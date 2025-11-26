@@ -101,19 +101,20 @@ async def get_contacts(skip: int = 0, limit: int = 50):
 
 @api_router.post("/newsletter", response_model=Newsletter)
 async def subscribe_newsletter(input: NewsletterCreate):
-    # Check if email already exists
-    existing = await db.newsletter.find_one({"email": input.email}, {"_id": 0})
-    if existing:
-        raise HTTPException(status_code=400, detail="Email already subscribed")
-    
     newsletter_dict = input.model_dump()
     newsletter_obj = Newsletter(**newsletter_dict)
     
     doc = newsletter_obj.model_dump()
     doc['timestamp'] = doc['timestamp'].isoformat()
     
-    _ = await db.newsletter.insert_one(doc)
-    return newsletter_obj
+    try:
+        _ = await db.newsletter.insert_one(doc)
+        return newsletter_obj
+    except Exception as e:
+        # Handle duplicate email error from unique index
+        if "duplicate key error" in str(e).lower():
+            raise HTTPException(status_code=400, detail="Email already subscribed")
+        raise HTTPException(status_code=500, detail="Failed to subscribe")
 
 @api_router.get("/newsletter", response_model=List[Newsletter])
 async def get_newsletter_subscribers(skip: int = 0, limit: int = 50):
