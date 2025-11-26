@@ -176,6 +176,25 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_db_indexes():
+    """Create database indexes on startup for optimized queries"""
+    try:
+        # Index for contacts - sort by timestamp
+        await db.contacts.create_index([("timestamp", -1)])
+        
+        # Index for newsletter - unique email and sort by timestamp
+        await db.newsletter.create_index("email", unique=True)
+        await db.newsletter.create_index([("timestamp", -1)])
+        
+        # Index for blog posts - unique id and sort by published_date
+        await db.blog_posts.create_index("id", unique=True)
+        await db.blog_posts.create_index([("published_date", -1)])
+        
+        logger.info("Database indexes created successfully")
+    except Exception as e:
+        logger.warning(f"Index creation warning (may already exist): {e}")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
