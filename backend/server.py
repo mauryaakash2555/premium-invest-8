@@ -116,8 +116,8 @@ async def subscribe_newsletter(input: NewsletterCreate):
     return newsletter_obj
 
 @api_router.get("/newsletter", response_model=List[Newsletter])
-async def get_newsletter_subscribers():
-    subscribers = await db.newsletter.find({}, {"_id": 0}).to_list(1000)
+async def get_newsletter_subscribers(skip: int = 0, limit: int = 50):
+    subscribers = await db.newsletter.find({}, {"_id": 0}).sort("timestamp", -1).skip(skip).limit(limit).to_list(limit)
     
     for sub in subscribers:
         if isinstance(sub['timestamp'], str):
