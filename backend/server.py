@@ -90,8 +90,8 @@ async def create_contact(input: ContactFormCreate):
     return contact_obj
 
 @api_router.get("/contact", response_model=List[ContactForm])
-async def get_contacts():
-    contacts = await db.contacts.find({}, {"_id": 0}).to_list(1000)
+async def get_contacts(skip: int = 0, limit: int = 50):
+    contacts = await db.contacts.find({}, {"_id": 0}).sort("timestamp", -1).skip(skip).limit(limit).to_list(limit)
     
     for contact in contacts:
         if isinstance(contact['timestamp'], str):
