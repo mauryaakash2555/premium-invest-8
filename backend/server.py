@@ -137,15 +137,12 @@ async def create_blog_post(input: BlogPostCreate):
     return blog_obj
 
 @api_router.get("/blog", response_model=List[BlogPost])
-async def get_blog_posts():
-    posts = await db.blog_posts.find({}, {"_id": 0}).to_list(1000)
+async def get_blog_posts(skip: int = 0, limit: int = 50):
+    posts = await db.blog_posts.find({}, {"_id": 0}).sort("published_date", -1).skip(skip).limit(limit).to_list(limit)
     
     for post in posts:
         if isinstance(post['published_date'], str):
             post['published_date'] = datetime.fromisoformat(post['published_date'])
-    
-    # Sort by published_date descending
-    posts.sort(key=lambda x: x['published_date'], reverse=True)
     
     return posts
 
