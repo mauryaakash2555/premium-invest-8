@@ -1,0 +1,393 @@
+import { Link } from 'react-router-dom';
+import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat } from 'lucide-react';
+import { useEffect } from 'react';
+
+const Home = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const services = [
+    {
+      icon: <PieChart size={40} />,
+      title: 'Mutual Funds',
+      description: 'Diversified investment options with expert fund selection and performance insights.',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <TrendingUp size={40} />,
+      title: 'Portfolio Management',
+      description: 'Personalized wealth management strategies tailored to your financial goals.',
+      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <CreditCard size={40} />,
+      title: 'Trading Services',
+      description: 'Real-time market access with advanced tools and expert guidance.',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <Shield size={40} />,
+      title: 'Insurance',
+      description: 'Comprehensive life and health insurance plans for financial security.',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
+    },
+    {
+      icon: <DollarSign size={40} />,
+      title: 'Fixed Deposits',
+      description: 'Secure returns with flexible tenure options and competitive rates.',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
+    },
+    {
+      icon: <Repeat size={40} />,
+      title: 'SIP',
+      description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+    },
+  ];
+
+  return (
+    <div>
+      {/* Hero Section */}
+      <section
+        className="hero-gradient"
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          paddingTop: '80px',
+        }}
+      >
+        {/* Background Image */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=85)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.15,
+            zIndex: 0,
+          }}
+        />
+
+        <div
+          className="section-container fade-in"
+          style={{
+            textAlign: 'center',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          <h1
+            data-testid="hero-heading"
+            style={{
+              fontSize: 'clamp(32px, 5vw, 72px)',
+              marginBottom: '24px',
+              lineHeight: 1.2,
+            }}
+            className="golden-gradient"
+          >
+            BM Wealth
+          </h1>
+          <h2
+            style={{
+              fontSize: 'clamp(20px, 3vw, 36px)',
+              color: '#C0A062',
+              marginBottom: '16px',
+              fontWeight: 500,
+            }}
+          >
+            Mumbai's Premier Financial Partner
+          </h2>
+          <p
+            style={{
+              fontSize: 'clamp(14px, 2vw, 18px)',
+              color: '#FFFFFF',
+              marginBottom: '40px',
+              maxWidth: '800px',
+              margin: '0 auto 40px',
+              lineHeight: 1.6,
+            }}
+          >
+            ARN 90008 | Expert financial advisory and investment services tailored
+            for your wealth creation journey
+          </p>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '20px',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: '60px',
+            }}
+          >
+            <a
+              href="https://wa.me/918850977259"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              data-testid="free-financial-guide-btn"
+            >
+              Get Free Financial Guide
+            </a>
+            <Link to="/services" className="btn-secondary" data-testid="explore-services-btn">
+              Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
+            </Link>
+          </div>
+
+          {/* SEBI Disclaimer */}
+          <div
+            className="sebi-disclaimer"
+            style={{
+              maxWidth: '900px',
+              margin: '0 auto',
+              textAlign: 'left',
+            }}
+          >
+            <strong>SEBI Disclaimer:</strong> Investments are subject to market
+            risks; past performance is not a guarantee of future results. Please
+            read all scheme-related documents carefully.
+          </div>
+        </div>
+      </section>
+
+      {/* Services Overview Section */}
+      <section className="section-container">
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(28px, 4vw, 48px)',
+              marginBottom: '16px',
+            }}
+            className="golden-gradient"
+          >
+            Our Services
+          </h2>
+          <p
+            style={{
+              fontSize: '18px',
+              color: '#C0A062',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Comprehensive financial solutions designed to help you achieve your
+            investment goals
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '30px',
+          }}
+        >
+          {services.map((service, index) => (
+            <div key={index} className="service-card slide-up" data-testid={`service-card-${index}`}>
+              <div
+                className="image-overlay"
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  marginBottom: '20px',
+                  background: `url(${service.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
+              <div style={{ color: '#DAA520', marginBottom: '16px' }}>
+                {service.icon}
+              </div>
+              <h3
+                style={{
+                  fontSize: '24px',
+                  color: '#DAA520',
+                  marginBottom: '12px',
+                }}
+              >
+                {service.title}
+              </h3>
+              <p
+                style={{
+                  fontSize: '16px',
+                  color: '#CCCCCC',
+                  lineHeight: 1.6,
+                }}
+              >
+                {service.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+          <Link to="/services" className="btn-primary" data-testid="view-all-services-btn">
+            View All Services
+          </Link>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section
+        style={{
+          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
+          padding: '80px 20px',
+        }}
+      >
+        <div className="section-container">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2
+              style={{
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                marginBottom: '16px',
+              }}
+              className="golden-gradient"
+            >
+              Why Choose BM Wealth?
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '40px',
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <Shield size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                SEBI Registered
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                ARN 90008 - Fully compliant and registered financial advisory
+                services
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <TrendingUp size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                Expert Guidance
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                Decades of experience in financial markets and wealth management
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <PieChart size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                Tailored Solutions
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                Personalized investment strategies aligned with your financial goals
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="section-container">
+        <div
+          className="glass-effect"
+          style={{
+            padding: '60px 40px',
+            textAlign: 'center',
+            background: 'rgba(218, 165, 32, 0.05)',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 'clamp(24px, 3vw, 40px)',
+              marginBottom: '20px',
+              color: '#DAA520',
+            }}
+          >
+            Ready to Start Your Wealth Journey?
+          </h2>
+          <p
+            style={{
+              fontSize: '18px',
+              color: '#CCCCCC',
+              marginBottom: '30px',
+              maxWidth: '600px',
+              margin: '0 auto 30px',
+            }}
+          >
+            Connect with our experts today for a free financial consultation
+          </p>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a
+              href="https://wa.me/918850977259"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              data-testid="cta-whatsapp-btn"
+            >
+              Chat on WhatsApp
+            </a>
+            <Link to="/contact" className="btn-secondary" data-testid="cta-contact-btn">
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Home;
