@@ -143,20 +143,6 @@ const Home = () => {
               Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
-
-          {/* SEBI Disclaimer */}
-          <div
-            className="sebi-disclaimer"
-            style={{
-              maxWidth: '900px',
-              margin: '0 auto',
-              textAlign: 'left',
-            }}
-          >
-            <strong>SEBI Disclaimer:</strong> Investments are subject to market
-            risks; past performance is not a guarantee of future results. Please
-            read all scheme-related documents carefully.
-          </div>
         </div>
       </section>
 
