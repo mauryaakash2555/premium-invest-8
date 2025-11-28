@@ -45,7 +45,7 @@ const Footer = () => {
                 marginBottom: '12px',
               }}
             >
-              ARN 90008 | Mumbai's Premier Financial Partner
+              Mumbai's Premier Financial Partner
             </p>
             <p
               style={{
@@ -58,7 +58,6 @@ const Footer = () => {
               of expertise.
             </p>
           </div>
-
           {/* Quick Links */}
           <div>
             <h4
@@ -139,7 +138,6 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-
           {/* Contact Info */}
           <div>
             <h4
@@ -181,7 +179,6 @@ const Footer = () => {
               </a>
             </div>
           </div>
-
           {/* Social Media */}
           <div>
             <h4
@@ -254,14 +251,12 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
         {/* SEBI Disclaimer */}
         <div className="sebi-disclaimer" style={{ marginBottom: '30px' }}>
           <strong>SEBI Disclaimer:</strong> Investments are subject to market
           risks. Past performance is not indicative of future results. Please read
-          all scheme-related documents carefully before investing. ARN 90008.
+          all scheme-related documents carefully before investing.
         </div>
-
         {/* Copyright */}
         <div
           style={{
@@ -273,8 +268,7 @@ const Footer = () => {
           }}
         >
           <p>
-            © {new Date().getFullYear()} BM Wealth. All rights reserved. | ARN
-            90008
+            © {new Date().getFullYear()} BM Wealth. All rights reserved.
           </p>
         </div>
       </div>
