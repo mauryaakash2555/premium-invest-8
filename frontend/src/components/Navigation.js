@@ -59,31 +59,8 @@ const Navigation = () => {
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              fontSize: '28px',
-              fontFamily: "'Playfair Display', serif",
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            BM Wealth
-          </div>
-          <span
-            style={{
-              fontSize: '12px',
-              color: '#C0A062',
-              fontWeight: 500,
-              letterSpacing: '1px',
-            }}
-          >
-            ARN 90008
-          </span>
+          <img src="/logo.png" alt="BM Wealth Logo" style={{ width: '150px', height: 'auto' }} />
         </Link>
-
         {/* Desktop Menu */}
         <div
           style={{
@@ -117,7 +94,6 @@ const Navigation = () => {
             </Link>
           ))}
         </div>
-
         {/* Mobile Menu Toggle */}
         <button
           data-testid="mobile-menu-toggle"
@@ -135,7 +111,6 @@ const Navigation = () => {
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
-
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div
@@ -168,7 +143,6 @@ const Navigation = () => {
           ))}
         </div>
       )}
-
       <style>{`
         @media (max-width: 768px) {
           .desktop-menu {
