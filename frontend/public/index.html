@@ -1,105 +1,203 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="BM Wealth - Financial Services Website" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BM Wealth - Mumbai's Trusted Financial Partner</title>
-    <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-    <script>
-      !(function (t, e) {
-          var o, n, p, r;
-          e.__SV ||
-              ((window.posthog = e),
-              (e._i = []),
-              (e.init = function (i, s, a) {
-                  function g(t, e) {
-                      var o = e.split(".");
-                      2 == o.length && ((t = t[o[0]]), (e = o[1])),
-                          (t[e] = function () {
-                              t.push(
-                                  [e].concat(
-                                      Array.prototype.slice.call(
-                                          arguments,
-                                          0,
-                                      ),
-                                  ),
-                              );
-                          });
-                  }
-                  ((p = t.createElement("script")).type =
-                      "text/javascript"),
-                      (p.crossOrigin = "anonymous"),
-                      (p.async = !0),
-                      (p.src =
-                          s.api_host.replace(
-                              ".i.posthog.com",
-                              "-assets.i.posthog.com",
-                          ) + "/static/array.js"),
-                      (r =
-                          t.getElementsByTagName(
-                              "script",
-                          )[0]).parentNode.insertBefore(p, r);
-                  var u = e;
-                  for (
-                      void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
-                          u.people = u.people || [],
-                          u.toString = function (t) {
-                              var e = "posthog";
-                              return (
-                                  "posthog" !== a && (e += "." + a),
-                                  t || (e += " (stub)"),
-                                  e
-                              );
-                          },
-                          u.people.toString = function () {
-                              return u.toString(1) + ".people (stub)";
-                          },
-                          o =
-                              "init me ws ys ps bs capture je Di ks register register_once register_for_session unregister unregister_for_session Ps getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty Es $s createPersonProfile Is opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing Ss debug xs getPageViewId captureTraceFeedback captureTraceMetric".split(
-                                  " ",
-                              ),
-                          n = 0;
-                      n < o.length;
-                      n++
-                  )
-                      g(u, o[n]);
-                  e._i.push([i, s, a]);
-              }),
-              (e.__SV = 1));
-      })(document, window.posthog || []);
-      posthog.init("phc_yJW1VjHGGwmCbbrtczfqqNxgBDbhlhOWcdzcIJEOTFE", {
-          api_host: "https://us.i.posthog.com",
-          person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
-      });
-    </script>
-  </body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(to bottom, #000, #333);
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background: #111;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #ffd700;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .hero {
+            background: url('mumbai-skyline.jpg') no-repeat center center/cover;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3em;
+            color: #ffd700;
+        }
+        .hero p {
+            font-size: 1.5em;
+            color: #ffd700;
+        }
+        .hero button {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .services {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .services h2 {
+            color: #ffd700;
+            font-size: 2.5em;
+        }
+        .service-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #111;
+            padding: 20px;
+            margin: 10px;
+            width: 300px;
+            border-radius: 10px;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .why-choose {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .why-choose h2 {
+            color: #ffd700;
+            font-size: 2.5em;
+        }
+        .why-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .cta {
+            background: #111;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .cta h2 {
+            color: #ffd700;
+            font-size: 2.5em;
+        }
+        .cta button {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        footer {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        footer a {
+            color: #ffd700;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .logo {
+            max-width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <img src="wings.png" alt="BM Wealth Wings" class="logo" style="background: transparent;">
+        <h1>BM Wealth</h1>
+        <p>Mumbai's Premier Financial Partner</p>
+        <p>Expert financial advisory and investment services tailored for your wealth creation journey</p>
+        <button>Get Free Financial Guide</button>
+        <button>Explore Services</button>
+    </section>
+    <section class="services">
+        <h2>Our Services</h2>
+        <p>Comprehensive financial solutions designed to help you achieve your investment goals</p>
+        <div class="service-cards">
+            <div class="card">
+                <img src="mutual-funds.jpg" alt="Mutual Funds">
+                <h3>Mutual Funds</h3>
+                <p>Diversified investment options with expert fund selection</p>
+            </div>
+            <div class="card">
+                <img src="portfolio.jpg" alt="Portfolio Management">
+                <h3>Portfolio Management</h3>
+                <p>Personalized wealth management strategies for optimal returns</p>
+            </div>
+            <div class="card">
+                <img src="trading.jpg" alt="Trading">
+                <h3>Trading</h3>
+                <p>Real-time trading with advanced tools and market insights</p>
+            </div>
+        </div>
+    </section>
+    <section class="why-choose">
+        <h2>Why Choose BM Wealth?</h2>
+        <div class="why-cards">
+            <div class="card">
+                <img src="shield-icon.jpg" alt="Registered">
+                <h3>AMFI Registered - Fully compliant and registered financial advisory services</h3>
+                <p>Fully compliant and registered financial advisory services</p>
+            </div>
+            <div class="card">
+                <img src="guide-icon.jpg" alt="Expert Guidance">
+                <h3>Expert Guidance</h3>
+                <p>Decades of experience in financial markets and wealth management</p>
+            </div>
+            <div class="card">
+                <img src="solutions-icon.jpg" alt="Tailored Solutions">
+                <h3>Tailored Solutions</h3>
+                <p>Personalized investment strategies aligned with your financial goals</p>
+            </div>
+        </div>
+    </section>
+    <section class="cta">
+        <h2>Ready to Start Your Wealth Journey?</h2>
+        <p>Connect with our experts today for a free financial consultation</p>
+        <button>Chat on WhatsApp</button>
+        <button>Contact Us</button>
+    </section>
+    <footer>
+        <p>BM Wealth | ARN 90008 | Mumbai Trusted Partner</p>
+        <div>
+            <a href="https://www.instagram.com/bmwealth.official/">Instagram</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">X</a>
+            <a href="#">Facebook</a>
+        </div>
+        <p>Contact Us: Phone: +91 88509 77259 | Email: mauryaakash2555@gmail.com | WhatsApp</p>
+        <p>SEBI Disclaimer: Investments are subject to market risks. Past performance is not a guarantee of future results. Please read all scheme documents carefully before investing. ARN 90008</p>
+        <p>&copy; 2025 BM Wealth. All rights reserved.</p>
+    </footer>
+</body>
 </html>
+```
