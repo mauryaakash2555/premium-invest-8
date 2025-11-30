@@ -29,91 +29,77 @@
             color: #ffd700;
             margin: 0 15px;
             text-decoration: none;
+            font-weight: bold;
         }
         .hero {
             background: url('mumbai-skyline.jpg') no-repeat center center/cover;
-            padding: 100px 20px;
+            padding: 120px 20px;
             text-align: center;
         }
         .hero h1 {
-            font-size: 3em;
+            font-size: 4em;
             color: #ffd700;
+            margin: 0;
+            text-shadow: 2px 2px 10px #000;
         }
         .hero p {
-            font-size: 1.5em;
+            font-size: 1.6em;
             color: #ffd700;
+            margin: 15px 0;
         }
         .hero button {
             background: #ffd700;
             color: #000;
             border: none;
-            padding: 10px 20px;
-            margin: 10px;
+            padding: 14px 30px;
+            margin: 12px;
+            font-size: 1.2em;
             cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
         }
-        .services {
-            padding: 50px 20px;
+        .services, .why-choose, .cta {
+            padding: 70px 20px;
             text-align: center;
         }
-        .services h2 {
+        h2 {
             color: #ffd700;
-            font-size: 2.5em;
+            font-size: 2.8em;
+            margin-bottom: 30px;
         }
-        .service-cards {
+        .service-cards, .why-cards {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             flex-wrap: wrap;
+            gap: 25px;
         }
         .card {
             background: #111;
-            padding: 20px;
-            margin: 10px;
-            width: 300px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(255,215,0,0.3);
         }
         .card img {
             width: 100%;
             height: auto;
-        }
-        .why-choose {
-            padding: 50px 20px;
-            text-align: center;
-        }
-        .why-choose h2 {
-            color: #ffd700;
-            font-size: 2.5em;
-        }
-        .why-cards {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-        .cta {
-            background: #111;
-            padding: 50px 20px;
-            text-align: center;
-        }
-        .cta h2 {
-            color: #ffd700;
-            font-size: 2.5em;
-        }
-        .cta button {
-            background: #ffd700;
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
+            border-radius: 10px;
         }
         footer {
             background: #000;
-            padding: 20px;
+            padding: 40px;
+            font-size: 0.9em;
             text-align: center;
-            font-size: 0.8em;
+            border-top: 2px solid #333;
         }
         footer a {
             color: #ffd700;
-            margin: 0 10px;
+            margin: 0 15px;
             text-decoration: none;
         }
     </style>
@@ -130,86 +116,47 @@
     </header>
     <section class="hero">
         <h1>BM Wealth</h1>
-        <p>Mumbai's Premier Financial Partner for Mutual Funds, LIC, PMS, Insurance, Trading, Wealth Management, FD</p>
-        <p>Expert financial advisory and investment services tailored for your wealth creation journey</p>
-        <button>Get Free SIP Guide for Mutual Funds</button>
-        <button>Explore Wealth Management Services</button>
+        <p>Mumbai's Premier Financial Partner</p>
+        <p>Mutual Funds • LIC • PMS • Insurance • Trading • Wealth Management • FD</p>
+        <button>Get Free SIP Guide</button>
+        <button>Explore Services</button>
     </section>
     <section class="services">
-        <h2>Our Services: Mutual Funds, LIC, PMS, Insurance, Trading, FD in Mumbai</h2>
-        <p>Comprehensive financial solutions designed to help you achieve your investment goals</p>
+        <h2>Our Services</h2>
         <div class="service-cards">
-            <div class="card">
-                <img src="mutual-funds.jpg" alt="Mutual Funds Investment Options in Mumbai by BM Wealth">
-                <h3>Mutual Funds</h3>
-                <p>Diversified investment options with expert fund selection</p>
-            </div>
-            <div class="card">
-                <img src="portfolio.jpg" alt="PMS Portfolio Management Services in Mumbai by BM Wealth">
-                <h3>Portfolio Management (PMS)</h3>
-                <p>Personalized wealth management strategies for optimal returns</p>
-            </div>
-            <div class="card">
-                <img src="trading.jpg" alt="Trading Services in Mumbai by BM Wealth">
-                <h3>Trading</h3>
-                <p>Real-time trading with advanced tools and market insights</p>
-            </div>
-            <div class="card">
-                <img src="insurance.jpg" alt="Insurance Plans in Mumbai by BM Wealth">
-                <h3>Insurance</h3>
-                <p>Comprehensive life and health insurance plans for financial security</p>
-            </div>
-            <div class="card">
-                <img src="fd.jpg" alt="Fixed Deposits FD in Mumbai by BM Wealth">
-                <h3>Fixed Deposits (FD)</h3>
-                <p>Secure returns with flexible tenure and competitive rates</p>
-            </div>
-            <div class="card">
-                <img src="lic.jpg" alt="LIC Plans in Mumbai by BM Wealth">
-                <h3>LIC</h3>
-                <p>Trusted LIC policies for life insurance and savings</p>
-            </div>
+            <div class="card"><h3>Mutual Funds</h3><p>Best SIP plans & fund selection</p></div>
+            <div class="card"><h3>Portfolio Management</h3><p>Personalized PMS strategies</p></div>
+            <div class="card"><h3>Trading</h3><p>Real-time market insights</p></div>
+            <div class="card"><h3>Insurance</h3><p>Life & Health protection plans</p></div>
+            <div class="card"><h3>Fixed Deposits</h3><p>Secure & high returns</p></div>
+            <div class="card"><h3>LIC</h3><p>Trusted savings & insurance</p></div>
         </div>
     </section>
     <section class="why-choose">
-        <h2>Why Choose BM Wealth for Wealth Management in Mumbai?</h2>
+        <h2>Why Choose BM Wealth?</h2>
         <div class="why-cards">
-            <div class="card">
-                <img src="shield-icon.jpg" alt="AMFI Registered Financial Advisor in Mumbai BM Wealth">
-                <h3>AMFI Registered - Fully compliant and registered financial advisory services</h3>
-                <p>Fully compliant and registered financial advisory services</p>
-            </div>
-            <div class="card">
-                <img src="guide-icon.jpg" alt="Expert Financial Guidance in Mumbai BM Wealth">
-                <h3>Expert Guidance</h3>
-                <p>Decades of experience in financial markets and wealth management</p>
-            </div>
-            <div class="card">
-                <img src="solutions-icon.jpg" alt="Tailored Wealth Solutions in Mumbai BM Wealth">
-                <h3>Tailored Solutions</h3>
-                <p>Personalized investment strategies aligned with your financial goals</p>
-            </div>
+            <div class="card"><h3>AMFI Registered</h3><p>100% compliant & trusted</p></div>
+            <div class="card"><h3>Expert Team</h3><p>Decades of experience</p></div>
+            <div class="card"><h3>Personalized Plans</h3><p>Tailored for your goals</p></div>
         </div>
-        <p>Led by Brahmdeo Maurya, dedicated to empowering Mumbai investors with tailored financial solutions, leveraging expertise.</p>
+        <p style="margin-top:40px;font-size:1.3em">Led by Brahmdeo Maurya • ARN 90008</p>
     </section>
     <section class="cta">
-        <h2>Ready to Start Your Wealth Journey?</h2>
-        <p>Connect with our experts today for a free financial consultation</p>
+        <h2>Ready to Build Your Wealth?</h2>
+        <p>Free consultation • Zero charges</p>
         <button>Chat on WhatsApp</button>
         <button>Contact Us</button>
     </section>
     <footer>
-        <p>BM Wealth | Mumbai Trusted Partner</p>
+        <p>BM Wealth • Mumbai Trusted Partner</p>
+        <p>Phone: +91 88509 77259 | Email: mauryaakash2555@gmail.com</p>
         <div>
-            <a href="https://www.instagram.com/bmwealth.official/">Instagram</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">X</a>
-            <a href="#">Facebook</a>
+            <a href="https://www.instagram.com/bmwealth.official/">Instagram</a> •
+            <a href="#">LinkedIn</a> • <a href="#">X</a> • <a href="#">Facebook</a>
         </div>
-        <p>Contact Us: Phone: +91 88509 77259 | Email: mauryaakash2555@gmail.com | WhatsApp</p>
-        <p>SEBI Disclaimer: Investments are subject to market risks. Past performance is not a guarantee of future results. Please read all scheme documents carefully before investing.</p>
-        <p style="font-size: 12px; color: #aaa; text-align: right;">ARN 90008</p>
-        <p>&copy; 2025 BM Wealth. All rights reserved.</p>
+        <p style="margin-top:20px;font-size:0.8em">SEBI Disclaimer: Investments are subject to market risks. Read all scheme documents carefully.</p>
+        <p style="font-size:0.7em;color:#aaa;text-align:right">ARN 90008</p>
+        <p>© 2025 BM Wealth. All rights reserved.</p>
     </footer>
 </body>
 </html>
