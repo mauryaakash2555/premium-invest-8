@@ -87,8 +87,7 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Led by <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong> and{' '}
-              <strong style={{ color: '#DAA520' }}>Akash Maurya</strong>, BM Wealth (ARN
+              Led by <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth (ARN
               90008) is dedicated to empowering Mumbai investors with comprehensive financial
               solutions.
             </p>
