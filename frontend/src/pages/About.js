@@ -142,7 +142,7 @@ const About = () => {
               BM
             </div>
             <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
-              Brahmdeo Maurya & Akash Maurya
+              Brahmdeo Maurya
             </h3>
             <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
               Founders & Financial Advisors
