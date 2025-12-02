@@ -9,6 +9,7 @@ node_modules/
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
 .yarn/install-state.gz
 .yarn/*
 !.yarn/patches
@@ -26,7 +27,7 @@ next-env.d.ts
 *.tsbuildinfo
 
 # Production builds
-/build
+# /build (commented out to allow build folder for GitHub Pages)
 dist/
 dist
 
