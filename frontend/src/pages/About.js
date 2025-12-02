@@ -145,7 +145,7 @@ const About = () => {
               Brahmdeo Maurya
             </h3>
             <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
-              Founders & Financial Advisors
+              Founders 
             </p>
             <p style={{ fontSize: '14px', color: '#888' }}>ARN 90008</p>
           </div>
