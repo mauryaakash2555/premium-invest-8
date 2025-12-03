@@ -45,9 +45,8 @@ const Navigation = () => {
           margin: '0 auto',
           padding: '20px',
           display: 'flex',
-          flexDirection: 'column',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '15px',
         }}
       >
         {/* Logo */}
@@ -62,13 +61,12 @@ const Navigation = () => {
         >
           <img src="/logo.png" alt="BM Wealth Logo" style={{ width: '150px', height: 'auto' }} />
         </Link>
-        {/* Desktop Menu - Centered */}
+        {/* Desktop Menu - Right Aligned */}
         <div
           style={{
             display: 'flex',
             gap: '40px',
             alignItems: 'center',
-            justifyContent: 'center',
           }}
           className="desktop-menu"
         >
@@ -81,7 +79,7 @@ const Navigation = () => {
                 color: '#ffd700',
                 textDecoration: 'none',
                 fontSize: '16px',
-                fontWeight: 700,
+                fontWeight: 500,
                 transition: 'color 0.3s ease',
                 position: 'relative',
               }}
