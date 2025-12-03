@@ -77,17 +77,17 @@ const Navigation = () => {
               data-testid={`nav-${link.label.toLowerCase()}`}
               style={{
                 color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  location.pathname === link.path ? '#ffd700' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '16px',
                 fontWeight: 500,
                 transition: 'color 0.3s ease',
                 position: 'relative',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+              onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
               onMouseLeave={(e) =>
                 (e.target.style.color =
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF')
+                  location.pathname === link.path ? '#ffd700' : '#FFFFFF')
               }
             >
               {link.label}
@@ -102,7 +102,7 @@ const Navigation = () => {
             display: 'none',
             background: 'transparent',
             border: 'none',
-            color: '#DAA520',
+            color: '#ffd700',
             cursor: 'pointer',
             padding: '8px',
           }}
@@ -130,7 +130,7 @@ const Navigation = () => {
               style={{
                 display: 'block',
                 color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  location.pathname === link.path ? '#ffd700' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 500,
