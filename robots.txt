@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mauryaakash2555.github.io/premium-invest-8/sitemap.xml
