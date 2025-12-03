@@ -121,7 +121,7 @@ const Services = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: '#ffd700',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -152,11 +152,11 @@ const Services = () => {
               {index % 2 === 0 ? (
                 <>
                   <div>
-                    <div style={{ color: '#DAA520', marginBottom: '20px' }}>{service.icon}</div>
+                    <div style={{ color: '#ffd700', marginBottom: '20px' }}>{service.icon}</div>
                     <h2
                       style={{
                         fontSize: 'clamp(24px, 3vw, 36px)',
-                        color: '#DAA520',
+                        color: '#ffd700',
                         marginBottom: '16px',
                       }}
                     >
@@ -175,7 +175,7 @@ const Services = () => {
                     <h3
                       style={{
                         fontSize: '20px',
-                        color: '#C0A062',
+                        color: '#ffd700',
                         marginBottom: '12px',
                       }}
                     >
@@ -201,7 +201,7 @@ const Services = () => {
                             gap: '10px',
                           }}
                         >
-                          <ArrowRight size={16} style={{ color: '#DAA520' }} />
+                          <ArrowRight size={16} style={{ color: '#ffd700' }} />
                           {feature}
                         </li>
                       ))}
@@ -232,11 +232,11 @@ const Services = () => {
                     }}
                   />
                   <div style={{ order: 2 }}>
-                    <div style={{ color: '#DAA520', marginBottom: '20px' }}>{service.icon}</div>
+                    <div style={{ color: '#ffd700', marginBottom: '20px' }}>{service.icon}</div>
                     <h2
                       style={{
                         fontSize: 'clamp(24px, 3vw, 36px)',
-                        color: '#DAA520',
+                        color: '#ffd700',
                         marginBottom: '16px',
                       }}
                     >
@@ -255,7 +255,7 @@ const Services = () => {
                     <h3
                       style={{
                         fontSize: '20px',
-                        color: '#C0A062',
+                        color: '#ffd700',
                         marginBottom: '12px',
                       }}
                     >
@@ -281,7 +281,7 @@ const Services = () => {
                             gap: '10px',
                           }}
                         >
-                          <ArrowRight size={16} style={{ color: '#DAA520' }} />
+                          <ArrowRight size={16} style={{ color: '#ffd700' }} />
                           {feature}
                         </li>
                       ))}
@@ -314,7 +314,7 @@ const Services = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '20px',
-                color: '#DAA520',
+                color: '#ffd700',
               }}
             >
               Let's Build Your Financial Future Together
