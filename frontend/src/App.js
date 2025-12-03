@@ -10,7 +10,7 @@ import Layout from "@/components/Layout";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename="/premium-invest-8">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
