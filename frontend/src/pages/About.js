@@ -28,7 +28,7 @@ const About = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=60)',
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=85)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.1,
