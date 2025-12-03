@@ -48,7 +48,7 @@ const About = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#ffd700',
+              color: '#d5a42a',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -74,7 +74,7 @@ const About = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '24px',
-                color: '#ffd700',
+                color: '#d5a42a',
               }}
             >
               Our Story
@@ -87,7 +87,7 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Led by <strong style={{ color: '#ffd700' }}>Brahmdeo Maurya</strong>, BM Wealth (ARN
+              Led by <strong style={{ color: '#d5a42a' }}>Brahmdeo Maurya</strong>, BM Wealth (ARN
               90008) is dedicated to empowering Mumbai investors with comprehensive financial
               solutions.
             </p>
@@ -129,7 +129,7 @@ const About = () => {
                 width: '250px',
                 height: '250px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #ffd700 0%, #ffd700 100%)',
+                background: 'linear-gradient(135deg, #d5a42a 0%, #d5a42a 100%)',
                 margin: '0 auto 30px',
                 display: 'flex',
                 alignItems: 'center',
@@ -141,10 +141,10 @@ const About = () => {
             >
               BM
             </div>
-            <h3 style={{ fontSize: '24px', color: '#ffd700', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '24px', color: '#d5a42a', marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#ffd700', marginBottom: '8px' }}>
+            <p style={{ fontSize: '16px', color: '#d5a42a', marginBottom: '8px' }}>
               Founders 
             </p>
             <p style={{ fontSize: '14px', color: '#888' }}>ARN 90008</p>
@@ -170,7 +170,7 @@ const About = () => {
             >
               Our Values
             </h2>
-            <p style={{ fontSize: '18px', color: '#ffd700' }}>
+            <p style={{ fontSize: '18px', color: '#d5a42a' }}>
               The principles that guide everything we do
             </p>
           </div>
@@ -193,12 +193,12 @@ const About = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#d5a42a',
                 }}
               >
                 <Users size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#d5a42a', marginBottom: '12px' }}>
                 Client-Centric
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -218,12 +218,12 @@ const About = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#d5a42a',
                 }}
               >
                 <Award size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#d5a42a', marginBottom: '12px' }}>
                 Excellence
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -243,12 +243,12 @@ const About = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#d5a42a',
                 }}
               >
                 <Target size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#d5a42a', marginBottom: '12px' }}>
                 Results-Driven
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -268,12 +268,12 @@ const About = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#d5a42a',
                 }}
               >
                 <Heart size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#d5a42a', marginBottom: '12px' }}>
                 Integrity
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -299,7 +299,7 @@ const About = () => {
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#ffd700',
+              color: '#d5a42a',
             }}
           >
             SEBI Registered Financial Advisors
