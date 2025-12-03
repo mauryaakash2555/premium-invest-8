@@ -268,7 +268,7 @@ const Footer = () => {
           }}
         >
           <p>
-            © {new Date().getFullYear()} BM Wealth. All rights reserved.
+            © {new Date().getFullYear()} BM Wealth. All rights reserved. • ARN 90008
           </p>
         </div>
       </div>
