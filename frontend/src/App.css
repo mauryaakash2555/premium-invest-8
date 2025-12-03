@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  background: #ffd700;
   color: #000000;
   border: none;
   padding: 16px 36px;
@@ -53,9 +53,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
-  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  background: #ffdf00;
 }
 
 .btn-secondary {
@@ -74,10 +74,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary:hover {
-  background: #ffd700;
-  color: #000000;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 
 .glass-effect {
