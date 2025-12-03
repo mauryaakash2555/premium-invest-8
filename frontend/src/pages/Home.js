@@ -12,37 +12,37 @@ const Home = () => {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
       description: 'Best SIP plans & fund selection for Mumbai investors',
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=60',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
       description: 'Personalized PMS strategies for optimal returns',
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=60',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading',
       description: 'Real-time market insights and advanced tools',
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=60',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
       description: 'Life & health protection plans tailored for you',
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?auto=compress&cs=tinysrgb&q=60',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
       description: 'Secure returns with flexible tenure and rates',
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?auto=compress&cs=tinysrgb&q=60',
     },
     {
       icon: <Repeat size={40} />,
       title: 'LIC',
       description: 'Trusted LIC policies for savings and insurance',
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?auto=compress&cs=tinysrgb&q=60',
     },
   ];
 
@@ -70,7 +70,7 @@ const Home = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=85)',
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=60)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.15,
