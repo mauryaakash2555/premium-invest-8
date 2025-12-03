@@ -59,7 +59,15 @@ const Navigation = () => {
             gap: '12px',
           }}
         >
-          <img src="/logo.png" alt="BM Wealth Logo" style={{ width: '150px', height: 'auto' }} />
+          <span style={{
+            fontSize: '28px',
+            fontWeight: 'bold',
+            color: '#d5a42a',
+            letterSpacing: '1px',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+          }}>
+            BM Wealth
+          </span>
         </Link>
         {/* Desktop Menu - Right Aligned */}
         <div
