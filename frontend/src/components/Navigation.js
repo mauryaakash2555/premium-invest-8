@@ -35,7 +35,7 @@ const Navigation = () => {
           ? 'rgba(0, 0, 0, 0.95)'
           : 'transparent',
         backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-        borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.1)' : 'none',
+        borderBottom: isScrolled ? '1px solid rgba(213, 164, 42, 0.1)' : 'none',
         transition: 'all 0.3s ease',
       }}
     >
@@ -76,15 +76,15 @@ const Navigation = () => {
               to={link.path}
               data-testid={`nav-${link.label.toLowerCase()}`}
               style={{
-                color: '#ffd700',
+                color: '#d5a42a',
                 textDecoration: 'none',
                 fontSize: '16px',
                 fontWeight: 500,
                 transition: 'color 0.3s ease',
                 position: 'relative',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#ffed4e')}
-              onMouseLeave={(e) => (e.target.style.color = '#ffd700')}
+              onMouseEnter={(e) => (e.target.style.color = '#e0b030')}
+              onMouseLeave={(e) => (e.target.style.color = '#d5a42a')}
             >
               {link.label}
             </Link>
@@ -98,7 +98,7 @@ const Navigation = () => {
             display: 'none',
             background: 'transparent',
             border: 'none',
-            color: '#ffd700',
+            color: '#d5a42a',
             cursor: 'pointer',
             padding: '8px',
           }}
@@ -114,7 +114,7 @@ const Navigation = () => {
             background: 'rgba(0, 0, 0, 0.98)',
             backdropFilter: 'blur(20px)',
             padding: '20px',
-            borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+            borderTop: '1px solid rgba(213, 164, 42, 0.2)',
           }}
           className="mobile-menu"
         >
@@ -126,7 +126,7 @@ const Navigation = () => {
               style={{
                 display: 'block',
                 color:
-                  location.pathname === link.path ? '#ffd700' : '#FFFFFF',
+                  location.pathname === link.path ? '#d5a42a' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 500,
