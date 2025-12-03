@@ -262,13 +262,20 @@ const Footer = () => {
           style={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             paddingTop: '20px',
-            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             color: '#888',
             fontSize: '14px',
+            flexWrap: 'wrap',
+            gap: '10px',
           }}
         >
-          <p>
+          <p style={{ margin: 0 }}>
             © {new Date().getFullYear()} BM Wealth. All rights reserved.
+          </p>
+          <p style={{ margin: 0, color: '#888' }}>
+            ARN 90008
           </p>
         </div>
       </div>

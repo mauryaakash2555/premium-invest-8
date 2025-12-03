@@ -45,8 +45,9 @@ const Navigation = () => {
           margin: '0 auto',
           padding: '20px',
           display: 'flex',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
           alignItems: 'center',
+          gap: '15px',
         }}
       >
         {/* Logo */}
@@ -61,12 +62,13 @@ const Navigation = () => {
         >
           <img src="/logo.png" alt="BM Wealth Logo" style={{ width: '150px', height: 'auto' }} />
         </Link>
-        {/* Desktop Menu */}
+        {/* Desktop Menu - Centered */}
         <div
           style={{
             display: 'flex',
             gap: '40px',
             alignItems: 'center',
+            justifyContent: 'center',
           }}
           className="desktop-menu"
         >
@@ -76,19 +78,15 @@ const Navigation = () => {
               to={link.path}
               data-testid={`nav-${link.label.toLowerCase()}`}
               style={{
-                color:
-                  location.pathname === link.path ? '#ffd700' : '#FFFFFF',
+                color: '#ffd700',
                 textDecoration: 'none',
                 fontSize: '16px',
-                fontWeight: 500,
+                fontWeight: 700,
                 transition: 'color 0.3s ease',
                 position: 'relative',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
-              onMouseLeave={(e) =>
-                (e.target.style.color =
-                  location.pathname === link.path ? '#ffd700' : '#FFFFFF')
-              }
+              onMouseEnter={(e) => (e.target.style.color = '#ffed4e')}
+              onMouseLeave={(e) => (e.target.style.color = '#ffd700')}
             >
               {link.label}
             </Link>
