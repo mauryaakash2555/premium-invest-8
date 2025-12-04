@@ -51,7 +51,7 @@ const Services = () => {
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
     },
     {
-      icon: <TrendingUp size={50} />,
+      icon: <Users size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
         'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to optimize your returns.',
