@@ -87,9 +87,21 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Led by <strong style={{ color: '#ffd700' }}>Brahmdeo Maurya</strong>, BM Wealth (ARN
-              90008) is dedicated to empowering Mumbai investors with comprehensive financial
-              solutions.
+              Led by <strong style={{ color: '#ffd700' }}>Brahmdeo Maurya</strong>, BM Wealth is a
+              leading financial distributor in Mumbai, dedicated to empowering investors with
+              comprehensive financial solutions across all asset classes.
+            </p>
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#CCCCCC',
+                lineHeight: 1.8,
+                marginBottom: '20px',
+              }}
+            >
+              As AMFI Registered Mutual Fund Distributors (ARN 90008), we specialize in providing
+              expert guidance on mutual funds, portfolio management services (PMS), insurance,
+              capital markets, fixed income, real estate, tax services, and loan solutions.
             </p>
             <p
               style={{
@@ -145,7 +157,7 @@ const About = () => {
               Brahmdeo Maurya
             </h3>
             <p style={{ fontSize: '16px', color: '#ffd700', marginBottom: '8px' }}>
-              Founders 
+              Founder & Principal Advisor
             </p>
             <p style={{ fontSize: '14px', color: '#888' }}>ARN 90008</p>
           </div>

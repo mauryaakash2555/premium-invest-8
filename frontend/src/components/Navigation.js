@@ -17,10 +17,10 @@ const Navigation = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/services', label: 'Services' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/about', label: 'About Us' },
+    { path: '/services', label: 'Offerings' },
+    { path: '/blog', label: 'Insights' },
+    { path: '/contact', label: 'Contact Us' },
   ];
 
   return (

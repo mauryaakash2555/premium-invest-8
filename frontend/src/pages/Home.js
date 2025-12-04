@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat } from 'lucide-react';
+import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, Calculator, Building, FileText, Users, Award, Star } from 'lucide-react';
 import { useEffect } from 'react';
 
 const Home = () => {
@@ -11,38 +11,50 @@ const Home = () => {
     {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
-      description: 'Best SIP plans & fund selection for Mumbai investors',
+      description: 'Best SIP plans & fund selection for Mumbai investors with expert guidance',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <TrendingUp size={40} />,
-      title: 'Portfolio Management',
-      description: 'Personalized PMS strategies for optimal returns',
+      title: 'Portfolio Management Services',
+      description: 'Personalized PMS strategies for optimal returns and wealth creation',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
-      icon: <CreditCard size={40} />,
-      title: 'Trading',
-      description: 'Real-time market insights and advanced tools',
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
-    },
-    {
       icon: <Shield size={40} />,
-      title: 'Insurance',
-      description: 'Life & health protection plans tailored for you',
+      title: 'Insurance Solutions',
+      description: 'Life, health, and general insurance plans tailored for you',
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
     },
     {
+      icon: <CreditCard size={40} />,
+      title: 'Capital Markets',
+      description: 'Real-time trading insights and advanced market analysis',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
       icon: <DollarSign size={40} />,
-      title: 'Fixed Deposits',
-      description: 'Secure returns with flexible tenure and rates',
+      title: 'Fixed Income',
+      description: 'Secure returns with flexible FD tenure and competitive rates',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
     },
     {
+      icon: <Building size={40} />,
+      title: 'Real Estate',
+      description: 'Property investment opportunities and advisory services',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <FileText size={40} />,
+      title: 'Tax Services',
+      description: 'Expert tax planning and filing assistance for optimal savings',
+      image: 'https://images.unsplash.com/photo-1554224311-beee460c201f?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
       icon: <Repeat size={40} />,
-      title: 'LIC',
-      description: 'Trusted LIC policies for savings and insurance',
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+      title: 'Loan Services',
+      description: 'Home loans, personal loans with best interest rates',
+      image: 'https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
   ];
 
@@ -106,7 +118,7 @@ const Home = () => {
               fontWeight: 500,
             }}
           >
-            Mumbai's Premier Financial Partner
+            Financial Distributor in Mumbai
           </h2>
           <p
             style={{
@@ -118,7 +130,7 @@ const Home = () => {
               lineHeight: 1.6,
             }}
           >
-            Mutual Funds • LIC • PMS • Insurance • Trading • Wealth Management • FD
+            Comprehensive Financial Solutions: Mutual Funds • Capital Markets • Fixed Income • PMS • Real Estate • Insurance • Tax Services • Loans
           </p>
 
           <div
@@ -137,10 +149,10 @@ const Home = () => {
               className="btn-primary"
               data-testid="free-financial-guide-btn"
             >
-              Get Free SIP Guide
+              Get Free Consultation
             </a>
-            <Link to="/services" className="btn-secondary" data-testid="explore-services-btn">
-              Explore Services
+            <Link to="/contact" className="btn-secondary" data-testid="explore-services-btn">
+              Request Call Back
             </Link>
           </div>
         </div>
@@ -156,7 +168,7 @@ const Home = () => {
               color: '#ffd700',
             }}
           >
-            Our Services
+            Our Offerings
           </h2>
           <p
             style={{
@@ -166,8 +178,7 @@ const Home = () => {
               margin: '0 auto',
             }}
           >
-            Comprehensive financial solutions designed to help you achieve your
-            investment goals
+            Comprehensive financial solutions for all your investment needs
           </p>
         </div>
 
@@ -326,6 +337,227 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Client Services Section */}
+      <section className="section-container">
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(28px, 4vw, 48px)',
+              marginBottom: '16px',
+              color: '#ffd700',
+            }}
+          >
+            Client Services
+          </h2>
+          <p
+            style={{
+              fontSize: '18px',
+              color: '#fff',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Access your portfolio and investment information anytime, anywhere
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '30px',
+          }}
+        >
+          <div className="service-card">
+            <div style={{ color: '#ffd700', marginBottom: '16px' }}>
+              <Users size={50} />
+            </div>
+            <h3
+              style={{
+                fontSize: '24px',
+                color: '#ffd700',
+                marginBottom: '12px',
+              }}
+            >
+              Client Desk
+            </h3>
+            <p
+              style={{
+                fontSize: '16px',
+                color: '#CCCCCC',
+                lineHeight: 1.6,
+                marginBottom: '20px',
+              }}
+            >
+              Consolidated portfolio view for your family or organization with secure login
+            </p>
+            <Link to="/contact" className="btn-secondary">
+              Request Access
+            </Link>
+          </div>
+
+          <div className="service-card">
+            <div style={{ color: '#ffd700', marginBottom: '16px' }}>
+              <Calculator size={50} />
+            </div>
+            <h3
+              style={{
+                fontSize: '24px',
+                color: '#ffd700',
+                marginBottom: '12px',
+              }}
+            >
+              Investment Tools
+            </h3>
+            <p
+              style={{
+                fontSize: '16px',
+                color: '#CCCCCC',
+                lineHeight: 1.6,
+                marginBottom: '20px',
+              }}
+            >
+              SIP calculator, retirement planning, and risk profiling tools
+            </p>
+            <Link to="/services" className="btn-secondary">
+              Explore Tools
+            </Link>
+          </div>
+
+          <div className="service-card">
+            <div style={{ color: '#ffd700', marginBottom: '16px' }}>
+              <TrendingUp size={50} />
+            </div>
+            <h3
+              style={{
+                fontSize: '24px',
+                color: '#ffd700',
+                marginBottom: '12px',
+              }}
+            >
+              Market Updates
+            </h3>
+            <p
+              style={{
+                fontSize: '16px',
+                color: '#CCCCCC',
+                lineHeight: 1.6,
+                marginBottom: '20px',
+              }}
+            >
+              Latest IPO news, market insights, and investment opportunities
+            </p>
+            <Link to="/blog" className="btn-secondary">
+              Read Updates
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section
+        style={{
+          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
+          padding: '80px 20px',
+        }}
+      >
+        <div className="section-container">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2
+              style={{
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                marginBottom: '16px',
+                color: '#ffd700',
+              }}
+            >
+              What Our Clients Say
+            </h2>
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#fff',
+                maxWidth: '700px',
+                margin: '0 auto',
+              }}
+            >
+              Trusted by thousands of satisfied investors across Mumbai
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '30px',
+            }}
+          >
+            {[
+              {
+                name: 'Rajesh Sharma',
+                location: 'Mumbai',
+                text: 'BM Wealth helped me achieve my financial goals with their expert guidance and personalized approach. Highly recommended!',
+                rating: 5,
+              },
+              {
+                name: 'Priya Patel',
+                location: 'Mumbai',
+                text: 'Professional service and transparent advice. My portfolio has grown significantly with their wealth management strategies.',
+                rating: 5,
+              },
+              {
+                name: 'Amit Kumar',
+                location: 'Mumbai',
+                text: 'Excellent support team and comprehensive financial solutions. They truly understand their clients\' needs.',
+                rating: 5,
+              },
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className="service-card"
+                style={{ textAlign: 'center' }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '4px',
+                    marginBottom: '16px',
+                    color: '#ffd700',
+                  }}
+                >
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} size={20} fill="#ffd700" />
+                  ))}
+                </div>
+                <p
+                  style={{
+                    fontSize: '16px',
+                    color: '#CCCCCC',
+                    lineHeight: 1.6,
+                    marginBottom: '20px',
+                    fontStyle: 'italic',
+                  }}
+                >
+                  "{testimonial.text}"
+                </p>
+                <h4
+                  style={{
+                    fontSize: '18px',
+                    color: '#ffd700',
+                    marginBottom: '4px',
+                  }}
+                >
+                  {testimonial.name}
+                </h4>
+                <p style={{ fontSize: '14px', color: '#888' }}>
+                  {testimonial.location}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="section-container">
         <div
@@ -354,7 +586,7 @@ const Home = () => {
               margin: '0 auto 30px',
             }}
           >
-            Free consultation • Zero charges
+            Free consultation • Expert advice • Trusted by thousands
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a

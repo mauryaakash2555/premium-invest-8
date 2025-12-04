@@ -92,7 +92,7 @@ const Blog = () => {
             }}
             className="golden-gradient"
           >
-            Financial Insights
+            Market Insights & Updates
           </h1>
           <p
             style={{

@@ -45,7 +45,17 @@ const Footer = () => {
                 marginBottom: '12px',
               }}
             >
-              Mumbai's Premier Financial Partner
+              Financial Distributor in Mumbai
+            </p>
+            <p
+              style={{
+                color: '#888',
+                fontSize: '14px',
+                lineHeight: '1.6',
+                marginBottom: '12px',
+              }}
+            >
+              AMFI Registered Mutual Fund Distributor
             </p>
             <p
               style={{
@@ -54,9 +64,29 @@ const Footer = () => {
                 lineHeight: '1.6',
               }}
             >
-              Empowering investors with tailored financial solutions and decades
-              of expertise.
+              ARN 90008
             </p>
+          </div>
+          {/* Services */}
+          <div>
+            <h4
+              style={{
+                color: '#ffd700',
+                fontSize: '18px',
+                marginBottom: '16px',
+                fontWeight: 600,
+              }}
+            >
+              Our Offerings
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>Mutual Funds</p>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>Capital Markets</p>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>Fixed Income</p>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>PMS</p>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>Real Estate</p>
+              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>Insurance</p>
+            </div>
           </div>
           {/* Quick Links */}
           <div>
@@ -108,7 +138,7 @@ const Footer = () => {
                 onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
-                Services
+                Offerings
               </Link>
               <Link
                 to="/blog"
@@ -121,7 +151,7 @@ const Footer = () => {
                 onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
-                Blog
+                Insights
               </Link>
               <Link
                 to="/contact"
@@ -134,7 +164,7 @@ const Footer = () => {
                 onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
-                Contact
+                Contact Us
               </Link>
             </div>
           </div>

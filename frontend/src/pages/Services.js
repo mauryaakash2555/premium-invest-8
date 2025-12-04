@@ -1,4 +1,4 @@
-import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRight } from 'lucide-react';
+import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Building, FileText, Repeat, ArrowRight, Calculator, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -14,13 +14,41 @@ const Services = () => {
       description:
         'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our expert team helps you select the right funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
-        'Diversified fund selection',
-        'Performance tracking and analysis',
-        'Risk-adjusted returns',
-        'Regular portfolio rebalancing',
-        'Tax-efficient investing',
+        'Diversified fund selection across equity, debt, and hybrid',
+        'Performance tracking and analysis with detailed reports',
+        'Risk-adjusted returns optimization',
+        'Regular portfolio rebalancing for optimal performance',
+        'Tax-efficient investing strategies',
       ],
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <TrendingUp size={50} />,
+      title: 'Capital Markets',
+      description:
+        'Comprehensive equity and derivatives trading services with real-time market data, research reports, and expert guidance. Trade with confidence using our advanced platforms and professional support.',
+      features: [
+        'Real-time stock market access',
+        'Advanced charting and technical analysis',
+        'Research reports and stock recommendations',
+        'Derivatives trading (Futures & Options)',
+        'Low brokerage rates with transparent pricing',
+      ],
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+    },
+    {
+      icon: <DollarSign size={50} />,
+      title: 'Fixed Income',
+      description:
+        'Secure and guaranteed returns with our fixed income solutions. Choose from a variety of fixed deposits, bonds, and debt instruments from top-rated banks and NBFCs to meet your capital preservation goals.',
+      features: [
+        'Competitive interest rates on fixed deposits',
+        'Flexible tenure options from 7 days to 10 years',
+        'Corporate and government bonds',
+        'Guaranteed returns with capital protection',
+        'Senior citizen special rates',
+      ],
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
     },
     {
       icon: <TrendingUp size={50} />,
@@ -28,69 +56,69 @@ const Services = () => {
       description:
         'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to optimize your returns.',
       features: [
-        'Customized investment strategies',
-        'Dedicated portfolio manager',
-        'Active fund management',
-        'Regular performance reviews',
-        'Direct equity investments',
+        'Customized investment strategies aligned with goals',
+        'Dedicated portfolio manager for personalized service',
+        'Active fund management with quarterly reviews',
+        'Direct equity investments in blue-chip stocks',
+        'Tax-efficient portfolio structuring',
       ],
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
-      icon: <CreditCard size={50} />,
-      title: 'Trading Services',
+      icon: <Building size={50} />,
+      title: 'Real Estate',
       description:
-        'Gain access to real-time market data, advanced trading tools, and expert guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+        'Professional real estate investment advisory services for residential and commercial properties. We help you identify lucrative opportunities, conduct due diligence, and execute property transactions with complete transparency.',
       features: [
-        'Real-time market access',
-        'Advanced charting tools',
-        'Research and recommendations',
-        'Low brokerage rates',
-        'Expert trading support',
+        'Property investment consultation',
+        'Market research and location analysis',
+        'Legal documentation assistance',
+        'REITs and real estate fund investments',
+        'Property valuation services',
       ],
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <Shield size={50} />,
-      title: 'Insurance',
+      title: 'Insurance Solutions',
       description:
-        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you choose the right policies that provide financial security and peace of mind.',
+        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, vehicle insurance to property protection, we help you choose the right policies that provide complete financial security.',
       features: [
-        'Life insurance policies',
-        'Health insurance plans',
-        'Term insurance coverage',
-        'Policy comparison and analysis',
-        'Claims assistance',
+        'Life insurance policies (Term, Endowment, ULIP)',
+        'Health insurance plans for individuals and families',
+        'Vehicle insurance (Car, Two-wheeler)',
+        'Property and home insurance',
+        'Policy comparison, claims assistance, and support',
       ],
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
     },
     {
-      icon: <DollarSign size={50} />,
-      title: 'Fixed Deposits (FD)',
+      icon: <FileText size={50} />,
+      title: 'Tax Services',
       description:
-        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from top banks and financial institutions to meet your capital preservation goals.',
+        'Expert tax planning and filing assistance to help you maximize savings and ensure compliance. Our tax advisors provide strategic guidance on income tax, GST, and corporate taxation with personalized solutions.',
       features: [
-        'Competitive interest rates',
-        'Flexible tenure options',
-        'Guaranteed returns',
-        'Bank and NBFC FDs',
-        'Premature withdrawal options',
+        'Income tax planning and return filing',
+        'Tax-saving investment recommendations',
+        'GST registration and compliance',
+        'Corporate tax advisory services',
+        'TDS returns and advance tax calculation',
       ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
+      image: 'https://images.unsplash.com/photo-1554224311-beee460c201f?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <Repeat size={50} />,
-      title: 'Systematic Investment Plans (SIP)',
+      title: 'Loan Services',
       description:
-        'Build wealth systematically through disciplined monthly investments. SIPs help you benefit from rupee cost averaging and the power of compounding to achieve your long-term financial goals.',
+        'Easy access to various loan products with competitive interest rates and flexible repayment options. Whether you need a home loan, personal loan, or business loan, we help you secure the best deals from leading financial institutions.',
       features: [
-        'Disciplined investing approach',
-        'Rupee cost averaging benefits',
-        'Flexible investment amounts',
-        'Auto-debit facility',
-        'Goal-based planning',
+        'Home loans with attractive interest rates',
+        'Personal loans for various needs',
+        'Business loans and working capital',
+        'Loan balance transfer and top-up',
+        'Doorstep documentation and processing',
       ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+      image: 'https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
   ];
 
@@ -116,7 +144,7 @@ const Services = () => {
             }}
             className="golden-gradient"
           >
-            Our Services
+            Our Offerings
           </h1>
           <p
             style={{
@@ -127,8 +155,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Comprehensive financial solutions designed to help you build, grow, and protect
-            your wealth
+            Comprehensive Financial Solutions for All Your Investment Needs
           </p>
         </div>
       </section>

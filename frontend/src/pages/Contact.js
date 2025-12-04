@@ -88,7 +88,7 @@ const Contact = () => {
             }}
             className="golden-gradient"
           >
-            Get In Touch
+            Contact Us
           </h1>
           <p
             style={{
@@ -99,8 +99,7 @@ const Contact = () => {
               lineHeight: 1.6,
             }}
           >
-            Have questions about your investments? Our team is here to help you achieve your
-            financial goals.
+            Get in touch with our financial advisors for personalized assistance
           </p>
         </div>
       </section>
