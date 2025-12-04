@@ -23,6 +23,9 @@
     </script>
     
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #000;
@@ -192,23 +195,23 @@
 <body>
     <header>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Blog</a>
-            <a href="#">Contact</a>
+            <a href="#hero">Home</a>
+            <a href="#why-choose">About</a>
+            <a href="#services">Services</a>
+            <a href="#" onclick="alert('Blog coming soon!'); return false;">Blog</a>
+            <a href="#contact">Contact</a>
         </nav>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="hero">
         <h1>BM Wealth</h1>
         <p>Mumbai's Premier Financial Partner</p>
         <p>Mutual Funds • LIC • PMS • Insurance • Trading • Wealth Management • FD</p>
-        <button>Get Free SIP Guide</button>
-        <button>Explore Services</button>
+        <button onclick="window.open('https://wa.me/918850977259', '_blank')">Get Free SIP Guide</button>
+        <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">Explore Services</button>
     </section>
 
-    <section class="services">
+    <section class="services" id="services">
         <h2>Our Services</h2>
         <div class="service-cards">
             <div class="card">
@@ -244,7 +247,7 @@
         </div>
     </section>
 
-    <section class="why-choose">
+    <section class="why-choose" id="why-choose">
         <h2>Why Choose BM Wealth?</h2>
         <div class="why-cards">
             <div class="card">
@@ -269,11 +272,11 @@
     <section class="cta">
         <h2>Ready to Build Your Wealth?</h2>
         <p>Free consultation • Zero charges</p>
-        <button>Chat on WhatsApp</button>
-        <button>Contact Us</button>
+        <button onclick="window.open('https://wa.me/918850977259', '_blank')">Chat on WhatsApp</button>
+        <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Contact Us</button>
     </section>
 
-    <footer>
+    <footer id="contact">
         <p>BM Wealth • Mumbai Trusted Partner</p>
         <p>Phone: +91 88509 77259 | Email: mauryaakash2555@gmail.com</p>
         <div>
