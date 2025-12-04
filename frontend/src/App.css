@@ -25,15 +25,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .golden-text {
-  color: #ffd700;
+  color: #DAA520;
 }
 
 .warm-gold-text {
-  color: #ffd700;
+  color: #DAA520;
 }
 
 .btn-primary {
-  background: #ffd700;
+  background: #DAA520;
   color: #000000;
   border: none;
   padding: 14px 30px;
@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary {
-  background: #ffd700;
+  background: #DAA520;
   color: #000000;
   border: none;
   padding: 14px 30px;
@@ -89,7 +89,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .golden-gradient {
-  color: #ffd700;
+  color: #DAA520;
   text-shadow: 2px 2px 10px #000;
 }
 
@@ -125,11 +125,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .sebi-disclaimer {
   background: rgba(255, 215, 0, 0.05);
-  border-left: 4px solid #ffd700;
+  border-left: 4px solid #DAA520;
   padding: 16px 20px;
   margin: 20px 0;
   font-size: 14px;
-  color: #ffd700;
+  color: #DAA520;
   font-style: italic;
 }
 

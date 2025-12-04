@@ -92,7 +92,7 @@ const Home = () => {
               fontSize: 'clamp(32px, 5vw, 72px)',
               marginBottom: '24px',
               lineHeight: 1.2,
-              color: '#ffd700',
+              color: '#DAA520',
               textShadow: '2px 2px 10px #000',
             }}
           >
@@ -101,7 +101,7 @@ const Home = () => {
           <h2
             style={{
               fontSize: 'clamp(20px, 3vw, 36px)',
-              color: '#ffd700',
+              color: '#DAA520',
               marginBottom: '16px',
               fontWeight: 500,
             }}
@@ -111,7 +111,7 @@ const Home = () => {
           <p
             style={{
               fontSize: 'clamp(14px, 2vw, 18px)',
-              color: '#ffd700',
+              color: '#DAA520',
               marginBottom: '40px',
               maxWidth: '800px',
               margin: '0 auto 40px',
@@ -153,7 +153,7 @@ const Home = () => {
             style={{
               fontSize: 'clamp(28px, 4vw, 48px)',
               marginBottom: '16px',
-              color: '#ffd700',
+              color: '#DAA520',
             }}
           >
             Our Services
@@ -191,13 +191,13 @@ const Home = () => {
                   backgroundPosition: 'center',
                 }}
               />
-              <div style={{ color: '#ffd700', marginBottom: '16px' }}>
+              <div style={{ color: '#DAA520', marginBottom: '16px' }}>
                 {service.icon}
               </div>
               <h3
                 style={{
                   fontSize: '24px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                   marginBottom: '12px',
                 }}
               >
@@ -236,7 +236,7 @@ const Home = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
-                color: '#ffd700',
+                color: '#DAA520',
               }}
             >
               Why Choose BM Wealth?
@@ -261,12 +261,12 @@ const Home = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <Shield size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -286,12 +286,12 @@ const Home = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <TrendingUp size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Expert Guidance
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -310,12 +310,12 @@ const Home = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <PieChart size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Personalized Plans
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -340,7 +340,7 @@ const Home = () => {
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#ffd700',
+              color: '#DAA520',
             }}
           >
             Ready to Build Your Wealth?
