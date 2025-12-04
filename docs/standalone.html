@@ -37,8 +37,18 @@
         header {
             background: linear-gradient(to bottom, #000, #1a1a1a);
             padding: 20px;
-            text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .brand {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #DAA520;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
         }
         nav {
             background: #111;
@@ -68,30 +78,33 @@
             margin: 15px 0;
         }
         .hero button {
-            background: #DAA520 !important;
-            color: #000 !important;
-            border: none;
+            background: rgba(218, 165, 32, 0.3) !important;
+            border: 2px solid #DAA520;
+            color: #DAA520 !important;
             padding: 14px 30px;
             margin: 12px;
             font-size: 1.2em;
             cursor: pointer;
             border-radius: 8px;
             font-weight: bold;
-            box-shadow: 0 6px 20px rgba(255,215,0,0.4);
-            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(218,165,32,0.3);
+            transition: all 0.4s ease;
             opacity: 1 !important;
+            backdrop-filter: blur(10px);
         }
         .hero button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255,215,0,0.6);
-            background: #E5B732 !important;
+            box-shadow: 0 8px 25px rgba(218,165,32,0.5);
+            background: rgba(218, 165, 32, 0.5) !important;
+            border-color: #E5B732;
         }
         .hero button:active,
         .hero button:focus {
             background: #DAA520 !important;
-            outline: 2px solid #E5B732;
-            outline-offset: 2px;
-            box-shadow: 0 6px 20px rgba(255,215,0,0.6);
+            color: #000 !important;
+            outline: none;
+            border-color: #DAA520;
+            box-shadow: 0 6px 20px rgba(218,165,32,0.6);
         }
         .services {
             padding: 70px 20px;
@@ -153,30 +166,33 @@
             margin-bottom: 30px;
         }
         .cta button {
-            background: #DAA520 !important;
-            color: #000 !important;
-            border: none;
+            background: rgba(218, 165, 32, 0.3) !important;
+            border: 2px solid #DAA520;
+            color: #DAA520 !important;
             padding: 14px 30px;
             margin: 12px;
             font-size: 1.2em;
             cursor: pointer;
             border-radius: 8px;
             font-weight: bold;
-            box-shadow: 0 6px 20px rgba(255,215,0,0.4);
-            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(218,165,32,0.3);
+            transition: all 0.4s ease;
             opacity: 1 !important;
+            backdrop-filter: blur(10px);
         }
         .cta button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255,215,0,0.6);
-            background: #E5B732 !important;
+            box-shadow: 0 8px 25px rgba(218,165,32,0.5);
+            background: rgba(218, 165, 32, 0.5) !important;
+            border-color: #E5B732;
         }
         .cta button:active,
         .cta button:focus {
             background: #DAA520 !important;
-            outline: 2px solid #E5B732;
-            outline-offset: 2px;
-            box-shadow: 0 6px 20px rgba(255,215,0,0.6);
+            color: #000 !important;
+            outline: none;
+            border-color: #DAA520;
+            box-shadow: 0 6px 20px rgba(218,165,32,0.6);
         }
         footer {
             background: #000;
@@ -194,6 +210,7 @@
 </head>
 <body>
     <header>
+        <div class="brand">BM Wealth</div>
         <nav>
             <a href="#hero">Home</a>
             <a href="#why-choose">About</a>
