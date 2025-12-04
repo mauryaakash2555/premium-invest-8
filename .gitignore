@@ -82,3 +82,6 @@ android-sdk/ -e
 # Environment files
 *.env
 *.env.*
+
+# Project archive zip files
+premium-invest-8-complete-*.zip
