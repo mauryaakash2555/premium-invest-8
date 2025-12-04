@@ -31,7 +31,7 @@ const Footer = () => {
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '24px',
-                color: '#ffd700',
+                color: '#DAA520',
                 marginBottom: '16px',
               }}
             >
@@ -39,7 +39,7 @@ const Footer = () => {
             </h3>
             <p
               style={{
-                color: '#ffd700',
+                color: '#C0A062',
                 fontSize: '14px',
                 lineHeight: '1.6',
                 marginBottom: '12px',
@@ -62,7 +62,7 @@ const Footer = () => {
           <div>
             <h4
               style={{
-                color: '#ffd700',
+                color: '#DAA520',
                 fontSize: '18px',
                 marginBottom: '16px',
                 fontWeight: 600,
@@ -79,7 +79,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 Home
@@ -92,7 +92,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 About Us
@@ -105,7 +105,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 Services
@@ -118,7 +118,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 Blog
@@ -131,7 +131,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 Contact
@@ -142,7 +142,7 @@ const Footer = () => {
           <div>
             <h4
               style={{
-                color: '#ffd700',
+                color: '#DAA520',
                 fontSize: '18px',
                 marginBottom: '16px',
                 fontWeight: 600,
@@ -183,7 +183,7 @@ const Footer = () => {
           <div>
             <h4
               style={{
-                color: '#ffd700',
+                color: '#DAA520',
                 fontSize: '18px',
                 marginBottom: '16px',
                 fontWeight: 600,
@@ -201,7 +201,7 @@ const Footer = () => {
                   color: '#FFFFFF',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 <Youtube size={24} />
@@ -215,7 +215,7 @@ const Footer = () => {
                   color: '#FFFFFF',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 <Instagram size={24} />
@@ -229,7 +229,7 @@ const Footer = () => {
                   color: '#FFFFFF',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 <Linkedin size={24} />
@@ -243,7 +243,7 @@ const Footer = () => {
                   color: '#FFFFFF',
                   transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#ffd700')}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
                 onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
               >
                 <Facebook size={24} />

@@ -11,37 +11,37 @@ const Home = () => {
     {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
-      description: 'Best SIP plans & fund selection for Mumbai investors',
+      description: 'Diversified investment options with expert fund selection and performance insights.',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
-      description: 'Personalized PMS strategies for optimal returns',
+      description: 'Personalized wealth management strategies tailored to your financial goals.',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <CreditCard size={40} />,
-      title: 'Trading',
-      description: 'Real-time market insights and advanced tools',
+      title: 'Trading Services',
+      description: 'Real-time market access with advanced tools and expert guidance.',
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
-      description: 'Life & health protection plans tailored for you',
+      description: 'Comprehensive life and health insurance plans for financial security.',
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
-      description: 'Secure returns with flexible tenure and rates',
+      description: 'Secure returns with flexible tenure options and competitive rates.',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
     },
     {
       icon: <Repeat size={40} />,
-      title: 'LIC',
-      description: 'Trusted LIC policies for savings and insurance',
+      title: 'SIP',
+      description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
     },
   ];
@@ -92,16 +92,15 @@ const Home = () => {
               fontSize: 'clamp(32px, 5vw, 72px)',
               marginBottom: '24px',
               lineHeight: 1.2,
-              color: '#ffd700',
-              textShadow: '2px 2px 10px #000',
             }}
+            className="golden-gradient"
           >
             BM Wealth
           </h1>
           <h2
             style={{
               fontSize: 'clamp(20px, 3vw, 36px)',
-              color: '#ffd700',
+              color: '#C0A062',
               marginBottom: '16px',
               fontWeight: 500,
             }}
@@ -111,14 +110,15 @@ const Home = () => {
           <p
             style={{
               fontSize: 'clamp(14px, 2vw, 18px)',
-              color: '#ffd700',
+              color: '#FFFFFF',
               marginBottom: '40px',
               maxWidth: '800px',
               margin: '0 auto 40px',
               lineHeight: 1.6,
             }}
           >
-            Mutual Funds • LIC • PMS • Insurance • Trading • Wealth Management • FD
+            ARN 90008 | Expert financial advisory and investment services tailored
+            for your wealth creation journey
           </p>
 
           <div
@@ -137,10 +137,10 @@ const Home = () => {
               className="btn-primary"
               data-testid="free-financial-guide-btn"
             >
-              Get Free SIP Guide
+              Get Free Financial Guide
             </a>
             <Link to="/services" className="btn-secondary" data-testid="explore-services-btn">
-              Explore Services
+              Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
         </div>
@@ -153,15 +153,15 @@ const Home = () => {
             style={{
               fontSize: 'clamp(28px, 4vw, 48px)',
               marginBottom: '16px',
-              color: '#ffd700',
             }}
+            className="golden-gradient"
           >
             Our Services
           </h2>
           <p
             style={{
               fontSize: '18px',
-              color: '#fff',
+              color: '#C0A062',
               maxWidth: '700px',
               margin: '0 auto',
             }}
@@ -191,13 +191,13 @@ const Home = () => {
                   backgroundPosition: 'center',
                 }}
               />
-              <div style={{ color: '#ffd700', marginBottom: '16px' }}>
+              <div style={{ color: '#DAA520', marginBottom: '16px' }}>
                 {service.icon}
               </div>
               <h3
                 style={{
                   fontSize: '24px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                   marginBottom: '12px',
                 }}
               >
@@ -236,8 +236,8 @@ const Home = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
-                color: '#ffd700',
               }}
+              className="golden-gradient"
             >
               Why Choose BM Wealth?
             </h2>
@@ -255,19 +255,19 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(255, 215, 0, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <Shield size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
-                AMFI Registered
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                SEBI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 ARN 90008 - Fully compliant and registered financial advisory
@@ -280,18 +280,18 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(255, 215, 0, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <TrendingUp size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Expert Guidance
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -304,19 +304,19 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(255, 215, 0, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#ffd700',
+                  color: '#DAA520',
                 }}
               >
                 <PieChart size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#ffd700', marginBottom: '12px' }}>
-                Personalized Plans
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                Tailored Solutions
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 Personalized investment strategies aligned with your financial goals
@@ -340,10 +340,10 @@ const Home = () => {
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#ffd700',
+              color: '#DAA520',
             }}
           >
-            Ready to Build Your Wealth?
+            Ready to Start Your Wealth Journey?
           </h2>
           <p
             style={{
@@ -354,7 +354,7 @@ const Home = () => {
               margin: '0 auto 30px',
             }}
           >
-            Free consultation • Zero charges
+            Connect with our experts today for a free financial consultation
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a

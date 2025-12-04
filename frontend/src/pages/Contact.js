@@ -93,7 +93,7 @@ const Contact = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#ffd700',
+              color: '#C0A062',
               maxWidth: '700px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -120,7 +120,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '30px',
-                color: '#ffd700',
+                color: '#DAA520',
               }}
             >
               Contact Information
@@ -145,14 +145,14 @@ const Contact = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#ffd700',
+                    color: '#DAA520',
                     flexShrink: 0,
                   }}
                 >
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#ffd700', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
                     Phone
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>+91 8850977259</p>
@@ -177,14 +177,14 @@ const Contact = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#ffd700',
+                    color: '#DAA520',
                     flexShrink: 0,
                   }}
                 >
                   <Mail size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#ffd700', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
                     Email
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
@@ -211,14 +211,14 @@ const Contact = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#ffd700',
+                    color: '#DAA520',
                     flexShrink: 0,
                   }}
                 >
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#ffd700', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
                     Location
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
@@ -280,7 +280,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 36px)',
                 marginBottom: '30px',
-                color: '#ffd700',
+                color: '#DAA520',
               }}
             >
               Send Us a Message
@@ -292,7 +292,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#ffd700',
+                    color: '#C0A062',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -317,7 +317,7 @@ const Contact = () => {
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#ffd700')}
+                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
                 />
               </div>
@@ -328,7 +328,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#ffd700',
+                    color: '#C0A062',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -353,7 +353,7 @@ const Contact = () => {
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#ffd700')}
+                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
                 />
               </div>
@@ -364,7 +364,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#ffd700',
+                    color: '#C0A062',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -389,7 +389,7 @@ const Contact = () => {
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#ffd700')}
+                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
                 />
               </div>
@@ -400,7 +400,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#ffd700',
+                    color: '#C0A062',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -426,7 +426,7 @@ const Contact = () => {
                     resize: 'vertical',
                     transition: 'border-color 0.3s ease',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#ffd700')}
+                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
                 />
               </div>
@@ -474,7 +474,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '16px',
-                color: '#ffd700',
+                color: '#DAA520',
               }}
             >
               Stay Updated with BM Wealth

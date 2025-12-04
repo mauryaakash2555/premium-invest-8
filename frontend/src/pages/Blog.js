@@ -97,7 +97,7 @@ const Blog = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#ffd700',
+              color: '#C0A062',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -112,7 +112,7 @@ const Blog = () => {
       <section className="section-container">
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <p style={{ fontSize: '18px', color: '#ffd700' }}>Loading blog posts...</p>
+            <p style={{ fontSize: '18px', color: '#C0A062' }}>Loading blog posts...</p>
           </div>
         ) : (
           <div
@@ -148,7 +148,7 @@ const Blog = () => {
                     height: '240px',
                     background: post.image_url
                       ? `url(${post.image_url})`
-                      : 'linear-gradient(135deg, #ffd700 0%, #ffd700 100%)',
+                      : 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                   }}
@@ -169,7 +169,7 @@ const Blog = () => {
                         alignItems: 'center',
                         gap: '6px',
                         fontSize: '14px',
-                        color: '#ffd700',
+                        color: '#C0A062',
                       }}
                     >
                       <Tag size={14} />
@@ -192,7 +192,7 @@ const Blog = () => {
                   <h3
                     style={{
                       fontSize: '22px',
-                      color: '#ffd700',
+                      color: '#DAA520',
                       marginBottom: '12px',
                       lineHeight: 1.3,
                     }}
@@ -226,7 +226,7 @@ const Blog = () => {
                         alignItems: 'center',
                         gap: '8px',
                         fontSize: '14px',
-                        color: '#ffd700',
+                        color: '#C0A062',
                       }}
                     >
                       <User size={16} />
@@ -238,7 +238,7 @@ const Blog = () => {
                         alignItems: 'center',
                         gap: '6px',
                         fontSize: '14px',
-                        color: '#ffd700',
+                        color: '#DAA520',
                         cursor: 'pointer',
                       }}
                     >
@@ -272,7 +272,7 @@ const Blog = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '20px',
-                color: '#ffd700',
+                color: '#DAA520',
               }}
             >
               BM Wealth Talks Podcast
