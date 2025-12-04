@@ -4,6 +4,10 @@
 # This includes all source code, documentation, and configuration files
 # Excludes: .git, node_modules, and other build artifacts
 
+# Get the directory where the script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+
 echo "Creating complete project zip file..."
 
 # Define the output zip file name with timestamp
@@ -39,8 +43,8 @@ rsync -av \
   --exclude='.cache' \
   --exclude='*.zip' \
   --exclude='*.tar.gz' \
-  --exclude='create-project-zip.sh' \
-  ./ "${DEST_DIR}/"
+  --exclude="${SCRIPT_NAME}" \
+  "${SCRIPT_DIR}/" "${DEST_DIR}/"
 
 # Create the zip file
 echo "Creating zip archive..."
@@ -48,7 +52,8 @@ cd "${TEMP_DIR}"
 zip -r "${ZIP_NAME}" "${PROJECT_NAME}" -x "*.DS_Store" > /dev/null
 
 # Move zip file to project root
-mv "${ZIP_NAME}" "/home/runner/work/premium-invest-8/premium-invest-8/${ZIP_NAME}"
+OUTPUT_PATH="${SCRIPT_DIR}/${ZIP_NAME}"
+mv "${ZIP_NAME}" "${OUTPUT_PATH}"
 
 # Clean up temporary directory
 rm -rf "${TEMP_DIR}"
@@ -70,7 +75,7 @@ echo "  - Log files"
 echo ""
 
 # Display zip file size
-ZIP_SIZE=$(du -h "/home/runner/work/premium-invest-8/premium-invest-8/${ZIP_NAME}" | cut -f1)
+ZIP_SIZE=$(du -h "${OUTPUT_PATH}" | cut -f1)
 echo "Zip file size: ${ZIP_SIZE}"
 echo ""
-echo "Location: /home/runner/work/premium-invest-8/premium-invest-8/${ZIP_NAME}"
+echo "Location: ${OUTPUT_PATH}"
