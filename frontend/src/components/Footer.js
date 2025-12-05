@@ -45,7 +45,7 @@ const Footer = () => {
                 marginBottom: '12px',
               }}
             >
-              ARN 90008 | Mumbai's Premier Financial Partner
+              Mumbai's Premier Financial Partner
             </p>
             <p
               style={{
