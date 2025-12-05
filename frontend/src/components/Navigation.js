@@ -72,16 +72,6 @@ const Navigation = () => {
           >
             BM Wealth
           </div>
-          <span
-            style={{
-              fontSize: '12px',
-              color: '#C0A062',
-              fontWeight: 500,
-              letterSpacing: '1px',
-            }}
-          >
-            ARN 90008
-          </span>
         </Link>
 
         {/* Desktop Menu */}

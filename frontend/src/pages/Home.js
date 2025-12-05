@@ -267,7 +267,7 @@ const Home = () => {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                SEBI Registered
+                AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 ARN 90008 - Fully compliant and registered financial advisory
