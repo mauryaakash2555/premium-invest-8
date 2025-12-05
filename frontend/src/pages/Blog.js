@@ -42,7 +42,7 @@ const Blog = () => {
       title: 'The Power of SIP: Building Wealth Systematically',
       excerpt:
         'Discover how Systematic Investment Plans can help you achieve long-term financial goals through disciplined investing.',
-      author: 'Akash Maurya',
+      author: 'BM Wealth Team',
       category: 'Investment Strategies',
       published_date: new Date().toISOString(),
       image_url: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
