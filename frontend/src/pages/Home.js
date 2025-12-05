@@ -117,7 +117,7 @@ const Home = () => {
               lineHeight: 1.6,
             }}
           >
-            ARN 90008 | Expert financial advisory and investment services tailored
+            Expert financial advisory and investment services tailored
             for your wealth creation journey
           </p>
 
