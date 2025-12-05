@@ -49,7 +49,7 @@ const Footer = () => {
             </p>
             <p
               style={{
-                color: '#888',
+                color: '#CCCCCC',
                 fontSize: '14px',
                 lineHeight: '1.6',
               }}
@@ -273,8 +273,10 @@ const Footer = () => {
           }}
         >
           <p>
-            © {new Date().getFullYear()} BM Wealth. All rights reserved. | ARN
-            90008
+            © {new Date().getFullYear()} BM Wealth. All rights reserved.
+          </p>
+          <p style={{ fontSize: '11px', color: '#666', marginTop: '8px' }}>
+            ARN 90008
           </p>
         </div>
       </div>
