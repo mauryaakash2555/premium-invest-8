@@ -270,7 +270,7 @@ const Home = () => {
                 AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                ARN 90008 - Fully compliant and registered financial advisory
+                Fully compliant and registered financial advisory
                 services
               </p>
             </div>
