@@ -313,7 +313,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            ARN 90008 - Fully compliant with SEBI regulations, ensuring the highest standards
+            Fully compliant with SEBI regulations, ensuring the highest standards
             of financial advisory and investor protection.
           </p>
           <div className="sebi-disclaimer" style={{ maxWidth: '900px', margin: '0 auto' }}>
