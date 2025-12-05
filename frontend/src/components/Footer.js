@@ -49,7 +49,7 @@ const Footer = () => {
             </p>
             <p
               style={{
-                color: '#FFFFFF',
+                color: '#CCCCCC',
                 fontSize: '14px',
                 lineHeight: '1.6',
               }}
