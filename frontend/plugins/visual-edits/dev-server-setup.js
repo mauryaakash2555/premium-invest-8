@@ -38,13 +38,8 @@ function setupDevServer(config) {
         return true;
       }
 
-      // Allow all emergent.sh subdomains
-      if (origin.match(/^https:\/\/([a-zA-Z0-9-]+\.)*emergent\.sh$/)) {
-        return true;
-      }
-
-      // Allow all emergentagent.com subdomains
-      if (origin.match(/^https:\/\/([a-zA-Z0-9-]+\.)*emergentagent\.com$/)) {
+      // CORS configuration for BM Wealth domain
+      if (origin.match(/^https:\/\/(www\.)?bmwealth\.co\.in$/)) {
         return true;
       }
 
@@ -132,8 +127,7 @@ function setupDevServer(config) {
                 } else if (file.isFile()) {
                   // Check if filename matches (basename without extension)
                   const fileBaseName = file.name.replace(
-                    /\.(js|jsx|ts|tsx)$/,
-                    "",
+                    \.(js|jsx|ts|tsx)$/, "",
                   );
                   if (fileBaseName === filename) {
                     return fullPath;
@@ -162,7 +156,7 @@ function setupDevServer(config) {
           const normalizedTarget = path.normalize(targetFile);
           const isInFrontend =
             normalizedTarget.startsWith(frontendRoot) &&
-            !normalizedTarget.includes("..");
+            !normalizedTarget.includes("..") ;
           const isNodeModules = normalizedTarget.includes("node_modules");
           const isPublic =
             normalizedTarget.includes("/public/") ||
@@ -410,7 +404,7 @@ function setupDevServer(config) {
                     };
                     const oldContent = generate(oldContentAST, {}, "")
                       .code.replace(/^<>/, "")
-                      .replace(/<\/>$/, "")
+                      .replace(/<\/?>$/, "")
                       .trim();
 
                     const newChildren = parseJsxChildren(change.content);
@@ -473,8 +467,8 @@ function setupDevServer(config) {
           const timestamp = Date.now();
           try {
             // Use -c flag for per-invocation git config to avoid modifying any config
-            execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" add "${targetFile}"`);
-            execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" commit -m "visual_edit_${timestamp}"`);
+            execSync(`git -c user.name=\"BM Wealth Dev\" -c user.email=\"dev@bmwealth.co.in\" add \"${targetFile}\"`);
+            execSync(`git -c user.name=\"BM Wealth Dev\" -c user.email=\"dev@bmwealth.co.in\" commit -m \"visual_edit_${timestamp}\"`);
           } catch (gitError) {
             console.error(`Git commit failed: ${gitError.message}`);
             // Continue even if git fails - file write succeeded
