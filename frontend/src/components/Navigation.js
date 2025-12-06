@@ -60,6 +60,15 @@ const Navigation = () => {
             gap: '12px',
           }}
         >
+          <img
+            src="/logo.png"
+            alt="BM Wealth Logo"
+            style={{
+              height: '40px',
+              width: '40px',
+              objectFit: 'contain',
+            }}
+          />
           <div
             style={{
               fontSize: '28px',

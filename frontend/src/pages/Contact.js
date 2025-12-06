@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Send } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { Helmet } from 'react-helmet-async';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -76,7 +77,16 @@ const Contact = () => {
         recaptcha_token: token
       });
       
-      toast.success('Message sent successfully! We will contact you soon.');
+      toast.success('Message sent successfully! We\'ll contact you soon.', {
+        style: {
+          background: '#25D366',
+          color: 'white',
+          fontWeight: 'bold',
+          border: 'none',
+        },
+        icon: '✓',
+        duration: 4000,
+      });
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -92,6 +102,24 @@ const Contact = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Contact BM Wealth - Expert Financial Advisory Mumbai | ARN 90008</title>
+        <meta name="description" content="Get in touch with BM Wealth for personalized investment advisory services. Located in Mumbai. Call, email, or visit us. SEBI registered ARN 90008." />
+        <meta name="keywords" content="contact BM Wealth, investment advisor Mumbai contact, Brahmdeo Maurya contact, ARN 90008, financial advisor Mumbai" />
+        <link rel="canonical" href="https://bmwealth.in/contact" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bmwealth.in/contact" />
+        <meta property="og:title" content="Contact BM Wealth - Expert Financial Advisory Mumbai" />
+        <meta property="og:description" content="Get in touch with BM Wealth for personalized investment advisory services. SEBI registered ARN 90008." />
+        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://bmwealth.in/contact" />
+        <meta name="twitter:title" content="Contact BM Wealth - Expert Financial Advisory Mumbai" />
+        <meta name="twitter:description" content="Get in touch with BM Wealth for personalized investment advisory services." />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+      </Helmet>
       {/* Hero Section */}
       <section
         style={{

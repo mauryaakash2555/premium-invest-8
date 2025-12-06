@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat } from 'lucide-react';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
   useEffect(() => {
@@ -48,6 +49,26 @@ const Home = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>BM Wealth - Mumbai's Premier Financial Partner | Mutual Funds, SIP, PMS | ARN 90008</title>
+        <meta name="description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008. Led by Brahmdeo Maurya. Start your wealth journey today." />
+        <meta name="keywords" content="BM Wealth, Mumbai investment advisor, mutual funds Mumbai, SIP investment, portfolio management, ARN 90008, Brahmdeo Maurya, financial planning Mumbai" />
+        <link rel="canonical" href="https://bmwealth.in/" />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bmwealth.in/" />
+        <meta property="og:title" content="BM Wealth - Mumbai's Premier Financial Partner | ARN 90008" />
+        <meta property="og:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008." />
+        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://bmwealth.in/" />
+        <meta name="twitter:title" content="BM Wealth - Mumbai's Premier Financial Partner" />
+        <meta name="twitter:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services." />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+      </Helmet>
       {/* Hero Section */}
       <section
         className="hero-gradient"

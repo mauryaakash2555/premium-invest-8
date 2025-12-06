@@ -1,5 +1,6 @@
 import { Users, Award, Target, Heart } from 'lucide-react';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const About = () => {
   useEffect(() => {
@@ -8,6 +9,24 @@ const About = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>About BM Wealth - Led by Brahmdeo Maurya | Mumbai Investment Advisory ARN 90008</title>
+        <meta name="description" content="Learn about BM Wealth and founder Brahmdeo Maurya. SEBI registered investment advisor ARN 90008 providing expert financial planning and wealth management in Mumbai." />
+        <meta name="keywords" content="Brahmdeo Maurya, BM Wealth about, investment advisor Mumbai, ARN 90008, SEBI registered advisor, financial planner Mumbai" />
+        <link rel="canonical" href="https://bmwealth.in/about" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bmwealth.in/about" />
+        <meta property="og:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
+        <meta property="og:description" content="SEBI registered investment advisor ARN 90008 providing expert financial planning in Mumbai." />
+        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://bmwealth.in/about" />
+        <meta name="twitter:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
+        <meta name="twitter:description" content="SEBI registered investment advisor ARN 90008 providing expert financial planning in Mumbai." />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+      </Helmet>
       {/* Hero Section */}
       <section
         style={{

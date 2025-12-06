@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Shield, FileText, AlertCircle, Phone, Mail } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const Compliance = () => {
   useEffect(() => {
@@ -8,6 +9,24 @@ const Compliance = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>SEBI Compliance & Investor Charter | BM Wealth Mumbai ARN 90008</title>
+        <meta name="description" content="BM Wealth SEBI compliance, investor charter, grievance redressal mechanism. AMFI registered ARN 90008. Transparent and regulated investment advisory in Mumbai." />
+        <meta name="keywords" content="SEBI compliance, investor charter, ARN 90008, AMFI registered, investment advisor compliance, grievance redressal, investor protection" />
+        <link rel="canonical" href="https://bmwealth.in/compliance" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bmwealth.in/compliance" />
+        <meta property="og:title" content="SEBI Compliance & Investor Charter | BM Wealth ARN 90008" />
+        <meta property="og:description" content="SEBI compliance, investor charter, and grievance redressal. AMFI registered ARN 90008." />
+        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://bmwealth.in/compliance" />
+        <meta name="twitter:title" content="SEBI Compliance & Investor Charter | BM Wealth" />
+        <meta name="twitter:description" content="SEBI compliance, investor charter, and grievance redressal. AMFI registered ARN 90008." />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+      </Helmet>
       {/* Hero Section */}
       <section
         style={{
