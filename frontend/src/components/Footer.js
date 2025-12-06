@@ -137,6 +137,19 @@ const Footer = () => {
               >
                 Contact
               </Link>
+              <Link
+                to="/compliance"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  transition: 'color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+              >
+                Compliance
+              </Link>
             </div>
           </div>
 

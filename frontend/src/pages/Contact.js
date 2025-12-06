@@ -14,10 +14,32 @@ const Contact = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // reCAPTCHA site key from environment variable
+  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Load reCAPTCHA v3 script
+    if (!RECAPTCHA_SITE_KEY) {
+      console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup: remove script on unmount
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [RECAPTCHA_SITE_KEY]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,12 +50,41 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post(`${API}/contact`, formData);
+      // Get reCAPTCHA token
+      if (!RECAPTCHA_SITE_KEY) {
+        toast.error('reCAPTCHA is not configured. Please contact support.');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // Wait for grecaptcha to be ready
+      if (!window.grecaptcha) {
+        toast.error('reCAPTCHA not loaded. Please refresh the page.');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      await new Promise((resolve) => {
+        window.grecaptcha.ready(resolve);
+      });
+      
+      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+      
+      // Send form data with reCAPTCHA token
+      await axios.post(`${API}/contact`, {
+        ...formData,
+        recaptcha_token: token
+      });
+      
       toast.success('Message sent successfully! We will contact you soon.');
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to send message. Please try again.');
+      if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
+        toast.error('Security verification failed. Please try again.');
+      } else {
+        toast.error('Failed to send message. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
