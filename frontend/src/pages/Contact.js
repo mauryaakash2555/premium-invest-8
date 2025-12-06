@@ -14,23 +14,32 @@ const Contact = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // reCAPTCHA site key from environment variable
+  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
 
   useEffect(() => {
     window.scrollTo(0, 0);
     
     // Load reCAPTCHA v3 script
-    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
+    if (!RECAPTCHA_SITE_KEY) {
+      console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
+      return;
+    }
+    
     const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
     
     return () => {
       // Cleanup: remove script on unmount
-      document.head.removeChild(script);
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
     };
-  }, []);
+  }, [RECAPTCHA_SITE_KEY]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,7 +51,11 @@ const Contact = () => {
 
     try {
       // Get reCAPTCHA token
-      const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
+      if (!RECAPTCHA_SITE_KEY) {
+        toast.error('reCAPTCHA is not configured. Please contact support.');
+        setIsSubmitting(false);
+        return;
+      }
       
       // Wait for grecaptcha to be ready
       if (!window.grecaptcha) {
@@ -55,7 +68,7 @@ const Contact = () => {
         window.grecaptcha.ready(resolve);
       });
       
-      const token = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
       
       // Send form data with reCAPTCHA token
       await axios.post(`${API}/contact`, {
