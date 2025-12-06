@@ -35,6 +35,11 @@ dist
 *token.json*
 *credentials.json*
 
+# Environment files
+*.env
+*.env.*
+!.env.example
+
 # Logs and debug files
 npm-debug.log*
 yarn-debug.log*
@@ -77,35 +82,5 @@ agenthub/agents/youtube/db
 .cache/
 
 # Mobile development
-android-sdk/ -e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
+android-sdk/
+
