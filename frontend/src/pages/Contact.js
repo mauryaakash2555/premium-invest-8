@@ -17,6 +17,19 @@ const Contact = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Load reCAPTCHA v3 script
+    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup: remove script on unmount
+      document.head.removeChild(script);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -28,12 +41,37 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post(`${API}/contact`, formData);
+      // Get reCAPTCHA token
+      const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
+      
+      // Wait for grecaptcha to be ready
+      if (!window.grecaptcha) {
+        toast.error('reCAPTCHA not loaded. Please refresh the page.');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      await new Promise((resolve) => {
+        window.grecaptcha.ready(resolve);
+      });
+      
+      const token = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+      
+      // Send form data with reCAPTCHA token
+      await axios.post(`${API}/contact`, {
+        ...formData,
+        recaptcha_token: token
+      });
+      
       toast.success('Message sent successfully! We will contact you soon.');
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to send message. Please try again.');
+      if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
+        toast.error('Security verification failed. Please try again.');
+      } else {
+        toast.error('Failed to send message. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }

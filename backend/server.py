@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
+import requests
 
 
 ROOT_DIR = Path(__file__).parent
@@ -42,6 +43,7 @@ class ContactFormCreate(BaseModel):
     email: EmailStr
     phone: str
     message: str
+    recaptcha_token: str
 
 class Newsletter(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -80,7 +82,33 @@ async def root():
 
 @api_router.post("/contact", response_model=ContactForm)
 async def create_contact(input: ContactFormCreate):
-    contact_dict = input.model_dump()
+    # Verify reCAPTCHA token
+    recaptcha_token = input.recaptcha_token
+    secret_key = os.environ.get('RECAPTCHA_SECRET_KEY')
+    
+    if not secret_key:
+        logger.warning("RECAPTCHA_SECRET_KEY not configured")
+        raise HTTPException(status_code=500, detail="reCAPTCHA configuration error")
+    
+    # Verify token with Google
+    verify_url = 'https://www.google.com/recaptcha/api/siteverify'
+    verify_data = {
+        'secret': secret_key,
+        'response': recaptcha_token
+    }
+    
+    try:
+        verify_response = requests.post(verify_url, data=verify_data, timeout=10).json()
+        
+        if not verify_response.get('success') or verify_response.get('score', 0) < 0.5:
+            logger.warning(f"reCAPTCHA verification failed: {verify_response}")
+            raise HTTPException(status_code=400, detail="reCAPTCHA verification failed")
+    except requests.RequestException as e:
+        logger.error(f"reCAPTCHA verification request failed: {e}")
+        raise HTTPException(status_code=500, detail="reCAPTCHA verification error")
+    
+    # Remove recaptcha_token before saving to database
+    contact_dict = input.model_dump(exclude={'recaptcha_token'})
     contact_obj = ContactForm(**contact_dict)
     
     doc = contact_obj.model_dump()
