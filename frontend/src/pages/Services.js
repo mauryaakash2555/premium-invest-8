@@ -123,11 +123,38 @@ const Services = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
+          position: 'relative',
+          overflow: 'hidden',
           paddingTop: '100px',
         }}
       >
-        <div className="section-container" style={{ textAlign: 'center' }}>
+        {/* Background Image */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.2,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
+          }}
+        />
+
+        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1
             data-testid="services-heading"
             style={{
