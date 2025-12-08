@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Youtube, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -45,7 +44,7 @@ const Footer = () => {
                 marginBottom: '12px',
               }}
             >
-              Mumbai's Premier Financial Partner
+              Premium Financial Advisory
             </p>
             <p
               style={{
@@ -54,8 +53,7 @@ const Footer = () => {
                 lineHeight: '1.6',
               }}
             >
-              Empowering investors with tailored financial solutions and decades
-              of expertise.
+              Empowering investors with tailored financial solutions in Mumbai.
             </p>
           </div>
 
@@ -137,6 +135,74 @@ const Footer = () => {
               >
                 Contact
               </Link>
+            </div>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h4
+              style={{
+                color: '#DAA520',
+                fontSize: '18px',
+                marginBottom: '16px',
+                fontWeight: 600,
+              }}
+            >
+              Legal
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <Link
+                to="/terms-and-conditions"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  transition: 'color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+              >
+                Terms & Conditions
+              </Link>
+              <Link
+                to="/privacy-policy"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  transition: 'color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/disclaimer"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  transition: 'color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+              >
+                Disclaimer
+              </Link>
+              <Link
+                to="/refund-policy"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  transition: 'color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+              >
+                Refund Policy
+              </Link>
               <Link
                 to="/compliance"
                 style={{
@@ -170,109 +236,30 @@ const Footer = () => {
                 Phone: +91 8850977259
               </p>
               <p style={{ color: '#FFFFFF', fontSize: '14px' }}>
-                Email: mauryaakash2555@gmail.com
+                Email: support@bmwealth.co.in
               </p>
-              <a
-                href="https://wa.me/918850977259"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="footer-whatsapp-link"
-                style={{
-                  color: '#25D366',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#1DA851')}
-                onMouseLeave={(e) => (e.target.style.color = '#25D366')}
-              >
-                <MessageCircle size={16} />
-                WhatsApp Us
-              </a>
-            </div>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h4
-              style={{
-                color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
-                fontWeight: 600,
-              }}
-            >
-              Follow Us
-            </h4>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <a
-                href="https://www.youtube.com/@BMWealthMumbai"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="social-youtube"
-                style={{
-                  color: '#FFFFFF',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
-                <Youtube size={24} />
-              </a>
-              <a
-                href="https://www.instagram.com/BMWealthOfficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="social-instagram"
-                style={{
-                  color: '#FFFFFF',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
-                <Instagram size={24} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/bm-wealth"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="social-linkedin"
-                style={{
-                  color: '#FFFFFF',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
-                <Linkedin size={24} />
-              </a>
-              <a
-                href="https://www.facebook.com/BMWealthMumbai"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="social-facebook"
-                style={{
-                  color: '#FFFFFF',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
-                <Facebook size={24} />
-              </a>
+              <p style={{ color: '#CCCCCC', fontSize: '13px', marginTop: '4px' }}>
+                Mumbai, Maharashtra
+              </p>
             </div>
           </div>
         </div>
 
-        {/* SEBI Disclaimer */}
-        <div className="sebi-disclaimer" style={{ marginBottom: '30px' }}>
-          <strong>SEBI Disclaimer:</strong> Investments are subject to market
-          risks. Past performance is not indicative of future results. Please read
-          all scheme-related documents carefully before investing. ARN 90008.
+        {/* Disclaimer */}
+        <div
+          style={{
+            marginBottom: '30px',
+            padding: '16px',
+            backgroundColor: 'rgba(218, 165, 32, 0.1)',
+            borderRadius: '8px',
+            borderLeft: '4px solid #DAA520',
+          }}
+        >
+          <p style={{ color: '#CCCCCC', fontSize: '13px', lineHeight: '1.6' }}>
+            <strong style={{ color: '#DAA520' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market
+            risks. Past performance is not indicative of future results. Please read
+            all scheme-related documents carefully before investing.
+          </p>
         </div>
 
         {/* Copyright */}
@@ -281,15 +268,13 @@ const Footer = () => {
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             paddingTop: '20px',
             textAlign: 'center',
-            color: '#888',
-            fontSize: '14px',
           }}
         >
-          <p>
+          <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
             © {new Date().getFullYear()} BM Wealth. All rights reserved.
           </p>
-          <p style={{ fontSize: '11px', color: '#666', marginTop: '8px' }}>
-            ARN 90008
+          <p style={{ color: '#C0A062', fontSize: '13px' }}>
+            IRDAI Licensed | AMFI Registered
           </p>
         </div>
       </div>

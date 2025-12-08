@@ -7,6 +7,10 @@ import Services from "@/pages/Services";
 import Contact from "@/pages/Contact";
 import Blog from "@/pages/Blog";
 import Compliance from "@/pages/Compliance";
+import TermsAndConditions from "@/pages/TermsAndConditions";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import Disclaimer from "@/pages/Disclaimer";
+import RefundPolicy from "@/pages/RefundPolicy";
 import Layout from "@/components/Layout";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -23,6 +27,10 @@ function App() {
               <Route path="contact" element={<Contact />} />
               <Route path="blog" element={<Blog />} />
               <Route path="compliance" element={<Compliance />} />
+              <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+              <Route path="privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="disclaimer" element={<Disclaimer />} />
+              <Route path="refund-policy" element={<RefundPolicy />} />
             </Route>
           </Routes>
         </BrowserRouter>
