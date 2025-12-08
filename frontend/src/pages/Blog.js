@@ -83,13 +83,13 @@ const Blog = () => {
         <meta property="og:url" content="https://bmwealth.in/blog" />
         <meta property="og:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta property="og:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
-        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/blog" />
         <meta name="twitter:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section

@@ -61,8 +61,10 @@ const Navigation = () => {
           }}
         >
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="BM Wealth Logo"
+            width="40"
+            height="40"
             style={{
               height: '40px',
               width: '40px',
