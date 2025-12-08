@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat } from 'lucide-react';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import LazyImage from '@/components/LazyImage';
 
 const Home = () => {
   useEffect(() => {
@@ -13,37 +14,37 @@ const Home = () => {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
       description: 'Diversified investment options with expert fund selection and performance insights.',
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
       description: 'Personalized wealth management strategies tailored to your financial goals.',
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading Services',
       description: 'Real-time market access with advanced tools and expert guidance.',
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
       description: 'Comprehensive life and health insurance plans for financial security.',
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
       description: 'Secure returns with flexible tenure options and competitive rates.',
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <Repeat size={40} />,
       title: 'SIP',
       description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
     },
   ];
 
@@ -91,7 +92,7 @@ const Home = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?crop=entropy&cs=srgb&fm=jpg&q=85)',
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.15,
@@ -201,15 +202,14 @@ const Home = () => {
         >
           {services.map((service, index) => (
             <div key={index} className="service-card slide-up" data-testid={`service-card-${index}`}>
-              <div
-                className="image-overlay"
+              <LazyImage
+                src={service.image}
+                alt={service.title}
                 style={{
                   width: '100%',
                   height: '200px',
                   marginBottom: '20px',
-                  background: `url(${service.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
+                  borderRadius: '8px',
                 }}
               />
               <div style={{ color: '#DAA520', marginBottom: '16px' }}>
