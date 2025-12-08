@@ -66,8 +66,6 @@ const Navigation = () => {
             width="40"
             height="40"
             style={{
-              height: '40px',
-              width: '40px',
               objectFit: 'contain',
             }}
           />
