@@ -10,21 +10,21 @@ const Compliance = () => {
   return (
     <div>
       <Helmet>
-        <title>SEBI Compliance & Investor Charter | BM Wealth Mumbai ARN 90008</title>
-        <meta name="description" content="BM Wealth SEBI compliance, investor charter, grievance redressal mechanism. AMFI registered ARN 90008. Transparent and regulated investment advisory in Mumbai." />
-        <meta name="keywords" content="SEBI compliance, investor charter, ARN 90008, AMFI registered, investment advisor compliance, grievance redressal, investor protection" />
+        <title>Regulatory Compliance & Investor Charter | BM Wealth Mumbai ARN 90008</title>
+        <meta name="description" content="BM Wealth regulatory compliance, investor charter, grievance redressal mechanism. IRDAI Licensed and AMFI Registered ARN 90008. Transparent and regulated financial advisory in Mumbai." />
+        <meta name="keywords" content="regulatory compliance, investor charter, ARN 90008, IRDAI licensed, AMFI registered, investment advisor compliance, grievance redressal, investor protection" />
         <link rel="canonical" href="https://bmwealth.in/compliance" />
         
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/compliance" />
-        <meta property="og:title" content="SEBI Compliance & Investor Charter | BM Wealth ARN 90008" />
-        <meta property="og:description" content="SEBI compliance, investor charter, and grievance redressal. AMFI registered ARN 90008." />
+        <meta property="og:title" content="Regulatory Compliance & Investor Charter | BM Wealth ARN 90008" />
+        <meta property="og:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
         <meta property="og:image" content="https://bmwealth.in/logo.png" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/compliance" />
-        <meta name="twitter:title" content="SEBI Compliance & Investor Charter | BM Wealth" />
-        <meta name="twitter:description" content="SEBI compliance, investor charter, and grievance redressal. AMFI registered ARN 90008." />
+        <meta name="twitter:title" content="Regulatory Compliance & Investor Charter | BM Wealth" />
+        <meta name="twitter:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
         <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
       </Helmet>
       {/* Hero Section */}
@@ -73,7 +73,7 @@ const Compliance = () => {
             }}
             className="golden-gradient"
           >
-            SEBI Compliance & Investor Charter
+            Regulatory Compliance & Investor Charter
           </h1>
           <p
             style={{
@@ -84,7 +84,7 @@ const Compliance = () => {
               lineHeight: 1.6,
             }}
           >
-            Committed to transparency, investor protection, and regulatory compliance
+            Committed to transparency, investor protection, and regulatory compliance with IRDAI and AMFI
           </p>
         </div>
       </section>
@@ -124,7 +124,7 @@ const Compliance = () => {
             </h3>
             <p style={{ marginBottom: '20px' }}>
               BM Wealth is committed to providing professional investment advisory services with the highest
-              standards of integrity, transparency, and investor protection in accordance with SEBI regulations.
+              standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
 
             <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
@@ -186,7 +186,7 @@ const Compliance = () => {
                 Protect your confidential information and ensure data security
               </li>
               <li style={{ marginBottom: '12px' }}>
-                Comply with all SEBI regulations and industry best practices
+                Comply with all IRDAI and AMFI regulations and industry best practices
               </li>
               <li style={{ marginBottom: '12px' }}>
                 Provide timely and accurate information about your investments
@@ -205,9 +205,11 @@ const Compliance = () => {
                 borderLeft: '4px solid #DAA520',
               }}
             >
-              <strong>SEBI Registration:</strong> ARN 90008
+              <strong>AMFI Registration:</strong> ARN 90008
               <br />
-              <strong>Validity:</strong> Perpetual (subject to SEBI regulations)
+              <strong>Validity:</strong> Perpetual (subject to regulatory compliance)
+              <br />
+              <strong>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
               <br />
               <strong>Principal Officer:</strong> Available on request
             </div>
@@ -280,10 +282,10 @@ const Compliance = () => {
             </ul>
 
             <h4 style={{ color: '#C0A062', fontSize: '20px', marginTop: '25px', marginBottom: '15px' }}>
-              Step 3: Escalation to SEBI
+              Step 3: Escalation to Regulatory Authorities
             </h4>
             <p style={{ marginBottom: '20px' }}>
-              If you are not satisfied with our resolution, you may escalate your complaint to:
+              If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
             </p>
             <div
               style={{
@@ -293,19 +295,30 @@ const Compliance = () => {
                 marginBottom: '20px',
               }}
             >
-              <strong style={{ color: '#DAA520' }}>SEBI Complaints Redress System (SCORES)</strong>
+              <strong style={{ color: '#DAA520' }}>AMFI Complaints</strong>
               <br />
               Website:{' '}
               <a
-                href="https://scores.sebi.gov.in"
+                href="https://www.amfiindia.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#DAA520', textDecoration: 'underline' }}
               >
-                https://scores.sebi.gov.in
+                https://www.amfiindia.com
               </a>
               <br />
-              SEBI Toll Free Helpline: 1800 22 7575
+              <br />
+              <strong style={{ color: '#DAA520' }}>IRDAI Grievance Redressal</strong>
+              <br />
+              Website:{' '}
+              <a
+                href="https://www.irdai.gov.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#DAA520', textDecoration: 'underline' }}
+              >
+                https://www.irdai.gov.in
+              </a>
             </div>
 
             <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
@@ -339,7 +352,7 @@ const Compliance = () => {
                 <strong style={{ color: '#DAA520' }}>Important Note:</strong>
                 <p style={{ margin: '8px 0 0 0' }}>
                   Please keep a copy of your complaint and all correspondence for your records. We are committed
-                  to resolving all grievances in a fair, transparent, and timely manner in accordance with SEBI
+                  to resolving all grievances in a fair, transparent, and timely manner in accordance with regulatory
                   guidelines.
                 </p>
               </div>
@@ -361,14 +374,13 @@ const Compliance = () => {
 
           <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: '16px' }}>
             <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Registration Number:</strong> ARN 90008
+              <strong style={{ color: '#C0A062' }}>AMFI Registration Number:</strong> ARN 90008
             </p>
             <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Registered with:</strong> Securities and Exchange Board of
-              India (SEBI)
+              <strong style={{ color: '#C0A062' }}>Registered with:</strong> IRDAI (Insurance Regulatory and Development Authority of India) | AMFI (Association of Mutual Funds in India)
             </p>
             <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Type of Registration:</strong> Investment Adviser
+              <strong style={{ color: '#C0A062' }}>Type of Services:</strong> Insurance Advisory (IRDAI Licensed) & Mutual Fund Distribution (AMFI Registered)
             </p>
             <p style={{ marginBottom: '15px' }}>
               <strong style={{ color: '#C0A062' }}>Principal Place of Business:</strong> Mumbai, Maharashtra
