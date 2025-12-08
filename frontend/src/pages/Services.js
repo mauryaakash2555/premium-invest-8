@@ -2,6 +2,7 @@ import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRigh
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import LazyImage from '@/components/LazyImage';
 
 const Services = () => {
   useEffect(() => {
@@ -21,7 +22,7 @@ const Services = () => {
         'Regular portfolio rebalancing',
         'Tax-efficient investing',
       ],
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <TrendingUp size={50} />,
@@ -35,7 +36,7 @@ const Services = () => {
         'Regular performance reviews',
         'Direct equity investments',
       ],
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <CreditCard size={50} />,
@@ -49,7 +50,7 @@ const Services = () => {
         'Low brokerage rates',
         'Expert trading support',
       ],
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?crop=entropy&cs=srgb&fm=jpg&q=85',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <Shield size={50} />,
@@ -63,7 +64,7 @@ const Services = () => {
         'Policy comparison and analysis',
         'Claims assistance',
       ],
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <DollarSign size={50} />,
@@ -77,7 +78,7 @@ const Services = () => {
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <Repeat size={50} />,
@@ -91,7 +92,7 @@ const Services = () => {
         'Auto-debit facility',
         'Goal-based planning',
       ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
   ];
 
@@ -226,27 +227,25 @@ const Services = () => {
                       ))}
                     </ul>
                   </div>
-                  <div
-                    className="image-overlay"
+                  <LazyImage
+                    src={service.image}
+                    alt={service.title}
                     style={{
                       width: '100%',
                       height: '400px',
-                      background: `url(${service.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      borderRadius: '8px',
                     }}
                   />
                 </>
               ) : (
                 <>
-                  <div
-                    className="image-overlay"
+                  <LazyImage
+                    src={service.image}
+                    alt={service.title}
                     style={{
                       width: '100%',
                       height: '400px',
-                      background: `url(${service.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      borderRadius: '8px',
                       order: 1,
                     }}
                   />

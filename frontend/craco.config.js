@@ -1,5 +1,6 @@
 // craco.config.js
 const path = require("path");
+const CompressionPlugin = require("compression-webpack-plugin");
 require("dotenv").config();
 
 // Environment variable overrides
@@ -61,6 +62,64 @@ const webpackConfig = {
             '**/public/**',
           ],
         };
+      }
+
+      // Production optimizations
+      if (process.env.NODE_ENV === 'production') {
+        // Enable compression
+        webpackConfig.plugins.push(
+          new CompressionPlugin({
+            filename: '[path][base].gz',
+            algorithm: 'gzip',
+            test: /\.(js|css|html|svg)$/,
+            threshold: 10240,
+            minRatio: 0.8,
+          })
+        );
+
+        // Optimize chunk splitting
+        webpackConfig.optimization = {
+          ...webpackConfig.optimization,
+          splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+              vendor: {
+                test: /[\\/]node_modules[\\/]/,
+                name(module) {
+                  const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                  return `vendor.${packageName.replace('@', '')}`;
+                },
+                priority: 10,
+              },
+              common: {
+                minChunks: 2,
+                priority: 5,
+                reuseExistingChunk: true,
+              },
+            },
+            maxInitialRequests: 25,
+            minSize: 20000,
+          },
+          runtimeChunk: 'single',
+        };
+
+        // Configure TerserPlugin for better minification
+        const TerserPlugin = require('terser-webpack-plugin');
+        webpackConfig.optimization.minimizer = [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true,
+                drop_debugger: true,
+              },
+              output: {
+                comments: false,
+              },
+            },
+            extractComments: false,
+          }),
+          ...webpackConfig.optimization.minimizer,
+        ];
       }
 
       // Add health check plugin to webpack if enabled
