@@ -1,6 +1,7 @@
 // craco.config.js
 const path = require("path");
 const CompressionPlugin = require("compression-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 require("dotenv").config();
 
 // Environment variable overrides
@@ -104,7 +105,6 @@ const webpackConfig = {
         };
 
         // Configure TerserPlugin for better minification
-        const TerserPlugin = require('terser-webpack-plugin');
         webpackConfig.optimization.minimizer = [
           new TerserPlugin({
             terserOptions: {
