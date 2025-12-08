@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Send, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
@@ -77,6 +77,10 @@ const Contact = () => {
         recaptcha_token: token
       });
       
+      // Clear form immediately on success
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      
+      // Show success message for 2 seconds
       toast.success('Message sent successfully! We\'ll contact you soon.', {
         style: {
           background: '#25D366',
@@ -85,9 +89,8 @@ const Contact = () => {
           border: 'none',
         },
         icon: '✓',
-        duration: 4000,
+        duration: 2000,
       });
-      setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
       if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
@@ -386,6 +389,7 @@ const Contact = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -395,6 +399,8 @@ const Contact = () => {
                     color: '#FFFFFF',
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
+                    opacity: isSubmitting ? 0.6 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
@@ -422,6 +428,7 @@ const Contact = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -431,6 +438,8 @@ const Contact = () => {
                     color: '#FFFFFF',
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
+                    opacity: isSubmitting ? 0.6 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
@@ -458,6 +467,7 @@ const Contact = () => {
                   required
                   value={formData.phone}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -467,6 +477,8 @@ const Contact = () => {
                     color: '#FFFFFF',
                     fontSize: '16px',
                     transition: 'border-color 0.3s ease',
+                    opacity: isSubmitting ? 0.6 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
@@ -494,6 +506,7 @@ const Contact = () => {
                   rows={6}
                   value={formData.message}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -504,6 +517,8 @@ const Contact = () => {
                     fontSize: '16px',
                     resize: 'vertical',
                     transition: 'border-color 0.3s ease',
+                    opacity: isSubmitting ? 0.6 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
@@ -525,8 +540,17 @@ const Contact = () => {
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 }}
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-                <Send size={20} />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={20} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <Send size={20} />
+                  </>
+                )}
               </button>
             </form>
           </div>
