@@ -51,23 +51,23 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-        <title>BM Wealth - Mumbai's Premier Financial Partner | Mutual Funds, SIP, PMS | ARN 90008</title>
-        <meta name="description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008. Led by Brahmdeo Maurya. Start your wealth journey today." />
+        <title>BM Wealth - Mumbai's Distinguished Financial Advisory | Mutual Funds, SIP, PMS | ARN 90008</title>
+        <meta name="description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008. Led by Brahmdeo Maurya. Initiate your wealth journey today." />
         <meta name="keywords" content="BM Wealth, Mumbai investment advisor, mutual funds Mumbai, SIP investment, portfolio management, ARN 90008, Brahmdeo Maurya, financial planning Mumbai" />
         <link rel="canonical" href="https://bmwealth.in/" />
         
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/" />
-        <meta property="og:title" content="BM Wealth - Mumbai's Premier Financial Partner | ARN 90008" />
-        <meta property="og:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008." />
+        <meta property="og:title" content="BM Wealth - Mumbai's Distinguished Financial Advisory | ARN 90008" />
+        <meta property="og:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008." />
         <meta property="og:image" content="https://bmwealth.in/logo.png" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/" />
-        <meta name="twitter:title" content="BM Wealth - Mumbai's Premier Financial Partner" />
-        <meta name="twitter:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services." />
+        <meta name="twitter:title" content="BM Wealth - Mumbai's Distinguished Financial Advisory" />
+        <meta name="twitter:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services." />
         <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
       </Helmet>
       {/* Hero Section */}
@@ -127,7 +127,7 @@ const Home = () => {
               fontWeight: 500,
             }}
           >
-            Mumbai's Premier Financial Partner
+            Mumbai's Distinguished Financial Advisory
           </h2>
           <p
             style={{
@@ -139,8 +139,7 @@ const Home = () => {
               lineHeight: 1.6,
             }}
           >
-            Expert financial advisory and investment services tailored
-            for your wealth creation journey
+            Exceptional wealth management solutions tailored to your prosperity
           </p>
 
           <div
@@ -159,7 +158,7 @@ const Home = () => {
               className="btn-primary"
               data-testid="free-financial-guide-btn"
             >
-              Get Free Financial Guide
+              Access Your Complimentary Wealth Blueprint
             </a>
             <Link to="/services" className="btn-secondary" data-testid="explore-services-btn">
               Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
@@ -188,8 +187,8 @@ const Home = () => {
               margin: '0 auto',
             }}
           >
-            Comprehensive financial solutions designed to help you achieve your
-            investment goals
+            Bespoke financial architectures meticulously crafted to elevate your
+            wealth trajectory
           </p>
         </div>
 
@@ -313,10 +312,10 @@ const Home = () => {
                 <TrendingUp size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Expert Guidance
+                Elite Guidance
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Decades of experience in financial markets and wealth management
+                Decades of expertise in financial markets and wealth management
               </p>
             </div>
 
@@ -364,7 +363,7 @@ const Home = () => {
               color: '#DAA520',
             }}
           >
-            Ready to Start Your Wealth Journey?
+            Ready to Commence Your Wealth Journey?
           </h2>
           <p
             style={{
@@ -375,7 +374,7 @@ const Home = () => {
               margin: '0 auto 30px',
             }}
           >
-            Connect with our experts today for a free financial consultation
+            Connect with our experts today for a complimentary financial consultation
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a

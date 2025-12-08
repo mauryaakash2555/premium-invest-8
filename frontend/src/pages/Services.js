@@ -14,7 +14,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our expert team helps you select the right funds with comprehensive performance insights and regular portfolio reviews.',
+        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of specialists empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -28,7 +28,7 @@ const Services = () => {
       icon: <TrendingUp size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
-        'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to optimize your returns.',
+        'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to maximize your returns.',
       features: [
         'Customized investment strategies',
         'Dedicated portfolio manager',
@@ -42,7 +42,7 @@ const Services = () => {
       icon: <CreditCard size={50} />,
       title: 'Trading Services',
       description:
-        'Gain access to real-time market data, advanced trading tools, and expert guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+        'Acquire access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
       features: [
         'Real-time market access',
         'Advanced charting tools',
@@ -56,7 +56,7 @@ const Services = () => {
       icon: <Shield size={50} />,
       title: 'Insurance',
       description:
-        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you choose the right policies that provide financial security and peace of mind.',
+        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we empower you to choose optimal policies that provide financial security and peace of mind.',
       features: [
         'Life insurance policies',
         'Health insurance plans',
@@ -70,7 +70,7 @@ const Services = () => {
       icon: <DollarSign size={50} />,
       title: 'Fixed Deposits (FD)',
       description:
-        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from top banks and financial institutions to meet your capital preservation goals.',
+        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
       features: [
         'Competitive interest rates',
         'Flexible tenure options',
@@ -84,7 +84,7 @@ const Services = () => {
       icon: <Repeat size={50} />,
       title: 'Systematic Investment Plans (SIP)',
       description:
-        'Build wealth systematically through disciplined monthly investments. SIPs help you benefit from rupee cost averaging and the power of compounding to achieve your long-term financial goals.',
+        'Accumulate wealth systematically through disciplined monthly investments. SIPs empower you to benefit from rupee cost averaging and the power of compounding to achieve your long-term financial goals.',
       features: [
         'Disciplined investing approach',
         'Rupee cost averaging benefits',
@@ -147,8 +147,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Comprehensive financial solutions designed to help you build, grow, and protect
-            your wealth
+            Bespoke financial architectures meticulously crafted to elevate your wealth trajectory
           </p>
         </div>
       </section>
@@ -335,7 +334,7 @@ const Services = () => {
                 color: '#DAA520',
               }}
             >
-              Let's Build Your Financial Future Together
+              Let's Establish Your Financial Future Together
             </h2>
             <p
               style={{
@@ -346,8 +345,8 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Schedule a consultation with our financial experts to discuss your investment
-              goals
+              Schedule a consultation with our financial specialists to discuss your investment
+              objectives
             </p>
             <div
               style={{
@@ -364,7 +363,7 @@ const Services = () => {
                 className="btn-primary"
                 data-testid="services-whatsapp-cta"
               >
-                Get Free Consultation
+                Secure Complimentary Consultation
               </a>
               <Link to="/contact" className="btn-secondary" data-testid="services-contact-cta">
                 Contact Us

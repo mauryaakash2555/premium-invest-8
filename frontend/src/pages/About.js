@@ -73,7 +73,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Empowering Mumbai investors with tailored financial solutions since inception
+            Empowering Mumbai investors with exceptional financial solutions since inception
           </p>
         </div>
       </section>
@@ -106,9 +106,8 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Led by <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
-              is dedicated to empowering Mumbai investors with comprehensive financial
-              solutions.
+              Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
+              orchestrates comprehensive wealth strategies for discerning Mumbai investors.
             </p>
             <p
               style={{
@@ -119,7 +118,7 @@ const About = () => {
               }}
             >
               With decades of combined expertise in financial markets, mutual funds, portfolio
-              management, and investment advisory, we have built a reputation for delivering
+              management, and investment advisory, we have established a distinguished reputation for delivering
               personalized wealth management strategies that align with our clients' unique
               financial goals.
             </p>
@@ -131,8 +130,8 @@ const About = () => {
               }}
             >
               Our mission is to make sophisticated financial planning accessible to every
-              investor, whether you're just starting your investment journey or looking to
-              optimize your existing portfolio.
+              investor, whether you're commencing your investment journey or looking to
+              enhance your existing portfolio.
             </p>
           </div>
 
@@ -220,8 +219,8 @@ const About = () => {
                 Client-Centric
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Your financial goals are our top priority. We build lasting relationships based
-                on trust and transparency.
+                Your financial goals are our top priority. We establish enduring relationships based
+                on confidence and transparency.
               </p>
             </div>
 
@@ -242,10 +241,10 @@ const About = () => {
                 <Award size={35} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Excellence
+                Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We maintain the highest standards in financial advisory, continuously updating
+                We maintain the premier standards in financial advisory, continuously enhancing
                 our expertise and methodologies.
               </p>
             </div>
@@ -270,7 +269,7 @@ const About = () => {
                 Results-Driven
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We focus on delivering measurable outcomes and helping you achieve your wealth
+                We focus on delivering measurable outcomes and empowering you to achieve your wealth
                 creation objectives.
               </p>
             </div>
