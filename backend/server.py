@@ -102,12 +102,13 @@ async def create_contact(input: ContactFormCreate):
         logger.warning("RECAPTCHA_SECRET_KEY not configured")
         raise HTTPException(status_code=500, detail="reCAPTCHA configuration error")
 
-    # Verify token with Google - reduced timeout for faster response
+    # Verify token with Google - configurable timeout for faster response
     verify_url = "https://www.google.com/recaptcha/api/siteverify"
     verify_data = {"secret": secret_key, "response": recaptcha_token}
+    recaptcha_timeout = int(os.environ.get("RECAPTCHA_TIMEOUT", "3"))
 
     try:
-        verify_response = requests.post(verify_url, data=verify_data, timeout=3).json()
+        verify_response = requests.post(verify_url, data=verify_data, timeout=recaptcha_timeout).json()
 
         if not verify_response.get("success") or verify_response.get("score", 0) < 0.5:
             logger.warning(f"reCAPTCHA verification failed: {verify_response}")

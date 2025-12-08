@@ -95,7 +95,7 @@ const Contact = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      if (error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK' || (error.message && error.message.toLowerCase().includes('timeout'))) {
         toast.error('Request timeout. Please check your connection and try again.', {
           duration: 4000,
         });
