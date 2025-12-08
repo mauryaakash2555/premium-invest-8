@@ -205,13 +205,15 @@ const Compliance = () => {
                 borderLeft: '4px solid #DAA520',
               }}
             >
+              <strong>IRDAI License Number:</strong> 277925
+              <br />
               <strong>AMFI Registration:</strong> ARN 90008
               <br />
               <strong>Validity:</strong> Perpetual (subject to regulatory compliance)
               <br />
               <strong>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
               <br />
-              <strong>Principal Officer:</strong> Available on request
+              <strong>Principal Officer:</strong> Brahmdeo Maurya
             </div>
           </div>
         </div>
@@ -264,6 +266,10 @@ const Compliance = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
                 <Mail size={20} style={{ color: '#DAA520' }} />
                 <span>Email: mauryaakash2555@gmail.com</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
+                <Mail size={20} style={{ color: '#DAA520' }} />
+                <span>Grievance Email: grievance@bmwealth.co.in</span>
               </div>
             </div>
 
@@ -366,31 +372,136 @@ const Compliance = () => {
             style={{
               fontSize: 'clamp(24px, 3vw, 36px)',
               color: '#DAA520',
-              marginBottom: '20px',
+              marginBottom: '30px',
             }}
           >
-            Regulatory Disclosures
+            REGULATORY DISCLOSURES &amp; LICENSES
           </h2>
 
           <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: '16px' }}>
-            <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>AMFI Registration Number:</strong> ARN 90008
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Insurance Advisory Services
+            </h3>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>IRDAI License Number:</strong> 277925
+            </p>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>Service Type:</strong> Insurance Advisory
             </p>
             <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Registered with:</strong> IRDAI (Insurance Regulatory and Development Authority of India) | AMFI (Association of Mutual Funds in India)
-            </p>
-            <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Type of Services:</strong> Insurance Advisory (IRDAI Licensed) & Mutual Fund Distribution (AMFI Registered)
-            </p>
-            <p style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#C0A062' }}>Principal Place of Business:</strong> Mumbai, Maharashtra
+              <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
 
-            <div className="sebi-disclaimer" style={{ marginTop: '30px' }}>
-              <strong>Disclaimer:</strong> Investment in securities market is subject to market risks. Please
-              read all the related documents carefully before investing. Past performance is not indicative of
-              future returns. BM Wealth does not guarantee any returns on investments. All investment decisions
-              should be made based on thorough research and understanding of risks involved.
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Mutual Fund Distribution Services
+            </h3>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>AMFI Registration:</strong> ARN 90008
+            </p>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
+            </p>
+            <p style={{ marginBottom: '15px' }}>
+              <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
+            </p>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Additional Advisory Services
+            </h3>
+            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
+              <li style={{ marginBottom: '10px' }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
+              <li style={{ marginBottom: '10px' }}>Fixed Deposit (FD) Advisory Services</li>
+              <li style={{ marginBottom: '10px' }}>Investment Planning &amp; Financial Consulting</li>
+            </ul>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Registered Office
+            </h3>
+            <p style={{ marginBottom: '20px' }}>
+              66, Vinod Villa Bldg., 1st floor office no. 108<br />
+              Cavel Cross Lane 3, Kalbadevi<br />
+              Mumbai - 400002, Maharashtra, India
+            </p>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Regulatory Authorities
+            </h3>
+            <div
+              style={{
+                padding: '20px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '8px',
+                marginBottom: '15px',
+              }}
+            >
+              <strong style={{ color: '#DAA520' }}>IRDAI (Insurance Regulatory and Development Authority of India)</strong>
+              <br />
+              Website:{' '}
+              <a
+                href="https://www.irdai.gov.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#DAA520', textDecoration: 'underline' }}
+              >
+                www.irdai.gov.in
+              </a>
+            </div>
+            <div
+              style={{
+                padding: '20px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '8px',
+                marginBottom: '20px',
+              }}
+            >
+              <strong style={{ color: '#DAA520' }}>AMFI (Association of Mutual Funds in India)</strong>
+              <br />
+              Website:{' '}
+              <a
+                href="https://www.amfiindia.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#DAA520', textDecoration: 'underline' }}
+              >
+                www.amfiindia.com
+              </a>
+            </div>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Grievance Redressal Mechanism
+            </h3>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>Email:</strong> grievance@bmwealth.co.in
+            </p>
+            <p style={{ marginBottom: '10px' }}>
+              <strong style={{ color: '#C0A062' }}>Phone:</strong> +91 8850977259
+            </p>
+            <p style={{ marginBottom: '20px' }}>
+              <strong style={{ color: '#C0A062' }}>Response Time:</strong> Within 7 working days
+            </p>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Compliance Statement
+            </h3>
+            <div
+              style={{
+                padding: '20px',
+                background: 'rgba(218, 165, 32, 0.1)',
+                borderRadius: '8px',
+                marginBottom: '20px',
+                borderLeft: '4px solid #DAA520',
+              }}
+            >
+              <p style={{ marginBottom: '0' }}>
+                BM Wealth is an IRDAI Licensed Insurance Advisor (License No. 277925) and AMFI Registered Mutual Fund Distributor (ARN 90008). We follow SEBI guidelines for mutual fund distribution but are NOT SEBI-registered Investment Advisors. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+              </p>
+            </div>
+
+            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+              Investment Disclaimer
+            </h3>
+            <div className="sebi-disclaimer" style={{ marginTop: '0' }}>
+              <strong>Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
             </div>
           </div>
         </div>
