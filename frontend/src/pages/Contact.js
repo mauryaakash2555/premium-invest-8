@@ -181,8 +181,8 @@ const Contact = () => {
               lineHeight: 1.6,
             }}
           >
-            Have questions about your investments? Our team is here to help you achieve your
-            financial goals.
+            Have questions about your investments? Our team is here to empower you to achieve your
+            financial objectives.
           </p>
         </div>
       </section>
@@ -580,7 +580,7 @@ const Contact = () => {
                 color: '#DAA520',
               }}
             >
-              Stay Updated with BM Wealth
+              Initiate Your Financial Transformation
             </h2>
             <p
               style={{
@@ -589,7 +589,7 @@ const Contact = () => {
                 marginBottom: '30px',
               }}
             >
-              Subscribe to our newsletter for weekly financial tips and podcast updates
+              Subscribe to our newsletter for weekly financial insights and podcast updates
             </p>
             <div className="sebi-disclaimer">
               <strong>Note:</strong> We respect your privacy and will never share your

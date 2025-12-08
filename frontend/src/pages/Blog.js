@@ -42,7 +42,7 @@ const Blog = () => {
       id: '2',
       title: 'The Power of SIP: Building Wealth Systematically',
       excerpt:
-        'Discover how Systematic Investment Plans can help you achieve long-term financial goals through disciplined investing.',
+        'Discover how Systematic Investment Plans can empower you to achieve long-term financial objectives through disciplined investing.',
       author: 'BM Wealth Team',
       category: 'Investment Strategies',
       published_date: new Date().toISOString(),
@@ -52,7 +52,7 @@ const Blog = () => {
       id: '3',
       title: 'Portfolio Diversification: Managing Risk Effectively',
       excerpt:
-        'Learn key strategies for diversifying your investment portfolio to minimize risk and maximize returns.',
+        'Master key strategies for diversifying your investment portfolio to minimize risk and maximize returns.',
       author: 'Brahmdeo Maurya',
       category: 'Risk Management',
       published_date: new Date().toISOString(),
@@ -122,7 +122,7 @@ const Blog = () => {
               lineHeight: 1.6,
             }}
           >
-            Expert advice, market insights, and updates from BM Wealth Talks
+            Elite insights, market analysis, and updates from BM Wealth Talks
           </p>
         </div>
       </section>
@@ -306,7 +306,7 @@ const Blog = () => {
                 lineHeight: 1.6,
               }}
             >
-              Listen to expert insights, market analysis, and financial advice from our team of
+              Listen to distinguished insights, market analysis, and financial expertise from our team of
               experienced advisors. Available on Spotify and all major podcast platforms.
             </p>
             <a
