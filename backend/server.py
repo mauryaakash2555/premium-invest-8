@@ -102,19 +102,23 @@ async def create_contact(input: ContactFormCreate):
         logger.warning("RECAPTCHA_SECRET_KEY not configured")
         raise HTTPException(status_code=500, detail="reCAPTCHA configuration error")
 
-    # Verify token with Google
+    # Verify token with Google - configurable timeout for faster response
     verify_url = "https://www.google.com/recaptcha/api/siteverify"
     verify_data = {"secret": secret_key, "response": recaptcha_token}
+    recaptcha_timeout = int(os.environ.get("RECAPTCHA_TIMEOUT", "3"))
 
     try:
-        verify_response = requests.post(verify_url, data=verify_data, timeout=10).json()
+        verify_response = requests.post(verify_url, data=verify_data, timeout=recaptcha_timeout).json()
 
         if not verify_response.get("success") or verify_response.get("score", 0) < 0.5:
             logger.warning(f"reCAPTCHA verification failed: {verify_response}")
             raise HTTPException(status_code=400, detail="reCAPTCHA verification failed")
+    except requests.Timeout:
+        logger.error("reCAPTCHA verification timeout")
+        raise HTTPException(status_code=500, detail="Verification service timeout. Please try again.")
     except requests.RequestException as e:
         logger.error(f"reCAPTCHA verification request failed: {e}")
-        raise HTTPException(status_code=500, detail="reCAPTCHA verification error")
+        raise HTTPException(status_code=500, detail="Verification error. Please try again.")
 
     # Remove recaptcha_token before saving to database
     contact_dict = input.model_dump(exclude={"recaptcha_token"})
@@ -123,7 +127,12 @@ async def create_contact(input: ContactFormCreate):
     doc = contact_obj.model_dump()
     doc["timestamp"] = doc["timestamp"].isoformat()
 
-    _ = await db.contacts.insert_one(doc)
+    try:
+        _ = await db.contacts.insert_one(doc)
+    except Exception as e:
+        logger.error(f"Database insert failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to save contact information. Please try again.")
+    
     return contact_obj
 
 
