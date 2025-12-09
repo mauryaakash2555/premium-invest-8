@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Calendar, User, Tag, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import { staticBlogPost } from '../data/staticBlogData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -18,9 +20,14 @@ const Blog = () => {
   const fetchBlogPosts = async () => {
     try {
       const response = await axios.get(`${API}/blog`);
-      setBlogPosts(response.data);
+      // Combine static blog with backend blogs, avoiding duplicates
+      const backendPosts = response.data || [];
+      const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
+      setBlogPosts(combinedPosts);
     } catch (error) {
       console.error('Error fetching blog posts:', error);
+      // If backend fails, still show static blog
+      setBlogPosts([staticBlogPost]);
     } finally {
       setIsLoading(false);
     }
@@ -30,6 +37,7 @@ const Blog = () => {
   const placeholderPosts = [
     {
       id: '1',
+      slug: 'understanding-mutual-funds',
       title: 'Understanding Mutual Funds: A Comprehensive Guide',
       excerpt:
         'Learn the fundamentals of mutual fund investing and how to choose the right funds for your portfolio.',
@@ -40,6 +48,7 @@ const Blog = () => {
     },
     {
       id: '2',
+      slug: 'power-of-sip',
       title: 'The Power of SIP: Building Wealth Systematically',
       excerpt:
         'Discover how Systematic Investment Plans can empower you to achieve long-term financial objectives through disciplined investing.',
@@ -50,6 +59,7 @@ const Blog = () => {
     },
     {
       id: '3',
+      slug: 'portfolio-diversification',
       title: 'Portfolio Diversification: Managing Risk Effectively',
       excerpt:
         'Master key strategies for diversifying your investment portfolio to minimize risk and maximize returns.',
@@ -169,130 +179,136 @@ const Blog = () => {
             }}
           >
             {displayPosts.map((post) => (
-              <div
+              <Link
+                to={`/blog/${post.slug || post.id}`}
                 key={post.id}
-                className="glass-effect"
-                data-testid={`blog-post-${post.id}`}
-                style={{
-                  overflow: 'hidden',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <div
-                  className="image-overlay"
+                  className="glass-effect"
+                  data-testid={`blog-post-${post.id}`}
                   style={{
-                    width: '100%',
-                    height: '240px',
-                    background: post.image_url
-                      ? `url(${post.image_url})`
-                      : 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    overflow: 'hidden',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    cursor: 'pointer',
+                    height: '100%',
                   }}
-                />
-                <div style={{ padding: '24px' }}>
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
                   <div
+                    className="image-overlay"
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      marginBottom: '12px',
-                      flexWrap: 'wrap',
+                      width: '100%',
+                      height: '240px',
+                      background: post.image_url
+                        ? `url(${post.image_url})`
+                        : 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                     }}
-                  >
-                    <span
+                  />
+                  <div style={{ padding: '24px' }}>
+                    <div
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '14px',
-                        color: '#C0A062',
+                        gap: '12px',
+                        marginBottom: '12px',
+                        flexWrap: 'wrap',
                       }}
                     >
-                      <Tag size={14} />
-                      {post.category}
-                    </span>
-                    <span
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '14px',
-                        color: '#888',
-                      }}
-                    >
-                      <Calendar size={14} />
-                      {formatDate(post.published_date)}
-                    </span>
-                  </div>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '14px',
+                          color: '#C0A062',
+                        }}
+                      >
+                        <Tag size={14} />
+                        {post.category}
+                      </span>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '14px',
+                          color: '#888',
+                        }}
+                      >
+                        <Calendar size={14} />
+                        {formatDate(post.published_date)}
+                      </span>
+                    </div>
 
-                  <h3
-                    style={{
-                      fontSize: '22px',
-                      color: '#DAA520',
-                      marginBottom: '12px',
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {post.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontSize: '16px',
-                      color: '#CCCCCC',
-                      lineHeight: 1.6,
-                      marginBottom: '16px',
-                    }}
-                  >
-                    {post.excerpt}
-                  </p>
-
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      paddingTop: '16px',
-                      borderTop: '1px solid rgba(218, 165, 32, 0.2)',
-                    }}
-                  >
-                    <span
+                    <h3
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        fontSize: '14px',
-                        color: '#C0A062',
-                      }}
-                    >
-                      <User size={16} />
-                      {post.author}
-                    </span>
-                    <span
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '14px',
+                        fontSize: '22px',
                         color: '#DAA520',
-                        cursor: 'pointer',
+                        marginBottom: '12px',
+                        lineHeight: 1.3,
                       }}
                     >
-                      Read More <ExternalLink size={14} />
-                    </span>
+                      {post.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontSize: '16px',
+                        color: '#CCCCCC',
+                        lineHeight: 1.6,
+                        marginBottom: '16px',
+                      }}
+                    >
+                      {post.excerpt}
+                    </p>
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        paddingTop: '16px',
+                        borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          fontSize: '14px',
+                          color: '#C0A062',
+                        }}
+                      >
+                        <User size={16} />
+                        {post.author}
+                      </span>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '14px',
+                          color: '#DAA520',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Read More <ExternalLink size={14} />
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
