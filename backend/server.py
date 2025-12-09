@@ -112,17 +112,23 @@ async def create_contact(input: ContactFormCreate):
     recaptcha_timeout = int(os.environ.get("RECAPTCHA_TIMEOUT", "3"))
 
     try:
-        verify_response = requests.post(verify_url, data=verify_data, timeout=recaptcha_timeout).json()
+        verify_response = requests.post(
+            verify_url, data=verify_data, timeout=recaptcha_timeout
+        ).json()
 
         if not verify_response.get("success") or verify_response.get("score", 0) < 0.5:
             logger.warning(f"reCAPTCHA verification failed: {verify_response}")
             raise HTTPException(status_code=400, detail="reCAPTCHA verification failed")
     except requests.Timeout:
         logger.error("reCAPTCHA verification timeout")
-        raise HTTPException(status_code=500, detail="Verification service timeout. Please try again.")
+        raise HTTPException(
+            status_code=500, detail="Verification service timeout. Please try again."
+        )
     except requests.RequestException as e:
         logger.error(f"reCAPTCHA verification request failed: {e}")
-        raise HTTPException(status_code=500, detail="Verification error. Please try again.")
+        raise HTTPException(
+            status_code=500, detail="Verification error. Please try again."
+        )
 
     # Remove recaptcha_token before saving to database
     contact_dict = input.model_dump(exclude={"recaptcha_token"})
@@ -135,8 +141,11 @@ async def create_contact(input: ContactFormCreate):
         _ = await db.contacts.insert_one(doc)
     except Exception as e:
         logger.error(f"Database insert failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to save contact information. Please try again.")
-    
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to save contact information. Please try again.",
+        )
+
     return contact_obj
 
 
@@ -266,16 +275,18 @@ async def seed_blog_data():
         if not os.getenv("ENABLE_AUTO_SEED", "true").lower() == "true":
             logger.info("Auto-seeding disabled via ENABLE_AUTO_SEED")
             return
-        
+
         logger.info("Starting blog data seeding...")
-        
+
         # Check if Blog #1 already exists
-        existing_blog = await db.blog_posts.find_one({"slug": "he-lost-47-lakh-following-expert-advice"})
-        
+        existing_blog = await db.blog_posts.find_one(
+            {"slug": "he-lost-47-lakh-following-expert-advice"}
+        )
+
         if existing_blog:
             logger.info("Blog #1 already exists, skipping seed")
             return
-        
+
         blog_1_content = """
         <div style="background: #0A0A1A; color: #E5E5E5; font-family: 'Inter', sans-serif; line-height: 1.8;">
             <article style="max-width: 900px; margin: 0 auto; padding: 40px 20px;">
@@ -415,7 +426,7 @@ async def seed_blog_data():
             </article>
         </div>
         """
-        
+
         blog_1 = {
             "id": str(uuid.uuid4()),
             "title": "He Lost ₹47 Lakh Following Expert Advice",
@@ -426,13 +437,18 @@ async def seed_blog_data():
             "category": "Investor Protection",
             "image_url": "https://images.unsplash.com/photo-1554224311-beee460c201f?w=600&h=400&fit=crop&auto=format&fm=webp&q=75",
             "published_date": datetime.now(timezone.utc).isoformat(),
-            "tags": ["investor-protection", "sebi-registration", "fraud-prevention", "financial-safety"],
-            "read_time": "5 min read"
+            "tags": [
+                "investor-protection",
+                "sebi-registration",
+                "fraud-prevention",
+                "financial-safety",
+            ],
+            "read_time": "5 min read",
         }
-        
+
         await db.blog_posts.insert_one(blog_1)
         logger.info("Blog #1 seeded successfully")
-        
+
     except Exception as e:
         # Log error but don't crash the application
         logger.error(f"Error seeding blog data (non-critical): {e}")
@@ -456,10 +472,10 @@ async def startup_db_indexes():
         await db.blog_posts.create_index([("published_date", -1)])
 
         logger.info("Database indexes created successfully")
-        
+
         # Run seeding in background (non-blocking)
         asyncio.create_task(seed_blog_data())
-        
+
     except Exception as e:
         logger.warning(f"Index creation warning (may already exist): {e}")
 
