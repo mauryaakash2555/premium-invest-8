@@ -19,13 +19,13 @@ const Compliance = () => {
         <meta property="og:url" content="https://bmwealth.in/compliance" />
         <meta property="og:title" content="Regulatory Compliance & Investor Charter | BM Wealth ARN 90008" />
         <meta property="og:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/compliance" />
         <meta name="twitter:title" content="Regulatory Compliance & Investor Charter | BM Wealth" />
         <meta name="twitter:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section

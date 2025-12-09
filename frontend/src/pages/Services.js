@@ -108,13 +108,13 @@ const Services = () => {
         <meta property="og:url" content="https://bmwealth.in/services" />
         <meta property="og:title" content="Investment Services Mumbai | BM Wealth" />
         <meta property="og:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
-        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/services" />
         <meta name="twitter:title" content="Investment Services Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section

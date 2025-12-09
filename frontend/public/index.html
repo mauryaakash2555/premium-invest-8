@@ -1,53 +1,95 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#DAA520" />
-        <meta name="description" content="Mumbai's Premier Financial Partner - Expert Investment Advisory" />
-        <meta name="google-site-verification" content="Ndk6OylwmzDA4pWL6KPNw0mkKS8WQnO-lGaWb5cpyJ0" />
-        
-        <!-- Resource hints for performance -->
-        <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link rel="preconnect" href="https://images.pexels.com" crossorigin />
-        <link rel="dns-prefetch" href="https://images.pexels.com" />
-        
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SSN64C0XCY"></script>
-        <script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#DAA520" />
+    <meta name="description" content="Mumbai's Premier Financial Partner - Expert Investment Advisory" />
+    <meta name="google-site-verification" content="Ndk6OylwmzDA4pWL6KPNw0mkKS8WQnO-lGaWb5cpyJ0" />
+
+    <!-- Open Graph & Twitter SEO Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bmwealth.in/" />
+    <meta property="og:title" content="BM Wealth - Mumbai's Premier Financial Partner | ARN 90008" />
+    <meta property="og:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. ARN 90008." />
+    <meta property="og:image" content="https://bmwealth.in/logo.webp" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://bmwealth.in/" />
+    <meta name="twitter:title" content="BM Wealth - Mumbai's Premier Financial Partner" />
+    <meta name="twitter:description" content="Expert investment advisory in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services." />
+    <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
+
+    <!-- Preconnect: Only essential origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- Preload LCP Asset -->
+    <link rel="preload" href="/logo.webp" as="image" type="image/webp" fetchpriority="high" />
+
+    <!-- Preload Fonts (minimal, optimized weights) -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+      as="style"
+    />
+
+    <!-- Load fonts without blocking render -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+      />
+    </noscript>
+
+    <!-- Favicons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" type="image/webp" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.webp" />
+    <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.png" />
+    <link rel="icon" type="image/webp" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.webp" />
+    <link rel="icon" type="image/png" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.webp" />
+    <link rel="apple-touch-icon" type="image/png" href="%PUBLIC_URL%/apple-touch-icon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
+
+    <title>BM Wealth - Mumbai's Premier Financial Partner</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <!-- Defer Google Analytics for speed -->
+    <script>
+      function loadGoogleAnalytics() {
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=G-SSN64C0XCY";
+        document.head.appendChild(s);
+
+        s.onload = function () {
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-SSN64C0XCY');
-        </script>
-        
-        <!-- Favicons -->
-        <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
-        <link rel="icon" type="image/webp" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.webp" />
-        <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.png" />
-        <link rel="icon" type="image/webp" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.webp" />
-        <link rel="icon" type="image/png" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.png" />
-        <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.webp" />
-        <link rel="apple-touch-icon" type="image/png" href="%PUBLIC_URL%/apple-touch-icon.png" />
-        <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
-        
-        <title>BM Wealth - Mumbai's Premier Financial Partner</title>
-    </head>
-    <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag("js", new Date());
+          gtag("config", "G-SSN64C0XCY");
+        };
+      }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-    </body>
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(loadGoogleAnalytics);
+      } else {
+        setTimeout(loadGoogleAnalytics, 2000);
+      }
+    </script>
+  </body>
 </html>

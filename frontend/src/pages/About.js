@@ -19,13 +19,13 @@ const About = () => {
         <meta property="og:url" content="https://bmwealth.in/about" />
         <meta property="og:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
         <meta property="og:description" content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai." />
-        <meta property="og:image" content="https://bmwealth.in/logo.png" />
+        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/about" />
         <meta name="twitter:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
         <meta name="twitter:description" content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.png" />
+        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section
