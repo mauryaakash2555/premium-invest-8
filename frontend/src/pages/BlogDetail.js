@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowLeft, Clock } from 'lucide-react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
+import { staticBlogPost } from '../data/staticBlogData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -15,15 +16,19 @@ const BlogDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    fetchBlogPost();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
-
-  const fetchBlogPost = async () => {
+  const fetchBlogPost = useCallback(async () => {
     try {
       setIsLoading(true);
+      
+      // Check if this is the static blog post first
+      if (slug === staticBlogPost.slug) {
+        setPost(staticBlogPost);
+        setError(null);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Otherwise, try to fetch from backend
       const response = await axios.get(`${API}/blog/slug/${slug}`);
       setPost(response.data);
       setError(null);
@@ -33,7 +38,12 @@ const BlogDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchBlogPost();
+  }, [fetchBlogPost]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
