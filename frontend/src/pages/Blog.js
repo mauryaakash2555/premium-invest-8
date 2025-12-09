@@ -3,6 +3,7 @@ import { Calendar, User, Tag, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import { staticBlogPost } from '../data/staticBlogData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -19,9 +20,14 @@ const Blog = () => {
   const fetchBlogPosts = async () => {
     try {
       const response = await axios.get(`${API}/blog`);
-      setBlogPosts(response.data);
+      // Combine static blog with backend blogs, avoiding duplicates
+      const backendPosts = response.data || [];
+      const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
+      setBlogPosts(combinedPosts);
     } catch (error) {
       console.error('Error fetching blog posts:', error);
+      // If backend fails, still show static blog
+      setBlogPosts([staticBlogPost]);
     } finally {
       setIsLoading(false);
     }
