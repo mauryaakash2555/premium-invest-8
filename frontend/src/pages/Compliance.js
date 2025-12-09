@@ -51,7 +51,8 @@ const Compliance = () => {
               'url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.45,
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
           }}
         />
         <div
@@ -61,7 +62,7 @@ const Compliance = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
 

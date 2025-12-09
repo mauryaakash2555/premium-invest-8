@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import { staticBlogPost } from '../data/staticBlogData';
+import LazyImage from '../components/LazyImage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -19,7 +20,9 @@ const Blog = () => {
 
   const fetchBlogPosts = async () => {
     try {
-      const response = await axios.get(`${API}/blog`);
+      const response = await axios.get(`${API}/blog`, {
+        timeout: 10000, // 10 second timeout for blog loading
+      });
       // Combine static blog with backend blogs, avoiding duplicates
       const backendPosts = response.data || [];
       const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
@@ -125,7 +128,8 @@ const Blog = () => {
               'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.45,
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
           }}
         />
         <div
@@ -135,7 +139,7 @@ const Blog = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
 
@@ -202,18 +206,24 @@ const Blog = () => {
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  <div
-                    className="image-overlay"
-                    style={{
-                      width: '100%',
-                      height: '240px',
-                      background: post.image_url
-                        ? `url(${post.image_url})`
-                        : 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
+                  {post.image_url ? (
+                    <LazyImage
+                      src={post.image_url}
+                      alt={post.title}
+                      style={{
+                        width: '100%',
+                        height: '240px',
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '240px',
+                        background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                      }}
+                    />
+                  )}
                   <div style={{ padding: '24px' }}>
                     <div
                       style={{
