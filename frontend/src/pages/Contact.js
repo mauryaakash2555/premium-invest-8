@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, Mail, MapPin, Send, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
@@ -71,12 +71,12 @@ const Contact = () => {
       
       const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
       
-      // Send form data with reCAPTCHA token - with timeout
+      // Send form data with reCAPTCHA token - with optimized timeout
       await axios.post(`${API}/contact`, {
         ...formData,
         recaptcha_token: token
       }, {
-        timeout: 30000 // 30 second timeout - more reliable for API calls
+        timeout: 15000 // 15 second timeout - more reasonable for API calls
       });
       
       // Clear form immediately on success
@@ -95,21 +95,31 @@ const Contact = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK' || (error.message && error.message.toLowerCase().includes('timeout'))) {
-        toast.error('Request timeout. Please check your connection and try again.', {
-          duration: 4000,
+      
+      // Handle different error scenarios
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        toast.error('Request timeout. The server is taking too long to respond. Please try again.', {
+          duration: 5000,
+        });
+      } else if (error.code === 'ERR_NETWORK') {
+        toast.error('Network error. Please check your internet connection and try again.', {
+          duration: 5000,
         });
       } else if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
-        toast.error('Security verification failed. Please try again.', {
-          duration: 4000,
+        toast.error('Security verification failed. Please refresh the page and try again.', {
+          duration: 5000,
+        });
+      } else if (error.response?.status === 500) {
+        toast.error('Server error. Please try again later or contact us directly.', {
+          duration: 5000,
         });
       } else if (error.response?.data?.detail) {
         toast.error(error.response.data.detail, {
-          duration: 4000,
+          duration: 5000,
         });
       } else {
-        toast.error('Failed to send message. Please try again.', {
-          duration: 4000,
+        toast.error('Failed to send message. Please try again or contact us via WhatsApp.', {
+          duration: 5000,
         });
       }
     } finally {
@@ -161,7 +171,8 @@ const Contact = () => {
               'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.45,
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
           }}
         />
         <div
@@ -171,7 +182,7 @@ const Contact = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
 
@@ -320,6 +331,54 @@ const Contact = () => {
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
                 </div>
               </div>
+
+              <a
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-effect"
+                style={{
+                  padding: '24px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '20px',
+                  textDecoration: 'none',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(37, 211, 102, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <div
+                  style={{
+                    width: '50px',
+                    height: '50px',
+                    background: 'rgba(37, 211, 102, 0.1)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#25D366',
+                    flexShrink: 0,
+                  }}
+                >
+                  <MessageCircle size={24} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '20px', color: '#25D366', marginBottom: '8px' }}>
+                    WhatsApp Us
+                  </h3>
+                  <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
+                    Chat with us instantly: +91 8850977259
+                  </p>
+                </div>
+              </a>
             </div>
           </div>
 

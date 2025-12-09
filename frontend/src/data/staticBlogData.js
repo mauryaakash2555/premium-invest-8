@@ -16,8 +16,8 @@ export const staticBlogPost = {
 <div style="background: #0A0A1A; color: #E5E5E5; font-family: 'Inter', sans-serif; line-height: 1.8;">
     <article style="max-width: 900px; margin: 0 auto; padding: 40px 20px;">
         <header style="margin-bottom: 40px;">
-            <h1 style="color: #DAA520; font-size: clamp(32px, 5vw, 48px); margin-bottom: 20px; line-height: 1.2;">
-                He Lost ₹47 Lakh Following "Expert" Advice
+            <h1 style="color: #DAA520; font-size: clamp(32px, 5vw, 48px); margin-bottom: 20px; line-height: 1.3; font-family: 'Playfair Display', serif;">
+                He Lost <span style="font-family: 'Inter', sans-serif; font-weight: 600; display: inline-block; vertical-align: baseline;">₹47 Lakh</span> Following "Expert" Advice
             </h1>
             <div style="color: #C0A062; font-size: 16px; margin-bottom: 20px;">
                 A cautionary tale about blind trust in financial advice
@@ -26,10 +26,10 @@ export const staticBlogPost = {
 
         <section style="margin-bottom: 40px;">
             <p style="font-size: 18px; margin-bottom: 20px;">
-                Rajesh Kumar (name changed), a 42-year-old software engineer from Mumbai, thought he was making the smartest financial move of his life. He had ₹50 lakh in savings, and his "financial advisor" promised 18% annual returns through a "guaranteed" investment scheme.
+                Rajesh Kumar (name changed), a 42-year-old software engineer from Mumbai, thought he was making the smartest financial move of his life. He had <span style="font-family: 'Inter', sans-serif; font-weight: 600; white-space: nowrap;">₹50 lakh</span> in savings, and his "financial advisor" promised 18% annual returns through a "guaranteed" investment scheme.
             </p>
             <p style="font-size: 18px; margin-bottom: 20px;">
-                Two years later, Rajesh had lost ₹47 lakh. The advisor had disappeared, and the scheme turned out to be unregistered and illegal.
+                Two years later, Rajesh had lost <span style="font-family: 'Inter', sans-serif; font-weight: 600; white-space: nowrap;">₹47 lakh</span>. The advisor had disappeared, and the scheme turned out to be unregistered and illegal.
             </p>
         </section>
 

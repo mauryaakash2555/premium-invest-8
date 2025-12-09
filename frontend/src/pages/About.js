@@ -50,7 +50,8 @@ const About = () => {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.1,
+            opacity: 0.3,
+            filter: 'brightness(1.2)',
           }}
         />
         <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
