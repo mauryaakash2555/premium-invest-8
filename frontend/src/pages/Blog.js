@@ -115,7 +115,7 @@ const Blog = () => {
               'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.2,
+            opacity: 0.45,
           }}
         />
         <div
