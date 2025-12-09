@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowLeft, Clock } from 'lucide-react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import DOMPurify from 'dompurify';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -227,7 +228,7 @@ const BlogDetail = () => {
             color: '#E5E5E5',
             lineHeight: 1.8,
           }}
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
         />
 
         {/* Tags */}
