@@ -272,7 +272,7 @@ async def seed_blog_data():
     """Seed Blog #1 into database if it doesn't exist"""
     try:
         # Check if seeding is enabled
-        if not os.getenv("ENABLE_AUTO_SEED", "true").lower() == "true":
+        if os.getenv("ENABLE_AUTO_SEED", "true").lower() != "true":
             logger.info("Auto-seeding disabled via ENABLE_AUTO_SEED")
             return
 
@@ -474,7 +474,15 @@ async def startup_db_indexes():
         logger.info("Database indexes created successfully")
 
         # Run seeding in background (non-blocking)
-        asyncio.create_task(seed_blog_data())
+        task = asyncio.create_task(seed_blog_data())
+        # Add callback to log any unexpected errors
+        task.add_done_callback(
+            lambda t: (
+                logger.error(f"Seeding task failed: {t.exception()}")
+                if t.exception()
+                else None
+            )
+        )
 
     except Exception as e:
         logger.warning(f"Index creation warning (may already exist): {e}")
