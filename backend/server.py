@@ -10,6 +10,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 import requests
+import asyncio
 
 # Configure logging
 logging.basicConfig(
@@ -261,6 +262,13 @@ app.add_middleware(
 async def seed_blog_data():
     """Seed Blog #1 into database if it doesn't exist"""
     try:
+        # Check if seeding is enabled
+        if not os.getenv("ENABLE_AUTO_SEED", "true").lower() == "true":
+            logger.info("Auto-seeding disabled via ENABLE_AUTO_SEED")
+            return
+        
+        logger.info("Starting blog data seeding...")
+        
         # Check if Blog #1 already exists
         existing_blog = await db.blog_posts.find_one({"slug": "he-lost-47-lakh-following-expert-advice"})
         
@@ -426,7 +434,9 @@ async def seed_blog_data():
         logger.info("Blog #1 seeded successfully")
         
     except Exception as e:
-        logger.error(f"Error seeding blog data: {e}")
+        # Log error but don't crash the application
+        logger.error(f"Error seeding blog data (non-critical): {e}")
+        # Don't re-raise - allow app to continue
 
 
 @app.on_event("startup")
@@ -447,8 +457,8 @@ async def startup_db_indexes():
 
         logger.info("Database indexes created successfully")
         
-        # Seed blog data
-        await seed_blog_data()
+        # Run seeding in background (non-blocking)
+        asyncio.create_task(seed_blog_data())
         
     except Exception as e:
         logger.warning(f"Index creation warning (may already exist): {e}")
