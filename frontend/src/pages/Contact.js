@@ -76,7 +76,7 @@ const Contact = () => {
         ...formData,
         recaptcha_token: token
       }, {
-        timeout: 5000 // 5 second timeout
+        timeout: 30000 // 30 second timeout - more reliable for API calls
       });
       
       // Clear form immediately on success
@@ -161,7 +161,7 @@ const Contact = () => {
               'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.2,
+            opacity: 0.45,
           }}
         />
         <div

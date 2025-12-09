@@ -249,34 +249,18 @@ const Footer = () => {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
                   textDecoration: 'none',
+                  color: '#25D366',
+                  fontSize: '14px',
                   marginTop: '8px',
-                  padding: '10px 16px',
-                  background: 'rgba(37, 211, 102, 0.1)',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(37, 211, 102, 0.3)',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
+                  transition: 'color 0.3s ease',
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.2)';
-                  e.currentTarget.style.borderColor = '#25D366';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.3)';
-                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#20B858')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#25D366')}
               >
-                <MessageCircle size={18} style={{ color: '#25D366' }} />
-                <div>
-                  <p style={{ color: '#25D366', fontSize: '14px', fontWeight: 600, marginBottom: '2px' }}>
-                    WhatsApp Us
-                  </p>
-                  <p style={{ color: '#CCCCCC', fontSize: '12px' }}>
-                    Chat with us instantly
-                  </p>
-                </div>
+                <MessageCircle size={16} />
+                WhatsApp Us
               </a>
             </div>
           </div>
