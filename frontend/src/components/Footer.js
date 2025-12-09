@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -241,6 +242,42 @@ const Footer = () => {
               <p style={{ color: '#CCCCCC', fontSize: '13px', marginTop: '4px' }}>
                 Mumbai, Maharashtra
               </p>
+              <a
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  textDecoration: 'none',
+                  marginTop: '8px',
+                  padding: '10px 16px',
+                  background: 'rgba(37, 211, 102, 0.1)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(37, 211, 102, 0.3)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.2)';
+                  e.currentTarget.style.borderColor = '#25D366';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.3)';
+                }}
+              >
+                <MessageCircle size={18} style={{ color: '#25D366' }} />
+                <div>
+                  <p style={{ color: '#25D366', fontSize: '14px', fontWeight: 600, marginBottom: '2px' }}>
+                    WhatsApp Us
+                  </p>
+                  <p style={{ color: '#CCCCCC', fontSize: '12px' }}>
+                    Chat with us instantly
+                  </p>
+                </div>
+              </a>
             </div>
           </div>
         </div>

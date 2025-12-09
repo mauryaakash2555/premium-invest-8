@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Send, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
@@ -71,16 +71,18 @@ const Contact = () => {
       
       const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
       
-      // Send form data with reCAPTCHA token
+      // Send form data with reCAPTCHA token - with timeout
       await axios.post(`${API}/contact`, {
         ...formData,
         recaptcha_token: token
+      }, {
+        timeout: 5000 // 5 second timeout
       });
       
       // Clear form immediately on success
       setFormData({ name: '', email: '', phone: '', message: '' });
       
-      // Show success message for 2 seconds
+      // Show success message for 3 seconds
       toast.success('Message sent successfully! We\'ll contact you soon.', {
         style: {
           background: '#25D366',
@@ -89,14 +91,26 @@ const Contact = () => {
           border: 'none',
         },
         icon: '✓',
-        duration: 2000,
+        duration: 3000,
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
-        toast.error('Security verification failed. Please try again.');
+      if (error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK' || (error.message && error.message.toLowerCase().includes('timeout'))) {
+        toast.error('Request timeout. Please check your connection and try again.', {
+          duration: 4000,
+        });
+      } else if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
+        toast.error('Security verification failed. Please try again.', {
+          duration: 4000,
+        });
+      } else if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail, {
+          duration: 4000,
+        });
       } else {
-        toast.error('Failed to send message. Please try again.');
+        toast.error('Failed to send message. Please try again.', {
+          duration: 4000,
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -144,7 +158,7 @@ const Contact = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.2,
@@ -181,8 +195,8 @@ const Contact = () => {
               lineHeight: 1.6,
             }}
           >
-            Have questions about your investments? Our team is here to help you achieve your
-            financial goals.
+            Have questions about your investments? Our team is here to empower you to achieve your
+            financial objectives.
           </p>
         </div>
       </section>
@@ -306,53 +320,6 @@ const Contact = () => {
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
                 </div>
               </div>
-
-              <a
-                href="https://wa.me/918850977259"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-effect"
-                data-testid="contact-whatsapp-link"
-                style={{
-                  padding: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '20px',
-                  textDecoration: 'none',
-                  transition: 'transform 0.3s ease, background 0.3s ease',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                }}
-              >
-                <div
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    background: '#25D366',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#FFFFFF',
-                    flexShrink: 0,
-                  }}
-                >
-                  <MessageCircle size={24} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '20px', color: '#25D366', marginBottom: '8px' }}>
-                    WhatsApp
-                  </h3>
-                  <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Chat with us instantly</p>
-                </div>
-              </a>
             </div>
           </div>
 
@@ -580,7 +547,7 @@ const Contact = () => {
                 color: '#DAA520',
               }}
             >
-              Stay Updated with BM Wealth
+              Initiate Your Financial Transformation
             </h2>
             <p
               style={{
@@ -589,7 +556,7 @@ const Contact = () => {
                 marginBottom: '30px',
               }}
             >
-              Subscribe to our newsletter for weekly financial tips and podcast updates
+              Subscribe to our newsletter for weekly financial insights and podcast updates
             </p>
             <div className="sebi-disclaimer">
               <strong>Note:</strong> We respect your privacy and will never share your
