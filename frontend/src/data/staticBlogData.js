@@ -328,6 +328,22 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid #DAA520; margin-bottom: 60px;">
+    <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
+      📖 Coming Next:
+    </p>
+    <p style="font-size: 24px; margin-bottom: 10px;">
+      <a href="/blog/retirement-shortfall-case-study" style="color: #DAA520; text-decoration: none; font-weight: 600; transition: color 0.3s ease;">
+        He Did Everything Right. Still ₹2.3 Crore Short →
+      </a>
+    </p>
+    <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
+      A 50-year-old's retirement reality check that shocked his entire family.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+
   <div style="background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%); padding: 50px; border-radius: 16px; color: #000000; margin-bottom: 60px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: #000000;">
       Get a Free Educational Consultation
