@@ -3,6 +3,8 @@
 // =======================
 
 // --- BLOG 1: ₹47 Lakh Loss Case Study ---
+// Note: Duplicate field names (date/published_date, readTime/read_time, image/image_url) are intentional
+// to maintain compatibility with both static blog format and backend API format
 export const staticBlogPost = {
   id: "blog-1",
   slug: "47-lakh-investment-mistake-mumbai",

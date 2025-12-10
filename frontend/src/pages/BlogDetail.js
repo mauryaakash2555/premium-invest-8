@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, User, Tag, ArrowLeft, Clock, Share2 } from 'lucide-react';
+import { Calendar, User, Tag, ArrowLeft, Clock } from 'lucide-react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
