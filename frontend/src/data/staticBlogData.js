@@ -378,7 +378,7 @@ export const staticBlogPost = {
         🌐 Website: <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 18px; margin-bottom: 15px; color: #1a1a1a; font-weight: 500;">
-        📍 Office 108, Vinod Villa, Bhayandar West, Mumbai 401101
+        📍 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
       </p>
       <p style="font-size: 16px; color: #1a1a1a; font-style: italic;">
         IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
