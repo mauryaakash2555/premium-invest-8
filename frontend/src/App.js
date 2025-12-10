@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { lazy, Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import "@/App.css";
 import Home from "@/pages/Home";
 import Layout from "@/components/Layout";
@@ -58,6 +59,7 @@ function App() {
         </BrowserRouter>
         <Toaster position="bottom-center" />
         <Analytics />
+        <SpeedInsights />
       </div>
     </HelmetProvider>
   );
