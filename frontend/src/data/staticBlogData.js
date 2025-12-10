@@ -23,20 +23,30 @@ export const staticBlogPost = {
 
   content: `
   <div style="margin-bottom: 40px;">
-    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 30px;">
-      The message arrived at 11:47 PM on a Tuesday. A simple question that would reveal a ₹47 lakh problem:
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      The message arrived at 11:47 PM on a Tuesday:
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 20px;">
+      "Sir, please... can you check my father's investments? Something feels very wrong."
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      "Can you review my portfolio? I've been investing for 7 years, but something doesn't feel right."
+      The voice on the call was shaking. A 29-year-old software engineer from Borivali, calling about his father—a successful chartered accountant who lives in a comfortable 2BHK in Bandra, drives a Honda City, and has been investing diligently for 18 years.
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      The sender? A 38-year-old Chartered Accountant from Mumbai. Someone who reviews financial statements for a living. Someone who should know better.
+      The next morning, we connected on video call. He shared his screen.
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      But here's the thing about financial expertise—understanding balance sheets doesn't automatically translate to building optimal investment portfolios.
+      A folder opened. Inside were dozens of documents:
     </p>
+    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 20px;">
+      <li>Five mutual fund statements (all different fund houses, no clear strategy)</li>
+      <li>Three ULIP policies with 5-year lock-in periods</li>
+      <li>Two traditional insurance plans marketed as "investment schemes"</li>
+      <li>Multiple "guaranteed return" endowment plans</li>
+      <li>Several debt funds with expense ratios above 2%</li>
+    </ul>
     <p style="font-size: 18px; line-height: 1.8;">
-      What we uncovered wasn't fraud. It wasn't a market crash. It wasn't bad luck.
+      Everything scattered. Nothing aligned. No clear financial goals documented anywhere.
     </p>
   </div>
 
@@ -77,8 +87,14 @@ export const staticBlogPost = {
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
       How Does This Even Happen?
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 40px;">
-      Let's break down the 5 core problems we discovered—because chances are, at least one of these exists in your portfolio too:
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      Here's what most people don't understand: This wasn't a case of fraud. The father wasn't scammed. He wasn't cheated.
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      He was simply sold products that didn't match his actual financial goals.
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+      The core problems we identified:
     </p>
 
     <div style="margin-bottom: 40px;">
@@ -86,16 +102,7 @@ export const staticBlogPost = {
         1. Product Selection Without Goal Mapping
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">What happened:</strong> He was sold 6 different mutual funds, 2 ULIPs, and 1 traditional endowment plan. When we asked what each was meant to achieve—silence.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        No retirement goal. No child's education target. No emergency fund strategy. Just products bought in isolation because they "seemed good."
-      </p>
-      <blockquote style="background: rgba(218, 165, 32, 0.1); border-left: 4px solid #DAA520; padding: 20px; margin: 25px 0; font-style: italic; color: #C0A062; font-size: 18px;">
-        "The advisor said this fund gave 15% last year, so I invested."
-      </blockquote>
-      <p style="font-size: 18px; line-height: 1.8;">
-        <strong style="color: #DAA520;">The problem:</strong> Past returns mean nothing without context. A high-risk equity fund might give 15% returns, but is completely wrong for a goal that's 3 years away.
+        He was buying "investment products" without first defining what he was actually investing FOR. Retirement? Child's education? Emergency fund? Wealth creation? Each goal needs a different strategy, timeline, and risk approach. He had products, but no plan.
       </p>
     </div>
 
@@ -104,16 +111,7 @@ export const staticBlogPost = {
         2. Mixing Insurance with Investment
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">What happened:</strong> Two ULIPs with combined annual premium of ₹2.5 lakh. Over 7 years, that's ₹17.5 lakh invested.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        Current value? ₹19.2 lakh. That's barely 1.5% annual returns.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">What could have been:</strong> ₹17.5 lakh in a proper equity mutual fund portfolio over 7 years, with a conservative 12% CAGR, would be worth approximately ₹38.5 lakh.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8;">
-        <strong style="color: #DAA520;">The lesson:</strong> Insurance is meant to protect your family's financial future. Investment is meant to grow your wealth. When you mix both, you get neither done properly.
+        Three ULIPs and two traditional endowment plans. These products combine life insurance with investment—and historically, they do neither particularly well. High charges eat into returns. Lock-in periods trap capital. The insurance coverage is usually inadequate for actual family needs.
       </p>
     </div>
 
@@ -122,18 +120,7 @@ export const staticBlogPost = {
         3. High-Cost Products Eating Returns Silently
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">What we found:</strong>
-      </p>
-      <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li>Regular plans of mutual funds (paying 1-1.5% extra in expense ratio annually)</li>
-        <li>ULIP charges: Premium allocation charge, fund management charge, mortality charge, policy admin charge</li>
-        <li>Traditional plan: 30% of first year premium gone in commissions</li>
-      </ul>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        On a ₹25 lakh portfolio, even a 1% extra cost means ₹25,000 less growing for you every single year.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8;">
-        Over 7 years, with compounding, that's the difference between ₹35 lakh and ₹32 lakh. Multiply this across different products—and there's your ₹47 lakh gap.
+        Some of his mutual funds had expense ratios above 2%. Over 15-20 years, these charges compound into massive wealth destruction. A 2% annual charge on ₹10 lakh growing at 12% for 20 years can cost you over ₹12 lakh in lost returns. Most investors never even check this number.
       </p>
     </div>
 
@@ -142,18 +129,7 @@ export const staticBlogPost = {
         4. No Asset Allocation Strategy
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">What happened:</strong> 85% in equity (mixed between direct stocks, equity mutual funds, and ULIP equity funds). 15% in debt (fixed deposits and traditional insurance).
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        Sounds aggressive and good for long-term wealth building? Not when you discover:
-      </p>
-      <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li>He needed ₹15 lakh in 2 years for his child's international education</li>
-        <li>Another ₹10 lakh in 3 years for a home down payment</li>
-        <li>Zero emergency fund despite supporting elderly parents</li>
-      </ul>
-      <p style="font-size: 18px; line-height: 1.8;">
-        <strong style="color: #DAA520;">The reality:</strong> Having 85% in equity when you need 40% of your portfolio in 2-3 years is a recipe for disaster. What if markets correct by 20% just when you need the money?
+        His portfolio had no clear equity-debt split aligned to his age, risk capacity, or financial goals. Some years he was 90% equity (too risky for his situation). Other years, 70% debt (too conservative for wealth building). Asset allocation—not product selection—determines 80-90% of portfolio returns over time.
       </p>
     </div>
 
@@ -162,18 +138,19 @@ export const staticBlogPost = {
         5. Zero Portfolio Review for 7 Years
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">The advisor who sold these products?</strong> Called once a year to sell something new. Never to review what was already bought.
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        No rebalancing. No checking if goals changed. No tracking if funds were underperforming. No discussion on tax implications.
-      </p>
-      <blockquote style="background: rgba(218, 165, 32, 0.1); border-left: 4px solid #DAA520; padding: 20px; margin: 25px 0; font-style: italic; color: #C0A062; font-size: 18px;">
-        "I thought once I invested, the fund manager handles everything."
-      </blockquote>
-      <p style="font-size: 18px; line-height: 1.8;">
-        <strong style="color: #DAA520;">The truth:</strong> The fund manager manages the fund. But who manages your portfolio? Who ensures the products still align with your changing life goals? That's the advisor's job—and it was never done.
+        Once products were sold, there was no systematic annual review. No rebalancing. No checking if funds were underperforming. No adjusting strategy as life situations changed. The portfolio was on autopilot—with no pilot actually monitoring the flight.
       </p>
     </div>
+
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      When we finished explaining these issues, the son was silent for a full minute.
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      "My father trusted someone completely. He did everything they told him to do. And this is the result."
+    </p>
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
+      This is the painful reality for millions of Indian families. Sincerity without proper financial guidance can be extremely expensive.
+    </p>
   </div>
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
@@ -183,19 +160,16 @@ export const staticBlogPost = {
       The Part That Hurts Most
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      Remember—this wasn't a financially illiterate person. This was a CA who:
+      This wasn't a careless investor. This was a CA—someone who understands numbers, analyzes balance sheets for clients, and makes careful financial decisions professionally.
     </p>
-    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 20px;">
-      <li>Understood financial statements</li>
-      <li>Advised companies on financial decisions</li>
-      <li>Knew the importance of diversification (in theory)</li>
-      <li>Had the income to invest consistently</li>
-    </ul>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      And yet—₹47 lakh opportunity cost.
+      He worked 10-12 hour days. Saved diligently. Invested regularly. Did everything right from a discipline perspective.
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      The only thing he didn't do? Ask the right questions about product suitability, cost structure, and goal alignment before committing his hard-earned money.
     </p>
     <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
-      If this can happen to a CA, it can happen to anyone.
+      If someone this financially aware can lose ₹47 lakh in opportunity cost, imagine what's happening to families without this background.
     </p>
   </div>
 
@@ -205,54 +179,48 @@ export const staticBlogPost = {
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
       What Every Investor Must Understand
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 40px;">
-      This case study revealed 5 non-negotiable principles that every investor must internalize:
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+      After reviewing 200+ portfolios over the past decade, certain patterns emerge clearly. Here's what separates successful wealth builders from those who struggle:
     </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 30px;">
-      <h3 style="color: #DAA520; font-size: 22px; margin-bottom: 15px;">
-        1. Your portfolio must be goal-mapped, not product-pushed
-      </h3>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        Every investment should answer: "What is this money meant to achieve, and when?" If you can't answer that clearly—you're investing blind.
-      </p>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      → <strong style="color: #DAA520;">Goals First, Products Second</strong>
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+      Define clear financial goals with timelines BEFORE choosing any investment product. Retirement in 20 years needs different products than child's education in 8 years or buying a home in 3 years.
+    </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 30px;">
-      <h3 style="color: #DAA520; font-size: 22px; margin-bottom: 15px;">
-        2. Keep insurance and investment separate. Always.
-      </h3>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        Buy pure term insurance for protection. Invest in mutual funds for wealth creation. Don't mix them in ULIPs or endowment plans—you'll lose on both fronts.
-      </p>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      → <strong style="color: #DAA520;">Keep Insurance and Investment Separate</strong>
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+      Pure term insurance for life protection. Mutual funds/other vehicles for wealth creation. Mixing them typically serves neither purpose well.
+    </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 30px;">
-      <h3 style="color: #DAA520; font-size: 22px; margin-bottom: 15px;">
-        3. Cost matters more than you think
-      </h3>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        A 1% difference in expense ratio might sound small. Over 20 years, on a ₹50 lakh portfolio, it's the difference between ₹3.8 crore and ₹4.2 crore. That's ₹40 lakh you're giving away for no reason.
-      </p>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      → <strong style="color: #DAA520;">Understand All Costs</strong>
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+      Expense ratios, allocation charges, exit loads, lock-in periods—know exactly what you're paying and why. A 1% difference in annual costs can mean lakhs over decades.
+    </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 30px;">
-      <h3 style="color: #DAA520; font-size: 22px; margin-bottom: 15px;">
-        4. Asset allocation is not optional
-      </h3>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        Your risk capacity changes with your goals, age, and life circumstances. What worked when you were 30 with no dependents won't work at 38 with children's education approaching.
-      </p>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      → <strong style="color: #DAA520;">Build Proper Asset Allocation</strong>
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+      Your equity-debt-liquid mix should match your age, risk capacity, and time horizons for different goals. This drives 80-90% of long-term returns.
+    </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 30px;">
-      <h3 style="color: #DAA520; font-size: 22px; margin-bottom: 15px;">
-        5. Reviews aren't optional—they're mandatory
-      </h3>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        An advisor who only contacts you to sell new products isn't an advisor—they're a salesperson. Real financial planning involves annual reviews, rebalancing, and course correction.
-      </p>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      → <strong style="color: #DAA520;">Review and Rebalance Annually</strong>
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; padding-left: 20px;">
+      Markets move. Your situation changes. Funds underperform. Regular review ensures your portfolio stays aligned with goals, and rebalancing locks in gains while managing risk.
+    </p>
+
+    <p style="font-size: 18px; line-height: 1.8; color: #C0A062;">
+      These aren't complicated strategies. They're fundamental principles. But they require someone to actually explain them clearly—which often doesn't happen.
+    </p>
   </div>
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
@@ -262,32 +230,29 @@ export const staticBlogPost = {
       Are You in the Same Situation?
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
-      Ask yourself these questions. If you answer "no" or "I'm not sure" to even one—you might be sitting on a similar problem:
+      Take 5 minutes right now. Pull out your investment statements. Check:
     </p>
 
     <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid #DAA520; margin-bottom: 20px;">
       <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
-        ✓ Can you clearly state what each of your investments is meant to achieve?
+        → Can you explain WHY you own each specific investment?
       </p>
       <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
-        ✓ Do you know the total cost you're paying across all your investments?
+        → Do you have any ULIPs or traditional insurance policies someone called "investment plans"?
       </p>
       <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
-        ✓ Is your asset allocation appropriate for your goals and time horizon?
+        → Do you know the exact expense ratio of each mutual fund?
       </p>
       <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
-        ✓ When was the last time someone reviewed your entire portfolio (not just sold you something new)?
-      </p>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
-        ✓ Do you have separate term insurance, or is insurance mixed in your investment products?
+        → Is there a clear asset allocation strategy aligned to your goals?
       </p>
       <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
-        ✓ If markets correct by 30% tomorrow, would your critical goals in the next 3 years still be safe?
+        → When was the last time someone actually reviewed your portfolio comprehensively?
       </p>
     </div>
 
     <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px;">
-      If you couldn't confidently answer yes to all of these—you need a portfolio review. Not in 6 months. Now.
+      If you answered "I'm not sure" or "I don't know" to even one of these questions, there may be gaps that could cost you significantly over time.
     </p>
   </div>
 
@@ -298,31 +263,27 @@ export const staticBlogPost = {
       What Changed for This Family
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      After our consultation, here's what we restructured (without asking him to sell everything and start over):
+      After our initial consultation, we spent time helping the family understand their actual financial situation—not with jargon, but with clear explanations of what they owned and why it might not be optimal.
     </p>
 
-    <div style="margin-bottom: 25px;">
-      <h3 style="color: #C0A062; font-size: 22px; margin-bottom: 15px;">Immediate Actions:</h3>
-      <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px;">
-        <li>Moved mutual fund investments from Regular to Direct plans (saving 1% annually)</li>
-        <li>Redirected ULIP premiums to term insurance + dedicated investment portfolio</li>
-        <li>Created goal-specific buckets: Emergency fund, Child education (2 years), Home down payment (3 years), Retirement (20+ years)</li>
-        <li>Implemented asset allocation: 40% debt for short-term goals, 60% equity for long-term wealth</li>
-      </ul>
-    </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      We provided educational guidance on:
+    </p>
 
-    <div style="margin-bottom: 25px;">
-      <h3 style="color: #C0A062; font-size: 22px; margin-bottom: 15px;">Long-term Strategy:</h3>
-      <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px;">
-        <li>Quarterly portfolio tracking (automated)</li>
-        <li>Annual review meetings to adjust for life changes</li>
-        <li>Tax-efficient withdrawal strategy</li>
-        <li>Succession planning documentation</li>
-      </ul>
-    </div>
+    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
+      <li>How to think about different financial goals systematically</li>
+      <li>General principles of asset allocation for different life stages</li>
+      <li>Understanding product costs and their long-term impact</li>
+      <li>The importance of separating insurance protection from investment growth</li>
+      <li>How regular portfolio review helps maintain alignment with changing life situations</li>
+    </ul>
 
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px;">
-      Result? While we can't recover the past 7 years, we're now positioned to avoid losing another ₹47 lakh over the next 7.
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      18 months later, they have clarity. They understand where their money is, why it's there, and what it's meant to achieve. More importantly, they have a systematic approach to making future financial decisions.
+    </p>
+
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
+      That's the difference proper financial guidance makes—not selling products, but building understanding and strategy.
     </p>
   </div>
 
@@ -348,34 +309,35 @@ export const staticBlogPost = {
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: #000000;">
       Get a Free Educational Consultation
     </h2>
-    <p style="font-size: 20px; margin-bottom: 15px; color: #1a1a1a; font-weight: 500;">
+    <p style="font-size: 20px; margin-bottom: 35px; color: #1a1a1a; font-weight: 500;">
       Understand Your Current Financial Position
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 35px; color: #1a1a1a;">
-      We don't sell products. We don't push changes you don't need. We provide clarity—that's it.
+
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #1a1a1a;">
+      We'll help you understand:
     </p>
 
     <div style="margin-bottom: 35px;">
       <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        <strong>✓</strong> Free 30-minute portfolio review call
+        ✓ Whether your investments match your actual financial goals
       </p>
       <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        <strong>✓</strong> Identify cost leakages and goal mismatches
+        ✓ Hidden costs that might be impacting your returns
       </p>
       <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        <strong>✓</strong> Understand if your current investments are on track
+        ✓ If your asset allocation aligns with your risk profile and timeline
       </p>
       <p style="font-size: 18px; line-height: 2; color: #1a1a1a;">
-        <strong>✓</strong> Get unbiased, educational guidance (not sales pitch)
+        ✓ General principles that could improve your financial strategy
       </p>
     </div>
 
-    <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 25px;">
+    <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 0;">
       <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
-        📲 WhatsApp: <a href="https://wa.me/918850977259" style="color: #000000; text-decoration: underline;">+91 88509 77259</a>
+        📱 WhatsApp: <a href="https://wa.me/918850977259" style="color: #000000; text-decoration: underline;">+91 88509 77259</a>
       </p>
       <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
-        🌐 Website: <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
+        🌐 <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 18px; margin-bottom: 15px; color: #1a1a1a; font-weight: 500;">
         📍 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
@@ -384,63 +346,34 @@ export const staticBlogPost = {
         IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
       </p>
     </div>
-
-    <p style="font-size: 17px; line-height: 1.6; color: #1a1a1a; font-style: italic;">
-      <strong>Important:</strong> You don't need to buy anything. You don't need to switch everything immediately. You just need clarity on where you stand—and what might need attention.
-    </p>
   </div>
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
     <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
-      📋 Full Regulatory Disclaimers
+      Important Disclaimers & Regulatory Information:
     </h3>
 
-    <div style="margin-bottom: 30px;">
-      <h4 style="color: #C0A062; font-size: 18px; margin-bottom: 12px; font-weight: 600;">
-        1. Educational Content Disclaimer
-      </h4>
-      <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-        This blog post is provided for educational and informational purposes only. The case study shared is based on a real consultation, but specific details have been anonymized to protect client confidentiality. The content should not be construed as personalized financial advice, investment recommendations, or an offer to buy or sell any securities. Each investor's situation is unique, and what worked in this case may not be suitable for others.
-      </p>
-    </div>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. The case study mentioned is based on a real situation but has been anonymized—names, specific amounts, and certain details have been modified to protect client privacy.
+    </p>
 
-    <div style="margin-bottom: 30px;">
-      <h4 style="color: #C0A062; font-size: 18px; margin-bottom: 12px; font-weight: 600;">
-        2. Investment Risks and Returns
-      </h4>
-      <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-        All investments in securities, mutual funds, and other financial instruments are subject to market risks. Past performance is not indicative of future results. The returns mentioned in this article (including the 12% CAGR assumption) are illustrative examples for comparison purposes only and should not be considered guaranteed or expected returns. Actual returns may be higher or lower based on market conditions, fund selection, timing, and various other factors. The opportunity cost calculation of ₹47 lakh is based on comparative analysis of different investment structures under specific market conditions and may vary for different investors and time periods.
-      </p>
-    </div>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
+    </p>
 
-    <div style="margin-bottom: 30px;">
-      <h4 style="color: #C0A062; font-size: 18px; margin-bottom: 12px; font-weight: 600;">
-        3. Regulatory Status
-      </h4>
-      <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-        BM Wealth is an IRDAI Licensed Corporate Agent (License No. 277925) for insurance products and AMFI Registered Mutual Fund Distributor (ARN 90008). All advice provided complies with IRDAI, SEBI, and AMFI regulations. For insurance products, we act as intermediaries and do not underwrite policies. For mutual fund investments, we are registered distributors and not portfolio managers or investment advisors as defined under SEBI regulations.
-      </p>
-    </div>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | AMFI ARN 90008) is registered to provide insurance advisory services and mutual fund distribution. We are NOT SEBI registered investment advisors (RIA) and do not provide portfolio management services, stock recommendations, or personalized investment advice requiring SEBI RIA registration.
+    </p>
 
-    <div style="margin-bottom: 30px;">
-      <h4 style="color: #C0A062; font-size: 18px; margin-bottom: 12px; font-weight: 600;">
-        4. Due Diligence and Professional Consultation
-      </h4>
-      <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-        Readers are strongly advised to conduct their own due diligence and consult with qualified financial advisors, tax consultants, and legal professionals before making any investment decisions. The analysis shared in this blog is specific to the client's circumstances and goals. Your financial situation, risk appetite, investment horizon, and goals may be entirely different, requiring a customized approach. Do not make investment decisions solely based on this article.
-      </p>
-    </div>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Due Diligence:</strong> Please read all scheme-related documents carefully before investing. Understand the risk-return profile of investment products. Consult with a qualified financial advisor to assess suitability based on your specific financial situation, goals, and risk tolerance before making any investment decisions.
+    </p>
 
-    <div style="margin-bottom: 0;">
-      <h4 style="color: #C0A062; font-size: 18px; margin-bottom: 12px; font-weight: 600;">
-        5. No Guarantees or Warranties
-      </h4>
-      <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-        While we strive to provide accurate and up-to-date information, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, or suitability of the information contained in this blog. Any reliance you place on such information is strictly at your own risk. Market conditions, regulations, tax laws, and product features change frequently, and the information provided may not reflect the most current developments. Investment in mutual funds, insurance products, or any other financial instruments should be made after carefully reading the offer documents, scheme information documents, and understanding all related charges and risks.
-      </p>
-    </div>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
+    </p>
   </div>
 
   <p style="font-size: 16px; line-height: 1.8; color: #999999; text-align: center; margin-top: 40px; font-style: italic;">
