@@ -333,9 +333,11 @@ export const staticBlogPost = {
     </div>
 
     <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 0;">
-      <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
-        📱 WhatsApp: <a href="https://wa.me/918850977259" style="color: #000000; text-decoration: underline;">+91 88509 77259</a>
-      </p>
+      <div style="margin-bottom: 20px;">
+        <a href="https://wa.me/918850977259" style="display: inline-block; background: #25D366; color: #FFFFFF; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: 600; transition: background 0.3s ease;">
+          <span style="margin-right: 8px;">📱</span> WhatsApp: +91 88509 77259
+        </a>
+      </div>
       <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
         🌐 <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
       </p>
