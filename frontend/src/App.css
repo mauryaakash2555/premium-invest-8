@@ -252,3 +252,9 @@ html {
     min-height: 300px;
   }
 }
+
+@media (min-width: 1024px) {
+  .page-hero-bg {
+    background-position: top center !important;
+  }
+}
