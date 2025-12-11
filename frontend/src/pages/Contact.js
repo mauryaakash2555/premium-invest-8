@@ -15,25 +15,25 @@ const Contact = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // reCAPTCHA site key from environment variable
   const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Load reCAPTCHA v3 script
     if (!RECAPTCHA_SITE_KEY) {
       console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
       return;
     }
-    
+
     const script = document.createElement('script');
     script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
-    
+
     return () => {
       // Cleanup: remove script on unmount
       if (script.parentNode) {
@@ -57,33 +57,37 @@ const Contact = () => {
         setIsSubmitting(false);
         return;
       }
-      
+
       // Wait for grecaptcha to be ready
       if (!window.grecaptcha) {
         toast.error('reCAPTCHA not loaded. Please refresh the page.');
         setIsSubmitting(false);
         return;
       }
-      
+
       await new Promise((resolve) => {
         window.grecaptcha.ready(resolve);
       });
-      
+
       const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
-      
+
       // Send form data with reCAPTCHA token - with optimized timeout
-      await axios.post(`${API}/contact`, {
-        ...formData,
-        recaptcha_token: token
-      }, {
-        timeout: 15000 // 15 second timeout - more reasonable for API calls
-      });
-      
+      await axios.post(
+        `${API}/contact`,
+        {
+          ...formData,
+          recaptcha_token: token,
+        },
+        {
+          timeout: 15000, // 15 second timeout - more reasonable for API calls
+        }
+      );
+
       // Clear form immediately on success
       setFormData({ name: '', email: '', phone: '', message: '' });
-      
+
       // Show success message for 3 seconds
-      toast.success('Message sent successfully! We\'ll contact you soon.', {
+      toast.success("Message sent successfully! We'll contact you soon.", {
         style: {
           background: '#25D366',
           color: 'white',
@@ -95,17 +99,23 @@ const Contact = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      
+
       // Handle different error scenarios
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-        toast.error('Request timeout. The server is taking too long to respond. Please try again.', {
-          duration: 5000,
-        });
+        toast.error(
+          'Request timeout. The server is taking too long to respond. Please try again.',
+          {
+            duration: 5000,
+          }
+        );
       } else if (error.code === 'ERR_NETWORK') {
         toast.error('Network error. Please check your internet connection and try again.', {
           duration: 5000,
         });
-      } else if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
+      } else if (
+        error.response?.status === 400 &&
+        error.response?.data?.detail === 'reCAPTCHA verification failed'
+      ) {
         toast.error('Security verification failed. Please refresh the page and try again.', {
           duration: 5000,
         });
@@ -131,46 +141,50 @@ const Contact = () => {
     <div>
       <Helmet>
         <title>Contact BM Wealth - Expert Financial Advisory Mumbai | ARN 90008</title>
-        <meta name="description" content="Get in touch with BM Wealth for personalized investment advisory services. Located in Mumbai. Call, email, or visit us. SEBI registered ARN 90008." />
-        <meta name="keywords" content="contact BM Wealth, investment advisor Mumbai contact, Brahmdeo Maurya contact, ARN 90008, financial advisor Mumbai" />
+        <meta
+          name="description"
+          content="Get in touch with BM Wealth for personalized investment advisory services. Located in Mumbai. Call, email, or visit us. SEBI registered ARN 90008."
+        />
+        <meta
+          name="keywords"
+          content="contact BM Wealth, investment advisor Mumbai contact, Brahmdeo Maurya contact, ARN 90008, financial advisor Mumbai"
+        />
         <link rel="canonical" href="https://bmwealth.in/contact" />
-        
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/contact" />
-        <meta property="og:title" content="Contact BM Wealth - Expert Financial Advisory Mumbai" />
-        <meta property="og:description" content="Get in touch with BM Wealth for personalized investment advisory services. SEBI registered ARN 90008." />
+        <meta
+          property="og:title"
+          content="Contact BM Wealth - Expert Financial Advisory Mumbai"
+        />
+        <meta
+          property="og:description"
+          content="Get in touch with BM Wealth for personalized investment advisory services. SEBI registered ARN 90008."
+        />
         <meta property="og:image" content="https://bmwealth.in/logo.webp" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/contact" />
-        <meta name="twitter:title" content="Contact BM Wealth - Expert Financial Advisory Mumbai" />
-        <meta name="twitter:description" content="Get in touch with BM Wealth for personalized investment advisory services." />
+        <meta
+          name="twitter:title"
+          content="Contact BM Wealth - Expert Financial Advisory Mumbai"
+        />
+        <meta
+          name="twitter:description"
+          content="Get in touch with BM Wealth for personalized investment advisory services."
+        />
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
-      {/* Hero Section */}
-      <section className="page-hero-section">
-        <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
-            opacity: 0.5,
-            backgroundPosition: 'top center',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
-            zIndex: 0,
-          }}
-        />
 
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+      {/* Hero Section */}
+      <section
+        className="page-hero-section"
+        style={{ backgroundImage: "url('/images/hero/contact-hero.webp')" }}
+      >
+        <div
+          className="section-container"
+          style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}
+        >
           <h1
             data-testid="contact-heading"
             style={{
@@ -332,7 +346,8 @@ const Contact = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(37, 211, 102, 0.3)';
+                  e.currentTarget.style.boxShadow =
+                    '0 8px 20px rgba(37, 211, 102, 0.3)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
@@ -413,7 +428,9 @@ const Contact = () => {
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')
+                  }
                 />
               </div>
 
@@ -452,7 +469,9 @@ const Contact = () => {
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')
+                  }
                 />
               </div>
 
@@ -491,7 +510,9 @@ const Contact = () => {
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')
+                  }
                 />
               </div>
 
@@ -531,7 +552,9 @@ const Contact = () => {
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
                   onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')
+                  }
                 />
               </div>
 
@@ -602,8 +625,8 @@ const Contact = () => {
               Subscribe to our newsletter for weekly financial insights and podcast updates
             </p>
             <div className="sebi-disclaimer">
-              <strong>Note:</strong> We respect your privacy and will never share your
-              information with third parties.
+              <strong>Note:</strong> We respect your privacy and will never share your information
+              with third parties.
             </div>
           </div>
         </div>
