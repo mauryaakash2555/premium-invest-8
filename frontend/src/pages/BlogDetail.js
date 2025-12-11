@@ -318,8 +318,14 @@ const BlogDetail = () => {
     );
   }
 
-  // Get current URL for sharing
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  // Get current URL for sharing (client-side only)
+  const [currentUrl, setCurrentUrl] = useState('');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
 
   return (
     <div style={{ background: '#000000', minHeight: '100vh' }}>
@@ -386,7 +392,9 @@ const BlogDetail = () => {
               objectFit: 'cover',
               borderRadius: '12px',
             }}
-            // TODO: update with licensed hero
+            /* TODO: Replace with licensed finance dashboard hero image
+               Requirements: 1200x400px, dark theme, financial charts/dashboard,
+               licensed for commercial use, optimized for web (WebP or optimized JPG) */
           />
         </section>
       )}
@@ -663,73 +671,90 @@ function renderEnhancedContent(htmlContent, slug) {
   // Split content by h2 headings to identify sections
   const sanitized = DOMPurify.sanitize(htmlContent);
   
-  // Find key sections using text markers
+  // Define content markers for section boundaries
+  const markers = {
+    numberChanged: 'The Number That Changed Everything',
+    howDoes: 'How Does This Even Happen?',
+    partHurts: 'The Part That Hurts Most',
+  };
+  
   const sections = [];
-  let remainingContent = sanitized;
+  let currentContent = sanitized;
   
   // Section 1: Opening content (before "The Number That Changed Everything")
-  const numberChangedIndex = remainingContent.indexOf('The Number That Changed Everything');
+  const numberChangedIndex = currentContent.indexOf(markers.numberChanged);
   if (numberChangedIndex > -1) {
-    const beforeNumber = remainingContent.substring(0, numberChangedIndex);
     sections.push(
-      <div key="section-opening" dangerouslySetInnerHTML={{ __html: beforeNumber }} />
+      <div key="section-opening" dangerouslySetInnerHTML={{ 
+        __html: currentContent.substring(0, numberChangedIndex) 
+      }} />
     );
-    remainingContent = remainingContent.substring(numberChangedIndex);
+    currentContent = currentContent.substring(numberChangedIndex);
   }
   
   // Section 2: "The Number That Changed Everything" - add chart before, replace gold box
-  const howDoesIndex = remainingContent.indexOf('How Does This Even Happen?');
+  const howDoesIndex = currentContent.indexOf(markers.howDoes);
   if (howDoesIndex > -1) {
-    let numberSection = remainingContent.substring(0, howDoesIndex);
+    let numberSection = currentContent.substring(0, howDoesIndex);
     
-    // Remove the existing gold box div from the content
-    numberSection = numberSection.replace(
-      /<div style="background: linear-gradient[^>]*>[\s\S]*?₹47,00,000[\s\S]*?<\/div>/,
-      '<!-- GOLD_BOX_PLACEHOLDER -->'
-    );
+    // Find and replace the existing gold box using a more specific pattern
+    const goldBoxPattern = /<div[^>]*?background: linear-gradient[^>]*?>[\s\S]*?₹47,00,000[\s\S]*?<\/div>/;
+    const hasGoldBox = goldBoxPattern.test(numberSection);
     
-    // Insert chart and then content
-    sections.push(
-      <div key="section-number-intro" dangerouslySetInnerHTML={{ 
-        __html: numberSection.substring(0, numberSection.indexOf('<!-- GOLD_BOX_PLACEHOLDER -->')) 
-      }} />
-    );
-    
-    // Add comparison chart
-    sections.push(<ComparisonChart key="chart" />);
-    
-    // Add gold highlight box
-    sections.push(<GoldHighlightBox key="highlight" />);
-    
-    // Add remaining content of this section after the gold box
-    const afterBox = numberSection.substring(numberSection.indexOf('<!-- GOLD_BOX_PLACEHOLDER -->') + '<!-- GOLD_BOX_PLACEHOLDER -->'.length);
-    if (afterBox.trim()) {
+    if (hasGoldBox) {
+      const beforeBox = numberSection.substring(0, numberSection.search(goldBoxPattern));
+      const afterBox = numberSection.substring(numberSection.search(goldBoxPattern)).replace(goldBoxPattern, '');
+      
+      // Add content before gold box
+      if (beforeBox.trim()) {
+        sections.push(
+          <div key="section-number-before" dangerouslySetInnerHTML={{ __html: beforeBox }} />
+        );
+      }
+      
+      // Add comparison chart
+      sections.push(<ComparisonChart key="chart" />);
+      
+      // Add gold highlight box
+      sections.push(<GoldHighlightBox key="highlight" />);
+      
+      // Add content after gold box
+      if (afterBox.trim()) {
+        sections.push(
+          <div key="section-number-after" dangerouslySetInnerHTML={{ __html: afterBox }} />
+        );
+      }
+    } else {
+      // If no gold box found, just add the section and components
       sections.push(
-        <div key="section-number-after" dangerouslySetInnerHTML={{ __html: afterBox }} />
+        <div key="section-number" dangerouslySetInnerHTML={{ __html: numberSection }} />
       );
+      sections.push(<ComparisonChart key="chart" />);
+      sections.push(<GoldHighlightBox key="highlight" />);
     }
     
-    remainingContent = remainingContent.substring(howDoesIndex);
+    currentContent = currentContent.substring(howDoesIndex);
   }
   
   // Section 3: "How Does This Even Happen?" - add CTA after this section
-  const partHurtsIndex = remainingContent.indexOf('The Part That Hurts Most');
+  const partHurtsIndex = currentContent.indexOf(markers.partHurts);
   if (partHurtsIndex > -1) {
-    const howDoesSection = remainingContent.substring(0, partHurtsIndex);
     sections.push(
-      <div key="section-how-does" dangerouslySetInnerHTML={{ __html: howDoesSection }} />
+      <div key="section-how-does" dangerouslySetInnerHTML={{ 
+        __html: currentContent.substring(0, partHurtsIndex) 
+      }} />
     );
     
     // Add mid-blog CTA
     sections.push(<MidBlogCTA key="mid-cta" />);
     
-    remainingContent = remainingContent.substring(partHurtsIndex);
+    currentContent = currentContent.substring(partHurtsIndex);
   }
   
   // Add all remaining content
-  if (remainingContent.trim()) {
+  if (currentContent.trim()) {
     sections.push(
-      <div key="section-remaining" dangerouslySetInnerHTML={{ __html: remainingContent }} />
+      <div key="section-remaining" dangerouslySetInnerHTML={{ __html: currentContent }} />
     );
   }
 
