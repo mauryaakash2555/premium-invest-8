@@ -154,6 +154,7 @@ const Contact = () => {
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
+            backgroundPosition: 'top center',
             opacity: 0.5,
           }}
         />

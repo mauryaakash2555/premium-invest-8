@@ -34,6 +34,7 @@ const Compliance = () => {
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            backgroundPosition: 'top center',
             opacity: 0.5,
           }}
         />
