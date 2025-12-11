@@ -22,7 +22,8 @@ const Services = () => {
         'Regular portfolio rebalancing',
         'Tax-efficient investing',
       ],
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      image:
+        'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <TrendingUp size={50} />,
@@ -36,7 +37,8 @@ const Services = () => {
         'Regular performance reviews',
         'Direct equity investments',
       ],
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      image:
+        'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <CreditCard size={50} />,
@@ -50,7 +52,8 @@ const Services = () => {
         'Low brokerage rates',
         'Expert trading support',
       ],
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      image:
+        'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       icon: <Shield size={50} />,
@@ -64,7 +67,8 @@ const Services = () => {
         'Policy comparison and analysis',
         'Claims assistance',
       ],
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image:
+        'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <DollarSign size={50} />,
@@ -78,7 +82,8 @@ const Services = () => {
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image:
+        'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       icon: <Repeat size={50} />,
@@ -92,7 +97,8 @@ const Services = () => {
         'Auto-debit facility',
         'Goal-based planning',
       ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image:
+        'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
     },
   ];
 
@@ -100,46 +106,44 @@ const Services = () => {
     <div>
       <Helmet>
         <title>Investment Services Mumbai - Mutual Funds, SIP, Insurance, PMS | BM Wealth</title>
-        <meta name="description" content="Comprehensive investment services in Mumbai: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits. Expert financial planning by BM Wealth ARN 90008." />
-        <meta name="keywords" content="investment services Mumbai, mutual funds advisor, SIP plans, portfolio management Mumbai, insurance Mumbai, trading services, fixed deposits" />
+        <meta
+          name="description"
+          content="Comprehensive investment services in Mumbai: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits. Expert financial planning by BM Wealth ARN 90008."
+        />
+        <meta
+          name="keywords"
+          content="investment services Mumbai, mutual funds advisor, SIP plans, portfolio management Mumbai, insurance Mumbai, trading services, fixed deposits"
+        />
         <link rel="canonical" href="https://bmwealth.in/services" />
-        
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/services" />
         <meta property="og:title" content="Investment Services Mumbai | BM Wealth" />
-        <meta property="og:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
+        <meta
+          property="og:description"
+          content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits."
+        />
         <meta property="og:image" content="https://bmwealth.in/logo.webp" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/services" />
         <meta name="twitter:title" content="Investment Services Mumbai | BM Wealth" />
-        <meta name="twitter:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
+        <meta
+          name="twitter:description"
+          content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits."
+        />
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
-      {/* Hero Section */}
-      <section className="page-hero-section">
-        <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            opacity: 0.5,
-            backgroundPosition: 'top center',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
-            zIndex: 0,
-          }}
-        />
 
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+      {/* Hero Section */}
+      <section
+        className="page-hero-section"
+        style={{ backgroundImage: "url('/images/hero/services-hero.webp')" }}
+      >
+        <div
+          className="section-container"
+          style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}
+        >
           <h1
             data-testid="services-heading"
             style={{
@@ -388,12 +392,11 @@ const Services = () => {
       {/* SEBI Disclaimer */}
       <section className="section-container">
         <div className="sebi-disclaimer">
-          <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to
-          market risks. Read all the related documents carefully before investing. Past
-          performance is not indicative of future returns. Please consider your specific
-          investment requirements, risk tolerance, investment goal, time frame, risk and reward
-          balance and cost associated with the investment before choosing a fund or designing a
-          portfolio that suits your needs.
+          <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to market
+          risks. Read all the related documents carefully before investing. Past performance is not
+          indicative of future returns. Please consider your specific investment requirements, risk
+          tolerance, investment goal, time frame, risk and reward balance and cost associated with
+          the investment before choosing a fund or designing a portfolio that suits your needs.
         </div>
       </section>
     </div>
