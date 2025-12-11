@@ -28,31 +28,14 @@ const Compliance = () => {
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
-      <section
-        style={{
-          minHeight: '50vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          paddingTop: '100px',
-        }}
-      >
-        {/* Background */}
+      <section className="page-hero-section">
         <div
+          className="page-hero-bg"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             backgroundImage:
               'url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
+            backgroundPosition: 'top center',
+            opacity: 0.5,
           }}
         />
         <div
@@ -62,7 +45,8 @@ const Compliance = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
+            zIndex: 0,
           }}
         />
 
