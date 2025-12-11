@@ -154,7 +154,7 @@ Cavel cross lane 3,
 Kalbadevi, Mumbai 401101
 IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
 
-Important Disclaimers &amp; Regulatory Information:
+Important Disclaimers & Regulatory Information:
 
 Educational Content: This article is for educational and informational purposes only. It should not be considered personalized investment advice. The case study mentioned is based on a real situation but has been anonymized—names, specific amounts, and certain details have been modified to protect client privacy.
 
