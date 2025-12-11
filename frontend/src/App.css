@@ -109,6 +109,16 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 0;
 }
 
+.page-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%);
+  z-index: 0;
+}
+
 /* Desktop-only improvements */
 @media (min-width: 1024px) {
   .page-hero-section {
