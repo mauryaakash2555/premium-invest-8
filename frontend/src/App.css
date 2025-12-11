@@ -247,9 +247,7 @@ html {
     bottom: 20px;
     right: 20px;
   }
-}
 
-@media (max-width: 767px) {
   .page-hero-section {
     min-height: 300px;
   }
