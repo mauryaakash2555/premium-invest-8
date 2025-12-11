@@ -21,22 +21,24 @@ const Blog = () => {
   const fetchBlogPosts = async () => {
     try {
       const response = await axios.get(`${API}/blog`, {
-        timeout: 10000, // 10 second timeout for blog loading
+        timeout: 10000,
       });
-      // Combine static blog with backend blogs, avoiding duplicates
+
       const backendPosts = response.data || [];
-      const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
+      const combinedPosts = [
+        staticBlogPost,
+        ...backendPosts.filter(post => post.slug !== staticBlogPost.slug),
+      ];
+
       setBlogPosts(combinedPosts);
     } catch (error) {
       console.error('Error fetching blog posts:', error);
-      // If backend fails, still show static blog
       setBlogPosts([staticBlogPost]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Placeholder blog posts if database is empty
   const placeholderPosts = [
     {
       id: '1',
@@ -54,7 +56,7 @@ const Blog = () => {
       slug: 'power-of-sip',
       title: 'The Power of SIP: Building Wealth Systematically',
       excerpt:
-        'Discover how Systematic Investment Plans can empower you to achieve long-term financial objectives through disciplined investing.',
+        'Discover how Systematic Investment Plans can empower you to achieve long-term financial objectives.',
       author: 'BM Wealth Team',
       category: 'Investment Strategies',
       published_date: new Date().toISOString(),
@@ -88,77 +90,81 @@ const Blog = () => {
     <div>
       <Helmet>
         <title>Financial Insights & Investment Tips | BM Wealth Blog Mumbai</title>
-        <meta name="description" content="Expert investment insights, mutual fund tips, SIP strategies, and financial planning advice from BM Wealth Mumbai. Stay updated with market trends and wealth management tips." />
-        <meta name="keywords" content="investment blog Mumbai, mutual fund tips, SIP strategies, financial planning advice, wealth management blog, BM Wealth insights" />
+        <meta
+          name="description"
+          content="Expert investment insights, mutual fund tips, SIP strategies, and financial planning advice from BM Wealth Mumbai."
+        />
+        <meta
+          name="keywords"
+          content="investment blog Mumbai, mutual fund tips, SIP strategies, financial planning advice, wealth management blog"
+        />
         <link rel="canonical" href="https://bmwealth.in/blog" />
-        
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/blog" />
         <meta property="og:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta property="og:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
         <meta property="og:image" content="https://bmwealth.in/logo.webp" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/blog" />
         <meta name="twitter:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
-      {/* Hero Section */}
-      <section
-        style={{
-          minHeight: '50vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          paddingTop: '100px',
-        }}
-      >
-        {/* Background Image */}
+
+      {/* ⭐ FIXED HERO SECTION ⭐ */}
+      <section className="page-hero-section">
         <div
+          className="page-hero-bg"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=2000&h=1200&fit=cover&auto=format&fm=webp&q=80)',
+            opacity: 0.55,
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            backgroundPosition: 'center center',
           }}
         />
 
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+        {/* Dark overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
+            zIndex: 0,
+          }}
+        />
+
+        {/* FULL WIDTH TEXT – FIXED */}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            width: '100%',
+            textAlign: 'center',
+            padding: '0 20px',
+          }}
+        >
           <h1
             data-testid="blog-heading"
-            style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
-              marginBottom: '24px',
-            }}
             className="golden-gradient"
+            style={{
+              fontSize: 'clamp(36px, 6vw, 72px)',
+              marginBottom: '20px',
+            }}
           >
             Financial Insights
           </h1>
+
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
               color: '#C0A062',
-              maxWidth: '800px',
+              maxWidth: '900px',
               margin: '0 auto',
               lineHeight: 1.6,
             }}
@@ -224,6 +230,7 @@ const Blog = () => {
                       }}
                     />
                   )}
+
                   <div style={{ padding: '24px' }}>
                     <div
                       style={{
@@ -246,6 +253,7 @@ const Blog = () => {
                         <Tag size={14} />
                         {post.category}
                       </span>
+
                       <span
                         style={{
                           display: 'flex',
@@ -303,6 +311,7 @@ const Blog = () => {
                         <User size={16} />
                         {post.author}
                       </span>
+
                       <span
                         style={{
                           display: 'flex',
@@ -349,6 +358,7 @@ const Blog = () => {
             >
               BM Wealth Talks Podcast
             </h2>
+
             <p
               style={{
                 fontSize: '18px',
@@ -359,9 +369,9 @@ const Blog = () => {
                 lineHeight: 1.6,
               }}
             >
-              Listen to distinguished insights, market analysis, and financial expertise from our team of
-              experienced advisors. Available on Spotify and all major podcast platforms.
+              Listen to distinguished insights, market analysis, and financial expertise from our team.
             </p>
+
             <a
               href="https://open.spotify.com/show/bmwealth"
               target="_blank"
@@ -378,10 +388,8 @@ const Blog = () => {
       {/* SEBI Disclaimer */}
       <section className="section-container">
         <div className="sebi-disclaimer">
-          <strong>Educational Content Disclaimer:</strong> The information provided in our blog
-          is for educational purposes only and should not be construed as financial advice.
-          Please consult with a registered financial advisor before making any investment
-          decisions. All investments are subject to market risks.
+          <strong>Educational Content Disclaimer:</strong> This blog is for educational purposes only.
+          Not investment advice. Please consult a registered advisor. All investments carry risks.
         </div>
       </section>
     </div>

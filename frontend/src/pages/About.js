@@ -28,17 +28,16 @@ const About = () => {
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
-      <section
-        style={{
-          minHeight: '60vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
-          position: 'relative',
-          paddingTop: '100px',
-        }}
-      >
+      <section className="page-hero-section">
+        <div
+          className="page-hero-bg"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            opacity: 0.45,
+            backgroundPosition: 'center center',
+          }}
+        />
         <div
           style={{
             position: 'absolute',
@@ -46,12 +45,8 @@ const About = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.3,
-            filter: 'brightness(1.2)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
+            zIndex: 0,
           }}
         />
         <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
