@@ -228,21 +228,7 @@ html {
     min-height: 300px;
   }
 }
-/* FIX: Show full hero image on desktop (no cropping) */
-@media (min-width: 1024px) {
-  .page-hero-bg {
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
-    background-position: top center !important;
-    height: 100% !important;
-    width: 100% !important;
-  }
 
-  /* Optional: Remove black bars by adding a gradient overlay */
-  .page-hero-section {
-    background: linear-gradient(180deg, #000000 0%, #00000000 40%, #000000 100%);
-  }
-}
 /* VERSION B – CINEMATIC HERO (FULL BLEED, NO BLACK BARS) */
 @media (min-width: 1024px) {
   .page-hero-section {
