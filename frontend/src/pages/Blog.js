@@ -113,66 +113,13 @@ const Blog = () => {
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
 
-      {/* ⭐ FIXED HERO SECTION ⭐ */}
-      <section className="page-hero-section">
-        <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=2000&h=1200&fit=cover&auto=format&fm=webp&q=80)',
-            opacity: 0.55,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-          }}
-        />
-
-        {/* Dark overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
-            zIndex: 0,
-          }}
-        />
-
-        {/* FULL WIDTH TEXT – FIXED */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            width: '100%',
-            textAlign: 'center',
-            padding: '0 20px',
-          }}
-        >
-          <h1
-            data-testid="blog-heading"
-            className="golden-gradient"
-            style={{
-              fontSize: 'clamp(36px, 6vw, 72px)',
-              marginBottom: '20px',
-            }}
-          >
-            Financial Insights
-          </h1>
-
-          <p
-            style={{
-              fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
-              maxWidth: '900px',
-              margin: '0 auto',
-              lineHeight: 1.6,
-            }}
-          >
-            Elite insights, market analysis, and updates from BM Wealth Talks
-          </p>
-        </div>
-      </section>
+      {/* Hero Section */}
+      <div
+        className="page-hero-section"
+        style={{ backgroundImage: `url('/images/hero/blog-hero.webp')` }}
+      >
+        <h1 className="page-hero-title">Financial Insights</h1>
+      </div>
 
       {/* Blog Posts */}
       <section className="section-container">

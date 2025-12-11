@@ -148,53 +148,12 @@ const Contact = () => {
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
-      <section className="page-hero-section">
-        <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
-            opacity: 0.5,
-            backgroundPosition: 'top center',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
-            zIndex: 0,
-          }}
-        />
-
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h1
-            data-testid="contact-heading"
-            style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
-              marginBottom: '24px',
-            }}
-            className="golden-gradient"
-          >
-            Get In Touch
-          </h1>
-          <p
-            style={{
-              fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
-              maxWidth: '700px',
-              margin: '0 auto',
-              lineHeight: 1.6,
-            }}
-          >
-            Have questions about your investments? Our team is here to empower you to achieve your
-            financial objectives.
-          </p>
-        </div>
-      </section>
+      <div
+        className="page-hero-section"
+        style={{ backgroundImage: `url('/images/hero/contact-hero.webp')` }}
+      >
+        <h1 className="page-hero-title">Get In Touch</h1>
+      </div>
 
       {/* Contact Form & Info */}
       <section className="section-container">

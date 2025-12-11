@@ -82,42 +82,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 80px 20px;
 }
 
-/* HERO SECTION (SHARED) */
-.page-hero-section {
-  min-height: max(400px, 60vh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  padding-top: 100px;
-}
-
-/* UNIVERSAL HERO BACKGROUND FIX */
-.page-hero-bg {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  
-  /* FIX: Show full laptop without cropping */
-  background-size: contain !important;
-  background-position: top center !important;
-  background-repeat: no-repeat !important;
-
-  z-index: 0;
-}
-
-/* DESKTOP FIX */
-@media (min-width: 1024px) {
-  .page-hero-section {
-    min-height: 540px;
-  }
-
-  .page-hero-bg {
-    background-size: contain !important;
-    background-position: center top !important;
-  }
-}
-
 /* BLOG DARK MODE */
 .blog-page,
 .blog-detail,
@@ -132,46 +96,45 @@ html {
 /* MOBILE */
 @media (max-width: 768px) {
   .section-container { padding: 60px 16px; }
-
-  .page-hero-section { min-height: 340px; }
-
-  .page-hero-bg {
-    background-size: cover !important;
-    background-position: center center !important;
-  }
 }
+
 /* =============================
-   HERO SECTION (FINAL WORKING VERSION)
+   HERO SECTION (FINAL VERSION)
+   Mobile-first approach
    ============================= */
 
+/* Mobile (default) */
 .page-hero-section {
-  min-height: max(420px, 60vh);
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding-top: 100px;
+  padding-top: 80px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
-.page-hero-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  /* 👇 This keeps laptop 100% visible */
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center top !important;
-
-  z-index: 0;
+.page-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(32px, 5vw, 64px);
+  color: #DAA520;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  padding: 0 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Desktop — larger hero height for better visibility */
-@media (min-width: 1024px) {
+/* Desktop */
+@media (min-width: 768px) {
   .page-hero-section {
-    min-height: 520px;
+    min-height: 450px;
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
   }
 }

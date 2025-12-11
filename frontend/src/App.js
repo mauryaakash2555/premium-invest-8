@@ -8,6 +8,8 @@ import Home from "@/pages/Home";
 import Layout from "@/components/Layout";
 import { Toaster } from "@/components/ui/sonner";
 
+// trigger vercel rebuild
+
 // Lazy load non-critical routes for better performance
 const About = lazy(() => import("@/pages/About"));
 const Services = lazy(() => import("@/pages/Services"));
