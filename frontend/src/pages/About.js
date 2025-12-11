@@ -41,10 +41,25 @@ const About = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section
-        className="page-hero-section"
-        style={{ backgroundImage: "url('/images/hero/about-hero.webp')" }}
-      >
+      <section className="page-hero-section">
+        <div
+          className="page-hero-bg"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%)',
+            zIndex: 0,
+          }}
+        />
         <div
           className="section-container"
           style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}

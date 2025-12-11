@@ -82,70 +82,13 @@ h1, h2, h3, h4, h5, h6 {
   padding: 80px 20px;
 }
 
-/* HERO SECTION (SHARED) */
-.page-hero-section {
-  min-height: max(400px, 60vh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  padding-top: 100px;
-}
-
-/* UNIVERSAL HERO BACKGROUND FIX */
-.page-hero-bg {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  
-  /* FIX: Show full laptop without cropping */
-  background-size: contain !important;
-  background-position: top center !important;
-  background-repeat: no-repeat !important;
-
-  z-index: 0;
-}
-
-/* DESKTOP FIX */
-@media (min-width: 1024px) {
-  .page-hero-section {
-    min-height: 540px;
-  }
-
-  .page-hero-bg {
-    background-size: contain !important;
-    background-position: center top !important;
-  }
-}
-
-/* BLOG DARK MODE */
-.blog-page,
-.blog-detail,
-.single-post,
-.post-wrapper,
-.article-body,
-body,
-html {
-  background: #000000 !important;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .section-container { padding: 60px 16px; }
-
-  .page-hero-section { min-height: 340px; }
-
-  .page-hero-bg {
-    background-size: cover !important;
-    background-position: center center !important;
-  }
-}
 /* =============================
-   HERO SECTION (FINAL WORKING VERSION)
+   HERO SECTION (STANDARDIZED)
    ============================= */
 
+/* Base styles (mobile-first) */
 .page-hero-section {
-  min-height: max(420px, 60vh);
+  min-height: max(400px, 60vh);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,18 +103,47 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-
-  /* 👇 This keeps laptop 100% visible */
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center top !important;
-
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   z-index: 0;
 }
 
-/* Desktop — larger hero height for better visibility */
+/* Desktop-only improvements */
 @media (min-width: 1024px) {
   .page-hero-section {
-    min-height: 520px;
+    min-height: 580px; /* Increased height for better device visibility */
   }
+
+  .page-hero-bg {
+    background-size: cover;          /* Fill hero width, accept some cropping */
+    background-position: center top; /* Show more of the top of images */
+  }
+}
+
+/* Mobile styles - unchanged */
+@media (max-width: 768px) {
+  .section-container { 
+    padding: 60px 16px; 
+  }
+
+  .page-hero-section { 
+    min-height: 340px; 
+  }
+
+  .page-hero-bg {
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* BLOG DARK MODE */
+.blog-page,
+.blog-detail,
+.single-post,
+.post-wrapper,
+.article-body,
+body,
+html {
+  background: #000000 !important;
 }
