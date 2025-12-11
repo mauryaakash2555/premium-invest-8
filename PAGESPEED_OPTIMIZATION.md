@@ -30,7 +30,7 @@ This document summarizes the PageSpeed optimizations implemented to improve webs
 - Changed image parameters to:
   - Format: WebP (`fm=webp`)
   - Quality: 75% (`q=75`)
-  - Optimized dimensions (`w=600&h=600` for cards, `w=1920&h=1080` for hero images)
+  - Optimized dimensions (`w=600&h=400` for cards, `w=1920&h=1080` for hero images)
   - Added `auto=format` and `fit=crop` for responsive optimization
 
 ### C. Lazy Loading Implementation
