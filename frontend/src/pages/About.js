@@ -35,6 +35,7 @@ const About = () => {
             backgroundImage:
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             opacity: 0.5,
+            backgroundPosition: 'top center',
           }}
         />
         <div
