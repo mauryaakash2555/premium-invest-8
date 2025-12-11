@@ -27,7 +27,7 @@ const Blog = () => {
       const backendPosts = response.data || [];
       const combinedPosts = [
         staticBlogPost,
-        ...backendPosts.filter(post => post.slug !== staticBlogPost.slug),
+        ...backendPosts.filter((post) => post.slug !== staticBlogPost.slug),
       ];
 
       setBlogPosts(combinedPosts);
@@ -49,7 +49,8 @@ const Blog = () => {
       author: 'BM Wealth Team',
       category: 'Investment Education',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      image_url:
+        'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
     },
     {
       id: '2',
@@ -60,7 +61,8 @@ const Blog = () => {
       author: 'BM Wealth Team',
       category: 'Investment Strategies',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      image_url:
+        'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
     },
     {
       id: '3',
@@ -71,7 +73,8 @@ const Blog = () => {
       author: 'Brahmdeo Maurya',
       category: 'Risk Management',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      image_url:
+        'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
     },
   ];
 
@@ -102,44 +105,34 @@ const Blog = () => {
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/blog" />
-        <meta property="og:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
-        <meta property="og:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
+        <meta
+          property="og:title"
+          content="Financial Insights & Investment Tips | BM Wealth Blog"
+        />
+        <meta
+          property="og:description"
+          content="Expert investment insights and financial planning advice from BM Wealth Mumbai."
+        />
         <meta property="og:image" content="https://bmwealth.in/logo.webp" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/blog" />
-        <meta name="twitter:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
-        <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
+        <meta
+          name="twitter:title"
+          content="Financial Insights & Investment Tips | BM Wealth Blog"
+        />
+        <meta
+          name="twitter:description"
+          content="Expert investment insights and financial planning advice from BM Wealth Mumbai."
+        />
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
 
-      {/* ⭐ FIXED HERO SECTION ⭐ */}
-      <section className="page-hero-section">
-        <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=2000&h=1200&fit=cover&auto=format&fm=webp&q=80)',
-            opacity: 0.55,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-          }}
-        />
-
-        {/* Dark overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
-            zIndex: 0,
-          }}
-        />
-
-        {/* FULL WIDTH TEXT – FIXED */}
+      {/* Hero Section */}
+      <section
+        className="page-hero-section"
+        style={{ backgroundImage: "url('/images/hero/blog-hero.webp')" }}
+      >
         <div
           style={{
             position: 'relative',
@@ -205,7 +198,8 @@ const Blog = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-8px)';
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.3)';
+                    e.currentTarget.style.boxShadow =
+                      '0 12px 40px rgba(218, 165, 32, 0.3)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -226,7 +220,8 @@ const Blog = () => {
                       style={{
                         width: '100%',
                         height: '240px',
-                        background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                        background:
+                          'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
                       }}
                     />
                   )}
@@ -369,7 +364,8 @@ const Blog = () => {
                 lineHeight: 1.6,
               }}
             >
-              Listen to distinguished insights, market analysis, and financial expertise from our team.
+              Listen to distinguished insights, market analysis, and financial expertise from our
+              team.
             </p>
 
             <a
@@ -388,8 +384,9 @@ const Blog = () => {
       {/* SEBI Disclaimer */}
       <section className="section-container">
         <div className="sebi-disclaimer">
-          <strong>Educational Content Disclaimer:</strong> This blog is for educational purposes only.
-          Not investment advice. Please consult a registered advisor. All investments carry risks.
+          <strong>Educational Content Disclaimer:</strong> This blog is for educational purposes
+          only. Not investment advice. Please consult a registered advisor. All investments carry
+          risks.
         </div>
       </section>
     </div>
