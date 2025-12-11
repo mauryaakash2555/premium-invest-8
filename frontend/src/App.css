@@ -194,6 +194,28 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
+/* Page Hero Section Helpers */
+.page-hero-section {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 100px;
+}
+
+.page-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover !important;
+  background-position: center center !important;
+  z-index: 0;
+}
+
 /* Blog-specific black background enforcement */
 .blog-page,
 .blog-detail,
@@ -224,5 +246,9 @@ html {
     font-size: 26px;
     bottom: 20px;
     right: 20px;
+  }
+
+  .page-hero-section {
+    min-height: 300px;
   }
 }
