@@ -189,14 +189,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* DESKTOP — FIX COMPLETELY */
 @media (min-width: 1024px) {
+  .page-hero-section {
+    min-height: 520px; /* higher hero to show more image */
+  }
+
   .page-hero-bg {
-    background-size: contain !important;
-    background-position: top center !important;
+    background-size: cover !important;
+    background-position: center top !important;
     background-repeat: no-repeat !important;
-    height: 100%;
-    width: 100%;
   }
 }
+
 
 /* BLOG BACKGROUND ENFORCEMENT */
 .blog-page,
