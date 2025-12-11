@@ -175,3 +175,96 @@ html {
     min-height: 520px;
   }
 }
+
+/* ========================================
+   BLOG POST TYPOGRAPHY & READABILITY
+   ======================================== */
+
+/* Blog content wrapper with enhanced readability */
+.blog-content-wrapper {
+  max-width: 42rem; /* max-w-prose */
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.blog-content-wrapper p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.blog-content-wrapper h2 {
+  font-size: clamp(28px, 4vw, 36px);
+  color: #DAA520;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.blog-content-wrapper h3 {
+  font-size: clamp(22px, 3vw, 28px);
+  color: #C0A062;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.blog-content-wrapper ul,
+.blog-content-wrapper ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  line-height: 2;
+}
+
+.blog-content-wrapper li {
+  margin-bottom: 0.5rem;
+  color: #E5E5E5;
+}
+
+.blog-content-wrapper strong {
+  color: #DAA520;
+  font-weight: 600;
+}
+
+.blog-content-wrapper hr {
+  border: 0;
+  border-top: 1px solid rgba(218, 165, 32, 0.4);
+  margin: 3rem 0;
+}
+
+/* Responsive typography for mobile */
+@media (max-width: 768px) {
+  .blog-content-wrapper {
+    padding: 0 1rem;
+  }
+  
+  .blog-content-wrapper h2 {
+    margin-top: 2rem;
+  }
+}
+
+/* Hero image responsive sizing */
+@media (min-width: 768px) {
+  .h-60 {
+    height: 15rem;
+  }
+  
+  .md\:h-72 {
+    height: 18rem;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}

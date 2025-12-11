@@ -562,7 +562,9 @@ const BlogDetail = () => {
             fontSize: '18px',
             lineHeight: '1.8',
             color: '#E5E5E5',
+            maxWidth: '100%',
           }}
+          className="blog-content-wrapper"
         >
           {/* Content will be parsed and enhanced */}
           {renderEnhancedContent(post.content, post.slug)}
@@ -658,106 +660,76 @@ function renderEnhancedContent(htmlContent, slug) {
     return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlContent) }} />;
   }
 
-  // Parse the HTML content and inject components at specific points
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlContent, 'text/html');
-  const sections = [];
-  let sectionIndex = 0;
-
-  // Convert HTML to sections and inject components
-  const bodyChildren = Array.from(doc.body.children);
-  let currentHTML = '';
-  let hasAddedChart = false;
-  let hasAddedHighlight = false;
-  let hasAddedMidCTA = false;
+  // Split content by h2 headings to identify sections
+  const sanitized = DOMPurify.sanitize(htmlContent);
   
-  bodyChildren.forEach((element, index) => {
-    const elementHTML = element.outerHTML;
-    const textContent = element.textContent;
-
-    // Check for section breaks (h2 tags) to add dividers - Requirement #8
-    if (element.tagName === 'H2') {
-      if (currentHTML) {
-        sections.push(
-          <div key={`section-${sectionIndex++}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentHTML) }} />
-        );
-        currentHTML = '';
-      }
-      
-      // Add gold divider before section
-      sections.push(
-        <hr key={`divider-${sectionIndex++}`} style={{ border: '0', borderTop: '1px solid rgba(218, 165, 32, 0.4)', margin: '48px 0' }} />
-      );
-    }
-
-    // Check if we should insert the comparison chart - Requirement #9
-    // Insert before "The opportunity cost" or "₹47,00,000" section
-    if (!hasAddedChart && textContent.includes('The Number That Changed Everything')) {
-      currentHTML += elementHTML;
-      if (currentHTML) {
-        sections.push(
-          <div key={`section-${sectionIndex++}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentHTML) }} />
-        );
-        currentHTML = '';
-      }
-      sections.push(<ComparisonChart key={`chart-${sectionIndex++}`} />);
-      hasAddedChart = true;
-      return;
-    }
-
-    // Check if we should insert the gold highlight box - Requirement #6
-    if (!hasAddedHighlight && textContent.includes('₹47,00,000')) {
-      if (currentHTML) {
-        sections.push(
-          <div key={`section-${sectionIndex++}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentHTML) }} />
-        );
-        currentHTML = '';
-      }
-      sections.push(<GoldHighlightBox key={`highlight-${sectionIndex++}`} />);
-      hasAddedHighlight = true;
-      // Continue to add the current element after the highlight
-    }
-
-    // Check if we should insert mid-blog CTA - Requirement #10
-    // After "How Does This Even Happen?" section
-    if (!hasAddedMidCTA && textContent.includes('How Does This Even Happen?')) {
-      currentHTML += elementHTML;
-      // Look ahead for the next few elements to complete this section
-      let lookAhead = 1;
-      while (index + lookAhead < bodyChildren.length && lookAhead < 10) {
-        const nextEl = bodyChildren[index + lookAhead];
-        if (nextEl.tagName === 'H2') break;
-        lookAhead++;
-      }
-      
-      // We'll add the CTA after accumulating some content
-      hasAddedMidCTA = 'pending';
-      return;
-    }
-
-    // If we have pending CTA and hit next section, insert it
-    if (hasAddedMidCTA === 'pending' && element.tagName === 'H2') {
-      if (currentHTML) {
-        sections.push(
-          <div key={`section-${sectionIndex++}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentHTML) }} />
-        );
-        currentHTML = '';
-      }
-      sections.push(<MidBlogCTA key={`cta-${sectionIndex++}`} />);
-      hasAddedMidCTA = true;
-      // Add divider before next section
-      sections.push(
-        <hr key={`divider-${sectionIndex++}`} style={{ border: '0', borderTop: '1px solid rgba(218, 165, 32, 0.4)', margin: '48px 0' }} />
-      );
-    }
-
-    currentHTML += elementHTML;
-  });
-
-  // Add remaining content
-  if (currentHTML) {
+  // Find key sections using text markers
+  const sections = [];
+  let remainingContent = sanitized;
+  
+  // Section 1: Opening content (before "The Number That Changed Everything")
+  const numberChangedIndex = remainingContent.indexOf('The Number That Changed Everything');
+  if (numberChangedIndex > -1) {
+    const beforeNumber = remainingContent.substring(0, numberChangedIndex);
     sections.push(
-      <div key={`section-${sectionIndex++}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentHTML) }} />
+      <div key="section-opening" dangerouslySetInnerHTML={{ __html: beforeNumber }} />
+    );
+    remainingContent = remainingContent.substring(numberChangedIndex);
+  }
+  
+  // Section 2: "The Number That Changed Everything" - add chart before, replace gold box
+  const howDoesIndex = remainingContent.indexOf('How Does This Even Happen?');
+  if (howDoesIndex > -1) {
+    let numberSection = remainingContent.substring(0, howDoesIndex);
+    
+    // Remove the existing gold box div from the content
+    numberSection = numberSection.replace(
+      /<div style="background: linear-gradient[^>]*>[\s\S]*?₹47,00,000[\s\S]*?<\/div>/,
+      '<!-- GOLD_BOX_PLACEHOLDER -->'
+    );
+    
+    // Insert chart and then content
+    sections.push(
+      <div key="section-number-intro" dangerouslySetInnerHTML={{ 
+        __html: numberSection.substring(0, numberSection.indexOf('<!-- GOLD_BOX_PLACEHOLDER -->')) 
+      }} />
+    );
+    
+    // Add comparison chart
+    sections.push(<ComparisonChart key="chart" />);
+    
+    // Add gold highlight box
+    sections.push(<GoldHighlightBox key="highlight" />);
+    
+    // Add remaining content of this section after the gold box
+    const afterBox = numberSection.substring(numberSection.indexOf('<!-- GOLD_BOX_PLACEHOLDER -->') + '<!-- GOLD_BOX_PLACEHOLDER -->'.length);
+    if (afterBox.trim()) {
+      sections.push(
+        <div key="section-number-after" dangerouslySetInnerHTML={{ __html: afterBox }} />
+      );
+    }
+    
+    remainingContent = remainingContent.substring(howDoesIndex);
+  }
+  
+  // Section 3: "How Does This Even Happen?" - add CTA after this section
+  const partHurtsIndex = remainingContent.indexOf('The Part That Hurts Most');
+  if (partHurtsIndex > -1) {
+    const howDoesSection = remainingContent.substring(0, partHurtsIndex);
+    sections.push(
+      <div key="section-how-does" dangerouslySetInnerHTML={{ __html: howDoesSection }} />
+    );
+    
+    // Add mid-blog CTA
+    sections.push(<MidBlogCTA key="mid-cta" />);
+    
+    remainingContent = remainingContent.substring(partHurtsIndex);
+  }
+  
+  // Add all remaining content
+  if (remainingContent.trim()) {
+    sections.push(
+      <div key="section-remaining" dangerouslySetInnerHTML={{ __html: remainingContent }} />
     );
   }
 
