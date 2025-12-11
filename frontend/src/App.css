@@ -196,7 +196,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Page Hero Section Helpers */
 .page-hero-section {
-  min-height: 400px;
+  min-height: max(400px, 60vh);
   display: flex;
   align-items: center;
   justify-content: center;
