@@ -123,8 +123,7 @@ const Services = () => {
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
+            opacity: 0.5,
           }}
         />
         <div
@@ -134,7 +133,7 @@ const Services = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
             zIndex: 0,
           }}
         />

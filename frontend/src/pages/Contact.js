@@ -154,8 +154,7 @@ const Contact = () => {
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
+            opacity: 0.5,
           }}
         />
         <div
@@ -165,7 +164,7 @@ const Contact = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
             zIndex: 0,
           }}
         />
