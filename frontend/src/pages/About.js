@@ -11,45 +11,44 @@ const About = () => {
     <div>
       <Helmet>
         <title>About BM Wealth - Led by Brahmdeo Maurya | Mumbai Investment Advisory ARN 90008</title>
-        <meta name="description" content="Learn about BM Wealth and founder Brahmdeo Maurya. IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning and wealth management in Mumbai." />
-        <meta name="keywords" content="Brahmdeo Maurya, BM Wealth about, investment advisor Mumbai, ARN 90008, IRDAI licensed, AMFI registered, financial planner Mumbai" />
+        <meta
+          name="description"
+          content="Learn about BM Wealth and founder Brahmdeo Maurya. IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning and wealth management in Mumbai."
+        />
+        <meta
+          name="keywords"
+          content="Brahmdeo Maurya, BM Wealth about, investment advisor Mumbai, ARN 90008, IRDAI licensed, AMFI registered, financial planner Mumbai"
+        />
         <link rel="canonical" href="https://bmwealth.in/about" />
-        
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bmwealth.in/about" />
         <meta property="og:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
-        <meta property="og:description" content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai." />
+        <meta
+          property="og:description"
+          content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai."
+        />
         <meta property="og:image" content="https://bmwealth.in/logo.webp" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://bmwealth.in/about" />
         <meta name="twitter:title" content="About BM Wealth - Led by Brahmdeo Maurya" />
-        <meta name="twitter:description" content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai." />
+        <meta
+          name="twitter:description"
+          content="IRDAI Licensed and AMFI Registered ARN 90008 providing expert financial planning in Mumbai."
+        />
         <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
       </Helmet>
+
       {/* Hero Section */}
-      <section className="page-hero-section">
+      <section
+        className="page-hero-section"
+        style={{ backgroundImage: "url('/images/hero/about-hero.webp')" }}
+      >
         <div
-          className="page-hero-bg"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            opacity: 0.45,
-            backgroundPosition: 'center center',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%)',
-            zIndex: 0,
-          }}
-        />
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          className="section-container"
+          style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}
+        >
           <h1
             data-testid="about-heading"
             style={{
@@ -102,8 +101,9 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
-              orchestrates comprehensive wealth strategies for discerning Mumbai investors.
+              Under the distinguished leadership of{' '}
+              <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth orchestrates
+              comprehensive wealth strategies for discerning Mumbai investors.
             </p>
             <p
               style={{
@@ -114,9 +114,9 @@ const About = () => {
               }}
             >
               With decades of combined expertise in financial markets, mutual funds, portfolio
-              management, and investment advisory, we have established a distinguished reputation for delivering
-              personalized wealth management strategies that align with our clients' unique
-              financial goals.
+              management, and investment advisory, we have established a distinguished reputation
+              for delivering personalized wealth management strategies that align with our clients'
+              unique financial goals.
             </p>
             <p
               style={{
@@ -125,9 +125,9 @@ const About = () => {
                 lineHeight: 1.8,
               }}
             >
-              Our mission is to make sophisticated financial planning accessible to every
-              investor, whether you're commencing your investment journey or looking to
-              enhance your existing portfolio.
+              Our mission is to make sophisticated financial planning accessible to every investor,
+              whether you're commencing your investment journey or looking to enhance your existing
+              portfolio.
             </p>
           </div>
 
@@ -158,9 +158,7 @@ const About = () => {
             <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
-              Founder
-            </p>
+            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>Founder</p>
           </div>
         </div>
       </section>
@@ -240,8 +238,8 @@ const About = () => {
                 Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We maintain the premier standards in financial advisory, continuously enhancing
-                our expertise and methodologies.
+                We maintain the premier standards in financial advisory, continuously enhancing our
+                expertise and methodologies.
               </p>
             </div>
 
@@ -290,8 +288,8 @@ const About = () => {
                 Integrity
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Honesty and ethical conduct are at the core of every recommendation and
-                interaction with our clients.
+                Honesty and ethical conduct are at the core of every recommendation and interaction
+                with our clients.
               </p>
             </div>
           </div>
@@ -327,14 +325,13 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Fully compliant with IRDAI (Insurance) and AMFI (Mutual Funds) regulations, 
-            ensuring the highest standards of financial advisory and investor protection.
+            Fully compliant with IRDAI (Insurance) and AMFI (Mutual Funds) regulations, ensuring
+            the highest standards of financial advisory and investor protection.
           </p>
           <div className="sebi-disclaimer" style={{ maxWidth: '900px', margin: '0 auto' }}>
             <strong>Regulatory Compliance:</strong> All our services are provided in strict
             accordance with IRDAI and AMFI guidelines. We are committed to transparency, ethical
-            practices, and protecting investor interests. Investments are subject to market
-            risks.
+            practices, and protecting investor interests. Investments are subject to market risks.
           </div>
         </div>
       </section>
