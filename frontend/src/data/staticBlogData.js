@@ -15,19 +15,30 @@ export const staticBlogPost = {
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
-  excerpt: "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
+  excerpt: "47 Lakh Lost: A Hard Lesson in Wrong Advice — Real Mumbai Case Study",
   image: "/blog-images/47-lakh-loss.jpg",
   image_url: "/blog-images/47-lakh-loss.jpg",
-  tags: ["investment mistakes Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
+  tags: ["investment mistakes", "Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes", "India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
   content: `
+  <div style="margin-bottom: 20px;">
+    <p style="font-size: 14px; color: #999; margin-bottom: 10px;">
+      By BM Wealth Editorial Team | December 9, 2025 | 8-Minute Read | Investment Education
+    </p>
+    <p style="font-size: 14px; color: #C0A062; font-style: italic; margin-bottom: 20px;">
+      True story from Mumbai. Names and details changed for privacy.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 2px solid #DAA520; margin: 40px 0;" />
+
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       The message arrived at 11:47 PM on a Tuesday:
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 20px;">
-      "Sir, please... can you check my father's investments? Something feels very wrong."
+      "Sir, please… can you check my father's investments? Something feels very wrong."
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       The voice on the call was shaking. A 29-year-old software engineer from Borivali, calling about his father—a successful chartered accountant who lives in a comfortable 2BHK in Bandra, drives a Honda City, and has been investing diligently for 18 years.
@@ -57,27 +68,37 @@ export const staticBlogPost = {
       The Number That Changed Everything
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
+      We spent three hours analyzing the portfolio. Running calculations. Comparing historical market data. Checking expense ratios. Understanding the actual product structures.
     </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      Then came the moment that made the room go quiet.
+    </p>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+      We compared the general difference between unstructured product selection and a goal-aligned approach, based on typical historical market patterns. This comparison is purely educational and illustrative.
+    </p>
+    <div class="compare-box">
+      <div class="col">
+        <div class="val">₹3.2 Lakh</div>
+        <div class="label">Actual</div>
+      </div>
+      <div class="col">
+        <div class="val">₹8.5 Lakh</div>
+        <div class="label">Ideal</div>
+      </div>
+    </div>
     <div style="background: linear-gradient(135deg, rgba(218, 165, 32, 0.15) 0%, rgba(192, 160, 98, 0.1) 100%); padding: 40px; border-radius: 16px; border: 2px solid #DAA520; margin: 40px 0; text-align: center;">
       <p style="font-size: 56px; font-weight: 700; color: #DAA520; margin-bottom: 16px; font-family: 'Playfair Display', serif;">
         ₹47,00,000
       </p>
       <p style="font-size: 22px; color: #E5E5E5; font-weight: 500;">
-        Lost in opportunity cost over 7 years
+        Estimated opportunity cost over 7 years
       </p>
     </div>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      Not lost to fraud. Not lost to market crashes. Lost to:
+      Not ₹47,000. Not ₹4.7 lakh. Nearly half a crore rupees in potential wealth—gone.
     </p>
-    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px;">
-      <li>High-cost investment products eating into returns</li>
-      <li>Wrong asset allocation for his goals</li>
-      <li>Insurance mixed with investment (the classic trap)</li>
-      <li>Zero portfolio reviews in 7 years</li>
-    </ul>
-    <p style="font-size: 18px; line-height: 1.8; margin-top: 30px;">
-      <strong style="color: #DAA520;">The hardest part?</strong> Every rupee was invested with the best intentions, based on "expert" advice from people he trusted.
+    <p style="font-size: 18px; line-height: 1.8;">
+      <strong style="color: #DAA520;">Not lost to fraud. Not lost to market crashes.</strong> Lost to structural issues in how investments were selected and managed.
     </p>
   </div>
 
@@ -120,7 +141,7 @@ export const staticBlogPost = {
         3. High-Cost Products Eating Returns Silently
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        Some of his mutual funds had expense ratios above 2%. Over 15-20 years, these charges compound into massive wealth destruction. A 2% annual charge on ₹10 lakh growing at 12% for 20 years can cost you over ₹12 lakh in lost returns. Most investors never even check this number.
+        Some of his mutual funds had expense ratios above 2%. Over 15–20 years, these charges compound into massive wealth destruction. A 2% annual charge on ₹10 lakh growing at 12% for 20 years can cost you over ₹12 lakh in lost returns. Most investors never even check this number.
       </p>
     </div>
 
@@ -129,7 +150,7 @@ export const staticBlogPost = {
         4. No Asset Allocation Strategy
       </h3>
       <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-        His portfolio had no clear equity-debt split aligned to his age, risk capacity, or financial goals. Some years he was 90% equity (too risky for his situation). Other years, 70% debt (too conservative for wealth building). Asset allocation—not product selection—determines 80-90% of portfolio returns over time.
+        His portfolio had no clear equity-debt split aligned to his age, risk capacity, or financial goals. Some years he was 90% equity (too risky for his situation). Other years, 70% debt (too conservative for wealth building). Asset allocation—not product selection—determines 80–90% of portfolio returns over time.
       </p>
     </div>
 
@@ -155,15 +176,15 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="background: linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(192, 160, 98, 0.05) 100%); padding: 40px; border-radius: 16px; border-left: 4px solid #DAA520; margin-bottom: 60px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; color: #DAA520; margin-bottom: 25px;">
       The Part That Hurts Most
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       This wasn't a careless investor. This was a CA—someone who understands numbers, analyzes balance sheets for clients, and makes careful financial decisions professionally.
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      He worked 10-12 hour days. Saved diligently. Invested regularly. Did everything right from a discipline perspective.
+      He worked 10–12 hour days. Saved diligently. Invested regularly. Did everything right from a discipline perspective.
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       The only thing he didn't do? Ask the right questions about product suitability, cost structure, and goal alignment before committing his hard-earned money.
@@ -208,7 +229,7 @@ export const staticBlogPost = {
       → <strong style="color: #DAA520;">Build Proper Asset Allocation</strong>
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
-      Your equity-debt-liquid mix should match your age, risk capacity, and time horizons for different goals. This drives 80-90% of long-term returns.
+      Your equity-debt-liquid mix should match your age, risk capacity, and time horizons for different goals. This drives 80–90% of long-term returns.
     </p>
 
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
@@ -263,11 +284,11 @@ export const staticBlogPost = {
       What Changed for This Family
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      After our initial consultation, we spent time helping the family understand their actual financial situation—not with jargon, but with clear explanations of what they owned and why it might not be optimal.
+      After our initial consultation, we explained general financial concepts so they could better understand how different products and costs affect outcomes.
     </p>
 
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
-      We provided educational guidance on:
+      We discussed educational topics such as:
     </p>
 
     <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
@@ -283,23 +304,7 @@ export const staticBlogPost = {
     </p>
 
     <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
-      That's the difference proper financial guidance makes—not selling products, but building understanding and strategy.
-    </p>
-  </div>
-
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
-
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid #DAA520; margin-bottom: 60px;">
-    <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-      📖 Coming Next:
-    </p>
-    <p style="font-size: 24px; margin-bottom: 10px;">
-      <a href="/blog/retirement-shortfall-case-study" style="color: #DAA520; text-decoration: none; font-weight: 600; transition: color 0.3s ease;">
-        He Did Everything Right. Still ₹2.3 Crore Short →
-      </a>
-    </p>
-    <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
-      A 50-year-old's retirement reality check that shocked his entire family.
+      That's the difference proper financial education makes—not selling products, but building understanding and strategy.
     </p>
   </div>
 
@@ -307,42 +312,23 @@ export const staticBlogPost = {
 
   <div style="background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%); padding: 50px; border-radius: 16px; color: #000000; margin-bottom: 60px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: #000000;">
-      Get a Free Educational Consultation
+      Get a Free Educational Call
     </h2>
     <p style="font-size: 20px; margin-bottom: 35px; color: #1a1a1a; font-weight: 500;">
-      Understand Your Current Financial Position
+      Understand general financial concepts and common mistakes. This is educational only and NOT personalised financial advice.
     </p>
-
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #1a1a1a;">
-      We'll help you understand:
-    </p>
-
-    <div style="margin-bottom: 35px;">
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ Whether your investments match your actual financial goals
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ Hidden costs that might be impacting your returns
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ If your asset allocation aligns with your risk profile and timeline
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a;">
-        ✓ General principles that could improve your financial strategy
-      </p>
-    </div>
 
     <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 0;">
       <div style="margin-bottom: 20px;">
-        <a href="https://wa.me/918850977259" style="display: inline-block; background: #25D366; color: #FFFFFF; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: 600; transition: background 0.3s ease;">
-          <span style="margin-right: 8px;">📱</span> WhatsApp: +91 88509 77259
+        <a href="https://wa.me/918850977259" class="cta-educate" style="display: inline-block;">
+          <span style="margin-right: 8px;">📱</span> Request Educational Call
         </a>
       </div>
       <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
         🌐 <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 18px; margin-bottom: 15px; color: #1a1a1a; font-weight: 500;">
-        📍 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
+        📍 Office 108, Vinod Villa, 1st floor, Cavel cross lane 3, Kalbadevi, Mumbai 400002
       </p>
       <p style="font-size: 16px; color: #1a1a1a; font-style: italic;">
         IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
@@ -353,33 +339,13 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
-      Important Disclaimers & Regulatory Information:
-    </h3>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. The case study mentioned is based on a real situation but has been anonymized—names, specific amounts, and certain details have been modified to protect client privacy.
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | AMFI ARN 90008) is registered to provide insurance advisory services and mutual fund distribution. We are NOT SEBI registered investment advisors (RIA) and do not provide portfolio management services, stock recommendations, or personalized investment advice requiring SEBI RIA registration.
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Due Diligence:</strong> Please read all scheme-related documents carefully before investing. Understand the risk-return profile of investment products. Consult with a qualified financial advisor to assess suitability based on your specific financial situation, goals, and risk tolerance before making any investment decisions.
-    </p>
-
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
+      <strong style="color: #C0A062;">Educational Content Disclaimer (Mandatory):</strong> This article is for educational and informational purposes only. No part of this content should be considered investment, legal, taxation, or financial advice. BM Wealth is AMFI Registered (ARN 90008) and IRDAI Licensed (277925). We are NOT SEBI Registered Investment Advisors (RIA). We do NOT provide stock tips, portfolio management, guaranteed returns, or personalized financial advice. Past performance, illustrations, comparisons, or examples are NOT indicators of future results. Investors should carefully read all scheme-related documents and consult a SEBI-registered advisor for personalized advice.
     </p>
   </div>
 
-  <p style="font-size: 16px; line-height: 1.8; color: #999999; text-align: center; margin-top: 40px; font-style: italic;">
-    Questions? Concerned about your portfolio? WhatsApp us at +91 88509 77259 for a no-obligation conversation.
+  <p style="font-size: 14px; line-height: 1.6; color: #999999; text-align: center; margin-top: 40px; font-style: italic;">
+    Published by BM Wealth Editorial Team | December 9, 2025
   </p>
   `
 };
