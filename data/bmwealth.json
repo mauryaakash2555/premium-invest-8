@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "service": "bmwealth-next",
+  "message": "Placeholder API for BM Wealth Next.js demo",
+  "version": "0.1.0",
+  "sampleRoutes": ["/", "/blog", "/products", "/sip-calculator"],
+  "team": {
+    "name": "BM Wealth",
+    "region": "IN",
+    "contact": "hello@bmwealth.example"
+  }
+}
+

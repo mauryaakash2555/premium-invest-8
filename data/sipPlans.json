@@ -1,0 +1,24 @@
+[
+  {
+    "id": "sip-balanced",
+    "label": "Balanced Growth SIP",
+    "monthly": 5000,
+    "rate": 12,
+    "years": 10
+  },
+  {
+    "id": "sip-aggressive",
+    "label": "Aggressive Equity SIP",
+    "monthly": 8000,
+    "rate": 14,
+    "years": 12
+  },
+  {
+    "id": "sip-conservative",
+    "label": "Capital Protection SIP",
+    "monthly": 3000,
+    "rate": 8,
+    "years": 5
+  }
+]
+

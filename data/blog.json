@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "building-wealth-101",
+    "title": "Building Wealth 101",
+    "summary": "Simple steps for new investors to get compounding working early.",
+    "author": "BM Wealth Desk",
+    "published": "2025-01-10",
+    "tags": ["basics", "compounding", "planning"],
+    "content": [
+      "Start with a clear emergency fund so investments can stay invested when markets move.",
+      "Automate monthly contributions and review asset allocation twice a year, not daily.",
+      "Keep fees low, avoid timing the market, and raise the SIP amount annually."
+    ]
+  },
+  {
+    "slug": "risk-management-playbook",
+    "title": "Risk Management Playbook",
+    "summary": "How to decide between debt, equity, and hybrid exposure for your goals.",
+    "author": "BM Wealth Desk",
+    "published": "2025-01-24",
+    "tags": ["risk", "allocation"],
+    "content": [
+      "Match tenor of your goal to the product you choose; short goals belong in debt.",
+      "Use simple glide paths instead of complex products; clarity beats cleverness.",
+      "Diversify across issuers, sectors, and styles to avoid single-point failure."
+    ]
+  },
+  {
+    "slug": "behavioral-checklist",
+    "title": "Behavioral Checklist for Investors",
+    "summary": "Tiny habits that protect long-term compounding from emotional decisions.",
+    "author": "BM Wealth Desk",
+    "published": "2025-02-02",
+    "tags": ["behavior", "discipline"],
+    "content": [
+      "Decide actions in advance: what you will do if markets drop 20%?",
+      "Hide speculative money from your core portfolio; different goals, different rules.",
+      "Review performance versus a benchmark annually, not weekly."
+    ]
+  }
+]
+

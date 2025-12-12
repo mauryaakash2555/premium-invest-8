@@ -1,0 +1,30 @@
+[
+  {
+    "id": "core-mf",
+    "name": "Core Mutual Fund Portfolio",
+    "category": "Mutual Funds",
+    "risk": "Moderate",
+    "description": "Diversified, low-cost mutual fund basket tuned for 7-10 year goals.",
+    "expectedReturn": "10-12% p.a.",
+    "aum": "Demo AUM: ₹50L+"
+  },
+  {
+    "id": "conservative-debt",
+    "name": "Short Duration Debt Sleeve",
+    "category": "Debt",
+    "risk": "Low",
+    "description": "Laddered debt allocation to protect capital for near-term obligations.",
+    "expectedReturn": "6-7% p.a.",
+    "aum": "Demo AUM: ₹20L+"
+  },
+  {
+    "id": "satellite-equity",
+    "name": "Satellite Equity Ideas",
+    "category": "Equity",
+    "risk": "High",
+    "description": "Tactical equity sleeve for investors comfortable with higher volatility.",
+    "expectedReturn": "12-15% p.a.",
+    "aum": "Demo AUM: ₹35L+"
+  }
+]
+
