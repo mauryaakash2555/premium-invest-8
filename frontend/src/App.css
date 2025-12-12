@@ -226,3 +226,86 @@ html {
     right: 20px;
   }
 }
+
+/* STEP 1: WhatsApp Share Button */
+.whatsapp-share-btn {
+  background: #25D366;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-share-btn:hover {
+  background: #20BA5A;
+  transform: translateY(-2px);
+}
+
+/* STEP 2: Gold emphasis for highlighted text */
+.gold-em {
+  color: #DAA520;
+  font-weight: 600;
+}
+
+/* STEP 4: CTA Button */
+.cta-educate {
+  background: #DAA520;
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.cta-educate:hover {
+  background: #C0A062;
+  transform: translateY(-2px);
+}
+
+/* STEP 8: Compare box for chart visual */
+.compare-box {
+  display: flex;
+  gap: 16px;
+  background: #0f0f0f;
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  padding: 16px;
+  border-radius: 12px;
+  margin: 30px 0;
+}
+
+.compare-box .col {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0b0b0b;
+  text-align: center;
+}
+
+.compare-box .col .val {
+  font-size: 20px;
+  color: #DAA520;
+  font-weight: 700;
+}
+
+.compare-box .col .label {
+  color: #fff;
+  opacity: 0.8;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* STEP 9: Blog content spacing and typography */
+.blog-content {
+  line-height: 1.8;
+  font-size: 18px;
+  max-width: 780px;
+}
+
+.blog-content p {
+  margin-bottom: 1rem;
+}

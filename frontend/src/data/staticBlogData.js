@@ -15,10 +15,10 @@ export const staticBlogPost = {
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
-  excerpt: "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
+  excerpt: "47 Lakh Lost: A Hard Lesson in Wrong Advice — Real Mumbai Case Study",
   image: "/blog-images/47-lakh-loss.jpg",
   image_url: "/blog-images/47-lakh-loss.jpg",
-  tags: ["investment mistakes", "Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
+  tags: ["investment mistakes", "Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes", "India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
   content: `
@@ -74,8 +74,18 @@ export const staticBlogPost = {
       Then came the moment that made the room go quiet.
     </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
-      We compared the general difference between unstructured product selection and a goal-aligned approach, based on typical historical market patterns. This comparison was purely educational.
+      We compared the general difference between unstructured product selection and a goal-aligned approach, based on typical historical market patterns. This comparison is purely educational and illustrative.
     </p>
+    <div class="compare-box">
+      <div class="col">
+        <div class="val">₹3.2 Lakh</div>
+        <div class="label">Actual</div>
+      </div>
+      <div class="col">
+        <div class="val">₹8.5 Lakh</div>
+        <div class="label">Ideal</div>
+      </div>
+    </div>
     <div style="background: linear-gradient(135deg, rgba(218, 165, 32, 0.15) 0%, rgba(192, 160, 98, 0.1) 100%); padding: 40px; border-radius: 16px; border: 2px solid #DAA520; margin: 40px 0; text-align: center;">
       <p style="font-size: 56px; font-weight: 700; color: #DAA520; margin-bottom: 16px; font-family: 'Playfair Display', serif;">
         ₹47,00,000
@@ -274,7 +284,7 @@ export const staticBlogPost = {
       What Changed for This Family
     </h2>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-      After our initial consultation, we explained general financial concepts to help them understand how different investment elements work.
+      After our initial consultation, we explained general financial concepts so they could better understand how different products and costs affect outcomes.
     </p>
 
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
@@ -305,32 +315,13 @@ export const staticBlogPost = {
       Get a Free Educational Call
     </h2>
     <p style="font-size: 20px; margin-bottom: 35px; color: #1a1a1a; font-weight: 500;">
-      Understand General Financial Concepts
+      Understand general financial concepts and common mistakes. This is educational only and NOT personalised financial advice.
     </p>
-
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #1a1a1a;">
-      Learn about common investment pitfalls and gain clarity on how different financial products work:
-    </p>
-
-    <div style="margin-bottom: 35px;">
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ General concepts about investment goal setting
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ Understanding common costs in financial products
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
-        ✓ Basic principles of asset allocation
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a;">
-        ✓ Educational discussion only — NOT personalized financial advice
-      </p>
-    </div>
 
     <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 0;">
       <div style="margin-bottom: 20px;">
-        <a href="https://wa.me/918850977259" style="display: inline-block; background: #25D366; color: #FFFFFF; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: 600; transition: background 0.3s ease;">
-          <span style="margin-right: 8px;">📱</span> WhatsApp: +91 88509 77259
+        <a href="https://wa.me/918850977259" class="cta-educate" style="display: inline-block;">
+          <span style="margin-right: 8px;">📱</span> Request Educational Call
         </a>
       </div>
       <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
@@ -348,40 +339,8 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
-      Educational Content Disclaimer (Mandatory)
-    </h3>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">This article is for educational and informational purposes only.</strong>
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">No part of this content should be considered investment, legal, taxation, or financial advice.</strong>
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">BM Wealth is AMFI Registered (ARN 90008) and IRDAI Licensed (277925).</strong>
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">We are NOT SEBI Registered Investment Advisors (RIA).</strong>
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      We do NOT provide stock tips, portfolio management, guaranteed returns, or personalized financial advice.
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      Past performance, illustrations, comparisons, or examples are NOT indicators of future results.
-    </p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      Investors should carefully read all scheme-related documents and consult a SEBI-registered advisor for personalized advice.
-    </p>
-
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      The case study mentioned is based on a real situation but has been anonymized—names, specific amounts, and certain details have been modified to protect client privacy.
+      <strong style="color: #C0A062;">Educational Content Disclaimer (Mandatory):</strong> This article is for educational and informational purposes only. No part of this content should be considered investment, legal, taxation, or financial advice. BM Wealth is AMFI Registered (ARN 90008) and IRDAI Licensed (277925). We are NOT SEBI Registered Investment Advisors (RIA). We do NOT provide stock tips, portfolio management, guaranteed returns, or personalized financial advice. Past performance, illustrations, comparisons, or examples are NOT indicators of future results. Investors should carefully read all scheme-related documents and consult a SEBI-registered advisor for personalized advice.
     </p>
   </div>
 
