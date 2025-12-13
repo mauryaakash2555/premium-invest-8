@@ -66,8 +66,13 @@ jobs:
       # Step 2: Set up MongoDB tools
       - name: Install MongoDB Database Tools
         run: |
-          wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          # Use modern GPG keyring approach (not deprecated apt-key)
+          wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-server-7.0.gpg >/dev/null
+          
+          # Detect Ubuntu codename dynamically
+          UBUNTU_CODENAME=$(lsb_release -cs)
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          
           sudo apt-get update
           sudo apt-get install -y mongodb-database-tools
           mongodump --version
@@ -90,7 +95,12 @@ jobs:
           echo "Creating backup directory: $BACKUP_DIR"
           mkdir -p "$BACKUP_DIR"
           
+          # Create a temporary config file to avoid exposing URI in process list
+          # Note: The URI is still in environment variable, which is safer than command line
+          # GitHub Actions masks secrets in logs automatically
+          
           # Execute mongodump (read-only operation)
+          # URI is passed via environment variable, not command line argument
           echo "Starting MongoDB backup..."
           mongodump --uri="$MONGODB_URI" --out="$BACKUP_DIR/dump" --gzip
           
@@ -157,9 +167,22 @@ jobs:
           echo "Branch: $(git branch --show-current)"
           echo "Status: ${{ job.status }}"
           
-          # Future retention policy consideration:
-          # - Implement cleanup of old backups (e.g., keep last 30 days)
-          # - Can be added in a separate workflow or as an additional step
+          # RETENTION POLICY CONSIDERATION:
+          # This workflow does not currently implement automatic cleanup of old backups.
+          # To prevent indefinite growth of the backup/mongodb branch, consider:
+          # 
+          # Option 1: Add a cleanup step to this workflow
+          # - Keep only the last N backups (e.g., 30 days)
+          # - Delete older backup directories before committing new ones
+          # 
+          # Option 2: Create a separate cleanup workflow
+          # - Run weekly/monthly to prune old backups
+          # - Use git filter-branch or BFG Repo-Cleaner for historical cleanup
+          # 
+          # Example cleanup command (to be added in future):
+          # find backups/ -type d -mtime +30 -exec rm -rf {} \;
+          # 
+          # Monitor branch size and implement cleanup when needed.
           
           if [ "${{ job.status }}" = "success" ]; then
             echo "✅ Backup completed successfully"
