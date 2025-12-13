@@ -59,11 +59,11 @@ export const staticBlogPost = {
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
     </p>
-    <div style="background: linear-gradient(135deg, rgba(218, 165, 32, 0.15) 0%, rgba(192, 160, 98, 0.1) 100%); padding: 40px; border-radius: 16px; border: 2px solid #DAA520; margin: 40px 0; text-align: center;">
-      <p style="font-size: 56px; font-weight: 700; color: #DAA520; margin-bottom: 16px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(218, 165, 32, 0.08); padding: 30px; border-radius: 12px; border-left: 3px solid rgba(218, 165, 32, 0.6); margin: 50px 0; text-align: center;">
+      <p style="font-size: 56px; font-weight: 600; color: rgba(218, 165, 32, 0.9); margin-bottom: 16px; font-family: 'Playfair Display', serif;">
         ₹47,00,000
       </p>
-      <p style="font-size: 22px; color: #E5E5E5; font-weight: 500;">
+      <p style="font-size: 22px; color: rgba(229, 229, 229, 0.85); font-weight: 500;">
         Lost in opportunity cost over 7 years
       </p>
     </div>
@@ -171,7 +171,7 @@ export const staticBlogPost = {
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       The only thing he didn't do? Ask the right questions about product suitability, cost structure, and goal alignment before committing his hard-earned money.
     </p>
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(217, 119, 6, 0.5); background: rgba(255, 255, 255, 0.02);">
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
       If someone this financially aware can lose ₹47 lakh in opportunity cost, imagine what's happening to families without this background.
     </p>
   </div>
@@ -254,7 +254,7 @@ export const staticBlogPost = {
       </p>
     </div>
 
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px; padding-left: 16px; border-left: 3px solid rgba(217, 119, 6, 0.5); background: rgba(255, 255, 255, 0.02);">
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
       If you answered "I'm not sure" or "I don't know" to even one of these questions, there may be gaps that could cost you significantly over time.
     </p>
   </div>
@@ -308,46 +308,44 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
 
-  <div style="background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%); padding: 50px; border-radius: 16px; color: #000000; margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: #000000;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 45px; border-radius: 12px; border-left: 3px solid rgba(192, 160, 98, 0.6); margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 18px; color: rgba(192, 160, 98, 0.95);">
       Get a Free Educational Consultation
     </h2>
-    <p style="font-size: 20px; margin-bottom: 35px; color: #1a1a1a; font-weight: 500;">
+    <p style="font-size: 19px; margin-bottom: 32px; color: #E5E5E5; font-weight: 400;">
       Understand Your Current Financial Position
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #1a1a1a;">
+    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 18px; color: #E5E5E5;">
       We'll help you understand:
     </p>
 
-    <div style="margin-bottom: 35px;">
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
+    <div style="margin-bottom: 32px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
         ✓ Whether your investments match your actual financial goals
       </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
         ✓ Hidden costs that might be impacting your returns
       </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a; margin-bottom: 10px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
         ✓ If your asset allocation aligns with your risk profile and timeline
       </p>
-      <p style="font-size: 18px; line-height: 2; color: #1a1a1a;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5;">
         ✓ General principles that could improve your financial strategy
       </p>
     </div>
 
-    <div style="background: rgba(0, 0, 0, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 0;">
-      <div style="margin-bottom: 20px;">
-        <a href="https://wa.me/918850977259" style="display: inline-block; background: #25D366; color: #FFFFFF; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: 600; transition: background 0.3s ease;">
-          <span style="margin-right: 8px;">📱</span> WhatsApp: +91 88509 77259
-        </a>
-      </div>
-      <p style="font-size: 20px; margin-bottom: 15px; color: #000000; font-weight: 600;">
-        🌐 <a href="https://bmwealth.co.in" style="color: #000000; text-decoration: underline;">bmwealth.co.in</a>
+    <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        📱 WhatsApp: <a href="https://wa.me/918850977259" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">+91 88509 77259</a>
       </p>
-      <p style="font-size: 18px; margin-bottom: 15px; color: #1a1a1a; font-weight: 500;">
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        🌐 <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a>
+      </p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         📍 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
       </p>
-      <p style="font-size: 16px; color: #1a1a1a; font-style: italic;">
+      <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">
         IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
       </p>
     </div>
