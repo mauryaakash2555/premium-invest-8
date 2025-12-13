@@ -67,6 +67,9 @@ export const staticBlogPost = {
         Lost in opportunity cost over 7 years
       </p>
     </div>
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; padding-left: 16px; border-left: 3px solid rgba(217, 119, 6, 0.5); background: rgba(255, 255, 255, 0.02);">
+      Not ₹47,000. Not ₹4.7 lakh. Nearly half a crore rupees in potential wealth—gone.
+    </p>
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       Not lost to fraud. Not lost to market crashes. Lost to:
     </p>
@@ -168,7 +171,7 @@ export const staticBlogPost = {
     <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
       The only thing he didn't do? Ask the right questions about product suitability, cost structure, and goal alignment before committing his hard-earned money.
     </p>
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(217, 119, 6, 0.5); background: rgba(255, 255, 255, 0.02);">
       If someone this financially aware can lose ₹47 lakh in opportunity cost, imagine what's happening to families without this background.
     </p>
   </div>
@@ -251,7 +254,7 @@ export const staticBlogPost = {
       </p>
     </div>
 
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px;">
+    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px; padding-left: 16px; border-left: 3px solid rgba(217, 119, 6, 0.5); background: rgba(255, 255, 255, 0.02);">
       If you answered "I'm not sure" or "I don't know" to even one of these questions, there may be gaps that could cost you significantly over time.
     </p>
   </div>
