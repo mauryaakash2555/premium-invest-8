@@ -1,6 +1,8 @@
 import Link from "next/link";
 import blogPosts from "@/data/blog.json";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Blog",
   description: "Sample blog list for BM Wealth Next.",
