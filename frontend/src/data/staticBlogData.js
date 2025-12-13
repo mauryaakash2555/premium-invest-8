@@ -39,8 +39,8 @@ export const staticBlogPost = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
-  image: "/blog-images/47-lakh-loss.jpg",
-  image_url: "/blog-images/47-lakh-loss.jpg",
+  image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1200&auto=format&fit=crop",
+  image_url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1200&auto=format&fit=crop",
   tags: ["investment mistakes Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
