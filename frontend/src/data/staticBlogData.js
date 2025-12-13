@@ -1,7 +1,30 @@
-// =======================
-// 📌 STATIC BLOG DATA FILE
-// =======================
-
+// ═══════════════════════════════════════════════════════════════
+// 📌 STATIC BLOG DATA FILE - ALL BLOGS LIVE HERE
+// ═══════════════════════════════════════════════════════════════
+//
+// 🎯 THIS IS THE ONLY FILE YOU NEED TO EDIT FOR BLOG CONTENT
+//
+// FILE LOCATION:
+// C:\Users\admin\premium-invest-8\frontend\src\data\staticBlogData.js
+//
+// ───────────────────────────────────────────────────────────────
+// 📚 BLOG INVENTORY:
+// ───────────────────────────────────────────────────────────────
+//
+// BLOG 1: "47 Lakh Loss Case Study" (staticBlogPost)
+//    • Slug: 47-lakh-investment-mistake-mumbai
+//    • URL: https://bmwealth.in/blog/47-lakh-investment-mistake-mumbai
+//    • Status: ✅ Live - Premium Editorial Style Applied
+//    • Starts at: Line 32 below
+//
+// BLOG 2: [Not created yet - add below when ready]
+//
+// BLOG 3: [Not created yet - add below when ready]
+//
+// ───────────────────────────────────────────────────────────────
+// 📖 FULL DOCUMENTATION: See BLOG_REFERENCE.md in project root
+// ───────────────────────────────────────────────────────────────
+//
 // --- BLOG 1: ₹47 Lakh Loss Case Study ---
 // Note: Duplicate field names (date/published_date, readTime/read_time, image/image_url) are intentional
 // to maintain compatibility with both static blog format and backend API format
