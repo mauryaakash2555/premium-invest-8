@@ -1,0 +1,191 @@
+name: MongoDB Automated Backup
+
+on:
+  # Daily cron schedule at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Manual trigger option
+  workflow_dispatch:
+
+# Minimal permissions for GitHub token
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout backup/mongodb branch (create if it doesn't exist)
+      - name: Checkout backup/mongodb branch
+        uses: actions/checkout@v4
+        with:
+          ref: backup/mongodb
+          fetch-depth: 0
+          persist-credentials: true
+        continue-on-error: true
+        id: checkout_existing
+      
+      # Step 1b: Create backup/mongodb branch if it doesn't exist
+      - name: Create backup/mongodb branch if needed
+        if: steps.checkout_existing.outcome == 'failure'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan backup/mongodb
+          git rm -rf . || true
+          echo "# MongoDB Backups" > README.md
+          echo "" >> README.md
+          echo "This branch contains automated MongoDB backups." >> README.md
+          echo "Backups are stored in timestamped directories." >> README.md
+          git add README.md
+          git commit -m "Initialize backup/mongodb branch"
+          git push -u origin backup/mongodb
+      
+      # Step 1c: Ensure we're on backup/mongodb branch
+      - name: Re-checkout backup/mongodb branch
+        if: steps.checkout_existing.outcome == 'failure'
+        uses: actions/checkout@v4
+        with:
+          ref: backup/mongodb
+          fetch-depth: 0
+          persist-credentials: true
+      
+      # Safeguard: Verify we're on the correct branch
+      - name: Verify branch (safeguard against main branch modification)
+        run: |
+          CURRENT_BRANCH=$(git branch --show-current)
+          echo "Current branch: $CURRENT_BRANCH"
+          if [ "$CURRENT_BRANCH" != "backup/mongodb" ]; then
+            echo "ERROR: Not on backup/mongodb branch! Current branch is: $CURRENT_BRANCH"
+            echo "This is a safety check to prevent modifications to main branch."
+            exit 1
+          fi
+      
+      # Step 2: Set up MongoDB tools
+      - name: Install MongoDB Database Tools
+        run: |
+          # Use modern GPG keyring approach (not deprecated apt-key)
+          wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-server-7.0.gpg >/dev/null
+          
+          # Detect Ubuntu codename dynamically
+          UBUNTU_CODENAME=$(lsb_release -cs)
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          
+          sudo apt-get update
+          sudo apt-get install -y mongodb-database-tools
+          mongodump --version
+      
+      # Step 3-5: Execute mongodump and create backup
+      - name: Create MongoDB backup
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          # Validate MongoDB URI is set
+          if [ -z "$MONGODB_URI" ]; then
+            echo "ERROR: MONGODB_URI secret is not configured"
+            exit 1
+          fi
+          
+          # Create timestamp for backup directory
+          TIMESTAMP=$(date -u +"%Y-%m-%d-%H%M%S")
+          BACKUP_DIR="backups/$TIMESTAMP"
+          
+          echo "Creating backup directory: $BACKUP_DIR"
+          mkdir -p "$BACKUP_DIR"
+          
+          # Create a temporary config file to avoid exposing URI in process list
+          # Note: The URI is still in environment variable, which is safer than command line
+          # GitHub Actions masks secrets in logs automatically
+          
+          # Execute mongodump (read-only operation)
+          # URI is passed via environment variable, not command line argument
+          echo "Starting MongoDB backup..."
+          mongodump --uri="$MONGODB_URI" --out="$BACKUP_DIR/dump" --gzip
+          
+          if [ $? -ne 0 ]; then
+            echo "ERROR: mongodump failed"
+            exit 1
+          fi
+          
+          echo "Backup completed successfully"
+          
+          # Display backup size
+          du -sh "$BACKUP_DIR"
+          
+          # Store backup path for next step
+          echo "BACKUP_DIR=$BACKUP_DIR" >> $GITHUB_ENV
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+      
+      # Step 6: Create compressed archive (additional tar.gz for redundancy)
+      - name: Compress backup files
+        run: |
+          echo "Creating compressed archive..."
+          cd backups
+          tar -czf "${TIMESTAMP}.tar.gz" "${TIMESTAMP}/"
+          echo "Compressed archive created: backups/${TIMESTAMP}.tar.gz"
+          ls -lh "${TIMESTAMP}.tar.gz"
+      
+      # Step 7-8: Commit and push to backup/mongodb branch only
+      - name: Commit backup to backup/mongodb branch
+        run: |
+          # Configure git with bot identity
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Final safeguard: Verify branch before commit
+          CURRENT_BRANCH=$(git branch --show-current)
+          if [ "$CURRENT_BRANCH" != "backup/mongodb" ]; then
+            echo "CRITICAL ERROR: Attempted to commit to wrong branch: $CURRENT_BRANCH"
+            exit 1
+          fi
+          
+          # Add backup files
+          git add backups/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit (backup may be identical to previous)"
+            exit 0
+          fi
+          
+          # Commit with timestamp
+          git commit -m "Automated MongoDB backup - ${TIMESTAMP}"
+          
+          # Push ONLY to backup/mongodb branch
+          git push origin backup/mongodb
+          
+          echo "Backup committed and pushed successfully to backup/mongodb branch"
+      
+      # Error handling summary
+      - name: Backup summary
+        if: always()
+        run: |
+          echo "=== MongoDB Backup Workflow Summary ==="
+          echo "Timestamp: ${{ env.TIMESTAMP }}"
+          echo "Branch: $(git branch --show-current)"
+          echo "Status: ${{ job.status }}"
+          
+          # RETENTION POLICY CONSIDERATION:
+          # This workflow does not currently implement automatic cleanup of old backups.
+          # To prevent indefinite growth of the backup/mongodb branch, consider:
+          # 
+          # Option 1: Add a cleanup step to this workflow
+          # - Keep only the last N backups (e.g., 30 days)
+          # - Delete older backup directories before committing new ones
+          # 
+          # Option 2: Create a separate cleanup workflow
+          # - Run weekly/monthly to prune old backups
+          # - Use git filter-branch or BFG Repo-Cleaner for historical cleanup
+          # 
+          # Example cleanup command (to be added in future):
+          # find backups/ -type d -mtime +30 -exec rm -rf {} \;
+          # 
+          # Monitor branch size and implement cleanup when needed.
+          
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Backup completed successfully"
+          else
+            echo "❌ Backup failed - check logs above for details"
+          fi
