@@ -3,13 +3,40 @@
 
 ---
 
-## 🎯 WHERE TO EDIT BLOGS
+## ⚙️ TECH STACK - WHAT THIS BLOG USES
 
-Your blog uses **React (Create React App)** in the `frontend/` directory.
+**Framework:** React 19.0.0 (Create React App)  
+**NOT Next.js** - Even though there's a Next.js folder in the project, your live blog runs on React
+
+**Key Technologies:**
+- **React** - Frontend framework
+- **React Router** - Page navigation (`/blog`, `/blog/[slug]`)
+- **HTML Strings** - Blog content is stored as HTML (not JSX)
+- **Inline CSS** - All styling uses `style="..."` attributes
+- **DOMPurify** - Sanitizes HTML before rendering
+- **Axios** - API calls (for future backend blogs)
+- **React Helmet** - SEO meta tags
+
+**What This Means for Editing:**
+- ✅ Edit HTML directly in strings
+- ✅ Use inline `style="..."` for all styling
+- ❌ NO CSS classes (they won't work)
+- ❌ NO JSX syntax like `className` or `{variable}`
+- ❌ NO separate CSS/SCSS files for blog content
+
+---
+
+## 🎯 WHERE TO EDIT BLOGS
 
 ### **THE ONLY FILE YOU NEED TO EDIT:**
 ```
 C:\Users\admin\premium-invest-8\frontend\src\data\staticBlogData.js
+```
+
+### **Supporting Files (Don't Edit These Unless Necessary):**
+```
+C:\Users\admin\premium-invest-8\frontend\src\pages\BlogDetail.js  ← Renders blog
+C:\Users\admin\premium-invest-8\frontend\src\pages\Blog.js        ← Blog list page
 ```
 
 ---
@@ -82,6 +109,11 @@ export const staticBlogPost2 = {
       </p>
     </div>
   `
+  // ⚠️ IMPORTANT: 
+  // - Content MUST be HTML (not JSX)
+  // - Use style="..." for ALL styling (not className)
+  // - Use double quotes for HTML attributes
+  // - Escape single quotes in text with \'
 };
 ```
 
@@ -165,16 +197,42 @@ Check at http://localhost:3000/blog
 ## ⚠️ CRITICAL RULES FOR BLOG EDITING
 
 ### **DO:**
-- ✅ Keep all HTML inline styles
+- ✅ Use HTML syntax (not JSX): `style="..."` not `className="..."`
+- ✅ Keep all inline styles with `style="..."` attribute
+- ✅ Use double quotes for HTML attributes: `style="color: red;"`
 - ✅ Use the exact color palette from Blog 1
 - ✅ Copy-paste working structures (safer than typing)
 - ✅ Test locally before pushing
 
 ### **DON'T:**
+- ❌ Use CSS classes like `className="..."` (won't work - this is HTML not JSX)
+- ❌ Use curly braces `{}` for variables (this is a string, not React component)
 - ❌ Remove inline styles (blog won't look right)
 - ❌ Add emojis inside blog content (only in social share is OK)
 - ❌ Change font families or sizes drastically
 - ❌ Use bright colors (stick to gold/brown/dark palette)
+
+### **COMMON MISTAKES TO AVOID:**
+
+```javascript
+// ❌ WRONG (JSX syntax - won't work):
+content: `<p className="text-gold">Hello</p>`
+
+// ✅ CORRECT (HTML with inline styles):
+content: `<p style="color: #C0A062;">Hello</p>`
+
+// ❌ WRONG (trying to use variables):
+content: `<p>{blogTitle}</p>`
+
+// ✅ CORRECT (plain text or template literals outside content):
+content: `<p>Static text here</p>`
+
+// ❌ WRONG (React self-closing):
+content: `<img src="..." />`
+
+// ✅ CORRECT (HTML syntax):
+content: `<img src="..." />`  // Actually both work, but stick to HTML
+```
 
 ---
 
