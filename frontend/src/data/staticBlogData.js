@@ -46,47 +46,47 @@ export const staticBlogPost = {
 
   content: `
   <div style="margin-bottom: 40px;">
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The message arrived at 11:47 PM on a Tuesday:
     </p>
-    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 20px;">
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
       "Sir, please... can you check my father's investments? Something feels very wrong."
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The voice on the call was shaking. A 29-year-old software engineer from Borivali, calling about his father—a successful chartered accountant who lives in a comfortable 2BHK in Bandra, drives a Honda City, and has been investing diligently for 18 years.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The next morning, we connected on video call. He shared his screen.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       A folder opened. Inside were dozens of documents:
     </p>
-    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 20px;">
+    <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
       <li>Five mutual fund statements (all different fund houses, no clear strategy)</li>
       <li>Three ULIP policies with 5-year lock-in periods</li>
       <li>Two traditional insurance plans marketed as "investment schemes"</li>
       <li>Multiple "guaranteed return" endowment plans</li>
       <li>Several debt funds with expense ratios above 2%</li>
     </ul>
-    <p style="font-size: 18px; line-height: 1.8;">
+    <p style="font-size: 18px; line-height: 2;">
       Everything scattered. Nothing aligned. No clear financial goals documented anywhere.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       The Number That Changed Everything
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.05); padding: 20px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 60px 0; text-align: center;">
-      <p style="font-size: 52px; font-weight: 500; color: rgba(192, 160, 98, 0.85); margin-bottom: 14px; font-family: 'Playfair Display', serif;">
-        <span style="position: relative; top: -2px;">₹</span>47,00,000
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+        <span style="position: relative; top: -3px;">₹</span>47,00,000
       </p>
-      <p style="font-size: 20px; color: rgba(229, 229, 229, 0.75); font-weight: 400;">
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
         Lost in opportunity cost over 7 years
       </p>
     </div>
@@ -102,201 +102,201 @@ export const staticBlogPost = {
       <li>Insurance mixed with investment (the classic trap)</li>
       <li>Zero portfolio reviews in 7 years</li>
     </ul>
-    <p style="font-size: 18px; line-height: 1.8; margin-top: 30px;">
+    <p style="font-size: 18px; line-height: 2; margin-top: 35px;">
       <strong style="color: #DAA520;">The hardest part?</strong> Every rupee was invested with the best intentions, based on "expert" advice from people he trusted.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       How Does This Even Happen?
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Here's what most people don't understand: This wasn't a case of fraud. The father wasn't scammed. He wasn't cheated.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       He was simply sold products that didn't match his actual financial goals.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px;">
       The core problems we identified:
     </p>
 
-    <div style="margin-bottom: 40px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 20px;">
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
         1. Product Selection Without Goal Mapping
       </h3>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         He was buying "investment products" without first defining what he was actually investing FOR. Retirement? Child's education? Emergency fund? Wealth creation? Each goal needs a different strategy, timeline, and risk approach. He had products, but no plan.
       </p>
     </div>
 
-    <div style="margin-bottom: 40px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 20px;">
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
         2. Mixing Insurance with Investment
       </h3>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         Three ULIPs and two traditional endowment plans. These products combine life insurance with investment—and historically, they do neither particularly well. High charges eat into returns. Lock-in periods trap capital. The insurance coverage is usually inadequate for actual family needs.
       </p>
     </div>
 
-    <div style="margin-bottom: 40px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 20px;">
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
         3. High-Cost Products Eating Returns Silently
       </h3>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         Some of his mutual funds had expense ratios above 2%. Over 15-20 years, these charges compound into massive wealth destruction. A 2% annual charge on ₹10 lakh growing at 12% for 20 years can cost you over ₹12 lakh in lost returns. Most investors never even check this number.
       </p>
     </div>
 
-    <div style="margin-bottom: 40px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 20px;">
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
         4. No Asset Allocation Strategy
       </h3>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         His portfolio had no clear equity-debt split aligned to his age, risk capacity, or financial goals. Some years he was 90% equity (too risky for his situation). Other years, 70% debt (too conservative for wealth building). Asset allocation—not product selection—determines 80-90% of portfolio returns over time.
       </p>
     </div>
 
-    <div style="margin-bottom: 40px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 20px;">
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
         5. Zero Portfolio Review for 7 Years
       </h3>
-      <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         Once products were sold, there was no systematic annual review. No rebalancing. No checking if funds were underperforming. No adjusting strategy as life situations changed. The portfolio was on autopilot—with no pilot actually monitoring the flight.
       </p>
     </div>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       When we finished explaining these issues, the son was silent for a full minute.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       "My father trusted someone completely. He did everything they told him to do. And this is the result."
     </p>
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500;">
       This is the painful reality for millions of Indian families. Sincerity without proper financial guidance can be extremely expensive.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       The Part That Hurts Most
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       This wasn't a careless investor. This was a CA—someone who understands numbers, analyzes balance sheets for clients, and makes careful financial decisions professionally.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       He worked 10-12 hour days. Saved diligently. Invested regularly. Did everything right from a discipline perspective.
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The only thing he didn't do? Ask the right questions about product suitability, cost structure, and goal alignment before committing his hard-earned money.
     </p>
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
       If someone this financially aware can lose ₹47 lakh in opportunity cost, imagine what's happening to families without this background.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       What Every Investor Must Understand
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px;">
       After reviewing 200+ portfolios over the past decade, certain patterns emerge clearly. Here's what separates successful wealth builders from those who struggle:
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       → <strong style="color: #DAA520;">Goals First, Products Second</strong>
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Define clear financial goals with timelines BEFORE choosing any investment product. Retirement in 20 years needs different products than child's education in 8 years or buying a home in 3 years.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       → <strong style="color: #DAA520;">Keep Insurance and Investment Separate</strong>
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Pure term insurance for life protection. Mutual funds/other vehicles for wealth creation. Mixing them typically serves neither purpose well.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       → <strong style="color: #DAA520;">Understand All Costs</strong>
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Expense ratios, allocation charges, exit loads, lock-in periods—know exactly what you're paying and why. A 1% difference in annual costs can mean lakhs over decades.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       → <strong style="color: #DAA520;">Build Proper Asset Allocation</strong>
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Your equity-debt-liquid mix should match your age, risk capacity, and time horizons for different goals. This drives 80-90% of long-term returns.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       → <strong style="color: #DAA520;">Review and Rebalance Annually</strong>
     </p>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px; padding-left: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px; padding-left: 20px;">
       Markets move. Your situation changes. Funds underperform. Regular review ensures your portfolio stays aligned with goals, and rebalancing locks in gains while managing risk.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; color: #C0A062;">
+    <p style="font-size: 18px; line-height: 2; color: #C0A062;">
       These aren't complicated strategies. They're fundamental principles. But they require someone to actually explain them clearly—which often doesn't happen.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       Are You in the Same Situation?
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 35px;">
       Take 5 minutes right now. Pull out your investment statements. Check:
     </p>
 
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid #DAA520; margin-bottom: 20px;">
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 38px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.6); margin-bottom: 25px;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Can you explain WHY you own each specific investment?
       </p>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Do you have any ULIPs or traditional insurance policies someone called "investment plans"?
       </p>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Do you know the exact expense ratio of each mutual fund?
       </p>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5; margin-bottom: 15px;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Is there a clear asset allocation strategy aligned to your goals?
       </p>
-      <p style="font-size: 18px; line-height: 1.8; color: #E5E5E5;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
         → When was the last time someone actually reviewed your portfolio comprehensively?
       </p>
     </div>
 
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500; margin-top: 30px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
       If you answered "I'm not sure" or "I don't know" to even one of these questions, there may be gaps that could cost you significantly over time.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="margin-bottom: 60px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 30px;">
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
       What Changed for This Family
     </h2>
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After our initial consultation, we spent time helping the family understand their actual financial situation—not with jargon, but with clear explanations of what they owned and why it might not be optimal.
     </p>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 15px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
       We provided educational guidance on:
     </p>
 
-    <ul style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
+    <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 28px;">
       <li>How to think about different financial goals systematically</li>
       <li>General principles of asset allocation for different life stages</li>
       <li>Understanding product costs and their long-term impact</li>
@@ -304,16 +304,16 @@ export const staticBlogPost = {
       <li>How regular portfolio review helps maintain alignment with changing life situations</li>
     </ul>
 
-    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       18 months later, they have clarity. They understand where their money is, why it's there, and what it's meant to achieve. More importantly, they have a systematic approach to making future financial decisions.
     </p>
 
-    <p style="font-size: 20px; line-height: 1.8; color: #C0A062; font-weight: 500;">
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500;">
       That's the difference proper financial guidance makes—not selling products, but building understanding and strategy.
     </p>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <a href="/blog/retirement-shortfall-case-study" style="text-decoration: none;">
     <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; transition: all 0.3s ease; box-shadow: 0 0 0 0 rgba(192, 160, 98, 0); cursor: pointer;" onmouseover="this.style.borderLeftColor='rgba(192, 160, 98, 0.9)'; this.style.background='rgba(255, 255, 255, 0.05)'; this.style.boxShadow='inset 0 0 30px 5px rgba(192, 160, 98, 0.12)';" onmouseout="this.style.borderLeftColor='rgba(192, 160, 98, 0.5)'; this.style.background='rgba(255, 255, 255, 0.03)'; this.style.boxShadow='0 0 0 0 rgba(192, 160, 98, 0)';">
@@ -329,7 +329,7 @@ export const staticBlogPost = {
     </div>
   </a>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 45px; border-radius: 12px; border-left: 3px solid rgba(192, 160, 98, 0.6); margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 18px; color: rgba(192, 160, 98, 0.95);">
@@ -377,7 +377,7 @@ export const staticBlogPost = {
     </div>
   </div>
 
-  <hr style="border: none; border-top: 2px solid #DAA520; margin: 60px 0;" />
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
     <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
