@@ -12,6 +12,7 @@ const API = `${BACKEND_URL}/api`;
 const Blog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -81,7 +82,31 @@ const Blog = () => {
     },
   ];
 
-  const displayPosts = blogPosts.length > 0 ? blogPosts : placeholderPosts;
+  const allPosts = blogPosts.length > 0 ? blogPosts : placeholderPosts;
+  
+  // Get unique categories
+  const categories = [...new Set(allPosts.map(post => post.category).filter(Boolean))];
+  
+  // Filter posts by selected category
+  const displayPosts = selectedCategory 
+    ? allPosts.filter(post => post.category === selectedCategory)
+    : allPosts;
+
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      // If clicking the same category, deselect it (show all)
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
+    // Smooth scroll to blog posts section
+    setTimeout(() => {
+      const postsSection = document.querySelector('.blog-posts-section');
+      if (postsSection) {
+        postsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
