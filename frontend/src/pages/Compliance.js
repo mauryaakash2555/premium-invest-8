@@ -8,7 +8,14 @@ const Compliance = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{
+      minHeight: '100vh',
+      background: '#000000',
+      width: '100%',
+      boxSizing: 'border-box',
+      paddingBottom: '80px',
+      overflowX: 'hidden'
+    }}>
       <Helmet>
         <title>Regulatory Compliance & Investor Charter | BM Wealth Mumbai ARN 90008</title>
         <meta name="description" content="BM Wealth regulatory compliance, investor charter, grievance redressal mechanism. IRDAI Licensed and AMFI Registered ARN 90008. Transparent and regulated financial advisory in Mumbai." />
@@ -91,8 +98,14 @@ const Compliance = () => {
       </section>
 
       {/* Investor Charter Section */}
-      <section className="section-container">
-        <div className="glass-effect" style={{ padding: '60px 40px', marginBottom: '40px' }}>
+      <section className="section-container" style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: 'clamp(20px, 5vw, 60px)',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
             <div
               style={{
@@ -119,20 +132,20 @@ const Compliance = () => {
             </h2>
           </div>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: '16px' }}>
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Vision Statement
             </h3>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               BM Wealth is committed to providing professional investment advisory services with the highest
               standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
 
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Your Rights as an Investor
             </h3>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 <strong>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
               </li>
               <li style={{ marginBottom: '12px' }}>
@@ -149,50 +162,50 @@ const Compliance = () => {
               </li>
             </ul>
 
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Your Responsibilities as an Investor
             </h3>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Conduct thorough research and due diligence before making investment decisions
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Provide complete and accurate information about your financial situation and risk appetite
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Read all documents carefully, including terms and conditions, before signing
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Keep records of all transactions and communications with your advisor
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Report any suspicious activity or concerns promptly
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Stay informed about market conditions and review your portfolio regularly
               </li>
             </ul>
 
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Our Commitments to You
             </h3>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Provide investment advice based on thorough analysis and your best interests
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Maintain transparency in all dealings and disclose any conflicts of interest
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Protect your confidential information and ensure data security
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Comply with all IRDAI and AMFI regulations and industry best practices
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Provide timely and accurate information about your investments
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 Address your concerns and grievances promptly and fairly
               </li>
             </ul>
@@ -201,9 +214,12 @@ const Compliance = () => {
               className="sebi-disclaimer"
               style={{
                 marginTop: '30px',
-                padding: '20px',
+                padding: 'clamp(20px, 4vw, 40px)',
                 background: 'rgba(218, 165, 32, 0.1)',
                 borderLeft: '4px solid #DAA520',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               <strong>IRDAI License Number:</strong> 277925
@@ -220,7 +236,7 @@ const Compliance = () => {
         </div>
 
         {/* Grievance Redressal Section */}
-        <div className="glass-effect" style={{ padding: '60px 40px', marginBottom: '40px' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
             <div
               style={{
@@ -247,51 +263,51 @@ const Compliance = () => {
             </h2>
           </div>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: '16px' }}>
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               How to File a Complaint
             </h3>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               We are committed to addressing your concerns promptly and fairly. If you have any grievances
               regarding our services, please follow the process outlined below:
             </p>
 
-            <h4 style={{ color: '#C0A062', fontSize: '20px', marginTop: '25px', marginBottom: '15px' }}>
+            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Step 1: Contact Us Directly
             </h4>
             <div style={{ marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
-                <Phone size={20} style={{ color: '#DAA520' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+                <Phone size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
                 <span>Phone: +91 8850977259</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
-                <Mail size={20} style={{ color: '#DAA520' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
                 <span>Email: mauryaakash2555@gmail.com</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
-                <Mail size={20} style={{ color: '#DAA520' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
                 <span>Grievance Email: grievance@bmwealth.co.in</span>
               </div>
             </div>
 
-            <h4 style={{ color: '#C0A062', fontSize: '20px', marginTop: '25px', marginBottom: '15px' }}>
+            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Step 2: Written Complaint
             </h4>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               If your concern is not resolved through initial contact, please submit a written complaint including:
             </p>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '10px' }}>Your name and contact details</li>
-              <li style={{ marginBottom: '10px' }}>Client ID or account reference number</li>
-              <li style={{ marginBottom: '10px' }}>Detailed description of the grievance</li>
-              <li style={{ marginBottom: '10px' }}>Supporting documents (if any)</li>
-              <li style={{ marginBottom: '10px' }}>Expected resolution</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Your name and contact details</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Client ID or account reference number</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Detailed description of the grievance</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Supporting documents (if any)</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Expected resolution</li>
             </ul>
 
-            <h4 style={{ color: '#C0A062', fontSize: '20px', marginTop: '25px', marginBottom: '15px' }}>
+            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Step 3: Escalation to Regulatory Authorities
             </h4>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
             </p>
             <div
@@ -328,17 +344,17 @@ const Compliance = () => {
               </a>
             </div>
 
-            <h3 style={{ color: '#DAA520', fontSize: '24px', marginTop: '30px', marginBottom: '20px' }}>
+            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Resolution Timeline
             </h3>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 <strong>Acknowledgment:</strong> Within 3 working days of receiving the complaint
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 <strong>Initial Response:</strong> Within 7 working days with status update
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
                 <strong>Resolution:</strong> Within 30 days from the date of receipt
               </li>
             </ul>
@@ -368,7 +384,7 @@ const Compliance = () => {
         </div>
 
         {/* Regulatory Information */}
-        <div className="glass-effect" style={{ padding: '40px', marginBottom: '40px' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 36px)',
@@ -379,52 +395,52 @@ const Compliance = () => {
             REGULATORY DISCLOSURES &amp; LICENSES
           </h2>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: '16px' }}>
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Insurance Advisory Services
             </h3>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>IRDAI License Number:</strong> 277925
             </p>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Service Type:</strong> Insurance Advisory
             </p>
-            <p style={{ marginBottom: '15px' }}>
+            <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Mutual Fund Distribution Services
             </h3>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>AMFI Registration:</strong> ARN 90008
             </p>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
             </p>
-            <p style={{ marginBottom: '15px' }}>
+            <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Additional Advisory Services
             </h3>
             <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '10px' }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
-              <li style={{ marginBottom: '10px' }}>Fixed Deposit (FD) Advisory Services</li>
-              <li style={{ marginBottom: '10px' }}>Investment Planning &amp; Financial Consulting</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Fixed Deposit (FD) Advisory Services</li>
+              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Investment Planning &amp; Financial Consulting</li>
             </ul>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Registered Office
             </h3>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               66, Vinod Villa Bldg., 1st floor office no. 108<br />
               Cavel Cross Lane 3, Kalbadevi<br />
               Mumbai - 400002, Maharashtra, India
             </p>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Regulatory Authorities
             </h3>
             <div
@@ -468,20 +484,20 @@ const Compliance = () => {
               </a>
             </div>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Grievance Redressal Mechanism
             </h3>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Email:</strong> grievance@bmwealth.co.in
             </p>
-            <p style={{ marginBottom: '10px' }}>
+            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Phone:</strong> +91 8850977259
             </p>
-            <p style={{ marginBottom: '20px' }}>
+            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong style={{ color: '#C0A062' }}>Response Time:</strong> Within 7 working days
             </p>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Compliance Statement
             </h3>
             <div
@@ -498,15 +514,22 @@ const Compliance = () => {
               </p>
             </div>
 
-            <h3 style={{ color: '#C0A062', fontSize: '22px', marginTop: '25px', marginBottom: '15px' }}>
+            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Investment Disclaimer
             </h3>
-            <div className="sebi-disclaimer" style={{ marginTop: '0' }}>
+            <div className="sebi-disclaimer" style={{ marginTop: '0', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
               <strong>Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
             </div>
           </div>
         </div>
       </section>
+      
+      {/* Spacer to prevent footer overlap and white bottom */}
+      <div style={{
+        height: '100px',
+        background: '#000000',
+        width: '100%'
+      }} />
     </div>
   );
 };
