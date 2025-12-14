@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat } from 'lucide-react';
+import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import LazyImage from '@/components/LazyImage';
+import { staticBlogPost } from '../data/staticBlogData';
 
 const Home = () => {
   useEffect(() => {
@@ -345,6 +346,156 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════════════
+          📝 LATEST BLOG SECTION - EASY TO REMOVE
+          ═══════════════════════════════════════════════════════════════════════════════
+          To remove this section, simply delete everything between these comment markers
+          (from "Latest Insights Section" to "End Latest Blog Section")
+          ═══════════════════════════════════════════════════════════════════════════════ */}
+      
+      {/* Latest Insights Section */}
+      <section className="section-container" style={{ padding: '80px 20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <div style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '12px', 
+            marginBottom: '16px',
+            color: '#DAA520'
+          }}>
+            <BookOpen size={32} />
+            <h2
+              style={{
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                margin: 0,
+              }}
+              className="golden-gradient"
+            >
+              Latest Insights
+            </h2>
+          </div>
+          <p
+            style={{
+              fontSize: '18px',
+              color: '#C0A062',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Expert financial wisdom and real-world investment stories
+          </p>
+        </div>
+
+        <div className="glass-effect" style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: 'clamp(30px, 5vw, 50px)',
+          borderRadius: '20px',
+          border: '1px solid rgba(218, 165, 32, 0.2)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          cursor: 'pointer',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-4px)';
+          e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.15)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = 'none';
+        }}
+        >
+          <Link 
+            to={`/blog/${staticBlogPost.slug}`}
+            style={{ 
+              textDecoration: 'none', 
+              color: 'inherit',
+              display: 'block'
+            }}
+          >
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gap: '30px',
+              alignItems: 'center',
+            }}
+            >
+              {/* Blog Image */}
+              <LazyImage
+                src={staticBlogPost.image_url || staticBlogPost.image}
+                alt={staticBlogPost.image_alt || staticBlogPost.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'cover',
+                  borderRadius: '12px',
+                  display: 'block',
+                }}
+              />
+              
+              {/* Blog Content */}
+              <div>
+                <div style={{
+                  display: 'inline-block',
+                  padding: '6px 16px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '20px',
+                  fontSize: '14px',
+                  color: '#DAA520',
+                  marginBottom: '20px',
+                  fontWeight: 500,
+                }}>
+                  {staticBlogPost.category}
+                </div>
+                
+                <h3
+                  style={{
+                    fontSize: 'clamp(24px, 4vw, 32px)',
+                    color: '#DAA520',
+                    marginBottom: '16px',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {staticBlogPost.title}
+                </h3>
+                
+                <p
+                  style={{
+                    fontSize: 'clamp(16px, 2.5vw, 18px)',
+                    color: '#CCCCCC',
+                    lineHeight: 1.7,
+                    marginBottom: '24px',
+                  }}
+                >
+                  {staticBlogPost.excerpt}
+                </p>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#C0A062',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                }}>
+                  <span>Read Full Article</span>
+                  <ArrowRight size={20} />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link to="/blog" className="btn-secondary" style={{ textDecoration: 'none' }}>
+            View All Insights
+          </Link>
+        </div>
+      </section>
+      {/* ═══════════════════════════════════════════════════════════════════════════════
+          END LATEST BLOG SECTION - Delete everything above this line to remove
+          ═══════════════════════════════════════════════════════════════════════════════ */}
 
       {/* CTA Section */}
       <section className="section-container">
