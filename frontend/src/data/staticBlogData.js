@@ -51,41 +51,6 @@ export const staticBlogPost = {
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
   content: `
-  <style>
-    .coming-next-block {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 35px;
-      border-radius: 12px;
-      border-left: 4px solid rgba(192, 160, 98, 0.5);
-      margin-bottom: 60px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .coming-next-block:hover {
-      border-left-color: rgba(192, 160, 98, 0.9);
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: inset 0 0 30px 5px rgba(192, 160, 98, 0.12);
-    }
-    .whatsapp-cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: #000000;
-      color: rgba(192, 160, 98, 0.95);
-      padding: 14px 28px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      border: 1px solid rgba(192, 160, 98, 0.4);
-      transition: all 0.3s ease;
-    }
-    .whatsapp-cta-btn:hover {
-      border-color: rgba(192, 160, 98, 0.8);
-      background: rgba(192, 160, 98, 0.05);
-      box-shadow: 0 0 20px 5px rgba(192, 160, 98, 0.15);
-    }
-  </style>
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The message arrived at 11:47 PM on a Tuesday:
