@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "mongodb": "^6.3.0",
     "next": "15.0.3",
+    "nodemailer": "^6.9.8",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
