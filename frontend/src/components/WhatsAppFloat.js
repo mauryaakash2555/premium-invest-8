@@ -16,7 +16,7 @@ const WhatsAppFloat = () => {
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <MessageCircle size={32} />
+        <MessageCircle size={28} style={{ width: '28px', height: '28px' }} />
       </a>
       {showTooltip && (
         <div
