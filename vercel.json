@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm install --legacy-peer-deps && npm run build",
+  "buildCommand": "if [ -d frontend ]; then cd frontend && npm install --legacy-peer-deps && npm run build; else echo 'Frontend directory not found'; exit 1; fi",
   "outputDirectory": "frontend/build",
   "devCommand": "cd frontend && npm start",
   "framework": "create-react-app",
