@@ -99,20 +99,27 @@ const Services = () => {
   return (
     <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <style>{`
-        @media (max-width: 768px) {
+        /* Mobile-first responsive styles */
+        .service-detail-grid {
+          grid-template-columns: 1fr !important;
+        }
+        
+        @media (min-width: 768px) {
           .service-detail-grid {
-            grid-template-columns: 1fr !important;
-            padding: 24px !important;
-            gap: 24px !important;
+            grid-template-columns: 1fr 1fr !important;
           }
-          
-          .service-detail-grid div {
-            order: 0 !important;
-          }
-          
-          .service-detail-grid img {
-            height: 250px !important;
-          }
+        }
+        
+        /* Prevent overflow */
+        .service-detail-grid * {
+          box-sizing: border-box;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+        
+        .service-detail-grid img {
+          max-width: 100% !important;
+          height: auto !important;
         }
       `}</style>
       <Helmet>
@@ -199,160 +206,110 @@ const Services = () => {
 
       {/* Services Detail */}
       <section className="section-container">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '80px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 8vw, 80px)' }}>
           {services.map((service, index) => (
             <div
               key={index}
               className="glass-effect service-detail-grid"
               style={{
-                padding: '40px',
+                padding: 'clamp(20px, 5vw, 40px)',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '40px',
+                gridTemplateColumns: '1fr',
+                gap: 'clamp(24px, 5vw, 40px)',
                 alignItems: 'center',
                 maxWidth: '100%',
                 boxSizing: 'border-box',
+                overflow: 'hidden',
+                width: '100%',
               }}
               data-testid={`service-detail-${index}`}
             >
-              {index % 2 === 0 ? (
-                <>
-                  <div>
-                    <div style={{ color: '#DAA520', marginBottom: '20px' }}>{service.icon}</div>
-                    <h2
+              {/* Image - Always first on mobile, responsive */}
+              <LazyImage
+                src={service.image}
+                alt={service.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: 'clamp(200px, 40vw, 400px)',
+                  objectFit: 'cover',
+                  borderRadius: '12px',
+                  display: 'block',
+                  boxSizing: 'border-box',
+                }}
+              />
+              
+              {/* Content */}
+              <div style={{ 
+                width: '100%',
+                boxSizing: 'border-box',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
+              }}>
+                <div style={{ color: '#DAA520', marginBottom: '20px', fontSize: 'clamp(40px, 8vw, 50px)' }}>
+                  {service.icon}
+                </div>
+                <h2
+                  style={{
+                    fontSize: 'clamp(22px, 5vw, 36px)',
+                    color: '#DAA520',
+                    marginBottom: '16px',
+                    lineHeight: 1.3,
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  {service.title}
+                </h2>
+                <p
+                  style={{
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
+                    color: '#CCCCCC',
+                    lineHeight: 1.8,
+                    marginBottom: '24px',
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  {service.description}
+                </p>
+                <h3
+                  style={{
+                    fontSize: 'clamp(18px, 4vw, 20px)',
+                    color: '#C0A062',
+                    marginBottom: '12px',
+                  }}
+                >
+                  Key Features:
+                </h3>
+                <ul
+                  style={{
+                    listStyle: 'none',
+                    padding: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                  }}
+                >
+                  {service.features.map((feature, idx) => (
+                    <li
+                      key={idx}
                       style={{
-                        fontSize: 'clamp(24px, 3vw, 36px)',
-                        color: '#DAA520',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      {service.title}
-                    </h2>
-                    <p
-                      style={{
-                        fontSize: '18px',
-                        color: '#CCCCCC',
-                        lineHeight: 1.8,
-                        marginBottom: '24px',
-                      }}
-                    >
-                      {service.description}
-                    </p>
-                    <h3
-                      style={{
-                        fontSize: '20px',
-                        color: '#C0A062',
-                        marginBottom: '12px',
-                      }}
-                    >
-                      Key Features:
-                    </h3>
-                    <ul
-                      style={{
-                        listStyle: 'none',
-                        padding: 0,
+                        fontSize: 'clamp(14px, 3vw, 16px)',
+                        color: '#FFFFFF',
                         display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px',
+                        alignItems: 'center',
+                        gap: '10px',
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
                       }}
                     >
-                      {service.features.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          style={{
-                            fontSize: '16px',
-                            color: '#FFFFFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                          }}
-                        >
-                          <ArrowRight size={16} style={{ color: '#DAA520' }} />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <LazyImage
-                    src={service.image}
-                    alt={service.title}
-                    style={{
-                      width: '100%',
-                      height: '400px',
-                      borderRadius: '8px',
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  <LazyImage
-                    src={service.image}
-                    alt={service.title}
-                    style={{
-                      width: '100%',
-                      height: '400px',
-                      borderRadius: '8px',
-                      order: 1,
-                    }}
-                  />
-                  <div style={{ order: 2 }}>
-                    <div style={{ color: '#DAA520', marginBottom: '20px' }}>{service.icon}</div>
-                    <h2
-                      style={{
-                        fontSize: 'clamp(24px, 3vw, 36px)',
-                        color: '#DAA520',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      {service.title}
-                    </h2>
-                    <p
-                      style={{
-                        fontSize: '18px',
-                        color: '#CCCCCC',
-                        lineHeight: 1.8,
-                        marginBottom: '24px',
-                      }}
-                    >
-                      {service.description}
-                    </p>
-                    <h3
-                      style={{
-                        fontSize: '20px',
-                        color: '#C0A062',
-                        marginBottom: '12px',
-                      }}
-                    >
-                      Key Features:
-                    </h3>
-                    <ul
-                      style={{
-                        listStyle: 'none',
-                        padding: 0,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px',
-                      }}
-                    >
-                      {service.features.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          style={{
-                            fontSize: '16px',
-                            color: '#FFFFFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                          }}
-                        >
-                          <ArrowRight size={16} style={{ color: '#DAA520' }} />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              )}
+                      <ArrowRight size={16} style={{ color: '#DAA520', flexShrink: 0 }} />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>
