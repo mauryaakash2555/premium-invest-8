@@ -4,8 +4,8 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Vercel Serverless API (new, faster, no timeout)
+const API_URL = '/api/contact';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,36 +17,11 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppFallback, setShowWhatsAppFallback] = useState(false);
   
-  // reCAPTCHA site key from environment variable
-  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Wake up backend when contact page loads (prevents timeout)
-    fetch(`${BACKEND_URL}/health`)
-      .then(() => console.log('Backend ready'))
-      .catch(() => console.log('Backend waking up...'));
-    
-    // Load reCAPTCHA v3 script
-    if (!RECAPTCHA_SITE_KEY) {
-      console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    
-    return () => {
-      // Cleanup: remove script on unmount
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, [RECAPTCHA_SITE_KEY]);
+    // No need to wake up backend - Vercel serverless is always instant!
+    // reCAPTCHA is completely optional - form works without it
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,32 +32,12 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Get reCAPTCHA token
-      if (!RECAPTCHA_SITE_KEY) {
-        toast.error('reCAPTCHA is not configured. Please contact support.');
-        setIsSubmitting(false);
-        return;
-      }
-      
-      // Wait for grecaptcha to be ready
-      if (!window.grecaptcha) {
-        toast.error('reCAPTCHA not loaded. Please refresh the page.');
-        setIsSubmitting(false);
-        return;
-      }
-      
-      await new Promise((resolve) => {
-        window.grecaptcha.ready(resolve);
-      });
-      
-      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
-      
-      // Send form data with reCAPTCHA token - with extended timeout for Render free tier
-      await axios.post(`${API}/contact`, {
-        ...formData,
-        recaptcha_token: token
+      // Send form data directly - no reCAPTCHA required
+      await axios.post(API_URL, {
+        ...formData
+        // reCAPTCHA completely removed - form works without it
       }, {
-        timeout: 60000 // 60 second timeout - handles backend cold start on Render
+        timeout: 10000 // 10 second timeout - Vercel is instant, no cold start
       });
       
       // Clear form immediately on success
