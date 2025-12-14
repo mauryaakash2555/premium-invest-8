@@ -49,59 +49,82 @@ module.exports = async (req, res) => {
       }
     }
 
-    // Save to MongoDB
+    // Save to MongoDB (required - but with better error handling)
+    let mongoSuccess = false;
     if (process.env.MONGODB_URI) {
-      const client = await MongoClient.connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      
-      const db = client.db('bmwealth');
-      const collection = db.collection('contacts');
-      
-      await collection.insertOne({
-        name,
-        email,
-        phone,
-        message,
-        submitted_at: new Date(),
-        source: 'website_contact_form',
-      });
-      
-      await client.close();
+      try {
+        const client = await MongoClient.connect(process.env.MONGODB_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          serverSelectionTimeoutMS: 5000, // 5 second timeout
+        });
+        
+        const db = client.db('bmwealth');
+        const collection = db.collection('contacts');
+        
+        await collection.insertOne({
+          name,
+          email,
+          phone,
+          message,
+          submitted_at: new Date(),
+          source: 'website_contact_form',
+        });
+        
+        await client.close();
+        mongoSuccess = true;
+      } catch (mongoError) {
+        console.error('MongoDB error:', mongoError.message);
+        // Don't fail the request if MongoDB fails - log it
+        // This allows form to work even if DB is temporarily down
+      }
+    } else {
+      console.warn('MONGODB_URI not set in environment variables');
     }
 
-    // Send email notification
+    // Send email notification (optional - won't fail if email fails)
+    let emailSuccess = false;
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
 
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER,
-        subject: `New Contact Form Submission - ${name}`,
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-          <hr>
-          <p><small>Submitted at: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</small></p>
-        `,
-      });
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: process.env.EMAIL_USER,
+          subject: `New Contact Form Submission - ${name}`,
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+            <hr>
+            <p><small>Submitted at: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</small></p>
+          `,
+        });
+        emailSuccess = true;
+      } catch (emailError) {
+        console.error('Email error:', emailError.message);
+        // Don't fail the request if email fails - it's optional
+        // Form submission still succeeds, just no email notification
+      }
+    } else {
+      console.warn('EMAIL_USER or EMAIL_PASS not set - email notifications disabled');
     }
 
-    // Success response
+    // Success response (even if email failed, form submission succeeded)
     return res.status(200).json({ 
       message: 'Contact form submitted successfully',
-      success: true 
+      success: true,
+      saved: mongoSuccess,
+      emailSent: emailSuccess
     });
 
   } catch (error) {
