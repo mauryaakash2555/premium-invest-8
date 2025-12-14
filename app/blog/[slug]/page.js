@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { readFile } from "fs/promises";
-import { join } from "path";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0; // Disable static generation and caching
@@ -9,16 +7,29 @@ export const fetchCache = 'force-no-store'; // Disable fetch caching
 export const runtime = 'nodejs'; // Use Node.js runtime (no edge caching)
 
 export async function generateMetadata({ params }) {
-  // Read JSON dynamically for metadata too
-  const filePath = join(process.cwd(), 'data', 'blog.json');
-  const fileContents = await readFile(filePath, 'utf8');
-  const blogPosts = JSON.parse(fileContents);
+  // Fetch from API route for fresh data
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : 'http://localhost:3000';
   
-  const post = blogPosts.find((entry) => entry.slug === params.slug);
-  return {
-    title: post ? `${post.title} · Blog` : "Blog post",
-    description: post?.summary ?? "BM Wealth blog post",
-  };
+  try {
+    const res = await fetch(`${baseUrl}/api/blog`, { 
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
+    const blogPosts = await res.json();
+    const post = blogPosts.find((entry) => entry.slug === params.slug);
+    
+    return {
+      title: post ? `${post.title} · Blog` : "Blog post",
+      description: post?.summary ?? "BM Wealth blog post",
+    };
+  } catch (error) {
+    return {
+      title: "Blog post",
+      description: "BM Wealth blog post",
+    };
+  }
 }
 
 function renderParagraph(paragraph, index) {
@@ -183,11 +194,16 @@ function renderParagraph(paragraph, index) {
 }
 
 export default async function BlogDetailPage({ params }) {
-  // Force dynamic rendering - read JSON file fresh on every request (not bundled)
-  const filePath = join(process.cwd(), 'data', 'blog.json');
-  const fileContents = await readFile(filePath, 'utf8');
-  const blogPosts = JSON.parse(fileContents);
+  // Fetch from API route - guaranteed fresh data on every request
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : 'http://localhost:3000';
   
+  const res = await fetch(`${baseUrl}/api/blog`, { 
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const blogPosts = await res.json();
   const post = blogPosts.find((entry) => entry.slug === params.slug);
 
   if (!post) {

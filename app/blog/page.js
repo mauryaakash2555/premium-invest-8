@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { readFile } from "fs/promises";
-import { join } from "path";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,10 +10,16 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  // Read JSON dynamically on every request (not bundled at build time)
-  const filePath = join(process.cwd(), 'data', 'blog.json');
-  const fileContents = await readFile(filePath, 'utf8');
-  const blogPosts = JSON.parse(fileContents);
+  // Fetch from API route - guaranteed fresh data
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : 'http://localhost:3000';
+  
+  const res = await fetch(`${baseUrl}/api/blog`, { 
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const blogPosts = await res.json();
   
   return (
     <div className="space-y-4">
