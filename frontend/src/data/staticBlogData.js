@@ -108,6 +108,79 @@ export const staticBlogPost = {
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
   content: `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "He Lost ₹47 Lakh Following Expert Advice - Here's What He Wishes He Knew 7 Years Ago",
+    "description": "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
+    "author": {
+      "@type": "Organization",
+      "name": "BM Wealth Editorial Team"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "BM Wealth",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://bmwealth.co.in/logo.png"
+      }
+    },
+    "datePublished": "2025-12-09",
+    "dateModified": "2025-12-14",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "articleSection": "Investment Education",
+    "keywords": "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes, portfolio review"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I lose money in mutual funds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, mutual funds are subject to market risks. Unlike fixed deposits, the value of your investment can go up or down based on market performance. However, systematic investing (SIP) over long periods (10+ years) has historically shown positive returns."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How often should I review my portfolio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At minimum, annually. Ideally, every 6 months or whenever there's a major life change. Regular review helps catch problems like high-cost products, goal misalignment, or excessive concentration."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is opportunity cost in investing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Opportunity cost is the difference between what your money actually earned versus what it could have earned with a better investment strategy. It's not about market timing, but about product selection and cost efficiency."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I mix insurance with investment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Generally, no. Pure term insurance provides maximum coverage at lowest cost. Separating insurance and investment typically works better for most families."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I know if my advisor is good?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A good advisor asks about your goals first, reviews your portfolio annually, explains costs clearly, and educates you about your own money."
+        }
+      }
+    ]
+  }
+  </script>
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The message arrived at 11:47 PM on a Tuesday:
@@ -375,6 +448,64 @@ export const staticBlogPost = {
       That's the difference proper financial guidance makes—not selling products, but building understanding and strategy.
     </p>
   </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+    
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="max-width: 800px; margin: 0 auto;">
+      
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          Can I lose money in mutual funds?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          Yes, mutual funds are subject to market risks. Unlike fixed deposits, the value of your investment can go up or down based on market performance. However, systematic investing (SIP) over long periods (10+ years) has historically shown positive returns. The key is proper goal alignment, risk assessment, and regular portfolio review.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          How often should I review my portfolio?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          At minimum, annually. Ideally, every 6 months or whenever there's a major life change (new job, marriage, child, etc.). Regular review helps catch problems like high-cost products, goal misalignment, or excessive concentration in one asset class. Many investors review only when something goes wrong—by then, opportunity cost has already occurred.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          What is opportunity cost in investing?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          Opportunity cost is the difference between what your money actually earned versus what it could have earned with a better investment strategy. In this case study, the ₹47 lakh "loss" isn't money that vanished—it's the additional growth that didn't happen due to high-cost products, poor asset allocation, and lack of review. It's not about market timing, but about product selection and cost efficiency.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          Should I mix insurance with investment?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          Generally, no. Pure term insurance provides maximum coverage at lowest cost. ULIPs and traditional endowment plans combine both but often deliver suboptimal results in both areas—insufficient insurance cover and mediocre investment returns with high charges. Separating insurance (term plan) and investment (mutual funds, PPF, etc.) typically works better for most families.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 0;">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          How do I know if my advisor is good?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          A good advisor asks about your goals first, not products. They review your portfolio annually, explain costs clearly, and don't push high-commission products. Check their credentials (AMFI registration for mutual funds, IRDAI for insurance). Most importantly, they should educate you so you understand your own money—not keep you dependent on them.
+        </p>
+      </div>
+
+    </div>
+  </section>
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
