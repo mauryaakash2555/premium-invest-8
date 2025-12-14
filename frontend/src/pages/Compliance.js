@@ -132,11 +132,27 @@ const Compliance = () => {
             </h2>
           </div>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+          <div style={{ 
+            color: '#CCCCCC', 
+            lineHeight: 1.8, 
+            fontSize: 'clamp(16px, 3.5vw, 18px)', 
+            wordWrap: 'break-word', 
+            overflowWrap: 'break-word',
+            textAlign: 'left',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}>
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Vision Statement
             </h3>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               BM Wealth is committed to providing professional investment advisory services with the highest
               standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
@@ -144,20 +160,64 @@ const Compliance = () => {
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Your Rights as an Investor
             </h3>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ 
+                marginBottom: '12px',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Right to Information:</strong> Complete and accurate disclosure of all material information
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ 
+                marginBottom: '12px',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ 
+                marginBottom: '12px',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Right to Privacy:</strong> Protection of your personal and financial information
               </li>
-              <li style={{ marginBottom: '12px' }}>
+              <li style={{ 
+                marginBottom: '12px',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
               </li>
             </ul>
@@ -165,23 +225,75 @@ const Compliance = () => {
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Your Responsibilities as an Investor
             </h3>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Conduct thorough research and due diligence before making investment decisions
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Provide complete and accurate information about your financial situation and risk appetite
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Read all documents carefully, including terms and conditions, before signing
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Keep records of all transactions and communications with your advisor
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Report any suspicious activity or concerns promptly
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Stay informed about market conditions and review your portfolio regularly
               </li>
             </ul>
@@ -189,23 +301,75 @@ const Compliance = () => {
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Our Commitments to You
             </h3>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Provide investment advice based on thorough analysis and your best interests
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Maintain transparency in all dealings and disclose any conflicts of interest
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Protect your confidential information and ensure data security
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Comply with all IRDAI and AMFI regulations and industry best practices
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Provide timely and accurate information about your investments
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 Address your concerns and grievances promptly and fairly
               </li>
             </ul>
@@ -263,11 +427,27 @@ const Compliance = () => {
             </h2>
           </div>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+          <div style={{ 
+            color: '#CCCCCC', 
+            lineHeight: 1.8, 
+            fontSize: 'clamp(16px, 3.5vw, 18px)', 
+            wordWrap: 'break-word', 
+            overflowWrap: 'break-word',
+            textAlign: 'left',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}>
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               How to File a Complaint
             </h3>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               We are committed to addressing your concerns promptly and fairly. If you have any grievances
               regarding our services, please follow the process outlined below:
             </p>
@@ -293,21 +473,79 @@ const Compliance = () => {
             <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Step 2: Written Complaint
             </h4>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               If your concern is not resolved through initial contact, please submit a written complaint including:
             </p>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Your name and contact details</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Client ID or account reference number</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Detailed description of the grievance</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Supporting documents (if any)</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Expected resolution</li>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Your name and contact details</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Client ID or account reference number</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Detailed description of the grievance</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Supporting documents (if any)</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Expected resolution</li>
             </ul>
 
             <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Step 3: Escalation to Regulatory Authorities
             </h4>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
             </p>
             <div
@@ -347,14 +585,42 @@ const Compliance = () => {
             <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
               Resolution Timeline
             </h3>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Acknowledgment:</strong> Within 3 working days of receiving the complaint
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Initial Response:</strong> Within 7 working days with status update
               </li>
-              <li style={{ marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+              <li style={{ 
+                marginBottom: '12px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>
                 <strong>Resolution:</strong> Within 30 days from the date of receipt
               </li>
             </ul>
@@ -373,7 +639,14 @@ const Compliance = () => {
               <AlertCircle size={24} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px' }} />
               <div>
                 <strong style={{ color: '#DAA520' }}>Important Note:</strong>
-                <p style={{ margin: '8px 0 0 0' }}>
+                <p style={{ 
+                margin: '8px 0 0 0',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                textAlign: 'left',
+                lineHeight: 1.6
+              }}>
                   Please keep a copy of your complaint and all correspondence for your records. We are committed
                   to resolving all grievances in a fair, transparent, and timely manner in accordance with regulatory
                   guidelines.
@@ -395,14 +668,37 @@ const Compliance = () => {
             REGULATORY DISCLOSURES &amp; LICENSES
           </h2>
 
-          <div style={{ color: '#CCCCCC', lineHeight: 1.8, fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+          <div style={{ 
+            color: '#CCCCCC', 
+            lineHeight: 1.8, 
+            fontSize: 'clamp(16px, 3.5vw, 18px)', 
+            wordWrap: 'break-word', 
+            overflowWrap: 'break-word',
+            textAlign: 'left',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}>
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Insurance Advisory Services
             </h3>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>IRDAI License Number:</strong> 277925
             </p>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>Service Type:</strong> Insurance Advisory
             </p>
             <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
@@ -412,10 +708,24 @@ const Compliance = () => {
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Mutual Fund Distribution Services
             </h3>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>AMFI Registration:</strong> ARN 90008
             </p>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
             </p>
             <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
@@ -425,16 +735,51 @@ const Compliance = () => {
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Additional Advisory Services
             </h3>
-            <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Fixed Deposit (FD) Advisory Services</li>
-              <li style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>Investment Planning &amp; Financial Consulting</li>
+            <ul style={{ 
+              paddingLeft: 'clamp(20px, 5vw, 30px)', 
+              marginBottom: '20px',
+              listStylePosition: 'outside'
+            }}>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Fixed Deposit (FD) Advisory Services</li>
+              <li style={{ 
+                marginBottom: '10px', 
+                fontSize: 'clamp(16px, 3.5vw, 18px)', 
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                lineHeight: 1.6,
+                paddingLeft: '8px',
+                textAlign: 'left'
+              }}>Investment Planning &amp; Financial Consulting</li>
             </ul>
 
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Registered Office
             </h3>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               66, Vinod Villa Bldg., 1st floor office no. 108<br />
               Cavel Cross Lane 3, Kalbadevi<br />
               Mumbai - 400002, Maharashtra, India
@@ -487,13 +832,34 @@ const Compliance = () => {
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Grievance Redressal Mechanism
             </h3>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>Email:</strong> grievance@bmwealth.co.in
             </p>
-            <p style={{ marginBottom: '10px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '10px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>Phone:</strong> +91 8850977259
             </p>
-            <p style={{ marginBottom: '20px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <p style={{ 
+              marginBottom: '20px', 
+              fontSize: 'clamp(16px, 3.5vw, 18px)', 
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              textAlign: 'left',
+              lineHeight: 1.6
+            }}>
               <strong style={{ color: '#C0A062' }}>Response Time:</strong> Within 7 working days
             </p>
 
@@ -509,7 +875,14 @@ const Compliance = () => {
                 borderLeft: '4px solid #DAA520',
               }}
             >
-              <p style={{ marginBottom: '0' }}>
+              <p style={{ 
+                marginBottom: '0',
+                fontSize: 'clamp(16px, 3.5vw, 18px)',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                textAlign: 'left',
+                lineHeight: 1.6
+              }}>
                 BM Wealth is an IRDAI Licensed Insurance Advisor (License No. 277925) and AMFI Registered Mutual Fund Distributor (ARN 90008). We follow SEBI guidelines for mutual fund distribution but are NOT SEBI-registered Investment Advisors. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
               </p>
             </div>
