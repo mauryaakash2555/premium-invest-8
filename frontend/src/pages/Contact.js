@@ -17,33 +17,11 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppFallback, setShowWhatsAppFallback] = useState(false);
   
-  // reCAPTCHA site key from environment variable
-  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    
     // No need to wake up backend - Vercel serverless is always instant!
-    
-    // Load reCAPTCHA v3 script
-    if (!RECAPTCHA_SITE_KEY) {
-      console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    
-    return () => {
-      // Cleanup: remove script on unmount
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, [RECAPTCHA_SITE_KEY]);
+    // reCAPTCHA is completely optional - form works without it
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,26 +32,10 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Get reCAPTCHA token (optional - skip if not configured)
-      let recaptchaToken = null;
-      if (RECAPTCHA_SITE_KEY && window.grecaptcha) {
-        try {
-          await new Promise((resolve) => {
-            window.grecaptcha.ready(resolve);
-          });
-          recaptchaToken = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
-        } catch (recaptchaError) {
-          console.warn('reCAPTCHA error (continuing without it):', recaptchaError);
-          // Continue without reCAPTCHA - it's optional
-        }
-      } else {
-        console.warn('reCAPTCHA not configured - submitting without it');
-      }
-      
-      // Send form data with optional reCAPTCHA token - Vercel serverless (instant response)
+      // Send form data directly - no reCAPTCHA required
       await axios.post(API_URL, {
-        ...formData,
-        recaptcha_token: recaptchaToken // null if not available
+        ...formData
+        // reCAPTCHA completely removed - form works without it
       }, {
         timeout: 10000 // 10 second timeout - Vercel is instant, no cold start
       });
