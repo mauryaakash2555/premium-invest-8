@@ -19,7 +19,8 @@ export default async function BlogPage() {
     cache: 'no-store',
     next: { revalidate: 0 }
   });
-  const blogPosts = await res.json();
+  const data = await res.json();
+  const blogPosts = data.posts || data; // Handle both formats
   
   return (
     <div className="space-y-4">

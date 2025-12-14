@@ -17,7 +17,8 @@ export async function generateMetadata({ params }) {
       cache: 'no-store',
       next: { revalidate: 0 }
     });
-    const blogPosts = await res.json();
+    const data = await res.json();
+    const blogPosts = data.posts || data; // Handle both formats
     const post = blogPosts.find((entry) => entry.slug === params.slug);
     
     return {
@@ -203,7 +204,8 @@ export default async function BlogDetailPage({ params }) {
     cache: 'no-store',
     next: { revalidate: 0 }
   });
-  const blogPosts = await res.json();
+  const data = await res.json();
+  const blogPosts = data.posts || data; // Handle both formats
   const post = blogPosts.find((entry) => entry.slug === params.slug);
 
   if (!post) {
