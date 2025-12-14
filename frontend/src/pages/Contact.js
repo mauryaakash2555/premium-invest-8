@@ -4,8 +4,9 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
 
-// Vercel Serverless API (new, faster, no timeout)
-const API_URL = '/api/contact';
+// Render Backend API (permanent solution)
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,11 +18,34 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppFallback, setShowWhatsAppFallback] = useState(false);
   
+  // reCAPTCHA site key from environment variable (optional)
+  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    // No need to wake up backend - Vercel serverless is always instant!
-    // reCAPTCHA is completely optional - form works without it
-  }, []);
+    
+    // Wake up backend when contact page loads (prevents timeout)
+    if (BACKEND_URL) {
+      fetch(`${BACKEND_URL}/health`)
+        .then(() => console.log('Backend ready'))
+        .catch(() => console.log('Backend waking up...'));
+    }
+    
+    // Load reCAPTCHA v3 script (optional - form works without it)
+    if (RECAPTCHA_SITE_KEY) {
+      const script = document.createElement('script');
+      script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+      
+      return () => {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      };
+    }
+  }, [RECAPTCHA_SITE_KEY]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,12 +56,26 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Send form data directly - no reCAPTCHA required
-      await axios.post(API_URL, {
-        ...formData
-        // reCAPTCHA completely removed - form works without it
+      // Get reCAPTCHA token (optional - skip if not configured)
+      let recaptchaToken = null;
+      if (RECAPTCHA_SITE_KEY && window.grecaptcha) {
+        try {
+          await new Promise((resolve) => {
+            window.grecaptcha.ready(resolve);
+          });
+          recaptchaToken = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+        } catch (recaptchaError) {
+          console.warn('reCAPTCHA error (continuing without it):', recaptchaError);
+          // Continue without reCAPTCHA - it's optional
+        }
+      }
+      
+      // Send form data with optional reCAPTCHA token - Render backend
+      await axios.post(`${API}/contact`, {
+        ...formData,
+        recaptcha_token: recaptchaToken // null if not available
       }, {
-        timeout: 10000 // 10 second timeout - Vercel is instant, no cold start
+        timeout: 60000 // 60 second timeout - handles backend cold start on Render
       });
       
       // Clear form immediately on success
