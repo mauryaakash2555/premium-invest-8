@@ -55,7 +55,7 @@ const Blog = () => {
       author: 'BM Wealth Team',
       category: 'Investment Education',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      image_url: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=60',
     },
     {
       id: '2',
@@ -66,7 +66,7 @@ const Blog = () => {
       author: 'BM Wealth Team',
       category: 'Investment Strategies',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      image_url: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=60',
     },
     {
       id: '3',
@@ -77,7 +77,7 @@ const Blog = () => {
       author: 'Brahmdeo Maurya',
       category: 'Risk Management',
       published_date: new Date().toISOString(),
-      image_url: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      image_url: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=60',
     },
   ];
 
