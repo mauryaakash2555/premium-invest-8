@@ -1,5 +1,6 @@
 import Link from "next/link";
-import blogPosts from "@/data/blog.json";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,7 +11,12 @@ export const metadata = {
   description: "Sample blog list for BM Wealth Next.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  // Read JSON dynamically on every request (not bundled at build time)
+  const filePath = join(process.cwd(), 'data', 'blog.json');
+  const fileContents = await readFile(filePath, 'utf8');
+  const blogPosts = JSON.parse(fileContents);
+  
   return (
     <div className="space-y-4">
       <div>

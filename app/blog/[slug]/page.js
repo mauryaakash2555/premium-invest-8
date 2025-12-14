@@ -1,13 +1,19 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import blogPosts from "@/data/blog.json";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0; // Disable static generation and caching
 export const fetchCache = 'force-no-store'; // Disable fetch caching
 export const runtime = 'nodejs'; // Use Node.js runtime (no edge caching)
 
-export function generateMetadata({ params }) {
+export async function generateMetadata({ params }) {
+  // Read JSON dynamically for metadata too
+  const filePath = join(process.cwd(), 'data', 'blog.json');
+  const fileContents = await readFile(filePath, 'utf8');
+  const blogPosts = JSON.parse(fileContents);
+  
   const post = blogPosts.find((entry) => entry.slug === params.slug);
   return {
     title: post ? `${post.title} · Blog` : "Blog post",
@@ -177,7 +183,11 @@ function renderParagraph(paragraph, index) {
 }
 
 export default async function BlogDetailPage({ params }) {
-  // Force dynamic rendering - fetch fresh data on every request
+  // Force dynamic rendering - read JSON file fresh on every request (not bundled)
+  const filePath = join(process.cwd(), 'data', 'blog.json');
+  const fileContents = await readFile(filePath, 'utf8');
+  const blogPosts = JSON.parse(fileContents);
+  
   const post = blogPosts.find((entry) => entry.slug === params.slug);
 
   if (!post) {
