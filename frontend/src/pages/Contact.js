@@ -4,8 +4,8 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Vercel Serverless API (new, faster, no timeout)
+const API_URL = '/api/contact';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +23,7 @@ const Contact = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Wake up backend when contact page loads (prevents timeout)
-    fetch(`${BACKEND_URL}/health`)
-      .then(() => console.log('Backend ready'))
-      .catch(() => console.log('Backend waking up...'));
+    // No need to wake up backend - Vercel serverless is always instant!
     
     // Load reCAPTCHA v3 script
     if (!RECAPTCHA_SITE_KEY) {
@@ -77,12 +74,12 @@ const Contact = () => {
       
       const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
       
-      // Send form data with reCAPTCHA token - with extended timeout for Render free tier
-      await axios.post(`${API}/contact`, {
+      // Send form data with reCAPTCHA token - Vercel serverless (instant response)
+      await axios.post(API_URL, {
         ...formData,
         recaptcha_token: token
       }, {
-        timeout: 60000 // 60 second timeout - handles backend cold start on Render
+        timeout: 10000 // 10 second timeout - Vercel is instant, no cold start
       });
       
       // Clear form immediately on success
