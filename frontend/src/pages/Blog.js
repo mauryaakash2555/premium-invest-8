@@ -20,18 +20,26 @@ const Blog = () => {
 
   const fetchBlogPosts = async () => {
     try {
-      const response = await axios.get(`${API}/blog`, {
-        timeout: 10000, // 10 second timeout for blog loading
-      });
-      // Combine static blog with backend blogs, avoiding duplicates
-      const backendPosts = response.data || [];
-      const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
-      setBlogPosts(combinedPosts);
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-      // If backend fails, still show static blog
+      // Show static blog immediately (no backend wait!)
       setBlogPosts([staticBlogPost]);
-    } finally {
+      setIsLoading(false);
+      
+      // Then try to fetch backend blogs in background (non-blocking)
+      try {
+        const response = await axios.get(`${API}/blog`, {
+          timeout: 5000, // Reduced timeout - don't block if slow
+        });
+        const backendPosts = response.data || [];
+        const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
+        setBlogPosts(combinedPosts);
+      } catch (backendError) {
+        console.warn('Backend blog fetch failed (using static only):', backendError);
+        // Keep static blog - already shown above
+      }
+    } catch (error) {
+      console.error('Error loading blog posts:', error);
+      // Fallback: still show static blog
+      setBlogPosts([staticBlogPost]);
       setIsLoading(false);
     }
   };
@@ -125,7 +133,7 @@ const Blog = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&auto=format&fm=webp&q=60)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.65,
@@ -171,8 +179,102 @@ const Blog = () => {
       {/* Blog Posts */}
       <section className="section-container">
         {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <p style={{ fontSize: '18px', color: '#C0A062' }}>Loading blog posts...</p>
+          <div style={{
+            minHeight: '50vh',
+            background: '#000000',
+            padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px)',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {/* Loading Skeleton */}
+            <style>{`
+              @keyframes shimmer {
+                0% { background-position: -200% 0; }
+                100% { background-position: 200% 0; }
+              }
+              .skeleton-shimmer {
+                background: linear-gradient(90deg, #1A1A2E 25%, #2A2A3E 50%, #1A1A2E 75%);
+                background-size: 200% 100%;
+                animation: shimmer 1.5s infinite;
+              }
+            `}</style>
+            
+            {/* Title Skeleton */}
+            <div className="skeleton-shimmer" style={{
+              height: '40px',
+              width: '300px',
+              borderRadius: '8px',
+              marginBottom: '40px',
+              margin: '0 auto 40px'
+            }} />
+            
+            {/* Blog Cards Skeleton */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+              gap: '40px'
+            }}>
+              {[1, 2, 3].map((i) => (
+                <div key={i} style={{
+                  background: '#1A1A2E',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  border: '1px solid rgba(218, 165, 32, 0.2)',
+                  overflow: 'hidden'
+                }}>
+                  {/* Image skeleton */}
+                  <div className="skeleton-shimmer" style={{
+                    height: '240px',
+                    borderRadius: '12px',
+                    marginBottom: '20px'
+                  }} />
+                  
+                  {/* Category skeleton */}
+                  <div className="skeleton-shimmer" style={{
+                    height: '20px',
+                    width: '120px',
+                    borderRadius: '6px',
+                    marginBottom: '16px'
+                  }} />
+                  
+                  {/* Title skeleton */}
+                  <div className="skeleton-shimmer" style={{
+                    height: '28px',
+                    width: '90%',
+                    borderRadius: '6px',
+                    marginBottom: '12px'
+                  }} />
+                  
+                  {/* Text skeleton */}
+                  <div className="skeleton-shimmer" style={{
+                    height: '16px',
+                    width: '100%',
+                    borderRadius: '6px',
+                    marginBottom: '8px'
+                  }} />
+                  <div className="skeleton-shimmer" style={{
+                    height: '16px',
+                    width: '80%',
+                    borderRadius: '6px',
+                    marginBottom: '16px'
+                  }} />
+                  
+                  {/* Footer skeleton */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
+                    <div className="skeleton-shimmer" style={{
+                      height: '16px',
+                      width: '100px',
+                      borderRadius: '6px'
+                    }} />
+                    <div className="skeleton-shimmer" style={{
+                      height: '16px',
+                      width: '80px',
+                      borderRadius: '6px'
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div
