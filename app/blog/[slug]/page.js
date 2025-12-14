@@ -4,6 +4,8 @@ import blogPosts from "@/data/blog.json";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0; // Disable static generation and caching
+export const fetchCache = 'force-no-store'; // Disable fetch caching
+export const runtime = 'nodejs'; // Use Node.js runtime (no edge caching)
 
 export function generateMetadata({ params }) {
   const post = blogPosts.find((entry) => entry.slug === params.slug);
@@ -174,7 +176,8 @@ function renderParagraph(paragraph, index) {
   );
 }
 
-export default function BlogDetailPage({ params }) {
+export default async function BlogDetailPage({ params }) {
+  // Force dynamic rendering - fetch fresh data on every request
   const post = blogPosts.find((entry) => entry.slug === params.slug);
 
   if (!post) {
@@ -183,6 +186,9 @@ export default function BlogDetailPage({ params }) {
 
   const isBlog1 = post.slug === "47-lakh-investment-mistake-mumbai";
   const mumbaiSkylineUrl = "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
+
+  // Add cache-busting timestamp to ensure fresh content
+  const cacheBuster = Date.now();
 
   return (
     <>
