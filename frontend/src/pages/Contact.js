@@ -235,11 +235,21 @@ const Contact = () => {
 
       {/* Contact Form & Info */}
       <section className="section-container">
+        <style>{`
+          @media (max-width: 768px) {
+            .contact-grid {
+              grid-template-columns: 1fr !important;
+              gap: 40px !important;
+            }
+          }
+        `}</style>
         <div
+          className="contact-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
             gap: '60px',
+            maxWidth: '100%',
           }}
         >
           {/* Contact Information */}

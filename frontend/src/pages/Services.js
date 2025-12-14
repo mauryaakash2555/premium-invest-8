@@ -97,7 +97,24 @@ const Services = () => {
   ];
 
   return (
-    <div>
+    <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .service-detail-grid {
+            grid-template-columns: 1fr !important;
+            padding: 24px !important;
+            gap: 24px !important;
+          }
+          
+          .service-detail-grid div {
+            order: 0 !important;
+          }
+          
+          .service-detail-grid img {
+            height: 250px !important;
+          }
+        }
+      `}</style>
       <Helmet>
         <title>Investment Services Mumbai - Mutual Funds, SIP, Insurance, PMS | BM Wealth</title>
         <meta name="description" content="Comprehensive investment services in Mumbai: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits. Expert financial planning by BM Wealth ARN 90008." />
@@ -186,13 +203,15 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="glass-effect"
+              className="glass-effect service-detail-grid"
               style={{
                 padding: '40px',
                 display: 'grid',
-                gridTemplateColumns: index % 2 === 0 ? '1fr 1fr' : '1fr 1fr',
+                gridTemplateColumns: '1fr 1fr',
                 gap: '40px',
                 alignItems: 'center',
+                maxWidth: '100%',
+                boxSizing: 'border-box',
               }}
               data-testid={`service-detail-${index}`}
             >
