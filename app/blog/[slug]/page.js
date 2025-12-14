@@ -45,6 +45,12 @@ function renderParagraph(paragraph, index) {
     "We'll help you understand:"
   ].includes(paragraph);
 
+  // Check if paragraph contains WhatsApp (for glow styling)
+  const containsWhatsApp = paragraph.includes("WhatsApp");
+  
+  // Check if paragraph is "Coming Next" section
+  const isComingNext = paragraph.includes("Coming Next") || paragraph.includes("He Did Everything Right");
+
   // Check if paragraph is disclaimer section
   const isDisclaimer = paragraph.startsWith("Educational Content:") || 
                        paragraph.startsWith("Investment Risks:") ||
@@ -62,13 +68,27 @@ function renderParagraph(paragraph, index) {
     );
   }
 
-  // Render numeric emphasis block with reduced loudness
+  // Render numeric emphasis block with reduced loudness and proper ₹ alignment
   if (isNumericBlock) {
+    // Extract just the amount if paragraph contains "The opportunity cost:"
+    const amountText = paragraph.includes("The opportunity cost:") 
+      ? paragraph.split(":")[1].trim() 
+      : paragraph;
+    
     return (
-      <div key={index} className="my-8 rounded-lg bg-white/5 border-l-2 border-amber-600/40 px-5 py-4">
-        <p className="text-2xl font-medium text-amber-100/90">
-          {paragraph}
-        </p>
+      <div key={index} className="my-8 rounded-lg bg-white/5 border-l-2 border-amber-600/40 px-4 py-3">
+        {paragraph.includes("The opportunity cost:") ? (
+          <div>
+            <p className="text-base text-slate-300/80 mb-2">The opportunity cost:</p>
+            <p className="text-2xl font-semibold text-amber-100/85 leading-tight" style={{ fontVariantNumeric: 'tabular-nums', fontFeatureSettings: '"tnum"' }}>
+              {amountText}
+            </p>
+          </div>
+        ) : (
+          <p className="text-2xl font-semibold text-amber-100/85 leading-tight" style={{ fontVariantNumeric: 'tabular-nums', fontFeatureSettings: '"tnum"' }}>
+            {paragraph}
+          </p>
+        )}
       </div>
     );
   }
@@ -92,10 +112,39 @@ function renderParagraph(paragraph, index) {
         </p>
       );
     }
+    // Render WhatsApp with glow only behind "WhatsApp" word
+    if (containsWhatsApp) {
+      const parts = paragraph.split(/(WhatsApp)/);
+      return (
+        <p key={index} className="text-sm text-slate-300 leading-relaxed">
+          {parts.map((part, i) => 
+            part === "WhatsApp" ? (
+              <span key={i} className="relative inline-block">
+                <span className="absolute inset-0 bg-amber-600/20 blur-md rounded" style={{ filter: 'blur(8px)' }} />
+                <span className="relative">{part}</span>
+              </span>
+            ) : part
+          )}
+        </p>
+      );
+    }
     return (
       <p key={index} className="text-sm text-slate-300 leading-relaxed">
         {paragraph}
       </p>
+    );
+  }
+
+  // Render "Coming Next" section with glow on hover
+  if (isComingNext) {
+    return (
+      <div 
+        key={index} 
+        className="my-8 p-6 rounded-lg bg-white/5 border border-amber-600/20 hover:bg-white/10 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-600/0 via-amber-600/10 to-amber-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
+        <p className="relative text-slate-100/90 leading-relaxed">{paragraph}</p>
+      </div>
     );
   }
 
@@ -108,10 +157,10 @@ function renderParagraph(paragraph, index) {
     );
   }
 
-  // Render highlighted paragraphs with muted-gold left border
+  // Render highlighted paragraphs with muted-gold left border (NO background, NO glow)
   if (isHighlighted) {
     return (
-      <p key={index} className="rounded-lg bg-white/5 px-4 py-3 text-slate-100/90 border-l-3 border-l-amber-600/50 leading-relaxed">
+      <p key={index} className="px-4 py-3 text-slate-100/90 border-l-4 border-amber-600/40 leading-relaxed mb-5">
         {paragraph}
       </p>
     );
@@ -132,10 +181,26 @@ export default function BlogDetailPage({ params }) {
     notFound();
   }
 
-  const isBlog1 = post.slug === "how-regular-mutual-fund-plans-cost-mumbai-investor-47-lakh";
+  const isBlog1 = post.slug === "47-lakh-investment-mistake-mumbai";
+  const mumbaiSkylineUrl = "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
 
   return (
-    <article className="card space-y-6 p-6 max-w-4xl mx-auto">
+    <>
+      {/* Mumbai Skyline Hero Image for Blog 1 - Immediate render, no lazy loading */}
+      {isBlog1 && (
+        <div className="relative w-full h-64 md:h-96 overflow-hidden">
+          <img
+            src={mumbaiSkylineUrl}
+            alt="Mumbai skyline"
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black" />
+        </div>
+      )}
+      <article className="card space-y-6 p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-slate-300/70">
@@ -161,6 +226,7 @@ export default function BlogDetailPage({ params }) {
         ))}
       </div>
 
+      {/* Content renders immediately - no lazy loading, no delays */}
       <div className="space-y-1 text-sm leading-7 text-slate-100">
         {isBlog1 
           ? post.content.map((paragraph, index) => renderParagraph(paragraph, index))
@@ -178,6 +244,7 @@ export default function BlogDetailPage({ params }) {
         </Link>
       </div>
     </article>
+    </>
   );
 }
 
