@@ -126,19 +126,19 @@ const Services = () => {
         <title>Investment Services Mumbai - Mutual Funds, SIP, Insurance, PMS | BM Wealth</title>
         <meta name="description" content="Comprehensive investment services in Mumbai: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits. Expert financial planning by BM Wealth ARN 90008." />
         <meta name="keywords" content="investment services Mumbai, mutual funds advisor, SIP plans, portfolio management Mumbai, insurance Mumbai, trading services, fixed deposits" />
-        <link rel="canonical" href="https://bmwealth.in/services" />
+        <link rel="canonical" href="https://www.bmwealth.co.in/services" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://bmwealth.in/services" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/services" />
         <meta property="og:title" content="Investment Services Mumbai | BM Wealth" />
         <meta property="og:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
-        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://bmwealth.in/services" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/services" />
         <meta name="twitter:title" content="Investment Services Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Comprehensive investment services: Mutual Funds, SIP, PMS, Insurance, Trading & Fixed Deposits." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section

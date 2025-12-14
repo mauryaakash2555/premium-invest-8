@@ -98,19 +98,19 @@ const Blog = () => {
         <title>Financial Insights & Investment Tips | BM Wealth Blog Mumbai</title>
         <meta name="description" content="Expert investment insights, mutual fund tips, SIP strategies, and financial planning advice from BM Wealth Mumbai. Stay updated with market trends and wealth management tips." />
         <meta name="keywords" content="investment blog Mumbai, mutual fund tips, SIP strategies, financial planning advice, wealth management blog, BM Wealth insights" />
-        <link rel="canonical" href="https://bmwealth.in/blog" />
+        <link rel="canonical" href="https://www.bmwealth.co.in/blog" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://bmwealth.in/blog" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/blog" />
         <meta property="og:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta property="og:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
-        <meta property="og:image" content="https://bmwealth.in/logo.webp" />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://bmwealth.in/blog" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/blog" />
         <meta name="twitter:title" content="Financial Insights & Investment Tips | BM Wealth Blog" />
         <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
-        <meta name="twitter:image" content="https://bmwealth.in/logo.webp" />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
       {/* Hero Section */}
       <section

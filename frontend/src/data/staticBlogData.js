@@ -77,7 +77,7 @@
 //
 // BLOG 1: "₹47 Lakh Case Study" (staticBlogPost)
 //    • Slug: 47-lakh-investment-mistake-mumbai
-//    • URL: https://bmwealth.in/blog/47-lakh-investment-mistake-mumbai
+//    • URL: https://www.bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai
 //    • Status: LIVE
 //    • Content starts: Line 93 below
 //    • Hover effects: Controlled by App.css
