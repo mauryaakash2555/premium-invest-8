@@ -22,6 +22,11 @@ const Contact = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
+    // Wake up backend when contact page loads (prevents timeout)
+    fetch(`${BACKEND_URL}/health`)
+      .then(() => console.log('Backend ready'))
+      .catch(() => console.log('Backend waking up...'));
+    
     // Load reCAPTCHA v3 script
     if (!RECAPTCHA_SITE_KEY) {
       console.error('REACT_APP_RECAPTCHA_SITE_KEY is not set');
@@ -71,12 +76,12 @@ const Contact = () => {
       
       const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
       
-      // Send form data with reCAPTCHA token - with optimized timeout
+      // Send form data with reCAPTCHA token - with extended timeout for Render free tier
       await axios.post(`${API}/contact`, {
         ...formData,
         recaptcha_token: token
       }, {
-        timeout: 15000 // 15 second timeout - more reasonable for API calls
+        timeout: 60000 // 60 second timeout - handles backend cold start on Render
       });
       
       // Clear form immediately on success
@@ -96,30 +101,46 @@ const Contact = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       
-      // Handle different error scenarios
+      // Handle different error scenarios with WhatsApp fallback
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-        toast.error('Request timeout. The server is taking too long to respond. Please try again.', {
-          duration: 5000,
+        toast.error('Request timeout. Server is taking too long. Please WhatsApp us: +91 8850977259', {
+          duration: 7000,
+          action: {
+            label: 'WhatsApp Now',
+            onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
+          },
         });
       } else if (error.code === 'ERR_NETWORK') {
-        toast.error('Network error. Please check your internet connection and try again.', {
-          duration: 5000,
+        toast.error('Network error. Please check connection or WhatsApp us: +91 8850977259', {
+          duration: 7000,
+          action: {
+            label: 'WhatsApp Now',
+            onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
+          },
         });
       } else if (error.response?.status === 400 && error.response?.data?.detail === 'reCAPTCHA verification failed') {
-        toast.error('Security verification failed. Please refresh the page and try again.', {
+        toast.error('Security verification failed. Please refresh and try again.', {
           duration: 5000,
         });
       } else if (error.response?.status === 500) {
-        toast.error('Server error. Please try again later or contact us directly.', {
-          duration: 5000,
+        toast.error('Server error. Please WhatsApp us instead: +91 8850977259', {
+          duration: 7000,
+          action: {
+            label: 'WhatsApp Now',
+            onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
+          },
         });
       } else if (error.response?.data?.detail) {
         toast.error(error.response.data.detail, {
           duration: 5000,
         });
       } else {
-        toast.error('Failed to send message. Please try again or contact us via WhatsApp.', {
-          duration: 5000,
+        toast.error('Failed to send. Please WhatsApp us: +91 8850977259', {
+          duration: 7000,
+          action: {
+            label: 'WhatsApp Now',
+            onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
+          },
         });
       }
     } finally {
@@ -578,6 +599,42 @@ const Contact = () => {
                   </>
                 )}
               </button>
+
+              {/* WhatsApp Fallback */}
+              <div style={{ marginTop: '30px', textAlign: 'center', padding: '20px', background: 'rgba(37, 211, 102, 0.05)', borderRadius: '12px', border: '1px solid rgba(37, 211, 102, 0.2)' }}>
+                <p style={{ color: '#B8B8B8', marginBottom: '12px', fontSize: '14px' }}>
+                  Prefer instant response?
+                </p>
+                <a 
+                  href="https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '12px 24px',
+                    background: '#25D366',
+                    color: '#FFFFFF',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '16px',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(37, 211, 102, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <MessageCircle size={20} />
+                  WhatsApp Us Instead
+                </a>
+              </div>
             </form>
           </div>
         </div>
