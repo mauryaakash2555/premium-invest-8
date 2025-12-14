@@ -1,29 +1,34 @@
-// ═══════════════════════════════════════════════════════════════
-// 📌 STATIC BLOG DATA FILE - ALL BLOGS LIVE HERE
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// 🚨🚨🚨 STOP - READ BLOG_MASTER_RULES.md BEFORE ANY EDIT 🚨🚨🚨
+// ═══════════════════════════════════════════════════════════════════════════════
 //
-// 🎯 THIS IS THE ONLY FILE YOU NEED TO EDIT FOR BLOG CONTENT
+// 📍 THIS FILE: C:\Users\admin\premium-invest-8\frontend\src\data\staticBlogData.js
+// 📋 RULES FILE: C:\Users\admin\premium-invest-8\BLOG_MASTER_RULES.md
 //
-// FILE LOCATION:
-// C:\Users\admin\premium-invest-8\frontend\src\data\staticBlogData.js
+// ═══════════════════════════════════════════════════════════════════════════════
+// ❌ CONTENT RULES - NO EXCEPTIONS:
+//    • DO NOT change ANY words
+//    • DO NOT change punctuation
+//    • DO NOT rephrase headings
+//    • DO NOT "improve" writing
+//    • EMOJIS FORBIDDEN inside content
+//    • Content changes require explicit: "content change allowed"
 //
-// ───────────────────────────────────────────────────────────────
+// ✅ ONLY VISUAL CHANGES ALLOWED (see BLOG_MASTER_RULES.md)
+// ═══════════════════════════════════════════════════════════════════════════════
+//
 // 📚 BLOG INVENTORY:
-// ───────────────────────────────────────────────────────────────
-//
-// BLOG 1: "47 Lakh Loss Case Study" (staticBlogPost)
+// ───────────────────────────────────────────────────────────────────────────────
+// BLOG 1: "₹47 Lakh Case Study" (staticBlogPost)
 //    • Slug: 47-lakh-investment-mistake-mumbai
 //    • URL: https://bmwealth.in/blog/47-lakh-investment-mistake-mumbai
-//    • Status: ✅ Live - Premium Editorial Style Applied
-//    • Starts at: Line 32 below
+//    • Status: LIVE
+//    • Content starts: Line 47 below
+//    • Content Authority: Word document ONLY
 //
-// BLOG 2: [Not created yet - add below when ready]
-//
-// BLOG 3: [Not created yet - add below when ready]
-//
-// ───────────────────────────────────────────────────────────────
-// 📖 FULL DOCUMENTATION: See BLOG_REFERENCE.md in project root
-// ───────────────────────────────────────────────────────────────
+// BLOG 2: [Not created yet]
+// BLOG 3: [Not created yet]
+// ───────────────────────────────────────────────────────────────────────────────
 //
 // --- BLOG 1: ₹47 Lakh Loss Case Study ---
 // Note: Duplicate field names (date/published_date, readTime/read_time, image/image_url) are intentional
@@ -41,10 +46,46 @@ export const staticBlogPost = {
   excerpt: "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
   image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
   image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+  image_alt: "Mumbai financial advisory case study - investment mistakes",
   tags: ["investment mistakes Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
 
   content: `
+  <style>
+    .coming-next-block {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 35px;
+      border-radius: 12px;
+      border-left: 4px solid rgba(192, 160, 98, 0.5);
+      margin-bottom: 60px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .coming-next-block:hover {
+      border-left-color: rgba(192, 160, 98, 0.9);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 0 30px 5px rgba(192, 160, 98, 0.12);
+    }
+    .whatsapp-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #000000;
+      color: rgba(192, 160, 98, 0.95);
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      border: 1px solid rgba(192, 160, 98, 0.4);
+      transition: all 0.3s ease;
+    }
+    .whatsapp-cta-btn:hover {
+      border-color: rgba(192, 160, 98, 0.8);
+      background: rgba(192, 160, 98, 0.05);
+      box-shadow: 0 0 20px 5px rgba(192, 160, 98, 0.15);
+    }
+  </style>
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The message arrived at 11:47 PM on a Tuesday:
@@ -82,11 +123,11 @@ export const staticBlogPost = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
-      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+    <div style="padding: 14px 18px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 400; color: rgba(192, 160, 98, 0.75); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>47,00,000
       </p>
-      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.65); font-weight: 400;">
         Lost in opportunity cost over 7 years
       </p>
     </div>
@@ -316,7 +357,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <a href="/blog/retirement-shortfall-case-study" style="text-decoration: none;">
-    <div style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; transition: all 0.3s ease; box-shadow: 0 0 0 0 rgba(192, 160, 98, 0); cursor: pointer;" onmouseover="this.style.borderLeftColor='rgba(192, 160, 98, 0.9)'; this.style.background='rgba(255, 255, 255, 0.05)'; this.style.boxShadow='inset 0 0 30px 5px rgba(192, 160, 98, 0.12)';" onmouseout="this.style.borderLeftColor='rgba(192, 160, 98, 0.5)'; this.style.background='rgba(255, 255, 255, 0.03)'; this.style.boxShadow='0 0 0 0 rgba(192, 160, 98, 0)';">
+    <div class="coming-next-block">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
         Coming Next:
       </p>
@@ -360,13 +401,16 @@ export const staticBlogPost = {
 
     <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
       <div style="margin-bottom: 20px;">
-        <a href="https://wa.me/918850977259" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4); transition: all 0.3s ease; box-shadow: 0 0 0 0 rgba(192, 160, 98, 0);" onmouseover="this.style.borderColor='rgba(192, 160, 98, 0.8)'; this.style.background='rgba(192, 160, 98, 0.05)'; this.style.boxShadow='0 0 20px 5px rgba(192, 160, 98, 0.15)';" onmouseout="this.style.borderColor='rgba(192, 160, 98, 0.4)'; this.style.background='#000000'; this.style.boxShadow='0 0 0 0 rgba(192, 160, 98, 0)';">
+        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp: +91 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a>
+      </p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        <a href="/services" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Contact Us</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
@@ -393,7 +437,7 @@ export const staticBlogPost = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | AMFI ARN 90008) is registered to provide insurance advisory services and mutual fund distribution. We are NOT SEBI registered investment advisors (RIA) and do not provide portfolio management services, stock recommendations, or personalized investment advice requiring SEBI RIA registration.
+      <strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory services and mutual fund distribution. We are NOT <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">SEBI</a> registered investment advisors (RIA) and do not provide portfolio management services, stock recommendations, or personalized investment advice requiring SEBI RIA registration.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">

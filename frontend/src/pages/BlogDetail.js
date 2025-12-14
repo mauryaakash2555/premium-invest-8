@@ -129,16 +129,21 @@ const BlogDetail = () => {
 
       {/* Hero Section with Featured Image */}
       {post.image_url && (
-        <section style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px' }}>
-          <div
+        <section style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px', height: '400px' }}>
+          <img
+            src={post.image_url}
+            alt={post.image_alt || post.title}
             style={{
               width: '100%',
               height: '400px',
-              backgroundImage: `url(${post.image_url})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              objectFit: 'cover',
+              objectPosition: 'center',
               opacity: 0.3,
+              position: 'absolute',
+              top: 0,
+              left: 0,
             }}
+            loading="eager"
           />
           <div
             style={{
