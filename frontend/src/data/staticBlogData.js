@@ -1,34 +1,91 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// 🚨🚨🚨 STOP - READ BLOG_MASTER_RULES.md BEFORE ANY EDIT 🚨🚨🚨
+// 📖 BLOG EDITING GUIDE - HOW TO CHANGE/EDIT THIS FILE
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // 📍 THIS FILE: C:\Users\admin\premium-invest-8\frontend\src\data\staticBlogData.js
-// 📋 RULES FILE: C:\Users\admin\premium-invest-8\BLOG_MASTER_RULES.md
+// 🎨 CSS FILE: C:\Users\admin\premium-invest-8\frontend\src\App.css
+// 📋 RULES: C:\Users\admin\premium-invest-8\BLOG_MASTER_RULES.md
 //
 // ═══════════════════════════════════════════════════════════════════════════════
-// ❌ CONTENT RULES - NO EXCEPTIONS:
-//    • DO NOT change ANY words
-//    • DO NOT change punctuation
-//    • DO NOT rephrase headings
-//    • DO NOT "improve" writing
-//    • EMOJIS FORBIDDEN inside content
-//    • Content changes require explicit: "content change allowed"
-//
-// ✅ ONLY VISUAL CHANGES ALLOWED (see BLOG_MASTER_RULES.md)
+// 🎨 HOW TO EDIT VISUAL STYLES (Colors, Spacing, Fonts)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
-// 📚 BLOG INVENTORY:
+// All styling is done with INLINE STYLES in the HTML below.
+// To change colors, sizes, spacing, etc., modify the style="" attributes.
+//
+// EXAMPLES:
+// • Change text color: style="color: #C0A062;"  →  style="color: #FF5733;"
+// • Change font size: style="font-size: 18px;"  →  style="font-size: 20px;"
+// • Change padding: style="padding: 35px;"  →  style="padding: 40px;"
+// • Change margin: style="margin-bottom: 25px;"  →  style="margin-bottom: 30px;"
+//
 // ───────────────────────────────────────────────────────────────────────────────
+// ✨ HOW HOVER EFFECTS WORK
+// ───────────────────────────────────────────────────────────────────────────────
+//
+// Hover effects are controlled by CSS CLASSES in App.css, NOT inline styles!
+//
+// 🔹 "Coming Next" Block Hover:
+//    1. HTML has: class="coming-next-block"
+//    2. CSS in App.css (lines 50-58) defines the hover effect:
+//       .coming-next-block:hover {
+//         border-left-color: rgba(192, 160, 98, 0.9) !important;
+//         background: rgba(255, 255, 255, 0.05) !important;
+//         box-shadow: inset 0 0 30px 5px rgba(192, 160, 98, 0.12);
+//       }
+//
+// 🔹 WhatsApp Button Hover:
+//    1. HTML has: class="whatsapp-cta-btn"
+//    2. CSS in App.css (lines 60-68) defines the hover effect:
+//       .whatsapp-cta-btn:hover {
+//         border-color: rgba(192, 160, 98, 0.8) !important;
+//         background: rgba(192, 160, 98, 0.05) !important;
+//         box-shadow: 0 0 20px 5px rgba(192, 160, 98, 0.15);
+//       }
+//
+// TO CHANGE HOVER EFFECTS:
+// → Open: frontend/src/App.css
+// → Find: .coming-next-block:hover or .whatsapp-cta-btn:hover
+// → Edit: Colors, glow intensity, background, borders, etc.
+//
+// ───────────────────────────────────────────────────────────────────────────────
+// 🔢 SPECIAL CASE: ₹ Rupee Symbol Alignment
+// ───────────────────────────────────────────────────────────────────────────────
+//
+// The ₹ symbol is wrapped in a <span> with special positioning:
+//   <span style="position: relative; top: -3px;">₹</span>47,00,000
+//
+// WHY: The rupee symbol needs to align perfectly with numbers
+// TO ADJUST: Change "top: -3px;" to move it up/down (e.g., "top: -2px;")
+//
+// ───────────────────────────────────────────────────────────────────────────────
+// ❌ CONTENT RULES - DO NOT CHANGE WORDS
+// ───────────────────────────────────────────────────────────────────────────────
+//
+// • DO NOT change ANY words, sentences, or paragraphs
+// • DO NOT change punctuation
+// • DO NOT rephrase headings
+// • DO NOT "improve" writing
+// • EMOJIS FORBIDDEN inside content
+// • Content changes require explicit approval
+//
+// ✅ ONLY VISUAL CHANGES ALLOWED (colors, spacing, fonts, sizes)
+//
+// ═══════════════════════════════════════════════════════════════════════════════
+// 📚 BLOG INVENTORY
+// ═══════════════════════════════════════════════════════════════════════════════
+//
 // BLOG 1: "₹47 Lakh Case Study" (staticBlogPost)
 //    • Slug: 47-lakh-investment-mistake-mumbai
 //    • URL: https://bmwealth.in/blog/47-lakh-investment-mistake-mumbai
 //    • Status: LIVE
-//    • Content starts: Line 47 below
-//    • Content Authority: Word document ONLY
+//    • Content starts: Line 93 below
+//    • Hover effects: Controlled by App.css
 //
 // BLOG 2: [Not created yet]
 // BLOG 3: [Not created yet]
-// ───────────────────────────────────────────────────────────────────────────────
+//
+// ═══════════════════════════════════════════════════════════════════════════════
 //
 // --- BLOG 1: ₹47 Lakh Loss Case Study ---
 // Note: Duplicate field names (date/published_date, readTime/read_time, image/image_url) are intentional
