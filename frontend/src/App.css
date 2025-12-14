@@ -229,9 +229,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(218, 165, 32, 0.4);
-  box-shadow: 0 12px 40px rgba(218, 165, 32, 0.3);
+  transform: translateY(-8px) !important;
+  border-color: rgba(218, 165, 32, 0.4) !important;
+  box-shadow: 0 12px 40px rgba(218, 165, 32, 0.3) !important;
 }
 
 .image-overlay {
