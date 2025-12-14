@@ -88,11 +88,11 @@ export const staticBlogPost = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
     </p>
-    <div style="padding: 14px 18px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
-      <p style="font-size: 50px; font-weight: 400; color: rgba(192, 160, 98, 0.75); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>47,00,000
       </p>
-      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.65); font-weight: 400;">
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
         Lost in opportunity cost over 7 years
       </p>
     </div>
@@ -322,7 +322,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <a href="/blog/retirement-shortfall-case-study" style="text-decoration: none;">
-    <div class="coming-next-block">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
         Coming Next:
       </p>
@@ -366,7 +366,7 @@ export const staticBlogPost = {
 
     <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
       <div style="margin-bottom: 20px;">
-        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn">
+        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp: +91 88509 77259
         </a>
