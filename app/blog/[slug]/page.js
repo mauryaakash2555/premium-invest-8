@@ -3,10 +3,7 @@ import { notFound } from "next/navigation";
 import blogPosts from "@/data/blog.json";
 
 export const dynamic = "force-dynamic";
-
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
-}
+export const revalidate = 0; // Disable static generation and caching
 
 export function generateMetadata({ params }) {
   const post = blogPosts.find((entry) => entry.slug === params.slug);
