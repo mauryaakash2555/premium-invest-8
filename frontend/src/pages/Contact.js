@@ -54,30 +54,26 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Get reCAPTCHA token
-      if (!RECAPTCHA_SITE_KEY) {
-        toast.error('reCAPTCHA is not configured. Please contact support.');
-        setIsSubmitting(false);
-        return;
+      // Get reCAPTCHA token (optional - skip if not configured)
+      let recaptchaToken = null;
+      if (RECAPTCHA_SITE_KEY && window.grecaptcha) {
+        try {
+          await new Promise((resolve) => {
+            window.grecaptcha.ready(resolve);
+          });
+          recaptchaToken = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+        } catch (recaptchaError) {
+          console.warn('reCAPTCHA error (continuing without it):', recaptchaError);
+          // Continue without reCAPTCHA - it's optional
+        }
+      } else {
+        console.warn('reCAPTCHA not configured - submitting without it');
       }
       
-      // Wait for grecaptcha to be ready
-      if (!window.grecaptcha) {
-        toast.error('reCAPTCHA not loaded. Please refresh the page.');
-        setIsSubmitting(false);
-        return;
-      }
-      
-      await new Promise((resolve) => {
-        window.grecaptcha.ready(resolve);
-      });
-      
-      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
-      
-      // Send form data with reCAPTCHA token - Vercel serverless (instant response)
+      // Send form data with optional reCAPTCHA token - Vercel serverless (instant response)
       await axios.post(API_URL, {
         ...formData,
-        recaptcha_token: token
+        recaptcha_token: recaptchaToken // null if not available
       }, {
         timeout: 10000 // 10 second timeout - Vercel is instant, no cold start
       });
