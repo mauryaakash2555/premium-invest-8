@@ -18,8 +18,8 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppFallback, setShowWhatsAppFallback] = useState(false);
   
-  // reCAPTCHA site key from environment variable (optional)
-  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+  // reCAPTCHA site key (from env var or fallback)
+  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
 
   useEffect(() => {
     window.scrollTo(0, 0);
