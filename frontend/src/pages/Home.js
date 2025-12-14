@@ -201,7 +201,14 @@ const Home = () => {
           }}
         >
           {services.map((service, index) => (
-            <div key={index} className="service-card slide-up" data-testid={`service-card-${index}`}>
+            <div 
+              key={index} 
+              className="service-card slide-up" 
+              data-testid={`service-card-${index}`}
+              style={{
+                overflow: 'hidden',
+              }}
+            >
               <LazyImage
                 src={service.image}
                 alt={service.title}
@@ -209,7 +216,9 @@ const Home = () => {
                   width: '100%',
                   height: '200px',
                   marginBottom: '20px',
-                  borderRadius: '8px',
+                  borderRadius: 0,
+                  display: 'block',
+                  objectFit: 'cover',
                 }}
               />
               <div style={{ color: '#DAA520', marginBottom: '16px' }}>
@@ -390,11 +399,12 @@ const Home = () => {
         <div className="glass-effect" style={{
           maxWidth: '900px',
           margin: '0 auto',
-          padding: 'clamp(30px, 5vw, 50px)',
+          padding: 0,
           borderRadius: '20px',
           border: '1px solid rgba(218, 165, 32, 0.2)',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
           cursor: 'pointer',
+          overflow: 'hidden',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-4px)';
@@ -413,14 +423,8 @@ const Home = () => {
               display: 'block'
             }}
           >
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr',
-              gap: '30px',
-              alignItems: 'center',
-            }}
-            >
-              {/* Blog Image */}
+            <div>
+              {/* Blog Image - Seamless, no border */}
               <LazyImage
                 src={staticBlogPost.image_url || staticBlogPost.image}
                 alt={staticBlogPost.image_alt || staticBlogPost.title}
@@ -429,13 +433,16 @@ const Home = () => {
                   height: 'auto',
                   maxHeight: '400px',
                   objectFit: 'cover',
-                  borderRadius: '12px',
+                  borderRadius: 0,
                   display: 'block',
+                  marginBottom: 0,
                 }}
               />
               
               {/* Blog Content */}
-              <div>
+              <div style={{
+                padding: 'clamp(30px, 5vw, 50px)',
+              }}>
                 <div style={{
                   display: 'inline-block',
                   padding: '6px 16px',
