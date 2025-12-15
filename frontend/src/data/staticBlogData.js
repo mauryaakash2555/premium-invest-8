@@ -451,7 +451,7 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions

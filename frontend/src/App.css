@@ -312,7 +312,7 @@ html {
   background-color: #000000 !important;
 }
 
-/* Remove leftover navy overlays */
+/* Remove leftover dark overlays */
 * {
   --bg-dark: #000000 !important;
   --theme-dark: #000000 !important;

@@ -288,7 +288,7 @@ async def seed_blog_data():
             return
 
         blog_1_content = """
-        <div style="background: #0A0A1A; color: #E5E5E5; font-family: 'Inter', sans-serif; line-height: 1.8;">
+        <div style="background: #000000; color: #E5E5E5; font-family: 'Inter', sans-serif; line-height: 1.8;">
             <article style="max-width: 900px; margin: 0 auto; padding: 40px 20px;">
                 <header style="margin-bottom: 40px;">
                     <h1 style="color: #DAA520; font-size: clamp(32px, 5vw, 48px); margin-bottom: 20px; line-height: 1.2;">

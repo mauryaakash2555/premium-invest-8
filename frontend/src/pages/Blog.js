@@ -3,7 +3,7 @@ import { Calendar, User, Tag, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { staticBlogPost } from '../data/staticBlogData';
+import { staticBlogPost, staticBlogData } from '../data/staticBlogData';
 import LazyImage from '../components/LazyImage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -21,8 +21,13 @@ const Blog = () => {
 
   const fetchBlogPosts = async () => {
     try {
-      // Show static blog immediately (no backend wait!)
-      setBlogPosts([staticBlogPost]);
+      // Ensure staticBlogData is an array and has content
+      const staticBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
+        ? staticBlogData 
+        : [staticBlogPost]; // Fallback to blog 1 if array is empty
+      
+      // Show all static blogs immediately (no backend wait!)
+      setBlogPosts(staticBlogs);
       setIsLoading(false);
       
       // Then try to fetch backend blogs in background (non-blocking)
@@ -31,15 +36,19 @@ const Blog = () => {
           timeout: 5000, // Reduced timeout - don't block if slow
         });
         const backendPosts = response.data || [];
-        const combinedPosts = [staticBlogPost, ...backendPosts.filter(post => post.slug !== staticBlogPost.slug)];
+        // Get all static blog slugs to avoid duplicates
+        const staticSlugs = staticBlogs.map(blog => blog.slug).filter(Boolean);
+        const uniqueBackendPosts = backendPosts.filter(post => post.slug && !staticSlugs.includes(post.slug));
+        // Combine: static blogs first, then backend blogs
+        const combinedPosts = [...staticBlogs, ...uniqueBackendPosts];
         setBlogPosts(combinedPosts);
       } catch (backendError) {
         console.warn('Backend blog fetch failed (using static only):', backendError);
-        // Keep static blog - already shown above
+        // Keep static blogs - already shown above
       }
     } catch (error) {
       console.error('Error loading blog posts:', error);
-      // Fallback: still show static blog
+      // Fallback: still show blog 1 at minimum
       setBlogPosts([staticBlogPost]);
       setIsLoading(false);
     }
@@ -218,7 +227,7 @@ const Blog = () => {
                 100% { background-position: 200% 0; }
               }
               .skeleton-shimmer {
-                background: linear-gradient(90deg, #1A1A2E 25%, #2A2A3E 50%, #1A1A2E 75%);
+                background: linear-gradient(90deg, #000000 25%, #0a0a0a 50%, #000000 75%);
                 background-size: 200% 100%;
                 animation: shimmer 1.5s infinite;
               }
@@ -241,7 +250,7 @@ const Blog = () => {
             }}>
               {[1, 2, 3].map((i) => (
                 <div key={i} style={{
-                  background: '#1A1A2E',
+                  background: '#000000',
                   borderRadius: '16px',
                   padding: '24px',
                   border: '1px solid rgba(218, 165, 32, 0.2)',

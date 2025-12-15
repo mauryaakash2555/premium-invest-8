@@ -4,7 +4,7 @@ import { Calendar, User, Tag, ArrowLeft, Clock } from 'lucide-react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
-import { staticBlogPost } from '../data/staticBlogData';
+import { staticBlogPost, staticBlogData } from '../data/staticBlogData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -20,9 +20,14 @@ const BlogDetail = () => {
     try {
       setIsLoading(true);
       
-      // Check if this is the static blog post first
-      if (slug === staticBlogPost.slug) {
-        setPost(staticBlogPost);
+      // Check if this is any static blog post first (check all static blogs)
+      const staticBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
+        ? staticBlogData 
+        : [staticBlogPost]; // Fallback to blog 1 if array is empty
+      
+      const foundStaticBlog = staticBlogs.find(blog => blog.slug === slug);
+      if (foundStaticBlog) {
+        setPost(foundStaticBlog);
         setError(null);
         setIsLoading(false);
         return;

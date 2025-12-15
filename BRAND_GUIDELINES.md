@@ -9,7 +9,6 @@
 
 ### Background Colors
 - **Deep Black:** `#000000` (Main background)
-- **Rich Navy:** `#0A0A1A` (Secondary background)
 
 ### Accent Colors
 - **Pearl White:** `#FFFFFF` (Primary text)
@@ -26,7 +25,7 @@
 
 ### Backgrounds
 - Primary: Deep Black (#000000)
-- Gradients: Black to Rich Navy (#000000 to #0A0A1A)
+- Gradients: Black (#000000)
 - Glass effects: rgba(255, 255, 255, 0.05)
 
 ### Text
