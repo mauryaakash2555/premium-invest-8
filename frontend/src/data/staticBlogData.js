@@ -1551,6 +1551,290 @@ export const staticBlogPost3 = {
   `
 };
 
+// --- BLOG 5: SIP vs Lump Sum Real Results ---
+export const staticBlogPost5 = {
+  id: "blog-5",
+  slug: "sip-vs-lump-sum-25-lakh-experiment",
+  title: "₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Real Result That Shocked Both",
+  author: "BM Wealth Editorial Team",
+  date: "February 5, 2025",
+  published_date: "2025-02-05",
+  readTime: "9 min read",
+  read_time: "9 minutes",
+  category: "Investment Education",
+  excerpt: "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
+  image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
+  tags: ["SIP vs lump sum", "investment timing Mumbai", "market timing myth", "bonus investment strategy"],
+  keywords: "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy",
+
+  content: `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Real Result That Shocked Both",
+    "description": "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
+    "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
+    "datePublished": "2025-02-05",
+    "dateModified": "2025-12-15",
+    "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+    "articleSection": "Investment Education",
+    "keywords": "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy"
+  }
+  </script>
+
+  <div style="margin-bottom: 40px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      March 15, 2020. Starbucks, Bandra Kurla Complex.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "Dude, the market is crashing. Should we wait to invest?"
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Arjun and Karan, both 35, software architects at different companies, had just received their annual bonuses: ₹25 lakh each. COVID-19 was spreading. Markets were in freefall. Nifty had dropped 30% in 3 weeks.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Arjun: "I'm going lump sum today. Markets are already down 30%. This is the bottom. Perfect entry point."
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Karan: "I'm not sure. What if it falls more? I'll do SIP—₹2 lakh per month for the next 12-13 months. Rupee cost averaging."
+    </p>
+    <p style="font-size: 18px; line-height: 2;">
+      Five years later, March 2025, same Starbucks. They compared portfolios.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      The 5-Year Results
+    </h2>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Arjun's Lump Sum Approach (March 16, 2020)
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Invested ₹25 lakh on March 16, 2020</li>
+        <li>Nifty level: 7,610 (near the bottom)</li>
+        <li>Portfolio allocation: 70% large cap, 30% mid cap</li>
+        <li>Current value (March 2025): ₹58.2 lakh</li>
+        <li>Absolute return: 133% over 5 years</li>
+        <li>CAGR: 18.4%</li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Karan's SIP Approach (March 2020 - March 2021)
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>₹2 lakh SIP per month for 12.5 months</li>
+        <li>Total invested: ₹25 lakh (completed by mid-March 2021)</li>
+        <li>Average Nifty level during SIPs: 11,850</li>
+        <li>Current value (March 2025): ₹52.3 lakh</li>
+        <li>Absolute return: 109% over deployment period</li>
+        <li>CAGR: 16.2%</li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+        <span style="position: relative; top: -3px;">₹</span>5,90,000
+      </p>
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
+        Difference after 5 years (₹58.2L vs ₹52.3L)
+      </p>
+    </div>
+
+    <p style="font-size: 19px; line-height: 2; margin-bottom: 20px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7); color: #C0A062; font-weight: 500;">
+      Arjun's lump sum at market bottom beat Karan's disciplined SIP by ₹5.9 lakh. But here's what they both learned...
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      The Real Lessons: Why Both Were Right
+    </h2>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        1. Arjun Got Lucky With Timing
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Arjun invested on March 16, 2020—just 8 days before the actual market bottom (March 24). Pure luck. If he'd invested on March 1 (before the crash), his returns would be lower. If he'd waited for "more clarity," he might have missed the bottom entirely.
+      </p>
+      <p style="font-size: 18px; line-height: 2;">
+        The March 2020 bottom was a once-in-decade event. It's impossible to time consistently. Arjun admits: "I got lucky. If this were February 2020, I'd have looked stupid for weeks."
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        2. Karan's Strategy Works in Normal Scenarios
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        SIP averages out volatility. Karan invested through March-April 2020 (bottom), May-Aug 2020 (recovery), and Sept 2020-March 2021 (steady rise). He caught some of the bottom, some of the middle, some of the top.
+      </p>
+      <p style="font-size: 18px; line-height: 2;">
+        In a sideways or gradually rising market, SIP performs excellently because you buy more units when price is low, fewer when high. Karan's 16.2% CAGR is still exceptional—most investors would be thrilled with it.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        3. The Psychological Factor
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Arjun: "I was terrified in April-May 2020. My portfolio showed -20% for weeks. I almost sold in panic. Only because I'd invested lump sum and didn't want to book a loss, I held on."
+      </p>
+      <p style="font-size: 18px; line-height: 2;">
+        Karan: "My SIPs continued automatically. Every month, ₹2 lakh went in. When markets fell, I felt good buying cheaper. When they rose, I felt validated. Psychologically, it was much easier."
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      What Should You Do?
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      The honest answer: It depends on your situation and psychology.
+    </p>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Choose Lump Sum If:
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You have a long investment horizon (10+ years) and can handle volatility</li>
+        <li>Markets have corrected significantly (20-30% down from recent highs)</li>
+        <li>You won't panic-sell during drawdowns</li>
+        <li>You understand you might see -15% to -20% in the first year</li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Choose SIP If:
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You're unsure about market levels (no clear correction or bottom)</li>
+        <li>You prefer psychological comfort of gradual deployment</li>
+        <li>You want to average out entry points over 12-24 months</li>
+        <li>You'd panic if you see immediate -20% after lump sum</li>
+      </ul>
+    </div>
+
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+      Both Arjun and Karan agree: The worst strategy is waiting on the sidelines for the "perfect time." That never comes.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "Is lump sum better than SIP?", "acceptedAnswer": {"@type": "Answer", "text": "Historically, lump sum outperforms SIP about 60-70% of the time in rising markets. However, SIP wins on psychological comfort and removes timing pressure. Choice depends on your risk tolerance and market conditions."}},
+      {"@type": "Question", "name": "How long should I run an SIP?", "acceptedAnswer": {"@type": "Answer", "text": "For lump sum amounts deployed via SIP: 12-24 months is typical. For regular monthly savings: continue as long as you're earning and investing. The power of SIP compounds over 10-20+ years."}},
+      {"@type": "Question", "name": "Should I wait for market correction to invest lump sum?", "acceptedAnswer": {"@type": "Answer", "text": "Timing corrections is extremely difficult. If markets feel overvalued, consider systematic transfer plan (STP)—park in liquid fund, transfer fixed amount monthly to equity. This way your money isn't idle while you deploy gradually."}},
+      {"@type": "Question", "name": "Can I do both lump sum and SIP?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many investors invest windfall/bonus as lump sum during corrections, while maintaining regular monthly SIPs for disciplined wealth creation. This combines opportunistic investing with systematic planning."}},
+      {"@type": "Question", "name": "What if I invested lump sum at the top?", "acceptedAnswer": {"@type": "Answer", "text": "With a 10+ year horizon, even investments at market peaks have historically recovered and delivered good returns. The key is not to panic-sell during the inevitable correction. Time in the market beats timing the market."}}
+    ]
+  }
+  </script>
+
+  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is lump sum better than SIP?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Historically, lump sum outperforms SIP about 60-70% of the time in rising markets because your money gets more time to compound. However, SIP wins on psychological comfort, removes timing pressure, and averages out volatility. Choice depends on your risk tolerance, investment horizon, and market conditions.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">How long should I run an SIP?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">For deploying a lump sum amount via SIP: 12-24 months is typical to average out entry points. For regular monthly savings from salary: continue as long as you're earning and have investment goals. The real power of SIP compounds over 10-20+ years of disciplined investing.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Should I wait for market correction to invest lump sum?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Timing corrections is extremely difficult—markets can stay overvalued for years or correct suddenly. If markets feel expensive, consider systematic transfer plan (STP)—park in liquid fund, transfer fixed amount monthly to equity. This way your money isn't idle while you deploy gradually.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I do both lump sum and SIP?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Absolutely yes. Many experienced investors invest windfall/bonus/inheritance as lump sum during major market corrections (20-30% down), while maintaining regular monthly SIPs from salary for disciplined wealth creation. This combines opportunistic investing with systematic long-term planning.</p>
+      </div>
+      <div style="margin-bottom: 0;">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What if I invested lump sum at the market top?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">With a 10+ year investment horizon, even investments made at market peaks (2000, 2008, 2020 highs) have historically recovered and delivered good returns. The key is not to panic-sell during the inevitable correction. Time in the market beats timing the market for long-term investors.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <a href="/blog/emergency-fund-12-months-mumbai" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Coming Next:</p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">Why 6 Months Emergency Fund Nearly Destroyed This Malad Family →</p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">COVID job loss. ₹12.3 lakh needed for 14 months. They had ₹4.8 lakh. The painful lesson Mumbai taught them.</p>
+    </div>
+  </a>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 45px; border-radius: 12px; border-left: 3px solid rgba(192, 160, 98, 0.6); margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 18px; color: rgba(192, 160, 98, 0.95);">Get a Free Educational Consultation</h2>
+    <p style="font-size: 19px; margin-bottom: 32px; color: #E5E5E5; font-weight: 400;">Plan Your Investment Strategy</p>
+    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 18px; color: #E5E5E5;">We'll help you understand:</p>
+    <div style="margin-bottom: 32px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ When to use lump sum vs SIP for your situation</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ How to deploy windfalls (bonus, inheritance) wisely</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ Systematic transfer plans (STP) for gradual deployment</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5;">✓ Asset allocation appropriate for your goals and timeline</p>
+    </div>
+    <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
+      <div style="margin-bottom: 20px;">
+        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp: +91 88509 77259
+        </a>
+      </div>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;"><a href="/services" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Contact Us</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002</p>
+      <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. Case studies are based on real situations but anonymized. Returns mentioned are based on actual market data but past performance is not indicative of future results.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds and equity markets are subject to market risks. Returns can vary significantly based on market conditions, timing, and specific fund selection. SIP does not guarantee profits or protect against losses in declining markets.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory and mutual fund distribution. We are NOT <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">SEBI</a> registered investment advisors (RIA) and do not provide portfolio management or personalized investment advice.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Due Diligence:</strong> Please read all scheme-related documents carefully before investing. Understand the risk-return profile of investment products. Consult with a qualified financial advisor to assess suitability based on your specific financial situation.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;"><strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. Market timing is impossible to predict consistently. Investment decisions should be based on financial goals, risk tolerance, and time horizon, not on attempts to time the market.</p>
+  </div>
+
+  <div style="border-top: 1px solid rgba(192, 160, 98, 0.15); padding-top: 35px; margin-top: 50px;">
+    <p style="font-size: 14px; color: rgba(192, 160, 98, 0.8); font-weight: 500; margin-bottom: 8px;">BM Wealth Editorial Note</p>
+    <p style="font-size: 14px; line-height: 1.7; color: rgba(229, 229, 229, 0.6);">This article is part of our Investment Education series. All case studies are anonymized to protect privacy. Reading time: 9 minutes.</p>
+  </div>
+  `
+};
+
 
 // =======================
 // EXPORT ALL BLOGS IN ARRAY
@@ -1835,4 +2119,5 @@ export const staticBlogData = [
   staticBlogPost2,
   staticBlogPost3,
   staticBlogPost4,
+  staticBlogPost5,
 ];
