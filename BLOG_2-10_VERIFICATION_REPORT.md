@@ -9,6 +9,10 @@
 - Blog 1 remains unchanged
 - JSON structure is valid and ready for production
 
+## Methodology Note
+
+Word counts are approximate and calculated by counting whitespace-separated tokens in the blog content. Actual word counts may vary slightly depending on the counting method used. All counts are rounded to the nearest whole number.
+
 ## Detailed Verification Results
 
 ### Blog 2: Retirement Shortfall Case Study
@@ -124,7 +128,7 @@
 ### Length Variation
 - Shortest: Blog 4 (~2,410 words)
 - Longest: Blog 3 (~3,336 words)
-- Range: 2,410 - 3,336 words
+- Range: ~2,410 - ~3,336 words
 - Average: ~2,928 words
 - **Status:** ✓ Good variety within 2000-3800 word range
 
@@ -227,7 +231,7 @@ The `staticBlogData.js` file contains all required blogs and meets all acceptanc
 2. ✅ Human-written voice (specific details, dialogue, emotions)
 3. ✅ SEBI-compliant language throughout
 4. ✅ Complete schema markup (Article + FAQ with 5 questions each)
-5. ✅ Varied lengths (2,400-3,400 words)
+5. ✅ Varied lengths (~2,410-~3,336 words)
 6. ✅ Different Mumbai localities across posts
 7. ✅ Unique, non-similar titles
 8. ✅ Blog 1 unchanged and protected
