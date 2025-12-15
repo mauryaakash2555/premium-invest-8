@@ -140,7 +140,7 @@ const Blog = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '50vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -205,7 +205,7 @@ const Blog = () => {
       <section className="section-container">
         {isLoading ? (
           <div style={{
-            minHeight: '50vh',
+            minHeight: '70vh',
             background: '#000000',
             padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px)',
             maxWidth: '1200px',

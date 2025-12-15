@@ -30,7 +30,7 @@ const About = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '60vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
