@@ -18,10 +18,11 @@ const Footer = () => {
       >
         {/* Main Footer Content */}
         <div
+          className="footer-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '40px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '50px',
             marginBottom: '40px',
           }}
         >
@@ -33,16 +34,18 @@ const Footer = () => {
                 fontSize: '24px',
                 color: '#DAA520',
                 marginBottom: '16px',
+                fontWeight: 600,
               }}
             >
               BM Wealth
             </h3>
             <p
               style={{
-                color: '#C0A062',
+                color: '#FFFFFF',
                 fontSize: '14px',
-                lineHeight: '1.6',
+                lineHeight: '1.8',
                 marginBottom: '12px',
+                fontWeight: 500,
               }}
             >
               Premium Financial Advisory
@@ -51,7 +54,8 @@ const Footer = () => {
               style={{
                 color: '#CCCCCC',
                 fontSize: '14px',
-                lineHeight: '1.6',
+                lineHeight: '1.8',
+                margin: 0,
               }}
             >
               Empowering investors with tailored financial solutions in Mumbai.
@@ -70,17 +74,24 @@ const Footer = () => {
             >
               Quick Links
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <Link
                 to="/"
                 style={{
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Home
               </Link>
@@ -90,10 +101,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 About Us
               </Link>
@@ -103,10 +121,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Services
               </Link>
@@ -116,10 +141,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Blog
               </Link>
@@ -129,10 +161,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Contact
               </Link>
@@ -151,17 +190,24 @@ const Footer = () => {
             >
               Legal
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <Link
                 to="/terms-and-conditions"
                 style={{
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Terms & Conditions
               </Link>
@@ -171,10 +217,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Privacy Policy
               </Link>
@@ -184,10 +237,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Disclaimer
               </Link>
@@ -197,10 +257,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Refund Policy
               </Link>
@@ -210,10 +277,17 @@ const Footer = () => {
                   color: '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  lineHeight: '1.6',
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                  e.target.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.transform = 'translateX(0)';
+                }}
               >
                 Compliance
               </Link>
@@ -232,14 +306,14 @@ const Footer = () => {
             >
               Contact Us
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Phone: +91 8850977259
               </p>
-              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>
+              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Email: support@bmwealth.co.in
               </p>
-              <p style={{ color: '#CCCCCC', fontSize: '13px', marginTop: '4px' }}>
+              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Mumbai, Maharashtra
               </p>
               <a
@@ -247,17 +321,24 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '8px',
                   textDecoration: 'none',
                   color: '#25D366',
                   fontSize: '14px',
-                  marginTop: '8px',
-                  transition: 'color 0.3s ease',
+                  marginTop: '4px',
+                  transition: 'all 0.3s ease',
+                  fontWeight: 500,
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#20B858')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#25D366')}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#20B858';
+                  e.currentTarget.style.transform = 'translateX(2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#25D366';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
               >
                 <MessageCircle size={16} />
                 WhatsApp Us

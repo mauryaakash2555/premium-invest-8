@@ -364,6 +364,12 @@ input, textarea, select {
     margin-bottom: 20px;
   }
   
+  /* Footer grid - responsive */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 30px !important;
+  }
+  
   /* Hero sections - reduce height on mobile */
   section[style*="minHeight"] {
     min-height: 40vh !important;
@@ -403,6 +409,13 @@ input, textarea, select {
 }
 
 /* Small phones (iPhone SE, etc.) */
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+}
+
 @media (max-width: 375px) {
   .section-container {
     padding: 30px 12px !important;
