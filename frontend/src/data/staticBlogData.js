@@ -626,14 +626,14 @@ export const staticBlogPost2 = {
   slug: "retirement-shortfall-case-study",
   title: "He Did Everything Right. Still ₹2.85 Crore Short - A Mumbai Retirement Reality Check",
   author: "BM Wealth Editorial Team",
-  date: "January 15, 2025",
-  published_date: "2025-01-15",
+  date: "December 8, 2025",
+  published_date: "2025-12-08",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Saturday morning retirement calculator shock: A 52-year-old Marketing Head discovers a ₹2.85 crore retirement gap. Why good salary and regular savings weren't enough.",
-  image: "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Retirement planning Mumbai - luxury retirement lifestyle peaceful sunset",
   tags: ["retirement planning Mumbai", "retirement corpus India", "retirement shortfall", "financial planning 50s"],
   keywords: "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s",
@@ -659,7 +659,7 @@ export const staticBlogPost2 = {
     },
     "datePublished": "2025-01-15",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s"
   }
@@ -934,7 +934,7 @@ export const staticBlogPost2 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -1095,14 +1095,14 @@ export const staticBlogPost3 = {
   slug: "insurance-investment-mix-trap-31-lakh",
   title: "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
   author: "BM Wealth Editorial Team",
-  date: "January 22, 2025",
-  published_date: "2025-01-22",
+  date: "December 10, 2025",
+  published_date: "2025-12-10",
   readTime: "10 min read",
   read_time: "10 minutes",
   category: "Investment Education",
   excerpt: "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
   tags: ["insurance investment mix", "endowment policy trap", "ULIP vs mutual funds Mumbai", "financial advisor mistakes"],
   keywords: "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes",
@@ -1128,7 +1128,7 @@ export const staticBlogPost3 = {
     },
     "datePublished": "2025-01-22",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes"
   }
@@ -1397,7 +1397,7 @@ export const staticBlogPost3 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -1557,14 +1557,14 @@ export const staticBlogPost5 = {
   slug: "sip-vs-lump-sum-25-lakh-experiment",
   title: "₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Real Result That Shocked Both",
   author: "BM Wealth Editorial Team",
-  date: "February 5, 2025",
-  published_date: "2025-02-05",
+  date: "December 11, 2025",
+  published_date: "2025-12-11",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
-  image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
   tags: ["SIP vs lump sum", "investment timing Mumbai", "market timing myth", "bonus investment strategy"],
   keywords: "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy",
@@ -1580,7 +1580,7 @@ export const staticBlogPost5 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-05",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy"
   }
@@ -1755,7 +1755,7 @@ export const staticBlogPost5 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
     <div style="max-width: 800px; margin: 0 auto;">
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
@@ -1842,14 +1842,14 @@ export const staticBlogPost4 = {
   slug: "tax-planning-beyond-80c-mumbai",
   title: "How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C",
   author: "BM Wealth Editorial Team",
-  date: "January 29, 2025",
-  published_date: "2025-01-29",
+  date: "December 12, 2025",
+  published_date: "2025-12-12",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
-  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
   tags: ["tax planning beyond 80C", "Mumbai tax saving", "software engineer taxes India", "NPS tax benefit"],
   keywords: "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit",
@@ -1865,7 +1865,7 @@ export const staticBlogPost4 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-01-29",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit"
   }
@@ -2018,7 +2018,7 @@ export const staticBlogPost4 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
     <div style="max-width: 800px; margin: 0 auto;">
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
@@ -2104,14 +2104,14 @@ export const staticBlogPost6 = {
   slug: "emergency-fund-12-months-mumbai",
   title: "Why 6 Months Emergency Fund Nearly Destroyed This Malad Family",
   author: "BM Wealth Editorial Team",
-  date: "February 12, 2025",
-  published_date: "2025-02-12",
+  date: "December 13, 2025",
+  published_date: "2025-12-13",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
-  image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
   tags: ["emergency fund Mumbai", "COVID job loss India", "financial safety net", "Mumbai living costs"],
   keywords: "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs",
@@ -2127,7 +2127,7 @@ export const staticBlogPost6 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-12",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
     "articleSection": "Investment Education",
     "keywords": "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs"
   }
@@ -2367,7 +2367,7 @@ export const staticBlogPost6 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -2527,14 +2527,14 @@ export const staticBlogPost7 = {
   slug: "elss-ppf-nps-comparison-20-years",
   title: "₹1.5 Lakh Annually for 20 Years: ELSS vs PPF vs NPS - The Real Results",
   author: "BM Wealth Editorial Team",
-  date: "February 19, 2025",
-  published_date: "2025-02-19",
+  date: "December 14, 2025",
+  published_date: "2025-12-14",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
-  image: "https://images.unsplash.com/photo-1610375461246-83df859d849d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1610375461246-83df859d849d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Gold bars wealth comparison premium investment instruments analysis",
   tags: ["ELSS vs PPF", "NPS comparison India", "tax saving investments 80C", "retirement corpus building Mumbai"],
   keywords: "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai",
@@ -2550,7 +2550,7 @@ export const staticBlogPost7 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-19",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1610375461246-83df859d849d",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai"
   }
@@ -2780,7 +2780,7 @@ export const staticBlogPost7 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -2936,14 +2936,14 @@ export const staticBlogPost8 = {
   slug: "1-crore-retirement-corpus-enough-mumbai",
   title: "₹1 Crore Retirement Corpus: The Mumbai Reality That Shocked Him",
   author: "BM Wealth Editorial Team",
-  date: "February 26, 2025",
-  published_date: "2025-02-26",
+  date: "December 15, 2025",
+  published_date: "2025-12-15",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
-  image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury retirement villa peaceful lifestyle Mumbai retirement planning reality",
   tags: ["1 crore retirement Mumbai", "retirement corpus reality", "post retirement planning India", "Mumbai retirement costs"],
   keywords: "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs",
@@ -2959,7 +2959,7 @@ export const staticBlogPost8 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-26",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
     "articleSection": "Investment Education",
     "keywords": "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs"
   }
@@ -3163,7 +3163,7 @@ export const staticBlogPost8 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -3319,14 +3319,14 @@ export const staticBlogPost9 = {
   slug: "real-estate-vs-mutual-funds-15-year-comparison",
   title: "₹60 Lakh in 2010: Real Estate vs Mutual Funds - The 15-Year Verdict",
   author: "BM Wealth Editorial Team",
-  date: "March 5, 2025",
-  published_date: "2025-03-05",
+  date: "December 16, 2025",
+  published_date: "2025-12-16",
   readTime: "10 min read",
   read_time: "10 minutes",
   category: "Investment Education",
   excerpt: "Two brothers inherit ₹60L in 2010. One buys Thane flat (₹3.43 Cr today). One invests in mutual funds (₹4.25 Cr). The detailed math reveals everything.",
-  image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
   tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
   keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
@@ -3342,7 +3342,7 @@ export const staticBlogPost9 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-03-05",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa",
+    "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
     "articleSection": "Investment Education",
     "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years"
   }
@@ -3588,7 +3588,7 @@ export const staticBlogPost9 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -3744,14 +3744,14 @@ export const staticBlogPost10 = {
   slug: "gold-investment-physical-digital-sgb-comparison",
   title: "Grandmother's 400g Gold: Physical vs Digital Gold vs SGB - The Analysis",
   author: "BM Wealth Editorial Team",
-  date: "March 12, 2025",
-  published_date: "2025-03-12",
+  date: "December 17, 2025",
+  published_date: "2025-12-17",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
-  image: "https://images.unsplash.com/photo-1610375461246-83df859d849d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1610375461246-83df859d849d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Elegant gold jewelry bars luxury investment precious metals Mumbai wealth",
   tags: ["gold investment India", "sovereign gold bonds SGB", "digital gold vs physical", "gold investment options Mumbai"],
   keywords: "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai",
@@ -3767,7 +3767,7 @@ export const staticBlogPost10 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-03-12",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1610375461246-83df859d849d",
+    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
     "articleSection": "Investment Education",
     "keywords": "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai"
   }
@@ -4067,7 +4067,7 @@ export const staticBlogPost10 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
@@ -4235,3 +4235,4 @@ export const staticBlogData = [
   staticBlogPost9,
   staticBlogPost10,
 ];
+
