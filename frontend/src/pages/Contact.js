@@ -71,20 +71,24 @@ const Contact = () => {
       }
       
       // Send form data with optional reCAPTCHA token - Render backend
-      // Try with extended timeout and better error handling
-      try {
-        await axios.post(`${API}/contact`, {
-          ...formData,
-          recaptcha_token: recaptchaToken // null if not available
-        }, {
-          timeout: 60000, // 60 second timeout - handles backend cold start on Render
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } catch (apiError) {
-        // Re-throw to be caught by outer catch block
-        throw apiError;
+      // Optimized timeout with faster failure for better UX
+      const response = await axios.post(`${API}/contact`, {
+        ...formData,
+        recaptcha_token: recaptchaToken // null if not available
+      }, {
+        timeout: 30000, // 30 second timeout - faster failure for better UX
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        validateStatus: function (status) {
+          // Accept 200-299 as success, everything else as error
+          return status >= 200 && status < 300;
+        },
+      });
+      
+      // Verify response is successful
+      if (!response.data || !response.data.success) {
+        throw new Error('Form submission failed');
       }
       
       // Clear form immediately on success
@@ -640,55 +644,52 @@ const Contact = () => {
                 <div 
                   data-whatsapp-fallback
                   style={{ 
-                  marginTop: '24px', 
-                  textAlign: 'center', 
-                  padding: '20px 24px', 
-                  background: 'rgba(37, 211, 102, 0.08)', 
-                  borderRadius: '12px', 
-                  border: '2px solid rgba(37, 211, 102, 0.3)',
-                  animation: 'fadeIn 0.3s ease-in'
-                }}>
+                    marginTop: '24px', 
+                    textAlign: 'center', 
+                    padding: '16px 20px', 
+                    background: 'rgba(255, 255, 255, 0.02)', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(192, 160, 98, 0.3)',
+                    animation: 'fadeIn 0.3s ease-in'
+                  }}
+                >
                   <p style={{ 
-                    color: '#25D366', 
-                    marginBottom: '12px', 
-                    fontSize: '15px',
-                    fontWeight: '500'
+                    color: '#C0A062', 
+                    marginBottom: '10px', 
+                    fontSize: '14px',
+                    fontWeight: '400'
                   }}>
-                    Having trouble sending? Contact us directly via WhatsApp
+                    Having trouble? Try WhatsApp
                   </p>
                   <a 
                     href="https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '10px',
-                      padding: '12px 24px',
-                      background: '#25D366',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      borderRadius: '8px',
+                      gap: '8px',
+                      padding: '10px 20px',
+                      background: 'transparent',
+                      color: '#C0A062',
+                      border: '1px solid rgba(192, 160, 98, 0.4)',
+                      borderRadius: '6px',
                       textDecoration: 'none',
-                      fontWeight: '600',
-                      fontSize: '16px',
+                      fontWeight: '500',
+                      fontSize: '14px',
                       transition: 'all 0.3s ease',
-                      boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#20bd5a';
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.4)';
+                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.6)';
+                      e.currentTarget.style.background = 'rgba(192, 160, 98, 0.05)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#25D366';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(37, 211, 102, 0.3)';
+                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
+                      e.currentTarget.style.background = 'transparent';
                     }}
                   >
-                    <MessageCircle size={20} />
-                    Chat on WhatsApp
+                    <MessageCircle size={16} />
+                    Contact via WhatsApp
                   </a>
                 </div>
               )}
