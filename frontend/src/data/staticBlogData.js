@@ -1089,6 +1089,469 @@ export const staticBlogPost2 = {
 };
 
 
+// --- BLOG 3: Insurance-Investment Mix Trap ---
+export const staticBlogPost3 = {
+  id: "blog-3",
+  slug: "insurance-investment-mix-trap-31-lakh",
+  title: "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
+  author: "BM Wealth Editorial Team",
+  date: "January 22, 2025",
+  published_date: "2025-01-22",
+  readTime: "10 min read",
+  read_time: "10 minutes",
+  category: "Investment Education",
+  excerpt: "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_alt: "Mumbai corporate office premium workspace financial planning professional",
+  tags: ["insurance investment mix", "endowment policy trap", "ULIP vs mutual funds Mumbai", "financial advisor mistakes"],
+  keywords: "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes",
+
+  content: `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
+    "description": "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+    "author": {
+      "@type": "Organization",
+      "name": "BM Wealth Editorial Team"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "BM Wealth",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://bmwealth.co.in/logo.png"
+      }
+    },
+    "datePublished": "2025-01-22",
+    "dateModified": "2025-12-15",
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
+    "articleSection": "Investment Education",
+    "keywords": "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes"
+  }
+  </script>
+
+  <div style="margin-bottom: 40px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Tuesday afternoon, 3:42 PM. A CA office in Fort, Mumbai.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "Sir, should I continue this endowment policy my father bought for me?"
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Rajesh, 43, a Chartered Accountant with his own practice in Ghatkopar, pulled out the policy document. A 20-year traditional endowment plan bought in 2008. Premium: ₹50,000 per year. "Guaranteed returns" promised.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      He started analyzing the numbers for his client. Maturity value projected: ₹18.5 lakh after 20 years. Total premiums paid: ₹10 lakh.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Then he pulled out a calculator. If the same ₹50,000 annually had been invested in a diversified equity mutual fund averaging 12% returns...
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      The number stopped him cold: ₹40.38 lakh.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      The difference? ₹21.88 lakh. But that's not the full story.
+    </p>
+    <p style="font-size: 18px; line-height: 2;">
+      Rajesh went home that evening. Opened his drawer. Pulled out his own endowment policy. Same company. Almost identical terms. 15 years into a 20-year policy.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      The Calculation That Changed Everything
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Rajesh sat at his dining table. His wife, Priya, noticed he'd been quiet since coming home.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      He'd been paying ₹85,000 per year into this policy for 15 years. Total invested: ₹12.75 lakh. Maturity value in 5 more years: ₹23.4 lakh.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Effective return: About 5.2% per annum.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      If that same ₹85,000 annually had been invested in a balanced equity portfolio averaging 11% over 20 years, it would have grown to approximately ₹55.08 lakh.
+    </p>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+        <span style="position: relative; top: -3px;">₹</span>31,68,000
+      </p>
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
+        Opportunity cost in 20 years
+      </p>
+    </div>
+    <p style="font-size: 19px; line-height: 2; margin-bottom: 20px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7); color: #C0A062; font-weight: 500;">
+      A Chartered Accountant. Someone who advises clients on financial matters daily. Lost ₹31.68 lakh in his own portfolio.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      Why Smart People Fall for This
+    </h2>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        1. The "Guaranteed Returns" Illusion
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        When Rajesh bought the policy at 28, fresh from clearing his CA exams, the agent emphasized: "Guaranteed maturity benefit. No market risk. Tax-free returns under Section 10(10D)."
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        What the agent didn't mention clearly:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>The "guaranteed" 5-6% returns barely beat inflation</li>
+        <li>Huge policy charges and commissions eating into the corpus</li>
+        <li>Lock-in period of 20 years with severe penalties for early exit</li>
+        <li>Inflation risk—₹23 lakh in 2028 won't have the same purchasing power as ₹23 lakh in 2008</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        The word "guaranteed" creates a false sense of security that prevents proper financial analysis.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        2. Mixing Insurance with Investment
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        The policy also provided life cover of ₹5 lakh. Sounds good? Not really.
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        The same ₹85,000 annual premium could have been split:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li><strong style="color: #DAA520;">₹12,000/year:</strong> ₹1 crore term insurance (proper family protection)</li>
+        <li><strong style="color: #DAA520;">₹73,000/year:</strong> Diversified mutual fund SIPs</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Result over 20 years:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Life cover: ₹1 crore (vs ₹5 lakh)</li>
+        <li>Investment corpus: ₹47.3 lakh (vs ₹23.4 lakh)</li>
+        <li>Flexibility: Can withdraw/rebalance anytime (vs locked for 20 years)</li>
+      </ul>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        3. The Sunk Cost Fallacy
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        When Rajesh discovered this in year 15, he faced a painful decision: Should he continue for 5 more years or stop now and redirect funds?
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        His initial reaction: "I've already paid for 15 years. Just 5 more to go. Let me complete it."
+      </p>
+      <p style="font-size: 18px; line-height: 2;">
+        This is the sunk cost fallacy—making future decisions based on past investments rather than future returns. The ₹12.75 lakh already paid is gone. The question is: Should he continue paying ₹85,000/year for the next 5 years for suboptimal returns?
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      What He Did After Discovery
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      After analyzing the numbers thoroughly, Rajesh made these decisions:
+    </p>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Decision 1: Continue The Policy to Maturity
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        With only 5 years left and ₹12.75 lakh already invested, surrendering would trigger significant penalties. The surrender value was only ₹9.8 lakh—a loss of ₹2.95 lakh immediately.
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        He decided to continue the policy but treated it as a lesson learned, not an investment to be proud of.
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Decision 2: Bought Proper Term Insurance
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        Purchased ₹1.5 crore term insurance for ₹18,000/year. At 43, with wife and two kids, this was essential family protection the endowment policy never provided.
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Decision 3: Started Proper Investment Strategy
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 8px;">
+        Started SIPs totaling ₹50,000/month in diversified equity and debt mutual funds:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>₹30,000 in equity funds (large cap + mid cap)</li>
+        <li>₹15,000 in hybrid/balanced funds</li>
+        <li>₹5,000 in debt funds for short-term goals</li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Decision 4: Changed His Client Advisory Approach
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Most importantly, Rajesh now actively reviews all insurance-cum-investment products when preparing clients' financial statements. He educates them about the separation of insurance and investment—even though he learned this lesson the hard way himself.
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      What This Means for You
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      If a Chartered Accountant can make this mistake, anyone can. The insurance-investment mix trap is designed to be appealing:
+    </p>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        → Do you have any ULIP, endowment, or money-back policies?
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        → Have you calculated the actual returns on these policies?
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        → Is your life insurance coverage adequate for your family's needs?
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        → Could separating insurance and investment work better for you?
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        → Are you continuing a policy just because you've "already paid so much"?
+      </p>
+    </div>
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+      Sometimes the best financial decision is admitting a past mistake and fixing the future strategy.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Should I surrender my endowment policy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on how many years remain. If you're close to maturity (3-5 years left), continuing might make sense despite low returns. If you have 10+ years remaining, calculate surrender value vs opportunity cost. Consult a fee-based advisor for unbiased analysis."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's wrong with ULIP policies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ULIPs combine insurance and investment, but typically do both poorly. High charges eat into returns. Life cover is often inadequate. Lock-in periods restrict flexibility. Separating term insurance and mutual funds usually works better for most people."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much term insurance do I actually need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A common rule: 10-15 times your annual income. Consider family expenses, liabilities (home loan, etc.), children's education needs, and spouse's earning capacity. For Mumbai, with higher costs, err on the higher side. ₹1-2 crore is typical for middle-class families."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I have both term insurance and investment policies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can, but it's usually not optimal. Term insurance provides maximum cover at lowest cost. For investment, mutual funds offer better returns, transparency, and flexibility. Keeping them separate gives you control over both protection and wealth creation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What should I do if my agent sold me these policies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Get an independent second opinion. Calculate actual returns. Compare with alternatives. If the product truly doesn't fit your needs, explore options—some policies become paid-up after 3 years, reducing future premium burden while maintaining some benefits. Don't make decisions based on loyalty to the agent."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+      Frequently Asked Questions
+    </h2>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          Should I surrender my endowment policy?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          It depends on how many years remain. If you're close to maturity (3-5 years left), continuing might make sense despite low returns, as surrender penalties can be steep. If you have 10+ years remaining, calculate surrender value vs opportunity cost of continuing. Consult a fee-based advisor for unbiased analysis specific to your situation.
+        </p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          What's wrong with ULIP policies?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          ULIPs combine insurance and investment, but typically do both poorly. High policy administration charges and fund management fees eat into returns. Life cover is often inadequate for family needs. 5-year lock-in periods restrict flexibility. Separating term insurance (for protection) and mutual funds (for investment) usually works better for most people—lower costs, better returns, more control.
+        </p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          How much term insurance do I actually need?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          A common rule: 10-15 times your annual income. Consider family monthly expenses, outstanding liabilities (home loan, etc.), children's education needs, and spouse's earning capacity. For Mumbai, with higher living costs, err on the higher side. ₹1-2 crore is typical for middle-class families; ₹2-5 crore for higher-income households.
+        </p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          Can I have both term insurance and investment policies?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          You can, but it's usually not optimal from a wealth creation perspective. Term insurance provides maximum coverage at lowest cost. For investment, mutual funds offer better potential returns, complete transparency, and flexibility. Keeping them separate gives you control over both protection and wealth creation independently.
+        </p>
+      </div>
+      <div style="margin-bottom: 0;">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          What should I do if my agent sold me these policies?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          Get an independent second opinion from a fee-based advisor. Calculate actual IRR (internal rate of return). Compare with alternative strategies. If the product truly doesn't fit your needs, explore options—some policies become paid-up after 3 premium years, reducing future premium burden while maintaining partial benefits. Don't make decisions based on loyalty to the agent or fear of admitting a mistake.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <a href="/blog/tax-planning-beyond-80c-mumbai" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
+        Coming Next:
+      </p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+        How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C →
+      </p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
+        The March 30 panic vs. the colleague who planned ahead. The difference? ₹2.2 lakh annually.
+      </p>
+    </div>
+  </a>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 45px; border-radius: 12px; border-left: 3px solid rgba(192, 160, 98, 0.6); margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 18px; color: rgba(192, 160, 98, 0.95);">
+      Get a Free Educational Consultation
+    </h2>
+    <p style="font-size: 19px; margin-bottom: 32px; color: #E5E5E5; font-weight: 400;">
+      Review Your Insurance and Investment Products
+    </p>
+
+    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 18px; color: #E5E5E5;">
+      We'll help you understand:
+    </p>
+
+    <div style="margin-bottom: 32px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
+        ✓ Actual returns on your existing insurance-investment policies
+      </p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
+        ✓ Whether your life insurance coverage is adequate
+      </p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">
+        ✓ Benefits of separating insurance and investment
+      </p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5;">
+        ✓ Alternative strategies that might work better for your goals
+      </p>
+    </div>
+
+    <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
+      <div style="margin-bottom: 20px;">
+        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp: +91 88509 77259
+        </a>
+      </div>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a>
+      </p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        <a href="/services" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Contact Us</a>
+      </p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
+        Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002
+      </p>
+      <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">
+        IRDAI Licensed (277925) | AMFI Registered (ARN 90008)
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+      Important Disclaimers & Regulatory Information:
+    </h3>
+
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. The case study mentioned is based on a real situation but has been anonymized—names, specific amounts, and certain details have been modified to protect client privacy.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory services and mutual fund distribution. We are NOT <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">SEBI</a> registered investment advisors (RIA) and do not provide portfolio management services, stock recommendations, or personalized investment advice requiring SEBI RIA registration.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
+      <strong style="color: #C0A062;">Due Diligence:</strong> Please read all scheme-related documents carefully before investing. Understand the risk-return profile of investment products. Consult with a qualified financial advisor to assess suitability based on your specific financial situation, goals, and risk tolerance before making any investment decisions.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. Opportunity cost calculations and return comparisons presented are illustrative based on historical market data. Individual results may differ significantly based on specific circumstances, timing, product selection, and actual market conditions.
+    </p>
+  </div>
+
+  <div style="border-top: 1px solid rgba(192, 160, 98, 0.15); padding-top: 35px; margin-top: 50px;">
+    <p style="font-size: 14px; color: rgba(192, 160, 98, 0.8); font-weight: 500; margin-bottom: 8px;">
+      BM Wealth Editorial Note
+    </p>
+    <p style="font-size: 14px; line-height: 1.7; color: rgba(229, 229, 229, 0.6);">
+      This article is part of our Investment Education series. All case studies are anonymized to protect client privacy. Reading time: 10 minutes.
+    </p>
+  </div>
+  `
+};
+
+
 // =======================
 // EXPORT ALL BLOGS IN ARRAY
 // =======================
@@ -1096,4 +1559,5 @@ export const staticBlogPost2 = {
 export const staticBlogData = [
   staticBlogPost,
   staticBlogPost2,
+  staticBlogPost3,
 ];
