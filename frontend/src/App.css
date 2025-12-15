@@ -204,7 +204,7 @@ h1, h2, h3, h4, h5, h6 {
 .footer-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 30px;
+  gap: 20px;
   margin-bottom: 40px;
   align-items: flex-start;
 }
@@ -212,14 +212,14 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 640px) {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
+    gap: 20px;
   }
 }
 
 @media (min-width: 1024px) {
   .footer-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    gap: 20px;
   }
 }
 

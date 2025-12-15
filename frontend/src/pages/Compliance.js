@@ -101,31 +101,34 @@ const Compliance = () => {
       <section className="section-container" style={{
         maxWidth: '900px',
         margin: '0 auto',
-        padding: 'clamp(20px, 5vw, 60px)',
+        padding: 'clamp(20px, 5vw, 60px) clamp(20px, 4vw, 20px)',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(15px, 3vw, 20px)', marginBottom: '30px', flexWrap: 'wrap' }}>
             <div
               style={{
-                width: '60px',
-                height: '60px',
+                width: 'clamp(50px, 8vw, 60px)',
+                height: 'clamp(50px, 8vw, 60px)',
                 background: 'rgba(218, 165, 32, 0.1)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#DAA520',
+                flexShrink: 0
               }}
             >
-              <Shield size={32} />
+              <Shield size={32} style={{ width: 'clamp(24px, 5vw, 32px)', height: 'clamp(24px, 5vw, 32px)' }} />
             </div>
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 color: '#DAA520',
                 margin: 0,
+                flex: 1,
+                minWidth: '200px'
               }}
             >
               Investor Charter
@@ -383,7 +386,10 @@ const Compliance = () => {
                 borderLeft: '4px solid #DAA520',
                 fontSize: 'clamp(16px, 3.5vw, 18px)',
                 wordWrap: 'break-word',
-                overflowWrap: 'break-word'
+                overflowWrap: 'break-word',
+                width: '100%',
+                boxSizing: 'border-box',
+                textAlign: 'left'
               }}
             >
               <strong>IRDAI License Number:</strong> 277925
@@ -400,27 +406,30 @@ const Compliance = () => {
         </div>
 
         {/* Grievance Redressal Section */}
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(15px, 3vw, 20px)', marginBottom: '30px', flexWrap: 'wrap' }}>
             <div
               style={{
-                width: '60px',
-                height: '60px',
+                width: 'clamp(50px, 8vw, 60px)',
+                height: 'clamp(50px, 8vw, 60px)',
                 background: 'rgba(218, 165, 32, 0.1)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#DAA520',
+                flexShrink: 0
               }}
             >
-              <FileText size={32} />
+              <FileText size={32} style={{ width: 'clamp(24px, 5vw, 32px)', height: 'clamp(24px, 5vw, 32px)' }} />
             </div>
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 color: '#DAA520',
                 margin: 0,
+                flex: 1,
+                minWidth: '200px'
               }}
             >
               Grievance Redressal Mechanism
@@ -456,17 +465,17 @@ const Compliance = () => {
               Step 1: Contact Us Directly
             </h4>
             <div style={{ marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
-                <Phone size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
-                <span>Phone: +91 8850977259</span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                <Phone size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
+                <span style={{ flex: 1 }}>Phone: +91 8850977259</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
-                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
-                <span>Email: mauryaakash2555@gmail.com</span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
+                <span style={{ flex: 1 }}>Email: mauryaakash2555@gmail.com</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
-                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0 }} />
-                <span>Grievance Email: grievance@bmwealth.co.in</span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
+                <span style={{ flex: 1 }}>Grievance Email: grievance@bmwealth.co.in</span>
               </div>
             </div>
 
@@ -550,10 +559,14 @@ const Compliance = () => {
             </p>
             <div
               style={{
-                padding: '20px',
+                padding: 'clamp(16px, 3vw, 20px)',
                 background: 'rgba(255, 255, 255, 0.05)',
                 borderRadius: '8px',
                 marginBottom: '20px',
+                width: '100%',
+                boxSizing: 'border-box',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               <strong style={{ color: '#DAA520' }}>AMFI Complaints</strong>
@@ -628,15 +641,18 @@ const Compliance = () => {
             <div
               style={{
                 marginTop: '30px',
-                padding: '20px',
+                padding: 'clamp(16px, 3vw, 20px)',
                 background: 'rgba(218, 165, 32, 0.1)',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '15px',
+                gap: 'clamp(12px, 2vw, 15px)',
+                width: '100%',
+                boxSizing: 'border-box',
+                borderLeft: '4px solid #DAA520'
               }}
             >
-              <AlertCircle size={24} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px' }} />
+              <AlertCircle size={24} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(20px, 4vw, 24px)', height: 'clamp(20px, 4vw, 24px)' }} />
               <div>
                 <strong style={{ color: '#DAA520' }}>Important Note:</strong>
                 <p style={{ 
@@ -657,7 +673,7 @@ const Compliance = () => {
         </div>
 
         {/* Regulatory Information */}
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 40px)', marginBottom: '40px' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 36px)',
@@ -810,10 +826,14 @@ const Compliance = () => {
             </div>
             <div
               style={{
-                padding: '20px',
+                padding: 'clamp(16px, 3vw, 20px)',
                 background: 'rgba(255, 255, 255, 0.05)',
                 borderRadius: '8px',
                 marginBottom: '20px',
+                width: '100%',
+                boxSizing: 'border-box',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               <strong style={{ color: '#DAA520' }}>AMFI (Association of Mutual Funds in India)</strong>
@@ -868,11 +888,15 @@ const Compliance = () => {
             </h3>
             <div
               style={{
-                padding: '20px',
+                padding: 'clamp(16px, 3vw, 20px)',
                 background: 'rgba(218, 165, 32, 0.1)',
                 borderRadius: '8px',
                 marginBottom: '20px',
                 borderLeft: '4px solid #DAA520',
+                width: '100%',
+                boxSizing: 'border-box',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               <p style={{ 
@@ -890,7 +914,7 @@ const Compliance = () => {
             <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
               Investment Disclaimer
             </h3>
-            <div className="sebi-disclaimer" style={{ marginTop: '0', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
+            <div className="sebi-disclaimer" style={{ marginTop: '0', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', width: '100%', boxSizing: 'border-box', textAlign: 'left' }}>
               <strong>Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
             </div>
           </div>

@@ -34,11 +34,12 @@ const About = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
           position: 'relative',
+          overflow: 'hidden',
           paddingTop: '100px',
         }}
       >
+        {/* Background Image */}
         <div
           style={{
             position: 'absolute',
@@ -50,8 +51,18 @@ const About = () => {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.3,
-            filter: 'brightness(1.2)',
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
         <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>

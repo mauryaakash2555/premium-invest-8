@@ -305,36 +305,39 @@ const Footer = () => {
               <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Email: support@bmwealth.co.in
               </p>
-              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
-                Mumbai, Maharashtra
-              </p>
-              <a
-                href="https://wa.me/918850977259"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  textDecoration: 'none',
-                  color: '#25D366',
-                  fontSize: '14px',
-                  marginTop: '0',
-                  transition: 'all 0.3s ease',
-                  fontWeight: 500,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#20B858';
-                  e.currentTarget.style.transform = 'translateX(2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#25D366';
-                  e.currentTarget.style.transform = 'translateX(0)';
-                }}
-              >
-                <MessageCircle size={16} />
-                WhatsApp Us
-              </a>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '0' }}>
+                <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
+                  Mumbai, Maharashtra
+                </p>
+                <a
+                  href="https://wa.me/918850977259"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    textDecoration: 'none',
+                    color: '#25D366',
+                    fontSize: '14px',
+                    marginTop: '0',
+                    marginBottom: '0',
+                    transition: 'all 0.3s ease',
+                    fontWeight: 500,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#20B858';
+                    e.currentTarget.style.transform = 'translateX(2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#25D366';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }}
+                >
+                  <MessageCircle size={16} />
+                  WhatsApp Us
+                </a>
+              </div>
             </div>
           </div>
         </div>
