@@ -71,12 +71,21 @@ const Contact = () => {
       }
       
       // Send form data with optional reCAPTCHA token - Render backend
-      await axios.post(`${API}/contact`, {
-        ...formData,
-        recaptcha_token: recaptchaToken // null if not available
-      }, {
-        timeout: 60000 // 60 second timeout - handles backend cold start on Render
-      });
+      // Try with extended timeout and better error handling
+      try {
+        await axios.post(`${API}/contact`, {
+          ...formData,
+          recaptcha_token: recaptchaToken // null if not available
+        }, {
+          timeout: 60000, // 60 second timeout - handles backend cold start on Render
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (apiError) {
+        // Re-throw to be caught by outer catch block
+        throw apiError;
+      }
       
       // Clear form immediately on success
       setFormData({ name: '', email: '', phone: '', message: '' });
@@ -96,10 +105,9 @@ const Contact = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       
-      // Show WhatsApp fallback on any error
-      setShowWhatsAppFallback(true);
+      // Handle different error scenarios
+      let shouldShowFallback = true;
       
-      // Handle different error scenarios with WhatsApp fallback
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
         toast.error('Request timeout. Please try WhatsApp below or call us.', {
           duration: 7000,
@@ -108,7 +116,7 @@ const Contact = () => {
             onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
           },
         });
-      } else if (error.code === 'ERR_NETWORK') {
+      } else if (error.code === 'ERR_NETWORK' || !error.response) {
         toast.error('Network error. Please use WhatsApp below to reach us.', {
           duration: 7000,
           action: {
@@ -120,8 +128,8 @@ const Contact = () => {
         toast.error('Security verification failed. Please refresh and try again.', {
           duration: 5000,
         });
-        setShowWhatsAppFallback(false); // Don't show fallback for security errors
-      } else if (error.response?.status === 500) {
+        shouldShowFallback = false; // Don't show fallback for security errors
+      } else if (error.response?.status === 500 || error.response?.status >= 500) {
         toast.error('Server error. Please use WhatsApp below to contact us.', {
           duration: 7000,
           action: {
@@ -133,6 +141,10 @@ const Contact = () => {
         toast.error(error.response.data.detail, {
           duration: 5000,
         });
+        // Show fallback for client errors too (except validation errors)
+        if (error.response?.status !== 400 || !error.response?.data?.detail?.includes('required')) {
+          shouldShowFallback = true;
+        }
       } else {
         toast.error('Unable to send message. Please use WhatsApp below.', {
           duration: 7000,
@@ -141,6 +153,20 @@ const Contact = () => {
             onClick: () => window.open('https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect', '_blank'),
           },
         });
+      }
+      
+      // Show WhatsApp fallback after error (unless it's a security/validation error)
+      if (shouldShowFallback) {
+        setShowWhatsAppFallback(true);
+        // Scroll to fallback after a short delay for better UX
+        setTimeout(() => {
+          const fallbackElement = document.querySelector('[data-whatsapp-fallback]');
+          if (fallbackElement) {
+            fallbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 300);
+      } else {
+        setShowWhatsAppFallback(false);
       }
     } finally {
       setIsSubmitting(false);
@@ -611,46 +637,58 @@ const Contact = () => {
 
               {/* WhatsApp Fallback - Shows only on error */}
               {showWhatsAppFallback && (
-                <div style={{ 
+                <div 
+                  data-whatsapp-fallback
+                  style={{ 
                   marginTop: '24px', 
                   textAlign: 'center', 
-                  padding: '16px 20px', 
-                  background: 'rgba(255, 255, 255, 0.02)', 
-                  borderRadius: '8px', 
-                  border: '1px solid rgba(192, 160, 98, 0.15)' 
+                  padding: '20px 24px', 
+                  background: 'rgba(37, 211, 102, 0.08)', 
+                  borderRadius: '12px', 
+                  border: '2px solid rgba(37, 211, 102, 0.3)',
+                  animation: 'fadeIn 0.3s ease-in'
                 }}>
-                  <p style={{ color: 'rgba(184, 184, 184, 0.7)', marginBottom: '10px', fontSize: '13px' }}>
-                    Having trouble? Try WhatsApp
+                  <p style={{ 
+                    color: '#25D366', 
+                    marginBottom: '12px', 
+                    fontSize: '15px',
+                    fontWeight: '500'
+                  }}>
+                    Having trouble sending? Contact us directly via WhatsApp
                   </p>
                   <a 
                     href="https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="btn-primary"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '8px',
-                      padding: '10px 20px',
-                      background: 'transparent',
-                      color: '#C0A062',
-                      border: '1px solid rgba(192, 160, 98, 0.3)',
-                      borderRadius: '6px',
+                      gap: '10px',
+                      padding: '12px 24px',
+                      background: '#25D366',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '8px',
                       textDecoration: 'none',
-                      fontWeight: '500',
-                      fontSize: '14px',
+                      fontWeight: '600',
+                      fontSize: '16px',
                       transition: 'all 0.3s ease',
+                      boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.6)';
-                      e.currentTarget.style.background = 'rgba(192, 160, 98, 0.05)';
+                      e.currentTarget.style.background = '#20bd5a';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.4)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.3)';
-                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.background = '#25D366';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(37, 211, 102, 0.3)';
                     }}
                   >
-                    <MessageCircle size={16} />
-                    Contact via WhatsApp
+                    <MessageCircle size={20} />
+                    Chat on WhatsApp
                   </a>
                 </div>
               )}
