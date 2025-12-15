@@ -6,7 +6,7 @@ const styles = {
   footer: {
     background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
     borderTop: '1px solid rgba(218, 165, 32, 0.2)',
-    padding: '40px 20px 20px',
+    padding: '50px 20px 25px',
   },
   container: {
     maxWidth: '1400px',
@@ -14,36 +14,51 @@ const styles = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '24px',
-    marginBottom: '24px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '30px',
+    marginBottom: '30px',
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+  },
+  linksContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
   },
   brandTitle: {
     fontFamily: "'Playfair Display', serif",
     fontSize: '22px',
     color: '#DAA520',
+    marginBottom: '10px',
     fontWeight: 600,
-    margin: 0,
+    marginTop: 0,
   },
   sectionTitle: {
     color: '#DAA520',
     fontSize: '17px',
+    marginBottom: '12px',
     fontWeight: 600,
-    margin: 0,
+    marginTop: 0,
   },
-  text: {
+  textPrimary: {
     color: '#FFFFFF',
     fontSize: '14px',
     lineHeight: '1.5',
-    margin: 0,
+    marginBottom: '6px',
+    fontWeight: 500,
+    marginTop: 0,
   },
   textSecondary: {
     color: '#CCCCCC',
+    fontSize: '14px',
+    lineHeight: '1.5',
+    marginTop: 0,
+    marginBottom: 0,
+  },
+  text: {
+    color: '#FFFFFF',
     fontSize: '14px',
     lineHeight: '1.5',
     margin: 0,
@@ -52,25 +67,24 @@ const styles = {
     color: '#FFFFFF',
     textDecoration: 'none',
     fontSize: '14px',
-    lineHeight: '1.5',
     transition: 'all 0.3s ease',
+    lineHeight: '1.5',
     margin: 0,
   },
   linkWhatsApp: {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '8px',
-    color: '#25D366',
     textDecoration: 'none',
+    color: '#25D366',
     fontSize: '14px',
-    lineHeight: '1.5',
+    margin: 0,
     transition: 'all 0.3s ease',
     fontWeight: 500,
-    margin: 0,
   },
   disclaimer: {
-    marginBottom: '20px',
-    padding: '12px',
+    marginBottom: '25px',
+    padding: '14px',
     backgroundColor: 'rgba(218, 165, 32, 0.1)',
     borderRadius: '8px',
     borderLeft: '4px solid #DAA520',
@@ -83,13 +97,13 @@ const styles = {
   },
   bottomBar: {
     borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-    paddingTop: '16px',
+    paddingTop: '18px',
     textAlign: 'center',
   },
   copyrightText: {
     color: '#FFFFFF',
     fontSize: '14px',
-    margin: '0 0 4px 0',
+    margin: '0 0 6px 0',
   },
   licenseText: {
     color: '#C0A062',
@@ -122,7 +136,7 @@ const Footer = () => {
           {/* Company Info */}
           <div style={styles.column}>
             <h3 style={styles.brandTitle}>BM Wealth</h3>
-            <p style={{ ...styles.text, fontWeight: 500 }}>Premium Financial Advisory</p>
+            <p style={styles.textPrimary}>Premium Financial Advisory</p>
             <p style={styles.textSecondary}>
               Empowering investors with tailored financial solutions in Mumbai.
             </p>
@@ -131,124 +145,130 @@ const Footer = () => {
           {/* Quick Links */}
           <div style={styles.column}>
             <h4 style={styles.sectionTitle}>Quick Links</h4>
-            <Link
-              to="/"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              About Us
-            </Link>
-            <Link
-              to="/services"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Services
-            </Link>
-            <Link
-              to="/blog"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Blog
-            </Link>
-            <Link
-              to="/contact"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Contact
-            </Link>
+            <div style={styles.linksContainer}>
+              <Link
+                to="/"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                About Us
+              </Link>
+              <Link
+                to="/services"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Services
+              </Link>
+              <Link
+                to="/blog"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Blog
+              </Link>
+              <Link
+                to="/contact"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Contact
+              </Link>
+            </div>
           </div>
 
           {/* Legal Links */}
           <div style={styles.column}>
             <h4 style={styles.sectionTitle}>Legal</h4>
-            <Link
-              to="/terms-and-conditions"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Terms & Conditions
-            </Link>
-            <Link
-              to="/privacy-policy"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              to="/disclaimer"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Disclaimer
-            </Link>
-            <Link
-              to="/refund-policy"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Refund Policy
-            </Link>
-            <Link
-              to="/compliance"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleNavLinkHover(e, true)}
-              onMouseLeave={(e) => handleNavLinkHover(e, false)}
-            >
-              Compliance
-            </Link>
+            <div style={styles.linksContainer}>
+              <Link
+                to="/terms-and-conditions"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Terms & Conditions
+              </Link>
+              <Link
+                to="/privacy-policy"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/disclaimer"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Disclaimer
+              </Link>
+              <Link
+                to="/refund-policy"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Refund Policy
+              </Link>
+              <Link
+                to="/compliance"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleNavLinkHover(e, true)}
+                onMouseLeave={(e) => handleNavLinkHover(e, false)}
+              >
+                Compliance
+              </Link>
+            </div>
           </div>
 
           {/* Contact Info */}
           <div style={styles.column}>
             <h4 style={styles.sectionTitle}>Contact Us</h4>
-            <a
-              href="tel:+918850977259"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleContactLinkHover(e, true)}
-              onMouseLeave={(e) => handleContactLinkHover(e, false)}
-            >
-              Phone: +91 8850977259
-            </a>
-            <a
-              href="mailto:support@bmwealth.co.in"
-              style={styles.linkBase}
-              onMouseEnter={(e) => handleContactLinkHover(e, true)}
-              onMouseLeave={(e) => handleContactLinkHover(e, false)}
-            >
-              Email: support@bmwealth.co.in
-            </a>
-            <p style={styles.text}>Mumbai, Maharashtra</p>
-            <a
-              href="https://wa.me/918850977259"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.linkWhatsApp}
-              onMouseEnter={(e) => handleWhatsAppHover(e, true)}
-              onMouseLeave={(e) => handleWhatsAppHover(e, false)}
-            >
-              <MessageCircle size={16} />
-              WhatsApp Us
-            </a>
+            <div style={styles.linksContainer}>
+              <a
+                href="tel:+918850977259"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleContactLinkHover(e, true)}
+                onMouseLeave={(e) => handleContactLinkHover(e, false)}
+              >
+                Phone: +91 8850977259
+              </a>
+              <a
+                href="mailto:support@bmwealth.co.in"
+                style={styles.linkBase}
+                onMouseEnter={(e) => handleContactLinkHover(e, true)}
+                onMouseLeave={(e) => handleContactLinkHover(e, false)}
+              >
+                Email: support@bmwealth.co.in
+              </a>
+              <p style={styles.text}>Mumbai, Maharashtra</p>
+              <a
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.linkWhatsApp}
+                onMouseEnter={(e) => handleWhatsAppHover(e, true)}
+                onMouseLeave={(e) => handleWhatsAppHover(e, false)}
+              >
+                <MessageCircle size={16} />
+                WhatsApp Us
+              </a>
+            </div>
           </div>
         </div>
 
