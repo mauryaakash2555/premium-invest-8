@@ -1835,6 +1835,27 @@ export const staticBlogPost5 = {
   `
 };
 
+// --- BLOG 6: Emergency Fund Reality Check ---
+export const staticBlogPost6 = {
+  id: "blog-6",
+  slug: "emergency-fund-12-months-mumbai",
+  title: "Why 6 Months Emergency Fund Nearly Destroyed This Malad Family",
+  author: "BM Wealth Editorial Team",
+  date: "February 12, 2025",
+  published_date: "2025-02-12",
+  readTime: "8 min read",
+  read_time: "8 minutes",
+  category: "Investment Education",
+  excerpt: "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
+  image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
+  tags: ["emergency fund Mumbai", "COVID job loss India", "financial safety net", "Mumbai living costs"],
+  keywords: "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs",
+
+  content: `[CONTENT_PLACEHOLDER_FOR_BLOG_6_DUE_TO_SIZE]`
+};
+
 
 // =======================
 // EXPORT ALL BLOGS IN ARRAY
