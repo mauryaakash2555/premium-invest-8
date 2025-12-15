@@ -48,11 +48,11 @@ const Compliance = () => {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.65,
-            filter: 'brightness(1.1)',
+            filter: 'brightness(0.9)',
           }}
         />
         <div

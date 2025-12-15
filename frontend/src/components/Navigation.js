@@ -131,8 +131,11 @@ const Navigation = () => {
             color: '#DAA520',
             cursor: 'pointer',
             padding: '8px',
+            zIndex: 1000,
+            position: 'relative',
           }}
           className="mobile-menu-toggle"
+          aria-label="Toggle mobile menu"
         >
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
@@ -178,6 +181,7 @@ const Navigation = () => {
           }
           .mobile-menu-toggle {
             display: block !important;
+            z-index: 1001 !important;
           }
         }
       `}</style>
