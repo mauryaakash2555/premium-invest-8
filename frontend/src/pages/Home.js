@@ -396,23 +396,10 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="glass-effect" style={{
+        <div className="blog-card-premium" style={{
           maxWidth: '900px',
           margin: '0 auto',
           padding: 0,
-          borderRadius: '20px',
-          border: '1px solid rgba(218, 165, 32, 0.2)',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-          cursor: 'pointer',
-          overflow: 'hidden',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px)';
-          e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.15)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
         }}
         >
           <Link 
@@ -424,21 +411,6 @@ const Home = () => {
             }}
           >
             <div>
-              {/* Blog Image - Seamless, no border */}
-              <LazyImage
-                src={staticBlogPost.image_url || staticBlogPost.image}
-                alt={staticBlogPost.image_alt || staticBlogPost.title}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '400px',
-                  objectFit: 'cover',
-                  borderRadius: 0,
-                  display: 'block',
-                  marginBottom: 0,
-                }}
-              />
-              
               {/* Blog Content */}
               <div style={{
                 padding: 'clamp(30px, 5vw, 50px)',
@@ -490,6 +462,21 @@ const Home = () => {
                   <ArrowRight size={20} />
                 </div>
               </div>
+              
+              {/* Blog Image - Seamless, no border */}
+              <LazyImage
+                src={staticBlogPost.image_url || staticBlogPost.image}
+                alt={staticBlogPost.image_alt || staticBlogPost.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'cover',
+                  borderRadius: 0,
+                  display: 'block',
+                  marginBottom: 0,
+                }}
+              />
             </div>
           </Link>
         </div>
