@@ -773,14 +773,16 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Your name and contact details
-                </p>
+                <div style={{ paddingLeft: '16px', width: '100%' }}>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
+                  }}>
+                    Your name and contact details
+                  </p>
+                </div>
               </div>
               <div style={{
                 display: 'flex',
@@ -798,14 +800,16 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Client ID or account reference number
-                </p>
+                <div style={{ paddingLeft: '16px', width: '100%' }}>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
+                  }}>
+                    Client ID or account reference number
+                  </p>
+                </div>
               </div>
               <div style={{
                 display: 'flex',
@@ -823,14 +827,16 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Detailed description of the grievance
-                </p>
+                <div style={{ paddingLeft: '16px', width: '100%' }}>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
+                  }}>
+                    Detailed description of the grievance
+                  </p>
+                </div>
               </div>
               <div style={{
                 display: 'flex',
@@ -848,14 +854,16 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Supporting documents (if any)
-                </p>
+                <div style={{ paddingLeft: '16px', width: '100%' }}>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
+                  }}>
+                    Supporting documents (if any)
+                  </p>
+                </div>
               </div>
               <div style={{
                 display: 'flex',
@@ -873,14 +881,16 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Expected resolution
-                </p>
+                <div style={{ paddingLeft: '16px', width: '100%' }}>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
+                  }}>
+                    Expected resolution
+                  </p>
+                </div>
               </div>
             </div>
             
