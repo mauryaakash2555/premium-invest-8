@@ -17,16 +17,7 @@ const Footer = () => {
         }}
       >
         {/* Main Footer Content */}
-        <div
-          className="footer-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '40px',
-            marginBottom: '40px',
-            alignItems: 'start',
-          }}
-        >
+        <div className="footer-grid">
           {/* Company Info */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h3
@@ -358,8 +349,8 @@ const Footer = () => {
             borderLeft: '4px solid #DAA520',
           }}
         >
-          <p style={{ color: '#CCCCCC', fontSize: '13px', lineHeight: '1.6' }}>
-            <strong style={{ color: '#DAA520' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market
+          <p style={{ color: '#C0A062', fontSize: '13px', lineHeight: '1.6' }}>
+            <strong>Investment Disclaimer:</strong> Mutual fund investments are subject to market
             risks. Past performance is not indicative of future results. Please read
             all scheme-related documents carefully before investing.
           </p>

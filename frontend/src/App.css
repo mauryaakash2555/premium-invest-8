@@ -201,6 +201,27 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+  align-items: flex-start;
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px;
+  }
+}
+
 .whatsapp-float {
   position: fixed;
   bottom: 30px;
