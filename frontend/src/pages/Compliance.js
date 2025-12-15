@@ -114,50 +114,135 @@ export default function Compliance() {
               Your Rights as an Investor
             </h3>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '30px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '30px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
+              </p>
+            </div>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
@@ -170,59 +255,161 @@ export default function Compliance() {
               Your Responsibilities as an Investor
             </h3>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Conduct thorough research and due diligence before making investment decisions
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Conduct thorough research and due diligence before making investment decisions
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Provide complete and accurate information about your financial situation and risk appetite
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Provide complete and accurate information about your financial situation and risk appetite
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Read all documents carefully, including terms and conditions, before signing
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Read all documents carefully, including terms and conditions, before signing
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Keep records of all transactions and communications with your advisor
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Keep records of all transactions and communications with your advisor
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Report any suspicious activity or concerns promptly
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Report any suspicious activity or concerns promptly
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '30px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '30px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Stay informed about market conditions and review your portfolio regularly
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Stay informed about market conditions and review your portfolio regularly
+              </p>
+            </div>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
@@ -235,59 +422,161 @@ export default function Compliance() {
               Our Commitments to You
             </h3>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Provide investment advice based on thorough analysis and your best interests
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Provide investment advice based on thorough analysis and your best interests
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Maintain transparency in all dealings and disclose any conflicts of interest
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Maintain transparency in all dealings and disclose any conflicts of interest
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Protect your confidential information and ensure data security
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Protect your confidential information and ensure data security
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Comply with all IRDAI and AMFI regulations and industry best practices
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Comply with all IRDAI and AMFI regulations and industry best practices
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Provide timely and accurate information about your investments
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Provide timely and accurate information about your investments
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '30px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '30px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Address your concerns and grievances promptly and fairly
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Address your concerns and grievances promptly and fairly
+              </p>
+            </div>
             
             {/* License Info Box */}
             <div style={{
@@ -440,46 +729,131 @@ export default function Compliance() {
               }}>
                 If your concern is not resolved through initial contact, please submit a written complaint including:
               </p>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                marginBottom: '8px'
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '12px',
+                paddingLeft: '20px',
+                position: 'relative'
               }}>
-                • Your name and contact details
-              </p>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                marginBottom: '8px'
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '8px',
+                  width: '3px',
+                  height: '20px',
+                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  borderRadius: '2px'
+                }}></div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Your name and contact details
+                </p>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '12px',
+                paddingLeft: '20px',
+                position: 'relative'
               }}>
-                • Client ID or account reference number
-              </p>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                marginBottom: '8px'
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '8px',
+                  width: '3px',
+                  height: '20px',
+                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  borderRadius: '2px'
+                }}></div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Client ID or account reference number
+                </p>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '12px',
+                paddingLeft: '20px',
+                position: 'relative'
               }}>
-                • Detailed description of the grievance
-              </p>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                marginBottom: '8px'
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '8px',
+                  width: '3px',
+                  height: '20px',
+                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  borderRadius: '2px'
+                }}></div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Detailed description of the grievance
+                </p>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '12px',
+                paddingLeft: '20px',
+                position: 'relative'
               }}>
-                • Supporting documents (if any)
-              </p>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: '0'
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '8px',
+                  width: '3px',
+                  height: '20px',
+                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  borderRadius: '2px'
+                }}></div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Supporting documents (if any)
+                </p>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '0',
+                paddingLeft: '20px',
+                position: 'relative'
               }}>
-                • Expected resolution
-              </p>
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '8px',
+                  width: '3px',
+                  height: '20px',
+                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  borderRadius: '2px'
+                }}></div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Expected resolution
+                </p>
+              </div>
             </div>
             
             <div style={{
@@ -549,32 +923,83 @@ export default function Compliance() {
               Resolution Timeline
             </h3>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '24px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '24px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
+              </p>
+            </div>
             
             <div style={{
               background: 'rgba(218, 165, 32, 0.1)',
@@ -699,32 +1124,83 @@ export default function Compliance() {
               Additional Advisory Services
             </h3>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Portfolio Management Services (PMS) - Advisory & Referral Services
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Portfolio Management Services (PMS) - Advisory & Referral Services
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '12px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Fixed Deposit (FD) Advisory Services
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Fixed Deposit (FD) Advisory Services
+              </p>
+            </div>
             
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.8',
-              color: '#B8B8B8',
-              marginBottom: '30px'
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '30px',
+              paddingLeft: '20px',
+              position: 'relative'
             }}>
-              • Investment Planning & Financial Consulting
-            </p>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: '8px',
+                width: '3px',
+                height: '20px',
+                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                borderRadius: '2px'
+              }}></div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Investment Planning & Financial Consulting
+              </p>
+            </div>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",

@@ -17,16 +17,24 @@ const Footer = () => {
         }}
       >
         {/* Main Footer Content */}
-        <div className="footer-grid" style={{ gap: '0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', paddingRight: '40px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '40px',
+            marginBottom: '40px',
+          }}
+        >
           {/* Company Info */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0', paddingRight: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h3
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '24px',
                 color: '#DAA520',
-                marginBottom: '4px',
+                marginBottom: '12px',
                 fontWeight: 600,
+                marginTop: 0,
               }}
             >
               BM Wealth
@@ -35,9 +43,10 @@ const Footer = () => {
               style={{
                 color: '#FFFFFF',
                 fontSize: '14px',
-                lineHeight: '1.8',
-                marginBottom: '0',
+                lineHeight: '1.6',
+                marginBottom: '8px',
                 fontWeight: 500,
+                marginTop: 0,
               }}
             >
               Premium Financial Advisory
@@ -46,8 +55,9 @@ const Footer = () => {
               style={{
                 color: '#CCCCCC',
                 fontSize: '14px',
-                lineHeight: '1.8',
-                margin: 0,
+                lineHeight: '1.6',
+                marginTop: 0,
+                marginBottom: 0,
               }}
             >
               Empowering investors with tailored financial solutions in Mumbai.
@@ -55,18 +65,19 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0', paddingRight: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '8px',
+                marginBottom: '16px',
                 fontWeight: 600,
+                marginTop: 0,
               }}
             >
               Quick Links
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <Link
                 to="/"
                 style={{
@@ -75,7 +86,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -96,7 +107,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -117,7 +128,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -138,7 +149,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -159,7 +170,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '0',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -176,18 +187,19 @@ const Footer = () => {
           </div>
 
           {/* Legal Links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0', paddingRight: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '8px',
+                marginBottom: '16px',
                 fontWeight: 600,
+                marginTop: 0,
               }}
             >
               Legal
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <Link
                 to="/terms-and-conditions"
                 style={{
@@ -196,7 +208,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -217,7 +229,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -238,7 +250,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -259,7 +271,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '8px',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -280,7 +292,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.6',
-                  marginBottom: '0',
+                  margin: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#DAA520';
@@ -297,25 +309,58 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0', paddingRight: '0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '8px',
+                marginBottom: '16px',
                 fontWeight: 600,
+                marginTop: 0,
               }}
             >
               Contact Us
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 8px 0', lineHeight: '1.6' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <a
+                href="tel:+918850977259"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  margin: 0,
+                  lineHeight: '1.6',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                }}
+              >
                 Phone: +91 8850977259
-              </p>
-              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 8px 0', lineHeight: '1.6' }}>
+              </a>
+              <a
+                href="mailto:support@bmwealth.co.in"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  margin: 0,
+                  lineHeight: '1.6',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#DAA520';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                }}
+              >
                 Email: support@bmwealth.co.in
-              </p>
-              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 8px 0', lineHeight: '1.6' }}>
+              </a>
+              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Mumbai, Maharashtra
               </p>
               <a
@@ -329,8 +374,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   color: '#25D366',
                   fontSize: '14px',
-                  marginTop: '0',
-                  marginBottom: '0',
+                  margin: 0,
                   transition: 'all 0.3s ease',
                   fontWeight: 500,
                 }}
@@ -360,7 +404,7 @@ const Footer = () => {
             borderLeft: '4px solid #DAA520',
           }}
         >
-          <p style={{ color: '#C0A062', fontSize: '13px', lineHeight: '1.6' }}>
+          <p style={{ color: '#C0A062', fontSize: '13px', lineHeight: '1.6', margin: 0 }}>
             <strong>Investment Disclaimer:</strong> Mutual fund investments are subject to market
             risks. Past performance is not indicative of future results. Please read
             all scheme-related documents carefully before investing.
@@ -375,10 +419,10 @@ const Footer = () => {
             textAlign: 'center',
           }}
         >
-          <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
+          <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 8px 0' }}>
             © {new Date().getFullYear()} BM Wealth. All rights reserved.
           </p>
-          <p style={{ color: '#C0A062', fontSize: '13px' }}>
+          <p style={{ color: '#C0A062', fontSize: '13px', margin: 0 }}>
             IRDAI Licensed | AMFI Registered
           </p>
         </div>
