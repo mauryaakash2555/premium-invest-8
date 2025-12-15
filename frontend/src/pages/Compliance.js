@@ -165,9 +165,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
-                </p>
-              </div>
+                <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
+              </p>
             </div>
             
             <div style={{
@@ -193,9 +192,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
-                </p>
-              </div>
+                <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
+              </p>
             </div>
             
             <div style={{
@@ -221,16 +219,15 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
-                </p>
-              </div>
+                <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
+              </p>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '30px',
-              paddingLeft: '0',
+              paddingLeft: '20px',
               position: 'relative'
             }}>
               <div style={{
@@ -286,9 +283,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Conduct thorough research and due diligence before making investment decisions
-                </p>
-              </div>
+                Conduct thorough research and due diligence before making investment decisions
+              </p>
             </div>
             
             <div style={{
@@ -314,9 +310,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Provide complete and accurate information about your financial situation and risk appetite
-                </p>
-              </div>
+                Provide complete and accurate information about your financial situation and risk appetite
+              </p>
             </div>
             
             <div style={{
@@ -342,9 +337,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Read all documents carefully, including terms and conditions, before signing
-                </p>
-              </div>
+                Read all documents carefully, including terms and conditions, before signing
+              </p>
             </div>
             
             <div style={{
@@ -370,9 +364,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Keep records of all transactions and communications with your advisor
-                </p>
-              </div>
+                Keep records of all transactions and communications with your advisor
+              </p>
             </div>
             
             <div style={{
@@ -398,16 +391,15 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Report any suspicious activity or concerns promptly
-                </p>
-              </div>
+                Report any suspicious activity or concerns promptly
+              </p>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '30px',
-              paddingLeft: '0',
+              paddingLeft: '20px',
               position: 'relative'
             }}>
               <div style={{
@@ -463,9 +455,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Provide investment advice based on thorough analysis and your best interests
-                </p>
-              </div>
+                Provide investment advice based on thorough analysis and your best interests
+              </p>
             </div>
             
             <div style={{
@@ -491,9 +482,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Maintain transparency in all dealings and disclose any conflicts of interest
-                </p>
-              </div>
+                Maintain transparency in all dealings and disclose any conflicts of interest
+              </p>
             </div>
             
             <div style={{
@@ -519,9 +509,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Protect your confidential information and ensure data security
-                </p>
-              </div>
+                Protect your confidential information and ensure data security
+              </p>
             </div>
             
             <div style={{
@@ -547,9 +536,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Comply with all IRDAI and AMFI regulations and industry best practices
-                </p>
-              </div>
+                Comply with all IRDAI and AMFI regulations and industry best practices
+              </p>
             </div>
             
             <div style={{
@@ -575,16 +563,15 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Provide timely and accurate information about your investments
-                </p>
-              </div>
+                Provide timely and accurate information about your investments
+              </p>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '30px',
-              paddingLeft: '0',
+              paddingLeft: '20px',
               position: 'relative'
             }}>
               <div style={{
@@ -761,7 +748,7 @@ export default function Compliance() {
                 display: 'flex',
                 alignItems: 'flex-start',
                 marginBottom: '12px',
-                paddingLeft: '0',
+                paddingLeft: '20px',
                 position: 'relative'
               }}>
                 <div style={{
@@ -773,22 +760,20 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <div style={{ paddingLeft: '16px', width: '100%' }}>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: '#B8B8B8',
-                    margin: 0
-                  }}>
-                    Your name and contact details
-                  </p>
-                </div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Your name and contact details
+                </p>
               </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'flex-start',
                 marginBottom: '12px',
-                paddingLeft: '0',
+                paddingLeft: '20px',
                 position: 'relative'
               }}>
                 <div style={{
@@ -800,22 +785,20 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <div style={{ paddingLeft: '16px', width: '100%' }}>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: '#B8B8B8',
-                    margin: 0
-                  }}>
-                    Client ID or account reference number
-                  </p>
-                </div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Client ID or account reference number
+                </p>
               </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'flex-start',
                 marginBottom: '12px',
-                paddingLeft: '0',
+                paddingLeft: '20px',
                 position: 'relative'
               }}>
                 <div style={{
@@ -827,22 +810,20 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <div style={{ paddingLeft: '16px', width: '100%' }}>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: '#B8B8B8',
-                    margin: 0
-                  }}>
-                    Detailed description of the grievance
-                  </p>
-                </div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Detailed description of the grievance
+                </p>
               </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'flex-start',
                 marginBottom: '12px',
-                paddingLeft: '0',
+                paddingLeft: '20px',
                 position: 'relative'
               }}>
                 <div style={{
@@ -854,22 +835,20 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <div style={{ paddingLeft: '16px', width: '100%' }}>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: '#B8B8B8',
-                    margin: 0
-                  }}>
-                    Supporting documents (if any)
-                  </p>
-                </div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Supporting documents (if any)
+                </p>
               </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'flex-start',
                 marginBottom: '0',
-                paddingLeft: '0',
+                paddingLeft: '20px',
                 position: 'relative'
               }}>
                 <div style={{
@@ -881,16 +860,14 @@ export default function Compliance() {
                   background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                   borderRadius: '2px'
                 }}></div>
-                <div style={{ paddingLeft: '16px', width: '100%' }}>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: '#B8B8B8',
-                    margin: 0
-                  }}>
-                    Expected resolution
-                  </p>
-                </div>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Expected resolution
+                </p>
               </div>
             </div>
             
@@ -984,9 +961,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
-                </p>
-              </div>
+                <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
+              </p>
             </div>
             
             <div style={{
@@ -1012,16 +988,15 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
-                </p>
-              </div>
+                <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
+              </p>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '24px',
-              paddingLeft: '0',
+              paddingLeft: '20px',
               position: 'relative'
             }}>
               <div style={{
@@ -1033,16 +1008,14 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <div style={{ paddingLeft: '16px', width: '100%' }}>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
-                </p>
-              </div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
+              </p>
             </div>
             
             <div style={{
@@ -1191,9 +1164,8 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Portfolio Management Services (PMS) - Advisory & Referral Services
-                </p>
-              </div>
+                Portfolio Management Services (PMS) - Advisory & Referral Services
+              </p>
             </div>
             
             <div style={{
@@ -1219,16 +1191,15 @@ export default function Compliance() {
                   color: '#B8B8B8',
                   margin: 0
                 }}>
-                  Fixed Deposit (FD) Advisory Services
-                </p>
-              </div>
+                Fixed Deposit (FD) Advisory Services
+              </p>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '30px',
-              paddingLeft: '0',
+              paddingLeft: '20px',
               position: 'relative'
             }}>
               <div style={{
@@ -1240,16 +1211,14 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <div style={{ paddingLeft: '16px', width: '100%' }}>
-                <p style={{
-                  fontSize: '16px',
-                  lineHeight: '1.8',
-                  color: '#B8B8B8',
-                  margin: 0
-                }}>
-                  Investment Planning & Financial Consulting
-                </p>
-              </div>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: 0
+              }}>
+                Investment Planning & Financial Consulting
+              </p>
             </div>
             
             <h3 style={{
