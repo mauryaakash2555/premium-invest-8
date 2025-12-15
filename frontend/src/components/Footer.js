@@ -98,22 +98,22 @@ const styles = {
   },
 };
 
-// Reusable hover handlers
-const handleNavLinkHover = (e, isHovering) => {
-  e.target.style.color = isHovering ? '#DAA520' : '#FFFFFF';
-  e.target.style.transform = isHovering ? 'translateX(4px)' : 'translateX(0)';
-};
-
-const handleContactLinkHover = (e, isHovering) => {
-  e.target.style.color = isHovering ? '#DAA520' : '#FFFFFF';
-};
-
-const handleWhatsAppHover = (e, isHovering) => {
-  e.currentTarget.style.color = isHovering ? '#20B858' : '#25D366';
-  e.currentTarget.style.transform = isHovering ? 'translateX(2px)' : 'translateX(0)';
-};
-
 const Footer = () => {
+  // Reusable hover handlers
+  const handleNavLinkHover = (e, isHovering) => {
+    e.currentTarget.style.color = isHovering ? '#DAA520' : '#FFFFFF';
+    e.currentTarget.style.transform = isHovering ? 'translateX(4px)' : 'translateX(0)';
+  };
+
+  const handleContactLinkHover = (e, isHovering) => {
+    e.currentTarget.style.color = isHovering ? '#DAA520' : '#FFFFFF';
+  };
+
+  const handleWhatsAppHover = (e, isHovering) => {
+    e.currentTarget.style.color = isHovering ? '#20B858' : '#25D366';
+    e.currentTarget.style.transform = isHovering ? 'translateX(2px)' : 'translateX(0)';
+  };
+
   return (
     <footer style={styles.footer}>
       <div style={styles.container}>
