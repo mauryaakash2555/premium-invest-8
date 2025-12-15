@@ -1561,3 +1561,278 @@ export const staticBlogData = [
   staticBlogPost2,
   staticBlogPost3,
 ];
+
+// --- BLOG 4: Tax Planning Beyond 80C ---
+export const staticBlogPost4 = {
+  id: "blog-4",
+  slug: "tax-planning-beyond-80c-mumbai",
+  title: "How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C",
+  author: "BM Wealth Editorial Team",
+  date: "January 29, 2025",
+  published_date: "2025-01-29",
+  readTime: "8 min read",
+  read_time: "8 minutes",
+  category: "Investment Education",
+  excerpt: "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
+  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
+  tags: ["tax planning beyond 80C", "Mumbai tax saving", "software engineer taxes India", "NPS tax benefit"],
+  keywords: "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit",
+
+  content: `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C",
+    "description": "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
+    "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
+    "datePublished": "2025-01-29",
+    "dateModified": "2025-12-15",
+    "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
+    "articleSection": "Investment Education",
+    "keywords": "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit"
+  }
+  </script>
+
+  <div style="margin-bottom: 40px;">
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      March 30, 2024. 11:53 PM. Powai, Mumbai.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "Bro, you haven't done your tax planning yet? Tomorrow is March 31st!"
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Ankit, 32, software engineer at a fintech startup, frantically browsed through his company's investment declaration portal. His colleague Rohan sat beside him, relaxed, already done with his tea.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      "I finished mine in November," Rohan said. "Already maxed out 80C, claimed HRA properly, invested in NPS Tier 1, got my health insurance sorted. Saved ₹2.2 lakh in taxes this year."
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Ankit looked up. Both earned similar salaries—₹18 lakh CTC. Same company. Same tax bracket.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "₹2.2 lakh? I'm barely saving ₹50,000 in taxes. How is that even possible?"
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      The Breakdown: ₹2.2 Lakh Tax Savings Strategy
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      The next day, Rohan showed Ankit his complete tax planning spreadsheet. Here's what he did:
+    </p>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        1. Section 80C (₹1.5 Lakh Limit) - Tax Saved: ₹46,800
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>EPF contribution: ₹65,000 (automatic from salary)</li>
+        <li>ELSS mutual funds: ₹50,000 (SIP of ₹4,166/month)</li>
+        <li>Home loan principal: ₹35,000</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2; color: #C0A062; margin-top: 15px;">
+        Tax bracket: 31.2% (30% + cess) → Savings: ₹46,800
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        2. Section 80CCD(1B) - NPS Additional ₹50k - Tax Saved: ₹15,600
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        Beyond the ₹1.5L limit of 80C, NPS Tier 1 allows an additional ₹50,000 deduction.
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Investment: ₹50,000 → Tax saved: ₹15,600
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        3. Section 80D - Health Insurance - Tax Saved: ₹15,600
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Self + spouse insurance: ₹25,000 (deduction limit ₹25k)</li>
+        <li>Parents insurance (senior citizen): ₹25,000 (deduction limit ₹50k)</li>
+        <li>Total deduction claimed: ₹50,000</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2; color: #C0A062; margin-top: 15px;">
+        Tax saved: ₹15,600
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        4. Section 24(b) - Home Loan Interest - Tax Saved: ₹62,400
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        Home loan EMI: ₹42,000/month (₹35L loan)
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Interest component per year: ₹2,00,000 → Tax saved: ₹62,400
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        5. HRA Exemption (Optimized) - Tax Saved: ₹78,000
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        Monthly rent: ₹35,000 in Powai
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        HRA received: ₹6,00,000/year
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Exemption claimed: ₹2,50,000 → Tax saved: ₹78,000
+      </p>
+    </div>
+
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
+        <span style="position: relative; top: -3px;">₹</span>2,18,400
+      </p>
+      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
+        Total tax saved annually through systematic planning
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      What Ankit Was Missing
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Ankit had only done Section 80C (₹1.5L) through EPF. That's it. Tax saved: ₹46,800.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      He was missing:
+    </p>
+    <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
+      <li>Additional ₹50k NPS deduction (80CCD(1B))</li>
+      <li>Health insurance for parents (80D)</li>
+      <li>Optimized HRA claims (he was living on rent but not claiming properly)</li>
+      <li>Wasn't tracking home loan interest deduction separately</li>
+    </ul>
+    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+      Same salary. ₹1.71 lakh difference in annual tax outgo. That's ₹14,250 extra per month in Ankit's pocket if he'd planned ahead.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "What is Section 80CCD(1B)?", "acceptedAnswer": {"@type": "Answer", "text": "80CCD(1B) allows an additional ₹50,000 tax deduction for NPS Tier 1 investments, over and above the ₹1.5 lakh limit of Section 80C. This is one of the most under-utilized tax saving options."}},
+      {"@type": "Question", "name": "Can I claim both home loan principal and interest?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Principal repayment (up to ₹1.5L) goes under Section 80C. Interest payment (up to ₹2L for self-occupied property) is claimed separately under Section 24(b). Both reduce taxable income."}},
+      {"@type": "Question", "name": "Should I buy health insurance just for tax saving?", "acceptedAnswer": {"@type": "Answer", "text": "No. Buy health insurance for family protection first. Tax benefit (Section 80D) is a bonus. For Mumbai's healthcare costs, adequate health cover (₹10L+ for family) is essential regardless of tax implications."}},
+      {"@type": "Question", "name": "Is NPS worth it despite 60-year lock-in?", "acceptedAnswer": {"@type": "Answer", "text": "For tax optimization in 30% bracket, NPS's additional ₹50k deduction (80CCD(1B)) is valuable. Returns are market-linked. Lock-in is strict but designed for retirement. Consider it as part of retirement planning, not just tax saving."}},
+      {"@type": "Question", "name": "When should I do tax planning?", "acceptedAnswer": {"@type": "Answer", "text": "Start in April, not March. Early planning allows better investment choices, optimal HRA structuring, and avoiding last-minute panic buying of tax-saving products. Review quarterly to stay on track."}}
+    ]
+  }
+  </script>
+
+  <section style="margin: 80px 0; padding: 60px 70px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 100%); border-radius: 16px; border-left: 4px solid #DAA520;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What is Section 80CCD(1B)?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">80CCD(1B) allows an additional ₹50,000 tax deduction for NPS Tier 1 investments, over and above the ₹1.5 lakh limit of Section 80C. This is one of the most under-utilized tax saving options. In the 30% bracket, it saves ₹15,600 in taxes annually.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I claim both home loan principal and interest?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes. Principal repayment (up to ₹1.5L) goes under Section 80C. Interest payment (up to ₹2L for self-occupied property) is claimed separately under Section 24(b). Both reduce taxable income. Track them separately in your tax planning.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Should I buy health insurance just for tax saving?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">No. Buy health insurance for family protection first. Tax benefit (Section 80D) is a bonus, not the primary reason. For Mumbai's healthcare costs, adequate health cover (₹10L+ for family, ₹25L+ including parents) is essential regardless of tax implications.</p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is NPS worth it despite 60-year lock-in?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">For tax optimization in 30% bracket, NPS's additional ₹50k deduction (80CCD(1B)) is valuable. Returns are market-linked with low expense ratios. Lock-in is strict but designed for retirement corpus. Consider it as part of long-term retirement planning, not just tax saving tool.</p>
+      </div>
+      <div style="margin-bottom: 0;">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">When should I do tax planning?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Start in April, not March 30th. Early planning allows better investment choices, optimal HRA structuring with landlord, proper health insurance selection, and avoiding last-minute panic buying of unsuitable tax-saving products. Review quarterly to stay on track throughout the year.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <a href="/blog/sip-vs-lump-sum-25-lakh-experiment" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Coming Next:</p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Result →</p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">Two friends, same bonus in March 2020. Different strategies. Coffee at BKC reveals ₹58L vs ₹52L.</p>
+    </div>
+  </a>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 45px; border-radius: 12px; border-left: 3px solid rgba(192, 160, 98, 0.6); margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 18px; color: rgba(192, 160, 98, 0.95);">Get a Free Educational Consultation</h2>
+    <p style="font-size: 19px; margin-bottom: 32px; color: #E5E5E5; font-weight: 400;">Optimize Your Tax Planning Strategy</p>
+    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 18px; color: #E5E5E5;">We'll help you understand:</p>
+    <div style="margin-bottom: 32px;">
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ All tax-saving options beyond Section 80C</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ Whether your current tax planning is optimized</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5; margin-bottom: 10px;">✓ HRA structuring and claims optimization</p>
+      <p style="font-size: 17px; line-height: 2; color: #E5E5E5;">✓ Year-round tax planning approach (not March panic)</p>
+    </div>
+    <div style="border-top: 1px solid rgba(192, 160, 98, 0.2); padding-top: 28px; margin-bottom: 0;">
+      <div style="margin-bottom: 20px;">
+        <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp: +91 88509 77259
+        </a>
+      </div>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;"><a href="/services" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">Contact Us</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002</p>
+      <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized tax or investment advice. Tax situations vary by individual. Consult a qualified tax professional for advice specific to your circumstances.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Tax Law Changes:</strong> Tax laws, deduction limits, and benefits can change with each Union Budget. Information presented is based on current tax laws as of FY 2024-25. Verify current applicability with tax advisor.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in NPS, ELSS, and other instruments are subject to market risks. Tax benefits should not be the sole criterion for investment decisions. Consider returns, liquidity, and suitability.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory and mutual fund distribution. We are NOT tax consultants or chartered accountants. For tax advice, consult qualified tax professionals.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;"><strong style="color: #C0A062;">Due Diligence:</strong> Please verify all tax deductions and investment products with qualified professionals before making decisions. Tax calculations presented are illustrative and may not apply to all situations.</p>
+  </div>
+
+  <div style="border-top: 1px solid rgba(192, 160, 98, 0.15); padding-top: 35px; margin-top: 50px;">
+    <p style="font-size: 14px; color: rgba(192, 160, 98, 0.8); font-weight: 500; margin-bottom: 8px;">BM Wealth Editorial Note</p>
+    <p style="font-size: 14px; line-height: 1.7; color: rgba(229, 229, 229, 0.6);">This article is part of our Investment Education series. All case studies are anonymized to protect privacy. Reading time: 8 minutes.</p>
+  </div>
+  `
+};
+
+
+
+// =======================
+// EXPORT ALL BLOGS IN ARRAY
+// =======================
+
+export const staticBlogData = [
+  staticBlogPost,
+  staticBlogPost2,
+  staticBlogPost3,
+  staticBlogPost4,
+];
