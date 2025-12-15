@@ -69,7 +69,7 @@ export default function Compliance() {
           {/* Section 1: Investor Charter */}
           <section style={{
             marginBottom: '60px',
-            paddingLeft: '24px'
+            paddingLeft: '0'
           }}>
             
             <h2 style={{
@@ -118,7 +118,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -130,21 +130,23 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
-                <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
+                </p>
+              </div>
             </div>
             
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -156,12 +158,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
               </p>
             </div>
@@ -170,7 +173,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -182,12 +185,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
               </p>
             </div>
@@ -196,7 +200,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -208,12 +212,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
               </p>
             </div>
@@ -259,7 +264,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -271,12 +276,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Conduct thorough research and due diligence before making investment decisions
               </p>
             </div>
@@ -285,7 +291,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -297,12 +303,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Provide complete and accurate information about your financial situation and risk appetite
               </p>
             </div>
@@ -311,7 +318,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -323,12 +330,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Read all documents carefully, including terms and conditions, before signing
               </p>
             </div>
@@ -337,7 +345,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -349,12 +357,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Keep records of all transactions and communications with your advisor
               </p>
             </div>
@@ -363,7 +372,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -375,12 +384,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Report any suspicious activity or concerns promptly
               </p>
             </div>
@@ -426,7 +436,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -438,12 +448,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Provide investment advice based on thorough analysis and your best interests
               </p>
             </div>
@@ -452,7 +463,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -464,12 +475,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Maintain transparency in all dealings and disclose any conflicts of interest
               </p>
             </div>
@@ -478,7 +490,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -490,12 +502,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Protect your confidential information and ensure data security
               </p>
             </div>
@@ -504,7 +517,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -516,12 +529,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Comply with all IRDAI and AMFI regulations and industry best practices
               </p>
             </div>
@@ -530,7 +544,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -542,12 +556,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Provide timely and accurate information about your investments
               </p>
             </div>
@@ -633,7 +648,7 @@ export default function Compliance() {
           {/* Section 2: Grievance Redressal Mechanism */}
           <section style={{
             marginBottom: '60px',
-            paddingLeft: '24px'
+            paddingLeft: '0'
           }}>
             
             <h2 style={{
@@ -927,7 +942,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -939,12 +954,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
               </p>
             </div>
@@ -953,7 +969,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -965,12 +981,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
               </p>
             </div>
@@ -1023,7 +1040,7 @@ export default function Compliance() {
           {/* Section 3: Regulatory Disclosures & Licenses */}
           <section style={{
             marginBottom: '60px',
-            paddingLeft: '24px'
+            paddingLeft: '0'
           }}>
             
             <h2 style={{
@@ -1128,7 +1145,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -1140,12 +1157,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Portfolio Management Services (PMS) - Advisory & Referral Services
               </p>
             </div>
@@ -1154,7 +1172,7 @@ export default function Compliance() {
               display: 'flex',
               alignItems: 'flex-start',
               marginBottom: '16px',
-              paddingLeft: '20px',
+              paddingLeft: '0',
               position: 'relative'
             }}>
               <div style={{
@@ -1166,12 +1184,13 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
                 Fixed Deposit (FD) Advisory Services
               </p>
             </div>
@@ -1330,7 +1349,7 @@ export default function Compliance() {
           {/* Section 4: Compliance Statement */}
           <section style={{
             marginBottom: '60px',
-            paddingLeft: '24px'
+            paddingLeft: '0'
           }}>
             
             <h2 style={{
@@ -1365,7 +1384,7 @@ export default function Compliance() {
           {/* Section 5: Investment Disclaimer */}
           <section style={{
             marginBottom: '0',
-            paddingLeft: '24px'
+            paddingLeft: '0'
           }}>
             
             <h2 style={{

@@ -7,7 +7,7 @@ const Footer = () => {
       style={{
         background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
         borderTop: '1px solid rgba(218, 165, 32, 0.2)',
-        padding: '60px 20px 30px',
+        padding: '50px 20px 25px',
       }}
     >
       <div
@@ -21,8 +21,8 @@ const Footer = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '40px',
-            marginBottom: '40px',
+            gap: '30px',
+            marginBottom: '30px',
           }}
         >
           {/* Company Info */}
@@ -30,9 +30,9 @@ const Footer = () => {
             <h3
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: '24px',
+                fontSize: '22px',
                 color: '#DAA520',
-                marginBottom: '12px',
+                marginBottom: '10px',
                 fontWeight: 600,
                 marginTop: 0,
               }}
@@ -43,8 +43,8 @@ const Footer = () => {
               style={{
                 color: '#FFFFFF',
                 fontSize: '14px',
-                lineHeight: '1.6',
-                marginBottom: '8px',
+                lineHeight: '1.5',
+                marginBottom: '6px',
                 fontWeight: 500,
                 marginTop: 0,
               }}
@@ -55,7 +55,7 @@ const Footer = () => {
               style={{
                 color: '#CCCCCC',
                 fontSize: '14px',
-                lineHeight: '1.6',
+                lineHeight: '1.5',
                 marginTop: 0,
                 marginBottom: 0,
               }}
@@ -69,15 +69,15 @@ const Footer = () => {
             <h4
               style={{
                 color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
+                fontSize: '17px',
+                marginBottom: '12px',
                 fontWeight: 600,
                 marginTop: 0,
               }}
             >
               Quick Links
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <Link
                 to="/"
                 style={{
@@ -85,7 +85,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -106,7 +106,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -127,7 +127,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -148,7 +148,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -169,7 +169,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -191,15 +191,15 @@ const Footer = () => {
             <h4
               style={{
                 color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
+                fontSize: '17px',
+                marginBottom: '12px',
                 fontWeight: 600,
                 marginTop: 0,
               }}
             >
               Legal
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <Link
                 to="/terms-and-conditions"
                 style={{
@@ -207,7 +207,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -228,7 +228,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -249,7 +249,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -270,7 +270,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -291,7 +291,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   margin: 0,
                 }}
                 onMouseEnter={(e) => {
@@ -313,15 +313,15 @@ const Footer = () => {
             <h4
               style={{
                 color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
+                fontSize: '17px',
+                marginBottom: '12px',
                 fontWeight: 600,
                 marginTop: 0,
               }}
             >
               Contact Us
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <a
                 href="tel:+918850977259"
                 style={{
@@ -329,7 +329,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   margin: 0,
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
@@ -348,7 +348,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   fontSize: '14px',
                   margin: 0,
-                  lineHeight: '1.6',
+                  lineHeight: '1.5',
                   transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
@@ -360,7 +360,7 @@ const Footer = () => {
               >
                 Email: support@bmwealth.co.in
               </a>
-              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
+              <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
                 Mumbai, Maharashtra
               </p>
               <a
@@ -397,8 +397,8 @@ const Footer = () => {
         {/* Disclaimer */}
         <div
           style={{
-            marginBottom: '30px',
-            padding: '16px',
+            marginBottom: '25px',
+            padding: '14px',
             backgroundColor: 'rgba(218, 165, 32, 0.1)',
             borderRadius: '8px',
             borderLeft: '4px solid #DAA520',
@@ -415,11 +415,11 @@ const Footer = () => {
         <div
           style={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            paddingTop: '20px',
+            paddingTop: '18px',
             textAlign: 'center',
           }}
         >
-          <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 8px 0' }}>
+          <p style={{ color: '#FFFFFF', fontSize: '14px', margin: '0 0 6px 0' }}>
             © {new Date().getFullYear()} BM Wealth. All rights reserved.
           </p>
           <p style={{ color: '#C0A062', fontSize: '13px', margin: 0 }}>
