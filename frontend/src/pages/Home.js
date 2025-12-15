@@ -403,7 +403,7 @@ const Home = () => {
         }}
         >
           <Link 
-            to={`/blog/${staticBlogPost.slug}`}
+            to="/blog"
             style={{ 
               textDecoration: 'none', 
               color: 'inherit',
@@ -411,6 +411,21 @@ const Home = () => {
             }}
           >
             <div>
+              {/* Blog Image - Seamless, no border */}
+              <LazyImage
+                src={staticBlogPost.image_url || staticBlogPost.image}
+                alt={staticBlogPost.image_alt || staticBlogPost.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'cover',
+                  borderRadius: 0,
+                  display: 'block',
+                  marginBottom: 0,
+                }}
+              />
+              
               {/* Blog Content */}
               <div style={{
                 padding: 'clamp(30px, 5vw, 50px)',
@@ -462,21 +477,6 @@ const Home = () => {
                   <ArrowRight size={20} />
                 </div>
               </div>
-              
-              {/* Blog Image - Seamless, no border */}
-              <LazyImage
-                src={staticBlogPost.image_url || staticBlogPost.image}
-                alt={staticBlogPost.image_alt || staticBlogPost.title}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '400px',
-                  objectFit: 'cover',
-                  borderRadius: 0,
-                  display: 'block',
-                  marginBottom: 0,
-                }}
-              />
             </div>
           </Link>
         </div>
