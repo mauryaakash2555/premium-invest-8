@@ -297,8 +297,8 @@ export default function Footer() {
                 fontSize: '16px',
                 color: '#25D366',
                 textDecoration: 'none',
-                marginTop: '8px',
-                fontWeight: '600',
+                marginTop: '4px',
+                fontWeight: '500',
                 transition: 'color 0.3s'
               }}
               onMouseOver={(e) => e.target.style.color = '#20BA5A'}

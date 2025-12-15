@@ -81,7 +81,7 @@ export default function Compliance() {
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
-              📋 Investor Charter
+              Investor Charter
             </h2>
             
             <h3 style={{
@@ -357,7 +357,7 @@ export default function Compliance() {
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
-              🛡️ Grievance Redressal Mechanism
+              Grievance Redressal Mechanism
             </h2>
             
             <h3 style={{
@@ -612,7 +612,7 @@ export default function Compliance() {
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
-              📜 Regulatory Disclosures & Licenses
+              Regulatory Disclosures & Licenses
             </h2>
             
             <h3 style={{
@@ -869,7 +869,7 @@ export default function Compliance() {
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
-              ⚖️ Compliance Statement
+              Compliance Statement
             </h2>
             
             <div style={{
@@ -881,10 +881,10 @@ export default function Compliance() {
               <p style={{
                 fontSize: '16px',
                 lineHeight: '1.8',
-                color: '#B8B8B8',
+                color: '#C0A062',
                 margin: '0'
               }}>
-                BM Wealth is an <strong style={{ color: '#E5E5E5' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#E5E5E5' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#DAA520' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+                BM Wealth is an <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#DAA520' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#DAA520' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
               </p>
             </div>
             
@@ -905,7 +905,7 @@ export default function Compliance() {
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
-              ⚠️ Investment Disclaimer
+              Investment Disclaimer
             </h2>
             
             <div style={{
