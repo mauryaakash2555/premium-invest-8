@@ -1,4 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════════════
+﻿// ═══════════════════════════════════════════════════════════════════════════════
 // 📖 BLOG EDITING GUIDE - HOW TO CHANGE/EDIT THIS FILE
 // ═══════════════════════════════════════════════════════════════════════════════
 //
@@ -135,7 +135,7 @@ export const staticBlogPost = {
     },
     "datePublished": "2025-12-09",
     "dateModified": "2025-12-14",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes, portfolio review"
   }
@@ -632,8 +632,8 @@ export const staticBlogPost2 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Saturday morning retirement calculator shock: A 52-year-old Marketing Head discovers a ₹2.85 crore retirement gap. Why good salary and regular savings weren't enough.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Retirement planning Mumbai - luxury retirement lifestyle peaceful sunset",
   tags: ["retirement planning Mumbai", "retirement corpus India", "retirement shortfall", "financial planning 50s"],
   keywords: "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s",
@@ -659,7 +659,7 @@ export const staticBlogPost2 = {
     },
     "datePublished": "2025-01-15",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s"
   }
@@ -1101,8 +1101,8 @@ export const staticBlogPost3 = {
   read_time: "10 minutes",
   category: "Investment Education",
   excerpt: "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
   tags: ["insurance investment mix", "endowment policy trap", "ULIP vs mutual funds Mumbai", "financial advisor mistakes"],
   keywords: "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes",
@@ -1128,7 +1128,7 @@ export const staticBlogPost3 = {
     },
     "datePublished": "2025-01-22",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes"
   }
@@ -1563,8 +1563,8 @@ export const staticBlogPost5 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
   tags: ["SIP vs lump sum", "investment timing Mumbai", "market timing myth", "bonus investment strategy"],
   keywords: "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy",
@@ -1580,7 +1580,7 @@ export const staticBlogPost5 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-05",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy"
   }
@@ -1848,8 +1848,8 @@ export const staticBlogPost4 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
   tags: ["tax planning beyond 80C", "Mumbai tax saving", "software engineer taxes India", "NPS tax benefit"],
   keywords: "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit",
@@ -1865,7 +1865,7 @@ export const staticBlogPost4 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-01-29",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit"
   }
@@ -2110,8 +2110,8 @@ export const staticBlogPost6 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
   tags: ["emergency fund Mumbai", "COVID job loss India", "financial safety net", "Mumbai living costs"],
   keywords: "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs",
@@ -2533,8 +2533,8 @@ export const staticBlogPost7 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Gold bars wealth comparison premium investment instruments analysis",
   tags: ["ELSS vs PPF", "NPS comparison India", "tax saving investments 80C", "retirement corpus building Mumbai"],
   keywords: "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai",
@@ -2550,7 +2550,7 @@ export const staticBlogPost7 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-02-19",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai"
   }
@@ -2942,8 +2942,8 @@ export const staticBlogPost8 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury retirement villa peaceful lifestyle Mumbai retirement planning reality",
   tags: ["1 crore retirement Mumbai", "retirement corpus reality", "post retirement planning India", "Mumbai retirement costs"],
   keywords: "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs",
@@ -3325,8 +3325,8 @@ export const staticBlogPost9 = {
   read_time: "10 minutes",
   category: "Investment Education",
   excerpt: "Two brothers inherit ₹60L in 2010. One buys Thane flat (₹3.43 Cr today). One invests in mutual funds (₹4.25 Cr). The detailed math reveals everything.",
-  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1450101499162-c8845c9c8b37?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1450101499162-c8845c9c8b37?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
   tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
   keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
@@ -3750,8 +3750,8 @@ export const staticBlogPost10 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   image_alt: "Elegant gold jewelry bars luxury investment precious metals Mumbai wealth",
   tags: ["gold investment India", "sovereign gold bonds SGB", "digital gold vs physical", "gold investment options Mumbai"],
   keywords: "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai",
@@ -3767,7 +3767,7 @@ export const staticBlogPost10 = {
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-03-12",
     "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai"
   }
