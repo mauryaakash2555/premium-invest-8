@@ -1,21 +1,15 @@
 import { useEffect } from 'react';
-import { Shield, FileText, AlertCircle, Phone, Mail } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
-const Compliance = () => {
+// COMPLETE COMPLIANCE PAGE - All Sections Included
+
+export default function Compliance() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: '#000000',
-      width: '100%',
-      boxSizing: 'border-box',
-      paddingBottom: '80px',
-      overflowX: 'hidden'
-    }}>
+    <>
       <Helmet>
         <title>Regulatory Compliance & Investor Charter | BM Wealth Mumbai ARN 90008</title>
         <meta name="description" content="BM Wealth regulatory compliance, investor charter, grievance redressal mechanism. IRDAI Licensed and AMFI Registered ARN 90008. Transparent and regulated financial advisory in Mumbai." />
@@ -34,901 +28,937 @@ const Compliance = () => {
         <meta name="twitter:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
         <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
-      {/* Hero Section */}
-      <section
-        style={{
-          minHeight: '70vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          paddingTop: '100px',
-        }}
-      >
-        {/* Background */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
-          }}
-        />
 
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h1
-            style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
-              marginBottom: '24px',
-            }}
-            className="golden-gradient"
-          >
+      <div style={{
+        minHeight: '100vh',
+        background: '#000000',
+        paddingTop: '100px',
+        paddingBottom: '80px'
+      }}>
+        
+        {/* Page Container */}
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '0 20px'
+        }}>
+          
+          {/* Page Title */}
+          <h1 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: 'clamp(36px, 6vw, 56px)',
+            fontWeight: '700',
+            color: '#DAA520',
+            marginBottom: '20px',
+            textAlign: 'center',
+            lineHeight: '1.2'
+          }}>
             Regulatory Compliance & Investor Charter
           </h1>
-          <p
-            style={{
-              fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
-              maxWidth: '800px',
-              margin: '0 auto',
-              lineHeight: 1.6,
-            }}
-          >
-            Committed to transparency, investor protection, and regulatory compliance with IRDAI and AMFI
-          </p>
-        </div>
-      </section>
-
-      {/* Investor Charter Section */}
-      <section className="section-container" style={{
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: 'clamp(20px, 5vw, 60px) clamp(20px, 4vw, 20px)',
-        width: '100%',
-        boxSizing: 'border-box'
-      }}>
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(15px, 3vw, 20px)', marginBottom: '30px', flexWrap: 'wrap' }}>
-            <div
-              style={{
-                width: 'clamp(50px, 8vw, 60px)',
-                height: 'clamp(50px, 8vw, 60px)',
-                background: 'rgba(218, 165, 32, 0.1)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#DAA520',
-                flexShrink: 0
-              }}
-            >
-              <Shield size={32} style={{ width: 'clamp(24px, 5vw, 32px)', height: 'clamp(24px, 5vw, 32px)' }} />
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(24px, 3vw, 40px)',
-                color: '#DAA520',
-                margin: 0,
-                flex: 1,
-                minWidth: '200px'
-              }}
-            >
-              Investor Charter
-            </h2>
-          </div>
-
-          <div style={{ 
-            color: '#CCCCCC', 
-            lineHeight: 1.8, 
-            fontSize: 'clamp(16px, 3.5vw, 18px)', 
-            wordWrap: 'break-word', 
-            overflowWrap: 'break-word',
-            textAlign: 'left',
-            width: '100%',
-            boxSizing: 'border-box'
+          
+          <p style={{
+            fontSize: '18px',
+            lineHeight: '1.6',
+            color: '#B8B8B8',
+            textAlign: 'center',
+            marginBottom: '60px'
           }}>
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
+            Committed to transparency, integrity, and investor protection in accordance with IRDAI and AMFI regulations.
+          </p>
+          
+          {/* Section 1: Investor Charter */}
+          <section style={{
+            marginBottom: '60px',
+            paddingLeft: '24px',
+            borderLeft: '4px solid #DAA520'
+          }}>
+            
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.3'
+            }}>
+              📋 Investor Charter
+            </h2>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
               Vision Statement
             </h3>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
             }}>
-              BM Wealth is committed to providing professional investment advisory services with the highest
-              standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
+              BM Wealth is committed to providing professional investment advisory services with the highest standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
-
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
               Your Rights as an Investor
             </h3>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
             }}>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
-              </li>
-              <li style={{ 
-                marginBottom: '12px',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Right to Information:</strong> Complete and accurate disclosure of all material information
-              </li>
-              <li style={{ 
-                marginBottom: '12px',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
-              </li>
-              <li style={{ 
-                marginBottom: '12px',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Right to Privacy:</strong> Protection of your personal and financial information
-              </li>
-              <li style={{ 
-                marginBottom: '12px',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
-              </li>
-            </ul>
-
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
+              • <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Right to Privacy:</strong> Protection of your personal and financial information
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
               Your Responsibilities as an Investor
             </h3>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
             }}>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Conduct thorough research and due diligence before making investment decisions
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Provide complete and accurate information about your financial situation and risk appetite
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Read all documents carefully, including terms and conditions, before signing
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Keep records of all transactions and communications with your advisor
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Report any suspicious activity or concerns promptly
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Stay informed about market conditions and review your portfolio regularly
-              </li>
-            </ul>
-
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
+              • Conduct thorough research and due diligence before making investment decisions
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Provide complete and accurate information about your financial situation and risk appetite
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Read all documents carefully, including terms and conditions, before signing
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Keep records of all transactions and communications with your advisor
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Report any suspicious activity or concerns promptly
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              • Stay informed about market conditions and review your portfolio regularly
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
               Our Commitments to You
             </h3>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
             }}>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
+              • Provide investment advice based on thorough analysis and your best interests
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Maintain transparency in all dealings and disclose any conflicts of interest
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Protect your confidential information and ensure data security
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Comply with all IRDAI and AMFI regulations and industry best practices
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Provide timely and accurate information about your investments
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              • Address your concerns and grievances promptly and fairly
+            </p>
+            
+            {/* License Info Box */}
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.05)',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.3)',
+              marginTop: '30px'
+            }}>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                Provide investment advice based on thorough analysis and your best interests
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
+                <strong style={{ color: '#DAA520' }}>IRDAI License Number:</strong> 277925
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                Maintain transparency in all dealings and disclose any conflicts of interest
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
+                <strong style={{ color: '#DAA520' }}>AMFI Registration:</strong> ARN 90008
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                Protect your confidential information and ensure data security
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
+                <strong style={{ color: '#DAA520' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                Comply with all IRDAI and AMFI regulations and industry best practices
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
+                <strong style={{ color: '#DAA520' }}>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
               }}>
-                Provide timely and accurate information about your investments
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                Address your concerns and grievances promptly and fairly
-              </li>
-            </ul>
-
-            <div
-              className="sebi-disclaimer"
-              style={{
-                marginTop: '30px',
-                padding: 'clamp(20px, 4vw, 40px)',
-                background: 'rgba(218, 165, 32, 0.1)',
-                borderLeft: '4px solid #DAA520',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                width: '100%',
-                boxSizing: 'border-box',
-                textAlign: 'left'
-              }}
-            >
-              <strong>IRDAI License Number:</strong> 277925
-              <br />
-              <strong>AMFI Registration:</strong> ARN 90008
-              <br />
-              <strong>Validity:</strong> Perpetual (subject to regulatory compliance)
-              <br />
-              <strong>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
-              <br />
-              <strong>Principal Officer:</strong> Brahmdeo Maurya
-            </div>
-          </div>
-        </div>
-
-        {/* Grievance Redressal Section */}
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 60px) clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(15px, 3vw, 20px)', marginBottom: '30px', flexWrap: 'wrap' }}>
-            <div
-              style={{
-                width: 'clamp(50px, 8vw, 60px)',
-                height: 'clamp(50px, 8vw, 60px)',
-                background: 'rgba(218, 165, 32, 0.1)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#DAA520',
-                flexShrink: 0
-              }}
-            >
-              <FileText size={32} style={{ width: 'clamp(24px, 5vw, 32px)', height: 'clamp(24px, 5vw, 32px)' }} />
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(24px, 3vw, 40px)',
-                color: '#DAA520',
-                margin: 0,
-                flex: 1,
-                minWidth: '200px'
-              }}
-            >
-              Grievance Redressal Mechanism
-            </h2>
-          </div>
-
-          <div style={{ 
-            color: '#CCCCCC', 
-            lineHeight: 1.8, 
-            fontSize: 'clamp(16px, 3.5vw, 18px)', 
-            wordWrap: 'break-word', 
-            overflowWrap: 'break-word',
-            textAlign: 'left',
-            width: '100%',
-            boxSizing: 'border-box'
-          }}>
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
-              How to File a Complaint
-            </h3>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              We are committed to addressing your concerns promptly and fairly. If you have any grievances
-              regarding our services, please follow the process outlined below:
-            </p>
-
-            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Step 1: Contact Us Directly
-            </h4>
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                <Phone size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
-                <span style={{ flex: 1 }}>Phone: +91 8850977259</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
-                <span style={{ flex: 1 }}>Email: mauryaakash2555@gmail.com</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 2vw, 15px)', marginBottom: '12px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                <Mail size={20} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(18px, 3vw, 20px)', height: 'clamp(18px, 3vw, 20px)' }} />
-                <span style={{ flex: 1 }}>Grievance Email: grievance@bmwealth.co.in</span>
-              </div>
-            </div>
-
-            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Step 2: Written Complaint
-            </h4>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              If your concern is not resolved through initial contact, please submit a written complaint including:
-            </p>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
-            }}>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Your name and contact details</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Client ID or account reference number</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Detailed description of the grievance</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Supporting documents (if any)</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Expected resolution</li>
-            </ul>
-
-            <h4 style={{ color: '#C0A062', fontSize: 'clamp(18px, 4vw, 20px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Step 3: Escalation to Regulatory Authorities
-            </h4>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
-            </p>
-            <div
-              style={{
-                padding: 'clamp(16px, 3vw, 20px)',
-                background: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                width: '100%',
-                boxSizing: 'border-box',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word'
-              }}
-            >
-              <strong style={{ color: '#DAA520' }}>AMFI Complaints</strong>
-              <br />
-              Website:{' '}
-              <a
-                href="https://www.amfiindia.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#DAA520', textDecoration: 'underline' }}
-              >
-                https://www.amfiindia.com
-              </a>
-              <br />
-              <br />
-              <strong style={{ color: '#DAA520' }}>IRDAI Grievance Redressal</strong>
-              <br />
-              Website:{' '}
-              <a
-                href="https://www.irdai.gov.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#DAA520', textDecoration: 'underline' }}
-              >
-                https://www.irdai.gov.in
-              </a>
-            </div>
-
-            <h3 style={{ color: '#DAA520', fontSize: 'clamp(20px, 5vw, 24px)', marginTop: '30px', marginBottom: '20px', lineHeight: 1.3 }}>
-              Resolution Timeline
-            </h3>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
-            }}>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Acknowledgment:</strong> Within 3 working days of receiving the complaint
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Initial Response:</strong> Within 7 working days with status update
-              </li>
-              <li style={{ 
-                marginBottom: '12px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>
-                <strong>Resolution:</strong> Within 30 days from the date of receipt
-              </li>
-            </ul>
-
-            <div
-              style={{
-                marginTop: '30px',
-                padding: 'clamp(16px, 3vw, 20px)',
-                background: 'rgba(218, 165, 32, 0.1)',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 'clamp(12px, 2vw, 15px)',
-                width: '100%',
-                boxSizing: 'border-box',
-                borderLeft: '4px solid #DAA520'
-              }}
-            >
-              <AlertCircle size={24} style={{ color: '#DAA520', flexShrink: 0, marginTop: '2px', width: 'clamp(20px, 4vw, 24px)', height: 'clamp(20px, 4vw, 24px)' }} />
-              <div>
-                <strong style={{ color: '#DAA520' }}>Important Note:</strong>
-                <p style={{ 
-                margin: '8px 0 0 0',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                textAlign: 'left',
-                lineHeight: 1.6
-              }}>
-                  Please keep a copy of your complaint and all correspondence for your records. We are committed
-                  to resolving all grievances in a fair, transparent, and timely manner in accordance with regulatory
-                  guidelines.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Regulatory Information */}
-        <div className="glass-effect" style={{ padding: 'clamp(20px, 4vw, 40px)', marginBottom: '40px', width: '100%', boxSizing: 'border-box' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(24px, 3vw, 36px)',
-              color: '#DAA520',
-              marginBottom: '30px',
-            }}
-          >
-            REGULATORY DISCLOSURES &amp; LICENSES
-          </h2>
-
-          <div style={{ 
-            color: '#CCCCCC', 
-            lineHeight: 1.8, 
-            fontSize: 'clamp(16px, 3.5vw, 18px)', 
-            wordWrap: 'break-word', 
-            overflowWrap: 'break-word',
-            textAlign: 'left',
-            width: '100%',
-            boxSizing: 'border-box'
-          }}>
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Insurance Advisory Services
-            </h3>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>IRDAI License Number:</strong> 277925
-            </p>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>Service Type:</strong> Insurance Advisory
-            </p>
-            <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
-              <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
-            </p>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Mutual Fund Distribution Services
-            </h3>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>AMFI Registration:</strong> ARN 90008
-            </p>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
-            </p>
-            <p style={{ marginBottom: '15px', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word' }}>
-              <strong style={{ color: '#C0A062' }}>Principal Officer:</strong> Brahmdeo Maurya
-            </p>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Additional Advisory Services
-            </h3>
-            <ul style={{ 
-              paddingLeft: 'clamp(20px, 5vw, 30px)', 
-              marginBottom: '20px',
-              listStylePosition: 'outside'
-            }}>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Portfolio Management Services (PMS) - Advisory &amp; Referral Services</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Fixed Deposit (FD) Advisory Services</li>
-              <li style={{ 
-                marginBottom: '10px', 
-                fontSize: 'clamp(16px, 3.5vw, 18px)', 
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                lineHeight: 1.6,
-                paddingLeft: '8px',
-                textAlign: 'left'
-              }}>Investment Planning &amp; Financial Consulting</li>
-            </ul>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Registered Office
-            </h3>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              66, Vinod Villa Bldg., 1st floor office no. 108<br />
-              Cavel Cross Lane 3, Kalbadevi<br />
-              Mumbai - 400002, Maharashtra, India
-            </p>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Regulatory Authorities
-            </h3>
-            <div
-              style={{
-                padding: '20px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '8px',
-                marginBottom: '15px',
-              }}
-            >
-              <strong style={{ color: '#DAA520' }}>IRDAI (Insurance Regulatory and Development Authority of India)</strong>
-              <br />
-              Website:{' '}
-              <a
-                href="https://www.irdai.gov.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#DAA520', textDecoration: 'underline' }}
-              >
-                www.irdai.gov.in
-              </a>
-            </div>
-            <div
-              style={{
-                padding: 'clamp(16px, 3vw, 20px)',
-                background: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                width: '100%',
-                boxSizing: 'border-box',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word'
-              }}
-            >
-              <strong style={{ color: '#DAA520' }}>AMFI (Association of Mutual Funds in India)</strong>
-              <br />
-              Website:{' '}
-              <a
-                href="https://www.amfiindia.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#DAA520', textDecoration: 'underline' }}
-              >
-                www.amfiindia.com
-              </a>
-            </div>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Grievance Redressal Mechanism
-            </h3>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>Email:</strong> grievance@bmwealth.co.in
-            </p>
-            <p style={{ 
-              marginBottom: '10px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>Phone:</strong> +91 8850977259
-            </p>
-            <p style={{ 
-              marginBottom: '20px', 
-              fontSize: 'clamp(16px, 3.5vw, 18px)', 
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              textAlign: 'left',
-              lineHeight: 1.6
-            }}>
-              <strong style={{ color: '#C0A062' }}>Response Time:</strong> Within 7 working days
-            </p>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Compliance Statement
-            </h3>
-            <div
-              style={{
-                padding: 'clamp(16px, 3vw, 20px)',
-                background: 'rgba(218, 165, 32, 0.1)',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                borderLeft: '4px solid #DAA520',
-                width: '100%',
-                boxSizing: 'border-box',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word'
-              }}
-            >
-              <p style={{ 
-                marginBottom: '0',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                textAlign: 'left',
-                lineHeight: 1.6
-              }}>
-                BM Wealth is an IRDAI Licensed Insurance Advisor (License No. 277925) and AMFI Registered Mutual Fund Distributor (ARN 90008). We follow SEBI guidelines for mutual fund distribution but are NOT SEBI-registered Investment Advisors. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+                <strong style={{ color: '#DAA520' }}>Principal Officer:</strong> Brahmdeo Maurya
               </p>
             </div>
-
-            <h3 style={{ color: '#C0A062', fontSize: 'clamp(20px, 5vw, 22px)', marginTop: '25px', marginBottom: '15px', lineHeight: 1.3 }}>
-              Investment Disclaimer
+            
+          </section>
+          
+          {/* Section 2: Grievance Redressal Mechanism */}
+          <section style={{
+            marginBottom: '60px',
+            paddingLeft: '24px',
+            borderLeft: '4px solid #DAA520'
+          }}>
+            
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.3'
+            }}>
+              🛡️ Grievance Redressal Mechanism
+            </h2>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              How to File a Complaint
             </h3>
-            <div className="sebi-disclaimer" style={{ marginTop: '0', fontSize: 'clamp(16px, 3.5vw, 18px)', wordWrap: 'break-word', width: '100%', boxSizing: 'border-box', textAlign: 'left' }}>
-              <strong>Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '24px'
+            }}>
+              We are committed to addressing your concerns promptly and fairly. If you have any grievances regarding our services, please follow the process outlined below:
+            </p>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.05)',
+              padding: '24px',
+              borderRadius: '8px',
+              marginBottom: '20px'
+            }}>
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#DAA520',
+                marginBottom: '16px'
+              }}>
+                Step 1: Contact Us Directly
+              </h4>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Phone:</strong> +91 8850977259
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Email:</strong> mauryaakash2555@gmail.com
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>Grievance Email:</strong> grievance@bmwealth.co.in
+              </p>
             </div>
-          </div>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.05)',
+              padding: '24px',
+              borderRadius: '8px',
+              marginBottom: '20px'
+            }}>
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#DAA520',
+                marginBottom: '16px'
+              }}>
+                Step 2: Written Complaint
+              </h4>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '12px'
+              }}>
+                If your concern is not resolved through initial contact, please submit a written complaint including:
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                • Your name and contact details
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                • Client ID or account reference number
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                • Detailed description of the grievance
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                • Supporting documents (if any)
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
+              }}>
+                • Expected resolution
+              </p>
+            </div>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.05)',
+              padding: '24px',
+              borderRadius: '8px',
+              marginBottom: '30px'
+            }}>
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#DAA520',
+                marginBottom: '16px'
+              }}>
+                Step 3: Escalation to Regulatory Authorities
+              </h4>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '16px'
+              }}>
+                If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>AMFI Complaints:</strong>
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '16px'
+              }}>
+                Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.amfiindia.com</a>
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
+              }}>
+                <strong style={{ color: '#E5E5E5' }}>IRDAI Grievance Redressal:</strong>
+              </p>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
+              }}>
+                Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.irdai.gov.in</a>
+              </p>
+            </div>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Resolution Timeline
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Initial Response:</strong> Within 7 working days with status update
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '24px'
+            }}>
+              • <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
+            </p>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.1)',
+              padding: '20px',
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.3)'
+            }}>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#DAA520',
+                fontWeight: '600',
+                margin: '0'
+              }}>
+                Important Note: Please keep a copy of your complaint and all correspondence for your records. We are committed to resolving all grievances in a fair, transparent, and timely manner in accordance with regulatory guidelines.
+              </p>
+            </div>
+            
+          </section>
+          
+          {/* Section 3: Regulatory Disclosures & Licenses */}
+          <section style={{
+            marginBottom: '60px',
+            paddingLeft: '24px',
+            borderLeft: '4px solid #DAA520'
+          }}>
+            
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.3'
+            }}>
+              📜 Regulatory Disclosures & Licenses
+            </h2>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Insurance Advisory Services
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>IRDAI License Number:</strong> 277925
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Service Type:</strong> Insurance Advisory
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Mutual Fund Distribution Services
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>AMFI Registration:</strong> ARN 90008
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Additional Advisory Services
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Portfolio Management Services (PMS) - Advisory & Referral Services
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              • Fixed Deposit (FD) Advisory Services
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              • Investment Planning & Financial Consulting
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Registered Office
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '8px'
+            }}>
+              66, Vinod Villa Bldg., 1st floor office no. 108
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '8px'
+            }}>
+              Cavel Cross Lane 3, Kalbadevi
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              Mumbai - 400002, Maharashtra, India
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Regulatory Authorities
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>IRDAI (Insurance Regulatory and Development Authority of India)</strong>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '24px'
+            }}>
+              Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.irdai.gov.in</a>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>AMFI (Association of Mutual Funds in India)</strong>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.amfiindia.com</a>
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Grievance Redressal Mechanism
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Email:</strong> grievance@bmwealth.co.in
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Phone:</strong> +91 8850977259
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>Response Time:</strong> Within 7 working days
+            </p>
+            
+          </section>
+          
+          {/* Section 4: Compliance Statement */}
+          <section style={{
+            marginBottom: '60px',
+            paddingLeft: '24px',
+            borderLeft: '4px solid #DAA520'
+          }}>
+            
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.3'
+            }}>
+              ⚖️ Compliance Statement
+            </h2>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.1)',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.3)'
+            }}>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
+              }}>
+                BM Wealth is an <strong style={{ color: '#E5E5E5' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#E5E5E5' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#DAA520' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+              </p>
+            </div>
+            
+          </section>
+          
+          {/* Section 5: Investment Disclaimer */}
+          <section style={{
+            marginBottom: '0',
+            paddingLeft: '24px',
+            borderLeft: '4px solid #DAA520'
+          }}>
+            
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.3'
+            }}>
+              ⚠️ Investment Disclaimer
+            </h2>
+            
+            <div style={{
+              background: 'rgba(218, 165, 32, 0.1)',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.3)'
+            }}>
+              <p style={{
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#DAA520',
+                fontWeight: '600',
+                margin: '0'
+              }}>
+                Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+              </p>
+            </div>
+            
+          </section>
+          
         </div>
-      </section>
-      
-      {/* Spacer to prevent footer overlap and white bottom */}
-      <div style={{
-        height: '100px',
-        background: '#000000',
-        width: '100%'
-      }} />
-    </div>
+        
+        {/* Mobile Responsive Styles */}
+        <style>{`
+          @media (max-width: 768px) {
+            section {
+              padding-left: 16px !important;
+            }
+            
+            h1 {
+              font-size: 32px !important;
+            }
+            
+            h2 {
+              font-size: 24px !important;
+            }
+            
+            h3 {
+              font-size: 18px !important;
+            }
+            
+            h4 {
+              font-size: 16px !important;
+            }
+            
+            p {
+              font-size: 15px !important;
+            }
+          }
+        `}</style>
+        
+      </div>
+    </>
   );
-};
-
-export default Compliance;
+}
