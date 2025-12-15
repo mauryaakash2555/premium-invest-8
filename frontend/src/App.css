@@ -222,8 +222,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7);
+  transform: scale(1.15);
+  box-shadow: 0 8px 35px rgba(37, 211, 102, 0.8);
+  background: #20bd5a;
 }
 
 .service-card {

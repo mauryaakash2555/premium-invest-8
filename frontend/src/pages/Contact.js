@@ -403,35 +403,49 @@ const Contact = () => {
                   alignItems: 'flex-start',
                   gap: '20px',
                   textDecoration: 'none',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  transition: 'all 0.3s ease',
                   cursor: 'pointer',
+                  border: '1px solid rgba(37, 211, 102, 0.2)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(37, 211, 102, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(37, 211, 102, 0.4)';
+                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.5)';
+                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.05)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.2)';
+                  e.currentTarget.style.background = 'transparent';
                 }}
               >
                 <div
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(37, 211, 102, 0.1)',
+                    background: 'rgba(37, 211, 102, 0.15)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#25D366',
                     flexShrink: 0,
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(37, 211, 102, 0.25)';
+                    e.currentTarget.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(37, 211, 102, 0.15)';
+                    e.currentTarget.style.transform = 'scale(1)';
                   }}
                 >
                   <MessageCircle size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#25D366', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: '#25D366', marginBottom: '8px', fontWeight: '600', transition: 'color 0.3s ease' }}>
                     WhatsApp Us
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
