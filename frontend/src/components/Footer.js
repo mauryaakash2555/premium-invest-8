@@ -21,19 +21,20 @@ const Footer = () => {
           className="footer-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '50px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '40px',
             marginBottom: '40px',
+            alignItems: 'start',
           }}
         >
           {/* Company Info */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h3
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '24px',
                 color: '#DAA520',
-                marginBottom: '16px',
+                marginBottom: '4px',
                 fontWeight: 600,
               }}
             >
@@ -44,7 +45,7 @@ const Footer = () => {
                 color: '#FFFFFF',
                 fontSize: '14px',
                 lineHeight: '1.8',
-                marginBottom: '12px',
+                marginBottom: '0',
                 fontWeight: 500,
               }}
             >
@@ -63,12 +64,12 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '16px',
+                marginBottom: '4px',
                 fontWeight: 600,
               }}
             >
@@ -179,12 +180,12 @@ const Footer = () => {
           </div>
 
           {/* Legal Links */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '16px',
+                marginBottom: '4px',
                 fontWeight: 600,
               }}
             >
@@ -295,12 +296,12 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h4
               style={{
                 color: '#DAA520',
                 fontSize: '18px',
-                marginBottom: '16px',
+                marginBottom: '4px',
                 fontWeight: 600,
               }}
             >
