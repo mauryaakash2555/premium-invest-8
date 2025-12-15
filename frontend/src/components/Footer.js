@@ -298,7 +298,7 @@ const Footer = () => {
             >
               Contact Us
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <p style={{ color: '#FFFFFF', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                 Phone: +91 8850977259
               </p>
@@ -319,7 +319,7 @@ const Footer = () => {
                   textDecoration: 'none',
                   color: '#25D366',
                   fontSize: '14px',
-                  marginTop: '4px',
+                  marginTop: '0',
                   transition: 'all 0.3s ease',
                   fontWeight: 500,
                 }}
