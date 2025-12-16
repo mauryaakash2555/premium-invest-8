@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -83,23 +83,23 @@ export default function Footer() {
         
         {/* Copyright */}
         <div className="footer-copyright">
-          <p> 2025 BM Wealth. All rights reserved.</p>
-        <div
-          style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            paddingTop: '20px',
-            textAlign: 'center',
-          }}
-        >
-          <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-            ┬⌐ {new Date().getFullYear()} BM Wealth. All rights reserved.
-          </p>
-          <p style={{ color: '#C0A062', fontSize: '13px' }}>
-            IRDAI Licensed | AMFI Registered
-          </p>
+          <div
+            style={{
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              paddingTop: '20px',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
+              © {new Date().getFullYear()} BM Wealth. All rights reserved.
+            </p>
+            <p style={{ color: '#C0A062', fontSize: '13px' }}>
+              IRDAI Licensed | AMFI Registered
+            </p>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };
 
