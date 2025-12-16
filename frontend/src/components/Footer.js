@@ -57,7 +57,7 @@ const Footer = () => {
               fontFamily: '"Playfair Display", serif',
             }}
           >
-            🔥 BM Wealth UPDATED 🔥
+            BM Wealth
           </h3>
           <p
             style={{
