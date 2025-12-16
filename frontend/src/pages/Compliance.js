@@ -15,13 +15,36 @@ const Compliance = () => {
       
       {/* Header Section with Background */}
       <div style={{
+        position: 'relative',
         backgroundColor: '#0a0a0a',
-        backgroundImage: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
         padding: '120px 0 80px 0',
         textAlign: 'center',
-        marginTop: '80px'
+        marginTop: '80px',
+        overflow: 'hidden'
       }}>
+        {/* Background Image */}
         <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&q=80&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.3
+        }} />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)'
+        }} />
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
           maxWidth: '1200px',
           margin: '0 auto',
           padding: '0 20px'
