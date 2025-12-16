@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -8,26 +7,29 @@ export default function Footer() {
       <div className="sebi-disclaimer-bar">
         <div className="sebi-disclaimer-content">
           <p>
-            <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. Please consider your specific investment requirements, risk tolerance, investment goal, time frame, risk and reward balance and cost associated with the investment before choosing a fund or designing a portfolio that suits your needs.
+            <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to
+            market risks. Read all the related documents carefully before investing. Past
+            performance is not indicative of future returns. Please consider your specific
+            investment requirements, risk tolerance, investment goal, time frame, risk and
+            reward balance and cost associated with the investment before choosing a fund or
+            designing a portfolio that suits your needs.
           </p>
         </div>
       </div>
 
       {/* Main Footer */}
       <footer className="main-footer">
-        
-        {/* 4 Column Grid */}
         <div className="footer-grid">
-          
-          {/* Column 1: BM Wealth */}
+          {/* Column 1: Brand */}
           <div className="footer-column">
             <h3 className="footer-heading-main">BM Wealth</h3>
             <p className="footer-tagline">Premium Financial Advisory</p>
             <p className="footer-description">
-              Empowering investors with tailored financial solutions in Mumbai.
+              Mumbai&apos;s distinguished financial advisory, helping investors design tailored,
+              long-term wealth strategies with clarity and discipline.
             </p>
           </div>
-          
+
           {/* Column 2: Quick Links */}
           <div className="footer-column">
             <h3 className="footer-heading">Quick Links</h3>
@@ -39,27 +41,27 @@ export default function Footer() {
               <Link to="/contact">Contact</Link>
             </nav>
           </div>
-          
-          {/* Column 3: Legal */}
+
+          {/* Column 3: Legal & Compliance */}
           <div className="footer-column">
-            <h3 className="footer-heading">Legal</h3>
+            <h3 className="footer-heading">Legal &amp; Compliance</h3>
             <nav className="footer-links">
-              <Link to="/terms">Terms & Conditions</Link>
+              <Link to="/terms">Terms &amp; Conditions</Link>
               <Link to="/privacy">Privacy Policy</Link>
               <Link to="/disclaimer">Disclaimer</Link>
               <Link to="/refund">Refund Policy</Link>
-              <Link to="/compliance">Compliance</Link>
+              <Link to="/compliance">Regulatory Compliance</Link>
             </nav>
           </div>
-          
-          {/* Column 4: Contact Us */}
+
+          {/* Column 4: Contact */}
           <div className="footer-column">
             <h3 className="footer-heading">Contact Us</h3>
             <div className="footer-contact">
               <p><strong>Phone:</strong> +91 8850977259</p>
               <p><strong>Email:</strong> support@bmwealth.co.in</p>
               <p>Mumbai, Maharashtra</p>
-              <a 
+              <a
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -69,18 +71,19 @@ export default function Footer() {
               </a>
             </div>
           </div>
-          
         </div>
-        
+
         {/* Investment Disclaimer Bar */}
         <div className="investment-disclaimer-bar">
           <div className="investment-disclaimer-content">
             <p>
-              <strong>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+              <strong>Investment Disclaimer:</strong> Mutual fund investments are subject to
+              market risks. Past performance is not indicative of future results. Please read
+              all scheme-related documents carefully before investing.
             </p>
           </div>
         </div>
-        
+
         {/* Copyright */}
         <div className="footer-copyright">
           <div
@@ -98,7 +101,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        </footer>
-      </>
-    );
-    };
+      </footer>
+    </>
+  );
+}

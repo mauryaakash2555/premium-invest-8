@@ -20,13 +20,13 @@ export default function Compliance() {
         <meta property="og:url" content="https://www.bmwealth.co.in/compliance" />
         <meta property="og:title" content="Regulatory Compliance & Investor Charter | BM Wealth ARN 90008" />
         <meta property="og:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://www.bmwealth.co.in/compliance-hero.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://www.bmwealth.co.in/compliance" />
         <meta name="twitter:title" content="Regulatory Compliance & Investor Charter | BM Wealth" />
         <meta name="twitter:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/compliance-hero.webp" />
       </Helmet>
 
       {/* Hero Section */}
@@ -49,8 +49,7 @@ export default function Compliance() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            backgroundImage: 'url(/compliance-hero.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.65,
