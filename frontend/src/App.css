@@ -216,6 +216,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 20px 40px;
   margin-bottom: 0;
   overflow: hidden;
+  width: 100%;
 }
 
 .sebi-disclaimer-content {
@@ -223,8 +224,8 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
+  word-break: normal;
+  hyphens: none;
 }
 
 .sebi-disclaimer-content p {
@@ -232,6 +233,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #C0A062;
   line-height: 1.6;
   margin: 0;
+  font-style: italic;
   white-space: normal;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -244,6 +246,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 20px 40px;
   margin-top: 40px;
   overflow: hidden;
+  width: 100%;
 }
 
 .investment-disclaimer-content {
@@ -251,8 +254,8 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
+  word-break: normal;
+  hyphens: none;
 }
 
 .investment-disclaimer-content p {
@@ -260,6 +263,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #C0A062;
   line-height: 1.6;
   margin: 0;
+  font-style: italic;
   white-space: normal;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -326,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
 .footer-tagline {
   font-size: 14px;
   color: #C0A062;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   font-style: italic;
 }
 
@@ -334,6 +338,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   color: #CCCCCC;
   line-height: 1.6;
+  font-style: italic;
 }
 
 /* Footer links - each link on its own line */

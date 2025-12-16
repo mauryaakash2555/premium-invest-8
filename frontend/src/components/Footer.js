@@ -26,8 +26,7 @@ export default function Footer() {
             <h3 className="footer-heading-main">BM Wealth</h3>
             <p className="footer-tagline">Premium Financial Advisory</p>
             <p className="footer-description">
-              Mumbai&apos;s distinguished financial advisory, helping investors design tailored,
-              long-term wealth strategies with clarity and discipline.
+              Empowering investors with tailored financial solutions in Mumbai.
             </p>
           </div>
 
@@ -43,15 +42,15 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Column 3: Legal & Compliance */}
+          {/* Column 3: Legal */}
           <div className="footer-column">
-            <h3 className="footer-heading">Legal &amp; Compliance</h3>
+            <h3 className="footer-heading">Legal</h3>
             <nav className="footer-links">
               <Link to="/terms">Terms &amp; Conditions</Link>
               <Link to="/privacy">Privacy Policy</Link>
               <Link to="/disclaimer">Disclaimer</Link>
               <Link to="/refund">Refund Policy</Link>
-              <Link to="/compliance">Regulatory Compliance</Link>
+              <Link to="/compliance">Compliance</Link>
             </nav>
           </div>
 
