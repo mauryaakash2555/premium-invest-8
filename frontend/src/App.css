@@ -204,7 +204,7 @@ h1, h2, h3, h4, h5, h6 {
 .footer-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
+  gap: 30px;
   margin-bottom: 40px;
   align-items: flex-start;
 }
@@ -212,14 +212,14 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 640px) {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
+    gap: 40px;
   }
 }
 
 @media (min-width: 1024px) {
   .footer-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 0;
+    gap: 40px;
   }
 }
 
@@ -386,12 +386,6 @@ input, textarea, select {
     margin-bottom: 20px;
   }
   
-  /* Footer grid - responsive */
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 30px !important;
-  }
-  
   /* Hero sections - reduce height on mobile */
   section[style*="minHeight"] {
     min-height: 40vh !important;
@@ -430,12 +424,9 @@ input, textarea, select {
   }
 }
 
-/* Small phones (iPhone SE, etc.) */
+/* Small phones (iPhone SE, etc.) - footer already handles this with base mobile-first rules */
 @media (max-width: 480px) {
-  .footer-grid {
-    grid-template-columns: 1fr !important;
-    gap: 30px !important;
-  }
+  /* Footer is already 1 column from base .footer-grid styles */
 }
 
 @media (max-width: 375px) {

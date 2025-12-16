@@ -1489,35 +1489,6 @@ export default function Compliance() {
           
         </div>
         
-        {/* Mobile Responsive Styles */}
-        <style>{`
-          @media (max-width: 768px) {
-            section {
-              padding-left: 16px !important;
-            }
-            
-            h1 {
-              font-size: 32px !important;
-            }
-            
-            h2 {
-              font-size: 24px !important;
-            }
-            
-            h3 {
-              font-size: 18px !important;
-            }
-            
-            h4 {
-              font-size: 16px !important;
-            }
-            
-            p {
-              font-size: 15px !important;
-            }
-          }
-        `}</style>
-        
       </div>
     </>
   );
