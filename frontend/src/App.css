@@ -327,6 +327,13 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
 }
 
+/* Desktop only: reduce gap for tighter spacing */
+@media (min-width: 1024px) {
+  .footer-links {
+    gap: 3px;
+  }
+}
+
 .footer-links a {
   color: #CCCCCC;
   text-decoration: none;
