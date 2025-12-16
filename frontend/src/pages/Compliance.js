@@ -50,11 +50,12 @@ export default function Compliance() {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1581093196049-899b3d4a5811?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&q=80&auto=format&fit=crop)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.7,
-            filter: 'brightness(0.9)',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.8,
+            filter: 'brightness(0.7)',
           }}
         />
         <div
@@ -150,31 +151,30 @@ export default function Compliance() {
       </section>
 
       <div style={{
-        minHeight: '100vh',
         background: '#000000',
-        padding: '60px 0 80px',
-        boxSizing: 'border-box',
-        width: '100%'
+        padding: '40px 0',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        {/* Page Container */}
         <div style={{
           maxWidth: '900px',
           margin: '0 auto',
-          padding: '0 20px',
-          width: '100%'
+          padding: '0 30px',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
-          {/* Section 1: Investor Charter */}
           <section style={{
-            marginBottom: '60px',
             width: '100%',
-            textAlign: 'left'
-          }}>  
+            textAlign: 'left',
+            marginBottom: '40px'
+          }}>
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: 'clamp(28px, 5vw, 36px)',
+              fontSize: '32px',
               fontWeight: '600',
               color: '#DAA520',
-              marginBottom: '24px',
+              margin: '0 0 20px 0',
+              padding: 0,
               lineHeight: '1.3'
             }}>
               Investor Charter
@@ -185,8 +185,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Vision Statement
             </h3>
@@ -208,8 +208,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Your Rights as an Investor
             </h3>
@@ -357,8 +357,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Your Responsibilities as an Investor
             </h3>
@@ -534,8 +534,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Our Commitments to You
             </h3>
@@ -780,17 +780,18 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               How to File a Complaint
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
-              marginBottom: '24px'
+              margin: '0 0 25px 0',
+              padding: 0
             }}>
               We are committed to addressing your concerns promptly and fairly. If you have any grievances regarding our services, please follow the process outlined below:
             </p>
@@ -811,7 +812,7 @@ export default function Compliance() {
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
@@ -819,7 +820,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
@@ -827,7 +828,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 margin: '0'
               }}>
@@ -851,7 +852,7 @@ export default function Compliance() {
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '12px'
               }}>
@@ -876,7 +877,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.8',
+                    lineHeight: '1.7',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -903,7 +904,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.8',
+                    lineHeight: '1.7',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -930,7 +931,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.8',
+                    lineHeight: '1.7',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -957,7 +958,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.8',
+                    lineHeight: '1.7',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -984,7 +985,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.8',
+                    lineHeight: '1.7',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -1010,7 +1011,7 @@ export default function Compliance() {
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '16px'
               }}>
@@ -1018,7 +1019,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
@@ -1026,7 +1027,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '16px'
               }}>
@@ -1034,7 +1035,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
@@ -1042,7 +1043,7 @@ export default function Compliance() {
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#B8B8B8',
                 margin: '0'
               }}>
@@ -1055,8 +1056,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Resolution Timeline
             </h3>
@@ -1080,7 +1081,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1108,7 +1109,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1136,7 +1137,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1153,7 +1154,7 @@ export default function Compliance() {
             }}>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.8',
+                lineHeight: '1.7',
                 color: '#DAA520',
                 fontWeight: '600',
                 margin: '0'
@@ -1186,15 +1187,15 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Insurance Advisory Services
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1203,7 +1204,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1212,7 +1213,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               margin: '0 0 30px 0',
               padding: 0,
@@ -1227,15 +1228,15 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Mutual Fund Distribution Services
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1244,7 +1245,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1253,7 +1254,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               margin: '0 0 30px 0',
               padding: 0,
@@ -1268,8 +1269,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Additional Advisory Services
             </h3>
@@ -1293,7 +1294,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1321,7 +1322,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1349,7 +1350,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.8',
+                  lineHeight: '1.7',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1363,15 +1364,15 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Registered Office
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '8px'
             }}>
@@ -1380,7 +1381,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '8px'
             }}>
@@ -1389,7 +1390,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               margin: '0 0 30px 0',
               padding: 0,
@@ -1404,15 +1405,15 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Regulatory Authorities
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1421,7 +1422,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.8',
+              lineHeight: '1.7',
               color: '#B8B8B8',
               marginBottom: '24px'
             }}>
@@ -1430,6 +1431,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
+              lineHeight: '1.7',
               lineHeight: '1.8',
               color: '#B8B8B8',
               marginBottom: '12px'
@@ -1454,8 +1456,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              marginTop: '30px',
-              marginBottom: '16px'
+              margin: '25px 0 15px 0',
+              padding: 0
             }}>
               Grievance Redressal Mechanism
             </h3>
