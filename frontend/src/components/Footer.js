@@ -4,7 +4,23 @@ import { MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer style={{ backgroundColor: '#0a0a0a', color: '#fff', padding: '0', fontFamily: '"Inter", sans-serif', width: '100%' }}>
+    <>
+      <style>{`
+        .footer-custom-link {
+          color: #aaaaaa !important;
+          text-decoration: none !important;
+          font-size: 14px !important;
+          line-height: 1.2 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+          box-sizing: border-box !important;
+        }
+        .footer-custom-link:hover {
+          color: #DAA520 !important;
+        }
+      `}</style>
+      <footer style={{ backgroundColor: '#0a0a0a', color: '#fff', padding: '0', fontFamily: '"Inter", sans-serif', width: '100%' }}>
       
       {/* SEBI Disclaimer - FIXED CONTAINER */}
       <div style={{
@@ -223,6 +239,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 
