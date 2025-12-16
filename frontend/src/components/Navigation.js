@@ -90,7 +90,7 @@ const Navigation = () => {
         <div
           style={{
             display: 'flex',
-            gap: '40px',
+            gap: '30px',
             alignItems: 'center',
           }}
           className="desktop-menu"
