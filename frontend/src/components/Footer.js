@@ -38,7 +38,7 @@ const styles = {
   sectionTitle: {
     color: '#DAA520',
     fontSize: '17px',
-    marginBottom: '8px',
+    marginBottom: '4px',
     fontWeight: 600,
     marginTop: 0,
   },
