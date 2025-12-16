@@ -268,19 +268,19 @@ const Footer = () => {
       {/* Copyright */}
       <div style={{
         borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-              paddingTop: '20px',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-              © {new Date().getFullYear()} BM Wealth. All rights reserved.
-            </p>
-            <p style={{ color: '#C0A062', fontSize: '13px' }}>
-              IRDAI Licensed | AMFI Registered
-            </p>
-          </div>
-        </div>
-      </footer>
-    </>
+        paddingTop: '20px',
+        textAlign: 'center',
+        padding: '20px'
+      }}>
+        <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
+          © {new Date().getFullYear()} BM Wealth. All rights reserved.
+        </p>
+        <p style={{ color: '#C0A062', fontSize: '13px' }}>
+          IRDAI Licensed | AMFI Registered
+        </p>
+      </div>
+    </footer>
   );
 };
+
+export default Footer;
