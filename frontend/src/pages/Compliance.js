@@ -75,7 +75,7 @@ export default function Compliance() {
               lineHeight: '1.2',
             }}
           >
-            Regulatory Compliance & Investor Protection
+            🔥 Regulatory Compliance & Investor Protection FIXED 🔥
           </h1>
         </div>
       </section>
