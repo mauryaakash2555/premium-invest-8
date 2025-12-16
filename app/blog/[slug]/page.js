@@ -222,7 +222,7 @@ export default async function BlogDetailPage({ params }) {
     <>
       {/* Mumbai Skyline Hero Image for Blog 1 - Immediate render, no lazy loading */}
       {isBlog1 && (
-        <div className="relative w-full h-64 md:h-96 overflow-hidden">
+        <div className="relative w-full h-48 md:h-96 overflow-hidden">
           <img
             src={mumbaiSkylineUrl}
             alt="Mumbai skyline"
@@ -234,7 +234,7 @@ export default async function BlogDetailPage({ params }) {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black" />
         </div>
       )}
-      <article className="card space-y-6 p-6 max-w-4xl mx-auto">
+      <article className="card space-y-6 p-4 md:p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-slate-300/70">
