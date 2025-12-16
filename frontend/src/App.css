@@ -330,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Desktop only: reduce gap for tighter spacing */
 @media (min-width: 1024px) {
   .footer-links {
-    gap: 0px;
+    gap: -3px;
   }
 }
 
