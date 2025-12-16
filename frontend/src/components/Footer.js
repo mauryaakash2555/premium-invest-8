@@ -96,11 +96,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Home</Link>
-            <Link to="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>About Us</Link>
-            <Link to="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Services</Link>
-            <Link to="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Blog</Link>
-            <Link to="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Contact</Link>
+            <Link to="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Home</Link>
+            <Link to="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>About Us</Link>
+            <Link to="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Services</Link>
+            <Link to="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Blog</Link>
+            <Link to="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Contact</Link>
           </div>
         </div>
 
@@ -119,11 +119,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Terms & Conditions</Link>
-            <Link to="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Privacy Policy</Link>
-            <Link to="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Disclaimer</Link>
-            <Link to="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Refund Policy</Link>
-            <Link to="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: '1px 0', margin: '0' }}>Compliance</Link>
+            <Link to="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Terms & Conditions</Link>
+            <Link to="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Privacy Policy</Link>
+            <Link to="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Disclaimer</Link>
+            <Link to="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Refund Policy</Link>
+            <Link to="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Compliance</Link>
           </div>
         </div>
 
@@ -164,7 +164,7 @@ const Footer = () => {
                 color: '#25D366',
                 textDecoration: 'none',
                 fontSize: '14px',
-                marginTop: '4px'
+                marginTop: '-8px'
               }}
             >
               <MessageCircle size={16} color="#25D366" />

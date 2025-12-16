@@ -341,32 +341,7 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-/* Footer links - each link on its own line */
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* Desktop only: reduce gap for tighter spacing */
-@media (min-width: 1024px) {
-  .footer-links {
-    gap: 0px !important;
-  }
-}
-
-.footer-links a {
-  color: #CCCCCC;
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.3s ease;
-  display: block;
-  line-height: 1.6;
-}
-
-.footer-links a:hover {
-  color: #DAA520;
-}
+/* Footer links - REMOVED TO PREVENT CONFLICTS WITH INLINE STYLES */
 
 /* Footer contact section */
 .footer-contact {
@@ -603,9 +578,4 @@ input, textarea, select {
   }
 }
 
-/* Mobile responsive footer - ensure proper gap on tablets and mobile */
-@media (max-width: 1023px) {
-  .footer-links {
-    gap: 8px !important;
-  }
-}
+/* Mobile responsive footer - REMOVED TO PREVENT CONFLICTS */
