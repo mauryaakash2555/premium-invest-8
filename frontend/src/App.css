@@ -215,11 +215,16 @@ h1, h2, h3, h4, h5, h6 {
   border-left: 4px solid #DAA520;
   padding: 20px 40px;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 .sebi-disclaimer-content {
   max-width: 1400px;
   margin: 0 auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .sebi-disclaimer-content p {
@@ -227,6 +232,9 @@ h1, h2, h3, h4, h5, h6 {
   color: #C0A062;
   line-height: 1.6;
   margin: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Investment Disclaimer Bar (bottom of footer) */
@@ -235,11 +243,16 @@ h1, h2, h3, h4, h5, h6 {
   border-top: 1px solid rgba(218, 165, 32, 0.2);
   padding: 20px 40px;
   margin-top: 40px;
+  overflow: hidden;
 }
 
 .investment-disclaimer-content {
   max-width: 1400px;
   margin: 0 auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .investment-disclaimer-content p {
@@ -247,6 +260,9 @@ h1, h2, h3, h4, h5, h6 {
   color: #C0A062;
   line-height: 1.6;
   margin: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Footer copyright section */
@@ -330,7 +346,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Desktop only: reduce gap for tighter spacing */
 @media (min-width: 1024px) {
   .footer-links {
-    gap: -3px;
+    gap: 0px !important;
   }
 }
 
