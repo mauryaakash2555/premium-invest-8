@@ -66,7 +66,7 @@ export default function Footer() {
                   href="https://wa.me/918850977259"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: '#DAA520', textDecoration: 'none' }}
+                  style={{ color: '#25D366', textDecoration: 'none' }}
                 >
                   💬 WhatsApp Us
                 </a>
