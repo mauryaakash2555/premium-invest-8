@@ -14,7 +14,7 @@ const Footer = () => {
     }}>
       {/* SEBI Disclaimer Bar */}
       <div style={{
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#0a0a0a',
         padding: '16px 0',
         borderBottom: '1px solid rgba(255,255,255,0.1)'
       }}>
@@ -30,7 +30,7 @@ const Footer = () => {
             margin: 0,
             textAlign: 'center'
           }}>
-            <strong style={{ color: '#DAA520' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all related documents carefully before investing.
+            <strong style={{ color: '#B8860B' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all related documents carefully before investing.
           </p>
         </div>
       </div>
@@ -47,7 +47,7 @@ const Footer = () => {
         {/* Column 1: About */}
         <div>
           <h3 style={{
-            color: '#DAA520',
+            color: '#B8860B',
             fontSize: '20px',
             marginBottom: '20px',
             fontWeight: '600',
@@ -56,10 +56,11 @@ const Footer = () => {
             BM Wealth
           </h3>
           <p style={{
-            color: '#aaa',
+            color: '#B8860B',
             fontSize: '14px',
             lineHeight: '1.7',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            fontWeight: '600'
           }}>
             Premium Financial Advisory
           </p>
@@ -76,7 +77,7 @@ const Footer = () => {
         {/* Column 2: Quick Links */}
         <div>
           <h3 style={{
-            color: '#fff',
+            color: '#B8860B',
             fontSize: '16px',
             marginBottom: '20px',
             fontWeight: '600',
@@ -100,7 +101,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                   '&:hover': {
-                    color: '#DAA520'
+                    color: '#B8860B'
                   }
                 }}
               >
@@ -113,7 +114,7 @@ const Footer = () => {
         {/* Column 3: Legal */}
         <div>
           <h3 style={{
-            color: '#fff',
+            color: '#B8860B',
             fontSize: '16px',
             marginBottom: '20px',
             fontWeight: '600',
@@ -143,7 +144,7 @@ const Footer = () => {
                   fontSize: '14px',
                   transition: 'color 0.3s ease',
                   '&:hover': {
-                    color: '#DAA520'
+                    color: '#B8860B'
                   }
                 }}
               >
@@ -156,7 +157,7 @@ const Footer = () => {
         {/* Column 4: Contact */}
         <div>
           <h3 style={{
-            color: '#fff',
+            color: '#B8860B',
             fontSize: '16px',
             marginBottom: '20px',
             fontWeight: '600',
@@ -244,7 +245,7 @@ const Footer = () => {
 
       {/* Investment Disclaimer */}
       <div style={{
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#0a0a0a',
         padding: '16px 0',
         borderTop: '1px solid rgba(255,255,255,0.1)'
       }}>
@@ -260,7 +261,7 @@ const Footer = () => {
             margin: 0,
             textAlign: 'center'
           }}>
-            <strong style={{ color: '#DAA520' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+            <strong style={{ color: '#B8860B' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
           </p>
         </div>
       </div>
@@ -268,17 +269,19 @@ const Footer = () => {
       {/* Copyright */}
       <div style={{
         borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-              paddingTop: '20px',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-              © {new Date().getFullYear()} BM Wealth. All rights reserved.
-            </p>
-            <p style={{ color: '#C0A062', fontSize: '13px' }}>
-              IRDAI Licensed | AMFI Registered
-            </p>
-          </div>
-      </footer>
+        paddingTop: '20px',
+        textAlign: 'center',
+        paddingBottom: '20px'
+      }}>
+        <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
+          © {new Date().getFullYear()} BM Wealth. All rights reserved.
+        </p>
+        <p style={{ color: '#B8860B', fontSize: '13px' }}>
+          IRDAI Licensed | AMFI Registered
+        </p>
+      </div>
+    </footer>
   );
 };
+
+export default Footer;
