@@ -29,10 +29,72 @@ export default function Compliance() {
         <meta name="twitter:image" content="https://www.bmwealth.co.in/compliance-hero.webp" />
       </Helmet>
 
+      {/* Hero Section */}
+      <section
+        style={{
+          minHeight: '70vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          paddingTop: '100px',
+        }}
+      >
+        {/* Background Image */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: 'url(/compliance-hero.webp)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+          }}
+        />
+
+        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(32px, 5vw, 64px)',
+              marginBottom: '24px',
+            }}
+            className="golden-gradient"
+          >
+            Regulatory Compliance & Investor Charter
+          </h1>
+          <p
+            style={{
+              fontSize: 'clamp(16px, 2vw, 20px)',
+              color: '#C0A062',
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: 1.6,
+            }}
+          >
+            Committed to transparency, integrity, and investor protection in accordance with IRDAI and AMFI regulations.
+          </p>
+        </div>
+      </section>
+
       <div style={{
         minHeight: '100vh',
         background: '#000000',
-        paddingTop: '120px',
+        paddingTop: '60px',
         paddingBottom: '80px'
       }}>
         
@@ -42,21 +104,6 @@ export default function Compliance() {
           margin: '0 auto',
           padding: '0 20px'
         }}>
-          
-          {/* Page Header */}
-          <h1 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: 'clamp(36px, 6vw, 48px)',
-            fontWeight: '700',
-            color: '#DAA520',
-            marginBottom: '12px',
-            lineHeight: '1.2'
-          }}>Regulatory Compliance & Investor Charter</h1>
-          <p style={{ 
-            fontSize: '16px', 
-            color: '#999', 
-            marginBottom: '40px' 
-          }}>Committed to transparency, integrity, and investor protection in accordance with IRDAI and AMFI regulations.</p>
           
           {/* Section 1: Investor Charter */}
           <section style={{
