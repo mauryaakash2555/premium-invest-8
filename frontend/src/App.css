@@ -602,3 +602,10 @@ input, textarea, select {
     font-size: 24px !important;
   }
 }
+
+/* Mobile responsive footer - ensure proper gap on tablets and mobile */
+@media (max-width: 1023px) {
+  .footer-links {
+    gap: 8px !important;
+  }
+}
