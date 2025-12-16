@@ -61,14 +61,16 @@ export default function Footer() {
               <p><strong>Phone:</strong> +91 8850977259</p>
               <p><strong>Email:</strong> support@bmwealth.co.in</p>
               <p>Mumbai, Maharashtra</p>
-              <a
-                href="https://wa.me/918850977259"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whatsapp-link"
-              >
-                WhatsApp Us
-              </a>
+              <p>
+                <a
+                  href="https://wa.me/918850977259"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#DAA520', textDecoration: 'none' }}
+                >
+                  💬 WhatsApp Us
+                </a>
+              </p>
             </div>
           </div>
         </div>

@@ -353,24 +353,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
-.footer-contact .whatsapp-link {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 20px;
-  background: #25D366;
-  color: #FFFFFF;
-  text-decoration: none;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease;
-  text-align: center;
-}
-
-.footer-contact .whatsapp-link:hover {
-  background: #20bd5a;
-  transform: translateY(-2px);
-}
 
 .whatsapp-float {
   position: fixed;
