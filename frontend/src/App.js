@@ -20,6 +20,16 @@ const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const Disclaimer = lazy(() => import("@/pages/Disclaimer"));
 const RefundPolicy = lazy(() => import("@/pages/RefundPolicy"));
 
+// Service Pages
+const MutualFunds = lazy(() => import("@/pages/MutualFunds"));
+const PortfolioManagement = lazy(() => import("@/pages/PortfolioManagement"));
+const TradingServices = lazy(() => import("@/pages/TradingServices"));
+const Insurance = lazy(() => import("@/pages/Insurance"));
+const FixedDeposits = lazy(() => import("@/pages/FixedDeposits"));
+const SIPServices = lazy(() => import("@/pages/SIPServices"));
+const Careers = lazy(() => import("@/pages/Careers"));
+const Sitemap = lazy(() => import("@/pages/Sitemap"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div style={{
@@ -44,14 +54,30 @@ function App() {
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
+                <Route path="about-us" element={<About />} />
                 <Route path="services" element={<Services />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="blog" element={<Blog />} />
                 <Route path="blog/:slug" element={<BlogDetail />} />
+                
+                {/* Service Pages */}
+                <Route path="mutual-funds" element={<MutualFunds />} />
+                <Route path="portfolio-management" element={<PortfolioManagement />} />
+                <Route path="trading-services" element={<TradingServices />} />
+                <Route path="insurance" element={<Insurance />} />
+                <Route path="fixed-deposits" element={<FixedDeposits />} />
+                <Route path="sip" element={<SIPServices />} />
+                <Route path="careers" element={<Careers />} />
+                <Route path="sitemap" element={<Sitemap />} />
+                
+                {/* Legal Pages */}
                 <Route path="compliance" element={<Compliance />} />
+                <Route path="terms" element={<TermsAndConditions />} />
                 <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+                <Route path="privacy" element={<PrivacyPolicy />} />
                 <Route path="privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="disclaimer" element={<Disclaimer />} />
+                <Route path="refund" element={<RefundPolicy />} />
                 <Route path="refund-policy" element={<RefundPolicy />} />
               </Route>
             </Routes>
