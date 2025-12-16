@@ -2,3 +2,6 @@ Version: 2.0.0
 Build: 2025-12-16-17:30
 Changes: 8 new SEO pages + Footer/Compliance fixes
 Cache-Busting: ACTIVE
+
+
+

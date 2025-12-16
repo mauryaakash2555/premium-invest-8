@@ -132,3 +132,6 @@ const Insurance = () => {
 };
 
 export default Insurance;
+
+
+

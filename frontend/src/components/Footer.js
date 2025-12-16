@@ -1,251 +1,105 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer style={{
-      backgroundColor: '#0a0a0a',
-      color: '#fff',
-      padding: '0',
-      fontFamily: '"Inter", sans-serif',
-      width: '100%',
-      marginTop: 'auto'
-    }}>
-      {/* SEBI Disclaimer */}
-      <div style={{
-        backgroundColor: '#0a0a0a',
-        padding: '16px 0',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 20px'
-        }}>
-          <p style={{
-            fontSize: '13px',
-            lineHeight: '1.6',
-            color: '#999',
-            margin: 0,
-            textAlign: 'center'
-          }}>
-            <strong style={{ color: '#B8860B' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all related documents carefully before investing.
+    <>
+      {/* SEBI Disclaimer Bar */}
+      <div className="sebi-disclaimer-bar">
+        <div className="sebi-disclaimer-content">
+          <p>
+            <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. Please consider your specific investment requirements, risk tolerance, investment goal, time frame, risk and reward balance and cost associated with the investment before choosing a fund or designing a portfolio that suits your needs.
           </p>
         </div>
       </div>
 
-      {/* Main Footer Content */}
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '40px 20px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '40px'
-      }}>
-        {/* BM Wealth Section - NO GAPS */}
-        <div>
-          <h3 style={{
-            color: '#B8860B',
-            fontSize: '20px',
-            marginBottom: '8px',
-            fontWeight: '600',
-            fontFamily: '"Playfair Display", serif'
-          }}>
-            BM Wealth
-          </h3>
-          <p style={{
-            color: '#B8860B',
-            fontSize: '14px',
-            lineHeight: '1.4',
-            marginBottom: '16px',
-            fontWeight: '600',
-            margin: '0 0 16px 0'
-          }}>
-            Premium Financial Advisory
-          </p>
-          <p style={{
-            color: '#888',
-            fontSize: '14px',
-            lineHeight: '1.6',
-            margin: 0
-          }}>
-            Empowering investors with tailored financial solutions in Mumbai.
-          </p>
-        </div>
-
-        {/* Quick Links - NO GAPS */}
-        <div>
-          <h3 style={{
-            color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
-            fontWeight: '600'
-          }}>
-            Quick Links
-          </h3>
-          <nav style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px'
-          }}>
-            {['Home', 'About Us', 'Services', 'Blog', 'Contact'].map((item) => (
-              <Link
-                key={item}
-                to={`/${item.toLowerCase().replace(' ', '-')}`}
-                style={{
-                  color: '#aaa',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  lineHeight: '1.4'
-                }}
+      {/* Main Footer */}
+      <footer className="main-footer">
+        
+        {/* 4 Column Grid */}
+        <div className="footer-grid">
+          
+          {/* Column 1: BM Wealth */}
+          <div className="footer-column">
+            <h3 className="footer-heading-main">BM Wealth</h3>
+            <p className="footer-tagline">Premium Financial Advisory</p>
+            <p className="footer-description">
+              Empowering investors with tailored financial solutions in Mumbai.
+            </p>
+          </div>
+          
+          {/* Column 2: Quick Links */}
+          <div className="footer-column">
+            <h3 className="footer-heading">Quick Links</h3>
+            <nav className="footer-links">
+              <Link to="/">Home</Link>
+              <Link to="/about">About Us</Link>
+              <Link to="/services">Services</Link>
+              <Link to="/blog">Blog</Link>
+              <Link to="/contact">Contact</Link>
+            </nav>
+          </div>
+          
+          {/* Column 3: Legal */}
+          <div className="footer-column">
+            <h3 className="footer-heading">Legal</h3>
+            <nav className="footer-links">
+              <Link to="/terms">Terms & Conditions</Link>
+              <Link to="/privacy">Privacy Policy</Link>
+              <Link to="/disclaimer">Disclaimer</Link>
+              <Link to="/refund">Refund Policy</Link>
+              <Link to="/compliance">Compliance</Link>
+            </nav>
+          </div>
+          
+          {/* Column 4: Contact Us */}
+          <div className="footer-column">
+            <h3 className="footer-heading">Contact Us</h3>
+            <div className="footer-contact">
+              <p><strong>Phone:</strong> +91 8850977259</p>
+              <p><strong>Email:</strong> support@bmwealth.co.in</p>
+              <p>Mumbai, Maharashtra</p>
+              <a 
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-link"
               >
-                {item}
-              </Link>
-            ))}
-          </nav>
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+          
         </div>
-
-        {/* Legal - NO GAPS */}
-        <div>
-          <h3 style={{
-            color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
-            fontWeight: '600'
-          }}>
-            Legal
-          </h3>
-          <nav style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px'
-          }}>
-            {[
-              { text: 'Terms & Conditions', path: '/terms' },
-              { text: 'Privacy Policy', path: '/privacy' },
-              { text: 'Disclaimer', path: '/disclaimer' },
-              { text: 'Refund Policy', path: '/refund' },
-              { text: 'Compliance', path: '/compliance' }
-            ].map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                style={{
-                  color: '#aaa',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  lineHeight: '1.4'
-                }}
-              >
-                {item.text}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Contact Us - FIXED ADDRESS */}
-        <div>
-          <h3 style={{
-            color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
-            fontWeight: '600'
-          }}>
-            Contact Us
-          </h3>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px'
-          }}>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Phone: +91 8850977259
+        
+        {/* Investment Disclaimer Bar */}
+        <div className="investment-disclaimer-bar">
+          <div className="investment-disclaimer-content">
+            <p>
+              <strong>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
             </p>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Email: support@bmwealth.co.in
-            </p>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Mumbai, Maharashtra
-            </p>
-            
-            {/* WhatsApp - NO GREEN BACKGROUND */}
-            <a 
-              href="https://wa.me/918850977259"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#25D366',
-                textDecoration: 'none',
-                fontWeight: '500',
-                marginTop: '8px',
-                fontSize: '14px'
-              }}
-            >
-              <MessageCircle size={16} color="#25D366" />
-              WhatsApp Us
-            </a>
           </div>
         </div>
-      </div>
-
-      {/* Investment Disclaimer */}
-      <div style={{
-        backgroundColor: '#0a0a0a',
-        padding: '16px 0',
-        borderTop: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 20px'
-        }}>
-          <p style={{
-            fontSize: '13px',
-            lineHeight: '1.6',
-            color: '#999',
-            margin: 0,
-            textAlign: 'center'
-          }}>
-            <strong style={{ color: '#B8860B' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks.
-          </p>
+        
+        {/* Copyright */}
+        <div className="footer-copyright">
+          <div
+            style={{
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              paddingTop: '20px',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
+              © {new Date().getFullYear()} BM Wealth. All rights reserved.
+            </p>
+            <p style={{ color: '#C0A062', fontSize: '13px' }}>
+              IRDAI Licensed | AMFI Registered
+            </p>
+          </div>
         </div>
-      </div>
-
-      {/* Copyright */}
-      <div style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        paddingTop: '20px',
-        paddingBottom: '20px',
-        textAlign: 'center'
-      }}>
-        <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-          © 2025 BM Wealth. All rights reserved.
-        </p>
-        <p style={{ color: '#B8860B', fontSize: '13px' }}>
-          IRDAI Licensed | AMFI Registered
-        </p>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };
 
