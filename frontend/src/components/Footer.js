@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -247,16 +248,20 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: 'inline-flex',
+                  display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  fontSize: '14px',
-                  color: '#25D366',
                   textDecoration: 'none',
-                  fontWeight: '500'
+                  color: '#25D366',
+                  fontSize: '14px',
+                  marginTop: '8px',
+                  transition: 'color 0.3s ease',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#20B858')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#25D366')}
               >
-                📱 WhatsApp Us
+                <MessageCircle size={16} />
+                WhatsApp Us
               </a>
             </div>
           </div>
