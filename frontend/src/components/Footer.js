@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -64,7 +65,18 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="whatsapp-link"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  color: '#25D366',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  marginTop: '10px',
+                  fontSize: '14px'
+                }}
               >
+                <MessageCircle size={16} color="#25D366" />
                 WhatsApp Us
               </a>
             </div>

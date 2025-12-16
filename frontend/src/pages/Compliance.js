@@ -32,13 +32,13 @@ export default function Compliance() {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '60vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          paddingTop: '100px',
+          paddingTop: '80px',
         }}
       >
         {/* Background Image */}
@@ -50,11 +50,11 @@ export default function Compliance() {
             right: 0,
             bottom: 0,
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+              'url(https://images.unsplash.com/photo-1581093196049-899b3d4a5811?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.65,
-            filter: 'brightness(1.1)',
+            opacity: 0.7,
+            filter: 'brightness(0.9)',
           }}
         />
         <div
@@ -64,19 +64,20 @@ export default function Compliance() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%)',
           }}
         />
         <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '900px', padding: '0 20px' }}>
           <h1
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: 'clamp(36px, 6vw, 56px)',
+              fontSize: 'clamp(32px, 5vw, 48px)',
               fontWeight: '700',
               color: '#DAA520',
-              marginBottom: '20px',
+              marginBottom: '24px',
               textAlign: 'center',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
+              textShadow: '0 2px 4px rgba(0,0,0,0.3)'
             }}
             className="golden-gradient"
           >
@@ -86,37 +87,88 @@ export default function Compliance() {
           <p style={{
             fontSize: '18px',
             lineHeight: '1.6',
-            color: '#E5E5E5',
+            color: '#FFFFFF',
             textAlign: 'center',
-            marginBottom: 0,
+            marginBottom: '30px',
             maxWidth: '700px',
-            margin: '0 auto'
+            margin: '0 auto 30px',
+            textShadow: '0 1px 3px rgba(0,0,0,0.3)'
           }}>
             Committed to transparency, integrity, and investor protection in accordance with IRDAI and AMFI regulations.
           </p>
+          
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            flexWrap: 'wrap',
+            marginTop: '30px'
+          }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.1)',
+              padding: '12px 24px',
+              borderRadius: '4px',
+              border: '1px solid rgba(218, 165, 32, 0.3)'
+            }}>
+              <span style={{
+                color: '#DAA520',
+                fontWeight: '600',
+                fontSize: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAA520" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                IRDAI Licensed
+              </span>
+            </div>
+            <div style={{
+              background: 'rgba(255,255,255,0.1)',
+              padding: '12px 24px',
+              borderRadius: '4px',
+              border: '1px solid rgba(218, 165, 32, 0.3)'
+            }}>
+              <span style={{
+                color: '#DAA520',
+                fontWeight: '600',
+                fontSize: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAA520" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                AMFI Registered
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
       <div style={{
         minHeight: '100vh',
         background: '#000000',
-        paddingTop: '60px',
-        paddingBottom: '80px'
+        padding: '60px 0 80px',
+        boxSizing: 'border-box',
+        width: '100%'
       }}>
-        
         {/* Page Container */}
         <div style={{
           maxWidth: '900px',
           margin: '0 auto',
-          padding: '0 20px'
+          padding: '0 20px',
+          width: '100%'
         }}>
-          
           {/* Section 1: Investor Charter */}
           <section style={{
             marginBottom: '60px',
-            paddingLeft: '0'
-          }}>
-            
+            width: '100%',
+            textAlign: 'left'
+          }}>  
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
@@ -143,7 +195,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               BM Wealth is committed to providing professional investment advisory services with the highest standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
@@ -1159,7 +1214,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
@@ -1197,7 +1255,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
@@ -1330,7 +1391,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               Mumbai - 400002, Maharashtra, India
             </p>
@@ -1377,7 +1441,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.amfiindia.com</a>
             </p>
@@ -1415,7 +1482,10 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              marginBottom: '30px'
+              margin: '0 0 30px 0',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%'
             }}>
               <strong style={{ color: '#E5E5E5' }}>Response Time:</strong> Within 7 working days
             </p>

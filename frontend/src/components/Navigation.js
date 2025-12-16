@@ -44,7 +44,7 @@ const Navigation = () => {
         style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '20px',
+          padding: '15px 20px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -90,7 +90,7 @@ const Navigation = () => {
         <div
           style={{
             display: 'flex',
-            gap: '30px',
+            gap: '20px',
             alignItems: 'center',
           }}
           className="desktop-menu"
@@ -104,7 +104,7 @@ const Navigation = () => {
                 color:
                   location.pathname === link.path ? '#DAA520' : '#FFFFFF',
                 textDecoration: 'none',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: 500,
                 transition: 'color 0.3s ease',
                 position: 'relative',
