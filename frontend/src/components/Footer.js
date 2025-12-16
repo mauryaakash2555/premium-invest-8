@@ -96,11 +96,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Home</Link>
-            <Link to="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>About Us</Link>
-            <Link to="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Services</Link>
-            <Link to="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Blog</Link>
-            <Link to="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Contact</Link>
+            <Link to="/" className="footer-custom-link">Home</Link>
+            <Link to="/about" className="footer-custom-link">About Us</Link>
+            <Link to="/services" className="footer-custom-link">Services</Link>
+            <Link to="/blog" className="footer-custom-link">Blog</Link>
+            <Link to="/contact" className="footer-custom-link">Contact</Link>
           </div>
         </div>
 
