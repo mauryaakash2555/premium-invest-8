@@ -279,8 +279,6 @@ const Footer = () => {
               IRDAI Licensed | AMFI Registered
             </p>
           </div>
-        </div>
       </footer>
-    </>
   );
 };
