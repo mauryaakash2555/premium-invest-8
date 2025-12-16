@@ -107,8 +107,7 @@ export default function Compliance() {
           
           {/* Section 1: Investor Charter */}
           <section style={{
-            marginBottom: '60px',
-            paddingLeft: '0'
+            marginBottom: '60px'
           }}>
             
             <h2 style={{
@@ -1105,8 +1104,7 @@ export default function Compliance() {
           
           {/* Section 3: Regulatory Disclosures & Licenses */}
           <section style={{
-            marginBottom: '60px',
-            paddingLeft: '0'
+            marginBottom: '60px'
           }}>
             
             <h2 style={{
@@ -1418,8 +1416,7 @@ export default function Compliance() {
           
           {/* Section 4: Compliance Statement */}
           <section style={{
-            marginBottom: '60px',
-            paddingLeft: '0'
+            marginBottom: '60px'
           }}>
             
             <h2 style={{
@@ -1453,8 +1450,7 @@ export default function Compliance() {
           
           {/* Section 5: Investment Disclaimer */}
           <section style={{
-            marginBottom: '0',
-            paddingLeft: '0'
+            marginBottom: '0'
           }}>
             
             <h2 style={{
