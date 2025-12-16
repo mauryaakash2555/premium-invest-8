@@ -1,305 +1,321 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer
-      style={{
-        background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
-        borderTop: '1px solid rgba(218, 165, 32, 0.2)',
-        padding: '60px 20px 30px',
-      }}
-    >
-      <div
-        style={{
+    <>
+      {/* SEBI Disclaimer Bar Above Footer */}
+      <div style={{
+        background: '#000000',
+        borderTop: '1px solid rgba(218, 165, 32, 0.15)',
+        padding: '30px 20px'
+      }}>
+        <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-        }}
-      >
-        {/* Main Footer Content */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '40px',
-            marginBottom: '40px',
-          }}
-        >
-          {/* Company Info */}
+          padding: '20px 24px',
+          background: 'transparent',
+          borderLeft: '3px solid #DAA520'
+        }}>
+          <p style={{
+            fontSize: '13px',
+            lineHeight: '1.7',
+            color: '#DAA520',
+            margin: '0',
+            fontStyle: 'italic'
+          }}>
+            <strong style={{ fontWeight: '600' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. Please consider your specific investment requirements, risk tolerance, investment goal, time frame, risk and reward balance and cost associated with the investment before choosing a fund or designing a portfolio that suits your needs.
+          </p>
+        </div>
+      </div>
+
+      {/* Main Footer */}
+      <footer style={{
+        background: '#000000',
+        padding: '0 20px 30px 20px'
+      }}>
+        
+        {/* 4 Column Grid */}
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '50px',
+          paddingBottom: '30px'
+        }}>
+          
+          {/* Column 1: BM Wealth */}
           <div>
-            <h3
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: '24px',
-                color: '#DAA520',
-                marginBottom: '16px',
-              }}
-            >
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '22px',
+              fontWeight: '700',
+              color: '#DAA520',
+              marginBottom: '16px',
+              marginTop: '0'
+            }}>
               BM Wealth
             </h3>
-            <p
-              style={{
-                color: '#C0A062',
-                fontSize: '14px',
-                lineHeight: '1.6',
-                marginBottom: '12px',
-              }}
-            >
+            
+            <p style={{
+              fontSize: '15px',
+              lineHeight: '1.5',
+              color: '#DAA520',
+              marginBottom: '10px',
+              fontWeight: '500'
+            }}>
               Premium Financial Advisory
             </p>
-            <p
-              style={{
-                color: '#CCCCCC',
-                fontSize: '14px',
-                lineHeight: '1.6',
-              }}
-            >
+            
+            <p style={{
+              fontSize: '14px',
+              lineHeight: '1.6',
+              color: '#B8B8B8',
+              margin: '0'
+            }}>
               Empowering investors with tailored financial solutions in Mumbai.
             </p>
           </div>
-
-          {/* Quick Links */}
+          
+          {/* Column 2: Quick Links */}
           <div>
-            <h4
-              style={{
-                color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
-                fontWeight: 600,
-              }}
-            >
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '16px',
+              marginTop: '0'
+            }}>
               Quick Links
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <Link
-                to="/"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+            </h3>
+            
+            <nav style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <Link to="/" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Home
               </Link>
-              <Link
-                to="/about"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/about" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 About Us
               </Link>
-              <Link
-                to="/services"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/services" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Services
               </Link>
-              <Link
-                to="/blog"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/blog" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Blog
               </Link>
-              <Link
-                to="/contact"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/contact" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Contact
               </Link>
-            </div>
+            </nav>
           </div>
-
-          {/* Legal Links */}
+          
+          {/* Column 3: Legal */}
           <div>
-            <h4
-              style={{
-                color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
-                fontWeight: 600,
-              }}
-            >
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '16px',
+              marginTop: '0'
+            }}>
               Legal
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <Link
-                to="/terms-and-conditions"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+            </h3>
+            
+            <nav style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <Link to="/terms-and-conditions" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Terms & Conditions
               </Link>
-              <Link
-                to="/privacy-policy"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/privacy-policy" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Privacy Policy
               </Link>
-              <Link
-                to="/disclaimer"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/disclaimer" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Disclaimer
               </Link>
-              <Link
-                to="/refund-policy"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/refund-policy" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Refund Policy
               </Link>
-              <Link
-                to="/compliance"
-                style={{
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  transition: 'color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-              >
+              
+              <Link to="/compliance" style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                textDecoration: 'none'
+              }}>
                 Compliance
               </Link>
-            </div>
+            </nav>
           </div>
-
-          {/* Contact Info */}
+          
+          {/* Column 4: Contact Us */}
           <div>
-            <h4
-              style={{
-                color: '#DAA520',
-                fontSize: '18px',
-                marginBottom: '16px',
-                fontWeight: 600,
-              }}
-            >
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#DAA520',
+              marginBottom: '16px',
+              marginTop: '0'
+            }}>
               Contact Us
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>
-                Phone: +91 8850977259
+            </h3>
+            
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <p style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                margin: '0',
+                lineHeight: '1.5'
+              }}>
+                <strong style={{ fontWeight: '600' }}>Phone:</strong> +91 8850977259
               </p>
-              <p style={{ color: '#FFFFFF', fontSize: '14px' }}>
-                Email: support@bmwealth.co.in
+              
+              <p style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                margin: '0',
+                lineHeight: '1.5'
+              }}>
+                <strong style={{ fontWeight: '600' }}>Email:</strong> support@bmwealth.co.in
               </p>
-              <p style={{ color: '#CCCCCC', fontSize: '13px', marginTop: '4px' }}>
+              
+              <p style={{
+                fontSize: '14px',
+                color: '#E5E5E5',
+                margin: '0 0 10px 0',
+                lineHeight: '1.5'
+              }}>
                 Mumbai, Maharashtra
               </p>
-              <a
+              
+              <a 
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  textDecoration: 'none',
-                  color: '#25D366',
                   fontSize: '14px',
-                  marginTop: '8px',
-                  transition: 'color 0.3s ease',
+                  color: '#25D366',
+                  textDecoration: 'none',
+                  fontWeight: '500'
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#20B858')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#25D366')}
               >
-                <MessageCircle size={16} />
-                WhatsApp Us
+                📱 WhatsApp Us
               </a>
             </div>
           </div>
+          
         </div>
-
-        {/* Disclaimer */}
-        <div
-          style={{
-            marginBottom: '30px',
-            padding: '16px',
-            backgroundColor: 'rgba(218, 165, 32, 0.1)',
-            borderRadius: '8px',
-            borderLeft: '4px solid #DAA520',
-          }}
-        >
-          <p style={{ color: '#CCCCCC', fontSize: '13px', lineHeight: '1.6' }}>
-            <strong style={{ color: '#DAA520' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market
-            risks. Past performance is not indicative of future results. Please read
-            all scheme-related documents carefully before investing.
-          </p>
+        
+        {/* Investment Disclaimer Bar */}
+        <div style={{
+          borderTop: '1px solid rgba(218, 165, 32, 0.15)',
+          paddingTop: '20px',
+          marginTop: '10px'
+        }}>
+          <div style={{
+            maxWidth: '1400px',
+            margin: '0 auto',
+            padding: '16px 24px',
+            background: 'transparent',
+            borderLeft: '3px solid #DAA520'
+          }}>
+            <p style={{
+              fontSize: '13px',
+              lineHeight: '1.7',
+              color: '#DAA520',
+              margin: '0',
+              fontWeight: '500'
+            }}>
+              <strong style={{ fontWeight: '600' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+            </p>
+          </div>
         </div>
-
+        
         {/* Copyright */}
-        <div
-          style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            paddingTop: '20px',
-            textAlign: 'center',
-          }}
-        >
-          <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-            © {new Date().getFullYear()} BM Wealth. All rights reserved.
-          </p>
-          <p style={{ color: '#C0A062', fontSize: '13px' }}>
-            IRDAI Licensed | AMFI Registered
+        <div style={{
+          textAlign: 'center',
+          marginTop: '20px',
+          paddingTop: '15px',
+          borderTop: '1px solid rgba(218, 165, 32, 0.1)'
+        }}>
+          <p style={{
+            fontSize: '12px',
+            color: '#666',
+            margin: '0'
+          }}>
+            © 2025 BM Wealth. All rights reserved.
           </p>
         </div>
-      </div>
-    </footer>
+        
+      </footer>
+
+      {/* Mobile Responsive */}
+      <style>{`
+        @media (max-width: 768px) {
+          footer > div:first-child {
+            grid-template-columns: 1fr !important;
+            gap: 25px !important;
+          }
+        }
+      `}</style>
+    </>
   );
 };
 
