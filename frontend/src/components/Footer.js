@@ -119,11 +119,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Terms & Conditions</Link>
-            <Link to="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Privacy Policy</Link>
-            <Link to="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Disclaimer</Link>
-            <Link to="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Refund Policy</Link>
-            <Link to="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: 1.2, padding: '0', margin: 0, display: 'block' }}>Compliance</Link>
+            <Link to="/terms" className="footer-custom-link">Terms & Conditions</Link>
+            <Link to="/privacy" className="footer-custom-link">Privacy Policy</Link>
+            <Link to="/disclaimer" className="footer-custom-link">Disclaimer</Link>
+            <Link to="/refund" className="footer-custom-link">Refund Policy</Link>
+            <Link to="/compliance" className="footer-custom-link">Compliance</Link>
           </div>
         </div>
 

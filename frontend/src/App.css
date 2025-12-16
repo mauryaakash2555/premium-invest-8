@@ -341,7 +341,21 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-/* Footer links - REMOVED TO PREVENT CONFLICTS WITH INLINE STYLES */
+/* Footer links - OVERRIDE TAILWIND WITH !important */
+.footer-custom-link {
+  color: #aaaaaa !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+  transition: color 0.3s ease !important;
+}
+
+.footer-custom-link:hover {
+  color: #DAA520 !important;
+}
 
 /* Footer contact section */
 .footer-contact {
