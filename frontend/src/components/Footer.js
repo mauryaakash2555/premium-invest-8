@@ -112,11 +112,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/" className="footer-custom-link">Home</Link>
-            <Link to="/about" className="footer-custom-link">About Us</Link>
-            <Link to="/services" className="footer-custom-link">Services</Link>
-            <Link to="/blog" className="footer-custom-link">Blog</Link>
-            <Link to="/contact" className="footer-custom-link">Contact</Link>
+            <a href="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Home</a>
+            <a href="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>About Us</a>
+            <a href="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Services</a>
+            <a href="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Blog</a>
+            <a href="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Contact</a>
           </div>
         </div>
 
@@ -135,11 +135,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '0px'
           }}>
-            <Link to="/terms" className="footer-custom-link">Terms & Conditions</Link>
-            <Link to="/privacy" className="footer-custom-link">Privacy Policy</Link>
-            <Link to="/disclaimer" className="footer-custom-link">Disclaimer</Link>
-            <Link to="/refund" className="footer-custom-link">Refund Policy</Link>
-            <Link to="/compliance" className="footer-custom-link">Compliance</Link>
+            <a href="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Terms & Conditions</a>
+            <a href="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Privacy Policy</a>
+            <a href="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Disclaimer</a>
+            <a href="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Refund Policy</a>
+            <a href="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Compliance</a>
           </div>
         </div>
 
