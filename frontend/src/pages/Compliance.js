@@ -280,14 +280,16 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
-                <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
+                </p>
+              </div>
             </div>
             
             <h3 style={{
@@ -457,14 +459,16 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
-                Stay informed about market conditions and review your portfolio regularly
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Stay informed about market conditions and review your portfolio regularly
+                </p>
+              </div>
             </div>
             
             <h3 style={{
@@ -634,14 +638,16 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#B8B8B8',
-                margin: 0
-              }}>
-                Address your concerns and grievances promptly and fairly
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Address your concerns and grievances promptly and fairly
+                </p>
+              </div>
             </div>
             
             {/* License Info Box */}
