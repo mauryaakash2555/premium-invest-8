@@ -16,36 +16,42 @@ const Home = () => {
       title: 'Mutual Funds',
       description: 'Diversified investment options with expert fund selection and performance insights.',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/mutual-funds',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
       description: 'Personalized wealth management strategies tailored to your financial goals.',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/portfolio-management',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading Services',
       description: 'Real-time market access with advanced tools and expert guidance.',
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/trading-services',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
       description: 'Comprehensive life and health insurance plans for financial security.',
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
+      link: '/insurance',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
       description: 'Secure returns with flexible tenure options and competitive rates.',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/fixed-deposits',
     },
     {
       icon: <Repeat size={40} />,
       title: 'SIP',
       description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/sip',
     },
   ];
 
@@ -201,48 +207,73 @@ const Home = () => {
           }}
         >
           {services.map((service, index) => (
-            <div 
-              key={index} 
-              className="service-card slide-up" 
-              data-testid={`service-card-${index}`}
-              style={{
-                overflow: 'hidden',
-              }}
+            <Link
+              key={index}
+              to={service.link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <LazyImage
-                src={service.image}
-                alt={service.title}
+              <div 
+                className="service-card slide-up" 
+                data-testid={`service-card-${index}`}
                 style={{
-                  width: '100%',
-                  height: '200px',
-                  marginBottom: '20px',
-                  borderRadius: '8px',
-                  display: 'block',
-                  objectFit: 'cover',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
-              />
-              <div style={{ color: '#DAA520', marginBottom: '16px' }}>
-                {service.icon}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <LazyImage
+                  src={service.image}
+                  alt={service.title}
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    marginBottom: '20px',
+                    borderRadius: '8px',
+                    display: 'block',
+                    objectFit: 'cover',
+                  }}
+                />
+                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
+                  {service.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: '24px',
+                    color: '#DAA520',
+                    marginBottom: '12px',
+                  }}
+                >
+                  {service.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '16px',
+                    color: '#CCCCCC',
+                    lineHeight: 1.6,
+                    marginBottom: '16px',
+                  }}
+                >
+                  {service.description}
+                </p>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#C0A062',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}>
+                  <span>Learn More</span>
+                  <ArrowRight size={16} />
+                </div>
               </div>
-              <h3
-                style={{
-                  fontSize: '24px',
-                  color: '#DAA520',
-                  marginBottom: '12px',
-                }}
-              >
-                {service.title}
-              </h3>
-              <p
-                style={{
-                  fontSize: '16px',
-                  color: '#CCCCCC',
-                  lineHeight: 1.6,
-                }}
-              >
-                {service.description}
-              </p>
-            </div>
+            </Link>
           ))}
         </div>
 
