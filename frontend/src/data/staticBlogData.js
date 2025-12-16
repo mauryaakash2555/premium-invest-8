@@ -1,4 +1,4 @@
-﻿// ═══════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
 // 📖 BLOG EDITING GUIDE - HOW TO CHANGE/EDIT THIS FILE
 // ═══════════════════════════════════════════════════════════════════════════════
 //
@@ -1873,22 +1873,19 @@ export const staticBlogPost4 = {
 
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      March 30, 2024. 11:53 PM. Powai, Mumbai.
+      March 31st, 11:45 PM. WhatsApp from CA: "Tax-saving proof needed NOW."
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Rush to buy random ELSS funds. Panic investment. Deadline pressure.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Next day, colleague mentions: "I claimed ₹90K deductions."
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      "Bro, you haven't done your tax planning yet? Tomorrow is March 31st!"
+      You claimed ₹46K. Same salary. What happened?
     </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Ankit, 32, software engineer at a fintech startup, frantically browsed through his company's investment declaration portal. His colleague Rohan sat beside him, relaxed, already done with his tea.
-    </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      "I finished mine in November," Rohan said. "Already maxed out 80C, claimed HRA properly, invested in NPS Tier 1, got my health insurance sorted. Saved ₹2.2 lakh in taxes this year."
-    </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Ankit looked up. Both earned similar salaries—₹18 lakh CTC. Same company. Same tax bracket.
-    </p>
-    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      "₹2.2 lakh? I'm barely saving ₹50,000 in taxes. How is that even possible?"
+    <p style="font-size: 18px; line-height: 2;">
+      Most people only use Section 80C (₹1.5L limit). They miss 5 other deductions that could save them ₹50,000+ every year. Here's the checklist you need.
     </p>
   </div>
 
@@ -1896,85 +1893,151 @@ export const staticBlogPost4 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      The Breakdown: ₹2.2 Lakh Tax Savings Strategy
+      The March 31st Panic
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      The next day, Rohan showed Ankit his complete tax planning spreadsheet. Here's what he did:
+      This is the story of someone earning ₹15 lakh per annum. Same salary as their colleague. But while the colleague claimed ₹90,000 in deductions, they only claimed ₹46,000.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      The difference? ₹50,000 lost to the government unnecessarily. Every single year.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      With proper planning, they could have saved ₹96,000 in taxes. Instead, they saved only ₹46,000. The ₹50,000 gap came from missing 5 common deductions that most Mumbai professionals overlook.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      Beyond Section 80C: 5 Missed Deductions
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Most people only use Section 80C (₹1.5L limit). Here are the 5 deductions they miss:
     </p>
 
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Mistake 1: Ignoring 80D (Medical Insurance)
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Section 80D allows deduction up to ₹50,000 for medical insurance premiums:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>Self + spouse: ₹25,000 deduction</li>
+        <li>Parents (below 60): ₹25,000 deduction</li>
+        <li>Parents (senior citizens): ₹50,000 deduction</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        Many people have health insurance but forget to claim this deduction. At 30% tax bracket, ₹50,000 deduction saves ₹15,600 in taxes.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Mistake 2: Not Optimizing HRA
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        HRA (House Rent Allowance) exemption can save ₹3-5 lakh in taxable income for Mumbai professionals:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>Minimum of: (a) Actual HRA received, (b) Actual rent paid minus 10% of salary, (c) 50% of salary (Mumbai)</li>
+        <li>Many people don't claim HRA properly or don't have proper rent receipts</li>
+        <li>Optimizing HRA can save ₹30,000-50,000 in taxes annually</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        For ₹15 LPA salary with ₹30,000 monthly rent, HRA exemption can be ₹2-3 lakh, saving ₹60,000-90,000 in taxes.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Mistake 3: Missing 80E (Education Loan)
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Section 80E allows full deduction of education loan interest (no upper limit):
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>Available for 8 years from loan start or until interest is fully paid</li>
+        <li>No upper limit on deduction amount</li>
+        <li>Many professionals with education loans forget this deduction</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        If you pay ₹50,000 in education loan interest, you save ₹15,600 in taxes (30% bracket). This is often missed.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Mistake 4: Forgetting NPS Additional ₹50K
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Section 80CCD(1B) allows additional ₹50,000 deduction for NPS Tier 1, beyond the ₹1.5L limit of 80C:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>This is over and above Section 80C limit</li>
+        <li>At 30% tax bracket, saves ₹15,600 annually</li>
+        <li>Most people don't know about this additional deduction</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        Investing ₹50,000 in NPS Tier 1 gives you this additional deduction, effectively reducing your tax by ₹15,600.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Mistake 5: Home Loan Interest Not Claimed
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Home loan has two separate deductions:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>Principal repayment: Up to ₹1.5L under Section 80C</li>
+        <li>Interest payment: Up to ₹2L under Section 24(b) - separate deduction!</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2;">
+        Many people claim principal in 80C but forget to claim interest separately. ₹2L interest deduction saves ₹62,400 in taxes (30% bracket). This is a huge miss.
+      </p>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      The ₹50,000 Annual Leak
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      For someone earning ₹15 LPA, here's the math:
+    </p>
     <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
       <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        1. Section 80C (₹1.5 Lakh Limit) - Tax Saved: ₹46,800
+        What Most People Do (Only 80C)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li>EPF contribution: ₹65,000 (automatic from salary)</li>
-        <li>ELSS mutual funds: ₹50,000 (SIP of ₹4,166/month)</li>
-        <li>Home loan principal: ₹35,000</li>
+        <li>Section 80C: ₹1.5L → Tax saved: ₹46,500 (31% bracket)</li>
+        <li>Total tax saved: ₹46,500</li>
       </ul>
-      <p style="font-size: 18px; line-height: 2; color: #C0A062; margin-top: 15px;">
-        Tax bracket: 31.2% (30% + cess) → Savings: ₹46,800
-      </p>
     </div>
-
     <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
       <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        2. Section 80CCD(1B) - NPS Additional ₹50k - Tax Saved: ₹15,600
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
-        Beyond the ₹1.5L limit of 80C, NPS Tier 1 allows an additional ₹50,000 deduction.
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        Investment: ₹50,000 → Tax saved: ₹15,600
-      </p>
-    </div>
-
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        3. Section 80D - Health Insurance - Tax Saved: ₹15,600
+        With Proper Planning (All Deductions)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li>Self + spouse insurance: ₹25,000 (deduction limit ₹25k)</li>
-        <li>Parents insurance (senior citizen): ₹25,000 (deduction limit ₹50k)</li>
-        <li>Total deduction claimed: ₹50,000</li>
+        <li>Section 80C: ₹1.5L → Tax saved: ₹46,500</li>
+        <li>Section 80D: ₹50K → Tax saved: ₹15,500</li>
+        <li>Section 80CCD(1B): ₹50K → Tax saved: ₹15,500</li>
+        <li>HRA optimization: ₹2L → Tax saved: ₹62,000</li>
+        <li>Home loan interest (24b): ₹2L → Tax saved: ₹62,000</li>
+        <li><strong style="color: #DAA520;">Total tax saved: ₹96,500</strong></li>
       </ul>
-      <p style="font-size: 18px; line-height: 2; color: #C0A062; margin-top: 15px;">
-        Tax saved: ₹15,600
-      </p>
     </div>
-
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        4. Section 24(b) - Home Loan Interest - Tax Saved: ₹62,400
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
-        Home loan EMI: ₹42,000/month (₹35L loan)
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        Interest component per year: ₹2,00,000 → Tax saved: ₹62,400
-      </p>
-    </div>
-
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        5. HRA Exemption (Optimized) - Tax Saved: ₹78,000
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
-        Monthly rent: ₹35,000 in Powai
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
-        HRA received: ₹6,00,000/year
-      </p>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        Exemption claimed: ₹2,50,000 → Tax saved: ₹78,000
-      </p>
-    </div>
-
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
-        <span style="position: relative; top: -3px;">₹</span>2,18,400
+        <span style="position: relative; top: -3px;">₹</span>50,000
       </p>
       <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
-        Total tax saved annually through systematic planning
+        Lost to government unnecessarily every year
       </p>
     </div>
   </div>
@@ -1983,23 +2046,40 @@ export const staticBlogPost4 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      What Ankit Was Missing
+      Your Tax-Saving Blueprint
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Ankit had only done Section 80C (₹1.5L) through EPF. That's it. Tax saved: ₹46,800.
+      Here's your action plan to avoid the March 31st panic:
     </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      He was missing:
-    </p>
-    <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
-      <li>Additional ₹50k NPS deduction (80CCD(1B))</li>
-      <li>Health insurance for parents (80D)</li>
-      <li>Optimized HRA claims (he was living on rent but not claiming properly)</li>
-      <li>Wasn't tracking home loan interest deduction separately</li>
-    </ul>
-    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
-      Same salary. ₹1.71 lakh difference in annual tax outgo. That's ₹14,250 extra per month in Ankit's pocket if he'd planned ahead.
-    </p>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Step 1: Start in April, Not March
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Plan your tax-saving investments at the start of the financial year. This allows you to make informed choices, not panic purchases.
+      </p>
+    </div>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Step 2: Checklist All Deductions
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>✓ Section 80C: ₹1.5L (EPF, ELSS, PPF, etc.)</li>
+        <li>✓ Section 80D: ₹50K (Health insurance)</li>
+        <li>✓ Section 80CCD(1B): ₹50K (NPS additional)</li>
+        <li>✓ Section 24(b): ₹2L (Home loan interest)</li>
+        <li>✓ HRA: Optimize based on rent paid</li>
+        <li>✓ Section 80E: Education loan interest (if applicable)</li>
+      </ul>
+    </div>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Step 3: Keep Documents Ready
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        Maintain rent receipts, insurance premium receipts, investment statements, and loan interest certificates throughout the year. Don't wait until March 31st.
+      </p>
+    </div>
   </div>
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
@@ -2009,11 +2089,11 @@ export const staticBlogPost4 = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      {"@type": "Question", "name": "What is Section 80CCD(1B)?", "acceptedAnswer": {"@type": "Answer", "text": "80CCD(1B) allows an additional ₹50,000 tax deduction for NPS Tier 1 investments, over and above the ₹1.5 lakh limit of Section 80C. This is one of the most under-utilized tax saving options."}},
-      {"@type": "Question", "name": "Can I claim both home loan principal and interest?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Principal repayment (up to ₹1.5L) goes under Section 80C. Interest payment (up to ₹2L for self-occupied property) is claimed separately under Section 24(b). Both reduce taxable income."}},
-      {"@type": "Question", "name": "Should I buy health insurance just for tax saving?", "acceptedAnswer": {"@type": "Answer", "text": "No. Buy health insurance for family protection first. Tax benefit (Section 80D) is a bonus. For Mumbai's healthcare costs, adequate health cover (₹10L+ for family) is essential regardless of tax implications."}},
-      {"@type": "Question", "name": "Is NPS worth it despite 60-year lock-in?", "acceptedAnswer": {"@type": "Answer", "text": "For tax optimization in 30% bracket, NPS's additional ₹50k deduction (80CCD(1B)) is valuable. Returns are market-linked. Lock-in is strict but designed for retirement. Consider it as part of retirement planning, not just tax saving."}},
-      {"@type": "Question", "name": "When should I do tax planning?", "acceptedAnswer": {"@type": "Answer", "text": "Start in April, not March. Early planning allows better investment choices, optimal HRA structuring, and avoiding last-minute panic buying of tax-saving products. Review quarterly to stay on track."}}
+      {"@type": "Question", "name": "What deductions are available beyond 80C?", "acceptedAnswer": {"@type": "Answer", "text": "Beyond 80C, you can claim: Section 80D (health insurance up to ₹50K), Section 80CCD(1B) (NPS additional ₹50K), Section 24(b) (home loan interest up to ₹2L), HRA exemption (based on rent paid), Section 80E (education loan interest, no limit), and Section 80G (charitable donations)."}},
+      {"@type": "Question", "name": "How much can I save on HRA in Mumbai?", "acceptedAnswer": {"@type": "Answer", "text": "HRA exemption in Mumbai can save ₹3-5 lakh in taxable income annually, translating to ₹90,000-1.5 lakh in tax savings (30% bracket). The exemption is minimum of: actual HRA received, actual rent minus 10% salary, or 50% of salary (Mumbai). Proper rent receipts are essential."}},
+      {"@type": "Question", "name": "Is NPS tax-saving worth it?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, for the additional ₹50K deduction (80CCD1B) beyond 80C. At 30% tax bracket, this saves ₹15,600 annually. NPS also offers market-linked returns with low expense ratios. The 60-year lock-in is designed for retirement, so consider it as part of long-term retirement planning."}},
+      {"@type": "Question", "name": "Can I claim both 80C and 80D?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, absolutely. Section 80C (₹1.5L) and Section 80D (₹50K) are separate deductions. You can claim both. Similarly, 80CCD(1B) (NPS ₹50K) is additional to 80C. All these deductions are independent and can be claimed together to maximize tax savings."}},
+      {"@type": "Question", "name": "What if I missed claiming deductions?", "acceptedAnswer": {"@type": "Answer", "text": "You can file a revised return within the assessment year or claim refund if you've already filed. However, it's better to plan in advance. For current year, start planning from April. For past year, consult a CA about filing revised return if within time limits."}}
     ]
   }
   </script>
@@ -2022,24 +2102,24 @@ export const staticBlogPost4 = {
     <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
     <div style="max-width: 800px; margin: 0 auto;">
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What is Section 80CCD(1B)?</h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">80CCD(1B) allows an additional ₹50,000 tax deduction for NPS Tier 1 investments, over and above the ₹1.5 lakh limit of Section 80C. This is one of the most under-utilized tax saving options. In the 30% bracket, it saves ₹15,600 in taxes annually.</p>
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What deductions are available beyond 80C?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Beyond 80C, you can claim: Section 80D (health insurance up to ₹50K), Section 80CCD(1B) (NPS additional ₹50K), Section 24(b) (home loan interest up to ₹2L), HRA exemption (based on rent paid), Section 80E (education loan interest, no limit), and Section 80G (charitable donations). Each provides separate deductions that can significantly reduce your tax liability.</p>
       </div>
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I claim both home loan principal and interest?</h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes. Principal repayment (up to ₹1.5L) goes under Section 80C. Interest payment (up to ₹2L for self-occupied property) is claimed separately under Section 24(b). Both reduce taxable income. Track them separately in your tax planning.</p>
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">How much can I save on HRA in Mumbai?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">HRA exemption in Mumbai can save ₹3-5 lakh in taxable income annually, translating to ₹90,000-1.5 lakh in tax savings (30% bracket). The exemption is minimum of: actual HRA received, actual rent minus 10% salary, or 50% of salary (Mumbai). Proper rent receipts and rent agreement are essential for claiming this deduction.</p>
       </div>
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Should I buy health insurance just for tax saving?</h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">No. Buy health insurance for family protection first. Tax benefit (Section 80D) is a bonus, not the primary reason. For Mumbai's healthcare costs, adequate health cover (₹10L+ for family, ₹25L+ including parents) is essential regardless of tax implications.</p>
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is NPS tax-saving worth it?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes, for the additional ₹50K deduction (80CCD1B) beyond 80C. At 30% tax bracket, this saves ₹15,600 annually. NPS also offers market-linked returns with low expense ratios. The 60-year lock-in is designed for retirement, so consider it as part of long-term retirement planning, not just a tax-saving tool.</p>
       </div>
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is NPS worth it despite 60-year lock-in?</h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">For tax optimization in 30% bracket, NPS's additional ₹50k deduction (80CCD(1B)) is valuable. Returns are market-linked with low expense ratios. Lock-in is strict but designed for retirement corpus. Consider it as part of long-term retirement planning, not just tax saving tool.</p>
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I claim both 80C and 80D?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes, absolutely. Section 80C (₹1.5L) and Section 80D (₹50K) are separate deductions. You can claim both. Similarly, 80CCD(1B) (NPS ₹50K) is additional to 80C. All these deductions are independent and can be claimed together to maximize tax savings. The key is to plan and invest in each category throughout the year.</p>
       </div>
       <div style="margin-bottom: 0;">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">When should I do tax planning?</h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Start in April, not March 30th. Early planning allows better investment choices, optimal HRA structuring with landlord, proper health insurance selection, and avoiding last-minute panic buying of unsuitable tax-saving products. Review quarterly to stay on track throughout the year.</p>
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What if I missed claiming deductions?</h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">You can file a revised return within the assessment year or claim refund if you've already filed. However, it's better to plan in advance. For current year, start planning from April. For past year, consult a CA about filing revised return if within time limits. Keep all documents ready to support your claims.</p>
       </div>
     </div>
   </section>
