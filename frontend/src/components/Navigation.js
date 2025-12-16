@@ -44,10 +44,11 @@ const Navigation = () => {
         style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '15px 20px',
+          padding: '0 20px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          height: '80px',
         }}
       >
         {/* Logo */}
@@ -90,7 +91,7 @@ const Navigation = () => {
         <div
           style={{
             display: 'flex',
-            gap: '20px',
+            gap: '24px',
             alignItems: 'center',
           }}
           className="desktop-menu"
@@ -102,17 +103,17 @@ const Navigation = () => {
               data-testid={`nav-${link.label.toLowerCase()}`}
               style={{
                 color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  location.pathname === link.path ? '#B8860B' : '#FFFFFF',
                 textDecoration: 'none',
-                fontSize: '14px',
+                fontSize: '16px',
                 fontWeight: 500,
                 transition: 'color 0.3s ease',
                 position: 'relative',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+              onMouseEnter={(e) => (e.target.style.color = '#B8860B')}
               onMouseLeave={(e) =>
                 (e.target.style.color =
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF')
+                  location.pathname === link.path ? '#B8860B' : '#FFFFFF')
               }
             >
               {link.label}
@@ -160,7 +161,7 @@ const Navigation = () => {
               style={{
                 display: 'block',
                 color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  location.pathname === link.path ? '#B8860B' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 500,
