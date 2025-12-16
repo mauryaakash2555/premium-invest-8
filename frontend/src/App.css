@@ -201,12 +201,73 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+/* Main footer container */
+.main-footer {
+  background: #000000;
+  border-top: 1px solid rgba(218, 165, 32, 0.2);
+  padding: 60px 40px 40px 40px;
+  color: #FFFFFF;
+}
+
+/* SEBI Disclaimer Bar (top of footer) */
+.sebi-disclaimer-bar {
+  background: rgba(218, 165, 32, 0.05);
+  border-left: 4px solid #DAA520;
+  padding: 20px 40px;
+  margin-bottom: 0;
+}
+
+.sebi-disclaimer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sebi-disclaimer-content p {
+  font-size: 13px;
+  color: #C0A062;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Investment Disclaimer Bar (bottom of footer) */
+.investment-disclaimer-bar {
+  background: rgba(218, 165, 32, 0.08);
+  border-top: 1px solid rgba(218, 165, 32, 0.2);
+  padding: 20px 40px;
+  margin-top: 40px;
+}
+
+.investment-disclaimer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.investment-disclaimer-content p {
+  font-size: 13px;
+  color: #C0A062;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Footer copyright section */
+.footer-copyright {
+  max-width: 1400px;
+  margin: 40px auto 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+/* Footer grid layout */
 .footer-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
   margin-bottom: 40px;
   align-items: flex-start;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (min-width: 640px) {
@@ -221,6 +282,94 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
   }
+}
+
+/* Footer column styling */
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-heading-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #DAA520;
+  margin-bottom: 8px;
+}
+
+.footer-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #DAA520;
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: #C0A062;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.footer-description {
+  font-size: 14px;
+  color: #CCCCCC;
+  line-height: 1.6;
+}
+
+/* Footer links - each link on its own line */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a {
+  color: #CCCCCC;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.footer-links a:hover {
+  color: #DAA520;
+}
+
+/* Footer contact section */
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-contact p {
+  font-size: 14px;
+  color: #CCCCCC;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.footer-contact .whatsapp-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 20px;
+  background: #25D366;
+  color: #FFFFFF;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.footer-contact .whatsapp-link:hover {
+  background: #20bd5a;
+  transform: translateY(-2px);
 }
 
 .whatsapp-float {
