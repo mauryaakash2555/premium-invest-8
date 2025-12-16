@@ -54,6 +54,9 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    let twoSecondTimer = null;
+    let scrollTimer = null;
 
     try {
       // Get reCAPTCHA token (optional - skip if not configured)
@@ -72,14 +75,11 @@ const Contact = () => {
       
       // Send form data with optional reCAPTCHA token - Render backend
       // 2-second timeout check with WhatsApp fallback
-      const startTime = Date.now();
-      let twoSecondTimeoutTriggered = false;
       
       // Set a 2-second timer to show WhatsApp fallback
-      const twoSecondTimer = setTimeout(() => {
-        twoSecondTimeoutTriggered = true;
+      twoSecondTimer = setTimeout(() => {
         setShowWhatsAppFallback(true);
-        setTimeout(() => {
+        scrollTimer = setTimeout(() => {
           const fallbackElement = document.querySelector('[data-whatsapp-fallback]');
           if (fallbackElement) {
             fallbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -101,19 +101,13 @@ const Contact = () => {
         },
       });
       
-      // Clear the 2-second timer if request completed in time
+      // Clear the 2-second timer if request completed
       clearTimeout(twoSecondTimer);
+      clearTimeout(scrollTimer);
       
       // Verify response is successful
       if (!response.data || !response.data.success) {
-        clearTimeout(twoSecondTimer);
         throw new Error('Form submission failed');
-      }
-      
-      // If form submitted successfully within 2 seconds, hide fallback
-      const elapsedTime = Date.now() - startTime;
-      if (elapsedTime < 2000 && !twoSecondTimeoutTriggered) {
-        setShowWhatsAppFallback(false);
       }
       
       // Clear form immediately on success
@@ -133,6 +127,10 @@ const Contact = () => {
         duration: 3000,
       });
     } catch (error) {
+      // Clear timers on error
+      clearTimeout(twoSecondTimer);
+      clearTimeout(scrollTimer);
+      
       console.error('Error submitting form:', error);
       
       // Handle different error scenarios
@@ -189,7 +187,7 @@ const Contact = () => {
       if (shouldShowFallback) {
         setShowWhatsAppFallback(true);
         // Scroll to fallback after a short delay for better UX
-        setTimeout(() => {
+        scrollTimer = setTimeout(() => {
           const fallbackElement = document.querySelector('[data-whatsapp-fallback]');
           if (fallbackElement) {
             fallbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
