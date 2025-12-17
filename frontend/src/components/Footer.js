@@ -140,6 +140,7 @@ const Footer = () => {
             <a href="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Disclaimer</a>
             <a href="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Refund Policy</a>
             <a href="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Compliance</a>
+            <a href="/sitemap" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Sitemap</a>
           </div>
         </div>
 
