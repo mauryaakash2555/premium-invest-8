@@ -92,9 +92,9 @@ const FixedDeposits = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: 'rgba(255, 0, 0, 0.1)',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(255, 0, 0, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>FD Investment Disclaimer:</strong> FD returns are subject to change based on bank/company policies and market conditions. Interest rates mentioned are indicative and may vary. Corporate FDs carry credit risk; invest only in highly-rated instruments. FD interest is fully taxable per your income tax slab. Premature withdrawal may attract penalties. DICGC insurance covers bank deposits up to ₹5 lakh per bank only. Diversify across banks for amounts exceeding ₹5 lakhs. Consult our advisors for personalized FD strategy considering your risk tolerance, tax situation, and income needs.

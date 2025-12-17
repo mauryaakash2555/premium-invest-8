@@ -212,9 +212,9 @@ const PortfolioManagement = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: 'rgba(255, 0, 0, 0.1)',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(255, 0, 0, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>Investment Disclaimer:</strong> Portfolio management involves market risks. Past performance does not guarantee future results. Asset allocation and diversification do not ensure profits or protect against losses. BM Wealth (AMFI ARN 90008) provides portfolio advisory services and mutual fund distribution. We are not SEBI-registered Investment Advisors or Portfolio Managers. For PMS, AIF, or sophisticated investment strategies, we provide referrals to appropriate SEBI-registered entities. All portfolio recommendations are made considering individual circumstances, goals, and risk profiles. Consult with our advisors for personalized guidance.

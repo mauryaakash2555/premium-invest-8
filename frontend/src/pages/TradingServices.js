@@ -99,9 +99,9 @@ const TradingServices = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: 'rgba(255, 0, 0, 0.1)',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(255, 0, 0, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>Trading Risk Disclaimer:</strong> Stock trading and derivatives involve substantial risk of loss. Past performance is not indicative of future results. Leverage amplifies both gains and losses. Most retail traders lose money. Trade only with capital you can afford to lose completely. BM Wealth provides educational guidance and broker facilitation but does not guarantee trading profits or provide specific buy/sell recommendations. All trading decisions remain your responsibility. SEBI regulations require understanding risks before trading. Consider consulting SEBI-registered advisors for personalized trading guidance.
