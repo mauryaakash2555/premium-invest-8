@@ -43,6 +43,18 @@ const Sitemap = () => {
         <meta name="description" content="Complete sitemap of BM Wealth website. Easy navigation to all services, resources, and information pages. AMFI ARN 90008, IRDAI 277925." />
         <meta name="keywords" content="BM Wealth sitemap, website navigation, financial services mumbai, AMFI registered advisor" />
         <link rel="canonical" href="https://www.bmwealth.co.in/sitemap" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/sitemap" />
+        <meta property="og:title" content="Sitemap | BM Wealth Mumbai | Website Navigation" />
+        <meta property="og:description" content="Complete sitemap of BM Wealth website. Easy navigation to all services and resources." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/sitemap" />
+        <meta name="twitter:title" content="Sitemap | BM Wealth Mumbai" />
+        <meta name="twitter:description" content="Complete website navigation for BM Wealth services." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{

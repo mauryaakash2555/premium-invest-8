@@ -113,6 +113,7 @@ export const staticBlogPost = {
   image_alt: "Mumbai financial advisory case study - investment mistakes",
   tags: ["investment mistakes Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
+  metaDescription: "Learn how a Mumbai investor lost ₹47 lakh following wrong advice. Avoid these critical investment mistakes with BM Wealth's expert guidance.",
 
   content: `
   <script type="application/ld+json">
@@ -637,6 +638,7 @@ export const staticBlogPost2 = {
   image_alt: "Retirement planning Mumbai - luxury retirement lifestyle peaceful sunset",
   tags: ["retirement planning Mumbai", "retirement corpus India", "retirement shortfall", "financial planning 50s"],
   keywords: "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s",
+  metaDescription: "Discover how a Bandra marketing director faces ₹2.3 Cr retirement gap despite 22 years of savings. Essential Mumbai retirement planning insights.",
 
   content: `
   <script type="application/ld+json">
@@ -1181,6 +1183,7 @@ export const staticBlogPost3 = {
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
   tags: ["insurance investment mix", "endowment policy trap", "ULIP vs mutual funds Mumbai", "financial advisor mistakes"],
   keywords: "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes",
+  metaDescription: "How mixing insurance with investment cost a Mumbai CA ₹40 lakhs. Learn why separating them works better for wealth building and protection.",
 
   content: `
   <script type="application/ld+json">
@@ -1643,6 +1646,7 @@ export const staticBlogPost5 = {
   image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
   tags: ["SIP vs lump sum", "investment timing Mumbai", "market timing myth", "bonus investment strategy"],
   keywords: "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy",
+  metaDescription: "Real comparison: ₹20L invested via SIP vs lump sum over 5 years. See actual results from 100 Mumbai investors and make informed decisions.",
 
   content: `
   <script type="application/ld+json">
@@ -1928,6 +1932,7 @@ export const staticBlogPost4 = {
   image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
   tags: ["tax planning beyond 80C", "Mumbai tax saving", "software engineer taxes India", "NPS tax benefit"],
   keywords: "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit",
+  metaDescription: "7 tax deductions Mumbai professionals miss beyond 80C. Save an additional ₹50,000+ annually with this comprehensive tax-saving checklist.",
 
   content: `
   <script type="application/ld+json">
@@ -2270,6 +2275,7 @@ export const staticBlogPost6 = {
   image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
   tags: ["emergency fund Mumbai", "COVID job loss India", "financial safety net", "Mumbai living costs"],
   keywords: "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs",
+  metaDescription: "Why 6 months emergency fund failed this Mumbai family. Learn how much you really need for financial security in Mumbai's high-cost environment.",
 
   content: `
   <script type="application/ld+json">
@@ -2693,6 +2699,7 @@ export const staticBlogPost7 = {
   image_alt: "Gold bars wealth comparison premium investment instruments analysis",
   tags: ["ELSS vs PPF", "NPS comparison India", "tax saving investments 80C", "retirement corpus building Mumbai"],
   keywords: "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai",
+  metaDescription: "ELSS, PPF, or NPS? Compare 20-year returns on ₹1.5L annual investment. See which tax saver builds maximum wealth for 2025 and beyond.",
 
   content: `
   <script type="application/ld+json">
@@ -3102,6 +3109,7 @@ export const staticBlogPost8 = {
   image_alt: "Luxury retirement villa peaceful lifestyle Mumbai retirement planning reality",
   tags: ["1 crore retirement Mumbai", "retirement corpus reality", "post retirement planning India", "Mumbai retirement costs"],
   keywords: "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs",
+  metaDescription: "Is ₹1 crore enough for Mumbai retirement? Real math reveals shocking truth. Calculate how much you actually need for comfortable retirement.",
 
   content: `
   <script type="application/ld+json">
@@ -3485,6 +3493,7 @@ export const staticBlogPost9 = {
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
   tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
   keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
+  metaDescription: "₹50L in 2010: Real estate vs mutual funds. See 15-year actual returns from Andheri property vs equity MF. Comprehensive Mumbai investment analysis.",
 
   content: `
   <script type="application/ld+json">
@@ -3910,6 +3919,7 @@ export const staticBlogPost10 = {
   image_alt: "Elegant gold jewelry bars luxury investment precious metals Mumbai wealth",
   tags: ["gold investment India", "sovereign gold bonds SGB", "digital gold vs physical", "gold investment options Mumbai"],
   keywords: "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai",
+  metaDescription: "Physical gold, digital gold, or Sovereign Gold Bonds? Complete 2025 comparison of returns, taxation, and liquidity for smart gold investment.",
 
   content: `
   <script type="application/ld+json">

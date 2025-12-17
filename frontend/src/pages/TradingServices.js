@@ -14,6 +14,18 @@ const TradingServices = () => {
         <meta name="description" content="Professional stock trading & demat account services in Mumbai. Expert trading advisory, technical analysis, equity trading. Open demat account today." />
         <meta name="keywords" content="stock trading mumbai, demat account opening, trading advisory mumbai, equity trading services, share market mumbai" />
         <link rel="canonical" href="https://www.bmwealth.co.in/trading-services" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/trading-services" />
+        <meta property="og:title" content="Stock Trading & Demat Services Mumbai | BM Wealth" />
+        <meta property="og:description" content="Professional stock trading & demat account services in Mumbai. Expert trading advisory." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/trading-services" />
+        <meta name="twitter:title" content="Stock Trading & Demat Services Mumbai | BM Wealth" />
+        <meta name="twitter:description" content="Professional stock trading & demat services. Open demat account today." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{

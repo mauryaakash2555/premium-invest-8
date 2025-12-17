@@ -85,14 +85,14 @@ const BlogDetail = () => {
     <div style={{ background: '#000000', minHeight: '100vh' }}>
       <Helmet>
         <title>{post.title} | BM Wealth Blog</title>
-        <meta name="description" content={post.excerpt} />
+        <meta name="description" content={post.metaDescription || post.excerpt} />
         <meta name="keywords" content={post.tags ? post.tags.join(', ') : ''} />
         <link rel="canonical" href={`https://www.bmwealth.co.in/blog/${post.slug}`} />
         
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://www.bmwealth.co.in/blog/${post.slug}`} />
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:description" content={post.metaDescription || post.excerpt} />
         <meta property="og:image" content={post.image_url || 'https://www.bmwealth.co.in/logo.webp'} />
         
         <meta name="twitter:card" content="summary_large_image" />

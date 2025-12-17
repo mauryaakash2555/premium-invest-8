@@ -104,9 +104,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #B8860B 0%, #A0825A 100%);
+  background: linear-gradient(135deg, #8B6F47 0%, #704214 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+  box-shadow: 0 8px 25px rgba(139, 111, 71, 0.5);
 }
 
 .btn-secondary {
@@ -537,8 +537,11 @@ input, textarea, select {
   }
   
   /* Hero sections - reduce height on mobile */
-  section[style*="minHeight"] {
-    min-height: 40vh !important;
+  section[style*="minHeight: '100vh'"],
+  section[style*="minHeight: \"100vh\""],
+  section[style*='minHeight: "100vh"'],
+  .hero-gradient {
+    min-height: 70vh !important;
   }
   
   /* Form inputs - full width */

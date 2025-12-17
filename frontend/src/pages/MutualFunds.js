@@ -23,6 +23,12 @@ const MutualFunds = () => {
         <meta property="og:description" content="Expert mutual fund advisory in Mumbai. AMFI Registered ARN 90008. SIP investment, ELSS tax saving funds." />
         <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
         
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/mutual-funds" />
+        <meta name="twitter:title" content="Mutual Fund Investment Services Mumbai | BM Wealth" />
+        <meta name="twitter:description" content="Expert mutual fund advisory in Mumbai. AMFI Registered ARN 90008." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
         {/* Schema Markup */}
         <script type="application/ld+json">
           {JSON.stringify({
