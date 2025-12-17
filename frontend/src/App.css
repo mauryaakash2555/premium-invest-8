@@ -104,6 +104,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary:hover {
+  background: linear-gradient(135deg, #B8860B 0%, #A0825A 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
 }
