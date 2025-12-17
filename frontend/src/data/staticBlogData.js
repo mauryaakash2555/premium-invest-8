@@ -3988,7 +3988,7 @@ export const staticBlogPost10 = {
         <li><strong style="color: #DAA520;">8-year lock-in:</strong> Full benefits only if held till maturity (can exit from year 5 onwards on interest payment dates)</li>
         <li><strong style="color: #DAA520;">Issue timing:</strong> Can only buy when RBI opens subscription (not on-demand)</li>
         <li><strong style="color: #DAA520;">Annual limit:</strong> ₹4 lakh per person per fiscal year (individuals)</li>
-        <li><strong style="color: #DAA020;">Not physical:</strong> Can't convert to physical gold easily</li>
+        <li><strong style="color: #DAA520;">Not physical:</strong> Can't convert to physical gold easily</li>
         <li><strong style="color: #DAA520;">Market price volatility:</strong> If selling before maturity on exchange, price depends on market sentiment</li>
       </ul>
     </div>
