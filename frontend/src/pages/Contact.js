@@ -685,14 +685,14 @@ const Contact = () => {
                     marginTop: '24px', 
                     textAlign: 'center', 
                     padding: '20px', 
-                    background: 'rgba(37, 211, 102, 0.05)', 
+                    background: 'rgba(192, 160, 98, 0.05)', 
                     borderRadius: '8px', 
-                    border: '1px solid rgba(37, 211, 102, 0.2)',
+                    border: '1px solid rgba(192, 160, 98, 0.2)',
                     animation: 'fadeIn 0.3s ease-in'
                   }}
                 >
                   <p style={{ 
-                    color: '#25D366', 
+                    color: '#C0A062', 
                     marginBottom: '12px', 
                     fontSize: '15px',
                     fontWeight: '500'
@@ -708,9 +708,9 @@ const Contact = () => {
                       alignItems: 'center',
                       gap: '10px',
                       padding: '12px 24px',
-                      background: 'rgba(37, 211, 102, 0.1)',
-                      color: '#25D366',
-                      border: '1px solid rgba(37, 211, 102, 0.3)',
+                      background: 'rgba(192, 160, 98, 0.08)',
+                      color: '#C0A062',
+                      border: '1px solid rgba(192, 160, 98, 0.3)',
                       borderRadius: '8px',
                       textDecoration: 'none',
                       fontWeight: '500',
@@ -718,14 +718,16 @@ const Contact = () => {
                       transition: 'all 0.4s ease',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(37, 211, 102, 0.2)';
+                      e.currentTarget.style.background = 'rgba(218, 165, 32, 0.15)';
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.5)';
+                      e.currentTarget.style.borderColor = 'rgba(218, 165, 32, 0.5)';
+                      e.currentTarget.style.color = '#DAA520';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(37, 211, 102, 0.1)';
+                      e.currentTarget.style.background = 'rgba(192, 160, 98, 0.08)';
                       e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.3)';
+                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.3)';
+                      e.currentTarget.style.color = '#C0A062';
                     }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
