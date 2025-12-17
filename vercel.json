@@ -1,8 +1,8 @@
 {
-  "version": 2,
-  "buildCommand": "cd frontend && npm install --legacy-peer-deps && npm run build",
-  "outputDirectory": "frontend/build",
-  "devCommand": "cd frontend && npm start",
-  "framework": "create-react-app",
-  "installCommand": "cd frontend && npm install --legacy-peer-deps"
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "build",
+  "devCommand": "npm start",
+  "framework": null,
+  "installCommand": "npm install --legacy-peer-deps",
+  "rootDirectory": "frontend"
 }
