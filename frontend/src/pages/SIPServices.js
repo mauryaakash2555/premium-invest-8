@@ -7,7 +7,7 @@ const SIPServices = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>SIP Investment Mumbai | Systematic Investment Plan Services | BM Wealth</title>
         <meta name="description" content="Start SIP investment in Mumbai with expert guidance. SIP calculator, best SIP plans 2025, retirement planning. AMFI Registered ARN 90008." />
@@ -17,7 +17,7 @@ const SIPServices = () => {
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -27,7 +27,7 @@ const SIPServices = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -48,7 +48,7 @@ const SIPServices = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Power of SIP Investment
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -60,25 +60,25 @@ const SIPServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             SIP Planning for Different Goals
           </h2>
           
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Retirement Planning Through SIPs
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Retirement planning is perhaps the most critical financial goal, yet most Mumbai professionals grossly underestimate required corpus. With life expectancy exceeding 75-80 years, retirement spanning 20-25 years is common. Mumbai's high cost of living requires substantial corpus – typically ₹5-10 crores for comfortable retirement maintaining current lifestyle. SIPs started early make this achievable. A 30-year-old starting ₹15,000 monthly SIP in diversified equity funds, increasing 10% annually with salary hikes, accumulates ₹5-6 crore by 60 assuming 12% returns. This provides sustainable retirement income through systematic withdrawal plans (SWPs) drawing 6-7% annually (₹30-42 lakhs annual income) while keeping principal largely intact. We recommend allocating 30-40% of monthly savings toward retirement SIPs, spread across 2-3 diversified equity funds. As retirement approaches (50+ years), gradually shift from aggressive equity funds to balanced or conservative funds reducing volatility while maintaining growth.
           </p>
 
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Child Education & Wedding Planning
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Children's education costs escalate frighteningly – quality undergraduate education in India costs ₹20-30 lakhs, international education ₹50 lakhs-1 crore+. Starting SIPs at child's birth provides 17-18 years compounding for college, and 20+ years for postgraduate education. A ₹8,000 monthly SIP started at child's birth grows to ₹60-70 lakhs by age 18 for undergraduate expenses. Another ₹5,000 SIP grows to ₹1-1.2 crores by age 22-23 for postgraduate or MBA education. Wedding expenses, though optional to over-budget, typically require ₹20-40 lakhs for middle-class Mumbai families. A ₹5,000 monthly SIP started when child is 5-10 years old accumulates ₹25-35 lakhs by age 25, comfortably covering wedding expenses. We recommend separate SIP goals for each child's education and wedding, investing in age-appropriate funds. For young children (0-10 years), aggressive equity funds maximize growth. As goals approach (child turns 14-15), gradually shift to hybrid or debt funds protecting accumulated corpus from market volatility.
           </p>
 
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Wealth Creation SIPs
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -87,7 +87,7 @@ const SIPServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             STP and SWP Strategies
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -96,7 +96,7 @@ const SIPServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Common SIP Mistakes to Avoid
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

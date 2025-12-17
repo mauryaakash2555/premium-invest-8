@@ -8,7 +8,7 @@ const Careers = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Careers at BM Wealth Mumbai | Financial Advisor Jobs | AMFI Certification</title>
         <meta name="description" content="Join BM Wealth's growing team in Mumbai. Career opportunities in financial advisory, insurance, wealth management. AMFI certified advisors welcome." />
@@ -18,7 +18,7 @@ const Careers = () => {
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -28,7 +28,7 @@ const Careers = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -49,7 +49,7 @@ const Careers = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Why Choose a Career with BM Wealth?
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -61,12 +61,12 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Current Job Openings
           </h2>
           
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Financial Advisor / Wealth Advisor
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -83,8 +83,8 @@ const Careers = () => {
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Client Relationship Manager
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -98,8 +98,8 @@ const Careers = () => {
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Insurance Consultant
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -115,7 +115,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Career Growth and Development
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -124,7 +124,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Employee Benefits and Culture
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -133,7 +133,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Application Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -141,7 +141,7 @@ const Careers = () => {
           </p>
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <a href="mailto:mauryaakash2555@gmail.com" style={{
-              backgroundColor: '#B8860B',
+              backgroundColor: '#DAA520',
               color: '#000',
               padding: '16px 36px',
               borderRadius: '6px',
@@ -156,7 +156,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Internship Opportunities
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

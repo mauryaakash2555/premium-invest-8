@@ -8,7 +8,7 @@ const TradingServices = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Stock Trading & Demat Services Mumbai | Trading Advisory | BM Wealth</title>
         <meta name="description" content="Professional stock trading & demat account services in Mumbai. Expert trading advisory, technical analysis, equity trading. Open demat account today." />
@@ -18,7 +18,7 @@ const TradingServices = () => {
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -28,7 +28,7 @@ const TradingServices = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -49,7 +49,7 @@ const TradingServices = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Trading Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -61,7 +61,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Demat Account Opening Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -73,7 +73,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Equity Trading Strategies
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -85,7 +85,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Risk Management in Trading
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

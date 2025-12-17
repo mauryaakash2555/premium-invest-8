@@ -9,7 +9,7 @@ const PortfolioManagement = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Portfolio Management Services Mumbai | Wealth Management | BM Wealth</title>
         <meta name="description" content="Professional portfolio management & wealth advisory in Mumbai. Customized asset allocation, risk management, PMS services. AMFI ARN 90008." />
@@ -24,7 +24,7 @@ const PortfolioManagement = () => {
       {/* Hero */}
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px',
@@ -54,7 +54,7 @@ const PortfolioManagement = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -75,7 +75,7 @@ const PortfolioManagement = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Wealth Management Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -90,7 +90,7 @@ const PortfolioManagement = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Portfolio Construction Methodology
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -108,7 +108,7 @@ const PortfolioManagement = () => {
         </section>
 
         <div style={{
-          background: 'linear-gradient(135deg, #B8860B 0%, #8B6914 100%)',
+          background: 'linear-gradient(135deg, #DAA520 0%, #8B6914 100%)',
           padding: '40px',
           borderRadius: '12px',
           textAlign: 'center',
@@ -122,7 +122,7 @@ const PortfolioManagement = () => {
           </p>
           <a href="tel:+918850977259" style={{
             backgroundColor: '#000',
-            color: '#B8860B',
+            color: '#DAA520',
             padding: '14px 32px',
             borderRadius: '6px',
             textDecoration: 'none',
@@ -135,7 +135,7 @@ const PortfolioManagement = () => {
         </div>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Asset Allocation Strategies
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -150,7 +150,7 @@ const PortfolioManagement = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Risk Management and Diversification
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -165,7 +165,7 @@ const PortfolioManagement = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Performance Monitoring and Rebalancing
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -180,7 +180,7 @@ const PortfolioManagement = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             High Net Worth Individual Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -195,7 +195,7 @@ const PortfolioManagement = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Mumbai Real Estate vs Financial Markets Analysis
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
