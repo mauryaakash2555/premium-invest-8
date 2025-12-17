@@ -82,15 +82,15 @@
 //    • Content starts: Line 93 below
 //    • Hover effects: Controlled by App.css
 //
-// BLOG 2: Retirement Shortfall (LIVE) - ₹2.85 Cr gap, Kandivali Marketing Head
-// BLOG 3: Insurance Mix Trap (LIVE) - ₹31 Lakh wasted, Ghatkopar CA
-// BLOG 4: Tax Planning Beyond 80C (LIVE) - ₹2.2L saved, Powai Engineer
-// BLOG 5: SIP vs Lump Sum (LIVE) - Two friends comparison
-// BLOG 6: Emergency Fund Reality (LIVE) - Malad family COVID story
-// BLOG 7: ELSS vs PPF vs NPS (LIVE) - 20 year comparison
-// BLOG 8: ₹1 Crore Retirement (LIVE) - Chembur bank manager
-// BLOG 9: Real Estate vs MF (LIVE) - Two brothers 15 years
-// BLOG 10: Gold Investment Options (LIVE) - Grandmother's gold
+// BLOG 2: Retirement Shortfall (LIVE) - ₹2.3 Cr gap, Bandra Marketing Director
+// BLOG 3: Insurance Mix Trap (LIVE) - ₹40 Lakh wasted, Fort CA
+// BLOG 4: Tax-Saving Checklist (LIVE) - 7 deductions Mumbai professionals miss
+// BLOG 5: SIP vs Lump Sum (LIVE) - ₹20L comparison, 100 Mumbai investors
+// BLOG 6: Emergency Fund Reality (LIVE) - Why 6 months isn't enough Mumbai
+// BLOG 7: ELSS vs PPF vs NPS (LIVE) - 2025 tax saver comparison
+// BLOG 8: ₹1 Crore Retirement (LIVE) - Mumbai honest math
+// BLOG 9: Real Estate vs MF (LIVE) - ₹50L Andheri vs MF 15 years
+// BLOG 10: Gold Investment 2025 (LIVE) - Physical vs Digital vs SGB
 //
 // ═══════════════════════════════════════════════════════════════════════════════
 //
@@ -102,8 +102,8 @@ export const staticBlogPost = {
   slug: "47-lakh-investment-mistake-mumbai",
   title: "He Lost ₹47 Lakh Following \"Expert\" Advice - Here's What He Wishes He Knew 7 Years Ago",
   author: "BM Wealth Editorial Team",
-  date: "December 9, 2025",
-  published_date: "2025-12-09",
+  date: "November 26, 2025",
+  published_date: "2025-11-26",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
@@ -624,14 +624,14 @@ export const staticBlogPost = {
 export const staticBlogPost2 = {
   id: "blog-2",
   slug: "retirement-shortfall-case-study",
-  title: "He Did Everything Right. Still ₹2.85 Crore Short - A Mumbai Retirement Reality Check",
+  title: "The ₹2.3 Crore Retirement Gap That Shocked a Bandra Family",
   author: "BM Wealth Editorial Team",
-  date: "December 8, 2025",
-  published_date: "2025-12-08",
+  date: "November 27, 2025",
+  published_date: "2025-11-27",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
-  excerpt: "Saturday morning retirement calculator shock: A 52-year-old Marketing Head discovers a ₹2.85 crore retirement gap. Why good salary and regular savings weren't enough.",
+  excerpt: "Saturday morning coffee turned into a financial wake-up call. A 50-year-old marketing director discovers he's ₹2.3 crore short for Mumbai retirement—despite 22 years of disciplined saving.",
   image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Retirement planning Mumbai - luxury retirement lifestyle peaceful sunset",
@@ -643,8 +643,8 @@ export const staticBlogPost2 = {
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "He Did Everything Right. Still ₹2.85 Crore Short - A Mumbai Retirement Reality Check",
-    "description": "Saturday morning retirement calculator shock: A 52-year-old Marketing Head discovers a ₹2.85 crore retirement gap. Why good salary and regular savings weren't enough.",
+    "headline": "The ₹2.3 Crore Retirement Gap That Shocked a Bandra Family",
+    "description": "Saturday morning coffee turned into a financial wake-up call. A 50-year-old marketing director discovers he's ₹2.3 crore short for Mumbai retirement—despite 22 years of disciplined saving.",
     "author": {
       "@type": "Organization",
       "name": "BM Wealth Editorial Team"
@@ -657,9 +657,9 @@ export const staticBlogPost2 = {
         "url": "https://bmwealth.co.in/logo.png"
       }
     },
-    "datePublished": "2025-01-15",
-    "dateModified": "2025-12-15",
-    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+    "datePublished": "2025-11-28",
+    "dateModified": "2025-12-17",
+    "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba",
     "articleSection": "Investment Education",
     "keywords": "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s"
   }
@@ -667,25 +667,28 @@ export const staticBlogPost2 = {
 
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Saturday morning, 10:23 AM. Kandivali West.
+      Saturday morning, 10 AM. Bandra West.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Rajesh, 50, sat on his balcony with his morning coffee. Marketing Director at a major consumer goods company. Corner office. Team of 15. ₹2.4 lakh monthly salary. By all measures, successful.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      His wife Priya walked out with her laptop.
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      "This can't be right. Let me recalculate... there must be some mistake."
+      "I found a retirement calculator online. Want to try?"
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Vikram, 52, Marketing Head at a respected FMCG company, sat frozen at his dining table. In his hands: a retirement calculator he'd just discovered online. On the screen: a number that made his morning coffee go cold.
+      They'd been married 25 years. Saved diligently. Never splurged. Always thought they were doing fine financially.
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      He'd done everything right. Good salary (₹2.8 lakh/month). Regular savings since he was 28. A disciplined investor who maxed out his PPF every year, contributed to EPF religiously, even started a few SIPs five years ago.
+      Twenty minutes later, the coffee went cold. The number on screen:
     </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      His wife, Meena, walked past and asked what was wrong.
+    <p style="font-size: 48px; font-weight: 600; color: #DAA520; text-align: center; margin: 40px 0; font-family: 'Playfair Display', serif;">
+      <span style="position: relative; top: -3px;">₹</span>2,34,00,000 SHORT
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      "According to this, we're ₹2.85 crore short for retirement."
-    </p>
-    <p style="font-size: 18px; line-height: 2;">
-      She laughed. "That can't be right. We have investments. You've been saving for 24 years."
+      "This can't be right. We've been saving for 22 years."
     </p>
   </div>
 
@@ -693,35 +696,30 @@ export const staticBlogPost2 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      The Reality Check That Changed Everything
+      The Coffee That Changed Everything
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Vikram called us two days later. By then, he'd run the numbers three more times, consulted two online calculators, even created a detailed Excel sheet.
+      Rajesh called us three days later. His voice was different from his usual confident executive tone.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "I thought I was doing everything right. PPF maxed out every year. EPF accumulating. Even started mutual fund SIPs three years ago. How am I ₹2.3 crore short?"
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Every calculation showed the same terrifying truth: His current savings trajectory would leave him massively short of what he'd need for a comfortable Mumbai retirement.
-    </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
-      <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
-        <span style="position: relative; top: -3px;">₹</span>2,85,00,000
-      </p>
-      <p style="font-size: 19px; color: rgba(229, 229, 229, 0.7); font-weight: 400;">
-        Retirement shortfall discovered at age 52
-      </p>
-    </div>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Here's what we found when we reviewed his portfolio:
+      Here's what we found when we sat down with their portfolio:
     </p>
     <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
-      <li>Current corpus: ₹1.47 crore (EPF ₹78L, PPF ₹42L, Mutual Funds ₹27L)</li>
-      <li>Target retirement age: 60 (8 years away)</li>
-      <li>Monthly retirement expense needed: ₹1.2 lakh today = ₹1.95L in 8 years (inflation adjusted)</li>
-      <li>Corpus required for 25 years of retirement: ₹5.8 crore</li>
-      <li>Current trajectory would give him: ₹2.95 crore</li>
-      <li>Gap: ₹2.85 crore</li>
+      <li>Rajesh's age: 50 years</li>
+      <li>Planned retirement: 60 (10 years away)</li>
+      <li>Total savings accumulated: ₹45 lakhs</li>
+      <li>PPF: ₹22 lakhs</li>
+      <li>EPF: ₹18 lakhs</li>
+      <li>Mutual Funds (started 3 years ago): ₹5 lakhs</li>
     </ul>
-    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
-      How does a disciplined saver end up ₹2.85 crore short?
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      On paper, ₹45 lakhs sounds substantial. Twenty-two years of disciplined saving. Never missed a PPF installment. Always let EPF accumulate.
+    </p>
+    <p style="font-size: 18px; line-height: 2;">
+      The problem? They never calculated what they actually needed.
     </p>
   </div>
 
@@ -729,61 +727,84 @@ export const staticBlogPost2 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      The Three Critical Mistakes
+      The Uncomfortable Math
     </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      We sat down to do what Rajesh should have done 20 years ago: calculate the real retirement number.
+    </p>
 
     <div style="margin-bottom: 45px;">
       <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
-        1. Conservative Asset Allocation When He Could Afford Risk
+        Current Savings Reality
       </h3>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        At 52 with 8 years to retirement, Vikram still had time for equity exposure. But his portfolio was 78% debt instruments (EPF, PPF, bank FDs). Only 22% in equity mutual funds—and that too started just 5 years ago.
+        Current corpus: ₹45 lakhs
       </p>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        Historical data shows equity allocation of 50-60% at his age could have dramatically improved retirement corpus. He had job security, no major liabilities, children settled—perfect conditions for balanced equity exposure.
-      </p>
-      <p style="font-size: 18px; line-height: 2;">
-        Result: Money growing at 6-7% when it could have averaged 10-12% over the 24-year period.
-      </p>
-    </div>
-
-    <div style="margin-bottom: 45px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
-        2. Never Calculated the Target Number
-      </h3>
-      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        For 24 years, Vikram saved diligently—but without knowing how much he actually needed. He maxed out PPF (₹1.5L/year) because "everyone does it." He let EPF accumulate because "it's safe." He started SIPs because "mutual funds are good."
-      </p>
-      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        But he never sat down to calculate: "If I want ₹1.2 lakh per month in retirement, considering Mumbai's cost of living and 6% inflation, how much corpus do I need?"
-      </p>
-      <p style="font-size: 18px; line-height: 2;">
-        Retirement planning without a target is like driving without a destination—you'll end up somewhere, just probably not where you wanted to be.
-      </p>
-    </div>
-
-    <div style="margin-bottom: 45px;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
-        3. Underestimating Mumbai's Retirement Costs
-      </h3>
-      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        When we asked Vikram about retirement expenses, he initially said: "₹60,000-70,000 per month should be comfortable."
-      </p>
-      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        Then we did the reality check together:
+        If this continues growing at current rate (7% PPF/EPF weighted average, small MF component at 12%):
       </p>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li>Apartment maintenance: ₹8,000/month</li>
-        <li>Groceries & household: ₹25,000/month</li>
-        <li>Medical insurance premiums (increases with age): ₹15,000/month average</li>
-        <li>Medical expenses (not covered): ₹12,000/month buffer</li>
-        <li>Utilities, help, miscellaneous: ₹18,000/month</li>
-        <li>Travel, entertainment, gifts: ₹15,000/month</li>
-        <li>Daughter's wedding support planned: ₹8,000/month saved separately</li>
-        <li>Property tax, repairs: ₹7,000/month average</li>
+        <li>10 years from now (at age 60): ₹88 lakhs from existing corpus</li>
+        <li>Plus EPF accumulation: ₹32 lakhs more</li>
+        <li>Plus continuing PPF/SIPs: ₹25 lakhs</li>
+        <li><strong style="color: #DAA520;">Total projected at retirement: ₹1.45 crore</strong></li>
       </ul>
       <p style="font-size: 18px; line-height: 2;">
-        <strong style="color: #DAA520;">Actual monthly need: ₹1.08 lakh.</strong> Not ₹60,000. And this would be ₹1.95 lakh by the time he retires in 8 years due to inflation.
+        Not bad, right? ₹1.45 crore at age 60. Many people would feel comfortable with that number.
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        Actual Retirement Needs
+      </h3>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        Then we did the expense calculation. Current monthly household costs in Bandra:
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
+        <li>Society maintenance: ₹9,500/month</li>
+        <li>Groceries & household: ₹28,000/month</li>
+        <li>Utilities, help: ₹22,000/month</li>
+        <li>Medical insurance premiums: ₹12,000/month</li>
+        <li>Out-of-pocket medical buffer: ₹15,000/month</li>
+        <li>Travel, entertainment: ₹18,000/month</li>
+        <li>Miscellaneous, gifts, festivals: ₹12,000/month</li>
+        <li>Property tax, repairs: ₹8,000/month average</li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        <strong style="color: #DAA520;">Current monthly need: ₹1,24,500</strong>
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        In 10 years, with 6% inflation: <strong style="color: #DAA520;">₹2,23,000/month</strong>
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
+        For 30 years of retirement (till age 85):
+      </p>
+      <p style="font-size: 18px; line-height: 2;">
+        Using 4% safe withdrawal rate: <strong style="color: #DAA520;">Need ₹6.7 crore corpus</strong>
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin-top: 15px;">
+        Conservative calculation accounting for medical inflation (8-9%), longevity, and Mumbai's costs: <strong style="color: #DAA520;">₹5.8 crore minimum, ₹6.7 crore comfortable</strong>
+      </p>
+    </div>
+
+    <div style="margin-bottom: 45px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
+        The ₹2.3 Crore Gap Explained
+      </h3>
+      <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+        <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+          <strong style="color: #DAA520;">Current trajectory:</strong> ₹1.45 crore at age 60
+        </p>
+        <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+          <strong style="color: #DAA520;">Actual requirement:</strong> ₹3.75 crore (modest retirement)
+        </p>
+        <p style="font-size: 24px; line-height: 2; color: #DAA520; font-weight: 600; margin-top: 20px;">
+          Gap: <span style="position: relative; top: -2px;">₹</span>2,30,00,000
+        </p>
+      </div>
+      <p style="font-size: 18px; line-height: 2; margin-top: 25px;">
+        That's not a typo. That's not a calculation error. That's reality for a family that did "everything right."
       </p>
     </div>
   </div>
@@ -792,59 +813,24 @@ export const staticBlogPost2 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      The Corrective Strategy We Designed
+      How This Happens to Successful People
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Here's what made this case challenging: Vikram had only 8 years to bridge a ₹2.85 crore gap. That required both aggressive saving and intelligent asset allocation.
+      Rajesh isn't alone. We see this pattern constantly with high-earning professionals in Mumbai:
     </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      The educational framework we provided:
-    </p>
-    
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        Rebalanced Asset Allocation Strategy
-      </h4>
-      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li>Shift new savings to 65% equity, 35% debt for next 5 years</li>
-        <li>Gradually move to 50-50 in years 6-7, then 40-60 in final year before retirement</li>
-        <li>Keep existing EPF/PPF as debt foundation (already ₹1.2 crore)</li>
-        <li>Redirect all new investments to diversified equity mutual funds via SIP</li>
-      </ul>
-    </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        Increased Savings Rate
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
-        Vikram was saving ₹45,000/month (₹1.5L PPF + ₹25k SIP + ₹8k NPS).
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        <strong style="color: #DAA520;">Mistake 1: Saving without a target</strong><br/>
+        Rajesh maxed out PPF because "that's what you're supposed to do." But ₹1.5 lakh/year for 22 years, while disciplined, was nowhere near enough for Mumbai retirement. He never asked: "Is this amount sufficient?"
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
+        <strong style="color: #DAA520;">Mistake 2: Conservative when he could afford risk</strong><br/>
+        78% of his portfolio in debt instruments (PPF, EPF). Only started equity MFs at 47. At his income level, with no major liabilities, children grown up—he could have had 60-70% equity for 20 years. That conservative approach cost him 3-4% annual returns.
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        Increased to ₹95,000/month total by cutting discretionary expenses and using bonuses:
-      </p>
-      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-top: 12px;">
-        <li>Equity SIP: ₹65,000/month</li>
-        <li>Continue PPF: ₹12,500/month (₹1.5L/year)</li>
-        <li>NPS Tier 1: ₹17,500/month (tax benefit + retirement corpus)</li>
-      </ul>
-    </div>
-
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
-        Projected Outcome (8 Years)
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 8px;">
-        If Vikram follows this strategy with market returns averaging 11% on equity and 7% on debt:
-      </p>
-      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li>Existing corpus grows from ₹1.47 Cr to ₹2.85 Cr</li>
-        <li>New investments of ₹91.2L over 8 years grow to ₹1.42 Cr</li>
-        <li>EPF accumulation adds ₹85L more</li>
-        <li><strong style="color: #DAA520;">Total projected at 60: ₹5.12 crore</strong></li>
-      </ul>
-      <p style="font-size: 18px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 15px;">
-        This bridges the gap from ₹2.95 Cr to ₹5.12 Cr—close to the ₹5.8 Cr target.
+        <strong style="color: #DAA520;">Mistake 3: Underestimating Mumbai costs</strong><br/>
+        When we asked what he thought retirement would cost, he said "₹70,000/month should be fine." Reality: ₹1.25 lakh today, ₹2.2 lakh in 10 years. Medical alone could be ₹25-30K/month in retirement. Mumbai doesn't get cheaper.
       </p>
     </div>
   </div>
@@ -853,33 +839,122 @@ export const staticBlogPost2 = {
 
   <div style="margin-bottom: 70px;">
     <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
-      What This Means for You
+      The Cost of Starting Late
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      If you're in your 40s or 50s and haven't calculated your retirement number, you're not alone. Most people discover the gap too late.
+      Here's what hurts most: if Rajesh had this conversation at age 30 instead of 50, the solution would have been dramatically easier.
     </p>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        If Started at Age 30:
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>₹25,000/month SIP for 30 years</li>
+        <li>At 12% average equity returns</li>
+        <li>Total invested: ₹90 lakhs</li>
+        <li><strong style="color: #DAA520;">Corpus at 60: ₹7.06 crore</strong></li>
+      </ul>
+    </div>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        Starting at Age 50 (Current Reality):
+      </h4>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Need to save: <strong style="color: #DAA520;">₹85,000/month</strong> for 10 years</li>
+        <li>To reach similar ₹3.75 crore target</li>
+        <li>Total invested: ₹1.02 crore</li>
+        <li>That's 3.4x more monthly investment needed</li>
+      </ul>
+    </div>
+    <p style="font-size: 20px; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+      Compound interest works both ways. Start early, and time does the heavy lifting. Start late, and you do all the heavy lifting.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      What Changed for This Family
+    </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Ask yourself:
+      Rajesh had three choices: work longer, save much more, or lower retirement expectations. They chose a combination.
+    </p>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+        The Educational Action Plan We Discussed:
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        <strong>1. Rebalance to age-appropriate equity exposure</strong><br/>
+        Shift new investments to 65% equity for next 7 years, then gradually reduce. Existing PPF/EPF stays as debt foundation.
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        <strong>2. Increase monthly savings aggressively</strong><br/>
+        From ₹32,000/month to ₹75,000/month. Possible by cutting discretionary spending, redirecting bonuses, and optimizing tax deductions.
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        <strong>3. Consider working 2-3 years beyond 60</strong><br/>
+        Even part-time consulting at ₹50-60K/month would reduce corpus requirement and give investments more time to grow.
+      </p>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <strong>4. Be realistic about lifestyle adjustments</strong><br/>
+        Move from "comfortable" target (₹6.7 Cr) to "good" target (₹4.2 Cr). Still maintains quality of life but acknowledges late start penalty.
+      </p>
+    </div>
+    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
+        <strong style="color: #DAA520;">Revised Projection (10-12 years):</strong>
+      </p>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Existing corpus growing: ₹88L → ₹1.8 Cr (with better allocation)</li>
+        <li>EPF accumulation: ₹42L more</li>
+        <li>New aggressive SIPs: ₹90L invested → grows to ₹1.65 Cr</li>
+        <li>Working 2 extra years: ₹35L additional savings</li>
+        <li><strong style="color: #DAA520;">Total at age 62: ₹4.22 crore</strong></li>
+      </ul>
+      <p style="font-size: 18px; line-height: 2; color: #C0A062; margin-top: 15px;">
+        Close enough to the ₹4.2 Cr "good retirement" target. Not perfect, but workable.
+      </p>
+    </div>
+    <p style="font-size: 18px; line-height: 2; margin-top: 25px;">
+      Three months later, Rajesh called to say they'd implemented everything. His exact words:
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
+      "That Saturday morning coffee was the best thing that happened to us. Ten more years of denial would have been catastrophic."
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
+
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+      Are You in the Same Situation?
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Most people discover retirement gaps too late—not because they don't save, but because they never calculated the target.
     </p>
     <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        → Do you know exactly how much corpus you need for retirement?
+        → Do you know exactly how much you need for Mumbai retirement?
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        → Have you calculated your retirement expenses realistically (not optimistically)?
+        → Have you calculated retirement expenses realistically (medical, inflation, 25-30 year horizon)?
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        → Is your current asset allocation appropriate for your years to retirement?
+        → Is your asset allocation appropriate for your age and risk capacity?
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        → Are you saving enough monthly to bridge any gap?
+        → When did you last review whether your current savings rate is sufficient?
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        → When did you last review your retirement plan comprehensively?
+        → Do you have a plan, or are you just hoping it works out?
       </p>
     </div>
-    <p style="font-size: 20px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
-      The earlier you discover the gap, the easier it is to fix. Vikram caught it at 52. You might still have more time.
+    <p style="font-size: 18px; line-height: 2; margin-top: 25px;">
+      Rajesh discovered his gap at 50. That gave him 10 years to fix it—difficult, but possible. If he'd waited till 55, the math would have been impossible without major lifestyle compromises.
+    </p>
+    <p style="font-size: 20px; color: #C0A062; font-weight: 500; margin-top: 35px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7);">
+      The earlier you find out, the easier the solution. The calculator doesn't lie. Face the number today, not at 58.
     </p>
   </div>
 
@@ -1092,15 +1167,15 @@ export const staticBlogPost2 = {
 // --- BLOG 3: Insurance-Investment Mix Trap ---
 export const staticBlogPost3 = {
   id: "blog-3",
-  slug: "insurance-investment-mix-trap-31-lakh",
-  title: "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
+  slug: "insurance-investment-mix-trap-40-lakh",
+  title: "Insurance vs Investment: Why Mixing Them Cost This CA ₹40 Lakhs",
   author: "BM Wealth Editorial Team",
-  date: "December 10, 2025",
-  published_date: "2025-12-10",
+  date: "November 29, 2025",
+  published_date: "2025-11-29",
   readTime: "10 min read",
   read_time: "10 minutes",
   category: "Investment Education",
-  excerpt: "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+  excerpt: "A Chartered Accountant discovers the truth about his own endowment policy—while advising a client. The ₹40 lakh mistake that even financial professionals make.",
   image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
@@ -1112,8 +1187,8 @@ export const staticBlogPost3 = {
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
-    "description": "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+    "headline": "Insurance vs Investment: Why Mixing Them Cost This CA ₹40 Lakhs",
+    "description": "A Chartered Accountant discovers the truth about his own endowment policy—while advising a client. The ₹40 lakh mistake that even financial professionals make.",
     "author": {
       "@type": "Organization",
       "name": "BM Wealth Editorial Team"
@@ -1126,8 +1201,8 @@ export const staticBlogPost3 = {
         "url": "https://bmwealth.co.in/logo.png"
       }
     },
-    "datePublished": "2025-01-22",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-11-29",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes"
@@ -1136,28 +1211,28 @@ export const staticBlogPost3 = {
 
   <div style="margin-bottom: 40px;">
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Tuesday afternoon, 3:42 PM. A CA office in Fort, Mumbai.
+      Tuesday afternoon. Fort, Mumbai.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      Sanjay, 45, Chartered Accountant. Own practice. Helps clients optimize taxes worth crores. Reviews balance sheets, spots inefficiencies, saves companies lakhs in tax liability.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
+      A client walked in with a question:
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      "Sir, should I continue this endowment policy my father bought for me?"
+      "Sir, my insurance agent is offering an endowment policy. Says it gives both insurance and investment returns. What's the difference between that and term insurance?"
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Rajesh, 43, a Chartered Accountant with his own practice in Ghatkopar, pulled out the policy document. A 20-year traditional endowment plan bought in 2008. Premium: ₹50,000 per year. "Guaranteed returns" promised.
+      Sanjay started explaining. Then paused. Opened his laptop. Pulled up his own policy documents—the one he'd bought 10 years ago when his daughter was born.
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      He started analyzing the numbers for his client. Maturity value projected: ₹18.5 lakh after 20 years. Total premiums paid: ₹10 lakh.
+      Read page 3 properly for the first time.
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Then he pulled out a calculator. If the same ₹50,000 annually had been invested in a diversified equity mutual fund averaging 12% returns...
+      His hands started trembling.
     </p>
     <p style="font-size: 20px; color: #C0A062; font-style: italic; margin-bottom: 25px; line-height: 2;">
-      The number stopped him cold: ₹40.38 lakh.
-    </p>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      The difference? ₹21.88 lakh. But that's not the full story.
-    </p>
-    <p style="font-size: 18px; line-height: 2;">
-      Rajesh went home that evening. Opened his drawer. Pulled out his own endowment policy. Same company. Almost identical terms. 15 years into a 20-year policy.
+      "I've been paying ₹3.2 lakh per year for 10 years. And the actual life cover is only ₹5 lakh?"
     </p>
   </div>
 
@@ -1554,15 +1629,15 @@ export const staticBlogPost3 = {
 // --- BLOG 5: SIP vs Lump Sum Real Results ---
 export const staticBlogPost5 = {
   id: "blog-5",
-  slug: "sip-vs-lump-sum-25-lakh-experiment",
-  title: "₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Real Result That Shocked Both",
+  slug: "sip-vs-lump-sum-20-lakh-mumbai-investors",
+  title: "SIP vs Lump Sum: Real Numbers from 100 Mumbai Investors",
   author: "BM Wealth Editorial Team",
-  date: "December 11, 2025",
-  published_date: "2025-12-11",
+  date: "December 1, 2025",
+  published_date: "2025-12-01",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
-  excerpt: "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
+  excerpt: "March 2020. Markets crashing 30%. Same ₹20 lakh bonus. One went lump sum, one chose SIP. Five years later: ₹42L vs ₹38L. But the real difference wasn't in returns—it was in sleep quality.",
   image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
@@ -1839,15 +1914,15 @@ export const staticBlogPost5 = {
 // --- BLOG 4: Tax Planning Beyond 80C ---
 export const staticBlogPost4 = {
   id: "blog-4",
-  slug: "tax-planning-beyond-80c-mumbai",
-  title: "How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C",
+  slug: "tax-saving-checklist-mumbai-professionals",
+  title: "Tax-Saving Checklist: 7 Deductions Mumbai Professionals Miss Every Year",
   author: "BM Wealth Editorial Team",
-  date: "December 12, 2025",
-  published_date: "2025-12-12",
+  date: "December 3, 2025",
+  published_date: "2025-12-03",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
-  excerpt: "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
+  excerpt: "March 31st panic vs strategic planning. Most Mumbai professionals save ₹46K in taxes. They could be saving ₹96K. Here's the checklist they're missing.",
   image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
@@ -1863,8 +1938,8 @@ export const staticBlogPost4 = {
     "description": "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-01-29",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-03",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit"
@@ -2181,15 +2256,15 @@ export const staticBlogPost4 = {
 // --- BLOG 6: Emergency Fund Reality Check ---
 export const staticBlogPost6 = {
   id: "blog-6",
-  slug: "emergency-fund-12-months-mumbai",
-  title: "Why 6 Months Emergency Fund Nearly Destroyed This Malad Family",
+  slug: "emergency-fund-mumbai-6-months-not-enough",
+  title: "Emergency Funds: Why 6 Months Salary Isn't Enough in Mumbai",
   author: "BM Wealth Editorial Team",
-  date: "December 13, 2025",
-  published_date: "2025-12-13",
+  date: "December 6, 2025",
+  published_date: "2025-12-06",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
-  excerpt: "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
+  excerpt: "'6 months salary saved. I'm safe.' That's what he thought. Then March 2020 happened. Job gone. Father hospitalized. Son's school fees due. By month 8, savings zero. The 'enough' wasn't enough.",
   image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
@@ -2205,8 +2280,8 @@ export const staticBlogPost6 = {
     "description": "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-02-12",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-06",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
     "articleSection": "Investment Education",
     "keywords": "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs"
@@ -2604,15 +2679,15 @@ export const staticBlogPost6 = {
 // --- BLOG 7: ELSS vs PPF vs NPS Comparison ---
 export const staticBlogPost7 = {
   id: "blog-7",
-  slug: "elss-ppf-nps-comparison-20-years",
-  title: "₹1.5 Lakh Annually for 20 Years: ELSS vs PPF vs NPS - The Real Results",
+  slug: "elss-vs-ppf-vs-nps-tax-saver-comparison-2025",
+  title: "ELSS vs PPF vs NPS: Which Tax Saver Actually Wins in 2025?",
   author: "BM Wealth Editorial Team",
-  date: "December 14, 2025",
-  published_date: "2025-12-14",
+  date: "December 9, 2025",
+  published_date: "2025-12-09",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
-  excerpt: "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
+  excerpt: "Three brothers. Same ₹1.5 lakh annual tax-saving investment. Brother 1: All ELSS. Brother 2: All PPF. Brother 3: All NPS. Twenty years later, they met for dinner. The portfolio comparison shocked everyone.",
   image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Gold bars wealth comparison premium investment instruments analysis",
@@ -2628,8 +2703,8 @@ export const staticBlogPost7 = {
     "description": "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-02-19",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-09",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai"
@@ -3013,15 +3088,15 @@ export const staticBlogPost7 = {
 // --- BLOG 8: ₹1 Crore Retirement Reality ---
 export const staticBlogPost8 = {
   id: "blog-8",
-  slug: "1-crore-retirement-corpus-enough-mumbai",
-  title: "₹1 Crore Retirement Corpus: The Mumbai Reality That Shocked Him",
+  slug: "1-crore-mumbai-retirement-reality-check",
+  title: "Can ₹1 Crore Fund Your Mumbai Retirement? The Honest Math",
   author: "BM Wealth Editorial Team",
-  date: "December 15, 2025",
-  published_date: "2025-12-15",
+  date: "December 12, 2025",
+  published_date: "2025-12-12",
   readTime: "8 min read",
   read_time: "8 minutes",
   category: "Investment Education",
-  excerpt: "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
+  excerpt: "₹1 crore saved. Retire at 60. Sounds perfect. Reality hit on day 1 of retirement. Rent: ₹50K. Medical: ₹25K. Daily expenses: ₹40K. Total: ₹1.15L/month. Simple math: Corpus lasts 7 years. 'I thought it was enough.'",
   image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury retirement villa peaceful lifestyle Mumbai retirement planning reality",
@@ -3037,8 +3112,8 @@ export const staticBlogPost8 = {
     "description": "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-02-26",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-12",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
     "articleSection": "Investment Education",
     "keywords": "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs"
@@ -3397,14 +3472,14 @@ export const staticBlogPost8 = {
 export const staticBlogPost9 = {
   id: "blog-9",
   slug: "real-estate-vs-mutual-funds-15-year-comparison",
-  title: "₹60 Lakh in 2010: Real Estate vs Mutual Funds - The 15-Year Verdict",
+  title: "Real Estate vs Mutual Funds: Mumbai Investor's 15-Year Verdict",
   author: "BM Wealth Editorial Team",
-  date: "December 16, 2025",
-  published_date: "2025-12-16",
+  date: "December 14, 2025",
+  published_date: "2025-12-14",
   readTime: "10 min read",
   read_time: "10 minutes",
   category: "Investment Education",
-  excerpt: "Two brothers inherit ₹60L in 2010. One buys Thane flat (₹3.43 Cr today). One invests in mutual funds (₹4.25 Cr). The detailed math reveals everything.",
+  excerpt: "Diwali 2025. Two brothers with ₹50 lakh each in 2010. One bought Andheri flat (₹2.2 Cr today). One invested in mutual funds (₹4.1 Cr). But when they calculated rent saved vs rent paid, the truth was more nuanced.",
   image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
@@ -3420,8 +3495,8 @@ export const staticBlogPost9 = {
     "description": "Two brothers inherit ₹60L in 2010. One buys Thane flat (₹3.43 Cr today). One invests in mutual funds (₹4.25 Cr). The detailed math reveals everything.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-03-05",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-14",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
     "articleSection": "Investment Education",
     "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years"
@@ -3821,15 +3896,15 @@ export const staticBlogPost9 = {
 // --- BLOG 10: Gold Investment Options ---
 export const staticBlogPost10 = {
   id: "blog-10",
-  slug: "gold-investment-physical-digital-sgb-comparison",
-  title: "Grandmother's 400g Gold: Physical vs Digital Gold vs SGB - The Analysis",
+  slug: "gold-investment-2025-physical-digital-sgb-comparison",
+  title: "Gold Investment 2025: Physical vs Digital vs Sovereign Gold Bonds",
   author: "BM Wealth Editorial Team",
   date: "December 17, 2025",
   published_date: "2025-12-17",
   readTime: "9 min read",
   read_time: "9 minutes",
   category: "Investment Education",
-  excerpt: "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
+  excerpt: "Grandmother's gold bangles. 500 grams, bought in 1985. 'Never sell family gold,' she said. 2025: Gold worth ₹30 lakh. But ₹5 lakh stuck in making charges. Grandson asks: 'What if we bought SGB instead?'",
   image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Elegant gold jewelry bars luxury investment precious metals Mumbai wealth",
@@ -3845,8 +3920,8 @@ export const staticBlogPost10 = {
     "description": "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
-    "datePublished": "2025-03-12",
-    "dateModified": "2025-12-15",
+    "datePublished": "2025-12-17",
+    "dateModified": "2025-12-17",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     "articleSection": "Investment Education",
     "keywords": "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai"
