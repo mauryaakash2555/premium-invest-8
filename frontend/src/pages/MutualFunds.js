@@ -566,8 +566,8 @@ const MutualFunds = () => {
         </section>
 
         {/* Disclaimers */}
-        <section style={{ marginTop: '60px', padding: '24px', background: 'rgba(255, 0, 0, 0.1)', borderRadius: '8px', border: '1px solid rgba(255, 0, 0, 0.3)' }}>
-          <h3 style={{ fontSize: '20px', color: '#ff6b6b', marginBottom: '16px', fontWeight: '600' }}>
+        <section style={{ marginTop: '60px', padding: '24px', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '8px', border: '1px solid rgba(251, 191, 36, 0.3)' }}>
+          <h3 style={{ fontSize: '20px', color: '#fbbf24', marginBottom: '16px', fontWeight: '600' }}>
             Important Investment Disclaimers
           </h3>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>

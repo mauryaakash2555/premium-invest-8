@@ -110,9 +110,9 @@ const SIPServices = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: 'rgba(255, 0, 0, 0.1)',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(255, 0, 0, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>SIP Investment Disclaimer:</strong> SIP investments are subject to market risks. Past SIP returns do not guarantee future performance. Equity mutual funds can be volatile short-term. SIP is most effective for long-term goals (5+ years). Maintain SIPs even during market downturns for maximum benefit. Returns mentioned are illustrative based on historical data and may vary. Consider your risk tolerance, investment horizon, and financial goals before starting SIPs. Consult our AMFI registered advisors (ARN 90008) for personalized SIP planning tailored to your financial objectives.

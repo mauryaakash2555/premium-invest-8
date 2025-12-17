@@ -117,9 +117,9 @@ const Insurance = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: 'rgba(255, 0, 0, 0.1)',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(255, 0, 0, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>Insurance Disclaimer:</strong> BM Wealth holds IRDAI License 277925 for insurance advisory and distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed advisors for personalized insurance planning suited to your family's protection needs.
