@@ -233,17 +233,23 @@ const Footer = () => {
 
       {/* Copyright */}
       <div style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        paddingTop: '20px',
-        paddingBottom: '20px',
-        textAlign: 'center'
+        backgroundColor: '#0a0a0a',
+        padding: '20px 0',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
       }}>
-        <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px' }}>
-          © 2025 BM Wealth. All rights reserved.
-        </p>
-        <p style={{ color: '#B8860B', fontSize: '13px' }}>
-          IRDAI Licensed | AMFI Registered
-        </p>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 20px',
+          textAlign: 'center'
+        }}>
+          <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px', margin: '0 0 8px 0' }}>
+            © 2025 BM Wealth. All rights reserved.
+          </p>
+          <p style={{ color: '#B8860B', fontSize: '13px', margin: 0 }}>
+            IRDAI Licensed | AMFI Registered
+          </p>
+        </div>
       </div>
     </footer>
   );

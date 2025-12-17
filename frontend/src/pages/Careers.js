@@ -79,7 +79,7 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Client relationship management, financial planning and goal assessment, mutual fund and insurance recommendations, portfolio monitoring and reviews, business development and client acquisition, staying updated on financial markets and products.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> Fixed salary (₹3-6 lakhs annually depending on experience) plus performance-based incentives (can exceed fixed salary for top performers). Total compensation range: ₹4-12+ lakhs annually.
+              <strong>Compensation:</strong> Competitive compensation based on experience and performance, including fixed salary plus performance-based incentives. Total package designed to reward excellence and client satisfaction.
             </p>
           </div>
 
@@ -94,7 +94,7 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Managing existing client relationships, addressing client queries and concerns, coordinating portfolio reviews and reporting, facilitating transactions and documentation, identifying cross-selling opportunities, maintaining high client satisfaction and retention.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> ₹3.5-5 lakhs annually plus performance bonuses. Total compensation: ₹4-7 lakhs annually.
+              <strong>Compensation:</strong> Competitive package with performance bonuses. Total compensation based on experience and client management excellence.
             </p>
           </div>
 
@@ -109,7 +109,7 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Conducting insurance needs analysis, recommending appropriate life and health insurance products, facilitating policy issuance and documentation, providing claim settlement assistance, maintaining client relationships for policy renewals and additions.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> ₹2.5-4 lakhs fixed plus significant commission potential. Total compensation: ₹3.5-8 lakhs annually based on business generated.
+              <strong>Compensation:</strong> Competitive fixed salary plus significant commission potential based on business generated. Performance-driven package with unlimited earning opportunities.
             </p>
           </div>
         </section>

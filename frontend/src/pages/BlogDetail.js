@@ -5,6 +5,10 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { staticBlogPost, staticBlogData } from '../data/staticBlogData';
+import ReadingProgress from '../components/ReadingProgress';
+import TableOfContents from '../components/TableOfContents';
+import FAQSection from '../components/FAQSection';
+import RelatedPosts from '../components/RelatedPosts';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -81,8 +85,56 @@ const BlogDetail = () => {
     );
   }
 
+  // Generate Schema.org JSON-LD
+  const schemaOrgData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": post.image_url || 'https://www.bmwealth.co.in/logo.webp',
+    "datePublished": post.published_date,
+    "dateModified": post.published_date,
+    "author": {
+      "@type": "Organization",
+      "name": post.author || "BM Wealth Editorial Team",
+      "url": "https://www.bmwealth.co.in"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "BM Wealth",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.bmwealth.co.in/logo.webp"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.bmwealth.co.in/blog/${post.slug}`
+    }
+  };
+
+  // Add FAQ schema if FAQs exist
+  const faqSchemaData = post.faqs && post.faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": post.faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null;
+
+  // Get all static blogs for related posts
+  const allBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
+    ? staticBlogData 
+    : [staticBlogPost];
+
   return (
     <div style={{ background: '#000000', minHeight: '100vh' }}>
+      <ReadingProgress />
       <Helmet>
         <title>{post.title} | BM Wealth Blog</title>
         <meta name="description" content={post.excerpt} />
@@ -106,6 +158,18 @@ const BlogDetail = () => {
         {post.tags && post.tags.map((tag, index) => (
           <meta property="article:tag" content={tag} key={index} />
         ))}
+
+        {/* Schema.org Article Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify(schemaOrgData)}
+        </script>
+
+        {/* Schema.org FAQ Markup */}
+        {faqSchemaData && (
+          <script type="application/ld+json">
+            {JSON.stringify(faqSchemaData)}
+          </script>
+        )}
       </Helmet>
 
       {/* Back Button */}
@@ -361,6 +425,9 @@ const BlogDetail = () => {
           </div>
         </header>
 
+        {/* Table of Contents */}
+        <TableOfContents content={post.content} />
+
         {/* Blog Content */}
         <div
           style={{
@@ -370,6 +437,14 @@ const BlogDetail = () => {
           }}
           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
         />
+
+        {/* FAQ Section */}
+        {post.faqs && post.faqs.length > 0 && (
+          <FAQSection faqs={post.faqs} />
+        )}
+
+        {/* Related Posts */}
+        <RelatedPosts posts={allBlogs} currentPostSlug={post.slug} />
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (

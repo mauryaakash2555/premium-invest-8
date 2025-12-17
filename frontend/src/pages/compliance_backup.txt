@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 // COMPLETE COMPLIANCE PAGE - All Sections Included
@@ -39,23 +39,10 @@ export default function Compliance() {
           position: 'relative',
           overflow: 'hidden',
           paddingTop: '80px',
+          background: '#000000',
         }}
       >
-        {/* Background Image */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: 'url(https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.15,
-          }}
-        />
-        {/* Background Gradient Overlay */}
+        {/* Background Gradient */}
         <div
           style={{
             position: 'absolute',

@@ -108,11 +108,34 @@ export const staticBlogPost = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
-  image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  image_url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+  image: "/blog-images/blog-hero-47lakh.jpg",
+  image_url: "/blog-images/blog-hero-47lakh.jpg",
   image_alt: "Mumbai financial advisory case study - investment mistakes",
   tags: ["investment mistakes Mumbai", "mutual fund errors", "ULIP problems", "financial advisor mistakes India"],
   keywords: "investment mistakes Mumbai, mutual fund errors, ULIP problems, financial advisor mistakes India",
+  
+  faqs: [
+    {
+      question: "Can I lose money in mutual funds?",
+      answer: "Yes, mutual funds are subject to market risks. Unlike fixed deposits, the value of your investment can go up or down based on market performance. However, systematic investing (SIP) over long periods (10+ years) has historically shown positive returns."
+    },
+    {
+      question: "How often should I review my portfolio?",
+      answer: "At minimum, annually. Ideally, every 6 months or whenever there's a major life change. Regular review helps catch problems like high-cost products, goal misalignment, or excessive concentration."
+    },
+    {
+      question: "What is opportunity cost in investing?",
+      answer: "Opportunity cost is the difference between what your money actually earned versus what it could have earned with a better investment strategy. It's not about market timing, but about product selection and cost efficiency."
+    },
+    {
+      question: "Should I mix insurance with investment?",
+      answer: "Generally, no. Pure term insurance provides maximum coverage at lowest cost. Separating insurance and investment typically works better for most families."
+    },
+    {
+      question: "How do I know if my advisor is good?",
+      answer: "A good advisor asks about your goals first, reviews your portfolio annually, explains costs clearly, and educates you about your own money."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -632,11 +655,34 @@ export const staticBlogPost2 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Saturday morning retirement calculator shock: A 52-year-old Marketing Head discovers a ₹2.85 crore retirement gap. Why good salary and regular savings weren't enough.",
-  image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Retirement planning Mumbai - luxury retirement lifestyle peaceful sunset",
   tags: ["retirement planning Mumbai", "retirement corpus India", "retirement shortfall", "financial planning 50s"],
   keywords: "retirement planning Mumbai, retirement corpus India, retirement shortfall, financial planning 50s",
+  
+  faqs: [
+    {
+      question: "How much corpus do I need for retirement in Mumbai?",
+      answer: "It depends on your lifestyle. For ₹1 lakh/month expenses today, you'd need ₹4-5 crore for 25 years of retirement, accounting for inflation. Use the 25x rule: Calculate annual expenses at retirement, multiply by 25."
+    },
+    {
+      question: "Is 50% equity too risky in your 50s?",
+      answer: "Not necessarily. If you have 8-10 years to retirement, stable income, and no major liabilities, moderate equity exposure can help grow corpus. The key is gradual shift to debt as retirement approaches."
+    },
+    {
+      question: "Should I max out PPF for retirement?",
+      answer: "PPF is safe but returns around 7-7.5%. For retirement 10+ years away, balanced equity-debt approach typically works better. PPF can be part of debt allocation, not the entire retirement strategy."
+    },
+    {
+      question: "Can I still save for retirement if I'm 50+?",
+      answer: "Yes. It requires disciplined savings, appropriate asset allocation, and possibly working a few years longer. Many recover from late starts by increasing savings rate and using market-linked instruments wisely."
+    },
+    {
+      question: "What if I discover retirement gap too late?",
+      answer: "Options include: increasing savings aggressively, extending working years, part-time work in retirement, downsizing lifestyle, or relocating to lower-cost city. Earlier discovery gives more options."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -1106,6 +1152,29 @@ export const staticBlogPost3 = {
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
   tags: ["insurance investment mix", "endowment policy trap", "ULIP vs mutual funds Mumbai", "financial advisor mistakes"],
   keywords: "insurance investment mix, endowment policy trap, ULIP vs mutual funds Mumbai, financial advisor mistakes",
+  
+  faqs: [
+    {
+      question: "Should I surrender my endowment policy?",
+      answer: "It depends on how many years remain. If you're close to maturity (3-5 years left), continuing might make sense despite low returns. If you have 10+ years remaining, calculate surrender value vs opportunity cost. Consult a fee-based advisor for unbiased analysis."
+    },
+    {
+      question: "What's wrong with ULIP policies?",
+      answer: "ULIPs combine insurance and investment, but typically do both poorly. High charges eat into returns. Life cover is often inadequate. Lock-in periods restrict flexibility. Separating term insurance and mutual funds usually works better for most people."
+    },
+    {
+      question: "How much term insurance do I actually need?",
+      answer: "A common rule: 10-15 times your annual income. Consider family expenses, liabilities (home loan, etc.), children's education needs, and spouse's earning capacity. For Mumbai, with higher costs, err on the higher side. ₹1-2 crore is typical for middle-class families."
+    },
+    {
+      question: "Can I have both term insurance and investment policies?",
+      answer: "You can, but it's usually not optimal. Term insurance provides maximum cover at lowest cost. For investment, mutual funds offer better returns, transparency, and flexibility. Keeping them separate gives you control over both protection and wealth creation."
+    },
+    {
+      question: "What should I do if my agent sold me these policies?",
+      answer: "Get an independent second opinion. Calculate actual returns. Compare with alternatives. If the product truly doesn't fit your needs, explore options—some policies become paid-up after 3 years, reducing future premium burden while maintaining some benefits. Don't make decisions based on loyalty to the agent."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -1563,11 +1632,34 @@ export const staticBlogPost5 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
-  image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Business partnership handshake professional meeting Mumbai investment strategy",
   tags: ["SIP vs lump sum", "investment timing Mumbai", "market timing myth", "bonus investment strategy"],
   keywords: "SIP vs lump sum, investment timing Mumbai, market timing myth, bonus investment strategy",
+  
+  faqs: [
+    {
+      question: "Is lump sum better than SIP?",
+      answer: "Historically, lump sum outperforms SIP about 60-70% of the time in rising markets. However, SIP wins on psychological comfort and removes timing pressure. Choice depends on your risk tolerance and market conditions."
+    },
+    {
+      question: "How long should I run an SIP?",
+      answer: "For lump sum amounts deployed via SIP: 12-24 months is typical. For regular monthly savings: continue as long as you're earning and investing. The power of SIP compounds over 10-20+ years."
+    },
+    {
+      question: "Should I wait for market correction to invest lump sum?",
+      answer: "Timing corrections is extremely difficult. If markets feel overvalued, consider systematic transfer plan (STP)—park in liquid fund, transfer fixed amount monthly to equity. This way your money isn't idle while you deploy gradually."
+    },
+    {
+      question: "Can I do both lump sum and SIP?",
+      answer: "Yes. Many investors invest windfall/bonus as lump sum during corrections, while maintaining regular monthly SIPs for disciplined wealth creation. This combines opportunistic investing with systematic planning."
+    },
+    {
+      question: "What if I invested lump sum at the top?",
+      answer: "With a 10+ year horizon, even investments at market peaks have historically recovered and delivered good returns. The key is not to panic-sell during the inevitable correction. Time in the market beats timing the market."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -1848,11 +1940,34 @@ export const staticBlogPost4 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
-  image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1554224311-beee1c7c0b18?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury home office workspace tax planning Mumbai professional workspace",
   tags: ["tax planning beyond 80C", "Mumbai tax saving", "software engineer taxes India", "NPS tax benefit"],
   keywords: "tax planning beyond 80C, Mumbai tax saving, software engineer taxes India, NPS tax benefit",
+  
+  faqs: [
+    {
+      question: "What deductions are available beyond 80C?",
+      answer: "Beyond 80C, you can claim: Section 80D (health insurance up to ₹50K), Section 80CCD(1B) (NPS additional ₹50K), Section 24(b) (home loan interest up to ₹2L), HRA exemption (based on rent paid), Section 80E (education loan interest, no limit), and Section 80G (charitable donations)."
+    },
+    {
+      question: "How much can I save on HRA in Mumbai?",
+      answer: "HRA exemption in Mumbai can save ₹3-5 lakh in taxable income annually, translating to ₹90,000-1.5 lakh in tax savings (30% bracket). The exemption is minimum of: actual HRA received, actual rent minus 10% salary, or 50% of salary (Mumbai). Proper rent receipts are essential."
+    },
+    {
+      question: "Is NPS tax-saving worth it?",
+      answer: "Yes, for the additional ₹50K deduction (80CCD1B) beyond 80C. At 30% tax bracket, this saves ₹15,600 annually. NPS also offers market-linked returns with low expense ratios. The 60-year lock-in is designed for retirement, so consider it as part of long-term retirement planning."
+    },
+    {
+      question: "Can I claim both 80C and 80D?",
+      answer: "Yes, absolutely. Section 80C (₹1.5L) and Section 80D (₹50K) are separate deductions. You can claim both. Similarly, 80CCD(1B) (NPS ₹50K) is additional to 80C. All these deductions are independent and can be claimed together to maximize tax savings."
+    },
+    {
+      question: "What if I missed claiming deductions?",
+      answer: "You can file a revised return within the assessment year or claim refund if you've already filed. However, it's better to plan in advance. For current year, start planning from April. For past year, consult a CA about filing revised return if within time limits."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -2190,11 +2305,34 @@ export const staticBlogPost6 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
-  image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Bank vault security emergency fund safety Mumbai financial planning",
   tags: ["emergency fund Mumbai", "COVID job loss India", "financial safety net", "Mumbai living costs"],
   keywords: "emergency fund Mumbai, COVID job loss India, financial safety net, Mumbai living costs",
+  
+  faqs: [
+    {
+      question: "Is 6 months emergency fund enough?",
+      answer: "For Mumbai, 6 months is generally not enough. Recommended: 12-15 months for single income households, 9-12 months for dual income. High fixed costs and longer job search times in metro cities require larger buffers."
+    },
+    {
+      question: "Where should I keep my emergency fund?",
+      answer: "Split between liquid funds (60-70%) and high-interest savings accounts (30-40%). Avoid locking in FDs. Need instant access during emergencies. Liquid funds offer ~6-7% returns with T+1 redemption."
+    },
+    {
+      question: "Should I invest my emergency fund in mutual funds?",
+      answer: "No. Emergency fund is for safety, not growth. Keep in liquid funds or savings accounts. Equity/debt mutual funds have market risk and volatility. You might need to withdraw when markets are down, locking losses."
+    },
+    {
+      question: "What if I can't save 12 months expenses right now?",
+      answer: "Start with 3 months, then 6, then gradually build to 12-15. Even ₹50,000 is better than zero. Set up automatic transfers monthly. Use bonuses, tax refunds to accelerate. Don't wait for perfect amount to start."
+    },
+    {
+      question: "Does credit card work as emergency fund?",
+      answer: "No. Credit cards charge 36-42% interest if you can't pay full amount. True emergency fund should be your own money, easily accessible, with no interest burden. Credit cards can supplement but never replace emergency savings."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -2613,11 +2751,34 @@ export const staticBlogPost7 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
-  image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Gold bars wealth comparison premium investment instruments analysis",
   tags: ["ELSS vs PPF", "NPS comparison India", "tax saving investments 80C", "retirement corpus building Mumbai"],
   keywords: "ELSS vs PPF, NPS comparison India, tax saving investments 80C, retirement corpus building Mumbai",
+  
+  faqs: [
+    {
+      question: "Which is best for tax saving: ELSS, PPF, or NPS?",
+      answer: "It depends on your goals. ELSS offers highest potential returns (12-15%) with 3-year lock-in. PPF is safest (7.1% guaranteed) with 15-year maturity. NPS gives additional ₹50K deduction and moderate returns (9-12%) but locked till 60. Most benefit from a combination based on age and risk tolerance."
+    },
+    {
+      question: "Can I invest in all three ELSS, PPF, and NPS?",
+      answer: "Yes. You can split ₹1.5L across all three for 80C, plus additional ₹50K in NPS for 80CCD(1B). This diversifies your tax-saving portfolio across equity, debt, and retirement instruments, balancing risk and returns."
+    },
+    {
+      question: "Can I withdraw from PPF before 15 years?",
+      answer: "Partial withdrawal allowed from 7th year onwards for specific needs (medical, education). Full withdrawal only after 15 years. However, you can extend in blocks of 5 years. Early exit (before 5 years) possible but with penalties and reduced interest."
+    },
+    {
+      question: "Is NPS withdrawal taxable?",
+      answer: "60% of NPS corpus is tax-free at maturity (40% must buy annuity). During NPS, withdrawals for education/home/medical allowed (tax-free up to 25% of contribution after 3 years). Final maturity proceeds are partially tax-exempt, unlike ELSS where LTCG over ₹1L is taxed at 10%."
+    },
+    {
+      question: "What's the lock-in period comparison?",
+      answer: "ELSS: 3 years (shortest). PPF: 15 years with partial withdrawal from year 7. NPS: Till age 60 with partial withdrawal allowed after 3 years for specific needs. Choose based on when you'll need the money."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -3022,11 +3183,34 @@ export const staticBlogPost8 = {
   read_time: "8 minutes",
   category: "Investment Education",
   excerpt: "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
-  image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury retirement villa peaceful lifestyle Mumbai retirement planning reality",
   tags: ["1 crore retirement Mumbai", "retirement corpus reality", "post retirement planning India", "Mumbai retirement costs"],
   keywords: "1 crore retirement Mumbai, retirement corpus reality, post retirement planning India, Mumbai retirement costs",
+  
+  faqs: [
+    {
+      question: "Is ₹1 crore enough to retire in Mumbai?",
+      answer: "For most people, no. ₹1 crore generates roughly ₹50-60K per month (at 7% safe withdrawal rate) before considering inflation. Mumbai's average middle-class expenses are ₹1-1.5 lakh/month. You'd need ₹2.5-4 crore for modest retirement, ₹5-7 crore for comfortable lifestyle."
+    },
+    {
+      question: "How much corpus do I need for ₹1 lakh monthly expenses?",
+      answer: "Use the 25x rule: ₹1 lakh/month = ₹12 lakh/year. Multiply by 25 = ₹3 crore minimum. This assumes 4% safe withdrawal rate. For Mumbai, accounting for inflation and healthcare, aim for ₹4-5 crore to safely generate ₹1 lakh monthly adjusted for inflation."
+    },
+    {
+      question: "What's a safe withdrawal rate in India?",
+      answer: "Traditionally 4% globally, but for India, consider 5-6% given higher expected returns. However, be conservative: start with 4-5% and adjust annually based on portfolio performance and inflation. For ₹1 crore, this means ₹40-50K monthly withdrawal."
+    },
+    {
+      question: "Should I move out of Mumbai after retirement?",
+      answer: "Many do. Tier-2 cities (Pune, Nashik, Goa) offer 40-50% lower living costs. ₹1 crore in smaller cities = ₹2 crore lifestyle in Mumbai. Consider factors: healthcare access, family proximity, social connections, climate. Moving can extend corpus significantly."
+    },
+    {
+      question: "Can I rely only on EPF and PPF for retirement?",
+      answer: "Risky. EPF and PPF give 7-8% returns. With 6-7% inflation, real growth is minimal. For aggressive corpus building (especially if you're 30-40), 50-70% equity allocation historically delivers better long-term results. EPF/PPF should be part of debt allocation, not entire strategy."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -3410,6 +3594,29 @@ export const staticBlogPost9 = {
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
   tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
   keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
+  
+  faqs: [
+    {
+      question: "Should I buy property or invest in mutual funds?",
+      answer: "Both have merits. Real estate offers tangible asset, rental income, and emotional security but lacks liquidity and has high entry costs. Mutual funds offer liquidity, diversification, and lower transaction costs but no physical ownership. For wealth creation alone, equity mutual funds have historically outperformed real estate by 3-5% annually."
+    },
+    {
+      question: "Is Mumbai real estate still a good investment in 2025?",
+      answer: "Depends on location and purpose. Prime areas (BKC, Lower Parel, South Mumbai) have limited supply and steady appreciation. Suburbs depend heavily on infrastructure development. Real estate works best as live-in asset (save rent) or long-term hold (15+ years). Short-term flipping is mostly dead in Mumbai."
+    },
+    {
+      question: "What's better for wealth creation?",
+      answer: "Historically, equity mutual funds deliver 12-15% CAGR vs real estate's 8-10% in Mumbai. But real estate forces discipline (can't sell impulsively) and provides utility (living/rental). For pure wealth creation: mutual funds. For wealth + utility: real estate as home, mutual funds for investments."
+    },
+    {
+      question: "Can I invest in both real estate and mutual funds?",
+      answer: "Yes, and most should. Buy one property to live in (save rent, forced savings). Invest liquid surplus in mutual funds for flexibility and growth. This gives stability (home) and liquidity (funds). Avoid multiple properties unless you're serious about real estate as business."
+    },
+    {
+      question: "How do I factor in rent saved when comparing?",
+      answer: "Add rent saved to real estate returns. If property appreciates 8% and you save ₹30K monthly rent, your effective return includes both. Similarly, deduct rent paid from mutual fund returns for fair comparison. The rent factor can swing analysis significantly in metro cities like Mumbai."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">
@@ -3830,11 +4037,34 @@ export const staticBlogPost10 = {
   read_time: "9 minutes",
   category: "Investment Education",
   excerpt: "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
-  image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
-  image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+  image: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
+  image_url: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Elegant gold jewelry bars luxury investment precious metals Mumbai wealth",
   tags: ["gold investment India", "sovereign gold bonds SGB", "digital gold vs physical", "gold investment options Mumbai"],
   keywords: "gold investment India, sovereign gold bonds SGB, digital gold vs physical, gold investment options Mumbai",
+  
+  faqs: [
+    {
+      question: "Which is better: Physical gold or Sovereign Gold Bonds?",
+      answer: "SGBs are superior for investment. You get gold price appreciation PLUS 2.5% annual interest PLUS tax-free capital gains on maturity. Physical gold has making charges (15-25%), storage risk, and no interest. SGBs are government-backed, completely safe. Only downside: 8-year maturity (can exit on exchange after 5 years)."
+    },
+    {
+      question: "Is digital gold safe to invest in India?",
+      answer: "Reasonably safe if bought from reputed platforms (Google Pay, PhonePe, Paytm) that partner with MMTC-PAMP or other vault providers. Gold is insured and can be converted to physical form. However, regulatory framework is still evolving. For long-term investment, SGBs are safer and offer better returns due to 2.5% interest."
+    },
+    {
+      question: "How much gold should I have in my portfolio?",
+      answer: "Traditional advice: 10-15% of portfolio. Gold acts as hedge against inflation and market crashes. During 2008 and 2020 crashes, gold held steady while equity fell. However, gold gives lower long-term returns than equity. Treat it as portfolio stabilizer, not growth driver."
+    },
+    {
+      question: "What are the charges for physical gold?",
+      answer: "Making charges: 10-25% of gold value (₹500-1500 per 10g). GST: 3% on gold + making charges. Purity concerns: Need to verify hallmark (916 = 22K). Buyback: Jewelers pay 5-10% below market rate. Total cost of buying and selling physical gold: 15-30% transaction cost. SGBs have zero charges."
+    },
+    {
+      question: "Can I take loan against Sovereign Gold Bonds?",
+      answer: "Yes. Banks accept SGBs as collateral for loans. Loan-to-value typically 75-80% (better than physical gold's 70-75%). Interest rates similar to gold loans (9-12%). SGBs in demat form make the process smoother. You continue earning 2.5% interest even while loan is active."
+    }
+  ],
 
   content: `
   <script type="application/ld+json">

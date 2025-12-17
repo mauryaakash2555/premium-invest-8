@@ -71,12 +71,12 @@ const Contact = () => {
       }
       
       // Send form data with optional reCAPTCHA token - Render backend
-      // Optimized timeout with faster failure for better UX
+      // Optimized timeout: 8 seconds for faster failure and better UX
       const response = await axios.post(`${API}/contact`, {
         ...formData,
         recaptcha_token: recaptchaToken // null if not available
       }, {
-        timeout: 30000, // 30 second timeout - faster failure for better UX
+        timeout: 8000, // 8 second timeout - quick failure shows WhatsApp faster
         headers: {
           'Content-Type': 'application/json',
         },
@@ -159,16 +159,19 @@ const Contact = () => {
         });
       }
       
-      // Show WhatsApp fallback after error (unless it's a security/validation error)
+      // Show WhatsApp fallback after 3 seconds delay (unless it's a security/validation error)
       if (shouldShowFallback) {
-        setShowWhatsAppFallback(true);
-        // Scroll to fallback after a short delay for better UX
+        // Wait 3 seconds before showing WhatsApp fallback for better UX
         setTimeout(() => {
-          const fallbackElement = document.querySelector('[data-whatsapp-fallback]');
-          if (fallbackElement) {
-            fallbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }, 300);
+          setShowWhatsAppFallback(true);
+          // Scroll to fallback after showing it
+          setTimeout(() => {
+            const fallbackElement = document.querySelector('[data-whatsapp-fallback]');
+            if (fallbackElement) {
+              fallbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 300);
+        }, 3000);
       } else {
         setShowWhatsAppFallback(false);
       }
@@ -653,25 +656,27 @@ const Contact = () => {
                 )}
               </button>
 
-              {/* WhatsApp Fallback - Shows only on error */}
+              {/* WhatsApp Fallback - Shows only on error after 3 seconds */}
               {showWhatsAppFallback && (
                 <div 
                   data-whatsapp-fallback
                   style={{ 
                     marginTop: '24px', 
                     textAlign: 'center', 
-                    padding: '16px 20px', 
-                    background: 'rgba(255, 255, 255, 0.02)', 
-                    borderRadius: '8px', 
+                    padding: '20px 24px', 
+                    background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(192, 160, 98, 0.02) 100%)', 
+                    borderRadius: '12px', 
                     border: '1px solid rgba(192, 160, 98, 0.3)',
-                    animation: 'fadeIn 0.3s ease-in'
+                    animation: 'fadeIn 0.5s ease-in',
+                    boxShadow: '0 4px 20px rgba(192, 160, 98, 0.15)'
                   }}
                 >
                   <p style={{ 
                     color: '#C0A062', 
-                    marginBottom: '10px', 
-                    fontSize: '14px',
-                    fontWeight: '400'
+                    marginBottom: '14px', 
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    letterSpacing: '0.3px'
                   }}>
                     Having trouble? Try WhatsApp
                   </p>
@@ -682,27 +687,35 @@ const Contact = () => {
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '8px',
-                      padding: '10px 20px',
-                      background: 'transparent',
+                      gap: '10px',
+                      padding: '12px 28px',
+                      background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(192, 160, 98, 0.05) 100%)',
                       color: '#C0A062',
-                      border: '1px solid rgba(192, 160, 98, 0.4)',
-                      borderRadius: '6px',
+                      border: '2px solid rgba(192, 160, 98, 0.4)',
+                      borderRadius: '8px',
                       textDecoration: 'none',
-                      fontWeight: '500',
-                      fontSize: '14px',
-                      transition: 'all 0.3s ease',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.6)';
-                      e.currentTarget.style.background = 'rgba(192, 160, 98, 0.05)';
+                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.8)';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(192, 160, 98, 0.25) 0%, rgba(192, 160, 98, 0.15) 100%)';
+                      e.currentTarget.style.boxShadow = '0 0 30px rgba(192, 160, 98, 0.5) inset, 0 0 15px rgba(192, 160, 98, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
+                      e.currentTarget.style.color = '#DAA520';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
-                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(192, 160, 98, 0.05) 100%)';
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                      e.currentTarget.style.color = '#C0A062';
                     }}
                   >
-                    <MessageCircle size={16} />
+                    <MessageCircle size={18} />
                     Contact via WhatsApp
                   </a>
                 </div>
