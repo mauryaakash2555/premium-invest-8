@@ -683,22 +683,9 @@ const Contact = () => {
                   data-whatsapp-fallback
                   style={{ 
                     marginTop: '24px', 
-                    textAlign: 'center', 
-                    padding: '20px', 
-                    background: 'rgba(192, 160, 98, 0.05)', 
-                    borderRadius: '8px', 
-                    border: '1px solid rgba(192, 160, 98, 0.2)',
-                    animation: 'fadeIn 0.3s ease-in'
+                    textAlign: 'center'
                   }}
                 >
-                  <p style={{ 
-                    color: '#C0A062', 
-                    marginBottom: '12px', 
-                    fontSize: '15px',
-                    fontWeight: '500'
-                  }}>
-                    Form taking longer than expected? Contact us instantly via WhatsApp
-                  </p>
                   <a 
                     href="https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect"
                     target="_blank"
