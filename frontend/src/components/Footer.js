@@ -97,7 +97,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Quick Links Column - ZERO GAP */}
+        {/* Quick Links Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
@@ -110,7 +110,7 @@ const Footer = () => {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '0px'
+            gap: '12px'
           }}>
             <a href="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Home</a>
             <a href="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>About Us</a>
@@ -120,7 +120,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Legal Column - ZERO GAP */}
+        {/* Legal Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
@@ -133,7 +133,7 @@ const Footer = () => {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '0px'
+            gap: '12px'
           }}>
             <a href="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Terms & Conditions</a>
             <a href="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Privacy Policy</a>
@@ -169,24 +169,25 @@ const Footer = () => {
               Mumbai, Maharashtra
             </p>
             
-            {/* WhatsApp - NO BACKGROUND */}
-            <a 
-              href="https://wa.me/918850977259"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#25D366',
-                textDecoration: 'none',
-                fontSize: '14px',
-                marginTop: '-8px'
-              }}
-            >
-              <MessageCircle size={16} color="#25D366" />
-              WhatsApp Us
-            </a>
+            {/* WhatsApp - Centered */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-8px' }}>
+              <a 
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#25D366',
+                  textDecoration: 'none',
+                  fontSize: '14px'
+                }}
+              >
+                <MessageCircle size={16} color="#25D366" />
+                WhatsApp Us
+              </a>
+            </div>
           </div>
         </div>
       </div>
