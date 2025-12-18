@@ -688,6 +688,7 @@ input, textarea, select {
     min-height: 65vh !important;
     padding-top: 60px !important;
     padding-bottom: 30px !important;
+    border: 5px solid red !important; /* TEMP DEBUG - REMOVE AFTER TESTING */
   }
   
   .hero-background-image {
