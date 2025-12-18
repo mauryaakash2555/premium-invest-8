@@ -174,8 +174,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL HERO/BACKGROUND CSS REMOVED - BACK TO STABLE STATE
+   BACKGROUND PROPERTIES FIX - MINIMAL CSS
    ═══════════════════════════════════════════════════════════════ */
+
+.hero,
+.hero-section,
+section:first-of-type {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 .golden-gradient {
   background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);

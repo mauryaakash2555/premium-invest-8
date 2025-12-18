@@ -32,6 +32,8 @@ const About = () => {
         className="page-hero-responsive"
         style={{
           minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

@@ -225,6 +225,8 @@ const Contact = () => {
       <section
         style={{
           minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

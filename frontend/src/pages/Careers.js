@@ -34,6 +34,8 @@ const Careers = () => {
         style={{
           position: 'relative',
           minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

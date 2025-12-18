@@ -86,6 +86,9 @@ const Home = () => {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
+          minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
         }}
       >
         {/* Background Image */}
