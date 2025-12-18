@@ -1,0 +1,73 @@
+# ========================================
+# 🚨 CRITICAL DEPLOYMENT RULES - READ FIRST
+# ========================================
+
+## DEPLOYMENT RULE - ABSOLUTE & NON-NEGOTIABLE
+
+**NEVER DEPLOY TO MAIN/PRODUCTION BRANCH**
+**ALWAYS DEPLOY TO STAGING BRANCH ONLY**
+
+### Production Website (PROTECTED - DO NOT TOUCH)
+- Domain: bmwealth.co.in
+- Vercel Project: premium-invest-8
+- Branch: main
+- Status: **LOCKED FROM AI DEPLOYMENTS**
+
+### Staging Environment (FOR ALL AI DEPLOYMENTS)
+- Staging URL: staging.premium-invest-8
+- Branch: staging
+- Status: **OPEN FOR AI TESTING**
+
+## MANDATORY WORKFLOW FOR ALL CODE CHANGES
+
+1. ✅ Make changes on `staging` branch
+2. ✅ Deploy to staging environment
+3. ✅ Let human test staging thoroughly
+4. ❌ STOP - Do NOT deploy to production
+5. 👤 Human will manually promote to production if tests pass
+
+## DEPLOYMENT COMMANDS
+
+**ALLOWED:**
+```bash
+git checkout staging
+git add .
+git commit -m "message"
+git push origin staging
+```
+
+**FORBIDDEN - NEVER RUN THESE:**
+```bash
+git push origin main  # ❌ FORBIDDEN
+git push --force origin main  # ❌ FORBIDDEN
+vercel --prod  # ❌ FORBIDDEN
+```
+
+## WHEN ASKED TO DEPLOY
+
+If user says "deploy this" or "push to production":
+1. Confirm: "I'll deploy to STAGING first. You can promote to production after testing."
+2. Deploy to staging branch only
+3. Provide staging URL for testing
+4. Remind user to test before production
+
+## VERCEL CONFIGURATION
+
+- Main Project: Auto-deploy DISABLED on main branch
+- Staging Project: Auto-deploy ENABLED on staging branch
+- Production promotion: MANUAL ONLY by human
+
+## EMERGENCY ROLLBACK
+
+If production breaks:
+1. Do NOT try to fix by deploying
+2. Tell user to use Vercel dashboard → Previous deployment → "Promote to Production"
+3. Fix issues on staging, then let human promote
+
+---
+
+**This rule exists because the main website (bmwealth.co.in) is a live business website that cannot afford downtime or bugs from untested changes.**
+
+**Following this rule protects the business, clients, and reputation.**
+
+**NO EXCEPTIONS - STAGING FIRST, ALWAYS.**
