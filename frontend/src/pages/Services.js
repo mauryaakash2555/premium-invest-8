@@ -149,7 +149,7 @@ const Services = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '70vh',
+          minHeight: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

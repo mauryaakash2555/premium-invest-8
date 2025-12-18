@@ -33,7 +33,7 @@ const Careers = () => {
         className="page-hero-responsive"
         style={{
           position: 'relative',
-          minHeight: '60vh',
+          minHeight: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
