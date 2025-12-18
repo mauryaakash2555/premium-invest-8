@@ -488,11 +488,6 @@ html {
    Mobile and tablet will look exactly like desktop (user preference)
    ═══════════════════════════════════════════════════════════════ */
 
-/* ────────────────────────────────────────────────────────────────────────────
-   DESKTOP - DO NOT MODIFY (1025px+)
-   Keep existing styles - desktop is perfect
-   ──────────────────────────────────────────────────────────────────────────── */
-@media (min-width: 1025px) {
-  /* Desktop remains unchanged - all default styles apply */
-  /* No overrides needed - desktop version is already perfect */
-}
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP STYLES APPLY TO ALL DEVICES (no media queries)
+   ═══════════════════════════════════════════════════════════════ */
