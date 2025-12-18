@@ -156,9 +156,9 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
 }
 
-/* Hero Section Default (Desktop) Styles */
+/* Hero Section Default (Mobile) Styles */
 .hero-section-responsive {
-  min-height: 85vh;
+  min-height: 75vh;
   padding-top: 80px;
 }
 
@@ -504,7 +504,12 @@ html {
    ═══════════════════════════════════════════════════════════════ */
 
 @media (min-width: 1025px) {
-  /* Blog & Career pages taller on desktop */
+  /* Home page taller on desktop (95vh vs 75vh mobile) */
+  .hero-section-responsive {
+    min-height: 95vh !important;
+  }
+  
+  /* Blog, About & Career pages taller on desktop */
   /* (They are 65vh base, but need to be 70vh on desktop) */
   .page-hero-responsive {
     min-height: 70vh !important;
