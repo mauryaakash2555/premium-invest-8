@@ -156,14 +156,14 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
 }
 
-/* Hero Section Default (Mobile) Styles */
+/* Hero Section Default (Mobile) Styles - LOCKED with !important */
 .hero-section-responsive {
-  min-height: 65vh;
-  padding-top: 80px;
+  min-height: 65vh !important;
+  padding-top: 80px !important;
 }
 
 .hero-background-image {
-  opacity: 0.15;
+  opacity: 0.15 !important;
 }
 
 .golden-gradient {
