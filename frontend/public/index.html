@@ -21,6 +21,34 @@
     })();
     </script>
     
+    <!-- Lock hero section heights with JavaScript (pixel values, not CSS vh) -->
+    <script>
+    window.addEventListener('load', function() {
+      // Lock all hero sections to 65vh in pixels
+      const heroes = document.querySelectorAll('.hero, .hero-section, section:first-of-type, [class*="hero"]');
+      
+      heroes.forEach(function(hero) {
+        const computedHeight = window.innerHeight * 0.65; // 65vh in pixels
+        hero.style.minHeight = computedHeight + 'px';
+        hero.style.maxHeight = computedHeight + 'px';
+        hero.style.height = computedHeight + 'px';
+      });
+    });
+
+    // Re-lock on refresh from cache
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        const heroes = document.querySelectorAll('.hero, .hero-section, section:first-of-type, [class*="hero"]');
+        heroes.forEach(function(hero) {
+          const computedHeight = window.innerHeight * 0.65;
+          hero.style.minHeight = computedHeight + 'px';
+          hero.style.maxHeight = computedHeight + 'px';
+          hero.style.height = computedHeight + 'px';
+        });
+      }
+    });
+    </script>
+    
     <meta name="theme-color" content="#DAA520" />
     <meta name="description" content="Mumbai's Premier Financial Partner - Expert Investment Advisory" />
     <meta name="google-site-verification" content="Ndk6OylwmzDA4pWL6KPNw0mkKS8WQnO-lGaWb5cpyJ0" />
