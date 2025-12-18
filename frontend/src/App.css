@@ -543,10 +543,50 @@ html {
     display: none !important;
   }
   
-  /* ===== HERO SECTIONS - MOBILE OPTIMIZED ===== */
-  .hero-section-responsive,
+  /* ===== HOME HERO - PREMIUM MOBILE STYLING ===== */
+  .hero-section-responsive {
+    height: 85vh !important;
+    min-height: 85vh !important;
+    max-height: 85vh !important;
+    padding: 80px 20px 40px 20px !important;
+  }
+  
+  /* Premium gradient overlay - mobile only */
+  .hero-section-responsive .hero-gradient-overlay {
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%) !important;
+  }
+  
+  /* Prevent home background from expanding */
+  .hero-section-responsive > div:first-child {
+    height: 85vh !important;
+    max-height: 85vh !important;
+  }
+  
+  /* Premium text styling - home page only */
+  .hero-section-responsive .hero-subtitle-responsive {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 32px !important;
+    font-weight: 300 !important;
+    letter-spacing: 2px !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+  
+  .hero-section-responsive .hero-description-responsive {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    margin-bottom: 50px !important;
+    max-width: 90% !important;
+    font-weight: 300 !important;
+    letter-spacing: 1px !important;
+    opacity: 0.9 !important;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+  }
+  
+  /* ===== OTHER PAGES HERO - KEEP ORIGINAL ===== */
   .page-hero-responsive,
-  section:first-of-type {
+  section:first-of-type:not(.hero-section-responsive) {
     height: auto !important;
     min-height: 60vh !important;
     max-height: none !important;
@@ -555,10 +595,9 @@ html {
     background-position: center !important;
   }
   
-  /* Prevent background image from expanding */
-  .hero-section-responsive > div:first-child,
+  /* Prevent other pages background from expanding */
   .page-hero-responsive > div:first-child,
-  section:first-of-type > div:first-child {
+  section:first-of-type:not(.hero-section-responsive) > div:first-child {
     height: 60vh !important;
     max-height: 60vh !important;
   }
