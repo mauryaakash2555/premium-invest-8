@@ -21,6 +21,7 @@ body {
   overflow-x: hidden;
   width: 100%;
   position: relative;
+  background-attachment: scroll !important;
 }
 
 #root {
@@ -170,6 +171,38 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-background-image {
   opacity: 0.15 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX BACKGROUND IMAGE VERTICAL ZOOM ON MOBILE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Fix for all hero/top section backgrounds */
+.hero,
+.hero-section,
+[class*="hero"],
+section:first-of-type,
+.page-header,
+.top-section {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  height: 65vh !important;
+  min-height: 65vh !important;
+  max-height: 65vh !important;
+}
+
+/* Prevent any section from expanding beyond viewport */
+section {
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* If using inline styles for backgrounds */
+[style*="background-image"] {
+  background-size: cover !important;
+  background-position: center !important;
+  height: 65vh !important;
 }
 
 .golden-gradient {
