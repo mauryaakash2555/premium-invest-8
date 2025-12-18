@@ -116,17 +116,6 @@ const Home = () => {
             zIndex: 1,
           }}
         >
-          <h1
-            data-testid="hero-heading"
-            className="golden-gradient hero-heading-responsive hide-on-mobile"
-            style={{
-              fontSize: 'clamp(32px, 5vw, 72px)',
-              marginBottom: '24px',
-              lineHeight: 1.2,
-            }}
-          >
-            BM Wealth
-          </h1>
           <h2
             className="hero-subtitle-responsive"
             style={{
@@ -153,7 +142,7 @@ const Home = () => {
           </p>
 
           <div
-            className="hero-cta-buttons-responsive"
+            className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
               gap: '20px',
