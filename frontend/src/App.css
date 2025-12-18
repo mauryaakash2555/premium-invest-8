@@ -673,15 +673,15 @@ input, textarea, select {
    MOBILE PHONES - Portrait & Small Devices (320px - 480px)
    ──────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  /* Homepage Hero - Minimal & Beautiful */
+  /* Homepage Hero - Larger with Prominent Background */
   .hero-section-responsive {
-    min-height: 55vh !important;
+    min-height: 65vh !important;
     padding-top: 60px !important;
     padding-bottom: 30px !important;
   }
   
   .hero-background-image {
-    opacity: 0.15 !important; /* Reverted to original subtle background */
+    opacity: 0.25 !important; /* Show background more prominently */
   }
   
   .hero-content-responsive {
@@ -717,9 +717,9 @@ input, textarea, select {
     font-size: 12px !important;
   }
   
-  /* Page Headers (Careers, Services, etc.) - SAME SIZE AS HOME */
+  /* Page Headers (Careers, Services, etc.) - Smaller than Home */
   .page-hero-responsive {
-    min-height: 55vh !important;
+    min-height: 45vh !important;
     padding-top: 80px !important;
     padding-bottom: 40px !important;
   }
@@ -738,14 +738,14 @@ input, textarea, select {
    MOBILE PHONES - Landscape & Large Phones (481px - 768px)
    ──────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 481px) and (max-width: 768px) {
-  /* Homepage Hero - Elegant & Minimal */
+  /* Homepage Hero - Larger with Prominent Background */
   .hero-section-responsive {
-    min-height: 60vh !important;
+    min-height: 70vh !important;
     padding-top: 70px !important;
   }
   
   .hero-background-image {
-    opacity: 0.15 !important; /* Reverted to original subtle background */
+    opacity: 0.25 !important; /* Show background more prominently */
   }
   
   .hero-heading-responsive {
@@ -775,9 +775,9 @@ input, textarea, select {
     font-size: 13px !important;
   }
   
-  /* Page Headers - SAME SIZE AS HOME */
+  /* Page Headers - Smaller than Home */
   .page-hero-responsive {
-    min-height: 60vh !important;
+    min-height: 50vh !important;
     padding-top: 90px !important;
     padding-bottom: 50px !important;
   }
@@ -795,13 +795,13 @@ input, textarea, select {
    TABLETS - Portrait (769px - 1024px)
    ──────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1024px) {
-  /* Homepage Hero - Balanced */
+  /* Homepage Hero - Larger with Prominent Background */
   .hero-section-responsive {
-    min-height: 70vh !important;
+    min-height: 80vh !important;
   }
   
   .hero-background-image {
-    opacity: 0.15 !important; /* Reverted to original subtle background */
+    opacity: 0.25 !important; /* Show background more prominently */
   }
   
   .hero-heading-responsive {
@@ -822,9 +822,9 @@ input, textarea, select {
     font-size: 14px !important;
   }
   
-  /* Page Headers - SAME SIZE AS HOME */
+  /* Page Headers - Smaller than Home */
   .page-hero-responsive {
-    min-height: 70vh !important;
+    min-height: 55vh !important;
     padding-top: 100px !important;
   }
   
