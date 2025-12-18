@@ -597,3 +597,68 @@ input, textarea, select {
 }
 
 /* Mobile responsive footer - REMOVED TO PREVENT CONFLICTS */
+
+/* ═══════════════════════════════════════════════════════════════
+   📱 MOBILE HEADER FIX ONLY - DON'T TOUCH DESKTOP
+   ═══════════════════════════════════════════════════════════════ */
+
+@media screen and (max-width: 768px) {
+  
+  /* Fix mobile header/navigation height */
+  nav {
+    height: 60px !important; /* Smaller mobile header */
+    padding: 8px 15px !important; /* Less padding */
+    min-height: 60px !important;
+  }
+  
+  /* Navigation inner container */
+  nav > div {
+    padding: 8px 15px !important; /* Match nav padding */
+    height: 100% !important;
+  }
+  
+  /* Logo on mobile */
+  nav img {
+    height: 35px !important; /* Smaller logo */
+    width: 35px !important;
+  }
+  
+  /* Logo text */
+  nav > div > a > div {
+    font-size: 22px !important; /* Smaller logo text */
+  }
+  
+  /* Hamburger menu button */
+  .mobile-menu-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 6px !important;
+  }
+  
+  .mobile-menu-toggle svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  /* Fix main content to account for smaller header */
+  main, .main-content, .page-content {
+    margin-top: 60px !important; /* Account for fixed header */
+    padding-top: 0 !important;
+  }
+  
+  /* Hero section starts below header */
+  section:first-of-type,
+  .hero-section, 
+  .hero,
+  .hero-gradient {
+    padding-top: 20px !important; /* Small gap after header */
+  }
+}
+
+/* KEEP DESKTOP HEADER AS IS */
+@media screen and (min-width: 769px) {
+  /* Desktop header remains unchanged */
+  nav {
+    height: auto; /* Keep original desktop height */
+  }
+}
