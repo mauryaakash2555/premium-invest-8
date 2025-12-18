@@ -79,7 +79,7 @@ const Home = () => {
       </Helmet>
       {/* Hero Section */}
       <section
-        className="hero-gradient"
+        className="hero-gradient hero-section-responsive"
         style={{
           minHeight: '100vh',
           display: 'flex',
@@ -92,6 +92,7 @@ const Home = () => {
       >
         {/* Background Image */}
         <div
+          className="hero-background-image"
           style={{
             position: 'absolute',
             top: 0,
@@ -108,7 +109,7 @@ const Home = () => {
         />
 
         <div
-          className="section-container fade-in"
+          className="section-container fade-in hero-content-responsive"
           style={{
             textAlign: 'center',
             position: 'relative',
@@ -117,16 +118,17 @@ const Home = () => {
         >
           <h1
             data-testid="hero-heading"
+            className="golden-gradient hero-heading-responsive"
             style={{
               fontSize: 'clamp(32px, 5vw, 72px)',
               marginBottom: '24px',
               lineHeight: 1.2,
             }}
-            className="golden-gradient"
           >
             BM Wealth
           </h1>
           <h2
+            className="hero-subtitle-responsive"
             style={{
               fontSize: 'clamp(20px, 3vw, 36px)',
               color: '#C0A062',
@@ -134,9 +136,10 @@ const Home = () => {
               fontWeight: 500,
             }}
           >
-            Mumbai's Distinguished Financial Advisory
+            Mumbai's Premier Financial Advisory
           </h2>
           <p
+            className="hero-description-responsive"
             style={{
               fontSize: 'clamp(14px, 2vw, 18px)',
               color: '#FFFFFF',
@@ -150,6 +153,7 @@ const Home = () => {
           </p>
 
           <div
+            className="hero-cta-buttons-responsive"
             style={{
               display: 'flex',
               gap: '20px',

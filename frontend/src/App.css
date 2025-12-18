@@ -662,3 +662,180 @@ input, textarea, select {
     height: auto; /* Keep original desktop height */
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   📱 MOBILE & TABLET RESPONSIVE OPTIMIZATIONS
+   🎯 TARGET: Showcase beautiful backgrounds with elegant minimal text
+   🛡️ PROTECTION: Desktop (1024px+) remains completely unchanged
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   MOBILE PHONES - Portrait & Small Devices (320px - 480px)
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Homepage Hero - Minimal & Beautiful */
+  .hero-section-responsive {
+    min-height: 55vh !important;
+    padding-top: 60px !important;
+    padding-bottom: 30px !important;
+  }
+  
+  .hero-background-image {
+    opacity: 0.25 !important; /* Show background more prominently */
+  }
+  
+  .hero-content-responsive {
+    padding: 0 15px !important;
+  }
+  
+  .hero-heading-responsive {
+    font-size: 36px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .hero-subtitle-responsive {
+    font-size: 16px !important;
+    margin-bottom: 12px !important;
+    font-weight: 400 !important;
+  }
+  
+  .hero-description-responsive {
+    font-size: 14px !important;
+    margin-bottom: 24px !important;
+    opacity: 0.85;
+    display: none; /* Hide on smallest screens for minimal look */
+  }
+  
+  .hero-cta-buttons-responsive {
+    margin-bottom: 30px !important;
+    gap: 12px !important;
+  }
+  
+  .hero-cta-buttons-responsive .btn-primary,
+  .hero-cta-buttons-responsive .btn-secondary {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Page Headers (Careers, Services, etc.) */
+  .page-hero-responsive {
+    min-height: 40vh !important;
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+  }
+  
+  .page-hero-heading-responsive {
+    font-size: 28px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .page-hero-subtitle-responsive {
+    font-size: 14px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   MOBILE PHONES - Landscape & Large Phones (481px - 768px)
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Homepage Hero - Elegant & Minimal */
+  .hero-section-responsive {
+    min-height: 60vh !important;
+    padding-top: 70px !important;
+  }
+  
+  .hero-background-image {
+    opacity: 0.22 !important;
+  }
+  
+  .hero-heading-responsive {
+    font-size: 42px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .hero-subtitle-responsive {
+    font-size: 18px !important;
+    margin-bottom: 14px !important;
+  }
+  
+  .hero-description-responsive {
+    font-size: 15px !important;
+    margin-bottom: 30px !important;
+    max-width: 600px !important;
+  }
+  
+  .hero-cta-buttons-responsive {
+    margin-bottom: 40px !important;
+    gap: 16px !important;
+  }
+  
+  .hero-cta-buttons-responsive .btn-primary,
+  .hero-cta-buttons-responsive .btn-secondary {
+    padding: 13px 24px !important;
+    font-size: 15px !important;
+  }
+  
+  /* Page Headers */
+  .page-hero-responsive {
+    min-height: 45vh !important;
+    padding-top: 90px !important;
+    padding-bottom: 50px !important;
+  }
+  
+  .page-hero-heading-responsive {
+    font-size: 36px !important;
+  }
+  
+  .page-hero-subtitle-responsive {
+    font-size: 16px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   TABLETS - Portrait (769px - 1024px)
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Homepage Hero - Balanced */
+  .hero-section-responsive {
+    min-height: 70vh !important;
+  }
+  
+  .hero-background-image {
+    opacity: 0.18 !important;
+  }
+  
+  .hero-heading-responsive {
+    font-size: 54px !important;
+  }
+  
+  .hero-subtitle-responsive {
+    font-size: 24px !important;
+  }
+  
+  .hero-description-responsive {
+    font-size: 16px !important;
+  }
+  
+  /* Page Headers */
+  .page-hero-responsive {
+    min-height: 50vh !important;
+    padding-top: 100px !important;
+  }
+  
+  .page-hero-heading-responsive {
+    font-size: 44px !important;
+  }
+  
+  .page-hero-subtitle-responsive {
+    font-size: 18px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   DESKTOP - DO NOT MODIFY (1025px+)
+   Keep existing styles - desktop is perfect
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 1025px) {
+  /* Desktop remains unchanged - all default styles apply */
+  /* No overrides needed - desktop version is already perfect */
+}

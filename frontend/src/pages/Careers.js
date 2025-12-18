@@ -28,32 +28,64 @@ const Careers = () => {
         <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
-      <section style={{
-        position: 'relative',
-        backgroundColor: '#000000',
-        padding: '120px 0 80px 0',
-        textAlign: 'center',
-        marginTop: '80px'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <h1 style={{
+      {/* Hero Section with Background */}
+      <section 
+        className="page-hero-responsive"
+        style={{
+          position: 'relative',
+          minHeight: '60vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          paddingTop: '100px',
+          paddingBottom: '60px',
+          overflow: 'hidden'
+        }}>
+        {/* Background Image - Mumbai Professional Skyline */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'url(https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.2,
+          zIndex: 0
+        }} />
+        
+        {/* Content */}
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          padding: '0 20px',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <h1 
+            className="page-hero-heading-responsive"
+            style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: '52px',
+            fontSize: 'clamp(32px, 6vw, 52px)',
             fontWeight: '700',
             color: '#DAA520',
-            marginBottom: '24px',
+            marginBottom: '20px',
             lineHeight: '1.2'
           }}>
-            Career Opportunities at BM Wealth Mumbai
+            Join Our Team
           </h1>
-          <p style={{
-            fontSize: '20px',
-            color: '#e5e5e5',
-            maxWidth: '800px',
-            margin: '0 auto 32px',
+          <p 
+            className="page-hero-subtitle-responsive"
+            style={{
+            fontSize: 'clamp(16px, 2.5vw, 20px)',
+            color: '#C0A062',
+            maxWidth: '700px',
+            margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            Join our team of financial professionals making real impact on Mumbai families' financial futures
+            Build your career with Mumbai's premier financial advisory firm
           </p>
         </div>
       </section>
