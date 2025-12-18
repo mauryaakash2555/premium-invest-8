@@ -58,6 +58,8 @@ The staging-first deployment workflow has been successfully installed and is now
 
 ### Staging Branch: ✅ CONFIGURED
 - **Branch name:** `staging`
+- **Vercel Project:** staging.premium-invest-8
+- **URL:** https://admin-tiart-alpha-59.vercel.app
 - **Status:** Synced with main, pushed to remote
 - **Latest commit:** 34688be (same as main)
 - **Protection:** Open for AI deployments
@@ -98,7 +100,7 @@ git push origin staging
 
 **2. Test on staging:**
 - Vercel will auto-deploy staging
-- Visit staging URL (to be configured)
+- Visit: https://admin-tiart-alpha-59.vercel.app
 - Test thoroughly
 
 **3. Promote to production (when ready):**

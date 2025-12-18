@@ -14,7 +14,8 @@
 - Status: **LOCKED FROM AI DEPLOYMENTS**
 
 ### Staging Environment (FOR ALL AI DEPLOYMENTS)
-- Staging URL: staging.premium-invest-8
+- Vercel Project: staging.premium-invest-8
+- Primary URL: admin-tiart-alpha-59.vercel.app
 - Branch: staging
 - Status: **OPEN FOR AI TESTING**
 

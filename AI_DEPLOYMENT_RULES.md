@@ -24,7 +24,8 @@ This repository has a **STAGING-FIRST workflow** to protect the live business we
 - **Purpose:** Live business website serving real clients
 
 ### Staging Environment (FOR TESTING)
-- **Staging URL:** staging.premium-invest-8.vercel.app
+- **Vercel Project:** staging.premium-invest-8
+- **Primary URL:** https://admin-tiart-alpha-59.vercel.app
 - **Branch:** `staging`
 - **Status:** ✅ **OPEN - AI CAN DEPLOY HERE**
 - **Purpose:** Safe testing ground for all changes

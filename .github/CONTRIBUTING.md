@@ -29,7 +29,8 @@ See detailed rules in:
 - **staging** - Testing branch (OPEN)
   - Auto-deploy: ENABLED
   - AI deployments allowed
-  - Serves: staging.premium-invest-8.vercel.app
+  - Project: staging.premium-invest-8
+  - Serves: admin-tiart-alpha-59.vercel.app
 
 ---
 

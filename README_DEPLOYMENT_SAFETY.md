@@ -56,7 +56,8 @@ This repository now has **permanent safeguards** that ensure:
 ### Staging Branch: `staging`
 - **Status:** ✅ OPEN
 - **Auto-deploy:** ENABLED
-- **Served at:** staging.premium-invest-8.vercel.app
+- **Vercel Project:** staging.premium-invest-8
+- **Served at:** admin-tiart-alpha-59.vercel.app
 - **Who can deploy:** AI assistants (for testing)
 
 ---
@@ -96,7 +97,7 @@ git push origin staging
 - Production remains untouched
 
 ### Step 3: You Test Staging
-- Visit: staging.premium-invest-8.vercel.app
+- Visit: https://admin-tiart-alpha-59.vercel.app
 - Check all pages, mobile, desktop
 - Verify everything works
 

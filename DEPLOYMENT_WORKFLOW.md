@@ -13,7 +13,8 @@
 - **Auto-deploy:** DISABLED (manual promotion only)
 
 ### ✅ Staging Website
-- **URL:** staging.premium-invest-8.vercel.app
+- **Vercel Project:** staging.premium-invest-8
+- **Primary URL:** https://admin-tiart-alpha-59.vercel.app
 - **Branch:** staging
 - **Auto-deploy:** ENABLED (AI can deploy here)
 
@@ -181,9 +182,10 @@ If production breaks:
 ## 📊 STAGING VS PRODUCTION URLs
 
 ### STAGING (for testing)
-- staging.premium-invest-8.vercel.app
-- Branch: `staging`
-- Purpose: Safe testing environment
+- **Project:** staging.premium-invest-8
+- **URL:** https://admin-tiart-alpha-59.vercel.app
+- **Branch:** `staging`
+- **Purpose:** Safe testing environment
 
 ### PRODUCTION (live website)
 - https://bmwealth.co.in
