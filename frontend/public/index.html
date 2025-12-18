@@ -2,7 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="viewport" content="width=1024, minimum-scale=0.1, maximum-scale=5.0, user-scalable=yes" />
+    
+    <!-- Lock viewport on refresh (handles browser cache) -->
+    <script>
+    (function() {
+      var viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=1024, minimum-scale=0.1, maximum-scale=5.0, user-scalable=yes');
+      }
+      
+      // Lock it on page show (handles refresh from cache)
+      window.addEventListener('pageshow', function(event) {
+        if (event.persisted && viewport) {
+          viewport.setAttribute('content', 'width=1024, minimum-scale=0.1, maximum-scale=5.0, user-scalable=yes');
+        }
+      });
+    })();
+    </script>
+    
     <meta name="theme-color" content="#DAA520" />
     <meta name="description" content="Mumbai's Premier Financial Partner - Expert Investment Advisory" />
     <meta name="google-site-verification" content="Ndk6OylwmzDA4pWL6KPNw0mkKS8WQnO-lGaWb5cpyJ0" />
