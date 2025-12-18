@@ -70,14 +70,14 @@ const Careers = () => {
             className="page-hero-heading-responsive"
             style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: 'clamp(32px, 6vw, 52px)',
+            fontSize: 'clamp(28px, 4.5vw, 56px)',
             fontWeight: '300',
-            color: '#DAA520',
-            marginBottom: '32px',
+            color: '#C0A062',
+            marginBottom: '24px',
             lineHeight: '1.2',
-            letterSpacing: '2px',
+            letterSpacing: '3px',
             opacity: 0.95,
-            textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            textShadow: '0 3px 12px rgba(0,0,0,0.4)',
           }}>
             Join Our Team
           </h1>

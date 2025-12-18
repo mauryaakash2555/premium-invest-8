@@ -72,14 +72,15 @@ const About = () => {
           <h1
             data-testid="about-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
-              marginBottom: '32px',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
+              marginBottom: '24px',
               fontWeight: 300,
-              letterSpacing: '2px',
+              letterSpacing: '3px',
               opacity: 0.95,
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#C0A062',
             }}
-            className="golden-gradient"
           >
             About Us
           </h1>
