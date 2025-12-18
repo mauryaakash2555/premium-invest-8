@@ -174,22 +174,34 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FIX BACKGROUND IMAGE VERTICAL ZOOM ON MOBILE - REVERTED TO MINIMAL
-   ALL AGGRESSIVE CSS REMOVED - BACK TO ORIGINAL WORKING STATE
+   FIX BACKGROUND IMAGE EXPANSION - LIGHT TOUCH APPROACH
+   ONLY affects background properties, does NOT touch text/content
    ═══════════════════════════════════════════════════════════════ */
 
-/* Minimal background image fix - ONLY fix background properties, nothing else */
-/* COMMENTED OUT - was breaking layout
+/* Lock background image dimensions WITHOUT affecting content */
 .hero,
 .hero-section,
 section:first-of-type,
-[class*="hero"],
-.page-header {
+[class*="hero"] {
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
 }
-*/
+
+/* Prevent sections from expanding beyond their intended height */
+section {
+  position: relative;
+}
+
+/* Lock specifically for mobile viewport */
+@media (max-width: 1023px) {
+  .hero,
+  .hero-section,
+  section:first-of-type {
+    max-height: 65vh !important;
+  }
+}
 
 .golden-gradient {
   background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
