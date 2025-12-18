@@ -677,7 +677,7 @@ input, textarea, select {
    ──────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
   /* Homepage Hero - Larger with Prominent Background */
-  .hero-section-responsive {
+  section.hero-gradient.hero-section-responsive {
     min-height: 65vh !important;
     padding-top: 60px !important;
     padding-bottom: 30px !important;
@@ -744,7 +744,7 @@ input, textarea, select {
    ──────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 481px) and (max-width: 768px) {
   /* Homepage Hero - Larger with Prominent Background */
-  .hero-section-responsive {
+  section.hero-gradient.hero-section-responsive {
     min-height: 70vh !important;
     padding-top: 70px !important;
   }
@@ -801,7 +801,7 @@ input, textarea, select {
    ──────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1024px) {
   /* Homepage Hero - Larger with Prominent Background */
-  .hero-section-responsive {
+  section.hero-gradient.hero-section-responsive {
     min-height: 80vh !important;
   }
   
