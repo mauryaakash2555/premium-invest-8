@@ -495,27 +495,41 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE RESPONSIVENESS - ALL REMOVED
-   Mobile uses desktop styles exactly (user preference)
+   MINIMAL MOBILE CHANGES - USER REQUEST
+   1. Hide "BM Wealth" heading on home page mobile
+   2. Make footer vertical on mobile
    ═══════════════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════════════════
-   ALL MOBILE CSS REMOVED - MOBILE USES DESKTOP STYLES
-   Mobile will look exactly like desktop (user preference)
-   ═══════════════════════════════════════════════════════════════ */
-
-/* KEEP DESKTOP HEADER AS IS */
-@media screen and (min-width: 769px) {
-  /* Desktop header remains unchanged */
-  nav {
-    height: auto; /* Keep original desktop height */
+@media (max-width: 768px) {
+  
+  /* Hide "BM Wealth" heading on home page hero (mobile only) */
+  .hide-on-mobile {
+    display: none !important;
+  }
+  
+  /* Footer - Stack vertically on mobile */
+  .footer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 30px !important;
+    text-align: center !important;
+  }
+  
+  .footer-column {
+    width: 100% !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+  
+  .footer-contact {
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  .main-footer {
+    text-align: center !important;
   }
 }
-
-/* ═══════════════════════════════════════════════════════════════
-   ALL MOBILE/TABLET CSS REMOVED - MOBILE USES DESKTOP STYLES
-   Mobile and tablet will look exactly like desktop (user preference)
-   ═══════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════
    DESKTOP-ONLY ADJUSTMENTS (min-width: 1025px)

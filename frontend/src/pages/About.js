@@ -77,7 +77,7 @@ const About = () => {
             }}
             className="golden-gradient"
           >
-            About BM Wealth
+            About Us
           </h1>
           <p
             style={{

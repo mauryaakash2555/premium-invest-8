@@ -118,7 +118,7 @@ const Home = () => {
         >
           <h1
             data-testid="hero-heading"
-            className="golden-gradient hero-heading-responsive"
+            className="golden-gradient hero-heading-responsive hide-on-mobile"
             style={{
               fontSize: 'clamp(32px, 5vw, 72px)',
               marginBottom: '24px',
