@@ -7,6 +7,7 @@
 html {
   overflow-x: hidden;
   width: 100%;
+  max-width: 100%;
 }
 
 body {
@@ -18,7 +19,14 @@ body {
   color: #FFFFFF;
   overflow-x: hidden;
   width: 100%;
+  max-width: 100%;
   position: relative;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .App {
@@ -27,6 +35,21 @@ body {
   max-width: 100%;
   overflow-x: hidden;
   /* min-height removed - was blocking responsive hero section height changes */
+}
+
+/* Force desktop layout on mobile using CSS transform */
+@media (max-width: 1023px) {
+  body {
+    min-width: 1024px;
+    width: 1024px;
+  }
+  
+  #root {
+    min-width: 1024px;
+    width: 1024px;
+    transform-origin: top left;
+    transform: scale(0.38);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
