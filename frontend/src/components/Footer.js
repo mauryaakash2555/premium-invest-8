@@ -169,8 +169,8 @@ const Footer = () => {
               Mumbai, Maharashtra
             </p>
             
-            {/* WhatsApp - Centered */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-8px' }}>
+            {/* WhatsApp - Left Aligned */}
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '-8px' }}>
               <a 
                 href="https://wa.me/918850977259"
                 target="_blank"
