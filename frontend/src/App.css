@@ -158,7 +158,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero Section Default (Mobile) Styles */
 .hero-section-responsive {
-  min-height: 75vh;
+  min-height: 65vh;
   padding-top: 80px;
 }
 
@@ -504,13 +504,15 @@ html {
    ═══════════════════════════════════════════════════════════════ */
 
 @media (min-width: 1024px) {
-  /* Home page taller on desktop (100vh vs 75vh mobile) */
+  /* Home page taller on desktop (100vh vs 65vh mobile) */
   .hero-section-responsive {
     min-height: 100vh !important;
   }
   
-  /* About, Blog, Career, etc. all stay 65vh (matching inline styles) */
-  /* NO desktop override - all pages except Home use same height on mobile and desktop */
+  /* About, Blog, Career pages - 70vh on desktop (vs 65vh mobile) */
+  .page-hero-responsive {
+    min-height: 70vh !important;
+  }
   
   /* Home page text smaller on desktop */
   .hero-heading-responsive {

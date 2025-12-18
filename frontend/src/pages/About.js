@@ -29,6 +29,7 @@ const About = () => {
       </Helmet>
       {/* Hero Section */}
       <section
+        className="page-hero-responsive"
         style={{
           minHeight: '65vh',
           display: 'flex',
