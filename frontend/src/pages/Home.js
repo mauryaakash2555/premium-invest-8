@@ -81,13 +81,11 @@ const Home = () => {
       <section
         className="hero-gradient hero-section-responsive"
         style={{
-          minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          paddingTop: '80px',
         }}
       >
         {/* Background Image */}
@@ -103,7 +101,6 @@ const Home = () => {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.15,
             zIndex: 0,
           }}
         />
