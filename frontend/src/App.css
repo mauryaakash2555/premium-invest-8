@@ -170,7 +170,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-background-image {
-  opacity: 0.15 !important;
+  opacity: 0.25 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -573,6 +573,15 @@ html {
     text-align: center !important;
   }
   
+  /* Override inline grid styles on footer */
+  .footer-grid-container {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    padding: 30px 20px !important;
+  }
+  
   .footer-grid {
     display: flex !important;
     flex-direction: column !important;
@@ -581,6 +590,8 @@ html {
     text-align: center !important;
   }
   
+  /* All footer sections/columns */
+  .footer-grid-container > div,
   .footer-column {
     width: 100% !important;
     text-align: center !important;
@@ -589,14 +600,18 @@ html {
   }
   
   .footer-heading-main,
-  .footer-heading {
+  .footer-heading,
+  footer h3 {
     font-size: 18px !important;
     text-align: center !important;
   }
   
   .footer-column p,
   .footer-column a,
-  .footer-column li {
+  .footer-column li,
+  footer p,
+  footer a,
+  footer li {
     font-size: 14px !important;
     text-align: center !important;
   }

@@ -59,7 +59,7 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content - EXACT 274 LAYOUT */}
-      <div style={{
+      <div className="footer-grid-container" style={{
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '50px 20px',
