@@ -650,11 +650,10 @@ input, textarea, select {
     padding-top: 0 !important;
   }
   
-  /* Hero section starts below header */
-  section:first-of-type,
-  .hero-section, 
-  .hero,
-  .hero-gradient {
+  /* Hero section starts below header - REMOVED .hero-gradient to avoid conflict with .hero-section-responsive */
+  section:first-of-type:not(.hero-section-responsive),
+  .hero-section:not(.hero-section-responsive), 
+  .hero:not(.hero-section-responsive) {
     padding-top: 20px !important; /* Small gap after header */
   }
 }
