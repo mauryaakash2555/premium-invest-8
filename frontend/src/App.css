@@ -177,40 +177,59 @@ h1, h2, h3, h4, h5, h6 {
    FIX BACKGROUND IMAGE VERTICAL ZOOM ON MOBILE
    ═══════════════════════════════════════════════════════════════ */
 
-/* Lock hero/top section background image height strictly */
+/* Lock hero background height at 65vh */
 .hero,
 .hero-section,
 section:first-of-type,
 [class*="hero"],
 .page-header {
-  height: 65vh !important;
   min-height: 65vh !important;
   max-height: 65vh !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   position: relative;
-  overflow: hidden !important;
+  overflow: visible !important;
+  
+  /* Center all content vertically and horizontally */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px !important;
 }
 
-/* Prevent any child elements from expanding parent */
+/* Make ALL text content visible with proper z-index */
 .hero *,
 .hero-section *,
 section:first-of-type * {
-  max-height: 100%;
+  position: relative !important;
+  z-index: 10 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
 }
 
-/* Lock it even harder with pseudo-element */
-.hero::before,
-.hero-section::before,
-section:first-of-type::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Specific text element positioning */
+.hero h1, .hero h2, .hero h3, .hero p, .hero button, .hero a, .hero div,
+.hero-section h1, .hero-section h2, .hero-section h3, .hero-section p, .hero-section button, .hero-section a, .hero-section div,
+section:first-of-type h1, section:first-of-type h2, section:first-of-type h3, section:first-of-type p, section:first-of-type button {
+  position: relative !important;
+  z-index: 10 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: inherit !important;
+  margin: 10px 0 !important;
+}
+
+/* Remove any transforms or positioning that might hide text */
+.hero > div,
+.hero-section > div,
+section:first-of-type > div {
+  transform: none !important;
+  position: relative !important;
   width: 100%;
-  height: 65vh;
-  z-index: -1;
+  max-width: 100%;
 }
 
 .golden-gradient {
