@@ -134,13 +134,16 @@ const Home = () => {
             className="hero-main-heading"
             style={{
               fontSize: 'clamp(32px, 5vw, 72px)',
-              color: '#DAA520',
+              background: 'linear-gradient(135deg, #FFD700 0%, #DAA520 50%, #B8860B 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
               marginBottom: '24px',
-              fontWeight: 300,
-              letterSpacing: '3px',
-              opacity: 0.95,
-              textShadow: '0 2px 10px rgba(0,0,0,0.4)',
+              fontWeight: 700,
+              letterSpacing: '4px',
+              textShadow: '0 4px 20px rgba(218, 165, 32, 0.5)',
               fontFamily: '"Playfair Display", serif',
+              filter: 'drop-shadow(0 2px 8px rgba(218, 165, 32, 0.4))',
             }}
           >
             BM Wealth
