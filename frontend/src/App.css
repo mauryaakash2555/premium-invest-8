@@ -503,17 +503,14 @@ html {
    Mobile viewport is 1024px so these only affect real desktop
    ═══════════════════════════════════════════════════════════════ */
 
-@media (min-width: 1025px) {
-  /* Home page taller on desktop (95vh vs 75vh mobile) */
+@media (min-width: 1024px) {
+  /* Home page taller on desktop (100vh vs 75vh mobile) */
   .hero-section-responsive {
-    min-height: 95vh !important;
+    min-height: 100vh !important;
   }
   
-  /* Blog, About & Career pages taller on desktop */
-  /* (They are 65vh base, but need to be 70vh on desktop) */
-  .page-hero-responsive {
-    min-height: 70vh !important;
-  }
+  /* About, Blog, Career, etc. all stay 65vh (matching inline styles) */
+  /* NO desktop override - all pages except Home use same height on mobile and desktop */
   
   /* Home page text smaller on desktop */
   .hero-heading-responsive {
