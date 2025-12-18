@@ -1,0 +1,51 @@
+# Windows User Directories
+AppData
+Application Data
+Cookies
+Local Settings
+My Documents
+NetHood
+PrintHood
+Recent
+SendTo
+Start Menu
+Templates
+Desktop
+Documents
+Downloads
+Pictures
+Videos
+Music
+OneDrive
+Contacts
+Favorites
+Links
+Searches
+Saved Games
+3D Objects
+IntelGraphicsProfiles
+NTUSER.DAT*
+ntuser.*
+
+# IDE and Editor folders
+.codeium
+.cursor
+.vscode
+.windsurf
+
+# Documentation and temp files
+*.md
+*.txt
+*.html
+*.csv
+temp_*
+compliance_*
+word_document_text.txt
+
+# Other projects
+premium-invest-8/
+
+# Keep only necessary files
+!README.md
+!vercel.json
+!package.json
