@@ -86,9 +86,9 @@ const Home = () => {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          minHeight: '65vh',
-          maxHeight: '65vh',
-          height: '65vh',
+          minHeight: '85vh',
+          maxHeight: '85vh',
+          height: '85vh',
         }}
       >
         {/* Background Image */}
@@ -108,6 +108,19 @@ const Home = () => {
           }}
         />
 
+        {/* Premium Gradient Overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)',
+            zIndex: 0,
+          }}
+        />
+
         <div
           className="section-container fade-in hero-content-responsive"
           style={{
@@ -121,8 +134,11 @@ const Home = () => {
             style={{
               fontSize: 'clamp(20px, 3vw, 36px)',
               color: '#C0A062',
-              marginBottom: '16px',
-              fontWeight: 500,
+              marginBottom: '32px',
+              fontWeight: 300,
+              letterSpacing: '2px',
+              opacity: 0.95,
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
             Mumbai's Premier Financial Advisory
@@ -132,10 +148,14 @@ const Home = () => {
             style={{
               fontSize: 'clamp(14px, 2vw, 18px)',
               color: '#FFFFFF',
-              marginBottom: '40px',
-              maxWidth: '800px',
-              margin: '0 auto 40px',
-              lineHeight: 1.6,
+              marginBottom: '50px',
+              maxWidth: '700px',
+              margin: '0 auto 50px',
+              lineHeight: 1.8,
+              fontWeight: 300,
+              letterSpacing: '1px',
+              opacity: 0.9,
+              textShadow: '0 2px 6px rgba(0,0,0,0.3)',
             }}
           >
             Exceptional wealth management solutions tailored to your prosperity

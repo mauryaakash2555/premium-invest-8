@@ -58,9 +58,39 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   border-radius: 50px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   text-decoration: none;
   display: inline-block;
+}
+
+/* Premium glass effect for home hero CTAs */
+.hero-section-responsive .btn-primary {
+  background: rgba(218, 165, 32, 0.85);
+  backdrop-filter: blur(10px);
+  color: #000000;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.hero-section-responsive .btn-primary:hover {
+  background: rgba(218, 165, 32, 0.95);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(218, 165, 32, 0.4);
+}
+
+.hero-section-responsive .btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(218, 165, 32, 0.4);
+  color: #DAA520;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.hero-section-responsive .btn-secondary:hover {
+  background: rgba(218, 165, 32, 0.15);
+  border-color: rgba(218, 165, 32, 0.6);
+  transform: translateY(-3px);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
