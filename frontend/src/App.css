@@ -15,8 +15,8 @@ body {
 }
 
 .App {
-  min-height: 100vh;
   background: #000000;
+  /* min-height removed - was blocking responsive hero section height changes */
 }
 
 h1, h2, h3, h4, h5, h6 {
