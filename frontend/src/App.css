@@ -576,6 +576,7 @@ html {
   .footer-grid {
     display: flex !important;
     flex-direction: column !important;
+    grid-template-columns: 1fr !important;
     gap: 30px !important;
     text-align: center !important;
   }
@@ -584,22 +585,27 @@ html {
     width: 100% !important;
     text-align: center !important;
     align-items: center !important;
+    margin-bottom: 25px !important;
   }
   
   .footer-heading-main,
   .footer-heading {
     font-size: 18px !important;
+    text-align: center !important;
   }
   
   .footer-column p,
   .footer-column a,
   .footer-column li {
     font-size: 14px !important;
+    text-align: center !important;
   }
   
   .footer-contact {
     align-items: center !important;
     text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
   
   .sebi-disclaimer-bar,
