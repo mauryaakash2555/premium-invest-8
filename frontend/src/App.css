@@ -546,13 +546,7 @@ input, textarea, select {
     margin-bottom: 20px;
   }
   
-  /* Hero sections - reduce height on mobile */
-  section[style*="minHeight: '100vh'"],
-  section[style*="minHeight: \"100vh\""],
-  section[style*='minHeight: "100vh"'],
-  .hero-gradient {
-    min-height: 70vh !important;
-  }
+  /* OLD RULE REMOVED - Now using .hero-section-responsive for precise control */
   
   /* Form inputs - full width */
   input, textarea, select {
@@ -688,7 +682,6 @@ input, textarea, select {
     min-height: 65vh !important;
     padding-top: 60px !important;
     padding-bottom: 30px !important;
-    border: 5px solid red !important; /* TEMP DEBUG - REMOVE AFTER TESTING */
   }
   
   .hero-background-image {
