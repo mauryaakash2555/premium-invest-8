@@ -149,9 +149,9 @@ const Services = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '65vh',
-          maxHeight: '65vh',
-          height: '65vh',
+          minHeight: '70vh',
+          maxHeight: '70vh',
+          height: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -192,7 +192,11 @@ const Services = () => {
             data-testid="services-heading"
             style={{
               fontSize: 'clamp(32px, 5vw, 64px)',
-              marginBottom: '24px',
+              marginBottom: '32px',
+              fontWeight: 300,
+              letterSpacing: '2px',
+              opacity: 0.95,
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
             className="golden-gradient"
           >

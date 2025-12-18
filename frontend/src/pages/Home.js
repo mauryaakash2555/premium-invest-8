@@ -130,6 +130,21 @@ const Home = () => {
             zIndex: 1,
           }}
         >
+          <h1
+            className="hero-main-heading"
+            style={{
+              fontSize: 'clamp(32px, 5vw, 72px)',
+              color: '#DAA520',
+              marginBottom: '24px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 2px 10px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+            }}
+          >
+            BM Wealth
+          </h1>
           <h2
             className="hero-subtitle-responsive"
             style={{

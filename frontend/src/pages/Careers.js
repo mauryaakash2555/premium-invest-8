@@ -71,10 +71,13 @@ const Careers = () => {
             style={{
             fontFamily: '"Playfair Display", serif',
             fontSize: 'clamp(32px, 6vw, 52px)',
-            fontWeight: '700',
+            fontWeight: '300',
             color: '#DAA520',
-            marginBottom: '20px',
-            lineHeight: '1.2'
+            marginBottom: '32px',
+            lineHeight: '1.2',
+            letterSpacing: '2px',
+            opacity: 0.95,
+            textShadow: '0 2px 8px rgba(0,0,0,0.3)',
           }}>
             Join Our Team
           </h1>

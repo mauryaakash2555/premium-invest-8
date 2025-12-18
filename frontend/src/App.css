@@ -537,9 +537,10 @@ html {
     line-height: 1.6;
   }
   
-  /* ===== HOME PAGE - HIDE BM WEALTH & CTA ===== */
+  /* ===== HOME PAGE - HIDE BM WEALTH HEADING & CTA ===== */
   .hide-on-mobile,
-  .hide-cta-on-mobile {
+  .hide-cta-on-mobile,
+  .hero-main-heading {
     display: none !important;
   }
   
