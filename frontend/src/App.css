@@ -177,21 +177,40 @@ h1, h2, h3, h4, h5, h6 {
    FIX BACKGROUND IMAGE VERTICAL ZOOM ON MOBILE
    ═══════════════════════════════════════════════════════════════ */
 
-/* Fix ONLY background properties, don't touch height/overflow */
+/* Lock hero/top section background image height strictly */
 .hero,
 .hero-section,
+section:first-of-type,
 [class*="hero"],
-section:first-of-type {
+.page-header {
+  height: 65vh !important;
+  min-height: 65vh !important;
+  max-height: 65vh !important;
   background-size: cover !important;
-  background-position: center center !important;
+  background-position: center !important;
   background-repeat: no-repeat !important;
+  position: relative;
+  overflow: hidden !important;
 }
 
-/* Keep overflow visible so text doesn't disappear */
-.hero,
-.hero-section,
-[class*="hero"] {
-  overflow: visible !important;
+/* Prevent any child elements from expanding parent */
+.hero *,
+.hero-section *,
+section:first-of-type * {
+  max-height: 100%;
+}
+
+/* Lock it even harder with pseudo-element */
+.hero::before,
+.hero-section::before,
+section:first-of-type::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 65vh;
+  z-index: -1;
 }
 
 .golden-gradient {
