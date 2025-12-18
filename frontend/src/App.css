@@ -499,5 +499,27 @@ html {
    ═══════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════
-   DESKTOP STYLES APPLY TO ALL DEVICES (no media queries)
+   DESKTOP-ONLY ADJUSTMENTS (min-width: 1025px)
+   Mobile viewport is 1024px so these only affect real desktop
    ═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1025px) {
+  /* Blog & Career pages taller on desktop */
+  /* (They are 65vh base, but need to be 70vh on desktop) */
+  .page-hero-responsive {
+    min-height: 70vh !important;
+  }
+  
+  /* Home page text smaller on desktop */
+  .hero-heading-responsive {
+    font-size: clamp(32px, 4vw, 56px) !important; /* Was 72px max, now 56px */
+  }
+  
+  .hero-subtitle-responsive {
+    font-size: clamp(20px, 2.5vw, 28px) !important; /* Was 36px max, now 28px */
+  }
+  
+  .hero-description-responsive {
+    font-size: clamp(14px, 1.5vw, 16px) !important; /* Was 18px max, now 16px */
+  }
+}
