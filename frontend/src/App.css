@@ -289,30 +289,16 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-/* Footer grid layout */
+/* Footer grid layout - DESKTOP ONLY (no mobile responsive) */
 .footer-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 40px;
   margin-bottom: 40px;
   align-items: flex-start;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
-}
-
-@media (min-width: 640px) {
-  .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .footer-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 40px;
-  }
 }
 
 /* Footer column styling */
@@ -480,44 +466,9 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   📱 MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS - ALL REMOVED
+   Mobile uses desktop styles exactly (user preference)
    ═══════════════════════════════════════════════════════════════ */
-
-/* Prevent horizontal scroll */
-html, body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* Word wrapping */
-* {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Responsive images */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Tap targets (iOS/Android guidelines) */
-a, button, input, select, textarea {
-  min-height: 44px;
-  min-width: 44px;
-}
-
-/* Remove iOS tap highlight */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Prevent zoom on input focus (iOS) */
-input, textarea, select {
-  font-size: 16px !important;
-}
 
 /* ═══════════════════════════════════════════════════════════════
    ALL MOBILE CSS REMOVED - MOBILE USES DESKTOP STYLES
