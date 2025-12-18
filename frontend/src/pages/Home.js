@@ -128,50 +128,37 @@ const Home = () => {
             textAlign: 'center',
             position: 'relative',
             zIndex: 1,
+            paddingTop: '60px',
           }}
         >
           <h1
-            className="hero-main-heading"
+            className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(24px, 3.5vw, 42px)',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               color: '#C0A062',
-              marginBottom: '16px',
+              marginBottom: '24px',
               fontWeight: 300,
               letterSpacing: '3px',
               opacity: 0.95,
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
             }}
           >
-            BM Wealth
-          </h1>
-          <h2
-            className="hero-subtitle-responsive"
-            style={{
-              fontSize: 'clamp(18px, 2.5vw, 32px)',
-              color: '#C0A062',
-              marginBottom: '28px',
-              fontWeight: 300,
-              letterSpacing: '2px',
-              opacity: 0.95,
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            }}
-          >
             Mumbai's Premier Financial Advisory
-          </h2>
+          </h1>
           <p
             className="hero-description-responsive"
             style={{
-              fontSize: 'clamp(14px, 2vw, 18px)',
-              color: '#FFFFFF',
-              marginBottom: '50px',
-              maxWidth: '700px',
-              margin: '0 auto 50px',
-              lineHeight: 1.8,
+              fontSize: 'clamp(16px, 2.2vw, 22px)',
+              color: '#C0A062',
+              marginBottom: '60px',
+              maxWidth: '800px',
+              margin: '0 auto 60px',
+              lineHeight: 1.6,
               fontWeight: 300,
               letterSpacing: '1px',
-              opacity: 0.9,
-              textShadow: '0 2px 6px rgba(0,0,0,0.3)',
+              opacity: 0.88,
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
             Exceptional wealth management solutions tailored to your prosperity
