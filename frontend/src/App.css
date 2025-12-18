@@ -681,10 +681,12 @@ input, textarea, select {
     min-height: 65vh !important;
     padding-top: 60px !important;
     padding-bottom: 30px !important;
+    background-color: rgba(255, 0, 0, 0.3) !important; /* TEMP: RED tint to test if height is applying */
   }
   
   .hero-background-image {
     opacity: 0.25 !important; /* Show background more prominently */
+    border: 5px solid yellow !important; /* TEMP: Yellow border to test if opacity is applying */
   }
   
   .hero-content-responsive {
