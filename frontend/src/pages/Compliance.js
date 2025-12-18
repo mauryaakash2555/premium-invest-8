@@ -33,6 +33,8 @@ export default function Compliance() {
       <section
         style={{
           minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -48,7 +50,7 @@ export default function Compliance() {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage: 'url(/compliance-hero.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -62,7 +64,7 @@ export default function Compliance() {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />

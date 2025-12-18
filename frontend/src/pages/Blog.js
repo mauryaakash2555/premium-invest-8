@@ -168,7 +168,7 @@ const Blog = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&auto=format&fm=webp&q=60)',
             backgroundSize: 'cover',
@@ -183,7 +183,7 @@ const Blog = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />

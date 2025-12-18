@@ -50,7 +50,7 @@ const Careers = () => {
           top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
+          height: '100%',
           backgroundImage: 'url(https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
