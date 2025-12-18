@@ -133,17 +133,14 @@ const Home = () => {
           <h1
             className="hero-main-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 72px)',
-              background: 'linear-gradient(135deg, #FFD700 0%, #DAA520 50%, #B8860B 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: '24px',
-              fontWeight: 700,
-              letterSpacing: '4px',
-              textShadow: '0 4px 20px rgba(218, 165, 32, 0.5)',
+              fontSize: 'clamp(24px, 3.5vw, 42px)',
+              color: '#C0A062',
+              marginBottom: '16px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
               fontFamily: '"Playfair Display", serif',
-              filter: 'drop-shadow(0 2px 8px rgba(218, 165, 32, 0.4))',
             }}
           >
             BM Wealth
@@ -151,9 +148,9 @@ const Home = () => {
           <h2
             className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(20px, 3vw, 36px)',
+              fontSize: 'clamp(18px, 2.5vw, 32px)',
               color: '#C0A062',
-              marginBottom: '32px',
+              marginBottom: '28px',
               fontWeight: 300,
               letterSpacing: '2px',
               opacity: 0.95,
