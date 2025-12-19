@@ -19,6 +19,16 @@ const Footer = () => {
         .footer-custom-link:hover {
           color: #DAA520 !important;
         }
+        .whatsapp-container-desktop {
+          display: flex;
+          justify-content: flex-start;
+          margin-top: -8px;
+        }
+        @media (max-width: 768px) {
+          .whatsapp-container-desktop {
+            justify-content: center !important;
+          }
+        }
       `}</style>
       <footer style={{ backgroundColor: '#0a0a0a', color: '#fff', padding: '0', fontFamily: '"Inter", sans-serif', width: '100%' }}>
       
@@ -169,8 +179,8 @@ const Footer = () => {
               Mumbai, Maharashtra
             </p>
             
-            {/* WhatsApp - Left Aligned */}
-            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '-8px' }}>
+            {/* WhatsApp - Left Aligned Desktop, Centered Mobile */}
+            <div className="whatsapp-container-desktop">
               <a 
                 href="https://wa.me/918850977259"
                 target="_blank"
