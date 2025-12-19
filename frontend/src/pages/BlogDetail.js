@@ -405,6 +405,23 @@ const BlogDetail = () => {
           </div>
         </header>
 
+        {/* Educational Disclaimer */}
+        <div style={{
+          background: 'rgba(218, 165, 32, 0.05)',
+          borderLeft: '4px solid #DAA520',
+          padding: '20px',
+          margin: '20px 0',
+        }}>
+          <p style={{color: '#DAA520', fontSize: '13px', fontWeight: 'bold', marginBottom: '8px'}}>
+            Educational Content
+          </p>
+          <p style={{color: '#B8B8B8', fontSize: '14px', margin: 0}}>
+            This article is for educational purposes. Past performance is not indicative 
+            of future returns. Please consult a licensed financial advisor before making 
+            investment decisions.
+          </p>
+        </div>
+
         {/* Blog Content */}
         <div
           style={{
