@@ -114,21 +114,30 @@ const BlogDetail = () => {
         @media (max-width: 768px) {
           .blog-hero-section {
             height: auto !important;
-            min-height: 300px !important;
-            max-height: 400px !important;
+            min-height: 250px !important;
+            max-height: none !important;
             background: #000000 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
+            display: block !important;
             position: relative !important;
+            overflow: visible !important;
+            padding: 20px 0 !important;
           }
           .blog-hero-image {
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            min-height: 250px !important;
             object-fit: contain !important;
             object-position: center !important;
-            position: static !important;
-            height: auto !important;
-            max-height: 400px !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
             opacity: 0.3 !important;
+            display: block !important;
+          }
+          .blog-hero-section > div {
+            position: relative !important;
+            z-index: 1 !important;
           }
         }
         
