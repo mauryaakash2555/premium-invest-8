@@ -54,6 +54,7 @@ const LazyImage = ({ src, alt, className, style, onLoad, ...props }) => {
           alt={alt}
           loading="lazy"
           onLoad={handleLoad}
+          className={className ? `${className}-img` : ''}
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',

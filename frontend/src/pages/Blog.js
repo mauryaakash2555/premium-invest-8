@@ -151,9 +151,13 @@ const Blog = () => {
       <style>{`
         /* Mobile: Show full image without cropping for ALL blog cards */
         @media (max-width: 768px) {
-          .blog-card-image-wrapper img {
+          .blog-card-image-wrapper img,
+          .blog-card-image-wrapper-img {
             object-fit: contain !important;
-            background: #000000;
+            background: #000000 !important;
+          }
+          .blog-card-image-wrapper {
+            background: #000000 !important;
           }
         }
       `}</style>

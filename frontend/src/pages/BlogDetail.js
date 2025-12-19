@@ -112,13 +112,23 @@ const BlogDetail = () => {
       <style>{`
         /* Mobile: Show full image without cropping - applies to ALL blog images */
         @media (max-width: 768px) {
+          .blog-hero-section {
+            height: auto !important;
+            min-height: 300px !important;
+            max-height: 400px !important;
+            background: #000000 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: relative !important;
+          }
           .blog-hero-image {
             object-fit: contain !important;
             object-position: center !important;
-            background: #000000;
-          }
-          .blog-hero-section {
-            height: 350px !important;
+            position: static !important;
+            height: auto !important;
+            max-height: 400px !important;
+            opacity: 0.3 !important;
           }
         }
         
