@@ -108,6 +108,29 @@ const BlogDetail = () => {
         ))}
       </Helmet>
 
+      {/* Mobile-specific image optimization styles for ALL blogs */}
+      <style>{`
+        /* Mobile: Show full image without cropping - applies to ALL blog images */
+        @media (max-width: 768px) {
+          .blog-hero-image {
+            object-fit: contain !important;
+            object-position: center !important;
+            background: #000000;
+          }
+          .blog-hero-section {
+            height: 350px !important;
+          }
+        }
+        
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .blog-hero-image {
+            object-fit: cover !important;
+            object-position: center 30% !important;
+          }
+        }
+      `}</style>
+
       {/* Back Button */}
       <div className="section-container" style={{ paddingTop: '120px', paddingBottom: '20px' }}>
         <button
@@ -134,8 +157,9 @@ const BlogDetail = () => {
 
       {/* Hero Section with Featured Image */}
       {post.image_url && (
-        <section style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px', height: '400px' }}>
+        <section className="blog-hero-section" style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px', height: '400px' }}>
           <img
+            className="blog-hero-image"
             src={post.image_url}
             alt={post.image_alt || post.title}
             style={{
@@ -148,7 +172,8 @@ const BlogDetail = () => {
               top: 0,
               left: 0,
             }}
-            loading="eager"
+            loading="lazy"
+            decoding="async"
           />
           <div
             style={{

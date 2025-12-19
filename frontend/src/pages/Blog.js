@@ -146,6 +146,18 @@ const Blog = () => {
         <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
         <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
+
+      {/* Mobile optimization for ALL blog card images */}
+      <style>{`
+        /* Mobile: Show full image without cropping for ALL blog cards */
+        @media (max-width: 768px) {
+          .blog-card-image-wrapper img {
+            object-fit: contain !important;
+            background: #000000;
+          }
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section
         className="page-hero-responsive"
@@ -354,6 +366,7 @@ const Blog = () => {
                     <LazyImage
                       src={post.image_url}
                       alt={post.title}
+                      className="blog-card-image-wrapper"
                       style={{
                         width: '100%',
                         height: '240px',
