@@ -53,7 +53,7 @@ const Insurance = () => {
             margin: '0 auto 32px',
             lineHeight: '1.6'
           }}>
-            IRDAI Licensed 277925 | Protecting Mumbai families with expert insurance guidance
+            IRDAI Licensed | Protecting Mumbai families with expert insurance guidance | <a href="/compliance" style={{color: '#DAA520', textDecoration: 'underline'}}>View Compliance</a>
           </p>
         </div>
       </section>
@@ -65,7 +65,7 @@ const Insurance = () => {
             Life Insurance Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Life insurance forms the foundation of comprehensive financial planning, providing financial security to your family in your absence. At BM Wealth, we hold IRDAI License 277925, authorizing us to provide professional insurance advisory services across life, health, and general insurance. Our insurance practice serves Mumbai families with customized protection planning ensuring loved ones remain financially secure regardless of life's uncertainties. Insurance needs vary dramatically based on life stage, family composition, income levels, liabilities, and future obligations. A 28-year-old single professional has vastly different needs than a 40-year-old parent supporting two children, aging parents, and carrying home loan obligations. Our needs analysis process comprehensively evaluates your situation before recommending appropriate coverage.
+            Life insurance forms the foundation of comprehensive financial planning, providing financial security to your family in your absence. At BM Wealth, we are IRDAI licensed, authorizing us to provide professional insurance advisory services across life, health, and general insurance. Our insurance practice serves Mumbai families with customized protection planning ensuring loved ones remain financially secure regardless of life's uncertainties. Insurance needs vary dramatically based on life stage, family composition, income levels, liabilities, and future obligations. A 28-year-old single professional has vastly different needs than a 40-year-old parent supporting two children, aging parents, and carrying home loan obligations. Our needs analysis process comprehensively evaluates your situation before recommending appropriate coverage.
           </p>
           
           <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
@@ -134,7 +134,7 @@ const Insurance = () => {
           border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            <strong>Insurance Disclaimer:</strong> BM Wealth holds IRDAI License 277925 for insurance advisory and distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed advisors for personalized insurance planning suited to your family's protection needs.
+            <strong>Insurance Disclaimer:</strong> BM Wealth is IRDAI licensed for insurance advisory and distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed advisors for personalized insurance planning suited to your family's protection needs. Full regulatory details available on our <a href="/compliance" style={{color: '#DAA520'}}>compliance page</a>.
           </p>
         </section>
 

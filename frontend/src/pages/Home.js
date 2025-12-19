@@ -59,7 +59,7 @@ const Home = () => {
     <div>
       <Helmet>
         <title>BM Wealth - Mumbai's Distinguished Financial Advisory | Mutual Funds, SIP, PMS | ARN 90008</title>
-        <meta name="description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008. Led by Brahmdeo Maurya. Initiate your wealth journey today." />
+        <meta name="description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. AMFI Registered ARN 90008. Led by Brahmdeo Maurya. Initiate your wealth journey today." />
         <meta name="keywords" content="BM Wealth, Mumbai investment advisor, mutual funds Mumbai, SIP investment, portfolio management, ARN 90008, Brahmdeo Maurya, financial planning Mumbai" />
         <link rel="canonical" href="https://www.bmwealth.co.in/" />
         
@@ -67,7 +67,7 @@ const Home = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.bmwealth.co.in/" />
         <meta property="og:title" content="BM Wealth - Mumbai's Distinguished Financial Advisory | ARN 90008" />
-        <meta property="og:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008." />
+        <meta property="og:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. AMFI Registered ARN 90008." />
         <meta property="og:image" content="https://www.bmwealth.co.in/logo.png" />
         
         {/* Twitter Card */}

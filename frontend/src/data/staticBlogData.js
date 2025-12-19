@@ -1279,7 +1279,7 @@ export const staticBlogPost3 = {
 
     <div style="margin-bottom: 45px;">
       <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
-        1. The "Guaranteed Returns" Illusion
+        1. The "Assured Returns" Misconception
       </h3>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         When Rajesh bought the policy at 28, fresh from clearing his CA exams, the agent emphasized: "Guaranteed maturity benefit. No market risk. Tax-free returns under Section 10(10D)."
@@ -2885,7 +2885,7 @@ export const staticBlogPost7 = {
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
         <li>₹80,000 → ELSS (growth component)</li>
-        <li>₹70,000 → PPF (safety + guaranteed returns)</li>
+        <li>₹70,000 → PPF (safety + government-backed returns)</li>
         <li><strong style="color: #DAA520;">Benefit:</strong> Balanced approach with both growth and safety</li>
       </ul>
     </div>

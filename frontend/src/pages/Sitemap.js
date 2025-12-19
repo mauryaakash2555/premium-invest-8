@@ -209,7 +209,7 @@ const Sitemap = () => {
             </div>
             <div>
               <h3 style={{ fontSize: '20px', color: '#C0A062', marginBottom: '12px', fontWeight: '600' }}>Registrations</h3>
-              <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>AMFI ARN 90008<br />IRDAI License 277925</p>
+              <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>AMFI Registered<br />IRDAI Licensed<br /><a href="/compliance" style={{color: '#DAA520', textDecoration: 'underline'}}>View Full Compliance Details</a></p>
             </div>
           </div>
         </section>
@@ -252,7 +252,7 @@ const Sitemap = () => {
             About BM Wealth Mumbai
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            BM Wealth is a trusted financial advisory firm based in Mumbai, providing comprehensive wealth management, investment advisory, and insurance planning services to individuals and families across the city. As AMFI registered mutual fund distributors (ARN 90008) and IRDAI licensed insurance advisors (License 277925), we adhere to the highest standards of regulatory compliance and ethical conduct.
+            BM Wealth is a trusted financial advisory firm based in Mumbai, providing comprehensive wealth management, investment advisory, and insurance planning services to individuals and families across the city. As AMFI registered mutual fund distributors and IRDAI licensed insurance advisors, we adhere to the highest standards of regulatory compliance and ethical conduct. Full regulatory details are available on our compliance page.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Our services span the complete spectrum of financial planning needs including mutual fund investments through systematic investment plans (SIPs), portfolio management and asset allocation, equity trading and demat account services, comprehensive life and health insurance planning, fixed deposit advisory and optimization, retirement planning solutions, children's education and wedding planning, tax-efficient investment strategies, and wealth creation for different life stages. We serve Mumbai residents from our centrally located Kalbadevi office, providing personalized financial guidance tailored to each client's unique circumstances, goals, and risk tolerance.
