@@ -131,31 +131,6 @@ const Home = () => {
             paddingTop: '60px',
           }}
         >
-          {/* Heritage Badge */}
-          <div
-            style={{
-              display: 'inline-block',
-              padding: '8px 24px',
-              background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 100%)',
-              border: '1px solid rgba(192, 160, 98, 0.3)',
-              borderRadius: '30px',
-              marginBottom: '24px',
-              backdropFilter: 'blur(10px)',
-            }}
-          >
-            <span
-              style={{
-                fontSize: 'clamp(12px, 1.5vw, 14px)',
-                color: '#C0A062',
-                fontWeight: 500,
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Established 1989 • 35+ Years of Excellence
-            </span>
-          </div>
-
           <h1
             className="hero-subtitle-responsive"
             style={{
@@ -196,7 +171,7 @@ const Home = () => {
               gap: '20px',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              marginBottom: '60px',
+              marginBottom: '30px',
             }}
           >
             <a
@@ -239,6 +214,31 @@ const Home = () => {
             >
               Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
+          </div>
+
+          {/* Heritage Badge - Below CTAs */}
+          <div
+            style={{
+              display: 'inline-block',
+              padding: '8px 24px',
+              background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 100%)',
+              border: '1px solid rgba(192, 160, 98, 0.3)',
+              borderRadius: '30px',
+              backdropFilter: 'blur(10px)',
+              marginBottom: '40px',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 'clamp(12px, 1.5vw, 14px)',
+                color: '#C0A062',
+                fontWeight: 500,
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Established 1989 • 37 Years of Excellence
+            </span>
           </div>
         </div>
       </section>
