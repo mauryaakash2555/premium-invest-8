@@ -20,7 +20,7 @@ const RecommendedPlatforms = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '45vh',
+          minHeight: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -37,10 +37,10 @@ const RecommendedPlatforms = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: 0.3,
+          opacity: 0.4,
           }}
         />
         <div
