@@ -270,8 +270,19 @@ const CuratedPartners = () => {
               }}
             >
               <div style={{ fontSize: '14px', color: 'rgba(192, 160, 98, 0.8)', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>INVESTMENT</div>
-              <div style={{ fontSize: '32px', color: '#C0A062', fontWeight: 700, fontFamily: '"Playfair Display", serif', letterSpacing: '1px' }}>
-                <span style={{ fontSize: '28px' }}>₹</span>2-3 Lakh
+              <div style={{ 
+                fontSize: '32px', 
+                color: '#C0A062', 
+                fontWeight: 700, 
+                fontFamily: '"Playfair Display", serif', 
+                letterSpacing: '1px',
+                display: 'flex',
+                alignItems: 'baseline',
+                justifyContent: 'center',
+                gap: '4px',
+              }}>
+                <span style={{ fontSize: '28px' }}>₹</span>
+                <span>2-3 Lakh</span>
               </div>
               <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', marginTop: '4px' }}>per month</div>
             </div>
