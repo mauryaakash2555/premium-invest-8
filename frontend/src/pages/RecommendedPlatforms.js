@@ -40,7 +40,7 @@ const RecommendedPlatforms = () => {
           backgroundImage: 'url(/6th.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: 0.65,
+          opacity: 0.75,
           }}
         />
         <div
