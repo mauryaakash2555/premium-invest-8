@@ -20,7 +20,7 @@ const CuratedPartners = () => {
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '60vh',
+          minHeight: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
