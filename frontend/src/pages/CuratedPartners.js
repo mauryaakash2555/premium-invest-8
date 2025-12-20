@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, TrendingUp, Users, CheckCircle, Calendar, ExternalLink } from 'lucide-react';
+import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const CuratedPartners = () => {
@@ -15,18 +15,12 @@ const CuratedPartners = () => {
         <meta name="description" content="Partner with BM Wealth for premium financial advisory services. AMFI Registered | IRDAI Licensed financial advisors in Mumbai." />
         <meta name="keywords" content="financial partners, investment advisory, BM Wealth, Mumbai financial advisors, AMFI, IRDAI" />
         <link rel="canonical" href="https://www.bmwealth.co.in/curated-partners" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/curated-partners" />
-        <meta property="og:title" content="Curated Partners | BM Wealth" />
-        <meta property="og:description" content="Premium financial advisory services in Mumbai." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       {/* Hero Section */}
       <section
         style={{
-          minHeight: '60vh',
+          minHeight: '55vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -36,7 +30,6 @@ const CuratedPartners = () => {
           paddingBottom: '60px',
         }}
       >
-        {/* Background Image */}
         <div
           style={{
             position: 'absolute',
@@ -47,7 +40,7 @@ const CuratedPartners = () => {
             backgroundImage: 'url(https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.15,
+            opacity: 0.35,
           }}
         />
         <div
@@ -57,7 +50,7 @@ const CuratedPartners = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.9) 100%)',
+            background: 'linear-gradient(180deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.7) 100%)',
           }}
         />
         
@@ -78,7 +71,7 @@ const CuratedPartners = () => {
           <p
             style={{
               fontSize: 'clamp(17px, 2.2vw, 20px)',
-              color: 'rgba(255, 255, 255, 0.85)',
+              color: 'rgba(255, 255, 255, 0.9)',
               maxWidth: '700px',
               margin: '0 auto',
               lineHeight: 1.7,
@@ -89,396 +82,438 @@ const CuratedPartners = () => {
         </div>
       </section>
 
-      {/* Main Content */}
-      <section style={{ padding: '0 20px 100px', maxWidth: '1100px', margin: '0 auto' }}>
+      {/* Partner Tiers Section */}
+      <section style={{ padding: '40px 20px 100px', maxWidth: '1400px', margin: '0 auto' }}>
         
-        {/* Premium Advisory Services Section */}
-        <div style={{ marginBottom: '100px' }}>
-          {/* Badge */}
-          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-            <span
-              style={{
-                display: 'inline-block',
-                background: 'rgba(192, 160, 98, 0.15)',
-                border: '1px solid rgba(192, 160, 98, 0.3)',
-                borderRadius: '20px',
-                padding: '8px 20px',
-                fontSize: '13px',
-                color: '#C0A062',
-                fontWeight: 600,
-                letterSpacing: '1px',
-              }}
-            >
-              💎 PREMIUM ADVISORY SERVICES
-            </span>
-          </div>
-
-          {/* BM Wealth Featured Card */}
-          <div
-            style={{
-              maxWidth: '850px',
-              margin: '0 auto',
-              background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.05) 0%, rgba(0, 0, 0, 0.4) 100%)',
-              border: '2px solid rgba(192, 160, 98, 0.25)',
-              borderRadius: '12px',
-              padding: '56px 48px',
-            }}
-          >
-            {/* Logo/Monogram */}
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <div
-                style={{
-                  display: 'inline-block',
-                  fontSize: '42px',
-                  fontFamily: '"Playfair Display", serif',
-                  fontWeight: 700,
-                  color: '#C0A062',
-                  letterSpacing: '6px',
-                }}
-              >
-                BM
+        {/* POSITION #1 - DIAMOND ADVISORY PARTNER (RESERVED) */}
+        <div
+          style={{
+            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.4) 100%)',
+            border: '2px solid rgba(192, 160, 98, 0.4)',
+            borderRadius: '12px',
+            padding: '60px 80px',
+            marginBottom: '40px',
+            display: 'grid',
+            gridTemplateColumns: '60% 40%',
+            gap: '60px',
+            alignItems: 'center',
+            minHeight: '300px',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 40px rgba(192, 160, 98, 0.2)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          {/* Left Side */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+              <span style={{ fontSize: '36px' }}>💎</span>
+              <div>
+                <div
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: '#C0A062',
+                    letterSpacing: '2px',
+                    marginBottom: '4px',
+                  }}
+                >
+                  POSITION #1
+                </div>
+                <h2
+                  style={{
+                    fontSize: '42px',
+                    fontFamily: '"Playfair Display", serif',
+                    color: '#C0A062',
+                    fontWeight: 600,
+                    margin: 0,
+                    letterSpacing: '2px',
+                  }}
+                >
+                  DIAMOND ADVISORY PARTNER
+                </h2>
               </div>
             </div>
 
-            {/* Title */}
-            <h2
-              style={{
-                fontSize: 'clamp(30px, 4vw, 36px)',
-                fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
-                marginBottom: '12px',
-                fontWeight: 600,
-                letterSpacing: '2px',
-                textAlign: 'center',
-              }}
-            >
-              BM Wealth
-            </h2>
-
-            {/* Subtitle */}
             <p
               style={{
-                fontSize: '19px',
-                color: 'rgba(192, 160, 98, 0.85)',
-                marginBottom: '28px',
+                fontSize: '20px',
+                color: 'rgba(192, 160, 98, 0.9)',
+                marginBottom: '32px',
                 fontWeight: 500,
-                textAlign: 'center',
+              }}
+            >
+              Reserved for Premium Financial Services Partnership
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {[
+                'Exclusive advisory positioning',
+                'Co-branded content strategy',
+                'Featured across all platforms',
+                'Strategic partnership benefits',
+              ].map((benefit, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                  }}
+                >
+                  <Sparkles size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      color: 'rgba(255, 255, 255, 0.75)',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {benefit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Side */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Link
+              to="/contact?subject=diamond-advisory-partnership"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'transparent',
+                color: '#C0A062',
+                padding: '18px 36px',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontSize: '17px',
+                fontWeight: 600,
+                border: '2px solid #C0A062',
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(192, 160, 98, 0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+              }}
+            >
+              Apply for Diamond Partnership
+            </Link>
+          </div>
+        </div>
+
+        {/* POSITION #2 - BM WEALTH (GOLD PARTNER) */}
+        <div
+          style={{
+            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.06) 0%, rgba(0, 0, 0, 0.5) 100%)',
+            border: '2px solid rgba(192, 160, 98, 0.35)',
+            borderRadius: '12px',
+            padding: '60px 80px',
+            marginBottom: '40px',
+            display: 'grid',
+            gridTemplateColumns: '60% 40%',
+            gap: '60px',
+            alignItems: 'center',
+            minHeight: '300px',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.5)';
+            e.currentTarget.style.boxShadow = '0 0 35px rgba(192, 160, 98, 0.2)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.35)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          {/* Left Side */}
+          <div>
+            <div
+              style={{
+                fontSize: '16px',
+                fontWeight: 700,
+                color: 'rgba(192, 160, 98, 0.9)',
+                letterSpacing: '2px',
+                marginBottom: '8px',
+              }}
+            >
+              #2 - GOLD PARTNER
+            </div>
+
+            <h2
+              style={{
+                fontSize: '42px',
+                fontFamily: '"Playfair Display", serif',
+                color: '#C0A062',
+                fontWeight: 600,
+                margin: '0 0 12px 0',
+                letterSpacing: '2px',
+              }}
+            >
+              BM WEALTH
+            </h2>
+
+            <p
+              style={{
+                fontSize: '18px',
+                color: 'rgba(192, 160, 98, 0.85)',
+                marginBottom: '24px',
+                fontWeight: 500,
               }}
             >
               Personalized Financial Planning & Wealth Management
             </p>
 
-            {/* Description */}
             <p
               style={{
-                fontSize: '16px',
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: 1.8,
-                maxWidth: '650px',
-                margin: '0 auto 40px',
-                textAlign: 'center',
+                fontSize: '15px',
+                color: 'rgba(255, 255, 255, 0.75)',
+                lineHeight: 1.7,
+                marginBottom: '28px',
               }}
             >
               Mumbai's trusted advisors for comprehensive wealth management. We provide tailored solutions for portfolio optimization, tax planning, insurance strategies, and retirement planning.
             </p>
 
-            {/* Features Grid */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '20px',
-                marginBottom: '40px',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '16px',
+                marginBottom: '24px',
               }}
             >
               {[
-                { icon: <TrendingUp size={22} color="#C0A062" />, text: 'Portfolio Management & Asset Allocation' },
-                { icon: <Shield size={22} color="#C0A062" />, text: 'Insurance & Risk Planning' },
-                { icon: <CheckCircle size={22} color="#C0A062" />, text: 'Tax Optimization Strategies' },
-                { icon: <Users size={22} color="#C0A062" />, text: 'Retirement & Estate Planning' },
-              ].map((feature, index) => (
+                { icon: <TrendingUp size={20} />, text: 'Portfolio Management' },
+                { icon: <Shield size={20} />, text: 'Insurance & Risk Planning' },
+                { icon: <CheckCircle size={20} />, text: 'Tax Optimization' },
+                { icon: <Users size={20} />, text: 'Retirement Planning' },
+              ].map((item, idx) => (
                 <div
-                  key={index}
+                  key={idx}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    background: 'rgba(0, 0, 0, 0.3)',
-                    padding: '16px 18px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(192, 160, 98, 0.15)',
+                    gap: '10px',
                   }}
                 >
-                  {feature.icon}
+                  <div style={{ color: '#C0A062' }}>{item.icon}</div>
                   <span
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.85)',
-                      lineHeight: 1.5,
+                      color: 'rgba(255, 255, 255, 0.8)',
                     }}
                   >
-                    {feature.text}
+                    {item.text}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* Credentials */}
             <div
               style={{
-                textAlign: 'center',
-                marginBottom: '32px',
-                padding: '16px',
-                background: 'rgba(192, 160, 98, 0.08)',
-                borderRadius: '8px',
+                display: 'inline-block',
+                padding: '10px 16px',
+                background: 'rgba(192, 160, 98, 0.12)',
+                borderRadius: '6px',
+                border: '1px solid rgba(192, 160, 98, 0.25)',
               }}
             >
               <p
                 style={{
-                  fontSize: '14px',
+                  fontSize: '13px',
                   color: '#C0A062',
-                  margin: '0 0 4px 0',
+                  margin: 0,
                   fontWeight: 600,
                 }}
               >
                 AMFI Registered | IRDAI Licensed
               </p>
-              <p
-                style={{
-                  fontSize: '13px',
-                  color: 'rgba(192, 160, 98, 0.7)',
-                  margin: 0,
-                }}
-              >
-                Licensed financial advisors in Mumbai
-              </p>
             </div>
+          </div>
 
-            {/* CTA Button */}
-            <div style={{ textAlign: 'center' }}>
-              <Link
-                to="/contact"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  background: '#C0A062',
-                  color: '#000',
-                  padding: '16px 40px',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  fontSize: '17px',
-                  fontWeight: 700,
-                  transition: 'all 0.3s ease',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = '#DAA520';
-                  e.target.style.transform = 'scale(1.02)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = '#C0A062';
-                  e.target.style.transform = 'scale(1)';
-                }}
-              >
-                <Calendar size={20} />
-                Schedule Free Consultation
-              </Link>
-            </div>
+          {/* Right Side */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Link
+              to="/contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                background: '#C0A062',
+                color: '#000',
+                padding: '18px 36px',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontSize: '17px',
+                fontWeight: 700,
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#DAA520';
+                e.target.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = '#C0A062';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              <Calendar size={20} />
+              Schedule Free Consultation
+            </Link>
           </div>
         </div>
 
-        {/* Platform Partners Section */}
+        {/* POSITION #3 - SILVER PARTNER (RESERVED) */}
         <div
           style={{
-            maxWidth: '750px',
-            margin: '0 auto 100px',
-            textAlign: 'center',
-            padding: '48px 40px',
             background: 'rgba(255, 255, 255, 0.02)',
+            border: '2px solid rgba(192, 160, 98, 0.2)',
             borderRadius: '12px',
-            border: '1px solid rgba(192, 160, 98, 0.15)',
+            padding: '60px 80px',
+            marginBottom: '60px',
+            display: 'grid',
+            gridTemplateColumns: '60% 40%',
+            gap: '60px',
+            alignItems: 'center',
+            minHeight: '300px',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.3)';
+            e.currentTarget.style.boxShadow = '0 0 25px rgba(192, 160, 98, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.2)';
+            e.currentTarget.style.boxShadow = 'none';
           }}
         >
-          {/* Badge */}
-          <div style={{ marginBottom: '24px' }}>
-            <span
+          {/* Left Side */}
+          <div>
+            <div
               style={{
-                display: 'inline-block',
-                background: 'rgba(192, 160, 98, 0.15)',
-                border: '1px solid rgba(192, 160, 98, 0.3)',
-                borderRadius: '20px',
-                padding: '8px 20px',
-                fontSize: '13px',
-                color: '#C0A062',
-                fontWeight: 600,
-                letterSpacing: '1px',
+                fontSize: '24px',
+                fontWeight: 700,
+                color: 'rgba(192, 160, 98, 0.7)',
+                letterSpacing: '2px',
+                marginBottom: '16px',
               }}
             >
-              🥇 INVESTMENT PLATFORM PARTNERS
-            </span>
-          </div>
+              #3 - SILVER PARTNER
+            </div>
 
-          <p
-            style={{
-              fontSize: '17px',
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: 1.7,
-              marginBottom: '32px',
-              maxWidth: '600px',
-              margin: '0 auto 32px',
-            }}
-          >
-            For self-directed investors, we recommend these trusted platforms for trading and wealth building.
-          </p>
-
-          <Link
-            to="/recommended-platforms"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'transparent',
-              color: '#C0A062',
-              padding: '14px 32px',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: 600,
-              border: '2px solid #C0A062',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(192, 160, 98, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'transparent';
-            }}
-          >
-            View Platform Comparison
-            <ExternalLink size={18} />
-          </Link>
-        </div>
-
-        {/* Partnership Opportunities Section */}
-        <div
-          style={{
-            maxWidth: '680px',
-            margin: '0 auto',
-            padding: '44px 40px',
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(192, 160, 98, 0.15)',
-            borderRadius: '12px',
-            textAlign: 'center',
-          }}
-        >
-          {/* Badge */}
-          <div style={{ marginBottom: '24px' }}>
-            <span
+            <h2
               style={{
-                display: 'inline-block',
-                background: 'rgba(192, 160, 98, 0.15)',
-                border: '1px solid rgba(192, 160, 98, 0.3)',
-                borderRadius: '20px',
-                padding: '8px 20px',
-                fontSize: '13px',
-                color: '#C0A062',
+                fontSize: '42px',
+                fontFamily: '"Playfair Display", serif',
+                color: 'rgba(192, 160, 98, 0.8)',
                 fontWeight: 600,
-                letterSpacing: '1px',
+                margin: '0 0 12px 0',
+                letterSpacing: '2px',
               }}
             >
-              💼 PARTNERSHIP INQUIRIES
-            </span>
-          </div>
+              Partnership Position Available
+            </h2>
 
-          <h3
-            style={{
-              fontSize: 'clamp(20px, 3vw, 24px)',
-              fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
-              marginBottom: '16px',
-              fontWeight: 400,
-              letterSpacing: '1px',
-            }}
-          >
-            Interested in Becoming a Curated Partner?
-          </h3>
+            <p
+              style={{
+                fontSize: '18px',
+                color: 'rgba(255, 255, 255, 0.65)',
+                marginBottom: '28px',
+                lineHeight: 1.7,
+              }}
+            >
+              We carefully select partners who meet our high standards for transparency, compliance, and client service.
+            </p>
 
-          <p
-            style={{
-              fontSize: '16px',
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: 1.7,
-              marginBottom: '32px',
-            }}
-          >
-            We carefully select partners who meet our high standards for transparency, compliance, and client service.
-          </p>
-
-          {/* Criteria List */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px',
-              marginBottom: '32px',
-              textAlign: 'left',
-              maxWidth: '500px',
-              margin: '0 auto 32px',
-            }}
-          >
-            {[
-              'Regulatory compliance & licensing',
-              'Transparent pricing structure',
-              'Strong investor protection measures',
-              'Excellent user experience & support',
-            ].map((criterion, index) => (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                }}
-              >
-                <CheckCircle size={18} color="#C0A062" style={{ flexShrink: 0 }} />
-                <span
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {[
+                'Regulatory compliance & licensing',
+                'Transparent pricing structure',
+                'Strong investor protection',
+                'Excellent user experience',
+              ].map((criterion, idx) => (
+                <div
+                  key={idx}
                   style={{
-                    fontSize: '15px',
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
                   }}
                 >
-                  {criterion}
-                </span>
-              </div>
-            ))}
+                  <CheckCircle size={18} style={{ color: 'rgba(192, 160, 98, 0.7)', flexShrink: 0 }} />
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {criterion}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* CTA Link */}
-          <Link
-            to="/contact?subject=partnership"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              color: '#C0A062',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: 600,
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.color = '#DAA520';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.color = '#C0A062';
-            }}
-          >
-            Partnership Application
-            <span>→</span>
-          </Link>
+          {/* Right Side */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Link
+              to="/contact?subject=partnership"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'transparent',
+                color: '#C0A062',
+                padding: '18px 36px',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontSize: '17px',
+                fontWeight: 600,
+                border: '2px solid rgba(192, 160, 98, 0.6)',
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(192, 160, 98, 0.1)';
+                e.target.style.borderColor = '#C0A062';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.borderColor = 'rgba(192, 160, 98, 0.6)';
+              }}
+            >
+              Partnership Application
+            </Link>
+          </div>
         </div>
+
+        {/* Responsive Styles */}
+        <style>{`
+          @media (max-width: 1024px) {
+            div[style*="gridTemplateColumns"] {
+              grid-template-columns: 1fr !important;
+              gap: 40px !important;
+              padding: 50px 40px !important;
+            }
+          }
+
+          @media (max-width: 768px) {
+            div[style*="gridTemplateColumns"] {
+              padding: 40px 30px !important;
+            }
+          }
+        `}</style>
       </section>
     </div>
   );
