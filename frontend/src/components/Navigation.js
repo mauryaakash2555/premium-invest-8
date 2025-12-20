@@ -1,14 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isPlatformsDropdownOpen, setIsPlatformsDropdownOpen] = useState(false);
-  const [isMobilePlatformsOpen, setIsMobilePlatformsOpen] = useState(false);
   const location = useLocation();
-  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,33 +15,14 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsPlatformsDropdownOpen(false);
-      }
-    };
-
-    if (isPlatformsDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isPlatformsDropdownOpen]);
-
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
-  ];
-
-  const platformsLinks = [
     { path: '/recommended-platforms', label: 'Recommended Platforms' },
     { path: '/curated-partners', label: 'Curated Partners' },
+    { path: '/blog', label: 'Blog' },
+    { path: '/contact', label: 'Contact' },
   ];
 
   return (
@@ -118,118 +96,7 @@ const Navigation = () => {
           }}
           className="desktop-menu"
         >
-          {navLinks.slice(0, 3).map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              data-testid={`nav-${link.label.toLowerCase()}`}
-              style={{
-                color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: 500,
-                transition: 'color 0.3s ease',
-                position: 'relative',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-              onMouseLeave={(e) =>
-                (e.target.style.color =
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF')
-              }
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          {/* Platforms Dropdown - CLICK to open */}
-          <div
-            ref={dropdownRef}
-            style={{ position: 'relative' }}
-          >
-            <button
-              onClick={() => setIsPlatformsDropdownOpen(!isPlatformsDropdownOpen)}
-              style={{
-                color: (location.pathname === '/recommended-platforms' || location.pathname === '/curated-partners') ? '#DAA520' : '#FFFFFF',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: 500,
-                transition: 'color 0.3s ease',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
-              onMouseLeave={(e) =>
-                (e.target.style.color =
-                  (location.pathname === '/recommended-platforms' || location.pathname === '/curated-partners') ? '#DAA520' : '#FFFFFF')
-              }
-            >
-              Platforms
-              <ChevronDown 
-                size={14} 
-                style={{ 
-                  transition: 'transform 0.3s ease', 
-                  transform: isPlatformsDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' 
-                }} 
-              />
-            </button>
-
-            {isPlatformsDropdownOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  marginTop: '12px',
-                  background: 'rgba(0, 0, 0, 0.95)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(192, 160, 98, 0.2)',
-                  borderRadius: '8px',
-                  padding: '12px 0',
-                  minWidth: '240px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                  zIndex: 1000,
-                }}
-              >
-                {platformsLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsPlatformsDropdownOpen(false)}
-                    style={{
-                      display: 'block',
-                      color: location.pathname === link.path ? '#DAA520' : '#FFFFFF',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      padding: '10px 20px',
-                      transition: 'all 0.2s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(192, 160, 98, 0.1)';
-                      e.target.style.color = '#DAA520';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'transparent';
-                      e.target.style.color = location.pathname === link.path ? '#DAA520' : '#FFFFFF';
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {navLinks.slice(3).map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -287,82 +154,7 @@ const Navigation = () => {
           }}
           className="mobile-menu"
         >
-          {navLinks.slice(0, 3).map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                display: 'block',
-                color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
-                textDecoration: 'none',
-                fontSize: '18px',
-                fontWeight: 500,
-                padding: '12px 0',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          {/* Mobile Platforms Accordion */}
-          <div>
-            <button
-              onClick={() => setIsMobilePlatformsOpen(!isMobilePlatformsOpen)}
-              style={{
-                width: '100%',
-                textAlign: 'left',
-                background: 'transparent',
-                border: 'none',
-                color: (location.pathname === '/recommended-platforms' || location.pathname === '/curated-partners') ? '#DAA520' : '#FFFFFF',
-                fontSize: '18px',
-                fontWeight: 500,
-                padding: '12px 0',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              Platforms
-              <ChevronDown 
-                size={18} 
-                style={{ 
-                  transition: 'transform 0.3s ease', 
-                  transform: isMobilePlatformsOpen ? 'rotate(180deg)' : 'rotate(0deg)' 
-                }} 
-              />
-            </button>
-            {isMobilePlatformsOpen && (
-              <div style={{ paddingLeft: '20px' }}>
-                {platformsLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      setIsMobilePlatformsOpen(false);
-                    }}
-                    style={{
-                      display: 'block',
-                      color: location.pathname === link.path ? '#DAA520' : 'rgba(255, 255, 255, 0.8)',
-                      textDecoration: 'none',
-                      fontSize: '16px',
-                      fontWeight: 400,
-                      padding: '10px 0',
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {navLinks.slice(3).map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
