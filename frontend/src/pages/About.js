@@ -29,8 +29,11 @@ const About = () => {
       </Helmet>
       {/* Hero Section */}
       <section
+        className="page-hero-responsive"
         style={{
-          minHeight: '70vh',
+          minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -46,7 +49,7 @@ const About = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
@@ -69,12 +72,17 @@ const About = () => {
           <h1
             data-testid="about-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               marginBottom: '24px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#C0A062',
             }}
-            className="golden-gradient"
           >
-            About BM Wealth
+            About Us
           </h1>
           <p
             style={{

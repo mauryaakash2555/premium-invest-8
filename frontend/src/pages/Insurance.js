@@ -8,17 +8,29 @@ const Insurance = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Insurance Advisory Mumbai | Life & Health Insurance | BM Wealth IRDAI 277925</title>
         <meta name="description" content="Comprehensive insurance planning in Mumbai. Term insurance, health insurance, ULIP. IRDAI Licensed 277925. Expert insurance advisory services." />
         <meta name="keywords" content="insurance advisor mumbai, life insurance mumbai, health insurance mumbai, term insurance plans, insurance planning mumbai, IRDAI licensed" />
         <link rel="canonical" href="https://www.bmwealth.co.in/insurance" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/insurance" />
+        <meta property="og:title" content="Insurance Advisory Mumbai - Life & Health Insurance | BM Wealth" />
+        <meta property="og:description" content="Comprehensive insurance planning in Mumbai. IRDAI Licensed 277925. Expert term, health, and ULIP advisory." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/insurance" />
+        <meta name="twitter:title" content="Insurance Advisory Mumbai | BM Wealth" />
+        <meta name="twitter:description" content="Comprehensive insurance planning in Mumbai. IRDAI Licensed 277925." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -28,7 +40,7 @@ const Insurance = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -49,14 +61,14 @@ const Insurance = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Life Insurance Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Life insurance forms the foundation of comprehensive financial planning, providing financial security to your family in your absence. At BM Wealth, we hold IRDAI License 277925, authorizing us to provide professional insurance advisory services across life, health, and general insurance. Our insurance practice serves Mumbai families with customized protection planning ensuring loved ones remain financially secure regardless of life's uncertainties. Insurance needs vary dramatically based on life stage, family composition, income levels, liabilities, and future obligations. A 28-year-old single professional has vastly different needs than a 40-year-old parent supporting two children, aging parents, and carrying home loan obligations. Our needs analysis process comprehensively evaluates your situation before recommending appropriate coverage.
           </p>
           
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Term Insurance - Pure Protection
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -66,14 +78,14 @@ const Insurance = () => {
             Term policy features merit careful evaluation. Return of Premium (ROP) riders return premiums if you survive policy term, though this increases premiums 40-50%. Critical illness riders provide lump sum upon diagnosis of specified illnesses (cancer, heart attack, stroke), typically 10-25% of base coverage. Waiver of premium riders continue coverage without further premiums if policyholder becomes disabled. Income benefit options provide monthly income instead of lump sum, helping families manage money better. We recommend pure term plans for most Mumbai families – the premium savings versus traditional plans or ULIPs are better invested separately in mutual funds for wealth creation. Policy term should cover your working years plus 5-10 years – typically 25-30 year terms for those in their 30s, 20-25 years for 40-somethings. Coverage should continue until children become independent and major liabilities (home loans) are paid off.
           </p>
 
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Whole Life Insurance & Endowment Plans
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Whole life insurance provides lifelong coverage plus maturity benefits, combining protection and savings. These policies cost 5-7 times more than term insurance for same coverage due to savings component. For example, ₹1 crore whole life coverage might cost ₹80,000-1,00,000 annually versus ₹12,000-15,000 for equivalent term plan. Endowment plans return sum assured plus bonuses upon maturity or provide death benefit. While providing stable returns (historically 4-6% annually), these returns may lag potential equity market returns (historical averages around 10-12%). We generally recommend term insurance plus separate mutual fund investments over endowment plans for most Mumbai investors. However, whole life policies suit specific situations: legacy planning where you want to leave inheritance regardless of longevity, forced savings for undisciplined savers who wouldn't invest separately, or complete risk aversion where even equity mutual fund volatility causes anxiety. If considering endowment or whole life policies, ensure premiums don't exceed 10-15% of annual income, leaving sufficient surplus for goal-based investing. Please note: Past performance is not indicative of future results.
+            Whole life insurance provides lifelong coverage plus maturity benefits, combining protection and savings. These policies cost 5-7 times more than term insurance for same coverage due to savings component. For example, ₹1 crore whole life coverage might cost ₹80,000-1,00,000 annually versus ₹12,000-15,000 for equivalent term plan. Endowment plans return sum assured plus bonuses upon maturity or provide death benefit. While providing stable returns (historically 4-6% annually), these returns significantly lag mutual fund potential (historically 10-12% returns). Past performance is not indicative of future results. We generally recommend term insurance plus separate mutual fund investments over endowment plans for most Mumbai investors. However, whole life policies suit specific situations: legacy planning where you want to leave inheritance regardless of longevity, forced savings for undisciplined savers who wouldn't invest separately, or complete risk aversion where even equity mutual fund volatility causes anxiety. If considering endowment or whole life policies, ensure premiums don't exceed 10-15% of annual income, leaving sufficient surplus for goal-based investing.
           </p>
 
-          <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
             Unit Linked Insurance Plans (ULIPs)
           </h3>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -82,7 +94,7 @@ const Insurance = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Health Insurance Planning
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -97,7 +109,7 @@ const Insurance = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             General Insurance Services
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -106,7 +118,7 @@ const Insurance = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Insurance vs Investment Products
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -117,9 +129,9 @@ const Insurance = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: '#0a0a0a',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(184, 134, 11, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>Insurance Disclaimer:</strong> BM Wealth holds IRDAI License 277925 for insurance advisory and distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed advisors for personalized insurance planning suited to your family's protection needs.
@@ -132,3 +144,6 @@ const Insurance = () => {
 };
 
 export default Insurance;
+
+
+

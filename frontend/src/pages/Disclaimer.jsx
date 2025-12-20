@@ -13,6 +13,7 @@ const Disclaimer = () => {
       <Helmet>
         <title>Disclaimer - BM Wealth</title>
         <meta name="description" content="Important disclaimers and risk disclosures for BM Wealth services" />
+        <link rel="canonical" href="https://www.bmwealth.co.in/disclaimer" />
       </Helmet>
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>

@@ -8,40 +8,89 @@ const Careers = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Careers at BM Wealth Mumbai | Financial Advisor Jobs | AMFI Certification</title>
         <meta name="description" content="Join BM Wealth's growing team in Mumbai. Career opportunities in financial advisory, insurance, wealth management. AMFI certified advisors welcome." />
         <meta name="keywords" content="financial advisor jobs mumbai, career in finance mumbai, AMFI certification jobs, financial planning careers" />
         <link rel="canonical" href="https://www.bmwealth.co.in/careers" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/careers" />
+        <meta property="og:title" content="Careers at BM Wealth Mumbai | Financial Advisor Jobs" />
+        <meta property="og:description" content="Join BM Wealth's growing team in Mumbai. Career opportunities in financial advisory and wealth management." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/careers" />
+        <meta name="twitter:title" content="Careers at BM Wealth Mumbai" />
+        <meta name="twitter:description" content="Join our team of financial professionals. AMFI certified advisors welcome." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
-      <section style={{
-        position: 'relative',
-        backgroundColor: '#0a0a0a',
-        padding: '120px 0 80px 0',
-        textAlign: 'center',
-        marginTop: '80px'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <h1 style={{
+      {/* Hero Section with Background */}
+      <section 
+        className="page-hero-responsive"
+        style={{
+          position: 'relative',
+          minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          paddingTop: '100px',
+          paddingBottom: '60px',
+          overflow: 'hidden'
+        }}>
+        {/* Background Image - Mumbai Professional Skyline */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '100%',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.2,
+          zIndex: 0
+        }} />
+        
+        {/* Content */}
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          padding: '0 20px',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <h1 
+            className="page-hero-heading-responsive"
+            style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: '52px',
-            fontWeight: '700',
-            color: '#B8860B',
+            fontSize: 'clamp(28px, 4.5vw, 56px)',
+            fontWeight: '300',
+            color: '#C0A062',
             marginBottom: '24px',
-            lineHeight: '1.2'
+            lineHeight: '1.2',
+            letterSpacing: '3px',
+            opacity: 0.95,
+            textShadow: '0 3px 12px rgba(0,0,0,0.4)',
           }}>
-            Career Opportunities at BM Wealth Mumbai
+            Join Our Team
           </h1>
-          <p style={{
-            fontSize: '20px',
-            color: '#e5e5e5',
-            maxWidth: '800px',
-            margin: '0 auto 32px',
+          <p 
+            className="page-hero-subtitle-responsive"
+            style={{
+            fontSize: 'clamp(16px, 2.5vw, 20px)',
+            color: '#C0A062',
+            maxWidth: '700px',
+            margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            Join our team of financial professionals making real impact on Mumbai families' financial futures
+            Build your career with Mumbai's premier financial advisory firm
           </p>
         </div>
       </section>
@@ -49,7 +98,7 @@ const Careers = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Why Choose a Career with BM Wealth?
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -61,12 +110,12 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Current Job Openings
           </h2>
           
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Financial Advisor / Wealth Advisor
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -79,12 +128,12 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Client relationship management, financial planning and goal assessment, mutual fund and insurance recommendations, portfolio monitoring and reviews, business development and client acquisition, staying updated on financial markets and products.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> Competitive compensation based on experience and performance, including fixed salary plus performance-based incentives. Total package designed to reward excellence and client satisfaction.
+              <strong>Compensation:</strong> Fixed salary (₹XX lakhs annually depending on experience) plus performance-based incentives (can exceed fixed salary for top performers). Total compensation range: ₹XX lakhs annually.
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Client Relationship Manager
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -94,12 +143,12 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Managing existing client relationships, addressing client queries and concerns, coordinating portfolio reviews and reporting, facilitating transactions and documentation, identifying cross-selling opportunities, maintaining high client satisfaction and retention.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> Competitive package with performance bonuses. Total compensation based on experience and client management excellence.
+              <strong>Compensation:</strong> ₹XX lakhs annually plus performance bonuses. Total compensation: ₹XX lakhs annually.
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(184, 134, 11, 0.1)', borderRadius: '8px', border: '1px solid rgba(184, 134, 11, 0.3)' }}>
-            <h3 style={{ fontSize: '26px', color: '#B8860B', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
+            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
               Insurance Consultant
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -109,13 +158,13 @@ const Careers = () => {
               <strong>Responsibilities:</strong> Conducting insurance needs analysis, recommending appropriate life and health insurance products, facilitating policy issuance and documentation, providing claim settlement assistance, maintaining client relationships for policy renewals and additions.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Compensation:</strong> Competitive fixed salary plus significant commission potential based on business generated. Performance-driven package with unlimited earning opportunities.
+              <strong>Compensation:</strong> ₹XX lakhs fixed plus significant commission potential. Total compensation: ₹XX lakhs annually based on business generated.
             </p>
           </div>
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Career Growth and Development
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -124,7 +173,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Employee Benefits and Culture
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -133,7 +182,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Application Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -141,7 +190,7 @@ const Careers = () => {
           </p>
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <a href="mailto:mauryaakash2555@gmail.com" style={{
-              backgroundColor: '#B8860B',
+              backgroundColor: '#DAA520',
               color: '#000',
               padding: '16px 36px',
               borderRadius: '6px',
@@ -156,7 +205,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Internship Opportunities
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -170,3 +219,6 @@ const Careers = () => {
 };
 
 export default Careers;
+
+
+

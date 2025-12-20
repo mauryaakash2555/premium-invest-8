@@ -23,6 +23,7 @@ const Services = () => {
         'Tax-efficient investing',
       ],
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      link: '/mutual-funds',
     },
     {
       icon: <TrendingUp size={50} />,
@@ -37,6 +38,7 @@ const Services = () => {
         'Direct equity investments',
       ],
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      link: '/portfolio-management',
     },
     {
       icon: <CreditCard size={50} />,
@@ -51,6 +53,7 @@ const Services = () => {
         'Expert trading support',
       ],
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      link: '/trading-services',
     },
     {
       icon: <Shield size={50} />,
@@ -65,20 +68,22 @@ const Services = () => {
         'Claims assistance',
       ],
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/insurance',
     },
     {
       icon: <DollarSign size={50} />,
       title: 'Fixed Deposits (FD)',
       description:
-        'Secure investment options with our fixed deposit advisory. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
+        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
       features: [
         'Competitive interest rates',
         'Flexible tenure options',
-        'Fixed returns (bank FDs)',
+        'Guaranteed returns',
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/fixed-deposits',
     },
     {
       icon: <Repeat size={50} />,
@@ -93,6 +98,7 @@ const Services = () => {
         'Goal-based planning',
       ],
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/sip',
     },
   ];
 
@@ -144,6 +150,8 @@ const Services = () => {
       <section
         style={{
           minHeight: '70vh',
+          maxHeight: '70vh',
+          height: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -159,7 +167,7 @@ const Services = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
@@ -174,7 +182,7 @@ const Services = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
@@ -183,10 +191,15 @@ const Services = () => {
           <h1
             data-testid="services-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               marginBottom: '24px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#C0A062',
             }}
-            className="golden-gradient"
           >
             Our Services
           </h1>
@@ -309,6 +322,36 @@ const Services = () => {
                     </li>
                   ))}
                 </ul>
+                {service.link && (
+                  <Link
+                    to={service.link}
+                    style={{
+                      display: 'inline-block',
+                      marginTop: '20px',
+                      padding: '12px 32px',
+                      background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
+                      color: '#000000',
+                      textDecoration: 'none',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: 'clamp(14px, 3vw, 16px)',
+                      transition: 'all 0.3s ease',
+                      border: '2px solid transparent',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.borderColor = '#DAA520';
+                      e.currentTarget.style.color = '#DAA520';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)';
+                      e.currentTarget.style.borderColor = 'transparent';
+                      e.currentTarget.style.color = '#000000';
+                    }}
+                  >
+                    Learn More <ArrowRight size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '4px' }} />
+                  </Link>
+                )}
               </div>
             </div>
           ))}

@@ -5,10 +5,6 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { staticBlogPost, staticBlogData } from '../data/staticBlogData';
-import ReadingProgress from '../components/ReadingProgress';
-import TableOfContents from '../components/TableOfContents';
-import FAQSection from '../components/FAQSection';
-import RelatedPosts from '../components/RelatedPosts';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -85,66 +81,18 @@ const BlogDetail = () => {
     );
   }
 
-  // Generate Schema.org JSON-LD
-  const schemaOrgData = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": post.image_url || 'https://www.bmwealth.co.in/logo.webp',
-    "datePublished": post.published_date,
-    "dateModified": post.published_date,
-    "author": {
-      "@type": "Organization",
-      "name": post.author || "BM Wealth Editorial Team",
-      "url": "https://www.bmwealth.co.in"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "BM Wealth",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.bmwealth.co.in/logo.webp"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://www.bmwealth.co.in/blog/${post.slug}`
-    }
-  };
-
-  // Add FAQ schema if FAQs exist
-  const faqSchemaData = post.faqs && post.faqs.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": post.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  } : null;
-
-  // Get all static blogs for related posts
-  const allBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
-    ? staticBlogData 
-    : [staticBlogPost];
-
   return (
     <div style={{ background: '#000000', minHeight: '100vh' }}>
-      <ReadingProgress />
       <Helmet>
         <title>{post.title} | BM Wealth Blog</title>
-        <meta name="description" content={post.excerpt} />
+        <meta name="description" content={post.metaDescription || post.excerpt} />
         <meta name="keywords" content={post.tags ? post.tags.join(', ') : ''} />
         <link rel="canonical" href={`https://www.bmwealth.co.in/blog/${post.slug}`} />
         
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://www.bmwealth.co.in/blog/${post.slug}`} />
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:description" content={post.metaDescription || post.excerpt} />
         <meta property="og:image" content={post.image_url || 'https://www.bmwealth.co.in/logo.webp'} />
         
         <meta name="twitter:card" content="summary_large_image" />
@@ -158,19 +106,49 @@ const BlogDetail = () => {
         {post.tags && post.tags.map((tag, index) => (
           <meta property="article:tag" content={tag} key={index} />
         ))}
-
-        {/* Schema.org Article Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify(schemaOrgData)}
-        </script>
-
-        {/* Schema.org FAQ Markup */}
-        {faqSchemaData && (
-          <script type="application/ld+json">
-            {JSON.stringify(faqSchemaData)}
-          </script>
-        )}
       </Helmet>
+
+      {/* Mobile-specific image optimization styles for ALL blogs */}
+      <style>{`
+        /* Mobile: Show full image without cropping - applies to ALL blog images */
+        @media (max-width: 768px) {
+          .blog-hero-section {
+            height: auto !important;
+            min-height: 250px !important;
+            max-height: none !important;
+            background: #000000 !important;
+            display: block !important;
+            position: relative !important;
+            overflow: visible !important;
+            padding: 20px 0 !important;
+          }
+          .blog-hero-image {
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            min-height: 250px !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            opacity: 0.3 !important;
+            display: block !important;
+          }
+          .blog-hero-section > div {
+            position: relative !important;
+            z-index: 1 !important;
+          }
+        }
+        
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .blog-hero-image {
+            object-fit: cover !important;
+            object-position: center 30% !important;
+          }
+        }
+      `}</style>
 
       {/* Back Button */}
       <div className="section-container" style={{ paddingTop: '120px', paddingBottom: '20px' }}>
@@ -198,8 +176,9 @@ const BlogDetail = () => {
 
       {/* Hero Section with Featured Image */}
       {post.image_url && (
-        <section style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px', height: '400px' }}>
+        <section className="blog-hero-section" style={{ position: 'relative', overflow: 'hidden', marginBottom: '40px', height: '400px' }}>
           <img
+            className="blog-hero-image"
             src={post.image_url}
             alt={post.image_alt || post.title}
             style={{
@@ -212,7 +191,8 @@ const BlogDetail = () => {
               top: 0,
               left: 0,
             }}
-            loading="eager"
+            loading="lazy"
+            decoding="async"
           />
           <div
             style={{
@@ -425,9 +405,6 @@ const BlogDetail = () => {
           </div>
         </header>
 
-        {/* Table of Contents */}
-        <TableOfContents content={post.content} />
-
         {/* Blog Content */}
         <div
           style={{
@@ -437,14 +414,6 @@ const BlogDetail = () => {
           }}
           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
         />
-
-        {/* FAQ Section */}
-        {post.faqs && post.faqs.length > 0 && (
-          <FAQSection faqs={post.faqs} />
-        )}
-
-        {/* Related Posts */}
-        <RelatedPosts posts={allBlogs} currentPostSlug={post.slug} />
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (

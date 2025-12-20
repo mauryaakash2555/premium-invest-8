@@ -16,36 +16,42 @@ const Home = () => {
       title: 'Mutual Funds',
       description: 'Diversified investment options with expert fund selection and performance insights.',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/mutual-funds',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
       description: 'Personalized wealth management strategies tailored to your financial goals.',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/portfolio-management',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading Services',
       description: 'Real-time market access with advanced tools and expert guidance.',
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/trading-services',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
       description: 'Comprehensive life and health insurance plans for financial security.',
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
+      link: '/insurance',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
       description: 'Secure returns with flexible tenure options and competitive rates.',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/fixed-deposits',
     },
     {
       icon: <Repeat size={40} />,
       title: 'SIP',
       description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto=compress&fm=webp&q=75',
+      link: '/sip',
     },
   ];
 
@@ -73,77 +79,93 @@ const Home = () => {
       </Helmet>
       {/* Hero Section */}
       <section
-        className="hero-gradient"
+        className="hero-gradient hero-section-responsive"
         style={{
-          minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          paddingTop: '80px',
+          minHeight: '85vh',
+          maxHeight: '85vh',
+          height: '85vh',
         }}
       >
         {/* Background Image */}
         <div
+          className="hero-background-image"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.15,
+            zIndex: 0,
+          }}
+        />
+
+        {/* Premium Gradient Overlay - Desktop & Mobile */}
+        <div
+          className="hero-gradient-overlay"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)',
             zIndex: 0,
           }}
         />
 
         <div
-          className="section-container fade-in"
+          className="section-container fade-in hero-content-responsive"
           style={{
             textAlign: 'center',
             position: 'relative',
             zIndex: 1,
+            paddingTop: '60px',
           }}
         >
           <h1
-            data-testid="hero-heading"
+            className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(32px, 5vw, 72px)',
-              marginBottom: '24px',
-              lineHeight: 1.2,
-            }}
-            className="golden-gradient"
-          >
-            BM Wealth
-          </h1>
-          <h2
-            style={{
-              fontSize: 'clamp(20px, 3vw, 36px)',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               color: '#C0A062',
-              marginBottom: '16px',
-              fontWeight: 500,
+              marginBottom: '24px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
             }}
           >
-            Mumbai's Distinguished Financial Advisory
-          </h2>
+            Mumbai's Premier Financial Advisory
+          </h1>
           <p
+            className="hero-description-responsive"
             style={{
-              fontSize: 'clamp(14px, 2vw, 18px)',
-              color: '#FFFFFF',
-              marginBottom: '40px',
+              fontSize: 'clamp(16px, 2.2vw, 22px)',
+              color: '#C0A062',
+              marginBottom: '60px',
               maxWidth: '800px',
-              margin: '0 auto 40px',
+              margin: '0 auto 60px',
               lineHeight: 1.6,
+              fontWeight: 300,
+              letterSpacing: '1px',
+              opacity: 0.88,
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
             Exceptional wealth management solutions tailored to your prosperity
           </p>
 
           <div
+            className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
               gap: '20px',
@@ -151,7 +173,6 @@ const Home = () => {
               flexWrap: 'wrap',
               marginBottom: '60px',
             }}
-            className="hero-cta-buttons"
           >
             <a
               href="https://wa.me/918850977259"
@@ -202,48 +223,73 @@ const Home = () => {
           }}
         >
           {services.map((service, index) => (
-            <div 
-              key={index} 
-              className="service-card slide-up" 
-              data-testid={`service-card-${index}`}
-              style={{
-                overflow: 'hidden',
-              }}
+            <Link
+              key={index}
+              to={service.link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <LazyImage
-                src={service.image}
-                alt={service.title}
+              <div 
+                className="service-card slide-up" 
+                data-testid={`service-card-${index}`}
                 style={{
-                  width: '100%',
-                  height: '200px',
-                  marginBottom: '20px',
-                  borderRadius: '8px',
-                  display: 'block',
-                  objectFit: 'cover',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
-              />
-              <div style={{ color: '#DAA520', marginBottom: '16px' }}>
-                {service.icon}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <LazyImage
+                  src={service.image}
+                  alt={service.title}
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    marginBottom: '20px',
+                    borderRadius: '8px',
+                    display: 'block',
+                    objectFit: 'cover',
+                  }}
+                />
+                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
+                  {service.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: '24px',
+                    color: '#DAA520',
+                    marginBottom: '12px',
+                  }}
+                >
+                  {service.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '16px',
+                    color: '#CCCCCC',
+                    lineHeight: 1.6,
+                    marginBottom: '16px',
+                  }}
+                >
+                  {service.description}
+                </p>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#C0A062',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}>
+                  <span>Learn More</span>
+                  <ArrowRight size={16} />
+                </div>
               </div>
-              <h3
-                style={{
-                  fontSize: '24px',
-                  color: '#DAA520',
-                  marginBottom: '12px',
-                }}
-              >
-                {service.title}
-              </h3>
-              <p
-                style={{
-                  fontSize: '16px',
-                  color: '#CCCCCC',
-                  lineHeight: 1.6,
-                }}
-              >
-                {service.description}
-              </p>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -522,7 +568,7 @@ const Home = () => {
           >
             Connect with our experts today for a complimentary financial consultation
           </p>
-          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }} className="cta-buttons-container">
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a
               href="https://wa.me/918850977259"
               target="_blank"
@@ -538,104 +584,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
-      {/* Mobile-specific styling enhancements */}
-      <style>{`
-        /* Keep desktop exactly as is (> 768px) */
-        @media (min-width: 769px) {
-          .hero-cta-buttons,
-          .cta-buttons-container {
-            flex-direction: row !important;
-          }
-        }
-        
-        /* Enhanced mobile experience (≤ 768px) */
-        @media (max-width: 768px) {
-          /* Hero CTA buttons - Stack vertically with better spacing */
-          .hero-cta-buttons {
-            flex-direction: column !important;
-            width: 100% !important;
-            gap: 0px !important;
-            padding: 0 20px;
-          }
-          
-          .hero-cta-buttons a {
-            width: 100% !important;
-            max-width: 100% !important;
-            margin-bottom: 12px !important;
-            text-align: center !important;
-            display: block !important;
-          }
-          
-          /* CTA buttons container */
-          .cta-buttons-container {
-            flex-direction: column !important;
-            width: 100% !important;
-            gap: 0px !important;
-            padding: 0 20px;
-          }
-          
-          .cta-buttons-container a {
-            width: 100% !important;
-            max-width: 100% !important;
-            margin-bottom: 12px !important;
-            text-align: center !important;
-            display: block !important;
-          }
-          
-          /* Service grid - Perfect single column */
-          div[style*="grid-template-columns"][style*="320px"] {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-            padding: 0 !important;
-          }
-          
-          /* Why Choose Us grid - Single column mobile */
-          section div[style*="grid-template-columns"][style*="280px"] {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          
-          /* Blog card - Mobile optimized padding */
-          .blog-card-premium > a > div:last-child {
-            padding: 30px 20px !important;
-          }
-          
-          /* Glass effect CTA - Better mobile padding */
-          section:last-of-type .glass-effect {
-            padding: 40px 24px !important;
-            margin: 0 16px !important;
-          }
-          
-          /* Hero section - Perfect mobile height */
-          .hero-gradient {
-            min-height: 70vh !important;
-            padding-bottom: 40px !important;
-          }
-          
-          /* Hero content - Better mobile spacing */
-          .hero-gradient .section-container {
-            padding-top: 100px !important;
-            padding-bottom: 60px !important;
-          }
-        }
-        
-        /* Small phones (≤ 480px) */
-        @media (max-width: 480px) {
-          .hero-cta-buttons,
-          .cta-buttons-container {
-            padding: 0 16px;
-          }
-          
-          .hero-gradient {
-            min-height: 65vh !important;
-          }
-          
-          .glass-effect {
-            margin: 0 8px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

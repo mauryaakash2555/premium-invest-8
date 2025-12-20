@@ -20,25 +20,27 @@ export default function Compliance() {
         <meta property="og:url" content="https://www.bmwealth.co.in/compliance" />
         <meta property="og:title" content="Regulatory Compliance & Investor Charter | BM Wealth ARN 90008" />
         <meta property="og:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://www.bmwealth.co.in/compliance-hero.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://www.bmwealth.co.in/compliance" />
         <meta name="twitter:title" content="Regulatory Compliance & Investor Charter | BM Wealth" />
         <meta name="twitter:description" content="Regulatory compliance, investor charter, and grievance redressal. IRDAI Licensed and AMFI Registered ARN 90008." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/compliance-hero.webp" />
       </Helmet>
 
       {/* Hero Section */}
       <section
         style={{
-          height: '300px',
+          minHeight: '70vh',
+          maxHeight: '70vh',
+          height: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          paddingTop: '80px',
+          paddingTop: '100px',
         }}
       >
         {/* Background Image */}
@@ -48,66 +50,79 @@ export default function Compliance() {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
-            backgroundImage: 'url(https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            height: '100%',
+            backgroundImage: 'url(/compliance-hero.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.15,
+            opacity: 0.65,
+            filter: 'brightness(1.1)',
           }}
         />
-        {/* Background Gradient Overlay */}
         <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.95) 100%)',
+            height: '100%',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '1200px', padding: '0 20px' }}>
+
+        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1
             style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: '48px',
-              fontWeight: '700',
-              color: '#B8860B',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               marginBottom: '24px',
-              textAlign: 'center',
-              lineHeight: '1.2',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#C0A062',
             }}
           >
-            Regulatory Compliance & Investor Protection
+            Regulatory Compliance & Investor Charter
           </h1>
+          <p
+            style={{
+              fontSize: 'clamp(16px, 2vw, 20px)',
+              color: '#C0A062',
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: 1.6,
+            }}
+          >
+            Committed to transparency, integrity, and investor protection in accordance with IRDAI and AMFI regulations.
+          </p>
         </div>
       </section>
 
       <div style={{
+        minHeight: '100vh',
         background: '#000000',
-        padding: '40px 0',
-        width: '100%',
-        boxSizing: 'border-box'
+        paddingTop: '60px',
+        paddingBottom: '80px'
       }}>
+        
+        {/* Page Container */}
         <div style={{
-          maxWidth: '1200px',
+          maxWidth: '900px',
           margin: '0 auto',
-          padding: '0 20px',
-          width: '100%',
-          boxSizing: 'border-box'
+          padding: '0 20px'
         }}>
+          
+          {/* Section 1: Investor Charter */}
           <section style={{
-            width: '100%',
-            textAlign: 'justify',
-            marginBottom: '24px'
+            marginBottom: '60px'
           }}>
+            
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: '24px',
+              fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '0 0 24px 0',
-              padding: 0,
+              color: '#DAA520',
+              marginBottom: '24px',
               lineHeight: '1.3'
             }}>
               Investor Charter
@@ -115,34 +130,31 @@ export default function Compliance() {
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Vision Statement
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              margin: '0 0 24px 0',
-              padding: 0,
-              textAlign: 'justify',
-              width: '100%'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
             }}>
               BM Wealth is committed to providing professional investment advisory services with the highest standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
             </p>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Your Rights as an Investor
             </h3>
@@ -166,12 +178,11 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
-                  <strong style={{ color: '#e5e5e5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
+                  <strong style={{ color: '#E5E5E5' }}>Right to Fair Treatment:</strong> Equal and fair treatment without discrimination
                 </p>
               </div>
             </div>
@@ -195,12 +206,11 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
-                  <strong style={{ color: '#e5e5e5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
+                  <strong style={{ color: '#E5E5E5' }}>Right to Information:</strong> Complete and accurate disclosure of all material information
                 </p>
               </div>
             </div>
@@ -224,12 +234,11 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
-                  <strong style={{ color: '#e5e5e5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
+                  <strong style={{ color: '#E5E5E5' }}>Right to Suitability:</strong> Investment advice suitable to your risk profile and financial goals
                 </p>
               </div>
             </div>
@@ -278,15 +287,16 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: 0,
-                textAlign: 'justify'
-              }}>
-                <strong style={{ color: '#e5e5e5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  <strong style={{ color: '#E5E5E5' }}>Right to Grievance Redressal:</strong> Access to fair and timely resolution of complaints
+                </p>
+              </div>
             </div>
             
             <h3 style={{
@@ -294,8 +304,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              margin: '25px 0 15px 0',
-              padding: 0
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Your Responsibilities as an Investor
             </h3>
@@ -319,10 +329,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Conduct thorough research and due diligence before making investment decisions
                 </p>
@@ -348,10 +357,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Provide complete and accurate information about your financial situation and risk appetite
                 </p>
@@ -377,10 +385,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Read all documents carefully, including terms and conditions, before signing
                 </p>
@@ -406,10 +413,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Keep records of all transactions and communications with your advisor
                 </p>
@@ -435,10 +441,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Report any suspicious activity or concerns promptly
                 </p>
@@ -461,24 +466,25 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: 0,
-                textAlign: 'justify'
-              }}>
-                Stay informed about market conditions and review your portfolio regularly
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Stay informed about market conditions and review your portfolio regularly
+                </p>
+              </div>
             </div>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Our Commitments to You
             </h3>
@@ -502,10 +508,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Provide investment advice based on thorough analysis and your best interests
                 </p>
@@ -531,10 +536,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Maintain transparency in all dealings and disclose any conflicts of interest
                 </p>
@@ -560,10 +564,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Protect your confidential information and ensure data security
                 </p>
@@ -589,10 +592,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Comply with all IRDAI and AMFI regulations and industry best practices
                 </p>
@@ -618,10 +620,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Provide timely and accurate information about your investments
                 </p>
@@ -644,15 +645,16 @@ export default function Compliance() {
                 background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
                 borderRadius: '2px'
               }}></div>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: 0,
-                textAlign: 'justify'
-              }}>
-                Address your concerns and grievances promptly and fairly
-              </p>
+              <div style={{ paddingLeft: '16px', width: '100%' }}>
+                <p style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
+                }}>
+                  Address your concerns and grievances promptly and fairly
+                </p>
+              </div>
             </div>
             
             {/* License Info Box */}
@@ -709,15 +711,15 @@ export default function Compliance() {
           
           {/* Section 2: Grievance Redressal Mechanism */}
           <section style={{
-            marginBottom: '24px',
+            marginBottom: '60px',
             paddingLeft: '0'
           }}>
             
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: '24px',
+              fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#B8860B',
+              color: '#DAA520',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -726,22 +728,20 @@ export default function Compliance() {
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               How to File a Complaint
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              margin: '0 0 24px 0',
-              padding: 0,
-              textAlign: 'justify'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '24px'
             }}>
               We are committed to addressing your concerns promptly and fairly. If you have any grievances regarding our services, please follow the process outlined below:
             </p>
@@ -753,39 +753,36 @@ export default function Compliance() {
               marginBottom: '20px'
             }}>
               <h4 style={{
-                fontSize: '24px',
+                fontSize: '18px',
                 fontWeight: '600',
-                color: '#B8860B',
+                color: '#DAA520',
                 marginBottom: '16px'
               }}>
                 Step 1: Contact Us Directly
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '8px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                <strong style={{ color: '#e5e5e5' }}>Phone:</strong> +91 8850977259
+                <strong style={{ color: '#E5E5E5' }}>Phone:</strong> +91 8850977259
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '8px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                <strong style={{ color: '#e5e5e5' }}>Email:</strong> mauryaakash2555@gmail.com
+                <strong style={{ color: '#E5E5E5' }}>Email:</strong> mauryaakash2555@gmail.com
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: '0',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
               }}>
-                <strong style={{ color: '#e5e5e5' }}>Grievance Email:</strong> grievance@bmwealth.co.in
+                <strong style={{ color: '#E5E5E5' }}>Grievance Email:</strong> grievance@bmwealth.co.in
               </p>
             </div>
             
@@ -796,19 +793,18 @@ export default function Compliance() {
               marginBottom: '20px'
             }}>
               <h4 style={{
-                fontSize: '24px',
+                fontSize: '18px',
                 fontWeight: '600',
-                color: '#B8860B',
+                color: '#DAA520',
                 marginBottom: '16px'
               }}>
                 Step 2: Written Complaint
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '12px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '12px'
               }}>
                 If your concern is not resolved through initial contact, please submit a written complaint including:
               </p>
@@ -831,10 +827,9 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.7',
-                    color: '#e5e5e5',
-                    margin: 0,
-                    textAlign: 'justify'
+                    lineHeight: '1.8',
+                    color: '#B8B8B8',
+                    margin: 0
                   }}>
                     Your name and contact details
                   </p>
@@ -859,7 +854,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.7',
+                    lineHeight: '1.8',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -886,7 +881,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.7',
+                    lineHeight: '1.8',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -913,7 +908,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.7',
+                    lineHeight: '1.8',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -940,7 +935,7 @@ export default function Compliance() {
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
                   <p style={{
                     fontSize: '16px',
-                    lineHeight: '1.7',
+                    lineHeight: '1.8',
                     color: '#B8B8B8',
                     margin: 0
                   }}>
@@ -957,57 +952,52 @@ export default function Compliance() {
               marginBottom: '30px'
             }}>
               <h4 style={{
-                fontSize: '24px',
+                fontSize: '18px',
                 fontWeight: '600',
-                color: '#B8860B',
+                color: '#DAA520',
                 marginBottom: '16px'
               }}>
                 Step 3: Escalation to Regulatory Authorities
               </h4>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '16px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '16px'
               }}>
                 If you are not satisfied with our resolution, you may escalate your complaint to the respective regulatory authorities:
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '8px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                <strong style={{ color: '#e5e5e5' }}>AMFI Complaints:</strong>
+                <strong style={{ color: '#E5E5E5' }}>AMFI Complaints:</strong>
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '16px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '16px'
               }}>
-                Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#B8860B', textDecoration: 'none' }}>https://www.amfiindia.com</a>
+                Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.amfiindia.com</a>
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                marginBottom: '8px',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                marginBottom: '8px'
               }}>
-                <strong style={{ color: '#e5e5e5' }}>IRDAI Grievance Redressal:</strong>
+                <strong style={{ color: '#E5E5E5' }}>IRDAI Grievance Redressal:</strong>
               </p>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: '0',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#B8B8B8',
+                margin: '0'
               }}>
-                Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#B8860B', textDecoration: 'none' }}>https://www.irdai.gov.in</a>
+                Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.irdai.gov.in</a>
               </p>
             </div>
             
@@ -1016,8 +1006,8 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              margin: '25px 0 15px 0',
-              padding: 0
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Resolution Timeline
             </h3>
@@ -1041,12 +1031,11 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
-                  <strong style={{ color: '#e5e5e5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
+                  <strong style={{ color: '#E5E5E5' }}>Acknowledgment:</strong> Within 3 working days of receiving the complaint
                 </p>
               </div>
             </div>
@@ -1070,7 +1059,7 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
+                  lineHeight: '1.8',
                   color: '#B8B8B8',
                   margin: 0
                 }}>
@@ -1098,12 +1087,11 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
-                  <strong style={{ color: '#e5e5e5' }}>Resolution:</strong> Within 30 days from the date of receipt
+                  <strong style={{ color: '#E5E5E5' }}>Resolution:</strong> Within 30 days from the date of receipt
                 </p>
               </div>
             </div>
@@ -1116,11 +1104,10 @@ export default function Compliance() {
             }}>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#B8860B',
+                lineHeight: '1.8',
+                color: '#DAA520',
                 fontWeight: '600',
-                margin: '0',
-                textAlign: 'justify'
+                margin: '0'
               }}>
                 Important Note: Please keep a copy of your complaint and all correspondence for your records. We are committed to resolving all grievances in a fair, transparent, and timely manner in accordance with regulatory guidelines.
               </p>
@@ -1130,15 +1117,14 @@ export default function Compliance() {
           
           {/* Section 3: Regulatory Disclosures & Licenses */}
           <section style={{
-            marginBottom: '24px',
-            paddingLeft: '0'
+            marginBottom: '60px'
           }}>
             
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: '24px',
+              fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#B8860B',
+              color: '#DAA520',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1147,45 +1133,40 @@ export default function Compliance() {
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Insurance Advisory Services
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '12px',
-              textAlign: 'justify'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
             }}>
-              <strong style={{ color: '#e5e5e5' }}>IRDAI License Number:</strong> 277925
+              <strong style={{ color: '#E5E5E5' }}>IRDAI License Number:</strong> 277925
             </p>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '12px',
-              textAlign: 'justify'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
             }}>
-              <strong style={{ color: '#e5e5e5' }}>Service Type:</strong> Insurance Advisory
+              <strong style={{ color: '#E5E5E5' }}>Service Type:</strong> Insurance Advisory
             </p>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              margin: '0 0 24px 0',
-              padding: 0,
-              textAlign: 'justify',
-              width: '100%'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
             }}>
-              <strong style={{ color: '#e5e5e5' }}>Principal Officer:</strong> Brahmdeo Maurya
+              <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
             
             <h3 style={{
@@ -1193,15 +1174,15 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              margin: '25px 0 15px 0',
-              padding: 0
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Mutual Fund Distribution Services
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
+              lineHeight: '1.8',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1210,7 +1191,7 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
+              lineHeight: '1.8',
               color: '#B8B8B8',
               marginBottom: '12px'
             }}>
@@ -1219,23 +1200,20 @@ export default function Compliance() {
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
+              lineHeight: '1.8',
               color: '#B8B8B8',
-              margin: '0 0 30px 0',
-              padding: 0,
-              textAlign: 'left',
-              width: '100%'
+              marginBottom: '30px'
             }}>
               <strong style={{ color: '#E5E5E5' }}>Principal Officer:</strong> Brahmdeo Maurya
             </p>
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Additional Advisory Services
             </h3>
@@ -1259,10 +1237,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Portfolio Management Services (PMS) - Advisory & Referral Services
                 </p>
@@ -1288,10 +1265,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Fixed Deposit (FD) Advisory Services
                 </p>
@@ -1317,10 +1293,9 @@ export default function Compliance() {
               <div style={{ paddingLeft: '16px', width: '100%' }}>
                 <p style={{
                   fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#e5e5e5',
-                  margin: 0,
-                  textAlign: 'justify'
+                  lineHeight: '1.8',
+                  color: '#B8B8B8',
+                  margin: 0
                 }}>
                   Investment Planning & Financial Consulting
                 </p>
@@ -1329,98 +1304,40 @@ export default function Compliance() {
             
             <h3 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Registered Office
             </h3>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '8px',
-              textAlign: 'justify'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '8px'
             }}>
               66, Vinod Villa Bldg., 1st floor office no. 108
             </p>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '8px',
-              textAlign: 'justify'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '8px'
             }}>
               Cavel Cross Lane 3, Kalbadevi
             </p>
             
             <p style={{
               fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              margin: '0 0 24px 0',
-              padding: 0,
-              textAlign: 'justify',
-              width: '100%'
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
             }}>
               Mumbai - 400002, Maharashtra, India
-            </p>
-            
-            <h3 style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: '24px',
-              fontWeight: '600',
-              color: '#B8860B',
-              margin: '24px 0 16px 0',
-              padding: 0
-            }}>
-              Regulatory Authorities
-            </h3>
-            
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '12px',
-              textAlign: 'justify'
-            }}>
-              <strong style={{ color: '#e5e5e5' }}>IRDAI (Insurance Regulatory and Development Authority of India)</strong>
-            </p>
-            
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '24px',
-              textAlign: 'justify'
-            }}>
-              Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#B8860B', textDecoration: 'none' }}>www.irdai.gov.in</a>
-            </p>
-            
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              marginBottom: '12px',
-              textAlign: 'justify'
-            }}>
-              <strong style={{ color: '#e5e5e5' }}>AMFI (Association of Mutual Funds in India)</strong>
-            </p>
-            
-            <p style={{
-              fontSize: '16px',
-              lineHeight: '1.7',
-              color: '#e5e5e5',
-              margin: '0 0 24px 0',
-              padding: 0,
-              textAlign: 'justify',
-              width: '100%'
-            }}>
-              Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#B8860B', textDecoration: 'none' }}>www.amfiindia.com</a>
             </p>
             
             <h3 style={{
@@ -1428,8 +1345,55 @@ export default function Compliance() {
               fontSize: '20px',
               fontWeight: '600',
               color: '#E5E5E5',
-              margin: '25px 0 15px 0',
-              padding: 0
+              marginTop: '30px',
+              marginBottom: '16px'
+            }}>
+              Regulatory Authorities
+            </h3>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>IRDAI (Insurance Regulatory and Development Authority of India)</strong>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '24px'
+            }}>
+              Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.irdai.gov.in</a>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: '#E5E5E5' }}>AMFI (Association of Mutual Funds in India)</strong>
+            </p>
+            
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.8',
+              color: '#B8B8B8',
+              marginBottom: '30px'
+            }}>
+              Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.amfiindia.com</a>
+            </p>
+            
+            <h3 style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#E5E5E5',
+              marginTop: '30px',
+              marginBottom: '16px'
             }}>
               Grievance Redressal Mechanism
             </h3>
@@ -1456,10 +1420,7 @@ export default function Compliance() {
               fontSize: '16px',
               lineHeight: '1.8',
               color: '#B8B8B8',
-              margin: '0 0 30px 0',
-              padding: 0,
-              textAlign: 'left',
-              width: '100%'
+              marginBottom: '30px'
             }}>
               <strong style={{ color: '#E5E5E5' }}>Response Time:</strong> Within 7 working days
             </p>
@@ -1468,15 +1429,14 @@ export default function Compliance() {
           
           {/* Section 4: Compliance Statement */}
           <section style={{
-            marginBottom: '24px',
-            paddingLeft: '0'
+            marginBottom: '60px'
           }}>
             
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: '24px',
+              fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#B8860B',
+              color: '#DAA520',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1484,19 +1444,18 @@ export default function Compliance() {
             </h2>
             
             <div style={{
-              background: 'rgba(184, 134, 11, 0.1)',
+              background: 'rgba(218, 165, 32, 0.1)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(184, 134, 11, 0.3)'
+              border: '1px solid rgba(218, 165, 32, 0.3)'
             }}>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#e5e5e5',
-                margin: '0',
-                textAlign: 'justify'
+                lineHeight: '1.8',
+                color: '#888888',
+                margin: '0'
               }}>
-                BM Wealth is an <strong style={{ color: '#e5e5e5' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#e5e5e5' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#e5e5e5' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+                BM Wealth is an <strong style={{ color: '#999999' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#999999' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#999999' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
               </p>
             </div>
             
@@ -1504,15 +1463,14 @@ export default function Compliance() {
           
           {/* Section 5: Investment Disclaimer */}
           <section style={{
-            marginBottom: '0',
-            paddingLeft: '0'
+            marginBottom: '0'
           }}>
             
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: '24px',
+              fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#B8860B',
+              color: '#DAA520',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1520,18 +1478,17 @@ export default function Compliance() {
             </h2>
             
             <div style={{
-              background: 'rgba(184, 134, 11, 0.1)',
+              background: 'rgba(218, 165, 32, 0.1)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(184, 134, 11, 0.3)'
+              border: '1px solid rgba(218, 165, 32, 0.3)'
             }}>
               <p style={{
                 fontSize: '16px',
-                lineHeight: '1.7',
-                color: '#B8860B',
+                lineHeight: '1.8',
+                color: '#DAA520',
                 fontWeight: '600',
-                margin: '0',
-                textAlign: 'justify'
+                margin: '0'
               }}>
                 Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
               </p>
@@ -1540,39 +1497,6 @@ export default function Compliance() {
           </section>
           
         </div>
-        
-        {/* Mobile Responsive Styles */}
-        <style>{`
-          @media (max-width: 768px) {
-            section {
-              padding-left: 0 !important;
-            }
-            
-            h1 {
-              font-size: 32px !important;
-            }
-            
-            h2 {
-              font-size: 24px !important;
-            }
-            
-            h3 {
-              font-size: 24px !important;
-            }
-            
-            h4 {
-              font-size: 24px !important;
-            }
-            
-            p {
-              font-size: 16px !important;
-            }
-            
-            .section-container {
-              padding: 0 20px !important;
-            }
-          }
-        `}</style>
         
       </div>
     </>

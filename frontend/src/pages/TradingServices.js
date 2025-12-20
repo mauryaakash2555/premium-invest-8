@@ -8,17 +8,29 @@ const TradingServices = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Stock Trading & Demat Services Mumbai | Trading Advisory | BM Wealth</title>
         <meta name="description" content="Professional stock trading & demat account services in Mumbai. Expert trading advisory, technical analysis, equity trading. Open demat account today." />
         <meta name="keywords" content="stock trading mumbai, demat account opening, trading advisory mumbai, equity trading services, share market mumbai" />
         <link rel="canonical" href="https://www.bmwealth.co.in/trading-services" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/trading-services" />
+        <meta property="og:title" content="Stock Trading & Demat Services Mumbai | BM Wealth" />
+        <meta property="og:description" content="Professional stock trading & demat account services in Mumbai. Expert trading advisory." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/trading-services" />
+        <meta name="twitter:title" content="Stock Trading & Demat Services Mumbai | BM Wealth" />
+        <meta name="twitter:description" content="Professional stock trading & demat services. Open demat account today." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -28,7 +40,7 @@ const TradingServices = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -49,7 +61,7 @@ const TradingServices = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Trading Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -61,7 +73,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Demat Account Opening Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -73,7 +85,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Equity Trading Strategies
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -85,7 +97,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Risk Management in Trading
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -99,9 +111,9 @@ const TradingServices = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: '#0a0a0a',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(184, 134, 11, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>Trading Risk Disclaimer:</strong> Stock trading and derivatives involve substantial risk of loss. Past performance is not indicative of future results. Leverage amplifies both gains and losses. Most retail traders lose money. Trade only with capital you can afford to lose completely. BM Wealth provides educational guidance and broker facilitation but does not guarantee trading profits or provide specific buy/sell recommendations. All trading decisions remain your responsibility. SEBI regulations require understanding risks before trading. Consider consulting SEBI-registered advisors for personalized trading guidance.
@@ -114,3 +126,6 @@ const TradingServices = () => {
 };
 
 export default TradingServices;
+
+
+
