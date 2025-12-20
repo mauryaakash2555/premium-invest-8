@@ -25,6 +25,10 @@ const Footer = () => {
           margin-top: -8px;
         }
         @media (max-width: 768px) {
+          .footer-grid-container {
+            grid-template-columns: 1fr !important;
+            gap: 40px !important;
+          }
           .whatsapp-container-desktop {
             justify-content: center !important;
           }
@@ -68,14 +72,14 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Main Footer Content - EXACT 274 LAYOUT */}
+      {/* Main Footer Content - 5 COLUMN LAYOUT */}
       <div className="footer-grid-container" style={{
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '50px 20px',
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-        gap: '60px'
+        gridTemplateColumns: '1.5fr 0.9fr 0.9fr 0.9fr 1.8fr',
+        gap: '48px'
       }}>
         
         {/* BM Wealth Column */}
@@ -127,6 +131,27 @@ const Footer = () => {
             <a href="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Services</a>
             <a href="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Blog</a>
             <a href="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Contact</a>
+            <a href="/careers" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Careers</a>
+          </div>
+        </div>
+
+        {/* Resources Column - NEW */}
+        <div>
+          <h3 style={{
+            color: '#B8860B',
+            fontSize: '18px',
+            marginBottom: '20px',
+            fontWeight: '600'
+          }}>
+            Resources
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <a href="/recommended-platforms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Recommended Platforms</a>
+            <a href="/curated-partners" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Curated Partners</a>
           </div>
         </div>
 
