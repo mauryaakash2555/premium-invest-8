@@ -611,14 +611,75 @@ const RecommendedPlatforms = () => {
           @media (max-width: 1024px) {
             div[style*="gridTemplateColumns"] {
               grid-template-columns: 1fr !important;
-              gap: 40px !important;
-              padding: 50px 40px !important;
+              gap: 30px !important;
+              padding: 40px 30px !important;
+              min-height: auto !important;
             }
           }
 
           @media (max-width: 768px) {
             div[style*="gridTemplateColumns"] {
-              padding: 40px 30px !important;
+              padding: 30px 20px !important;
+              gap: 24px !important;
+            }
+            
+            /* Hero adjustments */
+            section[style*="minHeight: 70vh"] {
+              min-height: 50vh !important;
+              padding-top: 100px !important;
+              padding-bottom: 40px !important;
+            }
+            
+            /* Font size adjustments */
+            h2[style*="fontSize: '42px'"],
+            h2[style*="fontSize: '40px'"] {
+              font-size: 28px !important;
+              letter-spacing: 1px !important;
+            }
+            
+            p[style*="fontSize: '20px'"] {
+              font-size: 16px !important;
+            }
+            
+            /* Button adjustments */
+            a[style*="padding: '18px 36px'"] {
+              padding: 14px 24px !important;
+              font-size: 14px !important;
+            }
+            
+            /* Diamond icon */
+            span[style*="fontSize: '36px'"] {
+              font-size: 28px !important;
+            }
+            
+            /* Benefits grid */
+            div[style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+              grid-template-columns: 1fr !important;
+              gap: 12px !important;
+            }
+            
+            /* Investment info */
+            div[style*="fontSize: '32px'"] {
+              font-size: 24px !important;
+            }
+            
+            div[style*="fontSize: '28px'"] {
+              font-size: 22px !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            div[style*="gridTemplateColumns"] {
+              padding: 24px 16px !important;
+            }
+            
+            h2 {
+              font-size: 24px !important;
+            }
+            
+            a[style*="padding"] {
+              padding: 12px 20px !important;
+              font-size: 13px !important;
             }
           }
         `}</style>
