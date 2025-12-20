@@ -4,51 +4,85 @@ import { MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer style={{
-      backgroundColor: '#0a0a0a',
-      color: '#fff',
-      padding: '0',
-      fontFamily: '"Inter", sans-serif',
-      width: '100%',
-      marginTop: 'auto'
-    }}>
-      {/* SEBI Disclaimer */}
+    <>
+      <style>{`
+        .footer-custom-link {
+          color: #aaaaaa !important;
+          text-decoration: none !important;
+          font-size: 14px !important;
+          line-height: 1.2 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+          box-sizing: border-box !important;
+        }
+        .footer-custom-link:hover {
+          color: #DAA520 !important;
+        }
+        .whatsapp-container-desktop {
+          display: flex;
+          justify-content: flex-start;
+          margin-top: -8px;
+        }
+        @media (max-width: 768px) {
+          .whatsapp-container-desktop {
+            justify-content: center !important;
+          }
+        }
+      `}</style>
+      <footer style={{ backgroundColor: '#0a0a0a', color: '#fff', padding: '0', fontFamily: '"Inter", sans-serif', width: '100%' }}>
+      
+      {/* SEBI Disclaimer - FIXED CONTAINER */}
       <div style={{
         backgroundColor: '#0a0a0a',
-        padding: '16px 0',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
+        padding: '20px 0',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        overflow: 'hidden'
       }}>
         <div style={{
           maxWidth: '1200px',
           margin: '0 auto',
-          padding: '0 20px'
+          padding: '0 20px',
+          position: 'relative'
         }}>
-          <p style={{
-            fontSize: '13px',
-            lineHeight: '1.6',
-            color: '#999',
-            margin: 0,
-            textAlign: 'center'
+          <div style={{
+            borderLeft: '4px solid #B8860B',
+            paddingLeft: '16px',
+            backgroundColor: 'rgba(24, 24, 24, 0.8)',
+            padding: '16px 20px',
+            borderRadius: '4px'
           }}>
-            <strong style={{ color: '#B8860B' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all related documents carefully before investing.
-          </p>
+            <p style={{
+              fontSize: '13px',
+              lineHeight: '1.6',
+              color: '#999',
+              margin: 0,
+              wordWrap: 'break-word',
+              whiteSpace: 'normal',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              <strong style={{ color: '#B8860B' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. Please consider your specific investment requirements, risk tolerance, investment goal, time frame, risk and reward balance and cost associated with the investment before choosing a fund or designing a portfolio that suits your needs.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Main Footer Content */}
-      <div style={{
+      {/* Main Footer Content - EXACT 274 LAYOUT */}
+      <div className="footer-grid-container" style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '40px 20px',
+        padding: '50px 20px',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '40px'
+        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+        gap: '60px'
       }}>
-        {/* BM Wealth Section - NO GAPS */}
+        
+        {/* BM Wealth Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
-            fontSize: '20px',
+            fontSize: '22px',
             marginBottom: '8px',
             fontWeight: '600',
             fontFamily: '"Playfair Display", serif'
@@ -58,15 +92,13 @@ const Footer = () => {
           <p style={{
             color: '#B8860B',
             fontSize: '14px',
-            lineHeight: '1.4',
-            marginBottom: '16px',
-            fontWeight: '600',
-            margin: '0 0 16px 0'
+            margin: '0 0 20px 0',
+            fontWeight: '600'
           }}>
             Premium Financial Advisory
           </p>
           <p style={{
-            color: '#888',
+            color: '#aaa',
             fontSize: '14px',
             lineHeight: '1.6',
             margin: 0
@@ -75,82 +107,59 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Quick Links - NO GAPS */}
+        {/* Quick Links Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
+            fontSize: '18px',
+            marginBottom: '20px',
             fontWeight: '600'
           }}>
             Quick Links
           </h3>
-          <nav style={{
+          <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '12px'
           }}>
-            {['Home', 'About Us', 'Services', 'Blog', 'Contact'].map((item) => (
-              <Link
-                key={item}
-                to={`/${item.toLowerCase().replace(' ', '-')}`}
-                style={{
-                  color: '#aaa',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  lineHeight: '1.4'
-                }}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
+            <a href="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Home</a>
+            <a href="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>About Us</a>
+            <a href="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Services</a>
+            <a href="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Blog</a>
+            <a href="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Contact</a>
+          </div>
         </div>
 
-        {/* Legal - NO GAPS */}
+        {/* Legal Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
+            fontSize: '18px',
+            marginBottom: '20px',
             fontWeight: '600'
           }}>
             Legal
           </h3>
-          <nav style={{
+          <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '12px'
           }}>
-            {[
-              { text: 'Terms & Conditions', path: '/terms' },
-              { text: 'Privacy Policy', path: '/privacy' },
-              { text: 'Disclaimer', path: '/disclaimer' },
-              { text: 'Refund Policy', path: '/refund' },
-              { text: 'Compliance', path: '/compliance' }
-            ].map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                style={{
-                  color: '#aaa',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  lineHeight: '1.4'
-                }}
-              >
-                {item.text}
-              </Link>
-            ))}
-          </nav>
+            <a href="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Terms & Conditions</a>
+            <a href="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Privacy Policy</a>
+            <a href="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Disclaimer</a>
+            <a href="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Refund Policy</a>
+            <a href="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Compliance</a>
+            <a href="/sitemap" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Sitemap</a>
+          </div>
         </div>
 
-        {/* Contact Us - FIXED ADDRESS */}
+        {/* Contact Us Column */}
         <div>
           <h3 style={{
             color: '#B8860B',
-            fontSize: '16px',
-            marginBottom: '8px',
+            fontSize: '18px',
+            marginBottom: '20px',
             fontWeight: '600'
           }}>
             Contact Us
@@ -158,91 +167,81 @@ const Footer = () => {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '12px'
           }}>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Phone: +91 8850977259
+            <p style={{ color: '#aaa', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
+              <strong>Phone:</strong> +91 8850977259
             </p>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Email: support@bmwealth.co.in
+            <p style={{ color: '#aaa', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
+              <strong>Email:</strong> support@bmwealth.co.in
             </p>
-            <p style={{
-              color: '#aaa',
-              fontSize: '14px',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
+            <p style={{ color: '#aaa', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
               Mumbai, Maharashtra
             </p>
             
-            {/* WhatsApp - NO GREEN BACKGROUND */}
-            <a 
-              href="https://wa.me/918850977259"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#25D366',
-                textDecoration: 'none',
-                fontWeight: '500',
-                marginTop: '8px',
-                fontSize: '14px'
-              }}
-            >
-              <MessageCircle size={16} color="#25D366" />
-              WhatsApp Us
-            </a>
+            {/* WhatsApp - Left Aligned Desktop, Centered Mobile */}
+            <div className="whatsapp-container-desktop">
+              <a 
+                href="https://wa.me/918850977259"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#25D366',
+                  textDecoration: 'none',
+                  fontSize: '14px'
+                }}
+              >
+                <MessageCircle size={16} color="#25D366" />
+                WhatsApp Us
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Investment Disclaimer */}
+      {/* Investment Disclaimer - FIXED CONTAINER */}
       <div style={{
         backgroundColor: '#0a0a0a',
-        padding: '16px 0',
-        borderTop: '1px solid rgba(255,255,255,0.1)'
+        padding: '20px 0',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        overflow: 'hidden'
       }}>
         <div style={{
           maxWidth: '1200px',
           margin: '0 auto',
           padding: '0 20px'
         }}>
-          <p style={{
-            fontSize: '13px',
-            lineHeight: '1.6',
-            color: '#999',
-            margin: 0,
-            textAlign: 'center'
+          <div style={{
+            borderLeft: '4px solid #B8860B',
+            paddingLeft: '16px',
+            backgroundColor: 'rgba(24, 24, 24, 0.8)',
+            padding: '16px 20px',
+            borderRadius: '4px'
           }}>
-            <strong style={{ color: '#B8860B' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks.
-          </p>
+            <p style={{
+              fontSize: '13px',
+              lineHeight: '1.6',
+              color: '#999',
+              margin: 0,
+              wordWrap: 'break-word',
+              whiteSpace: 'normal'
+            }}>
+              <strong style={{ color: '#B8860B' }}>Investment Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please read all scheme-related documents carefully before investing.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Copyright */}
       <div style={{
-        backgroundColor: '#0a0a0a',
-        padding: '20px 0',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        padding: '25px 0',
+        textAlign: 'center'
       }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 20px',
-          textAlign: 'center'
-        }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <p style={{ color: '#FFFFFF', fontSize: '14px', marginBottom: '8px', margin: '0 0 8px 0' }}>
             © 2025 BM Wealth. All rights reserved.
           </p>
@@ -252,6 +251,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 

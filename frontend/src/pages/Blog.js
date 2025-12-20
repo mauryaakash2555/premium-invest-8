@@ -146,10 +146,29 @@ const Blog = () => {
         <meta name="twitter:description" content="Expert investment insights and financial planning advice from BM Wealth Mumbai." />
         <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
+
+      {/* Mobile optimization for ALL blog card images */}
+      <style>{`
+        /* Mobile: Show full image without cropping for ALL blog cards */
+        @media (max-width: 768px) {
+          .blog-card-image-wrapper img,
+          .blog-card-image-wrapper-img {
+            object-fit: contain !important;
+            background: #000000 !important;
+          }
+          .blog-card-image-wrapper {
+            background: #000000 !important;
+          }
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section
+        className="page-hero-responsive"
         style={{
-          minHeight: '70vh',
+          minHeight: '65vh',
+          maxHeight: '65vh',
+          height: '65vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -165,7 +184,7 @@ const Blog = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             backgroundImage:
               'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&auto=format&fm=webp&q=60)',
             backgroundSize: 'cover',
@@ -180,7 +199,7 @@ const Blog = () => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
@@ -189,10 +208,15 @@ const Blog = () => {
           <h1
             data-testid="blog-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontSize: 'clamp(28px, 4.5vw, 56px)',
               marginBottom: '24px',
+              fontWeight: 300,
+              letterSpacing: '3px',
+              opacity: 0.95,
+              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#C0A062',
             }}
-            className="golden-gradient"
           >
             Financial Insights
           </h1>
@@ -346,6 +370,7 @@ const Blog = () => {
                     <LazyImage
                       src={post.image_url}
                       alt={post.title}
+                      className="blog-card-image-wrapper"
                       style={{
                         width: '100%',
                         height: '240px',

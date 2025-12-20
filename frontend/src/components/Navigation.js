@@ -19,12 +19,11 @@ const Navigation = () => {
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
+    { path: '/careers', label: 'Careers' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
     { path: '/compliance', label: 'Compliance' },
   ];
-
-  const isActive = (path) => location.pathname === path;
 
   return (
     <nav
@@ -34,22 +33,22 @@ const Navigation = () => {
         left: 0,
         right: 0,
         zIndex: 999,
-        background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
+        background: isScrolled
+          ? 'rgba(0, 0, 0, 0.95)'
+          : 'transparent',
         backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-        borderBottom: isScrolled ? '1px solid rgba(184, 134, 11, 0.1)' : 'none',
+        borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.1)' : 'none',
         transition: 'all 0.3s ease',
-        height: '80px',
       }}
     >
       <div
         style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '0 20px',
+          padding: '20px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          height: '100%',
         }}
       >
         {/* Logo */}
@@ -69,7 +68,9 @@ const Navigation = () => {
             height="40"
             loading="eager"
             fetchpriority="high"
-            style={{ objectFit: 'contain' }}
+            style={{
+              objectFit: 'contain',
+            }}
           />
           <div
             style={{
@@ -90,7 +91,7 @@ const Navigation = () => {
         <div
           style={{
             display: 'flex',
-            gap: '24px',
+            gap: '32px',
             alignItems: 'center',
           }}
           className="desktop-menu"
@@ -99,16 +100,21 @@ const Navigation = () => {
             <Link
               key={link.path}
               to={link.path}
+              data-testid={`nav-${link.label.toLowerCase()}`}
               style={{
-                color: isActive(link.path) ? '#B8860B' : '#FFFFFF',
+                color:
+                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
                 textDecoration: 'none',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: 500,
                 transition: 'color 0.3s ease',
+                position: 'relative',
+                whiteSpace: 'nowrap',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#B8860B')}
+              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
               onMouseLeave={(e) =>
-                (e.target.style.color = isActive(link.path) ? '#B8860B' : '#FFFFFF')
+                (e.target.style.color =
+                  location.pathname === link.path ? '#DAA520' : '#FFFFFF')
               }
             >
               {link.label}
@@ -118,15 +124,17 @@ const Navigation = () => {
 
         {/* Mobile Menu Toggle */}
         <button
+          data-testid="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           style={{
             display: 'none',
             background: 'transparent',
             border: 'none',
-            color: '#B8860B',
+            color: '#DAA520',
             cursor: 'pointer',
             padding: '8px',
             zIndex: 1000,
+            position: 'relative',
           }}
           className="mobile-menu-toggle"
           aria-label="Toggle mobile menu"
@@ -142,7 +150,7 @@ const Navigation = () => {
             background: 'rgba(0, 0, 0, 0.98)',
             backdropFilter: 'blur(20px)',
             padding: '20px',
-            borderTop: '1px solid rgba(184, 134, 11, 0.2)',
+            borderTop: '1px solid rgba(218, 165, 32, 0.2)',
           }}
           className="mobile-menu"
         >
@@ -153,7 +161,8 @@ const Navigation = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               style={{
                 display: 'block',
-                color: isActive(link.path) ? '#B8860B' : '#FFFFFF',
+                color:
+                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 500,
@@ -174,6 +183,7 @@ const Navigation = () => {
           }
           .mobile-menu-toggle {
             display: block !important;
+            z-index: 1001 !important;
           }
         }
       `}</style>

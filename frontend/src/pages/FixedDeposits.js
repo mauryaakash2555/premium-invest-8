@@ -7,17 +7,29 @@ const FixedDeposits = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', color: '#ffffff' }}>
+    <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
       <Helmet>
         <title>Fixed Deposit Advisory Mumbai | Best FD Rates 2025 | BM Wealth</title>
         <meta name="description" content="Expert fixed deposit investment advisory in Mumbai. Compare bank & corporate FD rates, tax-saving FDs, senior citizen schemes. Get best FD returns." />
         <meta name="keywords" content="fixed deposit rates mumbai, FD investment advisor, best FD rates 2025, senior citizen FD, tax saving FD" />
         <link rel="canonical" href="https://www.bmwealth.co.in/fixed-deposits" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.bmwealth.co.in/fixed-deposits" />
+        <meta property="og:title" content="Fixed Deposit Advisory Mumbai | Best FD Rates 2025 | BM Wealth" />
+        <meta property="og:description" content="Expert fixed deposit investment advisory in Mumbai. Compare bank & corporate FD rates." />
+        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.bmwealth.co.in/fixed-deposits" />
+        <meta name="twitter:title" content="Fixed Deposit Advisory Mumbai | BM Wealth" />
+        <meta name="twitter:description" content="Expert FD advisory in Mumbai. Get best FD rates 2025." />
+        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{
         position: 'relative',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#000000',
         padding: '120px 0 80px 0',
         textAlign: 'center',
         marginTop: '80px'
@@ -27,7 +39,7 @@ const FixedDeposits = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#B8860B',
+            color: '#DAA520',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -48,7 +60,7 @@ const FixedDeposits = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Fixed Deposit Investment Strategy
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -60,7 +72,7 @@ const FixedDeposits = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Bank FD vs Corporate FD Comparison
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -72,7 +84,7 @@ const FixedDeposits = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             FD Laddering Strategy
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -81,7 +93,7 @@ const FixedDeposits = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#B8860B', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Alternative to Fixed Deposits
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -92,9 +104,9 @@ const FixedDeposits = () => {
         <section style={{
           marginTop: '60px',
           padding: '24px',
-          background: '#0a0a0a',
+          background: 'rgba(251, 191, 36, 0.1)',
           borderRadius: '8px',
-          border: '1px solid rgba(184, 134, 11, 0.3)'
+          border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             <strong>FD Investment Disclaimer:</strong> FD returns are subject to change based on bank/company policies and market conditions. Interest rates mentioned are indicative and may vary. Corporate FDs carry credit risk; invest only in highly-rated instruments. FD interest is fully taxable per your income tax slab. Premature withdrawal may attract penalties. DICGC insurance covers bank deposits up to ₹5 lakh per bank only. Diversify across banks for amounts exceeding ₹5 lakhs. Consult our advisors for personalized FD strategy considering your risk tolerance, tax situation, and income needs.
@@ -107,3 +119,6 @@ const FixedDeposits = () => {
 };
 
 export default FixedDeposits;
+
+
+
