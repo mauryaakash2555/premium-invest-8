@@ -525,16 +525,69 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE RESPONSIVE DESIGN - PROPER MOBILE VERSION
-   Readable text, proper layout, no background expansion
+   MOBILE RESPONSIVE DESIGN - COMPREHENSIVE FIX
+   Ensures proper scrolling, readability, and touch targets
    ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
+  
+  /* ===== CRITICAL: REMOVE SCROLL BLOCKING ===== */
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    position: relative !important;
+  }
+  
+  #root, .App {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
   
   /* ===== BASE MOBILE SETUP ===== */
   body {
     font-size: 16px;
     line-height: 1.6;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* ===== MOBILE TYPOGRAPHY - LEFT ALIGNED FOR READABILITY ===== */
+  h1 {
+    font-size: clamp(28px, 7vw, 32px) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 16px !important;
+    text-align: center !important;
+  }
+  
+  h2 {
+    font-size: clamp(24px, 6vw, 28px) !important;
+    line-height: 1.3 !important;
+    margin-bottom: 14px !important;
+    text-align: center !important;
+  }
+  
+  h3 {
+    font-size: clamp(20px, 5vw, 24px) !important;
+    line-height: 1.3 !important;
+    margin-bottom: 12px !important;
+  }
+  
+  p, li, span {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Small text minimum 14px for readability */
+  small, .small-text {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
   }
   
   /* ===== HOME PAGE - HIDE BM WEALTH HEADING & CTA ===== */
@@ -549,7 +602,7 @@ html {
     height: 85vh !important;
     min-height: 85vh !important;
     max-height: 85vh !important;
-    padding: 80px 20px 40px 20px !important;
+    padding: 100px 20px 40px 20px !important;
   }
   
   /* Premium gradient overlay - mobile only */
@@ -565,33 +618,37 @@ html {
   
   /* Premium text styling - home page only */
   .hero-section-responsive .hero-subtitle-responsive {
-    font-size: 20px !important;
+    font-size: 22px !important;
     line-height: 1.4 !important;
-    margin-bottom: 32px !important;
+    margin-bottom: 20px !important;
     font-weight: 300 !important;
     letter-spacing: 2px !important;
     opacity: 0.95 !important;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+    text-align: center !important;
+    padding: 0 16px !important;
   }
   
   .hero-section-responsive .hero-description-responsive {
     font-size: 16px !important;
-    line-height: 1.8 !important;
-    margin-bottom: 50px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 24px !important;
     max-width: 90% !important;
     font-weight: 300 !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 0.5px !important;
     opacity: 0.9 !important;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+    text-align: center !important;
+    padding: 0 16px !important;
   }
   
-  /* ===== OTHER PAGES HERO - KEEP ORIGINAL ===== */
+  /* ===== OTHER PAGES HERO - PROPER HEIGHT ===== */
   .page-hero-responsive,
   section:first-of-type:not(.hero-section-responsive) {
     height: auto !important;
-    min-height: 60vh !important;
+    min-height: 50vh !important;
     max-height: none !important;
-    padding: 80px 20px 40px 20px !important;
+    padding: 100px 20px 40px 20px !important;
     background-size: cover !important;
     background-position: center !important;
   }
@@ -599,27 +656,32 @@ html {
   /* Prevent other pages background from expanding */
   .page-hero-responsive > div:first-child,
   section:first-of-type:not(.hero-section-responsive) > div:first-child {
-    height: 60vh !important;
-    max-height: 60vh !important;
+    height: auto !important;
+    min-height: 50vh !important;
+    max-height: none !important;
   }
   
-  /* Hero text - readable sizes */
+  /* Hero text - centered and readable */
   .hero-section-responsive h1,
   .hero-section-responsive h2,
   .page-hero-responsive h1,
   section:first-of-type h1,
   .hero-heading-responsive {
-    font-size: 28px !important;
+    font-size: clamp(28px, 7vw, 32px) !important;
     line-height: 1.3 !important;
     margin-bottom: 16px !important;
+    text-align: center !important;
+    padding: 0 20px !important;
   }
   
   .hero-subtitle-responsive,
   .hero-section-responsive h2,
   .page-hero-responsive h2 {
-    font-size: 20px !important;
+    font-size: clamp(20px, 5vw, 24px) !important;
     line-height: 1.4 !important;
     margin-bottom: 12px !important;
+    text-align: center !important;
+    padding: 0 20px !important;
   }
   
   .hero-description-responsive,
@@ -627,19 +689,53 @@ html {
   .page-hero-responsive p,
   section:first-of-type p {
     font-size: 16px !important;
-    line-height: 1.6 !important;
+    line-height: 1.7 !important;
     margin-bottom: 20px !important;
+    text-align: center !important;
+    padding: 0 20px !important;
   }
   
-  /* ===== SECTION CONTAINERS ===== */
+  /* ===== SECTION CONTAINERS - PROPER PADDING ===== */
   .section-container {
-    padding: 40px 20px !important;
+    padding: 50px 20px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    width: 100% !important;
     max-width: 100% !important;
   }
   
-  /* ===== FOOTER - VERTICAL STACK ===== */
+  /* ===== BUTTONS - TOUCH FRIENDLY ===== */
+  .btn-primary,
+  .btn-secondary,
+  button,
+  a[class*="btn"] {
+    font-size: 15px !important;
+    padding: 14px 28px !important;
+    min-height: 48px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+  }
+  
+  /* ===== SERVICE CARDS - VERTICAL STACK ===== */
+  .service-card {
+    padding: 24px !important;
+    margin-bottom: 24px !important;
+  }
+  
+  /* ===== FOOTER - VERTICAL STACK WITH PROPER SPACING ===== */
   .main-footer {
-    padding: 40px 20px 30px 20px !important;
+    padding: 50px 20px 30px 20px !important;
     text-align: center !important;
   }
   
@@ -648,15 +744,15 @@ html {
     display: flex !important;
     flex-direction: column !important;
     grid-template-columns: 1fr !important;
-    gap: 30px !important;
-    padding: 30px 20px !important;
+    gap: 32px !important;
+    padding: 0 !important;
   }
   
   .footer-grid {
     display: flex !important;
     flex-direction: column !important;
     grid-template-columns: 1fr !important;
-    gap: 30px !important;
+    gap: 32px !important;
     text-align: center !important;
   }
   
@@ -666,14 +762,15 @@ html {
     width: 100% !important;
     text-align: center !important;
     align-items: center !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 0 !important;
   }
   
   .footer-heading-main,
   .footer-heading,
   footer h3 {
-    font-size: 18px !important;
+    font-size: 20px !important;
     text-align: center !important;
+    margin-bottom: 16px !important;
   }
   
   .footer-column p,
@@ -682,8 +779,14 @@ html {
   footer p,
   footer a,
   footer li {
-    font-size: 14px !important;
+    font-size: 15px !important;
     text-align: center !important;
+    line-height: 1.7 !important;
+    padding: 8px 0 !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .footer-contact {
@@ -695,72 +798,127 @@ html {
   
   .sebi-disclaimer-bar,
   .investment-disclaimer-bar {
-    padding: 15px 20px !important;
+    padding: 20px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .sebi-disclaimer-content,
+  .investment-disclaimer-content {
+    padding: 0 !important;
   }
   
   .sebi-disclaimer-content p,
   .investment-disclaimer-content p {
-    font-size: 12px !important;
-    line-height: 1.5 !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    text-align: left !important;
   }
   
-  /* ===== BUTTONS ===== */
-  .btn-primary,
-  .btn-secondary,
-  button {
-    font-size: 14px !important;
-    padding: 12px 24px !important;
-    width: auto !important;
-    max-width: 100% !important;
-  }
-  
-  /* ===== SERVICE CARDS ===== */
-  .service-card {
-    padding: 20px !important;
-    margin-bottom: 20px !important;
-  }
-  
-  /* ===== BLOG CONTENT ===== */
+  /* ===== BLOG CONTENT - READABLE ===== */
   .blog-content,
   .blog-post,
   article {
-    padding: 20px 15px !important;
+    padding: 20px !important;
   }
   
   .blog-content h1,
   article h1 {
-    font-size: 24px !important;
+    font-size: 26px !important;
+    text-align: left !important;
   }
   
   .blog-content h2,
   article h2 {
+    font-size: 22px !important;
+    text-align: left !important;
+  }
+  
+  .blog-content h3,
+  article h3 {
     font-size: 20px !important;
+    text-align: left !important;
   }
   
   .blog-content p,
   article p {
     font-size: 16px !important;
-    line-height: 1.7 !important;
+    line-height: 1.8 !important;
+    text-align: left !important;
+    margin-bottom: 16px !important;
   }
   
-  /* ===== REMOVE HORIZONTAL SCROLL ===== */
-  * {
-    max-width: 100%;
-  }
-  
-  html, body {
-    overflow-x: hidden !important;
-    width: 100% !important;
-  }
-  
-  #root, .App {
-    overflow-x: hidden !important;
-    width: 100% !important;
-  }
-  
+  /* ===== IMAGES - RESPONSIVE ===== */
   img {
     max-width: 100% !important;
     height: auto !important;
+  }
+  
+  /* ===== WHATSAPP BUTTON - MOBILE OPTIMIZED ===== */
+  .whatsapp-float {
+    width: 56px !important;
+    height: 56px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    font-size: 28px !important;
+  }
+  
+  /* ===== PLATFORM & PARTNER PAGES - FORCE PROPER LAYOUT ===== */
+  div[style*="gridTemplateColumns"],
+  div[style*="display: 'grid'"],
+  div[style*="display: grid"] {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 20px !important;
+    gap: 20px !important;
+  }
+  
+  /* ===== PREVENT HORIZONTAL SCROLL ===== */
+  * {
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  
+  /* ===== ENSURE PROPER SPACING FROM EDGES ===== */
+  main,
+  article,
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* ===== SMALL MOBILE (< 480px) ===== */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+  
+  h1 {
+    font-size: 26px !important;
+  }
+  
+  h2 {
+    font-size: 22px !important;
+  }
+  
+  h3 {
+    font-size: 20px !important;
+  }
+  
+  .section-container {
+    padding: 40px 16px !important;
+  }
+  
+  section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    font-size: 14px !important;
+    padding: 12px 24px !important;
   }
 }
 

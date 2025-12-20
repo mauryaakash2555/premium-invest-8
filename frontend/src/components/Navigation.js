@@ -15,6 +15,28 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('mobile-menu-open');
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    
+    return () => {
+      document.body.classList.remove('mobile-menu-open');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
@@ -147,32 +169,53 @@ const Navigation = () => {
       {isMobileMenuOpen && (
         <div
           style={{
+            position: 'fixed',
+            top: '80px',
+            left: 0,
+            right: 0,
+            bottom: 0,
             background: 'rgba(0, 0, 0, 0.98)',
             backdropFilter: 'blur(20px)',
-            padding: '20px',
+            padding: '40px 20px',
             borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+            overflowY: 'auto',
+            zIndex: 998,
           }}
           className="mobile-menu"
+          onClick={() => setIsMobileMenuOpen(false)}
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                display: 'block',
-                color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
-                textDecoration: 'none',
-                fontSize: '18px',
-                fontWeight: 500,
-                padding: '12px 0',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <div onClick={(e) => e.stopPropagation()}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  display: 'block',
+                  color:
+                    location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  textDecoration: 'none',
+                  fontSize: '20px',
+                  fontWeight: 500,
+                  padding: '16px 24px',
+                  marginBottom: '4px',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                  minHeight: '56px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onTouchStart={(e) => {
+                  e.currentTarget.style.background = 'rgba(218, 165, 32, 0.1)';
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
 
@@ -184,6 +227,18 @@ const Navigation = () => {
           .mobile-menu-toggle {
             display: block !important;
             z-index: 1001 !important;
+          }
+          
+          /* Ensure mobile menu is above all content */
+          .mobile-menu {
+            z-index: 998 !important;
+          }
+          
+          /* Prevent body scroll when menu open */
+          body.mobile-menu-open {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
           }
         }
       `}</style>
