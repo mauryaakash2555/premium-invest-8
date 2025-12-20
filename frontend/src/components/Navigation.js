@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Navigation = () => {
@@ -8,6 +8,7 @@ const Navigation = () => {
   const [isPlatformsDropdownOpen, setIsPlatformsDropdownOpen] = useState(false);
   const [isMobilePlatformsOpen, setIsMobilePlatformsOpen] = useState(false);
   const location = useLocation();
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,22 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsPlatformsDropdownOpen(false);
+      }
+    };
+
+    if (isPlatformsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isPlatformsDropdownOpen]);
 
   const navLinks = [
     { path: '/', label: 'Home' },
@@ -126,13 +143,13 @@ const Navigation = () => {
             </Link>
           ))}
 
-          {/* Platforms Dropdown */}
+          {/* Platforms Dropdown - CLICK to open */}
           <div
+            ref={dropdownRef}
             style={{ position: 'relative' }}
-            onMouseEnter={() => setIsPlatformsDropdownOpen(true)}
-            onMouseLeave={() => setIsPlatformsDropdownOpen(false)}
           >
             <button
+              onClick={() => setIsPlatformsDropdownOpen(!isPlatformsDropdownOpen)}
               style={{
                 color: (location.pathname === '/recommended-platforms' || location.pathname === '/curated-partners') ? '#DAA520' : '#FFFFFF',
                 textDecoration: 'none',
@@ -147,9 +164,20 @@ const Navigation = () => {
                 gap: '4px',
                 whiteSpace: 'nowrap',
               }}
+              onMouseEnter={(e) => (e.target.style.color = '#DAA520')}
+              onMouseLeave={(e) =>
+                (e.target.style.color =
+                  (location.pathname === '/recommended-platforms' || location.pathname === '/curated-partners') ? '#DAA520' : '#FFFFFF')
+              }
             >
               Platforms
-              <ChevronDown size={14} style={{ transition: 'transform 0.3s ease', transform: isPlatformsDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+              <ChevronDown 
+                size={14} 
+                style={{ 
+                  transition: 'transform 0.3s ease', 
+                  transform: isPlatformsDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' 
+                }} 
+              />
             </button>
 
             {isPlatformsDropdownOpen && (
@@ -165,7 +193,7 @@ const Navigation = () => {
                   border: '1px solid rgba(192, 160, 98, 0.2)',
                   borderRadius: '8px',
                   padding: '12px 0',
-                  minWidth: '220px',
+                  minWidth: '240px',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
                   zIndex: 1000,
                 }}
@@ -174,6 +202,7 @@ const Navigation = () => {
                   <Link
                     key={link.path}
                     to={link.path}
+                    onClick={() => setIsPlatformsDropdownOpen(false)}
                     style={{
                       display: 'block',
                       color: location.pathname === link.path ? '#DAA520' : '#FFFFFF',
