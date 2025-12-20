@@ -68,14 +68,14 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Main Footer Content - EXACT 274 LAYOUT */}
+      {/* Main Footer Content - 5 COLUMN LAYOUT */}
       <div className="footer-grid-container" style={{
-        maxWidth: '1200px',
+        maxWidth: '1400px',
         margin: '0 auto',
         padding: '50px 20px',
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-        gap: '60px'
+        gridTemplateColumns: '1.2fr 1fr 1fr 1fr 1fr',
+        gap: '40px'
       }}>
         
         {/* BM Wealth Column */}
@@ -122,11 +122,33 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '12px'
           }}>
-            <a href="/" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Home</a>
-            <a href="/about" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>About Us</a>
-            <a href="/services" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Services</a>
-            <a href="/blog" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Blog</a>
-            <a href="/contact" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Contact</a>
+            <a href="/" className="footer-custom-link">Home</a>
+            <a href="/about" className="footer-custom-link">About Us</a>
+            <a href="/services" className="footer-custom-link">Services</a>
+            <a href="/blog" className="footer-custom-link">Blog</a>
+            <a href="/contact" className="footer-custom-link">Contact</a>
+          </div>
+        </div>
+
+        {/* Resources Column */}
+        <div>
+          <h3 style={{
+            color: '#B8860B',
+            fontSize: '18px',
+            marginBottom: '20px',
+            fontWeight: '600'
+          }}>
+            Resources
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <a href="/platforms" className="footer-custom-link">Platforms</a>
+            <a href="/curated-partners" className="footer-custom-link">Curated Partners</a>
+            <a href="/careers" className="footer-custom-link">Careers</a>
+            <a href="/sitemap" className="footer-custom-link">Sitemap</a>
           </div>
         </div>
 
@@ -145,12 +167,11 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '12px'
           }}>
-            <a href="/terms" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Terms & Conditions</a>
-            <a href="/privacy" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Privacy Policy</a>
-            <a href="/disclaimer" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Disclaimer</a>
-            <a href="/refund" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Refund Policy</a>
-            <a href="/compliance" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Compliance</a>
-            <a href="/sitemap" style={{ color: '#aaa', textDecoration: 'none', fontSize: '14px', lineHeight: '1.2', padding: 0, margin: 0, display: 'block' }}>Sitemap</a>
+            <a href="/terms" className="footer-custom-link">Terms & Conditions</a>
+            <a href="/privacy" className="footer-custom-link">Privacy Policy</a>
+            <a href="/disclaimer" className="footer-custom-link">Disclaimer</a>
+            <a href="/refund" className="footer-custom-link">Refund Policy</a>
+            <a href="/compliance" className="footer-custom-link">Compliance</a>
           </div>
         </div>
 
@@ -179,8 +200,8 @@ const Footer = () => {
               Mumbai, Maharashtra
             </p>
             
-            {/* WhatsApp - Left Aligned Desktop, Centered Mobile */}
-            <div className="whatsapp-container-desktop">
+            {/* WhatsApp Button */}
+            <div className="whatsapp-container-desktop" style={{ marginTop: '8px' }}>
               <a 
                 href="https://wa.me/918850977259"
                 target="_blank"
@@ -191,11 +212,12 @@ const Footer = () => {
                   gap: '8px',
                   color: '#25D366',
                   textDecoration: 'none',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  fontWeight: 500
                 }}
               >
-                <MessageCircle size={16} color="#25D366" />
-                WhatsApp Us
+                <MessageCircle size={18} color="#25D366" />
+                <span>WhatsApp Us</span>
               </a>
             </div>
           </div>

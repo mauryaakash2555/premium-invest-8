@@ -30,6 +30,10 @@ const SIPServices = lazy(() => import("@/pages/SIPServices"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
 
+// Partnership Pages
+const Platforms = lazy(() => import("@/pages/Platforms"));
+const CuratedPartners = lazy(() => import("@/pages/CuratedPartners"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div style={{
@@ -69,6 +73,10 @@ function App() {
                 <Route path="sip" element={<SIPServices />} />
                 <Route path="careers" element={<Careers />} />
                 <Route path="sitemap" element={<Sitemap />} />
+                
+                {/* Partnership Pages */}
+                <Route path="platforms" element={<Platforms />} />
+                <Route path="curated-partners" element={<CuratedPartners />} />
                 
                 {/* Legal Pages */}
                 <Route path="compliance" element={<Compliance />} />

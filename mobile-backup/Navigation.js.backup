@@ -19,10 +19,9 @@ const Navigation = () => {
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
-    { path: '/platforms', label: 'Platforms' },
-    { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
+    { path: '/compliance', label: 'Compliance' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -169,78 +168,12 @@ const Navigation = () => {
       )}
 
       <style>{`
-        /* Desktop Navigation (> 768px) */
-        @media (min-width: 769px) {
-          .mobile-menu-toggle {
-            display: none !important;
-          }
-          .desktop-menu {
-            display: flex !important;
-          }
-        }
-        
-        /* Mobile Navigation (≤ 768px) - Enhanced UX */
         @media (max-width: 768px) {
           .desktop-menu {
             display: none !important;
           }
           .mobile-menu-toggle {
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-          }
-          
-          /* Mobile menu container - Smooth slide-in */
-          .mobile-menu {
-            animation: slideDown 0.3s ease-out;
-          }
-          
-          @keyframes slideDown {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          
-          /* Mobile menu links - Better touch targets */
-          .mobile-menu a {
-            padding: 16px 8px !important;
-            font-size: 17px !important;
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-          }
-          
-          .mobile-menu a:hover,
-          .mobile-menu a:active {
-            background: rgba(184, 134, 11, 0.1);
-            border-left-color: #B8860B;
-            padding-left: 16px !important;
-          }
-          
-          /* Navigation bar - Fixed height on mobile */
-          nav {
-            height: 70px !important;
-          }
-        }
-        
-        /* Small phones (≤ 480px) */
-        @media (max-width: 480px) {
-          nav {
-            height: 65px !important;
-            padding: 0 12px !important;
-          }
-          
-          .mobile-menu {
-            padding: 16px !important;
-          }
-          
-          .mobile-menu a {
-            padding: 14px 8px !important;
-            font-size: 16px !important;
+            display: block !important;
           }
         }
       `}</style>

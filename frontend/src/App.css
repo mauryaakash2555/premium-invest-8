@@ -965,6 +965,127 @@ html {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
+  
+  /* ===== PLATFORMS & PARTNERS PAGES - MOBILE ===== */
+  .platform-card,
+  .partner-card {
+    padding: 24px 20px !important;
+    margin-bottom: 24px !important;
+  }
+  
+  .platform-card h2,
+  .partner-card h2 {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+  }
+  
+  .platform-card a,
+  .partner-card a {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    padding: 12px 20px !important;
+  }
+  
+  /* Enhanced mobile styling for Platforms and Curated Partners pages */
+  
+  /* Make all grid layouts single column on mobile */
+  div[style*="gridTemplateColumns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 16px !important;
+    gap: 20px !important;
+    text-align: center !important;
+  }
+  
+  /* Diamond emoji and icons sizing */
+  span[style*="fontSize: '48px'"],
+  span[style*="fontSize: '46px'"],
+  span[style*="fontSize: '36px'"] {
+    font-size: 32px !important;
+  }
+  
+  /* Position badges (Elite Tier, Verified Partner) */
+  div[style*="ELITE TIER"],
+  div[style*="VERIFIED PARTNER"] {
+    font-size: 9px !important;
+    padding: 5px 10px !important;
+    top: 10px !important;
+    right: 10px !important;
+    position: absolute !important;
+  }
+  
+  /* Investment pricing card */
+  div[style*="INVESTMENT"] {
+    padding: 16px 20px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  div[style*="fontSize: '32px'"] {
+    font-size: 22px !important;
+  }
+  
+  div[style*="fontSize: '28px'"] {
+    font-size: 20px !important;
+  }
+  
+  /* Featured Advisory Partners badge in hero */
+  div[style*="FEATURED ADVISORY PARTNERS"] {
+    padding: 8px 16px !important;
+  }
+  
+  div[style*="FEATURED ADVISORY PARTNERS"] span {
+    font-size: 11px !important;
+    gap: 6px !important;
+  }
+  
+  /* All buttons on these pages */
+  a[style*="background"][style*="padding"] {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  
+  /* Benefit/feature cards with icons */
+  div[style*="CheckCircle"],
+  div[style*="Sparkles"],
+  div[style*="TrendingUp"],
+  div[style*="Shield"],
+  div[style*="Users"] {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Force all grids to stack */
+  div[style*="gridTemplateColumns: 'repeat(2, 1fr)'"],
+  div[style*="gridTemplateColumns: '1fr 1fr'"],
+  div[style*="display: 'grid'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  
+  /* Hero sections for new pages on mobile */
+  section[style*="marginTop: '80px'"] {
+    min-height: 300px !important;
+    padding: 60px 20px 40px 20px !important;
+  }
+  
+  section[style*="marginTop: '80px'"] h1 {
+    font-size: 28px !important;
+  }
+  
+  section[style*="marginTop: '80px'"] p {
+    font-size: 16px !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
