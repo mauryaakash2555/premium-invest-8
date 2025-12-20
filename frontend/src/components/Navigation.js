@@ -19,7 +19,7 @@ const Navigation = () => {
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
-    { path: '/recommended-platforms', label: 'Recommended Platforms' },
+    { path: '/recommended-platforms', label: 'Platforms' },
     { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
