@@ -37,7 +37,7 @@ const RecommendedPlatforms = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.35,

@@ -128,7 +128,7 @@ const Home = () => {
             textAlign: 'center',
             position: 'relative',
             zIndex: 1,
-            paddingTop: '60px',
+            paddingTop: '120px',
           }}
         >
           <h1
@@ -136,7 +136,7 @@ const Home = () => {
             style={{
               fontSize: 'clamp(28px, 4.5vw, 56px)',
               color: '#C0A062',
-              marginBottom: '24px',
+              marginBottom: '16px',
               fontWeight: 300,
               letterSpacing: '3px',
               opacity: 0.95,
@@ -151,9 +151,9 @@ const Home = () => {
             style={{
               fontSize: 'clamp(16px, 2.2vw, 22px)',
               color: '#C0A062',
-              marginBottom: '60px',
+              marginBottom: '30px',
               maxWidth: '800px',
-              margin: '0 auto 60px',
+              margin: '0 auto 30px',
               lineHeight: 1.6,
               fontWeight: 300,
               letterSpacing: '1px',
@@ -168,10 +168,10 @@ const Home = () => {
             className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
-              gap: '20px',
+              gap: '12px',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              marginBottom: '30px',
+              marginBottom: '20px',
             }}
           >
             <a
@@ -182,8 +182,8 @@ const Home = () => {
               data-testid="free-financial-guide-btn"
               style={{
                 background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
-                padding: '16px 32px',
-                fontSize: '16px',
+                padding: '12px 24px',
+                fontSize: '14px',
                 fontWeight: 600,
                 letterSpacing: '0.5px',
                 transition: 'all 0.3s ease',
@@ -205,14 +205,14 @@ const Home = () => {
               className="btn-secondary" 
               data-testid="explore-services-btn"
               style={{
-                padding: '16px 32px',
-                fontSize: '16px',
+                padding: '12px 24px',
+                fontSize: '14px',
                 fontWeight: 600,
                 letterSpacing: '0.5px',
                 transition: 'all 0.3s ease',
               }}
             >
-              Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
+              Explore Services <ArrowRight size={18} style={{ marginLeft: '6px', display: 'inline' }} />
             </Link>
           </div>
 
@@ -220,7 +220,7 @@ const Home = () => {
           <div
             style={{
               display: 'inline-block',
-              padding: '8px 24px',
+              padding: '6px 20px',
               background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 100%)',
               border: '1px solid rgba(192, 160, 98, 0.3)',
               borderRadius: '30px',
@@ -230,7 +230,7 @@ const Home = () => {
           >
             <span
               style={{
-                fontSize: 'clamp(12px, 1.5vw, 14px)',
+                fontSize: 'clamp(11px, 1.5vw, 13px)',
                 color: '#C0A062',
                 fontWeight: 500,
                 letterSpacing: '2px',
