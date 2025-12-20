@@ -151,6 +151,7 @@ const Home = () => {
               flexWrap: 'wrap',
               marginBottom: '60px',
             }}
+            className="hero-cta-buttons"
           >
             <a
               href="https://wa.me/918850977259"
@@ -521,7 +522,7 @@ const Home = () => {
           >
             Connect with our experts today for a complimentary financial consultation
           </p>
-          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }} className="cta-buttons-container">
             <a
               href="https://wa.me/918850977259"
               target="_blank"
@@ -537,6 +538,104 @@ const Home = () => {
           </div>
         </div>
       </section>
+      
+      {/* Mobile-specific styling enhancements */}
+      <style>{`
+        /* Keep desktop exactly as is (> 768px) */
+        @media (min-width: 769px) {
+          .hero-cta-buttons,
+          .cta-buttons-container {
+            flex-direction: row !important;
+          }
+        }
+        
+        /* Enhanced mobile experience (≤ 768px) */
+        @media (max-width: 768px) {
+          /* Hero CTA buttons - Stack vertically with better spacing */
+          .hero-cta-buttons {
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 0px !important;
+            padding: 0 20px;
+          }
+          
+          .hero-cta-buttons a {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 12px !important;
+            text-align: center !important;
+            display: block !important;
+          }
+          
+          /* CTA buttons container */
+          .cta-buttons-container {
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 0px !important;
+            padding: 0 20px;
+          }
+          
+          .cta-buttons-container a {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 12px !important;
+            text-align: center !important;
+            display: block !important;
+          }
+          
+          /* Service grid - Perfect single column */
+          div[style*="grid-template-columns"][style*="320px"] {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+            padding: 0 !important;
+          }
+          
+          /* Why Choose Us grid - Single column mobile */
+          section div[style*="grid-template-columns"][style*="280px"] {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          
+          /* Blog card - Mobile optimized padding */
+          .blog-card-premium > a > div:last-child {
+            padding: 30px 20px !important;
+          }
+          
+          /* Glass effect CTA - Better mobile padding */
+          section:last-of-type .glass-effect {
+            padding: 40px 24px !important;
+            margin: 0 16px !important;
+          }
+          
+          /* Hero section - Perfect mobile height */
+          .hero-gradient {
+            min-height: 70vh !important;
+            padding-bottom: 40px !important;
+          }
+          
+          /* Hero content - Better mobile spacing */
+          .hero-gradient .section-container {
+            padding-top: 100px !important;
+            padding-bottom: 60px !important;
+          }
+        }
+        
+        /* Small phones (≤ 480px) */
+        @media (max-width: 480px) {
+          .hero-cta-buttons,
+          .cta-buttons-container {
+            padding: 0 16px;
+          }
+          
+          .hero-gradient {
+            min-height: 65vh !important;
+          }
+          
+          .glass-effect {
+            margin: 0 8px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

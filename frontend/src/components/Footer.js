@@ -36,7 +36,7 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div style={{
+      <div className="footer-main-grid" style={{
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '40px 20px',
@@ -251,6 +251,52 @@ const Footer = () => {
           </p>
         </div>
       </div>
+      
+      {/* Mobile-specific footer styles */}
+      <style>{`
+        /* Desktop Footer (> 768px) - Keep as is */
+        @media (min-width: 769px) {
+          .footer-main-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+          }
+        }
+        
+        /* Tablet Footer (481px - 768px) */
+        @media (max-width: 768px) and (min-width: 481px) {
+          .footer-main-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 32px !important;
+            padding: 40px 24px !important;
+          }
+        }
+        
+        /* Mobile Footer (≤ 480px) */
+        @media (max-width: 480px) {
+          .footer-main-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+            padding: 32px 20px !important;
+          }
+          
+          .footer-main-grid > div {
+            text-align: center;
+          }
+          
+          .footer-main-grid nav {
+            align-items: center;
+          }
+          
+          .footer-main-grid h3 {
+            font-size: 18px !important;
+            margin-bottom: 12px !important;
+          }
+          
+          .footer-main-grid p,
+          .footer-main-grid a {
+            font-size: 15px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };
