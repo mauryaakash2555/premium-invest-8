@@ -666,119 +666,148 @@ const CuratedPartners = () => {
               gap: 30px !important;
               padding: 40px 30px !important;
               min-height: auto !important;
+              text-align: center !important;
             }
             
-            /* Hide shimmer effect on mobile for performance */
-            div[style*="animation: shimmer"] {
+            /* Hide shimmer on tablet/mobile */
+            div[style*="shimmer"] {
               display: none !important;
             }
           }
 
           @media (max-width: 768px) {
-            div[style*="gridTemplateColumns"] {
+            /* Hero Section */
+            section {
+              min-height: 45vh !important;
+              padding-top: 80px !important;
+              padding-bottom: 30px !important;
+            }
+            
+            /* All grid sections to single column */
+            div[style*="gridTemplateColumns"],
+            div[style*="display: 'grid'"] {
+              display: flex !important;
+              flex-direction: column !important;
               padding: 30px 20px !important;
-              gap: 24px !important;
-              min-height: auto !important;
-            }
-            
-            /* Hero adjustments */
-            section[style*="minHeight: 65vh"] {
-              min-height: 50vh !important;
-              padding-top: 100px !important;
-              padding-bottom: 40px !important;
-            }
-            
-            /* Elite badge */
-            div[style*="ELITE TIER"],
-            div[style*="VERIFIED PARTNER"] {
-              font-size: 10px !important;
-              padding: 6px 14px !important;
-            }
-            
-            /* Font size adjustments */
-            h2[style*="fontSize: '46px'"],
-            h2[style*="fontSize: '44px'"],
-            h2[style*="fontSize: '42px'"] {
-              font-size: 28px !important;
-              letter-spacing: 1px !important;
-            }
-            
-            h3[style*="fontSize: '46px'"],
-            h3[style*="fontSize: '44px'"] {
-              font-size: 26px !important;
-              letter-spacing: 1px !important;
-            }
-            
-            p[style*="fontSize: '20px'"],
-            p[style*="fontSize: '22px'"] {
-              font-size: 16px !important;
-            }
-            
-            p[style*="fontSize: '18px'"] {
-              font-size: 15px !important;
-            }
-            
-            /* Button adjustments */
-            a[style*="padding: '20px 40px'"],
-            a[style*="padding: '22px 44px'"] {
-              padding: 14px 24px !important;
-              font-size: 14px !important;
-              white-space: normal !important;
+              gap: 20px !important;
               text-align: center !important;
             }
             
-            /* Diamond icon */
-            span[style*="fontSize: '46px'"],
-            span[style*="fontSize: '36px'"] {
-              font-size: 28px !important;
-            }
-            
-            /* Features grid */
-            div[style*="display: 'grid'"][style*="gap: '20px'"] {
-              grid-template-columns: 1fr !important;
-              gap: 12px !important;
-            }
-            
-            /* Investment card */
-            div[style*="fontSize: '32px'"] {
-              font-size: 24px !important;
-            }
-            
-            div[style*="fontSize: '28px'"] {
-              font-size: 22px !important;
-            }
-            
-            /* BM Wealth offerings grid */
-            div[style*="gridTemplateColumns: '1fr 1fr'"] {
-              grid-template-columns: 1fr !important;
-            }
-            
-            /* Award badge in hero */
-            div[style*="FEATURED ADVISORY PARTNERS"] {
-              font-size: 12px !important;
-              padding: 8px 18px !important;
-            }
-          }
-
-          @media (max-width: 480px) {
-            div[style*="gridTemplateColumns"] {
-              padding: 24px 16px !important;
-            }
-            
-            h2, h3 {
-              font-size: 22px !important;
-            }
-            
-            a[style*="padding"] {
-              padding: 12px 20px !important;
-              font-size: 13px !important;
-            }
-            
-            /* Make badges even smaller */
+            /* Elite/Verified badges */
             div[style*="ELITE TIER"],
             div[style*="VERIFIED PARTNER"] {
               font-size: 9px !important;
               padding: 5px 12px !important;
+              top: 12px !important;
+              right: 12px !important;
+            }
+            
+            /* Position headers - make compact */
+            div[style*="display: 'flex'"][style*="alignItems: 'center'"] {
+              flex-direction: column !important;
+              text-align: center !important;
+              gap: 8px !important;
+            }
+            
+            /* Position numbers */
+            div[style*="POSITION"] h2 {
+              font-size: clamp(22px, 5vw, 28px) !important;
+              letter-spacing: 1px !important;
+            }
+            
+            /* Partner names */
+            h2, h3 {
+              font-size: clamp(22px, 5vw, 28px) !important;
+              letter-spacing: 1px !important;
+              line-height: 1.3 !important;
+              margin: 8px 0 !important;
+            }
+            
+            /* Taglines and descriptions */
+            p {
+              font-size: clamp(14px, 3.5vw, 16px) !important;
+              line-height: 1.6 !important;
+              margin-bottom: 16px !important;
+            }
+            
+            /* Benefits and features */
+            div[style*="CheckCircle"],
+            div[style*="TrendingUp"],
+            div[style*="Shield"] {
+              font-size: 14px !important;
+              padding: 8px 12px !important;
+            }
+            
+            /* BM Wealth offerings grid */
+            div[style*="gridTemplateColumns: '1fr 1fr'"] {
+              display: flex !important;
+              flex-direction: column !important;
+              gap: 10px !important;
+            }
+            
+            /* Buttons */
+            a[style*="padding"] {
+              padding: 14px 28px !important;
+              font-size: clamp(13px, 3.5vw, 15px) !important;
+              width: auto !important;
+              max-width: 100% !important;
+              white-space: normal !important;
+              line-height: 1.4 !important;
+              text-align: center !important;
+              display: inline-flex !important;
+              justify-content: center !important;
+            }
+            
+            /* Icons */
+            span[style*="fontSize: '46px'"],
+            span[style*="fontSize: '36px'"] {
+              font-size: 32px !important;
+            }
+            
+            /* Investment info card */
+            div[style*="INVESTMENT"] {
+              padding: 16px 20px !important;
+            }
+            
+            div[style*="fontSize: '32px'"] {
+              font-size: clamp(20px, 5vw, 24px) !important;
+            }
+            
+            div[style*="fontSize: '14px'"][style*="INVESTMENT"],
+            div[style*="fontSize: '13px'"] {
+              font-size: 12px !important;
+            }
+            
+            /* Award badge in hero */
+            div[style*="FEATURED ADVISORY PARTNERS"] span {
+              font-size: 11px !important;
+              padding: 8px 16px !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            div[style*="gridTemplateColumns"],
+            div[style*="display: 'grid'"] {
+              padding: 20px 16px !important;
+            }
+            
+            h2, h3 {
+              font-size: 20px !important;
+            }
+            
+            a[style*="padding"] {
+              padding: 12px 24px !important;
+              font-size: 13px !important;
+            }
+            
+            span[style*="fontSize"] {
+              font-size: 28px !important;
+            }
+            
+            div[style*="ELITE TIER"],
+            div[style*="VERIFIED PARTNER"] {
+              font-size: 8px !important;
+              padding: 4px 10px !important;
             }
           }
         `}</style>

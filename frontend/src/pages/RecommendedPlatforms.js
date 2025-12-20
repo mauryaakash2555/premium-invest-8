@@ -614,72 +614,119 @@ const RecommendedPlatforms = () => {
               gap: 30px !important;
               padding: 40px 30px !important;
               min-height: auto !important;
+              text-align: center !important;
             }
           }
 
           @media (max-width: 768px) {
-            div[style*="gridTemplateColumns"] {
+            /* Hero Section */
+            section {
+              min-height: 45vh !important;
+              padding-top: 80px !important;
+              padding-bottom: 30px !important;
+            }
+            
+            /* All grid sections to single column */
+            div[style*="gridTemplateColumns"],
+            div[style*="display: 'grid'"] {
+              display: flex !important;
+              flex-direction: column !important;
               padding: 30px 20px !important;
-              gap: 24px !important;
+              gap: 20px !important;
+              text-align: center !important;
             }
             
-            /* Hero adjustments */
-            section[style*="minHeight: 70vh"] {
-              min-height: 50vh !important;
-              padding-top: 100px !important;
-              padding-bottom: 40px !important;
+            /* Position headers - make compact */
+            div[style*="display: 'flex'"][style*="alignItems: 'center'"] {
+              flex-direction: column !important;
+              text-align: center !important;
+              gap: 8px !important;
             }
             
-            /* Font size adjustments */
-            h2[style*="fontSize: '42px'"],
-            h2[style*="fontSize: '40px'"] {
-              font-size: 28px !important;
+            /* Position numbers and titles */
+            div[style*="fontSize: '16px'"][style*="POSITION"] {
+              font-size: 13px !important;
               letter-spacing: 1px !important;
             }
             
-            p[style*="fontSize: '20px'"] {
-              font-size: 16px !important;
+            h2 {
+              font-size: clamp(22px, 5vw, 28px) !important;
+              letter-spacing: 1px !important;
+              line-height: 1.3 !important;
+              margin: 0 !important;
             }
             
-            /* Button adjustments */
-            a[style*="padding: '18px 36px'"] {
-              padding: 14px 24px !important;
+            /* Taglines and descriptions */
+            p {
+              font-size: clamp(14px, 3.5vw, 16px) !important;
+              line-height: 1.6 !important;
+              margin-bottom: 16px !important;
+            }
+            
+            /* Benefits and features */
+            div[style*="gridTemplateColumns: 'repeat(2, 1fr)'"],
+            div[style*="gridTemplateColumns: '1fr 1fr'"] {
+              display: flex !important;
+              flex-direction: column !important;
+              gap: 10px !important;
+            }
+            
+            div[style*="CheckCircle"] {
               font-size: 14px !important;
+              padding: 8px 12px !important;
             }
             
-            /* Diamond icon */
+            /* Buttons */
+            a[style*="padding"] {
+              padding: 14px 28px !important;
+              font-size: clamp(13px, 3.5vw, 15px) !important;
+              width: auto !important;
+              max-width: 100% !important;
+              white-space: normal !important;
+              line-height: 1.4 !important;
+              text-align: center !important;
+              display: inline-flex !important;
+              justify-content: center !important;
+            }
+            
+            /* Icons */
             span[style*="fontSize: '36px'"] {
-              font-size: 28px !important;
+              font-size: 32px !important;
             }
             
-            /* Benefits grid */
-            div[style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
-              grid-template-columns: 1fr !important;
-              gap: 12px !important;
+            /* Investment info card */
+            div[style*="background: 'rgba(192, 160, 98"] {
+              padding: 16px 20px !important;
             }
             
-            /* Investment info */
             div[style*="fontSize: '32px'"] {
-              font-size: 24px !important;
+              font-size: clamp(20px, 5vw, 24px) !important;
             }
             
-            div[style*="fontSize: '28px'"] {
-              font-size: 22px !important;
+            div[style*="fontSize: '14px'"][style*="MONTHLY INVESTMENT"],
+            div[style*="fontSize: '13px'"] {
+              font-size: 12px !important;
             }
           }
 
           @media (max-width: 480px) {
-            div[style*="gridTemplateColumns"] {
-              padding: 24px 16px !important;
+            div[style*="gridTemplateColumns"],
+            div[style*="display: 'grid'"] {
+              padding: 20px 16px !important;
             }
             
             h2 {
-              font-size: 24px !important;
+              font-size: 20px !important;
             }
             
             a[style*="padding"] {
-              padding: 12px 20px !important;
+              padding: 12px 24px !important;
               font-size: 13px !important;
+            }
+            
+            span[style*="fontSize: '36px'"],
+            span[style*="fontSize: '32px'"] {
+              font-size: 28px !important;
             }
           }
         `}</style>
