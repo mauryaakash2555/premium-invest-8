@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Platforms = () => {
+const RecommendedPlatforms = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -735,4 +735,4 @@ const Platforms = () => {
   );
 };
 
-export default Platforms;
+export default RecommendedPlatforms;
