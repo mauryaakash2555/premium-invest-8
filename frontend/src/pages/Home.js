@@ -171,7 +171,7 @@ const Home = () => {
               gap: '12px',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              marginBottom: '20px',
+              marginBottom: '12px',
             }}
           >
             <a
@@ -225,6 +225,7 @@ const Home = () => {
               border: '1px solid rgba(192, 160, 98, 0.3)',
               borderRadius: '30px',
               backdropFilter: 'blur(10px)',
+              marginTop: '12px',
               marginBottom: '40px',
             }}
           >
