@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles, Award, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -29,6 +29,7 @@ const CuratedPartners = () => {
           paddingTop: '80px',
           paddingBottom: '60px',
         }}
+        className="hero-section"
       >
         <div
           style={{
@@ -65,6 +66,7 @@ const CuratedPartners = () => {
               marginBottom: '24px',
               boxShadow: '0 8px 32px rgba(192, 160, 98, 0.25)',
             }}
+            className="hero-badge"
           >
             <span
               style={{
@@ -116,6 +118,7 @@ const CuratedPartners = () => {
         
         {/* POSITION #1 - DIAMOND ADVISORY PARTNER (RESERVED) */}
         <div
+          className="partner-card diamond-card"
           style={{
             background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.12) 0%, rgba(218, 165, 32, 0.08) 50%, rgba(0, 0, 0, 0.5) 100%)',
             border: '3px solid rgba(192, 160, 98, 0.5)',
@@ -153,6 +156,7 @@ const CuratedPartners = () => {
               animation: 'shimmer 8s infinite',
               pointerEvents: 'none',
             }}
+            className="shimmer-effect"
           />
 
           {/* Elite badge */}
@@ -173,14 +177,15 @@ const CuratedPartners = () => {
               gap: '6px',
               boxShadow: '0 4px 15px rgba(192, 160, 98, 0.4)',
             }}
+            className="tier-badge"
           >
             <Star size={14} fill="#000" />
             ELITE TIER
           </div>
 
           {/* Left Side */}
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }} className="card-header">
               <span style={{ fontSize: '48px' }}>💎</span>
               <div>
                 <div
@@ -191,6 +196,7 @@ const CuratedPartners = () => {
                     letterSpacing: '3px',
                     marginBottom: '6px',
                   }}
+                  className="position-label"
                 >
                   POSITION #1
                 </div>
@@ -204,6 +210,7 @@ const CuratedPartners = () => {
                     letterSpacing: '3px',
                     textShadow: '0 2px 15px rgba(192, 160, 98, 0.5)',
                   }}
+                  className="partner-title"
                 >
                   DIAMOND ADVISORY PARTNER
                 </h2>
@@ -218,11 +225,12 @@ const CuratedPartners = () => {
                 fontWeight: 600,
                 fontStyle: 'italic',
               }}
+              className="partner-tagline"
             >
               Reserved for Premium Financial Services Partnership
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} className="benefits-list">
               {[
                 'Exclusive advisory positioning & branding',
                 'Co-branded premium content strategy',
@@ -240,6 +248,7 @@ const CuratedPartners = () => {
                     borderRadius: '8px',
                     border: '1px solid rgba(192, 160, 98, 0.2)',
                   }}
+                  className="benefit-item"
                 >
                   <Sparkles size={20} style={{ color: '#C0A062', flexShrink: 0 }} />
                   <span
@@ -258,7 +267,7 @@ const CuratedPartners = () => {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', zIndex: 1 }} className="card-actions">
             <div
               style={{
                 textAlign: 'center',
@@ -268,6 +277,7 @@ const CuratedPartners = () => {
                 border: '2px solid rgba(192, 160, 98, 0.3)',
                 marginBottom: '12px',
               }}
+              className="investment-box"
             >
               <div style={{ fontSize: '14px', color: 'rgba(192, 160, 98, 0.8)', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>INVESTMENT</div>
               <div style={{ 
@@ -305,6 +315,7 @@ const CuratedPartners = () => {
                 whiteSpace: 'nowrap',
                 boxShadow: '0 6px 25px rgba(192, 160, 98, 0.3)',
               }}
+              className="cta-button primary"
               onMouseEnter={(e) => {
                 e.target.style.transform = 'scale(1.05)';
                 e.target.style.boxShadow = '0 8px 35px rgba(192, 160, 98, 0.5)';
@@ -321,6 +332,7 @@ const CuratedPartners = () => {
 
         {/* POSITION #2 - BM WEALTH (GOLD PARTNER) */}
         <div
+          className="partner-card"
           style={{
             background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.6) 100%)',
             border: '3px solid rgba(192, 160, 98, 0.4)',
@@ -365,6 +377,7 @@ const CuratedPartners = () => {
               alignItems: 'center',
               gap: '6px',
             }}
+            className="tier-badge"
           >
             <CheckCircle size={14} />
             VERIFIED PARTNER
@@ -383,6 +396,7 @@ const CuratedPartners = () => {
                   color: '#000',
                   letterSpacing: '2px',
                 }}
+                className="position-label"
               >
                 #2 - GOLD PARTNER
               </div>
@@ -398,6 +412,7 @@ const CuratedPartners = () => {
                 letterSpacing: '3px',
                 textShadow: '0 2px 12px rgba(192, 160, 98, 0.4)',
               }}
+              className="partner-title"
             >
               BM WEALTH
             </h2>
@@ -409,6 +424,7 @@ const CuratedPartners = () => {
                 marginBottom: '24px',
                 fontWeight: 600,
               }}
+              className="partner-tagline"
             >
               Personalized Financial Planning & Wealth Management
             </p>
@@ -420,6 +436,7 @@ const CuratedPartners = () => {
                 lineHeight: 1.8,
                 marginBottom: '32px',
               }}
+              className="partner-description"
             >
               Mumbai's trusted advisors for comprehensive wealth management. We provide tailored solutions for portfolio optimization, tax planning, insurance strategies, and retirement planning.
             </p>
@@ -431,6 +448,7 @@ const CuratedPartners = () => {
                 gap: '18px',
                 marginBottom: '28px',
               }}
+              className="services-grid"
             >
               {[
                 { icon: <TrendingUp size={22} />, text: 'Portfolio Management & Asset Allocation' },
@@ -449,6 +467,7 @@ const CuratedPartners = () => {
                     borderRadius: '8px',
                     border: '1px solid rgba(192, 160, 98, 0.2)',
                   }}
+                  className="service-item"
                 >
                   <div style={{ color: '#C0A062', flexShrink: 0 }}>{item.icon}</div>
                   <span
@@ -473,6 +492,7 @@ const CuratedPartners = () => {
                 borderRadius: '8px',
                 border: '2px solid rgba(192, 160, 98, 0.35)',
               }}
+              className="certification-badge"
             >
               <p
                 style={{
@@ -490,7 +510,7 @@ const CuratedPartners = () => {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-actions">
             <Link
               to="/contact"
               style={{
@@ -508,6 +528,7 @@ const CuratedPartners = () => {
                 whiteSpace: 'nowrap',
                 boxShadow: '0 6px 25px rgba(192, 160, 98, 0.3)',
               }}
+              className="cta-button primary"
               onMouseEnter={(e) => {
                 e.target.style.transform = 'scale(1.05)';
                 e.target.style.boxShadow = '0 8px 35px rgba(192, 160, 98, 0.5)';
@@ -525,6 +546,7 @@ const CuratedPartners = () => {
 
         {/* POSITION #3 - SILVER PARTNER (RESERVED) */}
         <div
+          className="partner-card"
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.6) 100%)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
@@ -557,6 +579,7 @@ const CuratedPartners = () => {
                 letterSpacing: '2px',
                 marginBottom: '18px',
               }}
+              className="position-label"
             >
               #3 - SILVER PARTNER
             </div>
@@ -570,6 +593,7 @@ const CuratedPartners = () => {
                 margin: '0 0 14px 0',
                 letterSpacing: '2px',
               }}
+              className="partner-title"
             >
               Partnership Position Available
             </h2>
@@ -581,11 +605,12 @@ const CuratedPartners = () => {
                 marginBottom: '32px',
                 lineHeight: 1.8,
               }}
+              className="partner-description"
             >
               We carefully select partners who meet our high standards for transparency, compliance, and client service excellence.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} className="benefits-list">
               {[
                 'Regulatory compliance & licensing',
                 'Transparent pricing structure',
@@ -600,6 +625,7 @@ const CuratedPartners = () => {
                     gap: '12px',
                     padding: '12px 0',
                   }}
+                  className="benefit-item"
                 >
                   <CheckCircle size={20} style={{ color: 'rgba(192, 160, 98, 0.75)', flexShrink: 0 }} />
                   <span
@@ -617,7 +643,7 @@ const CuratedPartners = () => {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-actions">
             <Link
               to="/contact?subject=partnership"
               style={{
@@ -635,6 +661,7 @@ const CuratedPartners = () => {
                 transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap',
               }}
+              className="cta-button"
               onMouseEnter={(e) => {
                 e.target.style.background = 'rgba(192, 160, 98, 0.12)';
                 e.target.style.borderColor = '#C0A062';
@@ -649,7 +676,7 @@ const CuratedPartners = () => {
           </div>
         </div>
 
-        {/* Responsive Styles + Animations */}
+        {/* Enhanced Mobile Responsive Styles + Animations */}
         <style>{`
           @keyframes shimmer {
             0% {
@@ -660,8 +687,16 @@ const CuratedPartners = () => {
             }
           }
 
+          /* Desktop: keep original layout */
+          @media (min-width: 1025px) {
+            .partner-card {
+              /* Keep desktop styles intact */
+            }
+          }
+
+          /* Tablet: 768px - 1024px */
           @media (max-width: 1024px) {
-            div[style*="gridTemplateColumns"] {
+            .partner-card {
               grid-template-columns: 1fr !important;
               gap: 30px !important;
               padding: 40px 30px !important;
@@ -670,144 +705,263 @@ const CuratedPartners = () => {
             }
             
             /* Hide shimmer on tablet/mobile */
-            div[style*="shimmer"] {
+            .shimmer-effect {
               display: none !important;
+            }
+            
+            .card-header {
+              flex-direction: column !important;
+              align-items: center !important;
+              gap: 12px !important;
+            }
+            
+            .services-grid {
+              grid-template-columns: 1fr !important;
+            }
+            
+            .card-actions {
+              justify-content: center !important;
             }
           }
 
-          @media (max-width: 768px) {
+          /* Mobile: max-width 767px */
+          @media (max-width: 767px) {
             /* Hero Section */
-            section {
-              min-height: 45vh !important;
-              padding-top: 80px !important;
-              padding-bottom: 30px !important;
+            .hero-section {
+              min-height: 50vh !important;
+              padding-top: 100px !important;
+              padding-bottom: 40px !important;
             }
             
-            /* All grid sections to single column */
-            div[style*="gridTemplateColumns"],
-            div[style*="display: 'grid'"] {
+            .hero-badge span {
+              font-size: 11px !important;
+              letter-spacing: 1px !important;
+            }
+            
+            .hero-badge svg {
+              width: 14px !important;
+              height: 14px !important;
+            }
+            
+            /* All partner cards */
+            .partner-card {
               display: flex !important;
               flex-direction: column !important;
-              padding: 30px 20px !important;
+              padding: 24px 16px !important;
               gap: 20px !important;
               text-align: center !important;
+              margin-bottom: 24px !important;
+              border-radius: 10px !important;
             }
             
-            /* Elite/Verified badges */
-            div[style*="ELITE TIER"],
-            div[style*="VERIFIED PARTNER"] {
+            /* Hide shimmer effect */
+            .shimmer-effect {
+              display: none !important;
+            }
+            
+            /* Tier badges */
+            .tier-badge {
               font-size: 9px !important;
-              padding: 5px 12px !important;
+              padding: 5px 10px !important;
               top: 12px !important;
               right: 12px !important;
             }
             
-            /* Position headers - make compact */
-            div[style*="display: 'flex'"][style*="alignItems: 'center'"] {
+            .tier-badge svg {
+              width: 12px !important;
+              height: 12px !important;
+            }
+            
+            /* Card headers */
+            .card-header {
               flex-direction: column !important;
-              text-align: center !important;
+              align-items: center !important;
               gap: 8px !important;
+              margin-bottom: 12px !important;
             }
             
-            /* Position numbers */
-            div[style*="POSITION"] h2 {
-              font-size: clamp(22px, 5vw, 28px) !important;
-              letter-spacing: 1px !important;
+            .card-header span {
+              font-size: 32px !important;
             }
             
-            /* Partner names */
-            h2, h3 {
-              font-size: clamp(22px, 5vw, 28px) !important;
-              letter-spacing: 1px !important;
-              line-height: 1.3 !important;
-              margin: 8px 0 !important;
+            /* Position labels */
+            .position-label {
+              font-size: 12px !important;
+              letter-spacing: 1.5px !important;
+              margin-bottom: 6px !important;
             }
             
-            /* Taglines and descriptions */
-            p {
-              font-size: clamp(14px, 3.5vw, 16px) !important;
-              line-height: 1.6 !important;
-              margin-bottom: 16px !important;
+            /* Partner titles */
+            .partner-title {
+              font-size: clamp(24px, 6vw, 32px) !important;
+              letter-spacing: 1.5px !important;
+              line-height: 1.2 !important;
+              margin: 0 0 10px 0 !important;
             }
             
-            /* Benefits and features */
-            div[style*="CheckCircle"],
-            div[style*="TrendingUp"],
-            div[style*="Shield"] {
+            /* Taglines */
+            .partner-tagline {
+              font-size: 15px !important;
+              margin-bottom: 20px !important;
+              line-height: 1.5 !important;
+            }
+            
+            /* Descriptions */
+            .partner-description {
               font-size: 14px !important;
-              padding: 8px 12px !important;
+              line-height: 1.6 !important;
+              margin-bottom: 20px !important;
             }
             
-            /* BM Wealth offerings grid */
-            div[style*="gridTemplateColumns: '1fr 1fr'"] {
+            /* Services grid */
+            .services-grid {
               display: flex !important;
               flex-direction: column !important;
               gap: 10px !important;
             }
             
-            /* Buttons */
-            a[style*="padding"] {
-              padding: 14px 28px !important;
-              font-size: clamp(13px, 3.5vw, 15px) !important;
-              width: auto !important;
-              max-width: 100% !important;
-              white-space: normal !important;
-              line-height: 1.4 !important;
-              text-align: center !important;
-              display: inline-flex !important;
-              justify-content: center !important;
+            .service-item {
+              padding: 10px 12px !important;
             }
             
-            /* Icons */
-            span[style*="fontSize: '46px'"],
-            span[style*="fontSize: '36px'"] {
-              font-size: 32px !important;
-            }
-            
-            /* Investment info card */
-            div[style*="INVESTMENT"] {
-              padding: 16px 20px !important;
-            }
-            
-            div[style*="fontSize: '32px'"] {
-              font-size: clamp(20px, 5vw, 24px) !important;
-            }
-            
-            div[style*="fontSize: '14px'"][style*="INVESTMENT"],
-            div[style*="fontSize: '13px'"] {
-              font-size: 12px !important;
-            }
-            
-            /* Award badge in hero */
-            div[style*="FEATURED ADVISORY PARTNERS"] span {
-              font-size: 11px !important;
-              padding: 8px 16px !important;
-            }
-          }
-
-          @media (max-width: 480px) {
-            div[style*="gridTemplateColumns"],
-            div[style*="display: 'grid'"] {
-              padding: 20px 16px !important;
-            }
-            
-            h2, h3 {
-              font-size: 20px !important;
-            }
-            
-            a[style*="padding"] {
-              padding: 12px 24px !important;
+            .service-item span {
               font-size: 13px !important;
             }
             
-            span[style*="fontSize"] {
+            .service-item svg {
+              width: 18px !important;
+              height: 18px !important;
+            }
+            
+            /* Benefits list */
+            .benefits-list {
+              gap: 10px !important;
+              text-align: left !important;
+            }
+            
+            .benefit-item {
+              padding: 10px 12px !important;
+            }
+            
+            .benefit-item span {
+              font-size: 14px !important;
+              line-height: 1.5 !important;
+            }
+            
+            .benefit-item svg {
+              width: 16px !important;
+              height: 16px !important;
+            }
+            
+            /* Investment box */
+            .investment-box {
+              padding: 16px 20px !important;
+              margin-bottom: 16px !important;
+            }
+            
+            .investment-box > div:first-child {
+              font-size: 12px !important;
+            }
+            
+            .investment-box > div:nth-child(2) {
+              font-size: 24px !important;
+            }
+            
+            .investment-box > div:nth-child(2) span:first-child {
+              font-size: 20px !important;
+            }
+            
+            .investment-box > div:last-child {
+              font-size: 11px !important;
+            }
+            
+            /* Certification badge */
+            .certification-badge {
+              padding: 10px 16px !important;
+            }
+            
+            .certification-badge p {
+              font-size: 12px !important;
+            }
+            
+            .certification-badge svg {
+              width: 14px !important;
+              height: 14px !important;
+            }
+            
+            /* Action buttons */
+            .card-actions {
+              width: 100% !important;
+              justify-content: center !important;
+              margin-top: 10px !important;
+            }
+            
+            .cta-button {
+              width: 100% !important;
+              max-width: 100% !important;
+              padding: 14px 20px !important;
+              font-size: 14px !important;
+              white-space: normal !important;
+              text-align: center !important;
+              justify-content: center !important;
+              line-height: 1.4 !important;
+            }
+            
+            .cta-button svg {
+              width: 18px !important;
+              height: 18px !important;
+            }
+          }
+
+          /* Extra small mobile: max-width 480px */
+          @media (max-width: 480px) {
+            .partner-card {
+              padding: 20px 12px !important;
+              margin-bottom: 20px !important;
+            }
+            
+            .card-header span {
               font-size: 28px !important;
             }
             
-            div[style*="ELITE TIER"],
-            div[style*="VERIFIED PARTNER"] {
+            .partner-title {
+              font-size: 22px !important;
+              letter-spacing: 1px !important;
+            }
+            
+            .partner-tagline {
+              font-size: 14px !important;
+            }
+            
+            .partner-description {
+              font-size: 13px !important;
+            }
+            
+            .service-item span,
+            .benefit-item span {
+              font-size: 12px !important;
+            }
+            
+            .cta-button {
+              padding: 12px 16px !important;
+              font-size: 13px !important;
+            }
+            
+            .position-label {
+              font-size: 11px !important;
+            }
+            
+            .tier-badge {
               font-size: 8px !important;
-              padding: 4px 10px !important;
+              padding: 4px 8px !important;
+            }
+            
+            .investment-box > div:nth-child(2) {
+              font-size: 20px !important;
+            }
+            
+            .investment-box > div:nth-child(2) span:first-child {
+              font-size: 18px !important;
             }
           }
         `}</style>
