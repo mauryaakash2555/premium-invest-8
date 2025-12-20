@@ -131,6 +131,31 @@ const Home = () => {
             paddingTop: '60px',
           }}
         >
+          {/* Heritage Badge */}
+          <div
+            style={{
+              display: 'inline-block',
+              padding: '8px 24px',
+              background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 100%)',
+              border: '1px solid rgba(192, 160, 98, 0.3)',
+              borderRadius: '30px',
+              marginBottom: '24px',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 'clamp(12px, 1.5vw, 14px)',
+                color: '#C0A062',
+                fontWeight: 500,
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Established 1989 • 35+ Years of Excellence
+            </span>
+          </div>
+
           <h1
             className="hero-subtitle-responsive"
             style={{
@@ -180,10 +205,38 @@ const Home = () => {
               rel="noopener noreferrer"
               className="btn-primary"
               data-testid="free-financial-guide-btn"
+              style={{
+                background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+                padding: '16px 32px',
+                fontSize: '16px',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 20px rgba(192, 160, 98, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px) scale(1.02)';
+                e.target.style.boxShadow = '0 8px 30px rgba(192, 160, 98, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0) scale(1)';
+                e.target.style.boxShadow = '0 4px 20px rgba(192, 160, 98, 0.3)';
+              }}
             >
               Access Your Complimentary Wealth Blueprint
             </a>
-            <Link to="/services" className="btn-secondary" data-testid="explore-services-btn">
+            <Link 
+              to="/services" 
+              className="btn-secondary" 
+              data-testid="explore-services-btn"
+              style={{
+                padding: '16px 32px',
+                fontSize: '16px',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                transition: 'all 0.3s ease',
+              }}
+            >
               Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
@@ -234,67 +287,129 @@ const Home = () => {
                 style={{
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  transition: 'all 0.4s ease',
+                  position: 'relative',
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 10, 10, 0.8) 100%)',
+                  border: '1px solid rgba(192, 160, 98, 0.2)',
+                  borderRadius: '12px',
+                  padding: '0',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.transform = 'translateY(-10px)';
+                  e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.5)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(192, 160, 98, 0.25)';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.2)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
+                {/* Premium Badge */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '16px',
+                    right: '16px',
+                    background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.9) 0%, rgba(218, 165, 32, 0.9) 100%)',
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#000',
+                    letterSpacing: '1px',
+                    zIndex: 1,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Premium
+                </div>
+
                 <LazyImage
                   src={service.image}
                   alt={service.title}
                   style={{
                     width: '100%',
-                    height: '200px',
-                    marginBottom: '20px',
-                    borderRadius: '8px',
+                    height: '220px',
+                    marginBottom: '0',
+                    borderRadius: '12px 12px 0 0',
                     display: 'block',
                     objectFit: 'cover',
                   }}
                 />
-                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
-                  {service.icon}
-                </div>
-                <h3
-                  style={{
-                    fontSize: '24px',
-                    color: '#DAA520',
-                    marginBottom: '12px',
-                  }}
-                >
-                  {service.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '16px',
-                    color: '#CCCCCC',
-                    lineHeight: 1.6,
+                <div style={{ padding: '28px 24px' }}>
+                  <div style={{ 
+                    color: '#DAA520', 
                     marginBottom: '16px',
-                  }}
-                >
-                  {service.description}
-                </p>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#C0A062',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                }}>
-                  <span>Learn More</span>
-                  <ArrowRight size={16} />
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                  }}>
+                    <div style={{
+                      background: 'rgba(218, 165, 32, 0.1)',
+                      padding: '12px',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      {service.icon}
+                    </div>
+                    <h3
+                      style={{
+                        fontSize: '26px',
+                        color: '#DAA520',
+                        marginBottom: '0',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {service.title}
+                    </h3>
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '16px',
+                      color: '#CCCCCC',
+                      lineHeight: 1.7,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    {service.description}
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#C0A062',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px',
+                  }}>
+                    <span>Learn More</span>
+                    <ArrowRight size={18} />
+                  </div>
                 </div>
               </div>
             </Link>
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '50px' }}>
-          <Link to="/services" className="btn-primary" data-testid="view-all-services-btn">
+        <div style={{ textAlign: 'center', marginTop: '60px' }}>
+          <Link 
+            to="/services" 
+            className="btn-primary" 
+            data-testid="view-all-services-btn"
+            style={{
+              background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+              padding: '16px 40px',
+              fontSize: '16px',
+              fontWeight: 600,
+              letterSpacing: '0.5px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 20px rgba(192, 160, 98, 0.3)',
+              display: 'inline-block',
+            }}
+          >
             View All Services
           </Link>
         </div>
@@ -575,10 +690,29 @@ const Home = () => {
               rel="noopener noreferrer"
               className="btn-primary"
               data-testid="cta-whatsapp-btn"
+              style={{
+                background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+                padding: '16px 32px',
+                fontSize: '16px',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 20px rgba(192, 160, 98, 0.3)',
+              }}
             >
               Chat on WhatsApp
             </a>
-            <Link to="/contact" className="btn-secondary" data-testid="cta-contact-btn">
+            <Link 
+              to="/contact" 
+              className="btn-secondary" 
+              data-testid="cta-contact-btn"
+              style={{
+                padding: '16px 32px',
+                fontSize: '16px',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+              }}
+            >
               Contact Us
             </Link>
           </div>
