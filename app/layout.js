@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MobileNavDock from "./components/MobileNavDock";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -51,6 +52,7 @@ export default function RootLayout({ children }) {
           </header>
           <main className="mt-8 space-y-8">{children}</main>
         </div>
+                            <MobileNavDock />
       </body>
     </html>
   );
