@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles, Award, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
-
+import Link from 'next/link';
 const CuratedPartners = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
