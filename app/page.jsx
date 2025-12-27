@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
 import { useEffect } from 'react';
-import LazyImage from '@/components/LazyImage';
 import { staticBlogPost } from '@/data/staticBlogData';
 
 export default function HomePage() {
@@ -221,19 +221,17 @@ export default function HomePage() {
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
-              >
-                <LazyImage
-                  src={service.image}
-                  alt={service.title}
-                  style={{
-                    width: '100%',
-                    height: '200px',
-                    marginBottom: '20px',
-                    borderRadius: '8px',
-                    display: 'block',
-                    objectFit: 'cover',
-                  }}
-                />
+                >
+                  <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '20px', borderRadius: '8px', overflow: 'hidden' }}>
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={index < 3}
+                    />
+                  </div>
                 <div style={{ color: '#DAA520', marginBottom: '16px' }}>
                   {service.icon}
                 </div>
