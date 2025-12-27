@@ -1,7 +1,5 @@
 ﻿"use client";
 
-export const dynamic = 'force-dynamic';
-
 import { useEffect } from 'react';
 import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles, Award, Star } from 'lucide-react';
 import Link from 'next/link';
