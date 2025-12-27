@@ -54,11 +54,11 @@ a {
     display: inline-block;
   }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #8B6F47 0%, #704214 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 111, 71, 0.5);
-}
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #8B6F47 0%, #704214 100%);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(139, 111, 71, 0.6), 0 0 20px rgba(218, 165, 32, 0.4);
+  }
 
 .btn-secondary {
   background: transparent;
@@ -74,11 +74,12 @@ a {
   display: inline-block;
 }
 
-.btn-secondary:hover {
-  background: #DAA520;
-  color: #000000;
-  transform: translateY(-2px);
-}
+  .btn-secondary:hover {
+    background: #DAA520;
+    color: #000000;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(218, 165, 32, 0.6), 0 0 20px rgba(218, 165, 32, 0.4);
+  }
 
 /* ═══════════════════════════════════════════════════════════════
    LAYOUT
@@ -139,11 +140,11 @@ a {
   letter-spacing: 0.5px;
 }
 
-.hero-section-responsive .btn-primary:hover {
-  background: rgba(218, 165, 32, 0.95);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(218, 165, 32, 0.4);
-}
+  .hero-section-responsive .btn-primary:hover {
+    background: rgba(218, 165, 32, 0.95);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(218, 165, 32, 0.5), 0 0 25px rgba(218, 165, 32, 0.4);
+  }
 
 .hero-section-responsive .btn-secondary {
   background: rgba(255, 255, 255, 0.08);
@@ -154,11 +155,12 @@ a {
   letter-spacing: 0.5px;
 }
 
-.hero-section-responsive .btn-secondary:hover {
-  background: rgba(218, 165, 32, 0.15);
-  border-color: rgba(218, 165, 32, 0.6);
-  transform: translateY(-3px);
-}
+  .hero-section-responsive .btn-secondary:hover {
+    background: rgba(218, 165, 32, 0.15);
+    border-color: rgba(218, 165, 32, 0.8);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(218, 165, 32, 0.4), 0 0 25px rgba(218, 165, 32, 0.3);
+  }
 
 /* ═══════════════════════════════════════════════════════════════
    CARDS
@@ -175,11 +177,11 @@ a {
   height: 100%;
 }
 
-.service-card:hover {
-  transform: translateY(-8px) !important;
-  border-color: rgba(218, 165, 32, 0.4) !important;
-  box-shadow: 0 12px 40px rgba(218, 165, 32, 0.3) !important;
-}
+  .service-card:hover {
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(218, 165, 32, 0.6) !important;
+    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+  }
 
 .blog-card-premium {
   background: rgba(255, 255, 255, 0.03) !important;
@@ -191,11 +193,11 @@ a {
   overflow: hidden;
 }
 
-.blog-card-premium:hover {
-  transform: translateY(-8px) !important;
-  border-color: rgba(218, 165, 32, 0.4) !important;
-  box-shadow: 0 12px 40px rgba(218, 165, 32, 0.3) !important;
-}
+  .blog-card-premium:hover {
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(218, 165, 32, 0.6) !important;
+    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+  }
 
 /* ═══════════════════════════════════════════════════════════════
    ANIMATIONS
@@ -328,3 +330,4 @@ a {
     height: 55px;
   }
 }
+
