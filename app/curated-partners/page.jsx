@@ -292,7 +292,7 @@ export default function Page() {
             </div>
 
             <Link
-              to="/contact?subject=diamond-advisory-partnership"
+              href="/contact?subject=diamond-advisory-partnership"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -506,7 +506,7 @@ export default function Page() {
           {/* Right Side */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-actions">
             <Link
-              to="/contact"
+              href="/contact"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -639,7 +639,7 @@ export default function Page() {
           {/* Right Side */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-actions">
             <Link
-              to="/contact?subject=partnership"
+              href="/contact?subject=partnership"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
