@@ -10,7 +10,7 @@ export default function Platforms() {
   }, []);
 
   return (
-    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <main style={{ width: '100vw', maxWidth: '100vw', overflowX: 'hidden', position: 'relative', boxSizing: 'border-box' }}>
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
 
       {/* Hero Section */}
@@ -83,12 +83,12 @@ export default function Platforms() {
         
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
-          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
+          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '36px' }}>💎</span>
+              <span style={{ fontSize: '36px', maxWidth: '100%', overflow: 'hidden' }}>💎</span>
               <div>
                 <div
                   style={{
@@ -103,7 +103,7 @@ export default function Platforms() {
                 </div>
                 <h2
                   style={{
-                    fontSize: '42px',
+                    fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                     fontFamily: '"Playfair Display", serif',
                     color: '#C0A062',
                     fontWeight: 600,
@@ -118,7 +118,7 @@ export default function Platforms() {
 
             <p
               style={{
-                fontSize: '20px',
+                fontSize: '20px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 color: 'rgba(192, 160, 98, 0.9)',
                 marginBottom: '32px',
                 fontWeight: 500,
@@ -158,7 +158,7 @@ export default function Platforms() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
             <Link
               href="/contact?subject=diamond-partnership"
               style={{
@@ -184,13 +184,13 @@ export default function Platforms() {
 
         {/* POSITION #2 - ZERODHA */}
         <div
-          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
+          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
             <div
               style={{
-                fontSize: '24px',
+                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontWeight: 700,
                 color: 'rgba(192, 160, 98, 0.8)',
                 letterSpacing: '2px',
@@ -202,7 +202,7 @@ export default function Platforms() {
 
             <h2
               style={{
-                fontSize: '42px',
+                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontFamily: '"Playfair Display", serif',
                 color: '#C0A062',
                 fontWeight: 600,
@@ -255,7 +255,7 @@ export default function Platforms() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
             <a
               href="https://zerodha.com"
               target="_blank"
@@ -283,13 +283,13 @@ export default function Platforms() {
 
         {/* POSITION #3 - SMALLCASE */}
         <div
-          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
+          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
             <div
               style={{
-                fontSize: '24px',
+                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontWeight: 700,
                 color: 'rgba(192, 160, 98, 0.8)',
                 letterSpacing: '2px',
@@ -301,7 +301,7 @@ export default function Platforms() {
 
             <h2
               style={{
-                fontSize: '42px',
+                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontFamily: '"Playfair Display", serif',
                 color: '#C0A062',
                 fontWeight: 600,
@@ -354,7 +354,7 @@ export default function Platforms() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
             <a
               href="https://smallcase.com"
               target="_blank"
@@ -382,13 +382,13 @@ export default function Platforms() {
 
         {/* POSITION #4 - GROWW */}
         <div
-          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
+          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
             <div
               style={{
-                fontSize: '24px',
+                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontWeight: 700,
                 color: 'rgba(192, 160, 98, 0.8)',
                 letterSpacing: '2px',
@@ -400,7 +400,7 @@ export default function Platforms() {
 
             <h2
               style={{
-                fontSize: '42px',
+                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
                 fontFamily: '"Playfair Display", serif',
                 color: '#C0A062',
                 fontWeight: 600,
@@ -453,7 +453,7 @@ export default function Platforms() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
             <a
               href="https://groww.in"
               target="_blank"
@@ -517,9 +517,11 @@ export default function Platforms() {
         `}</style>
       </section>
         </div>
-  </div>
-  );
+  </main>`n  );
 }
+
+
+
 
 
 
