@@ -3,8 +3,9 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import LuxuryMobileDock from "@/components/LuxuryMobileDock";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
           <Footer />
         </div>
         <WhatsAppFloat />
+        <LuxuryMobileDock />
         <Analytics />
         <SpeedInsights />
       </body>
