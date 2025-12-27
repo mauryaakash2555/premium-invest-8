@@ -34,9 +34,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0 }}>
+      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100vw' }}>
         <Navigation />
-        <main>{children}</main>
+        <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
         <Footer />
         <WhatsAppFloat />
         <Analytics />

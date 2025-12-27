@@ -10,8 +10,7 @@ export default function Platforms() {
   }, []);
 
   return (
-    <main style={{ width: '100vw', maxWidth: '100vw', overflowX: 'hidden', position: 'relative', boxSizing: 'border-box' }}>
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* Hero Section */}
       <section
@@ -53,7 +52,7 @@ export default function Platforms() {
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 20px', maxWidth: '900px' }}>
           <h1
             style={{
-              fontSize: 'clamp(36px, 5vw, 52px)',
+              fontSize: 'clamp(32px, 5vw, 52px)',
               marginBottom: '20px',
               fontWeight: 300,
               letterSpacing: '3px',
@@ -66,7 +65,7 @@ export default function Platforms() {
           </h1>
           <p
             style={{
-              fontSize: 'clamp(17px, 2.2vw, 20px)',
+              fontSize: 'clamp(16px, 2.2vw, 20px)',
               color: 'rgba(255, 255, 255, 0.9)',
               maxWidth: '700px',
               margin: '0 auto',
@@ -78,455 +77,228 @@ export default function Platforms() {
         </div>
       </section>
 
-      {/* Platform Tiers Section */}
-      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', boxSizing: 'border-box', overflowX: 'hidden' }}>
+      {/* Platform Cards Section */}
+      <section style={{ padding: '40px 0 100px', width: '100%' }}>
         
-        {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
-        <div
-          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
-        >
-          {/* Left Side */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '36px', maxWidth: '100%', overflow: 'hidden' }}>💎</span>
+        {/* POSITION #1 - DIAMOND PARTNER */}
+        <div className="platform-card">
+          <div className="platform-content">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '36px' }}>💎</span>
               <div>
-                <div
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    color: '#C0A062',
-                    letterSpacing: '2px',
-                    marginBottom: '4px',
-                  }}
-                >
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#C0A062', letterSpacing: '2px', marginBottom: '4px' }}>
                   POSITION #1
                 </div>
-                <h2
-                  style={{
-                    fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                    fontFamily: '"Playfair Display", serif',
-                    color: '#C0A062',
-                    fontWeight: 600,
-                    margin: 0,
-                    letterSpacing: '2px',
-                  }}
-                >
+                <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: 0, letterSpacing: '2px' }}>
                   DIAMOND PARTNER
                 </h2>
               </div>
             </div>
 
-            <p
-              style={{
-                fontSize: '20px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                color: 'rgba(192, 160, 98, 0.9)',
-                marginBottom: '32px',
-                fontWeight: 500,
-              }}
-            >
+            <p style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '24px', fontWeight: 500 }}>
               Reserved for Exclusive Partnership
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {[
-                'Featured homepage placement',
-                'Dedicated content collaboration',
-                'Premium brand positioning',
-                'Monthly investment: ₹2-3 Lakh',
-              ].map((benefit, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                  }}
-                >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['Featured homepage placement', 'Dedicated content collaboration', 'Premium brand positioning', 'Monthly investment: ₹2-3 Lakh'].map((benefit, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Sparkles size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
-                  <span
-                    style={{
-                      fontSize: '16px',
-                      color: 'rgba(255, 255, 255, 0.75)',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {benefit}
-                  </span>
+                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.6 }}>{benefit}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
-            <Link
-              href="/contact?subject=diamond-partnership"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'transparent',
-                color: '#C0A062',
-                padding: '18px 36px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontSize: '17px',
-                fontWeight: 600,
-                border: '2px solid #C0A062',
-                transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap',
-              }}
-            >
+          <div className="platform-button">
+            <Link href="/contact?subject=diamond-partnership" className="btn-outline">
               Apply for Diamond Partnership
             </Link>
           </div>
         </div>
 
         {/* POSITION #2 - ZERODHA */}
-        <div
-          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
-        >
-          {/* Left Side */}
-          <div>
-            <div
-              style={{
-                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}
-            >
-              #2
-            </div>
-
-            <h2
-              style={{
-                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
-                fontWeight: 600,
-                margin: '0 0 12px 0',
-                letterSpacing: '2px',
-              }}
-            >
+        <div className="platform-card">
+          <div className="platform-content">
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#2</div>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
               ZERODHA
             </h2>
-
-            <p
-              style={{
-                fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
-                marginBottom: '28px',
-                fontWeight: 500,
-              }}
-            >
+            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
               India&apos;s largest discount broker
             </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {[
-                '₹0 equity delivery brokerage',
-                '₹20 per order for intraday trading',
-                'Advanced Kite trading platform',
-                'Trusted by 1 Crore+ active traders',
-              ].map((feature, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '12px',
-                  }}
-                >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['₹0 equity delivery brokerage', '₹20 per order for intraday trading', 'Advanced Kite trading platform', 'Trusted by 1 Crore+ active traders'].map((feature, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
-                  <span
-                    style={{
-                      fontSize: '16px',
-                      color: 'rgba(255, 255, 255, 0.85)',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {feature}
-                  </span>
+                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.6 }}>{feature}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
-            <a
-              href="https://zerodha.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                background: '#C0A062',
-                color: '#000',
-                padding: '18px 36px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontSize: '17px',
-                fontWeight: 700,
-                transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Open Free Demat Account
-              <ExternalLink size={18} />
+          <div className="platform-button">
+            <a href="https://zerodha.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              Open Free Demat Account <ExternalLink size={18} />
             </a>
           </div>
         </div>
 
         {/* POSITION #3 - SMALLCASE */}
-        <div
-          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
-        >
-          {/* Left Side */}
-          <div>
-            <div
-              style={{
-                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}
-            >
-              #3
-            </div>
-
-            <h2
-              style={{
-                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
-                fontWeight: 600,
-                margin: '0 0 12px 0',
-                letterSpacing: '2px',
-              }}
-            >
+        <div className="platform-card">
+          <div className="platform-content">
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#3</div>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
               SMALLCASE
             </h2>
-
-            <p
-              style={{
-                fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
-                marginBottom: '28px',
-                fontWeight: 500,
-              }}
-            >
+            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
               Thematic portfolio investing
             </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {[
-                'Professional investment strategies',
-                'Transparent portfolio tracking',
-                'Automated rebalancing tools',
-                'Trusted by 20 Lakh+ investors',
-              ].map((feature, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '12px',
-                  }}
-                >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['Professional investment strategies', 'Transparent portfolio tracking', 'Automated rebalancing tools', 'Trusted by 20 Lakh+ investors'].map((feature, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
-                  <span
-                    style={{
-                      fontSize: '16px',
-                      color: 'rgba(255, 255, 255, 0.85)',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {feature}
-                  </span>
+                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.6 }}>{feature}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
-            <a
-              href="https://smallcase.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                background: '#C0A062',
-                color: '#000',
-                padding: '18px 36px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontSize: '17px',
-                fontWeight: 700,
-                transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Explore Smallcases
-              <ExternalLink size={18} />
+          <div className="platform-button">
+            <a href="https://smallcase.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              Explore Smallcases <ExternalLink size={18} />
             </a>
           </div>
         </div>
 
         {/* POSITION #4 - GROWW */}
-        <div
-          className="platform-card" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
-        >
-          {/* Left Side */}
-          <div>
-            <div
-              style={{
-                fontSize: '24px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}
-            >
-              #4
-            </div>
-
-            <h2
-              style={{
-                fontSize: '42px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
-                fontWeight: 600,
-                margin: '0 0 12px 0',
-                letterSpacing: '2px',
-              }}
-            >
+        <div className="platform-card">
+          <div className="platform-content">
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#4</div>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
               GROWW
             </h2>
-
-            <p
-              style={{
-                fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
-                marginBottom: '28px',
-                fontWeight: 500,
-              }}
-            >
+            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
               Simplified investing for everyone
             </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {[
-                '₹0 account maintenance charges',
-                'Easy mutual fund SIP setup',
-                'Intuitive mobile-first interface',
-                '2 Crore+ registered users',
-              ].map((feature, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '12px',
-                  }}
-                >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['₹0 account maintenance charges', 'Easy mutual fund SIP setup', 'Intuitive mobile-first interface', '2 Crore+ registered users'].map((feature, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
-                  <span
-                    style={{
-                      fontSize: '16px',
-                      color: 'rgba(255, 255, 255, 0.85)',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {feature}
-                  </span>
+                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.6 }}>{feature}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '100%', wordWrap: 'break-word', overflow: 'hidden' }}>
-            <a
-              href="https://groww.in"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                background: '#C0A062',
-                color: '#000',
-                padding: '18px 36px',
-                borderRadius: '6px',
-                textDecoration: 'none',
-                fontSize: '17px',
-                fontWeight: 700,
-                transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Start Free Account
-              <ExternalLink size={18} />
+          <div className="platform-button">
+            <a href="https://groww.in" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              Start Free Account <ExternalLink size={18} />
             </a>
           </div>
         </div>
 
         {/* Affiliate Disclaimer */}
-        <div style={{ textAlign: 'center', padding: '0 20px' }}>
-          <p
-            style={{
-              fontSize: '13px',
-              color: 'rgba(255, 255, 255, 0.4)',
-              lineHeight: 1.6,
-              maxWidth: '800px',
-              margin: '0 auto',
-            }}
-          >
+        <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
+          <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
             <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> We may earn commission when you sign up through our links at no extra cost to you. This helps us provide free educational content.
           </p>
         </div>
 
-        {/* Responsive Styles */}
-        <style>{`
-          @media (max-width: 1024px) {
-            .platform-card-grid {
-              grid-template-columns: 1fr !important;
-              gap: 30px !important;
-              padding: 40px 30px !important;
-              min-height: auto !important;
-              text-align: center !important;
-            }
-          }
-
-          @media (max-width: 768px) {
-            .platform-card-grid {
-              padding: 30px 20px !important;
-            }
-            .platform-card-grid h2 {
-              font-size: clamp(22px, 5vw, 28px) !important;
-            }
-          }
-        `}</style>
       </section>
-        </div>
-  </main>
+
+      <style>{`
+        .platform-card {
+          width: 100%;
+          background: rgba(255, 255, 255, 0.03);
+          border: 2px solid rgba(192, 160, 98, 0.25);
+          padding: 50px 60px;
+          margin-bottom: 0;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 40px;
+          align-items: center;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        
+        .platform-card:hover {
+          background: rgba(192, 160, 98, 0.08);
+          border-color: rgba(192, 160, 98, 0.5);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 40px rgba(192, 160, 98, 0.15);
+        }
+        
+        .platform-content {
+          flex: 1;
+        }
+        
+        .platform-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        
+        .btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: #C0A062;
+          color: #000;
+          padding: 18px 36px;
+          border-radius: 6px;
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 700;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+        }
+        
+        .btn-primary:hover {
+          background: #DAA520;
+          transform: scale(1.05);
+          box-shadow: 0 5px 20px rgba(192, 160, 98, 0.4);
+        }
+        
+        .btn-outline {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: transparent;
+          color: #C0A062;
+          padding: 18px 36px;
+          border-radius: 6px;
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 600;
+          border: 2px solid #C0A062;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+        }
+        
+        .btn-outline:hover {
+          background: #C0A062;
+          color: #000;
+          transform: scale(1.05);
+        }
+        
+        @media (max-width: 900px) {
+          .platform-card {
+            grid-template-columns: 1fr;
+            padding: 30px 20px;
+            text-align: center;
+          }
+          
+          .platform-card > div:first-child > div:first-child {
+            justify-content: center;
+          }
+          
+          .platform-button {
+            margin-top: 20px;
+          }
+          
+          .btn-primary, .btn-outline {
+            padding: 14px 28px;
+            font-size: 14px;
+          }
+        }
+      `}</style>
+    </div>
   );
-
-
-
-
-
-
-
-
-
-
-
+}
