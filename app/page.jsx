@@ -109,7 +109,7 @@ export default function HomePage() {
             textAlign: 'center',
             position: 'relative',
             zIndex: 1,
-            paddingTop: '60px',
+            paddingTop: '180px',
           }}
         >
           <h1
@@ -429,7 +429,7 @@ export default function HomePage() {
           >
             <div>
               {/* Blog Image - Seamless, no border */}
-              <LazyImage
+              <img
                 src={staticBlogPost.image_url || staticBlogPost.image}
                 alt={staticBlogPost.image_alt || staticBlogPost.title}
                 style={{
