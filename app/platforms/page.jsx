@@ -10,7 +10,7 @@ export default function Platforms() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* Hero Section */}
       <section
@@ -78,7 +78,7 @@ export default function Platforms() {
       </section>
 
       {/* Platform Tiers Section */}
-      <section style={{ padding: '40px 0 100px' }}>
+      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
         
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
@@ -197,11 +197,13 @@ export default function Platforms() {
 
         {/* POSITION #2 - ZERODHA */}
         <div
-          className="platform-card"
+          className="platform-card-grid"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '0', padding: '60px 5%', marginBottom: '0', width: '100%', boxShadow: '0 8px 32px rgba(192, 160, 98, 0.15)',
+            borderRadius: '12px',
+            padding: '60px 80px',
+            marginBottom: '40px',
             display: 'grid',
             gridTemplateColumns: '60% 40%',
             gap: '60px',
@@ -307,11 +309,13 @@ export default function Platforms() {
 
         {/* POSITION #3 - SMALLCASE */}
         <div
-          className="platform-card"
+          className="platform-card-grid"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '0', padding: '60px 5%', marginBottom: '0', width: '100%', boxShadow: '0 8px 32px rgba(192, 160, 98, 0.15)',
+            borderRadius: '12px',
+            padding: '60px 80px',
+            marginBottom: '40px',
             display: 'grid',
             gridTemplateColumns: '60% 40%',
             gap: '60px',
@@ -417,7 +421,7 @@ export default function Platforms() {
 
         {/* POSITION #4 - GROWW */}
         <div
-          className="platform-card"
+          className="platform-card-grid"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
@@ -567,4 +571,3 @@ export default function Platforms() {
     </div>
   );
 }
-
