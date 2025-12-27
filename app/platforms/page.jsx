@@ -78,7 +78,7 @@ export default function Platforms() {
       </section>
 
       {/* Platform Tiers Section */}
-      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', boxSizing: 'border-box', maxWidth: '100vw', overflowX: 'hidden' }}>
         
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
@@ -89,12 +89,12 @@ export default function Platforms() {
             borderRadius: '0',
             padding: '40px 20px',
             marginBottom: '0',
-            display: 'grid',
+            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
             gridTemplateColumns: '60% 40%',
             gap: '40px',
             alignItems: 'center',
             minHeight: '300px',
-            width: '100%',
+            width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
             boxShadow: '0 8px 32px rgba(192, 160, 98, 0.15)',
           }}
         >
@@ -204,7 +204,7 @@ export default function Platforms() {
             borderRadius: '0',
             padding: '40px 20px',
             marginBottom: '0',
-            display: 'grid',
+            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
             gridTemplateColumns: '60% 40%',
             gap: '40px',
             alignItems: 'center',
@@ -316,7 +316,7 @@ export default function Platforms() {
             borderRadius: '0',
             padding: '40px 20px',
             marginBottom: '0',
-            display: 'grid',
+            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
             gridTemplateColumns: '60% 40%',
             gap: '40px',
             alignItems: 'center',
@@ -428,7 +428,7 @@ export default function Platforms() {
             borderRadius: '0',
             padding: '40px 20px',
             marginBottom: '0',
-            display: 'grid',
+            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
             gridTemplateColumns: '60% 40%',
             gap: '40px',
             alignItems: 'center',
@@ -571,5 +571,6 @@ export default function Platforms() {
     </div>
   );
 }
+
 
 
