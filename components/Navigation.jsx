@@ -129,6 +129,47 @@ const Navigation = () => {
           </span>
         </Link>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div
+        style={{
+          display: isMobile ? 'block' : 'none',
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          background: 'rgba(0, 0, 0, 0.95)',
+          backdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+          padding: '12px 0',
+          paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', maxWidth: '400px', margin: '0 auto' }}>
+          {mobileLinks.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  color: isActive ? '#DAA520' : '#888',
+                  fontSize: '10px',
+                  fontWeight: isActive ? 600 : 400,
+                  transition: 'color 0.2s ease',
+                }}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 };
