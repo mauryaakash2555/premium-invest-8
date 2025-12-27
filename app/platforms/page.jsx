@@ -517,8 +517,8 @@ export default function Platforms() {
         `}</style>
       </section>
         </div>
-  </main>`n  );
-}
+  </main>
+  );
 
 
 
