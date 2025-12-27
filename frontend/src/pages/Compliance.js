@@ -774,7 +774,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
-                <strong style={{ color: '#E5E5E5' }}>Email:</strong> mauryaakash2555@gmail.com
+                <strong style={{ color: '#E5E5E5' }}>Email:</strong> support@bmwealth.co.in
               </p>
               <p style={{
                 fontSize: '16px',

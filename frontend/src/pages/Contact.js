@@ -18,8 +18,9 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppFallback, setShowWhatsAppFallback] = useState(false);
   
-  // reCAPTCHA site key (from env var or fallback)
-  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB';
+  // reCAPTCHA site key (from env var or fallback) - only use on production domain
+  const isProduction = typeof window !== 'undefined' && window.location.hostname === 'bmwealth.co.in';
+  const RECAPTCHA_SITE_KEY = isProduction ? (process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB') : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -386,7 +387,7 @@ const Contact = () => {
                     Email
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
-                    mauryaakash2555@gmail.com
+                    support@bmwealth.co.in
                   </p>
                 </div>
               </div>

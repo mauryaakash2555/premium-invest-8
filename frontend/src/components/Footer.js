@@ -90,10 +90,16 @@ const Footer = () => {
             flexDirection: 'column',
             gap: '8px'
           }}>
-            {['Home', 'About Us', 'Services', 'Blog', 'Contact'].map((item) => (
+            {[
+              { text: 'Home', path: '/' },
+              { text: 'About Us', path: '/about-us' },
+              { text: 'Services', path: '/services' },
+              { text: 'Blog', path: '/blog' },
+              { text: 'Contact', path: '/contact' }
+            ].map((item) => (
               <Link
-                key={item}
-                to={`/${item.toLowerCase().replace(' ', '-')}`}
+                key={item.path}
+                to={item.path}
                 style={{
                   color: '#aaa',
                   textDecoration: 'none',
@@ -101,7 +107,7 @@ const Footer = () => {
                   lineHeight: '1.4'
                 }}
               >
-                {item}
+                {item.text}
               </Link>
             ))}
           </nav>
