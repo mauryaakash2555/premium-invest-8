@@ -84,18 +84,18 @@ export default function Platforms() {
         <div className="platform-card">
           <div className="platform-content">
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '36px' }}>💎</span>
+              <span style={{ fontSize: '40px' }}>💎</span>
               <div>
                 <div style={{ fontSize: '14px', fontWeight: 700, color: '#C0A062', letterSpacing: '2px', marginBottom: '4px' }}>
                   POSITION #1
                 </div>
-                <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: 0, letterSpacing: '2px' }}>
+                <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: 0, letterSpacing: '1.5px' }}>
                   DIAMOND PARTNER
                 </h2>
               </div>
             </div>
 
-            <p style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '24px', fontWeight: 500 }}>
+            <p style={{ fontSize: 'clamp(16px, 2vw, 18px)', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '20px', fontWeight: 500 }}>
               Reserved for Exclusive Partnership
             </p>
 
@@ -119,11 +119,11 @@ export default function Platforms() {
         {/* POSITION #2 - ZERODHA */}
         <div className="platform-card">
           <div className="platform-content">
-            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#2</div>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#2</div>
+            <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
               ZERODHA
             </h2>
-            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
+            <p style={{ fontSize: '16px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '20px', fontWeight: 500 }}>
               India&apos;s largest discount broker
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -137,7 +137,7 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="https://zerodha.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Open Free Demat Account <ExternalLink size={18} />
+              Open Free Demat Account <ExternalLink size={16} />
             </a>
           </div>
         </div>
@@ -145,11 +145,11 @@ export default function Platforms() {
         {/* POSITION #3 - SMALLCASE */}
         <div className="platform-card">
           <div className="platform-content">
-            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#3</div>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#3</div>
+            <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
               SMALLCASE
             </h2>
-            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
+            <p style={{ fontSize: '16px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '20px', fontWeight: 500 }}>
               Thematic portfolio investing
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -163,7 +163,7 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="https://smallcase.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Explore Smallcases <ExternalLink size={18} />
+              Explore Smallcases <ExternalLink size={16} />
             </a>
           </div>
         </div>
@@ -171,11 +171,11 @@ export default function Platforms() {
         {/* POSITION #4 - GROWW */}
         <div className="platform-card">
           <div className="platform-content">
-            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '12px' }}>#4</div>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 12px 0', letterSpacing: '2px' }}>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#4</div>
+            <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
               GROWW
             </h2>
-            <p style={{ fontSize: '17px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '24px', fontWeight: 500 }}>
+            <p style={{ fontSize: '16px', color: 'rgba(192, 160, 98, 0.85)', marginBottom: '20px', fontWeight: 500 }}>
               Simplified investing for everyone
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -189,7 +189,7 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="https://groww.in" target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Start Free Account <ExternalLink size={18} />
+              Start Free Account <ExternalLink size={16} />
             </a>
           </div>
         </div>
@@ -205,24 +205,29 @@ export default function Platforms() {
 
       <style>{`
         .platform-card {
-          width: 100%;
+          width: calc(100% - 30px);
+          margin-left: 15px;
+          margin-right: 15px;
           background: rgba(255, 255, 255, 0.03);
-          border: 2px solid rgba(192, 160, 98, 0.25);
-          padding: 50px 60px;
-          margin-bottom: 0;
+          border: 2px solid rgba(192, 160, 98, 0.3);
+          padding: 60px 50px;
+          margin-bottom: 24px;
           display: grid;
           grid-template-columns: 1fr auto;
           gap: 40px;
           align-items: center;
           transition: all 0.3s ease;
           cursor: pointer;
+          border-radius: 12px;
+          text-align: left;
+          min-height: 280px;
         }
         
         .platform-card:hover {
           background: rgba(192, 160, 98, 0.08);
           border-color: rgba(192, 160, 98, 0.5);
           transform: translateY(-2px);
-          box-shadow: 0 10px 40px rgba(192, 160, 98, 0.15);
+          box-shadow: 0 8px 30px rgba(192, 160, 98, 0.15);
         }
         
         .platform-content {
@@ -242,7 +247,7 @@ export default function Platforms() {
           background: #C0A062;
           color: #000;
           padding: 18px 36px;
-          border-radius: 6px;
+          border-radius: 8px;
           text-decoration: none;
           font-size: 16px;
           font-weight: 700;
@@ -253,17 +258,17 @@ export default function Platforms() {
         .btn-primary:hover {
           background: #DAA520;
           transform: scale(1.05);
-          box-shadow: 0 5px 20px rgba(192, 160, 98, 0.4);
+          box-shadow: 0 8px 30px rgba(192, 160, 98, 0.5);
         }
         
         .btn-outline {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 10px;
           background: transparent;
           color: #C0A062;
           padding: 18px 36px;
-          border-radius: 6px;
+          border-radius: 8px;
           text-decoration: none;
           font-size: 16px;
           font-weight: 600;
@@ -276,21 +281,33 @@ export default function Platforms() {
           background: #C0A062;
           color: #000;
           transform: scale(1.05);
+          box-shadow: 0 8px 30px rgba(192, 160, 98, 0.5);
         }
         
         @media (max-width: 900px) {
           .platform-card {
             grid-template-columns: 1fr;
-            padding: 30px 20px;
-            text-align: center;
-          }
-          
-          .platform-card > div:first-child > div:first-child {
-            justify-content: center;
+            width: calc(100% - 20px);
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 50px 30px;
+            min-height: auto;
           }
           
           .platform-button {
+            justify-content: flex-start;
             margin-top: 20px;
+          }
+        }
+        
+        @media (max-width: 600px) {
+          .platform-card {
+            width: calc(100% - 16px);
+            margin-left: 8px;
+            margin-right: 8px;
+            padding: 40px 20px;
+            margin-bottom: 16px;
+            border-radius: 8px;
           }
           
           .btn-primary, .btn-outline {
