@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -74,7 +74,7 @@ const Navigation = () => {
               height={40}
               style={{ objectFit: 'contain' }}
             />
-            <span style={{ fontSize: '28px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
+            <span style={{ fontSize: '22px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
               BM Wealth
             </span>
           </Link>
@@ -124,7 +124,7 @@ const Navigation = () => {
             height={36}
             style={{ objectFit: 'contain' }}
           />
-          <span style={{ fontSize: '20px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
+          <span style={{ fontSize: '18px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
             BM Wealth
           </span>
         </Link>
@@ -175,4 +175,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
