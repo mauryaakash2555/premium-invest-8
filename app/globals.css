@@ -317,6 +317,12 @@ a {
    WHATSAPP FLOATING BUTTON
    ═══════════════════════════════════════════════════════════════ */
 
+@keyframes whatsappPulse {
+  0% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.7); }
+  50% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
 .whatsapp-float {
   position: fixed;
   bottom: 30px;
@@ -332,11 +338,13 @@ a {
   z-index: 998;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   color: #FFFFFF;
+  animation: whatsappPulse 2s infinite;
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+  transform: scale(1.15);
+  box-shadow: 0 8px 40px rgba(37, 211, 102, 0.8), 0 0 30px rgba(37, 211, 102, 0.6);
+  animation: none;
 }
 
 /* Mobile: Move WhatsApp button above mobile dock */
@@ -348,3 +356,4 @@ a {
     height: 55px;
   }
 }
+
