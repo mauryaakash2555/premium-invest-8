@@ -273,7 +273,7 @@ const Contact = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
               <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
+                className="glass-effect" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
                 }}
               >
                 <div
@@ -300,7 +300,7 @@ const Contact = () => {
               </div>
 
               <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
+                className="glass-effect" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
                 }}
               >
                 <div
@@ -329,7 +329,7 @@ const Contact = () => {
               </div>
 
               <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
+                className="glass-effect" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
                 }}
               >
                 <div
@@ -359,7 +359,7 @@ const Contact = () => {
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
+                className="glass-effect" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
                   textDecoration: 'none',
                   transition: 'all 0.3s ease',
                   cursor: 'pointer',
@@ -709,3 +709,4 @@ const Contact = () => {
 };
 
 export default Contact;
+
