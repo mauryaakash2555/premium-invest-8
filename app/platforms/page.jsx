@@ -10,7 +10,7 @@ export default function Platforms() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden', width: '100%', maxWidth: '100vw', position: 'relative' }}>
 
       {/* Hero Section */}
       <section
@@ -87,11 +87,11 @@ export default function Platforms() {
             background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.4) 100%)',
             border: '2px solid rgba(192, 160, 98, 0.4)',
             borderRadius: '0',
-            padding: '40px 20px',
+            padding: '40px 15px',
             marginBottom: '0',
             display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '60% 40%',
-            gap: '40px',
+            gridTemplateColumns: '1.5fr 1fr',
+            gap: '30px',
             alignItems: 'center',
             minHeight: '300px',
             width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
@@ -202,11 +202,11 @@ export default function Platforms() {
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
             borderRadius: '0',
-            padding: '40px 20px',
+            padding: '40px 15px',
             marginBottom: '0',
             display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '60% 40%',
-            gap: '40px',
+            gridTemplateColumns: '1.5fr 1fr',
+            gap: '30px',
             alignItems: 'center',
             minHeight: '300px',
             transition: 'all 0.3s ease',
@@ -314,11 +314,11 @@ export default function Platforms() {
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
             borderRadius: '0',
-            padding: '40px 20px',
+            padding: '40px 15px',
             marginBottom: '0',
             display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '60% 40%',
-            gap: '40px',
+            gridTemplateColumns: '1.5fr 1fr',
+            gap: '30px',
             alignItems: 'center',
             minHeight: '300px',
             transition: 'all 0.3s ease',
@@ -426,11 +426,11 @@ export default function Platforms() {
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
             borderRadius: '0',
-            padding: '40px 20px',
+            padding: '40px 15px',
             marginBottom: '0',
             display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '60% 40%',
-            gap: '40px',
+            gridTemplateColumns: '1.5fr 1fr',
+            gap: '30px',
             alignItems: 'center',
             minHeight: '300px',
             transition: 'all 0.3s ease',
@@ -571,6 +571,8 @@ export default function Platforms() {
     </div>
   );
 }
+
+
 
 
 
