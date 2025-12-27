@@ -74,7 +74,7 @@ const Navigation = () => {
               height={40}
               style={{ objectFit: 'contain' }}
             />
-            <span style={{ fontSize: '22px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
+            <span style={{ fontSize: '16px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
               BM Wealth
             </span>
           </Link>
@@ -86,7 +86,7 @@ const Navigation = () => {
                 style={{
                   color: pathname === link.path ? '#DAA520' : '#FFFFFF',
                   textDecoration: 'none',
-                  fontSize: '14px',
+                  fontSize: '11px',
                   fontWeight: 500,
                   transition: 'color 0.3s ease',
                   textTransform: 'uppercase',
@@ -124,7 +124,7 @@ const Navigation = () => {
             height={36}
             style={{ objectFit: 'contain' }}
           />
-          <span style={{ fontSize: '18px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
+          <span style={{ fontSize: '15px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
             BM Wealth
           </span>
         </Link>

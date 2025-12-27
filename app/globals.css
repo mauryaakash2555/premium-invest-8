@@ -40,19 +40,19 @@ a {
    BUTTONS
    ═══════════════════════════════════════════════════════════════ */
 
-.btn-primary {
-  background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
-  color: #000000;
-  border: none;
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-}
+  .btn-primary {
+    background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
+    color: #000000;
+    border: none;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, #8B6F47 0%, #704214 100%);

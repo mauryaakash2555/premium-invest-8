@@ -115,7 +115,7 @@ export default function HomePage() {
           <h1
             className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(28px, 4.5vw, 56px)',
+              fontSize: 'clamp(20px, 2.5vw, 32px)',
               color: '#C0A062',
               marginBottom: '24px',
               fontWeight: 300,
@@ -130,15 +130,15 @@ export default function HomePage() {
           <p
             className="hero-description-responsive"
             style={{
-              fontSize: 'clamp(16px, 2.2vw, 22px)',
+              fontSize: 'clamp(13px, 1.5vw, 16px)',
               color: '#C0A062',
               marginBottom: '60px',
               maxWidth: '800px',
               margin: '0 auto 60px',
-              lineHeight: 1.6,
+              lineHeight: 1.5,
               fontWeight: 300,
-              letterSpacing: '1px',
-              opacity: 0.88,
+              letterSpacing: '0.5px',
+              opacity: 0.85,
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
