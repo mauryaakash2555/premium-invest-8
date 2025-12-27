@@ -13,7 +13,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
     "mongodb": "^6.3.0",
-    "next": "15.0.3",
+    "next": "15.1.9",
     "nodemailer": "^6.9.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "15.0.3",
+    "eslint-config-next": "15.1.9",
     "tailwindcss": "^4"
   }
 }
