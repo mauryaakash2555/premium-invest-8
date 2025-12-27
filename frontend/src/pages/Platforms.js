@@ -1,7 +1,7 @@
-himport { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 const Platforms = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
