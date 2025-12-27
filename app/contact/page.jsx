@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
 import axios from 'axios';
 // Render Backend API (permanent solution)
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Use NEXT_PUBLIC_ prefix for client-side access in Next.js
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://bmwealth-backend.onrender.com';
 const API = `${BACKEND_URL}/api`;
 
 const Contact = () => {
@@ -19,7 +20,7 @@ const Contact = () => {
   
   // reCAPTCHA site key (from env var or fallback) - only use on production domain
   const isProduction = typeof window !== 'undefined' && window.location.hostname === 'bmwealth.co.in';
-  const RECAPTCHA_SITE_KEY = isProduction ? (process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB') : null;
+  const RECAPTCHA_SITE_KEY = isProduction ? (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LfAFSMsAAAAAOGp-tuvFm7cngZ3Xc8VY85zGqKB') : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
