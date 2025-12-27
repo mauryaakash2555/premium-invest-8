@@ -197,33 +197,14 @@ export default function BlogDetailPage({ params }) {
         )}
 
         {/* Content */}
-        <div style={{ color: '#e5e5e5', lineHeight: '1.8' }}>
-          {Array.isArray(post.content) ? (
-            post.content.map((paragraph, index) => {
-              // Skip script tags (they are for SEO and should be in head)
-              if (typeof paragraph === 'string' && paragraph.includes('<script')) {
-                return null;
-              }
-              // Check if paragraph is HTML (contains HTML tags)
-              if (typeof paragraph === 'string' && paragraph.includes('<')) {
-                return (
-                  <div 
-                    key={index}
-                    dangerouslySetInnerHTML={{ __html: paragraph }}
-                    style={{ marginBottom: '20px' }}
-                  />
-                );
-              }
-              return (
-                <p key={index} style={{ marginBottom: '20px', fontSize: '16px' }}>
-                  {paragraph}
-                </p>
-              );
-            })
-          ) : (
-            <p style={{ fontSize: '16px' }}>{post.content || 'No content available.'}</p>
-          )}
-        </div>
+        <div 
+          style={{ color: '#e5e5e5', lineHeight: '1.8' }}
+          dangerouslySetInnerHTML={{ 
+            __html: typeof post.content === 'string' 
+              ? post.content 
+              : (Array.isArray(post.content) ? post.content.join('') : 'No content available.')
+          }}
+        />
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
