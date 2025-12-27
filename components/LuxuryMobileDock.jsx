@@ -1,328 +1,305 @@
-'use client';
+"use client"
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Briefcase, Users, MoreHorizontal, Menu, X } from 'lucide-react';
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Home, Briefcase, Users, Menu, X, Info, Layers, BookOpen, Mail } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-export default function LuxuryMobileDock() {
-  const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const mainNavItems = [
+  { label: "Home", icon: Home, href: "/" },
+  { label: "Services", icon: Briefcase, href: "/services" },
+  { label: "Partners", icon: Users, href: "/curated-partners" },
+]
+
+const allNavItems = [
+  { label: "Home", icon: Home, href: "/" },
+  { label: "About", icon: Info, href: "/about-us" },
+  { label: "Services", icon: Briefcase, href: "/services" },
+  { label: "Platforms", icon: Layers, href: "/platforms" },
+  { label: "Curated Partners", icon: Users, href: "/curated-partners" },
+  { label: "Blog", icon: BookOpen, href: "/blog" },
+  { label: "Contact", icon: Mail, href: "/contact" },
+]
+
+export function LuxuryMobileDock() {
+  const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState(null)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+      setScrolled(window.scrollY > 50)
+    }
 
-  const navItems = [
-    { href: '/', icon: Home, label: 'HOME' },
-    { href: '/services', icon: Briefcase, label: 'SERVICES' },
-    { href: '/curated-partners', icon: Users, label: 'PARTNERS' },
-    { href: '/more', icon: MoreHorizontal, label: 'MORE' },
-  ];
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  const menuItems = [
-    { href: '/', label: 'Home', sublabel: 'Welcome' },
-    { href: '/about-us', label: 'About Us', sublabel: 'Our Story' },
-    { href: '/services', label: 'Services', sublabel: 'What We Offer' },
-    { href: '/platforms', label: 'Platforms', sublabel: 'Investment Options' },
-    { href: '/curated-partners', label: 'Curated Partners', sublabel: 'Our Network' },
-    { href: '/blog', label: 'Blog', sublabel: 'Insights & News' },
-    { href: '/contact', label: 'Contact', sublabel: 'Get in Touch' },
-  ];
+  const handleNavClick = (href) => {
+    setIsMenuOpen(false)
+  }
+
+  const isActive = (href) => {
+    if (href === "/" && pathname === "/") return true
+    if (href !== "/" && pathname.startsWith(href)) return true
+    return false
+  }
 
   return (
     <>
-      {/* Mobile Navigation Dock - Only visible on mobile */}
-      <div
-        className="md:hidden"
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          left: '50%',
-          transform: isScrolled ? 'translateX(-50%) scale(0.92)' : 'translateX(-50%) scale(1)',
-          zIndex: 9999,
-          width: 'calc(100% - 40px)',
-          maxWidth: '420px',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          opacity: isScrolled ? 0.92 : 1,
-        }}
+      {/* Main Dock */}
+      <nav
+        className={cn(
+          "md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+          scrolled ? "scale-90 opacity-85" : "scale-100 opacity-100",
+        )}
       >
-        {/* Gold Halo Glow Effect */}
         <div
-          style={{
-            position: 'absolute',
-            inset: '-12px',
-            background: 'radial-gradient(ellipse at center, rgba(192, 160, 98, 0.25) 0%, transparent 70%)',
-            filter: 'blur(20px)',
-            pointerEvents: 'none',
-            opacity: 0.6,
-          }}
-        />
-
-        {/* Main Dock Container */}
-        <div
-          style={{
-            position: 'relative',
-            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(10, 10, 10, 0.95) 100%)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-            border: '1.5px solid rgba(192, 160, 98, 0.4)',
-            borderRadius: '9999px',
-            padding: '16px 24px',
-            boxShadow: `
-              0 10px 40px rgba(0, 0, 0, 0.8),
-              0 0 1px rgba(192, 160, 98, 0.3),
-              inset 0 1px 0 rgba(192, 160, 98, 0.15),
-              inset 0 -1px 0 rgba(0, 0, 0, 0.5)
-            `,
-          }}
+          className={cn(
+            "gold-shimmer luxury-particles ultra-luxury-glass ambient-glow-pulse",
+            "relative flex items-center gap-1 px-5 py-3.5 bg-[#000000] rounded-full",
+            "border-[1.5px] border-[#C0A062]",
+            "shadow-[0_0_25px_rgba(192,160,98,0.4),0_0_50px_rgba(192,160,98,0.25),0_0_75px_rgba(192,160,98,0.15),inset_0_0_20px_rgba(192,160,98,0.08)]",
+          )}
         >
-          {/* Subtle Gold Grain Texture Overlay */}
+          <div className="absolute top-1/2 left-3 -translate-y-1/2 w-1 h-1 rounded-full bg-[#C0A062] opacity-60 animate-pulse" />
           <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: `
-                repeating-linear-gradient(
-                  0deg,
-                  transparent,
-                  transparent 2px,
-                  rgba(192, 160, 98, 0.02) 2px,
-                  rgba(192, 160, 98, 0.02) 4px
-                )
-              `,
-              borderRadius: '9999px',
-              pointerEvents: 'none',
-              mixBlendMode: 'overlay',
-            }}
+            className="absolute top-1/2 right-3 -translate-y-1/2 w-1 h-1 rounded-full bg-[#C0A062] opacity-60 animate-pulse"
+            style={{ animationDelay: "1s" }}
           />
 
-          {/* Navigation Items */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              gap: '8px',
-              position: 'relative',
-            }}
-          >
-            {navItems.map((item, index) => {
-              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-              const Icon = item.icon;
+          {mainNavItems.map((item, index) => {
+            const Icon = item.icon
+            const active = isActive(item.href)
+            
+            return (
+              <Link
+                key={index}
+                href={item.href}
+                onClick={() => handleNavClick(item.href)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={cn(
+                  "relative flex flex-col items-center justify-center px-4 py-2",
+                  "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+                  "hover:scale-125 active:scale-95 group",
+                )}
+                aria-label={item.label}
+              >
+                {(hoveredIndex === index || active) && (
+                  <div className="absolute inset-0 rounded-lg bg-[#C0A062]/10 blur-xl animate-in fade-in zoom-in duration-300" />
+                )}
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href === '/more' ? '#' : item.href}
-                  onClick={(e) => {
-                    if (item.href === '/more') {
-                      e.preventDefault();
-                      setIsMenuOpen(true);
-                    }
-                  }}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '10px 16px',
-                    borderRadius: '24px',
-                    background: isActive 
-                      ? 'linear-gradient(135deg, rgba(192, 160, 98, 0.2) 0%, rgba(192, 160, 98, 0.08) 100%)'
-                      : 'transparent',
-                    transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-                    textDecoration: 'none',
-                    position: 'relative',
-                    transform: isActive ? 'translateY(-2px)' : 'translateY(0)',
-                  }}
-                >
-                  {/* Active Indicator Glow */}
-                  {isActive && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: '-4px',
-                        background: 'radial-gradient(circle at center, rgba(192, 160, 98, 0.2) 0%, transparent 70%)',
-                        filter: 'blur(8px)',
-                        pointerEvents: 'none',
-                        animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                      }}
-                    />
+                <div
+                  className={cn(
+                    "relative transition-all duration-500",
+                    active ? "text-[#C0A062]" : "text-[#C0A062]/60",
+                    "group-hover:text-[#C0A062]",
+                    "group-hover:drop-shadow-[0_0_15px_rgba(192,160,98,0.8)]",
+                    "group-hover:drop-shadow-[0_0_30px_rgba(192,160,98,0.5)]",
+                    "group-hover:filter group-hover:brightness-125",
                   )}
+                >
+                  <Icon className="w-5 h-5" strokeWidth={1} />
+                </div>
+                <span
+                  className={cn(
+                    "font-inter text-[9px] mt-1.5 transition-all duration-500",
+                    "tracking-widest uppercase",
+                    active ? "text-[#C0A062]" : "text-[#C0A062]/60",
+                    "group-hover:text-[#C0A062]",
+                    "group-hover:drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]",
+                    "group-hover:scale-110",
+                  )}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            )
+          })}
 
-                  <Icon
-                    size={22}
-                    strokeWidth={1}
-                    style={{
-                      color: isActive ? '#C0A062' : 'rgba(192, 160, 98, 0.5)',
-                      transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-                      filter: isActive ? 'drop-shadow(0 0 8px rgba(192, 160, 98, 0.6))' : 'none',
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: '9px',
-                      fontWeight: 500,
-                      letterSpacing: '0.8px',
-                      color: isActive ? '#C0A062' : 'rgba(192, 160, 98, 0.5)',
-                      transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-                      fontFamily: 'Inter, -apple-system, sans-serif',
-                      textTransform: 'uppercase',
-                      textShadow: isActive ? '0 0 10px rgba(192, 160, 98, 0.4)' : 'none',
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+          {/* More Button */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            onMouseEnter={() => setHoveredIndex(999)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className={cn(
+              "relative flex flex-col items-center justify-center px-4 py-2",
+              "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+              "hover:scale-125 active:scale-95 group",
+            )}
+            aria-label="More menu"
+          >
+            {hoveredIndex === 999 && (
+              <div className="absolute inset-0 rounded-lg bg-[#C0A062]/10 blur-xl animate-in fade-in zoom-in duration-300" />
+            )}
+
+            <div
+              className={cn(
+                "relative text-[#C0A062] transition-all duration-500",
+                "group-hover:drop-shadow-[0_0_15px_rgba(192,160,98,0.8)]",
+                "group-hover:drop-shadow-[0_0_30px_rgba(192,160,98,0.5)]",
+                "group-hover:filter group-hover:brightness-125",
+                "group-hover:rotate-90",
+              )}
+            >
+              <Menu className="w-5 h-5" strokeWidth={1} />
+            </div>
+            <span
+              className={cn(
+                "font-inter text-[9px] mt-1.5 transition-all duration-500",
+                "tracking-widest uppercase",
+                "text-[#C0A062]/60 group-hover:text-[#C0A062]",
+                "group-hover:drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]",
+                "group-hover:scale-110",
+              )}
+            >
+              More
+            </span>
+          </button>
         </div>
-      </div>
+      </nav>
 
       {/* Full-Screen Overlay Menu */}
       {isMenuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99999,
-            background: 'rgba(0, 0, 0, 0.98)',
-            backdropFilter: 'blur(40px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(40px) saturate(180%)',
-            animation: 'fadeIn 0.3s ease-out',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px 24px',
-          }}
-          onClick={() => setIsMenuOpen(false)}
-        >
-          {/* Close Button */}
-          <button
-            onClick={() => setIsMenuOpen(false)}
-            style={{
-              position: 'absolute',
-              top: '24px',
-              right: '24px',
-              background: 'rgba(192, 160, 98, 0.1)',
-              border: '1px solid rgba(192, 160, 98, 0.3)',
-              borderRadius: '50%',
-              width: '48px',
-              height: '48px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            <X size={24} strokeWidth={1.5} style={{ color: '#C0A062' }} />
-          </button>
+        <div className="fixed inset-0 z-[100] animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-black/98 backdrop-blur-xl" onClick={() => setIsMenuOpen(false)} />
 
-          {/* Menu Items */}
           <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
-              width: '100%',
-              maxWidth: '400px',
-              marginTop: '20px',
-            }}
+            className={cn(
+              "gold-grain-texture luxury-particles",
+              "relative h-full flex flex-col items-center justify-center p-8",
+              "bg-gradient-to-b from-[#000000] via-[#0a0a0a] to-[#000000]",
+            )}
           >
-            {menuItems.map((item, index) => {
-              const isActive = pathname === item.href;
-              
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    padding: '20px 24px',
-                    background: isActive 
-                      ? 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(192, 160, 98, 0.05) 100%)'
-                      : 'rgba(255, 255, 255, 0.02)',
-                    border: `1px solid ${isActive ? 'rgba(192, 160, 98, 0.3)' : 'rgba(192, 160, 98, 0.1)'}`,
-                    borderRadius: '16px',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    animation: `slideInStagger ${0.3 + index * 0.05}s ease-out`,
-                    transform: 'translateY(0)',
-                  }}
-                >
-                  <span
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className={cn(
+                "absolute top-8 right-8 group",
+                "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+                "hover:scale-125 hover:rotate-90 active:scale-95",
+                "text-[#C0A062]",
+              )}
+              aria-label="Close menu"
+            >
+              <div
+                className={cn(
+                  "relative",
+                  "group-hover:drop-shadow-[0_0_20px_rgba(192,160,98,0.9)]",
+                  "group-hover:drop-shadow-[0_0_40px_rgba(192,160,98,0.6)]",
+                )}
+              >
+                <X className="w-8 h-8" strokeWidth={1} />
+              </div>
+            </button>
+
+            <div className="absolute top-8 left-8">
+              <h2 className="gold-gradient-text font-serif text-2xl tracking-[0.2em] uppercase">Navigation</h2>
+              <div className="h-[1px] w-full bg-gradient-to-r from-[#C0A062] to-transparent mt-2" />
+            </div>
+
+            <nav className="flex flex-col items-center gap-4 w-full max-w-md">
+              {allNavItems.map((item, index) => {
+                const Icon = item.icon
+                const active = isActive(item.href)
+                
+                return (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    className={cn(
+                      "group w-full relative",
+                      "flex items-center gap-6 px-8 py-5 rounded-2xl",
+                      "border",
+                      active ? "border-[#C0A062]/40 bg-gradient-to-r from-[#C0A062]/5 via-[#C0A062]/3 to-transparent" : "border-[#C0A062]/20",
+                      "hover:border-[#C0A062]/60",
+                      "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+                      "hover:bg-gradient-to-r hover:from-[#C0A062]/10 hover:via-[#C0A062]/5 hover:to-transparent",
+                      "hover:shadow-[0_0_30px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.1)]",
+                      "hover:scale-105 hover:translate-x-2",
+                      "backdrop-blur-sm",
+                    )}
                     style={{
-                      fontFamily: 'Playfair Display, serif',
-                      fontSize: '22px',
-                      fontWeight: 600,
-                      color: isActive ? '#C0A062' : '#FFFFFF',
-                      transition: 'color 0.3s ease',
-                      letterSpacing: '0.5px',
+                      animationDelay: `${index * 80}ms`,
                     }}
                   >
-                    {item.label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      color: 'rgba(192, 160, 98, 0.6)',
-                      letterSpacing: '0.3px',
-                    }}
-                  >
-                    {item.sublabel}
-                  </span>
-                </Link>
-              );
-            })}
+                    <div className="absolute left-8 w-12 h-12 bg-[#C0A062]/0 group-hover:bg-[#C0A062]/20 rounded-full blur-2xl transition-all duration-500" />
+
+                    <div
+                      className={cn(
+                        "relative z-10 transition-all duration-500",
+                        active ? "text-[#C0A062]" : "text-[#C0A062]/80",
+                        "group-hover:text-[#C0A062]",
+                        "group-hover:drop-shadow-[0_0_15px_rgba(192,160,98,0.8)]",
+                        "group-hover:drop-shadow-[0_0_30px_rgba(192,160,98,0.5)]",
+                        "group-hover:scale-125 group-hover:rotate-12",
+                        "group-hover:filter group-hover:brightness-125",
+                      )}
+                    >
+                      <Icon className="w-6 h-6" strokeWidth={1} />
+                    </div>
+                    <div className="flex flex-col items-start flex-1 relative z-10">
+                      <span
+                        className={cn(
+                          "font-serif text-2xl transition-all duration-500",
+                          active ? "text-[#D4B576]" : "text-[#C0A062]",
+                          "group-hover:text-[#D4B576]",
+                          "tracking-wide",
+                          "group-hover:drop-shadow-[0_0_10px_rgba(192,160,98,0.8)]",
+                          "group-hover:tracking-wider",
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                      <span
+                        className={cn(
+                          "font-inter text-xs transition-all duration-500",
+                          "text-[#C0A062]/40 group-hover:text-[#C0A062]/70",
+                          "tracking-widest uppercase mt-1",
+                        )}
+                      >
+                        Navigate to {item.label.toLowerCase()}
+                      </span>
+                    </div>
+
+                    <div
+                      className={cn(
+                        "relative z-10 w-3 h-3 rounded-full transition-all duration-500",
+                        "bg-[#C0A062]/0 group-hover:bg-[#C0A062]",
+                        "group-hover:shadow-[0_0_20px_rgba(192,160,98,0.8)]",
+                        "group-hover:scale-150",
+                      )}
+                    >
+                      <div className="absolute inset-0 rounded-full bg-[#C0A062] opacity-0 group-hover:opacity-50 group-hover:animate-ping" />
+                    </div>
+
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-[#C0A062]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    </div>
+                  </Link>
+                )
+              })}
+            </nav>
+
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+              <div className="relative w-32 h-[2px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4B576] to-transparent blur-sm animate-pulse" />
+              </div>
+              <div className="flex gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" />
+                <div
+                  className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse"
+                  style={{ animationDelay: "0.5s" }}
+                />
+                <div className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" style={{ animationDelay: "1s" }} />
+              </div>
+            </div>
           </div>
         </div>
       )}
-
-      {/* Animations */}
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInStagger {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.6;
-          }
-        }
-      `}</style>
     </>
-  );
+  )
 }
