@@ -116,7 +116,7 @@ export default function BlogPage() {
             right: 0,
             height: '100%',
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&auto=format&fm=webp&q=60)',
+              'url(/blog-images/blog-hero-47lakh.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.65,
