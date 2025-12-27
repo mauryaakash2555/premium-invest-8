@@ -1,19 +1,21 @@
 ﻿"use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Calendar, User, Tag, ArrowLeft, Clock } from 'lucide-react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
-import { staticBlogPost, staticBlogData } from '../data/staticBlogData';
+import { staticBlogPost, staticBlogData } from '@/data/staticBlogData';
+import { use } from 'react';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 export default function Page({ params }) {
-  const { slug } = params;
+  const resolvedParams = use(params);
+  const { slug } = resolvedParams;
   
-  const navigate = useNavigate();
+  const router = useRouter();
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -74,7 +76,7 @@ export default function Page({ params }) {
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '20px' }}>
         <p style={{ fontSize: '18px', color: '#C0A062' }}>{error || 'Blog post not found'}</p>
         <button
-          onClick={() => navigate('/blog')}
+          onClick={() => router.push('/blog')}
           className="btn-primary"
         >
           Back to Blog
@@ -130,7 +132,7 @@ export default function Page({ params }) {
       {/* Back Button */}
       <div className="section-container" style={{ paddingTop: '120px', paddingBottom: '20px' }}>
         <button
-          onClick={() => navigate('/blog')}
+          onClick={() => router.push('/blog')}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -419,7 +421,7 @@ export default function Page({ params }) {
         {/* Back to Blog Button */}
         <div style={{ marginTop: '60px', textAlign: 'center' }}>
           <button
-            onClick={() => navigate('/blog')}
+            onClick={() => router.push('/blog')}
             className="btn-primary"
           >
             Back to All Posts

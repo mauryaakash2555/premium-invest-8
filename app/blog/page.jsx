@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import LazyImage from '@/components/LazyImage';
-import { staticBlogPost, allBlogPosts } from '@/data/staticBlogData';
+import { staticBlogPost, staticBlogData } from '@/data/staticBlogData';
 
 export default function Blog() {
-  const posts = allBlogPosts || [staticBlogPost];
+  const posts = staticBlogData && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
 
   return (
     <div>

@@ -1,5 +1,7 @@
 ﻿"use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect } from 'react';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
@@ -176,7 +178,7 @@ export default function Page() {
           {/* Right Side */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Link
-              to="/contact?subject=diamond-partnership"
+              href="/contact?subject=diamond-partnership"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
