@@ -1,42 +1,60 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #020617;
-  --foreground: #e2e8f0;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-*,
-*::before,
-*::after {
+/* BM Wealth Global Styles */
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(99, 102, 241, 0.18), transparent 30%),
-    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.12), transparent 25%),
-    var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #000000;
+  color: #FFFFFF;
+  line-height: 1.6;
   min-height: 100vh;
-  margin: 0;
 }
 
+/* Golden Gradient Text */
+.golden-gradient {
+  background: linear-gradient(135deg, #DAA520 0%, #FFD700 50%, #B8860B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(218, 165, 32, 0.1);
+  border-radius: 16px;
+}
+
+/* Card Style */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Links */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-.card {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.35);
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .page-hero-responsive {
+    min-height: 50vh !important;
+    padding-top: 80px !important;
+  }
 }
