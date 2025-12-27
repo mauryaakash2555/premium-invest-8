@@ -359,24 +359,7 @@ const Contact = () => {
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                  border: '1px solid rgba(37, 211, 102, 0.2)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(37, 211, 102, 0.4)';
-                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.5)';
-                  e.currentTarget.style.background = 'rgba(37, 211, 102, 0.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.2)';
-                  e.currentTarget.style.background = 'transparent';
-                }}
+                className="glass-effect contact-info-card whatsapp-contact-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px', textDecoration: 'none', cursor: 'pointer', border: '1px solid rgba(37, 211, 102, 0.2)' }}
               >
                 <div
                   style={{
@@ -709,3 +692,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

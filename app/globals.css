@@ -228,6 +228,12 @@ a {
   box-shadow: 0 15px 50px rgba(218, 165, 32, 0.4), 0 0 25px rgba(218, 165, 32, 0.2) !important;
 }
 
+.whatsapp-contact-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(37, 211, 102, 0.6) !important;
+  box-shadow: 0 15px 50px rgba(37, 211, 102, 0.5), 0 0 25px rgba(37, 211, 102, 0.3) !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════ */
@@ -359,3 +365,4 @@ a {
     height: 55px;
   }
 }
+
