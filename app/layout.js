@@ -34,10 +34,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100vw' }}>
-        <Navigation />
-        <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
-        <Footer />
+      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
+        <div className="main-wrapper" style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%', position: 'relative' }}>
+          <Navigation />
+          <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
+          <Footer />
+        </div>
         <WhatsAppFloat />
         <Analytics />
         <SpeedInsights />
