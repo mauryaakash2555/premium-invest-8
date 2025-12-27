@@ -197,13 +197,13 @@ export default function Platforms() {
 
         {/* POSITION #2 - ZERODHA */}
         <div
-          className="platform-card-grid"
+          className="platform-card"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '12px',
-            padding: '60px 80px',
-            marginBottom: '40px',
+            borderRadius: '0',
+            padding: '60px 40px',
+            marginBottom: '0',
             display: 'grid',
             gridTemplateColumns: '60% 40%',
             gap: '60px',
@@ -309,13 +309,13 @@ export default function Platforms() {
 
         {/* POSITION #3 - SMALLCASE */}
         <div
-          className="platform-card-grid"
+          className="platform-card"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '12px',
-            padding: '60px 80px',
-            marginBottom: '40px',
+            borderRadius: '0',
+            padding: '60px 40px',
+            marginBottom: '0',
             display: 'grid',
             gridTemplateColumns: '60% 40%',
             gap: '60px',
@@ -421,13 +421,13 @@ export default function Platforms() {
 
         {/* POSITION #4 - GROWW */}
         <div
-          className="platform-card-grid"
+          className="platform-card"
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '12px',
-            padding: '60px 80px',
-            marginBottom: '60px',
+            borderRadius: '0',
+            padding: '60px 40px',
+            marginBottom: '0',
             display: 'grid',
             gridTemplateColumns: '60% 40%',
             gap: '60px',
@@ -571,3 +571,4 @@ export default function Platforms() {
     </div>
   );
 }
+
