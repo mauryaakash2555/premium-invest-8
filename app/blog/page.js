@@ -269,20 +269,11 @@ export default function BlogPage() {
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <div
-                  className="glass-effect"
+                  className="blog-card-premium"
                   style={{
                     overflow: 'hidden',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                     cursor: 'pointer',
                     height: '100%',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-8px)';
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
                   {(post.image_url || post.image) ? (
