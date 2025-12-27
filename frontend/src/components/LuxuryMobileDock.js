@@ -11,7 +11,7 @@ const mainNavItems = [
 
 const allNavItems = [
   { label: 'Home', icon: <Home className="w-6 h-6" strokeWidth={1} />, href: '/' },
-  { label: 'About', icon: <Info className="w-6 h-6" strokeWidth={1} />, href: '/about' },
+  { label: 'About Us', icon: <Info className="w-6 h-6" strokeWidth={1} />, href: '/about-us' },
   { label: 'Services', icon: <Briefcase className="w-6 h-6" strokeWidth={1} />, href: '/services' },
   { label: 'Platforms', icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: '/platforms' },
   { label: 'Curated Partners', icon: <Users className="w-6 h-6" strokeWidth={1} />, href: '/curated-partners' },

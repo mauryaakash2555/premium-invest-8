@@ -29,6 +29,8 @@ const FixedDeposits = lazy(() => import("@/pages/FixedDeposits"));
 const SIPServices = lazy(() => import("@/pages/SIPServices"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
+const Platforms = lazy(() => import("@/pages/Platforms"));
+const CuratedPartners = lazy(() => import("@/pages/CuratedPartners"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -69,6 +71,9 @@ function App() {
                 <Route path="sip" element={<SIPServices />} />
                 <Route path="careers" element={<Careers />} />
                 <Route path="sitemap" element={<Sitemap />} />
+                <Route path="platforms" element={<Platforms />} />
+                <Route path="platform" element={<Platforms />} />
+                <Route path="curated-partners" element={<CuratedPartners />} />
                 
                 {/* Legal Pages */}
                 <Route path="compliance" element={<Compliance />} />
