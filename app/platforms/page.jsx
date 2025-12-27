@@ -79,7 +79,7 @@ export default function Platforms() {
       </section>
 
       {/* Platform Tiers Section */}
-      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', boxSizing: 'border-box', maxWidth: '100vw', overflowX: 'hidden' }}>
+      <section style={{ padding: '40px 0 100px', width: '100%', maxWidth: '100vw', boxSizing: 'border-box', overflowX: 'hidden' }}>
         
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
@@ -519,6 +519,7 @@ export default function Platforms() {
         </div>
   </main>`n  );
 }
+
 
 
 
