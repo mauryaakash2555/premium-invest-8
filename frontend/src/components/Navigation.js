@@ -17,11 +17,11 @@ const Navigation = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
+    { path: '/platform', label: 'Platform' },
+    { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
-    { path: '/compliance', label: 'Compliance' },
   ];
 
   const isActive = (path) => location.pathname === path;
