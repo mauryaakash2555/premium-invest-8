@@ -1,6 +1,7 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -65,8 +66,17 @@ const Navigation = () => {
         }}
       >
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ fontSize: '28px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textDecoration: 'none', letterSpacing: '1px' }}>
-            BM Wealth
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+            <Image 
+              src="/logo.webp" 
+              alt="BM Wealth Logo" 
+              width={40} 
+              height={40}
+              style={{ objectFit: 'contain' }}
+            />
+            <span style={{ fontSize: '28px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
+              BM Wealth
+            </span>
           </Link>
           <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
             {navLinks.map((link) => (
@@ -90,7 +100,37 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Top Header with Logo */}
+      <div
+        style={{
+          display: isMobile ? 'block' : 'none',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+          background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(218, 165, 32, 0.2)',
+          padding: '12px 20px',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <Image 
+            src="/logo.webp" 
+            alt="BM Wealth Logo" 
+            width={36} 
+            height={36}
+            style={{ objectFit: 'contain' }}
+          />
+          <span style={{ fontSize: '20px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
+            BM Wealth
+          </span>
+        </Link>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
       <div
         style={{
           display: isMobile ? 'block' : 'none',
@@ -135,3 +175,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
