@@ -6,14 +6,27 @@ import { useState, useEffect } from 'react';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const navLinks = [
@@ -26,12 +39,20 @@ const Navigation = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
+  const mobileLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/about-us', label: 'About' },
+    { href: '/services', label: 'Services' },
+    { href: '/blog', label: 'Blog' },
+    { href: '/contact', label: 'Contact' },
+  ];
+
   return (
     <>
       {/* Desktop Navigation */}
       <nav
-        className="hidden md:block"
         style={{
+          display: isMobile ? 'none' : 'block',
           position: 'fixed',
           top: 0,
           left: 0,
@@ -71,8 +92,8 @@ const Navigation = () => {
 
       {/* Mobile Navigation */}
       <div
-        className="md:hidden"
         style={{
+          display: isMobile ? 'block' : 'none',
           position: 'fixed',
           bottom: 0,
           left: 0,
@@ -86,13 +107,7 @@ const Navigation = () => {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', maxWidth: '400px', margin: '0 auto' }}>
-          {[
-            { href: '/', label: 'Home' },
-            { href: '/about-us', label: 'About' },
-            { href: '/services', label: 'Services' },
-            { href: '/blog', label: 'Blog' },
-            { href: '/contact', label: 'Contact' },
-          ].map((item) => {
+          {mobileLinks.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
