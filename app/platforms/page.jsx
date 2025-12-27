@@ -10,7 +10,8 @@ export default function Platforms() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden', width: '100%', maxWidth: '100vw', position: 'relative' }}>
+    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
 
       {/* Hero Section */}
       <section
@@ -82,21 +83,7 @@ export default function Platforms() {
         
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
-          className="platform-card"
-          style={{
-            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.4) 100%)',
-            border: '2px solid rgba(192, 160, 98, 0.4)',
-            borderRadius: '0',
-            padding: '40px 15px',
-            marginBottom: '0',
-            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '1.5fr 1fr',
-            gap: '30px',
-            alignItems: 'center',
-            minHeight: '300px',
-            width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            boxShadow: '0 8px 32px rgba(192, 160, 98, 0.15)',
-          }}
+          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
@@ -197,20 +184,7 @@ export default function Platforms() {
 
         {/* POSITION #2 - ZERODHA */}
         <div
-          className="platform-card"
-          style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '0',
-            padding: '40px 15px',
-            marginBottom: '0',
-            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '1.5fr 1fr',
-            gap: '30px',
-            alignItems: 'center',
-            minHeight: '300px',
-            transition: 'all 0.3s ease',
-          }}
+          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
@@ -309,20 +283,7 @@ export default function Platforms() {
 
         {/* POSITION #3 - SMALLCASE */}
         <div
-          className="platform-card"
-          style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '0',
-            padding: '40px 15px',
-            marginBottom: '0',
-            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '1.5fr 1fr',
-            gap: '30px',
-            alignItems: 'center',
-            minHeight: '300px',
-            transition: 'all 0.3s ease',
-          }}
+          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
@@ -421,20 +382,7 @@ export default function Platforms() {
 
         {/* POSITION #4 - GROWW */}
         <div
-          className="platform-card"
-          style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
-            borderRadius: '0',
-            padding: '40px 15px',
-            marginBottom: '0',
-            display: 'grid', width: '100%', maxWidth: '100vw', boxSizing: 'border-box',
-            gridTemplateColumns: '1.5fr 1fr',
-            gap: '30px',
-            alignItems: 'center',
-            minHeight: '300px',
-            transition: 'all 0.3s ease',
-          }}
+          className="platform-card" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto 30px auto', padding: '40px 20px', boxSizing: 'border-box', background: 'rgba(255, 255, 255, 0.03)', border: '2px solid rgba(192, 160, 98, 0.25)', borderRadius: '0' }}
         >
           {/* Left Side */}
           <div>
@@ -568,9 +516,12 @@ export default function Platforms() {
           }
         `}</style>
       </section>
-    </div>
+        </div>
+  </div>
   );
 }
+
+
 
 
 
