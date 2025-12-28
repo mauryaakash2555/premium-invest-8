@@ -40,9 +40,9 @@ const Navigation = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-  // Clean & Minimalist Logo Component
+  // Ultra-Luxury Logo Component - Matching Mobile Dock Aesthetic
   const Logo = ({ size = 40, fontSize = '20px' }) => (
-    <Link href="/" className="group flex items-center gap-3 no-underline">
+    <Link href="/" className="group flex items-center gap-4 no-underline">
       <div className="relative">
         {/* Multidimensional Radiant Glow */}
         <div className="absolute inset-0 bg-[#C0A062] blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-full animate-ambientGlowPulse" />
@@ -56,9 +56,9 @@ const Navigation = () => {
         />
       </div>
       <div className="flex flex-col">
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <span 
-            className="font-serif font-bold tracking-[2.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3.5px] gold-gradient-text"
+            className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3.5px] gold-gradient-text"
             style={{ 
               fontSize: fontSize, 
               filter: 'drop-shadow(0 0 10px rgba(192, 160, 98, 0.4))' 
@@ -79,8 +79,8 @@ const Navigation = () => {
         className={cn(
           "fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ease-in-out px-5 h-[70px] flex items-center",
           isScrolled 
-            ? "bg-black/95 backdrop-blur-xl border-b border-[#C0A062]/40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
-            : "bg-transparent border-b border-transparent"
+            ? "bg-black/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
+            : "bg-transparent"
         )}
       >
         <Logo size={38} fontSize="19px" />
@@ -94,7 +94,7 @@ const Navigation = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ease-in-out h-[85px] flex items-center justify-center px-10",
         isScrolled 
-          ? "ultra-luxury-glass border-b border-[#C0A062]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
+          ? "ultra-luxury-glass shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
           : "bg-transparent"
       )}
     >

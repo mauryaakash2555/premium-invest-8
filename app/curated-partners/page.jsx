@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -111,9 +111,9 @@ export default function CuratedPartners() {
       {/* Partner Cards Section */}
       <section style={{ padding: '40px 0 100px', width: '100%' }}>
         
-        {/* POSITION #1 - DIAMOND ADVISORY PARTNER (RESERVED) */}
+        {/* POSITION #1 - DIAMOND ADVISORY PARTNER (COMPETITIVE BIDDING) */}
         <div
-          className="partner-card"
+          className="partner-card diamond-shiny-card bidding-active"
           onMouseEnter={() => setHoveredCard(1)}
           onMouseLeave={() => setHoveredCard(null)}
           style={{
@@ -121,111 +121,132 @@ export default function CuratedPartners() {
             marginLeft: '15px',
             marginRight: '15px',
             background: hoveredCard === 1 
-              ? 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 50%, rgba(0, 0, 0, 0.5) 100%)'
-              : 'linear-gradient(135deg, rgba(192, 160, 98, 0.12) 0%, rgba(218, 165, 32, 0.08) 50%, rgba(0, 0, 0, 0.5) 100%)',
-            border: '3px solid rgba(192, 160, 98, 0.5)',
-            borderRadius: '16px',
+              ? 'linear-gradient(135deg, rgba(192, 160, 98, 0.35) 0%, rgba(218, 165, 32, 0.25) 50%, rgba(0, 0, 0, 0.85) 100%)'
+              : 'linear-gradient(135deg, rgba(192, 160, 98, 0.25) 0%, rgba(218, 165, 32, 0.2) 50%, rgba(0, 0, 0, 0.75) 100%)',
+            border: '4px solid #C0A062',
+            borderRadius: '24px',
             padding: '60px 50px',
             marginBottom: '30px',
             display: 'grid',
             gridTemplateColumns: '1fr auto',
             gap: '40px',
             alignItems: 'center',
-            minHeight: '320px',
+            minHeight: '400px',
             position: 'relative',
             overflow: 'hidden',
-            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
             boxShadow: hoveredCard === 1 
-              ? '0 12px 50px rgba(192, 160, 98, 0.25)' 
-              : '0 8px 40px rgba(192, 160, 98, 0.15)',
-            transform: hoveredCard === 1 ? 'translateY(-4px)' : 'none',
+              ? '0 30px 120px rgba(192, 160, 98, 0.7), inset 0 0 80px rgba(192, 160, 98, 0.4)' 
+              : '0 15px 60px rgba(192, 160, 98, 0.3), inset 0 0 40px rgba(192, 160, 98, 0.15)',
+            transform: hoveredCard === 1 ? 'translateY(-12px) scale(1.02)' : 'none',
             cursor: 'pointer',
           }}
         >
+          {/* Super Shiny Overlays - Diamond Intensity */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[linearSweep_1.2s_infinite] opacity-100" />
+            <div className="absolute top-0 left-0 w-full h-full opacity-60 gold-grain-texture" />
+            <div className="absolute -inset-40 bg-gradient-to-tr from-[#C0A062]/30 via-transparent to-[#C0A062]/30 animate-pulse duration-[2s]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(192,160,98,0.3),_transparent_70%)] animate-ambientGlowPulse" />
+          </div>
+
           {/* Elite badge */}
           <div
+            className="elite-badge"
             style={{
               position: 'absolute',
-              top: '20px',
-              right: '20px',
-              background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+              top: '25px',
+              right: '25px',
+              background: 'linear-gradient(135deg, #FFF 0%, #C0A062 50%, #DAA520 100%)',
               color: '#000',
-              padding: '8px 16px',
-              borderRadius: '20px',
-              fontSize: '12px',
-              fontWeight: 800,
-              letterSpacing: '1px',
+              padding: '12px 28px',
+              borderRadius: '30px',
+              fontSize: '14px',
+              fontWeight: 900,
+              letterSpacing: '2px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 15px rgba(192, 160, 98, 0.4)',
+              gap: '8px',
+              boxShadow: '0 10px 40px rgba(192, 160, 98, 0.8), 0 0 20px rgba(255,255,255,0.4)',
+              zIndex: 10,
+              border: '2px solid #FFF',
+              animation: 'pulse 2s infinite',
             }}
           >
-            <Star size={14} fill="#000" />
-            ELITE TIER
+            <Star size={16} fill="#000" className="animate-spin-slow" />
+            BIDDING ACTIVE
           </div>
 
           {/* Left Side */}
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
-              <span style={{ fontSize: '48px' }}>💎</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginBottom: '25px' }} className="card-header-flex">
+              <span style={{ fontSize: '72px', filter: 'drop-shadow(0 0 30px rgba(192, 160, 98, 0.9))' }}>💎</span>
               <div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#C0A062', letterSpacing: '3px', marginBottom: '6px' }}>
-                  POSITION #1
+                <div style={{ fontSize: '18px', fontWeight: 900, color: '#FFF', letterSpacing: '5px', marginBottom: '8px', textShadow: '0 0 15px rgba(192,160,98,1)' }}>
+                  ULTIMATE SPONSORSHIP
                 </div>
-                <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 700, margin: 0, letterSpacing: '2px', textShadow: '0 2px 15px rgba(192, 160, 98, 0.5)' }}>
-                  DIAMOND ADVISORY PARTNER
+                <h2 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontFamily: '"Playfair Display", serif', color: '#FFF', fontWeight: 900, margin: 0, letterSpacing: '3px', textShadow: '0 0 30px rgba(192, 160, 98, 0.8)' }}>
+                  DIAMOND PARTNER
                 </h2>
               </div>
             </div>
 
-            <p style={{ fontSize: '20px', color: 'rgba(192, 160, 98, 0.95)', marginBottom: '28px', fontWeight: 600, fontStyle: 'italic' }}>
-              Reserved for Premium Financial Services Partnership
+            <p style={{ fontSize: '24px', color: '#C0A062', marginBottom: '32px', fontWeight: 800, fontStyle: 'italic', letterSpacing: '1px', textTransform: 'uppercase' }}>
+              The Ultimate Bidding War for the #1 Spot
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {[
-                'Exclusive advisory positioning & branding',
-                'Co-branded premium content strategy',
-                'Featured across all digital platforms',
-                'Strategic VIP partnership benefits',
+                'Maximum Dominance & Brand Visibility',
+                'Prime Home Page Real-Estate (Reserved)',
+                'Direct Access to Ultra-High-Net-Worth Leads',
+                'Exclusive Media Synergy & Co-Branding',
               ].map((benefit, idx) => (
                 <div
                   key={idx}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    background: 'rgba(192, 160, 98, 0.08)',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(192, 160, 98, 0.2)',
+                    gap: '15px',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    padding: '16px 24px',
+                    borderRadius: '12px',
+                    border: '2px solid rgba(192, 160, 98, 0.6)',
                     transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
                   }}
                 >
-                  <Sparkles size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
-                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1.6, fontWeight: 500 }}>
+                  <Sparkles size={20} style={{ color: '#FFF', flexShrink: 0, filter: 'drop-shadow(0 0 8px #FFF)' }} />
+                  <span style={{ fontSize: '17px', color: '#FFF', lineHeight: 1.6, fontWeight: 700 }}>
                     {benefit}
                   </span>
                 </div>
               ))}
             </div>
+            
+            <div style={{ marginTop: '30px', padding: '15px 20px', background: 'rgba(192,160,98,0.1)', border: '1px dashed #C0A062', borderRadius: '12px' }}>
+              <p style={{ color: '#FFF', fontSize: '15px', margin: 0, fontWeight: 500 }}>
+                ⚠️ <span style={{ color: '#C0A062', fontWeight: 700 }}>Note:</span> Multiple sponsors are currently bidding for this slot. Final selection based on authority and service excellence.
+              </p>
+            </div>
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', zIndex: 1 }}>
-            <div style={{ textAlign: 'center', background: 'rgba(192, 160, 98, 0.15)', padding: '20px 28px', borderRadius: '12px', border: '2px solid rgba(192, 160, 98, 0.3)', marginBottom: '12px' }}>
-              <div style={{ fontSize: '14px', color: 'rgba(192, 160, 98, 0.8)', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>INVESTMENT</div>
-              <div style={{ fontSize: '32px', color: '#C0A062', fontWeight: 700, fontFamily: '"Playfair Display", serif', letterSpacing: '1px', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '28px' }}>₹</span>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '25px', position: 'relative', zIndex: 1 }} className="card-right-side">
+            <div style={{ textAlign: 'center', background: 'rgba(0, 0, 0, 0.6)', padding: '35px 45px', borderRadius: '24px', border: '3px solid #C0A062', marginBottom: '15px', boxShadow: '0 0 50px rgba(192, 160, 98, 0.5), inset 0 0 20px rgba(192,160,98,0.2)' }}>
+              <div style={{ fontSize: '18px', color: '#C0A062', marginBottom: '12px', letterSpacing: '3px', fontWeight: 900 }}>CURRENT BIDDING</div>
+              <div style={{ fontSize: '46px', color: '#FFF', fontWeight: 900, fontFamily: '"Playfair Display", serif', letterSpacing: '1px', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '38px' }}>₹</span>
                 <span>2-3 Lakh</span>
               </div>
-              <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', marginTop: '4px' }}>per month</div>
+              <div style={{ fontSize: '15px', color: '#C0A062', marginTop: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>🔥 12 SPONSORS VYING</div>
             </div>
 
-            <Link href="/contact?subject=diamond-advisory-partnership" className="btn-gold">
-              Apply for Partnership
+            <Link href="/contact?subject=diamond-bidding-competition" className="btn-diamond-shiny">
+              Enter the Competition
             </Link>
+            
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>SLOT RENEWS MONTHLY</p>
           </div>
         </div>
 
@@ -260,14 +281,33 @@ export default function CuratedPartners() {
           }}
         >
           {/* Verified badge */}
-          <div style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(192, 160, 98, 0.2)', border: '2px solid #C0A062', color: '#C0A062', padding: '8px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div 
+            className="verified-badge"
+            style={{ 
+              position: 'absolute', 
+              top: '20px', 
+              right: '20px', 
+              background: 'rgba(192, 160, 98, 0.2)', 
+              border: '2px solid #C0A062', 
+              color: '#C0A062', 
+              padding: '8px 16px', 
+              borderRadius: '20px', 
+              fontSize: '12px', 
+              fontWeight: 700, 
+              letterSpacing: '1px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px',
+              zIndex: 10
+            }}
+          >
             <CheckCircle size={14} />
             VERIFIED PARTNER
           </div>
 
           {/* Left Side */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }} className="card-header-flex">
               <div style={{ background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)', padding: '8px 18px', borderRadius: '8px', fontSize: '16px', fontWeight: 800, color: '#000', letterSpacing: '2px' }}>
                 #2 - GOLD PARTNER
               </div>
@@ -310,7 +350,7 @@ export default function CuratedPartners() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-right-side">
             <Link href="/contact" className="btn-gold">
               <Calendar size={20} />
               Schedule Consultation
@@ -377,7 +417,7 @@ export default function CuratedPartners() {
           </div>
 
           {/* Right Side */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-right-side">
             <Link href="/contact?subject=partnership" className="btn-outline-gold">
               Apply for Partnership
             </Link>
@@ -411,6 +451,31 @@ export default function CuratedPartners() {
           transform: scale(1.05);
           box-shadow: 0 10px 40px rgba(192, 160, 98, 0.5);
           background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
+        }
+
+        .btn-diamond-shiny {
+          display: inline-flex;
+          align-items: center;
+          gap: 15px;
+          background: linear-gradient(135deg, #FFF 0%, #C0A062 50%, #DAA520 100%);
+          color: #000;
+          padding: 24px 48px;
+          border-radius: 15px;
+          text-decoration: none;
+          font-size: 18px;
+          font-weight: 900;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          white-space: nowrap;
+          box-shadow: 0 10px 40px rgba(192, 160, 98, 0.5);
+          border: 2px solid #FFF;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .btn-diamond-shiny:hover {
+          transform: scale(1.08) rotate(-1deg);
+          box-shadow: 0 20px 60px rgba(192, 160, 98, 0.8);
+          background: linear-gradient(135deg, #DAA520 0%, #C0A062 50%, #FFF 100%);
         }
         
         .btn-outline-gold {
@@ -450,8 +515,23 @@ export default function CuratedPartners() {
             grid-template-columns: 1fr !important;
           }
           
-          .partner-card > div:first-child > div:first-child {
-            justify-content: center;
+          .card-header-flex {
+            justify-content: center !important;
+            flex-direction: column !important;
+            text-align: center !important;
+          }
+
+          .elite-badge, .verified-badge {
+            position: relative !important;
+            top: 0 !important;
+            right: 0 !important;
+            margin: 0 auto 20px !important;
+            width: fit-content !important;
+          }
+          
+          .card-right-side {
+            width: 100% !important;
+            margin-top: 20px !important;
           }
         }
         
@@ -460,14 +540,60 @@ export default function CuratedPartners() {
             width: calc(100% - 16px) !important;
             margin-left: 8px !important;
             margin-right: 8px !important;
-            padding: 32px 20px !important;
+            padding: 24px 16px !important;
             margin-bottom: 20px !important;
+            border-radius: 16px !important;
           }
           
-          .btn-gold, .btn-outline-gold {
-            padding: 16px 32px !important;
-            font-size: 15px !important;
+          .btn-gold, .btn-outline-gold, .btn-diamond-shiny {
+            padding: 14px 24px !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            justify-content: center !important;
           }
+
+          .card-right-side div[style*="fontSize: '46px'"] {
+            font-size: 32px !important;
+          }
+
+          .card-right-side div[style*="padding: '35px 45px'"] {
+            padding: 20px 25px !important;
+          }
+
+          .card-header-flex svg {
+            width: 48px !important;
+            height: 48px !important;
+          }
+
+          h2[style*="fontSize: 'clamp(32px, 5vw, 52px)'"] {
+            font-size: 28px !important;
+          }
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(1); box-shadow: 0 10px 40px rgba(192, 160, 98, 0.8); }
+          50% { transform: scale(1.05); box-shadow: 0 15px 60px rgba(192, 160, 98, 1); }
+          100% { transform: scale(1); box-shadow: 0 10px 40px rgba(192, 160, 98, 0.8); }
+        }
+
+        @keyframes linearSweep {
+          0% { transform: translateX(-100%) skewX(-25deg); }
+          100% { transform: translateX(200%) skewX(-25deg); }
+        }
+
+        @keyframes ambientGlowPulse {
+          0% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.1); }
+          100% { opacity: 0.3; transform: scale(1); }
+        }
+
+        .animate-spin-slow {
+          animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </div>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect } from 'react';
 import Link from 'next/link';
@@ -80,38 +80,49 @@ export default function Platforms() {
       {/* Platform Cards Section */}
       <section style={{ padding: '40px 0 100px', width: '100%' }}>
         
-        {/* POSITION #1 - DIAMOND PARTNER */}
-        <div className="platform-card">
+        {/* POSITION #1 - DIAMOND PARTNER (COMPETITIVE BIDDING) */}
+        <div className="platform-card diamond-bidding">
           <div className="platform-content">
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '40px' }}>💎</span>
+              <span style={{ fontSize: '40px', filter: 'drop-shadow(0 0 10px rgba(192, 160, 98, 0.8))' }}>💎</span>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: '#C0A062', letterSpacing: '2px', marginBottom: '4px' }}>
-                  POSITION #1
+                <div style={{ fontSize: '14px', fontWeight: 900, color: '#C0A062', letterSpacing: '3px', marginBottom: '4px' }}>
+                  ELITE POSITION #1
                 </div>
-                <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: 0, letterSpacing: '1.5px' }}>
+                <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontFamily: '"Playfair Display", serif', color: '#FFF', fontWeight: 800, margin: 0, letterSpacing: '2px', textShadow: '0 0 20px rgba(192, 160, 98, 0.5)' }}>
                   DIAMOND PARTNER
                 </h2>
               </div>
             </div>
 
-            <p style={{ fontSize: 'clamp(16px, 2vw, 18px)', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '20px', fontWeight: 500 }}>
-              Reserved for Exclusive Partnership
+            <p style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: '#C0A062', marginBottom: '20px', fontWeight: 800, fontStyle: 'italic', textTransform: 'uppercase' }}>
+              Bidding War Active: Secure the Elite Spot
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {['Featured homepage placement', 'Dedicated content collaboration', 'Premium brand positioning', 'Monthly investment: ₹2-3 Lakh'].map((benefit, idx) => (
+              {[
+                'Maximum Authority & Industry Dominance',
+                'Prime Real-Estate on Platform Directory',
+                'Priority Traffic & Direct Investor Funnel',
+                'Current Bidding: ₹2-3 Lakh / Month'
+              ].map((benefit, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Sparkles size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
-                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.6 }}>{benefit}</span>
+                  <Sparkles size={18} style={{ color: '#FFF', flexShrink: 0, filter: 'drop-shadow(0 0 5px #FFF)' }} />
+                  <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1.6, fontWeight: 600 }}>{benefit}</span>
                 </div>
               ))}
+            </div>
+            
+            <div style={{ marginTop: '20px', padding: '12px 15px', background: 'rgba(192,160,98,0.15)', border: '1px solid #C0A062', borderRadius: '8px' }}>
+              <p style={{ color: '#FFF', fontSize: '14px', margin: 0, fontWeight: 600 }}>
+                🔥 <span style={{ color: '#C0A062', fontWeight: 800 }}>Bidding Alert:</span> 8 Institutional Sponsors are currently vying for this exclusive slot.
+              </p>
             </div>
           </div>
 
           <div className="platform-button">
-            <Link href="/contact?subject=diamond-partnership" className="btn-outline">
-              Apply for Diamond Partnership
+            <Link href="/contact?subject=diamond-bidding-platforms" className="btn-diamond-shiny-sm">
+              Enter Bidding
             </Link>
           </div>
         </div>
@@ -284,6 +295,29 @@ export default function Platforms() {
           box-shadow: 0 8px 30px rgba(192, 160, 98, 0.5);
         }
         
+        .btn-diamond-shiny-sm {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: linear-gradient(135deg, #FFF 0%, #C0A062 50%, #DAA520 100%);
+          color: #000;
+          padding: 16px 32px;
+          border-radius: 8px;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 800;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+          border: 1px solid #FFF;
+          box-shadow: 0 4px 15px rgba(192, 160, 98, 0.4);
+          text-transform: uppercase;
+        }
+
+        .btn-diamond-shiny-sm:hover {
+          transform: scale(1.05);
+          box-shadow: 0 8px 25px rgba(192, 160, 98, 0.6);
+        }
+        
         @media (max-width: 900px) {
           .platform-card {
             grid-template-columns: 1fr;
@@ -305,14 +339,25 @@ export default function Platforms() {
             width: calc(100% - 16px);
             margin-left: 8px;
             margin-right: 8px;
-            padding: 40px 20px;
+            padding: 24px 16px;
             margin-bottom: 16px;
-            border-radius: 8px;
+            border-radius: 12px;
           }
           
-          .btn-primary, .btn-outline {
-            padding: 14px 28px;
+          .btn-primary, .btn-outline, .btn-diamond-shiny-sm {
+            padding: 14px 24px;
             font-size: 14px;
+            width: 100%;
+            justify-content: center;
+          }
+
+          .platform-content h2 {
+            font-size: 24px !important;
+          }
+
+          .platform-content svg[width="40"] {
+            width: 32px !important;
+            height: 32px !important;
           }
         }
       `}</style>

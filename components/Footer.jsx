@@ -4,6 +4,7 @@ import { MessageCircle, ArrowRight, ExternalLink, ShieldCheck, Gem, Crown, Info,
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null)
@@ -58,7 +59,7 @@ const Footer = () => {
         "shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"
       )}>
         
-        {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
+        {/* ENHANCED: Truly Randomized 25 Popping Dust Particles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
           {[...Array(25)].map((_, i) => (
             <div 
@@ -76,23 +77,11 @@ const Footer = () => {
 
         {/* Branding Masterpiece Section */}
         <div className="relative pt-24 pb-16 px-6 flex flex-col items-center z-20">
-          <div className="flex items-center gap-12 mb-10 group cursor-default">
-            {/* Turbo Shimmering Wings (Left) */}
-            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
-                BM Wealth
-              </h2>
-              <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[#C0A062] to-transparent mt-2 opacity-80" />
-            </div>
-
-            {/* Turbo Shimmering Wings (Right) */}
-            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-l from-transparent via-[#C0A062] to-transparent overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
-            </div>
+          <div className="flex flex-col items-center mb-10 group cursor-default">
+            <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
+              BM Wealth
+            </h2>
+            <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[#C0A062] to-transparent mt-2 opacity-80" />
           </div>
 
           <p className="text-[13px] tracking-[5px] text-[#D4B576] font-bold uppercase mb-4 m-0 text-center">
@@ -196,7 +185,7 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* RECTANGLE WHATSAPP CARD - LEFT ALIGNED FOR BOTH MOBILE & DESKTOP */}
+              {/* RECTANGLE WHATSAPP CARD - PITCH BLACK FIX */}
               <a
                 href="https://wa.me/918850977259"
                 target="_blank"
@@ -207,28 +196,16 @@ const Footer = () => {
                 onMouseUp={() => setIsWHAActive(false)}
                 onTouchStart={() => setIsWHAActive(true)}
                 onTouchEnd={() => setIsWHAActive(false)}
-                className="relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5"
+                className="relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-[#000000] h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0"
                 style={{ 
                   borderColor: isWHAHovered ? '#25D366' : '#C0A062',
                   transform: isWHAHovered ? 'scale(1.08)' : 'scale(1)',
                   boxShadow: isWHAHovered ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
                   display: 'flex',
-                  justifyContent: 'flex-start', // Always start from left
+                  justifyContent: isDesktop ? 'flex-start' : 'center',
+                  paddingLeft: isDesktop ? '16px' : '0'
                 }}
               >
-                {/* Dynamic Expansion - Brown to Green from Inside */}
-                <div 
-                  className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
-                  style={{ 
-                    background: isWHAActive 
-                      ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
-                      : (isWHAHovered ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
-                    transform: isWHAHovered ? 'scale(2.5)' : 'scale(0)',
-                    opacity: isWHAHovered ? 1 : 0,
-                    zIndex: 1
-                  }} 
-                />
-                
                 {/* Shimmer */}
                 <div className={cn(
                   "absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 z-10",
@@ -279,28 +256,66 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* INTERACTIVE HALF-TO-FULL SIDE LINE DISCLAIMERS */}
+        {/* CLASSIC HALF-LINE Side-Line Disclaimers - RESTORED */}
         <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[#C0A062]/15 relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="premium-half-line group">
-              <div className="side-line" />
+            <motion.div 
+              whileHover="hover"
+              whileTap="tap"
+              className="flex gap-6 group items-stretch cursor-pointer"
+            >
+              <motion.div 
+                initial={{ scaleY: 0.3, opacity: 0.3 }}
+                whileInView={{ scaleY: 1, opacity: 0.6 }}
+                variants={{
+                  hover: { 
+                    scaleY: [1, 0.5, 1],
+                    opacity: 1,
+                    transition: { duration: 0.8, ease: "easeInOut" }
+                  },
+                  tap: { scaleY: 0.4 }
+                }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 2, ease: "circOut" }}
+                style={{ originY: 0, backgroundColor: '#C0A062' }}
+                className="w-[1.5px] flex-shrink-0 shadow-[0_0_10px_rgba(192,160,98,0.2)] mt-1" 
+              />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">SEBI Disclosure</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0">SEBI Disclosure</h4>
+                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="premium-half-line group">
-              <div className="side-line" />
+            <motion.div 
+              whileHover="hover"
+              whileTap="tap"
+              className="flex gap-6 group items-stretch cursor-pointer"
+            >
+              <motion.div 
+                initial={{ scaleY: 0.3, opacity: 0.3 }}
+                whileInView={{ scaleY: 1, opacity: 0.6 }}
+                variants={{
+                  hover: { 
+                    scaleY: [1, 0.5, 1],
+                    opacity: 1,
+                    transition: { duration: 0.8, ease: "easeInOut" }
+                  },
+                  tap: { scaleY: 0.4 }
+                }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 2, ease: "circOut" }}
+                style={{ originY: 0, backgroundColor: '#C0A062' }}
+                className="w-[1.5px] flex-shrink-0 shadow-[0_0_10px_rgba(192,160,98,0.2)] mt-1" 
+              />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Investment Notice</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0">Investment Notice</h4>
+                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
                   Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. BM Wealth acts as a distributor, not a manufacturer.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -321,7 +336,7 @@ const Footer = () => {
 
             <div className="flex flex-col items-center space-y-3 opacity-60">
               <p className="text-[12px] text-gray-400 font-light tracking-[0.4em] uppercase m-0">
-                Â© 2025 BM Wealth. All rights reserved.
+                © 2025 BM Wealth. All rights reserved.
               </p>
               <p className="text-[10px] text-[#C0A062] font-bold tracking-[0.2em] uppercase m-0">
                 Crafted for Mumbai's Distinguished Investors

@@ -106,3 +106,4 @@ export default function NewPage() {
 - [ ] Mobile view tested (especially `LuxuryMobileDock` and `WhatsAppFloat`).
 - [ ] No corrupted characters in any file.
 
+
