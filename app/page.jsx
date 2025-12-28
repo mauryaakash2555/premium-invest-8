@@ -224,11 +224,9 @@ export default function HomePage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <div className="molten-ribbon" />
               <span className="relative z-10">Access Your Complimentary Wealth Blueprint</span>
             </motion.a>
             <Link href="/services" className="btn-crystal-secondary group">
-              <div className="molten-ribbon" />
               <span className="relative z-10 flex items-center">
                 Explore Services <ArrowRight size={20} style={{ marginLeft: '8px' }} className="group-hover:translate-x-2 transition-transform" />
               </span>
@@ -648,63 +646,68 @@ export default function HomePage() {
           position: relative;
           display: inline-flex;
           align-items: center;
-          justify-content: center;
+          justifyContent: center;
           padding: 16px 32px;
           border-radius: 100px;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
-          font-size: 13px;
+          letter-spacing: 2.5px;
+          font-size: 12px;
           overflow: hidden;
           cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          backdrop-filter: blur(15px);
-          -webkit-backdrop-filter: blur(15px);
-        }
-
-        .btn-crystal-premium {
-          background: rgba(192, 160, 98, 0.05);
-          border: 0.5px solid rgba(192, 160, 98, 0.4);
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          background: rgba(255, 255, 255, 0.03);
+          border: 0.5px solid rgba(192, 160, 98, 0.2);
           color: #FFF;
         }
 
+        .btn-crystal-premium::after, .btn-crystal-secondary::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(192, 160, 98, 0.15), transparent);
+          transform: translateX(-100%);
+          transition: transform 0.8s ease;
+        }
+
+        .btn-crystal-premium:hover::after, .btn-crystal-premium:active::after {
+          transform: translateX(100%);
+        }
+
+        /* The Cool Feature: A traveling light flare on the border */
+        .btn-crystal-premium::before {
+          content: "";
+          position: absolute;
+          width: 40px;
+          height: 100%;
+          background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+          transform: skewX(-25deg);
+          left: -100%;
+          animation: flare-sweep 8s infinite linear;
+        }
+
+        @keyframes flare-sweep {
+          0% { left: -100%; }
+          20% { left: 200%; }
+          100% { left: 200%; }
+        }
+
+        .btn-crystal-premium:hover {
+          border-color: rgba(192, 160, 98, 0.8);
+          box-shadow: 0 0 20px rgba(192, 160, 98, 0.1);
+          background: rgba(255, 255, 255, 0.06);
+        }
+
         .btn-crystal-secondary {
-          background: rgba(255, 255, 255, 0.02);
-          border: 0.5px solid rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.1);
           color: #C0A062;
         }
 
-        .btn-crystal-premium:hover, .btn-crystal-premium:active {
-          background: rgba(192, 160, 98, 0.15);
-          border-color: #FFF;
-          box-shadow: 0 0 30px rgba(192, 160, 98, 0.2);
-        }
-
-        .btn-crystal-secondary:hover, .btn-crystal-secondary:active {
-          background: rgba(255, 255, 255, 0.08);
+        .btn-crystal-secondary:hover {
           border-color: #C0A062;
-          box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-        }
-
-        .molten-ribbon {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            120deg,
-            transparent 0%,
-            transparent 40%,
-            rgba(255, 255, 255, 0.15) 50%,
-            transparent 60%,
-            transparent 100%
-          );
-          background-size: 200% 100%;
-          animation: ribbon-slide 6s infinite linear;
-          pointer-events: none;
-        }
-
-        @keyframes ribbon-slide {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
+          background: rgba(255, 255, 255, 0.06);
         }
 
         @media (max-width: 768px) {
