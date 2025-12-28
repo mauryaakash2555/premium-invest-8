@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -14,18 +14,10 @@ const Navigation = () => {
       setIsScrolled(window.scrollY > 50);
     };
     
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-    
-    handleResize();
     handleScroll();
-    
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -39,21 +31,13 @@ const Navigation = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-  const mobileLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/about-us', label: 'About' },
-    { href: '/services', label: 'Services' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
-  ];
-
-  // Common Logo Component
+  // Common Logo Component with standard <img> for maximum reliability
   const Logo = ({ size = 40, fontSize = '20px' }) => (
-    <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+    <Link href="/" className="flex items-center gap-3 no-underline">
       <img 
         src="/logo.webp" 
         alt="BM Wealth Logo" 
-        style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
+        style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain' }}
       />
       <span style={{ 
         fontSize: fontSize, 
@@ -68,121 +52,45 @@ const Navigation = () => {
     </Link>
   );
 
-  if (isMobile) {
-    return (
-      <>
-        {/* Mobile Top Header */}
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1000,
-            background: isScrolled ? 'rgba(0, 0, 0, 0.98)' : 'rgba(0, 0, 0, 0.9)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(218, 165, 32, 0.3)',
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            height: '60px',
-            boxSizing: 'border-box'
-          }}
-        >
-          <Logo size={36} fontSize="18px" />
-        </div>
-
-        {/* Mobile Bottom Navigation */}
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1000,
-            background: 'rgba(0, 0, 0, 0.98)',
-            backdropFilter: 'blur(20px)',
-            borderTop: '1px solid rgba(218, 165, 32, 0.3)',
-            padding: '10px 0',
-            paddingBottom: 'max(10px, env(safe-area-inset-bottom))',
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            height: 'auto'
-          }}
-        >
-          {mobileLinks.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  color: isActive ? '#DAA520' : '#888',
-                  fontSize: '11px',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'color 0.2s ease',
-                }}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
-      </>
-    );
-  }
-
-  // Desktop Navigation
   return (
-    <nav
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        background: isScrolled ? 'rgba(0, 0, 0, 0.98)' : 'transparent',
-        backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-        borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.2)' : 'none',
-        transition: 'all 0.3s ease',
-        padding: '0 40px',
-        height: '80px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxSizing: 'border-box'
-      }}
-    >
-      <div style={{ width: '100%', maxWidth: '1400px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Logo size={45} fontSize="22px" />
-        <div style={{ display: 'flex', gap: '35px', alignItems: 'center' }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              style={{
-                color: pathname === link.path ? '#DAA520' : '#FFFFFF',
-                textDecoration: 'none',
-                fontSize: '13px',
-                fontWeight: 500,
-                transition: 'color 0.3s ease',
-                textTransform: 'uppercase',
-                letterSpacing: '1.2px',
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+    <>
+      {/* Desktop Navigation */}
+      <nav
+        className={cn(
+          "hidden lg:flex fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 h-20 items-center justify-center border-b border-transparent px-10",
+          isScrolled ? "bg-black/95 backdrop-blur-xl border-white/10" : "bg-transparent"
+        )}
+      >
+        <div className="w-full max-w-[1400px] flex justify-between items-center">
+          <Logo size={45} fontSize="22px" />
+          <div className="flex gap-8 items-center">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={cn(
+                  "no-underline text-[13px] font-medium transition-colors duration-300 uppercase tracking-widest",
+                  pathname === link.path ? "text-[#DAA520]" : "text-white hover:text-[#DAA520]"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
+      </nav>
+
+      {/* Mobile Top Header Only (Bottom is handled by LuxuryMobileDock) */}
+      <div
+        className={cn(
+          "lg:hidden fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 h-16 flex items-center px-5 border-b",
+          isScrolled ? "bg-black/98 backdrop-blur-xl border-[#DAA520]/30" : "bg-black/90 backdrop-blur-xl border-white/10"
+        )}
+      >
+        <Logo size={36} fontSize="18px" />
       </div>
-    </nav>
+    </>
   );
 };
 
 export default Navigation;
-

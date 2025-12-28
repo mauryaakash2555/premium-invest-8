@@ -3,6 +3,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { LuxuryMobileDock } from "@/components/LuxuryMobileDock";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
           <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
           <Footer />
         </div>
+        <LuxuryMobileDock />
         <WhatsAppFloat />
         <Analytics />
         <SpeedInsights />

@@ -241,11 +241,11 @@ export default function BlogPage() {
                 <div key={i} style={{
                   background: '#000000',
                   borderRadius: '16px',
-                  padding: '24px',
+                  padding: '20px',
                   border: '1px solid rgba(218, 165, 32, 0.2)',
                   overflow: 'hidden'
                 }}>
-                  <div className="skeleton-shimmer" style={{ height: '240px', borderRadius: '12px', marginBottom: '20px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '200px', borderRadius: '12px', marginBottom: '20px' }} />
                   <div className="skeleton-shimmer" style={{ height: '20px', width: '120px', borderRadius: '6px', marginBottom: '16px' }} />
                   <div className="skeleton-shimmer" style={{ height: '28px', width: '90%', borderRadius: '6px', marginBottom: '12px' }} />
                   <div className="skeleton-shimmer" style={{ height: '16px', width: '100%', borderRadius: '6px', marginBottom: '8px' }} />
@@ -283,7 +283,7 @@ export default function BlogPage() {
                       className="blog-card-image-wrapper"
                       style={{
                         width: '100%',
-                        height: '240px',
+                        height: '200px',
                         objectFit: 'cover',
                       }}
                     />
@@ -291,12 +291,12 @@ export default function BlogPage() {
                     <div
                       style={{
                         width: '100%',
-                        height: '240px',
+                        height: '200px',
                         background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
                       }}
                     />
                   )}
-                  <div style={{ padding: '24px' }}>
+                  <div style={{ padding: '20px' }}>
                     <div
                       style={{
                         display: 'flex',
