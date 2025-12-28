@@ -3,12 +3,42 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { staticBlogPost } from '@/data/staticBlogData';
 
 export default function HomePage() {
+  const [tickerData, setTickerData] = useState([
+    { l: 'NIFTY 50', v: '24,321.05', c: '+1.2%', pos: true },
+    { l: 'SENSEX', v: '80,142.12', c: '+0.9%', pos: true },
+    { l: 'GOLD (24K)', v: '₹72,450', c: '+0.4%', pos: true },
+    { l: 'INR/USD', v: '83.42', c: '-0.1%', pos: false },
+    { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%', pos: true },
+  ]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const fetchMarketData = async () => {
+      try {
+        const res = await fetch('/api/market-data');
+        const result = await res.json();
+        if (result.success) {
+          const formatted = result.data.map(item => ({
+            l: item.label,
+            v: item.value,
+            c: item.change,
+            pos: item.isPositive
+          }));
+          setTickerData(formatted);
+        }
+      } catch (err) {
+        console.error('Failed to fetch real-time market data:', err);
+      }
+    };
+
+    fetchMarketData();
+    const interval = setInterval(fetchMarketData, 60000); // Update every minute
+    return () => clearInterval(interval);
   }, []);
 
   const services = [
@@ -54,14 +84,6 @@ export default function HomePage() {
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/sip',
     },
-  ];
-
-  const tickerItems = [
-    { l: 'NIFTY 50', v: '24,321.05', c: '+1.2%' },
-    { l: 'SENSEX', v: '80,142.12', c: '+0.9%' },
-    { l: 'GOLD (24K)', v: '₹72,450', c: '+0.4%' },
-    { l: 'INR/USD', v: '83.42', c: '-0.1%' },
-    { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%' },
   ];
 
   return (
@@ -177,14 +199,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* HOLOGRAPHIC LIVE MARKET TICKER - The only feature kept from the ultra-luxury update */}
+        {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
         <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
           <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
-            {[...tickerItems, ...tickerItems].map((item, i) => (
+            {[...tickerData, ...tickerData].map((item, i) => (
               <div key={i} className="flex items-center gap-4 text-xs font-mono tracking-tighter">
                 <span className="text-[#C0A062]/60 uppercase">{item.l}</span>
                 <span className="text-white font-bold">{item.v}</span>
-                <span className={item.c.startsWith('+') ? 'text-green-500' : 'text-red-500'}>{item.c}</span>
+                <span className={item.pos ? 'text-green-500' : 'text-red-500'}>{item.c}</span>
               </div>
             ))}
           </div>
