@@ -57,7 +57,13 @@ const Navigation = () => {
         <div className="hidden sm:block w-4 h-[1px] bg-gradient-to-r from-transparent to-[#C0A062] opacity-30" />
         <span 
           className="font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2px]"
-          style={{ fontSize: fontSize, color: '#DAA520' }}
+          style={{ 
+            fontSize: fontSize, 
+            background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0 0 8px rgba(224, 195, 252, 0.3))'
+          }}
         >
           BM Wealth
         </span>
