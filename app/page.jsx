@@ -193,7 +193,7 @@ export default function HomePage() {
           </p>
 
           <div
-            className="hero-cta-buttons-responsive"
+            className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
               gap: '20px',
@@ -700,7 +700,6 @@ export default function HomePage() {
 
         @media (max-width: 768px) {
           .hero-cta-buttons-responsive {
-            display: flex !important;
             padding: 0 20px;
             flex-direction: column;
             width: 100%;
