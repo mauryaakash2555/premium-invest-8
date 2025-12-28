@@ -262,26 +262,29 @@ const Footer = () => {
             <motion.div 
               whileHover="hover"
               whileTap="tap"
-              className="flex gap-6 group items-stretch cursor-pointer"
+              className="flex gap-6 group cursor-pointer"
             >
               <motion.div 
-                initial={{ scaleY: 0.3, opacity: 0.3 }}
-                whileInView={{ scaleY: 1, opacity: 0.6 }}
+                initial={{ height: "30%", opacity: 0.3 }}
+                whileInView={{ height: "100%", opacity: 0.6 }}
                 variants={{
                   hover: { 
-                    scaleY: [1, 0.5, 1],
-                    opacity: 1,
-                    transition: { duration: 0.8, ease: "easeInOut" }
+                    height: ["100%", "30%", "100%"],
+                    opacity: [0.6, 1, 0.6],
+                    transition: { duration: 1.5, ease: "easeInOut" }
                   },
-                  tap: { scaleY: 0.4 }
+                  tap: { 
+                    height: ["100%", "20%", "100%"],
+                    transition: { duration: 0.5 }
+                  }
                 }}
                 viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 2, ease: "circOut" }}
-                style={{ originY: 0, backgroundColor: '#C0A062' }}
-                className="w-[1.5px] flex-shrink-0 shadow-[0_0_10px_rgba(192,160,98,0.2)] mt-1" 
+                transition={{ duration: 3, ease: "circOut" }}
+                style={{ backgroundColor: '#C0A062' }}
+                className="w-[1.2px] flex-shrink-0 shadow-[0_0_8px_rgba(192,160,98,0.3)] mt-1" 
               />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0">SEBI Disclosure</h4>
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 opacity-60">SEBI Disclosure</h4>
                 <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
@@ -291,26 +294,29 @@ const Footer = () => {
             <motion.div 
               whileHover="hover"
               whileTap="tap"
-              className="flex gap-6 group items-stretch cursor-pointer"
+              className="flex gap-6 group cursor-pointer"
             >
               <motion.div 
-                initial={{ scaleY: 0.3, opacity: 0.3 }}
-                whileInView={{ scaleY: 1, opacity: 0.6 }}
+                initial={{ height: "30%", opacity: 0.3 }}
+                whileInView={{ height: "100%", opacity: 0.6 }}
                 variants={{
                   hover: { 
-                    scaleY: [1, 0.5, 1],
-                    opacity: 1,
-                    transition: { duration: 0.8, ease: "easeInOut" }
+                    height: ["100%", "30%", "100%"],
+                    opacity: [0.6, 1, 0.6],
+                    transition: { duration: 1.5, ease: "easeInOut" }
                   },
-                  tap: { scaleY: 0.4 }
+                  tap: { 
+                    height: ["100%", "20%", "100%"],
+                    transition: { duration: 0.5 }
+                  }
                 }}
                 viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 2, ease: "circOut" }}
-                style={{ originY: 0, backgroundColor: '#C0A062' }}
-                className="w-[1.5px] flex-shrink-0 shadow-[0_0_10px_rgba(192,160,98,0.2)] mt-1" 
+                transition={{ duration: 3, ease: "circOut" }}
+                style={{ backgroundColor: '#C0A062' }}
+                className="w-[1.2px] flex-shrink-0 shadow-[0_0_8px_rgba(192,160,98,0.3)] mt-1" 
               />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0">Investment Notice</h4>
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 opacity-60">Investment Notice</h4>
                 <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
                   Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. BM Wealth acts as a distributor, not a manufacturer.
                 </p>

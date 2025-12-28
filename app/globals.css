@@ -322,6 +322,7 @@
     border-radius: 50%;
     filter: blur(0.5px);
     pointer-events: none;
+    animation: goldDustDynamic 5s infinite ease-in-out;
     box-shadow: 0 0 8px rgba(192, 160, 98, 1), 0 0 15px rgba(192, 160, 98, 0.6);
     opacity: 0;
     z-index: 20;
