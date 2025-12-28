@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,26 +7,15 @@ import { useState, useEffect } from 'react';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Initial check
-    handleResize();
-    
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -52,21 +41,15 @@ const Navigation = () => {
     <>
       {/* Desktop Navigation */}
       <nav
+        className="hidden md:block fixed top-0 left-0 right-0 z-[999] transition-all duration-300"
         style={{
-          display: isMobile ? 'none' : 'block',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 999,
           background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(20px)' : 'none',
           borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.1)' : 'none',
-          transition: 'all 0.3s ease',
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+        <div className="max-w-[1400px] mx-auto px-5 py-5 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-3 no-underline">
             <Image 
               src="/logo.webp" 
               alt="BM Wealth Logo" 
@@ -78,19 +61,14 @@ const Navigation = () => {
               BM Wealth
             </span>
           </Link>
-          <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+          <div className="flex gap-8 items-center">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 href={link.path}
+                className="no-underline text-[11px] font-medium transition-colors duration-300 uppercase tracking-widest"
                 style={{
                   color: pathname === link.path ? '#DAA520' : '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  transition: 'color 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
                 }}
               >
                 {link.label}
@@ -102,21 +80,14 @@ const Navigation = () => {
 
       {/* Mobile Top Header with Logo */}
       <div
+        className="md:hidden fixed top-0 left-0 right-0 z-[999] px-5 py-3 transition-all duration-300 border-b border-white/10"
         style={{
-          display: isMobile ? 'block' : 'none',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 999,
           background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'rgba(0, 0, 0, 0.85)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(218, 165, 32, 0.2)',
-          padding: '12px 20px',
-          transition: 'all 0.3s ease',
+          borderBottomColor: 'rgba(218, 165, 32, 0.2)',
         }}
       >
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+        <Link href="/" className="flex items-center gap-2.5 no-underline">
           <Image 
             src="/logo.webp" 
             alt="BM Wealth Logo" 
@@ -132,39 +103,29 @@ const Navigation = () => {
 
       {/* Mobile Bottom Navigation */}
       <div
+        className="md:hidden fixed bottom-0 left-0 right-0 z-[9999] py-3 transition-all duration-300 border-t border-white/10"
         style={{
-          display: isMobile ? 'block' : 'none',
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 9999,
           background: 'rgba(0, 0, 0, 0.95)',
           backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(218, 165, 32, 0.2)',
-          padding: '12px 0',
+          borderTopColor: 'rgba(218, 165, 32, 0.2)',
           paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', maxWidth: '400px', margin: '0 auto' }}>
+        <div className="flex justify-around items-center max-w-[400px] mx-auto">
           {mobileLinks.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                className="flex flex-col items-center no-underline transition-colors duration-200"
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textDecoration: 'none',
                   color: isActive ? '#DAA520' : '#888',
-                  fontSize: '10px',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'color 0.2s ease',
                 }}
               >
-                {item.label}
+                <span className="text-[10px]" style={{ fontWeight: isActive ? 600 : 400 }}>
+                  {item.label}
+                </span>
               </Link>
             );
           })}
