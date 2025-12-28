@@ -40,43 +40,41 @@ const Navigation = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-  // High-Intensity Luxury Logo Component
+  // Minimalist Luxury Logo Component
   const Logo = ({ size = 40, fontSize = '20px' }) => (
     <Link href="/" className="group flex items-center gap-4 no-underline">
       <div className="relative">
-        {/* Intense Multidimensional Radiant Glow */}
-        <div className="absolute -inset-4 bg-[#C0A062]/25 blur-2xl rounded-full animate-pulse" />
-        <div className="absolute inset-0 bg-[#D4B576]/30 blur-lg rounded-full" />
-        
+        {/* Subtle Ambient Glow */}
+        <div className="absolute inset-0 bg-[#C0A062]/15 blur-2xl rounded-full animate-pulse lg:animate-none group-hover:lg:animate-pulse" />
         <img 
           src="/logo.webp" 
           alt="BM Wealth Logo" 
-          className="relative z-10 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(192,160,98,0.8)]"
+          className="relative z-10 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(192,160,98,0.5)]"
           style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
         />
       </div>
       
       <div className="flex items-center gap-3">
-        {/* Shimmering Wing - Left (Visible on Mobile/Tablet only) */}
+        {/* Shimmering Wing - Visible on Mobile/Tablet only */}
         <div className="hidden sm:block lg:hidden relative w-10 h-[1.5px] bg-[#C0A062]/30 overflow-hidden rounded-full shadow-[0_0_8px_rgba(192,160,98,0.2)]">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent -translate-x-full animate-[linearSweep_1.5s_infinite]" />
         </div>
 
         <span 
-          className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3px]"
+          className="font-serif font-bold tracking-[2.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3.5px]"
           style={{ 
             fontSize: fontSize, 
             background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 50%, #FFFFFF 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            animation: 'gold-shine 3s linear infinite',
-            filter: 'drop-shadow(0 0 15px rgba(212, 181, 118, 0.4))'
+            animation: 'gold-shine 4s linear infinite',
+            filter: 'drop-shadow(0 0 12px rgba(212, 181, 118, 0.3))'
           }}
         >
           BM Wealth
         </span>
 
-        {/* Shimmering Wing - Right (Visible on Mobile/Tablet only) */}
+        {/* Shimmering Wing - Visible on Mobile/Tablet only */}
         <div className="hidden sm:block lg:hidden relative w-10 h-[1.5px] bg-[#C0A062]/30 overflow-hidden rounded-full shadow-[0_0_8px_rgba(192,160,98,0.2)]">
           <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/60 to-transparent translate-x-full animate-[linearSweep_1.5s_infinite]" />
         </div>
@@ -99,19 +97,22 @@ const Navigation = () => {
     );
   }
 
-  // Desktop Navigation
+  // Desktop Navigation - Minimalist & Clean
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-[1000] transition-all duration-700 ease-in-out h-[100px] flex items-center justify-center px-10",
+        "fixed top-0 left-0 right-0 z-[1000] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] h-[80px] flex items-center justify-center px-12",
         isScrolled 
-          ? "ultra-luxury-glass border-b border-[#C0A062]/30 shadow-[0_10px_60px_rgba(0,0,0,0.9)]" 
+          ? "ultra-luxury-glass border-b border-[#C0A062]/20 shadow-[0_10px_40px_rgba(0,0,0,0.7)]" 
           : "bg-transparent"
       )}
     >
-      <div className="w-full max-w-[1400px] flex justify-between items-center">
-        <Logo size={52} fontSize="26px" />
-        <div className="flex gap-12 items-center">
+      <div className="w-full max-w-[1600px] flex justify-between items-center">
+        {/* TOP LEFT: Logo and Brand */}
+        <Logo size={48} fontSize="24px" />
+
+        {/* TOP RIGHT: Navigation Links */}
+        <div className="flex gap-10 items-center">
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
             return (
@@ -119,13 +120,13 @@ const Navigation = () => {
                 key={link.path}
                 href={link.path}
                 className={cn(
-                  "relative text-[14px] font-bold transition-all duration-500 uppercase tracking-[2px] no-underline",
-                  isActive ? "text-[#D4B576] drop-shadow-[0_0_12px_rgba(212,181,118,0.6)]" : "text-white hover:text-[#D4B576] hover:scale-110"
+                  "relative text-[12px] font-medium transition-all duration-500 uppercase tracking-[2.5px] no-underline",
+                  isActive ? "text-[#D4B576]" : "text-white/80 hover:text-white"
                 )}
               >
                 {link.label}
                 {isActive && (
-                  <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent animate-pulse shadow-[0_0_10px_#C0A062]" />
+                  <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent animate-pulse" />
                 )}
               </Link>
             );
