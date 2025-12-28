@@ -44,35 +44,24 @@ const Navigation = () => {
   const Logo = ({ size = 40, fontSize = '20px' }) => (
     <Link href="/" className="group flex items-center gap-3 no-underline">
       <div className="relative">
-        {/* Outer Rotating Luxury Ring */}
-        <div className="absolute -inset-1.5 rounded-full border border-[#C0A062]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-        <div className="absolute -inset-1.5 rounded-full border-t border-transparent border-r-[#C0A062]/40 border-b-transparent border-l-transparent animate-spin duration-[3s] opacity-0 group-hover:opacity-100" />
-        
-        {/* Internal Radiant Glow */}
-        <div className="absolute inset-0 bg-[#C0A062] blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500 rounded-full" />
-        
-        <div className="relative z-10 p-1.5 rounded-full border border-[#C0A062]/10 bg-black/40 backdrop-blur-sm transition-all duration-500 group-hover:border-[#C0A062]/40 group-hover:shadow-[0_0_20px_rgba(192,160,98,0.3)]">
-          <img 
-            src="/logo.webp" 
-            alt="BM Wealth Logo" 
-            className="transition-transform duration-700 group-hover:scale-110 rounded-full"
-            style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
-          />
-        </div>
+        <div className="absolute inset-0 bg-[#C0A062] blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-full" />
+        <img 
+          src="/logo.webp" 
+          alt="BM Wealth Logo" 
+          className="relative z-10 transition-transform duration-500 group-hover:scale-110"
+          style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
+        />
       </div>
-      <div className="flex flex-col items-start -gap-1">
-        <div className="flex items-center gap-2">
-          {/* Elegant Logo Wings */}
-          <div className="hidden sm:block w-3 h-[1px] bg-gradient-to-r from-transparent to-[#C0A062] opacity-20 group-hover:w-5 transition-all duration-700" />
-          <span 
-            className="gold-gradient-text font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3px]"
-            style={{ fontSize: fontSize }}
-          >
-            BM Wealth
-          </span>
-          <div className="hidden sm:block w-3 h-[1px] bg-gradient-to-l from-transparent to-[#C0A062] opacity-20 group-hover:w-5 transition-all duration-700" />
-        </div>
-        <span className="text-[8px] text-[#C0A062]/40 uppercase tracking-[0.3em] font-medium ml-5 hidden sm:block">Excellence in Wealth</span>
+      <div className="flex items-center gap-2">
+        {/* Elegant Logo Wings */}
+        <div className="hidden sm:block w-4 h-[1px] bg-gradient-to-r from-transparent to-[#C0A062] opacity-30" />
+        <span 
+          className="gold-gradient-text font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2px]"
+          style={{ fontSize: fontSize }}
+        >
+          BM Wealth
+        </span>
+        <div className="hidden sm:block w-4 h-[1px] bg-gradient-to-l from-transparent to-[#C0A062] opacity-30" />
       </div>
     </Link>
   );
