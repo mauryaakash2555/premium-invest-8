@@ -59,10 +59,10 @@ const Navigation = () => {
           className="font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2.5px]"
           style={{ 
             fontSize: fontSize, 
-            background: 'linear-gradient(135deg, #E5E4E2 0%, #9D8189 50%, #E5E4E2 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 50%, #FFFFFF 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 0 10px rgba(157, 129, 137, 0.2))'
+            filter: 'drop-shadow(0 0 12px rgba(212, 181, 118, 0.25))'
           }}
         >
           BM Wealth
