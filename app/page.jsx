@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 
-// --- LUXURY COMPONENTS ---
+// --- LUXURY COMPONENTS KEPT ---
 
 const GoldenHorizonSweep = () => (
   <motion.div
@@ -29,7 +29,7 @@ export default function HomePage() {
     { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%', pos: true },
   ]);
 
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -111,7 +111,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="bg-black">
+    <div>
       {/* Hero Section */}
       <section
         className="hero-gradient hero-section-responsive"
@@ -143,8 +143,22 @@ export default function HomePage() {
           }}
         />
 
-        {/* Golden Horizon Sweep */}
+        {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
+
+        {/* Premium Gradient Overlay - Desktop & Mobile */}
+        <div
+          className="hero-gradient-overlay"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)',
+            zIndex: 0,
+          }}
+        />
 
         <div
           className="section-container fade-in hero-content-responsive"
@@ -155,6 +169,7 @@ export default function HomePage() {
             paddingTop: '180px',
           }}
         >
+          {/* 7. Gold-Leaf Typography Kept */}
           <motion.h1
             className="hero-subtitle-responsive"
             style={{
@@ -202,25 +217,21 @@ export default function HomePage() {
               marginBottom: '60px',
             }}
           >
-            <motion.a
+            <a
               href="https://wa.me/918850977259"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-crystal-premium"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="btn-primary"
             >
-              <span className="relative z-10">Access Your Complimentary Wealth Blueprint</span>
-            </motion.a>
-            <Link href="/services" className="btn-crystal-secondary group">
-              <span className="relative z-10 flex items-center">
-                Explore Services <ArrowRight size={20} style={{ marginLeft: '8px' }} className="group-hover:translate-x-2 transition-transform" />
-              </span>
+              Access Your Complimentary Wealth Blueprint
+            </a>
+            <Link href="/services" className="btn-secondary">
+              Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
         </div>
 
-        {/* HOLOGRAPHIC LIVE MARKET TICKER */}
+        {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
         <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
           <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
             {[...tickerData, ...tickerData].map((item, i) => (
@@ -242,7 +253,7 @@ export default function HomePage() {
               fontSize: 'clamp(28px, 4vw, 48px)',
               marginBottom: '16px',
             }}
-            className="golden-gradient font-serif"
+            className="golden-gradient"
           >
             Our Services
           </h2>
@@ -304,7 +315,6 @@ export default function HomePage() {
                     fontSize: '24px',
                     color: '#DAA520',
                     marginBottom: '12px',
-                    fontFamily: '"Playfair Display", serif',
                   }}
                 >
                   {service.title}
@@ -356,7 +366,7 @@ export default function HomePage() {
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
               }}
-              className="golden-gradient font-serif"
+              className="golden-gradient"
             >
               Why Choose BM Wealth?
             </h2>
@@ -385,7 +395,7 @@ export default function HomePage() {
               >
                 <Shield size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -410,7 +420,7 @@ export default function HomePage() {
               >
                 <TrendingUp size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Elite Guidance
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -434,7 +444,7 @@ export default function HomePage() {
               >
                 <PieChart size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Tailored Solutions
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -460,7 +470,6 @@ export default function HomePage() {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 margin: 0,
-                fontFamily: '"Playfair Display", serif',
               }}
               className="golden-gradient"
             >
@@ -532,7 +541,6 @@ export default function HomePage() {
                     color: '#DAA520',
                     marginBottom: '16px',
                     lineHeight: 1.3,
-                    fontFamily: '"Playfair Display", serif',
                   }}
                 >
                   {staticBlogPost.title}
@@ -587,7 +595,6 @@ export default function HomePage() {
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
               color: '#DAA520',
-              fontFamily: '"Playfair Display", serif',
             }}
           >
             Ready to Commence Your Wealth Journey?
@@ -626,89 +633,6 @@ export default function HomePage() {
         }
         .animate-marquee-slow {
           animation: marquee 30s linear infinite;
-        }
-
-        .btn-crystal-premium, .btn-crystal-secondary {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          justifyContent: center;
-          padding: 16px 32px;
-          border-radius: 100px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 2.5px;
-          font-size: 12px;
-          overflow: hidden;
-          cursor: pointer;
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-          backdrop-filter: blur(30px);
-          -webkit-backdrop-filter: blur(30px);
-          background: rgba(255, 255, 255, 0.02); /* Almost zero opacity */
-          border: 0.5px solid rgba(255, 255, 255, 0.1);
-          color: #FFF;
-        }
-
-        /* The "Cool Feature": Corner precision accents that only appear on hover */
-        .btn-crystal-premium::before, .btn-crystal-premium::after,
-        .btn-crystal-secondary::before, .btn-crystal-secondary::after {
-          content: "";
-          position: absolute;
-          width: 8px;
-          height: 8px;
-          border-color: #C0A062;
-          opacity: 0;
-          transition: all 0.4s ease;
-        }
-
-        .btn-crystal-premium::before, .btn-crystal-secondary::before {
-          top: 8px;
-          left: 8px;
-          border-top: 1.5px solid;
-          border-left: 1.5px solid;
-          transform: translate(-10px, -10px);
-        }
-
-        .btn-crystal-premium::after, .btn-crystal-secondary::after {
-          bottom: 8px;
-          right: 8px;
-          border-bottom: 1.5px solid;
-          border-right: 1.5px solid;
-          transform: translate(10px, 10px);
-        }
-
-        .btn-crystal-premium:hover::before, .btn-crystal-premium:hover::after,
-        .btn-crystal-secondary:hover::before, .btn-crystal-secondary:hover::after {
-          opacity: 1;
-          transform: translate(0, 0);
-        }
-
-        .btn-crystal-premium:hover {
-          background: rgba(192, 160, 98, 0.05);
-          border-color: rgba(192, 160, 98, 0.5);
-          box-shadow: 0 0 30px rgba(192, 160, 98, 0.1);
-        }
-
-        .btn-crystal-secondary {
-          color: #C0A062;
-        }
-
-        .btn-crystal-secondary:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: #C0A062;
-        }
-
-        @media (max-width: 768px) {
-          .hero-cta-buttons-responsive {
-            padding: 0 20px;
-            flex-direction: column;
-            width: 100%;
-          }
-          .btn-crystal-premium, .btn-crystal-secondary {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 12px;
-          }
         }
       `}</style>
     </div>
