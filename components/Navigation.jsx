@@ -56,13 +56,13 @@ const Navigation = () => {
         {/* Elegant Logo Wings */}
         <div className="hidden sm:block w-4 h-[1px] bg-gradient-to-r from-transparent to-[#C0A062] opacity-30" />
         <span 
-          className="font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2px]"
+          className="font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2.5px]"
           style={{ 
             fontSize: fontSize, 
-            background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
+            background: 'linear-gradient(135deg, #E5E4E2 0%, #9D8189 50%, #E5E4E2 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 0 8px rgba(224, 195, 252, 0.3))'
+            filter: 'drop-shadow(0 0 10px rgba(157, 129, 137, 0.2))'
           }}
         >
           BM Wealth
