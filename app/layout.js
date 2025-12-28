@@ -23,11 +23,8 @@ export const metadata = {
   title: "BM Wealth - Mumbai's Distinguished Financial Advisory | Mutual Funds, SIP, PMS | ARN 90008",
   description: "BM Wealth offers expert investment advisory, mutual funds, SIP, portfolio management, and insurance services in Mumbai. IRDAI Licensed & AMFI Registered ARN 90008.",
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
+    icon: '/favicon.ico',
+    shortcut: '/favicon-32x32.png',
     apple: '/apple-touch-icon.png',
   },
 };
