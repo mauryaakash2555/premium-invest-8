@@ -4,10 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 
-// --- LUXURY COMPONENTS ---
+// --- LUXURY COMPONENTS KEPT ---
 
 const GoldenHorizonSweep = () => (
   <motion.div
@@ -29,17 +29,13 @@ export default function HomePage() {
     { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%', pos: true },
   ]);
 
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const [isClient, setIsClient] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setIsClient(true);
     window.scrollTo(0, 0);
 
     const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      setMousePos({ x, y });
+      setMousePos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 });
     };
     window.addEventListener('mousemove', handleMouseMove);
 
@@ -62,7 +58,7 @@ export default function HomePage() {
     };
 
     fetchMarketData();
-    const interval = setInterval(fetchMarketData, 60000);
+    const interval = setInterval(fetchMarketData, 60000); // Update every minute
     return () => {
       clearInterval(interval);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -115,7 +111,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="bg-black">
+    <div>
       {/* Hero Section */}
       <section
         className="hero-gradient hero-section-responsive"
@@ -147,28 +143,10 @@ export default function HomePage() {
           }}
         />
 
-        {/* Golden Horizon Sweep Kept */}
+        {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
 
-        {/* Cursor Aura Effect */}
-        {isClient && (
-          <motion.div
-            className="absolute z-[1] pointer-events-none rounded-full blur-[100px] opacity-20"
-            animate={{
-              left: `${mousePos.x}%`,
-              top: `${mousePos.y}%`,
-            }}
-            transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            style={{
-              width: '400px',
-              height: '400px',
-              background: 'radial-gradient(circle, #C0A062 0%, transparent 70%)',
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-        )}
-
-        {/* Premium Gradient Overlay */}
+        {/* Premium Gradient Overlay - Desktop & Mobile */}
         <div
           className="hero-gradient-overlay"
           style={{
@@ -177,7 +155,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)',
             zIndex: 0,
           }}
         />
@@ -187,11 +165,11 @@ export default function HomePage() {
           style={{
             textAlign: 'center',
             position: 'relative',
-            zIndex: 10,
+            zIndex: 1,
             paddingTop: '180px',
           }}
         >
-          {/* Gold-Leaf Typography Refined */}
+          {/* 7. Gold-Leaf Typography Kept */}
           <motion.h1
             className="hero-subtitle-responsive"
             style={{
@@ -203,11 +181,10 @@ export default function HomePage() {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              backgroundImage: `linear-gradient(135deg, #C0A062 ${mousePos.x - 30}%, #FFF ${mousePos.x}%, #C0A062 ${mousePos.x + 30}%)`,
+              backgroundImage: `linear-gradient(135deg, #C0A062 ${mousePos.x - 20}%, #FFF ${mousePos.x}%, #C0A062 ${mousePos.x + 20}%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundSize: '200% auto',
-              transition: 'background-position 0.2s ease-out',
             }}
           >
             Mumbai&apos;s Premier Financial Advisory
@@ -231,7 +208,7 @@ export default function HomePage() {
           </p>
 
           <div
-            className="hero-cta-buttons-responsive"
+            className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
               gap: '20px',
@@ -240,28 +217,21 @@ export default function HomePage() {
               marginBottom: '60px',
             }}
           >
-            {/* Crystal Glass & Molten Shimmer Button */}
-            <motion.a
+            <a
               href="https://wa.me/918850977259"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary-crystal group"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="btn-primary"
             >
-              <span className="relative z-10">Access Your Complimentary Wealth Blueprint</span>
-              <div className="molten-shimmer" />
-            </motion.a>
-            <Link href="/services" className="btn-secondary-crystal group">
-              <span className="relative z-10 flex items-center">
-                Explore Services <ArrowRight size={20} style={{ marginLeft: '8px' }} className="group-hover:translate-x-2 transition-transform" />
-              </span>
-              <div className="molten-shimmer" />
+              Access Your Complimentary Wealth Blueprint
+            </a>
+            <Link href="/services" className="btn-secondary">
+              Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
         </div>
 
-        {/* HOLOGRAPHIC LIVE MARKET TICKER */}
+        {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
         <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
           <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
             {[...tickerData, ...tickerData].map((item, i) => (
@@ -283,7 +253,7 @@ export default function HomePage() {
               fontSize: 'clamp(28px, 4vw, 48px)',
               marginBottom: '16px',
             }}
-            className="golden-gradient font-serif"
+            className="golden-gradient"
           >
             Our Services
           </h2>
@@ -313,13 +283,18 @@ export default function HomePage() {
               href={service.link}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <motion.div 
-                className="service-card slide-up bg-black/40 backdrop-blur-xl border border-white/5" 
-                whileHover={{ y: -8, perspective: 1000 }}
-                transition={{ type: 'spring', stiffness: 300 }}
+              <div 
+                className="service-card slide-up" 
                 style={{
                   overflow: 'hidden',
                   cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
                 >
                   <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '20px', borderRadius: '8px', overflow: 'hidden' }}>
@@ -328,23 +303,18 @@ export default function HomePage() {
                       alt={service.title}
                       fill
                       style={{ objectFit: 'cover' }}
-                      className="grayscale group-hover:grayscale-0 transition-all duration-700"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       priority={index < 3}
                     />
                   </div>
-                <motion.div 
-                  style={{ color: '#C0A062', marginBottom: '16px' }}
-                  whileHover={{ rotateY: 20, rotateX: -10 }}
-                >
+                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
                   {service.icon}
-                </motion.div>
+                </div>
                 <h3
                   style={{
                     fontSize: '24px',
-                    color: '#C0A062',
+                    color: '#DAA520',
                     marginBottom: '12px',
-                    fontFamily: '"Playfair Display", serif',
                   }}
                 >
                   {service.title}
@@ -352,7 +322,7 @@ export default function HomePage() {
                 <p
                   style={{
                     fontSize: '16px',
-                    color: '#999',
+                    color: '#CCCCCC',
                     lineHeight: 1.6,
                     marginBottom: '16px',
                   }}
@@ -370,13 +340,13 @@ export default function HomePage() {
                   <span>Learn More</span>
                   <ArrowRight size={16} />
                 </div>
-              </motion.div>
+              </div>
             </Link>
           ))}
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
-          <Link href="/services" className="btn-primary-crystal px-12 py-4 inline-block">
+          <Link href="/services" className="btn-primary">
             View All Services
           </Link>
         </div>
@@ -396,7 +366,7 @@ export default function HomePage() {
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
               }}
-              className="golden-gradient font-serif"
+              className="golden-gradient"
             >
               Why Choose BM Wealth?
             </h2>
@@ -414,22 +384,21 @@ export default function HomePage() {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(192, 160, 98, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#C0A062',
-                  border: '1px solid rgba(192, 160, 98, 0.2)',
+                  color: '#DAA520',
                 }}
               >
                 <Shield size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#C0A062', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 AMFI Registered
               </h3>
-              <p style={{ fontSize: '16px', color: '#999', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 Fully compliant and registered financial advisory
                 services
               </p>
@@ -440,22 +409,21 @@ export default function HomePage() {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(192, 160, 98, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#C0A062',
-                  border: '1px solid rgba(192, 160, 98, 0.2)',
+                  color: '#DAA520',
                 }}
               >
                 <TrendingUp size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#C0A062', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Elite Guidance
               </h3>
-              <p style={{ fontSize: '16px', color: '#999', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 Decades of expertise in financial markets and wealth management
               </p>
             </div>
@@ -465,22 +433,21 @@ export default function HomePage() {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(192, 160, 98, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#C0A062',
-                  border: '1px solid rgba(192, 160, 98, 0.2)',
+                  color: '#DAA520',
                 }}
               >
                 <PieChart size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#C0A062', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
                 Tailored Solutions
               </h3>
-              <p style={{ fontSize: '16px', color: '#999', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
                 Personalized investment strategies aligned with your financial goals
               </p>
             </div>
@@ -496,14 +463,13 @@ export default function HomePage() {
             alignItems: 'center', 
             gap: '12px', 
             marginBottom: '16px',
-            color: '#C0A062'
+            color: '#DAA520'
           }}>
             <BookOpen size={32} />
             <h2
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 margin: 0,
-                fontFamily: '"Playfair Display", serif',
               }}
               className="golden-gradient"
             >
@@ -536,30 +502,33 @@ export default function HomePage() {
               display: 'block'
             }}
           >
-            <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 h-[300px] relative">
-                <img
-                  src={staticBlogPost.image_url || staticBlogPost.image}
-                  alt={staticBlogPost.image_alt || staticBlogPost.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </div>
+            <div>
+              {/* Blog Image - Seamless, no border */}
+              <img
+                src={staticBlogPost.image_url || staticBlogPost.image}
+                alt={staticBlogPost.image_alt || staticBlogPost.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'cover',
+                  borderRadius: 0,
+                  display: 'block',
+                  marginBottom: 0,
+                }}
+              />
               
+              {/* Blog Content */}
               <div style={{
                 padding: 'clamp(30px, 5vw, 50px)',
-                flex: 1
               }}>
                 <div style={{
                   display: 'inline-block',
                   padding: '6px 16px',
-                  background: 'rgba(192, 160, 98, 0.1)',
+                  background: 'rgba(218, 165, 32, 0.1)',
                   borderRadius: '20px',
                   fontSize: '14px',
-                  color: '#C0A062',
+                  color: '#DAA520',
                   marginBottom: '20px',
                   fontWeight: 500,
                 }}>
@@ -569,10 +538,9 @@ export default function HomePage() {
                 <h3
                   style={{
                     fontSize: 'clamp(24px, 4vw, 32px)',
-                    color: '#C0A062',
+                    color: '#DAA520',
                     marginBottom: '16px',
                     lineHeight: 1.3,
-                    fontFamily: '"Playfair Display", serif',
                   }}
                 >
                   {staticBlogPost.title}
@@ -581,7 +549,7 @@ export default function HomePage() {
                 <p
                   style={{
                     fontSize: 'clamp(16px, 2.5vw, 18px)',
-                    color: '#999',
+                    color: '#CCCCCC',
                     lineHeight: 1.7,
                     marginBottom: '24px',
                   }}
@@ -604,6 +572,12 @@ export default function HomePage() {
             </div>
           </Link>
         </div>
+
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link href="/blog" className="btn-secondary" style={{ textDecoration: 'none' }}>
+            View All Insights
+          </Link>
+        </div>
       </section>
 
       {/* CTA Section */}
@@ -613,17 +587,14 @@ export default function HomePage() {
           style={{
             padding: '60px 40px',
             textAlign: 'center',
-            background: 'rgba(192, 160, 98, 0.05)',
-            border: '1px solid rgba(192, 160, 98, 0.1)',
-            borderRadius: '24px'
+            background: 'rgba(218, 165, 32, 0.05)',
           }}
         >
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#C0A062',
-              fontFamily: '"Playfair Display", serif',
+              color: '#DAA520',
             }}
           >
             Ready to Commence Your Wealth Journey?
@@ -631,7 +602,7 @@ export default function HomePage() {
           <p
             style={{
               fontSize: '18px',
-              color: '#999',
+              color: '#CCCCCC',
               marginBottom: '30px',
               maxWidth: '600px',
               margin: '0 auto 30px',
@@ -644,11 +615,11 @@ export default function HomePage() {
               href="https://wa.me/918850977259"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary-crystal px-10 py-4"
+              className="btn-primary"
             >
               Chat on WhatsApp
             </a>
-            <Link href="/contact" className="btn-secondary-crystal px-10 py-4">
+            <Link href="/contact" className="btn-secondary">
               Contact Us
             </Link>
           </div>
@@ -662,83 +633,6 @@ export default function HomePage() {
         }
         .animate-marquee-slow {
           animation: marquee 30s linear infinite;
-        }
-
-        .btn-primary-crystal, .btn-secondary-crystal {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 18px 32px;
-          border-radius: 100px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          font-size: 13px;
-          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          overflow: hidden;
-          cursor: pointer;
-        }
-
-        .btn-primary-crystal {
-          background: rgba(192, 160, 98, 0.1);
-          border: 0.5px solid rgba(192, 160, 98, 0.6);
-          color: #FFF;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary-crystal {
-          background: rgba(255, 255, 255, 0.05);
-          border: 0.5px solid rgba(255, 255, 255, 0.2);
-          color: #C0A062;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-
-        .btn-primary-crystal:hover {
-          border-color: #FFF;
-          box-shadow: 0 0 30px rgba(192, 160, 98, 0.3);
-          background: rgba(192, 160, 98, 0.2);
-        }
-
-        .btn-secondary-crystal:hover {
-          border-color: #C0A062;
-          box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        .molten-shimmer {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            120deg,
-            transparent 0%,
-            transparent 40%,
-            rgba(255, 255, 255, 0.2) 50%,
-            transparent 60%,
-            transparent 100%
-          );
-          background-size: 200% 100%;
-          animation: ribbon-roll 4s infinite linear;
-          pointer-events: none;
-          z-index: 1;
-        }
-
-        @keyframes ribbon-roll {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-
-        @media (max-width: 768px) {
-          .hero-cta-buttons-responsive {
-            display: flex !important;
-            padding: 0 20px;
-          }
-          .btn-primary-crystal, .btn-secondary-crystal {
-            width: 100%;
-            text-align: center;
-          }
         }
       `}</style>
     </div>
