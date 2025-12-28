@@ -56,8 +56,8 @@ const Navigation = () => {
         {/* Elegant Logo Wings */}
         <div className="hidden sm:block w-4 h-[1px] bg-gradient-to-r from-transparent to-[#C0A062] opacity-30" />
         <span 
-          className="gold-gradient-text font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2px]"
-          style={{ fontSize: fontSize }}
+          className="font-serif font-bold tracking-[1.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[2px]"
+          style={{ fontSize: fontSize, color: '#DAA520' }}
         >
           BM Wealth
         </span>
