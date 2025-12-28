@@ -57,29 +57,28 @@ const Navigation = () => {
       </div>
       
       <div className="flex items-center gap-3">
-        {/* Shimmering Wing - Left (Intense Always-On) */}
-        <div className="hidden sm:block relative w-12 h-[2px] bg-[#C0A062]/40 overflow-hidden rounded-full shadow-[0_0_10px_rgba(192,160,98,0.3)]">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full animate-[linearSweep_1.2s_infinite]" />
+        {/* Shimmering Wing - Left (Visible on Mobile/Tablet only) */}
+        <div className="hidden sm:block lg:hidden relative w-10 h-[1.5px] bg-[#C0A062]/30 overflow-hidden rounded-full shadow-[0_0_8px_rgba(192,160,98,0.2)]">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent -translate-x-full animate-[linearSweep_1.5s_infinite]" />
         </div>
 
         <span 
-          className="font-serif font-bold tracking-[2.5px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3.5px]"
+          className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3px]"
           style={{ 
             fontSize: fontSize, 
-            background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 25%, #F0E6D2 50%, #D4B576 75%, #FFFFFF 100%)',
-            backgroundSize: '200% auto',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 50%, #FFFFFF 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            animation: 'gold-shine 3s linear infinite', // Faster, more intense shine
+            animation: 'gold-shine 3s linear infinite',
             filter: 'drop-shadow(0 0 15px rgba(212, 181, 118, 0.4))'
           }}
         >
           BM Wealth
         </span>
 
-        {/* Shimmering Wing - Right (Intense Always-On) */}
-        <div className="hidden sm:block relative w-12 h-[2px] bg-[#C0A062]/40 overflow-hidden rounded-full shadow-[0_0_10px_rgba(192,160,98,0.3)]">
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/80 to-transparent translate-x-full animate-[linearSweep_1.2s_infinite]" />
+        {/* Shimmering Wing - Right (Visible on Mobile/Tablet only) */}
+        <div className="hidden sm:block lg:hidden relative w-10 h-[1.5px] bg-[#C0A062]/30 overflow-hidden rounded-full shadow-[0_0_8px_rgba(192,160,98,0.2)]">
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/60 to-transparent translate-x-full animate-[linearSweep_1.5s_infinite]" />
         </div>
       </div>
     </Link>
