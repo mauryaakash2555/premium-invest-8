@@ -40,42 +40,44 @@ const Navigation = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-  // Premium Logo Component with Shine & Glow (No cheap circles)
+  // Ultra-Premium Logo Component with Always-On Shine
   const Logo = ({ size = 40, fontSize = '20px' }) => (
     <Link href="/" className="group flex items-center gap-4 no-underline">
       <div className="relative">
-        {/* Subtle Ambient Glow */}
-        <div className="absolute inset-0 bg-[#C0A062]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+        {/* Always-On Ambient Glow */}
+        <div className="absolute inset-0 bg-[#C0A062]/10 blur-xl rounded-full animate-pulse" />
         <img 
           src="/logo.webp" 
           alt="BM Wealth Logo" 
-          className="relative z-10 transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(192,160,98,0.6)]"
+          className="relative z-10 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_10px_rgba(192,160,98,0.4)]"
           style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
         />
       </div>
       
       <div className="flex items-center gap-3">
-        {/* Luxurious Wing - Left (Linear Shimmer) */}
+        {/* Shimmering Wing - Left (Always Running) */}
         <div className="hidden sm:block relative w-10 h-[1.5px] bg-[#C0A062]/20 overflow-hidden rounded-full">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C0A062]/60 to-transparent -translate-x-full animate-[linearSweep_1.5s_infinite]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full animate-[linearSweep_2s_infinite]" />
         </div>
 
         <span 
           className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3px]"
           style={{ 
             fontSize: fontSize, 
-            background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 50%, #FFFFFF 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #D4B576 25%, #F0E6D2 50%, #D4B576 75%, #FFFFFF 100%)',
+            backgroundSize: '200% auto',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
+            animation: 'gold-shine 4s linear infinite', // ALWAYS SHINING
             filter: 'drop-shadow(0 0 12px rgba(212, 181, 118, 0.2))'
           }}
         >
           BM Wealth
         </span>
 
-        {/* Luxurious Wing - Right (Linear Shimmer) */}
+        {/* Shimmering Wing - Right (Always Running) */}
         <div className="hidden sm:block relative w-10 h-[1.5px] bg-[#C0A062]/20 overflow-hidden rounded-full">
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#C0A062]/60 to-transparent translate-x-full animate-[linearSweep_1.5s_infinite]" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/50 to-transparent translate-x-full animate-[linearSweep_2s_infinite]" />
         </div>
       </div>
     </Link>
