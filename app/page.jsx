@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -172,7 +172,7 @@ export default function HomePage() {
             textAlign: 'center',
             position: 'relative',
             zIndex: 1,
-            paddingTop: '180px',
+            paddingTop: 'clamp(20px, 7vh, 180px)',
           }}
         >
           {/* 7. Gold-Leaf Typography Kept */}
@@ -653,3 +653,4 @@ export default function HomePage() {
     </div>
   );
 }
+
