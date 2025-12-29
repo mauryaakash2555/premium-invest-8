@@ -9,9 +9,7 @@ import { staticBlogPost } from '@/data/staticBlogData';
 
 // NEW PREMIUM IMPORTS
 import MarketMoodStrip from '@/components/MarketMoodStrip';
-
-
-
+import AnimatedClouds from '@/components/AnimatedClouds';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -36,6 +34,7 @@ export default function HomePage() {
   ]);
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [rainEnabled, setRainEnabled] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -145,9 +144,12 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            zIndex: 0,
+            zIndex: 2,
           }}
         />
+
+        {/* Animated Clouds + occasional lightning (rain off by default) */}
+        <AnimatedClouds enableRain={rainEnabled} />
 
         {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
@@ -162,7 +164,7 @@ export default function HomePage() {
             right: 0,
             height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)',
-            zIndex: 0,
+            zIndex: 2,
           }}
         />
 
@@ -171,7 +173,7 @@ export default function HomePage() {
           style={{
             textAlign: 'center',
             position: 'relative',
-            zIndex: 1,
+            zIndex: 3,
             paddingTop: 'clamp(20px, 7vh, 180px)',
           }}
         >
@@ -239,7 +241,7 @@ export default function HomePage() {
 
         {/* MARKET MOOD STRIP - NEW */}
         <div className="absolute bottom-[60px] left-0 w-full z-40">
-          <MarketMoodStrip />
+          <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
         </div>
 
         {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
@@ -653,4 +655,10 @@ export default function HomePage() {
     </div>
   );
 }
+
+
+
+
+
+
 

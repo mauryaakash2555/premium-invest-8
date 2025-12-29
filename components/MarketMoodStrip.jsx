@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -10,7 +10,7 @@ const moods = [
   'Macroeconomic indicators signaling resilience in domestic markets.'
 ];
 
-export default function MarketMoodStrip() {
+export default function MarketMoodStrip({ onToggleRain }) {
   const [index, setMoodIndex] = useState(0);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function MarketMoodStrip() {
   return (
     <div className='w-full bg-[#050505] py-2 z-50 overflow-hidden relative shadow-[0_-10px_30px_rgba(0,0,0,0.8)]'>
       <div className='max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-start gap-4 h-6'>
-        <div className='flex items-center gap-2 flex-shrink-0 z-10 bg-[#050505] pr-2'>
+        <div className='flex items-center gap-2 flex-shrink-0 z-10 bg-[#050505] pr-2' onClick={() => onToggleRain?.()} style={{ cursor: 'pointer' }}>
           <span className='relative flex h-2 w-2'>
             <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C0A062] opacity-75'></span>
             <span className='relative inline-flex rounded-full h-2 w-2 bg-[#C0A062]'></span>
@@ -68,3 +68,5 @@ export default function MarketMoodStrip() {
     </div>
   );
 }
+
+
