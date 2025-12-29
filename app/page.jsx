@@ -7,6 +7,12 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 
+// NEW PREMIUM IMPORTS
+import MarketMoodStrip from '@/components/luxury-ui/MarketMoodStrip';
+import LiveCardsSection from '@/components/luxury-ui/LiveCardsSection';
+import InsightsPreview from '@/components/luxury-ui/InsightsPreview';
+import ScrollAnimations from '@/components/luxury-ui/ScrollAnimations';
+
 // --- LUXURY COMPONENTS KEPT ---
 
 const GoldenHorizonSweep = () => (
@@ -24,7 +30,7 @@ export default function HomePage() {
   const [tickerData, setTickerData] = useState([
     { l: 'NIFTY 50', v: '24,321.05', c: '+1.2%', pos: true },
     { l: 'SENSEX', v: '80,142.12', c: '+0.9%', pos: true },
-    { l: 'GOLD (24K)', v: '₹72,450', c: '+0.4%', pos: true },
+    { l: 'GOLD (24K)', v: ',172,450', c: '+0.4%', pos: true },
     { l: 'INR/USD', v: '83.42', c: '-0.1%', pos: false },
     { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%', pos: true },
   ]);
@@ -112,6 +118,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <ScrollAnimations />
       {/* Hero Section */}
       <section
         className="hero-gradient hero-section-responsive"
@@ -187,7 +194,7 @@ export default function HomePage() {
               backgroundSize: '200% auto',
             }}
           >
-            Mumbai&apos;s Premier Financial Advisory
+            Mumbai&apos;s Premier Wealth Architecture
           </motion.h1>
           <p
             className="hero-description-responsive"
@@ -231,6 +238,11 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* MARKET MOOD STRIP - NEW */}
+        <div className="absolute bottom-[60px] left-0 w-full z-40">
+          <MarketMoodStrip />
+        </div>
+
         {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
         <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
           <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
@@ -244,6 +256,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
+      <LiveCardsSection />
 
       {/* Services Overview Section */}
       <section className="section-container">
@@ -265,7 +280,7 @@ export default function HomePage() {
               margin: '0 auto',
             }}
           >
-            Bespoke financial architectures meticulously crafted to elevate your
+            Bespoke wealth architectures meticulously crafted to elevate your
             wealth trajectory
           </p>
         </div>
@@ -396,10 +411,10 @@ export default function HomePage() {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                AMFI Registered
+                AMFI Registered Wealth Distribution
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Fully compliant and registered financial advisory
+                Fully compliant and registered wealth distribution
                 services
               </p>
             </div>
@@ -625,6 +640,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* INSIGHTS PREVIEW - NEW */}
+      <InsightsPreview />
 
       <style jsx global>{`
         @keyframes marquee {

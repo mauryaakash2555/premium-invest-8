@@ -4,7 +4,6 @@ import { MessageCircle, ArrowRight, ExternalLink, ShieldCheck, Gem, Crown, Info,
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { motion } from "framer-motion"
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null)
@@ -59,7 +58,7 @@ const Footer = () => {
         "shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"
       )}>
         
-        {/* ENHANCED: Truly Randomized 25 Popping Dust Particles */}
+        {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
           {[...Array(25)].map((_, i) => (
             <div 
@@ -77,15 +76,27 @@ const Footer = () => {
 
         {/* Branding Masterpiece Section */}
         <div className="relative pt-24 pb-16 px-6 flex flex-col items-center z-20">
-          <div className="flex flex-col items-center mb-10 group cursor-default">
-            <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
-              BM Wealth
-            </h2>
-            <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[#C0A062] to-transparent mt-2 opacity-80" />
+          <div className="flex items-center gap-12 mb-10 group cursor-default">
+            {/* Turbo Shimmering Wings (Left) */}
+            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
+            </div>
+            
+            <div className="flex flex-col items-center">
+              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
+                BM Wealth
+              </h2>
+              <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[#C0A062] to-transparent mt-2 opacity-80" />
+            </div>
+
+            {/* Turbo Shimmering Wings (Right) */}
+            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-l from-transparent via-[#C0A062] to-transparent overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
+            </div>
           </div>
 
           <p className="text-[13px] tracking-[5px] text-[#D4B576] font-bold uppercase mb-4 m-0 text-center">
-            Distinguished Financial Architecture
+            Distinguished Wealth Architecture
           </p>
           <p className="text-sm text-gray-400 font-light italic max-w-xl text-center leading-relaxed m-0 opacity-80 border-x border-[#C0A062]/20 px-8">
             Empowering Mumbai's elite investors with bespoke wealth strategies and unwavering integrity.
@@ -185,7 +196,7 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* RECTANGLE WHATSAPP CARD - PITCH BLACK FIX */}
+              {/* RECTANGLE WHATSAPP CARD - LEFT ALIGNED FOR BOTH MOBILE & DESKTOP */}
               <a
                 href="https://wa.me/918850977259"
                 target="_blank"
@@ -196,16 +207,28 @@ const Footer = () => {
                 onMouseUp={() => setIsWHAActive(false)}
                 onTouchStart={() => setIsWHAActive(true)}
                 onTouchEnd={() => setIsWHAActive(false)}
-                className="relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-[#000000] h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0"
+                className="relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5"
                 style={{ 
                   borderColor: isWHAHovered ? '#25D366' : '#C0A062',
                   transform: isWHAHovered ? 'scale(1.08)' : 'scale(1)',
                   boxShadow: isWHAHovered ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
                   display: 'flex',
-                  justifyContent: isDesktop ? 'flex-start' : 'center',
-                  paddingLeft: isDesktop ? '16px' : '0'
+                  justifyContent: 'flex-start', // Always start from left
                 }}
               >
+                {/* Dynamic Expansion - Brown to Green from Inside */}
+                <div 
+                  className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
+                  style={{ 
+                    background: isWHAActive 
+                      ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
+                      : (isWHAHovered ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
+                    transform: isWHAHovered ? 'scale(2.5)' : 'scale(0)',
+                    opacity: isWHAHovered ? 1 : 0,
+                    zIndex: 1
+                  }} 
+                />
+                
                 {/* Shimmer */}
                 <div className={cn(
                   "absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 z-10",
@@ -256,72 +279,28 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* CLASSIC HALF-LINE Side-Line Disclaimers - RESTORED */}
+        {/* INTERACTIVE HALF-TO-FULL SIDE LINE DISCLAIMERS */}
         <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[#C0A062]/15 relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <motion.div 
-              whileHover="hover"
-              whileTap="tap"
-              className="flex gap-6 group cursor-pointer"
-            >
-              <motion.div 
-                initial={{ height: "30%", opacity: 0.3 }}
-                whileInView={{ height: "100%", opacity: 0.6 }}
-                variants={{
-                  hover: { 
-                    height: ["100%", "30%", "100%"],
-                    opacity: [0.6, 1, 0.6],
-                    transition: { duration: 1.5, ease: "easeInOut" }
-                  },
-                  tap: { 
-                    height: ["100%", "20%", "100%"],
-                    transition: { duration: 0.5 }
-                  }
-                }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 3, ease: "circOut" }}
-                style={{ backgroundColor: '#C0A062' }}
-                className="w-[1.2px] flex-shrink-0 shadow-[0_0_8px_rgba(192,160,98,0.3)] mt-1" 
-              />
+            <div className="premium-half-line group">
+              <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 opacity-60">SEBI Disclosure</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">SEBI Disclosure</h4>
+                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              whileHover="hover"
-              whileTap="tap"
-              className="flex gap-6 group cursor-pointer"
-            >
-              <motion.div 
-                initial={{ height: "30%", opacity: 0.3 }}
-                whileInView={{ height: "100%", opacity: 0.6 }}
-                variants={{
-                  hover: { 
-                    height: ["100%", "30%", "100%"],
-                    opacity: [0.6, 1, 0.6],
-                    transition: { duration: 1.5, ease: "easeInOut" }
-                  },
-                  tap: { 
-                    height: ["100%", "20%", "100%"],
-                    transition: { duration: 0.5 }
-                  }
-                }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 3, ease: "circOut" }}
-                style={{ backgroundColor: '#C0A062' }}
-                className="w-[1.2px] flex-shrink-0 shadow-[0_0_8px_rgba(192,160,98,0.3)] mt-1" 
-              />
+            <div className="premium-half-line group">
+              <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 opacity-60">Investment Notice</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0">
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Investment Notice</h4>
+                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
                   Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. BM Wealth acts as a distributor, not a manufacturer.
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
 
@@ -334,19 +313,40 @@ const Footer = () => {
                 
                 <p className="relative z-20 text-[14px] font-serif text-[#C0A062] font-bold tracking-[4px] uppercase m-0 flex items-center gap-4">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" />
-                  IRDAI Licensed | AMFI Registered
+                  IRDAI Licensed | AMFI Registered Wealth Distribution
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" />
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col items-center space-y-3 opacity-60">
-              <p className="text-[12px] text-gray-400 font-light tracking-[0.4em] uppercase m-0">
+            <div className="flex flex-col items-center space-y-3">
+              <p className="text-[12px] text-gray-400 font-light tracking-[0.4em] uppercase m-0 opacity-60">
                 © 2025 BM Wealth. All rights reserved.
               </p>
-              <p className="text-[10px] text-[#C0A062] font-bold tracking-[0.2em] uppercase m-0">
+              <p className="text-[10px] text-[#C0A062] font-bold tracking-[0.2em] uppercase m-0 opacity-60">
                 Crafted for Mumbai's Distinguished Investors
               </p>
+              
+              {/* SOPHISTICATED MARKET DYNAMICS NOTICE */}
+              <p className="text-[11px] text-gray-500 italic font-light mt-4 text-center max-w-2xl opacity-80">
+                Investment products are subject to market dynamics. Carefully review all documentation before commitment.
+              </p>
+
+              {/* LEGAL MICRO-TEXT FOR AUDITORS */}
+              <div className="flex flex-col items-center mt-6 space-y-2 opacity-30 hover:opacity-100 transition-opacity duration-500">
+                <p className="text-[8px] text-[#666] tracking-[0.5px] m-0">
+                  AMFI ARN-90008 | IRDAI-277925 | Distribution remuneration as per industry standards
+                </p>
+                <div className="flex gap-4">
+                  <Link href="/legal-disclosures" className="text-[8px] text-[#666] hover:text-[#C0A062] no-underline">
+                    Legal Disclosures
+                  </Link>
+                  <span className="text-[8px] text-[#666]">|</span>
+                  <Link href="/regulatory-compliance" className="text-[8px] text-[#666] hover:text-[#C0A062] no-underline">
+                    Regulatory Compliance
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

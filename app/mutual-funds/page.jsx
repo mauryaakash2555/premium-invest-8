@@ -50,7 +50,7 @@ const MutualFunds = () => {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Mutual Fund Investment Services in Mumbai
+            Mutual Fund Selection Services in Mumbai
           </h1>
           <p style={{
             fontSize: '20px',
@@ -59,7 +59,7 @@ const MutualFunds = () => {
             margin: '0 auto 32px',
             lineHeight: '1.6'
           }}>
-            Build wealth systematically with expert mutual fund advisory. AMFI Registered ARN 90008 | Trusted by 500+ Mumbai investors
+            Build wealth systematically with expert mutual fund curation. AMFI Registered ARN 90008 | Trusted by 500+ Mumbai investors
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="tel:+918850977259" style={{
@@ -104,10 +104,10 @@ const MutualFunds = () => {
             Mutual funds have emerged as one of the most popular investment vehicles for Indian investors, especially in financial hubs like Mumbai. At BM Wealth, we believe mutual funds offer the perfect balance of professional management, diversification, and accessibility for investors across all income levels. Whether you're a young professional starting your investment journey in Mumbai's competitive market or a seasoned investor looking to optimize your portfolio, mutual funds provide a structured approach to wealth creation.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            The beauty of mutual funds lies in their democratic nature – you don't need lakhs of rupees to start investing. With Systematic Investment Plans (SIPs) starting as low as ₹500 per month, even entry-level professionals in Mumbai can begin their wealth creation journey. Our AMFI registered advisors (ARN 90008) have helped countless Mumbai residents navigate the complex world of mutual funds, creating customized portfolios that align with their financial goals, risk appetite, and investment horizon.
+            The beauty of mutual funds lies in their democratic nature – you don't need lakhs of rupees to start investing. With Systematic Investment Plans (SIPs) starting as low as ₹1500 per month, even entry-level professionals in Mumbai can begin their wealth creation journey. Our AMFI registered wealth architects (ARN 90008) have helped countless Mumbai residents navigate the complex world of mutual funds, creating customized portfolios that align with their financial goals, risk appetite, and investment horizon.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Mutual funds offer several compelling advantages: professional fund management by experienced portfolio managers, instant diversification across multiple securities, high liquidity allowing you to redeem your investments when needed, regulatory oversight by SEBI ensuring investor protection, and tax efficiency through instruments like ELSS funds. For Mumbai's salaried professionals juggling demanding careers, mutual funds eliminate the need for constant market monitoring while still providing exposure to equity and debt markets.
+            Mutual funds offer several compelling advantages: professional fund management by experienced portfolio managers, instant diversification across multiple securities, high liquidity allowing you to redeem your investments when needed, regulatory oversight ensuring investor protection, and tax efficiency through instruments like ELSS funds. For Mumbai's salaried professionals juggling demanding careers, mutual funds eliminate the need for constant market monitoring while still providing exposure to equity and debt markets.
           </p>
 
           <div style={{
@@ -118,9 +118,9 @@ const MutualFunds = () => {
           }}>
             {[
               { icon: <TrendingUp size={32} />, title: 'Professional Management', desc: 'Expert fund managers with proven track records' },
-              { icon: <Shield size={32} />, title: 'SEBI Regulated', desc: 'Complete investor protection and transparency' },
-              { icon: <Target size={32} />, title: 'Goal-Based Investing', desc: 'Tailored solutions for every financial goal' },
-              { icon: <Calculator size={32} />, title: 'Flexible SIPs', desc: 'Start with just ₹500 per month' }
+              { icon: <Shield size={32} />, title: 'Regulatory Oversight', desc: 'Complete investor protection and transparency' },
+              { icon: <Target size={32} />, title: 'Goal-Based Curation', desc: 'Tailored solutions for every financial goal' },
+              { icon: <Calculator size={32} />, title: 'Flexible SIPs', desc: 'Start with just ₹1500 per month' }
             ].map((item, idx) => (
               <div key={idx} style={{
                 background: 'rgba(218, 165, 32, 0.1)',
@@ -215,7 +215,7 @@ const MutualFunds = () => {
             Ready to Start Your Mutual Fund Journey?
           </h3>
           <p style={{ fontSize: '17px', color: '#000', marginBottom: '24px' }}>
-            Get personalized mutual fund recommendations from AMFI Registered Advisors
+            Get personalized mutual fund curation from AMFI Registered Wealth Architects
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="tel:+918850977259" style={{
@@ -272,10 +272,10 @@ const MutualFunds = () => {
         {/* Investment Process */}
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Mutual Fund Investment Process at BM Wealth
+            Mutual Fund Curation Process at BM Wealth
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Our AMFI registered advisors (ARN 90008) follow a structured, client-centric process ensuring your investments align perfectly with your financial goals:
+            Our AMFI registered wealth architects (ARN 90008) follow a structured, client-centric process ensuring your investments align perfectly with your financial goals:
           </p>
           
           <div style={{ marginBottom: '24px' }}>
@@ -328,7 +328,7 @@ const MutualFunds = () => {
               Step 6: Ongoing Monitoring & Review
             </h4>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              Our relationship doesn't end with investment. We conduct quarterly portfolio reviews, comparing your funds' performance against benchmarks and peer groups. We provide detailed reports showing returns, asset allocation, and goal progress. Annual reviews ensure your portfolio stays aligned with evolving goals, changing risk appetite, or life events. We proactively recommend rebalancing or fund changes when necessary, always prioritizing your best interests as AMFI registered advisors.
+              Our relationship doesn't end with investment. We conduct quarterly portfolio reviews, comparing your funds' performance against benchmarks and peer groups. We provide detailed reports showing returns, asset allocation, and goal progress. Annual reviews ensure your portfolio stays aligned with evolving goals, changing risk appetite, or life events. We proactively recommend rebalancing or fund changes when necessary, always prioritizing your best interests as AMFI registered wealth architects.
             </p>
           </div>
         </section>
@@ -389,7 +389,7 @@ const MutualFunds = () => {
             Need Help Choosing the Right Funds?
           </h3>
           <p style={{ fontSize: '17px', color: '#e5e5e5', marginBottom: '24px', textAlign: 'center' }}>
-            Our AMFI registered advisors provide unbiased recommendations tailored to your financial goals
+            Our AMFI registered wealth architects provide unbiased recommendations tailored to your financial goals
           </p>
           <div style={{ textAlign: 'center' }}>
             <Link href="/contact" style={{
@@ -419,7 +419,7 @@ const MutualFunds = () => {
             The city's startup ecosystem has created numerous wealth creation stories, leading to increased interest in lump sum investments following ESOPs and exits. We help Mumbai entrepreneurs deploy these windfalls strategically through combination of immediate lump sum allocation and systematic transfer plans. Additionally, Mumbai's strong connection to equity markets (BSE and NSE headquarters) has cultivated a financially savvy investor base comfortable with equity exposure, though we ensure this doesn't lead to under-diversification or excessive risk-taking.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            For NRIs with Mumbai connections, we offer specialized guidance on mutual fund investing within RBI regulations, helping the diaspora maintain financial ties to their roots while building India-exposed portfolios. Our central Mumbai location in Kalbadevi provides convenient access for face-to-face consultations, a service highly valued in a city where personal relationships matter in financial decision-making.
+            For NRIs with Mumbai connections, we offer specialized guidance on mutual fund investing within regulatory frameworks, helping the diaspora maintain financial ties to their roots while building India-exposed portfolios. Our central Mumbai location in Kalbadevi provides convenient access for face-to-face consultations, a service highly valued in a city where personal relationships matter in financial decision-making.
           </p>
         </section>
 
@@ -440,7 +440,7 @@ const MutualFunds = () => {
             },
             {
               q: 'What is the difference between direct and regular plans?',
-              a: 'Direct plans have lower expense ratios as they exclude distributor commissions, resulting in 0.5-1% higher returns over time. However, regular plans through AMFI advisors like us provide professional guidance, portfolio monitoring, and rebalancing services. We transparently disclose our compensation and let clients choose based on their need for advisory support.'
+              a: 'Direct plans have lower expense ratios as they exclude distributor commissions, resulting in 0.5-1% higher returns over time. However, regular plans through AMFI distribution partners like us provide professional guidance, portfolio monitoring, and rebalancing services. We transparently disclose our remuneration and let clients choose based on their need for professional support.'
             },
             {
               q: 'How long should I stay invested in mutual funds?',
@@ -452,11 +452,11 @@ const MutualFunds = () => {
             },
             {
               q: 'Are mutual funds safe investments?',
-              a: 'Mutual funds are SEBI-regulated and offer transparency, professional management, and diversification. However, they carry market risk – equity funds can be volatile short-term, and debt funds have interest rate and credit risk. The key is choosing funds matching your risk profile and investment horizon. Our risk assessment ensures appropriate recommendations for Mumbai investors.'
+              a: 'Mutual funds are strictly regulated and offer transparency, professional management, and diversification. However, they carry market risk – equity funds can be volatile short-term, and debt funds have interest rate and credit risk. The key is choosing funds matching your risk profile and investment horizon. Our risk assessment ensures appropriate recommendations for Mumbai investors.'
             },
             {
               q: 'What is the AMFI registration ARN 90008?',
-              a: 'ARN 90008 is our AMFI (Association of Mutual Funds in India) registration number, certifying BM Wealth as authorized mutual fund distributors. This registration requires clearing AMFI certification exams, adhering to strict regulatory guidelines, and maintaining ethical distribution practices. It ensures you receive compliant, professional advice.'
+              a: 'ARN 90008 is our AMFI (Association of Mutual Funds in India) registration number, certifying BM Wealth as authorized mutual fund distributors. This registration requires clearing AMFI certification exams, adhering to strict regulatory guidelines, and maintaining ethical distribution practices. It ensures you receive compliant, professional services.'
             },
             {
               q: 'How do you select mutual funds for client portfolios?',
@@ -492,7 +492,7 @@ const MutualFunds = () => {
             Start Your Wealth Creation Journey Today
           </h2>
           <p style={{ fontSize: '18px', color: '#e5e5e5', marginBottom: '16px', maxWidth: '700px', margin: '0 auto 28px' }}>
-            Join 500+ satisfied Mumbai investors who trust BM Wealth for professional mutual fund advisory
+            Join 500+ satisfied Mumbai investors who trust BM Wealth for professional mutual fund distribution
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
             <p style={{ fontSize: '16px', color: '#DAA520', fontWeight: '600' }}>
@@ -541,10 +541,10 @@ const MutualFunds = () => {
             Past performance is not indicative of future returns. The returns mentioned are illustrative and not guaranteed. Actual returns may vary based on market conditions, fund performance, and investment timing.
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            BM Wealth (AMFI ARN 90008) is a registered mutual fund distributor, not a SEBI-registered Investment Advisor. We receive commissions from mutual fund houses for distribution services. All recommendations are made in clients' best interests following AMFI guidelines and code of conduct.
+            BM Wealth (AMFI ARN 90008) is a registered mutual fund distributor. We receive remuneration from mutual fund houses for distribution services. All selections are made in clients' best interests following AMFI guidelines and code of conduct.
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', margin: 0 }}>
-            Tax implications mentioned are based on current tax laws and may change. Consult a qualified tax advisor for personalized tax planning. This content is for informational purposes and should not be construed as personalized investment advice. Please consult our AMFI registered advisors for customized recommendations based on your individual financial situation and goals.
+            Tax implications mentioned are based on current tax laws and may change. Consult a qualified tax professional for personalized tax planning. This content is for informational purposes and should not be construed as personalized investment advice. Please consult our AMFI registered wealth architects for customized selections based on your individual financial situation and goals.
           </p>
         </section>
 
@@ -564,6 +564,3 @@ const MutualFunds = () => {
 };
 
 export default MutualFunds;
-
-
-

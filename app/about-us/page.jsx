@@ -76,7 +76,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Empowering Mumbai investors with exceptional financial solutions since inception
+            Empowering Mumbai investors with exceptional wealth architecture since inception
           </p>
         </div>
       </section>
@@ -121,7 +121,7 @@ const About = () => {
               }}
             >
               With decades of combined expertise in financial markets, mutual funds, portfolio
-              management, and investment advisory, we have established a distinguished reputation for delivering
+              management, and portfolio curation, we have established a distinguished reputation for delivering
               personalized wealth management strategies that align with our clients' unique
               financial goals.
             </p>
@@ -132,7 +132,7 @@ const About = () => {
                 lineHeight: 1.8,
               }}
             >
-              Our mission is to make sophisticated financial planning accessible to every
+              Our mission is to make sophisticated wealth strategies accessible to every
               investor, whether you're commencing your investment journey or looking to
               enhance your existing portfolio.
             </p>
@@ -166,7 +166,7 @@ const About = () => {
               Brahmdeo Maurya
             </h3>
             <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
-              Founder
+              Principal
             </p>
           </div>
         </div>
@@ -247,7 +247,7 @@ const About = () => {
                 Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We maintain the premier standards in financial advisory, continuously enhancing
+                We maintain the premier standards in wealth architecture, continuously enhancing
                 our expertise and methodologies.
               </p>
             </div>
@@ -322,7 +322,7 @@ const About = () => {
               color: '#DAA520',
             }}
           >
-            IRDAI Licensed | AMFI Registered Financial Advisory
+            IRDAI Licensed | AMFI Registered Wealth Distribution
           </h2>
           <p
             style={{
@@ -335,7 +335,7 @@ const About = () => {
             }}
           >
             Fully compliant with IRDAI (Insurance) and AMFI (Mutual Funds) regulations, 
-            ensuring the highest standards of financial advisory and investor protection.
+            ensuring the highest standards of wealth distribution and investor protection.
           </p>
           <div className="sebi-disclaimer" style={{ maxWidth: '900px', margin: '0 auto' }}>
             <strong>Regulatory Compliance:</strong> All our services are provided in strict

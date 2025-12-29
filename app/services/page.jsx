@@ -15,7 +15,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of specialists empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
+        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of wealth architects empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -68,7 +68,7 @@ const Services = () => {
         'Policy comparison and analysis',
         'Claims assistance',
       ],
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/insurance',
     },
     {
@@ -83,7 +83,7 @@ const Services = () => {
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/fixed-deposits',
     },
     {
@@ -98,7 +98,7 @@ const Services = () => {
         'Auto-debit facility',
         'Goal-based planning',
       ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/sip',
     },
   ];
@@ -196,7 +196,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Bespoke financial architectures meticulously crafted to elevate your wealth trajectory
+            Bespoke wealth architectures meticulously crafted to elevate your wealth trajectory
           </p>
         </div>
       </section>
@@ -375,7 +375,7 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Schedule a consultation with our financial specialists to discuss your investment
+              Schedule a consultation with our wealth architects to discuss your investment
               objectives
             </p>
             <div

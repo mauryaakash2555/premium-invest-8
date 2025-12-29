@@ -20,8 +20,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "BM Wealth - Mumbai's Distinguished Financial Advisory | Mutual Funds, SIP, PMS | ARN 90008",
-  description: "BM Wealth offers expert investment advisory, mutual funds, SIP, portfolio management, and insurance services in Mumbai. IRDAI Licensed & AMFI Registered ARN 90008.",
+  title: "BM Wealth - Mumbai's Distinguished Wealth Architecture | Mutual Funds, SIP, PMS | ARN 90008",
+  description: "BM Wealth offers expert wealth distribution, mutual funds, SIP, portfolio curation, and insurance services in Mumbai. IRDAI Licensed & AMFI Registered ARN 90008.",
   icons: {
     icon: [
       { url: '/favicon.ico?v=2', sizes: 'any' },
