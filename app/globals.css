@@ -671,3 +671,28 @@
     height: 50px;
   }
 }
+
+/* Interactive Side-Line Disclaimer Style */
+.premium-half-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  cursor: pointer;
+  position: relative;
+}
+
+.premium-half-line .side-line {
+  width: 1.5px; /* Slimmed down */
+  height: 24px;
+  background-color: #C0A062; /* Matched color */
+  flex-shrink: 0;
+  transition: all 0.7s ease-in-out;
+  margin-top: 4px;
+  box-shadow: 0 0 15px rgba(192, 160, 98, 0.4); /* Subtle glow */
+}
+
+.premium-half-line:hover .side-line,
+.premium-half-line:active .side-line {
+  height: 64px;
+  box-shadow: 0 0 15px rgba(192, 160, 98, 0.4); /* Subtle glow */
+}

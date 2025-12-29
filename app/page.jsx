@@ -8,10 +8,10 @@ import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 
 // NEW PREMIUM IMPORTS
-import MarketMoodStrip from '@/components/luxury-ui/MarketMoodStrip';
-import LiveCardsSection from '@/components/luxury-ui/LiveCardsSection';
-import InsightsPreview from '@/components/luxury-ui/InsightsPreview';
-import ScrollAnimations from '@/components/luxury-ui/ScrollAnimations';
+import MarketMoodStrip from '@/components/MarketMoodStrip';
+
+
+
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -118,7 +118,6 @@ export default function HomePage() {
 
   return (
     <div>
-      <ScrollAnimations />
       {/* Hero Section */}
       <section
         className="hero-gradient hero-section-responsive"
@@ -258,7 +257,6 @@ export default function HomePage() {
       </section>
 
       {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
-      <LiveCardsSection />
 
       {/* Services Overview Section */}
       <section className="section-container">
@@ -642,7 +640,6 @@ export default function HomePage() {
       </section>
 
       {/* INSIGHTS PREVIEW - NEW */}
-      <InsightsPreview />
 
       <style jsx global>{`
         @keyframes marquee {
