@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -66,7 +66,7 @@ export function LuxuryMobileDock() {
       >
         <div
           className={cn(
-            "luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
+            "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
             "relative flex items-center gap-1.5 px-4.5 py-3 bg-[#000000] rounded-full", // Pitch black bg
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
@@ -303,3 +303,4 @@ export function LuxuryMobileDock() {
 }
 
 export default LuxuryMobileDock;
+

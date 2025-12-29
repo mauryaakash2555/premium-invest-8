@@ -10,6 +10,8 @@ import { staticBlogPost } from '@/data/staticBlogData';
 // NEW PREMIUM IMPORTS
 import MarketMoodStrip from '@/components/MarketMoodStrip';
 import AnimatedClouds from '@/components/AnimatedClouds';
+import ServiceCard from '@/components/ServiceCard';
+import BlogCard from '@/components/BlogCard';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -293,71 +295,9 @@ export default function HomePage() {
           }}
         >
           {services.map((service, index) => (
-            <Link
-              key={index}
-              href={service.link}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <div 
-                className="service-card slide-up" 
-                style={{
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-                >
-                  <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '20px', borderRadius: '8px', overflow: 'hidden' }}>
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority={index < 3}
-                    />
-                  </div>
-                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
-                  {service.icon}
-                </div>
-                <h3
-                  style={{
-                    fontSize: '24px',
-                    color: '#DAA520',
-                    marginBottom: '12px',
-                  }}
-                >
-                  {service.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '16px',
-                    color: '#CCCCCC',
-                    lineHeight: 1.6,
-                    marginBottom: '16px',
-                  }}
-                >
-                  {service.description}
-                </p>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#C0A062',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                }}>
-                  <span>Learn More</span>
-                  <ArrowRight size={16} />
-                </div>
-              </div>
-            </Link>
+            <ServiceCard key={index} service={service} index={index} />
           ))}
+
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -503,90 +443,8 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="blog-card-premium" style={{
-          maxWidth: '900px',
-          margin: '0 auto',
-          padding: 0,
-        }}
-        >
-          <Link 
-            href="/blog"
-            style={{ 
-              textDecoration: 'none', 
-              color: 'inherit',
-              display: 'block'
-            }}
-          >
-            <div>
-              {/* Blog Image - Seamless, no border */}
-              <img
-                src={staticBlogPost.image_url || staticBlogPost.image}
-                alt={staticBlogPost.image_alt || staticBlogPost.title}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '400px',
-                  objectFit: 'cover',
-                  borderRadius: 0,
-                  display: 'block',
-                  marginBottom: 0,
-                }}
-              />
-              
-              {/* Blog Content */}
-              <div style={{
-                padding: 'clamp(30px, 5vw, 50px)',
-              }}>
-                <div style={{
-                  display: 'inline-block',
-                  padding: '6px 16px',
-                  background: 'rgba(218, 165, 32, 0.1)',
-                  borderRadius: '20px',
-                  fontSize: '14px',
-                  color: '#DAA520',
-                  marginBottom: '20px',
-                  fontWeight: 500,
-                }}>
-                  {staticBlogPost.category}
-                </div>
-                
-                <h3
-                  style={{
-                    fontSize: 'clamp(24px, 4vw, 32px)',
-                    color: '#DAA520',
-                    marginBottom: '16px',
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {staticBlogPost.title}
-                </h3>
-                
-                <p
-                  style={{
-                    fontSize: 'clamp(16px, 2.5vw, 18px)',
-                    color: '#CCCCCC',
-                    lineHeight: 1.7,
-                    marginBottom: '24px',
-                  }}
-                >
-                  {staticBlogPost.excerpt}
-                </p>
-                
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#C0A062',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                }}>
-                  <span>Read Full Article</span>
-                  <ArrowRight size={20} />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        <BlogCard post={staticBlogPost} />
+
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
           <Link href="/blog" className="btn-secondary" style={{ textDecoration: 'none' }}>

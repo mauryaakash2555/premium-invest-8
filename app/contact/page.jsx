@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
+import MobileScrollBoost from '@/components/MobileScrollBoost';
 import axios from 'axios';
 // Render Backend API (permanent solution)
 // Use NEXT_PUBLIC_ prefix for client-side access in Next.js
@@ -355,7 +356,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <a
+              <MobileScrollBoost as="a" holdMs={6000}
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -393,7 +394,7 @@ const Contact = () => {
                     Chat with us instantly: +91 8850977259
                   </p>
                 </div>
-              </a>
+              </MobileScrollBoost>
             </div>
           </div>
 
@@ -692,4 +693,8 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
+
+
 

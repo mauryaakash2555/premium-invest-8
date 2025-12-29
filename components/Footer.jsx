@@ -1,7 +1,8 @@
 ﻿"use client"
 
 import { MessageCircle, ArrowRight, ExternalLink, ShieldCheck, Gem, Crown, Info, MapPin } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { useIsMobile } from "@/hooks/useIsMobile"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 
@@ -10,7 +11,14 @@ const Footer = () => {
   const [mounted, setMounted] = useState(false)
   const [isWHAHovered, setIsWHAHovered] = useState(false)
   const [isWHAActive, setIsWHAActive] = useState(false)
+  const [isWHAScrollBoost, setIsWHAScrollBoost] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const isMobile = useIsMobile()
+  const whatsAppCardRef = useRef(null)
+  const sebiRef = useRef(null)
+  const noticeRef = useRef(null)
+  const [sebiActive, setSebiActive] = useState(false)
+  const [noticeActive, setNoticeActive] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -20,7 +28,53 @@ const Footer = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const navigationLinks = {
+  
+  useEffect(() => {
+    if (!isMobile) return
+
+    const debug = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1"
+    const timeouts = []
+
+    const pulse = (setter, ms) => {
+      setter(true)
+      const t = setTimeout(() => setter(false), ms)
+      timeouts.push(t)
+    }
+
+    const makeObserver = (el, onVisible, options) => {
+      if (!el) return null
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) onVisible()
+      }, options)
+      obs.observe(el)
+      return obs
+    }
+
+    const obs1 = makeObserver(whatsAppCardRef.current, () => {
+      if (debug) console.log("WhatsApp card visible on mobile")
+      pulse(setIsWHAScrollBoost, 3500)
+    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
+
+    const obs2 = makeObserver(sebiRef.current, () => {
+      if (debug) console.log("Disclaimer visible on mobile: SEBI")
+      pulse(setSebiActive, 2500)
+    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
+
+    const obs3 = makeObserver(noticeRef.current, () => {
+      if (debug) console.log("Disclaimer visible on mobile: Notice")
+      pulse(setNoticeActive, 2500)
+    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
+
+    if (debug) console.log("Observing footer elements on mobile")
+
+    return () => {
+      if (obs1) obs1.disconnect()
+      if (obs2) obs2.disconnect()
+      if (obs3) obs3.disconnect()
+      timeouts.forEach((t) => clearTimeout(t))
+    }
+  }, [isMobile])
+const navigationLinks = {
     quick: [
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about-us" },
@@ -47,7 +101,9 @@ const Footer = () => {
 
   if (!mounted) return null;
 
-  return (
+  const isWHAPremium = isMobile ? (isWHAScrollBoost || isWHAActive) : isWHAHovered
+
+return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
       {/* ULTRA LUXURY WAVE TOP */}
       <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90" />
@@ -60,7 +116,7 @@ const Footer = () => {
         
         {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-          {[...Array(25)].map((_, i) => (
+          {[...Array(isMobile ? 14 : 25)].map((_, i) => (
             <div 
               key={i}
               className="gold-particle" 
@@ -207,11 +263,14 @@ const Footer = () => {
                 onMouseUp={() => setIsWHAActive(false)}
                 onTouchStart={() => setIsWHAActive(true)}
                 onTouchEnd={() => setIsWHAActive(false)}
-                className="relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5"
+                ref={whatsAppCardRef}                className={cn(
+                  "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5",
+                  isMobile && (isWHAScrollBoost || isWHAActive) && "is-scroll-boost"
+                )}
                 style={{ 
-                  borderColor: isWHAHovered ? '#25D366' : '#C0A062',
-                  transform: isWHAHovered ? 'scale(1.08)' : 'scale(1)',
-                  boxShadow: isWHAHovered ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
+                  borderColor: isWHAPremium ? '#25D366' : '#C0A062',
+                  transform: isWHAPremium ? 'scale(1.08)' : 'scale(1)',
+                  boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
                   display: 'flex',
                   justifyContent: 'flex-start', // Always start from left
                 }}
@@ -222,9 +281,9 @@ const Footer = () => {
                   style={{ 
                     background: isWHAActive 
                       ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
-                      : (isWHAHovered ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
-                    transform: isWHAHovered ? 'scale(2.5)' : 'scale(0)',
-                    opacity: isWHAHovered ? 1 : 0,
+                      : (isWHAPremium ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
+                    transform: isWHAPremium ? 'scale(2.5)' : 'scale(0)',
+                    opacity: isWHAPremium ? 1 : 0,
                     zIndex: 1
                   }} 
                 />
@@ -232,7 +291,7 @@ const Footer = () => {
                 {/* Shimmer */}
                 <div className={cn(
                   "absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 z-10",
-                  isWHAHovered ? "translate-x-[100%]" : "-translate-x-[100%]"
+                  isWHAPremium ? "translate-x-[100%]" : "-translate-x-[100%]"
                 )} />
                 
                 {/* Content Container */}
@@ -241,8 +300,8 @@ const Footer = () => {
                   <div 
                     className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
-                      borderColor: isWHAHovered ? '#25D366' : 'rgba(192, 160, 98, 0.3)',
-                      transform: isWHAHovered ? 'rotate(360deg)' : 'rotate(0deg)'
+                      borderColor: isWHAPremium ? '#25D366' : 'rgba(192, 160, 98, 0.3)',
+                      transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
                     }}
                   >
                     <MessageCircle 
@@ -258,7 +317,7 @@ const Footer = () => {
                       className="m-0 font-black uppercase tracking-[1.5px] transition-colors duration-500"
                       style={{ 
                         fontSize: isDesktop ? '16px' : '15px',
-                        color: isWHAHovered ? '#25D366' : '#FFFFFF'
+                        color: isWHAPremium ? '#25D366' : '#FFFFFF'
                       }}
                     >
                       WhatsApp Us
@@ -267,7 +326,7 @@ const Footer = () => {
                       <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
                       <p className={cn(
                         "text-[9px] md:text-[10px] m-0 uppercase tracking-[3px] md:tracking-[4px] font-black transition-colors duration-500",
-                        isWHAHovered ? "text-white" : "text-[#C0A062]"
+                        isWHAPremium ? "text-white" : "text-[#C0A062]"
                       )}>
                         Concierge
                       </p>
@@ -282,7 +341,7 @@ const Footer = () => {
         {/* INTERACTIVE HALF-TO-FULL SIDE LINE DISCLAIMERS */}
         <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[#C0A062]/15 relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="premium-half-line group">
+            <div ref={sebiRef} className={cn("premium-half-line group", sebiActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setSebiActive(true); setTimeout(() => setSebiActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
                 <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">SEBI Disclosure</h4>
@@ -292,7 +351,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="premium-half-line group">
+            <div ref={noticeRef} className={cn("premium-half-line group", noticeActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setNoticeActive(true); setTimeout(() => setNoticeActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
                 <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Investment Notice</h4>
@@ -356,3 +415,22 @@ const Footer = () => {
 }
 
 export default Footer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

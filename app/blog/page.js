@@ -1,9 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { Calendar, User } from 'lucide-react';
 import Link from 'next/link';
 import LazyImage from '@/components/LazyImage';
+import MobileScrollBoost from '@/components/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 
 export default function BlogPage() {
@@ -15,7 +16,6 @@ export default function BlogPage() {
     window.scrollTo(0, 0);
     fetchBlogPosts();
   }, []);
-
   const fetchBlogPosts = async () => {
     try {
       // Ensure staticBlogData is an array and has content
@@ -27,29 +27,33 @@ export default function BlogPage() {
       setBlogPosts(staticBlogs);
       setIsLoading(false);
       
-      // Then try to fetch backend blogs in background
-      try {
-        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://bmwealth-backend.onrender.com';
-        const response = await fetch(`${BACKEND_URL}/api/blog`, {
-          cache: 'no-store',
-        });
-        if (response.ok) {
-          const backendPosts = await response.json() || [];
-          const staticSlugs = staticBlogs.map(blog => blog.slug).filter(Boolean);
-          const uniqueBackendPosts = backendPosts.filter(post => post.slug && !staticSlugs.includes(post.slug));
-          const combinedPosts = [...staticBlogs, ...uniqueBackendPosts];
-          setBlogPosts(combinedPosts);
+      // Then try to fetch backend blogs in background (skip on localhost to avoid CORS noise)
+      const debug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === '1';
+      const isLocalhost =
+        typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+      const canFetchBackend = !isLocalhost && (window.location.hostname === 'bmwealth.co.in' || window.location.hostname === 'www.bmwealth.co.in');
+
+      if (canFetchBackend) {
+        try {
+          const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://bmwealth-backend.onrender.com';
+          const response = await fetch(`${BACKEND_URL}/api/blog`, { cache: 'no-store' });
+          if (response.ok) {
+            const backendPosts = (await response.json()) || [];
+            const staticSlugs = staticBlogs.map((blog) => blog.slug).filter(Boolean);
+            const uniqueBackendPosts = backendPosts.filter((post) => post.slug && !staticSlugs.includes(post.slug));
+            setBlogPosts([...staticBlogs, ...uniqueBackendPosts]);
+          }
+        } catch (backendError) {
+          if (debug) console.warn('Backend blog fetch failed (using static only):', backendError);
         }
-      } catch (backendError) {
-        console.warn('Backend blog fetch failed (using static only):', backendError);
-      }
+      } else {}
     } catch (error) {
       console.error('Error loading blog posts:', error);
       setBlogPosts([staticBlogPost]);
       setIsLoading(false);
     }
   };
-
   const allPosts = blogPosts.length > 0 ? blogPosts : [staticBlogPost];
   
   // Get unique categories
@@ -268,7 +272,8 @@ export default function BlogPage() {
                 key={post.id || post.slug}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <div
+                <MobileScrollBoost
+                  holdMs={6000}
                   className="blog-card-premium"
                   style={{
                     overflow: 'hidden',
@@ -385,8 +390,7 @@ export default function BlogPage() {
                         fontSize: '14px',
                         fontWeight: 500,
                       }}>
-                        Read More →
-                      </span>
+                        Read More â†’\n                      </span>
                       {(post.readTime || post.read_time) && (
                         <span style={{
                           color: '#666',
@@ -397,7 +401,7 @@ export default function BlogPage() {
                       )}
                     </div>
                   </div>
-                </div>
+                </MobileScrollBoost>
               </Link>
             ))}
           </div>
@@ -406,3 +410,12 @@ export default function BlogPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

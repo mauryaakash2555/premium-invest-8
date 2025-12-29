@@ -1,9 +1,10 @@
-'use client';
+﻿'use client';
 
 import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import LazyImage from '@/components/LazyImage';
+import MobileScrollBoost from '@/components/MobileScrollBoost';
 
 const Services = () => {
   useEffect(() => {
@@ -205,8 +206,9 @@ const Services = () => {
       <section className="section-container">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 8vw, 80px)' }}>
           {services.map((service, index) => (
-            <div
+            <MobileScrollBoost
               key={index}
+              holdMs={6000}
               className="glass-effect service-detail-grid"
               style={{
                 padding: 'clamp(20px, 5vw, 40px)',
@@ -336,7 +338,7 @@ const Services = () => {
                   </Link>
                 )}
               </div>
-            </div>
+            </MobileScrollBoost>
           ))}
         </div>
       </section>
@@ -419,3 +421,6 @@ const Services = () => {
 };
 
 export default Services;
+
+
+
