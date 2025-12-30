@@ -28,7 +28,10 @@ function normalizeBlogHtmlForPremium(html) {
     .replace(/#DAA520/gi, '#C0A062')
     .replace(/#B8860B/gi, '#C0A062')
     .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(192, 160, 98,')
-    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,');
+    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,')
+    // Content is already live; rename label everywhere consistently.
+    .replace(/Coming Next:/gi, 'Next Read:')
+    .replace(/Coming Next/gi, 'Next Read');
 }
 
 export default function BlogDetailPage({ params }) {
@@ -152,17 +155,13 @@ export default function BlogDetailPage({ params }) {
     const targets = [...comingBlocks, ...waCtas];
     const cleanups = [];
 
-    const inEyeLine = (el) => {
+    const inView = (el) => {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 0;
-      const centerY = (rect.top + rect.bottom) / 2;
       return (
         vh > 0 &&
         rect.bottom > 0 &&
-        rect.top < vh &&
-        // Wider band so it reliably triggers while scrolling
-        centerY >= vh * 0.30 &&
-        centerY <= vh * 0.80
+        rect.top < vh
       );
     };
 
@@ -170,7 +169,8 @@ export default function BlogDetailPage({ params }) {
       (entries) => {
         entries.forEach((entry) => {
           const el = entry.target;
-          setBoost(el, entry.isIntersecting && inEyeLine(el));
+          // If it's in the viewport at all, keep the glow active.
+          setBoost(el, entry.isIntersecting);
         });
       },
       { threshold: 0.08, rootMargin: '0px' }
@@ -183,7 +183,7 @@ export default function BlogDetailPage({ params }) {
     const addHoverHandlers = (el) => {
       // For odd browser quirks (wrapped links, etc), ensure hover/tap can still force the glow.
       const onEnter = () => setBoost(el, true);
-      const onLeave = () => setBoost(el, inEyeLine(el));
+      const onLeave = () => setBoost(el, inView(el));
       const onDown = () => setBoost(el, true);
       el.addEventListener('mouseenter', onEnter);
       el.addEventListener('mouseleave', onLeave);
@@ -203,7 +203,7 @@ export default function BlogDetailPage({ params }) {
 
     let raf = 0;
     const updateBoost = () => {
-      targets.forEach((el) => setBoost(el, inEyeLine(el)));
+      targets.forEach((el) => setBoost(el, inView(el)));
     };
     const onScroll = () => {
       if (raf) return;
