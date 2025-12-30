@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Calendar, User, ArrowLeft } from 'lucide-react';
+import { Calendar, User, ArrowLeft, ChevronUp } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 
 function isMobileViewport() {
@@ -32,6 +32,7 @@ export default function BlogDetailPage({ params }) {
   const [isMobile, setIsMobile] = useState(false);
   const [readProgress, setReadProgress] = useState(0); // 0..1
   const [showBackToTop, setShowBackToTop] = useState(false);
+  // Keep overlay simple: % only (no timer)
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -95,6 +96,8 @@ export default function BlogDetailPage({ params }) {
       window.removeEventListener('resize', compute);
     };
   }, [isMobile]);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   // Emulate hover for "Coming Next"/"Next Read" + blog WhatsApp CTA on scroll, and rename label.
   // Also: mobile-only tone-down of bright yellows inside blog content to premium gold.
@@ -260,7 +263,7 @@ export default function BlogDetailPage({ params }) {
   const heroImage = post.imageUrl || post.image_url || post.image || null;
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
+    <div className="blog-detail-page" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
       {/* Mobile-only reading progress */}
       {isMobile && (
         <>
@@ -271,9 +274,9 @@ export default function BlogDetailPage({ params }) {
               top: 0,
               left: 0,
               right: 0,
-              height: '3px',
+              height: '4px',
               zIndex: 10002,
-              background: 'rgba(0,0,0,0.35)',
+              background: 'rgba(0,0,0,0.45)',
               backdropFilter: 'blur(8px)',
             }}
           >
@@ -281,50 +284,93 @@ export default function BlogDetailPage({ params }) {
               style={{
                 height: '100%',
                 width: `${Math.round(readProgress * 100)}%`,
-                background: 'linear-gradient(90deg, rgba(192,160,98,0.15), rgba(192,160,98,0.95), rgba(255,255,255,0.25))',
-                boxShadow: '0 0 18px rgba(192,160,98,0.55)',
-                transition: 'width 120ms linear',
+                background: 'linear-gradient(90deg, rgba(192,160,98,0.10), rgba(192,160,98,0.95), rgba(255,255,255,0.18))',
+                boxShadow: '0 0 22px rgba(192,160,98,0.55)',
+                transition: 'width 90ms linear',
               }}
             />
           </div>
 
-          {showBackToTop && (
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{
-                position: 'fixed',
-                left: 14,
-                bottom: 110, // above dock
-                zIndex: 10002,
-                borderRadius: 999,
-                border: '1px solid rgba(192,160,98,0.45)',
-                background: 'rgba(0,0,0,0.75)',
-                color: '#C0A062',
-                padding: '10px 12px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 10,
-                boxShadow: '0 0 24px rgba(192,160,98,0.25)',
-                backdropFilter: 'blur(10px)',
-                cursor: 'pointer',
-                transition: 'transform 200ms ease, box-shadow 200ms ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 0 34px rgba(192,160,98,0.35)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 0 24px rgba(192,160,98,0.25)';
-              }}
-              aria-label="Back to top"
-            >
-              <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: 0.5 }}>
-                {Math.round(readProgress * 100)}%
-              </span>
-              <span style={{ fontSize: 12, opacity: 0.85 }}>Top</span>
-            </button>
-          )}
+          {/* Mobile-only ultra-premium progress ring */}
+          {showBackToTop && (() => {
+            const pct = Math.round(readProgress * 100);
+            const radius = 20;
+            const stroke = 2;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (readProgress * circumference);
+            return (
+              <button
+                onClick={scrollToTop}
+                aria-label="Reading progress (tap to go to top)"
+                style={{
+                  position: 'fixed',
+                  left: 16,
+                  bottom: 115,
+                  zIndex: 10002,
+                  width: 50,
+                  height: 50,
+                  padding: 0,
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'transform 200ms ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+              >
+                <svg width="50" height="50" viewBox="0 0 50 50">
+                  {/* Background ring */}
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r={radius}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth={stroke}
+                  />
+                  {/* Progress ring */}
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r={radius}
+                    fill="none"
+                    stroke="url(#goldGradient)"
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: '50% 50%',
+                      transition: 'stroke-dashoffset 150ms ease',
+                    }}
+                  />
+                  <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#E8D5A3" />
+                      <stop offset="50%" stopColor="#C9A962" />
+                      <stop offset="100%" stopColor="#A08040" />
+                    </linearGradient>
+                  </defs>
+                  {/* Percentage text */}
+                  <text
+                    x="25"
+                    y="26"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fill="#C9A962"
+                    fontSize="11"
+                    fontWeight="500"
+                    fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                    letterSpacing="0.3"
+                  >
+                    {pct}%
+                  </text>
+                </svg>
+              </button>
+            );
+          })()}
         </>
       )}
 
@@ -520,6 +566,24 @@ export default function BlogDetailPage({ params }) {
           article :global(h3[style*="Playfair Display"]),
           article :global(h4[style*="Playfair Display"]) {
             color: #C0A062 !important;
+          }
+
+          /* Mobile reading typography polish (safe: only inside blog detail page) */
+          .blog-detail-page article :global(p) {
+            font-size: 16px !important;
+            line-height: 1.95 !important;
+            letter-spacing: 0.1px !important;
+          }
+
+          .blog-detail-page article :global(ul),
+          .blog-detail-page article :global(ol) {
+            font-size: 16px !important;
+            line-height: 1.9 !important;
+          }
+
+          /* Reduce "wall of text" feel */
+          .blog-detail-page article :global(p + p) {
+            margin-top: 14px !important;
           }
         }
       `}</style>
