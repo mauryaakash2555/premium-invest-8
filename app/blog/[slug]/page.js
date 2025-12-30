@@ -1,9 +1,27 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
+
+function isMobileViewport() {
+  if (typeof window === 'undefined') return false;
+  if (window.matchMedia) {
+    return window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse)').matches;
+  }
+  return window.innerWidth <= 768;
+}
+
+function normalizeBlogHtmlForPremium(html) {
+  if (typeof html !== 'string') return html;
+  // Convert "bright yellow" accents into premium matte gold across blog HTML.
+  return html
+    .replace(/#DAA520/gi, '#C0A062')
+    .replace(/#B8860B/gi, '#C0A062')
+    .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(192, 160, 98,')
+    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,');
+}
 
 export default function BlogDetailPage({ params }) {
   const [post, setPost] = useState(null);
@@ -11,6 +29,9 @@ export default function BlogDetailPage({ params }) {
   const [slug, setSlug] = useState(null);
   const [scrollBoostSeed, setScrollBoostSeed] = useState(0);
   const articleRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [readProgress, setReadProgress] = useState(0); // 0..1
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,6 +56,46 @@ export default function BlogDetailPage({ params }) {
     setScrollBoostSeed((s) => s + 1);
   }, [slug]);
 
+  useEffect(() => {
+    const set = () => setIsMobile(isMobileViewport());
+    set();
+    window.addEventListener('resize', set, { passive: true });
+    return () => window.removeEventListener('resize', set);
+  }, []);
+
+  const rawHtml = useMemo(() => {
+    if (!post) return '';
+    return typeof post.content === 'string'
+      ? post.content
+      : (Array.isArray(post.content) ? post.content.join('') : '');
+  }, [post]);
+
+  const renderedHtml = useMemo(() => {
+    return normalizeBlogHtmlForPremium(rawHtml);
+  }, [rawHtml]);
+
+  // Mobile-only reading progress + back-to-top
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const compute = () => {
+      const doc = document.documentElement;
+      const scrollTop = window.scrollY || doc.scrollTop || 0;
+      const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+      const p = Math.min(1, Math.max(0, scrollTop / max));
+      setReadProgress(p);
+      setShowBackToTop(scrollTop > 220);
+    };
+
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+    };
+  }, [isMobile]);
+
   // Emulate hover for "Coming Next"/"Next Read" + blog WhatsApp CTA on scroll, and rename label.
   // Also: mobile-only tone-down of bright yellows inside blog content to premium gold.
   useEffect(() => {
@@ -43,37 +104,14 @@ export default function BlogDetailPage({ params }) {
 
     const root = articleRef.current || document;
 
-    const isMobile = window.matchMedia
-      ? window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse)').matches
-      : window.innerWidth <= 768;
-
-    // Mobile-only: replace overly-bright yellows with premium matte gold in blog article.
+    // Mobile-only: make the FAQ block mobile-friendly (keep desktop untouched)
     if (isMobile && articleRef.current) {
-      // 1) Normalize inline styles that use bright yellows
-      const styled = Array.from(articleRef.current.querySelectorAll('[style]'));
-      styled.forEach((el) => {
-        const s = el.getAttribute('style');
-        if (!s) return;
-        if (!/(#DAA520|#B8860B|rgba\(\s*218\s*,\s*165\s*,\s*32\s*,|rgba\(\s*184\s*,\s*134\s*,\s*11\s*,)/i.test(s)) return;
-
-        const ns = s
-          .replace(/#DAA520/gi, '#C0A062')
-          .replace(/#B8860B/gi, '#C0A062')
-          .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(192, 160, 98,')
-          .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,');
-
-        if (ns !== s) el.setAttribute('style', ns);
-      });
-
-      // 2) Make the FAQ block mobile-friendly (keep desktop untouched)
       const faqSections = Array.from(articleRef.current.querySelectorAll('section')).filter((sec) =>
         (sec.textContent || '').includes('Frequently Asked Questions')
       );
       faqSections.forEach((sec) => {
-        // tighten spacing for mobile readability
         sec.style.padding = '28px 18px';
         sec.style.margin = '48px 0';
-        // border-left color already normalized by the replace above (but enforce)
         sec.style.borderLeftColor = 'rgba(192, 160, 98, 0.75)';
       });
     }
@@ -187,7 +225,7 @@ export default function BlogDetailPage({ params }) {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        <div style={{ color: '#B8860B', fontSize: '18px' }}>Loading...</div>
+        <div style={{ color: '#C0A062', fontSize: '18px' }}>Loading...</div>
       </div>
     );
   }
@@ -206,7 +244,7 @@ export default function BlogDetailPage({ params }) {
         <h1 style={{ color: '#fff', fontSize: '48px', marginBottom: '16px' }}>404</h1>
         <p style={{ color: '#999', fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
         <Link href="/blog" style={{
-          color: '#B8860B',
+          color: '#C0A062',
           textDecoration: 'none',
           display: 'flex',
           alignItems: 'center',
@@ -219,10 +257,79 @@ export default function BlogDetailPage({ params }) {
     );
   }
 
+  const heroImage = post.imageUrl || post.image_url || post.image || null;
+
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
+      {/* Mobile-only reading progress */}
+      {isMobile && (
+        <>
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              zIndex: 10002,
+              background: 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                width: `${Math.round(readProgress * 100)}%`,
+                background: 'linear-gradient(90deg, rgba(192,160,98,0.15), rgba(192,160,98,0.95), rgba(255,255,255,0.25))',
+                boxShadow: '0 0 18px rgba(192,160,98,0.55)',
+                transition: 'width 120ms linear',
+              }}
+            />
+          </div>
+
+          {showBackToTop && (
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{
+                position: 'fixed',
+                left: 14,
+                bottom: 110, // above dock
+                zIndex: 10002,
+                borderRadius: 999,
+                border: '1px solid rgba(192,160,98,0.45)',
+                background: 'rgba(0,0,0,0.75)',
+                color: '#C0A062',
+                padding: '10px 12px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                boxShadow: '0 0 24px rgba(192,160,98,0.25)',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer',
+                transition: 'transform 200ms ease, box-shadow 200ms ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 0 34px rgba(192,160,98,0.35)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 0 24px rgba(192,160,98,0.25)';
+              }}
+              aria-label="Back to top"
+            >
+              <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: 0.5 }}>
+                {Math.round(readProgress * 100)}%
+              </span>
+              <span style={{ fontSize: 12, opacity: 0.85 }}>Top</span>
+            </button>
+          )}
+        </>
+      )}
+
       {/* Hero Image */}
-      {post.imageUrl && (
+      {heroImage && (
         <div style={{
           width: '100%',
           maxWidth: '1000px',
@@ -230,7 +337,7 @@ export default function BlogDetailPage({ params }) {
           padding: '0 20px'
         }}>
           <img
-            src={post.imageUrl}
+            src={heroImage}
             alt={post.title}
             style={{
               width: '100%',
@@ -253,7 +360,7 @@ export default function BlogDetailPage({ params }) {
       }}>
         {/* Back Link */}
         <Link href="/blog" style={{
-          color: '#B8860B',
+          color: '#C0A062',
           textDecoration: 'none',
           display: 'inline-flex',
           alignItems: 'center',
@@ -269,8 +376,8 @@ export default function BlogDetailPage({ params }) {
         {post.category && (
           <div style={{
             display: 'inline-block',
-            backgroundColor: 'rgba(184, 134, 11, 0.2)',
-            color: '#B8860B',
+            backgroundColor: 'rgba(192, 160, 98, 0.16)',
+            color: '#C0A062',
             padding: '6px 12px',
             borderRadius: '20px',
             fontSize: '12px',
@@ -339,7 +446,7 @@ export default function BlogDetailPage({ params }) {
             fontStyle: 'italic',
             marginBottom: '40px',
             paddingLeft: '20px',
-            borderLeft: '3px solid #B8860B'
+            borderLeft: '3px solid rgba(192, 160, 98, 0.7)'
           }}>
             {post.excerpt}
           </p>
@@ -349,9 +456,7 @@ export default function BlogDetailPage({ params }) {
         <div 
           style={{ color: '#e5e5e5', lineHeight: '1.8' }}
           dangerouslySetInnerHTML={{ 
-            __html: typeof post.content === 'string' 
-              ? post.content 
-              : (Array.isArray(post.content) ? post.content.join('') : 'No content available.')
+            __html: renderedHtml || 'No content available.'
           }}
         />
 
@@ -388,7 +493,7 @@ export default function BlogDetailPage({ params }) {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            backgroundColor: '#B8860B',
+            backgroundColor: '#C0A062',
             color: '#0a0a0a',
             padding: '14px 32px',
             borderRadius: '30px',
@@ -408,6 +513,13 @@ export default function BlogDetailPage({ params }) {
         @media (max-width: 768px) {
           article {
             padding: 0 16px 60px 16px !important;
+          }
+
+          /* Mobile-only: enforce premium gold for Playfair headings (keeps FAQ Inter questions white/grey) */
+          article :global(h2[style*="Playfair Display"]),
+          article :global(h3[style*="Playfair Display"]),
+          article :global(h4[style*="Playfair Display"]) {
+            color: #C0A062 !important;
           }
         }
       `}</style>

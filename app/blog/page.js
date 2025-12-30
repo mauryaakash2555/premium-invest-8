@@ -183,7 +183,7 @@ export default function BlogPage() {
                 borderRadius: '20px',
                 border: '1px solid rgba(218, 165, 32, 0.3)',
                 background: selectedCategory === null ? 'rgba(218, 165, 32, 0.2)' : 'transparent',
-                color: selectedCategory === null ? '#DAA520' : '#888',
+                color: selectedCategory === null ? '#C0A062' : '#888',
                 cursor: 'pointer',
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
@@ -200,7 +200,7 @@ export default function BlogPage() {
                   borderRadius: '20px',
                   border: '1px solid rgba(218, 165, 32, 0.3)',
                   background: selectedCategory === category ? 'rgba(218, 165, 32, 0.2)' : 'transparent',
-                  color: selectedCategory === category ? '#DAA520' : '#888',
+                  color: selectedCategory === category ? '#C0A062' : '#888',
                   cursor: 'pointer',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
@@ -299,7 +299,7 @@ export default function BlogPage() {
                       style={{
                         width: '100%',
                         height: '200px',
-                        background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                        background: 'linear-gradient(135deg, #C0A062 0%, #D4B576 100%)',
                       }}
                     />
                   )}
@@ -344,10 +344,10 @@ export default function BlogPage() {
                         style={{
                           display: 'inline-block',
                           padding: '4px 12px',
-                          background: 'rgba(218, 165, 32, 0.1)',
+                        background: 'rgba(192, 160, 98, 0.10)',
                           borderRadius: '20px',
                           fontSize: '12px',
-                          color: '#DAA520',
+                          color: '#C0A062',
                           marginBottom: '12px',
                         }}
                       >
@@ -358,7 +358,7 @@ export default function BlogPage() {
                     <h2
                       style={{
                         fontSize: '20px',
-                        color: '#DAA520',
+                        color: '#C0A062',
                         marginBottom: '12px',
                         lineHeight: 1.3,
                         fontFamily: '"Playfair Display", serif',
