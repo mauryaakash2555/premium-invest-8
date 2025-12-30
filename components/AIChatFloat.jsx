@@ -123,8 +123,16 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       body: JSON.stringify({ name, email, phone }),
     });
     const j = await r.json().catch(() => null);
-    if (!r.ok || !j?.ok) return null;
-    return j.lead;
+
+    if (r.status === 503 && j?.error === "setup_required") {
+      return { lead: null, setupRequired: true, hint: j?.hint || j?.detail || null };
+    }
+
+    if (!r.ok || !j?.ok) {
+      return { lead: null, setupRequired: false, error: j?.error || "lead_capture_failed" };
+    }
+
+    return { lead: j.lead, setupRequired: false, error: null };
   }
 
   async function sendChat({ message, mode, leadId: lid }) {
@@ -171,8 +179,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         return;
       }
 
-      // Admin unlock (user types password in chat)
-      if (!admin) {
+      // Admin unlock (enter password-like digits to unlock)
+      if (!admin && /^\d{4,12}$/.test(text)) {
         const ok = await tryAdminLogin(text);
         if (ok) {
           setAdmin(true);
@@ -182,6 +190,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           setDashboard(dash);
           return;
         }
+        pushBot("Admin code not recognized for this environment.");
+        return;
       }
 
       // Lead capture gate (Micro-MVP)
@@ -212,11 +222,15 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           }
           const nextDraft = { ...leadDraft, phone };
           setLeadDraft(nextDraft);
-          const lead = await upsertLead(nextDraft);
+          const res = await upsertLead(nextDraft);
+          const lead = res?.lead;
           if (lead?.id) {
             setLeadId(lead.id);
             setCaptureStep("done");
             pushBot("Done. How can I help you today?");
+          } else if (res?.setupRequired) {
+            setCaptureStep("done");
+            pushBot("Thanks. Concierge is available now. Lead capture is still being configured - you can continue chatting.");
           } else {
             pushBot("Setup is still in progress. Please try again in a moment.");
           }
@@ -378,6 +392,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
 
 
 

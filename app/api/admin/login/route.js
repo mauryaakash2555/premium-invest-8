@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { getServerEnvSafe } from "@/lib/env";
+﻿import { NextResponse } from "next/server";
+import { getAdminEnvSafe } from "@/lib/env";
 import { issueAdminCookie } from "@/lib/adminSession";
 
 export async function POST(req) {
-  const env = getServerEnvSafe();
+  const env = getAdminEnvSafe();
   if (!env?.ADMIN_PASSWORD) {
     return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
   }
@@ -19,5 +19,6 @@ export async function POST(req) {
   res.cookies.set(cookie.name, cookie.value, cookie.options);
   return res;
 }
+
 
 

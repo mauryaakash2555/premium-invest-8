@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { getServerEnvSafe } from "@/lib/env";
+import { getAIEnvSafe } from "@/lib/env";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
@@ -92,7 +92,7 @@ async function callClaude({ apiKey, userText }) {
 }
 
 export async function POST(req) {
-  const env = getServerEnvSafe();
+  const env = getAIEnvSafe();
   const cookieStore = await cookies();
   const isAdmin = isAdminFromCookies(cookieStore);
 
@@ -144,5 +144,6 @@ export async function POST(req) {
     return NextResponse.json({ ok: true, reply: fallback, warn: msg });
   }
 }
+
 
 

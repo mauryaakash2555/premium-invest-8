@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { getServerEnvSafe } from "@/lib/env";
+import { getAIEnvSafe, getAdminEnvSafe } from "@/lib/env";
 
 function ok(name, extra = {}) {
   return { ok: true, name, ...extra };
@@ -72,7 +72,7 @@ export async function GET(req) {
   const startedAt = Date.now();
 
   // Env readiness (do not throw)
-  const env = getServerEnvSafe();
+  const aiEnv = getAIEnvSafe();\n\n  const adminEnv = getAdminEnvSafe();
 
   // Supabase check
   let supa;
@@ -93,22 +93,22 @@ export async function GET(req) {
 
   // AI checks
   const ai = {
-    gemini: env?.GEMINI_API_KEY ? ok("gemini", { configured: true }) : bad("gemini", "missing_key", { configured: false }),
-    anthropic: env?.ANTHROPIC_API_KEY ? ok("anthropic", { configured: true }) : bad("anthropic", "missing_key", { configured: false }),
+    gemini: aiEnv?.GEMINI_API_KEY ? ok("gemini", { configured: true }) : bad("gemini", "missing_key", { configured: false }),
+    anthropic: aiEnv?.ANTHROPIC_API_KEY ? ok("anthropic", { configured: true }) : bad("anthropic", "missing_key", { configured: false }),
   };
 
-  if (deep && env?.GEMINI_API_KEY) {
+  if (deep && aiEnv?.GEMINI_API_KEY) {
     try {
-      await deepCheckGemini(env.GEMINI_API_KEY);
+      await deepCheckGemini(aiEnv.GEMINI_API_KEY);
       ai.gemini = ok("gemini", { configured: true, deep: true });
     } catch (e) {
       ai.gemini = bad("gemini", e?.message || "deep_failed", { configured: true, deep: true });
     }
   }
 
-  if (deep && env?.ANTHROPIC_API_KEY) {
+  if (deep && aiEnv?.ANTHROPIC_API_KEY) {
     try {
-      await deepCheckAnthropic(env.ANTHROPIC_API_KEY);
+      await deepCheckAnthropic(aiEnv.ANTHROPIC_API_KEY);
       ai.anthropic = ok("anthropic", { configured: true, deep: true });
     } catch (e) {
       ai.anthropic = bad("anthropic", e?.message || "deep_failed", { configured: true, deep: true });
@@ -121,9 +121,7 @@ export async function GET(req) {
     ok: allOk,
     asOf: new Date().toISOString(),
     ms: Date.now() - startedAt,
-    checks: {
-      supabase: supabaseCheck,
-      ai,
-    },
+    checks: {\n      supabase: supabaseCheck,\n      ai,\n      admin: adminEnv?.ADMIN_PASSWORD ? ok("admin", { configured: true }) : bad("admin", "missing_password", { configured: false }),\n    },
   });
 }
+
