@@ -118,27 +118,37 @@ export default function BlogDetailPage({ params }) {
 
     const root = articleRef.current || document;
 
-    // Mobile-only: make the FAQ block mobile-friendly (keep desktop untouched)
-    if (isMobile && articleRef.current) {
-      const faqSections = Array.from(articleRef.current.querySelectorAll('section')).filter((sec) =>
-        (sec.textContent || '').includes('Frequently Asked Questions')
-      );
-      faqSections.forEach((sec) => {
-        sec.style.padding = '28px 18px';
-        sec.style.margin = '48px 0';
-        sec.style.borderLeftColor = 'rgba(192, 160, 98, 0.75)';
-      });
-    }
-    const comingBlocks = Array.from(root.querySelectorAll('.coming-next-block'));
-    const waCtas = Array.from(root.querySelectorAll('.whatsapp-cta-btn'));
+    // Detect "Next Read" blocks and WhatsApp CTAs even if they lack the class
+    const allLinks = Array.from(root.querySelectorAll('a'));
+    
+    const comingBlocks = allLinks.filter(a => {
+      if (a.classList.contains('coming-next-block')) return true;
+      const text = (a.textContent || '').toLowerCase();
+      return text.includes('coming next') || text.includes('next read');
+    });
+
+    const waCtas = allLinks.filter(a => {
+      if (a.classList.contains('whatsapp-cta-btn')) return true;
+      const href = (a.getAttribute('href') || '').toLowerCase();
+      return href.includes('wa.me') || href.includes('whatsapp.com');
+    });
+
+    // Ensure they have the classes for CSS to work
+    comingBlocks.forEach(el => el.classList.add('coming-next-block'));
+    waCtas.forEach(el => el.classList.add('whatsapp-cta-btn'));
 
     // Rename label text (content already live, so it's not "coming next" anymore)
     comingBlocks.forEach((block) => {
-      const label = block.querySelector('p');
-      if (!label) return;
-      const txt = (label.textContent || '').trim();
-      if (txt === 'Coming Next:' || txt === 'Coming Next') {
-        label.textContent = 'Next Read:';
+      const pTags = Array.from(block.querySelectorAll('p'));
+      pTags.forEach(p => {
+        const txt = (p.textContent || '').trim();
+        if (txt.toLowerCase().startsWith('coming next')) {
+          p.textContent = txt.replace(/coming next/gi, 'Next Read');
+        }
+      });
+      // Fallback: search all text nodes if no <p> matches
+      if (block.textContent.includes('Coming Next')) {
+        block.innerHTML = block.innerHTML.replace(/Coming Next/gi, 'Next Read');
       }
     });
 
@@ -155,71 +165,59 @@ export default function BlogDetailPage({ params }) {
     const targets = [...comingBlocks, ...waCtas];
     const cleanups = [];
 
-    const inView = (el) => {
-      const rect = el.getBoundingClientRect();
+    // ROBUST SCROLL TRACKING: Trigger glow when element is in the "eye-line" (middle 60% of screen)
+    const updateBoost = () => {
       const vh = window.innerHeight || 0;
-      return (
-        vh > 0 &&
-        rect.bottom > 0 &&
-        rect.top < vh
-      );
+      const center = vh / 2;
+      
+      targets.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        // If the element is anywhere in the middle 70% of the viewport, make it glow
+        const isInEyeLine = rect.top < vh * 0.85 && rect.bottom > vh * 0.15;
+        
+        if (isInEyeLine) {
+          el.classList.add('is-scroll-boost');
+        } else {
+          el.classList.remove('is-scroll-boost');
+        }
+      });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target;
-          // If it's in the viewport at all, keep the glow active.
-          setBoost(el, entry.isIntersecting);
-        });
-      },
-      { threshold: 0.08, rootMargin: '0px' }
-    );
+    const onScroll = () => {
+      window.requestAnimationFrame(updateBoost);
+    };
 
-    targets.forEach((el) => observer.observe(el));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateBoost, { passive: true });
+    
+    // Initial check
+    setTimeout(updateBoost, 100);
 
     // Hover/tap fallback: if CSS hover is blocked by wrapping links or browser quirks,
     // force the same visual by toggling the class.
     const addHoverHandlers = (el) => {
-      // For odd browser quirks (wrapped links, etc), ensure hover/tap can still force the glow.
-      const onEnter = () => setBoost(el, true);
-      const onLeave = () => setBoost(el, inView(el));
-      const onDown = () => setBoost(el, true);
+      const onEnter = () => el.classList.add('is-scroll-boost');
+      const onLeave = () => {
+        const vh = window.innerHeight || 0;
+        const rect = el.getBoundingClientRect();
+        const isInEyeLine = rect.top < vh * 0.85 && rect.bottom > vh * 0.15;
+        if (!isInEyeLine) el.classList.remove('is-scroll-boost');
+      };
       el.addEventListener('mouseenter', onEnter);
       el.addEventListener('mouseleave', onLeave);
-      el.addEventListener('focus', onEnter);
-      el.addEventListener('blur', onLeave);
-      el.addEventListener('pointerdown', onDown);
+      el.addEventListener('touchstart', onEnter, { passive: true });
       cleanups.push(() => {
         el.removeEventListener('mouseenter', onEnter);
         el.removeEventListener('mouseleave', onLeave);
-        el.removeEventListener('focus', onEnter);
-        el.removeEventListener('blur', onLeave);
-        el.removeEventListener('pointerdown', onDown);
+        el.removeEventListener('touchstart', onEnter);
       });
     };
 
     targets.forEach(addHoverHandlers);
 
-    let raf = 0;
-    const updateBoost = () => {
-      targets.forEach((el) => setBoost(el, inView(el)));
-    };
-    const onScroll = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(() => {
-        raf = 0;
-        updateBoost();
-      });
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    updateBoost();
-
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', onScroll);
-      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener('resize', updateBoost);
       cleanups.forEach((fn) => fn());
     };
   }, [post, scrollBoostSeed]);
@@ -406,11 +404,12 @@ export default function BlogDetailPage({ params }) {
             style={{
               width: '100%',
               height: 'auto',
-              maxHeight: '500px',
+              maxHeight: '400px',
+              aspectRatio: '16/9',
               objectFit: 'cover',
               borderRadius: '12px',
-              filter: 'brightness(0.55) saturate(0.85) contrast(1.05)',
-              opacity: 0.75
+              filter: 'brightness(0.4) saturate(0.9) contrast(1.1)',
+              opacity: 0.8
             }}
           />
         </div>
@@ -459,7 +458,7 @@ export default function BlogDetailPage({ params }) {
           fontFamily: '"Playfair Display", Georgia, serif',
           fontSize: 'clamp(28px, 5vw, 42px)',
           fontWeight: '600',
-          color: '#fff',
+          color: '#C0A062',
           lineHeight: '1.2',
           marginBottom: '24px'
         }}>

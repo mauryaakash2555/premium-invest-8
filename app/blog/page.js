@@ -392,7 +392,8 @@ export default function BlogPage() {
                         fontSize: '14px',
                         fontWeight: 500,
                       }}>
-                        Read More â†’\n                      </span>
+                        Read More →
+                      </span>
                       {(post.readTime || post.read_time) && (
                         <span style={{
                           color: '#666',

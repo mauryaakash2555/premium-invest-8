@@ -78,10 +78,10 @@ export default function BlogCard({ post }) {
               style={{
                 display: 'inline-block',
                 padding: '6px 16px',
-                background: isMobile ? (mobileAnimating ? 'rgba(198, 161, 91, 0.3)' : 'rgba(198, 161, 91, 0.15)') : 'rgba(218, 165, 32, 0.1)',
+                background: isMobile ? (mobileAnimating ? 'rgba(192, 160, 98, 0.3)' : 'rgba(192, 160, 98, 0.15)') : 'rgba(192, 160, 98, 0.1)',
                 borderRadius: '20px',
                 fontSize: '14px',
-                color: '#DAA520',
+                color: '#C0A062',
                 marginBottom: '20px',
                 fontWeight: 500,
                 transition: isMobile ? 'all 0.5s ease' : undefined,
@@ -90,7 +90,7 @@ export default function BlogCard({ post }) {
               {post.category}
             </div>
 
-            <h3 style={{ fontSize: 'clamp(24px, 4vw, 32px)', color: '#DAA520', marginBottom: '16px', lineHeight: 1.3 }}>
+            <h3 style={{ fontSize: 'clamp(24px, 4vw, 32px)', color: '#C0A062', marginBottom: '16px', lineHeight: 1.3 }}>
               {post.title}
             </h3>
 
