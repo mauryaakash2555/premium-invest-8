@@ -72,7 +72,9 @@ export async function GET(req) {
   const startedAt = Date.now();
 
   // Env readiness (do not throw)
-  const aiEnv = getAIEnvSafe();\n\n  const adminEnv = getAdminEnvSafe();
+  const aiEnv = getAIEnvSafe();
+
+  const adminEnv = getAdminEnvSafe();
 
   // Supabase check
   let supa;
@@ -121,7 +123,13 @@ export async function GET(req) {
     ok: allOk,
     asOf: new Date().toISOString(),
     ms: Date.now() - startedAt,
-    checks: {\n      supabase: supabaseCheck,\n      ai,\n      admin: adminEnv?.ADMIN_PASSWORD ? ok("admin", { configured: true }) : bad("admin", "missing_password", { configured: false }),\n    },
+    checks: {
+      supabase: supabaseCheck,
+      ai,
+      admin: adminEnv?.ADMIN_PASSWORD
+        ? ok("admin", { configured: true })
+        : bad("admin", "missing_password", { configured: false }),
+    },
   });
 }
 
