@@ -639,20 +639,20 @@
   }
 }
 
-/* Next Read block - subtle pulse, NO extra border */
-.coming-next-block,
-a.coming-next-block,
-div.coming-next-block {
+/* Blog detail: Next Read block - subtle pulse (always visible) */
+.blog-detail-page .coming-next-block,
+.blog-detail-page a.coming-next-block,
+.blog-detail-page div.coming-next-block {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   animation: premiumGoldGlow 3s ease-in-out infinite !important;
 }
 
-.coming-next-block:hover,
-a.coming-next-block:hover,
-div.coming-next-block:hover,
-.coming-next-block.is-scroll-boost,
-a.coming-next-block.is-scroll-boost,
-div.coming-next-block.is-scroll-boost {
+.blog-detail-page .coming-next-block:hover,
+.blog-detail-page a.coming-next-block:hover,
+.blog-detail-page div.coming-next-block:hover,
+.blog-detail-page .coming-next-block.is-scroll-boost,
+.blog-detail-page a.coming-next-block.is-scroll-boost,
+.blog-detail-page div.coming-next-block.is-scroll-boost {
   background: rgba(192, 160, 98, 0.12) !important;
   box-shadow: 
     inset 0 0 40px rgba(192, 160, 98, 0.2), 
@@ -661,20 +661,14 @@ div.coming-next-block.is-scroll-boost {
   animation: none !important;
 }
 
-/* WhatsApp CTA inside blog content ONLY - not floating button */
-/* Use very specific selector to avoid affecting floating WhatsApp */
-.blog-html a[href*="wa.me"],
-.blog-html a[href*="whatsapp.com"],
-article a[href*="wa.me"]:not(.whatsapp-float),
-article a[href*="whatsapp.com"]:not(.whatsapp-float) {
+/* Blog detail: WhatsApp CTA (ONLY this CTA) - subtle pulse (always visible) */
+.blog-detail-page a.whatsapp-cta-btn {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   animation: premiumGoldGlow 3s ease-in-out infinite !important;
 }
 
-.blog-html a[href*="wa.me"]:hover,
-.blog-html a[href*="whatsapp.com"]:hover,
-article a[href*="wa.me"]:not(.whatsapp-float):hover,
-article a[href*="whatsapp.com"]:not(.whatsapp-float):hover {
+.blog-detail-page a.whatsapp-cta-btn:hover,
+.blog-detail-page a.whatsapp-cta-btn.is-scroll-boost {
   box-shadow: 0 0 40px rgba(192, 160, 98, 0.4) !important;
   transform: translateY(-3px) scale(1.02) !important;
   animation: none !important;
@@ -696,43 +690,29 @@ footer .whatsapp-card:hover {
   border-color: rgba(37, 211, 102, 0.9) !important;
 }
 
-  .whatsapp-float {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
-    z-index: 998;
-    transition: transform 0.3s ease;
-    color: #FFFFFF;
-    animation: whatsappPulse 2s infinite, whatsappGlow 2s infinite;
-    cursor: pointer;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-  }
+/* Floating WhatsApp (restore original look) */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: #25D366 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4) !important;
+  z-index: 998 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  text-decoration: none !important;
+}
 
-  .whatsapp-float:hover {
-    transform: scale(1.2) rotate(10deg);
-    box-shadow: 0 12px 50px rgba(37, 211, 102, 0.8), 0 0 40px rgba(37, 211, 102, 0.6);
-    animation: none;
-    filter: drop-shadow(0 0 25px rgba(37, 211, 102, 1));
-    background: linear-gradient(135deg, #2BE47B 0%, #15A578 100%);
-  }
-
-  @keyframes whatsappPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7), 0 8px 30px rgba(37, 211, 102, 0.4); }
-    50% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0), 0 8px 30px rgba(37, 211, 102, 0.4); }
-  }
-
-  @keyframes whatsappGlow {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.6)); }
-    50% { filter: drop-shadow(0 0 20px rgba(37, 211, 102, 0.9)); }
-  }
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -762,8 +742,8 @@ footer .whatsapp-card:hover {
   .whatsapp-float {
     bottom: 90px;
     right: 20px;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
   }
 }
 
@@ -1124,4 +1104,7 @@ html {
 @media (max-width: 768px) {
   .animated-clouds-container .cloud-layer { opacity: 0.14; }
   .animated-clouds-container .rain-drop { height: 12px; opacity: 0.75; }
+}
+
+/* End of @layer utilities */
 }

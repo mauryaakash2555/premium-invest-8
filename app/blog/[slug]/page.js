@@ -125,7 +125,10 @@ export default function BlogDetailPage({ params }) {
     
     // Method 1: Elements with the class already
     let comingBlocks = Array.from(root.querySelectorAll('.coming-next-block'));
-    let waCtas = Array.from(root.querySelectorAll('.whatsapp-cta-btn'));
+    // IMPORTANT: Never touch the floating WhatsApp button
+    let waCtas = Array.from(root.querySelectorAll('.whatsapp-cta-btn')).filter(
+      (a) => !a.classList?.contains?.('whatsapp-float')
+    );
     
     // Method 2: Links containing "next read" or "coming next" text
     allLinks.forEach(a => {
@@ -138,6 +141,7 @@ export default function BlogDetailPage({ params }) {
 
     // Method 3: Links to wa.me or whatsapp.com
     allLinks.forEach(a => {
+      if (a.classList.contains('whatsapp-float')) return; // never touch floating WhatsApp
       const href = (a.getAttribute('href') || '').toLowerCase();
       if (href.includes('wa.me') || href.includes('whatsapp.com')) {
         a.classList.add('whatsapp-cta-btn');
