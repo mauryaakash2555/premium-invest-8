@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 const schema = z.object({
-  leadId: z.string().uuid(),
+  leadId: z.string().uuid().optional(),
   event_type: z.string().min(1).max(120),
   data: z.any().optional(),
 });
@@ -22,7 +22,7 @@ export async function POST(req) {
 
   const { leadId, event_type, data } = parsed.data;
   const { error } = await sb.from("events").insert({
-    lead_id: leadId,
+    lead_id: leadId ?? null,
     event_type,
     data: data ?? null,
   });
@@ -30,5 +30,6 @@ export async function POST(req) {
   if (error) return NextResponse.json({ ok: false }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
+
 
 

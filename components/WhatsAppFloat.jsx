@@ -3,6 +3,7 @@
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import AIChatFloat from './AIChatFloat';
+import ChatErrorBoundary from './ChatErrorBoundary';
 
 const WhatsAppFloat = () => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -56,9 +57,12 @@ const WhatsAppFloat = () => {
         </div>
       )}
 
-      <AIChatFloat open={open} onClose={() => setOpen(false)} whatsappHref={whatsappHref} />
+      <ChatErrorBoundary>
+        <AIChatFloat open={open} onClose={() => setOpen(false)} whatsappHref={whatsappHref} />
+      </ChatErrorBoundary>
     </div>
   );
 };
 
 export default WhatsAppFloat;
+

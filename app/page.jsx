@@ -12,7 +12,6 @@ import MarketMoodStrip from '@/components/MarketMoodStrip';
 import AnimatedClouds from '@/components/AnimatedClouds';
 import ServiceCard from '@/components/ServiceCard';
 import BlogCard from '@/components/BlogCard';
-import PremiumMarketTicker from '@/components/PremiumMarketTicker';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -241,12 +240,176 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+
+        {/* MARKET MOOD STRIP - just above ticker (keep gold ticker untouched) */}
+        {/* Keep it BELOW mobile dock/menu overlays; do not let it dominate */}
+        <div className="absolute bottom-[52px] md:bottom-[60px] left-0 w-full z-40">
+          <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
+        </div>
+
+        {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
+        <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
+          <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
+            {[...tickerData, ...tickerData].map((item, i) => (
+              <div key={i} className="flex items-center gap-4 text-xs font-mono tracking-tighter">
+                <span className="text-[#C0A062]/60 uppercase">{item.l}</span>
+                <span className="text-white font-bold">{item.v}</span>
+                <span className={item.pos ? 'text-green-500' : 'text-red-500'}>{item.c}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
-      {/* Market Snapshot (informational) */}
-      <div data-market-strips style={{ position: 'relative', zIndex: 30, marginTop: '10px' }}>
-        <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
-        <PremiumMarketTicker />
-      </div>
+
+      {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
+
+      {/* Services Overview Section */}
+      <section className="section-container">
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(28px, 4vw, 48px)',
+              marginBottom: '16px',
+            }}
+            className="golden-gradient"
+          >
+            Our Services
+          </h2>
+          <p
+            style={{
+              fontSize: '18px',
+              color: '#C0A062',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Bespoke wealth architectures meticulously crafted to elevate your
+            wealth trajectory
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '30px',
+          }}
+        >
+          {services.map((service, index) => (
+            <ServiceCard key={index} service={service} index={index} />
+          ))}
+
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+          <Link href="/services" className="btn-primary">
+            View All Services
+          </Link>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section
+        style={{
+          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
+          padding: '80px 20px',
+        }}
+      >
+        <div className="section-container">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2
+              style={{
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                marginBottom: '16px',
+              }}
+              className="golden-gradient"
+            >
+              Why Choose BM Wealth?
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '40px',
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <Shield size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                AMFI Registered Wealth Distribution
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                Fully compliant and registered wealth distribution
+                services
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <TrendingUp size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                Elite Guidance
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                Decades of expertise in financial markets and wealth management
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  color: '#DAA520',
+                }}
+              >
+                <PieChart size={40} />
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+                Tailored Solutions
+              </h3>
+              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+                Personalized investment strategies aligned with your financial goals
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Latest Insights Section */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
@@ -338,7 +501,17 @@ export default function HomePage() {
       </section>
 
       {/* INSIGHTS PREVIEW - NEW */}
-</div>
+
+      <style jsx global>{`
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .animate-marquee-slow {
+          animation: marquee 30s linear infinite;
+        }
+      `}</style>
+    </div>
   );
 }
 

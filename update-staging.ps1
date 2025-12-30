@@ -1,4 +1,4 @@
-# Stop on PowerShell errors
+﻿# Stop on PowerShell errors
 $ErrorActionPreference = "Stop"
 
 function Assert-Git { if ($LASTEXITCODE -ne 0) { throw "Git failed." } }
@@ -26,6 +26,16 @@ Assert-Git
 Write-Host ">>> Creating README-staging.txt..."
 "staging branch for premium-invest-8" | Out-File -Encoding utf8 README-staging.txt
 
+Write-Host ">>> SAFETY: Backup current chat + validate before push..."
+node .\scripts\safety\chat-backup.js backup
+if ($LASTEXITCODE -ne 0) { throw "Chat backup failed." }
+
+npm run validate:chat
+if ($LASTEXITCODE -ne 0) {
+  Write-Host ">>> SAFETY: Validation failed. Restoring last backup and aborting deploy." -ForegroundColor Red
+  node .\scripts\safety\chat-backup.js restore-latest
+  throw "Changes broke chat - reverted"
+}
 Write-Host ">>> Checking for changes..."
 if (git status --porcelain) {
     git add .
@@ -37,3 +47,4 @@ if (git status --porcelain) {
 }
 
 Write-Host ">>> DONE."
+
