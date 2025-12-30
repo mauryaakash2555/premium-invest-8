@@ -1,11 +1,11 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AIChatFloat.module.css";
 
 const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product \n" +
-  "distribution services. AMFI Registered • IRDAI Licensed • \n" +
+  "distribution services. AMFI Registered â€¢ IRDAI Licensed â€¢ \n" +
   "Investments subject to market dynamics.";
 
 function isValidEmail(v) {
@@ -42,7 +42,8 @@ function wantsHuman(text) {
 
 export default function AIChatFloat({ open, onClose, whatsappHref }) {
   // Safety: keep it OFF unless explicitly enabled via env flag.
-  const enabled = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === "true";
+  const flag = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED;
+  const enabled = flag ? flag === "true" : true;
   if (!enabled) return null;
   if (!open) return null;
 
@@ -166,7 +167,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       // Human handoff request (show WhatsApp option only when asked)
       if (wantsHuman(text)) {
         setHumanReady(true);
-        pushBot("Sure — you can contact our customer support team on WhatsApp.");
+        pushBot("Sure â€” you can contact our customer support team on WhatsApp.");
         return;
       }
 
@@ -183,7 +184,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         }
       }
 
-      // Lead capture gate (Micro‑MVP)
+      // Lead capture gate (Microâ€‘MVP)
       if (captureStep !== "done") {
         if (captureStep === "name") {
           setLeadDraft((p) => ({ ...p, name: text }));
@@ -249,7 +250,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           <div className={styles.header}>
             <div className={styles.brand}>
               <div className={styles.badge}>{admin ? "SYSTEM CORE" : "CONCIERGE"}</div>
-              <div className={styles.title}>BM Wealth — Concierge</div>
+              <div className={styles.title}>BM Wealth â€” Concierge</div>
               <div className={styles.compliance}>{COMPLIANCE_TEXT}</div>
             </div>
 
@@ -274,7 +275,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
               )}
 
               <button type="button" className={styles.closeBtn} aria-label="Close" onClick={onClose}>
-                <span className={styles.closeX} aria-hidden="true">×</span>
+                <span className={styles.closeX} aria-hidden="true">Ã—</span>
               </button>
             </div>
           </div>
@@ -346,7 +347,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   className={styles.input}
                   ref={inputRef}
                   value={input}
-                  placeholder={admin ? "Admin command…" : "Type your message…"}
+                  placeholder={admin ? "Admin commandâ€¦" : "Type your messageâ€¦"}
                   onChange={(e) => setInput(e.target.value)}
                   onInput={(e) => setInput(e.currentTarget.value)}
                   onKeyDown={(e) => {
@@ -368,5 +369,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
 
 
