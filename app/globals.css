@@ -629,11 +629,22 @@
 
 /* Blog: scroll-trigger "hover" (desktop + mobile) */
 /* Blog: Next Read block + WhatsApp CTA - DESKTOP HOVER + SCROLL BOOST */
+/* PERMANENT GLOW - Always visible for "Next Read" and blog WhatsApp CTA */
+@keyframes premiumGoldGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(192, 160, 98, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 35px rgba(192, 160, 98, 0.35);
+  }
+}
+
+/* Next Read block - subtle pulse, NO extra border */
 .coming-next-block,
 a.coming-next-block,
-div.coming-next-block,
-[class*="coming-next-block"] {
+div.coming-next-block {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  animation: premiumGoldGlow 3s ease-in-out infinite !important;
 }
 
 .coming-next-block:hover,
@@ -641,46 +652,40 @@ a.coming-next-block:hover,
 div.coming-next-block:hover,
 .coming-next-block.is-scroll-boost,
 a.coming-next-block.is-scroll-boost,
-div.coming-next-block.is-scroll-boost,
-[class*="coming-next-block"]:hover,
-[class*="coming-next-block"].is-scroll-boost {
-  border-left: 6px solid #C0A062 !important;
-  border-color: #C0A062 !important;
-  background: rgba(192, 160, 98, 0.18) !important;
+div.coming-next-block.is-scroll-boost {
+  background: rgba(192, 160, 98, 0.12) !important;
   box-shadow: 
-    inset 0 0 60px rgba(192, 160, 98, 0.25), 
-    0 0 50px rgba(192, 160, 98, 0.4), 
-    0 12px 40px rgba(0, 0, 0, 0.6) !important;
-  transform: translateY(-6px) scale(1.02) !important;
-  filter: brightness(1.1) !important;
-  z-index: 10;
-  position: relative;
+    inset 0 0 40px rgba(192, 160, 98, 0.2), 
+    0 0 40px rgba(192, 160, 98, 0.35) !important;
+  transform: translateY(-4px) scale(1.01) !important;
+  animation: none !important;
 }
 
 /* WhatsApp CTA inside blog content ONLY - not floating button */
-.blog-html .whatsapp-cta-btn,
-.blog-html a.whatsapp-cta-btn,
-.blog-html [class*="whatsapp-cta-btn"],
-article .whatsapp-cta-btn,
-article a.whatsapp-cta-btn {
+/* Use very specific selector to avoid affecting floating WhatsApp */
+.blog-html a[href*="wa.me"],
+.blog-html a[href*="whatsapp.com"],
+article a[href*="wa.me"]:not(.whatsapp-float),
+article a[href*="whatsapp.com"]:not(.whatsapp-float) {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  animation: premiumGoldGlow 3s ease-in-out infinite !important;
 }
 
-.blog-html .whatsapp-cta-btn:hover,
-.blog-html a.whatsapp-cta-btn:hover,
-.blog-html .whatsapp-cta-btn.is-scroll-boost,
-.blog-html a.whatsapp-cta-btn.is-scroll-boost,
-article .whatsapp-cta-btn:hover,
-article .whatsapp-cta-btn.is-scroll-boost {
-  border: 2px solid #C0A062 !important;
-  background: rgba(192, 160, 98, 0.2) !important;
-  box-shadow: 
-    0 0 60px rgba(192, 160, 98, 0.5), 
-    0 0 25px rgba(255, 255, 255, 0.15),
-    0 18px 45px rgba(0, 0, 0, 0.7) !important;
-  transform: translateY(-6px) scale(1.05) !important;
-  filter: brightness(1.15) !important;
-  z-index: 10;
+.blog-html a[href*="wa.me"]:hover,
+.blog-html a[href*="whatsapp.com"]:hover,
+article a[href*="wa.me"]:not(.whatsapp-float):hover,
+article a[href*="whatsapp.com"]:not(.whatsapp-float):hover {
+  box-shadow: 0 0 40px rgba(192, 160, 98, 0.4) !important;
+  transform: translateY(-3px) scale(1.02) !important;
+  animation: none !important;
+}
+
+/* Make sure floating WhatsApp is NEVER affected */
+.whatsapp-float,
+a.whatsapp-float,
+[class*="whatsapp-float"] {
+  animation: none !important;
+  box-shadow: none !important;
 }
 
 /* Footer: ensure scroll-boost glow always has a visible effect (desktop + mobile) */
