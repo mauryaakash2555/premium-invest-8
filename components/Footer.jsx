@@ -30,10 +30,11 @@ const Footer = () => {
 
   
   useEffect(() => {
-    if (!isMobile) return
-
     const debug = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1"
     const timeouts = []
+    let raf = 0
+    let cooldown = false
+    let intervalId = null
 
     const pulse = (setter, ms) => {
       setter(true)
@@ -50,27 +51,82 @@ const Footer = () => {
       return obs
     }
 
+    // Always observe ONLY the footer Concierge WhatsApp card (desktop + mobile)
     const obs1 = makeObserver(whatsAppCardRef.current, () => {
-      if (debug) console.log("WhatsApp card visible on mobile")
-      pulse(setIsWHAScrollBoost, 3500)
+      if (debug) console.log("WhatsApp card visible")
+      pulse(setIsWHAScrollBoost, 2500)
     }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
 
-    const obs2 = makeObserver(sebiRef.current, () => {
+    // Mobile fallback: IntersectionObserver can be flaky in some webviews — add a lightweight scroll eye-line trigger.
+    const isMobileViewport = typeof window !== "undefined" && (
+      window.matchMedia
+        ? window.matchMedia("(max-width: 768px), (hover: none) and (pointer: coarse)").matches
+        : window.innerWidth <= 768
+    )
+
+    const inEyeLine = () => {
+      const el = whatsAppCardRef.current
+      if (!el) return false
+      const rect = el.getBoundingClientRect()
+      const vh = window.innerHeight || 0
+      const centerY = (rect.top + rect.bottom) / 2
+      return (
+        vh > 0 &&
+        rect.bottom > 0 &&
+        rect.top < vh &&
+        // Wider band to be reliable across mobile browsers/webviews
+        centerY >= vh * 0.25 &&
+        centerY <= vh * 0.85
+      )
+    }
+
+    const onScroll = () => {
+      if (cooldown) return
+      if (raf) return
+      raf = window.requestAnimationFrame(() => {
+        raf = 0
+        if (!inEyeLine()) return
+        cooldown = true
+        pulse(setIsWHAScrollBoost, 3500)
+        const t = setTimeout(() => { cooldown = false }, 4200)
+        timeouts.push(t)
+      })
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+
+    // Absolute fallback: some mobile browsers/webviews won't reliably fire scroll events.
+    // Poll briefly while the user is on the page; pulse when the card is visible.
+    intervalId = window.setInterval(() => {
+      if (cooldown) return
+      if (!inEyeLine()) return
+      cooldown = true
+      pulse(setIsWHAScrollBoost, 3500)
+      const t = setTimeout(() => { cooldown = false }, 4200)
+      timeouts.push(t)
+    }, 700)
+
+    // Keep disclaimers mobile-only
+    const obs2 = isMobile ? makeObserver(sebiRef.current, () => {
       if (debug) console.log("Disclaimer visible on mobile: SEBI")
       pulse(setSebiActive, 2500)
-    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
+    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" }) : null
 
-    const obs3 = makeObserver(noticeRef.current, () => {
+    const obs3 = isMobile ? makeObserver(noticeRef.current, () => {
       if (debug) console.log("Disclaimer visible on mobile: Notice")
       pulse(setNoticeActive, 2500)
-    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" })
+    }, { threshold: 0.15, rootMargin: "0px 0px -20% 0px" }) : null
 
-    if (debug) console.log("Observing footer elements on mobile")
+    if (debug) console.log("Observing footer elements")
 
     return () => {
       if (obs1) obs1.disconnect()
       if (obs2) obs2.disconnect()
       if (obs3) obs3.disconnect()
+      window.removeEventListener("scroll", onScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+      if (intervalId) window.clearInterval(intervalId)
       timeouts.forEach((t) => clearTimeout(t))
     }
   }, [isMobile])
@@ -101,7 +157,7 @@ const navigationLinks = {
 
   if (!mounted) return null;
 
-  const isWHAPremium = isMobile ? (isWHAScrollBoost || isWHAActive) : isWHAHovered
+  const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered
 
 return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
@@ -265,7 +321,7 @@ return (
                 onTouchEnd={() => setIsWHAActive(false)}
                 ref={whatsAppCardRef}                className={cn(
                   "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5",
-                  isMobile && (isWHAScrollBoost || isWHAActive) && "is-scroll-boost"
+                  (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                 )}
                 style={{ 
                   borderColor: isWHAPremium ? '#25D366' : '#C0A062',

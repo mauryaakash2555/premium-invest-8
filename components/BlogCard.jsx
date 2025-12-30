@@ -99,8 +99,8 @@ export default function BlogCard({ post }) {
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#C0A062', fontSize: '16px', fontWeight: 500 }}>
-              <span>Read Full Article</span>
-              <span aria-hidden="true">â†’</span>
+              <span>Read the full article</span>
+              <span aria-hidden="true">→</span>
             </div>
           </div>
         </div>

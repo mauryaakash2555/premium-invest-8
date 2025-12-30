@@ -241,8 +241,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* MARKET MOOD STRIP - NEW */}
-        <div className="absolute bottom-[60px] left-0 w-full z-40">
+        {/* MARKET MOOD STRIP - just above ticker (keep gold ticker untouched) */}
+        {/* Keep it BELOW mobile dock/menu overlays; do not let it dominate */}
+        <div className="absolute bottom-[52px] md:bottom-[60px] left-0 w-full z-40">
           <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
         </div>
 

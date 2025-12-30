@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles, Award, Star } from 'lucide-react';
+import MobileScrollBoost from '@/components/MobileScrollBoost';
 
 export default function CuratedPartners() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -112,8 +113,9 @@ export default function CuratedPartners() {
       <section style={{ padding: '40px 0 100px', width: '100%' }}>
         
         {/* POSITION #1 - DIAMOND ADVISORY PARTNER (COMPETITIVE BIDDING) */}
-        <div
+        <MobileScrollBoost
           className="partner-card diamond-shiny-card bidding-active"
+          holdMs={5000}
           onMouseEnter={() => setHoveredCard(1)}
           onMouseLeave={() => setHoveredCard(null)}
           style={{
@@ -248,11 +250,12 @@ export default function CuratedPartners() {
             
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>SLOT RENEWS MONTHLY</p>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* POSITION #2 - BM WEALTH (GOLD PARTNER) */}
-        <div
+        <MobileScrollBoost
           className="partner-card"
+          holdMs={4500}
           onMouseEnter={() => setHoveredCard(2)}
           onMouseLeave={() => setHoveredCard(null)}
           style={{
@@ -356,11 +359,12 @@ export default function CuratedPartners() {
               Schedule Consultation
             </Link>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* POSITION #3 - SILVER PARTNER (RESERVED) */}
-        <div
+        <MobileScrollBoost
           className="partner-card"
+          holdMs={4500}
           onMouseEnter={() => setHoveredCard(3)}
           onMouseLeave={() => setHoveredCard(null)}
           style={{
@@ -422,7 +426,7 @@ export default function CuratedPartners() {
               Apply for Partnership
             </Link>
           </div>
-        </div>
+        </MobileScrollBoost>
 
       </section>
 

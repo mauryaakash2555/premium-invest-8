@@ -273,9 +273,10 @@ const Contact = () => {
             </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-              <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
-                }}
+              <MobileScrollBoost
+                holdMs={4500}
+                className="glass-effect contact-info-card"
+                style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div
                   style={{
@@ -298,11 +299,12 @@ const Contact = () => {
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>+91 8850977259</p>
                 </div>
-              </div>
+              </MobileScrollBoost>
 
-              <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
-                }}
+              <MobileScrollBoost
+                holdMs={4500}
+                className="glass-effect contact-info-card"
+                style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div
                   style={{
@@ -327,11 +329,12 @@ const Contact = () => {
                     support@bmwealth.co.in
                   </p>
                 </div>
-              </div>
+              </MobileScrollBoost>
 
-              <div
-                className="glass-effect contact-info-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px',
-                }}
+              <MobileScrollBoost
+                holdMs={4500}
+                className="glass-effect contact-info-card"
+                style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div
                   style={{
@@ -354,7 +357,7 @@ const Contact = () => {
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
                 </div>
-              </div>
+              </MobileScrollBoost>
 
               <MobileScrollBoost as="a" holdMs={6000}
                 href="https://wa.me/918850977259"

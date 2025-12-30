@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
@@ -9,6 +9,8 @@ export default function BlogDetailPage({ params }) {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [slug, setSlug] = useState(null);
+  const [scrollBoostSeed, setScrollBoostSeed] = useState(0);
+  const articleRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,7 +31,152 @@ export default function BlogDetailPage({ params }) {
     const foundPost = allBlogs.find(p => p.slug === slug);
     setPost(foundPost || null);
     setIsLoading(false);
+    // re-run DOM enhancements when content changes
+    setScrollBoostSeed((s) => s + 1);
   }, [slug]);
+
+  // Emulate hover for "Coming Next"/"Next Read" + blog WhatsApp CTA on scroll, and rename label.
+  // Also: mobile-only tone-down of bright yellows inside blog content to premium gold.
+  useEffect(() => {
+    if (!post) return;
+    if (typeof window === 'undefined') return;
+
+    const root = articleRef.current || document;
+
+    const isMobile = window.matchMedia
+      ? window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse)').matches
+      : window.innerWidth <= 768;
+
+    // Mobile-only: replace overly-bright yellows with premium matte gold in blog article.
+    if (isMobile && articleRef.current) {
+      // 1) Normalize inline styles that use bright yellows
+      const styled = Array.from(articleRef.current.querySelectorAll('[style]'));
+      styled.forEach((el) => {
+        const s = el.getAttribute('style');
+        if (!s) return;
+        if (!/(#DAA520|#B8860B|rgba\(\s*218\s*,\s*165\s*,\s*32\s*,|rgba\(\s*184\s*,\s*134\s*,\s*11\s*,)/i.test(s)) return;
+
+        const ns = s
+          .replace(/#DAA520/gi, '#C0A062')
+          .replace(/#B8860B/gi, '#C0A062')
+          .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(192, 160, 98,')
+          .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,');
+
+        if (ns !== s) el.setAttribute('style', ns);
+      });
+
+      // 2) Make the FAQ block mobile-friendly (keep desktop untouched)
+      const faqSections = Array.from(articleRef.current.querySelectorAll('section')).filter((sec) =>
+        (sec.textContent || '').includes('Frequently Asked Questions')
+      );
+      faqSections.forEach((sec) => {
+        // tighten spacing for mobile readability
+        sec.style.padding = '28px 18px';
+        sec.style.margin = '48px 0';
+        // border-left color already normalized by the replace above (but enforce)
+        sec.style.borderLeftColor = 'rgba(192, 160, 98, 0.75)';
+      });
+    }
+    const comingBlocks = Array.from(root.querySelectorAll('.coming-next-block'));
+    const waCtas = Array.from(root.querySelectorAll('.whatsapp-cta-btn'));
+
+    // Rename label text (content already live, so it's not "coming next" anymore)
+    comingBlocks.forEach((block) => {
+      const label = block.querySelector('p');
+      if (!label) return;
+      const txt = (label.textContent || '').trim();
+      if (txt === 'Coming Next:' || txt === 'Coming Next') {
+        label.textContent = 'Next Read:';
+      }
+    });
+
+    if (comingBlocks.length === 0 && waCtas.length === 0) return;
+
+    const timeouts = new Map();
+    const pulse = (el, ms = 2800) => {
+      if (!el) return;
+      el.classList.add('is-scroll-boost');
+      const prev = timeouts.get(el);
+      if (prev) window.clearTimeout(prev);
+      const t = window.setTimeout(() => {
+        el.classList.remove('is-scroll-boost');
+        timeouts.delete(el);
+      }, ms);
+      timeouts.set(el, t);
+    };
+
+    const targets = [...comingBlocks, ...waCtas];
+    const cleanups = [];
+
+    const inEyeLine = (el) => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 0;
+      const centerY = (rect.top + rect.bottom) / 2;
+      return (
+        vh > 0 &&
+        rect.bottom > 0 &&
+        rect.top < vh &&
+        // Wider band so it reliably triggers while scrolling
+        centerY >= vh * 0.30 &&
+        centerY <= vh * 0.80
+      );
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          if (!inEyeLine(el)) return;
+          pulse(el);
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px' }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+
+    // Hover/tap fallback: if CSS hover is blocked by wrapping links or browser quirks,
+    // force the same visual by toggling the class.
+    const addHoverHandlers = (el) => {
+      const onEnter = () => pulse(el, 1800);
+      const onDown = () => pulse(el, 2200);
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('focus', onEnter);
+      el.addEventListener('pointerdown', onDown);
+      cleanups.push(() => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('focus', onEnter);
+        el.removeEventListener('pointerdown', onDown);
+      });
+    };
+
+    targets.forEach(addHoverHandlers);
+
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        targets.forEach((el) => {
+          if (!inEyeLine(el)) return;
+          pulse(el, 2200);
+        });
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+      timeouts.forEach((t) => window.clearTimeout(t));
+      timeouts.clear();
+      cleanups.forEach((fn) => fn());
+    };
+  }, [post, scrollBoostSeed]);
 
   if (isLoading) {
     return (
@@ -97,7 +244,9 @@ export default function BlogDetailPage({ params }) {
       )}
 
       {/* Article Content */}
-      <article style={{
+      <article
+        ref={articleRef}
+        style={{
         maxWidth: '800px',
         margin: '0 auto',
         padding: '0 20px 80px 20px'

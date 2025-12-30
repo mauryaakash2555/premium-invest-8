@@ -25,15 +25,26 @@ export function LuxuryMobileDock() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isReading, setIsReading] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [idleIndex, setIdleIndex] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let scrollTimeout = null;
     const handleScroll = () => {
+      // When the overlay menu is open, don't let scroll-driven UI states fight the animation
+      if (isMenuOpen) return;
+
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 50);
+
+      // "Animate while scrolling" (brief shimmer burst)
+      setIsScrolling(true);
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => setIsScrolling(false), 180);
       
       // Super smooth reading mode detection
       if (currentScrollY > lastScrollY + 15 && currentScrollY > 250) {
@@ -44,14 +55,65 @@ export function LuxuryMobileDock() {
       lastScrollY = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+    };
+  }, [isMenuOpen]);
+
+  // Idle "alive" animation: gently cycles a highlight across buttons when user isn't interacting.
+  useEffect(() => {
+    if (isMenuOpen) {
+      setIdleIndex(null);
+      return;
+    }
+
+    let i = 0;
+    let cancelled = false;
+    const tick = () => {
+      if (cancelled) return;
+      // Don't fight real interactions; only run when no hover state + not actively scrolling.
+      if (hoveredIndex === null && !isScrolling && !isReading) {
+        setIdleIndex(i % (mainNavItems.length + 1)); // last slot used for "More"
+        i += 1;
+      }
+    };
+
+    // Start after a short delay so it doesn't feel jumpy on first load
+    const start = window.setTimeout(() => tick(), 1200);
+    const interval = window.setInterval(() => tick(), 2600);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(start);
+      window.clearInterval(interval);
+      setIdleIndex(null);
+    };
+  }, [isMenuOpen, hoveredIndex, isScrolling, isReading]);
+
+  // Lock background scroll while the full-screen menu is open (prevents flicker/glitch)
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    setIsReading(false);
+
+    const prevOverflow = document.body.style.overflow;
+    const prevTouchAction = document.body.style.touchAction;
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouchAction;
+    };
+  }, [isMenuOpen]);
 
   const handleNavClick = (href) => {
     setIsMenuOpen(false);
     setHoveredIndex(null);
+    setIdleIndex(null);
     router.push(href);
   };
+
+  const highlightIndex = hoveredIndex ?? idleIndex;
 
   return (
     <>
@@ -67,6 +129,7 @@ export function LuxuryMobileDock() {
         <div
           className={cn(
             "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
+            isScrolling && "gold-shimmer",
             "relative flex items-center gap-1.5 px-4.5 py-3 bg-[#000000] rounded-full", // Pitch black bg
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
@@ -91,6 +154,7 @@ export function LuxuryMobileDock() {
 
           {mainNavItems.map((item, index) => {
             const isActive = pathname === item.href;
+            const isHighlighted = highlightIndex === index || isActive;
             return (
               <button
                 key={index}
@@ -104,14 +168,14 @@ export function LuxuryMobileDock() {
                 )}
                 aria-label={item.label}
               >
-                {(hoveredIndex === index || isActive) && (
+                {isHighlighted && (
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
                 )}
 
                 <div
                   className={cn(
                     "relative transition-all duration-500 flex items-center justify-center",
-                    isActive || hoveredIndex === index ? "text-[#D4B576] brightness-150 scale-110" : "text-[#C0A062]/70",
+                    isHighlighted ? "text-[#D4B576] brightness-150 scale-110" : "text-[#C0A062]/70",
                     "group-hover:drop-shadow-[0_0_18px_rgba(192,160,98,1)]"
                   )}
                 >
@@ -121,7 +185,7 @@ export function LuxuryMobileDock() {
                   className={cn(
                     "font-inter text-[8px] mt-1.5 transition-all duration-500",
                     "tracking-[0.12em] uppercase font-bold",
-                    isActive || hoveredIndex === index ? "text-[#D4B576] brightness-125" : "text-[#C0A062]/50",
+                    isHighlighted ? "text-[#D4B576] brightness-125" : "text-[#C0A062]/50",
                     "group-hover:scale-110"
                   )}
                 >
@@ -142,7 +206,7 @@ export function LuxuryMobileDock() {
             )}
             aria-label="More menu"
           >
-            {hoveredIndex === 999 && (
+            {(hoveredIndex === 999 || highlightIndex === mainNavItems.length) && (
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
             )}
 
