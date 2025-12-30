@@ -680,13 +680,8 @@ article a[href*="whatsapp.com"]:not(.whatsapp-float):hover {
   animation: none !important;
 }
 
-/* Make sure floating WhatsApp is NEVER affected */
-.whatsapp-float,
-a.whatsapp-float,
-[class*="whatsapp-float"] {
-  animation: none !important;
-  box-shadow: none !important;
-}
+/* Make sure floating WhatsApp keeps its ORIGINAL styling - no changes */
+/* Do NOT apply blog-specific pulse/glow to the floating button */
 
 /* Footer: ensure scroll-boost glow always has a visible effect (desktop + mobile) */
 footer .whatsapp-card.is-scroll-boost {
