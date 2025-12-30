@@ -385,8 +385,21 @@ export default function BlogDetailPage({ params }) {
           width: '100%',
           maxWidth: '1000px',
           margin: '0 auto 40px auto',
-          padding: '0 20px'
+          padding: '0 20px',
+          position: 'relative'
         }}>
+          {/* Darken image inside blog detail so reading stays the focus */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '12px',
+              pointerEvents: 'none',
+              background:
+                'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 60%, rgba(10,10,10,0.82) 100%)',
+            }}
+          />
           <img
             src={heroImage}
             alt={post.title}
@@ -395,7 +408,9 @@ export default function BlogDetailPage({ params }) {
               height: 'auto',
               maxHeight: '500px',
               objectFit: 'cover',
-              borderRadius: '12px'
+              borderRadius: '12px',
+              filter: 'brightness(0.55) saturate(0.85) contrast(1.05)',
+              opacity: 0.75
             }}
           />
         </div>
@@ -504,7 +519,8 @@ export default function BlogDetailPage({ params }) {
         )}
 
         {/* Content */}
-        <div 
+        <div
+          className="blog-html"
           style={{ color: '#e5e5e5', lineHeight: '1.8' }}
           dangerouslySetInnerHTML={{ 
             __html: renderedHtml || 'No content available.'
@@ -590,6 +606,13 @@ export default function BlogDetailPage({ params }) {
           .blog-detail-page article :global(p + p) {
             margin-top: 14px !important;
           }
+        }
+
+        /* Blog HTML content: enforce premium gold headings (fix "random white headings") */
+        .blog-detail-page .blog-html :global(h2),
+        .blog-detail-page .blog-html :global(h3),
+        .blog-detail-page .blog-html :global(h4) {
+          color: #C0A062 !important;
         }
       `}</style>
     </div>
