@@ -141,17 +141,12 @@ export default function BlogDetailPage({ params }) {
 
     if (comingBlocks.length === 0 && waCtas.length === 0) return;
 
-    const timeouts = new Map();
-    const pulse = (el, ms = 2800) => {
+    // "Scroll hover" should be reliable and persistent while the element is in view.
+    // Avoid short pulses that can be missed during fast scrolling.
+    const setBoost = (el, on) => {
       if (!el) return;
-      el.classList.add('is-scroll-boost');
-      const prev = timeouts.get(el);
-      if (prev) window.clearTimeout(prev);
-      const t = window.setTimeout(() => {
-        el.classList.remove('is-scroll-boost');
-        timeouts.delete(el);
-      }, ms);
-      timeouts.set(el, t);
+      if (on) el.classList.add('is-scroll-boost');
+      else el.classList.remove('is-scroll-boost');
     };
 
     const targets = [...comingBlocks, ...waCtas];
@@ -174,10 +169,8 @@ export default function BlogDetailPage({ params }) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
           const el = entry.target;
-          if (!inEyeLine(el)) return;
-          pulse(el);
+          setBoost(el, entry.isIntersecting && inEyeLine(el));
         });
       },
       { threshold: 0.08, rootMargin: '0px' }
@@ -188,14 +181,20 @@ export default function BlogDetailPage({ params }) {
     // Hover/tap fallback: if CSS hover is blocked by wrapping links or browser quirks,
     // force the same visual by toggling the class.
     const addHoverHandlers = (el) => {
-      const onEnter = () => pulse(el, 1800);
-      const onDown = () => pulse(el, 2200);
+      // For odd browser quirks (wrapped links, etc), ensure hover/tap can still force the glow.
+      const onEnter = () => setBoost(el, true);
+      const onLeave = () => setBoost(el, inEyeLine(el));
+      const onDown = () => setBoost(el, true);
       el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mouseleave', onLeave);
       el.addEventListener('focus', onEnter);
+      el.addEventListener('blur', onLeave);
       el.addEventListener('pointerdown', onDown);
       cleanups.push(() => {
         el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
         el.removeEventListener('focus', onEnter);
+        el.removeEventListener('blur', onLeave);
         el.removeEventListener('pointerdown', onDown);
       });
     };
@@ -203,26 +202,24 @@ export default function BlogDetailPage({ params }) {
     targets.forEach(addHoverHandlers);
 
     let raf = 0;
+    const updateBoost = () => {
+      targets.forEach((el) => setBoost(el, inEyeLine(el)));
+    };
     const onScroll = () => {
       if (raf) return;
       raf = window.requestAnimationFrame(() => {
         raf = 0;
-        targets.forEach((el) => {
-          if (!inEyeLine(el)) return;
-          pulse(el, 2200);
-        });
+        updateBoost();
       });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    updateBoost();
 
     return () => {
       observer.disconnect();
       window.removeEventListener('scroll', onScroll);
       if (raf) window.cancelAnimationFrame(raf);
-      timeouts.forEach((t) => window.clearTimeout(t));
-      timeouts.clear();
       cleanups.forEach((fn) => fn());
     };
   }, [post, scrollBoostSeed]);
