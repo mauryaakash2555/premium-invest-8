@@ -1,4 +1,4 @@
-import { Playfair_Display, Inter } from "next/font/google";
+﻿import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -52,3 +52,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+
