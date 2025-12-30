@@ -23,7 +23,7 @@ function fmtNumber(v, opts = {}) {
 function fmtValue(item) {
   if (item.kind === "fx") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 3 });
   if (item.kind === "index") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
-  return "â‚¹" + fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
+  return "INR " + fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
 }
 
 function fmtPct(p) {

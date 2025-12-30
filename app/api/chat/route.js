@@ -12,8 +12,8 @@ const reqSchema = z.object({
 });
 
 const COMPLIANCE_TEXT =
-  "Welcome to BM Wealth. We provide educational guidance and product \n" +
-  "distribution services. AMFI Registered • IRDAI Licensed • \n" +
+  "Welcome to BM Wealth. We provide educational guidance and product\n" +
+  "distribution services. AMFI Registered | IRDAI Licensed |\n" +
   "Investments subject to market dynamics.";
 
 async function saveConversation({ leadId, message, sender }) {
