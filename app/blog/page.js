@@ -274,6 +274,8 @@ export default function BlogPage() {
               >
                 <MobileScrollBoost
                   holdMs={6000}
+                  bandTop={0.25}
+                  bandBottom={0.85}
                   className="blog-card-premium"
                   style={{
                     overflow: 'hidden',
