@@ -116,26 +116,51 @@ export default function BlogDetailPage({ params }) {
     if (!post) return;
     if (typeof window === 'undefined') return;
 
-    const root = articleRef.current || document;
+    // Search the entire document, not just articleRef
+    const root = document;
 
-    // Detect "Next Read" blocks and WhatsApp CTAs even if they lack the class
+    // Detect "Next Read" blocks and WhatsApp CTAs by multiple methods
     const allLinks = Array.from(root.querySelectorAll('a'));
+    const allDivs = Array.from(root.querySelectorAll('div'));
     
-    const comingBlocks = allLinks.filter(a => {
-      if (a.classList.contains('coming-next-block')) return true;
+    // Method 1: Elements with the class already
+    let comingBlocks = Array.from(root.querySelectorAll('.coming-next-block'));
+    let waCtas = Array.from(root.querySelectorAll('.whatsapp-cta-btn'));
+    
+    // Method 2: Links containing "next read" or "coming next" text
+    allLinks.forEach(a => {
       const text = (a.textContent || '').toLowerCase();
-      return text.includes('coming next') || text.includes('next read');
+      if (text.includes('coming next') || text.includes('next read')) {
+        a.classList.add('coming-next-block');
+        if (!comingBlocks.includes(a)) comingBlocks.push(a);
+      }
     });
 
-    const waCtas = allLinks.filter(a => {
-      if (a.classList.contains('whatsapp-cta-btn')) return true;
+    // Method 3: Links to wa.me or whatsapp.com
+    allLinks.forEach(a => {
       const href = (a.getAttribute('href') || '').toLowerCase();
-      return href.includes('wa.me') || href.includes('whatsapp.com');
+      if (href.includes('wa.me') || href.includes('whatsapp.com')) {
+        a.classList.add('whatsapp-cta-btn');
+        if (!waCtas.includes(a)) waCtas.push(a);
+      }
     });
 
-    // Ensure they have the classes for CSS to work
-    comingBlocks.forEach(el => el.classList.add('coming-next-block'));
-    waCtas.forEach(el => el.classList.add('whatsapp-cta-btn'));
+    // Method 4: Divs with border-left styling that contain "Next Read" (the inner wrapper)
+    allDivs.forEach(div => {
+      const text = (div.textContent || '').toLowerCase();
+      const style = div.getAttribute('style') || '';
+      if ((text.includes('next read') || text.includes('coming next')) && style.includes('border-left')) {
+        div.classList.add('coming-next-block');
+        if (!comingBlocks.includes(div)) comingBlocks.push(div);
+      }
+    });
+
+    // Debug: Log what we found
+    const debug = new URLSearchParams(window.location.search).get('debug') === '1';
+    if (debug) {
+      console.log('[Scroll Boost] Found coming-next blocks:', comingBlocks.length);
+      console.log('[Scroll Boost] Found whatsapp CTAs:', waCtas.length);
+    }
 
     // Rename label text (content already live, so it's not "coming next" anymore)
     comingBlocks.forEach((block) => {
@@ -146,10 +171,6 @@ export default function BlogDetailPage({ params }) {
           p.textContent = txt.replace(/coming next/gi, 'Next Read');
         }
       });
-      // Fallback: search all text nodes if no <p> matches
-      if (block.textContent.includes('Coming Next')) {
-        block.innerHTML = block.innerHTML.replace(/Coming Next/gi, 'Next Read');
-      }
     });
 
     if (comingBlocks.length === 0 && waCtas.length === 0) return;
