@@ -2,23 +2,25 @@
 
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import AIChatFloat from './AIChatFloat';
 
 const WhatsAppFloat = () => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [open, setOpen] = useState(false);
+  const whatsappHref = "https://wa.me/918850977259";
 
   return (
     <div style={{ position: 'relative' }}>
-      <a
-        href="https://wa.me/918850977259"
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        type="button"
         className="whatsapp-float"
-        aria-label="Chat with us on WhatsApp"
+        aria-label="Open chat"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
+        onClick={() => setOpen(true)}
       >
         <MessageCircle size={28} style={{ width: '28px', height: '28px' }} />
-      </a>
+      </button>
       {showTooltip && (
         <div
           style={{
@@ -34,6 +36,8 @@ const WhatsAppFloat = () => {
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
             zIndex: 999,
             fontWeight: '500',
+            pointerEvents: 'none',
+            userSelect: 'none',
           }}
         >
           Chat with us Instantly
@@ -51,6 +55,8 @@ const WhatsAppFloat = () => {
           />
         </div>
       )}
+
+      <AIChatFloat open={open} onClose={() => setOpen(false)} whatsappHref={whatsappHref} />
     </div>
   );
 };

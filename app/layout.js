@@ -2,7 +2,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import AIChatFloat from "@/components/AIChatFloat";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/LuxuryMobileDock";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
           <Footer />
         </div>
         <LuxuryMobileDock />
-        <AIChatFloat />
+        <WhatsAppFloat />
         <Analytics />
         <SpeedInsights />
       </body>
