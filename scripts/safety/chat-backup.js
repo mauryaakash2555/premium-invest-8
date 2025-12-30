@@ -1,8 +1,10 @@
 ﻿const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const ROOT = process.cwd();
-const BACKUP_DIR = path.join(ROOT, '.safety-backups', 'chat');
+// Store backups OUTSIDE the repo so git checkout/stash can't delete them
+const BACKUP_DIR = path.join(os.homedir(), '.bmwealth-safety-backups', 'chat');
 const KEEP = 3;
 
 const TARGETS = [
@@ -103,3 +105,5 @@ else {
   console.log('Usage: node scripts/safety/chat-backup.js backup|restore-latest');
   process.exit(1);
 }
+
+
