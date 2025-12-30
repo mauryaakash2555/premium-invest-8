@@ -7,10 +7,18 @@ import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 
 function isMobileViewport() {
   if (typeof window === 'undefined') return false;
-  if (window.matchMedia) {
-    return window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse)').matches;
-  }
-  return window.innerWidth <= 768;
+  const w = window.innerWidth || 0;
+  const hasMatchMedia = typeof window.matchMedia === 'function';
+  const coarsePointer = hasMatchMedia ? window.matchMedia('(pointer: coarse)').matches : false;
+  const noHover = hasMatchMedia ? window.matchMedia('(hover: none)').matches : false;
+  const touch =
+    (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0) ||
+    // eslint-disable-next-line no-prototype-builtins
+    ('ontouchstart' in window);
+
+  // iOS/iPadOS/Android WebViews can misreport hover/pointer; treat "touch-ish" and
+  // smaller screens as mobile/tablet so the reader HUD renders consistently.
+  return w <= 900 || ((touch || coarsePointer || noHover) && w <= 1024);
 }
 
 function normalizeBlogHtmlForPremium(html) {
