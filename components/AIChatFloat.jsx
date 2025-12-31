@@ -169,14 +169,43 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     return { lead: j.lead, setupRequired: false, error: null };
   }
 
-  async function sendChat({ message, mode, leadId: lid }) {
+  function buildConversationHistorySnapshot() {
+    try {
+      return (messages || [])
+        .filter((m) => m && (m.sender === "user" || m.sender === "bot"))
+        .slice(-5)
+        .map((m) => ({
+          sender: m.sender,
+          text: String(m.text || "").trim().slice(0, 2000),
+        }))
+        .filter((m) => m.text);
+    } catch {
+      return [];
+    }
+  }
+
+  async function sendChat({ message, mode, leadId: lid, conversationHistory }) {
     const r = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, mode, leadId: lid || undefined }),
+      body: JSON.stringify({
+        message,
+        mode,
+        leadId: lid || undefined,
+        conversationId: sessionId,
+        conversationHistory: conversationHistory || undefined,
+      }),
     });
     const j = await r.json().catch(() => null);
-    if (!j?.ok) return { reply: "Temporary issue. Please try again.", warn: "bad_response" };
+    if (r.status === 429 || j?.error === "rate_limited") {
+      return {
+        reply:
+          "Just a moment — please send up to 10 messages per minute so we can keep the concierge experience smooth.\n\n" +
+          COMPLIANCE_TEXT,
+        warn: "rate_limited",
+      };
+    }
+    if (!r.ok || !j?.ok) return { reply: "Temporary issue. Please try again.", warn: j?.error || "bad_response" };
     return { reply: j.reply || "", warn: j.warn };
   }
 
@@ -232,6 +261,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     const raw = inputRef.current?.value ?? input;
     const text = String(raw || "").trim();
     if (!text || busy) return;
+
+    const conversationHistory = buildConversationHistorySnapshot();
 
     // Keep DOM + state in sync (robust to automation + IME edge-cases)
     if (inputRef.current) inputRef.current.value = "";
@@ -323,7 +354,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply } = await sendChat({ message: text, mode: admin ? "admin" : "user", leadId });
+      const { reply } = await sendChat({
+        message: text,
+        mode: admin ? "admin" : "user",
+        leadId,
+        conversationHistory,
+      });
       pushBot(reply);
       void logEvent("chat_message", { sessionId, admin, chars: text.length });
 

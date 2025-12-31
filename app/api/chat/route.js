@@ -7,6 +7,18 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 const reqSchema = z.object({
   message: z.string().min(1).max(6000),
+  // The client sends the last few messages so Gemini can answer with context.
+  // Shape is intentionally simple + strict to avoid prompt-injection blobs.
+  conversationHistory: z
+    .array(
+      z.object({
+        sender: z.enum(["user", "bot"]),
+        text: z.string().min(1).max(6000),
+      })
+    )
+    .max(20)
+    .optional(),
+  conversationId: z.string().min(1).max(200).optional(),
   leadId: z.string().uuid().optional(),
   mode: z.enum(["user", "admin"]).optional(),
 });
@@ -15,6 +27,72 @@ const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product\n" +
   "distribution services. AMFI Registered | IRDAI Licensed |\n" +
   "Investments subject to market dynamics.";
+
+// Basic per-user rate limit (best-effort in serverless): 10 messages / minute.
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 10;
+const RATE_BUCKETS =
+  globalThis.__bmwealth_chat_rate_buckets || (globalThis.__bmwealth_chat_rate_buckets = new Map());
+
+function rateKey(req, leadId) {
+  if (leadId) return `lead:${leadId}`;
+  const xff = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "";
+  const ip = String(xff).split(",")[0]?.trim();
+  return ip ? `ip:${ip}` : "anon";
+}
+
+function consumeRate(key) {
+  const now = Date.now();
+  const existing = RATE_BUCKETS.get(key);
+  if (!existing || now >= existing.resetAt) {
+    RATE_BUCKETS.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return { allowed: true, retryAfterMs: 0 };
+  }
+  if (existing.count >= RATE_MAX) {
+    return { allowed: false, retryAfterMs: Math.max(0, existing.resetAt - now) };
+  }
+  existing.count += 1;
+  return { allowed: true, retryAfterMs: 0 };
+}
+
+async function logEventSafe({ leadId, event_type, data }) {
+  try {
+    const sb = supabaseAdmin();
+    await sb
+      .from("events")
+      .insert({
+        lead_id: leadId ?? null,
+        event_type,
+        data: data ?? null,
+      })
+      .throwOnError();
+  } catch {
+    // ignore if DB not configured yet
+  }
+}
+
+async function getLeadNameSafe(leadId) {
+  if (!leadId) return "";
+  try {
+    const sb = supabaseAdmin();
+    const { data, error } = await sb.from("leads").select("name").eq("id", leadId).limit(1);
+    if (error) return "";
+    const name = String(data?.[0]?.name || "").trim();
+    return name;
+  } catch {
+    return "";
+  }
+}
+
+function makeConversationId(fallback = "") {
+  if (fallback) return String(fallback);
+  try {
+    // eslint-disable-next-line no-undef
+    return crypto?.randomUUID?.() || Math.random().toString(16).slice(2);
+  } catch {
+    return Math.random().toString(16).slice(2);
+  }
+}
 
 async function saveConversation({ leadId, message, sender }) {
   if (!leadId) return;
@@ -69,23 +147,39 @@ async function saveLeadScore({ leadId, score }) {
     .throwOnError();
 }
 
-async function callGemini({ apiKey, userText }) {
+async function callGemini({ apiKey, userText, conversationHistory = [], userName = "" }) {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
     encodeURIComponent(apiKey);
 
+  // System prompt (as requested) + guardrails.
+  const systemBase =
+    "You are BM Wealth's financial assistant. Provide educational guidance only\n" +
+    "(SEBI compliant - no specific investment advice). Topics: mutual funds, SIP,\n" +
+    "insurance, fixed deposits. Be helpful, professional, Mumbai-style friendly.\n" +
+    "AMFI Registered • IRDAI Licensed. Always end with compliance text.";
+
   const system = [
-    "You are BM Wealth AI assistant.",
-    "You MUST be SEBI-compliant: provide only educational information and general explanations.",
-    "Do NOT give personalized investment advice, price targets, or specific buy/sell/hold recommendations.",
-    "When asked 'what is X', explain simply with a short example.",
-    "Keep answers crisp (3-7 short lines), luxury tone, no hype.",
-    `End with this line exactly once: "${COMPLIANCE_TEXT}"`,
-  ].join("\n");
+    systemBase,
+    userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
+    "Do NOT provide personalized recommendations, price targets, or specific buy/sell/hold calls.",
+    `Always end your answer with this exact compliance text (verbatim) once:\n${COMPLIANCE_TEXT}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const contents = [];
+  for (const h of conversationHistory || []) {
+    const sender = h?.sender === "user" ? "user" : "model";
+    const text = String(h?.text || "").trim();
+    if (!text) continue;
+    contents.push({ role: sender, parts: [{ text }] });
+  }
+  contents.push({ role: "user", parts: [{ text: userText }] });
 
   const body = {
     systemInstruction: { role: "system", parts: [{ text: system }] },
-    contents: [{ role: "user", parts: [{ text: userText }] }],
+    contents,
     generationConfig: { temperature: 0.5, maxOutputTokens: 600 },
   };
 
@@ -169,6 +263,30 @@ export async function POST(req) {
 
   const { message, leadId } = parsed.data;
   const mode = parsed.data.mode || "user";
+  const conversationId = makeConversationId(parsed.data.conversationId || "");
+
+  // Rate limit (best-effort): max 10 msgs/min/user.
+  const rl = consumeRate(rateKey(req, leadId));
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "rate_limited", conversationId, retryAfterMs: rl.retryAfterMs },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.max(1, Math.ceil(rl.retryAfterMs / 1000))),
+        },
+      }
+    );
+  }
+
+  const conversationHistory = (parsed.data.conversationHistory || [])
+    .filter((x) => x && typeof x.text === "string" && (x.sender === "user" || x.sender === "bot"))
+    .slice(-5)
+    .map((x) => ({
+      sender: x.sender,
+      text: String(x.text || "").trim().slice(0, 2000),
+    }))
+    .filter((x) => x.text);
 
   // Persist user message (best-effort)
   try {
@@ -195,7 +313,13 @@ export async function POST(req) {
       reply = await callClaude({ apiKey: env.ANTHROPIC_API_KEY, userText: message });
     } else {
       if (!env?.GEMINI_API_KEY) throw new Error("setup_required");
-      reply = await callGemini({ apiKey: env.GEMINI_API_KEY, userText: message });
+      const userName = await getLeadNameSafe(leadId);
+      reply = await callGemini({
+        apiKey: env.GEMINI_API_KEY,
+        userText: message,
+        conversationHistory,
+        userName,
+      });
 
       // If the model returns only the compliance line or something too short, use a safe canned explainer.
       const cleaned = String(reply || "").trim();
@@ -218,18 +342,33 @@ export async function POST(req) {
     } catch {
       // ignore if DB not configured yet
     }
-    return NextResponse.json({ ok: true, reply });
+    return NextResponse.json({ ok: true, reply, conversationId });
   } catch (e) {
     const msg = e?.message || "chat_failed";
-    // If AI is unavailable (quota/setup/etc), provide a safe canned educational answer when possible.
+    const provider = mode === "admin" ? "anthropic" : "gemini";
+    await logEventSafe({
+      leadId,
+      event_type: "chat_error",
+      data: {
+        provider,
+        conversationId,
+        mode,
+        error: String(msg || "chat_failed").slice(0, 600),
+      },
+    });
+
+    // If AI is unavailable (quota/setup/etc), provide a safe fallback.
     const canned = cannedEducationalAnswer(message);
-    const fallback = canned || `I can help with educational guidance. ${COMPLIANCE_TEXT}`;
+    const fallback =
+      canned ||
+      ("I’m having a temporary connectivity issue right now. Please try again in a moment.\n\n" +
+        COMPLIANCE_TEXT);
     try {
       await saveConversation({ leadId, message: fallback, sender: "bot" });
     } catch {
       // ignore
     }
-    return NextResponse.json({ ok: true, reply: fallback, warn: msg });
+    return NextResponse.json({ ok: true, reply: fallback, conversationId, warn: msg });
   }
 }
 
