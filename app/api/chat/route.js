@@ -113,7 +113,10 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
     "You are BM Wealth's financial assistant. Provide educational guidance only.\n" +
     "Never recommend specific products, funds, or stocks. Use phrases like 'various mutual fund options available' not 'invest in equity funds'.\n" +
     "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
-    "AMFI Registered • IRDAI Licensed. Keep answers concise (3-4 sentences max).";
+    "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
+    "Do NOT include greetings like 'Welcome to BM Wealth' unless the user only greets and asks nothing else.\n" +
+    "Do NOT list all topics; respond only to what the user asked.\n" +
+    "Keep answers concise (3-4 sentences max).";
 
   const extras = [
     userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
@@ -121,6 +124,14 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   ].filter(Boolean);
 
   return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+}
+
+function truncateToSentences(text, maxSentences = 4) {
+  const t = String(text || "").trim();
+  if (!t) return "";
+  const parts = t.match(/[^.!?\n]+(?:[.!?]+|\n+|$)/g) || [t];
+  const out = parts.slice(0, maxSentences).join("").trim();
+  return out.replace(/\n{3,}/g, "\n\n").trim();
 }
 
 async function saveConversation({ leadId, message, sender }) {
@@ -428,6 +439,9 @@ export async function POST(req) {
         const canned = cannedEducationalAnswer(message);
         if (canned) reply = canned;
       }
+
+      // Enforce brevity (3–4 sentences max).
+      reply = truncateToSentences(reply, 4);
 
       // Log which provider answered (admin visibility)
       await logEventSafe({

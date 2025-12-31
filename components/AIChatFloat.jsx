@@ -61,6 +61,14 @@ function wantsHuman(text) {
   );
 }
 
+function isGreetingOnly(text) {
+  const t = String(text || "").trim().toLowerCase();
+  if (!t) return false;
+  if (t.length > 32) return false;
+  if (/\?/.test(t)) return false;
+  return /^(hi|hii+|hello|hey|good\s+morning|good\s+afternoon|good\s+evening|namaste)\b/.test(t);
+}
+
 export default function AIChatFloat({ open, onClose, whatsappHref }) {
   // Safety: keep it OFF unless explicitly enabled via env flag.
   const flag = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED;
@@ -172,7 +180,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   function buildConversationHistorySnapshot() {
     try {
       return (messages || [])
-        .filter((m) => m && (m.sender === "user" || m.sender === "bot"))
+        // Exclude the initial compliance/onboarding message so models don't echo it back.
+        .filter((m) => m && m.id !== "m0" && (m.sender === "user" || m.sender === "bot"))
         .slice(-5)
         .map((m) => ({
           sender: m.sender,
@@ -306,6 +315,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       // Lead capture gate (Micro-MVP)
       if (captureStep !== "done") {
         if (captureStep === "name") {
+          if (isGreetingOnly(text)) {
+            pushBot("Hello. May I have your name?");
+            return;
+          }
           setLeadDraft((p) => ({ ...p, name: text }));
           setCaptureStep("email");
           pushBot("Thank you. Please share your email.");
@@ -349,6 +362,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           }
           return;
         }
+      }
+
+      // Simple greeting handling (keeps chat clean, avoids models echoing old context)
+      if (captureStep === "done" && !admin && isGreetingOnly(text)) {
+        pushBot("Hello. How can I help you today?");
+        return;
       }
 
       // Normal chat
