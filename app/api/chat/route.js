@@ -650,11 +650,13 @@ export async function POST(req) {
     }))
     .filter((x) => x.text);
 
-  // Persist user message (best-effort)
-  try {
-    await saveConversation({ leadId, message, sender: "user" });
-  } catch {
-    // ignore if DB not configured yet
+  // Persist user message (best-effort) - NEVER persist admin mode messages into lead conversations.
+  if (!adminSession) {
+    try {
+      await saveConversation({ leadId, message, sender: "user" });
+    } catch {
+      // ignore if DB not configured yet
+    }
   }
 
   // Lead qualification (best-effort; only when a real lead exists)
@@ -790,7 +792,9 @@ export async function POST(req) {
     }
 
     try {
-      await saveConversation({ leadId, message: reply, sender: "bot" });
+      if (!adminSession) {
+        await saveConversation({ leadId, message: reply, sender: "bot" });
+      }
     } catch {
       // ignore if DB not configured yet
     }

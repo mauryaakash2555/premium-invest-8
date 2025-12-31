@@ -128,7 +128,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     setDashboard(null);
     setSelectedLeadId(null);
     setLeadDetail(null);
-    pushBot("Exited admin mode.");
+    pushBotAdmin("Exited admin mode.");
   }
 
   async function exportLeads() {
@@ -184,13 +184,23 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         `${dayGreeting()}\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
     },
   ]);
+  const [adminMessages, setAdminMessages] = useState(() => [
+    {
+      id: "a0",
+      sender: "bot",
+      at: todayISO(),
+      text: "Admin console ready. Ask for strategic advice any time.",
+    },
+  ]);
+
+  const activeMessages = admin ? adminMessages : messages;
 
   useEffect(() => {
     if (!enabled || !open) return;
     const el = listRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
-  }, [enabled, open, messages.length, busy]);
+  }, [enabled, open, admin, messages.length, adminMessages.length, busy]);
 
   // Analytics: visitor event (privacy-safe ipHash is added server-side).
   useEffect(() => {
@@ -200,7 +210,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     void logEvent("visitor", { sessionId });
   }, [enabled, open, sessionId]);
 
-  function pushBot(text, extra = null) {
+  function pushBotUser(text, extra = null) {
     setMessages((prev) => [
       ...prev,
       {
@@ -213,10 +223,30 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     ]);
   }
 
-  function pushUser(text) {
+  function pushUserUser(text) {
     setMessages((prev) => [
       ...prev,
       { id: "u_" + Date.now().toString(16), sender: "user", at: todayISO(), text: String(text || "") },
+    ]);
+  }
+
+  function pushBotAdmin(text, extra = null) {
+    setAdminMessages((prev) => [
+      ...prev,
+      {
+        id: "ab_" + Date.now().toString(16),
+        sender: "bot",
+        at: todayISO(),
+        text: String(text || ""),
+        ...(extra && typeof extra === "object" ? extra : {}),
+      },
+    ]);
+  }
+
+  function pushUserAdmin(text) {
+    setAdminMessages((prev) => [
+      ...prev,
+      { id: "au_" + Date.now().toString(16), sender: "user", at: todayISO(), text: String(text || "") },
     ]);
   }
 
@@ -375,10 +405,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
   function buildConversationHistorySnapshot() {
     try {
-      return (messages || [])
+      const base = admin ? adminMessages : messages;
+      return (base || [])
         // Exclude the initial compliance/onboarding message so models don't echo it back.
         .filter((m) => {
-          if (!m || m.id === "m0") return false;
+          if (!m) return false;
+          if (!admin && m.id === "m0") return false;
           if (!(m.sender === "user" || m.sender === "bot")) return false;
           // Drop greeting-only user messages from context to prevent "hi" being echoed.
           if (m.sender === "user" && isGreetingOnly(m.text)) return false;
@@ -487,7 +519,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     // Keep DOM + state in sync (robust to automation + IME edge-cases)
     if (inputRef.current) inputRef.current.value = "";
     setInput("");
-    pushUser(text);
+    if (admin) pushUserAdmin(text);
+    else pushUserUser(text);
     setBusy(true);
 
     try {
@@ -508,7 +541,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       // Human handoff request (show WhatsApp option only when asked)
       if (wantsHuman(text)) {
         setHumanReady(true);
-        pushBot("Sure - you can contact our customer support team on WhatsApp.");
+        if (admin) pushBotAdmin("Sure - you can contact our customer support team on WhatsApp.");
+        else pushBotUser("Sure - you can contact our customer support team on WhatsApp.");
         return;
       }
 
@@ -518,20 +552,20 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       if (!admin && (/^\d{4}$/.test(text) || (captureStep === "done" && /^\d{5,12}$/.test(text)))) {
         const res = await tryAdminLogin(text);
         if (res?.setupRequired) {
-          pushBot("Admin dashboard is not configured on this environment yet.");
+          pushBotUser("Admin dashboard is not configured on this environment yet.");
           return;
         }
         if (res?.ok) {
           setAdmin(true);
           setTab("dashboard");
-          pushBot("Admin mode active - Claude AI enabled.");
+          pushBotAdmin("Admin mode active - Claude AI enabled.");
           const dash = await refreshDashboard();
           setDashboard(dash);
           const s = await fetchStrategy({ force: false });
           setStrategy(s);
           return;
         }
-        pushBot("Admin code not recognized for this environment.");
+        pushBotUser("Admin code not recognized for this environment.");
         return;
       }
 
@@ -540,30 +574,30 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       if (!admin && captureStep !== "done") {
         if (captureStep === "name") {
           if (isGreetingOnly(text)) {
-            pushBot("Hello. May I have your name?");
+            pushBotUser("Hello. May I have your name?");
             return;
           }
           setLeadDraft((p) => ({ ...p, name: text }));
           setCaptureStep("email");
-          pushBot("Thank you. Please share your email.");
+          pushBotUser("Thank you. Please share your email.");
           return;
         }
 
         if (captureStep === "email") {
           if (!isValidEmail(text)) {
-            pushBot("Please enter a valid email (example: name@email.com).");
+            pushBotUser("Please enter a valid email (example: name@email.com).");
             return;
           }
           setLeadDraft((p) => ({ ...p, email: text.trim().toLowerCase() }));
           setCaptureStep("phone");
-          pushBot("Perfect. Your mobile number?");
+          pushBotUser("Perfect. Your mobile number?");
           return;
         }
 
         if (captureStep === "phone") {
           const phone = normalizePhone(text);
           if (!phone) {
-            pushBot("Please enter a valid phone number (10 digits).");
+            pushBotUser("Please enter a valid phone number (10 digits).");
             return;
           }
           const nextDraft = { ...leadDraft, phone };
@@ -574,16 +608,16 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             setLeadId(lead.id);
             setCaptureStep("done");
             void logEvent("lead_captured", { sessionId, leadId: lead.id });
-            pushBot("Done. How can I help you today?");
+            pushBotUser("Done. How can I help you today?");
           } else if (res?.setupRequired) {
             setCaptureStep("done");
-            pushBot(
+            pushBotUser(
               "Thanks. Concierge is available now. Lead capture is not configured on this environment yet, so details may not be saved.\n" +
                 (res?.hint ? `\nSetup hint: ${res.hint}\n` : "\n") +
                 "Admin can check: /api/health"
             );
           } else {
-            pushBot("Setup is still in progress. Please try again in a moment.");
+            pushBotUser("Setup is still in progress. Please try again in a moment.");
           }
           return;
         }
@@ -591,7 +625,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
       // Simple greeting handling (keeps chat clean, avoids models echoing old context)
       if (captureStep === "done" && !admin && isGreetingOnly(text)) {
-        pushBot("Hello. How can I help you today?");
+        pushBotUser("Hello. How can I help you today?");
         return;
       }
 
@@ -602,7 +636,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         leadId,
         conversationHistory,
       });
-      pushBot(reply, cta ? { cta } : null);
+      if (admin) pushBotAdmin(reply, cta ? { cta } : null);
+      else pushBotUser(reply, cta ? { cta } : null);
       void logEvent("chat_message", { sessionId, admin, chars: text.length });
 
       // Dashboard auto-refresh when in admin
@@ -1172,7 +1207,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           ) : (
             <>
               <div ref={listRef} className={styles.body}>
-                {messages.map((m) => (
+                {activeMessages.map((m) => (
                   <div
                     key={m.id}
                     className={[
