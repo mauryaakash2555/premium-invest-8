@@ -375,7 +375,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Lead capture gate (Micro-MVP)
-      if (captureStep !== "done") {
+      // IMPORTANT: never run lead capture in admin mode.
+      if (!admin && captureStep !== "done") {
         if (captureStep === "name") {
           if (isGreetingOnly(text)) {
             pushBot("Hello. May I have your name?");
