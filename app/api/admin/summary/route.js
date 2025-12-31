@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-export async function GET() {
+export async function GET(req) {
   const cookieStore = await cookies();
   if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
@@ -15,16 +15,52 @@ export async function GET() {
   } catch {
     return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
   }
+
+  const url = new URL(req.url);
+  const leadId = url.searchParams.get("leadId") || "";
+
+  // If a lead is requested, return full conversation history for that lead (newest last).
+  if (leadId) {
+    const [leadRes, convRes] = await Promise.all([
+      sb.from("leads").select("id,name,email,phone,created_at").eq("id", leadId).maybeSingle(),
+      sb
+        .from("conversations")
+        .select("id,lead_id,message,sender,created_at")
+        .eq("lead_id", leadId)
+        .order("created_at", { ascending: true })
+        .limit(500),
+    ]);
+
+    if (leadRes.error || convRes.error) {
+      return NextResponse.json(
+        { ok: false, error: leadRes.error?.message || convRes.error?.message || "Supabase error" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      ok: true,
+      lead: leadRes.data || null,
+      conversations: convRes.data || [],
+    });
+  }
+
   const start = new Date();
   start.setHours(0, 0, 0, 0);
 
-  const [leadsRes, convRes, errRes, revRes, scoreRes, aiRes] = await Promise.all([
+  const [leadsAllRes, leadsTodayRes, convTodayRes, errRes, revRes, scoreRes, aiRes, leadsCountRes] =
+    await Promise.all([
+    sb
+      .from("leads")
+      .select("id,name,email,phone,created_at")
+      .order("created_at", { ascending: false })
+      .limit(500),
     sb
       .from("leads")
       .select("id,name,email,phone,created_at")
       .gte("created_at", start.toISOString())
       .order("created_at", { ascending: false })
-      .limit(100),
+      .limit(500),
     sb
       .from("conversations")
       .select("id,lead_id,message,sender,created_at")
@@ -65,19 +101,33 @@ export async function GET() {
       .eq("event_type", "chat_ai")
       .order("created_at", { ascending: false })
       .limit(1000),
+
+    // Total leads (all-time)
+    sb.from("leads").select("id", { count: "exact", head: true }),
   ]);
 
-  if (leadsRes.error || convRes.error || errRes.error || revRes.error || scoreRes.error || aiRes.error) {
+  if (
+    leadsAllRes.error ||
+    leadsTodayRes.error ||
+    convTodayRes.error ||
+    errRes.error ||
+    revRes.error ||
+    scoreRes.error ||
+    aiRes.error ||
+    leadsCountRes.error
+  ) {
     return NextResponse.json(
       {
         ok: false,
         error:
-          leadsRes.error?.message ||
-          convRes.error?.message ||
+          leadsAllRes.error?.message ||
+          leadsTodayRes.error?.message ||
+          convTodayRes.error?.message ||
           errRes.error?.message ||
           revRes.error?.message ||
           scoreRes.error?.message ||
           aiRes.error?.message ||
+          leadsCountRes.error?.message ||
           "Supabase error",
       },
       { status: 500 }
@@ -103,7 +153,7 @@ export async function GET() {
   }
 
   const lead_score_counts = { HOT: 0, WARM: 0, COLD: 0 };
-  for (const l of leadsRes.data || []) {
+  for (const l of leadsTodayRes.data || []) {
     const tier = lead_scores[l.id]?.tier || "COLD";
     lead_score_counts[tier] = (lead_score_counts[tier] || 0) + 1;
   }
@@ -118,14 +168,20 @@ export async function GET() {
   return NextResponse.json({
     ok: true,
     today: {
-      leads: leadsRes.data || [],
-      conversations: convRes.data || [],
+      leads: leadsTodayRes.data || [],
+      conversations: convTodayRes.data || [],
       chat_errors_count: (errRes.data || []).length,
       revenue_total,
       revenue_entries: revenueEntries,
       lead_scores,
       lead_score_counts,
       ai_provider_counts,
+    },
+    all: {
+      leads: leadsAllRes.data || [],
+      total_leads: leadsCountRes.count ?? (leadsAllRes.data || []).length,
+      new_today: (leadsTodayRes.data || []).length,
+      total_conversations_today: (convTodayRes.data || []).length,
     },
   });
 }

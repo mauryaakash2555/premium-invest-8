@@ -46,6 +46,22 @@ function fmtINR(n) {
   }
 }
 
+function fmtDateTime(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(d);
+  } catch {
+    return d.toLocaleString();
+  }
+}
+
 function wantsHuman(text) {
   const t = String(text || "").toLowerCase();
   return (
@@ -87,11 +103,16 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [revenueNote, setRevenueNote] = useState("");
   const [revenueBusy, setRevenueBusy] = useState(false);
   const [revenueErr, setRevenueErr] = useState("");
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
+  const [leadDetail, setLeadDetail] = useState(null); // { lead, conversations }
+  const [leadDetailBusy, setLeadDetailBusy] = useState(false);
 
   function exitAdminMode() {
     setAdmin(false);
     setTab("chat");
     setDashboard(null);
+    setSelectedLeadId(null);
+    setLeadDetail(null);
     pushBot("Exited admin mode.");
   }
 
@@ -156,6 +177,19 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     if (!r.ok) return null;
     const j = await r.json().catch(() => null);
     return j?.ok ? j : null;
+  }
+
+  async function fetchLeadDetail(id) {
+    if (!id) return null;
+    setLeadDetailBusy(true);
+    try {
+      const r = await fetch(`/api/admin/summary?leadId=${encodeURIComponent(id)}`, { method: "GET" });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j?.ok) return null;
+      return j;
+    } finally {
+      setLeadDetailBusy(false);
+    }
   }
 
   async function upsertLead({ name, email, phone }) {
@@ -485,6 +519,26 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       </div>
                     </div>
                 </div>
+                <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    TOTAL LEADS{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {dashboard?.all?.total_leads ?? dashboard?.all?.leads?.length ?? 0}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    NEW TODAY{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {dashboard?.all?.new_today ?? 0}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    CONVERSATIONS{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {dashboard?.all?.total_conversations_today ?? dashboard?.today?.conversations?.length ?? 0}
+                    </span>
+                  </div>
+                </div>
                 <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", opacity: 0.85 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     HOT <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.HOT ?? 0}</span>
@@ -578,29 +632,112 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   ) : null}
               </div>
 
-              {(dashboard?.today?.leads || []).slice(0, 30).map((l) => (
-                <div key={l.id} className={styles.bubble}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                    <div style={{ fontWeight: 750 }}>{l.name || "Anonymous"}</div>
-                    <div
-                      style={{
-                        fontSize: 10,
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        padding: "6px 10px",
-                        borderRadius: 999,
-                        border: "1px solid rgba(192,160,98,0.28)",
-                        color: "rgba(192,160,98,0.95)",
-                        background: "rgba(0,0,0,0.28)",
-                      }}
-                    >
-                      {dashboard?.today?.lead_scores?.[l.id]?.tier || "COLD"}
-                    </div>
-                  </div>
-                  <div style={{ marginTop: 4, opacity: 0.65, fontSize: 12 }}>{l.email}</div>
-                  <div style={{ marginTop: 6, opacity: 0.95, fontSize: 13 }}>{l.phone}</div>
+              <div className={styles.bubble}>
+                <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                  Leads
                 </div>
-              ))}
+
+                <div className={styles.adminTableWrap}>
+                  <table className={styles.adminTable}>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(dashboard?.all?.leads || []).map((l) => (
+                        <tr
+                          key={l.id}
+                          className={selectedLeadId === l.id ? styles.adminRowActive : undefined}
+                          onClick={async () => {
+                            setSelectedLeadId(l.id);
+                            setLeadDetail(null);
+                            const d = await fetchLeadDetail(l.id);
+                            setLeadDetail(d);
+                          }}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          <td>{l.name || "Anonymous"}</td>
+                          <td className={styles.mono}>{l.email || "—"}</td>
+                          <td className={styles.mono}>{l.phone || "—"}</td>
+                          <td className={styles.mono}>{fmtDateTime(l.created_at)}</td>
+                        </tr>
+                      ))}
+                      {(!dashboard?.all?.leads || dashboard.all.leads.length === 0) ? (
+                        <tr>
+                          <td colSpan={4} style={{ opacity: 0.6, padding: "12px 10px" }}>
+                            No leads yet.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {selectedLeadId ? (
+                <div className={styles.bubble}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                      Conversation
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.actionBtn}
+                      onClick={() => {
+                        setSelectedLeadId(null);
+                        setLeadDetail(null);
+                      }}
+                      aria-label="Close conversation"
+                      title="Close"
+                    >
+                      CLOSE
+                    </button>
+                  </div>
+
+                  {leadDetailBusy ? (
+                    <div style={{ marginTop: 10, opacity: 0.7, fontSize: 12 }}>Loading…</div>
+                  ) : null}
+
+                  {!leadDetailBusy && leadDetail?.lead ? (
+                    <div style={{ marginTop: 10, opacity: 0.8, fontSize: 12, lineHeight: 1.5 }}>
+                      <div><span style={{ opacity: 0.6 }}>Name:</span> {leadDetail.lead.name || "Anonymous"}</div>
+                      <div><span style={{ opacity: 0.6 }}>Email:</span> {leadDetail.lead.email || "—"}</div>
+                      <div><span style={{ opacity: 0.6 }}>Phone:</span> {leadDetail.lead.phone || "—"}</div>
+                      <div><span style={{ opacity: 0.6 }}>Captured:</span> {fmtDateTime(leadDetail.lead.created_at)}</div>
+                    </div>
+                  ) : null}
+
+                  <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
+                    {(leadDetail?.conversations || []).map((c) => (
+                      <div
+                        key={c.id}
+                        style={{
+                          padding: "10px 12px",
+                          borderRadius: 14,
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          background: c.sender === "user" ? "rgba(255,255,255,0.04)" : "rgba(192,160,98,0.06)",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: 10, opacity: 0.7, fontSize: 11 }}>
+                          <span style={{ letterSpacing: "0.12em", textTransform: "uppercase" }}>{c.sender}</span>
+                          <span className={styles.mono}>{fmtDateTime(c.created_at)}</span>
+                        </div>
+                        <div style={{ marginTop: 6, whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.45 }}>
+                          {c.message}
+                        </div>
+                      </div>
+                    ))}
+                    {leadDetail && (leadDetail?.conversations || []).length === 0 ? (
+                      <div style={{ opacity: 0.6, fontSize: 12 }}>No conversations for this lead yet.</div>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
           ) : (
             <>

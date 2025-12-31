@@ -150,6 +150,63 @@ transform-style: preserve-3d;
   white-space: pre-line;
 }
 
+.adminTableWrap {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.20);
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 520px;
+}
+
+.adminTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 10px 10px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.70);
+  background: rgba(0, 0, 0, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.adminTable tbody td {
+  padding: 10px 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.90);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+}
+
+.adminTable tbody tr {
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.adminTable tbody tr:hover {
+  background: rgba(192, 160, 98, 0.06);
+}
+
+.adminRowActive {
+  background: rgba(192, 160, 98, 0.10) !important;
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.01em;
+}
+
 .actions {
   display: flex;
   gap: 10px;
