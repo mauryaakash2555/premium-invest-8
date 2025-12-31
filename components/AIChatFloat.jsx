@@ -152,10 +152,16 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     el.scrollTop = el.scrollHeight;
   }, [enabled, open, messages.length, busy]);
 
-  function pushBot(text) {
+  function pushBot(text, extra = null) {
     setMessages((prev) => [
       ...prev,
-      { id: "b_" + Date.now().toString(16), sender: "bot", at: todayISO(), text: String(text || "") },
+      {
+        id: "b_" + Date.now().toString(16),
+        sender: "bot",
+        at: todayISO(),
+        text: String(text || ""),
+        ...(extra && typeof extra === "object" ? extra : {}),
+      },
     ]);
   }
 
@@ -230,12 +236,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           if (m.sender === "user" && isGreetingOnly(m.text)) return false;
           return true;
         })
-        .slice(-5)
+        .slice(-10)
         .map((m) => ({
-          sender: m.sender,
-          text: String(m.text || "").trim().slice(0, 2000),
+          role: m.sender === "user" ? "user" : "bot",
+          message: String(m.text || "").trim().slice(0, 2000),
         }))
-        .filter((m) => m.text);
+        .filter((m) => m.message);
     } catch {
       return [];
     }
@@ -261,7 +267,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       };
     }
     if (!r.ok || !j?.ok) return { reply: "Temporary issue. Please try again.", warn: j?.error || "bad_response" };
-    return { reply: j.reply || "", warn: j.warn };
+    return {
+      reply: j.reply || "",
+      warn: j.warn,
+      cta: j.cta || null,
+      intent: j.intent || null,
+    };
   }
 
   async function logEvent(event_type, data = {}) {
@@ -422,13 +433,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply } = await sendChat({
+      const { reply, cta } = await sendChat({
         message: text,
         mode: admin ? "admin" : "user",
         leadId,
         conversationHistory,
       });
-      pushBot(reply);
+      pushBot(reply, cta ? { cta } : null);
       void logEvent("chat_message", { sessionId, admin, chars: text.length });
 
       // Dashboard auto-refresh when in admin
@@ -810,6 +821,17 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                     ].join(" ")}
                   >
                     {m.text}
+                    {m?.cta?.label && m?.cta?.href ? (
+                      <a
+                        className={styles.consultCta}
+                        href={whatsappHref || m.cta.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => void logEvent("consultation_click", { sessionId, leadId })}
+                      >
+                        {m.cta.label}
+                      </a>
+                    ) : null}
                   </div>
                 ))}
 

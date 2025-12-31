@@ -179,11 +179,12 @@ export async function GET(req) {
     lead_score_counts[tier] = (lead_score_counts[tier] || 0) + 1;
   }
 
-  const ai_provider_counts = { gemini: 0, groq: 0 };
+  const ai_provider_counts = { gemini: 0, groq: 0, rule: 0 };
   for (const e of aiRes.data || []) {
     const p = String(e?.data?.provider || "").toLowerCase();
     if (p === "groq") ai_provider_counts.groq += 1;
     else if (p === "gemini") ai_provider_counts.gemini += 1;
+    else if (p === "rule") ai_provider_counts.rule += 1;
   }
 
   // Sort all leads: HOT first (highest score), then WARM, then COLD; newest as tie-breaker.

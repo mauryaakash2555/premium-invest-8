@@ -5,19 +5,26 @@ import { getAIEnvSafe } from "@/lib/env";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-const reqSchema = z.object({
-  message: z.string().min(1).max(6000),
-  // The client sends the last few messages so Gemini can answer with context.
-  // Shape is intentionally simple + strict to avoid prompt-injection blobs.
-  conversationHistory: z
-    .array(
+const historySchema = z
+  .array(
+    z.union([
       z.object({
+        // New client format
+        role: z.enum(["user", "bot"]),
+        message: z.string().min(1).max(6000),
+      }),
+      z.object({
+        // Backwards compatible format
         sender: z.enum(["user", "bot"]),
         text: z.string().min(1).max(6000),
-      })
-    )
-    .max(20)
-    .optional(),
+      }),
+    ])
+  )
+  .max(20);
+
+const reqSchema = z.object({
+  message: z.string().min(1).max(6000),
+  conversationHistory: historySchema.optional(),
   conversationId: z.string().min(1).max(200).optional(),
   leadId: z.string().uuid().optional(),
   mode: z.enum(["user", "admin"]).optional(),
@@ -116,6 +123,7 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
     "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
     "Do NOT include greetings like 'Welcome to BM Wealth' unless the user only greets and asks nothing else.\n" +
     "Do NOT insert filler greetings like 'hi', 'hello', 'hey' inside sentences.\n" +
+    "You MAY refer to the user's earlier messages when helpful (example: 'As you mentioned earlier...') and connect the context naturally.\n" +
     "Do NOT list all topics; respond only to what the user asked.\n" +
     "Keep answers concise (3-4 sentences max).";
 
@@ -201,14 +209,16 @@ function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
     reasons.push("invest_intent");
   }
 
-  if (getStartedIntent) {
-    score += 25;
-    reasons.push("get_started");
-  }
-
+  // Hard intent mapping (as requested):
+  // - Mentioned amount => at least WARM 60
+  // - Asked "how to invest / get started" => at least HOT 85
   if (amountMentioned) {
-    score += 40;
-    reasons.push("amount");
+    score = Math.max(score, 60);
+    reasons.push("amount_warm60");
+  }
+  if (getStartedIntent) {
+    score = Math.max(score, 85);
+    reasons.push("how_to_invest_hot85");
   }
 
   if (veryEngaged) {
@@ -267,6 +277,41 @@ async function updateLeadScoreColumnSafe(leadId, score) {
   } catch {
     // ignore
   }
+}
+
+function detectInvestmentIntent(message) {
+  const raw = String(message || "");
+  const t = raw.toLowerCase();
+  const hasInrContext = /\b(inr|rs\.?|rupees)\b/.test(t) || /₹/.test(raw);
+  const hasIndianUnit = /\b(k|lakh|lakhs|lac|lacs|crore|cr)\b/.test(t);
+  const amountLike =
+    /₹\s*\d{1,3}(?:,\d{3})+(?:\.\d+)?/.test(raw) ||
+    /₹\s*\d+(?:\.\d+)?/.test(raw) ||
+    /\b\d+(?:\.\d+)?\s*(?:k|lakh|lakhs|lac|lacs|crore|cr)\b/i.test(raw);
+  const amountMentioned = amountLike && (hasInrContext || hasIndianUnit);
+  const howToInvest = /\b(how\s+to\s+invest|get\s+started|start\s+investing|begin\s+investing|how\s+do\s+i\s+invest)\b/.test(t);
+  const wantsBest = /\b(which\s+fund|best\s+fund|which\s+is\s+best|recommend|suggest)\b/.test(t);
+  return { amountMentioned, howToInvest, wantsBest };
+}
+
+function buildConsultationReply({ userName = "", amountMentioned, howToInvest }) {
+  const name = userName ? `${userName}, ` : "";
+  const first =
+    amountMentioned
+      ? `${name}that’s a great start. Many investors use SIP for regular investing.`
+      : `${name}many investors start with SIP for regular investing.`;
+
+  const body =
+    "We distribute various mutual fund options (equity/debt/hybrid categories) through our AMFI-registered platform.\n\n" +
+    "To suggest suitable investment products, our advisors will understand:\n" +
+    "- Your investment goals\n" +
+    "- Investment timeline\n" +
+    "- Risk comfort level\n\n" +
+    "Book consultation for personalized guidance.\n\n" +
+    "Would you like to schedule a call with our advisor?";
+
+  // Keep it concise; avoid categories/allocations/returns.
+  return `${first}\n\n${body}`;
 }
 
 async function saveLeadScore({ leadId, score }) {
@@ -452,8 +497,21 @@ export async function POST(req) {
   }
 
   const conversationHistory = (parsed.data.conversationHistory || [])
-    .filter((x) => x && typeof x.text === "string" && (x.sender === "user" || x.sender === "bot"))
-    .slice(-5)
+    .map((x) => {
+      if (x && typeof x === "object") {
+        if (Object.prototype.hasOwnProperty.call(x, "role") || Object.prototype.hasOwnProperty.call(x, "message")) {
+          const role = x.role === "user" ? "user" : "bot";
+          const message = String(x.message || "").trim();
+          return { sender: role, text: message };
+        }
+        const sender = x.sender === "user" ? "user" : "bot";
+        const text = String(x.text || "").trim();
+        return { sender, text };
+      }
+      return null;
+    })
+    .filter((x) => x && (x.sender === "user" || x.sender === "bot") && typeof x.text === "string")
+    .slice(-10)
     .map((x) => ({
       sender: x.sender,
       text: String(x.text || "").trim().slice(0, 2000),
@@ -494,6 +552,56 @@ export async function POST(req) {
       reply = await callClaude({ apiKey: env.ANTHROPIC_API_KEY, userText: message });
     } else {
       const userName = await getLeadNameSafe(leadId);
+      const intent = detectInvestmentIntent(message);
+
+      // Log intent signals (best-effort)
+      if (leadId) {
+        await logEventSafe({
+          leadId,
+          event_type: "lead_intent",
+          data: {
+            conversationId,
+            amountMentioned: intent.amountMentioned,
+            howToInvest: intent.howToInvest,
+            wantsBest: intent.wantsBest,
+            message: String(message || "").slice(0, 240),
+          },
+        });
+      }
+
+      // SEBI-safe selling logic: when the user shows investment intent, offer a consultation CTA.
+      const shouldOfferConsultation = intent.amountMentioned || intent.howToInvest || intent.wantsBest;
+      const cta = shouldOfferConsultation
+        ? {
+            label: "Book Free Consultation",
+            href: "/contact",
+          }
+        : null;
+
+      // If intent is strong, respond with a guided consultation prompt (still SEBI-safe).
+      if (shouldOfferConsultation) {
+        reply = buildConsultationReply({
+          userName,
+          amountMentioned: intent.amountMentioned,
+          howToInvest: intent.howToInvest,
+        });
+        // Persist bot message (best-effort) even on this early-return path.
+        try {
+          await saveConversation({ leadId, message: reply, sender: "bot" });
+        } catch {
+          // ignore
+        }
+
+        // Log provider used for admin visibility (this path is rule-based).
+        await logEventSafe({
+          leadId,
+          event_type: "chat_ai",
+          data: { provider: "rule", conversationId, mode: "user", fallback_from: null },
+        });
+
+        return NextResponse.json({ ok: true, reply, conversationId, cta, intent });
+      }
+
       let provider = "gemini";
       let fallbackFrom = null;
 
