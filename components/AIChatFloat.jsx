@@ -689,7 +689,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      {exportBusy ? "Exporting…" : "Export"}
+                      <span className={styles.exportBtnText}>{exportBusy ? "Exporting…" : "Export"}</span>
                     </button>
                   </div>
                 </div>

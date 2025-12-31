@@ -161,7 +161,10 @@ transform-style: preserve-3d;
 .exportBar {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .exportSelect {
@@ -173,6 +176,7 @@ transform-style: preserve-3d;
   color: rgba(255, 255, 255, 0.85);
   font-size: 12px;
   outline: none;
+  max-width: 140px;
 }
 
 .exportBtn {
@@ -190,6 +194,7 @@ transform-style: preserve-3d;
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .exportBtn:disabled {
@@ -201,6 +206,22 @@ transform-style: preserve-3d;
   margin-top: 8px;
   font-size: 12px;
   opacity: 0.75;
+}
+
+.exportBtnText {
+  display: inline;
+}
+
+@media (max-width: 420px) {
+  .exportSelect {
+    max-width: 120px;
+  }
+  .exportBtn {
+    padding: 0 10px;
+  }
+  .exportBtnText {
+    display: none;
+  }
 }
 
 .adminTable {
