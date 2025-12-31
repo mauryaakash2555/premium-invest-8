@@ -436,34 +436,44 @@ async function callClaude({ apiKey, userText }) {
     `You are BM Wealth Admin AI assistant. Provide operational guidance for BM Wealth business (analytics, funnels, copy). ` +
     `Do not produce personalized investment advice. Always keep compliance text available: "${COMPLIANCE_TEXT}"`;
 
-  const body = {
-    model: "claude-3-5-sonnet-20241022",
-    max_tokens: 800,
-    temperature: 0.4,
-    system,
-    messages: [{ role: "user", content: userText }],
-  };
+  const candidates = ["claude-sonnet-4-20250514", "claude-3-7-sonnet-latest", "claude-3-5-sonnet-latest"];
 
-  const r = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify(body),
-  });
+  let lastErr = null;
+  for (const model of candidates) {
+    const body = {
+      model,
+      max_tokens: 800,
+      temperature: 0.4,
+      system,
+      messages: [{ role: "user", content: userText }],
+    };
 
-  if (!r.ok) {
-    const t = await r.text().catch(() => "");
-    throw new Error(`Claude error: ${r.status} ${t}`);
+    const r = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!r.ok) {
+      const t = await r.text().catch(() => "");
+      lastErr = new Error(`Claude error: ${r.status} ${t}`);
+      // Try next model on 404 (model not found). Otherwise, fail fast.
+      if (r.status === 404) continue;
+      throw lastErr;
+    }
+
+    const json = await r.json();
+    const text =
+      json?.content?.map((c) => (c?.type === "text" ? c.text : "")).filter(Boolean).join("") ||
+      "Admin assistant ready.";
+    return text.trim();
   }
 
-  const json = await r.json();
-  const text =
-    json?.content?.map((c) => (c?.type === "text" ? c.text : "")).filter(Boolean).join("") ||
-    "Admin assistant ready.";
-  return text.trim();
+  throw lastErr || new Error("Claude error: no_model_available");
 }
 
 export async function POST(req) {

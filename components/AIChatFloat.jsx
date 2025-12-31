@@ -141,7 +141,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       sender: "bot",
       at: todayISO(),
       text:
-        `${dayGreeting()} Welcome to BM Wealth.\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
+        `${dayGreeting()}\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
     },
   ]);
 
