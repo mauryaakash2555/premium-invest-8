@@ -427,6 +427,17 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       </div>
                     </div>
                 </div>
+                <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", opacity: 0.85 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    HOT <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.HOT ?? 0}</span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    WARM <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.WARM ?? 0}</span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    COLD <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.COLD ?? 0}</span>
+                  </div>
+                </div>
 
                   <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                     <input
@@ -496,7 +507,23 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
               {(dashboard?.today?.leads || []).slice(0, 30).map((l) => (
                 <div key={l.id} className={styles.bubble}>
-                  <div style={{ fontWeight: 750 }}>{l.name || "Anonymous"}</div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <div style={{ fontWeight: 750 }}>{l.name || "Anonymous"}</div>
+                    <div
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: "0.14em",
+                        textTransform: "uppercase",
+                        padding: "6px 10px",
+                        borderRadius: 999,
+                        border: "1px solid rgba(192,160,98,0.28)",
+                        color: "rgba(192,160,98,0.95)",
+                        background: "rgba(0,0,0,0.28)",
+                      }}
+                    >
+                      {dashboard?.today?.lead_scores?.[l.id]?.tier || "COLD"}
+                    </div>
+                  </div>
                   <div style={{ marginTop: 4, opacity: 0.65, fontSize: 12 }}>{l.email}</div>
                   <div style={{ marginTop: 6, opacity: 0.95, fontSize: 13 }}>{l.phone}</div>
                 </div>

@@ -22,6 +22,53 @@ async function saveConversation({ leadId, message, sender }) {
   await sb.from("conversations").insert({ lead_id: leadId, message, sender }).throwOnError();
 }
 
+function scoreLeadMessage(text) {
+  const raw = String(text || "");
+  const t = raw.toLowerCase();
+
+  // Signals: invest intent + amount mentioned ⇒ HOT
+  const investIntent =
+    /\b(invest|investing|sip|mutual\s*fund|mf\b|pms|portfolio|allocation|lumpsum|swp|elss|equity|debt|goal|retirement|wealth)\b/.test(
+      t
+    );
+
+  const questionish =
+    /\?/.test(raw) ||
+    /\b(how|what|which|can i|should i|help me|guide me|tell me)\b/.test(t);
+
+  // Amount detection: require INR context or Indian units (avoid phone-like numbers).
+  const hasInrContext = /\b(inr|rs\.?|rupees)\b/.test(t) || /₹/.test(raw);
+  const hasIndianUnit = /\b(k|lakh|lakhs|lac|lacs|crore|cr)\b/.test(t);
+  const amountLike =
+    /₹\s*\d{1,3}(?:,\d{3})+(?:\.\d+)?/.test(raw) ||
+    /₹\s*\d+(?:\.\d+)?/.test(raw) ||
+    /\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b/.test(raw) ||
+    /\b\d+(?:\.\d+)?\s*(?:k|lakh|lakhs|lac|lacs|crore|cr)\b/i.test(raw);
+  const amountMentioned = amountLike && (hasInrContext || hasIndianUnit);
+
+  let tier = "COLD";
+  if (amountMentioned && investIntent) tier = "HOT";
+  else if (investIntent || questionish) tier = "WARM";
+
+  return {
+    tier,
+    signals: { investIntent, amountMentioned, questionish },
+  };
+}
+
+async function saveLeadScore({ leadId, score }) {
+  if (!leadId) return;
+  const sb = supabaseAdmin();
+  await sb
+    .from("events")
+    .insert({
+      lead_id: leadId,
+      event_type: "lead_score",
+      data: score,
+    })
+    .throwOnError();
+}
+
 async function callGemini({ apiKey, userText }) {
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
@@ -128,6 +175,16 @@ export async function POST(req) {
     await saveConversation({ leadId, message, sender: "user" });
   } catch {
     // ignore if DB not configured yet
+  }
+
+  // Lead qualification (best-effort; only when a real lead exists)
+  if (leadId && mode !== "admin") {
+    try {
+      const score = scoreLeadMessage(message);
+      await saveLeadScore({ leadId, score });
+    } catch {
+      // ignore if DB not configured yet
+    }
   }
 
   try {
