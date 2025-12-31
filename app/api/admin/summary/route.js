@@ -47,6 +47,14 @@ export async function GET(req) {
 
   const start = new Date();
   start.setHours(0, 0, 0, 0);
+  const weekStart = new Date(start);
+  {
+    const day = weekStart.getDay(); // 0 Sun..6 Sat
+    const diff = (day === 0 ? -6 : 1) - day; // Monday start
+    weekStart.setDate(weekStart.getDate() + diff);
+  }
+  const monthStart = new Date(start);
+  monthStart.setDate(1);
 
   const [leadsAllRes, leadsTodayRes, convTodayRes, errRes, revRes, scoreRes, aiRes, leadsCountRes] =
     await Promise.all([
@@ -75,23 +83,23 @@ export async function GET(req) {
       .eq("event_type", "chat_error")
       .limit(1000),
 
-    // Manual revenue tracking (admin-only UI)
+    // Revenue tracking (manual for now). Keep backwards compatibility with older "revenue_manual" events.
     sb
       .from("events")
       .select("id,lead_id,event_type,data,created_at")
-      .gte("created_at", start.toISOString())
-      .eq("event_type", "revenue_manual")
+      .gte("created_at", monthStart.toISOString())
+      .in("event_type", ["revenue", "revenue_manual"])
       .order("created_at", { ascending: false })
-      .limit(200),
+      .limit(1000),
 
     // Lead qualification (HOT/WARM/COLD)
     sb
       .from("events")
       .select("id,lead_id,data,created_at")
-      .gte("created_at", start.toISOString())
+      // latest score for each lead (no date filter, bounded by limit)
       .eq("event_type", "lead_score")
       .order("created_at", { ascending: false })
-      .limit(1000),
+      .limit(2000),
 
     // AI provider usage (Gemini vs Groq)
     sb
@@ -135,7 +143,18 @@ export async function GET(req) {
   }
 
   const revenueEntries = revRes.data || [];
-  const revenue_total = revenueEntries.reduce((sum, e) => {
+  const revenue_today = revenueEntries.reduce((sum, e) => {
+    if (!e?.created_at || e.created_at < start.toISOString()) return sum;
+    const n = Number(e?.data?.amount);
+    return Number.isFinite(n) ? sum + n : sum;
+  }, 0);
+  const revenue_week = revenueEntries.reduce((sum, e) => {
+    if (!e?.created_at || e.created_at < weekStart.toISOString()) return sum;
+    const n = Number(e?.data?.amount);
+    return Number.isFinite(n) ? sum + n : sum;
+  }, 0);
+  const revenue_month = revenueEntries.reduce((sum, e) => {
+    if (!e?.created_at || e.created_at < monthStart.toISOString()) return sum;
     const n = Number(e?.data?.amount);
     return Number.isFinite(n) ? sum + n : sum;
   }, 0);
@@ -144,9 +163,11 @@ export async function GET(req) {
   for (const e of scoreRes.data || []) {
     const lid = e?.lead_id;
     if (!lid || lead_scores[lid]) continue; // first seen is latest (ordered desc)
+    const scoreNum = Number(e?.data?.score);
     const tier = String(e?.data?.tier || "").toUpperCase();
     lead_scores[lid] = {
       tier: tier === "HOT" || tier === "WARM" ? tier : "COLD",
+      score: Number.isFinite(scoreNum) ? scoreNum : null,
       signals: e?.data?.signals || null,
       at: e?.created_at || null,
     };
@@ -165,20 +186,32 @@ export async function GET(req) {
     else if (p === "gemini") ai_provider_counts.gemini += 1;
   }
 
+  // Sort all leads: HOT first (highest score), then WARM, then COLD; newest as tie-breaker.
+  const allLeadsSorted = (leadsAllRes.data || []).slice().sort((a, b) => {
+    const as = lead_scores[a.id]?.score ?? -1;
+    const bs = lead_scores[b.id]?.score ?? -1;
+    if (bs !== as) return bs - as;
+    const at = a?.created_at ? new Date(a.created_at).getTime() : 0;
+    const bt = b?.created_at ? new Date(b.created_at).getTime() : 0;
+    return bt - at;
+  });
+
   return NextResponse.json({
     ok: true,
     today: {
       leads: leadsTodayRes.data || [],
       conversations: convTodayRes.data || [],
       chat_errors_count: (errRes.data || []).length,
-      revenue_total,
+      revenue_today,
+      revenue_week,
+      revenue_month,
       revenue_entries: revenueEntries,
       lead_scores,
       lead_score_counts,
       ai_provider_counts,
     },
     all: {
-      leads: leadsAllRes.data || [],
+      leads: allLeadsSorted,
       total_leads: leadsCountRes.count ?? (leadsAllRes.data || []).length,
       new_today: (leadsTodayRes.data || []).length,
       total_conversations_today: (convTodayRes.data || []).length,

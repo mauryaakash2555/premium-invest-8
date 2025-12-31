@@ -155,38 +155,118 @@ async function saveConversation({ leadId, message, sender }) {
   await sb.from("conversations").insert({ lead_id: leadId, message, sender }).throwOnError();
 }
 
-function scoreLeadMessage(text) {
-  const raw = String(text || "");
+function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
+  const raw = String(message || "");
   const t = raw.toLowerCase();
 
-  // Signals: invest intent + amount mentioned ⇒ HOT
-  const investIntent =
-    /\b(invest|investing|sip|mutual\s*fund|mf\b|pms|portfolio|allocation|lumpsum|swp|elss|equity|debt|goal|retirement|wealth)\b/.test(
-      t
-    );
-
   const questionish =
-    /\?/.test(raw) ||
-    /\b(how|what|which|can i|should i|help me|guide me|tell me)\b/.test(t);
+    /\?/.test(raw) || /\b(how|what|which|can i|should i|help me|guide me|tell me)\b/.test(t);
 
-  // Amount detection: require INR context or Indian units (avoid phone-like numbers).
+  const getStartedIntent =
+    /\b(how\s+to\s+invest|get\s+started|start\s+investing|begin\s+investing|how\s+do\s+i\s+invest)\b/.test(t);
+
+  const investIntent = /\b(invest|investing|sip|mutual\s*fund|mf\b|portfolio)\b/.test(t);
+
+  // Amount detection (avoid phone numbers by requiring INR context or Indian units).
   const hasInrContext = /\b(inr|rs\.?|rupees)\b/.test(t) || /₹/.test(raw);
   const hasIndianUnit = /\b(k|lakh|lakhs|lac|lacs|crore|cr)\b/.test(t);
   const amountLike =
     /₹\s*\d{1,3}(?:,\d{3})+(?:\.\d+)?/.test(raw) ||
     /₹\s*\d+(?:\.\d+)?/.test(raw) ||
-    /\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b/.test(raw) ||
     /\b\d+(?:\.\d+)?\s*(?:k|lakh|lakhs|lac|lacs|crore|cr)\b/i.test(raw);
   const amountMentioned = amountLike && (hasInrContext || hasIndianUnit);
 
-  let tier = "COLD";
-  if (amountMentioned && investIntent) tier = "HOT";
-  else if (investIntent || questionish) tier = "WARM";
+  const contactPoints = (hasEmail ? 1 : 0) + (hasPhone ? 1 : 0);
+  const engaged = Number(userMessageCount || 0) >= 3;
+  const veryEngaged = Number(userMessageCount || 0) >= 5;
+
+  let score = 0;
+  const reasons = [];
+
+  if (contactPoints === 2) {
+    score += 30;
+    reasons.push("contact_email_phone");
+  } else if (contactPoints === 1) {
+    score += 20;
+    reasons.push("contact_partial");
+  }
+
+  if (questionish) {
+    score += 10;
+    reasons.push("questions");
+  }
+
+  if (investIntent) {
+    score += 15;
+    reasons.push("invest_intent");
+  }
+
+  if (getStartedIntent) {
+    score += 25;
+    reasons.push("get_started");
+  }
+
+  if (amountMentioned) {
+    score += 40;
+    reasons.push("amount");
+  }
+
+  if (veryEngaged) {
+    score += 15;
+    reasons.push("very_engaged");
+  } else if (engaged) {
+    score += 10;
+    reasons.push("engaged");
+  }
+
+  score = Math.max(0, Math.min(100, score));
+  const tier = score >= 80 ? "HOT" : score >= 40 ? "WARM" : "COLD";
 
   return {
+    score,
     tier,
-    signals: { investIntent, amountMentioned, questionish },
+    reasons,
+    signals: { questionish, investIntent, getStartedIntent, amountMentioned, hasEmail, hasPhone, userMessageCount },
   };
+}
+
+async function getLeadContactSafe(leadId) {
+  if (!leadId) return { hasEmail: false, hasPhone: false };
+  try {
+    const sb = supabaseAdmin();
+    const { data, error } = await sb.from("leads").select("email,phone").eq("id", leadId).maybeSingle();
+    if (error) return { hasEmail: false, hasPhone: false };
+    return { hasEmail: Boolean(data?.email), hasPhone: Boolean(data?.phone) };
+  } catch {
+    return { hasEmail: false, hasPhone: false };
+  }
+}
+
+async function countUserMessagesSafe(leadId) {
+  if (!leadId) return 0;
+  try {
+    const sb = supabaseAdmin();
+    const { count, error } = await sb
+      .from("conversations")
+      .select("id", { count: "exact", head: true })
+      .eq("lead_id", leadId)
+      .eq("sender", "user");
+    if (error) return 0;
+    return Number(count || 0);
+  } catch {
+    return 0;
+  }
+}
+
+async function updateLeadScoreColumnSafe(leadId, score) {
+  if (!leadId) return;
+  try {
+    const sb = supabaseAdmin();
+    // Column may not exist yet in some environments; ignore errors.
+    await sb.from("leads").update({ lead_score: score }).eq("id", leadId);
+  } catch {
+    // ignore
+  }
 }
 
 async function saveLeadScore({ leadId, score }) {
@@ -390,8 +470,14 @@ export async function POST(req) {
   // Lead qualification (best-effort; only when a real lead exists)
   if (leadId && mode !== "admin") {
     try {
-      const score = scoreLeadMessage(message);
+      const [{ hasEmail, hasPhone }, userMessageCount] = await Promise.all([
+        getLeadContactSafe(leadId),
+        countUserMessagesSafe(leadId),
+      ]);
+
+      const score = computeLeadScore({ message, hasEmail, hasPhone, userMessageCount });
       await saveLeadScore({ leadId, score });
+      await updateLeadScoreColumnSafe(leadId, score.score);
     } catch {
       // ignore if DB not configured yet
     }

@@ -8,6 +8,7 @@ create table if not exists public.leads (
   name text,
   email text unique,
   phone text,
+  lead_score integer default 0,
   created_at timestamp with time zone default now()
 );
 

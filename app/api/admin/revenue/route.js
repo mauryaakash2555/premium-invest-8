@@ -7,6 +7,7 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 const schema = z.object({
   amount: z.number().finite().positive().max(1_000_000_000_000),
   currency: z.string().max(8).optional(),
+  source: z.enum(["Affiliate", "Lead Sale", "Product", "Other"]).optional(),
   note: z.string().max(240).optional(),
   leadId: z.string().uuid().optional(),
 });
@@ -27,6 +28,7 @@ export async function POST(req) {
   const parsed = schema.safeParse({
     amount,
     currency: body?.currency,
+    source: body?.source,
     note: body?.note,
     leadId: body?.leadId,
   });
@@ -41,15 +43,15 @@ export async function POST(req) {
     return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
   }
 
-  const { amount: a, currency, note, leadId } = parsed.data;
+  const { amount: a, currency, source, note, leadId } = parsed.data;
   const { error } = await sb.from("events").insert({
     lead_id: leadId ?? null,
-    event_type: "revenue_manual",
+    event_type: "revenue",
     data: {
       amount: a,
       currency: currency || "INR",
       note: note || null,
-      source: "admin_dashboard",
+      source: source || "Other",
     },
   });
 

@@ -28,11 +28,17 @@ function todayISO() {
 function dayGreeting() {
   try {
     const h = new Date().getHours();
-    if (h < 12) return "Good morning";
-    if (h < 17) return "Good afternoon";
-    return "Good evening";
+    // User-local time ranges:
+    // 5 AM - 12 PM: Good morning
+    // 12 PM - 5 PM: Good afternoon
+    // 5 PM - 10 PM: Good evening
+    // 10 PM - 5 AM: Hello
+    if (h >= 5 && h < 12) return "Good morning!";
+    if (h >= 12 && h < 17) return "Good afternoon!";
+    if (h >= 17 && h < 22) return "Good evening!";
+    return "Hello!";
   } catch {
-    return "Welcome";
+    return "Hello!";
   }
 }
 
@@ -100,9 +106,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [tab, setTab] = useState("chat"); // chat|dashboard
   const [humanReady, setHumanReady] = useState(false);
   const [revenueAmount, setRevenueAmount] = useState("");
+  const [revenueSource, setRevenueSource] = useState("Other"); // Affiliate|Lead Sale|Product|Other
   const [revenueNote, setRevenueNote] = useState("");
   const [revenueBusy, setRevenueBusy] = useState(false);
   const [revenueErr, setRevenueErr] = useState("");
+  const [revenueModalOpen, setRevenueModalOpen] = useState(false);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [leadDetail, setLeadDetail] = useState(null); // { lead, conversations }
   const [leadDetailBusy, setLeadDetailBusy] = useState(false);
@@ -133,7 +141,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       sender: "bot",
       at: todayISO(),
       text:
-        `${dayGreeting()}.\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
+        `${dayGreeting()} Welcome to BM Wealth.\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
     },
   ]);
 
@@ -286,6 +294,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         body: JSON.stringify({
           amount,
           currency: "INR",
+          source: revenueSource,
           note: String(revenueNote || "").trim() || undefined,
         }),
       });
@@ -295,7 +304,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         return;
       }
       setRevenueAmount("");
+      setRevenueSource("Other");
       setRevenueNote("");
+      setRevenueModalOpen(false);
       const dash = await refreshDashboard();
       setDashboard(dash);
     } finally {
@@ -513,11 +524,38 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                     </div>
                   </div>
                     <div>
-                      <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE</div>
+                      <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE TODAY</div>
                       <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
-                        {fmtINR(dashboard?.today?.revenue_total ?? 0)}
+                        {fmtINR(dashboard?.today?.revenue_today ?? 0)}
                       </div>
                     </div>
+                </div>
+                <div style={{ marginTop: 10, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    THIS WEEK{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {fmtINR(dashboard?.today?.revenue_week ?? 0)}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    THIS MONTH{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {fmtINR(dashboard?.today?.revenue_month ?? 0)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    onClick={() => {
+                      setRevenueErr("");
+                      setRevenueModalOpen(true);
+                    }}
+                    aria-label="Add revenue"
+                    title="Add Revenue"
+                    style={{ width: 110 }}
+                  >
+                    ADD REV
+                  </button>
                 </div>
                 <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
@@ -566,70 +604,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </div>
                 </div>
 
-                  <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                    <input
-                      value={revenueAmount}
-                      onChange={(e) => {
-                        setRevenueAmount(e.target.value);
-                        if (revenueErr) setRevenueErr("");
-                      }}
-                      placeholder="Add revenue (₹)"
-                      inputMode="decimal"
-                      style={{
-                        flex: "0 0 140px",
-                        height: 36,
-                        borderRadius: 10,
-                        padding: "0 12px",
-                        border: "1px solid rgba(255,255,255,0.10)",
-                        background: "rgba(0,0,0,0.35)",
-                        color: "rgba(255,255,255,0.92)",
-                        outline: "none",
-                        fontSize: 13,
-                      }}
-                    />
-                    <input
-                      value={revenueNote}
-                      onChange={(e) => {
-                        setRevenueNote(e.target.value);
-                        if (revenueErr) setRevenueErr("");
-                      }}
-                      placeholder="Note (optional)"
-                      style={{
-                        flex: "1 1 160px",
-                        height: 36,
-                        borderRadius: 10,
-                        padding: "0 12px",
-                        border: "1px solid rgba(255,255,255,0.10)",
-                        background: "rgba(0,0,0,0.35)",
-                        color: "rgba(255,255,255,0.92)",
-                        outline: "none",
-                        fontSize: 13,
-                      }}
-                    />
-                    <button
-                      type="button"
-                      disabled={revenueBusy}
-                      onClick={() => void addRevenue()}
-                      style={{
-                        height: 36,
-                        borderRadius: 10,
-                        padding: "0 14px",
-                        border: "1px solid rgba(192,160,98,0.55)",
-                        background: revenueBusy ? "rgba(192,160,98,0.15)" : "rgba(0,0,0,0.35)",
-                        color: "rgba(192,160,98,0.95)",
-                        fontWeight: 800,
-                        letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                        fontSize: 11,
-                        cursor: revenueBusy ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      Add
-                    </button>
-                  </div>
-                  {revenueErr ? (
-                    <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,120,120,0.95)" }}>{revenueErr}</div>
-                  ) : null}
+                {revenueErr ? (
+                  <div style={{ marginTop: 10, fontSize: 12, color: "rgba(255,120,120,0.95)" }}>{revenueErr}</div>
+                ) : null}
               </div>
 
               <div className={styles.bubble}>
@@ -651,7 +628,14 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       {(dashboard?.all?.leads || []).map((l) => (
                         <tr
                           key={l.id}
-                          className={selectedLeadId === l.id ? styles.adminRowActive : undefined}
+                          className={[
+                            selectedLeadId === l.id ? styles.adminRowActive : "",
+                            (dashboard?.today?.lead_scores?.[l.id]?.tier || "") === "HOT" ? styles.rowHot : "",
+                            (dashboard?.today?.lead_scores?.[l.id]?.tier || "") === "WARM" ? styles.rowWarm : "",
+                            (dashboard?.today?.lead_scores?.[l.id]?.tier || "") === "COLD" ? styles.rowCold : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
                           onClick={async () => {
                             setSelectedLeadId(l.id);
                             setLeadDetail(null);
@@ -661,7 +645,17 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                           role="button"
                           tabIndex={0}
                         >
-                          <td>{l.name || "Anonymous"}</td>
+                          <td>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                              <span>{l.name || "Anonymous"}</span>
+                              <span className={styles.scorePill}>
+                                {(dashboard?.today?.lead_scores?.[l.id]?.tier || "COLD")}{" "}
+                                {Number.isFinite(Number(dashboard?.today?.lead_scores?.[l.id]?.score))
+                                  ? `• ${Number(dashboard?.today?.lead_scores?.[l.id]?.score)}`
+                                  : ""}
+                              </span>
+                            </div>
+                          </td>
                           <td className={styles.mono}>{l.email || "—"}</td>
                           <td className={styles.mono}>{l.phone || "—"}</td>
                           <td className={styles.mono}>{fmtDateTime(l.created_at)}</td>
@@ -735,6 +729,71 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                     {leadDetail && (leadDetail?.conversations || []).length === 0 ? (
                       <div style={{ opacity: 0.6, fontSize: 12 }}>No conversations for this lead yet.</div>
                     ) : null}
+                  </div>
+                </div>
+              ) : null}
+
+              {revenueModalOpen ? (
+                <div className={styles.modalOverlay} role="dialog" aria-modal="true">
+                  <div className={styles.modalCard}>
+                    <div className={styles.modalTitle}>Add Revenue</div>
+                    <div className={styles.modalSub}>Revenue Today • Manual entry</div>
+
+                    <label className={styles.modalLabel}>Amount (₹)</label>
+                    <input
+                      className={styles.modalInput}
+                      value={revenueAmount}
+                      onChange={(e) => {
+                        setRevenueAmount(e.target.value);
+                        if (revenueErr) setRevenueErr("");
+                      }}
+                      inputMode="decimal"
+                      placeholder="e.g., 25000"
+                    />
+
+                    <label className={styles.modalLabel}>Source</label>
+                    <select
+                      className={styles.modalInput}
+                      value={revenueSource}
+                      onChange={(e) => setRevenueSource(e.target.value)}
+                    >
+                      <option value="Affiliate">Affiliate</option>
+                      <option value="Lead Sale">Lead Sale</option>
+                      <option value="Product">Product</option>
+                      <option value="Other">Other</option>
+                    </select>
+
+                    <label className={styles.modalLabel}>Note (optional)</label>
+                    <textarea
+                      className={styles.modalTextarea}
+                      value={revenueNote}
+                      onChange={(e) => setRevenueNote(e.target.value)}
+                      placeholder="Short note for your records…"
+                      rows={3}
+                    />
+
+                    {revenueErr ? <div className={styles.modalError}>{revenueErr}</div> : null}
+
+                    <div className={styles.modalActions}>
+                      <button
+                        type="button"
+                        className={styles.modalBtn}
+                        onClick={() => {
+                          if (revenueBusy) return;
+                          setRevenueModalOpen(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.modalBtnPrimary}
+                        disabled={revenueBusy}
+                        onClick={() => void addRevenue()}
+                      >
+                        {revenueBusy ? "Saving…" : "Save"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : null}
