@@ -28,6 +28,20 @@ const COMPLIANCE_TEXT =
   "distribution services. AMFI Registered | IRDAI Licensed |\n" +
   "Investments subject to market dynamics.";
 
+const COMPLIANCE_LINES = COMPLIANCE_TEXT.split("\n").map((l) => l.trim()).filter(Boolean);
+
+function stripComplianceFooter(text) {
+  let t = String(text || "");
+  if (!t) return "";
+  if (t.includes(COMPLIANCE_TEXT)) t = t.split(COMPLIANCE_TEXT).join("");
+  for (const line of COMPLIANCE_LINES) {
+    if (line && t.includes(line)) t = t.split(line).join("");
+  }
+  // clean up extra whitespace introduced by stripping
+  t = t.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  return t;
+}
+
 // Basic per-user rate limit (best-effort in serverless): 10 messages / minute.
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 10;
@@ -152,18 +166,28 @@ async function callGemini({ apiKey, userText, conversationHistory = [], userName
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
     encodeURIComponent(apiKey);
 
-  // System prompt (as requested) + guardrails.
+  // System prompt (SEBI-safe wording) + guardrails.
   const systemBase =
-    "You are BM Wealth's financial assistant. Provide educational guidance only\n" +
-    "(SEBI compliant - no specific investment advice). Topics: mutual funds, SIP,\n" +
-    "insurance, fixed deposits. Be helpful, professional, Mumbai-style friendly.\n" +
-    "AMFI Registered • IRDAI Licensed. Always end with compliance text.";
+    "You are BM Wealth's financial assistant.\n" +
+    "Provide educational guidance only (SEBI compliant — no specific investment advice).\n" +
+    "Topics: mutual funds, SIP, insurance, fixed deposits.\n" +
+    "Be helpful, professional, Mumbai-style friendly.\n" +
+    "AMFI Registered • IRDAI Licensed.\n\n" +
+    "STRICT WORDING RULES:\n" +
+    "- Do NOT mention specific product types (example: \"equity mutual fund\").\n" +
+    "- Do NOT mention fund categories (example: \"large cap\").\n" +
+    "- Do NOT mention investment strategies (example: \"aggressive growth\").\n" +
+    "- Prefer neutral phrases like: \"various mutual fund options\" and \"suitable investment products\".\n" +
+    "- For anything that depends on personal details, say: \"consult our advisors for personalized recommendations\".\n" +
+    "- Do not create urgency or hype.\n" +
+    "- Keep answers concise and clear (4–8 short lines).";
 
   const system = [
     systemBase,
     userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
     "Do NOT provide personalized recommendations, price targets, or specific buy/sell/hold calls.",
-    `Always end your answer with this exact compliance text (verbatim) once:\n${COMPLIANCE_TEXT}`,
+    "End every reply with this exact line (once): consult our advisors for personalized recommendations.",
+    "Do NOT repeat the BM Wealth compliance footer text (it is shown once in the chat UI).",
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -191,13 +215,15 @@ async function callGemini({ apiKey, userText, conversationHistory = [], userName
 
   if (!r.ok) {
     const t = await r.text().catch(() => "");
+    // Log full failure details to server console for debugging (no secrets included).
+    console.error("[api/chat] Gemini HTTP error", { status: r.status, body: t });
     throw new Error(`Gemini error: ${r.status} ${t}`);
   }
 
   const json = await r.json();
   const text =
     json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join("") ||
-    "I can help with educational guidance. " + COMPLIANCE_TEXT;
+    "I can help with educational guidance. consult our advisors for personalized recommendations.";
   return text.trim();
 }
 
@@ -207,8 +233,8 @@ function cannedEducationalAnswer(userText) {
     return (
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
-      "Example: investing ₹5,000 every month into an equity mutual fund for long-term goals.\n\n" +
-      COMPLIANCE_TEXT
+      "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
+      "consult our advisors for personalized recommendations."
     );
   }
   return "";
@@ -268,6 +294,7 @@ export async function POST(req) {
   // Rate limit (best-effort): max 10 msgs/min/user.
   const rl = consumeRate(rateKey(req, leadId));
   if (!rl.allowed) {
+    console.warn("[api/chat] rate_limited", { conversationId, leadId, mode });
     return NextResponse.json(
       { ok: false, error: "rate_limited", conversationId, retryAfterMs: rl.retryAfterMs },
       {
@@ -309,10 +336,16 @@ export async function POST(req) {
     let reply;
     if (mode === "admin") {
       if (!isAdmin) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
-      if (!env?.ANTHROPIC_API_KEY) throw new Error("setup_required");
+      if (!env?.ANTHROPIC_API_KEY) {
+        console.error("[api/chat] missing ANTHROPIC_API_KEY", { conversationId });
+        throw new Error("setup_required");
+      }
       reply = await callClaude({ apiKey: env.ANTHROPIC_API_KEY, userText: message });
     } else {
-      if (!env?.GEMINI_API_KEY) throw new Error("setup_required");
+      if (!env?.GEMINI_API_KEY) {
+        console.error("[api/chat] missing GEMINI_API_KEY", { conversationId });
+        throw new Error("setup_required");
+      }
       const userName = await getLeadNameSafe(leadId);
       reply = await callGemini({
         apiKey: env.GEMINI_API_KEY,
@@ -321,19 +354,14 @@ export async function POST(req) {
         userName,
       });
 
-      // If the model returns only the compliance line or something too short, use a safe canned explainer.
+      // Keep chat clean: do not repeat the compliance footer text in every reply.
+      reply = stripComplianceFooter(reply);
+
+      // If the model returns something too short/empty, use a safe canned explainer.
       const cleaned = String(reply || "").trim();
-      const onlyCompliance =
-        cleaned === COMPLIANCE_TEXT ||
-        cleaned.replace(/\s+/g, " ").endsWith(COMPLIANCE_TEXT) && cleaned.replace(/\s+/g, " ").length <= COMPLIANCE_TEXT.length + 20;
-      if (onlyCompliance) {
+      if (cleaned.length < 4) {
         const canned = cannedEducationalAnswer(message);
         if (canned) reply = canned;
-      }
-
-      // Ensure compliance line present
-      if (!reply.includes("Welcome to BM Wealth")) {
-        reply = `${reply}\n\n${COMPLIANCE_TEXT}`;
       }
     }
 
@@ -346,6 +374,9 @@ export async function POST(req) {
   } catch (e) {
     const msg = e?.message || "chat_failed";
     const provider = mode === "admin" ? "anthropic" : "gemini";
+
+    // Log exact failure to server console for debugging.
+    console.error("[api/chat] provider failure", { provider, conversationId, leadId, mode, error: msg });
     await logEventSafe({
       leadId,
       event_type: "chat_error",
@@ -359,10 +390,7 @@ export async function POST(req) {
 
     // If AI is unavailable (quota/setup/etc), provide a safe fallback.
     const canned = cannedEducationalAnswer(message);
-    const fallback =
-      canned ||
-      ("I’m having a temporary connectivity issue right now. Please try again in a moment.\n\n" +
-        COMPLIANCE_TEXT);
+    const fallback = canned || "I’m having a temporary connectivity issue right now. Please try again in a moment.";
     try {
       await saveConversation({ leadId, message: fallback, sender: "bot" });
     } catch {

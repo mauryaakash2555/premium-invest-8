@@ -104,7 +104,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       sender: "bot",
       at: todayISO(),
       text:
-        `${dayGreeting()}.\n\nWelcome to BM Wealth.\n\nTo provide a premium experience, may I have your name?`,
+        `${dayGreeting()}.\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
     },
   ]);
 
@@ -199,9 +199,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     const j = await r.json().catch(() => null);
     if (r.status === 429 || j?.error === "rate_limited") {
       return {
-        reply:
-          "Just a moment — please send up to 10 messages per minute so we can keep the concierge experience smooth.\n\n" +
-          COMPLIANCE_TEXT,
+        reply: "Just a moment — please send up to 10 messages per minute so we can keep the concierge experience smooth.",
         warn: "rate_limited",
       };
     }
@@ -389,7 +387,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             <div className={styles.brand}>
               <div className={styles.badge}>{admin ? "SYSTEM CORE" : "CONCIERGE"}</div>
               <div className={styles.title}>BM Wealth - Concierge</div>
-              <div className={styles.compliance}>{COMPLIANCE_TEXT}</div>
             </div>
 
             <div className={styles.actions}>
