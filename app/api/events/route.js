@@ -1,6 +1,8 @@
 ﻿import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import crypto from "crypto";
+import { getAdminEnvSafe } from "@/lib/env";
 
 const schema = z.object({
   leadId: z.string().uuid().optional(),
@@ -21,10 +23,25 @@ export async function POST(req) {
   }
 
   const { leadId, event_type, data } = parsed.data;
+
+  // Privacy-safe analytics: hash IP server-side (never store raw IP).
+  const xff = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "";
+  const ip = String(xff).split(",")[0]?.trim() || "";
+  const salt = getAdminEnvSafe()?.ADMIN_PASSWORD || "bmwealth";
+  const ipHash = ip ? crypto.createHmac("sha256", salt).update(ip).digest("hex") : null;
+
+  const nextData =
+    event_type === "visitor" ||
+    event_type === "conversation_started" ||
+    event_type === "message_sent" ||
+    event_type === "lead_captured"
+      ? { ...(data || {}), ipHash }
+      : data ?? null;
+
   const { error } = await sb.from("events").insert({
     lead_id: leadId ?? null,
     event_type,
-    data: data ?? null,
+    data: nextData,
   });
 
   if (error) return NextResponse.json({ ok: false }, { status: 500 });

@@ -103,7 +103,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [leadDraft, setLeadDraft] = useState({ name: "", email: "", phone: "" });
   const [captureStep, setCaptureStep] = useState("name"); // name|email|phone|done
   const [dashboard, setDashboard] = useState(null);
-  const [tab, setTab] = useState("chat"); // chat|dashboard
+  const [tab, setTab] = useState("chat"); // chat|dashboard|analytics
   const [humanReady, setHumanReady] = useState(false);
   const [revenueAmount, setRevenueAmount] = useState("");
   const [revenueSource, setRevenueSource] = useState("Other"); // Affiliate|Lead Sale|Product|Other
@@ -117,6 +117,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [exportBusy, setExportBusy] = useState(false);
   const [exportNote, setExportNote] = useState("");
   const [exportFilter, setExportFilter] = useState("all"); // all|hot|today
+  const [analytics, setAnalytics] = useState(null);
+  const [analyticsBusy, setAnalyticsBusy] = useState(false);
 
   function exitAdminMode() {
     setAdmin(false);
@@ -166,6 +168,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       return Math.random().toString(16).slice(2);
     }
   }, []);
+  const visitorLoggedRef = useRef(false);
+  const convoStartedRef = useRef(false);
   const listRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -185,6 +189,14 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     if (!el) return;
     el.scrollTop = el.scrollHeight;
   }, [enabled, open, messages.length, busy]);
+
+  // Analytics: visitor event (privacy-safe ipHash is added server-side).
+  useEffect(() => {
+    if (!enabled || !open) return;
+    if (visitorLoggedRef.current) return;
+    visitorLoggedRef.current = true;
+    void logEvent("visitor", { sessionId });
+  }, [enabled, open, sessionId]);
 
   function pushBot(text, extra = null) {
     setMessages((prev) => [
@@ -238,6 +250,93 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     } finally {
       setLeadDetailBusy(false);
     }
+  }
+
+  async function fetchAnalytics() {
+    setAnalyticsBusy(true);
+    try {
+      const r = await fetch("/api/admin/analytics", { method: "GET" });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j?.ok) return null;
+      return j;
+    } finally {
+      setAnalyticsBusy(false);
+    }
+  }
+
+  function StatCard({ label, value, sub }) {
+    return (
+      <div className={styles.statCard}>
+        <div className={styles.statLabel}>{label}</div>
+        <div className={styles.statValue}>{value}</div>
+        {sub ? <div className={styles.statSub}>{sub}</div> : null}
+      </div>
+    );
+  }
+
+  function MiniLine({ data = [], aKey = "leads", bKey = "visitors" }) {
+    const w = 320;
+    const h = 90;
+    const pad = 10;
+    const max = Math.max(
+      1,
+      ...data.map((d) => Math.max(Number(d?.[aKey]) || 0, Number(d?.[bKey]) || 0))
+    );
+    const xStep = data.length > 1 ? (w - pad * 2) / (data.length - 1) : 0;
+    const y = (v) => h - pad - ((Number(v) || 0) / max) * (h - pad * 2);
+    const x = (i) => pad + i * xStep;
+
+    const pathFor = (key) =>
+      data
+        .map((d, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(d?.[key]).toFixed(1)}`)
+        .join(" ");
+
+    return (
+      <svg width="100%" viewBox={`0 0 ${w} ${h}`} className={styles.miniChart} aria-hidden="true">
+        <path d={pathFor(bKey)} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" />
+        <path d={pathFor(aKey)} fill="none" stroke="rgba(192,160,98,0.95)" strokeWidth="2.5" />
+      </svg>
+    );
+  }
+
+  function MiniDonut({ hot = 0, warm = 0, cold = 0 }) {
+    const total = Math.max(1, hot + warm + cold);
+    const cx = 38;
+    const cy = 38;
+    const r = 28;
+    const c = 2 * Math.PI * r;
+    const seg = [
+      { v: hot, color: "rgba(255,80,80,0.9)" },
+      { v: warm, color: "rgba(255,200,90,0.9)" },
+      { v: cold, color: "rgba(255,255,255,0.35)" },
+    ];
+    let acc = 0;
+    return (
+      <svg width="76" height="76" viewBox="0 0 76 76" aria-hidden="true">
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="10" />
+        {seg.map((s, idx) => {
+          const frac = s.v / total;
+          const dash = frac * c;
+          const offset = c - acc;
+          acc += dash;
+          return (
+            <circle
+              key={idx}
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="none"
+              stroke={s.color}
+              strokeWidth="10"
+              strokeDasharray={`${dash} ${c - dash}`}
+              strokeDashoffset={offset}
+              strokeLinecap="butt"
+              transform={`rotate(-90 ${cx} ${cy})`}
+            />
+          );
+        })}
+      </svg>
+    );
   }
 
   async function upsertLead({ name, email, phone }) {
@@ -374,6 +473,14 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     setBusy(true);
 
     try {
+      // Analytics: conversation started (once per session, on first real user message)
+      if (!convoStartedRef.current) {
+        convoStartedRef.current = true;
+        void logEvent("conversation_started", { sessionId });
+      }
+      // Analytics: message sent
+      void logEvent("message_sent", { sessionId, admin, chars: text.length });
+
       // allow leaving admin mode quickly
       if (admin && /^(exit|leave|logout)$/i.test(text)) {
         exitAdminMode();
@@ -446,6 +553,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           if (lead?.id) {
             setLeadId(lead.id);
             setCaptureStep("done");
+            void logEvent("lead_captured", { sessionId, leadId: lead.id });
             pushBot("Done. How can I help you today?");
           } else if (res?.setupRequired) {
             setCaptureStep("done");
@@ -527,6 +635,24 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   <button
                     type="button"
                     className={styles.actionBtn}
+                    aria-label={tab === "analytics" ? "Open dashboard" : "Open analytics"}
+                    onClick={async () => {
+                      if (tab === "analytics") {
+                        setTab("dashboard");
+                        const dash = await refreshDashboard();
+                        setDashboard(dash);
+                        return;
+                      }
+                      setTab("analytics");
+                      const a = await fetchAnalytics();
+                      setAnalytics(a);
+                    }}
+                  >
+                    {tab === "analytics" ? "DASH" : "ANL"}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
                     aria-label="Exit admin mode"
                     onClick={() => exitAdminMode()}
                   >
@@ -550,7 +676,123 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             </div>
           </div>
 
-          {tab === "dashboard" && admin ? (
+          {admin && tab === "analytics" ? (
+            <div className={styles.body}>
+              <div className={styles.bubble}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                    Analytics
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    onClick={async () => {
+                      const a = await fetchAnalytics();
+                      setAnalytics(a);
+                    }}
+                    aria-label="Refresh analytics"
+                    title="Refresh"
+                    style={{ width: 64 }}
+                  >
+                    REF
+                  </button>
+                </div>
+                {analyticsBusy ? <div style={{ marginTop: 10, opacity: 0.7, fontSize: 12 }}>Loading…</div> : null}
+              </div>
+
+              {analytics ? (
+                <>
+                  <div className={styles.bubble}>
+                    <div className={styles.sectionTitle}>Today</div>
+                    <div className={styles.statGrid}>
+                      <StatCard label="Visitors" value={analytics?.today?.visitors ?? 0} />
+                      <StatCard label="Conversations" value={analytics?.today?.conversations_started ?? 0} />
+                      <StatCard label="Leads" value={analytics?.today?.leads_captured ?? 0} />
+                      <StatCard
+                        label="Conversion"
+                        value={`${analytics?.today?.conversion_rate ?? 0}%`}
+                        sub="leads / visitors"
+                      />
+                      <StatCard
+                        label="Avg msgs / convo"
+                        value={analytics?.today?.avg_messages_per_conversation ?? 0}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.bubble}>
+                    <div className={styles.sectionTitle}>This Week</div>
+                    <div className={styles.statGrid}>
+                      <StatCard label="Visitors" value={analytics?.week?.visitors ?? 0} />
+                      <StatCard label="Leads" value={analytics?.week?.leads ?? 0} />
+                      <div className={styles.statCardWide}>
+                        <div className={styles.statLabel}>HOT / WARM / COLD</div>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
+                          <MiniDonut
+                            hot={analytics?.week?.tier_breakdown?.HOT ?? 0}
+                            warm={analytics?.week?.tier_breakdown?.WARM ?? 0}
+                            cold={analytics?.week?.tier_breakdown?.COLD ?? 0}
+                          />
+                          <div style={{ display: "grid", gap: 6, fontSize: 12, opacity: 0.85 }}>
+                            <div>HOT: {analytics?.week?.tier_breakdown?.HOT ?? 0}</div>
+                            <div>WARM: {analytics?.week?.tier_breakdown?.WARM ?? 0}</div>
+                            <div>COLD: {analytics?.week?.tier_breakdown?.COLD ?? 0}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.statCardWide}>
+                        <div className={styles.statLabel}>Trend (7d)</div>
+                        <MiniLine data={analytics?.week?.daily || []} aKey="leads" bKey="visitors" />
+                        <div style={{ marginTop: 6, fontSize: 11, opacity: 0.65 }}>
+                          Gold = leads, Silver = visitors
+                        </div>
+                      </div>
+                      <div className={styles.statCardWide}>
+                        <div className={styles.statLabel}>Top Questions</div>
+                        <div style={{ marginTop: 8, display: "grid", gap: 8 }}>
+                          {(analytics?.week?.top_questions || []).slice(0, 5).map((q) => (
+                            <div key={q.question} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                              <div style={{ opacity: 0.9, fontSize: 12, lineHeight: 1.35 }}>{q.question}</div>
+                              <div className={styles.mono} style={{ opacity: 0.75 }}>{q.count}</div>
+                            </div>
+                          ))}
+                          {(analytics?.week?.top_questions || []).length === 0 ? (
+                            <div style={{ opacity: 0.6, fontSize: 12 }}>No questions captured yet.</div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.bubble}>
+                    <div className={styles.sectionTitle}>This Month</div>
+                    <div className={styles.statGrid}>
+                      <StatCard
+                        label="Visitors"
+                        value={analytics?.month?.visitors ?? 0}
+                        sub={`vs last month: ${analytics?.month?.visitors_growth_pct ?? 0}%`}
+                      />
+                      <StatCard
+                        label="Revenue"
+                        value={fmtINR(analytics?.month?.revenue ?? 0)}
+                        sub={`vs last month: ${analytics?.month?.revenue_growth_pct ?? 0}%`}
+                      />
+                      <StatCard
+                        label="Most active hour (IST)"
+                        value={`${String(analytics?.month?.most_active_hour_ist ?? 0).padStart(2, "0")}:00`}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.bubble}>
+                  <div style={{ opacity: 0.7, fontSize: 12 }}>
+                    Analytics not available yet. Try refresh.
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : tab === "dashboard" && admin ? (
             <div className={styles.body}>
               <div className={styles.bubble}>
                 <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
