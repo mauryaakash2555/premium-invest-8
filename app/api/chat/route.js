@@ -108,6 +108,21 @@ function makeConversationId(fallback = "") {
   }
 }
 
+function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
+  const base =
+    "You are BM Wealth's financial assistant. Provide educational guidance only.\n" +
+    "Never recommend specific products, funds, or stocks. Use phrases like 'various mutual fund options available' not 'invest in equity funds'.\n" +
+    "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
+    "AMFI Registered • IRDAI Licensed. Keep answers concise (3-4 sentences max).";
+
+  const extras = [
+    userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
+    "If asked for what to choose / which is best / personalized advice, say: consult our advisors for personalized recommendations.",
+  ].filter(Boolean);
+
+  return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+}
+
 async function saveConversation({ leadId, message, sender }) {
   if (!leadId) return;
   const sb = supabaseAdmin();
@@ -166,31 +181,7 @@ async function callGemini({ apiKey, userText, conversationHistory = [], userName
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
     encodeURIComponent(apiKey);
 
-  // System prompt (SEBI-safe wording) + guardrails.
-  const systemBase =
-    "You are BM Wealth's financial assistant.\n" +
-    "Provide educational guidance only (SEBI compliant — no specific investment advice).\n" +
-    "Topics: mutual funds, SIP, insurance, fixed deposits.\n" +
-    "Be helpful, professional, Mumbai-style friendly.\n" +
-    "AMFI Registered • IRDAI Licensed.\n\n" +
-    "STRICT WORDING RULES:\n" +
-    "- Do NOT mention specific product types (example: \"equity mutual fund\").\n" +
-    "- Do NOT mention fund categories (example: \"large cap\").\n" +
-    "- Do NOT mention investment strategies (example: \"aggressive growth\").\n" +
-    "- Prefer neutral phrases like: \"various mutual fund options\" and \"suitable investment products\".\n" +
-    "- For anything that depends on personal details, say: \"consult our advisors for personalized recommendations\".\n" +
-    "- Do not create urgency or hype.\n" +
-    "- Keep answers concise and clear (4–8 short lines).";
-
-  const system = [
-    systemBase,
-    userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
-    "Do NOT provide personalized recommendations, price targets, or specific buy/sell/hold calls.",
-    "End every reply with this exact line (once): consult our advisors for personalized recommendations.",
-    "Do NOT repeat the BM Wealth compliance footer text (it is shown once in the chat UI).",
-  ]
-    .filter(Boolean)
-    .join("\n\n");
+  const system = buildSeBiSafeSystemPrompt({ userName });
 
   const contents = [];
   for (const h of conversationHistory || []) {
@@ -204,7 +195,7 @@ async function callGemini({ apiKey, userText, conversationHistory = [], userName
   const body = {
     systemInstruction: { role: "system", parts: [{ text: system }] },
     contents,
-    generationConfig: { temperature: 0.5, maxOutputTokens: 600 },
+    generationConfig: { temperature: 0.4, maxOutputTokens: 260 },
   };
 
   const r = await fetch(url, {
@@ -225,6 +216,54 @@ async function callGemini({ apiKey, userText, conversationHistory = [], userName
     json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join("") ||
     "I can help with educational guidance. consult our advisors for personalized recommendations.";
   return text.trim();
+}
+
+async function callGroq({ apiKey, userText, conversationHistory = [], userName = "" }) {
+  const url = "https://api.groq.com/openai/v1/chat/completions";
+  const system = buildSeBiSafeSystemPrompt({ userName });
+
+  const messages = [{ role: "system", content: system }];
+  for (const h of conversationHistory || []) {
+    const role = h?.sender === "user" ? "user" : "assistant";
+    const text = String(h?.text || "").trim();
+    if (!text) continue;
+    messages.push({ role, content: text });
+  }
+  messages.push({ role: "user", content: String(userText || "") });
+
+  const body = {
+    model: "llama-3.3-70b-versatile",
+    temperature: 0.35,
+    max_tokens: 260,
+    messages,
+  };
+
+  const r = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  const raw = await r.text().catch(() => "");
+  if (!r.ok) {
+    console.error("[api/chat] Groq HTTP error", { status: r.status, body: raw });
+    throw new Error(`Groq error: ${r.status} ${raw}`);
+  }
+
+  let json;
+  try {
+    json = JSON.parse(raw);
+  } catch {
+    throw new Error("Groq error: bad_json");
+  }
+
+  const text =
+    String(json?.choices?.[0]?.message?.content || "").trim() ||
+    "I can help with educational guidance. consult our advisors for personalized recommendations.";
+  return text;
 }
 
 function cannedEducationalAnswer(userText) {
@@ -342,17 +381,43 @@ export async function POST(req) {
       }
       reply = await callClaude({ apiKey: env.ANTHROPIC_API_KEY, userText: message });
     } else {
-      if (!env?.GEMINI_API_KEY) {
-        console.error("[api/chat] missing GEMINI_API_KEY", { conversationId });
-        throw new Error("setup_required");
-      }
       const userName = await getLeadNameSafe(leadId);
-      reply = await callGemini({
-        apiKey: env.GEMINI_API_KEY,
-        userText: message,
-        conversationHistory,
-        userName,
-      });
+      let provider = "gemini";
+      let fallbackFrom = null;
+
+      // 1) Try Gemini first (if configured)
+      if (env?.GEMINI_API_KEY) {
+        try {
+          reply = await callGemini({
+            apiKey: env.GEMINI_API_KEY,
+            userText: message,
+            conversationHistory,
+            userName,
+          });
+        } catch (e) {
+          fallbackFrom = "gemini";
+          provider = "groq";
+          const emsg = e?.message || "gemini_failed";
+          console.warn("[api/chat] Gemini failed, trying Groq", { conversationId, error: emsg });
+        }
+      } else {
+        fallbackFrom = "gemini";
+        provider = "groq";
+      }
+
+      // 2) Groq fallback
+      if (!reply) {
+        if (!env?.GROQ_API_KEY) {
+          console.error("[api/chat] missing GROQ_API_KEY", { conversationId });
+          throw new Error("setup_required");
+        }
+        reply = await callGroq({
+          apiKey: env.GROQ_API_KEY,
+          userText: message,
+          conversationHistory,
+          userName,
+        });
+      }
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
@@ -363,6 +428,18 @@ export async function POST(req) {
         const canned = cannedEducationalAnswer(message);
         if (canned) reply = canned;
       }
+
+      // Log which provider answered (admin visibility)
+      await logEventSafe({
+        leadId,
+        event_type: "chat_ai",
+        data: {
+          provider,
+          conversationId,
+          mode: "user",
+          fallback_from: fallbackFrom,
+        },
+      });
     }
 
     try {

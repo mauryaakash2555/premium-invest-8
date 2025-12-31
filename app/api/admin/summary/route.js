@@ -18,7 +18,7 @@ export async function GET() {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
 
-  const [leadsRes, convRes, errRes, revRes, scoreRes] = await Promise.all([
+  const [leadsRes, convRes, errRes, revRes, scoreRes, aiRes] = await Promise.all([
     sb
       .from("leads")
       .select("id,name,email,phone,created_at")
@@ -56,9 +56,18 @@ export async function GET() {
       .eq("event_type", "lead_score")
       .order("created_at", { ascending: false })
       .limit(1000),
+
+    // AI provider usage (Gemini vs Groq)
+    sb
+      .from("events")
+      .select("id,data,created_at")
+      .gte("created_at", start.toISOString())
+      .eq("event_type", "chat_ai")
+      .order("created_at", { ascending: false })
+      .limit(1000),
   ]);
 
-  if (leadsRes.error || convRes.error || errRes.error || revRes.error || scoreRes.error) {
+  if (leadsRes.error || convRes.error || errRes.error || revRes.error || scoreRes.error || aiRes.error) {
     return NextResponse.json(
       {
         ok: false,
@@ -68,6 +77,7 @@ export async function GET() {
           errRes.error?.message ||
           revRes.error?.message ||
           scoreRes.error?.message ||
+          aiRes.error?.message ||
           "Supabase error",
       },
       { status: 500 }
@@ -98,6 +108,13 @@ export async function GET() {
     lead_score_counts[tier] = (lead_score_counts[tier] || 0) + 1;
   }
 
+  const ai_provider_counts = { gemini: 0, groq: 0 };
+  for (const e of aiRes.data || []) {
+    const p = String(e?.data?.provider || "").toLowerCase();
+    if (p === "groq") ai_provider_counts.groq += 1;
+    else if (p === "gemini") ai_provider_counts.gemini += 1;
+  }
+
   return NextResponse.json({
     ok: true,
     today: {
@@ -108,6 +125,7 @@ export async function GET() {
       revenue_entries: revenueEntries,
       lead_scores,
       lead_score_counts,
+      ai_provider_counts,
     },
   });
 }

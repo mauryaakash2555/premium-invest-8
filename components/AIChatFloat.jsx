@@ -472,6 +472,21 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </div>
                 </div>
 
+                <div style={{ marginTop: 8, display: "flex", gap: 10, flexWrap: "wrap", opacity: 0.8 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    AI GEMINI{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {dashboard?.today?.ai_provider_counts?.gemini ?? 0}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                    AI GROQ{" "}
+                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      {dashboard?.today?.ai_provider_counts?.groq ?? 0}
+                    </span>
+                  </div>
+                </div>
+
                   <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                     <input
                       value={revenueAmount}
