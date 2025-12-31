@@ -114,6 +114,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [leadDetail, setLeadDetail] = useState(null); // { lead, conversations }
   const [leadDetailBusy, setLeadDetailBusy] = useState(false);
+  const [exportBusy, setExportBusy] = useState(false);
+  const [exportNote, setExportNote] = useState("");
+  const [exportFilter, setExportFilter] = useState("all"); // all|hot|today
 
   function exitAdminMode() {
     setAdmin(false);
@@ -122,6 +125,37 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     setSelectedLeadId(null);
     setLeadDetail(null);
     pushBot("Exited admin mode.");
+  }
+
+  async function exportLeads() {
+    if (!admin || exportBusy) return;
+    setExportBusy(true);
+    setExportNote("");
+    try {
+      const qs = new URLSearchParams();
+      if (exportFilter && exportFilter !== "all") qs.set("filter", exportFilter);
+      const r = await fetch(`/api/admin/export?${qs.toString()}`, { method: "GET" });
+      if (!r.ok) {
+        setExportNote("Export failed.");
+        return;
+      }
+      const count = r.headers.get("x-export-count") || "";
+      const cd = r.headers.get("content-disposition") || "";
+      const m = cd.match(/filename=\"?([^\";]+)\"?/i);
+      const filename = m?.[1] || `bm-wealth-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      setExportNote(`Downloaded ${count || "0"} leads`);
+    } finally {
+      setExportBusy(false);
+    }
   }
 
   const sessionId = useMemo(() => {
@@ -622,9 +656,44 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
               </div>
 
               <div className={styles.bubble}>
-                <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-                  Leads
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                    Leads
+                  </div>
+                  <div className={styles.exportBar}>
+                    <select
+                      className={styles.exportSelect}
+                      value={exportFilter}
+                      onChange={(e) => setExportFilter(e.target.value)}
+                      aria-label="Export filter"
+                    >
+                      <option value="all">All</option>
+                      <option value="hot">HOT only</option>
+                      <option value="today">Today</option>
+                    </select>
+                    <button
+                      type="button"
+                      className={styles.exportBtn}
+                      onClick={() => void exportLeads()}
+                      disabled={exportBusy}
+                      aria-label="Export leads"
+                      title="Export Leads"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      {exportBusy ? "Exporting…" : "Export"}
+                    </button>
+                  </div>
                 </div>
+                {exportNote ? <div className={styles.exportNote}>{exportNote}</div> : null}
 
                 <div className={styles.adminTableWrap}>
                   <table className={styles.adminTable}>
