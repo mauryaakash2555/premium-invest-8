@@ -27,13 +27,18 @@ async function callGemini({ apiKey, userText }) {
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
     encodeURIComponent(apiKey);
 
-  const system = `You are BM Wealth AI assistant. You MUST be SEBI-compliant: provide only educational information, general explanations, and product distribution guidance. Do NOT give personalized investment advice, price targets, or specific buy/sell/hold recommendations. Always include this compliance line near the end: "${COMPLIANCE_TEXT}"`;
+  const system = [
+    "You are BM Wealth AI assistant.",
+    "You MUST be SEBI-compliant: provide only educational information and general explanations.",
+    "Do NOT give personalized investment advice, price targets, or specific buy/sell/hold recommendations.",
+    "When asked 'what is X', explain simply with a short example.",
+    "Keep answers crisp (3-7 short lines), luxury tone, no hype.",
+    `End with this line exactly once: "${COMPLIANCE_TEXT}"`,
+  ].join("\n");
 
   const body = {
-    contents: [
-      { role: "user", parts: [{ text: system }] },
-      { role: "user", parts: [{ text: userText }] },
-    ],
+    systemInstruction: { role: "system", parts: [{ text: system }] },
+    contents: [{ role: "user", parts: [{ text: userText }] }],
     generationConfig: { temperature: 0.5, maxOutputTokens: 600 },
   };
 
@@ -53,6 +58,19 @@ async function callGemini({ apiKey, userText }) {
     json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join("") ||
     "I can help with educational guidance. " + COMPLIANCE_TEXT;
   return text.trim();
+}
+
+function cannedEducationalAnswer(userText) {
+  const t = String(userText || "").toLowerCase();
+  if (/\bsip\b/.test(t) || t.includes("systematic investment plan")) {
+    return (
+      "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
+      "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
+      "Example: investing ₹5,000 every month into an equity mutual fund for long-term goals.\n\n" +
+      COMPLIANCE_TEXT
+    );
+  }
+  return "";
 }
 
 async function callClaude({ apiKey, userText }) {
@@ -121,6 +139,17 @@ export async function POST(req) {
     } else {
       if (!env?.GEMINI_API_KEY) throw new Error("setup_required");
       reply = await callGemini({ apiKey: env.GEMINI_API_KEY, userText: message });
+
+      // If the model returns only the compliance line or something too short, use a safe canned explainer.
+      const cleaned = String(reply || "").trim();
+      const onlyCompliance =
+        cleaned === COMPLIANCE_TEXT ||
+        cleaned.replace(/\s+/g, " ").endsWith(COMPLIANCE_TEXT) && cleaned.replace(/\s+/g, " ").length <= COMPLIANCE_TEXT.length + 20;
+      if (onlyCompliance) {
+        const canned = cannedEducationalAnswer(message);
+        if (canned) reply = canned;
+      }
+
       // Ensure compliance line present
       if (!reply.includes("Welcome to BM Wealth")) {
         reply = `${reply}\n\n${COMPLIANCE_TEXT}`;
@@ -135,7 +164,9 @@ export async function POST(req) {
     return NextResponse.json({ ok: true, reply });
   } catch (e) {
     const msg = e?.message || "chat_failed";
-    const fallback = `I can help with educational guidance. ${COMPLIANCE_TEXT}`;
+    // If AI is unavailable (quota/setup/etc), provide a safe canned educational answer when possible.
+    const canned = cannedEducationalAnswer(message);
+    const fallback = canned || `I can help with educational guidance. ${COMPLIANCE_TEXT}`;
     try {
       await saveConversation({ leadId, message: fallback, sender: "bot" });
     } catch {

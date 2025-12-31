@@ -31,6 +31,15 @@ export function LuxuryMobileDock() {
   const pathname = usePathname();
   const router = useRouter();
 
+  // When the "pop-out" (full-screen) menu closes, ensure no stale hover state
+  // remains (hover events may not fire on unmount, causing buttons to look stuck).
+  useEffect(() => {
+    if (!isMenuOpen) {
+      setHoveredIndex(null);
+      setIdleIndex(null);
+    }
+  }, [isMenuOpen]);
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
     let scrollTimeout = null;
@@ -154,7 +163,7 @@ export function LuxuryMobileDock() {
 
           {mainNavItems.map((item, index) => {
             const isActive = pathname === item.href;
-            const isHighlighted = highlightIndex === index || isActive;
+            const isHighlighted = highlightIndex === index; // Removed active-path auto-highlight
             return (
               <button
                 key={index}

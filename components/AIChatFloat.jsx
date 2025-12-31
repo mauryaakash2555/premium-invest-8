@@ -55,6 +55,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [tab, setTab] = useState("chat"); // chat|dashboard
   const [humanReady, setHumanReady] = useState(false);
 
+  function exitAdminMode() {
+    setAdmin(false);
+    setTab("chat");
+    setDashboard(null);
+    pushBot("Exited admin mode.");
+  }
+
   const sessionId = useMemo(() => {
     try {
       // eslint-disable-next-line no-undef
@@ -175,6 +182,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     setBusy(true);
 
     try {
+      // allow leaving admin mode quickly
+      if (admin && /^(exit|leave|logout)$/i.test(text)) {
+        exitAdminMode();
+        return;
+      }
+
       // Human handoff request (show WhatsApp option only when asked)
       if (wantsHuman(text)) {
         setHumanReady(true);
@@ -239,7 +252,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             pushBot("Done. How can I help you today?");
           } else if (res?.setupRequired) {
             setCaptureStep("done");
-            pushBot("Thanks. Concierge is available now. Lead capture is still being configured - you can continue chatting.");
+            pushBot(
+              "Thanks. Concierge is available now. Lead capture is not configured on this environment yet, so details may not be saved.\n" +
+                (res?.hint ? `\nSetup hint: ${res.hint}\n` : "\n") +
+                "Admin can check: /api/health"
+            );
           } else {
             pushBot("Setup is still in progress. Please try again in a moment.");
           }
@@ -283,22 +300,32 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
             <div className={styles.actions}>
               {admin && (
-                <button
-                  type="button"
-                  className={styles.actionBtn}
-                  aria-label={tab === "dashboard" ? "Open chat" : "Open dashboard"}
-                  onClick={async () => {
-                    if (tab === "chat") {
-                      setTab("dashboard");
-                      const dash = await refreshDashboard();
-                      setDashboard(dash);
-                    } else {
-                      setTab("chat");
-                    }
-                  }}
-                >
-                  {tab === "dashboard" ? "CHAT" : "DASH"}
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    aria-label={tab === "dashboard" ? "Open chat" : "Open dashboard"}
+                    onClick={async () => {
+                      if (tab === "chat") {
+                        setTab("dashboard");
+                        const dash = await refreshDashboard();
+                        setDashboard(dash);
+                      } else {
+                        setTab("chat");
+                      }
+                    }}
+                  >
+                    {tab === "dashboard" ? "CHAT" : "DASH"}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    aria-label="Exit admin mode"
+                    onClick={() => exitAdminMode()}
+                  >
+                    EXIT
+                  </button>
+                </>
               )}
 
               <button type="button" className={styles.closeBtn} aria-label="Close" onClick={onClose}>
