@@ -25,6 +25,27 @@ function todayISO() {
   return new Date().toISOString();
 }
 
+function dayGreeting() {
+  try {
+    const h = new Date().getHours();
+    if (h < 12) return "Good morning";
+    if (h < 17) return "Good afternoon";
+    return "Good evening";
+  } catch {
+    return "Welcome";
+  }
+}
+
+function fmtINR(n) {
+  const num = Number(n);
+  if (!Number.isFinite(num)) return "—";
+  try {
+    return "₹" + new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(num);
+  } catch {
+    return "₹" + Math.round(num).toString();
+  }
+}
+
 function wantsHuman(text) {
   const t = String(text || "").toLowerCase();
   return (
@@ -54,6 +75,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [dashboard, setDashboard] = useState(null);
   const [tab, setTab] = useState("chat"); // chat|dashboard
   const [humanReady, setHumanReady] = useState(false);
+  const [revenueAmount, setRevenueAmount] = useState("");
+  const [revenueNote, setRevenueNote] = useState("");
+  const [revenueBusy, setRevenueBusy] = useState(false);
+  const [revenueErr, setRevenueErr] = useState("");
 
   function exitAdminMode() {
     setAdmin(false);
@@ -79,7 +104,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       sender: "bot",
       at: todayISO(),
       text:
-        "Welcome to BM Wealth.\n\nTo provide a premium experience, may I have your name?",
+        `${dayGreeting()}.\n\nWelcome to BM Wealth.\n\nTo provide a premium experience, may I have your name?`,
     },
   ]);
 
@@ -156,16 +181,49 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   async function logEvent(event_type, data = {}) {
-    // Only log once we have a valid leadId (API requires UUID)
-    if (!leadId) return;
     try {
       await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ leadId, event_type, data }),
+        body: JSON.stringify({ leadId: leadId || undefined, event_type, data }),
       });
     } catch {
       // ignore
+    }
+  }
+
+  async function addRevenue() {
+    if (!admin) return;
+    const raw = String(revenueAmount || "").trim();
+    const cleaned = raw.replace(/[,\s]/g, "");
+    const amount = Number(cleaned);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setRevenueErr("Enter a valid amount.");
+      return;
+    }
+    setRevenueErr("");
+    setRevenueBusy(true);
+    try {
+      const r = await fetch("/api/admin/revenue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount,
+          currency: "INR",
+          note: String(revenueNote || "").trim() || undefined,
+        }),
+      });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j?.ok) {
+        setRevenueErr(j?.error === "setup_required" ? "Revenue tracking not configured." : "Could not save.");
+        return;
+      }
+      setRevenueAmount("");
+      setRevenueNote("");
+      const dash = await refreshDashboard();
+      setDashboard(dash);
+    } finally {
+      setRevenueBusy(false);
     }
   }
 
@@ -362,7 +420,78 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       {dashboard?.today?.conversations?.length ?? 0}
                     </div>
                   </div>
+                    <div>
+                      <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE</div>
+                      <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
+                        {fmtINR(dashboard?.today?.revenue_total ?? 0)}
+                      </div>
+                    </div>
                 </div>
+
+                  <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                    <input
+                      value={revenueAmount}
+                      onChange={(e) => {
+                        setRevenueAmount(e.target.value);
+                        if (revenueErr) setRevenueErr("");
+                      }}
+                      placeholder="Add revenue (₹)"
+                      inputMode="decimal"
+                      style={{
+                        flex: "0 0 140px",
+                        height: 36,
+                        borderRadius: 10,
+                        padding: "0 12px",
+                        border: "1px solid rgba(255,255,255,0.10)",
+                        background: "rgba(0,0,0,0.35)",
+                        color: "rgba(255,255,255,0.92)",
+                        outline: "none",
+                        fontSize: 13,
+                      }}
+                    />
+                    <input
+                      value={revenueNote}
+                      onChange={(e) => {
+                        setRevenueNote(e.target.value);
+                        if (revenueErr) setRevenueErr("");
+                      }}
+                      placeholder="Note (optional)"
+                      style={{
+                        flex: "1 1 160px",
+                        height: 36,
+                        borderRadius: 10,
+                        padding: "0 12px",
+                        border: "1px solid rgba(255,255,255,0.10)",
+                        background: "rgba(0,0,0,0.35)",
+                        color: "rgba(255,255,255,0.92)",
+                        outline: "none",
+                        fontSize: 13,
+                      }}
+                    />
+                    <button
+                      type="button"
+                      disabled={revenueBusy}
+                      onClick={() => void addRevenue()}
+                      style={{
+                        height: 36,
+                        borderRadius: 10,
+                        padding: "0 14px",
+                        border: "1px solid rgba(192,160,98,0.55)",
+                        background: revenueBusy ? "rgba(192,160,98,0.15)" : "rgba(0,0,0,0.35)",
+                        color: "rgba(192,160,98,0.95)",
+                        fontWeight: 800,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        fontSize: 11,
+                        cursor: revenueBusy ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {revenueErr ? (
+                    <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,120,120,0.95)" }}>{revenueErr}</div>
+                  ) : null}
               </div>
 
               {(dashboard?.today?.leads || []).slice(0, 30).map((l) => (
@@ -389,7 +518,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 ))}
 
                 {humanReady && whatsappHref ? (
-                  <a className={styles.humanCta} href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                  <a
+                    className={styles.humanCta}
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => void logEvent("whatsapp_click", { sessionId })}
+                  >
                     Contact Support on WhatsApp
                   </a>
                 ) : null}
