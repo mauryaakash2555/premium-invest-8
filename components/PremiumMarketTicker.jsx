@@ -23,6 +23,18 @@ function fmtNumber(v, opts = {}) {
 function fmtValue(item) {
   if (item.kind === "fx") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 3 });
   if (item.kind === "index") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
+  // Crypto: match common display (TradingView/CMC) using USD
+  if (item.kind === "crypto") {
+    if (String(item.currency || "").toUpperCase() === "USD") {
+      // User preference: no $ symbol, show "USD" suffix like many quote pages
+      const n = new Intl.NumberFormat("en-US", {
+        style: "decimal",
+        maximumFractionDigits: 0,
+      }).format(item.value);
+      return `${n} USD`;
+    }
+    return fmtNumber(item.value, { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+  }
   return "INR " + fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
 }
 
@@ -130,6 +142,7 @@ function normalizeApi(json) {
       value: Number(x.value),
       changePct: Number(x.changePct),
       direction: String(x.direction || "flat"),
+      currency: String(x.currency || ""),
     }))
     .filter((x) => x.id && Number.isFinite(x.value) && Number.isFinite(x.changePct));
 }
@@ -204,7 +217,7 @@ export default function PremiumMarketTicker({ className }) {
     }
 
     fetchNow();
-    const id = setInterval(fetchNow, 15000);
+    const id = setInterval(fetchNow, 60000);
 
     return () => {
       stop = true;
@@ -320,8 +333,9 @@ export default function PremiumMarketTicker({ className }) {
         </div>
       </div>
 
-      <div className={styles.fadeLeft} aria-hidden="true" />
-      <div className={styles.fadeRight} aria-hidden="true" />
+      <div className={styles.metaBadge} aria-hidden="true">
+        Indicative • Delayed
+      </div>
     </div>
   );
 }

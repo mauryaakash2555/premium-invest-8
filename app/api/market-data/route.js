@@ -6,10 +6,16 @@
 const INSTRUMENTS = [
   { id: "NIFTY50", name: "NIFTY 50", kind: "index", yahooCandidates: ["^NSEI"] },
   { id: "SENSEX", name: "SENSEX", kind: "index", yahooCandidates: ["^BSESN"] },
-  // Metals are labeled as SPOT; feed is best-effort via public Yahoo symbols.
-  // We prefer spot XAU/XAG in USD and convert to INR using USD/INR.
-  { id: "GOLD", name: "GOLD (Spot)", kind: "metal", yahooCandidates: ["XAUUSD=X", "GC=F", "XAUINR=X"] },
-  { id: "SILVER", name: "SILVER (Spot)", kind: "metal", yahooCandidates: ["XAGUSD=X", "SI=F", "XAGINR=X"] },
+  // Metals: best-effort via public Yahoo symbols.
+  // Use XAU/XAG in USD and convert to INR using USD/INR, then convert into Indian-friendly units:
+  // - Gold: INR per 10g
+  // - Silver: INR per kg
+  // Note: These are indicative conversions and are NOT guaranteed to match MCX spot/futures.
+  { id: "GOLD", name: "GOLD (10g)", kind: "metal", yahooCandidates: ["XAUUSD=X", "GC=F", "XAUINR=X"] },
+  { id: "SILVER", name: "SILVER (1kg)", kind: "metal", yahooCandidates: ["XAGUSD=X", "SI=F", "XAGINR=X"] },
+  // Commodities / Crypto (informational only)
+  { id: "CRUDEOIL", name: "CRUDE OIL", kind: "commodity", yahooCandidates: ["CL=F"] },
+  { id: "BTC", name: "BITCOIN", kind: "crypto", yahooCandidates: ["BTC-USD"] },
   { id: "USDINR", name: "USD/INR", kind: "fx", yahooCandidates: ["INR=X"] },
 ];
 
@@ -24,6 +30,10 @@ function round(n, places = 2) {
   return Math.round(n * p) / p;
 }
 
+const TROY_OUNCE_TO_GRAMS = 31.1034768;
+const GOLD_10G_IN_OZ = 10 / TROY_OUNCE_TO_GRAMS; // 0.321507...
+const KG_IN_OZ = 1000 / TROY_OUNCE_TO_GRAMS; // 32.1507...
+
 function directionFrom(changePct) {
   if (!Number.isFinite(changePct)) return "flat";
   if (changePct > 0.0001) return "up";
@@ -34,8 +44,8 @@ function directionFrom(changePct) {
 async function fetchYahooMeta(symbol) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
   const res = await fetch(url, {
-    // UI refreshes every 15 seconds
-    next: { revalidate: 15 },
+    // UI refreshes every 60 seconds
+    next: { revalidate: 60 },
     headers: {
       "User-Agent": "bmwealth-market-ticker/1.0",
       Accept: "application/json",
@@ -111,22 +121,52 @@ export async function GET() {
 
       if (price == null || prevClose == null) throw new Error(`Bad numbers for ${inst.id}`);
 
-      // Convert metals quoted in USD to INR using USD/INR.
       const isMetal = inst.kind === "metal";
-      const looksUsd = wrap.sym.endsWith("USD=X") || wrap.sym === "GC=F" || wrap.sym === "SI=F";
-      const looksInr = wrap.sym.endsWith("INR=X");
+      const isCrypto = inst.kind === "crypto";
+      const isCommodity = inst.kind === "commodity";
 
-      if (isMetal && looksUsd) {
+      const looksUsdPerOz =
+        wrap.sym.endsWith("USD=X") ||
+        wrap.sym === "GC=F" || // gold futures (USD per oz)
+        wrap.sym === "SI=F" || // silver futures (USD per oz)
+        wrap.sym === "BTC-USD" ||
+        wrap.sym === "CL=F"; // crude futures (USD per barrel)
+
+      const looksInrPair = wrap.sym.endsWith("INR=X");
+
+      // Convert USD quotes to INR where it helps UX (metals + crude).
+      // NOTE: BTC is kept in USD to match common display on TradingView/CoinMarketCap.
+      if ((isMetal || isCommodity) && looksUsdPerOz) {
         price = price * usdInr;
         prevClose = prevClose * usdPrev;
       }
 
-      // If metal comes from an INR pair, keep as-is.
-      if (isMetal && looksInr) {
-        // no-op
+      // Metals unit normalization (MCX-style display)
+      if (isMetal && (wrap.sym.endsWith("USD=X") || wrap.sym === "GC=F" || wrap.sym === "SI=F")) {
+        if (inst.id === "GOLD") {
+          price = price * GOLD_10G_IN_OZ;
+          prevClose = prevClose * GOLD_10G_IN_OZ;
+        } else if (inst.id === "SILVER") {
+          price = price * KG_IN_OZ;
+          prevClose = prevClose * KG_IN_OZ;
+        }
+      }
+
+      // If metal comes from an INR pair, assume it is already INR/oz; normalize to local units.
+      if (isMetal && looksInrPair) {
+        if (inst.id === "GOLD") {
+          price = price * GOLD_10G_IN_OZ;
+          prevClose = prevClose * GOLD_10G_IN_OZ;
+        } else if (inst.id === "SILVER") {
+          price = price * KG_IN_OZ;
+          prevClose = prevClose * KG_IN_OZ;
+        }
       }
 
       const { changePct, direction } = computeChange(price, prevClose);
+
+      const convertedToInr = (isMetal || isCommodity) && looksUsdPerOz;
+      const currency = convertedToInr ? "INR" : String(meta.currency || "INR");
 
       items.push({
         id: inst.id,
@@ -136,7 +176,7 @@ export async function GET() {
         changePct: round(changePct, 2),
         direction,
         source: wrap.sym,
-        currency: "INR",
+        currency,
       });
     }
 

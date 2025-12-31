@@ -44,8 +44,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   // Safety: keep it OFF unless explicitly enabled via env flag.
   const flag = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED;
   const enabled = flag ? flag === "true" : true;
-  if (!enabled) return null;
-  if (!open) return null;
 
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -79,10 +77,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   ]);
 
   useEffect(() => {
+    if (!enabled || !open) return;
     const el = listRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
-  }, [open, messages.length, busy]);
+  }, [enabled, open, messages.length, busy]);
 
   function pushBot(text) {
     setMessages((prev) => [
@@ -104,9 +103,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (!r.ok) return false;
     const j = await r.json().catch(() => null);
-    return Boolean(j?.ok);
+    if (r.status === 503 && j?.error === "setup_required") {
+      return { ok: false, setupRequired: true };
+    }
+    if (!r.ok) return { ok: false, setupRequired: false };
+    return { ok: Boolean(j?.ok), setupRequired: false };
   }
 
   async function refreshDashboard() {
@@ -161,6 +163,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   async function send() {
+    if (!enabled || !open) return;
     const raw = inputRef.current?.value ?? input;
     const text = String(raw || "").trim();
     if (!text || busy) return;
@@ -180,9 +183,15 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Admin unlock (enter password-like digits to unlock)
-      if (!admin && /^\d{4,12}$/.test(text)) {
-        const ok = await tryAdminLogin(text);
-        if (ok) {
+      // IMPORTANT: avoid intercepting phone capture (10-digit numbers).
+      // Allow 4-digit PIN anytime (admin convenience), but longer numeric inputs only after capture is done.
+      if (!admin && (/^\d{4}$/.test(text) || (captureStep === "done" && /^\d{5,12}$/.test(text)))) {
+        const res = await tryAdminLogin(text);
+        if (res?.setupRequired) {
+          pushBot("Admin dashboard is not configured on this environment yet.");
+          return;
+        }
+        if (res?.ok) {
           setAdmin(true);
           setTab("dashboard");
           pushBot("Admin mode unlocked.");
@@ -252,6 +261,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       setBusy(false);
     }
   }
+
+  // IMPORTANT: don't early-return before hooks; it breaks hook ordering when `open` toggles.
+  if (!enabled) return null;
+  if (!open) return null;
 
   return (
     <>

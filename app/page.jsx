@@ -3,12 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
-
-// NEW PREMIUM IMPORTS
+import PremiumMarketTicker from '@/components/PremiumMarketTicker';
 import MarketMoodStrip from '@/components/MarketMoodStrip';
+
 import AnimatedClouds from '@/components/AnimatedClouds';
 import ServiceCard from '@/components/ServiceCard';
 import BlogCard from '@/components/BlogCard';
@@ -27,14 +27,6 @@ const GoldenHorizonSweep = () => (
 );
 
 export default function HomePage() {
-  const [tickerData, setTickerData] = useState([
-    { l: 'NIFTY 50', v: '24,321.05', c: '+1.2%', pos: true },
-    { l: 'SENSEX', v: '80,142.12', c: '+0.9%', pos: true },
-    { l: 'GOLD (24K)', v: ',172,450', c: '+0.4%', pos: true },
-    { l: 'INR/USD', v: '83.42', c: '-0.1%', pos: false },
-    { l: 'BM ELITE INDEX', v: '142.80', c: '+2.4%', pos: true },
-  ]);
-
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [rainEnabled, setRainEnabled] = useState(false);
 
@@ -45,29 +37,7 @@ export default function HomePage() {
       setMousePos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 });
     };
     window.addEventListener('mousemove', handleMouseMove);
-
-    const fetchMarketData = async () => {
-      try {
-        const res = await fetch('/api/market-data');
-        const result = await res.json();
-        if (result.success) {
-          const formatted = result.data.map(item => ({
-            l: item.label,
-            v: item.value,
-            c: item.change,
-            pos: item.isPositive
-          }));
-          setTickerData(formatted);
-        }
-      } catch (err) {
-        console.error('Failed to fetch real-time market data:', err);
-      }
-    };
-
-    fetchMarketData();
-    const interval = setInterval(fetchMarketData, 60000); // Update every minute
     return () => {
-      clearInterval(interval);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
@@ -135,7 +105,6 @@ export default function HomePage() {
       >
         {/* Background Image */}
         <div
-          className="hero-background-image"
           style={{
             position: 'absolute',
             top: 0,
@@ -146,6 +115,9 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            // restore darker, premium mood
+            opacity: 0.55,
+            filter: 'brightness(0.80) saturate(1.05)',
             zIndex: 2,
           }}
         />
@@ -165,7 +137,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.70) 100%)',
             zIndex: 2,
           }}
         />
@@ -241,23 +213,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* MARKET MOOD STRIP - just above ticker (keep gold ticker untouched) */}
-        {/* Keep it BELOW mobile dock/menu overlays; do not let it dominate */}
-        <div className="absolute bottom-[52px] md:bottom-[60px] left-0 w-full z-40">
+        {/* LIVE MOOD (restored) - sits just above ticker */}
+        <div className="absolute bottom-[46px] left-0 w-full z-50">
           <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
         </div>
 
-        {/* HOLOGRAPHIC LIVE MARKET TICKER - Real-time data connected */}
-        <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-xl border-t border-[#C0A062]/20 py-4 z-40">
-          <div className="flex gap-12 whitespace-nowrap animate-marquee-slow px-10">
-            {[...tickerData, ...tickerData].map((item, i) => (
-              <div key={i} className="flex items-center gap-4 text-xs font-mono tracking-tighter">
-                <span className="text-[#C0A062]/60 uppercase">{item.l}</span>
-                <span className="text-white font-bold">{item.v}</span>
-                <span className={item.pos ? 'text-green-500' : 'text-red-500'}>{item.c}</span>
-              </div>
-            ))}
-          </div>
+        {/* PREMIUM LIVE MARKET TICKER (inside hero, same position as your reference) */}
+        <div className="absolute bottom-0 left-0 w-full z-50">
+          <PremiumMarketTicker />
         </div>
       </section>
 

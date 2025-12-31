@@ -21,21 +21,33 @@ export default function MarketMoodStrip({ onToggleRain }) {
   }, []);
 
   return (
-    <div className='w-full bg-[#050505] py-2 z-50 overflow-hidden relative shadow-[0_-10px_30px_rgba(0,0,0,0.8)]'>
-      <div className='max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-start gap-4 h-6'>
-        <div className='flex items-center gap-2 flex-shrink-0 z-10 bg-[#050505] pr-2' onClick={() => onToggleRain?.()} style={{ cursor: 'pointer' }}>
-          <span className='relative flex h-2 w-2'>
-            <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C0A062] opacity-75'></span>
-            <span className='relative inline-flex rounded-full h-2 w-2 bg-[#C0A062]'></span>
+    <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[#C0A062]/[0.10]'>
+      <div className='max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-start gap-3 h-5'>
+        <div
+          className='flex items-center gap-2 flex-shrink-0 z-10 pr-2 px-2 py-[2px] rounded-full bg-black/25 backdrop-blur-sm'
+          onClick={() => onToggleRain?.()}
+          style={{ cursor: 'pointer' }}
+        >
+          {/* subtle pulse dot (slow + premium, not flashy) */}
+          <span className='relative inline-flex h-2 w-2 bm-mood-dot'>
+            {/* ring pulse */}
+            <span
+              className='absolute inline-flex h-full w-full rounded-full bg-[#C0A062]/30 animate-ping'
+              style={{ animationDuration: '2.6s' }}
+              aria-hidden='true'
+            />
+            <span className='relative inline-flex rounded-full h-2 w-2 bg-[#C0A062] opacity-70' />
           </span>
-          <span className='text-[9px] font-bold tracking-[2px] uppercase text-[#C0A062] opacity-60 whitespace-nowrap'>Live Mood</span>
+          <span className='text-[8px] font-medium tracking-[1.6px] uppercase text-[#C0A062] opacity-55 whitespace-nowrap'>Live Mood</span>
         </div>
         
-        <div className='h-full w-[1px] bg-[#C0A062]/20 mx-2 flex-shrink-0 z-10 hidden md:block' />
+        {/* ultra-faint divider (premium, near-invisible) */}
+        <div className='h-full w-[1px] bg-[#C0A062]/[0.06] mx-2 flex-shrink-0 z-10 hidden md:block' />
 
-        <div className='relative flex-1 overflow-hidden h-full flex items-center'>
-          <div className='absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-[#050505] to-transparent z-10' />
-          <div className='absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#050505] to-transparent z-10' />
+        <div className='relative flex-1 overflow-hidden h-full flex items-center rounded-full bg-black/20 backdrop-blur-sm px-2'>
+          {/* restore the slightly darker “old” mood fades */}
+          <div className='absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent z-10' />
+          <div className='absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-black/20 to-transparent z-10' />
           
           <AnimatePresence mode='wait'>
             <motion.div
@@ -57,7 +69,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
                   ease: 'linear',
                   repeatDelay: 1
                 }}
-                className='text-[10px] md:text-[11px] font-light tracking-[1.2px] uppercase text-white/90 m-0 pr-[50%]'
+              className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase text-white/70 m-0 pr-[50%]'
               >
                 {moods[index]}
               </motion.p>
@@ -65,6 +77,19 @@ export default function MarketMoodStrip({ onToggleRain }) {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* pseudo-element ring (requested) */}
+      <style jsx>{`
+        .bm-mood-dot::before {
+          content: '';
+          position: absolute;
+          inset: -3px;
+          border-radius: 999px;
+          border: 1px solid rgba(192, 160, 98, 0.35);
+          opacity: 0.9;
+          pointer-events: none;
+        }
+      `}</style>
     </div>
   );
 }
