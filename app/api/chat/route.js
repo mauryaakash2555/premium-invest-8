@@ -115,6 +115,7 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
     "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
     "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
     "Do NOT include greetings like 'Welcome to BM Wealth' unless the user only greets and asks nothing else.\n" +
+    "Do NOT insert filler greetings like 'hi', 'hello', 'hey' inside sentences.\n" +
     "Do NOT list all topics; respond only to what the user asked.\n" +
     "Keep answers concise (3-4 sentences max).";
 
@@ -124,6 +125,20 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   ].filter(Boolean);
 
   return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+}
+
+function stripFillerHi(text) {
+  let t = String(text || "");
+  if (!t) return "";
+  // Remove mid-sentence ", hi" / ", hi," patterns that some models may insert.
+  t = t.replace(/,\s*hi\b\s*,\s*/gi, ", ");
+  t = t.replace(/,\s*hi\b\s*\./gi, ".");
+  t = t.replace(/,\s*hi\b\s*!/gi, "!");
+  t = t.replace(/,\s*hi\b\s*\?/gi, "?");
+  t = t.replace(/,\s*hi\b(?=\s)/gi, "");
+  // Clean up spacing artifacts
+  t = t.replace(/\s+([,.!?])/g, "$1").replace(/[ \t]{2,}/g, " ").trim();
+  return t;
 }
 
 function truncateToSentences(text, maxSentences = 4) {
@@ -432,6 +447,8 @@ export async function POST(req) {
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
+      // Remove any stray mid-sentence filler "hi" artifacts from model output.
+      reply = stripFillerHi(reply);
 
       // If the model returns something too short/empty, use a safe canned explainer.
       const cleaned = String(reply || "").trim();

@@ -181,7 +181,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     try {
       return (messages || [])
         // Exclude the initial compliance/onboarding message so models don't echo it back.
-        .filter((m) => m && m.id !== "m0" && (m.sender === "user" || m.sender === "bot"))
+        .filter((m) => {
+          if (!m || m.id === "m0") return false;
+          if (!(m.sender === "user" || m.sender === "bot")) return false;
+          // Drop greeting-only user messages from context to prevent "hi" being echoed.
+          if (m.sender === "user" && isGreetingOnly(m.text)) return false;
+          return true;
+        })
         .slice(-5)
         .map((m) => ({
           sender: m.sender,
