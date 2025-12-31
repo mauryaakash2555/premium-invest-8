@@ -49,9 +49,11 @@ function stripComplianceFooter(text) {
   return t;
 }
 
-// Basic per-user rate limit (best-effort in serverless): 10 messages / minute.
+// Basic per-user rate limit (best-effort in serverless)
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 10;
+const ADMIN_RATE_WINDOW_MS = 60 * 60_000; // 1 hour
+const ADMIN_RATE_MAX = 50; // 50 messages / hour
 const RATE_BUCKETS =
   globalThis.__bmwealth_chat_rate_buckets || (globalThis.__bmwealth_chat_rate_buckets = new Map());
 
@@ -62,18 +64,127 @@ function rateKey(req, leadId) {
   return ip ? `ip:${ip}` : "anon";
 }
 
-function consumeRate(key) {
+function consumeRate(key, { max = RATE_MAX, windowMs = RATE_WINDOW_MS } = {}) {
   const now = Date.now();
   const existing = RATE_BUCKETS.get(key);
   if (!existing || now >= existing.resetAt) {
-    RATE_BUCKETS.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    RATE_BUCKETS.set(key, { count: 1, resetAt: now + windowMs });
     return { allowed: true, retryAfterMs: 0 };
   }
-  if (existing.count >= RATE_MAX) {
+  if (existing.count >= max) {
     return { allowed: false, retryAfterMs: Math.max(0, existing.resetAt - now) };
   }
   existing.count += 1;
   return { allowed: true, retryAfterMs: 0 };
+}
+
+function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
+  return (
+    `You are BM Wealth's strategic business advisor.\n` +
+    `User is ${userName} (founder).\n\n` +
+    `Analyze provided metrics and give:\n` +
+    `- Revenue optimization recommendations\n` +
+    `- Marketing strategy suggestions\n` +
+    `- Competitive positioning advice\n` +
+    `- Growth opportunities\n` +
+    `- Risk analysis\n\n` +
+    `Be direct, data-driven, actionable. Act like a demanding business partner who pushes for better results.\n` +
+    `Output format:\n` +
+    `1) Executive snapshot (2-3 bullets)\n` +
+    `2) Priority actions (P0/P1/P2, each with owner + next step)\n` +
+    `3) Funnel diagnosis (visitors -> conversations -> leads)\n` +
+    `4) Messaging improvements (top objections/questions)\n` +
+    `5) 7-day experiment plan (metrics + expected impact)\n\n` +
+    `Constraints:\n` +
+    `- Do NOT give personalized investment advice.\n` +
+    `- Do NOT mention API keys or internal secrets.\n`
+  );
+}
+
+async function buildAdminContextSafe() {
+  try {
+    const sb = supabaseAdmin();
+    const now = new Date();
+    const dayStart = new Date(now);
+    dayStart.setHours(0, 0, 0, 0);
+    const weekStart = new Date(dayStart);
+    {
+      const day = weekStart.getDay(); // 0 Sun..6 Sat
+      const diff = (day === 0 ? -6 : 1) - day;
+      weekStart.setDate(weekStart.getDate() + diff);
+    }
+    const monthStart = new Date(dayStart);
+    monthStart.setDate(1);
+
+    const [leadsTodayRes, leadsWeekRes, leadsAllCountRes, convTodayRes, convWeekRes, revMonthRes, aiTodayRes] =
+      await Promise.all([
+        sb.from("leads").select("id,created_at").gte("created_at", dayStart.toISOString()).order("created_at", { ascending: false }).limit(500),
+        sb.from("leads").select("id,created_at").gte("created_at", weekStart.toISOString()).order("created_at", { ascending: false }).limit(2000),
+        sb.from("leads").select("count", { count: "exact", head: true }),
+        sb.from("conversations").select("id,lead_id,message,sender,created_at").gte("created_at", dayStart.toISOString()).order("created_at", { ascending: false }).limit(300),
+        sb.from("conversations").select("id,lead_id,message,sender,created_at").gte("created_at", weekStart.toISOString()).order("created_at", { ascending: false }).limit(1000),
+        sb.from("events").select("id,event_type,data,created_at").gte("created_at", monthStart.toISOString()).filter("event_type", "in", '("revenue","revenue_manual")').order("created_at", { ascending: false }).limit(500),
+        sb.from("events").select("id,data,created_at").gte("created_at", dayStart.toISOString()).eq("event_type", "chat_ai").order("created_at", { ascending: false }).limit(500),
+      ]);
+
+    const leadsToday = leadsTodayRes.data || [];
+    const leadsWeek = leadsWeekRes.data || [];
+    const convToday = convTodayRes.data || [];
+    const convWeek = convWeekRes.data || [];
+
+    const revenueMonth = (revMonthRes.data || []).reduce((sum, e) => {
+      const n = Number(e?.data?.amount);
+      return Number.isFinite(n) ? sum + n : sum;
+    }, 0);
+
+    const providerCounts = { groq: 0, gemini: 0, anthropic: 0, rule: 0 };
+    for (const e of aiTodayRes.data || []) {
+      const p = String(e?.data?.provider || "").toLowerCase();
+      if (p === "groq") providerCounts.groq += 1;
+      else if (p === "gemini") providerCounts.gemini += 1;
+      else if (p === "anthropic" || p === "claude") providerCounts.anthropic += 1;
+      else if (p === "rule") providerCounts.rule += 1;
+    }
+
+    // Top questions (week) quick heuristic: user messages containing '?'
+    const qMap = new Map();
+    for (const c of convWeek) {
+      if (c.sender !== "user") continue;
+      const msg = String(c.message || "").trim();
+      if (!msg) continue;
+      if (!msg.includes("?") && msg.length > 140) continue;
+      const key = msg.toLowerCase().replace(/\s+/g, " ").slice(0, 140);
+      if (!key) continue;
+      qMap.set(key, (qMap.get(key) || 0) + 1);
+    }
+    const topQuestions = Array.from(qMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([q, count]) => ({ q, count }));
+
+    return {
+      asOf: now.toISOString(),
+      leads: {
+        today: leadsToday.length,
+        week: leadsWeek.length,
+        total: leadsAllCountRes.count || 0,
+      },
+      conversations: {
+        today: convToday.length,
+        week: convWeek.length,
+      },
+      revenue: {
+        month: revenueMonth,
+      },
+      ai_usage_today: providerCounts,
+      top_questions_week: topQuestions,
+      notes: {
+        data_source: "supabase",
+      },
+    };
+  } catch {
+    return { asOf: new Date().toISOString(), error: "context_unavailable" };
+  }
 }
 
 async function logEventSafe({ leadId, event_type, data }) {
@@ -430,22 +541,26 @@ function cannedEducationalAnswer(userText) {
   return "";
 }
 
-async function callClaude({ apiKey, userText }) {
+async function callClaude({ apiKey, userText, systemOverride = "", context = null }) {
   const url = "https://api.anthropic.com/v1/messages";
-  const system =
-    `You are BM Wealth Admin AI assistant. Provide operational guidance for BM Wealth business (analytics, funnels, copy). ` +
-    `Do not produce personalized investment advice. Always keep compliance text available: "${COMPLIANCE_TEXT}"`;
+  const system = systemOverride
+    ? String(systemOverride)
+    : `You are BM Wealth Admin AI assistant. Provide operational guidance for BM Wealth business (analytics, funnels, copy). ` +
+      `Do not produce personalized investment advice.`;
 
   const candidates = ["claude-sonnet-4-20250514", "claude-3-7-sonnet-latest", "claude-3-5-sonnet-latest"];
 
   let lastErr = null;
   for (const model of candidates) {
+    const userBlock = context
+      ? `Context (JSON):\n${JSON.stringify(context, null, 2)}\n\nAdmin question:\n${userText}`
+      : userText;
     const body = {
       model,
       max_tokens: 800,
       temperature: 0.4,
       system,
-      messages: [{ role: "user", content: userText }],
+      messages: [{ role: "user", content: userBlock }],
     };
 
     const r = await fetch(url, {
@@ -491,8 +606,15 @@ export async function POST(req) {
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
 
-  // Rate limit (best-effort): max 10 msgs/min/user.
-  const rl = consumeRate(rateKey(req, leadId));
+  const adminSession = Boolean(isAdmin && mode === "admin");
+
+  // Rate limit (best-effort):
+  // - User: 10/min
+  // - Admin: 50/hour
+  const rl = consumeRate(
+    `${adminSession ? "admin:" : ""}${rateKey(req, leadId)}`,
+    adminSession ? { max: ADMIN_RATE_MAX, windowMs: ADMIN_RATE_WINDOW_MS } : { max: RATE_MAX, windowMs: RATE_WINDOW_MS }
+  );
   if (!rl.allowed) {
     console.warn("[api/chat] rate_limited", { conversationId, leadId, mode });
     return NextResponse.json(
@@ -553,13 +675,26 @@ export async function POST(req) {
 
   try {
     let reply;
-    if (mode === "admin") {
-      if (!isAdmin) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    if (adminSession) {
       if (!env?.ANTHROPIC_API_KEY) {
         console.error("[api/chat] missing ANTHROPIC_API_KEY", { conversationId });
         throw new Error("setup_required");
       }
-      reply = await callClaude({ apiKey: env.ANTHROPIC_API_KEY, userText: message });
+      const context = await buildAdminContextSafe();
+      const system = buildAdminStrategicPrompt({ userName: "Akash" });
+      reply = await callClaude({
+        apiKey: env.ANTHROPIC_API_KEY,
+        userText: message,
+        systemOverride: system,
+        context,
+      });
+
+      // Cost / usage tracking
+      await logEventSafe({
+        leadId,
+        event_type: "chat_ai",
+        data: { provider: "anthropic", conversationId, mode: "admin" },
+      });
     } else {
       const userName = await getLeadNameSafe(leadId);
       const intent = detectInvestmentIntent(message);
@@ -612,42 +747,19 @@ export async function POST(req) {
         return NextResponse.json({ ok: true, reply, conversationId, cta, intent });
       }
 
-      let provider = "gemini";
-      let fallbackFrom = null;
-
-      // 1) Try Gemini first (if configured)
-      if (env?.GEMINI_API_KEY) {
-        try {
-          reply = await callGemini({
-            apiKey: env.GEMINI_API_KEY,
-            userText: message,
-            conversationHistory,
-            userName,
-          });
-        } catch (e) {
-          fallbackFrom = "gemini";
-          provider = "groq";
-          const emsg = e?.message || "gemini_failed";
-          console.warn("[api/chat] Gemini failed, trying Groq", { conversationId, error: emsg });
-        }
-      } else {
-        fallbackFrom = "gemini";
-        provider = "groq";
+      // Regular users: Groq only (fast + predictable costs)
+      const provider = "groq";
+      const fallbackFrom = null;
+      if (!env?.GROQ_API_KEY) {
+        console.error("[api/chat] missing GROQ_API_KEY", { conversationId });
+        throw new Error("setup_required");
       }
-
-      // 2) Groq fallback
-      if (!reply) {
-        if (!env?.GROQ_API_KEY) {
-          console.error("[api/chat] missing GROQ_API_KEY", { conversationId });
-          throw new Error("setup_required");
-        }
-        reply = await callGroq({
-          apiKey: env.GROQ_API_KEY,
-          userText: message,
-          conversationHistory,
-          userName,
-        });
-      }
+      reply = await callGroq({
+        apiKey: env.GROQ_API_KEY,
+        userText: message,
+        conversationHistory,
+        userName,
+      });
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
@@ -685,7 +797,7 @@ export async function POST(req) {
     return NextResponse.json({ ok: true, reply, conversationId });
   } catch (e) {
     const msg = e?.message || "chat_failed";
-    const provider = mode === "admin" ? "anthropic" : "gemini";
+    const provider = adminSession ? "anthropic" : "groq";
 
     // Log exact failure to server console for debugging.
     console.error("[api/chat] provider failure", { provider, conversationId, leadId, mode, error: msg });

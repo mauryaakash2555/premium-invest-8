@@ -119,6 +119,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [exportFilter, setExportFilter] = useState("all"); // all|hot|today
   const [analytics, setAnalytics] = useState(null);
   const [analyticsBusy, setAnalyticsBusy] = useState(false);
+  const [strategy, setStrategy] = useState(null);
+  const [strategyBusy, setStrategyBusy] = useState(false);
 
   function exitAdminMode() {
     setAdmin(false);
@@ -264,6 +266,19 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     }
   }
 
+  async function fetchStrategy({ force = false } = {}) {
+    setStrategyBusy(true);
+    try {
+      const qs = force ? "?force=1" : "";
+      const r = await fetch(`/api/admin/strategy${qs}`, { method: "GET" });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j?.ok) return null;
+      return j;
+    } finally {
+      setStrategyBusy(false);
+    }
+  }
+
   function StatCard({ label, value, sub }) {
     return (
       <div className={styles.statCard}>
@@ -394,8 +409,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     });
     const j = await r.json().catch(() => null);
     if (r.status === 429 || j?.error === "rate_limited") {
+      const adminMode = mode === "admin";
       return {
-        reply: "Just a moment — please send up to 10 messages per minute so we can keep the concierge experience smooth.",
+        reply: adminMode
+          ? "Rate limit: please send up to 50 messages per hour in admin mode."
+          : "Just a moment — please send up to 10 messages per minute so we can keep the concierge experience smooth.",
         warn: "rate_limited",
       };
     }
@@ -506,9 +524,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         if (res?.ok) {
           setAdmin(true);
           setTab("dashboard");
-          pushBot("Admin mode unlocked.");
+          pushBot("Admin mode active - Claude AI enabled.");
           const dash = await refreshDashboard();
           setDashboard(dash);
+          const s = await fetchStrategy({ force: false });
+          setStrategy(s);
           return;
         }
         pushBot("Admin code not recognized for this environment.");
@@ -894,6 +914,34 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
                 {revenueErr ? (
                   <div style={{ marginTop: 10, fontSize: 12, color: "rgba(255,120,120,0.95)" }}>{revenueErr}</div>
+                ) : null}
+              </div>
+
+              <div className={styles.bubble}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                    Today’s strategic advice
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    onClick={async () => {
+                      const s = await fetchStrategy({ force: true });
+                      setStrategy(s);
+                    }}
+                    aria-label="Refresh strategic advice"
+                    title="Refresh"
+                    style={{ width: 64 }}
+                    disabled={strategyBusy}
+                  >
+                    {strategyBusy ? "…" : "REF"}
+                  </button>
+                </div>
+                <div style={{ marginTop: 10, fontSize: 13, lineHeight: 1.5, whiteSpace: "pre-wrap", opacity: 0.9 }}>
+                  {strategy?.text ? strategy.text : "No advice generated yet. Tap REF."}
+                </div>
+                {strategy?.cached ? (
+                  <div style={{ marginTop: 8, fontSize: 11, opacity: 0.6 }}>Cached for today.</div>
                 ) : null}
               </div>
 
