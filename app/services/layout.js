@@ -1,25 +1,11 @@
-/**
- * FILE: app\services\layout.js
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: app
- *
- * DEPENDENCIES:
- * - (none)
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
- */
+import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
-  title: 'Financial Services | BM Wealth Mumbai ARN 90008',
-  description: 'Comprehensive financial services including mutual funds, SIP, portfolio management, and insurance.',
+  ...buildMetadata({
+    title: "Financial Services | BM Wealth Mumbai ARN 90008",
+    description: "Comprehensive financial services including mutual funds, SIP, portfolio management, and insurance.",
+    path: "/services",
+  }),
 };
 
 export default function Layout({ children }) {
