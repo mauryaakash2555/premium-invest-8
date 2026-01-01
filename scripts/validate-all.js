@@ -30,8 +30,8 @@ async function main() {
   if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_CLAUDE)) requireEnv('ANTHROPIC_API_KEY', checks);
 
   // Admin auth: recommend hash + session secret
-  if (!process.env.ADMIN_PASSWORD_HASH && !process.env.ADMIN_PASSWORD) {
-    checks.push({ pass: false, message: 'Missing: ADMIN_PASSWORD_HASH (preferred) or ADMIN_PASSWORD (fallback)' });
+  if (!process.env.SUPER_ADMIN_PASSWORD_HASH && !process.env.ADMIN_PASSWORD_HASH && !process.env.SUPER_ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD) {
+    checks.push({ pass: false, message: 'Missing: SUPER_ADMIN_PASSWORD_HASH (preferred) or ADMIN_PASSWORD_HASH (legacy) or SUPER_ADMIN_PASSWORD/ADMIN_PASSWORD (fallback)' });
   }
   if (!process.env.ADMIN_SESSION_SECRET) {
     checks.push({ pass: false, message: 'Missing: ADMIN_SESSION_SECRET (required for secure cookie signing)' });
@@ -95,3 +95,4 @@ main().catch((e) => {
   console.error('❌ validate-all crashed:', e);
   process.exit(1);
 });
+

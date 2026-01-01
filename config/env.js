@@ -20,9 +20,28 @@
 
 import { z } from "zod";
 
-const adminSchema = z.object({
-  ADMIN_PASSWORD: z.string().min(1),
-});
+const adminSchema = z
+  .object({
+    // ✅ Preferred (hashed passwords)
+    SUPER_ADMIN_PASSWORD_HASH: z.string().min(10).optional(),
+    FAMILY_ADMIN_PASSWORD_HASH: z.string().min(10).optional(),
+
+    // ✅ Cookie/session signing secret
+    ADMIN_SESSION_SECRET: z.string().min(16).optional(),
+    // ✅ Optional separate salt for IP hashing
+    ANALYTICS_SALT: z.string().min(16).optional(),
+
+    // ⚠️ Backward compatibility (older Phase 5 naming)
+    ADMIN_PASSWORD_HASH: z.string().min(10).optional(),
+    // ⚠️ Backward compatibility (plaintext)
+    SUPER_ADMIN_PASSWORD: z.string().min(1).optional(),
+    FAMILY_ADMIN_PASSWORD: z.string().min(1).optional(),
+    ADMIN_PASSWORD: z.string().min(1).optional(),
+  })
+  .refine(
+    (v) => Boolean(v.SUPER_ADMIN_PASSWORD_HASH || v.ADMIN_PASSWORD_HASH || v.SUPER_ADMIN_PASSWORD || v.ADMIN_PASSWORD),
+    "Set SUPER_ADMIN_PASSWORD_HASH (preferred) or ADMIN_PASSWORD_HASH (legacy) or SUPER_ADMIN_PASSWORD/ADMIN_PASSWORD (fallback)"
+  );
 
 const supabaseSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
@@ -99,3 +118,4 @@ export function getAIEnvSafe() {
   if (!parsed.data.GEMINI_API_KEY && !parsed.data.ANTHROPIC_API_KEY && !parsed.data.GROQ_API_KEY) return null;
   return parsed.data;
 }
+

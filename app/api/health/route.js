@@ -128,11 +128,12 @@ export async function GET(req) {
     checks: {
       supabase: supabaseCheck,
       ai,
-      admin: adminEnv?.ADMIN_PASSWORD_HASH || adminEnv?.ADMIN_PASSWORD
+      admin: adminEnv?.SUPER_ADMIN_PASSWORD_HASH || adminEnv?.ADMIN_PASSWORD_HASH || adminEnv?.SUPER_ADMIN_PASSWORD || adminEnv?.ADMIN_PASSWORD
         ? ok("admin", { configured: true })
         : bad("admin", "missing_admin_config", { configured: false }),
     },
   });
 }
+
 
 

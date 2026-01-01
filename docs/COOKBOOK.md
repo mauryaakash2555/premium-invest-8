@@ -44,7 +44,7 @@ PRIMARY_GOLD: "#C6A15B"
 2. Find or add:
 
 ```bash
-ADMIN_PASSWORD=7287
+FAMILY_ADMIN_PASSWORD_HASH=<bcrypt hash of your family PIN>
 ```
 
 3. Change it to a stronger password (letters + numbers).
@@ -131,5 +131,6 @@ import "@/features/plugins/EmailNotifications";
 node scripts/safety/chat-backup.js restore-latest
 npm run dev
 ```
+
 
 

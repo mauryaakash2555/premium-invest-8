@@ -571,7 +571,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
     // Family admin unlock (password typed into chat) — do this BEFORE we push user text into the chat.
     // We only attempt when it looks like the family password (avoids extra calls on normal messages).
-    if (!admin && !familyAdmin && /bmwealth/i.test(text) && text.length <= 20) {
+    if (!admin && !familyAdmin && text === "7287") {
       // Keep DOM + state in sync
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
@@ -585,7 +585,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         if (res?.ok) {
           setFamilyAdmin(true);
           setTab("family");
-          pushBotUser("Family Admin Mode Active \u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}");
+          pushBotUser("Welcome BM Wealth! \u{1F4CA} Viewing family dashboard...");
           return;
         }
       } finally {
@@ -594,41 +594,32 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       pushBotUser("Family code not recognized.");
       return;
     }
-
-
-    // Admin unlock (intercept before echo)
-    // IMPORTANT: avoid intercepting phone capture (10-digit numbers).
-    // Allow 4-digit PIN anytime (admin convenience), but longer numeric inputs only after capture is done.
-    if (!admin && !familyAdmin && (/^\d{4}$/.test(text) || (captureStep === "done" && /^\d{5,12}$/.test(text)))) {
+    // Super admin unlock (redirect to hidden control panel) - intercept before echo
+    // Trigger only for password-like inputs (contains '@') to avoid catching normal chat.
+    if (!admin && !familyAdmin && captureStep !== "email" && text.includes("@") && text.length <= 64) {
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
       try {
         const res = await tryAdminLogin(text);
         if (res?.setupRequired) {
-          pushBotUser("Admin dashboard is not configured on this environment yet.");
+          pushBotUser("Super admin is not configured on this environment yet.");
           return;
         }
         if (res?.ok) {
-          setAdmin(true);
-          setTab("dashboard");
-          pushBotAdmin(FEATURE_CLAUDE_ADMIN ? "Admin mode active - Claude AI enabled." : "Admin mode active.");
-          const dash = await refreshDashboard();
-          setDashboard(dash);
-          if (FEATURE_CLAUDE_ADMIN) {
-            const s = await fetchStrategy({ force: false });
-            setStrategy(s);
-          } else {
-            setStrategy(null);
-          }
+          pushBotUser("Welcome Akash! \u{1F39B}\u{FE0F} Redirecting to control panel...");
+          setTimeout(() => {
+            window.location.href = "/admin-secret-akash";
+          }, 250);
           return;
         }
-        pushBotUser("Admin code not recognized for this environment.");
+        pushBotUser("Super admin code not recognized.");
         return;
       } finally {
         setBusy(false);
       }
     }
+
     const conversationHistory = buildConversationHistorySnapshot();
 
     // Keep DOM + state in sync (robust to automation + IME edge-cases)
@@ -1404,6 +1395,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
+
+
+
 
 
 

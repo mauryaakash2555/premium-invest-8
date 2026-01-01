@@ -18,7 +18,7 @@ npm run dev
 ## ❌ Admin password not working
 
 **Fix:**
-1. Check `.env.local` has `ADMIN_PASSWORD=...`
+1. Check `.env.local` has `SUPER_ADMIN_PASSWORD_HASH=...` (or legacy `ADMIN_PASSWORD_HASH=...`)
 2. Restart server
 3. Clear site data (DevTools → Application → Clear site data)
 
@@ -51,5 +51,6 @@ npm run dev
 npm install
 npm run dev
 ```
+
 
 

@@ -6,7 +6,7 @@
 |---|---|---|
 | Change colors | `config/constants.js` | Ctrl+F → `COLORS` |
 | Change welcome text | `components/user/AIChatFloat.jsx` | Ctrl+F → `COMPLIANCE_TEXT` |
-| Change admin password | `.env.local` | `ADMIN_PASSWORD=` |
+| Change super admin password | `.env.local` | `SUPER_ADMIN_PASSWORD_HASH=` |
 | Turn feature on/off | `.env.local` | `FEATURE_...=` |
 | Change bot style | `app/api/chat/route.js` | Ctrl+F → `System prompt` |
 
@@ -36,5 +36,6 @@ npm run dev
 npm run build
 npm run validate:chat
 ```
+
 
 

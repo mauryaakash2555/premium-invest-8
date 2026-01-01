@@ -21,10 +21,21 @@
 
 export const CONSTANTS = {
   // 🔵 Admin
-  ADMIN: {    COOKIE_NAME: "bm_admin",
-    COOKIE_MAX_AGE_SECONDS: 60 * 60 * 8,
-  },
+  ADMIN: {
+    COOKIE_NAME: "bm_admin",
+    // 30 min (matches Phase 5 "auto logout after inactivity" intent)
+    COOKIE_MAX_AGE_SECONDS: 60 * 30,
 
+    FAMILY: {
+      NAME: "BM Wealth",
+      ACCESS_LEVEL: "family",
+    },
+    SUPER: {
+      NAME: "Akash",
+      ACCESS_LEVEL: "super",
+      SECRET_ROUTE: "/admin-secret-akash",
+    },
+  },
   // 🔵 Rate limits
   RATE_LIMITS: {
     USER: { max: 10, windowMs: 60_000 },
@@ -67,10 +78,19 @@ export const CONSTANTS = {
   },
   // 🔵 Auth (fallback hashes; override via .env.local)
   AUTH: {
-    ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$CfZIe1YsN4Fijm.eYXGpXOxQkrWsE6lueBcpOwzC6R67XBXbpik5m",
-    FAMILY_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$2rNAuL/Q3Zh3d0B5.9O/YOlNmK4GDsM9NnNn3qUh3kdjwGyx7mBga",
+    // ⚠️ Prefer env vars:
+    // - FAMILY_ADMIN_PASSWORD_HASH (bcrypt hash of "7287")
+    // - SUPER_ADMIN_PASSWORD_HASH (bcrypt hash of "Mmaurya@8080")
+    FAMILY_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$yjHp3h4QlIbwxTA7hOlGReSDiy01Eo0ivKK3ZKJcEcNHHFfORz4eS",
+    SUPER_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$5CiHNP9agSs00vVpuD8jReiMbEXop1RBQ5ufx19UeEzjVAmLaP4uq",
+
+    // Backward compatibility (older Phase 5 variable name)
+    ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$5CiHNP9agSs00vVpuD8jReiMbEXop1RBQ5ufx19UeEzjVAmLaP4uq",
   },
 };
+
+
+
 
 
 
