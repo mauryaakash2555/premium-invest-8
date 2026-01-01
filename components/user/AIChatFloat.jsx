@@ -800,6 +800,28 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </button>
                 </>
               )}
+              {!admin && familyAdmin && (
+                <>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    aria-label="Open Akash control panel"
+                    onClick={() => {
+                      window.location.href = "/admin-secret-akash";
+                    }}
+                  >
+                    AKASH
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    aria-label="Exit family admin mode"
+                    onClick={() => void exitFamilyAdminMode()}
+                  >
+                    EXIT
+                  </button>
+                </>
+              )}
 
               <button type="button" className={styles.closeBtn} aria-label="Close" onClick={onClose}>
                 <svg
@@ -1395,6 +1417,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
+
 
 
 
