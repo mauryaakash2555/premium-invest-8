@@ -16,6 +16,8 @@ import { sanitizeInput } from "@/lib/utils/validator";
 import { logger } from "@/lib/utils/logger";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
+import { detectIntent, shouldPitch } from "@/lib/pitching/intentDetector";
+import { getPitch } from "@/lib/pitching/pitches";
 
 const historySchema = z
   .array(
@@ -40,6 +42,12 @@ const reqSchema = z.object({
   conversationId: z.string().min(1).max(200).optional(),
   leadId: z.string().uuid().optional(),
   mode: z.enum(["user", "admin"]).optional(),
+  pitchState: z
+    .object({
+      lastPitchAt: z.number().int().nonnegative().optional(),
+      seenPitches: z.array(z.string().min(1).max(80)).max(30).optional(),
+    })
+    .optional(),
 });
 
 const COMPLIANCE_TEXT =
@@ -391,6 +399,9 @@ function cannedEducationalAnswer(userText) {
 
 export async function POST(req) {
   let affiliate_platforms = null;
+  let pitch = null;
+  let pitch_intent = null;
+  let pitch_type = null;
   const env = getAIEnvSafe();
   const cookieStore = await cookies();
   const isAdmin = isAdminFromCookies(cookieStore);
@@ -463,6 +474,10 @@ export async function POST(req) {
     }))
     .filter((x) => x.text);
 
+  const conversationLength = conversationHistory.length;
+  const lastPitchAt = parsed.data.pitchState?.lastPitchAt;
+  const seenPitches = Array.isArray(parsed.data.pitchState?.seenPitches) ? parsed.data.pitchState.seenPitches : [];
+
   // Persist user message (best-effort) - NEVER persist admin mode messages into lead conversations.
   if (!adminSession) {
     try {
@@ -524,6 +539,9 @@ export async function POST(req) {
       const userName = await getLeadNameSafe(leadId);
       const intent = detectInvestmentIntent(message);
 
+      // Feature 11: intent detection for product pitching (SEBI-safe). This is separate from lead qualification intent.
+      pitch_intent = detectIntent(message, conversationHistory);
+
       // Log intent signals (best-effort)
       if (leadId) {
         await logEventSafe({
@@ -577,7 +595,35 @@ export async function POST(req) {
           conversationId,
         });
 
-        return NextResponse.json({ ok: true, reply, conversationId, cta, intent });
+        // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
+        if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {
+          const candidate = getPitch(pitch_intent.pitch);
+          if (candidate && !seenPitches.includes(pitch_intent.pitch)) {
+            pitch = { ...candidate };
+            pitch_type = pitch_intent.pitch;
+
+            // For affiliate-related pitches, ensure buttons can be shown even if the model didn't emit the affiliate tag.
+            if (pitch_intent.pitch === "TRADING_PLATFORMS" && !affiliate_platforms) {
+              affiliate_platforms = ["Zerodha", "Groww", "Angel One"];
+            }
+            if (pitch_intent.pitch === "INSURANCE_OPTIONS" && !affiliate_platforms) {
+              affiliate_platforms = ["HDFC Life"];
+            }
+
+            await logEventSafe({
+              leadId: leadId || null,
+              event_type: "pitch_shown",
+              data: {
+                pitch: pitch_intent.pitch,
+                intent: pitch_intent.intent,
+                conversationId,
+              },
+            });
+          }
+        }
+
+        // If a pitch was selected, return it along with CTA for backwards compatibility.
+        return NextResponse.json({ ok: true, reply, conversationId, cta, intent, pitch, pitch_type, affiliate_platforms });
       }
 
       const memoryHistory = await buildConversationHistorySafe({
@@ -622,6 +668,33 @@ export async function POST(req) {
       // Enforce brevity (3–4 sentences max).
       reply = truncateToSentences(reply, 4);
 
+      // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
+      if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {
+        const candidate = getPitch(pitch_intent.pitch);
+        if (candidate && !seenPitches.includes(pitch_intent.pitch)) {
+          pitch = { ...candidate };
+          pitch_type = pitch_intent.pitch;
+
+          // For affiliate-related pitches, ensure buttons can be shown even if the model didn't emit the affiliate tag.
+          if (pitch_intent.pitch === "TRADING_PLATFORMS" && !affiliate_platforms) {
+            affiliate_platforms = ["Zerodha", "Groww", "Angel One"];
+          }
+          if (pitch_intent.pitch === "INSURANCE_OPTIONS" && !affiliate_platforms) {
+            affiliate_platforms = ["HDFC Life"];
+          }
+
+          await logEventSafe({
+            leadId: leadId || null,
+            event_type: "pitch_shown",
+            data: {
+              pitch: pitch_intent.pitch,
+              intent: pitch_intent.intent,
+              conversationId,
+            },
+          });
+        }
+      }
+
       // Log which provider answered (admin visibility)
       await logEventSafe({
         leadId,
@@ -650,7 +723,7 @@ export async function POST(req) {
       mode: adminSession ? "admin" : "user",
       conversationId,
     });
-    return NextResponse.json({ ok: true, reply, conversationId, affiliate_platforms });
+    return NextResponse.json({ ok: true, reply, conversationId, affiliate_platforms, pitch, pitch_type });
   } catch (e) {
     const msg = e?.message || "chat_failed";
     const provider = adminSession ? "anthropic" : "ai";

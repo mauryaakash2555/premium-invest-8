@@ -610,6 +610,75 @@ transform-style: preserve-3d;
   filter: brightness(1.02);
 }
 
+.pitchCard {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pitchUrgent {
+  border-color: rgba(192, 160, 98, 0.55);
+  background: rgba(192, 160, 98, 0.06);
+}
+
+.pitchHigh {
+  border-color: rgba(192, 160, 98, 0.45);
+  background: rgba(192, 160, 98, 0.05);
+}
+
+.pitchMedium {
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.pitchLow {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.pitchContent {
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.pitchContent :global(p) {
+  margin: 0 0 10px 0;
+}
+
+.pitchContent :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.pitchContent :global(strong) {
+  color: rgba(192, 160, 98, 0.95);
+}
+
+.pitchContent :global(ul) {
+  margin: 8px 0;
+  padding-left: 18px;
+}
+
+.pitchCta {
+  margin-top: 10px;
+  width: 100%;
+  height: 38px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(192, 160, 98, 0.35);
+  color: rgba(192, 160, 98, 0.95);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.pitchCta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
 .humanCta:hover {
   transform: translateY(-1px);
   filter: brightness(1.02);

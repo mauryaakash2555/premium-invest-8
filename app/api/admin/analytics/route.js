@@ -214,6 +214,25 @@ export async function GET(req) {
     });
   }
 
+  // Pitch performance this week
+  const pitchAgg = new Map();
+  for (const e of events) {
+    if (!inRange(e.created_at, weekStart)) continue;
+    if (e.event_type !== "pitch_shown" && e.event_type !== "pitch_clicked") continue;
+    const pitch = String(e?.data?.pitch || "").trim() || "UNKNOWN";
+    if (!pitchAgg.has(pitch)) pitchAgg.set(pitch, { pitch, shown: 0, clicked: 0 });
+    const row = pitchAgg.get(pitch);
+    if (e.event_type === "pitch_shown") row.shown += 1;
+    if (e.event_type === "pitch_clicked") row.clicked += 1;
+  }
+  const pitch_performance = Array.from(pitchAgg.values())
+    .map((p) => ({
+      ...p,
+      conversion_rate: p.shown > 0 ? Math.round((p.clicked / p.shown) * 1000) / 10 : 0,
+    }))
+    .sort((a, b) => b.shown - a.shown)
+    .slice(0, 12);
+
   return NextResponse.json({
     ok: true,
     asOf: now.toISOString(),
@@ -230,6 +249,7 @@ export async function GET(req) {
       tier_breakdown: tierCountsWeek,
       top_questions: topQuestions,
       daily,
+      pitch_performance,
     },
     month: {
       visitors: visitorsMonth,

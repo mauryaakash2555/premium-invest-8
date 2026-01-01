@@ -21,6 +21,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
 import { FamilyAdminView } from "@/components/admin/FamilyAdminView";
@@ -226,6 +227,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }, []);
   const visitorLoggedRef = useRef(false);
   const convoStartedRef = useRef(false);
+  const pitchStateRef = useRef({ lastPitchAt: null, seenPitches: [] });
   const listRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -493,6 +495,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         leadId: lid || undefined,
         conversationId: sessionId,
         conversationHistory: conversationHistory || undefined,
+        pitchState: !admin ? pitchStateRef.current : undefined,
       }),
     });
     const j = await r.json().catch(() => null);
@@ -512,7 +515,51 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       cta: j.cta || null,
       intent: j.intent || null,
       affiliatePlatforms: Array.isArray(j?.affiliate_platforms) ? j.affiliate_platforms : null,
+      pitch: j.pitch || null,
+      pitchType: typeof j?.pitch_type === "string" ? j.pitch_type : null,
     };
+  }
+
+  function handlePitchAction(action, pitchType) {
+    if (!action) return;
+
+    void logEvent("pitch_clicked", { sessionId, leadId, pitch: pitchType || null, action });
+
+    switch (action) {
+      case "BOOK_CONSULTATION":
+      case "PRIORITY_BOOKING":
+      case "INSURANCE_CONSULT": {
+        const msg = encodeURIComponent(
+          action === "PRIORITY_BOOKING"
+            ? "I want to schedule a priority consultation"
+            : action === "INSURANCE_CONSULT"
+              ? "I want a free insurance needs analysis"
+              : "I want to book a free consultation"
+        );
+        const href = whatsappHref || `https://wa.me/918850977259?text=${msg}`;
+        window.open(href, "_blank", "noopener,noreferrer");
+        break;
+      }
+      case "OPEN_CALCULATOR":
+      case "OPEN_RETIREMENT_PLANNER":
+      case "OPEN_TAX_CALC": {
+        // Keep a working route even if specific tools are added later.
+        window.location.href = "/sip-calculator";
+        break;
+      }
+      case "SHOW_PLATFORMS": {
+        // Platform buttons are rendered separately below the bot message.
+        break;
+      }
+      case "DOWNLOAD_GUIDE": {
+        // No download flow implemented yet; route to consultation.
+        const href = whatsappHref || "https://wa.me/918850977259?text=I%20want%20the%20beginner%20investing%20guide";
+        window.open(href, "_blank", "noopener,noreferrer");
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   async function logEvent(event_type, data = {}) {
@@ -715,7 +762,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply, cta, affiliatePlatforms } = await sendChat({
+      const { reply, cta, affiliatePlatforms, pitch, pitchType } = await sendChat({
         message: text,
         mode: admin ? "admin" : "user",
         leadId,
@@ -724,6 +771,16 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
       const extra = {};
       if (cta) extra.cta = cta;
+      if (!admin && pitch && pitchType) {
+        extra.pitch = pitch;
+        extra.pitchType = pitchType;
+        // Track pitch state locally to avoid over-pitching.
+        const nextLen = (conversationHistory?.length || 0) + 1;
+        pitchStateRef.current = {
+          lastPitchAt: nextLen,
+          seenPitches: Array.from(new Set([...(pitchStateRef.current.seenPitches || []), pitchType])).slice(0, 30),
+        };
+      }
       if (!admin && Array.isArray(affiliatePlatforms) && affiliatePlatforms.length) {
         extra.affiliatePlatforms = affiliatePlatforms;
       }
@@ -1391,6 +1448,32 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                             </a>
                           ))}
                         </div>
+                      </div>
+                    ) : null}
+
+                    {m?.pitch?.message && m?.pitch?.cta && m?.pitch?.action ? (
+                      <div
+                        className={[
+                          styles.pitchCard,
+                          m?.pitch?.priority === "urgent"
+                            ? styles.pitchUrgent
+                            : m?.pitch?.priority === "high"
+                              ? styles.pitchHigh
+                              : m?.pitch?.priority === "medium"
+                                ? styles.pitchMedium
+                                : styles.pitchLow,
+                        ].join(" ")}
+                      >
+                        <div className={styles.pitchContent}>
+                          <ReactMarkdown>{String(m.pitch.message || "")}</ReactMarkdown>
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.pitchCta}
+                          onClick={() => handlePitchAction(m.pitch.action, m.pitchType)}
+                        >
+                          {String(m.pitch.cta)} →
+                        </button>
                       </div>
                     ) : null}
                   </div>
