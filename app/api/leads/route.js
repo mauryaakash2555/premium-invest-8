@@ -6,13 +6,6 @@
  * DEPENDENCIES:
  * - next/server (NextResponse)
  * - lib/db/leads (upsertLead)
- *
- * USED BY:
- * - components/user/AIChatFloat.jsx (lead capture)
- *
- * SIMPLE EXPLANATION:
- * When a user shares name/email/phone, we save it as a "lead".
- * We use email as the unique key so the same person updates their record.
  */
 
 import { NextResponse } from "next/server";
@@ -20,6 +13,7 @@ import { upsertLead } from "@/lib/db/leads";
 import { isFeatureEnabled } from "@/config/features";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
+import { sanitizeInput, validateLeadData, normalizePhone } from "@/lib/utils/validator";
 
 function isMissingLeadsTable(msg) {
   const m = String(msg || "");
@@ -34,15 +28,16 @@ export async function POST(req) {
   // Plugins (best-effort)
   await loadPlugins();
 
-  // 🔵 Parse input
+  // 🔵 Parse + sanitize input
   const body = await req.json().catch(() => ({}));
-  const name = String(body?.name || "").trim();
-  const email = String(body?.email || "").trim().toLowerCase();
-  const phone = String(body?.phone || "").trim();
+  const name = sanitizeInput(String(body?.name || ""));
+  const email = sanitizeInput(String(body?.email || "")).toLowerCase();
+  const phone = normalizePhone(sanitizeInput(String(body?.phone || "")));
 
   // 🔵 Validate
-  if (!email) {
-    return NextResponse.json({ ok: false, error: "email_required" }, { status: 400 });
+  const { valid, errors } = validateLeadData({ name, email, phone });
+  if (!valid) {
+    return NextResponse.json({ ok: false, error: errors.join(", ") }, { status: 400 });
   }
 
   // 🔵 Save lead

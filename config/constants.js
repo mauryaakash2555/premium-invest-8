@@ -21,12 +21,7 @@
 
 export const CONSTANTS = {
   // 🔵 Admin
-  ADMIN: {
-    // ⚠️ NOTE: For production, always set ADMIN_PASSWORD in your environment.
-    // This fallback is only here because the current codebase already uses a password gate in dev.
-    PASSWORD: process.env.ADMIN_PASSWORD || "7287",
-    FAMILY_ADMIN_PASSWORD: "bmwealth123",
-    COOKIE_NAME: "bm_admin",
+  ADMIN: {    COOKIE_NAME: "bm_admin",
     COOKIE_MAX_AGE_SECONDS: 60 * 60 * 8,
   },
 
@@ -71,3 +66,4 @@ export const CONSTANTS = {
     CLAUDE: "claude-sonnet-4-20250514",
   },
 };
+

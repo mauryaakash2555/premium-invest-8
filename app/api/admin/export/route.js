@@ -23,9 +23,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { isAdminFromCookies } from "@/lib/adminSession";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
-
-function csvEscape(v) {
+import { supabaseAdmin } from "@/lib/supabaseAdmin";\nimport { Logger } from "@/lib/monitoring/logger";\nfunction csvEscape(v) {
   const s = v == null ? "" : String(v);
   if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
@@ -231,9 +229,10 @@ export async function GET(req) {
       },
     });
   } catch (e) {
-    console.error("[api/admin/export] export_failed", e);
+    Logger.error("admin_export_failed", { error: String(e?.message || e), stack: e?.stack });
     return NextResponse.json({ ok: false, error: String(e?.message || "export_failed") }, { status: 500 });
   }
 }
+
 
 

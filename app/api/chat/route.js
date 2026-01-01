@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { getAIEnvSafe } from "@/config/env";
@@ -12,6 +12,7 @@ import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "
 import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
 import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
 import { consumeRate, makeRateKey } from "@/lib/utils/rateLimiter";
+import { sanitizeInput } from "@/lib/utils/validator";
 import { logger } from "@/lib/utils/logger";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
@@ -381,7 +382,11 @@ export async function POST(req) {
     return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 });
   }
 
-  const { message, leadId } = parsed.data;
+  const { message: rawMessage, leadId } = parsed.data;
+  const message = sanitizeInput(rawMessage);
+  if (!message) {
+    return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 });
+  }
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
 
@@ -650,6 +655,9 @@ export async function POST(req) {
     return NextResponse.json({ ok: true, reply: fallback, conversationId, warn: msg });
   }
 }
+
+
+
 
 
 

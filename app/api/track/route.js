@@ -11,8 +11,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import crypto from "crypto";
+import { getAnalyticsSaltSafe } from "@/lib/auth/secrets";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { getAdminEnvSafe } from "@/config/env";
 
 const schema = z.object({
   platform: z.string().min(1).max(80),
@@ -28,7 +28,7 @@ export async function POST(req) {
   // Privacy-safe IP hash
   const xff = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "";
   const ip = String(xff).split(",")[0]?.trim() || "";
-  const salt = getAdminEnvSafe()?.ADMIN_PASSWORD || "bmwealth";
+  const salt = getAnalyticsSaltSafe() || "bmwealth";
   const ipHash = ip ? crypto.createHmac("sha256", salt).update(ip).digest("hex") : null;
 
   try {

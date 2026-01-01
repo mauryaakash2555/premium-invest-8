@@ -17,9 +17,7 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
-﻿import { NextResponse } from "next/server";
-
-// Premium Market Snapshot (informational only)
+﻿import { NextResponse } from "next/server";\nimport { Logger } from "@/lib/monitoring/logger";\n// Premium Market Snapshot (informational only)
 // Resilient to partial symbol failures: retain last-known values on the client.
 
 const INSTRUMENTS = [
@@ -201,7 +199,8 @@ export async function GET() {
 
     return NextResponse.json({ ok: true, asOf: new Date().toISOString(), items });
   } catch (e) {
-    console.error("Market data fetch error:", e);
+    Logger.error("market_data_fetch_error", { error: String(e?.message || e), stack: e?.stack });
     return NextResponse.json({ ok: false }, { status: 502 });
   }
 }
+

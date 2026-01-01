@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAIEnvSafe, getAdminEnvSafe } from "@/config/env";
 import { FEATURES } from "@/config/features";
@@ -128,10 +128,11 @@ export async function GET(req) {
     checks: {
       supabase: supabaseCheck,
       ai,
-      admin: adminEnv?.ADMIN_PASSWORD
+      admin: adminEnv?.ADMIN_PASSWORD_HASH || adminEnv?.ADMIN_PASSWORD
         ? ok("admin", { configured: true })
-        : bad("admin", "missing_password", { configured: false }),
+        : bad("admin", "missing_admin_config", { configured: false }),
     },
   });
 }
+
 

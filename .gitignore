@@ -31,8 +31,14 @@ yarn-error.log*
 .pnpm-debug.log*
 devserver*.log
 
-# env files (can opt-in for committing if needed)
+# env files (never commit real secrets)
+.env
+.env.local
+.env.*.local
+.env*.local
+*.env
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,4 +46,3 @@ devserver*.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env
