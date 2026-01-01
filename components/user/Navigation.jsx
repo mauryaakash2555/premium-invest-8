@@ -30,9 +30,13 @@ import { cn } from '@/lib/utils';
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
+    // Prevent hydration mismatch: set mounted after initial render
+    setMounted(true);
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -95,7 +99,8 @@ const Navigation = () => {
     </Link>
   );
 
-  if (isMobile) {
+  // Prevent hydration mismatch: render desktop version on server, then switch after mount
+  if (mounted && isMobile) {
     return (
       <header
         className={cn(
