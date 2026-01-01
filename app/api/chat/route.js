@@ -11,6 +11,8 @@ import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
 import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
 import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
 import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
+import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
+import { EmailService } from "@/lib/email/emailService";
 import { consumeRate, makeRateKey } from "@/lib/utils/rateLimiter";
 import { sanitizeInput } from "@/lib/utils/validator";
 import { logger } from "@/lib/utils/logger";
@@ -498,6 +500,41 @@ export async function POST(req) {
       const score = computeLeadScore({ message, hasEmail, hasPhone, userMessageCount });
       await saveLeadScoreEvent({ leadId, score });
       await updateLeadScoreColumnSafe(leadId, score.score);
+
+      // FEATURE 12: hot lead email alert (best-effort, deduped)
+      if (score?.score >= 80) {
+        const prefs = await EmailPreferencesDB.getSafe();
+        if (prefs.hot_lead_alerts) {
+          try {
+            const sb = supabaseAdmin();
+            const already = await sb
+              .from("events")
+              .select("id")
+              .eq("lead_id", leadId)
+              .eq("event_type", "email_hot_lead_sent")
+              .limit(1);
+
+            if (!already?.data?.length) {
+              const leadRes = await sb.from("leads").select("name,email,phone,lead_score,created_at").eq("id", leadId).maybeSingle();
+              await EmailService.sendHotLeadAlert({
+                to: prefs.email_address,
+                lead: {
+                  ...(leadRes?.data || {}),
+                  lead_score: score.score,
+                  last_message: message,
+                },
+              });
+              await logEventSafe({
+                leadId,
+                event_type: "email_hot_lead_sent",
+                data: { score: score.score, conversationId },
+              });
+            }
+          } catch {
+            // ignore
+          }
+        }
+      }
     } catch {
       // ignore if DB not configured yet
     }

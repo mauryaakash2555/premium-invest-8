@@ -63,3 +63,22 @@ create index if not exists idx_clicks_platform on public.affiliate_clicks(platfo
 create index if not exists idx_clicks_lead on public.affiliate_clicks(lead_id);
 
 
+-- Email notifications (FEATURE 12)
+create table if not exists public.email_preferences (
+  id uuid primary key,
+  email_address text not null,
+  hot_lead_alerts boolean default true,
+  daily_summary boolean default true,
+  weekly_summary boolean default true,
+  conversion_alerts boolean default true,
+  error_alerts boolean default true,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
+);
+
+-- Singleton row (used by app code as a fixed id)
+insert into public.email_preferences (id, email_address)
+values ('00000000-0000-0000-0000-000000000001', 'akash@bmwealth.co.in')
+on conflict (id) do nothing;
+
+

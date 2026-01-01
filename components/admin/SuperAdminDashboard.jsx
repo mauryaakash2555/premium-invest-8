@@ -5,6 +5,7 @@ import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { LeadsList } from '@/components/admin/LeadsList';
 import { AnalyticsView } from '@/components/admin/AnalyticsView';
 import { AffiliateTracking } from '@/components/admin/AffiliateTracking';
+import { EmailPreferences } from '@/components/admin/EmailPreferences';
 import { SessionManager } from '@/lib/auth/session';
 
 function fmtINR(n) {
@@ -308,6 +309,7 @@ export function SuperAdminDashboard({ onLogout }) {
               <div className="sa-panelTitle">SYSTEM CONTROLS</div>
             </div>
             <AffiliateTracking />
+            <EmailPreferences />
           </div>
         ) : null}
       </main>
