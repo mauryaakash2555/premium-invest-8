@@ -1,37 +1,37 @@
 /**
- * FILE: app/admin-secret-akash/page.jsx
- * PURPOSE: Hidden SUPER admin page (login + full dashboard).
- * CATEGORY: app
- *
- * SIMPLE EXPLANATION:
- * This page is not linked from the main site.
- * Super Admin enters password, then sees the full control panel.
+ * Super Admin Dashboard
+ * Full control panel for Akash only
  */
 
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import { CONSTANTS } from '@/config/constants';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { AdminLogin } from '@/components/admin/AdminLogin';
+import { SuperAdminDashboard } from '@/components/admin/SuperAdminDashboard';
 
-export default function AdminSecretAkashPage() {
-  const passwordRef = useRef(null);
+import './admin.css';
+
+async function fetchJSON(url, opts) {
+  const r = await fetch(url, opts);
+  const j = await r.json().catch(() => null);
+  return { r, j };
+}
+
+export default function SuperAdminPage() {
   const [authed, setAuthed] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // 🔵 Quick auth check (will work only if super cookie is present)
     let mounted = true;
     (async () => {
       try {
-        const r = await fetch('/api/admin/summary');
-        const j = await r.json().catch(() => null);
+        const { r, j } = await fetchJSON('/api/admin/verify');
         if (!mounted) return;
-        setAuthed(Boolean(r.ok && j?.ok));
-      } catch {
-        if (!mounted) return;
-        setAuthed(false);
+        setAuthed(Boolean(r.ok && j?.authenticated));
+      } finally {
+        if (mounted) setLoading(false);
       }
     })();
     return () => {
@@ -39,82 +39,44 @@ export default function AdminSecretAkashPage() {
     };
   }, []);
 
-  async function login(e) {
-    e.preventDefault();
-    setBusy(true);
-    setError('');
+  async function handleLogin(password) {
+    const { r, j } = await fetchJSON('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
 
-    const password = String(passwordRef.current?.value || '');
-
-    try {
-      const r = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-
-      if (!r.ok) {
-        setError(r.status === 401 ? 'Wrong password' : 'Login failed');
-        setAuthed(false);
-        return;
-      }
-
-      setAuthed(true);
-    } catch {
-      setError('Login failed');
-      setAuthed(false);
-    } finally {
-      setBusy(false);
+    if (r.status === 429 && j?.error === 'locked') {
+      return { lockedForSeconds: Number(j?.retryAfterSeconds) || 300 };
     }
+
+    if (!r.ok) {
+      throw new Error(r.status === 401 ? 'Wrong password' : 'Login failed');
+    }
+
+    setAuthed(true);
+    return { ok: true };
   }
 
-  if (authed) return <AdminDashboard />;
+  async function handleLogout() {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch {}
+    setAuthed(false);
+    router.push('/');
+  }
 
-  return (
-    <div style={{ maxWidth: 560, margin: '0 auto', padding: '120px 16px 60px', color: '#fff' }}>
-      <h1 style={{ color: '#C0A062', fontFamily: '"Playfair Display", serif' }}>
-        {CONSTANTS?.ADMIN?.SUPER?.NAME || 'Akash'} Control Panel
-      </h1>
-      <p style={{ marginTop: 10, opacity: 0.75 }}>Enter the super admin password to continue.</p>
+  if (loading) return <div className="sa-loading">Loading…</div>;
 
-      <form onSubmit={login} style={{ marginTop: 18, display: 'grid', gap: 10 }}>
-        <input
-          ref={passwordRef}
-          type="password"
-          placeholder="Super Admin Password"
-          autoComplete="current-password"
-          style={{
-            padding: '12px 14px',
-            borderRadius: 12,
-            border: '1px solid rgba(255,255,255,0.14)',
-            background: 'rgba(255,255,255,0.05)',
-            color: '#fff',
-            outline: 'none',
-          }}
-        />
+  if (!authed) {
+    return (
+      <AdminLogin
+        onLogin={handleLogin}
+        title="🎛️ Akash's Control Panel"
+        subtitle="Super Admin Access"
+      />
+    );
+  }
 
-        <button
-          type="submit"
-          disabled={busy}
-          style={{
-            padding: '12px 14px',
-            borderRadius: 12,
-            border: '1px solid rgba(192,160,98,0.35)',
-            background: busy ? 'rgba(192,160,98,0.12)' : 'rgba(192,160,98,0.18)',
-            color: '#C0A062',
-            cursor: busy ? 'not-allowed' : 'pointer',
-            fontWeight: 700,
-          }}
-        >
-          {busy ? 'Logging in...' : 'Login'}
-        </button>
-
-        {error ? <div style={{ color: '#ffb4b4' }}>{error}</div> : null}
-      </form>
-
-      <div style={{ marginTop: 18, opacity: 0.55, fontSize: 12 }}>
-        Tip: In production this is protected by a secure super admin cookie.
-      </div>
-    </div>
-  );
+  return <SuperAdminDashboard onLogout={handleLogout} />;
 }
