@@ -585,13 +585,14 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         if (res?.ok) {
           setFamilyAdmin(true);
           setTab("family");
-          pushBotUser("Family Admin Mode Active 👨‍👩‍👧");
+          pushBotUser("Family Admin Mode Active \u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}");
           return;
         }
       } finally {
         setBusy(false);
       }
-      // If login failed, continue as normal chat message.
+      pushBotUser("Family code not recognized.");
+      return;
     }
 
     const conversationHistory = buildConversationHistorySnapshot();
@@ -935,10 +936,20 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             </div>
                     ) : tab === "family" && familyAdmin ? (
             <div className={styles.body}>
-              <div className={styles.bubble} style={{ padding: 0 }}>
+              <div
+                className={styles.bubble}
+                style={{
+                  padding: 0,
+                  width: "100%",
+                  maxWidth: "100%",
+                  alignSelf: "stretch",
+                  overflow: "hidden",
+                }}
+              >
                 <FamilyAdminView onExit={exitFamilyAdminMode} />
               </div>
-            </div>) : tab === "dashboard" && admin ? (
+            </div>
+          ) : tab === "dashboard" && admin ? (
             <div className={styles.body}>
               <div className={styles.bubble}>
                 <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
@@ -1386,6 +1397,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
+
 
 
 
