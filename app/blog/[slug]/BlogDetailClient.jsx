@@ -66,7 +66,9 @@ export default function BlogDetailClient({ slug }) {
   const [showBackToTop, setShowBackToTop] = useState(false);
   // Keep overlay simple: % only (no timer)
 
-  useEffect(() => {\n    window.scrollTo(0, 0);\n  }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!slug) return;
