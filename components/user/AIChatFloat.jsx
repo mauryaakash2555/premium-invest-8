@@ -23,6 +23,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
+import { FamilyAdminView } from "@/components/admin/FamilyAdminView";
 
 const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product\n" +
@@ -128,11 +129,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [admin, setAdmin] = useState(false);
+  const [familyAdmin, setFamilyAdmin] = useState(false);
   const [leadId, setLeadId] = useState(null);
   const [leadDraft, setLeadDraft] = useState({ name: "", email: "", phone: "" });
   const [captureStep, setCaptureStep] = useState(() => (FEATURE_LEAD_CAPTURE ? "name" : "done")); // name|email|phone|done
   const [dashboard, setDashboard] = useState(null);
-  const [tab, setTab] = useState("chat"); // chat|dashboard|analytics
+  const [tab, setTab] = useState("chat"); // chat|dashboard|analytics|family|family
   const [humanReady, setHumanReady] = useState(false);
   const [revenueAmount, setRevenueAmount] = useState("");
   const [revenueSource, setRevenueSource] = useState("Other"); // Affiliate|Lead Sale|Product|Other
@@ -160,6 +162,28 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     pushBotAdmin("Exited admin mode.");
   }
 
+  async function exitFamilyAdminMode() {
+    setFamilyAdmin(false);
+    setTab("chat");
+    pushBotUser("Exited family admin mode.");
+    try {
+      await fetch("/api/admin/family/logout", { method: "POST" });
+    } catch {
+      // ignore
+    }
+  }
+
+  async function tryFamilyLogin(password) {
+    const r = await fetch("/api/admin/family/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const j = await r.json().catch(() => null);
+    if (r.status === 503 && j?.error === "setup_required") return { ok: false, setupRequired: true };
+    if (!r.ok) return { ok: false, setupRequired: false };
+    return { ok: Boolean(j?.ok), setupRequired: false };
+  }
   async function exportLeads() {
     if (!admin || exportBusy) return;
     setExportBusy(true);
@@ -545,6 +569,31 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     const text = String(raw || "").trim();
     if (!text || busy) return;
 
+    // Family admin unlock (password typed into chat) — do this BEFORE we push user text into the chat.
+    // We only attempt when it looks like the family password (avoids extra calls on normal messages).
+    if (!admin && !familyAdmin && /bmwealth/i.test(text) && text.length <= 20) {
+      // Keep DOM + state in sync
+      if (inputRef.current) inputRef.current.value = "";
+      setInput("");
+      setBusy(true);
+      try {
+        const res = await tryFamilyLogin(text);
+        if (res?.setupRequired) {
+          pushBotUser("Family dashboard is not configured on this environment yet.");
+          return;
+        }
+        if (res?.ok) {
+          setFamilyAdmin(true);
+          setTab("family");
+          pushBotUser("Family Admin Mode Active 👨‍👩‍👧");
+          return;
+        }
+      } finally {
+        setBusy(false);
+      }
+      // If login failed, continue as normal chat message.
+    }
+
     const conversationHistory = buildConversationHistorySnapshot();
 
     // Keep DOM + state in sync (robust to automation + IME edge-cases)
@@ -606,7 +655,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
       // Lead capture gate (Micro-MVP)
       // IMPORTANT: never run lead capture in admin mode.
-      if (!admin && FEATURE_LEAD_CAPTURE && captureStep !== "done") {
+      if (!admin && !familyAdmin && FEATURE_LEAD_CAPTURE && captureStep !== "done") {
         if (captureStep === "name") {
           if (isGreetingOnly(text)) {
             pushBotUser("Hello. May I have your name?");
@@ -884,7 +933,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 </div>
               )}
             </div>
-          ) : tab === "dashboard" && admin ? (
+                    ) : tab === "family" && familyAdmin ? (
+            <div className={styles.body}>
+              <div className={styles.bubble} style={{ padding: 0 }}>
+                <FamilyAdminView onExit={exitFamilyAdminMode} />
+              </div>
+            </div>) : tab === "dashboard" && admin ? (
             <div className={styles.body}>
               <div className={styles.bubble}>
                 <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
@@ -1332,6 +1386,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
+
+
+
+
+
+
 
 
 

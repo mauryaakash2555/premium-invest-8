@@ -65,5 +65,12 @@ export const CONSTANTS = {
     GROQ: "llama-3.3-70b-versatile",
     CLAUDE: "claude-sonnet-4-20250514",
   },
+  // 🔵 Auth (fallback hashes; override via .env.local)
+  AUTH: {
+    ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$CfZIe1YsN4Fijm.eYXGpXOxQkrWsE6lueBcpOwzC6R67XBXbpik5m",
+    FAMILY_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$2rNAuL/Q3Zh3d0B5.9O/YOlNmK4GDsM9NnNn3qUh3kdjwGyx7mBga",
+  },
 };
+
+
 
