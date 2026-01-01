@@ -595,6 +595,40 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       return;
     }
 
+
+    // Admin unlock (intercept before echo)
+    // IMPORTANT: avoid intercepting phone capture (10-digit numbers).
+    // Allow 4-digit PIN anytime (admin convenience), but longer numeric inputs only after capture is done.
+    if (!admin && !familyAdmin && (/^\d{4}$/.test(text) || (captureStep === "done" && /^\d{5,12}$/.test(text)))) {
+      if (inputRef.current) inputRef.current.value = "";
+      setInput("");
+      setBusy(true);
+      try {
+        const res = await tryAdminLogin(text);
+        if (res?.setupRequired) {
+          pushBotUser("Admin dashboard is not configured on this environment yet.");
+          return;
+        }
+        if (res?.ok) {
+          setAdmin(true);
+          setTab("dashboard");
+          pushBotAdmin(FEATURE_CLAUDE_ADMIN ? "Admin mode active - Claude AI enabled." : "Admin mode active.");
+          const dash = await refreshDashboard();
+          setDashboard(dash);
+          if (FEATURE_CLAUDE_ADMIN) {
+            const s = await fetchStrategy({ force: false });
+            setStrategy(s);
+          } else {
+            setStrategy(null);
+          }
+          return;
+        }
+        pushBotUser("Admin code not recognized for this environment.");
+        return;
+      } finally {
+        setBusy(false);
+      }
+    }
     const conversationHistory = buildConversationHistorySnapshot();
 
     // Keep DOM + state in sync (robust to automation + IME edge-cases)
@@ -624,33 +658,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         setHumanReady(true);
         if (admin) pushBotAdmin("Sure - you can contact our customer support team on WhatsApp.");
         else pushBotUser("Sure - you can contact our customer support team on WhatsApp.");
-        return;
-      }
-
-      // Admin unlock (enter password-like digits to unlock)
-      // IMPORTANT: avoid intercepting phone capture (10-digit numbers).
-      // Allow 4-digit PIN anytime (admin convenience), but longer numeric inputs only after capture is done.
-      if (!admin && (/^\d{4}$/.test(text) || (captureStep === "done" && /^\d{5,12}$/.test(text)))) {
-        const res = await tryAdminLogin(text);
-        if (res?.setupRequired) {
-          pushBotUser("Admin dashboard is not configured on this environment yet.");
-          return;
-        }
-        if (res?.ok) {
-          setAdmin(true);
-          setTab("dashboard");
-          pushBotAdmin(FEATURE_CLAUDE_ADMIN ? "Admin mode active - Claude AI enabled." : "Admin mode active.");
-          const dash = await refreshDashboard();
-          setDashboard(dash);
-          if (FEATURE_CLAUDE_ADMIN) {
-            const s = await fetchStrategy({ force: false });
-            setStrategy(s);
-          } else {
-            setStrategy(null);
-          }
-          return;
-        }
-        pushBotUser("Admin code not recognized for this environment.");
         return;
       }
 
@@ -1397,6 +1404,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
+
 
 
 
