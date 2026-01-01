@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <defs>
+    <style>
+      .bg { fill: #0b0b0c; }
+      .card { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.10); stroke-width: 2; }
+      .h { fill: #C6A15B; font-family: Arial, sans-serif; font-size: 28px; font-weight: 900; }
+      .sub { fill: rgba(255,255,255,0.70); font-family: Arial, sans-serif; font-size: 14px; }
+      .mono { fill: rgba(255,255,255,0.90); font-family: Consolas, monospace; font-size: 16px; }
+      .red { fill: rgba(255,120,120,0.95); font-family: Consolas, monospace; font-size: 16px; }
+      .arrow { stroke: rgba(255,215,0,0.9); stroke-width: 4; fill: none; marker-end: url(#arrowHead); }
+      .note { fill: rgba(255,255,255,0.90); font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="rgba(255,215,0,0.9)"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1100" height="700"/>
+  <rect class="card" x="60" y="60" rx="20" ry="20" width="980" height="580"/>
+
+  <text class="h" x="100" y="115">Screenshot 5: Where Errors Appear 🔥</text>
+  <text class="sub" x="100" y="142">Open the browser console: press F12 (Inspect → Console)</text>
+
+  <rect class="card" x="100" y="180" rx="12" ry="12" width="900" height="430"/>
+  <text class="mono" x="130" y="220">Console</text>
+  <text class="mono" x="130" y="260">✅ GET /api/health 200</text>
+  <text class="red"  x="130" y="300">❌ Error: Something broke (example)</text>
+  <text class="mono" x="130" y="330">   at components/user/AIChatFloat.jsx:123</text>
+  <text class="mono" x="130" y="360">   Tip: look for the FIRST red error</text>
+  <text class="mono" x="130" y="390">✅ Fix: restart server + hard refresh</text>
+
+  <path class="arrow" d="M 980 300 C 1060 300, 1060 360, 940 360" />
+  <text class="note" x="780" y="275">Look for red lines</text>
+  <text class="sub" x="780" y="295">They tell you what broke</text>
+
+  <text class="sub" x="100" y="650">If you don’t understand the error, copy it and ask for help.</text>
+</svg>
+
+

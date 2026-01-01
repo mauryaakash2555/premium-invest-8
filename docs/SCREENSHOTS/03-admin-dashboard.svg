@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <defs>
+    <style>
+      .bg { fill: #0b0b0c; }
+      .panel { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.10); stroke-width: 2; }
+      .gold { fill: #C6A15B; }
+      .text { fill: rgba(255,255,255,0.92); font-family: Arial, sans-serif; }
+      .muted { fill: rgba(255,255,255,0.65); font-family: Arial, sans-serif; }
+      .mono { fill: rgba(255,255,255,0.85); font-family: Consolas, monospace; }
+      .title { font-size: 26px; font-weight: 800; }
+      .small { font-size: 14px; }
+      .label { font-size: 16px; font-weight: 700; }
+      .boxTitle { font-size: 18px; font-weight: 800; letter-spacing: 1px; }
+      .arrow { stroke: rgba(255,215,0,0.9); stroke-width: 4; fill: none; marker-end: url(#arrowHead); }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="rgba(255,215,0,0.9)"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1100" height="700"/>
+  <rect class="panel" x="70" y="60" rx="20" ry="20" width="960" height="580"/>
+
+  <text class="text title" x="110" y="120">ADMIN DASHBOARD 🎛️ (Example)</text>
+  <text class="muted small" x="110" y="150">Safe mock screenshot with fake data (no real emails/phones).</text>
+
+  <rect class="panel" x="110" y="190" rx="16" ry="16" width="280" height="110"/>
+  <text class="muted small" x="135" y="225">LEADS TODAY</text>
+  <text class="gold" x="135" y="270" style="font-size:42px;font-weight:900;">12</text>
+
+  <rect class="panel" x="420" y="190" rx="16" ry="16" width="280" height="110"/>
+  <text class="muted small" x="445" y="225">CHATS TODAY</text>
+  <text class="gold" x="445" y="270" style="font-size:42px;font-weight:900;">34</text>
+
+  <rect class="panel" x="730" y="190" rx="16" ry="16" width="260" height="110"/>
+  <text class="muted small" x="755" y="225">REVENUE (MONTH)</text>
+  <text class="gold" x="755" y="270" style="font-size:42px;font-weight:900;">₹2,50,000</text>
+
+  <rect class="panel" x="110" y="330" rx="16" ry="16" width="880" height="260"/>
+  <text class="text boxTitle" x="135" y="370">LEADS (Top)</text>
+  <text class="mono small" x="135" y="410">Name</text>
+  <text class="mono small" x="420" y="410">Email</text>
+  <text class="mono small" x="730" y="410">Phone</text>
+
+  <text class="text small" x="135" y="450">Riya (HOT • 90)</text>
+  <text class="text small" x="420" y="450">riya@example.com</text>
+  <text class="text small" x="730" y="450">99999 99999</text>
+
+  <text class="text small" x="135" y="485">Aman (WARM • 55)</text>
+  <text class="text small" x="420" y="485">aman@example.com</text>
+  <text class="text small" x="730" y="485">88888 88888</text>
+
+  <text class="text small" x="135" y="520">Anonymous (COLD • 10)</text>
+  <text class="text small" x="420" y="520">—</text>
+  <text class="text small" x="730" y="520">—</text>
+
+  <path class="arrow" d="M 80 210 C 40 210, 40 240, 110 245" />
+  <text class="text label" x="20" y="205">① Today stats</text>
+  <text class="muted small" x="20" y="228">Leads / chats / revenue</text>
+
+  <path class="arrow" d="M 1020 360 C 1080 360, 1080 420, 970 430" />
+  <text class="text label" x="860" y="350">② Leads list</text>
+  <text class="muted small" x="860" y="372">Who contacted you</text>
+
+  <path class="arrow" d="M 980 140 C 1040 140, 1040 190, 930 235" />
+  <text class="text label" x="820" y="125">③ Admin tools</text>
+  <text class="muted small" x="820" y="147">Export / revenue / strategy</text>
+
+  <text class="muted small" x="110" y="625">Real dashboard appears in the chat UI after entering admin code.</text>
+</svg>
+
+

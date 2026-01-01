@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <defs>
+    <style>
+      .bg { fill: #0b0b0c; }
+      .card { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.10); stroke-width: 2; }
+      .h { fill: #C6A15B; font-family: Arial, sans-serif; font-size: 28px; font-weight: 900; }
+      .sub { fill: rgba(255,255,255,0.70); font-family: Arial, sans-serif; font-size: 14px; }
+      .code { fill: rgba(255,255,255,0.92); font-family: Consolas, monospace; font-size: 18px; }
+      .hl { fill: rgba(198,161,91,0.18); stroke: rgba(198,161,91,0.75); stroke-width: 2; }
+      .note { fill: rgba(255,255,255,0.90); font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; }
+      .arrow { stroke: rgba(255,215,0,0.9); stroke-width: 4; fill: none; marker-end: url(#arrowHead); }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="rgba(255,215,0,0.9)"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1100" height="700"/>
+  <rect class="card" x="60" y="60" rx="20" ry="20" width="980" height="580"/>
+
+  <text class="h" x="100" y="115">Screenshot 2: Where to Change Colors 🎨</text>
+  <text class="sub" x="100" y="142">File: config/constants.js → CONSTANTS.UI.COLORS</text>
+
+  <rect class="card" x="100" y="175" rx="16" ry="16" width="900" height="420"/>
+  <rect class="hl" x="130" y="290" rx="10" ry="10" width="840" height="180"/>
+
+  <text class="code" x="140" y="230">export const CONSTANTS = {</text>
+  <text class="code" x="180" y="260">UI: {</text>
+  <text class="code" x="220" y="290">COLORS: {</text>
+  <text class="code" x="260" y="320">PRIMARY_GOLD: "#C6A15B",</text>
+  <text class="code" x="260" y="350">SECONDARY_GOLD: "#E0C98A",</text>
+  <text class="code" x="260" y="380">BACKGROUND_DARK: "#0B0B0C",</text>
+  <text class="code" x="260" y="410">CARD_DARK: "#111214",</text>
+  <text class="code" x="220" y="440">},</text>
+  <text class="code" x="180" y="470">},</text>
+  <text class="code" x="140" y="500">};</text>
+
+  <path class="arrow" d="M 1000 260 C 1060 260, 1060 340, 950 340" />
+  <text class="note" x="790" y="235">Change these hex codes</text>
+  <text class="sub" x="790" y="255">Save + refresh</text>
+</svg>
+
+
