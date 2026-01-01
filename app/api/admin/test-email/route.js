@@ -25,8 +25,10 @@ export async function POST(req) {
   const to = prefs.email_address;
 
   try {
+    let result = null;
+
     if (parsed.data.type === 'hot_lead') {
-      await EmailService.sendHotLeadAlert({
+      result = await EmailService.sendHotLeadAlert({
         to,
         lead: {
           name: 'Test User',
@@ -40,7 +42,7 @@ export async function POST(req) {
     }
 
     if (parsed.data.type === 'daily_summary') {
-      await EmailService.sendDailySummary({
+      result = await EmailService.sendDailySummary({
         to,
         stats: {
           leads: 12,
@@ -54,7 +56,7 @@ export async function POST(req) {
     }
 
     if (parsed.data.type === 'conversion') {
-      await EmailService.sendConversionAlert({
+      result = await EmailService.sendConversionAlert({
         to,
         conversion: {
           platform: 'Zerodha',
@@ -66,7 +68,7 @@ export async function POST(req) {
     }
 
     if (parsed.data.type === 'error') {
-      await EmailService.sendErrorAlert({
+      result = await EmailService.sendErrorAlert({
         to,
         err: {
           message: 'Test error alert',
@@ -76,7 +78,24 @@ export async function POST(req) {
       });
     }
 
-    return NextResponse.json({ ok: true, sent: true });
+    if (result?.ok) {
+      return NextResponse.json({ ok: true, sent: true });
+    }
+
+    if (result?.skipped) {
+      return NextResponse.json(
+        {
+          ok: false,
+          sent: false,
+          skipped: true,
+          reason: String(result?.reason || 'skipped'),
+        },
+        { status: 503 }
+      );
+    }
+
+    const errMsg = result?.error?.message ? String(result.error.message) : String(result?.error || 'send_failed');
+    return NextResponse.json({ ok: false, sent: false, error: errMsg }, { status: 500 });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e?.message || 'unknown') }, { status: 500 });
   }
