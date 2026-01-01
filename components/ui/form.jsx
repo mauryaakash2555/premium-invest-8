@@ -1,3 +1,26 @@
+/**
+ * FILE: components\ui\form.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - react
+ * - @radix-ui/react-slot
+ * - react-hook-form
+ * - @/lib/utils
+ * - @/components/ui/label
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { Controller, FormProvider, useFormContext } from "react-hook-form";

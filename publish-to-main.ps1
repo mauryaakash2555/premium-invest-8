@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 function Assert-Git { if ($LASTEXITCODE -ne 0) { throw "Git failed." } }
 
 Write-Host ">>> Switching to project..."
-Set-Location "$([Environment]::GetFolderPath('Desktop'))\premium-invest-8"
+Set-Location "$PSScriptRoot" # Use the script's own directory for safety
 
 Write-Host ">>> Checking out main..."
 git checkout main --quiet; Assert-Git

@@ -1,8 +1,31 @@
-﻿'use client';
+/**
+ * FILE: app\platforms\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - next/link
+ * - lucide-react
+ * - @/components/user/MobileScrollBoost
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+'use client';
 
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 
 export default function Platforms() {
   useEffect(() => {
@@ -81,7 +104,7 @@ export default function Platforms() {
       <section style={{ padding: '40px 0 100px', width: '100%' }}>
         
         {/* POSITION #1 - DIAMOND PARTNER (COMPETITIVE BIDDING) */}
-        <div className="platform-card diamond-bidding">
+        <MobileScrollBoost className="platform-card diamond-bidding" holdMs={5000}>
           <div className="platform-content">
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '40px', filter: 'drop-shadow(0 0 10px rgba(192, 160, 98, 0.8))' }}>💎</span>
@@ -125,10 +148,10 @@ export default function Platforms() {
               Enter Bidding
             </Link>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* POSITION #2 - ZERODHA */}
-        <div className="platform-card">
+        <MobileScrollBoost className="platform-card" holdMs={4500}>
           <div className="platform-content">
             <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#2</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
@@ -151,10 +174,10 @@ export default function Platforms() {
               Open Free Demat Account <ExternalLink size={16} />
             </a>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* POSITION #3 - SMALLCASE */}
-        <div className="platform-card">
+        <MobileScrollBoost className="platform-card" holdMs={4500}>
           <div className="platform-content">
             <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#3</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
@@ -177,10 +200,10 @@ export default function Platforms() {
               Explore Smallcases <ExternalLink size={16} />
             </a>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* POSITION #4 - GROWW */}
-        <div className="platform-card">
+        <MobileScrollBoost className="platform-card" holdMs={4500}>
           <div className="platform-content">
             <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(192, 160, 98, 0.8)', letterSpacing: '2px', marginBottom: '10px' }}>#4</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: '#C0A062', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
@@ -203,7 +226,7 @@ export default function Platforms() {
               Start Free Account <ExternalLink size={16} />
             </a>
           </div>
-        </div>
+        </MobileScrollBoost>
 
         {/* Affiliate Disclaimer */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
@@ -364,3 +387,4 @@ export default function Platforms() {
     </div>
   );
 }
+

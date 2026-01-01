@@ -242,13 +242,13 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Number That Changed Everything
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After three hours of portfolio analysis, we calculated the opportunity cost of his current investment structure versus what a properly designed portfolio could have achieved:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>47,00,000
       </p>
@@ -269,14 +269,14 @@ export const staticBlogPost = {
       <li>Zero portfolio reviews in 7 years</li>
     </ul>
     <p style="font-size: 18px; line-height: 2; margin-top: 35px;">
-      <strong style="color: #DAA520;">The hardest part?</strong> Every rupee was invested with the best intentions, based on "expert" advice from people he trusted.
+      <strong style="color: #C0A062;">The hardest part?</strong> Every rupee was invested with the best intentions, based on "expert" advice from people he trusted.
     </p>
   </div>
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       How Does This Even Happen?
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -348,7 +348,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Part That Hurts Most
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -368,7 +368,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Every Investor Must Understand
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px;">
@@ -376,35 +376,35 @@ export const staticBlogPost = {
     </p>
 
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      → <strong style="color: #DAA520;">Goals First, Products Second</strong>
+      → <strong style="color: #C0A062;">Goals First, Products Second</strong>
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Define clear financial goals with timelines BEFORE choosing any investment product. Retirement in 20 years needs different products than child's education in 8 years or buying a home in 3 years.
     </p>
 
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      → <strong style="color: #DAA520;">Keep Insurance and Investment Separate</strong>
+      → <strong style="color: #C0A062;">Keep Insurance and Investment Separate</strong>
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Pure term insurance for life protection. Mutual funds/other vehicles for wealth creation. Mixing them typically serves neither purpose well.
     </p>
 
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      → <strong style="color: #DAA520;">Understand All Costs</strong>
+      → <strong style="color: #C0A062;">Understand All Costs</strong>
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Expense ratios, allocation charges, exit loads, lock-in periods—know exactly what you're paying and why. A 1% difference in annual costs can mean lakhs over decades.
     </p>
 
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      → <strong style="color: #DAA520;">Build Proper Asset Allocation</strong>
+      → <strong style="color: #C0A062;">Build Proper Asset Allocation</strong>
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px; padding-left: 20px;">
       Your equity-debt-liquid mix should match your age, risk capacity, and time horizons for different goals. This drives 80-90% of long-term returns.
     </p>
 
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      → <strong style="color: #DAA520;">Review and Rebalance Annually</strong>
+      → <strong style="color: #C0A062;">Review and Rebalance Annually</strong>
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px; padding-left: 20px;">
       Markets move. Your situation changes. Funds underperform. Regular review ensures your portfolio stays aligned with goals, and rebalancing locks in gains while managing risk.
@@ -418,7 +418,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Are You in the Same Situation?
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 35px;">
@@ -451,7 +451,7 @@ export const staticBlogPost = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Changed for This Family
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -481,15 +481,15 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
     
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
 
     <div style="max-width: 800px; margin: 0 auto;">
       
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I lose money in mutual funds?
         </h3>
@@ -498,7 +498,7 @@ export const staticBlogPost = {
         </p>
       </div>
 
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           How often should I review my portfolio?
         </h3>
@@ -507,7 +507,7 @@ export const staticBlogPost = {
         </p>
       </div>
 
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What is opportunity cost in investing?
         </h3>
@@ -516,7 +516,7 @@ export const staticBlogPost = {
         </p>
       </div>
 
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Should I mix insurance with investment?
         </h3>
@@ -539,12 +539,12 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/retirement-shortfall-case-study" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/retirement-shortfall-case-study" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         He Did Everything Right. Still ₹2.3 Crore Short →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -586,7 +586,7 @@ export const staticBlogPost = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -606,8 +606,8 @@ export const staticBlogPost = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -738,7 +738,7 @@ export const staticBlogPost2 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Reality Check That Changed Everything
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -747,7 +747,7 @@ export const staticBlogPost2 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Every calculation showed the same terrifying truth: His current savings trajectory would leave him massively short of what he'd need for a comfortable Mumbai retirement.
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>2,85,00,000
       </p>
@@ -774,7 +774,7 @@ export const staticBlogPost2 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Three Critical Mistakes
     </h2>
 
@@ -829,7 +829,7 @@ export const staticBlogPost2 = {
         <li>Property tax, repairs: ₹7,000/month average</li>
       </ul>
       <p style="font-size: 18px; line-height: 2;">
-        <strong style="color: #DAA520;">Actual monthly need: ₹1.08 lakh.</strong> Not ₹60,000. And this would be ₹1.95 lakh by the time he retires in 8 years due to inflation.
+        <strong style="color: #C0A062;">Actual monthly need: ₹1.08 lakh.</strong> Not ₹60,000. And this would be ₹1.95 lakh by the time he retires in 8 years due to inflation.
       </p>
     </div>
   </div>
@@ -837,7 +837,7 @@ export const staticBlogPost2 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Corrective Strategy We Designed
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -847,8 +847,8 @@ export const staticBlogPost2 = {
       The educational framework we provided:
     </p>
     
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Rebalanced Asset Allocation Strategy
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -859,8 +859,8 @@ export const staticBlogPost2 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Increased Savings Rate
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
@@ -876,8 +876,8 @@ export const staticBlogPost2 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Projected Outcome (8 Years)
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 8px;">
@@ -887,7 +887,7 @@ export const staticBlogPost2 = {
         <li>Existing corpus grows from ₹1.47 Cr to ₹2.85 Cr</li>
         <li>New investments of ₹91.2L over 8 years grow to ₹1.42 Cr</li>
         <li>EPF accumulation adds ₹85L more</li>
-        <li><strong style="color: #DAA520;">Total projected at 60: ₹5.12 crore</strong></li>
+        <li><strong style="color: #C0A062;">Total projected at 60: ₹5.12 crore</strong></li>
       </ul>
       <p style="font-size: 18px; line-height: 2; color: #C0A062; font-weight: 500; margin-top: 15px;">
         This bridges the gap from ₹2.95 Cr to ₹5.12 Cr—close to the ₹5.8 Cr target.
@@ -898,7 +898,7 @@ export const staticBlogPost2 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What This Means for You
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -907,7 +907,7 @@ export const staticBlogPost2 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Ask yourself:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Do you know exactly how much corpus you need for retirement?
       </p>
@@ -980,12 +980,12 @@ export const staticBlogPost2 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           How much corpus do I need for retirement in Mumbai?
         </h3>
@@ -993,7 +993,7 @@ export const staticBlogPost2 = {
           It depends on your lifestyle. For ₹1 lakh/month expenses today, you'd need ₹4-5 crore for 25 years of retirement, accounting for inflation and conservative withdrawal rates. Use the 25x rule: Calculate your annual expenses at retirement, multiply by 25. For Mumbai's higher costs, err on the higher side.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is 50% equity too risky in your 50s?
         </h3>
@@ -1001,7 +1001,7 @@ export const staticBlogPost2 = {
           Not necessarily. If you have 8-10 years to retirement, stable income, and no major liabilities, moderate equity exposure can help grow your corpus faster. The key is gradual shift to debt instruments as retirement approaches. At 55, consider 60-40, at 58 consider 50-50, and closer to retirement shift to 30-70 equity-debt.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Should I max out PPF for retirement?
         </h3>
@@ -1009,7 +1009,7 @@ export const staticBlogPost2 = {
           PPF is safe and tax-free but returns around 7-7.5%. For retirement 10+ years away, a balanced equity-debt approach typically works better for corpus building. PPF can be part of your debt allocation, not the entire retirement strategy. Consider it alongside EPF, debt funds, and NPS.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I still save for retirement if I'm 50+?
         </h3>
@@ -1030,12 +1030,12 @@ export const staticBlogPost2 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/insurance-investment-mix-trap-31-lakh" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/insurance-investment-mix-trap-31-lakh" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         The Insurance-Investment Mix That Cost Him ₹31 Lakh →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -1077,7 +1077,7 @@ export const staticBlogPost2 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -1097,8 +1097,8 @@ export const staticBlogPost2 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -1233,7 +1233,7 @@ export const staticBlogPost3 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Calculation That Changed Everything
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -1248,7 +1248,7 @@ export const staticBlogPost3 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       If that same ₹85,000 annually had been invested in a balanced equity portfolio averaging 11% over 20 years, it would have grown to approximately ₹55.08 lakh.
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>31,68,000
       </p>
@@ -1264,7 +1264,7 @@ export const staticBlogPost3 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Why Smart People Fall for This
     </h2>
 
@@ -1300,8 +1300,8 @@ export const staticBlogPost3 = {
         The same ₹85,000 annual premium could have been split:
       </p>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li><strong style="color: #DAA520;">₹12,000/year:</strong> ₹1 crore term insurance (proper family protection)</li>
-        <li><strong style="color: #DAA520;">₹73,000/year:</strong> Diversified mutual fund SIPs</li>
+        <li><strong style="color: #C0A062;">₹12,000/year:</strong> ₹1 crore term insurance (proper family protection)</li>
+        <li><strong style="color: #C0A062;">₹73,000/year:</strong> Diversified mutual fund SIPs</li>
       </ul>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         Result over 20 years:
@@ -1332,15 +1332,15 @@ export const staticBlogPost3 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What He Did After Discovery
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After analyzing the numbers thoroughly, Rajesh made these decisions:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Decision 1: Continue The Policy to Maturity
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
@@ -1351,8 +1351,8 @@ export const staticBlogPost3 = {
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Decision 2: Bought Proper Term Insurance
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
@@ -1360,8 +1360,8 @@ export const staticBlogPost3 = {
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Decision 3: Started Proper Investment Strategy
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 8px;">
@@ -1374,8 +1374,8 @@ export const staticBlogPost3 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Decision 4: Changed His Client Advisory Approach
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -1387,13 +1387,13 @@ export const staticBlogPost3 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What This Means for You
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       If a Chartered Accountant can make this mistake, anyone can. The insurance-investment mix trap is designed to be appealing:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
         → Do you have any ULIP, endowment, or money-back policies?
       </p>
@@ -1466,12 +1466,12 @@ export const staticBlogPost3 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Should I surrender my endowment policy?
         </h3>
@@ -1479,7 +1479,7 @@ export const staticBlogPost3 = {
           It depends on how many years remain. If you're close to maturity (3-5 years left), continuing might make sense despite low returns, as surrender penalties can be steep. If you have 10+ years remaining, calculate surrender value vs opportunity cost of continuing. Consult a fee-based advisor for unbiased analysis specific to your situation.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What's wrong with ULIP policies?
         </h3>
@@ -1487,7 +1487,7 @@ export const staticBlogPost3 = {
           ULIPs combine insurance and investment, but typically do both poorly. High policy administration charges and fund management fees eat into returns. Life cover is often inadequate for family needs. 5-year lock-in periods restrict flexibility. Separating term insurance (for protection) and mutual funds (for investment) usually works better for most people—lower costs, better returns, more control.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           How much term insurance do I actually need?
         </h3>
@@ -1495,7 +1495,7 @@ export const staticBlogPost3 = {
           A common rule: 10-15 times your annual income. Consider family monthly expenses, outstanding liabilities (home loan, etc.), children's education needs, and spouse's earning capacity. For Mumbai, with higher living costs, err on the higher side. ₹1-2 crore is typical for middle-class families; ₹2-5 crore for higher-income households.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I have both term insurance and investment policies?
         </h3>
@@ -1516,12 +1516,12 @@ export const staticBlogPost3 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/tax-planning-beyond-80c-mumbai" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/tax-planning-beyond-80c-mumbai" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -1563,7 +1563,7 @@ export const staticBlogPost3 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -1583,8 +1583,8 @@ export const staticBlogPost3 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -1702,12 +1702,12 @@ export const staticBlogPost5 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The 5-Year Results
     </h2>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Arjun's Lump Sum Approach (March 16, 2020)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -1720,8 +1720,8 @@ export const staticBlogPost5 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Karan's SIP Approach (March 2020 - March 2021)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -1734,7 +1734,7 @@ export const staticBlogPost5 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>5,90,000
       </p>
@@ -1751,7 +1751,7 @@ export const staticBlogPost5 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Real Lessons: Why Both Were Right
     </h2>
 
@@ -1795,15 +1795,15 @@ export const staticBlogPost5 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Should You Do?
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       The honest answer: It depends on your situation and psychology.
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Choose Lump Sum If:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -1814,8 +1814,8 @@ export const staticBlogPost5 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Choose SIP If:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -1847,22 +1847,22 @@ export const staticBlogPost5 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is lump sum better than SIP?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Historically, lump sum outperforms SIP about 60-70% of the time in rising markets because your money gets more time to compound. However, SIP wins on psychological comfort, removes timing pressure, and averages out volatility. Choice depends on your risk tolerance, investment horizon, and market conditions.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">How long should I run an SIP?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">For deploying a lump sum amount via SIP: 12-24 months is typical to average out entry points. For regular monthly savings from salary: continue as long as you're earning and have investment goals. The real power of SIP compounds over 10-20+ years of disciplined investing.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Should I wait for market correction to invest lump sum?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Timing corrections is extremely difficult—markets can stay overvalued for years or correct suddenly. If markets feel expensive, consider systematic transfer plan (STP)—park in liquid fund, transfer fixed amount monthly to equity. This way your money isn't idle while you deploy gradually.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I do both lump sum and SIP?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Absolutely yes. Many experienced investors invest windfall/bonus/inheritance as lump sum during major market corrections (20-30% down), while maintaining regular monthly SIPs from salary for disciplined wealth creation. This combines opportunistic investing with systematic long-term planning.</p>
       </div>
@@ -1875,10 +1875,10 @@ export const staticBlogPost5 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/emergency-fund-12-months-mumbai" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/emergency-fund-12-months-mumbai" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
-      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Coming Next:</p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">Why 6 Months Emergency Fund Nearly Destroyed This Malad Family →</p>
+      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Next Read:</p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">Why 6 Months Emergency Fund Nearly Destroyed This Malad Family →</p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">COVID job loss. ₹12.3 lakh needed for 14 months. They had ₹4.8 lakh. The painful lesson Mumbai taught them.</p>
     </div>
   </a>
@@ -1899,7 +1899,7 @@ export const staticBlogPost5 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a></p>
@@ -1911,8 +1911,8 @@ export const staticBlogPost5 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. Case studies are based on real situations but anonymized. Returns mentioned are based on actual market data but past performance is not indicative of future results.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds and equity markets are subject to market risks. Returns can vary significantly based on market conditions, timing, and specific fund selection. SIP does not guarantee profits or protect against losses in declining markets.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory and mutual fund distribution. We are NOT <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">SEBI</a> registered investment advisors (RIA) and do not provide portfolio management or personalized investment advice.</p>
@@ -2007,7 +2007,7 @@ export const staticBlogPost4 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The March 31st Panic
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -2024,7 +2024,7 @@ export const staticBlogPost4 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Beyond Section 80C: 5 Missed Deductions
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -2119,14 +2119,14 @@ export const staticBlogPost4 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The ₹50,000 Annual Leak
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       For someone earning ₹15 LPA, here's the math:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         What Most People Do (Only 80C)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -2134,8 +2134,8 @@ export const staticBlogPost4 = {
         <li>Total tax saved: ₹46,500</li>
       </ul>
     </div>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         With Proper Planning (All Deductions)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -2144,10 +2144,10 @@ export const staticBlogPost4 = {
         <li>Section 80CCD(1B): ₹50K → Tax saved: ₹15,500</li>
         <li>HRA optimization: ₹2L → Tax saved: ₹62,000</li>
         <li>Home loan interest (24b): ₹2L → Tax saved: ₹62,000</li>
-        <li><strong style="color: #DAA520;">Total tax saved: ₹96,500</strong></li>
+        <li><strong style="color: #C0A062;">Total tax saved: ₹96,500</strong></li>
       </ul>
     </div>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>50,000
       </p>
@@ -2160,22 +2160,22 @@ export const staticBlogPost4 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Your Tax-Saving Blueprint
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Here's your action plan to avoid the March 31st panic:
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Step 1: Start in April, Not March
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
         Plan your tax-saving investments at the start of the financial year. This allows you to make informed choices, not panic purchases.
       </p>
     </div>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Step 2: Checklist All Deductions
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -2187,8 +2187,8 @@ export const staticBlogPost4 = {
         <li>✓ Section 80E: Education loan interest (if applicable)</li>
       </ul>
     </div>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Step 3: Keep Documents Ready
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -2213,22 +2213,22 @@ export const staticBlogPost4 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">Frequently Asked Questions</h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">What deductions are available beyond 80C?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Beyond 80C, you can claim: Section 80D (health insurance up to ₹50K), Section 80CCD(1B) (NPS additional ₹50K), Section 24(b) (home loan interest up to ₹2L), HRA exemption (based on rent paid), Section 80E (education loan interest, no limit), and Section 80G (charitable donations). Each provides separate deductions that can significantly reduce your tax liability.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">How much can I save on HRA in Mumbai?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">HRA exemption in Mumbai can save ₹3-5 lakh in taxable income annually, translating to ₹90,000-1.5 lakh in tax savings (30% bracket). The exemption is minimum of: actual HRA received, actual rent minus 10% salary, or 50% of salary (Mumbai). Proper rent receipts and rent agreement are essential for claiming this deduction.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Is NPS tax-saving worth it?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes, for the additional ₹50K deduction (80CCD1B) beyond 80C. At 30% tax bracket, this saves ₹15,600 annually. NPS also offers market-linked returns with low expense ratios. The 60-year lock-in is designed for retirement, so consider it as part of long-term retirement planning, not just a tax-saving tool.</p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">Can I claim both 80C and 80D?</h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">Yes, absolutely. Section 80C (₹1.5L) and Section 80D (₹50K) are separate deductions. You can claim both. Similarly, 80CCD(1B) (NPS ₹50K) is additional to 80C. All these deductions are independent and can be claimed together to maximize tax savings. The key is to plan and invest in each category throughout the year.</p>
       </div>
@@ -2241,10 +2241,10 @@ export const staticBlogPost4 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/sip-vs-lump-sum-25-lakh-experiment" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/sip-vs-lump-sum-25-lakh-experiment" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
-      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Coming Next:</p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Result →</p>
+      <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">Next Read:</p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Result →</p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">Two friends, same bonus in March 2020. Different strategies. Coffee at BKC reveals ₹58L vs ₹52L.</p>
     </div>
   </a>
@@ -2265,7 +2265,7 @@ export const staticBlogPost4 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: rgba(192, 160, 98, 0.9); text-decoration: underline;">bmwealth.co.in</a></p>
@@ -2277,8 +2277,8 @@ export const staticBlogPost4 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized tax or investment advice. Tax situations vary by individual. Consult a qualified tax professional for advice specific to your circumstances.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Tax Law Changes:</strong> Tax laws, deduction limits, and benefits can change with each Union Budget. Information presented is based on current tax laws as of FY 2024-25. Verify current applicability with tax advisor.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in NPS, ELSS, and other instruments are subject to market risks. Tax benefits should not be the sole criterion for investment decisions. Consider returns, liquidity, and suitability.</p>
@@ -2375,7 +2375,7 @@ export const staticBlogPost6 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       When 6 Months Wasn't Enough
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -2384,7 +2384,7 @@ export const staticBlogPost6 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       But Sameer's job search took 14 months. Not 6. Fourteen.
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>12,30,000
       </p>
@@ -2411,7 +2411,7 @@ export const staticBlogPost6 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Why Mumbai Needs More Than 6 Months
     </h2>
 
@@ -2438,13 +2438,13 @@ export const staticBlogPost6 = {
         Sameer tried cutting expenses. Here's what happened:
       </p>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li><strong style="color: #DAA520;">Rent:</strong> ₹45,000/month - Can't reduce. Lease locked. Moving costs ₹2L+ and disrupts daughter's schooling.</li>
-        <li><strong style="color: #DAA520;">Society maintenance:</strong> ₹6,500/month - Fixed.</li>
-        <li><strong style="color: #DAA520;">School fees:</strong> ₹8,000/month - Already paid quarterly in advance.</li>
-        <li><strong style="color: #DAA520;">Health insurance:</strong> ₹3,200/month - Can't stop during unemployment!</li>
-        <li><strong style="color: #DAA520;">Groceries:</strong> Reduced from ₹18k to ₹12k/month</li>
-        <li><strong style="color: #DAA520;">Transport:</strong> Reduced from ₹8k to ₹3k/month (only essentials)</li>
-        <li><strong style="color: #DAA520;">Entertainment:</strong> Cut to zero</li>
+        <li><strong style="color: #C0A062;">Rent:</strong> ₹45,000/month - Can't reduce. Lease locked. Moving costs ₹2L+ and disrupts daughter's schooling.</li>
+        <li><strong style="color: #C0A062;">Society maintenance:</strong> ₹6,500/month - Fixed.</li>
+        <li><strong style="color: #C0A062;">School fees:</strong> ₹8,000/month - Already paid quarterly in advance.</li>
+        <li><strong style="color: #C0A062;">Health insurance:</strong> ₹3,200/month - Can't stop during unemployment!</li>
+        <li><strong style="color: #C0A062;">Groceries:</strong> Reduced from ₹18k to ₹12k/month</li>
+        <li><strong style="color: #C0A062;">Transport:</strong> Reduced from ₹8k to ₹3k/month (only essentials)</li>
+        <li><strong style="color: #C0A062;">Entertainment:</strong> Cut to zero</li>
       </ul>
       <p style="font-size: 18px; line-height: 2;">
         Monthly expenses reduced from ₹85,000 to ₹78,000. Only 8% reduction. The big costs don't budge in Mumbai.
@@ -2470,39 +2470,39 @@ export const staticBlogPost6 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Right Emergency Fund Size for Mumbai
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Based on Mumbai's cost structure and job market realities:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Single Income Household
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Minimum: 12 months expenses</strong><br/>
+        <strong style="color: #C0A062;">Minimum: 12 months expenses</strong><br/>
         If you're the sole earning member, job loss means zero household income. Mumbai's job search can take 6-12 months for specialized roles. Medical emergencies, family obligations don't pause. 12 months gives you breathing room to find the RIGHT job, not just ANY job.
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Dual Income Household
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Minimum: 9 months expenses</strong><br/>
+        <strong style="color: #C0A062;">Minimum: 9 months expenses</strong><br/>
         Even with two incomes, both face job market uncertainties. Sectoral downturns (COVID hit hospitality, real estate, aviation simultaneously). 9 months covers extended job search for one person while maintaining lifestyle.
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         High Fixed Costs / Dependents
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Minimum: 15 months expenses</strong><br/>
+        <strong style="color: #C0A062;">Minimum: 15 months expenses</strong><br/>
         If you have elderly parents, children's education, high rent/EMI (>40% of income), go for 15 months. Relocating or downsizing lifestyle in Mumbai takes time and money. This buffer prevents desperate decisions.
       </p>
     </div>
@@ -2511,25 +2511,25 @@ export const staticBlogPost6 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Sameer Did After Getting Back on Track
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Once he joined his new role in June 2021, Sameer rebuilt his finances with a hard-earned lesson:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        <strong style="color: #DAA520;">Goal:</strong> Build ₹12 lakh emergency fund (15 months at ₹80k/month)
+        <strong style="color: #C0A062;">Goal:</strong> Build ₹12 lakh emergency fund (15 months at ₹80k/month)
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        <strong style="color: #DAA520;">Strategy:</strong> Save ₹50,000/month for 24 months
+        <strong style="color: #C0A062;">Strategy:</strong> Save ₹50,000/month for 24 months
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-        <strong style="color: #DAA520;">Where kept:</strong> Liquid funds (₹8L) + High-interest savings (₹4L)
+        <strong style="color: #C0A062;">Where kept:</strong> Liquid funds (₹8L) + High-interest savings (₹4L)
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Status (Dec 2024):</strong> ₹13.2 lakh emergency fund. Sleeps better. No credit card debt. Gold jewelry bought back.
+        <strong style="color: #C0A062;">Status (Dec 2024):</strong> ₹13.2 lakh emergency fund. Sleeps better. No credit card debt. Gold jewelry bought back.
       </p>
     </div>
   </div>
@@ -2585,12 +2585,12 @@ export const staticBlogPost6 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is 6 months emergency fund enough?
         </h3>
@@ -2598,7 +2598,7 @@ export const staticBlogPost6 = {
           For Mumbai and other metros, 6 months is generally not enough. Recommended: 12-15 months for single income households, 9-12 months for dual income families. High fixed costs (rent, school fees) and longer job search times in metro cities require larger buffers than the generic 6-month advice.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Where should I keep my emergency fund?
         </h3>
@@ -2606,7 +2606,7 @@ export const staticBlogPost6 = {
           Split between liquid mutual funds (60-70%) and high-interest savings accounts (30-40%). Avoid locking in fixed deposits. You need instant access during emergencies. Liquid funds offer ~6-7% returns with T+1 day redemption. Keep 1-2 months in savings account for immediate access.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Should I invest my emergency fund in mutual funds?
         </h3>
@@ -2614,7 +2614,7 @@ export const staticBlogPost6 = {
           No, not in equity or regular debt mutual funds. Emergency fund is for safety and liquidity, not growth. Keep in liquid funds (debt category with very low risk) or savings accounts. Equity/hybrid mutual funds have market risk and volatility—you might need to withdraw when markets are down, locking in losses.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What if I can't save 12 months expenses right now?
         </h3>
@@ -2635,12 +2635,12 @@ export const staticBlogPost6 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/elss-ppf-nps-comparison-20-years" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/elss-ppf-nps-comparison-20-years" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         ₹1.5 Lakh Annually for 20 Years: ELSS vs PPF vs NPS Results →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -2682,7 +2682,7 @@ export const staticBlogPost6 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -2702,8 +2702,8 @@ export const staticBlogPost6 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -2818,15 +2818,15 @@ export const staticBlogPost7 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The 20-Year Results (2005-2024)
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Total invested in each: ₹30 lakh (₹1.5L × 20 years)
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         ELSS (Equity Linked Savings Scheme)
       </h4>
       <div style="text-align: center; margin: 25px 0;">
@@ -2836,15 +2836,15 @@ export const staticBlogPost7 = {
         <p style="font-size: 17px; color: rgba(229, 229, 229, 0.7);">Final corpus after 20 years</p>
       </div>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">CAGR:</strong> ~12.8% (historical equity fund average)</li>
-        <li><strong style="color: #DAA520;">Lock-in:</strong> 3 years only</li>
-        <li><strong style="color: #DAA520;">Taxation:</strong> LTCG >₹1.25L taxed at 12.5%</li>
-        <li><strong style="color: #DAA520;">Liquidity:</strong> High after 3 years</li>
+        <li><strong style="color: #C0A062;">CAGR:</strong> ~12.8% (historical equity fund average)</li>
+        <li><strong style="color: #C0A062;">Lock-in:</strong> 3 years only</li>
+        <li><strong style="color: #C0A062;">Taxation:</strong> LTCG >₹1.25L taxed at 12.5%</li>
+        <li><strong style="color: #C0A062;">Liquidity:</strong> High after 3 years</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         NPS (National Pension System)
       </h4>
       <div style="text-align: center; margin: 25px 0;">
@@ -2854,15 +2854,15 @@ export const staticBlogPost7 = {
         <p style="font-size: 17px; color: rgba(229, 229, 229, 0.7);">Final corpus after 20 years</p>
       </div>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">CAGR:</strong> ~10.5% (50% equity allocation typical)</li>
-        <li><strong style="color: #DAA520;">Lock-in:</strong> Till age 60 (can't fully withdraw)</li>
-        <li><strong style="color: #DAA520;">Taxation:</strong> 60% tax-free, 40% annuity (taxable income)</li>
-        <li><strong style="color: #DAA520;">Liquidity:</strong> Very low</li>
+        <li><strong style="color: #C0A062;">CAGR:</strong> ~10.5% (50% equity allocation typical)</li>
+        <li><strong style="color: #C0A062;">Lock-in:</strong> Till age 60 (can't fully withdraw)</li>
+        <li><strong style="color: #C0A062;">Taxation:</strong> 60% tax-free, 40% annuity (taxable income)</li>
+        <li><strong style="color: #C0A062;">Liquidity:</strong> Very low</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         PPF (Public Provident Fund)
       </h4>
       <div style="text-align: center; margin: 25px 0;">
@@ -2872,14 +2872,14 @@ export const staticBlogPost7 = {
         <p style="font-size: 17px; color: rgba(229, 229, 229, 0.7);">Final corpus after 20 years</p>
       </div>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">CAGR:</strong> ~7.1% (government-set rate)</li>
-        <li><strong style="color: #DAA520;">Lock-in:</strong> 15 years (can extend in blocks of 5)</li>
-        <li><strong style="color: #DAA520;">Taxation:</strong> Completely tax-free (EEE)</li>
-        <li><strong style="color: #DAA520;">Liquidity:</strong> Partial withdrawal from year 7</li>
+        <li><strong style="color: #C0A062;">CAGR:</strong> ~7.1% (government-set rate)</li>
+        <li><strong style="color: #C0A062;">Lock-in:</strong> 15 years (can extend in blocks of 5)</li>
+        <li><strong style="color: #C0A062;">Taxation:</strong> Completely tax-free (EEE)</li>
+        <li><strong style="color: #C0A062;">Liquidity:</strong> Partial withdrawal from year 7</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>51,80,000
       </p>
@@ -2892,7 +2892,7 @@ export const staticBlogPost7 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Which One Should You Choose?
     </h2>
 
@@ -2939,33 +2939,33 @@ export const staticBlogPost7 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The Smart Combination Strategy
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       You don't have to choose just one. Many investors use all three strategically:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Aggressive Saver (₹1.5L in 80C + ₹50k in NPS)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
         <li>₹1 lakh → ELSS (growth)</li>
         <li>₹50,000 → PPF (safety)</li>
         <li>₹50,000 → NPS (extra ₹50k tax benefit under 80CCD(1B))</li>
-        <li><strong style="color: #DAA520;">Total tax benefit:</strong> ₹2 lakh deduction</li>
+        <li><strong style="color: #C0A062;">Total tax benefit:</strong> ₹2 lakh deduction</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Balanced Investor (₹1.5L total)
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
         <li>₹80,000 → ELSS (growth component)</li>
         <li>₹70,000 → PPF (safety + guaranteed returns)</li>
-        <li><strong style="color: #DAA520;">Benefit:</strong> Balanced approach with both growth and safety</li>
+        <li><strong style="color: #C0A062;">Benefit:</strong> Balanced approach with both growth and safety</li>
       </ul>
     </div>
   </div>
@@ -3021,12 +3021,12 @@ export const staticBlogPost7 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is ELSS better than PPF?
         </h3>
@@ -3034,7 +3034,7 @@ export const staticBlogPost7 = {
           For long-term wealth creation (10+ years), ELSS historically delivers significantly higher returns (~12% vs ~7%). PPF offers guaranteed, tax-free returns with zero market risk. Choose ELSS if you can tolerate volatility and have long horizon. Choose PPF for guaranteed safety and tax-free income. Many use both for diversification.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I withdraw from ELSS before 3 years?
         </h3>
@@ -3042,7 +3042,7 @@ export const staticBlogPost7 = {
           No. ELSS has mandatory 3-year lock-in period. After 3 years, you can redeem anytime without penalty. PPF has 15-year lock-in with partial withdrawal allowed from year 7. NPS locks your money till age 60 (can withdraw 60% at maturity, 40% goes to annuity).
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Which gives maximum tax benefit?
         </h3>
@@ -3050,7 +3050,7 @@ export const staticBlogPost7 = {
           All three offer ₹1.5L deduction under Section 80C. NPS offers additional ₹50,000 deduction under 80CCD(1B), making it ₹2 lakh total deduction potential. PPF offers tax-free returns (EEE status—Exempt-Exempt-Exempt), while ELSS and NPS are taxable at withdrawal.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is NPS worth it?
         </h3>
@@ -3071,12 +3071,12 @@ export const staticBlogPost7 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/1-crore-retirement-corpus-enough-mumbai" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/1-crore-retirement-corpus-enough-mumbai" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         ₹1 Crore Retirement Corpus: Why It's Not Enough in Mumbai →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -3118,7 +3118,7 @@ export const staticBlogPost7 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -3138,8 +3138,8 @@ export const staticBlogPost7 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -3245,7 +3245,7 @@ export const staticBlogPost8 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Then we sat down to calculate monthly income from this ₹1 crore.
     </p>
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>58,000
       </p>
@@ -3261,7 +3261,7 @@ export const staticBlogPost8 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The 4% Rule Reality Check
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
@@ -3271,11 +3271,11 @@ export const staticBlogPost8 = {
       For India, conservative advisors recommend 5.5-6% withdrawal rate considering our higher inflation.
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      <strong style="color: #DAA520;">Rakesh's calculation:</strong><br/>
+      <strong style="color: #C0A062;">Rakesh's calculation:</strong><br/>
       ₹1 crore × 7% annual withdrawal = ₹7 lakh per year = ₹58,333 per month
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      <strong style="color: #DAA520;">His actual monthly expenses:</strong>
+      <strong style="color: #C0A062;">His actual monthly expenses:</strong>
     </p>
     <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 25px;">
       <li>Apartment maintenance: ₹7,500</li>
@@ -3286,7 +3286,7 @@ export const staticBlogPost8 = {
       <li>Daughter's support (occasional): ₹8,000 average</li>
       <li>Property tax, repairs: ₹6,000 average</li>
       <li>Miscellaneous: ₹9,500</li>
-      <li><strong style="color: #DAA520;">Total: ₹95,000/month</strong></li>
+      <li><strong style="color: #C0A062;">Total: ₹95,000/month</strong></li>
     </ul>
     <p style="font-size: 19px; line-height: 2; margin-bottom: 20px; padding-left: 16px; border-left: 3px solid rgba(192, 160, 98, 0.7); color: #C0A062; font-weight: 500;">
       Gap: ₹37,000 per month. ₹4.4 lakh per year. Where does this come from?
@@ -3296,40 +3296,40 @@ export const staticBlogPost8 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       How Much Do You Actually Need?
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      The formula: <strong style="color: #DAA520;">Required Corpus = (Monthly Expenses × 12) ÷ 0.06</strong>
+      The formula: <strong style="color: #C0A062;">Required Corpus = (Monthly Expenses × 12) ÷ 0.06</strong>
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         For ₹80,000/month expenses:
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
         ₹80,000 × 12 = ₹9.6 lakh annually<br/>
-        ₹9.6L ÷ 0.06 = <strong style="color: #DAA520;">₹1.6 crore needed</strong>
+        ₹9.6L ÷ 0.06 = <strong style="color: #C0A062;">₹1.6 crore needed</strong>
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         For ₹1,20,000/month expenses (typical Mumbai comfortable lifestyle):
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
         ₹1,20,000 × 12 = ₹14.4 lakh annually<br/>
-        ₹14.4L ÷ 0.06 = <strong style="color: #DAA520;">₹2.4 crore needed</strong>
+        ₹14.4L ÷ 0.06 = <strong style="color: #C0A062;">₹2.4 crore needed</strong>
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         For ₹2,00,000/month expenses (upper middle class Mumbai):
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 12px;">
         ₹2,00,000 × 12 = ₹24 lakh annually<br/>
-        ₹24L ÷ 0.06 = <strong style="color: #DAA520;">₹4 crore needed</strong>
+        ₹24L ÷ 0.06 = <strong style="color: #C0A062;">₹4 crore needed</strong>
       </p>
     </div>
 
@@ -3341,15 +3341,15 @@ export const staticBlogPost8 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Rakesh Did After This Realization
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Rather than panic, Rakesh adjusted his strategy:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         1. Continued Working Part-Time
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -3357,8 +3357,8 @@ export const staticBlogPost8 = {
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         2. Optimized Asset Allocation
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -3366,8 +3366,8 @@ export const staticBlogPost8 = {
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         3. Planned Lifestyle Adjustments
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -3427,12 +3427,12 @@ export const staticBlogPost8 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is ₹1 crore enough for retirement in Mumbai?
         </h3>
@@ -3440,7 +3440,7 @@ export const staticBlogPost8 = {
           For modest lifestyle (₹60-70k monthly expenses), yes—but tight. For comfortable lifestyle (₹1-1.2L monthly), you need ₹2-2.5 crore. For upper middle class lifestyle (₹2L+ monthly), target ₹4-5 crore. Actual need depends on your specific lifestyle, medical costs, and whether you own your home.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What is the 4% withdrawal rule?
         </h3>
@@ -3448,7 +3448,7 @@ export const staticBlogPost8 = {
           Withdraw 4% of corpus in first year, then adjust that amount for inflation annually. Based on US historical data showing this approach lasts 30 years. For India, many advisors use 5.5-6% considering higher inflation. Example: ₹1 crore with 6% withdrawal = ₹6 lakh/year = ₹50k/month initially.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Should I keep my entire retirement corpus in FDs?
         </h3>
@@ -3456,7 +3456,7 @@ export const staticBlogPost8 = {
           Not recommended. FDs currently give 6-7% returns, barely beating inflation. Consider balanced portfolio: 50-60% debt (FDs, bonds, debt funds) for stability and monthly income, 40-50% equity (mutual funds) for long-term growth. Even at age 60, you have a 25-30 year investment horizon.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What if I outlive my corpus?
         </h3>
@@ -3477,12 +3477,12 @@ export const staticBlogPost8 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/real-estate-vs-mutual-funds-15-year-comparison" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/real-estate-vs-mutual-funds-15-year-comparison" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         ₹60 Lakh in 2010: Real Estate vs Mutual Funds - The 15-Year Verdict →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -3524,7 +3524,7 @@ export const staticBlogPost8 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -3544,8 +3544,8 @@ export const staticBlogPost8 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -3656,22 +3656,22 @@ export const staticBlogPost9 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       The 15-Year Results
     </h2>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Amit's Real Estate Journey
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">2010:</strong> Bought 2BHK Thane (700 sq ft) for ₹58L + ₹2L stamp duty = ₹60L total<br/>
-        <strong style="color: #DAA520;">2010-2024 Expenses:</strong><br/>
+        <strong style="color: #C0A062;">2010:</strong> Bought 2BHK Thane (700 sq ft) for ₹58L + ₹2L stamp duty = ₹60L total<br/>
+        <strong style="color: #C0A062;">2010-2024 Expenses:</strong><br/>
         • Property tax: ₹12,000/year × 15 = ₹1.8L<br/>
         • Maintenance: ₹4,000/month × 180 months = ₹7.2L<br/>
         • Home loan interest (₹40L loan @ 9%): ₹18.5L paid over 10 years<br/>
         • Painting/repairs (3 times): ₹2.5L<br/>
-        <strong style="color: #DAA520;">Total invested/spent: ₹90 lakh</strong>
+        <strong style="color: #C0A062;">Total invested/spent: ₹90 lakh</strong>
       </p>
       <div style="text-align: center; margin: 25px 0;">
         <p style="font-size: 46px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 8px; font-family: 'Playfair Display', serif;">
@@ -3680,23 +3680,23 @@ export const staticBlogPost9 = {
         <p style="font-size: 17px; color: rgba(229, 229, 229, 0.7);">Current market value (Dec 2024)</p>
       </div>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Net gain:</strong> ₹3.43Cr - ₹90L = ₹2.53 crore<br/>
-        <strong style="color: #DAA520;">CAGR:</strong> ~11.8% (on total investment including costs)
+        <strong style="color: #C0A062;">Net gain:</strong> ₹3.43Cr - ₹90L = ₹2.53 crore<br/>
+        <strong style="color: #C0A062;">CAGR:</strong> ~11.8% (on total investment including costs)
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Rohit's Mutual Fund Journey
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">2010:</strong> Invested ₹60L in diversified equity funds (60% large cap, 30% mid cap, 10% multi-cap)<br/>
-        <strong style="color: #DAA520;">2010-2024:</strong><br/>
+        <strong style="color: #C0A062;">2010:</strong> Invested ₹60L in diversified equity funds (60% large cap, 30% mid cap, 10% multi-cap)<br/>
+        <strong style="color: #C0A062;">2010-2024:</strong><br/>
         • No maintenance costs<br/>
         • No property tax<br/>
         • No EMIs<br/>
         • Annual expense ratio: ~1.5% (already accounted in NAV)<br/>
-        <strong style="color: #DAA520;">Total invested: ₹60 lakh</strong>
+        <strong style="color: #C0A062;">Total invested: ₹60 lakh</strong>
       </p>
       <div style="text-align: center; margin: 25px 0;">
         <p style="font-size: 46px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 8px; font-family: 'Playfair Display', serif;">
@@ -3705,12 +3705,12 @@ export const staticBlogPost9 = {
         <p style="font-size: 17px; color: rgba(229, 229, 229, 0.7);">Current portfolio value (Dec 2024)</p>
       </div>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Net gain:</strong> ₹4.25Cr - ₹60L = ₹3.65 crore<br/>
-        <strong style="color: #DAA520;">CAGR:</strong> ~14.2% (historical equity fund average)
+        <strong style="color: #C0A062;">Net gain:</strong> ₹4.25Cr - ₹60L = ₹3.65 crore<br/>
+        <strong style="color: #C0A062;">CAGR:</strong> ~14.2% (historical equity fund average)
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>82,00,000
       </p>
@@ -3723,7 +3723,7 @@ export const staticBlogPost9 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       But The Story Doesn't End at Numbers
     </h2>
 
@@ -3732,10 +3732,10 @@ export const staticBlogPost9 = {
         Liquidity Difference
       </h3>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">Amit:</strong> In 2018, needed ₹15 lakh for daughter's foreign education. Property was worth ₹2.1 crore. Had to take education loan (couldn't sell/couldn't get home loan against it due to existing EMI). Took 9 months to arrange funds.
+        <strong style="color: #C0A062;">Amit:</strong> In 2018, needed ₹15 lakh for daughter's foreign education. Property was worth ₹2.1 crore. Had to take education loan (couldn't sell/couldn't get home loan against it due to existing EMI). Took 9 months to arrange funds.
       </p>
       <p style="font-size: 18px; line-height: 2;">
-        <strong style="color: #DAA520;">Rohit:</strong> Needed ₹18 lakh in 2019 for business opportunity. Redeemed mutual funds, money in account in 3 days. No loan. No stress.
+        <strong style="color: #C0A062;">Rohit:</strong> Needed ₹18 lakh in 2019 for business opportunity. Redeemed mutual funds, money in account in 3 days. No loan. No stress.
       </p>
     </div>
 
@@ -3750,8 +3750,8 @@ export const staticBlogPost9 = {
         • Net rental income: ~₹12 lakh over 5 years
       </p>
       <p style="font-size: 18px; line-height: 2;">
-        <strong style="color: #DAA520;">Adjusted real estate total value:</strong> ₹3.43Cr + ₹12L = ₹3.55 crore<br/>
-        <strong style="color: #DAA520;">Still behind mutual funds</strong> by ₹70 lakh
+        <strong style="color: #C0A062;">Adjusted real estate total value:</strong> ₹3.43Cr + ₹12L = ₹3.55 crore<br/>
+        <strong style="color: #C0A062;">Still behind mutual funds</strong> by ₹70 lakh
       </p>
     </div>
 
@@ -3763,12 +3763,12 @@ export const staticBlogPost9 = {
         If both sell today (Dec 2024):
       </p>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 8px;">
-        <strong style="color: #DAA520;">Amit (Real Estate):</strong><br/>
+        <strong style="color: #C0A062;">Amit (Real Estate):</strong><br/>
         LTCG after indexation: ~₹1.8 crore taxable @ 20% = ₹36 lakh tax<br/>
         <strong>Net in hand: ₹3.07 crore</strong>
       </p>
       <p style="font-size: 18px; line-height: 2;">
-        <strong style="color: #DAA520;">Rohit (Mutual Funds):</strong><br/>
+        <strong style="color: #C0A062;">Rohit (Mutual Funds):</strong><br/>
         LTCG: ₹3.65 crore (gains above ₹1.25L) @ 12.5% = ₹45.6 lakh tax<br/>
         <strong>Net in hand: ₹3.79 crore</strong>
       </p>
@@ -3781,15 +3781,15 @@ export const staticBlogPost9 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       So Should You Never Buy Real Estate?
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Not at all. The answer is more nuanced:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Buy Real Estate If:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -3801,8 +3801,8 @@ export const staticBlogPost9 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Choose Mutual Funds If:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -3814,8 +3814,8 @@ export const staticBlogPost9 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         The Balanced Approach:
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -3875,12 +3875,12 @@ export const staticBlogPost9 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is real estate a bad investment?
         </h3>
@@ -3888,7 +3888,7 @@ export const staticBlogPost9 = {
           No, but for pure wealth creation over 10-15 years, diversified equity mutual funds historically deliver better risk-adjusted returns with significantly more liquidity. Real estate works best for self-use housing need and emotional security. As pure investment, it requires large capital, has low liquidity, involves maintenance hassles, and tenant management.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What about rental income from property?
         </h3>
@@ -3896,7 +3896,7 @@ export const staticBlogPost9 = {
           Rental yields in Mumbai are typically 2-3% gross annually. After maintenance costs, property tax, vacancy periods, and tenant issues, net yield drops to 1.5-2%. Mutual fund SWP (systematic withdrawal) or dividend income plus long-term capital appreciation typically outperform this. Rental works for steady passive income, not wealth maximization.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I sell mutual funds anytime?
         </h3>
@@ -3904,7 +3904,7 @@ export const staticBlogPost9 = {
           Yes, most mutual funds allow redemption anytime (except ELSS with 3-year lock-in). Money typically reaches your bank account in 1-3 business days. Property takes 3-9 months to sell, involves legal due diligence, broker commissions, and finding the right buyer at the right price. Liquidity advantage of mutual funds is massive.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           What if property prices double in next 5 years?
         </h3>
@@ -3925,12 +3925,12 @@ export const staticBlogPost9 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/gold-investment-physical-digital-sgb-comparison" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/gold-investment-physical-digital-sgb-comparison" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
-        Coming Next:
+        Next Read:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         Grandmother's 400g Gold: Physical vs Digital vs SGB Analysis →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -3972,7 +3972,7 @@ export const staticBlogPost9 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -3992,8 +3992,8 @@ export const staticBlogPost9 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -4104,12 +4104,12 @@ export const staticBlogPost10 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Option 1: Keep as Physical Gold Jewelry
     </h2>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Advantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -4120,16 +4120,16 @@ export const staticBlogPost10 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Disadvantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">Making charges lost:</strong> Original jewelry has 8-15% making charges. When you sell, you get only gold value, not making charges back.</li>
-        <li><strong style="color: #DAA520;">Purity issues:</strong> Old jewelry may be 18K or 20K (not 24K). Reduce value by 20-25% from pure gold price.</li>
-        <li><strong style="color: #DAA520;">Storage risk:</strong> Bank locker costs ₹5,000-15,000/year. Home storage = theft risk.</li>
-        <li><strong style="color: #DAA520;">Selling hassle:</strong> Jeweler will test purity, deduct wastage (3-5%), pay less than market rate.</li>
-        <li><strong style="color: #DAA520;">No additional returns:</strong> Gold price appreciation only, no interest.</li>
+        <li><strong style="color: #C0A062;">Making charges lost:</strong> Original jewelry has 8-15% making charges. When you sell, you get only gold value, not making charges back.</li>
+        <li><strong style="color: #C0A062;">Purity issues:</strong> Old jewelry may be 18K or 20K (not 24K). Reduce value by 20-25% from pure gold price.</li>
+        <li><strong style="color: #C0A062;">Storage risk:</strong> Bank locker costs ₹5,000-15,000/year. Home storage = theft risk.</li>
+        <li><strong style="color: #C0A062;">Selling hassle:</strong> Jeweler will test purity, deduct wastage (3-5%), pay less than market rate.</li>
+        <li><strong style="color: #C0A062;">No additional returns:</strong> Gold price appreciation only, no interest.</li>
       </ul>
     </div>
 
@@ -4144,15 +4144,15 @@ export const staticBlogPost10 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Option 2: Convert to Digital Gold
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Sell physical jewelry, buy equivalent gold digitally through platforms like Paytm Gold, PhonePe Gold, Google Pay Gold, or dedicated platforms like SafeGold/MMTC-PAMP.
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Advantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
@@ -4165,16 +4165,16 @@ export const staticBlogPost10 = {
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Disadvantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">Platform fees:</strong> Buy/sell spread of 2-3% + small annual storage fee (0.5-1%)</li>
-        <li><strong style="color: #DAA520;">Taxation:</strong> Treated as physical gold. Gains taxed as STCG/LTCG (no indexation benefit from April 2023).</li>
-        <li><strong style="color: #DAA520;">Platform risk:</strong> If platform shuts down (though gold is insured and stored separately)</li>
-        <li><strong style="color: #DAA520;">No additional returns:</strong> Only gold price appreciation</li>
-        <li><strong style="color: #DAA520;">Loss of sentimental value:</strong> No physical heirloom to pass on</li>
+        <li><strong style="color: #C0A062;">Platform fees:</strong> Buy/sell spread of 2-3% + small annual storage fee (0.5-1%)</li>
+        <li><strong style="color: #C0A062;">Taxation:</strong> Treated as physical gold. Gains taxed as STCG/LTCG (no indexation benefit from April 2023).</li>
+        <li><strong style="color: #C0A062;">Platform risk:</strong> If platform shuts down (though gold is insured and stored separately)</li>
+        <li><strong style="color: #C0A062;">No additional returns:</strong> Only gold price appreciation</li>
+        <li><strong style="color: #C0A062;">Loss of sentimental value:</strong> No physical heirloom to pass on</li>
       </ul>
     </div>
 
@@ -4189,41 +4189,41 @@ export const staticBlogPost10 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       Option 3: Sovereign Gold Bonds (SGB)
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Sell physical jewelry, invest proceeds in Sovereign Gold Bonds issued by RBI (issued periodically, usually 6-8 tranches per year).
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Advantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">Additional 2.5% annual interest:</strong> Paid half-yearly on original investment value</li>
-        <li><strong style="color: #DAA520;">Tax-free capital gains:</strong> If held till maturity (8 years), gains completely tax-free!</li>
-        <li><strong style="color: #DAA520;">Government-backed:</strong> Zero default risk, issued by RBI</li>
+        <li><strong style="color: #C0A062;">Additional 2.5% annual interest:</strong> Paid half-yearly on original investment value</li>
+        <li><strong style="color: #C0A062;">Tax-free capital gains:</strong> If held till maturity (8 years), gains completely tax-free!</li>
+        <li><strong style="color: #C0A062;">Government-backed:</strong> Zero default risk, issued by RBI</li>
         <li>No storage costs, no purity issues</li>
         <li>Can be traded on stock exchange (after lock-in) for liquidity before maturity</li>
         <li>Accepted as collateral for loans</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
-      <h4 style="font-size: 22px; color: #DAA520; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 35px 0;">
+      <h4 style="font-size: 22px; color: #C0A062; margin-bottom: 18px; font-family: 'Playfair Display', serif;">
         Disadvantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li><strong style="color: #DAA520;">8-year lock-in:</strong> Full benefits only if held till maturity (can exit from year 5 onwards on interest payment dates)</li>
-        <li><strong style="color: #DAA520;">Issue timing:</strong> Can only buy when RBI opens subscription (not on-demand)</li>
-        <li><strong style="color: #DAA520;">Annual limit:</strong> ₹4 lakh per person per fiscal year (individuals)</li>
+        <li><strong style="color: #C0A062;">8-year lock-in:</strong> Full benefits only if held till maturity (can exit from year 5 onwards on interest payment dates)</li>
+        <li><strong style="color: #C0A062;">Issue timing:</strong> Can only buy when RBI opens subscription (not on-demand)</li>
+        <li><strong style="color: #C0A062;">Annual limit:</strong> ₹4 lakh per person per fiscal year (individuals)</li>
         <li><strong style="color: #DAA020;">Not physical:</strong> Can't convert to physical gold easily</li>
-        <li><strong style="color: #DAA520;">Market price volatility:</strong> If selling before maturity on exchange, price depends on market sentiment</li>
+        <li><strong style="color: #C0A062;">Market price volatility:</strong> If selling before maturity on exchange, price depends on market sentiment</li>
       </ul>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         2.5<span style="font-size: 36px;">%</span>
       </p>
@@ -4243,50 +4243,50 @@ export const staticBlogPost10 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       8-Year Return Comparison (₹21 Lakh Investment)
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       Assuming gold price grows at historical 8% CAGR:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Physical Gold (339g kept as is):
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
         Value after 8 years: ₹38.9 lakh (gold appreciation only)<br/>
         Minus locker costs (₹10k/year × 8): ₹80,000<br/>
-        <strong style="color: #DAA520;">Net value: ₹38.1 lakh</strong>
+        <strong style="color: #C0A062;">Net value: ₹38.1 lakh</strong>
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Digital Gold:
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
         Value after 8 years: ₹38.9 lakh (gold appreciation)<br/>
         Minus annual storage fees (0.5% × 8 years on average value): ~₹1 lakh<br/>
-        <strong style="color: #DAA520;">Net value: ₹37.9 lakh</strong><br/>
+        <strong style="color: #C0A062;">Net value: ₹37.9 lakh</strong><br/>
         <em style="font-size: 16px; color: rgba(229, 229, 229, 0.7);">Plus: Instant liquidity, no theft risk</em>
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
-      <h4 style="font-size: 20px; color: #DAA520; margin-bottom: 15px;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 15px;">
         Sovereign Gold Bonds:
       </h4>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
         Gold appreciation: ₹38.9 lakh<br/>
         Plus 2.5% interest annually on ₹21L × 8 years: ₹4.2 lakh<br/>
-        <strong style="color: #DAA520;">Total value: ₹43.1 lakh</strong><br/>
-        <strong style="color: #DAA520;">Capital gains: 100% tax-free if held till maturity</strong><br/>
+        <strong style="color: #C0A062;">Total value: ₹43.1 lakh</strong><br/>
+        <strong style="color: #C0A062;">Capital gains: 100% tax-free if held till maturity</strong><br/>
         <em style="font-size: 16px; color: rgba(229, 229, 229, 0.7);">Interest is taxable as per income tax slab</em>
       </p>
     </div>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 18px 22px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 65px 0; text-align: center;">
       <p style="font-size: 50px; font-weight: 450; color: rgba(192, 160, 98, 0.82); margin-bottom: 12px; font-family: 'Playfair Display', serif; letter-spacing: -1px;">
         <span style="position: relative; top: -3px;">₹</span>5,20,000
       </p>
@@ -4299,25 +4299,25 @@ export const staticBlogPost10 = {
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #DAA520; margin-bottom: 35px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
       What Priya Decided
     </h2>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       After analyzing all options, Priya took a balanced approach:
     </p>
 
-    <div style="background: rgba(218, 165, 32, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; margin: 35px 0;">
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">Kept 100g physical jewelry (₹6.2L worth):</strong> Grandmother's favorite necklace and two bangles—emotional value, for special occasions, passing to daughter eventually.
+        <strong style="color: #C0A062;">Kept 100g physical jewelry (₹6.2L worth):</strong> Grandmother's favorite necklace and two bangles—emotional value, for special occasions, passing to daughter eventually.
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">Sold remaining 300g (got ₹15.8L):</strong> Purity was 20K average, paid off making charges loss.
+        <strong style="color: #C0A062;">Sold remaining 300g (got ₹15.8L):</strong> Purity was 20K average, paid off making charges loss.
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 15px;">
-        <strong style="color: #DAA520;">Invested in SGB:</strong> ₹12 lakh in Sovereign Gold Bonds (got 194g equivalent) for long-term wealth creation with 2.5% interest.
+        <strong style="color: #C0A062;">Invested in SGB:</strong> ₹12 lakh in Sovereign Gold Bonds (got 194g equivalent) for long-term wealth creation with 2.5% interest.
       </p>
       <p style="font-size: 18px; line-height: 2; color: #E5E5E5;">
-        <strong style="color: #DAA520;">Digital Gold:</strong> ₹3.8 lakh in digital gold (61g) for liquidity—can sell anytime if emergency arises.
+        <strong style="color: #C0A062;">Digital Gold:</strong> ₹3.8 lakh in digital gold (61g) for liquidity—can sell anytime if emergency arises.
       </p>
     </div>
 
@@ -4377,12 +4377,12 @@ export const staticBlogPost10 = {
   }
   </script>
 
-  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #DAA520;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #DAA520; margin-bottom: 50px; text-align: center;">
+  <section style="margin: 80px 0; padding: 60px 70px; background: #000000; border-radius: 16px; border-left: 4px solid #C0A062;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 42px); font-weight: 700; color: #C0A062; margin-bottom: 50px; text-align: center;">
       Frequently Asked Questions
     </h2>
     <div style="max-width: 800px; margin: 0 auto;">
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Which is better—physical gold or Sovereign Gold Bonds?
         </h3>
@@ -4390,7 +4390,7 @@ export const staticBlogPost10 = {
           For pure investment purpose, SGB is superior—offers 2.5% additional annual interest over gold price appreciation, completely tax-free capital gains at maturity (8 years), zero storage costs or theft risk. For emotional value, occasions, or jewelry use, keep some physical gold. Many smart investors do both—physical for sentimental/usage purposes, SGB for wealth creation.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Is digital gold safe?
         </h3>
@@ -4398,7 +4398,7 @@ export const staticBlogPost10 = {
           Yes, if bought from reputable platforms (PhonePe, Paytm, Google Pay, SafeGold, MMTC-PAMP, Augmont). Gold is stored in insured vaults managed by certified custodians. Platform risk exists (if company shuts down unexpectedly), but gold ownership remains legally with you. Always check for SEBI-registered, well-established platforms.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           Can I convert digital gold to physical gold?
         </h3>
@@ -4406,7 +4406,7 @@ export const staticBlogPost10 = {
           Yes. Most platforms allow conversion to physical gold coins or bars (usually minimum 1 gram, some platforms 0.5g). Small delivery charges apply (typically ₹200-500 for courier + insurance). You'll receive 99.99% purity gold with authenticity certificate. Good option if you accumulate digital gold over time and want physical delivery later.
         </p>
       </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(218, 165, 32, 0.2);">
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
         <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
           How do I buy Sovereign Gold Bonds?
         </h3>
@@ -4427,12 +4427,12 @@ export const staticBlogPost10 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <a href="/blog/47-lakh-investment-mistake-mumbai" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/47-lakh-investment-mistake-mumbai" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid rgba(192, 160, 98, 0.5); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: #C0A062; margin-bottom: 15px;">
         Explore Our Investment Education Series:
       </p>
-      <p style="font-size: 24px; margin-bottom: 10px; color: #DAA520; font-weight: 600;">
+      <p style="font-size: 24px; margin-bottom: 10px; color: #C0A062; font-weight: 600;">
         Start from Blog 1: The ₹47 Lakh Case Study →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
@@ -4474,7 +4474,7 @@ export const staticBlogPost10 = {
       <div style="margin-bottom: 20px;">
         <a href="https://wa.me/918850977259" class="whatsapp-cta-btn" style="display: inline-flex; align-items: center; gap: 10px; background: #000000; color: rgba(192, 160, 98, 0.95); padding: 14px 28px; border-radius: 6px; text-decoration: none; font-size: 16px; font-weight: 500; border: 1px solid rgba(192, 160, 98, 0.4);">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +91 88509 77259
+          <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
@@ -4494,8 +4494,8 @@ export const staticBlogPost10 = {
 
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
-  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(218, 165, 32, 0.2); margin-bottom: 40px;">
-    <h3 style="color: #DAA520; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
+    <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">
       Important Disclaimers & Regulatory Information:
     </h3>
 
@@ -4545,4 +4545,5 @@ export const staticBlogData = [
   staticBlogPost9,
   staticBlogPost10,
 ];
+
 

@@ -1,6 +1,11 @@
+import { buildMetadata } from "@/lib/seo/metadata";
+
 export const metadata = {
-  title: 'Financial Services | BM Wealth Mumbai ARN 90008',
-  description: 'Comprehensive financial services including mutual funds, SIP, portfolio management, and insurance.',
+  ...buildMetadata({
+    title: "Financial Services | BM Wealth Mumbai ARN 90008",
+    description: "Comprehensive financial services including mutual funds, SIP, portfolio management, and insurance.",
+    path: "/services",
+  }),
 };
 
 export default function Layout({ children }) {

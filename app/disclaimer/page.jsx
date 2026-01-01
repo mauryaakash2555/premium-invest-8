@@ -1,3 +1,23 @@
+/**
+ * FILE: app\disclaimer\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - lucide-react
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 'use client';
 
 import React from 'react';
@@ -79,6 +99,15 @@ const Disclaimer = () => {
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>1. Investment Disclaimer</h2>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                <strong style={{ color: '#E5E5E5' }}>Regulatory status:</strong> BM Wealth operates as a mutual fund distributor (AMFI ARN-90008) and an IRDAI-licensed insurance advisor (License: 277925). We are not a SEBI-registered Investment Adviser (RIA) and we do not provide stock tips, buy/sell calls, or personalized investment advice requiring SEBI RIA registration.
+              </p>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                Market prices shown on our website (including third-party embedded widgets) are for general awareness only and may be delayed or differ across sources.
+              </p>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                Any market snapshot/ticker data (indices, commodities, FX, crypto) is indicative and may be delayed. Where labels reference local units, values may be derived from publicly available third-party sources and may not match official exchange feeds (e.g., NSE/BSE/MCX) at all times.
+              </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 The information, analysis, and recommendations provided by BM Wealth are for 
                 informational and educational purposes only. They should not be construed as 

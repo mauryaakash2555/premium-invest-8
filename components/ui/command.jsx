@@ -1,3 +1,26 @@
+/**
+ * FILE: components\ui\command.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - react
+ * - cmdk
+ * - lucide-react
+ * - @/lib/utils
+ * - @/components/ui/dialog
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { Search } from "lucide-react"

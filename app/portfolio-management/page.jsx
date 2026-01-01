@@ -1,3 +1,24 @@
+/**
+ * FILE: app\portfolio-management\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - next/link
+ * - lucide-react
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 'use client';
 
 import React, { useEffect } from 'react';
@@ -50,7 +71,7 @@ const PortfolioManagement = () => {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Professional Portfolio Management Services Mumbai
+            Professional Portfolio Curation Services Mumbai
           </h1>
           <p style={{
             fontSize: '20px',
@@ -59,7 +80,7 @@ const PortfolioManagement = () => {
             margin: '0 auto 32px',
             lineHeight: '1.6'
           }}>
-            Comprehensive wealth management solutions for high net worth individuals and families
+            Comprehensive wealth architecture solutions for high net worth individuals and families
           </p>
         </div>
       </section>
@@ -68,16 +89,16 @@ const PortfolioManagement = () => {
         
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Comprehensive Wealth Management Solutions
+            Comprehensive Wealth Architecture Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Portfolio management is the art and science of making investment decisions to achieve specific financial objectives while managing risk appropriately. At BM Wealth, our portfolio management services go beyond simple product selection – we create holistic wealth management strategies tailored to each client's unique financial situation, goals, risk tolerance, and life stage. Our AMFI registered advisors (ARN 90008) bring decades of combined experience serving Mumbai's affluent investors, from young professionals building their first crore to seasoned business owners managing multi-crore portfolios.
+            Portfolio curation is the art and science of making investment decisions to achieve specific financial objectives while managing risk appropriately. At BM Wealth, our portfolio curation services go beyond simple product selection – we create holistic wealth architecture strategies tailored to each client's unique financial situation, goals, risk tolerance, and life stage. Our AMFI registered wealth architects (ARN 90008) bring decades of combined experience serving Mumbai's affluent investors, from young professionals building their first crore to seasoned business owners managing multi-crore portfolios.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Mumbai, as India's financial capital, hosts some of the country's wealthiest individuals and families. The city's unique ecosystem – thriving startup culture, established business houses, multinational corporations, and real estate wealth – creates complex portfolio management needs. Our clients range from corporate executives with substantial ESOPs to entrepreneurs who've exited businesses, from legacy wealth families to first-generation wealth creators. Each requires a customized approach balancing growth, income, tax efficiency, and capital preservation.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Our portfolio management philosophy rests on several core principles: disciplined asset allocation based on scientific research and individual circumstances, regular rebalancing to maintain target allocations, tax-efficient investing to maximize post-tax returns, behavioral coaching to prevent emotional decision-making, and transparent communication ensuring clients understand their portfolios completely. We believe successful investing is a marathon, not a sprint, and our long-term relationships with clients reflect this philosophy.
+            Our portfolio curation philosophy rests on several core principles: disciplined asset allocation based on scientific research and individual circumstances, regular rebalancing to maintain target allocations, tax-efficient investing to maximize post-tax returns, behavioral coaching to prevent emotional decision-making, and transparent communication ensuring clients understand their portfolios completely. We believe successful investing is a marathon, not a sprint, and our long-term relationships with clients reflect this philosophy.
           </p>
         </section>
 
@@ -86,10 +107,10 @@ const PortfolioManagement = () => {
             Portfolio Construction Methodology
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Our portfolio construction process follows a systematic, repeatable methodology ensuring consistency and objectivity. The journey begins with comprehensive financial planning – understanding your complete financial picture including income, expenses, assets, liabilities, insurance coverage, and existing investments. For Mumbai clients, this often involves evaluating substantial real estate holdings, family business interests, or offshore investments alongside traditional financial assets.
+            Our portfolio construction process follows a systematic, repeatable methodology ensuring consistency and objectivity. The journey begins with comprehensive wealth strategies – understanding your complete financial picture including income, expenses, assets, liabilities, insurance coverage, and existing investments. For Mumbai clients, this often involves evaluating substantial real estate holdings, family business interests, or offshore investments alongside traditional financial assets.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Goal identification forms the cornerstone of portfolio design. We work with clients to articulate and prioritize financial objectives: retirement planning (typical Mumbai retirement corpus requirements range from ₹5-20 crores depending on lifestyle expectations), children's education (international education costs now exceed ₹1 crore per child), wedding expenses, home purchases, philanthropy, wealth transfer, or simply wealth accumulation. Each goal is assigned a timeframe, target amount, and priority level, forming the foundation for asset allocation decisions.
+            Goal identification forms the cornerstone of portfolio design. We work with clients to articulate and prioritize financial objectives: retirement planning (typical Mumbai retirement corpus requirements range from ₹15-20 crores depending on lifestyle expectations), children's education (international education costs now exceed ₹1 crore per child), wedding expenses, home purchases, philanthropy, wealth transfer, or simply wealth accumulation. Each goal is assigned a timeframe, target amount, and priority level, forming the foundation for asset allocation decisions.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Risk profiling goes beyond simple questionnaires. We conduct detailed discussions exploring your investment experience, emotional responses to market volatility, financial obligations, income stability, and capacity to bear losses. A Mumbai entrepreneur with multiple income streams can afford more risk than a salaried executive solely dependent on one income source, even if both have similar net worth. Our proprietary risk scoring system considers both willingness (psychological comfort) and ability (financial capacity) to bear risk, ensuring appropriate portfolio alignment.
@@ -110,7 +131,7 @@ const PortfolioManagement = () => {
             Ready to Optimize Your Investment Portfolio?
           </h3>
           <p style={{ fontSize: '17px', color: '#000', marginBottom: '24px' }}>
-            Schedule a comprehensive portfolio review with our experienced advisors
+            Schedule a comprehensive portfolio review with our experienced wealth architects
           </p>
           <a href="tel:+918850977259" style={{
             backgroundColor: '#000',
@@ -137,7 +158,7 @@ const PortfolioManagement = () => {
             Mid-career professionals (35-50 years) often have multiple competing goals – children's education approaching, retirement planning beginning, potential home upgrades, elderly parent care. Their portfolios transition toward balanced allocations with 60-70% equity, incorporating more stable debt instruments for near-term goals while maintaining equity exposure for long-term objectives. This life stage often sees the highest savings rates for Mumbai professionals, making systematic investment particularly powerful. Senior professionals and pre-retirees (50-60 years) require careful portfolio transitioning. We implement "glide path" strategies gradually reducing equity exposure as retirement approaches, typically moving from 60% equity at 50 years to 30-40% at retirement. This de-risking preserves accumulated wealth while maintaining inflation protection through meaningful equity allocation.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Retirees need income-focused portfolios balancing capital preservation with inflation protection. Our retiree portfolios typically allocate 30-40% to equity (providing growth and dividend income), 50-60% to debt (generating regular interest income), and 10% to gold/alternatives (portfolio stability). We construct laddered debt portfolios ensuring steady monthly income while managing interest rate risk. Systematic withdrawal plans (SWPs) from mutual funds provide tax-efficient income streams for Mumbai retirees, often superior to traditional pension plans or annuities. High net worth individuals with substantial corpus (₹5 crores+) can afford more sophisticated strategies including Portfolio Management Services (PMS), Alternative Investment Funds (AIFs), direct equity portfolios, offshore investing, and structured products. We provide referrals to SEBI-registered PMS providers and AIFs aligned with your risk profile and investment philosophy.
+            Retirees need income-focused portfolios balancing capital preservation with inflation protection. Our retiree portfolios typically allocate 30-40% to equity (providing growth and dividend income), 50-60% to debt (generating regular interest income), and 10% to gold/alternatives (portfolio stability). We construct laddered debt portfolios ensuring steady monthly income while managing interest rate risk. Systematic withdrawal plans (SWPs) from mutual funds provide tax-efficient income streams for Mumbai retirees, often superior to traditional pension plans or annuities. High net worth individuals with substantial corpus (₹15 crores+) can afford more sophisticated strategies including Portfolio Management Services (PMS), Alternative Investment Funds (AIFs), direct equity portfolios, offshore investing, and structured products. We provide referrals to regulated distribution partners for PMS and AIFs aligned with your risk profile and investment philosophy.
           </p>
         </section>
 
@@ -176,13 +197,13 @@ const PortfolioManagement = () => {
             High Net Worth Individual Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            High net worth individuals (HNIs) and ultra-high net worth individuals (UHNIs) with substantial portfolios require specialized services beyond standard advisory. Our HNI practice serves Mumbai's affluent investors with customized solutions addressing complex wealth management needs. HNI portfolios often include direct equity investments in select companies, providing concentrated exposure to high-conviction ideas. We assist with stock research, valuation analysis, entry/exit timing, and position sizing for direct equity allocations. Many Mumbai HNIs maintain 20-30% portfolios in carefully selected direct stocks complementing mutual fund holdings.
+            High net worth individuals (HNIs) and ultra-high net worth individuals (UHNIs) with substantial portfolios require specialized services beyond standard curation. Our HNI practice serves Mumbai's affluent investors with customized solutions addressing complex wealth architecture needs. HNI portfolios often include direct equity investments in select companies, providing concentrated exposure to high-conviction ideas. We assist with stock research, valuation analysis, entry/exit timing, and position sizing for direct equity allocations. Many Mumbai HNIs maintain 20-30% portfolios in carefully selected direct stocks complementing mutual fund holdings.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Portfolio Management Services (PMS) offer professionally managed, separately managed accounts for HNIs with ₹50 lakh+ investable assets. Unlike mutual funds pooling multiple investors' money, PMS creates individual portfolios tailored to your specifications. We provide referrals to top-tier SEBI-registered PMS providers specializing in various strategies – value investing, growth stocks, momentum strategies, sector-focused approaches, or multi-cap allocations. PMS particularly suits HNIs wanting direct stock ownership, customization around tax situations or ethical preferences, and personalized portfolio management. Alternative Investment Funds (AIFs) provide access to non-traditional assets – private equity, venture capital, real estate, distressed assets, or hedge fund strategies. Category I AIFs invest in startups and early-stage ventures; Category II includes private equity and debt funds; Category III encompasses hedge funds and complex trading strategies. With minimum investments typically ₹1 crore, AIFs suit UHNIs seeking portfolio diversification beyond traditional equity-debt allocations.
+            Portfolio Management Services (PMS) offer professionally managed, separately managed accounts for HNIs with ₹50 lakh+ investable assets. Unlike mutual funds pooling multiple investors' money, PMS creates individual portfolios tailored to your specifications. We provide access to top-tier regulated distribution partners specializing in various strategies – value investing, growth stocks, momentum strategies, sector-focused approaches, or multi-cap allocations. PMS particularly suits HNIs wanting direct stock ownership, customization around tax situations or ethical preferences, and personalized portfolio curation. Alternative Investment Funds (AIFs) provide access to non-traditional assets – private equity, venture capital, real estate, distressed assets, or hedge fund strategies. Category I AIFs invest in startups and early-stage ventures; Category II includes private equity and debt funds; Category III encompasses hedge funds and complex trading strategies. With minimum investments typically ₹1 crore, AIFs suit UHNIs seeking portfolio diversification beyond traditional equity-debt allocations.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            International diversification provides geographic risk distribution and currency diversification for Mumbai HNIs. Through international mutual funds or direct offshore investing (under LRS scheme allowing $250,000 annual remittance per person), HNIs access global equity markets, developed country bonds, thematic funds, and offshore real estate. This geographic diversification reduces India-specific risks while providing dollar-denominated assets hedging rupee depreciation. Tax planning becomes paramount for HNIs facing highest tax brackets. We coordinate with chartered accountants implementing tax-efficient strategies: maximizing 80C deductions through ELSS, utilizing capital gains exemptions (₹1 lakh LTCG exemption annually), tax-loss harvesting to offset gains with losses, location optimization (debt in tax-free bonds vs. taxable funds), and estate planning through trusts or holding companies. Every percentage point saved in taxes compounds significantly for large portfolios.
+            International diversification provides geographic risk distribution and currency diversification for Mumbai HNIs. Through international mutual funds or direct offshore investing (under LRS scheme allowing $250,000 annual remittance per person), HNIs access global equity markets, developed country bonds, thematic funds, and offshore real estate. This geographic diversification reduces India-specific risks while providing dollar-denominated assets hedging rupee depreciation. Tax planning becomes paramount for HNIs facing highest tax brackets. We coordinate with tax professionals implementing tax-efficient strategies: maximizing 80C deductions through ELSS, utilizing capital gains exemptions (₹1 lakh LTCG exemption annually), tax-loss harvesting to offset gains with losses, location optimization (debt in tax-free bonds vs. taxable funds), and estate planning through trusts or holding companies. Every percentage point saved in taxes compounds significantly for large portfolios.
           </p>
         </section>
 
@@ -209,7 +230,7 @@ const PortfolioManagement = () => {
           border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            <strong>Investment Disclaimer:</strong> Portfolio management involves market risks. Past performance does not guarantee future results. Asset allocation and diversification do not ensure profits or protect against losses. BM Wealth (AMFI ARN 90008) provides portfolio advisory services and mutual fund distribution. We are not SEBI-registered Investment Advisors or Portfolio Managers. For PMS, AIF, or sophisticated investment strategies, we provide referrals to appropriate SEBI-registered entities. All portfolio recommendations are made considering individual circumstances, goals, and risk profiles. Consult with our advisors for personalized guidance.
+            <strong>Investment Disclaimer:</strong> Portfolio curation involves market risks. Past performance does not guarantee future results. Asset allocation and diversification do not ensure profits or protect against losses. BM Wealth (AMFI ARN 90008) provides portfolio curation and mutual fund distribution services. We are a registered distribution firm. For PMS, AIF, or sophisticated investment strategies, we provide access to appropriate regulated entities. All portfolio recommendations are made considering individual circumstances, goals, and risk profiles. Consult with our wealth architects for personalized guidance.
           </p>
         </section>
 
@@ -219,6 +240,3 @@ const PortfolioManagement = () => {
 };
 
 export default PortfolioManagement;
-
-
-

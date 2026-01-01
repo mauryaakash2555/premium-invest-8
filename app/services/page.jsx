@@ -1,9 +1,33 @@
+/**
+ * FILE: app\services\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - lucide-react
+ * - next/link
+ * - react
+ * - @/components/user/LazyImage
+ * - @/components/user/MobileScrollBoost
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 'use client';
 
 import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import LazyImage from '@/components/LazyImage';
+import LazyImage from '@/components/user/LazyImage';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 
 const Services = () => {
   useEffect(() => {
@@ -15,7 +39,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of specialists empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
+        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of wealth architects empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -68,7 +92,7 @@ const Services = () => {
         'Policy comparison and analysis',
         'Claims assistance',
       ],
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/insurance',
     },
     {
@@ -83,7 +107,7 @@ const Services = () => {
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/fixed-deposits',
     },
     {
@@ -98,7 +122,7 @@ const Services = () => {
         'Auto-debit facility',
         'Goal-based planning',
       ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
+      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/sip',
     },
   ];
@@ -196,7 +220,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Bespoke financial architectures meticulously crafted to elevate your wealth trajectory
+            Bespoke wealth architectures meticulously crafted to elevate your wealth trajectory
           </p>
         </div>
       </section>
@@ -205,8 +229,9 @@ const Services = () => {
       <section className="section-container">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 8vw, 80px)' }}>
           {services.map((service, index) => (
-            <div
+            <MobileScrollBoost
               key={index}
+              holdMs={6000}
               className="glass-effect service-detail-grid"
               style={{
                 padding: 'clamp(20px, 5vw, 40px)',
@@ -336,7 +361,7 @@ const Services = () => {
                   </Link>
                 )}
               </div>
-            </div>
+            </MobileScrollBoost>
           ))}
         </div>
       </section>
@@ -375,7 +400,7 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Schedule a consultation with our financial specialists to discuss your investment
+              Schedule a consultation with our wealth architects to discuss your investment
               objectives
             </p>
             <div
@@ -419,3 +444,7 @@ const Services = () => {
 };
 
 export default Services;
+
+
+
+

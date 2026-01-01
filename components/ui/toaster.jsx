@@ -1,3 +1,23 @@
+/**
+ * FILE: components\ui\toaster.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - @/hooks/use-toast
+ * - @/components/ui/toast
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
