@@ -1,31 +1,9 @@
-/**
- * FILE: app\api\admin\revenue\route.js
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: api
- *
- * DEPENDENCIES:
- * - next/server
- * - next/headers
- * - zod
- * - @/lib/adminSession
- * - @/lib/supabaseAdmin
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
- */
-
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { isFeatureEnabled } from "@/config/features";
 
 const schema = z.object({
   amount: z.number().finite().positive().max(1_000_000_000_000),
@@ -39,6 +17,10 @@ export async function POST(req) {
   const cookieStore = await cookies();
   if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
+  }
+
+  if (!isFeatureEnabled("REVENUE_TRACKING")) {
+    return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
   }
 
   const body = await req.json().catch(() => ({}));

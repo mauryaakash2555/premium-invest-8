@@ -1,48 +1,20 @@
-/**
- * FILE: app\api\chat\route.js
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: api
- *
- * DEPENDENCIES:
- * - next/server
- * - next/headers
- * - zod
- * - @/config/env
- * - @/config/constants
- * - @/lib/adminSession
- * - @/lib/supabaseAdmin
- * - @/lib/ai/groq
- * - @/lib/ai/claude
- * - @/lib/db/leads
- * - @/lib/db/conversations
- * - @/lib/db/events
- * - (more...)
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
- */
-
 ﻿import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { getAIEnvSafe } from "@/config/env";
 import { CONSTANTS } from "@/config/constants";
+import { isFeatureEnabled } from "@/config/features";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { callGroqSafe } from "@/lib/ai/groq";
-import { callClaudeSafe } from "@/lib/ai/claude";
+import { getAIResponse } from "@/lib/ai/provider";
+import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
 import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
 import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
 import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
 import { consumeRate, makeRateKey } from "@/lib/utils/rateLimiter";
 import { logger } from "@/lib/utils/logger";
+import { loadPlugins } from "@/lib/plugins/loadPlugins";
+import { runPluginHook } from "@/lib/plugins/PluginManager";
 
 const historySchema = z
   .array(
@@ -415,6 +387,15 @@ export async function POST(req) {
 
   const adminSession = Boolean(isAdmin && mode === "admin");
 
+  // Plugins (best-effort)
+  await loadPlugins();
+  await runPluginHook("onChatMessage", {
+    message,
+    leadId: leadId || null,
+    mode: adminSession ? "admin" : "user",
+    conversationId,
+  });
+
   // Rate limit (best-effort):
   // - User: 10/min
   // - Admin: 50/hour
@@ -468,7 +449,7 @@ export async function POST(req) {
   }
 
   // Lead qualification (best-effort; only when a real lead exists)
-  if (leadId && mode !== "admin") {
+  if (isFeatureEnabled("LEAD_SCORING") && leadId && mode !== "admin") {
     try {
       const [{ hasEmail, hasPhone }, userMessageCount] = await Promise.all([
         getLeadContactSafe(leadId),
@@ -485,29 +466,35 @@ export async function POST(req) {
 
   try {
     let reply;
+    let providerUsed = null;
     if (adminSession) {
-      if (!env?.ANTHROPIC_API_KEY) {
-        logger.error("[api/chat] missing ANTHROPIC_API_KEY", { conversationId });
-        throw new Error("setup_required");
+      if (!isFeatureEnabled("CLAUDE_ADMIN")) {
+        return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
       }
       const context = await buildAdminContextSafe();
       const system = buildAdminStrategicPrompt({ userName: "Akash" });
-      const a = await callClaudeSafe({
-        apiKey: env.ANTHROPIC_API_KEY,
-        userText: message,
+      const a = await getAIResponse({
+        message,
+        isAdmin: true,
         system,
         context,
-        maxTokens: 800,
-        temperature: 0.4,
+        conversationHistory: [],
+        keys: {
+          ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+          GEMINI_API_KEY: env?.GEMINI_API_KEY,
+          GROQ_API_KEY: env?.GROQ_API_KEY,
+        },
+        claude: { maxTokens: 800, temperature: 0.4 },
       });
       if (a.error) throw new Error(a.error);
       reply = a.reply;
+      providerUsed = a.provider || "anthropic";
 
       // Cost / usage tracking
       await logEventSafe({
         leadId,
         event_type: "chat_ai",
-        data: { provider: "anthropic", conversationId, mode: "admin" },
+        data: { provider: providerUsed, conversationId, mode: "admin", fallback_from: a.fallback_from || null },
       });
     } else {
       const userName = await getLeadNameSafe(leadId);
@@ -558,25 +545,38 @@ export async function POST(req) {
           data: { provider: "rule", conversationId, mode: "user", fallback_from: null },
         });
 
+        await runPluginHook("onChatReply", {
+          reply,
+          provider: "rule",
+          leadId: leadId || null,
+          mode: "user",
+          conversationId,
+        });
+
         return NextResponse.json({ ok: true, reply, conversationId, cta, intent });
       }
 
-      // Regular users: Groq only (fast + predictable costs)
-      const provider = "groq";
-      const fallbackFrom = null;
-      if (!env?.GROQ_API_KEY) {
-        logger.error("[api/chat] missing GROQ_API_KEY", { conversationId });
-        throw new Error("setup_required");
-      }
+      const memoryHistory = await buildConversationHistorySafe({
+        leadId,
+        fallbackHistory: conversationHistory,
+        limit: 12,
+      });
       const system = buildSeBiSafeSystemPrompt({ userName });
-      const g = await callGroqSafe({
-        apiKey: env.GROQ_API_KEY,
-        userText: message,
-        conversationHistory,
+      const g = await getAIResponse({
+        message,
+        isAdmin: false,
         system,
+        context: null,
+        conversationHistory: memoryHistory,
+        keys: {
+          ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+          GEMINI_API_KEY: env?.GEMINI_API_KEY,
+          GROQ_API_KEY: env?.GROQ_API_KEY,
+        },
       });
       if (g.error) throw new Error(g.error);
       reply = g.reply;
+      providerUsed = g.provider || "unknown";
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
@@ -598,10 +598,10 @@ export async function POST(req) {
         leadId,
         event_type: "chat_ai",
         data: {
-          provider,
+          provider: providerUsed,
           conversationId,
           mode: "user",
-          fallback_from: fallbackFrom,
+          fallback_from: g.fallback_from || null,
         },
       });
     }
@@ -613,10 +613,18 @@ export async function POST(req) {
     } catch {
       // ignore if DB not configured yet
     }
+
+    await runPluginHook("onChatReply", {
+      reply,
+      provider: providerUsed,
+      leadId: leadId || null,
+      mode: adminSession ? "admin" : "user",
+      conversationId,
+    });
     return NextResponse.json({ ok: true, reply, conversationId });
   } catch (e) {
     const msg = e?.message || "chat_failed";
-    const provider = adminSession ? "anthropic" : "groq";
+    const provider = adminSession ? "anthropic" : "ai";
 
     // Log exact failure to server console for debugging.
     logger.error("[api/chat] provider failure", { provider, conversationId, leadId, mode, error: msg });

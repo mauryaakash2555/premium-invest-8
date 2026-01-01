@@ -22,11 +22,19 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AIChatFloat.module.css";
+import { isFeatureEnabled } from "@/config/features";
 
 const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product\n" +
   "distribution services. AMFI Registered | IRDAI Licensed |\n" +
   "Investments subject to market dynamics.";
+
+// Feature flags (client-side uses NEXT_PUBLIC_FEATURE_* env vars)
+const FEATURE_LEAD_CAPTURE = isFeatureEnabled("LEAD_CAPTURE");
+const FEATURE_TIME_GREETINGS = isFeatureEnabled("TIME_GREETINGS");
+const FEATURE_REVENUE_TRACKING = isFeatureEnabled("REVENUE_TRACKING");
+const FEATURE_ANALYTICS = isFeatureEnabled("ANALYTICS");
+const FEATURE_CLAUDE_ADMIN = isFeatureEnabled("CLAUDE_ADMIN");
 
 function isValidEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim());
@@ -47,6 +55,7 @@ function todayISO() {
 
 function dayGreeting() {
   try {
+    if (!FEATURE_TIME_GREETINGS) return "Hello!";
     const h = new Date().getHours();
     // User-local time ranges:
     // 5 AM - 12 PM: Good morning
@@ -121,7 +130,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [admin, setAdmin] = useState(false);
   const [leadId, setLeadId] = useState(null);
   const [leadDraft, setLeadDraft] = useState({ name: "", email: "", phone: "" });
-  const [captureStep, setCaptureStep] = useState("name"); // name|email|phone|done
+  const [captureStep, setCaptureStep] = useState(() => (FEATURE_LEAD_CAPTURE ? "name" : "done")); // name|email|phone|done
   const [dashboard, setDashboard] = useState(null);
   const [tab, setTab] = useState("chat"); // chat|dashboard|analytics
   const [humanReady, setHumanReady] = useState(false);
@@ -201,7 +210,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       sender: "bot",
       at: todayISO(),
       text:
-        `${dayGreeting()}\n\n${COMPLIANCE_TEXT}\n\nTo provide a premium experience, may I have your name?`,
+        `${dayGreeting()}\n\n${COMPLIANCE_TEXT}\n\n${
+          FEATURE_LEAD_CAPTURE ? "To provide a premium experience, may I have your name?" : "How can I help you today?"
+        }`,
     },
   ]);
   const [adminMessages, setAdminMessages] = useState(() => [
@@ -578,11 +589,15 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         if (res?.ok) {
           setAdmin(true);
           setTab("dashboard");
-          pushBotAdmin("Admin mode active - Claude AI enabled.");
+          pushBotAdmin(FEATURE_CLAUDE_ADMIN ? "Admin mode active - Claude AI enabled." : "Admin mode active.");
           const dash = await refreshDashboard();
           setDashboard(dash);
-          const s = await fetchStrategy({ force: false });
-          setStrategy(s);
+          if (FEATURE_CLAUDE_ADMIN) {
+            const s = await fetchStrategy({ force: false });
+            setStrategy(s);
+          } else {
+            setStrategy(null);
+          }
           return;
         }
         pushBotUser("Admin code not recognized for this environment.");
@@ -591,7 +606,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
       // Lead capture gate (Micro-MVP)
       // IMPORTANT: never run lead capture in admin mode.
-      if (!admin && captureStep !== "done") {
+      if (!admin && FEATURE_LEAD_CAPTURE && captureStep !== "done") {
         if (captureStep === "name") {
           if (isGreetingOnly(text)) {
             pushBotUser("Hello. May I have your name?");
@@ -707,24 +722,26 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   >
                     {tab === "dashboard" ? "CHAT" : "DASH"}
                   </button>
-                  <button
-                    type="button"
-                    className={styles.actionBtn}
-                    aria-label={tab === "analytics" ? "Open dashboard" : "Open analytics"}
-                    onClick={async () => {
-                      if (tab === "analytics") {
-                        setTab("dashboard");
-                        const dash = await refreshDashboard();
-                        setDashboard(dash);
-                        return;
-                      }
-                      setTab("analytics");
-                      const a = await fetchAnalytics();
-                      setAnalytics(a);
-                    }}
-                  >
-                    {tab === "analytics" ? "DASH" : "ANL"}
-                  </button>
+                  {FEATURE_ANALYTICS ? (
+                    <button
+                      type="button"
+                      className={styles.actionBtn}
+                      aria-label={tab === "analytics" ? "Open dashboard" : "Open analytics"}
+                      onClick={async () => {
+                        if (tab === "analytics") {
+                          setTab("dashboard");
+                          const dash = await refreshDashboard();
+                          setDashboard(dash);
+                          return;
+                        }
+                        setTab("analytics");
+                        const a = await fetchAnalytics();
+                        setAnalytics(a);
+                      }}
+                    >
+                      {tab === "analytics" ? "DASH" : "ANL"}
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className={styles.actionBtn}
@@ -751,7 +768,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             </div>
           </div>
 
-          {admin && tab === "analytics" ? (
+          {admin && tab === "analytics" && FEATURE_ANALYTICS ? (
             <div className={styles.body}>
               <div className={styles.bubble}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
@@ -886,40 +903,44 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       {dashboard?.today?.conversations?.length ?? 0}
                     </div>
                   </div>
-                    <div>
-                      <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE TODAY</div>
-                      <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
-                        {fmtINR(dashboard?.today?.revenue_today ?? 0)}
+                    {FEATURE_REVENUE_TRACKING ? (
+                      <div>
+                        <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE TODAY</div>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
+                          {fmtINR(dashboard?.today?.revenue_today ?? 0)}
+                        </div>
                       </div>
+                    ) : null}
+                </div>
+                {FEATURE_REVENUE_TRACKING ? (
+                  <div style={{ marginTop: 10, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
+                    <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                      THIS WEEK{" "}
+                      <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                        {fmtINR(dashboard?.today?.revenue_week ?? 0)}
+                      </span>
                     </div>
-                </div>
-                <div style={{ marginTop: 10, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
-                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
-                    THIS WEEK{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
-                      {fmtINR(dashboard?.today?.revenue_week ?? 0)}
-                    </span>
+                    <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
+                      THIS MONTH{" "}
+                      <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                        {fmtINR(dashboard?.today?.revenue_month ?? 0)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.actionBtn}
+                      onClick={() => {
+                        setRevenueErr("");
+                        setRevenueModalOpen(true);
+                      }}
+                      aria-label="Add revenue"
+                      title="Add Revenue"
+                      style={{ width: 110 }}
+                    >
+                      ADD REV
+                    </button>
                   </div>
-                  <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
-                    THIS MONTH{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
-                      {fmtINR(dashboard?.today?.revenue_month ?? 0)}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.actionBtn}
-                    onClick={() => {
-                      setRevenueErr("");
-                      setRevenueModalOpen(true);
-                    }}
-                    aria-label="Add revenue"
-                    title="Add Revenue"
-                    style={{ width: 110 }}
-                  >
-                    ADD REV
-                  </button>
-                </div>
+                ) : null}
                 <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     TOTAL LEADS{" "}
@@ -972,33 +993,44 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 ) : null}
               </div>
 
-              <div className={styles.bubble}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                  <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-                    Today’s strategic advice
+              {FEATURE_CLAUDE_ADMIN ? (
+                <div className={styles.bubble}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                      Today’s strategic advice
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.actionBtn}
+                      onClick={async () => {
+                        const s = await fetchStrategy({ force: true });
+                        setStrategy(s);
+                      }}
+                      aria-label="Refresh strategic advice"
+                      title="Refresh"
+                      style={{ width: 64 }}
+                      disabled={strategyBusy}
+                    >
+                      {strategyBusy ? "…" : "REF"}
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    className={styles.actionBtn}
-                    onClick={async () => {
-                      const s = await fetchStrategy({ force: true });
-                      setStrategy(s);
-                    }}
-                    aria-label="Refresh strategic advice"
-                    title="Refresh"
-                    style={{ width: 64 }}
-                    disabled={strategyBusy}
-                  >
-                    {strategyBusy ? "…" : "REF"}
-                  </button>
+                  <div style={{ marginTop: 10, fontSize: 13, lineHeight: 1.5, whiteSpace: "pre-wrap", opacity: 0.9 }}>
+                    {strategy?.text ? strategy.text : "No advice generated yet. Tap REF."}
+                  </div>
+                  {strategy?.cached ? (
+                    <div style={{ marginTop: 8, fontSize: 11, opacity: 0.6 }}>Cached for today.</div>
+                  ) : null}
                 </div>
-                <div style={{ marginTop: 10, fontSize: 13, lineHeight: 1.5, whiteSpace: "pre-wrap", opacity: 0.9 }}>
-                  {strategy?.text ? strategy.text : "No advice generated yet. Tap REF."}
+              ) : (
+                <div className={styles.bubble}>
+                  <div style={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                    Strategic advice
+                  </div>
+                  <div style={{ marginTop: 10, fontSize: 12, opacity: 0.7 }}>
+                    Disabled by feature flag.
+                  </div>
                 </div>
-                {strategy?.cached ? (
-                  <div style={{ marginTop: 8, fontSize: 11, opacity: 0.6 }}>Cached for today.</div>
-                ) : null}
-              </div>
+              )}
 
               <div className={styles.bubble}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
@@ -1159,7 +1191,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 </div>
               ) : null}
 
-              {revenueModalOpen ? (
+              {FEATURE_REVENUE_TRACKING && revenueModalOpen ? (
                 <div className={styles.modalOverlay} role="dialog" aria-modal="true">
                   <div className={styles.modalCard}>
                     <div className={styles.modalTitle}>Add Revenue</div>

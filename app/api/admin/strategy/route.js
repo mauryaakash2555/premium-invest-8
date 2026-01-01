@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { getAIEnvSafe } from "@/config/env";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { callClaudeSafe } from "@/lib/ai/claude";
+import { isFeatureEnabled } from "@/config/features";
+import { getAIResponse } from "@/lib/ai/provider";
 
 function startOfDay(d) {
   const x = new Date(d);
@@ -138,6 +139,10 @@ export async function GET(req) {
   const cookieStore = await cookies();
   if (!isAdminFromCookies(cookieStore)) return NextResponse.json({ ok: false }, { status: 401 });
 
+  if (!isFeatureEnabled("CLAUDE_ADMIN")) {
+    return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
+  }
+
   const env = getAIEnvSafe();
   if (!env?.ANTHROPIC_API_KEY) return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
 
@@ -176,13 +181,18 @@ export async function GET(req) {
     "Also include 1 conversion improvement for the chat flow, 1 marketing channel focus, and 1 KPI to watch today.";
 
   const system = buildAdminStrategicPrompt();
-  const res = await callClaudeSafe({
-    apiKey: env.ANTHROPIC_API_KEY,
-    userText: task,
+  const res = await getAIResponse({
+    message: task,
+    isAdmin: true,
     system,
     context,
-    maxTokens: 900,
-    temperature: 0.35,
+    conversationHistory: [],
+    keys: {
+      ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY,
+      GEMINI_API_KEY: env.GEMINI_API_KEY,
+      GROQ_API_KEY: env.GROQ_API_KEY,
+    },
+    claude: { maxTokens: 900, temperature: 0.35 },
   });
   if (res.error) throw new Error(res.error);
   const text = res.reply;
@@ -197,7 +207,7 @@ export async function GET(req) {
     await sb.from("events").insert({
       lead_id: null,
       event_type: "chat_ai",
-      data: { provider: "anthropic", mode: "admin_strategy" },
+      data: { provider: res.provider || "anthropic", mode: "admin_strategy", fallback_from: res.fallback_from || null },
     });
   } catch {
     // ignore

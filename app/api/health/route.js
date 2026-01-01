@@ -1,6 +1,7 @@
 ﻿import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAIEnvSafe, getAdminEnvSafe } from "@/config/env";
+import { FEATURES } from "@/config/features";
 
 function ok(name, extra = {}) {
   return { ok: true, name, ...extra };
@@ -123,6 +124,7 @@ export async function GET(req) {
     ok: allOk,
     asOf: new Date().toISOString(),
     ms: Date.now() - startedAt,
+    features: FEATURES,
     checks: {
       supabase: supabaseCheck,
       ai,

@@ -1,29 +1,8 @@
-/**
- * FILE: app\api\admin\analytics\route.js
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: api
- *
- * DEPENDENCIES:
- * - next/server
- * - next/headers
- * - @/lib/adminSession
- * - @/lib/supabaseAdmin
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
- */
-
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { isFeatureEnabled } from "@/config/features";
 
 function startOfDay(d) {
   const x = new Date(d);
@@ -81,6 +60,10 @@ export async function GET(req) {
   const cookieStore = await cookies();
   if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
+  }
+
+  if (!isFeatureEnabled("ANALYTICS")) {
+    return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
   }
 
   let sb;

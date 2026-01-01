@@ -17,6 +17,9 @@
 
 import { NextResponse } from "next/server";
 import { upsertLead } from "@/lib/db/leads";
+import { isFeatureEnabled } from "@/config/features";
+import { loadPlugins } from "@/lib/plugins/loadPlugins";
+import { runPluginHook } from "@/lib/plugins/PluginManager";
 
 function isMissingLeadsTable(msg) {
   const m = String(msg || "");
@@ -24,6 +27,13 @@ function isMissingLeadsTable(msg) {
 }
 
 export async function POST(req) {
+  if (!isFeatureEnabled("LEAD_CAPTURE")) {
+    return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
+  }
+
+  // Plugins (best-effort)
+  await loadPlugins();
+
   // 🔵 Parse input
   const body = await req.json().catch(() => ({}));
   const name = String(body?.name || "").trim();
@@ -38,6 +48,7 @@ export async function POST(req) {
   // 🔵 Save lead
   try {
     const lead = await upsertLead({ name, email, phone });
+    await runPluginHook("onLeadCapture", { lead });
     return NextResponse.json({ ok: true, lead });
   } catch (e) {
     const msg = String(e?.message || "");
