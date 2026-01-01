@@ -1125,3 +1125,9 @@ html {
 
 /* End of @layer utilities */
 }
+\n/* 🔵 Shared animation: used by LoadingSpinner */
+@keyframes bmw-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+

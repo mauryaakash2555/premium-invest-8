@@ -1,5 +1,26 @@
+/**
+ * FILE: app\api\admin\login\route.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: api
+ *
+ * DEPENDENCIES:
+ * - next/server
+ * - @/lib/env
+ * - @/lib/adminSession
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 ﻿import { NextResponse } from "next/server";
-import { getAdminEnvSafe } from "@/lib/env";
+import { getAdminEnvSafe } from "@/config/env";
 import { issueAdminCookie } from "@/lib/adminSession";
 
 export async function POST(req) {

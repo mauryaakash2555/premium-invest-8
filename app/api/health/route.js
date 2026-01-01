@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { getAIEnvSafe, getAdminEnvSafe } from "@/lib/env";
+import { getAIEnvSafe, getAdminEnvSafe } from "@/config/env";
 
 function ok(name, extra = {}) {
   return { ok: true, name, ...extra };

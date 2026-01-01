@@ -1,9 +1,31 @@
-﻿'use client';
+/**
+ * FILE: app\platforms\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - next/link
+ * - lucide-react
+ * - @/components/user/MobileScrollBoost
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+'use client';
 
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
-import MobileScrollBoost from '@/components/MobileScrollBoost';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 
 export default function Platforms() {
   useEffect(() => {
@@ -365,3 +387,4 @@ export default function Platforms() {
     </div>
   );
 }
+

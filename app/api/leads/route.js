@@ -1,44 +1,49 @@
-import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
+/**
+ * FILE: app/api/leads/route.js
+ * PURPOSE: Create or update a lead (by email) in Supabase.
+ * CATEGORY: api
+ *
+ * DEPENDENCIES:
+ * - next/server (NextResponse)
+ * - lib/db/leads (upsertLead)
+ *
+ * USED BY:
+ * - components/user/AIChatFloat.jsx (lead capture)
+ *
+ * SIMPLE EXPLANATION:
+ * When a user shares name/email/phone, we save it as a "lead".
+ * We use email as the unique key so the same person updates their record.
+ */
 
-function normalizeEmail(email) {
-  return String(email || "").trim().toLowerCase();
-}
+import { NextResponse } from "next/server";
+import { upsertLead } from "@/lib/db/leads";
 
 function isMissingLeadsTable(msg) {
-  const m = String(msg || '');
-  return m.includes('Could not find the table') && m.includes('public.leads');
+  const m = String(msg || "");
+  return m.includes("Could not find the table") && m.includes("public.leads");
 }
 
 export async function POST(req) {
+  // 🔵 Parse input
   const body = await req.json().catch(() => ({}));
   const name = String(body?.name || "").trim();
-  const email = normalizeEmail(body?.email);
+  const email = String(body?.email || "").trim().toLowerCase();
   const phone = String(body?.phone || "").trim();
 
+  // 🔵 Validate
   if (!email) {
     return NextResponse.json({ ok: false, error: "email_required" }, { status: 400 });
   }
 
-  let sb;
+  // 🔵 Save lead
   try {
-    sb = supabaseAdmin();
-  } catch {
-    return NextResponse.json(
-      { ok: false, error: "setup_required" },
-      { status: 503 }
-    );
-  }
+    const lead = await upsertLead({ name, email, phone });
+    return NextResponse.json({ ok: true, lead });
+  } catch (e) {
+    const msg = String(e?.message || "");
 
-  // Upsert by email
-  const { data, error } = await sb
-    .from("leads")
-    .upsert({ name: name || null, email, phone: phone || null }, { onConflict: "email" })
-    .select("id,name,email,phone,created_at")
-    .single();
-  if (error) {
-    // Common setup issue: Supabase project is reachable but schema hasn't been applied.
-    if (isMissingLeadsTable(error.message)) {
+    // ⚠️ Common setup issue: Supabase reachable but schema not applied.
+    if (isMissingLeadsTable(msg)) {
       return NextResponse.json(
         {
           ok: false,
@@ -50,10 +55,10 @@ export async function POST(req) {
       );
     }
 
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    if (msg.includes("Supabase env not configured")) {
+      return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
+    }
+
+    return NextResponse.json({ ok: false, error: msg || "unknown" }, { status: 500 });
   }
-
-  return NextResponse.json({ ok: true, lead: data });
 }
-
-

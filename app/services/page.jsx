@@ -1,10 +1,33 @@
-﻿'use client';
+/**
+ * FILE: app\services\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - lucide-react
+ * - next/link
+ * - react
+ * - @/components/user/LazyImage
+ * - @/components/user/MobileScrollBoost
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+'use client';
 
 import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import LazyImage from '@/components/LazyImage';
-import MobileScrollBoost from '@/components/MobileScrollBoost';
+import LazyImage from '@/components/user/LazyImage';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 
 const Services = () => {
   useEffect(() => {
@@ -421,6 +444,7 @@ const Services = () => {
 };
 
 export default Services;
+
 
 
 

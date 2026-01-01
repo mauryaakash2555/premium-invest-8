@@ -1,8 +1,31 @@
+/**
+ * FILE: app\api\events\route.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: api
+ *
+ * DEPENDENCIES:
+ * - next/server
+ * - zod
+ * - crypto
+ * - @/config/env
+ * - @/lib/db/events
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 ﻿import { NextResponse } from "next/server";
 import { z } from "zod";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import crypto from "crypto";
-import { getAdminEnvSafe } from "@/lib/env";
+import { getAdminEnvSafe } from "@/config/env";
+import { insertEvent } from "@/lib/db/events";
 
 const schema = z.object({
   leadId: z.string().uuid().optional(),
@@ -14,13 +37,6 @@ export async function POST(req) {
   const body = await req.json().catch(() => ({}));
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ ok: false }, { status: 400 });
-
-  let sb;
-  try {
-    sb = supabaseAdmin();
-  } catch {
-    return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
-  }
 
   const { leadId, event_type, data } = parsed.data;
 
@@ -38,13 +54,15 @@ export async function POST(req) {
       ? { ...(data || {}), ipHash }
       : data ?? null;
 
-  const { error } = await sb.from("events").insert({
-    lead_id: leadId ?? null,
-    event_type,
-    data: nextData,
-  });
-
-  if (error) return NextResponse.json({ ok: false }, { status: 500 });
+  try {
+    await insertEvent({ leadId, event_type, data: nextData });
+  } catch (e) {
+    const msg = String(e?.message || "");
+    if (msg.includes("Supabase env not configured")) {
+      return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
+    }
+    return NextResponse.json({ ok: false }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }
 

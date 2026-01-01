@@ -1,3 +1,23 @@
+/**
+ * FILE: components\ui\card.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - react
+ * - @/lib/utils
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"

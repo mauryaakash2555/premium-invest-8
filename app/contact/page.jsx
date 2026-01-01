@@ -1,8 +1,30 @@
-﻿'use client';
+/**
+ * FILE: app\contact\page.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - lucide-react
+ * - @/components/user/MobileScrollBoost
+ * - axios
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
-import MobileScrollBoost from '@/components/MobileScrollBoost';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import axios from 'axios';
 // Render Backend API (permanent solution)
 // Use NEXT_PUBLIC_ prefix for client-side access in Next.js
@@ -696,6 +718,7 @@ const Contact = () => {
 };
 
 export default Contact;
+
 
 
 

@@ -1,9 +1,34 @@
-﻿import { Playfair_Display, Inter } from "next/font/google";
+/**
+ * FILE: app\layout.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - next/font/google
+ * - @/components/user/Navigation
+ * - @/components/user/Footer
+ * - @/components/user/WhatsAppFloat
+ * - @/components/user/LuxuryMobileDock
+ * - @vercel/analytics/react
+ * - @vercel/speed-insights/react
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import { LuxuryMobileDock } from "@/components/LuxuryMobileDock";
+import Navigation from "@/components/user/Navigation";
+import Footer from "@/components/user/Footer";
+import WhatsAppFloat from "@/components/user/WhatsAppFloat";
+import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -52,5 +77,6 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
 
 

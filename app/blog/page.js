@@ -1,10 +1,34 @@
-﻿'use client';
+/**
+ * FILE: app\blog\page.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - react
+ * - lucide-react
+ * - next/link
+ * - @/components/user/LazyImage
+ * - @/components/user/MobileScrollBoost
+ * - @/data/staticBlogData
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Calendar, User } from 'lucide-react';
 import Link from 'next/link';
-import LazyImage from '@/components/LazyImage';
-import MobileScrollBoost from '@/components/MobileScrollBoost';
+import LazyImage from '@/components/user/LazyImage';
+import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 
 export default function BlogPage() {
@@ -413,6 +437,7 @@ export default function BlogPage() {
     </div>
   );
 }
+
 
 
 

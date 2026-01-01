@@ -1,9 +1,48 @@
+/**
+ * FILE: app\api\chat\route.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: api
+ *
+ * DEPENDENCIES:
+ * - next/server
+ * - next/headers
+ * - zod
+ * - @/config/env
+ * - @/config/constants
+ * - @/lib/adminSession
+ * - @/lib/supabaseAdmin
+ * - @/lib/ai/groq
+ * - @/lib/ai/claude
+ * - @/lib/db/leads
+ * - @/lib/db/conversations
+ * - @/lib/db/events
+ * - (more...)
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 ﻿import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { getAIEnvSafe } from "@/lib/env";
+import { getAIEnvSafe } from "@/config/env";
+import { CONSTANTS } from "@/config/constants";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { callGroqSafe } from "@/lib/ai/groq";
+import { callClaudeSafe } from "@/lib/ai/claude";
+import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
+import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
+import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
+import { consumeRate, makeRateKey } from "@/lib/utils/rateLimiter";
+import { logger } from "@/lib/utils/logger";
 
 const historySchema = z
   .array(
@@ -49,33 +88,9 @@ function stripComplianceFooter(text) {
   return t;
 }
 
-// Basic per-user rate limit (best-effort in serverless)
-const RATE_WINDOW_MS = 60_000;
-const RATE_MAX = 10;
-const ADMIN_RATE_WINDOW_MS = 60 * 60_000; // 1 hour
-const ADMIN_RATE_MAX = 50; // 50 messages / hour
-const RATE_BUCKETS =
-  globalThis.__bmwealth_chat_rate_buckets || (globalThis.__bmwealth_chat_rate_buckets = new Map());
-
-function rateKey(req, leadId) {
-  if (leadId) return `lead:${leadId}`;
+function getClientIp(req) {
   const xff = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "";
-  const ip = String(xff).split(",")[0]?.trim();
-  return ip ? `ip:${ip}` : "anon";
-}
-
-function consumeRate(key, { max = RATE_MAX, windowMs = RATE_WINDOW_MS } = {}) {
-  const now = Date.now();
-  const existing = RATE_BUCKETS.get(key);
-  if (!existing || now >= existing.resetAt) {
-    RATE_BUCKETS.set(key, { count: 1, resetAt: now + windowMs });
-    return { allowed: true, retryAfterMs: 0 };
-  }
-  if (existing.count >= max) {
-    return { allowed: false, retryAfterMs: Math.max(0, existing.resetAt - now) };
-  }
-  existing.count += 1;
-  return { allowed: true, retryAfterMs: 0 };
+  return String(xff).split(",")[0]?.trim() || "";
 }
 
 function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
@@ -187,34 +202,7 @@ async function buildAdminContextSafe() {
   }
 }
 
-async function logEventSafe({ leadId, event_type, data }) {
-  try {
-    const sb = supabaseAdmin();
-    await sb
-      .from("events")
-      .insert({
-        lead_id: leadId ?? null,
-        event_type,
-        data: data ?? null,
-      })
-      .throwOnError();
-  } catch {
-    // ignore if DB not configured yet
-  }
-}
-
-async function getLeadNameSafe(leadId) {
-  if (!leadId) return "";
-  try {
-    const sb = supabaseAdmin();
-    const { data, error } = await sb.from("leads").select("name").eq("id", leadId).limit(1);
-    if (error) return "";
-    const name = String(data?.[0]?.name || "").trim();
-    return name;
-  } catch {
-    return "";
-  }
-}
+// (logEventSafe + getLeadNameSafe moved to /lib/db/*)
 
 function makeConversationId(fallback = "") {
   if (fallback) return String(fallback);
@@ -268,11 +256,7 @@ function truncateToSentences(text, maxSentences = 4) {
   return out.replace(/\n{3,}/g, "\n\n").trim();
 }
 
-async function saveConversation({ leadId, message, sender }) {
-  if (!leadId) return;
-  const sb = supabaseAdmin();
-  await sb.from("conversations").insert({ lead_id: leadId, message, sender }).throwOnError();
-}
+// (saveConversation moved to /lib/db/conversations)
 
 function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
   const raw = String(message || "");
@@ -341,7 +325,12 @@ function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
   }
 
   score = Math.max(0, Math.min(100, score));
-  const tier = score >= 80 ? "HOT" : score >= 40 ? "WARM" : "COLD";
+  const tier =
+    score >= CONSTANTS.LEAD_SCORING.HOT_THRESHOLD
+      ? "HOT"
+      : score >= CONSTANTS.LEAD_SCORING.WARM_THRESHOLD
+        ? "WARM"
+        : "COLD";
 
   return {
     score,
@@ -351,44 +340,9 @@ function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
   };
 }
 
-async function getLeadContactSafe(leadId) {
-  if (!leadId) return { hasEmail: false, hasPhone: false };
-  try {
-    const sb = supabaseAdmin();
-    const { data, error } = await sb.from("leads").select("email,phone").eq("id", leadId).maybeSingle();
-    if (error) return { hasEmail: false, hasPhone: false };
-    return { hasEmail: Boolean(data?.email), hasPhone: Boolean(data?.phone) };
-  } catch {
-    return { hasEmail: false, hasPhone: false };
-  }
-}
+// getLeadContactSafe + countUserMessagesSafe moved to /lib/db/*
 
-async function countUserMessagesSafe(leadId) {
-  if (!leadId) return 0;
-  try {
-    const sb = supabaseAdmin();
-    const { count, error } = await sb
-      .from("conversations")
-      .select("id", { count: "exact", head: true })
-      .eq("lead_id", leadId)
-      .eq("sender", "user");
-    if (error) return 0;
-    return Number(count || 0);
-  } catch {
-    return 0;
-  }
-}
-
-async function updateLeadScoreColumnSafe(leadId, score) {
-  if (!leadId) return;
-  try {
-    const sb = supabaseAdmin();
-    // Column may not exist yet in some environments; ignore errors.
-    await sb.from("leads").update({ lead_score: score }).eq("id", leadId);
-  } catch {
-    // ignore
-  }
-}
+// updateLeadScoreColumnSafe moved to /lib/db/leads
 
 function detectInvestmentIntent(message) {
   const raw = String(message || "");
@@ -425,108 +379,9 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
   return `${first}\n\n${body}`;
 }
 
-async function saveLeadScore({ leadId, score }) {
-  if (!leadId) return;
-  const sb = supabaseAdmin();
-  await sb
-    .from("events")
-    .insert({
-      lead_id: leadId,
-      event_type: "lead_score",
-      data: score,
-    })
-    .throwOnError();
-}
+// saveLeadScore moved to /lib/db/events (saveLeadScoreEvent)
 
-async function callGemini({ apiKey, userText, conversationHistory = [], userName = "" }) {
-  const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
-    encodeURIComponent(apiKey);
-
-  const system = buildSeBiSafeSystemPrompt({ userName });
-
-  const contents = [];
-  for (const h of conversationHistory || []) {
-    const sender = h?.sender === "user" ? "user" : "model";
-    const text = String(h?.text || "").trim();
-    if (!text) continue;
-    contents.push({ role: sender, parts: [{ text }] });
-  }
-  contents.push({ role: "user", parts: [{ text: userText }] });
-
-  const body = {
-    systemInstruction: { role: "system", parts: [{ text: system }] },
-    contents,
-    generationConfig: { temperature: 0.4, maxOutputTokens: 260 },
-  };
-
-  const r = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-
-  if (!r.ok) {
-    const t = await r.text().catch(() => "");
-    // Log full failure details to server console for debugging (no secrets included).
-    console.error("[api/chat] Gemini HTTP error", { status: r.status, body: t });
-    throw new Error(`Gemini error: ${r.status} ${t}`);
-  }
-
-  const json = await r.json();
-  const text =
-    json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join("") ||
-    "I can help with educational guidance. consult our advisors for personalized recommendations.";
-  return text.trim();
-}
-
-async function callGroq({ apiKey, userText, conversationHistory = [], userName = "" }) {
-  const url = "https://api.groq.com/openai/v1/chat/completions";
-  const system = buildSeBiSafeSystemPrompt({ userName });
-
-  const messages = [{ role: "system", content: system }];
-  for (const h of conversationHistory || []) {
-    const role = h?.sender === "user" ? "user" : "assistant";
-    const text = String(h?.text || "").trim();
-    if (!text) continue;
-    messages.push({ role, content: text });
-  }
-  messages.push({ role: "user", content: String(userText || "") });
-
-  const body = {
-    model: "llama-3.3-70b-versatile",
-    temperature: 0.35,
-    max_tokens: 260,
-    messages,
-  };
-
-  const r = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(body),
-  });
-
-  const raw = await r.text().catch(() => "");
-  if (!r.ok) {
-    console.error("[api/chat] Groq HTTP error", { status: r.status, body: raw });
-    throw new Error(`Groq error: ${r.status} ${raw}`);
-  }
-
-  let json;
-  try {
-    json = JSON.parse(raw);
-  } catch {
-    throw new Error("Groq error: bad_json");
-  }
-
-  const text =
-    String(json?.choices?.[0]?.message?.content || "").trim() ||
-    "I can help with educational guidance. consult our advisors for personalized recommendations.";
-  return text;
-}
+// (AI provider calls moved to /lib/ai/*)
 
 function cannedEducationalAnswer(userText) {
   const t = String(userText || "").toLowerCase();
@@ -541,55 +396,7 @@ function cannedEducationalAnswer(userText) {
   return "";
 }
 
-async function callClaude({ apiKey, userText, systemOverride = "", context = null }) {
-  const url = "https://api.anthropic.com/v1/messages";
-  const system = systemOverride
-    ? String(systemOverride)
-    : `You are BM Wealth Admin AI assistant. Provide operational guidance for BM Wealth business (analytics, funnels, copy). ` +
-      `Do not produce personalized investment advice.`;
-
-  const candidates = ["claude-sonnet-4-20250514", "claude-3-7-sonnet-latest", "claude-3-5-sonnet-latest"];
-
-  let lastErr = null;
-  for (const model of candidates) {
-    const userBlock = context
-      ? `Context (JSON):\n${JSON.stringify(context, null, 2)}\n\nAdmin question:\n${userText}`
-      : userText;
-    const body = {
-      model,
-      max_tokens: 800,
-      temperature: 0.4,
-      system,
-      messages: [{ role: "user", content: userBlock }],
-    };
-
-    const r = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!r.ok) {
-      const t = await r.text().catch(() => "");
-      lastErr = new Error(`Claude error: ${r.status} ${t}`);
-      // Try next model on 404 (model not found). Otherwise, fail fast.
-      if (r.status === 404) continue;
-      throw lastErr;
-    }
-
-    const json = await r.json();
-    const text =
-      json?.content?.map((c) => (c?.type === "text" ? c.text : "")).filter(Boolean).join("") ||
-      "Admin assistant ready.";
-    return text.trim();
-  }
-
-  throw lastErr || new Error("Claude error: no_model_available");
-}
+// (Claude provider call moved to /lib/ai/claude)
 
 export async function POST(req) {
   const env = getAIEnvSafe();
@@ -611,12 +418,13 @@ export async function POST(req) {
   // Rate limit (best-effort):
   // - User: 10/min
   // - Admin: 50/hour
+  const ip = getClientIp(req);
   const rl = consumeRate(
-    `${adminSession ? "admin:" : ""}${rateKey(req, leadId)}`,
-    adminSession ? { max: ADMIN_RATE_MAX, windowMs: ADMIN_RATE_WINDOW_MS } : { max: RATE_MAX, windowMs: RATE_WINDOW_MS }
+    makeRateKey({ isAdmin: adminSession, leadId, ip }),
+    adminSession ? CONSTANTS.RATE_LIMITS.ADMIN : CONSTANTS.RATE_LIMITS.USER
   );
   if (!rl.allowed) {
-    console.warn("[api/chat] rate_limited", { conversationId, leadId, mode });
+    logger.warn("[api/chat] rate_limited", { conversationId, leadId, mode });
     return NextResponse.json(
       { ok: false, error: "rate_limited", conversationId, retryAfterMs: rl.retryAfterMs },
       {
@@ -653,7 +461,7 @@ export async function POST(req) {
   // Persist user message (best-effort) - NEVER persist admin mode messages into lead conversations.
   if (!adminSession) {
     try {
-      await saveConversation({ leadId, message, sender: "user" });
+      await saveMessage({ leadId, message, sender: "user" });
     } catch {
       // ignore if DB not configured yet
     }
@@ -668,7 +476,7 @@ export async function POST(req) {
       ]);
 
       const score = computeLeadScore({ message, hasEmail, hasPhone, userMessageCount });
-      await saveLeadScore({ leadId, score });
+      await saveLeadScoreEvent({ leadId, score });
       await updateLeadScoreColumnSafe(leadId, score.score);
     } catch {
       // ignore if DB not configured yet
@@ -679,17 +487,21 @@ export async function POST(req) {
     let reply;
     if (adminSession) {
       if (!env?.ANTHROPIC_API_KEY) {
-        console.error("[api/chat] missing ANTHROPIC_API_KEY", { conversationId });
+        logger.error("[api/chat] missing ANTHROPIC_API_KEY", { conversationId });
         throw new Error("setup_required");
       }
       const context = await buildAdminContextSafe();
       const system = buildAdminStrategicPrompt({ userName: "Akash" });
-      reply = await callClaude({
+      const a = await callClaudeSafe({
         apiKey: env.ANTHROPIC_API_KEY,
         userText: message,
-        systemOverride: system,
+        system,
         context,
+        maxTokens: 800,
+        temperature: 0.4,
       });
+      if (a.error) throw new Error(a.error);
+      reply = a.reply;
 
       // Cost / usage tracking
       await logEventSafe({
@@ -734,7 +546,7 @@ export async function POST(req) {
         });
         // Persist bot message (best-effort) even on this early-return path.
         try {
-          await saveConversation({ leadId, message: reply, sender: "bot" });
+          await saveMessage({ leadId, message: reply, sender: "bot" });
         } catch {
           // ignore
         }
@@ -753,15 +565,18 @@ export async function POST(req) {
       const provider = "groq";
       const fallbackFrom = null;
       if (!env?.GROQ_API_KEY) {
-        console.error("[api/chat] missing GROQ_API_KEY", { conversationId });
+        logger.error("[api/chat] missing GROQ_API_KEY", { conversationId });
         throw new Error("setup_required");
       }
-      reply = await callGroq({
+      const system = buildSeBiSafeSystemPrompt({ userName });
+      const g = await callGroqSafe({
         apiKey: env.GROQ_API_KEY,
         userText: message,
         conversationHistory,
-        userName,
+        system,
       });
+      if (g.error) throw new Error(g.error);
+      reply = g.reply;
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
@@ -793,7 +608,7 @@ export async function POST(req) {
 
     try {
       if (!adminSession) {
-        await saveConversation({ leadId, message: reply, sender: "bot" });
+        await saveMessage({ leadId, message: reply, sender: "bot" });
       }
     } catch {
       // ignore if DB not configured yet
@@ -804,7 +619,7 @@ export async function POST(req) {
     const provider = adminSession ? "anthropic" : "groq";
 
     // Log exact failure to server console for debugging.
-    console.error("[api/chat] provider failure", { provider, conversationId, leadId, mode, error: msg });
+    logger.error("[api/chat] provider failure", { provider, conversationId, leadId, mode, error: msg });
     await logEventSafe({
       leadId,
       event_type: "chat_error",
@@ -820,7 +635,7 @@ export async function POST(req) {
     const canned = cannedEducationalAnswer(message);
     const fallback = canned || "I’m having a temporary connectivity issue right now. Please try again in a moment.";
     try {
-      await saveConversation({ leadId, message: fallback, sender: "bot" });
+      await saveMessage({ leadId, message: fallback, sender: "bot" });
     } catch {
       // ignore
     }

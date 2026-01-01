@@ -1,3 +1,26 @@
+/**
+ * FILE: components\ui\carousel.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - react
+ * - embla-carousel-react
+ * - lucide-react
+ * - @/lib/utils
+ * - @/components/ui/button
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import * as React from "react"
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react"

@@ -1,3 +1,26 @@
+/**
+ * FILE: app\api\admin\revenue\route.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: api
+ *
+ * DEPENDENCIES:
+ * - next/server
+ * - next/headers
+ * - zod
+ * - @/lib/adminSession
+ * - @/lib/supabaseAdmin
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";

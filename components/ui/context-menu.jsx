@@ -1,3 +1,25 @@
+/**
+ * FILE: components\ui\context-menu.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: components
+ *
+ * DEPENDENCIES:
+ * - react
+ * - @radix-ui/react-context-menu
+ * - lucide-react
+ * - @/lib/utils
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 import * as React from "react"
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"

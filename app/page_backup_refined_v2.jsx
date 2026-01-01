@@ -1,3 +1,27 @@
+/**
+ * FILE: app\page_backup_refined_v2.jsx
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - next/link
+ * - next/image
+ * - lucide-react
+ * - react
+ * - framer-motion
+ * - @/data/staticBlogData
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
+
 'use client';
 
 import Link from 'next/link';
