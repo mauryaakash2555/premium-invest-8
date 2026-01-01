@@ -570,6 +570,46 @@ transform-style: preserve-3d;
   filter: brightness(1.02);
 }
 
+.platformOptions {
+  margin-top: 10px;
+}
+
+.platformTitle {
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.platformButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.platformBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(192, 160, 98, 0.35);
+  color: rgba(192, 160, 98, 0.95);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.platformBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
 .humanCta:hover {
   transform: translateY(-1px);
   filter: brightness(1.02);

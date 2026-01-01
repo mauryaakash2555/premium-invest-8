@@ -24,6 +24,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
 import { FamilyAdminView } from "@/components/admin/FamilyAdminView";
+import { createTrackedLink, logClick } from "@/lib/affiliate/tracker";
 
 const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product\n" +
@@ -510,6 +511,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       warn: j.warn,
       cta: j.cta || null,
       intent: j.intent || null,
+      affiliatePlatforms: Array.isArray(j?.affiliate_platforms) ? j.affiliate_platforms : null,
     };
   }
 
@@ -713,14 +715,21 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply, cta } = await sendChat({
+      const { reply, cta, affiliatePlatforms } = await sendChat({
         message: text,
         mode: admin ? "admin" : "user",
         leadId,
         conversationHistory,
       });
-      if (admin) pushBotAdmin(reply, cta ? { cta } : null);
-      else pushBotUser(reply, cta ? { cta } : null);
+
+      const extra = {};
+      if (cta) extra.cta = cta;
+      if (!admin && Array.isArray(affiliatePlatforms) && affiliatePlatforms.length) {
+        extra.affiliatePlatforms = affiliatePlatforms;
+      }
+
+      if (admin) pushBotAdmin(reply, Object.keys(extra).length ? extra : null);
+      else pushBotUser(reply, Object.keys(extra).length ? extra : null);
       void logEvent("chat_message", { sessionId, admin, chars: text.length });
 
       // Dashboard auto-refresh when in admin
@@ -1363,6 +1372,26 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                       >
                         {m.cta.label}
                       </a>
+                    ) : null}
+
+                    {Array.isArray(m?.affiliatePlatforms) && m.affiliatePlatforms.length ? (
+                      <div className={styles.platformOptions}>
+                        <div className={styles.platformTitle}>Explore these popular platforms:</div>
+                        <div className={styles.platformButtons}>
+                          {m.affiliatePlatforms.map((p) => (
+                            <a
+                              key={p}
+                              href={createTrackedLink(p, leadId)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.platformBtn}
+                              onClick={() => void logClick(p, leadId)}
+                            >
+                              Open {p} →
+                            </a>
+                          ))}
+                        </div>
+                      </div>
                     ) : null}
                   </div>
                 ))}

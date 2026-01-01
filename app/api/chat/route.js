@@ -6,7 +6,7 @@ import { CONSTANTS } from "@/config/constants";
 import { isFeatureEnabled } from "@/config/features";
 import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { getAIResponse } from "@/lib/ai/provider";
+import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
 import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
 import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
@@ -202,9 +202,27 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const extras = [
     userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
     "If asked for what to choose / which is best / personalized advice, say: consult our advisors for personalized recommendations.",
+    AFFILIATE_CONTEXT_PROMPT,
   ].filter(Boolean);
 
   return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+}
+
+function extractAffiliatePlatformsTag(text) {
+  const raw = String(text || "");
+  // Match: [[affiliate_platforms:Zerodha,Groww,Angel One]]
+  const re = /\[\[affiliate_platforms:([^\]]+)\]\]/i;
+  const m = raw.match(re);
+  if (!m) return { cleaned: raw, platforms: null };
+
+  const list = String(m[1] || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 6);
+
+  const cleaned = raw.replace(re, "").replace(/\n{3,}/g, "\n\n").trim();
+  return { cleaned, platforms: list.length ? list : null };
 }
 
 function stripFillerHi(text) {
@@ -372,6 +390,7 @@ function cannedEducationalAnswer(userText) {
 // (Claude provider call moved to /lib/ai/claude)
 
 export async function POST(req) {
+  let affiliate_platforms = null;
   const env = getAIEnvSafe();
   const cookieStore = await cookies();
   const isAdmin = isAdminFromCookies(cookieStore);
@@ -580,7 +599,12 @@ export async function POST(req) {
         },
       });
       if (g.error) throw new Error(g.error);
-      reply = g.reply;
+      // Extract affiliate button metadata before cleanup/truncation.
+      {
+        const extracted = extractAffiliatePlatformsTag(g.reply);
+        reply = extracted.cleaned;
+        affiliate_platforms = extracted.platforms;
+      }
       providerUsed = g.provider || "unknown";
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
@@ -626,7 +650,7 @@ export async function POST(req) {
       mode: adminSession ? "admin" : "user",
       conversationId,
     });
-    return NextResponse.json({ ok: true, reply, conversationId });
+    return NextResponse.json({ ok: true, reply, conversationId, affiliate_platforms });
   } catch (e) {
     const msg = e?.message || "chat_failed";
     const provider = adminSession ? "anthropic" : "ai";

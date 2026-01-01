@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { LeadsList } from '@/components/admin/LeadsList';
 import { AnalyticsView } from '@/components/admin/AnalyticsView';
+import { AffiliateTracking } from '@/components/admin/AffiliateTracking';
 import { SessionManager } from '@/lib/auth/session';
 
 function fmtINR(n) {
@@ -306,9 +307,7 @@ export function SuperAdminDashboard({ onLogout }) {
             <div className="sa-panelHead">
               <div className="sa-panelTitle">SYSTEM CONTROLS</div>
             </div>
-            <div className="sa-muted">
-              Coming next: feature flag toggles, API health (Gemini/Groq/Claude/Supabase), logs, backups.
-            </div>
+            <AffiliateTracking />
           </div>
         ) : null}
       </main>
