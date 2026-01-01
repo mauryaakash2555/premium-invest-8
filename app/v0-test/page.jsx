@@ -17,14 +17,19 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
-import V0Test from '@/components/V0Test';
-
 export const metadata = {
   title: 'V0.dev Component Test | BM Wealth',
   description: 'Testing v0.dev component compatibility',
 };
 
 export default function V0TestPage() {
-  return <V0Test />;
+  return (
+    <main style={{ padding: 24, maxWidth: 860, margin: "0 auto" }}>
+      <h1 style={{ fontSize: 26, fontWeight: 900, marginBottom: 10 }}>V0 Test</h1>
+      <p style={{ opacity: 0.8, lineHeight: 1.6 }}>
+        This route is a dev-only sandbox. The previous component import was removed during Phase 2 cleanup.
+      </p>
+    </main>
+  );
 }
 
