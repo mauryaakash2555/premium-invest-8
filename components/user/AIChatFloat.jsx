@@ -596,7 +596,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     }
     // Super admin unlock (redirect to hidden control panel) - intercept before echo
     // Trigger only for password-like inputs (contains '@') to avoid catching normal chat.
-    if (!admin && !familyAdmin && captureStep !== "email" && text.includes("@") && text.length <= 64) {
+    if (!admin && !familyAdmin && !(captureStep === "email" && isValidEmail(text)) && text.includes("@") && text.length <= 64) {
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
@@ -1395,6 +1395,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     </>
   );
 }
+
 
 
 
