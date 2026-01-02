@@ -43,8 +43,8 @@ const WhatsAppFloat = () => {
         <div
           style={{
             position: 'fixed',
-            // Position nearer to the button, still above safe area.
-            bottom: 'calc(170px + env(safe-area-inset-bottom))',
+            // Lower tooltip to match button position
+            bottom: 'calc(140px + env(safe-area-inset-bottom))',
             right: '20px',
             background: '#25D366',
             color: '#FFFFFF',

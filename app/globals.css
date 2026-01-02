@@ -757,8 +757,8 @@ footer .whatsapp-card:hover {
   }
 
   .whatsapp-float {
-    /* Place closer to bottom, still above safe area */
-    bottom: calc(110px + env(safe-area-inset-bottom));
+    /* Lower by ~30px; still above safe area */
+    bottom: calc(80px + env(safe-area-inset-bottom));
     right: 20px;
     width: 55px;
     height: 55px;

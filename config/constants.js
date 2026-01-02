@@ -96,6 +96,8 @@ export const CONSTANTS = {
     // - SUPER_ADMIN_PASSWORD_HASH (bcrypt hash of your super admin password)
     FAMILY_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$yjHp3h4QlIbwxTA7hOlGReSDiy01Eo0ivKK3ZKJcEcNHHFfORz4eS",
     SUPER_ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$5CiHNP9agSs00vVpuD8jReiMbEXop1RBQ5ufx19UeEzjVAmLaP4uq",
+    // Plain fallback for local/staging convenience (use env in production)
+    SUPER_ADMIN_PASSWORD_PLAIN_FALLBACK: "Mmaurya@8080",
 
     // Backward compatibility (older Phase 5 variable name)
     ADMIN_PASSWORD_HASH_FALLBACK: "$2a$10$5CiHNP9agSs00vVpuD8jReiMbEXop1RBQ5ufx19UeEzjVAmLaP4uq",

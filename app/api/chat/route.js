@@ -568,22 +568,14 @@ export async function POST(req) {
 
     // FEATURE #13: SMART SMALLTALK LIMITER
     // After 3 consecutive smalltalk user messages, redirect to finance topics with 3 suggestions.
-    if (leadId && isFeatureEnabled("SMART_SMALLTALK_REDIRECT")) {
+    if (isFeatureEnabled("SMART_SMALLTALK_REDIRECT")) {
       try {
-        const recent = await listConversations({ leadId, limit: 12, oldestFirst: false });
-        const lastUserMsgs = (recent || []).filter((r) => r?.sender === "user").slice(0, 3);
+        const recent = leadId ? await listConversations({ leadId, limit: 20, oldestFirst: false }) : [];
+        const userMsgs = [{ sender: "user", message }, ...((recent || []).filter((r) => r?.sender === "user"))].slice(0, 5);
+        const smallTalkCount = userMsgs.filter((m) => isSmallTalkMessage(String(m?.message || ""))).length;
+        const lastIsSmallTalk = isSmallTalkMessage(message);
 
-        if (lastUserMsgs.length >= 2) {
-          // Include current message (not yet saved) in the streak check.
-          lastUserMsgs.unshift({ sender: "user", message, created_at: new Date().toISOString() });
-        } else {
-          lastUserMsgs.push({ sender: "user", message, created_at: new Date().toISOString() });
-        }
-
-        const streak = lastUserMsgs.slice(0, 3);
-        const allSmallTalk = streak.length === 3 && streak.every((m) => isSmallTalkMessage(String(m?.message || "")));
-
-        if (allSmallTalk) {
+        if (lastIsSmallTalk && smallTalkCount >= 3) {
           const fullHistory = await listConversations({ leadId, limit: 60, oldestFirst: true });
           const intent = analyzeIntent(fullHistory || []);
           const leadScore = await getLeadScoreSafe(leadId);
