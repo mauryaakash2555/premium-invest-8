@@ -539,6 +539,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       affiliatePlatforms: Array.isArray(j?.affiliate_platforms) ? j.affiliate_platforms : null,
       pitch: j.pitch || null,
       pitchType: typeof j?.pitch_type === "string" ? j.pitch_type : null,
+      suggestions: Array.isArray(j?.suggestions) ? j.suggestions.filter(Boolean).slice(0, 3) : null,
     };
   }
 
@@ -784,7 +785,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply, cta, affiliatePlatforms, pitch, pitchType } = await sendChat({
+      const { reply, cta, affiliatePlatforms, pitch, pitchType, suggestions } = await sendChat({
         message: text,
         mode: admin ? "admin" : "user",
         leadId,
@@ -805,6 +806,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
       if (!admin && Array.isArray(affiliatePlatforms) && affiliatePlatforms.length) {
         extra.affiliatePlatforms = affiliatePlatforms;
+      }
+
+      if (!admin && Array.isArray(suggestions) && suggestions.length) {
+        extra.suggestions = suggestions;
       }
 
       if (admin) pushBotAdmin(reply, Object.keys(extra).length ? extra : null);
@@ -1422,26 +1427,30 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           ) : (
             <>
               <div ref={listRef} className={styles.body}>
-                {activeMessages.map((m) => (
-                  <div
-                    key={m.id}
-                    className={[
-                      styles.bubble,
-                      m.sender === "user" ? styles.bubbleUser : styles.bubbleBot,
-                    ].join(" ")}
-                  >
-                    {m.text}
-                    {m?.cta?.label && m?.cta?.href ? (
-                      <a
-                        className={styles.consultCta}
-                        href={whatsappHref || m.cta.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => void logEvent("consultation_click", { sessionId, leadId })}
-                      >
-                        {m.cta.label}
-                      </a>
-                    ) : null}
+                {activeMessages.map((m) => {
+                  const ctaHref = m?.cta?.href || whatsappHref;
+                  const ctaExternal = /^https?:\/\//i.test(String(ctaHref || ""));
+
+                  return (
+                    <div
+                      key={m.id}
+                      className={[
+                        styles.bubble,
+                        m.sender === "user" ? styles.bubbleUser : styles.bubbleBot,
+                      ].join(" ")}
+                    >
+                      {m.text}
+                      {m?.cta?.label && ctaHref ? (
+                        <a
+                          className={styles.consultCta}
+                          href={ctaHref}
+                          target={ctaExternal ? "_blank" : undefined}
+                          rel={ctaExternal ? "noopener noreferrer" : undefined}
+                          onClick={() => void logEvent("consultation_click", { sessionId, leadId })}
+                        >
+                          {m.cta.label}
+                        </a>
+                      ) : null}
 
                     {Array.isArray(m?.affiliatePlatforms) && m.affiliatePlatforms.length ? (
                       <div className={styles.platformOptions}>
@@ -1458,6 +1467,29 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                             >
                               Open {p} →
                             </a>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {Array.isArray(m?.suggestions) && m.suggestions.length ? (
+                      <div className={styles.suggestionsWrap}>
+                        <div className={styles.suggestionsTitle}>Quick suggestions:</div>
+                        <div className={styles.suggestionsButtons}>
+                          {m.suggestions.map((s, idx) => (
+                            <button
+                              key={`${idx}-${s}`}
+                              type="button"
+                              className={styles.suggestionBtn}
+                              onClick={() => {
+                                if (busy) return;
+                                if (inputRef.current) inputRef.current.value = String(s || "");
+                                setInput(String(s || ""));
+                                void send();
+                              }}
+                            >
+                              {String(s)}
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -1488,8 +1520,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                         </button>
                       </div>
                     ) : null}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
 
                 {humanReady && whatsappHref ? (
                   <a

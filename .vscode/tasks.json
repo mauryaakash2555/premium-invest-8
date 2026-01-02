@@ -1,29 +1,63 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "start-frontend",
-      "type": "shell",
-      "command": "npm start",
-      "options": {
-        "cwd": "${workspaceFolder}/frontend"
-      },
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "custom",
-        "pattern": {
-          "regexp": "^$"
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": "Compiling...",
-          "endsPattern": "Compiled successfully!"
-        }
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "start-frontend",
+			"type": "shell",
+			"command": "npm start",
+			"options": {
+				"cwd": "${workspaceFolder}/frontend"
+			},
+			"isBackground": true,
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": {
+					"regexp": "^$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Compiling...",
+					"endsPattern": "Compiled successfully!"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "test-chat-api",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && npm test --silent -- --runTestsByPath tests/api/chat.test.js"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "test-chat-api",
+			"type": "shell",
+			"command": "cmd /c \"cd /d c:\\Users\\admin\\premium-invest-8 && npm test --silent -- --runTestsByPath tests/api/chat.test.js\"",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "test-chat",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test",
+				"--",
+				"--runTestsByPath",
+				"tests/api/chat.test.js",
+				"--watchAll=false"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
 }

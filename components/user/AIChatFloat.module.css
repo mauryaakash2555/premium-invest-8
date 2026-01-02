@@ -610,6 +610,46 @@ transform-style: preserve-3d;
   filter: brightness(1.02);
 }
 
+.suggestionsWrap {
+  margin-top: 10px;
+}
+
+.suggestionsTitle {
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.suggestionsButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestionBtn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(192, 160, 98, 0.35);
+  color: rgba(192, 160, 98, 0.95);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.suggestionBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
 .pitchCard {
   margin-top: 10px;
   padding: 12px;
@@ -855,7 +895,8 @@ padding: 18px;
 @media (max-width: 768px) {
   .launcher {
     right: 20px;
-    bottom: 160px;
+    /* Keep above WhatsAppFloat + LuxuryMobileDock */
+    bottom: calc(230px + env(safe-area-inset-bottom));
     width: 58px;
     height: 58px;
   }

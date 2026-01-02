@@ -9,8 +9,10 @@ import { isFamilyFromCookies } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
-import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
-import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
+import { analyzeIntent } from "@/lib/ai/intentAnalyzer";
+import { generateSmartSuggestions } from "@/lib/ai/suggestionGenerator";
+import { getLeadContactSafe, getLeadNameSafe, getLeadScoreSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
+import { countUserMessagesSafe, listConversations, saveMessage } from "@/lib/db/conversations";
 import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
 import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
 import { EmailService } from "@/lib/email/emailService";
@@ -222,10 +224,63 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const extras = [
     userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
     "If asked for what to choose / which is best / personalized advice, say: consult our advisors for personalized recommendations.",
-    AFFILIATE_CONTEXT_PROMPT,
   ].filter(Boolean);
 
   return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+}
+
+function isFinanceRelatedMessage(message) {
+  const t = String(message || "").toLowerCase();
+  return /\b(invest|investing|sip|mutual\s*fund|\bmf\b|portfolio|stock|stocks|share|shares|equity|trading|broker|brokerage|demat|zerodha|groww|angel\s*one|insurance|term\s*plan|fd|fixed\s*deposit|tax|nps|ppf|elss)\b/.test(t);
+}
+
+function isSmallTalkMessage(message) {
+  const raw = String(message || "");
+  const t = raw.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  if (!t) return false;
+  if (isFinanceRelatedMessage(t)) return false;
+
+  // Common smalltalk / greeting patterns
+  if (/^(hi|hello|hey|hii|hlo|yo)\b/.test(t)) return true;
+  if (/\bgood\s+(morning|afternoon|evening|night)\b/.test(t)) return true;
+  if (/\bhow\s+(are|r)\s+(you|u)\b/.test(t)) return true;
+  if (/\bhow\s+are\s+you\s+doing\b/.test(t)) return true;
+  if (/\bhw\s*r\s*u\b/.test(t)) return true;
+  if (/\bwhat\s*(s|is)\s*up\b/.test(t) || /\bwassup\b/.test(t)) return true;
+  if (/\bthank\s*you\b/.test(t) || /^thanks\b/.test(t)) return true;
+  if (/^ok(ay)?\b/.test(t)) return true;
+  if (/\bnice\b/.test(t)) return true;
+  return false;
+}
+
+function shouldIncludeAffiliateContext(message) {
+  const t = String(message || "").toLowerCase();
+  // Only include the affiliate instruction when the user is actually asking about platforms/tools.
+  return /\b(platform|app|broker|brokerage|demat|trading\s*account|open\s*account|where\s+to\s+invest|which\s+app|zerodha|groww|angel\s*one|kite)\b/.test(t);
+}
+
+function isCalculatorRequest(message) {
+  const t = String(message || "").toLowerCase();
+  return /\b(calculator|calc|sip\s*calculator|sip\s*calc)\b/.test(t);
+}
+
+function isShowMeFollowup(message) {
+  const t = String(message || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return /\b(show\s+me|send\s+me|open\s+it|link)\b/.test(t) || /^(show|send|open)\b/.test(t);
+}
+
+function historyMentionsCalculator(historyItems) {
+  const items = Array.isArray(historyItems) ? historyItems : [];
+  const joined = items
+    .slice(-6)
+    .map((x) => String(x?.text || x?.message || ""))
+    .join(" ")
+    .toLowerCase();
+  return /\b(calculator|sip\s*calculator|sip\s*calc)\b/.test(joined);
 }
 
 function extractAffiliatePlatformsTag(text) {
@@ -421,6 +476,7 @@ export async function POST(req) {
   let pitch = null;
   let pitch_intent = null;
   let pitch_type = null;
+  let suggestions = null;
   const env = getAIEnvSafe();
   const cookieStore = await cookies();
   const isSuperAdmin = isAdminFromCookies(cookieStore);
@@ -464,10 +520,108 @@ export async function POST(req) {
       { status: 200 }
     );
   }
+
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
-
   const adminSession = Boolean(isSuperAdmin && mode === "admin");
+
+  // Site tool routing: SIP calculator
+  // Avoid wasting AI tokens on something we can do deterministically.
+  if (!adminSession && userType !== "family_admin") {
+    const clientHistory = Array.isArray(parsed.data.conversationHistory) ? parsed.data.conversationHistory : [];
+    const wantsCalculator = isCalculatorRequest(message) || (isShowMeFollowup(message) && historyMentionsCalculator(clientHistory));
+    if (wantsCalculator) {
+      const reply = "Sure — you can use our SIP Calculator here.";
+      const cta = { label: "Open SIP Calculator →", href: "/sip-calculator" };
+
+      try {
+        await saveMessage({ leadId, message, sender: "user" });
+        await saveMessage({ leadId, message: reply, sender: "bot" });
+      } catch {
+        // ignore
+      }
+
+      await logEventSafe({
+        leadId,
+        event_type: "chat_ai",
+        data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+      });
+
+      return NextResponse.json({
+        ok: true,
+        reply,
+        conversationId,
+        provider: "rule",
+        fallback_from: null,
+        affiliate_platforms: null,
+        pitch: null,
+        pitch_type: null,
+        cta,
+      });
+    }
+  }
+
+  // Smalltalk fast-path: avoid SIP/pitching/platforms for greetings like "how are you".
+  // This keeps UX human and saves AI cost.
+  if (isSmallTalkMessage(message)) {
+    let reply = "I’m doing well — thanks for asking. How can I help you today?";
+
+    // FEATURE #13: SMART SMALLTALK LIMITER
+    // After 3 consecutive smalltalk user messages, redirect to finance topics with 3 suggestions.
+    if (leadId && isFeatureEnabled("SMART_SMALLTALK_REDIRECT")) {
+      try {
+        const recent = await listConversations({ leadId, limit: 12, oldestFirst: false });
+        const lastUserMsgs = (recent || []).filter((r) => r?.sender === "user").slice(0, 3);
+
+        if (lastUserMsgs.length >= 2) {
+          // Include current message (not yet saved) in the streak check.
+          lastUserMsgs.unshift({ sender: "user", message, created_at: new Date().toISOString() });
+        } else {
+          lastUserMsgs.push({ sender: "user", message, created_at: new Date().toISOString() });
+        }
+
+        const streak = lastUserMsgs.slice(0, 3);
+        const allSmallTalk = streak.length === 3 && streak.every((m) => isSmallTalkMessage(String(m?.message || "")));
+
+        if (allSmallTalk) {
+          const fullHistory = await listConversations({ leadId, limit: 60, oldestFirst: true });
+          const intent = analyzeIntent(fullHistory || []);
+          const leadScore = await getLeadScoreSafe(leadId);
+          suggestions = generateSmartSuggestions(intent, leadScore);
+          reply = "I’m doing great — thanks! I’m here to help with your financial goals. What would you like to know?";
+        }
+      } catch {
+        // best-effort: fall back to normal smalltalk
+      }
+    }
+
+    try {
+      if (userType !== "family_admin") {
+        await saveMessage({ leadId, message, sender: "user" });
+        await saveMessage({ leadId, message: reply, sender: "bot" });
+      }
+    } catch {
+      // ignore
+    }
+
+    await logEventSafe({
+      leadId,
+      event_type: "chat_ai",
+      data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+    });
+
+    return NextResponse.json({
+      ok: true,
+      reply,
+      conversationId,
+      provider: "rule",
+      fallback_from: null,
+      affiliate_platforms: null,
+      pitch: null,
+      pitch_type: null,
+      suggestions: Array.isArray(suggestions) && suggestions.length ? suggestions : null,
+    });
+  }
 
   // Plugins (best-effort)
   await loadPlugins();
@@ -793,7 +947,15 @@ export async function POST(req) {
           fallbackHistory: conversationHistory,
           limit: 12,
         });
-        const system = userType === "super_admin" ? buildSuperAdminSystemPrompt({ userName: "Akash" }) : buildSeBiSafeSystemPrompt({ userName });
+        const system =
+          userType === "super_admin"
+            ? buildSuperAdminSystemPrompt({ userName: "Akash" })
+            : [
+                buildSeBiSafeSystemPrompt({ userName }),
+                shouldIncludeAffiliateContext(message) ? AFFILIATE_CONTEXT_PROMPT : "",
+              ]
+                .filter(Boolean)
+                .join("\n\n");
         const g = await getAIResponse({
           message,
           userType,

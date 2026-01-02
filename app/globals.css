@@ -757,7 +757,8 @@ footer .whatsapp-card:hover {
   }
 
   .whatsapp-float {
-    bottom: 90px;
+    /* Keep above LuxuryMobileDock + safe area */
+    bottom: calc(160px + env(safe-area-inset-bottom));
     right: 20px;
     width: 55px;
     height: 55px;
