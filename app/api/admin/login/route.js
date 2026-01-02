@@ -53,7 +53,8 @@ export async function POST(req) {
   attempts.delete(ip);
 
   const cookie = issueSuperAdminCookie();
-  const res = NextResponse.json({ ok: true });
+  const allowToken = String(process.env.VERCEL_ENV || "").toLowerCase() !== "production";
+  const res = NextResponse.json({ ok: true, token: allowToken ? cookie.value : undefined });
   res.cookies.set(cookie.name, cookie.value, cookie.options);
   return res;
 }

@@ -1,7 +1,22 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAdminFromCookies } from "@/lib/adminSession";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+
+const LEADS_LIMIT = 200;
+const SUPABASE_TIMEOUT_MS = 8_000;
+
+async function withTimeout(promise, ms) {
+  let t;
+  const timeout = new Promise((_, reject) => {
+    t = setTimeout(() => reject(new Error("timeout")), ms);
+  });
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    clearTimeout(t);
+  }
+}
 
 function startOfDay(d) {
   const x = new Date(d);
@@ -55,7 +70,8 @@ function computeRange(filter) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  if (!isAdminFromCookies(cookieStore)) return NextResponse.json({ ok: false }, { status: 401 });
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) return NextResponse.json({ ok: false }, { status: 401 });
 
   let sb;
   try {
@@ -71,11 +87,22 @@ export async function GET(req) {
 
   const { from, to } = computeRange(normalizedFilter);
 
-  let q = sb.from("leads").select("id,name,email,phone,created_at,lead_score").order("created_at", { ascending: false }).limit(500);
+  let q = sb.from("leads").select("id,name,email,phone,created_at,lead_score").order("created_at", { ascending: false }).limit(LEADS_LIMIT);
   if (from) q = q.gte("created_at", from.toISOString());
   if (to) q = q.lt("created_at", to.toISOString());
 
-  const res = await q;
+  let res;
+  try {
+    res = await withTimeout(q, SUPABASE_TIMEOUT_MS);
+  } catch (e) {
+    const msg = String(e?.message || "failed");
+    const status = msg === "timeout" ? 504 : 502;
+    return NextResponse.json({ ok: false, error: msg }, { status });
+  }
+
+  if (res?.error) {
+    return NextResponse.json({ ok: false, error: String(res.error?.message || "query_failed") }, { status: 502 });
+  }
 
   return NextResponse.json({
     ok: true,

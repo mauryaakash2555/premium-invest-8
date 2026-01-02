@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAdminFromCookies } from "@/lib/adminSession";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { getAIEnvSafe } from "@/config/env";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { isFeatureEnabled } from "@/config/features";
@@ -138,7 +138,8 @@ async function buildContext(sb) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  if (!isAdminFromCookies(cookieStore)) return NextResponse.json({ ok: false }, { status: 401 });
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) return NextResponse.json({ ok: false }, { status: 401 });
 
   if (!isFeatureEnabled("CLAUDE_ADMIN")) {
     return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });

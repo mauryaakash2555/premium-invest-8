@@ -5,7 +5,7 @@ import { getAIEnvSafe } from "@/config/env";
 import { CONSTANTS } from "@/config/constants";
 import { isFeatureEnabled } from "@/config/features";
 import { isAdminFromCookies } from "@/lib/adminSession";
-import { isFamilyFromCookies } from "@/lib/familySession";
+import { isFamilyFromRequest } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
@@ -63,6 +63,20 @@ const COMPLIANCE_TEXT =
   "Investments subject to market dynamics.";
 
 const COMPLIANCE_LINES = COMPLIANCE_TEXT.split("\n").map((l) => l.trim()).filter(Boolean);
+
+const AI_TIMEOUT_MS = 9000;
+
+async function withTimeout(promise, ms, label) {
+  let t;
+  const timeout = new Promise((_, reject) => {
+    t = setTimeout(() => reject(new Error(`${label || "operation"}_timeout`)), ms);
+  });
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    clearTimeout(t);
+  }
+}
 
 function stripComplianceFooter(text) {
   let t = String(text || "");
@@ -480,7 +494,7 @@ export async function POST(req) {
   const env = getAIEnvSafe();
   const cookieStore = await cookies();
   const isSuperAdmin = isAdminFromCookies(cookieStore);
-  const isFamilyAdmin = isFamilyFromCookies(cookieStore);
+  const isFamilyAdmin = isFamilyFromRequest(cookieStore, headerStore);
   const userType = isSuperAdmin ? "super_admin" : isFamilyAdmin ? "family_admin" : "public";
 
   const body = await req.json().catch(() => ({}));
@@ -524,6 +538,15 @@ export async function POST(req) {
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
   const adminSession = Boolean(isSuperAdmin && mode === "admin");
+
+  const usageToTokens = (usage, fallbackTextA = "", fallbackTextB = "") => {
+    const t = Number(usage?.totalTokens);
+    if (Number.isFinite(t) && t > 0) return t;
+    const a = Number(usage?.inputTokens);
+    const b = Number(usage?.outputTokens);
+    if (Number.isFinite(a) || Number.isFinite(b)) return (Number.isFinite(a) ? a : 0) + (Number.isFinite(b) ? b : 0);
+    return estimateTokensSafe(fallbackTextA) + estimateTokensSafe(fallbackTextB);
+  };
 
   // Site tool routing: SIP calculator
   // Avoid wasting AI tokens on something we can do deterministically.
@@ -735,13 +758,15 @@ export async function POST(req) {
     let reply;
     let providerUsed = null;
     let fallbackFrom = null;
+    let aiUsage = null;
     if (adminSession) {
       if (!isFeatureEnabled("CLAUDE_ADMIN")) {
         return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
       }
       const context = await buildAdminContextSafe();
       const system = buildAdminStrategicPrompt({ userName: "Akash" });
-      const a = await getAIResponse({
+      const a = await withTimeout(
+        getAIResponse({
         message,
         userType,
         system,
@@ -753,22 +778,26 @@ export async function POST(req) {
           GROQ_API_KEY: env?.GROQ_API_KEY,
         },
         claude: { maxTokens: 800, temperature: 0.4 },
-      });
+        }),
+        AI_TIMEOUT_MS,
+        "admin_ai"
+      );
       if (a.error) throw new Error(a.error);
       reply = a.reply;
       providerUsed = a.provider || "anthropic";
       fallbackFrom = a.fallback_from || null;
+      aiUsage = a.usage || null;
 
       // Cost / usage tracking
       await logEventSafe({
         leadId,
         event_type: "chat_ai",
-        data: { provider: providerUsed, conversationId, mode: "admin", user_type: userType, fallback_from: fallbackFrom },
+        data: { provider: providerUsed, conversationId, mode: "admin", user_type: userType, fallback_from: fallbackFrom, usage: aiUsage },
       });
 
       await logAPIUsage({
         provider: providerUsed,
-        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+        tokens: usageToTokens(aiUsage, message, reply),
         userType,
         leadId: leadId || null,
         conversationId,
@@ -779,16 +808,17 @@ export async function POST(req) {
       if (userType === "family_admin") {
         reply = "Family Admin mode is stats-only. Please use the dashboard.";
         providerUsed = "rule";
+        aiUsage = { inputTokens: null, outputTokens: null, totalTokens: usageToTokens(null, message, reply) };
 
         await logEventSafe({
           leadId,
           event_type: "chat_ai",
-          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null, usage: aiUsage },
         });
 
         await logAPIUsage({
           provider: "rule",
-          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+          tokens: usageToTokens(aiUsage, message, reply),
           userType,
           leadId: leadId || null,
           conversationId,
@@ -882,12 +912,19 @@ export async function POST(req) {
         await logEventSafe({
           leadId,
           event_type: "chat_ai",
-          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+          data: {
+            provider: "rule",
+            conversationId,
+            mode: "user",
+            user_type: userType,
+            fallback_from: null,
+            usage: { inputTokens: null, outputTokens: null, totalTokens: usageToTokens(null, message, reply) },
+          },
         });
 
         await logAPIUsage({
           provider: "rule",
-          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+          tokens: usageToTokens(null, message, reply),
           userType,
           leadId: leadId || null,
           conversationId,
@@ -948,7 +985,8 @@ export async function POST(req) {
               ]
                 .filter(Boolean)
                 .join("\n\n");
-        const g = await getAIResponse({
+        const g = await withTimeout(
+          getAIResponse({
           message,
           userType,
           system,
@@ -959,8 +997,12 @@ export async function POST(req) {
             GEMINI_API_KEY: env?.GEMINI_API_KEY,
             GROQ_API_KEY: env?.GROQ_API_KEY,
           },
-        });
+          }),
+          AI_TIMEOUT_MS,
+          "user_ai"
+        );
         if (g.error) throw new Error(g.error);
+        aiUsage = g.usage || null;
         // Extract affiliate button metadata before cleanup/truncation.
         {
           const extracted = extractAffiliatePlatformsTag(g.reply);
@@ -1032,12 +1074,13 @@ export async function POST(req) {
           mode: "user",
           user_type: userType,
           fallback_from: fallbackFrom,
+          usage: aiUsage,
         },
       });
 
       await logAPIUsage({
         provider: providerUsed,
-        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+        tokens: usageToTokens(aiUsage, message, reply),
         userType,
         leadId: leadId || null,
         conversationId,

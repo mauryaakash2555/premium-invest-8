@@ -4,10 +4,11 @@
 		{
 			"label": "start-frontend",
 			"type": "shell",
-			"command": "npm start",
-			"options": {
-				"cwd": "${workspaceFolder}/frontend"
-			},
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\\frontend\" && npm.cmd start"
+			],
 			"isBackground": true,
 			"problemMatcher": {
 				"owner": "custom",
@@ -26,6 +27,21 @@
 			}
 		},
 		{
+			"label": "start-next-dev",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && npx.cmd next dev -p 3000"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
 			"label": "test-chat-api",
 			"type": "shell",
 			"command": "cmd",
@@ -37,23 +53,14 @@
 			"problemMatcher": [],
 			"group": "build"
 		},
-		{
-			"label": "test-chat-api",
-			"type": "shell",
-			"command": "cmd /c \"cd /d c:\\Users\\admin\\premium-invest-8 && npm test --silent -- --runTestsByPath tests/api/chat.test.js\"",
-			"isBackground": false,
-			"problemMatcher": []
-		},
+		
 		{
 			"label": "test-chat",
 			"type": "shell",
-			"command": "npm",
+			"command": "cmd",
 			"args": [
-				"test",
-				"--",
-				"--runTestsByPath",
-				"tests/api/chat.test.js",
-				"--watchAll=false"
+				"/c",
+				"cd /d \"${workspaceFolder}\" && npm.cmd test -- --runTestsByPath tests/api/chat.test.js --watchAll=false"
 			],
 			"isBackground": false,
 			"problemMatcher": [],

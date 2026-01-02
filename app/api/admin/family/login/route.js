@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isFamilyAdminPasswordConfigured, verifyFamilyAdminPassword } from "@/lib/auth/passwords";
-import { issueFamilyCookie } from "@/lib/familySession";
+import { issueFamilyCookie, issueFamilyTokenValue } from "@/lib/familySession";
 
 export async function POST(req) {
   if (!isFamilyAdminPasswordConfigured()) {
@@ -16,8 +16,10 @@ export async function POST(req) {
 
   const cookie = issueFamilyCookie();
   const isLocalOrDev = String(process.env.VERCEL || "") !== "1";
+  const token = isLocalOrDev ? issueFamilyTokenValue() : null;
   const res = NextResponse.json({
     ok: true,
+    ...(token ? { token } : null),
     ...(isLocalOrDev
       ? {
           debug: {

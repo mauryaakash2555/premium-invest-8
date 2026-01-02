@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAdminFromCookies } from "@/lib/adminSession";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { isFeatureEnabled } from "@/config/features";
 
@@ -58,7 +58,8 @@ function isQuestion(text) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  if (!isAdminFromCookies(cookieStore)) {
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
@@ -116,6 +117,50 @@ export async function GET(req) {
   const visitorsPrevMonth = uniqVisitors(
     events.filter((e) => e.event_type === "visitor" && inRange(e.created_at, prevStart, prevEnd))
   );
+
+  const sumTokens = (arr) =>
+    (arr || []).reduce((sum, e) => {
+      if (e.event_type !== "api_usage") return sum;
+      const tok = Number(e?.data?.tokens_used);
+      return Number.isFinite(tok) && tok > 0 ? sum + tok : sum;
+    }, 0);
+
+  const tokensByProvider = (arr) => {
+    const out = Object.create(null);
+    for (const e of arr || []) {
+      if (e.event_type !== "api_usage") continue;
+      const p = String(e?.data?.provider || "unknown").toLowerCase();
+      const tok = Number(e?.data?.tokens_used);
+      if (!Number.isFinite(tok) || tok <= 0) continue;
+      out[p] = (out[p] || 0) + tok;
+    }
+    return out;
+  };
+
+  const aiCallsByProvider = (arr) => {
+    const out = Object.create(null);
+    for (const e of arr || []) {
+      if (e.event_type !== "chat_ai") continue;
+      const p = String(e?.data?.provider || "unknown").toLowerCase();
+      if (p === "cache") continue;
+      out[p] = (out[p] || 0) + 1;
+    }
+    return out;
+  };
+
+  const eventsToday = events.filter((e) => inRange(e.created_at, todayStart));
+  const eventsMonthOnly = events.filter((e) => inRange(e.created_at, monthStart));
+
+  const ai_today = {
+    calls_by_provider: aiCallsByProvider(eventsToday),
+    tokens_total: sumTokens(eventsToday),
+    tokens_by_provider: tokensByProvider(eventsToday),
+  };
+  const ai_month = {
+    calls_by_provider: aiCallsByProvider(eventsMonthOnly),
+    tokens_total: sumTokens(eventsMonthOnly),
+    tokens_by_provider: tokensByProvider(eventsMonthOnly),
+  };
 
   const convStartedToday = countType(events.filter((e) => inRange(e.created_at, todayStart)), "conversation_started");
   const msgSentToday = countType(events.filter((e) => inRange(e.created_at, todayStart)), "message_sent");
@@ -242,6 +287,7 @@ export async function GET(req) {
       leads_captured: leadsCapturedToday,
       conversion_rate: conversionToday,
       avg_messages_per_conversation: avgMsgsPerConversationToday,
+      ai: ai_today,
     },
     week: {
       visitors: visitorsWeek,
@@ -257,6 +303,7 @@ export async function GET(req) {
       revenue: revenueThisMonth,
       revenue_growth_pct: pctChange(revenueThisMonth, revenuePrevMonth),
       most_active_hour_ist: mostActiveHour,
+      ai: ai_month,
     },
   });
 }

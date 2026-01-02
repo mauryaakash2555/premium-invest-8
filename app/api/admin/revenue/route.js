@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { z } from "zod";
-import { isAdminFromCookies } from "@/lib/adminSession";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { isFeatureEnabled } from "@/config/features";
 
@@ -15,7 +15,8 @@ const schema = z.object({
 
 export async function POST(req) {
   const cookieStore = await cookies();
-  if (!isAdminFromCookies(cookieStore)) {
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 

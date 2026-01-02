@@ -21,8 +21,8 @@
  */
 
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAdminFromCookies } from "@/lib/adminSession";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { Logger } from "@/lib/monitoring/logger";
 function csvEscape(v) {
@@ -65,7 +65,8 @@ async function fetchAllRows({ sb, table, select, pageSize = 1000, queryFn }) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  if (!isAdminFromCookies(cookieStore)) {
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 

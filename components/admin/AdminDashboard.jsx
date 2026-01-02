@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { LeadsList } from '@/components/admin/LeadsList';
 import { AnalyticsView } from '@/components/admin/AnalyticsView';
+import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 export function AdminDashboard() {
   const [tab, setTab] = useState('summary');
@@ -26,8 +27,7 @@ export function AdminDashboard() {
     async function load() {
       setBusy(true);
       try {
-        const r = await fetch('/api/admin/summary');
-        const j = await r.json().catch(() => null);
+        const { r, j } = await fetchAdminJSON('/api/admin/summary');
         if (mounted) setSummary(r.ok && j?.ok ? j : null);
       } finally {
         if (mounted) setBusy(false);
@@ -40,8 +40,7 @@ export function AdminDashboard() {
   async function loadAnalytics() {
     setBusy(true);
     try {
-      const r = await fetch('/api/admin/analytics');
-      const j = await r.json().catch(() => null);
+      const { r, j } = await fetchAdminJSON('/api/admin/analytics');
       setAnalytics(r.ok && j?.ok ? j : null);
     } finally {
       setBusy(false);

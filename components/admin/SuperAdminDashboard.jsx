@@ -7,6 +7,7 @@ import { AnalyticsView } from '@/components/admin/AnalyticsView';
 import { AffiliateTracking } from '@/components/admin/AffiliateTracking';
 import { EmailPreferences } from '@/components/admin/EmailPreferences';
 import { SessionManager } from '@/lib/auth/session';
+import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 function fmtINR(n) {
   const x = Number(n);
@@ -47,12 +48,6 @@ function revenueBySource(entries) {
   return out;
 }
 
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, opts);
-  const j = await r.json().catch(() => null);
-  return { r, j };
-}
-
 export function SuperAdminDashboard({ onLogout }) {
   const [tab, setTab] = useState('overview');
   const [summary, setSummary] = useState(null);
@@ -60,6 +55,7 @@ export function SuperAdminDashboard({ onLogout }) {
   const [strategy, setStrategy] = useState(null);
   const [strategyBusy, setStrategyBusy] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [verifyNote, setVerifyNote] = useState('');
 
   const smartCache = summary?.today?.smart_cache || null;
   const cacheHitRatePct = useMemo(() => {
@@ -102,9 +98,12 @@ export function SuperAdminDashboard({ onLogout }) {
     async function loadSummary() {
       setBusy(true);
       try {
-        const { r, j } = await fetchJSON('/api/admin/summary');
+        const { r, j } = await fetchAdminJSON('/api/admin/summary');
         if (!mounted) return;
         setSummary(r.ok && j?.ok ? j : null);
+      } catch {
+        if (!mounted) return;
+        setSummary(null);
       } finally {
         if (mounted) setBusy(false);
       }
@@ -122,10 +121,21 @@ export function SuperAdminDashboard({ onLogout }) {
     if (now - verifyThrottledRef.current < 15_000) return;
     verifyThrottledRef.current = now;
 
-    const { r } = await fetchJSON('/api/admin/verify');
-    if (!r.ok) {
-      // session expired / invalid
-      await onLogout();
+    try {
+      const { r } = await fetchAdminJSON('/api/admin/verify');
+      if (!r.ok) {
+        // session expired / invalid
+        await onLogout();
+        setVerifyNote('Session expired.');
+        setTimeout(() => setVerifyNote(''), 4000);
+      } else {
+        setVerifyNote('Session OK ✅');
+        setTimeout(() => setVerifyNote(''), 2500);
+      }
+    } catch {
+      // Ignore transient network/dev-server errors (avoid crashing the UI).
+      setVerifyNote('Verify failed (network).');
+      setTimeout(() => setVerifyNote(''), 4000);
     }
   }
 
@@ -165,8 +175,10 @@ export function SuperAdminDashboard({ onLogout }) {
   async function loadAnalytics() {
     setBusy(true);
     try {
-      const { r, j } = await fetchJSON('/api/admin/analytics');
+      const { r, j } = await fetchAdminJSON('/api/admin/analytics');
       setAnalytics(r.ok && j?.ok ? j : null);
+    } catch {
+      setAnalytics(null);
     } finally {
       setBusy(false);
     }
@@ -176,10 +188,45 @@ export function SuperAdminDashboard({ onLogout }) {
     setStrategyBusy(true);
     try {
       const u = force ? '/api/admin/strategy?force=1' : '/api/admin/strategy';
-      const { r, j } = await fetchJSON(u);
+      const { r, j } = await fetchAdminJSON(u);
       setStrategy(r.ok && j?.ok ? j : null);
+    } catch {
+      setStrategy(null);
     } finally {
       setStrategyBusy(false);
+    }
+  }
+
+  async function downloadExport() {
+    setBusy(true);
+    try {
+      const token = (() => {
+        try {
+          return typeof window !== 'undefined' ? window.localStorage.getItem('bm_admin_token_v1') : null;
+        } catch {
+          return null;
+        }
+      })();
+
+      const headers = token ? { 'x-bm-admin-token': token } : undefined;
+      const r = await fetch('/api/admin/export', { method: 'GET', credentials: 'include', headers });
+      if (!r.ok) return;
+
+      const blob = await r.blob();
+      const cd = r.headers.get('content-disposition') || '';
+      const m = cd.match(/filename="?([^";]+)"?/i);
+      const filename = m?.[1] || `bm-wealth-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -191,6 +238,7 @@ export function SuperAdminDashboard({ onLogout }) {
           <div className="sa-sub">BM Wealth · Super Admin</div>
         </div>
         <div className="sa-actions">
+          {verifyNote ? <div className="sa-sub" style={{ marginRight: 10 }}>{verifyNote}</div> : null}
           <button className="sa-btn" onClick={() => setBusy(true) || void (async () => { await verifyAndRefreshCookie(); setBusy(false); })()}>
             Verify
           </button>
@@ -286,7 +334,24 @@ export function SuperAdminDashboard({ onLogout }) {
             <section className="sa-panel" style={{ marginTop: 14 }}>
               <div className="sa-panelHead">
                 <div className="sa-panelTitle">REVENUE BREAKDOWN</div>
-                <button className="sa-miniBtn" onClick={() => void (async () => { setBusy(true); const { r, j } = await fetchJSON('/api/admin/summary'); setSummary(r.ok && j?.ok ? j : summary); setBusy(false); })()}>Refresh</button>
+                <button
+                  className="sa-miniBtn"
+                  onClick={() =>
+                    void (async () => {
+                      setBusy(true);
+                      try {
+                        const { r, j } = await fetchAdminJSON('/api/admin/summary');
+                        setSummary(r.ok && j?.ok ? j : summary);
+                      } catch {
+                        // keep existing summary
+                      } finally {
+                        setBusy(false);
+                      }
+                    })()
+                  }
+                >
+                  Refresh
+                </button>
               </div>
 
               <div className="sa-breakdown">
@@ -299,7 +364,7 @@ export function SuperAdminDashboard({ onLogout }) {
               </div>
 
               <div className="sa-quickActions">
-                <a className="sa-btn" href="/api/admin/export" target="_blank" rel="noopener noreferrer">Export All Leads (CSV)</a>
+                <button className="sa-btn" onClick={() => void downloadExport()}>Export All Leads (CSV)</button>
                 <button className="sa-btn" onClick={() => { setTab('analytics'); if (!analytics) void loadAnalytics(); }}>📊 Full Analytics</button>
                 <button className="sa-btn" onClick={() => setTab('system')}>System Health</button>
               </div>
@@ -322,6 +387,16 @@ export function SuperAdminDashboard({ onLogout }) {
               <p className="sa-line">API Calls Saved Today: {Number(smartCache?.api_calls_saved_today) || 0}</p>
               <p className="sa-line">Questions in Cache: {Number(smartCache?.questions_in_cache) || 0}</p>
               <p className="sa-line">Most Asked: &quot;{smartCache?.most_asked?.question || 'N/A'}&quot; ({Number(smartCache?.most_asked?.count) || 0} times)</p>
+            </section>
+
+            <section className="sa-block">
+              <h3 className="sa-panelTitle">AI Usage (Today)</h3>
+              <p className="sa-line">Calls: Gemini {summary?.today?.ai_provider_counts?.gemini ?? 0} · Groq {summary?.today?.ai_provider_counts?.groq ?? 0} · Claude {summary?.today?.ai_provider_counts?.anthropic ?? 0} · Rule {summary?.today?.ai_provider_counts?.rule ?? 0}</p>
+              <p className="sa-line">Tokens used (app-tracked): {Number(summary?.today?.ai_tokens_today ?? 0).toLocaleString('en-IN')}</p>
+              <p className="sa-line">Tokens by provider: Gemini {Number(summary?.today?.ai_tokens_by_provider?.gemini ?? 0).toLocaleString('en-IN')} · Groq {Number(summary?.today?.ai_tokens_by_provider?.groq ?? 0).toLocaleString('en-IN')} · Claude {Number(summary?.today?.ai_tokens_by_provider?.anthropic ?? 0).toLocaleString('en-IN')}</p>
+              <p className="sa-line">Daily call limits (config): Gemini {summary?.today?.ai_daily_limits?.gemini ?? '—'} · Groq {summary?.today?.ai_daily_limits?.groq ?? '—'} · Claude {summary?.today?.ai_daily_limits?.anthropic ?? '—'}</p>
+              <p className="sa-line">Remaining calls today: Gemini {summary?.today?.ai_daily_limits?.gemini ? Math.max(0, Number(summary?.today?.ai_daily_limits?.gemini) - Number(summary?.today?.ai_provider_counts?.gemini ?? 0)) : '—'} · Groq {summary?.today?.ai_daily_limits?.groq ? Math.max(0, Number(summary?.today?.ai_daily_limits?.groq) - Number(summary?.today?.ai_provider_counts?.groq ?? 0)) : '—'} · Claude {summary?.today?.ai_daily_limits?.anthropic ? Math.max(0, Number(summary?.today?.ai_daily_limits?.anthropic) - Number(summary?.today?.ai_provider_counts?.anthropic ?? 0)) : '—'}</p>
+              <p className="sa-muted">Note: Provider billing/credits remaining requires separate provider billing APIs + keys; this view is real usage tracked by this app.</p>
             </section>
 
             <AffiliateTracking />

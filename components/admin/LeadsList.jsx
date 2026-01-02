@@ -10,6 +10,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 export function LeadsList({ summary }) {
   const initialLeads = useMemo(() => summary?.all?.leads || [], [summary]);
@@ -25,12 +26,14 @@ export function LeadsList({ summary }) {
 
   useEffect(() => {
     let alive = true;
+    const controller = new AbortController();
     void (async () => {
       setLoading(true);
       setError(null);
       try {
-        const r = await fetch(`/api/admin/leads?filter=${encodeURIComponent(filter)}`, { cache: 'no-store' });
-        const j = await r.json().catch(() => null);
+        const { r, j } = await fetchAdminJSON(`/api/admin/leads?filter=${encodeURIComponent(filter)}`,
+          { signal: controller.signal }
+        );
         if (!alive) return;
         if (!r.ok || !j?.ok) {
           setError(j?.error || 'failed');
@@ -39,13 +42,15 @@ export function LeadsList({ summary }) {
         setLeads(Array.isArray(j.leads) ? j.leads : []);
       } catch (e) {
         if (!alive) return;
-        setError(String(e?.message || 'failed'));
+        const msg = String(e?.name || '').toLowerCase() === 'aborterror' ? null : String(e?.message || 'failed');
+        if (msg) setError(msg);
       } finally {
         if (alive) setLoading(false);
       }
     })();
     return () => {
       alive = false;
+      controller.abort();
     };
   }, [filter]);
 
@@ -54,12 +59,12 @@ export function LeadsList({ summary }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <h2 style={{ color: '#C0A062', fontSize: 18, margin: 0 }}>Leads</h2>
         <select value={filter} onChange={(e) => setFilter(e.target.value)} style={selectStyle} aria-label="Lead time filter">
-          <option value="today">Today</option>
-          <option value="yesterday">Yesterday</option>
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-          <option value="year">This Year</option>
-          <option value="all">All Time</option>
+          <option value="today" style={optionStyle}>Today</option>
+          <option value="yesterday" style={optionStyle}>Yesterday</option>
+          <option value="week" style={optionStyle}>This Week</option>
+          <option value="month" style={optionStyle}>This Month</option>
+          <option value="year" style={optionStyle}>This Year</option>
+          <option value="all" style={optionStyle}>All Time</option>
         </select>
       </div>
       {loading ? <div style={{ marginTop: 8, opacity: 0.7 }}>Loading…</div> : null}
@@ -95,10 +100,15 @@ const th = { textAlign: 'left', padding: '10px 12px', fontSize: 12, color: 'rgba
 const td = { textAlign: 'left', padding: '10px 12px', fontSize: 13, color: 'rgba(255,255,255,0.90)' };
 
 const selectStyle = {
-  background: 'rgba(255,255,255,0.04)',
+  background: '#111214',
   border: '1px solid rgba(255,255,255,0.10)',
-  color: 'rgba(255,255,255,0.90)',
+  color: '#ffffff',
   borderRadius: 10,
   padding: '8px 10px',
   fontSize: 13,
+};
+
+const optionStyle = {
+  background: '#111214',
+  color: '#ffffff',
 };

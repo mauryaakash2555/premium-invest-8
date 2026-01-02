@@ -99,8 +99,9 @@ const Navigation = () => {
     </Link>
   );
 
-  // Hide brand/navigation on SIP Calculator page to avoid visual clash
-  const hideNav = pathname === '/sip-calculator';
+  // Hide brand/navigation on pages that provide their own header.
+  // (Prevents the fixed public navbar overlaying and blocking admin controls.)
+  const hideNav = pathname === '/sip-calculator' || pathname.startsWith('/admin-secret-akash');
 
   if (hideNav) {
     // Render nothing on this route; page provides its own minimal header.

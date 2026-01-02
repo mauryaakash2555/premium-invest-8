@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAdminFromCookies } from "@/lib/adminSession";
-import { isFamilyFromCookies } from "@/lib/familySession";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
+import { isFamilyFromRequest } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { CONSTANTS } from "@/config/constants";
 
@@ -31,8 +31,9 @@ function mondayStart(d) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  const isSuper = isAdminFromCookies(cookieStore);
-  const isFamily = isFamilyFromCookies(cookieStore);
+  const headerStore = await headers();
+  const isSuper = isAdminFromRequest(cookieStore, headerStore);
+  const isFamily = isFamilyFromRequest(cookieStore, headerStore);
   if (!isSuper && !isFamily) {
     const isLocalOrDev = String(process.env.VERCEL || "") !== "1";
     return NextResponse.json(

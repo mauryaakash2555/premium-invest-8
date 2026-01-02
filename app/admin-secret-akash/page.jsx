@@ -9,14 +9,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminLogin } from '@/components/admin/AdminLogin';
 import { SuperAdminDashboard } from '@/components/admin/SuperAdminDashboard';
+import { clearAdminToken, setAdminToken, fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 import './admin.css';
-
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, opts);
-  const j = await r.json().catch(() => null);
-  return { r, j };
-}
 
 export default function SuperAdminPage() {
   const [authed, setAuthed] = useState(false);
@@ -27,29 +22,18 @@ export default function SuperAdminPage() {
     let mounted = true;
     (async () => {
       try {
-        const { r, j } = await fetchJSON('/api/admin/verify');
+        const { r, j } = await fetchAdminJSON('/api/admin/verify');
         if (!mounted) return;
         setAuthed(Boolean(r.ok && j?.authenticated));
       } finally {
         if (mounted) setLoading(false);
       }
     })();
-    // Single retry shortly after mount to catch cookie propagation from chat-login
-    const t = setTimeout(async () => {
-      try {
-        const { r, j } = await fetchJSON('/api/admin/verify');
-        if (!mounted) return;
-        if (r.ok && j?.authenticated) setAuthed(true);
-      } catch {}
-    }, 1000);
-    return () => {
-      mounted = false;
-      clearTimeout(t);
-    };
+    return () => { mounted = false; };
   }, []);
 
   async function handleLogin(password) {
-    const { r, j } = await fetchJSON('/api/admin/login', {
+    const { r, j } = await fetchAdminJSON('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
@@ -63,14 +47,17 @@ export default function SuperAdminPage() {
       throw new Error(r.status === 401 ? 'Wrong password' : 'Login failed');
     }
 
+    if (j?.token) setAdminToken(j.token);
+
     setAuthed(true);
     return { ok: true };
   }
 
   async function handleLogout() {
     try {
-      await fetch('/api/admin/logout', { method: 'POST' });
+      await fetchAdminJSON('/api/admin/logout', { method: 'POST' });
     } catch {}
+    clearAdminToken();
     setAuthed(false);
     router.push('/');
   }

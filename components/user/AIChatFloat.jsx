@@ -21,6 +21,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { clearFamilyToken, getFamilyToken, setFamilyToken } from "@/lib/auth/familyTokenClient";
 import ReactMarkdown from "react-markdown";
 import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
@@ -169,7 +170,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     setTab("chat");
     pushBotUser("Exited family admin mode.");
     try {
-      await fetch("/api/admin/family/logout", { method: "POST" });
+      clearFamilyToken();
+      await fetch("/api/admin/family/logout", { method: "POST", credentials: "include" });
     } catch {
       // ignore
     }
@@ -180,10 +182,12 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
+      credentials: "include",
     });
     const j = await r.json().catch(() => null);
     if (r.status === 503 && j?.error === "setup_required") return { ok: false, setupRequired: true };
     if (!r.ok) return { ok: false, setupRequired: false };
+    if (j?.token) setFamilyToken(j.token);
     return { ok: Boolean(j?.ok), setupRequired: false };
   }
   async function exportLeads() {
@@ -336,17 +340,22 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   async function tryAdminLogin(password) {
-    const r = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    const j = await r.json().catch(() => null);
-    if (r.status === 503 && j?.error === "setup_required") {
-      return { ok: false, setupRequired: true };
+    try {
+      const r = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+        credentials: "include",
+      });
+      const j = await r.json().catch(() => null);
+      if (r.status === 503 && j?.error === "setup_required") {
+        return { ok: false, setupRequired: true, status: r.status };
+      }
+      if (!r.ok) return { ok: false, setupRequired: false, status: r.status, error: j?.error || null };
+      return { ok: Boolean(j?.ok), setupRequired: false, status: r.status, token: j?.token || null };
+    } catch {
+      return { ok: false, setupRequired: false, status: 0, networkError: true };
     }
-    if (!r.ok) return { ok: false, setupRequired: false };
-    return { ok: Boolean(j?.ok), setupRequired: false };
   }
 
   async function refreshDashboard() {
@@ -535,9 +544,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
     const conversationIdSafe = typeof sessionId === "string" && sessionId.trim().length > 0 ? sessionId.trim() : undefined;
 
+    const familyToken = familyAdmin ? getFamilyToken() : null;
+    const headers = new Headers({ "Content-Type": "application/json" });
+    if (familyToken) headers.set("x-bm-family-token", familyToken);
+
     const r = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({
         message,
         mode,
@@ -705,12 +718,43 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           pushBotUser("Super admin is not configured on this environment yet.");
           return;
         }
+        if (res?.networkError) {
+          pushBotUser("Super admin login failed due to a network error. If you're on the React frontend (port 3001), open the Next app at http://localhost:3000 and try again.");
+          return;
+        }
+        if (res?.status === 404) {
+          pushBotUser("Super admin login endpoint isn't available on this page. Open http://localhost:3000 (Next app) and try again.");
+          return;
+        }
         if (res?.ok) {
-          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Redirecting to control panel...");
-          // Allow time for the cookie to be set by the login response
-          setTimeout(() => {
+          try {
+            if (res?.token && typeof window !== "undefined") {
+              window.localStorage.setItem("bm_admin_token_v1", String(res.token));
+            }
+          } catch {
+            // ignore
+          }
+          // Verify once before redirect so we can show a useful error if cookies are blocked.
+          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Opening control panel...");
+          let adminToken = "";
+          try {
+            adminToken = typeof window !== "undefined" ? String(window.localStorage.getItem("bm_admin_token_v1") || "") : "";
+          } catch {}
+          const v = await fetch("/api/admin/verify", {
+            method: "GET",
+            cache: "no-store",
+            credentials: "include",
+            headers: adminToken ? { "x-bm-admin-token": adminToken } : undefined,
+          })
+            .then(async (r) => ({ ok: r.ok, j: await r.json().catch(() => null) }))
+            .catch(() => ({ ok: false, j: null }));
+          if (v.ok && v.j?.authenticated) {
             window.location.href = "/admin-secret-akash";
-          }, 1200);
+            return;
+          }
+          pushBotUser(
+            "Login succeeded, but this browser isn't sending/accepting the admin cookie (so the dashboard can't stay logged in). Please open the site in Chrome/Edge at http://localhost:3000 and try again."
+          );
           return;
         }
         pushBotUser("Super admin code not recognized.");

@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, opts);
-  const j = await r.json().catch(() => null);
-  return { r, j };
-}
+import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 export function EmailPreferences() {
   const [busy, setBusy] = useState(false);
@@ -18,7 +13,7 @@ export function EmailPreferences() {
   async function load() {
     setBusy(true);
     try {
-      const { r, j } = await fetchJSON('/api/admin/email-preferences');
+      const { r, j } = await fetchAdminJSON('/api/admin/email-preferences');
       setPrefs(r.ok && j?.ok ? j.prefs : null);
     } finally {
       setBusy(false);
@@ -33,7 +28,7 @@ export function EmailPreferences() {
     if (!prefs) return;
     setSaving(true);
     try {
-      await fetchJSON('/api/admin/email-preferences', {
+      await fetchAdminJSON('/api/admin/email-preferences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(prefs),
@@ -47,7 +42,7 @@ export function EmailPreferences() {
   async function testEmail(type) {
     setTesting(true);
     try {
-      await fetchJSON('/api/admin/test-email', {
+      await fetchAdminJSON('/api/admin/test-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type }),

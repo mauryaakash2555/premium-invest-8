@@ -15,6 +15,24 @@ export function AnalyticsView({ analytics }) {
   }
 
   const pitches = analytics?.week?.pitch_performance || [];
+  const aiToday = analytics?.today?.ai || null;
+  const aiMonth = analytics?.month?.ai || null;
+
+  const fmtNum = (n) => {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return '0';
+    try {
+      return x.toLocaleString('en-IN');
+    } catch {
+      return String(x);
+    }
+  };
+
+  const topProviders = (obj) => {
+    const entries = Object.entries(obj || {}).filter(([, v]) => Number(v) > 0);
+    entries.sort((a, b) => Number(b[1]) - Number(a[1]));
+    return entries.slice(0, 4);
+  };
 
   return (
     <div style={{ marginTop: 22 }}>
@@ -24,6 +42,37 @@ export function AnalyticsView({ analytics }) {
         <Stat label="Conversations" value={analytics?.today?.conversations_started ?? 0} />
         <Stat label="Leads" value={analytics?.today?.leads_captured ?? 0} />
         <Stat label="Conversion" value={(analytics?.today?.conversion_rate ?? 0) + '%'} />
+      </div>
+
+      <div style={{ marginTop: 18 }}>
+        <h3 style={{ color: '#C0A062', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          AI Usage
+        </h3>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginTop: 10 }}>
+          <Stat label="Tokens used (today)" value={fmtNum(aiToday?.tokens_total ?? 0)} />
+          <Stat label="Tokens used (month)" value={fmtNum(aiMonth?.tokens_total ?? 0)} />
+        </div>
+
+        <div style={{ marginTop: 10, opacity: 0.9, fontSize: 13 }}>
+          <div style={{ opacity: 0.75, marginBottom: 6 }}>Top providers (today):</div>
+          {topProviders(aiToday?.tokens_by_provider).length ? (
+            <div>
+              {topProviders(aiToday?.tokens_by_provider).map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '6px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ fontWeight: 800 }}>{k}</div>
+                  <div style={{ color: '#C0A062', fontWeight: 900 }}>{fmtNum(v)}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ opacity: 0.65 }}>No token usage events yet.</div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 10, opacity: 0.65, fontSize: 12 }}>
+          Note: This is app-tracked token usage (from provider responses when available). Provider billing/credits remaining requires separate billing APIs + keys.
+        </div>
       </div>
 
       <div style={{ marginTop: 18 }}>
