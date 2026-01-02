@@ -31,8 +31,27 @@ function mondayStart(d) {
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  const authed = isAdminFromCookies(cookieStore) || isFamilyFromCookies(cookieStore);
-  if (!authed) return NextResponse.json({ ok: false }, { status: 401 });
+  const isSuper = isAdminFromCookies(cookieStore);
+  const isFamily = isFamilyFromCookies(cookieStore);
+  if (!isSuper && !isFamily) {
+    const isLocalOrDev = String(process.env.VERCEL || "") !== "1";
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "unauthorized",
+        ...(isLocalOrDev
+          ? {
+              debug: {
+                nodeEnv: process.env.NODE_ENV || "",
+                vercel: process.env.VERCEL || "",
+                hasBmFamilyCookie: Boolean(cookieStore?.get?.("bm_family")?.value),
+              },
+            }
+          : null),
+      },
+      { status: 401 }
+    );
+  }
 
   let sb;
   try {

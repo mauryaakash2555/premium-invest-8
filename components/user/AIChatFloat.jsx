@@ -486,16 +486,38 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   async function sendChat({ message, mode, leadId: lid, conversationHistory }) {
+    const isUuid = (v) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v || ""));
+
+    const rawPitchState = !admin ? pitchStateRef.current : undefined;
+    const normalizedPitchState = (() => {
+      if (!rawPitchState || typeof rawPitchState !== "object") return undefined;
+
+      const lastPitchAtNum = Number(rawPitchState.lastPitchAt);
+      const lastPitchAt = Number.isFinite(lastPitchAtNum) && lastPitchAtNum >= 0 ? lastPitchAtNum : undefined;
+
+      const seenPitches = Array.isArray(rawPitchState.seenPitches)
+        ? rawPitchState.seenPitches
+            .map((x) => String(x || "").trim())
+            .filter(Boolean)
+            .slice(0, 30)
+        : undefined;
+
+      if (typeof lastPitchAt === "undefined" && typeof seenPitches === "undefined") return undefined;
+      return { lastPitchAt, seenPitches };
+    })();
+
+    const conversationIdSafe = typeof sessionId === "string" && sessionId.trim().length > 0 ? sessionId.trim() : undefined;
+
     const r = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message,
         mode,
-        leadId: lid || undefined,
-        conversationId: sessionId,
+        leadId: isUuid(lid) ? lid : undefined,
+        conversationId: conversationIdSafe,
         conversationHistory: conversationHistory || undefined,
-        pitchState: !admin ? pitchStateRef.current : undefined,
+        pitchState: normalizedPitchState,
       }),
     });
     const j = await r.json().catch(() => null);
@@ -619,8 +641,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     if (!text || busy) return;
 
     // Family admin unlock (password typed into chat) — do this BEFORE we push user text into the chat.
-    // We only attempt when it looks like the family password (avoids extra calls on normal messages).
-    if (!admin && !familyAdmin && text === "7287") {
+    // We only attempt when it looks like a 4-digit family PIN (avoids extra calls on normal messages).
+    if (!admin && !familyAdmin && /^\d{4}$/.test(text)) {
       // Keep DOM + state in sync
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
@@ -656,7 +678,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           return;
         }
         if (res?.ok) {
-          pushBotUser("Welcome Akash! \u{1F39B}\u{FE0F} Redirecting to control panel...");
+          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Redirecting to control panel...");
           setTimeout(() => {
             window.location.href = "/admin-secret-akash";
           }, 250);
@@ -868,16 +890,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
               )}
               {!admin && familyAdmin && (
                 <>
-                  <button
-                    type="button"
-                    className={styles.actionBtn}
-                    aria-label="Open Akash control panel"
-                    onClick={() => {
-                      window.location.href = "/admin-secret-akash";
-                    }}
-                  >
-                    AKASH
-                  </button>
                   <button
                     type="button"
                     className={styles.actionBtn}

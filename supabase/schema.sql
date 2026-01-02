@@ -78,7 +78,26 @@ create table if not exists public.email_preferences (
 
 -- Singleton row (used by app code as a fixed id)
 insert into public.email_preferences (id, email_address)
-values ('00000000-0000-0000-0000-000000000001', 'akash@bmwealth.co.in')
+values ('00000000-0000-0000-0000-000000000001', 'mauryaakash2555@gmail.com')
 on conflict (id) do nothing;
+
+
+-- Smart cache (FEATURE: scale + cost control)
+-- Stores AI answers so repeated questions can be served without an API call.
+create table if not exists public.smart_cache (
+  scope text not null check (scope in ('public','family_admin','super_admin')),
+  question_hash text not null,
+  normalized_question text,
+  answer text not null,
+  provider text,
+  hits bigint not null default 0,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now(),
+  last_hit_at timestamp with time zone,
+  primary key (scope, question_hash)
+);
+
+create index if not exists idx_smart_cache_hits on public.smart_cache(hits desc);
+create index if not exists idx_smart_cache_last_hit on public.smart_cache(last_hit_at desc);
 
 

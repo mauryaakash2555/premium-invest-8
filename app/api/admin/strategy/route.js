@@ -5,6 +5,7 @@ import { getAIEnvSafe } from "@/config/env";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { isFeatureEnabled } from "@/config/features";
 import { getAIResponse } from "@/lib/ai/provider";
+import { logAPIUsage } from "@/lib/monitoring/apiUsage";
 
 function startOfDay(d) {
   const x = new Date(d);
@@ -183,7 +184,7 @@ export async function GET(req) {
   const system = buildAdminStrategicPrompt();
   const res = await getAIResponse({
     message: task,
-    isAdmin: true,
+    userType: "super_admin",
     system,
     context,
     conversationHistory: [],
@@ -196,6 +197,16 @@ export async function GET(req) {
   });
   if (res.error) throw new Error(res.error);
   const text = res.reply;
+
+  await logAPIUsage({
+    provider: res.provider || "anthropic",
+    // tokens are not directly available here; this is a best-effort approximation
+    tokens: Math.max(1, Math.ceil((String(task).length + String(text).length) / 4)),
+    userType: "super_admin",
+    leadId: null,
+    conversationId: null,
+    mode: "admin_strategy",
+  });
 
   // Persist as event for caching + audit
   try {

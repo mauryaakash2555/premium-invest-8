@@ -11,7 +11,7 @@ jest.mock('next/headers', () => ({
 
 // Make tests self-contained (no real network calls)
 jest.mock('@/lib/ai/provider', () => ({
-  getAIResponse: async () => ({ reply: 'ok', provider: 'mock' }),
+  getAIResponse: jest.fn(async () => ({ reply: 'ok', provider: 'mock' })),
 }));
 
 // Silence noisy logs in tests
@@ -32,6 +32,8 @@ jest.mock('@/lib/plugins/PluginManager', () => ({
 }));
 
 import { POST as chatPOST } from '@/app/api/chat/route';
+import { clearSmartCacheForTests } from '@/lib/cache/smartCache';
+import { getAIResponse } from '@/lib/ai/provider';
 
 function jsonReq(body, { headers = {} } = {}) {
   return new Request('http://localhost:3000/api/chat', {
@@ -46,11 +48,19 @@ describe('POST /api/chat', () => {
     process.env.GEMINI_API_KEY = 'test-key';
     process.env.ANTHROPIC_API_KEY = 'test-key';
     process.env.GROQ_API_KEY = 'test-key';
+
+    clearSmartCacheForTests();
+    getAIResponse.mockClear();
   });
 
-  test('rejects empty message', async () => {
+  test('handles empty message gracefully', async () => {
     const res = await chatPOST(jsonReq({ message: '' }));
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
+    const j = await res.json();
+    expect(j.ok).toBe(true);
+    expect(j.warn).toBe('bad_request');
+    expect(typeof j.reply).toBe('string');
+    expect(j.reply.length).toBeGreaterThan(0);
   });
 
   test('rate limits excessive requests (best-effort)', async () => {
@@ -60,5 +70,21 @@ describe('POST /api/chat', () => {
       last = await chatPOST(jsonReq({ message: 'hello' }, { headers }));
     }
     expect(last.status).toBe(429);
+  });
+
+  test('serves repeated short question from smart cache', async () => {
+    const r1 = await chatPOST(jsonReq({ message: 'What is SIP?' }));
+    expect(r1.status).toBe(200);
+    const j1 = await r1.json();
+    expect(j1.ok).toBe(true);
+
+    const r2 = await chatPOST(jsonReq({ message: 'What is SIP?' }));
+    expect(r2.status).toBe(200);
+    const j2 = await r2.json();
+    expect(j2.ok).toBe(true);
+    expect(j2.reply).toBe(j1.reply);
+
+    // AI provider should only be called once due to cache hit on second request.
+    expect(getAIResponse).toHaveBeenCalledTimes(1);
   });
 });

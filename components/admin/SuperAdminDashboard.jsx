@@ -61,6 +61,13 @@ export function SuperAdminDashboard({ onLogout }) {
   const [strategyBusy, setStrategyBusy] = useState(false);
   const [busy, setBusy] = useState(false);
 
+  const smartCache = summary?.today?.smart_cache || null;
+  const cacheHitRatePct = useMemo(() => {
+    const r = Number(smartCache?.cache_hit_rate);
+    if (!Number.isFinite(r) || r < 0) return 0;
+    return Math.min(100, Math.max(0, r * 100));
+  }, [smartCache]);
+
   const sessionRef = useRef(null);
   const verifyThrottledRef = useRef(0);
 
@@ -308,6 +315,15 @@ export function SuperAdminDashboard({ onLogout }) {
             <div className="sa-panelHead">
               <div className="sa-panelTitle">SYSTEM CONTROLS</div>
             </div>
+
+            <section className="sa-block">
+              <h3 className="sa-panelTitle">Smart Cache Performance</h3>
+              <p className="sa-line">Cache Hit Rate: {cacheHitRatePct.toFixed(1)}% {cacheHitRatePct >= 90 ? '✅' : ''}</p>
+              <p className="sa-line">API Calls Saved Today: {Number(smartCache?.api_calls_saved_today) || 0}</p>
+              <p className="sa-line">Questions in Cache: {Number(smartCache?.questions_in_cache) || 0}</p>
+              <p className="sa-line">Most Asked: &quot;{smartCache?.most_asked?.question || 'N/A'}&quot; ({Number(smartCache?.most_asked?.count) || 0} times)</p>
+            </section>
+
             <AffiliateTracking />
             <EmailPreferences />
           </div>

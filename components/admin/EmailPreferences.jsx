@@ -88,7 +88,7 @@ export function EmailPreferences() {
             <input
               value={prefs.email_address || ''}
               onChange={(e) => setPrefs({ ...prefs, email_address: e.target.value })}
-              placeholder="akash@bmwealth.co.in"
+              placeholder="mauryaakash2555@gmail.com"
               style={{ padding: 8, borderRadius: 8, border: '1px solid #ddd', minWidth: 260 }}
             />
           </div>

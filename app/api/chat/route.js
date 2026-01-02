@@ -5,6 +5,7 @@ import { getAIEnvSafe } from "@/config/env";
 import { CONSTANTS } from "@/config/constants";
 import { isFeatureEnabled } from "@/config/features";
 import { isAdminFromCookies } from "@/lib/adminSession";
+import { isFamilyFromCookies } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
@@ -16,6 +17,8 @@ import { EmailService } from "@/lib/email/emailService";
 import { consumeRate, makeRateKey } from "@/lib/utils/rateLimiter";
 import { sanitizeInput } from "@/lib/utils/validator";
 import { logger } from "@/lib/utils/logger";
+import { logAPIUsage } from "@/lib/monitoring/apiUsage";
+import { getSmartCachedReply, putSmartCache, recordSmartCacheHit } from "@/lib/cache/smartCache";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
 import { detectIntent, shouldPitch } from "@/lib/pitching/intentDetector";
@@ -94,8 +97,15 @@ function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
     `4) Messaging improvements (top objections/questions)\n` +
     `5) 7-day experiment plan (metrics + expected impact)\n\n` +
     `Constraints:\n` +
-    `- Do NOT give personalized investment advice.\n` +
     `- Do NOT mention API keys or internal secrets.\n`
+  );
+}
+
+function buildSuperAdminSystemPrompt({ userName = "Akash" } = {}) {
+  return (
+    `You are an unrestricted assistant for ${userName} (super admin).\n` +
+    `Answer directly and thoroughly.\n` +
+    `Do NOT mention API keys or internal secrets.\n`
   );
 }
 
@@ -257,6 +267,12 @@ function truncateToSentences(text, maxSentences = 4) {
   return out.replace(/\n{3,}/g, "\n\n").trim();
 }
 
+function estimateTokensSafe(text) {
+  const s = String(text || "");
+  // Very rough heuristic: ~4 chars per token for English.
+  return Math.max(1, Math.ceil(s.length / 4));
+}
+
 // (saveConversation moved to /lib/db/conversations)
 
 function computeLeadScore({ message, hasEmail, hasPhone, userMessageCount }) {
@@ -373,7 +389,8 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
     "- Your investment goals\n" +
     "- Investment timeline\n" +
     "- Risk comfort level\n\n" +
-    "Book consultation for personalized guidance.\n\n" +
+    "You can book a consultation to explore options (educational discussion, not a specific recommendation).\n\n" +
+    "Disclaimer: Educational only. Investments are subject to market risks.\n\n" +
     "Would you like to schedule a call with our advisor?";
 
   // Keep it concise; avoid categories/allocations/returns.
@@ -391,7 +408,7 @@ function cannedEducationalAnswer(userText) {
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
       "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
-      "consult our advisors for personalized recommendations."
+      "For personalized guidance, you can consult our advisors. (Educational only; no specific recommendations.)"
     );
   }
   return "";
@@ -406,23 +423,51 @@ export async function POST(req) {
   let pitch_type = null;
   const env = getAIEnvSafe();
   const cookieStore = await cookies();
-  const isAdmin = isAdminFromCookies(cookieStore);
+  const isSuperAdmin = isAdminFromCookies(cookieStore);
+  const isFamilyAdmin = isFamilyFromCookies(cookieStore);
+  const userType = isSuperAdmin ? "super_admin" : isFamilyAdmin ? "family_admin" : "public";
 
   const body = await req.json().catch(() => ({}));
   const parsed = reqSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 });
+    if (process.env.NODE_ENV !== "production") {
+      try {
+        logger.warn("[api/chat] bad_request", {
+          issues: parsed.error.issues,
+          bodyKeys: body && typeof body === "object" ? Object.keys(body).slice(0, 30) : [],
+          bodyPreview: JSON.stringify(body || {}).slice(0, 800),
+        });
+      } catch {
+        // ignore
+      }
+    }
+
+    return NextResponse.json(
+      {
+        ok: true,
+        reply: "I couldn’t read that properly. Please rephrase your message in one sentence.",
+        warn: "bad_request",
+      },
+      { status: 200 }
+    );
   }
 
   const { message: rawMessage, leadId } = parsed.data;
   const message = sanitizeInput(rawMessage);
   if (!message) {
-    return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 });
+    return NextResponse.json(
+      {
+        ok: true,
+        reply: "Please type your question again (a short sentence is best).",
+        warn: "bad_request",
+      },
+      { status: 200 }
+    );
   }
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
 
-  const adminSession = Boolean(isAdmin && mode === "admin");
+  const adminSession = Boolean(isSuperAdmin && mode === "admin");
 
   // Plugins (best-effort)
   await loadPlugins();
@@ -480,8 +525,8 @@ export async function POST(req) {
   const lastPitchAt = parsed.data.pitchState?.lastPitchAt;
   const seenPitches = Array.isArray(parsed.data.pitchState?.seenPitches) ? parsed.data.pitchState.seenPitches : [];
 
-  // Persist user message (best-effort) - NEVER persist admin mode messages into lead conversations.
-  if (!adminSession) {
+  // Persist user message (best-effort) - NEVER persist admin/family-admin messages into lead conversations.
+  if (!adminSession && userType !== "family_admin") {
     try {
       await saveMessage({ leadId, message, sender: "user" });
     } catch {
@@ -543,6 +588,7 @@ export async function POST(req) {
   try {
     let reply;
     let providerUsed = null;
+    let fallbackFrom = null;
     if (adminSession) {
       if (!isFeatureEnabled("CLAUDE_ADMIN")) {
         return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
@@ -551,7 +597,7 @@ export async function POST(req) {
       const system = buildAdminStrategicPrompt({ userName: "Akash" });
       const a = await getAIResponse({
         message,
-        isAdmin: true,
+        userType,
         system,
         context,
         conversationHistory: [],
@@ -565,16 +611,85 @@ export async function POST(req) {
       if (a.error) throw new Error(a.error);
       reply = a.reply;
       providerUsed = a.provider || "anthropic";
+      fallbackFrom = a.fallback_from || null;
 
       // Cost / usage tracking
       await logEventSafe({
         leadId,
         event_type: "chat_ai",
-        data: { provider: providerUsed, conversationId, mode: "admin", fallback_from: a.fallback_from || null },
+        data: { provider: providerUsed, conversationId, mode: "admin", user_type: userType, fallback_from: fallbackFrom },
+      });
+
+      await logAPIUsage({
+        provider: providerUsed,
+        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+        userType,
+        leadId: leadId || null,
+        conversationId,
+        mode: "admin",
       });
     } else {
+      // FAMILY ADMIN: stats-only mode
+      if (userType === "family_admin") {
+        reply = "Family Admin mode is stats-only. Please use the dashboard.";
+        providerUsed = "rule";
+
+        await logEventSafe({
+          leadId,
+          event_type: "chat_ai",
+          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+        });
+
+        await logAPIUsage({
+          provider: "rule",
+          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+          userType,
+          leadId: leadId || null,
+          conversationId,
+          mode: "user",
+        });
+
+        await runPluginHook("onChatReply", {
+          reply,
+          provider: "rule",
+          leadId: leadId || null,
+          mode: "user",
+          conversationId,
+        });
+
+        return NextResponse.json({ ok: true, reply, conversationId, pitch: null, pitch_type: null, affiliate_platforms: null });
+      }
+
       const userName = await getLeadNameSafe(leadId);
       const intent = detectInvestmentIntent(message);
+
+      // Smart cache (best-effort): only for short, mostly-context-free user questions.
+      const cacheEligible =
+        userType !== "super_admin" &&
+        String(message || "").trim().length <= 240 &&
+        (conversationHistory?.length || 0) <= 2;
+
+      let usedCache = false;
+      if (cacheEligible) {
+        const cached = await getSmartCachedReply({ scope: userType, mode: "user", message });
+        if (cached?.hit && cached.reply) {
+          reply = String(cached.reply);
+          providerUsed = "cache";
+          usedCache = true;
+
+          await recordSmartCacheHit({ scope: userType, questionHash: cached.questionHash });
+          await logEventSafe({
+            leadId,
+            event_type: "chat_cache_hit",
+            data: {
+              conversationId,
+              mode: "user",
+              user_type: userType,
+              provider: cached.provider || null,
+            },
+          });
+        }
+      }
 
       // Feature 11: intent detection for product pitching (SEBI-safe). This is separate from lead qualification intent.
       pitch_intent = detectIntent(message, conversationHistory);
@@ -621,7 +736,16 @@ export async function POST(req) {
         await logEventSafe({
           leadId,
           event_type: "chat_ai",
-          data: { provider: "rule", conversationId, mode: "user", fallback_from: null },
+          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
+        });
+
+        await logAPIUsage({
+          provider: "rule",
+          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+          userType,
+          leadId: leadId || null,
+          conversationId,
+          mode: "user",
         });
 
         await runPluginHook("onChatReply", {
@@ -663,32 +787,44 @@ export async function POST(req) {
         return NextResponse.json({ ok: true, reply, conversationId, cta, intent, pitch, pitch_type, affiliate_platforms });
       }
 
-      const memoryHistory = await buildConversationHistorySafe({
-        leadId,
-        fallbackHistory: conversationHistory,
-        limit: 12,
-      });
-      const system = buildSeBiSafeSystemPrompt({ userName });
-      const g = await getAIResponse({
-        message,
-        isAdmin: false,
-        system,
-        context: null,
-        conversationHistory: memoryHistory,
-        keys: {
-          ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
-          GEMINI_API_KEY: env?.GEMINI_API_KEY,
-          GROQ_API_KEY: env?.GROQ_API_KEY,
-        },
-      });
-      if (g.error) throw new Error(g.error);
-      // Extract affiliate button metadata before cleanup/truncation.
-      {
-        const extracted = extractAffiliatePlatformsTag(g.reply);
-        reply = extracted.cleaned;
-        affiliate_platforms = extracted.platforms;
+      if (!usedCache) {
+        const memoryHistory = await buildConversationHistorySafe({
+          leadId,
+          fallbackHistory: conversationHistory,
+          limit: 12,
+        });
+        const system = userType === "super_admin" ? buildSuperAdminSystemPrompt({ userName: "Akash" }) : buildSeBiSafeSystemPrompt({ userName });
+        const g = await getAIResponse({
+          message,
+          userType,
+          system,
+          context: null,
+          conversationHistory: memoryHistory,
+          keys: {
+            ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+            GEMINI_API_KEY: env?.GEMINI_API_KEY,
+            GROQ_API_KEY: env?.GROQ_API_KEY,
+          },
+        });
+        if (g.error) throw new Error(g.error);
+        // Extract affiliate button metadata before cleanup/truncation.
+        {
+          const extracted = extractAffiliatePlatformsTag(g.reply);
+          reply = extracted.cleaned;
+          affiliate_platforms = extracted.platforms;
+        }
+        providerUsed = g.provider || "unknown";
+        fallbackFrom = g.fallback_from || null;
+
+        // Store in smart cache (best-effort)
+        if (
+          userType !== "super_admin" &&
+          String(message || "").trim().length <= 240 &&
+          (conversationHistory?.length || 0) <= 2
+        ) {
+          await putSmartCache({ scope: userType, mode: "user", message, reply, provider: providerUsed });
+        }
       }
-      providerUsed = g.provider || "unknown";
 
       // Keep chat clean: do not repeat the compliance footer text in every reply.
       reply = stripComplianceFooter(reply);
@@ -740,13 +876,23 @@ export async function POST(req) {
           provider: providerUsed,
           conversationId,
           mode: "user",
-          fallback_from: g.fallback_from || null,
+          user_type: userType,
+          fallback_from: fallbackFrom,
         },
+      });
+
+      await logAPIUsage({
+        provider: providerUsed,
+        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
+        userType,
+        leadId: leadId || null,
+        conversationId,
+        mode: "user",
       });
     }
 
     try {
-      if (!adminSession) {
+      if (!adminSession && userType !== "family_admin") {
         await saveMessage({ leadId, message: reply, sender: "bot" });
       }
     } catch {
@@ -760,7 +906,16 @@ export async function POST(req) {
       mode: adminSession ? "admin" : "user",
       conversationId,
     });
-    return NextResponse.json({ ok: true, reply, conversationId, affiliate_platforms, pitch, pitch_type });
+    return NextResponse.json({
+      ok: true,
+      reply,
+      conversationId,
+      provider: providerUsed,
+      fallback_from: fallbackFrom,
+      affiliate_platforms,
+      pitch,
+      pitch_type,
+    });
   } catch (e) {
     const msg = e?.message || "chat_failed";
     const provider = adminSession ? "anthropic" : "ai";
@@ -786,7 +941,7 @@ export async function POST(req) {
     } catch {
       // ignore
     }
-    return NextResponse.json({ ok: true, reply: fallback, conversationId, warn: msg });
+    return NextResponse.json({ ok: true, reply: fallback, conversationId, warn: msg, provider, fallback_from: null });
   }
 }
 

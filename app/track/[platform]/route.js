@@ -6,6 +6,15 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
+function redirect307(request, location) {
+  const res = NextResponse.redirect(location, 307);
+  // Avoid caching redirects (affiliate URLs can change).
+  res.headers.set("Cache-Control", "no-store");
+  // Defensive: some clients look for Location header explicitly.
+  res.headers.set("Location", String(location));
+  return res;
+}
+
 function safeSlug(v) {
   return String(v || "")
     .trim()
@@ -20,7 +29,7 @@ export async function GET(request, { params }) {
   const leadId = request?.nextUrl?.searchParams?.get("lead") || null;
 
   if (!platformSlug) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return redirect307(request, new URL("/", request.url));
   }
 
   let sb;
@@ -28,7 +37,7 @@ export async function GET(request, { params }) {
     sb = supabaseAdmin();
   } catch {
     // If DB isn't configured, just go home.
-    return NextResponse.redirect(new URL("/", request.url));
+    return redirect307(request, new URL("/", request.url));
   }
 
   try {
@@ -41,7 +50,7 @@ export async function GET(request, { params }) {
       .maybeSingle();
 
     if (error || !affiliate?.affiliate_url) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return redirect307(request, new URL("/", request.url));
     }
 
     // Log the click (best-effort)
@@ -56,9 +65,9 @@ export async function GET(request, { params }) {
       // ignore logging failures
     }
 
-    return NextResponse.redirect(affiliate.affiliate_url);
+    return redirect307(request, affiliate.affiliate_url);
   } catch (e) {
     console.error("Affiliate tracking error:", e);
-    return NextResponse.redirect(new URL("/", request.url));
+    return redirect307(request, new URL("/", request.url));
   }
 }

@@ -45,6 +45,34 @@ async function deepCheckGemini(apiKey) {
   return true;
 }
 
+async function deepCheckGroq(apiKey) {
+  const url = "https://api.groq.com/openai/v1/chat/completions";
+  const body = {
+    model: "llama-3.1-8b-instant",
+    temperature: 0,
+    max_tokens: 1,
+    messages: [{ role: "user", content: "ping" }],
+  };
+
+  const r = await withTimeout(
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    }),
+    2500
+  );
+
+  if (!r.ok) {
+    const t = await r.text().catch(() => "");
+    throw new Error(`groq_http_${r.status}:${t.slice(0, 180)}`);
+  }
+  return true;
+}
+
 async function deepCheckAnthropic(apiKey) {
   const r = await withTimeout(
     fetch("https://api.anthropic.com/v1/messages", {
@@ -98,6 +126,7 @@ export async function GET(req) {
   const ai = {
     gemini: aiEnv?.GEMINI_API_KEY ? ok("gemini", { configured: true }) : bad("gemini", "missing_key", { configured: false }),
     anthropic: aiEnv?.ANTHROPIC_API_KEY ? ok("anthropic", { configured: true }) : bad("anthropic", "missing_key", { configured: false }),
+    groq: aiEnv?.GROQ_API_KEY ? ok("groq", { configured: true }) : bad("groq", "missing_key", { configured: false }),
   };
 
   if (deep && aiEnv?.GEMINI_API_KEY) {
@@ -118,7 +147,16 @@ export async function GET(req) {
     }
   }
 
-  const allOk = supabaseCheck.ok && ai.gemini.ok && ai.anthropic.ok;
+  if (deep && aiEnv?.GROQ_API_KEY) {
+    try {
+      await deepCheckGroq(aiEnv.GROQ_API_KEY);
+      ai.groq = ok("groq", { configured: true, deep: true });
+    } catch (e) {
+      ai.groq = bad("groq", e?.message || "deep_failed", { configured: true, deep: true });
+    }
+  }
+
+  const allOk = supabaseCheck.ok && ai.gemini.ok && ai.anthropic.ok && ai.groq.ok;
 
   return NextResponse.json({
     ok: allOk,

@@ -15,7 +15,19 @@ export async function POST(req) {
   }
 
   const cookie = issueFamilyCookie();
-  const res = NextResponse.json({ ok: true });
+  const isLocalOrDev = String(process.env.VERCEL || "") !== "1";
+  const res = NextResponse.json({
+    ok: true,
+    ...(isLocalOrDev
+      ? {
+          debug: {
+            nodeEnv: process.env.NODE_ENV || "",
+            vercel: process.env.VERCEL || "",
+            cookieSecure: Boolean(cookie?.options?.secure),
+          },
+        }
+      : null),
+  });
   res.cookies.set(cookie.name, cookie.value, cookie.options);
   return res;
 }

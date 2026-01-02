@@ -66,8 +66,17 @@ export async function GET(req) {
   const enableRevenue = isFeatureEnabled("REVENUE_TRACKING");
   const enableScoring = isFeatureEnabled("LEAD_SCORING");
 
-  const [leadsAllRes, leadsTodayRes, convTodayRes, errRes, revRes, scoreRes, aiRes, leadsCountRes] =
-    await Promise.all([
+  const [
+    leadsAllRes,
+    leadsTodayRes,
+    convTodayRes,
+    errRes,
+    revRes,
+    scoreRes,
+    aiRes,
+    cacheHitsRes,
+    leadsCountRes,
+  ] = await Promise.all([
     sb
       .from("leads")
       .select("id,name,email,phone,created_at")
@@ -124,9 +133,18 @@ export async function GET(req) {
       .order("created_at", { ascending: false })
       .limit(1000),
 
+    // Smart cache hits today (API calls saved)
+    sb
+      .from("events")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", start.toISOString())
+      .eq("event_type", "chat_cache_hit"),
+
     // Total leads (all-time)
     sb.from("leads").select("id", { count: "exact", head: true }),
   ]);
+
+  const cacheHitsToday = Number(cacheHitsRes?.count ?? 0);
 
   if (
     leadsAllRes.error ||
@@ -136,6 +154,7 @@ export async function GET(req) {
     revRes.error ||
     scoreRes.error ||
     aiRes.error ||
+    cacheHitsRes.error ||
     leadsCountRes.error
   ) {
     return NextResponse.json(
@@ -149,6 +168,7 @@ export async function GET(req) {
           revRes.error?.message ||
           scoreRes.error?.message ||
           aiRes.error?.message ||
+          cacheHitsRes.error?.message ||
           leadsCountRes.error?.message ||
           "Supabase error",
       },
@@ -194,12 +214,41 @@ export async function GET(req) {
   }
 
   const ai_provider_counts = { gemini: 0, groq: 0, rule: 0 };
+  let ai_calls_today = 0;
   for (const e of aiRes.data || []) {
     const p = String(e?.data?.provider || "").toLowerCase();
+    if (p === "cache") continue;
+    ai_calls_today += 1;
     if (p === "groq") ai_provider_counts.groq += 1;
     else if (p === "gemini") ai_provider_counts.gemini += 1;
     else if (p === "rule") ai_provider_counts.rule += 1;
   }
+
+  // Smart cache stats (best-effort; may be unavailable until schema is applied).
+  let questions_in_cache = 0;
+  let topQuestion = null;
+  let topQuestionHits = 0;
+  try {
+    const [cntRes, topRes] = await Promise.all([
+      sb.from("smart_cache").select("scope", { count: "exact", head: true }),
+      sb
+        .from("smart_cache")
+        .select("normalized_question,hits")
+        .eq("scope", "public")
+        .order("hits", { ascending: false })
+        .limit(1),
+    ]);
+    if (!cntRes.error) questions_in_cache = Number(cntRes.count ?? 0);
+    if (!topRes.error && topRes.data?.length) {
+      topQuestion = topRes.data[0]?.normalized_question || null;
+      topQuestionHits = Number(topRes.data[0]?.hits) || 0;
+    }
+  } catch {
+    // ignore
+  }
+
+  const totalRequestsToday = cacheHitsToday + ai_calls_today;
+  const cache_hit_rate = totalRequestsToday ? cacheHitsToday / totalRequestsToday : 0;
 
   // Sort all leads: HOT first (highest score), then WARM, then COLD; newest as tie-breaker.
   const allLeadsSorted = (leadsAllRes.data || []).slice().sort((a, b) => {
@@ -224,6 +273,12 @@ export async function GET(req) {
       lead_scores,
       lead_score_counts,
       ai_provider_counts,
+      smart_cache: {
+        cache_hit_rate,
+        api_calls_saved_today: cacheHitsToday,
+        questions_in_cache,
+        most_asked: topQuestion ? { question: topQuestion, count: topQuestionHits } : null,
+      },
     },
     all: {
       leads: allLeadsSorted,

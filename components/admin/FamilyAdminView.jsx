@@ -50,7 +50,7 @@ export function FamilyAdminView({ onExit }) {
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
         if (res.status === 401) {
-          setError("Session expired. Please enter family password again.");
+          setError("Session expired. Please re-enter the family PIN in chat to continue.");
         } else {
           setError(data?.error || "Failed to load stats");
         }

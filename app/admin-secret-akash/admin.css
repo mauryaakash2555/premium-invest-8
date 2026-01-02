@@ -364,6 +364,36 @@
   gap: 10px;
 }
 
+.sa-loginPassword {
+  position: relative;
+  display: grid;
+}
+
+.sa-loginPassword .sa-loginInput {
+  padding-right: 44px;
+}
+
+.sa-loginEyeBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.78);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.sa-loginEyeBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .sa-loginInput {
   padding: 12px 14px;
   border-radius: 12px;
@@ -397,4 +427,15 @@
   margin-top: 12px;
   color: var(--sa-muted);
   font-size: 12px;
+}
+
+.sa-block {
+  margin-top: 10px;
+}
+
+.sa-line {
+  margin-top: 6px;
+  margin-bottom: 0;
+  color: var(--sa-muted);
+  font-size: 13px;
 }
