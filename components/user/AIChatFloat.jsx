@@ -707,9 +707,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
         }
         if (res?.ok) {
           pushBotUser("Welcome. \u{1F39B}\u{FE0F} Redirecting to control panel...");
+          // Allow time for the cookie to be set by the login response
           setTimeout(() => {
             window.location.href = "/admin-secret-akash";
-          }, 250);
+          }, 1200);
           return;
         }
         pushBotUser("Super admin code not recognized.");
@@ -837,6 +838,11 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
       if (!admin && Array.isArray(suggestions) && suggestions.length) {
         extra.suggestions = suggestions;
+      }
+
+      // Auto-open calculator when CTA targets internal calculator route
+      if (!admin && cta && typeof cta.href === "string" && cta.href === "/sip-calculator") {
+        window.location.href = cta.href;
       }
 
       if (admin) pushBotAdmin(reply, Object.keys(extra).length ? extra : null);

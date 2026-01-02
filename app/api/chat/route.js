@@ -261,7 +261,7 @@ function shouldIncludeAffiliateContext(message) {
 
 function isCalculatorRequest(message) {
   const t = String(message || "").toLowerCase();
-  return /\b(calculator|calc|sip\s*calculator|sip\s*calc)\b/.test(t);
+  return /\b(calculator|calc|calculate|calculation|sip\s*calculator|sip\s*calc)\b/.test(t);
 }
 
 function isShowMeFollowup(message) {

@@ -34,8 +34,17 @@ export default function SuperAdminPage() {
         if (mounted) setLoading(false);
       }
     })();
+    // Single retry shortly after mount to catch cookie propagation from chat-login
+    const t = setTimeout(async () => {
+      try {
+        const { r, j } = await fetchJSON('/api/admin/verify');
+        if (!mounted) return;
+        if (r.ok && j?.authenticated) setAuthed(true);
+      } catch {}
+    }, 1000);
     return () => {
       mounted = false;
+      clearTimeout(t);
     };
   }, []);
 
