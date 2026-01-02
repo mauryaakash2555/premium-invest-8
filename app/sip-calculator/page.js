@@ -21,6 +21,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import sipPlans from "@/data/sipPlans.json";
 
 const formatCurrency = (value) =>
@@ -38,6 +39,7 @@ function calculateSipValue(monthly, rate, years) {
 }
 
 export default function SipCalculatorPage() {
+  const router = useRouter();
   const [monthly, setMonthly] = useState(5000);
   const [rate, setRate] = useState(12);
   const [years, setYears] = useState(10);
@@ -48,6 +50,24 @@ export default function SipCalculatorPage() {
 
   return (
     <div className="space-y-6">
+      {/* Minimal header: back/close controls; brand hidden via Navigation.jsx */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs tracking-wider hover:bg-white/10"
+          aria-label="Go back"
+        >
+          ← Back
+        </button>
+        <a
+          href="/"
+          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs tracking-wider hover:bg-white/10"
+          aria-label="Close calculator"
+        >
+          Close
+        </a>
+      </div>
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Planner</p>
         <h1 className="text-3xl font-semibold text-white">SIP Calculator</h1>

@@ -253,6 +253,33 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
   const activeMessages = admin ? adminMessages : messages;
 
+  // Persist chat state locally to avoid restart on reopen/navigation
+  useEffect(() => {
+    try {
+      const key = "bmw_chat_state_v1";
+      const raw = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (Array.isArray(s?.messages) && s.messages.length) setMessages(s.messages);
+        if (s?.leadId) setLeadId(s.leadId);
+        if (typeof s?.captureStep === "string") setCaptureStep(s.captureStep);
+      }
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      const key = "bmw_chat_state_v1";
+      const payload = JSON.stringify({ messages, leadId, captureStep });
+      if (typeof window !== "undefined") window.localStorage.setItem(key, payload);
+    } catch {
+      // ignore
+    }
+  }, [messages, leadId, captureStep]);
+
   useEffect(() => {
     if (!enabled || !open) return;
     const el = listRef.current;

@@ -43,8 +43,8 @@ const WhatsAppFloat = () => {
         <div
           style={{
             position: 'fixed',
-            // Keep tooltip above the floating button and above the mobile dock.
-            bottom: 'calc(240px + env(safe-area-inset-bottom))',
+            // Position nearer to the button, still above safe area.
+            bottom: 'calc(170px + env(safe-area-inset-bottom))',
             right: '20px',
             background: '#25D366',
             color: '#FFFFFF',

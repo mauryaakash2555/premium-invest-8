@@ -99,6 +99,14 @@ const Navigation = () => {
     </Link>
   );
 
+  // Hide brand/navigation on SIP Calculator page to avoid visual clash
+  const hideNav = pathname === '/sip-calculator';
+
+  if (hideNav) {
+    // Render nothing on this route; page provides its own minimal header.
+    return null;
+  }
+
   // Prevent hydration mismatch: render desktop version on server, then switch after mount
   if (mounted && isMobile) {
     return (
