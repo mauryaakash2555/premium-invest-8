@@ -22,7 +22,7 @@
 
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Briefcase, Users, Menu, X, Info, Layers, BookOpen, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,10 @@ export function LuxuryMobileDock() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [idleIndex, setIdleIndex] = useState(null);
+  const lastScrollYRef = useRef(0);
+  const scrollRafRef = useRef(0);
+  const scrollTimeoutRef = useRef(0);
+  const highlightTimeoutRef = useRef(0);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -63,34 +67,56 @@ export function LuxuryMobileDock() {
   }, [isMenuOpen]);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let scrollTimeout = null;
+    lastScrollYRef.current = typeof window !== "undefined" ? window.scrollY : 0;
+
     const handleScroll = () => {
       // When the overlay menu is open, don't let scroll-driven UI states fight the animation
       if (isMenuOpen) return;
+      if (scrollRafRef.current) return;
+      scrollRafRef.current = window.requestAnimationFrame(() => {
+        scrollRafRef.current = 0;
 
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 50);
+        const currentScrollY = window.scrollY;
+        const nextScrolled = currentScrollY > 50;
+        setScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
 
-      // "Animate while scrolling" (brief shimmer burst)
-      setIsScrolling(true);
-      if (scrollTimeout) window.clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(() => setIsScrolling(false), 180);
-      
-      // Super smooth reading mode detection
-      if (currentScrollY > lastScrollY + 15 && currentScrollY > 250) {
-        setIsReading(true);
-      } else if (currentScrollY < lastScrollY - 15 || currentScrollY < 50) {
-        setIsReading(false);
-      }
-      lastScrollY = currentScrollY;
+        // "Animate while scrolling" (brief shimmer burst)
+        setIsScrolling((prev) => (prev ? prev : true));
+        if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = window.setTimeout(() => setIsScrolling(false), 180);
+
+        // Super smooth reading mode detection
+        const last = lastScrollYRef.current;
+        const nextReading =
+          (currentScrollY > last + 15 && currentScrollY > 250) ? true :
+          (currentScrollY < last - 15 || currentScrollY < 50) ? false :
+          null;
+        if (nextReading !== null) {
+          setIsReading((prev) => (prev === nextReading ? prev : nextReading));
+        }
+        lastScrollYRef.current = currentScrollY;
+      });
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      if (scrollRafRef.current) window.cancelAnimationFrame(scrollRafRef.current);
+      scrollRafRef.current = 0;
+      if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = 0;
     };
   }, [isMenuOpen]);
+
+  const pulseHighlight = (index) => {
+    if (typeof window === "undefined") return;
+    if (highlightTimeoutRef.current) window.clearTimeout(highlightTimeoutRef.current);
+    setHoveredIndex(index);
+    highlightTimeoutRef.current = window.setTimeout(() => {
+      setHoveredIndex(null);
+    }, 520);
+  };
 
   // Idle "alive" animation: gently cycles a highlight across buttons when user isn't interacting.
   useEffect(() => {
@@ -192,6 +218,8 @@ export function LuxuryMobileDock() {
                 onClick={() => handleNavClick(item.href)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onTouchStart={() => pulseHighlight(index)}
+                onPointerDown={() => pulseHighlight(index)}
                 className={cn(
                   "relative flex flex-col items-center justify-center px-4 py-1.5",
                   "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -228,8 +256,10 @@ export function LuxuryMobileDock() {
 
           <button
             onClick={() => setIsMenuOpen(true)}
-            onMouseEnter={() => setHoveredIndex(999)}
+            onMouseEnter={() => setHoveredIndex(mainNavItems.length)}
             onMouseLeave={() => setHoveredIndex(null)}
+            onTouchStart={() => pulseHighlight(mainNavItems.length)}
+            onPointerDown={() => pulseHighlight(mainNavItems.length)}
             className={cn(
               "relative flex flex-col items-center justify-center px-4 py-1.5",
               "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -237,7 +267,7 @@ export function LuxuryMobileDock() {
             )}
             aria-label="More menu"
           >
-            {(hoveredIndex === 999 || highlightIndex === mainNavItems.length) && (
+            {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
             )}
 
@@ -267,15 +297,20 @@ export function LuxuryMobileDock() {
 
       {/* Full-Screen Overlay Menu - FIXED ALIGNMENT & FOLLOW-THE-MOUSE LOGIC */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[10000] animate-in fade-in duration-500">
-          <div className="absolute inset-0 bg-black/98 backdrop-blur-xl" onClick={() => setIsMenuOpen(false)} />
+        <div className="fixed inset-0 z-[10000] animate-in fade-in duration-500 transform-gpu" style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}>
+          <div
+            className="absolute inset-0 backdrop-blur-xl transform-gpu"
+            style={{ backgroundColor: "rgba(0,0,0,0.995)", WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
+            onClick={() => setIsMenuOpen(false)}
+          />
 
           <div
             className={cn(
               "gold-grain-texture luxury-particles scrollbar-hide", 
-              "relative h-full flex flex-col items-center p-8 overflow-y-auto", 
+              "relative h-full flex flex-col items-center p-8 overflow-y-auto overscroll-contain transform-gpu", 
               "bg-gradient-to-b from-[#000000] via-[#0a0a0a] to-[#000000]"
             )}
+            style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
           >
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -306,6 +341,8 @@ export function LuxuryMobileDock() {
                     onClick={() => handleNavClick(item.href)}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
+                    onTouchStart={() => pulseHighlight(index)}
+                    onPointerDown={() => pulseHighlight(index)}
                     className={cn(
                       "group w-full relative",
                       "flex items-center gap-6 px-8 py-5 rounded-2xl",
