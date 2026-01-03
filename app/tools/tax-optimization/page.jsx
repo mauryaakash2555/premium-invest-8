@@ -47,7 +47,7 @@ export default function TaxOptimizationToolPage() {
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This is educational, general information. It is not SEBI registered investment advice. Consult a qualified professional for personalized guidance.",
+            "No. This tool provides educational, general information based on your inputs and published rules. It does not constitute personalised investment advice. Consult a qualified professional for personalised guidance.",
         },
       },
       {
@@ -161,7 +161,7 @@ export default function TaxOptimizationToolPage() {
         />
         <div className="relative px-6 lg:px-10 py-16 lg:py-24 max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-[color:var(--color-matte-gold)]">
-            Tax Optimization Intelligence — FY 2025–26
+            Tax Optimization Intelligence — <span className="whitespace-nowrap">FY 2025–26</span>
           </h1>
           <p className="mt-4 max-w-2xl text-sm sm:text-base text-white/80">
             Compare Old vs New regime, then unlock a simple execution blueprint.
@@ -204,7 +204,7 @@ export default function TaxOptimizationToolPage() {
         <summary className="list-none cursor-pointer select-none learn-more-summary">
           <div className="flex items-center gap-3 text-[11px] text-slate-300/70">
             <div className="h-px w-full bg-white/10" />
-            <span className="tracking-[0.18em] uppercase">Learn more (optional)</span>
+            <span className="tracking-[0.18em] uppercase">Learn more</span>
             <div className="h-px w-full bg-white/10" />
           </div>
         </summary>
@@ -312,16 +312,6 @@ export default function TaxOptimizationToolPage() {
           </div>
         </section>
       </details>
-
-      {/* AdSense / Sponsored slot (content-only, below the tool) */}
-      <section className="px-6 lg:px-10 py-10 lg:py-14">
-        <div className="max-w-5xl mx-auto">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-center">
-            <div className="text-[11px] tracking-[0.18em] uppercase text-white/50">Sponsored</div>
-            <div id="adsense-tax-optimization" className="mt-3 min-h-[120px]" />
-          </div>
-        </div>
-      </section>
     </>
   );
 }

@@ -341,41 +341,56 @@ export function TaxCalculator() {
 
   function Breakdown({ label, data }) {
     const rows = data?.slabBreakdown || [];
+    const isOld = data?.regime === "old";
+
+    const dStandard = Number(data?.standardDeduction || 0);
+    const d80c = Number(data?.deductions?.section80C || 0);
+    const d80d = Number(data?.deductions?.section80D || 0);
+    const dHra = Number(data?.deductions?.hraExempt || 0);
+    const dHome = Number(data?.deductions?.homeLoanInterest || 0);
+    const dNps = Number(data?.deductions?.nps80ccd1b || 0);
+
+    const deductionItems = isOld
+      ? [
+          { k: "Standard deduction", v: dStandard },
+          { k: "Section 80C (cap)", v: d80c },
+          { k: "Section 80D (cap)", v: d80d },
+          { k: "HRA exemption (Mumbai; requires HRA + rent)", v: dHra },
+          { k: "Home loan interest (Section 24; cap)", v: dHome },
+          { k: "NPS 80CCD(1B) (cap)", v: dNps },
+        ]
+      : [{ k: "Standard deduction", v: dStandard }];
+
+    const visibleDeductionsTotal = deductionItems.reduce((acc, it) => acc + (Number(it.v) || 0), 0);
+
     return (
       <div className="rounded-xl border border-white/10 bg-white/5 p-4">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold text-white">{label} breakdown</div>
+          <div className="text-sm font-semibold text-white">Calculation Breakdown (Audit View)</div>
           <div className="text-xs text-slate-200/60">FY 2025–26</div>
         </div>
+        <div className="mt-1 text-[11px] text-slate-200/60">{label}</div>
+
         <div className="mt-3 grid gap-2 text-xs text-slate-100">
           <div className="flex justify-between text-slate-200/70">
             <span>Taxable income</span>
             <span className="text-[color:var(--color-matte-gold)]">{formatINR(data?.taxableIncome || 0)}</span>
           </div>
-          <div className="flex justify-between text-slate-200/70">
-            <span>Total deductions</span>
-            <span>{formatINR(data?.totalDeductions || 0)}</span>
+
+          <div className="mt-1 border-t border-white/10 pt-2 space-y-1">
+            <div className="text-[11px] uppercase tracking-[0.18em] text-slate-200/60">Deductions</div>
+            {deductionItems.map((it) => (
+              <div key={it.k} className="flex justify-between text-slate-200/70">
+                <span>{it.k}</span>
+                <span>{formatINR(it.v || 0)}</span>
+              </div>
+            ))}
+            <div className="mt-1 flex justify-between font-semibold">
+              <span>Total deductions (sum above)</span>
+              <span className="text-[color:var(--color-matte-gold)]">{formatINR(visibleDeductionsTotal)}</span>
+            </div>
           </div>
-          <div className="flex justify-between text-slate-200/70">
-            <span>Standard deduction</span>
-            <span>{formatINR(data?.standardDeduction || 0)}</span>
-          </div>
-          {data?.regime === "old" ? (
-            <>
-              <div className="flex justify-between text-slate-200/70">
-                <span>HRA exempt</span>
-                <span>{formatINR(data?.deductions?.hraExempt || 0)}</span>
-              </div>
-              <div className="flex justify-between text-slate-200/70">
-                <span>Home loan interest (cap)</span>
-                <span>{formatINR(data?.deductions?.homeLoanInterest || 0)}</span>
-              </div>
-              <div className="flex justify-between text-slate-200/70">
-                <span>NPS 80CCD(1B) (cap)</span>
-                <span>{formatINR(data?.deductions?.nps80ccd1b || 0)}</span>
-              </div>
-            </>
-          ) : null}
+
           <div className="mt-2 border-t border-white/10 pt-2">
             <div className="text-[11px] uppercase tracking-[0.18em] text-slate-200/60">Slabs</div>
             <div className="mt-2 space-y-1">
@@ -391,6 +406,7 @@ export function TaxCalculator() {
               ))}
             </div>
           </div>
+
           <div className="mt-2 border-t border-white/10 pt-2 space-y-1">
             <div className="flex justify-between text-slate-200/70">
               <span>Tax (before rebate)</span>
@@ -400,6 +416,11 @@ export function TaxCalculator() {
               <span>Tax (after rebate)</span>
               <span>{formatINR(data?.taxAfterRebate || 0)}</span>
             </div>
+            {(data?.taxAmount || 0) === 0 ? (
+              <div className="text-[11px] text-slate-200/60">
+                ₹0 is typically due to Section 87A rebate (subject to taxable income threshold).
+              </div>
+            ) : null}
             {data?.regime === "new" && (data?.marginalRelief || 0) > 0 ? (
               <div className="flex justify-between text-slate-200/70">
                 <span>Marginal relief</span>
@@ -452,24 +473,30 @@ export function TaxCalculator() {
 
       <div className="w-full flex justify-center">
         <div className="calculator-container w-full max-w-md lg:max-w-6xl">
-          <div className="calculator-inner">
+          <div className="calculator-inner tabular-nums">
             {/* Header */}
-            <div className="text-center px-6 pt-8 pb-6 lg:px-10 lg:pt-10 lg:pb-8">
-              <div className="flex items-center justify-center gap-2 text-xs tracking-[0.18em] uppercase text-white/60">
+            <div className="text-center px-6 pt-6 pb-5 lg:px-10 lg:pt-8 lg:pb-6">
+              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] tracking-[0.16em] uppercase text-white/55">
                 <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                <span>BM Wealth</span>
+                <span className="text-white/25">•</span>
                 <span>BM Wealth Calculator</span>
+                <span className="text-white/25">•</span>
+                <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
               </div>
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-white/75">
+
+              <h1 className="mt-4 text-2xl lg:text-3xl font-semibold tracking-wide leading-tight text-[color:var(--color-matte-gold)]">
+                Tax Optimization Intelligence — <span className="whitespace-nowrap">FY 2025–26</span>
+              </h1>
+
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white/75">
                 <span className="text-[color:var(--color-matte-gold)] font-semibold">Stop the invisible leak.</span>
                 <span>See if the 2026 “Zero Tax” rule applies to you.</span>
               </div>
-              <h1 className="mt-3 text-2xl lg:text-3xl font-semibold tracking-wide text-[color:var(--color-matte-gold)]">
-                Tax Optimization Intelligence — FY 2025–26
-              </h1>
-              <p className="mt-2 text-sm text-white/70">
+
+              <p className="mt-3 text-sm text-white/70">
                 Compare Old vs New regime, then unlock a 10-point optimization blueprint.
               </p>
-              <p className="mt-2 text-xs text-white/55">ARN 90008 | IRDAI 277925</p>
             </div>
 
             <div className="px-6 pb-6 lg:px-10 lg:pb-10">
@@ -584,7 +611,7 @@ export function TaxCalculator() {
                     className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                   />
                   <p className="text-[11px] text-slate-200/55">
-                    HRA exemption uses min(actual HRA, rent − 10% of basic, 40% of basic). If basic is blank, the engine assumes 50% of salary.
+                    HRA exemption is ₹0 unless you enter both "HRA received" and "Rent paid". For Mumbai (metro), exemption uses min(actual HRA, rent − 10% of basic, 50% of basic). If basic is blank, the engine assumes 50% of salary.
                   </p>
                 </div>
 
@@ -647,6 +674,9 @@ export function TaxCalculator() {
                     <CardContent className="p-4 space-y-2">
                       <h3 className="text-sm text-slate-200/70">Old Regime</h3>
                       <p className="text-xl font-semibold text-[color:var(--color-matte-gold)]">{formatINR(oldTaxDisplay)}</p>
+                      {oldTax === 0 ? (
+                        <p className="text-[11px] text-slate-200/60">₹0 due to Section 87A rebate (threshold-based).</p>
+                      ) : null}
                       <p
                         className={
                           "text-[11px] leading-snug " +
@@ -684,6 +714,9 @@ export function TaxCalculator() {
                     <CardContent className="p-4 space-y-2">
                       <h3 className="text-sm text-[color:var(--color-matte-gold)]">New Regime</h3>
                       <p className="text-xl font-semibold text-[color:var(--color-matte-gold)]">{formatINR(newTaxDisplay)}</p>
+                      {newTax === 0 ? (
+                        <p className="text-[11px] text-slate-200/60">₹0 due to Section 87A rebate (threshold-based).</p>
+                      ) : null}
                       <p
                         className={
                           "text-[11px] leading-snug " +
@@ -724,6 +757,7 @@ export function TaxCalculator() {
                     <div className="space-y-2">
                       <h3 className="text-base font-semibold text-white">High-income mistakes don’t happen in calculation. They happen in execution.</h3>
                       <p className="text-[11px] text-slate-200/65">Designed to be acted on before key FY deadlines — not read later.</p>
+                      <p className="text-[11px] text-slate-200/65">Generated using your inputs. Not a generic template.</p>
                       <p className="text-xs text-slate-200/70">You already know the numbers. This plan shows what to do, when to do it, and what most people miss.</p>
                     </div>
                     <div className="mt-3 grid gap-2">
@@ -792,7 +826,7 @@ export function TaxCalculator() {
                 {showResults && comparison ? (
                   <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
                     <div>
-                      <div className="text-sm text-white">Show calculation breakdown</div>
+                      <div className="text-sm text-white">Calculation Breakdown (Audit View)</div>
                       <div className="text-xs text-slate-200/60">Slabs, deductions, cess & marginal relief</div>
                     </div>
                     <Switch
@@ -824,7 +858,7 @@ export function TaxCalculator() {
 
           {/* Disclaimer */}
           <p className="px-6 py-6 lg:px-10 text-[10px] text-center text-slate-200/50">
-            ARN 90008 | IRDAI 277925. Educational tool only. Not SEBI registered investment advice.
+            ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing tax rules. For personalised investment advice, consult a SEBI-registered investment adviser.
           </p>
         </div>
       </div>

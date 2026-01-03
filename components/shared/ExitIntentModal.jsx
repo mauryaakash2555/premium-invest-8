@@ -8,16 +8,15 @@ export function ExitIntentModal({ open, onOpenChange, onPrimary, onSecondary }) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border border-white/10 bg-black/90 text-white">
         <DialogHeader>
-          <DialogTitle className="text-white">Before you close this…</DialogTitle>
+          <DialogTitle className="text-white">Quick note</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           <p className="text-sm text-slate-200/80">
-            You already ran the calculation.<br/>
-            Most people stop here — and still overpay.
+            You’ve already run the calculation.
           </p>
           <p className="text-xs text-slate-200/70">
-            The execution plan shows what actually changes your tax outcome.
+            If you’d like, we can email your result now, or you can unlock the execution plan for a step-by-step checklist.
           </p>
 
           <div className="grid gap-2 sm:grid-cols-2">
@@ -26,7 +25,7 @@ export function ExitIntentModal({ open, onOpenChange, onPrimary, onSecondary }) 
               className="bg-[color:var(--color-matte-gold)] text-black hover:bg-[color:var(--color-matte-gold)]/90"
               onClick={onPrimary}
             >
-              Get my execution plan (₹299)
+              Unlock execution plan (₹299)
             </Button>
             <Button
               type="button"
@@ -44,9 +43,9 @@ export function ExitIntentModal({ open, onOpenChange, onPrimary, onSecondary }) 
               type="button"
               variant="ghost"
               className="text-slate-300/80 hover:text-white"
-              onClick={() => { try { window.history.back(); } catch (_) {} onOpenChange(false); }}
+              onClick={() => onOpenChange(false)}
             >
-              Go back
+              Close
             </Button>
           </div>
 

@@ -228,7 +228,7 @@ export default function HomePage() {
               marginBottom: '60px',
             }}
           >
-            <Link href="/blueprint" className="btn-primary">
+            <Link href="/tools" className="btn-primary">
               Access Your Complimentary Wealth Blueprint
             </Link>
             <Link href="/services" className="btn-secondary">

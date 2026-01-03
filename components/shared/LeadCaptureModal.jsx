@@ -146,7 +146,7 @@ export function LeadCaptureModal({ open, onOpenChange, onFree, onPay }) {
           </div>
 
           <p className="text-xs text-slate-300/70">
-            ARN 90008 | IRDAI 277925. Educational tool only. Not SEBI registered investment advice.
+            ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing tax rules. For personalised investment advice, consult a SEBI-registered investment adviser.
           </p>
         </div>
       </DialogContent>
