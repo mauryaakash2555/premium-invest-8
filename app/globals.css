@@ -164,47 +164,7 @@
 
 /* Gold grain texture for luxury feel */
 @layer utilities {
-  /* Emergent-style animated metallic frame for the calculator container */
-  .calculator-shell {
-    position: relative;
-    z-index: 0;
-    isolation: isolate;
-  }
-
-  .calculator-shell::before {
-    content: "";
-    position: absolute;
-    inset: -1.5px;
-    border-radius: inherit;
-    background: linear-gradient(
-      120deg,
-      rgba(0, 0, 0, 0.85),
-      var(--color-matte-gold),
-      var(--color-gold-glow),
-      var(--color-matte-gold),
-      rgba(0, 0, 0, 0.85)
-    );
-    background-size: 400% 400%;
-    animation: bm-metal-flow 7s linear infinite;
-    z-index: -1;
-    opacity: 0.85;
-    pointer-events: none;
-  }
-
-  @keyframes bm-metal-flow {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 400% 50%;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .calculator-shell::before {
-      animation: none;
-    }
-  }
+  /* Removed metallic frame and pseudo-elements per rollback request */
 
   .gold-grain-texture {
     background-image: repeating-linear-gradient(
