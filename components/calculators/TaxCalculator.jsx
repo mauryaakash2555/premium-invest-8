@@ -441,7 +441,7 @@ export function TaxCalculator() {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
       <div className="min-h-screen bg-black flex justify-center items-center px-4 py-6 lg:px-8 lg:py-8">
-        <div className="calculator-container w-full max-w-md lg:max-w-6xl rounded-3xl border border-white/10 bg-black/70 backdrop-blur-xl shadow-[0_0_0_1px_rgba(192,160,98,0.25),0_0_60px_rgba(192,160,98,0.12),0_0_80px_rgba(0,0,0,0.35)] gold-grain-texture glass-effect animate-in fade-in zoom-in-95 duration-700">
+        <div className="calculator-container calculator-shell w-full max-w-md lg:max-w-6xl rounded-3xl border border-white/10 bg-black/70 backdrop-blur-xl shadow-[0_0_0_1px_rgba(192,160,98,0.25),0_0_60px_rgba(192,160,98,0.12),0_0_80px_rgba(0,0,0,0.35)] gold-grain-texture glass-effect animate-in fade-in zoom-in-95 duration-700">
           {/* Header */}
           <div className="text-center px-6 pt-8 pb-6 lg:px-10 lg:pt-10 lg:pb-8">
             <h1 className="text-2xl lg:text-3xl font-semibold gold-gradient-text tracking-wide">
