@@ -346,6 +346,10 @@ export function TaxCalculator() {
             <span>Total deductions</span>
             <span>{formatINR(data?.totalDeductions || 0)}</span>
           </div>
+          <div className="flex justify-between text-slate-200/70">
+            <span>Standard deduction</span>
+            <span>{formatINR(data?.standardDeduction || 0)}</span>
+          </div>
           {data?.regime === "old" ? (
             <>
               <div className="flex justify-between text-slate-200/70">
@@ -561,7 +565,7 @@ export function TaxCalculator() {
                     className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                   />
                   <p className="text-[11px] text-slate-200/55">
-                    Metro assumption: Mumbai (50% of basic). If basic is blank, the engine assumes 50% of salary.
+                    HRA exemption uses min(actual HRA, rent − 10% of basic, 40% of basic). If basic is blank, the engine assumes 50% of salary.
                   </p>
                 </div>
 
@@ -660,6 +664,12 @@ export function TaxCalculator() {
                 {showResults && comparison ? (
                   <div className="text-center text-sm text-white/90">
                     Winner: <span className="text-[color:var(--color-matte-gold)] font-semibold">{winner === "tie" ? "Tie" : winner === "old" ? "Old Regime" : "New Regime"}</span>
+                  </div>
+                ) : null}
+
+                {showResults && comparison ? (
+                  <div className="text-center text-[11px] text-slate-200/60">
+                    87A rebate applies only up to taxable income thresholds (Old: ₹5,00,000; New: ₹12,00,000). For New regime incomes just above ₹12L, marginal relief limits the tax jump.
                   </div>
                 ) : null}
 
