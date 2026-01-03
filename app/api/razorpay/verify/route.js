@@ -80,7 +80,7 @@ export async function POST(req) {
       html,
       attachments: [
         {
-          filename: "BM-Wealth-Tax-Blueprint-FY2025-26.pdf",
+          filename: "BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf",
           content: pdfBytes,
           contentType: "application/pdf",
         },

@@ -224,7 +224,7 @@ export function TaxCalculator() {
       amount: orderJson.amount,
       currency: orderJson.currency || "INR",
       name: "BM Wealth",
-      description: "Tax Optimization Blueprint (FY 2025–26)",
+      description: "Personalized Tax Optimization Roadmap (FY 2025–26)",
       order_id: orderJson.orderId,
       prefill: {
         name: payload?.name || "",
@@ -270,7 +270,7 @@ export function TaxCalculator() {
             return;
           }
           const blob = await pdfRes.blob();
-          downloadBlob("BM-Wealth-Tax-Blueprint-FY2025-26.pdf", blob);
+          downloadBlob("BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf", blob);
           track("pdf_downloaded");
           setStatusNote("Downloaded. Please also check your email.");
         } catch {
@@ -824,6 +824,54 @@ export function TaxCalculator() {
                     }}
                   />
                 ) : null}
+
+                {/* SEO Content Block (Visible, no accordions/tabs) */}
+                <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <h2 className="text-base font-semibold text-white">Tax Planning for the Sophisticated Mumbai Investor</h2>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Introduction: The New Era of Mumbai Wealth</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    For the high-earning professional in Mumbai—from the CXOs in BKC to the tech leaders in Powai—tax planning for FY 2025-26 has fundamentally shifted.
+                    With the new tax regime now serving as the default, the "leakage" of wealth into inefficient tax brackets has become a silent profit killer for HNIs.
+                    A salary of ₹50 Lakhs in Mumbai is no longer just about gross earnings; it’s about the "Net Spendable Surplus" after accounting for the city's high cost of living and the 30% tax ceiling.
+                  </p>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">The ₹12 Lakh "Zero Tax" Phenomenon</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    The latest budget has introduced a critical psychological and financial milestone: the ₹12,00,000 Zero-Tax threshold.
+                    For professionals climbing the corporate ladder, staying within this limit (after the ₹75,000 standard deduction and rebates) can result in a total tax liability of zero.
+                    However, once you cross this threshold even by a small margin, "Marginal Relief" logic becomes your most important financial shield.
+                    Our detector identifies exactly where this cliff exists, ensuring you don’t pay ₹50,000 in tax just because you earned ₹10,000 extra.
+                  </p>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Mumbai-Specific Optimization: HRA &amp; The Metro Rule</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    While the New Regime is aggressive, many Mumbai residents still find the Old Regime superior due to House Rent Allowance (HRA).
+                    Since Mumbai is classified as a 'Metro' city, you are eligible for an HRA deduction of up to 50% of your Basic salary.
+                    In a city where luxury rentals in Worli or Bandra can exceed ₹1.5 Lakhs per month, failing to optimize this specific deduction can lead to a "tax leak" of over ₹3 Lakhs annually.
+                    BM Wealth’s optimization logic compares your actual rent against the 50% metro rule to see if the Old Regime’s deductions still outweigh the New Regime’s lower slabs.
+                  </p>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Beyond the Basics: Surcharge &amp; Cess Management</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    For the "Elite" bracket—those earning above ₹50 Lakhs—the surcharge adds a heavy layer of complexity.
+                    With surcharges ranging from 10% to 25% for high-income earners, the "effective" tax rate can climb significantly.
+                    Sophisticated tax planning involves more than just Section 80C; it requires strategic income distribution and understanding how 4% Health and Education Cess compounds on top of your surcharge.
+                  </p>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Investment Harvesting in FY 2026</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    Tax planning is no longer a March-only activity. With the new 12.5% Long-Term Capital Gains (LTCG) tax on equity, Mumbai investors must practice "Tax Harvesting."
+                    By realizing gains up to the ₹1.25 Lakh tax-free limit each financial year, you can reset your cost basis and save thousands in future liabilities.
+                    This "Roadmap" approach—moving from compliance to strategy—is what separates a standard taxpayer from a BM Wealth client.
+                  </p>
+
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Conclusion: Reclaim Your Liquidity</h3>
+                  <p className="mt-2 text-sm text-slate-200/75">
+                    Tax is your largest recurring expense. By using the BM Wealth Tax Leak Detector, you aren't just calculating numbers; you are performing an audit of your financial efficiency.
+                    Whether it is leveraging Section 24(b) for your Mumbai home loan or optimizing your family's 80D health coverage, every rupee saved is a rupee invested back into your legacy.
+                  </p>
+                </section>
 
                 {showResults && comparison ? (
                   <div className="h-28 rounded-xl bg-white/5 border border-white/10 flex items-end justify-around p-4">
