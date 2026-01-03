@@ -492,6 +492,7 @@ export async function POST(req) {
   let pitch_type = null;
   let suggestions = null;
   const env = getAIEnvSafe();
+  const headerStore = req?.headers;
   const cookieStore = await cookies();
   const isSuperAdmin = isAdminFromCookies(cookieStore);
   const isFamilyAdmin = isFamilyFromRequest(cookieStore, headerStore);

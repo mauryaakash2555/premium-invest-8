@@ -240,6 +240,46 @@ export default function HomePage() {
               Explore Services <ArrowRight size={20} style={{ marginLeft: '8px', display: 'inline' }} />
             </Link>
           </div>
+
+          {/* Tax Optimization Micro-trigger */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 2 }}
+            style={{
+              maxWidth: 720,
+              margin: '0 auto',
+              padding: '14px 16px',
+              borderRadius: 16,
+              border: '1px solid rgba(255,255,255,0.10)',
+              background: 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(10px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}
+          >
+            <div style={{ textAlign: 'left' }}>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.82)', letterSpacing: '0.3px' }}>
+                Check if you’re overpaying tax for FY 2025–26.
+              </div>
+              <div style={{ fontSize: 12, color: 'rgba(192,160,98,0.85)' }}>
+                Instant Old vs New comparison + premium blueprint.
+              </div>
+            </div>
+            <Link
+              href="/tools/tax-optimization"
+              className="btn-primary"
+              style={{
+                whiteSpace: 'nowrap',
+                padding: '10px 14px',
+                fontSize: 13,
+              }}
+            >
+              Run Tax Optimization Check
+            </Link>
+          </motion.div>
         </div>
 
         {/* LIVE MOOD (restored) - sits just above ticker */}

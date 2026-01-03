@@ -1,0 +1,272 @@
+import Script from "next/script";
+import Link from "next/link";
+import BackRow from "@/components/shared/BackRow";
+
+import { TaxCalculator } from "@/components/calculators/TaxCalculator";
+
+export const metadata = {
+  title: "Tax Optimization Intelligence 2026 | Old vs New Regime Calculator Mumbai | BM Wealth",
+  description:
+    "Accurate FY 2025-26 tax calculator for Mumbai professionals. Compare old vs new regime, find savings, and unlock your personal execution blueprint. AMFI ARN-90008.",
+  keywords:
+    "tax optimization intelligence, tax calculator 2026, old vs new tax regime, FY 2025-26 tax, Mumbai tax calculator, income tax calculator India, tax planning",
+};
+
+export default function TaxOptimizationToolPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    name: "Tax Optimization Intelligence FY 2025-26",
+    brand: {
+      "@type": "Organization",
+      name: "BM Wealth",
+      telephone: "+91-8850977259",
+    },
+    offers: {
+      "@type": "Offer",
+      price: "299",
+      priceCurrency: "INR",
+    },
+    description:
+      "Educational tax analysis tool for FY 2025–26. Compares old vs new regime and provides an illustrative execution blueprint for salaried professionals in Mumbai.",
+    url: "https://bmwealth.example/tools/tax-optimization",
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: "Mumbai",
+    },
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Is the Old or New Regime better for FY 2025–26?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "It depends on salary structure and deductions (80C, 80D, NPS, HRA, home-loan interest). Our tool compares both regimes with current slabs and shows an illustrative outcome.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does this tool provide investment advice?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "No. This is educational, general information. It is not SEBI registered investment advice. Consult a qualified professional for personalized guidance.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How is HRA exemption calculated?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "HRA exemption is the minimum of: actual HRA received, rent paid minus 10% of basic salary, and 50% of basic for specified metro cities (assumed Mumbai here).",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you guarantee tax outcomes?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "No guarantees are made. The calculations are illustrative based on your inputs and current rules and may change with future updates.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Will I receive sales calls?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. The experience is designed to be educational-first. Communication is limited to sharing your calculation and related updates.",
+        },
+      },
+    ],
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://bmwealth.example/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "https://bmwealth.example/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Tax Optimization Intelligence",
+        item: "https://bmwealth.example/tools/tax-optimization",
+      },
+    ],
+  };
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to time your FY 2025–26 tax execution",
+    description:
+      "Educational steps to plan tax execution across the financial year. General information, not investment advice.",
+    totalTime: "P12M",
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "April–June: Set the structure",
+        text:
+          "Validate salary components, rent documentation, and insurance schedules. Note planned NPS contributions under 80CCD(1B).",
+      },
+      {
+        "@type": "HowToStep",
+        name: "July–December: Stay on track",
+        text:
+          "Reconcile proofs with employer cycles, ensure rent/basic alignment for HRA, and keep medical covers updated.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "January–March: Close the loop",
+        text:
+          "Top up deductible contributions if appropriate, review regime decision with current numbers, and maintain records for filing.",
+      },
+    ],
+  };
+
+  return (
+    <>
+      {/* Minimal back row: subtle, visible immediately */}
+      <BackRow />
+      <Script
+        id="tax-optimization-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <Script
+        id="tax-optimization-faq"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <Script
+        id="tax-optimization-breadcrumbs"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <Script
+        id="tax-optimization-howto"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <TaxCalculator />
+
+      {/* Long SEO Section: Educational, calm, compliance-first */}
+      <div className="px-6 lg:px-10">
+        <div className="flex items-center gap-3 text-[11px] text-slate-300/70">
+          <div className="h-px w-full bg-white/10" />
+          <span>Learn more (optional)</span>
+          <div className="h-px w-full bg-white/10" />
+        </div>
+      </div>
+      <section className="px-6 py-10 lg:px-10 lg:py-16" style={{ color: "#e6e6e6", background: "#000" }}>
+        <div className="prose prose-invert max-w-4xl mx-auto">
+          <h2>How Mumbai Professionals Can Reduce Tax in FY 2025–26</h2>
+          <p>
+            This educational section explains, in plain language, how a typical salaried professional in Mumbai can
+            approach tax planning for FY 2025–26. It focuses on structure and execution rather than products or
+            promises. The goal is to help you understand the moving parts: income heads, deductions, exemptions, and
+            timing. All illustrations are general information, not personalized advice.
+          </p>
+          <p>
+            At a high level, tax outcomes depend on your salary composition (basic, HRA, allowances), eligible
+            deductions (80C, 80D, NPS under 80CCD(1B)), and housing-related provisions (home-loan interest under
+            Section 24). The statutory slabs and rebates differ across the old and new regimes; the correct choice is
+            the one that yields a lower total tax for your inputs. This tool computes both sides using current rules and
+            shows an illustrative difference so you can plan prudently.
+          </p>
+
+          <h2>Old vs New Regime — What Actually Matters</h2>
+          <p>
+            Under the old regime, deductions and exemptions matter more—especially 80C, 80D, HRA exemption, and home-
+            loan interest. Under the new regime, the slabs are broader and simpler; certain deductions are limited, and
+            a rebate applies up to the threshold. For incomes around the rebate limit, new-regime marginal relief can
+            impact the effective rate. What matters is not speculation but a disciplined, input-true comparison with a
+            clear breakdown of slabs, cess, and applicable relief. That is exactly what the calculator above performs.
+          </p>
+          <p>
+            Importantly, this is not about “beating the system.” It is about using published rules correctly. The tool’s
+            methodology follows publicly available formulae—for instance, HRA exemption is the minimum of actual HRA
+            received, rent paid minus 10% of basic, and 50% of basic for Mumbai—as a transparent, auditable approach.
+          </p>
+
+          <h2>Why Most Salaried Professionals Overpay Tax</h2>
+          <p>
+            Overpayment typically happens for practical reasons: incomplete documentation at the time of proof
+            submission, late decisions on eligible investments, or not aligning rent agreements and basic salary levels
+            to the HRA framework. A second pattern involves assuming that one regime is always better; in practice, the
+            answer depends on current year data and must be recomputed when components change. A third pattern is mixing
+            investment selection with tax calculation—these are separate decisions and should be kept independent.
+          </p>
+          <p>
+            A clean process includes: estimating annual salary components, validating rent/basic numbers for HRA, using
+            health insurance and retirement contributions prudently, and re-checking the regime decision before filing.
+            The calculator’s breakdown (slab-by-slab and deduction-wise) is intended to support such a process in a calm
+            and methodical way.
+          </p>
+
+          <h2>Execution Timing vs Calculation</h2>
+          <p>
+            The execution calendar often matters more than the calculation itself. For example, if rent agreements or
+            health insurance premiums are finalized late, deductions may not reflect in the employer cycle and may need
+            to be reconciled while filing. Similarly, NPS contributions under 80CCD(1B) have a separate cap and timing
+            window. Setting calendar reminders for proof collection, premium payments, and any planned contributions can
+            improve outcomes without changing risk profiles. Calculation is a lens; execution delivers the impact.
+          </p>
+
+          <h2>Common Mistakes Even at ₹20L+ Income</h2>
+          <p>
+            At higher incomes, the cost of small errors compounds. Common issues include: not updating basic salary
+            proportions when roles change, inconsistent rent documentation, ignoring home-loan interest capping under
+            Section 24, and overlooking the new-regime marginal relief near the rebate threshold. Another mistake is to
+            frame the choice as permanent. In reality, you can re-evaluate annually based on your inputs—sometimes old
+            regime wins decisively due to deductions; other times the new regime’s simplicity provides the edge.
+          </p>
+          <p>
+            Keep records tidy, reconcile employer and personal computations, and use the slab breakdown to cross-check
+            reasonableness. Consider maintaining a simple year-on-year worksheet that tracks which variables changed and
+            why the regime decision shifted, if at all. This builds internal confidence and reduces filing stress.
+          </p>
+
+          <h3>Further Reading and Policies</h3>
+          <p>
+            For policy and disclosures, please review our
+            {" "}
+            <Link href="/compliance" className="underline text-[color:var(--color-matte-gold)]">Privacy & Compliance</Link>
+            {" "}and{" "}
+            <Link href="/regulatory-compliance" className="underline text-[color:var(--color-matte-gold)]">Disclaimers</Link>.
+            These materials clarify scope, assumptions, and responsibilities. All content here is illustrative and for
+            general information purposes only.
+          </p>
+
+          <h3>What’s Next</h3>
+          <p>
+            We will continue to add educational tools (coming soon) on salary structuring, HRA planners, and timing
+            checklists. These are designed to help you build your own audit trail of decisions across the financial year
+            without relying on subjective narratives. The goal is not to promise outcomes but to improve clarity.
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}

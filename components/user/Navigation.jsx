@@ -31,14 +31,28 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showNav, setShowNav] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
     // Prevent hydration mismatch: set mounted after initial render
     setMounted(true);
     
+    let lastY = 0;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const y = window.scrollY;
+      setIsScrolled(y > 50);
+      // Route-level auto-hide for /tools/*
+      const onTools = pathname?.startsWith('/tools/');
+      if (onTools) {
+        const goingDown = y > lastY;
+        const threshold = 24;
+        if (y > threshold && goingDown) setShowNav(false);
+        else setShowNav(true);
+      } else {
+        setShowNav(true);
+      }
+      lastY = y;
     };
     
     const handleResize = () => {
@@ -61,6 +75,7 @@ const Navigation = () => {
     { path: '/about-us', label: 'About Us' },
     { path: '/services', label: 'Services' },
     { path: '/platforms', label: 'Platforms' },
+    { path: '/tools/tax-optimization', label: 'Tax Optimization' },
     { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
@@ -113,11 +128,12 @@ const Navigation = () => {
     return (
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ease-in-out px-5 h-[70px] flex items-center",
+          "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out px-5 h-[70px] flex items-center",
           isScrolled 
             ? "bg-black/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
             : "bg-transparent"
         )}
+        style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
       >
         <Logo size={38} fontSize="19px" />
       </header>
@@ -128,11 +144,12 @@ const Navigation = () => {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ease-in-out h-[85px] flex items-center justify-center px-10",
+        "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out h-[85px] flex items-center justify-center px-10",
         isScrolled 
           ? "ultra-luxury-glass shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
           : "bg-transparent"
       )}
+      style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
     >
       <div className="w-full max-w-[1600px] flex justify-between items-center">
         <Logo size={48} fontSize="24px" />

@@ -84,6 +84,7 @@
   --color-luxury-black: #000000;
   --color-matte-gold: #c0a062;
   --color-gold-glow: rgba(192, 160, 98, 0.3);
+  --color-vscode-gold: #dcdcaa;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
