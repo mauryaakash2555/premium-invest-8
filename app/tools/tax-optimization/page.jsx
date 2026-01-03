@@ -166,14 +166,6 @@ export default function TaxOptimizationToolPage() {
           <p className="mt-4 max-w-2xl text-sm sm:text-base text-white/80">
             Compare Old vs New regime, then unlock a simple execution blueprint.
           </p>
-          <div className="mt-7">
-            <a
-              href="#tools-tax-optimization"
-              className="inline-flex items-center rounded-md bg-white text-black px-4 py-2 text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              Open Calculator
-            </a>
-          </div>
         </div>
       </section>
       <Script
