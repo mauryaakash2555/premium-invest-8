@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Script from "next/script";
 
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -18,6 +17,37 @@ import { ZeroTaxBadge } from "@/components/calculators/ZeroTaxBadge";
 import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
 
 import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
+
+const RAZORPAY_SDK_SRC = "https://checkout.razorpay.com/v1/checkout.js";
+let razorpaySdkPromise = null;
+
+function loadRazorpaySdk() {
+  if (typeof window === "undefined") return Promise.resolve(false);
+  if (window.Razorpay) return Promise.resolve(true);
+  if (razorpaySdkPromise) return razorpaySdkPromise;
+
+  razorpaySdkPromise = new Promise((resolve) => {
+    try {
+      const existing = document.querySelector(`script[src="${RAZORPAY_SDK_SRC}"]`);
+      if (existing) {
+        existing.addEventListener("load", () => resolve(Boolean(window.Razorpay)), { once: true });
+        existing.addEventListener("error", () => resolve(false), { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = RAZORPAY_SDK_SRC;
+      script.async = true;
+      script.onload = () => resolve(Boolean(window.Razorpay));
+      script.onerror = () => resolve(false);
+      document.head.appendChild(script);
+    } catch {
+      resolve(false);
+    }
+  });
+
+  return razorpaySdkPromise;
+}
 
 function clamp(n, min, max) {
   const x = Number(n);
@@ -182,9 +212,10 @@ export function TaxCalculator() {
       return;
     }
 
-    if (typeof window === "undefined" || !window.Razorpay) {
-      track("payment_failed", { stage: "sdk_missing" });
-      setStatusNote("Payment system is still loading. Please try again in a moment.");
+    const sdkOk = await loadRazorpaySdk();
+    if (!sdkOk) {
+      track("payment_failed", { stage: "sdk_load_failed" });
+      setStatusNote("Payment system could not be loaded. Please disable blockers or try again.");
       return;
     }
 
@@ -500,8 +531,6 @@ export function TaxCalculator() {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-
       <BaseCalculatorLayout
         header={
           <CalculatorHeader
