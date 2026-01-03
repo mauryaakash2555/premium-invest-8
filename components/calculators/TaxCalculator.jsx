@@ -81,6 +81,12 @@ export function TaxCalculator() {
   const newTax = comparison?.new?.taxAmount || 0;
   const winner = comparison?.winner || "tie";
 
+  const savings = comparison?.savings || 0;
+  const zeroTaxNew = showResults && Boolean(comparison) && newTax === 0;
+  const zeroTaxOld = showResults && Boolean(comparison) && oldTax === 0;
+  const hasZeroTax = zeroTaxNew || zeroTaxOld;
+  const leakRegime = winner === "old" ? "New Regime" : winner === "new" ? "Old Regime" : null;
+
   const maxTax = Math.max(oldTax, newTax, 1);
   const oldRatio = oldTax / maxTax;
   const newRatio = newTax / maxTax;
@@ -124,6 +130,7 @@ export function TaxCalculator() {
 
   async function handleFree(payload) {
     trackEvent("lead_captured", { mode: "free" });
+    trackEvent("lead_capture", { mode: "free" });
     await captureLead(payload);
     setStatusNote("Free basic report will be emailed shortly.");
     setLeadOpen(false);
@@ -138,6 +145,7 @@ export function TaxCalculator() {
 
   async function handlePay(payload) {
     trackEvent("lead_captured", { mode: "premium" });
+    trackEvent("lead_capture", { mode: "premium" });
     const leadRes = await captureLead(payload);
 
     trackEvent("payment_initiated");
@@ -186,6 +194,7 @@ export function TaxCalculator() {
           }
 
           trackEvent("payment_success");
+          trackEvent("purchase", { product: "personal_tax_execution_blueprint", amount: 299, currency: "INR" });
           setStatusNote("Payment successful. Preparing your PDF...");
           try { localStorage.setItem("tax_premium_bought", "1"); purchaseRef.current = true; } catch {}
 
@@ -307,6 +316,7 @@ export function TaxCalculator() {
       await new Promise((r) => setTimeout(r, 60));
       setInputs(draftInputs);
       trackEvent("calculator_calculate");
+      trackEvent("calculate");
       setShowResults(true);
       setHasCalculated(true);
       setEmphasizeWinner(true);
@@ -440,20 +450,29 @@ export function TaxCalculator() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-      <div className="min-h-screen bg-black flex justify-center items-center px-4 py-6 lg:px-8 lg:py-8">
-        <div className="calculator-container w-full max-w-md lg:max-w-6xl rounded-3xl border border-white/10 bg-black/70 backdrop-blur-xl shadow-[0_0_0_1px_rgba(192,160,98,0.25),0_0_60px_rgba(192,160,98,0.12),0_0_80px_rgba(0,0,0,0.35)] gold-grain-texture glass-effect animate-in fade-in zoom-in-95 duration-700">
-          {/* Header */}
-          <div className="text-center px-6 pt-8 pb-6 lg:px-10 lg:pt-10 lg:pb-8">
-            <h1 className="text-2xl lg:text-3xl font-semibold gold-gradient-text tracking-wide">
-              Tax Optimization Intelligence — FY 2025–26
-            </h1>
-            <p className="mt-2 text-sm text-slate-200/70">
-              Compare Old vs New regime, then unlock a 10-point optimization blueprint.
-            </p>
-            <p className="mt-2 text-xs text-slate-200/60">ARN 90008 | IRDAI 277925</p>
-          </div>
+      <div className="w-full flex justify-center">
+        <div className="calculator-container w-full max-w-md lg:max-w-6xl">
+          <div className="calculator-inner">
+            {/* Header */}
+            <div className="text-center px-6 pt-8 pb-6 lg:px-10 lg:pt-10 lg:pb-8">
+              <div className="flex items-center justify-center gap-2 text-xs tracking-[0.18em] uppercase text-white/60">
+                <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                <span>BM Wealth Calculator</span>
+              </div>
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-white/75">
+                <span className="text-[color:var(--color-matte-gold)] font-semibold">Stop the invisible leak.</span>
+                <span>See if the 2026 “Zero Tax” rule applies to you.</span>
+              </div>
+              <h1 className="mt-3 text-2xl lg:text-3xl font-semibold tracking-wide text-[color:var(--color-matte-gold)]">
+                Tax Optimization Intelligence — FY 2025–26
+              </h1>
+              <p className="mt-2 text-sm text-white/70">
+                Compare Old vs New regime, then unlock a 10-point optimization blueprint.
+              </p>
+              <p className="mt-2 text-xs text-white/55">ARN 90008 | IRDAI 277925</p>
+            </div>
 
-          <div className="px-6 pb-6 lg:px-10 lg:pb-10">
+            <div className="px-6 pb-6 lg:px-10 lg:pb-10">
             <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-10">
               {/* Left: Inputs */}
               <div className="space-y-6">
@@ -539,7 +558,7 @@ export function TaxCalculator() {
                         const raw = String(e.target.value || "").replace(/[^\d]/g, "");
                         setHra(clamp(Number(raw || 0), 0, 50_00_000));
                       }}
-                      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
+                      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                     />
                     <input
                       type="text"
@@ -550,7 +569,7 @@ export function TaxCalculator() {
                         const raw = String(e.target.value || "").replace(/[^\d]/g, "");
                         setRentPaid(clamp(Number(raw || 0), 0, 50_00_000));
                       }}
-                      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
+                      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                     />
                   </div>
                   <input
@@ -562,7 +581,7 @@ export function TaxCalculator() {
                       const raw = String(e.target.value || "").replace(/[^\d]/g, "");
                       setBasicSalary(clamp(Number(raw || 0), 0, 50_00_000));
                     }}
-                    className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
+                    className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                   />
                   <p className="text-[11px] text-slate-200/55">
                     HRA exemption uses min(actual HRA, rent − 10% of basic, 40% of basic). If basic is blank, the engine assumes 50% of salary.
@@ -575,7 +594,7 @@ export function TaxCalculator() {
                   type="button"
                   onClick={handleCalculate}
                   disabled={busy}
-                  className="w-full rounded-xl border border-[rgba(192,160,98,0.35)] bg-[rgba(192,160,98,0.12)] px-4 py-3 text-sm font-semibold text-[color:var(--color-matte-gold)] transition hover:bg-[rgba(192,160,98,0.18)] disabled:opacity-60"
+                  className="bm-btn bm-btn-secondary w-full px-4 py-3 text-sm"
                 >
                   {busy ? "Calculating..." : "Calculate"}
                 </button>
@@ -583,11 +602,38 @@ export function TaxCalculator() {
 
               {/* Right: Results + Winner + Premium + Chart + Breakdown */}
               <div ref={resultsRef} className="space-y-6" style={{ scrollMarginTop: "96px" }}>
+                {showResults && comparison && hasZeroTax ? (
+                  <div className="bm-zero-tax-banner rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-sm font-semibold text-white">
+                        Zero Tax Badge
+                      </div>
+                      <div className="bm-zero-tax-badge text-[11px] font-semibold">
+                        {zeroTaxNew ? "NEW REGIME: ₹0" : "OLD REGIME: ₹0"}
+                      </div>
+                    </div>
+                    <div className="mt-1 text-[11px] text-slate-200/70">
+                      If your taxable income is within the rebate threshold (New: ₹12L, Old: ₹5L), the 87A rebate can reduce tax to ₹0 (cess included).
+                    </div>
+                  </div>
+                ) : null}
+
+                {showResults && comparison && winner !== "tie" && savings > 0 ? (
+                  <div className="rounded-2xl border border-[color:color-mix(in oklab, var(--color-matte-gold) 35%, transparent)] bg-[color:color-mix(in oklab, var(--color-matte-gold) 10%, transparent)] px-4 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-sm font-semibold text-white">Wealth Leak Alert</div>
+                      <div className="text-[11px] font-semibold text-[color:var(--color-matte-gold)]">Potential leak: {formatINR(savings)}</div>
+                    </div>
+                    <div className="mt-1 text-[11px] text-slate-200/70">
+                      Choosing the wrong regime can cost you {formatINR(savings)} this year. Based on your inputs, avoid {leakRegime}.
+                    </div>
+                  </div>
+                ) : null}
                 {showResults && comparison ? (
                   <div className="grid grid-cols-2 gap-4 animate-in fade-in">
                   <Card
                     className={
-                      "bg-white/5 border relative glass-effect transition-transform duration-300 " +
+                      "bg-white/5 border relative glass-effect transition-transform duration-300 hover:-translate-y-0.5 " +
                       (winner === "old" && emphasizeWinner
                         ? "border-[color:var(--color-matte-gold)] bg-[rgba(192,160,98,0.08)]"
                         : winner === "old"
@@ -624,7 +670,7 @@ export function TaxCalculator() {
 
                   <Card
                     className={
-                      "bg-white/5 border relative glass-effect transition-transform duration-300 " +
+                      "bg-white/5 border relative glass-effect transition-transform duration-300 hover:-translate-y-0.5 " +
                       (winner === "new" && emphasizeWinner
                         ? "border-[color:var(--color-matte-gold)] bg-[rgba(192,160,98,0.08)]"
                         : winner === "new"
@@ -674,31 +720,31 @@ export function TaxCalculator() {
                 ) : null}
 
                 {showResults && (
-                  <div className="rounded-xl border border-white/10 bg-white/5 p-4 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4 animate-in fade-in slide-in-from-bottom-2 transition-colors hover:bg-white/10 hover:border-white/20">
                     <div className="space-y-2">
                       <h3 className="text-base font-semibold text-white">High-income mistakes don’t happen in calculation. They happen in execution.</h3>
                       <p className="text-[11px] text-slate-200/65">Designed to be acted on before key FY deadlines — not read later.</p>
                       <p className="text-xs text-slate-200/70">You already know the numbers. This plan shows what to do, when to do it, and what most people miss.</p>
                     </div>
                     <div className="mt-3 grid gap-2">
-                      <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+                      <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
                         <div className="text-xs font-semibold text-white">🔓 What You See Free</div>
                         <div className="text-[11px] text-slate-200/75">Your tax number • Old vs New comparison</div>
                       </div>
-                      <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+                      <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
                         <div className="text-xs font-semibold text-white">🔒 What Professionals Actually Need (₹299)</div>
                         <div className="text-[11px] text-slate-200/75">EXECUTION, NOT CALCULATION</div>
                         <div className="text-[11px] text-slate-200/60">Your exact tax-saving potential ({formatINR(comparison?.savings || 0)}) • Why this regime works for you</div>
                       </div>
-                      <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+                      <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
                         <div className="text-xs font-semibold text-white">MONTH-BY-MONTH ACTION</div>
                         <div className="text-[11px] text-slate-200/60">What to fix in April • What not to miss before December • What must be done before March 31</div>
                       </div>
-                      <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+                      <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
                         <div className="text-xs font-semibold text-white">HIDDEN OPTIMIZATION</div>
                         <div className="text-[11px] text-slate-200/60">Mumbai-specific HRA structuring • 80C allocation mistakes • 80D family split strategy • NPS top-up positioning</div>
                       </div>
-                      <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+                      <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
                         <div className="text-xs font-semibold text-white">FORWARD STRATEGY</div>
                         <div className="text-[11px] text-slate-200/60">3-year tax outlook • Salary hike breakpoints • When regime switching actually makes sense</div>
                       </div>
@@ -771,14 +817,14 @@ export function TaxCalculator() {
                     {statusNote}
                   </p>
                 ) : null}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Disclaimer */}
           <p className="px-6 py-6 lg:px-10 text-[10px] text-center text-slate-200/50">
-            ARN 90008 | IRDAI 277925. This is a mathematical calculation tool for educational purposes only. Not SEBI
-            registered investment advice. Consult a financial advisor before making investment decisions.
+            ARN 90008 | IRDAI 277925. Educational tool only. Not SEBI registered investment advice.
           </p>
         </div>
       </div>

@@ -1129,9 +1129,172 @@ html {
 
 /* End of @layer utilities */
 }
-\n/* 🔵 Shared animation: used by LoadingSpinner */
+
+/* 🔵 Shared animation: used by LoadingSpinner */
 @keyframes bmw-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* calculator frame border/effects removed per structure cleanup */
+
+/* Premium buttons (brand-token based) */
+.bm-btn {
+  border-radius: 0.9rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.bm-btn-primary {
+  color: #000;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-matte-gold) 92%, white 8%) 0%,
+    color-mix(in oklab, var(--color-matte-gold) 85%, black 15%) 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 35%, transparent),
+    0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 30px color-mix(in oklab, var(--color-matte-gold) 24%, transparent);
+}
+
+.bm-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 45%, transparent),
+    0 14px 34px rgba(0, 0, 0, 0.58),
+    0 0 45px color-mix(in oklab, var(--color-matte-gold) 32%, transparent);
+}
+
+.bm-btn-primary:active {
+  transform: translateY(0px) scale(0.99);
+}
+
+.bm-btn-secondary {
+  color: var(--color-matte-gold);
+  background: color-mix(in oklab, var(--color-matte-gold) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 12%, transparent),
+    0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+.bm-btn-secondary:hover {
+  background: color-mix(in oklab, var(--color-matte-gold) 14%, transparent);
+  border-color: color-mix(in oklab, var(--color-matte-gold) 48%, transparent);
+  transform: translateY(-1px);
+}
+
+.bm-btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Learn more (details) polish */
+.learn-more-summary {
+  padding: 10px 0;
+}
+
+.learn-more[open] .learn-more-summary {
+  opacity: 0.95;
+}
+
+@property --bm-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes bm-rotate-angle {
+  to {
+    --bm-angle: 360deg;
+  }
+}
+
+@keyframes bm-gold-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px color-mix(in oklab, var(--color-matte-gold) 20%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 22px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+  }
+}
+
+.bm-zero-tax-badge {
+  border-radius: 9999px;
+  padding: 6px 10px;
+  color: #000;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-matte-gold) 92%, white 8%) 0%,
+    color-mix(in oklab, var(--color-matte-gold) 82%, black 18%) 100%
+  );
+  animation: bm-gold-pulse 1.6s ease-in-out infinite;
+}
+
+.bm-zero-tax-banner {
+  position: relative;
+  overflow: hidden;
+}
+
+.bm-zero-tax-banner::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--color-matte-gold) 22%, transparent), transparent 55%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.calculator-container {
+  --bm-angle: 0deg;
+  --bm-border: 2px;
+  --bm-radius: 12px;
+
+  border-radius: var(--bm-radius);
+  padding: var(--bm-border);
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.88)) padding-box,
+    conic-gradient(
+        from var(--bm-angle),
+        color-mix(in oklab, var(--color-matte-gold) 18%, transparent),
+        color-mix(in oklab, var(--color-matte-gold) 60%, transparent),
+        color-mix(in oklab, var(--color-matte-gold) 30%, white),
+        color-mix(in oklab, var(--color-matte-gold) 60%, transparent),
+        color-mix(in oklab, var(--color-matte-gold) 18%, transparent)
+      ) border-box;
+
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 16%, transparent),
+    0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 18px color-mix(in oklab, var(--color-matte-gold) 20%, transparent);
+
+  animation: bm-rotate-angle 3.8s linear infinite;
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.calculator-container:hover {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 20%, transparent),
+    0 12px 32px rgba(0, 0, 0, 0.58),
+    0 0 22px color-mix(in oklab, var(--color-matte-gold) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+.calculator-inner {
+  border-radius: calc(var(--bm-radius) - var(--bm-border));
+  background: rgba(0, 0, 0, 0.80);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--color-matte-gold) 10%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculator-container {
+    animation: none;
+  }
 }
 

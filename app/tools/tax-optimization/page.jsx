@@ -15,25 +15,17 @@ export const metadata = {
 export default function TaxOptimizationToolPage() {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "FinancialProduct",
-    name: "Tax Optimization Intelligence FY 2025-26",
-    brand: {
+    "@type": "FinancialCalculator",
+    name: "Tax Optimization Intelligence — FY 2025–26",
+    description:
+      "Mumbai-first FY 2025–26 income tax calculator comparing Old vs New regime with standard deduction, 87A rebate, marginal relief, and 4% cess.",
+    url: "https://bmwealth.example/tools/tax-optimization",
+    provider: {
       "@type": "Organization",
       name: "BM Wealth",
       telephone: "+91-8850977259",
     },
-    offers: {
-      "@type": "Offer",
-      price: "299",
-      priceCurrency: "INR",
-    },
-    description:
-      "Educational tax analysis tool for FY 2025–26. Compares old vs new regime and provides an illustrative execution blueprint for salaried professionals in Mumbai.",
-    url: "https://bmwealth.example/tools/tax-optimization",
-    areaServed: {
-      "@type": "AdministrativeArea",
-      name: "Mumbai",
-    },
+    areaServed: { "@type": "City", name: "Mumbai" },
   };
 
   const faqSchema = {
@@ -145,6 +137,45 @@ export default function TaxOptimizationToolPage() {
     <>
       {/* Minimal back row: subtle, visible immediately */}
       <BackRow />
+      {/* Hero Section — background image, headline, subtext, ONE CTA */}
+      <section
+        className="relative overflow-hidden"
+        style={{ backgroundColor: '#000' }}
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'url(/6th.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.18,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.92) 100%)',
+          }}
+        />
+        <div className="relative px-6 lg:px-10 py-16 lg:py-24 max-w-5xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-[color:var(--color-matte-gold)]">
+            Tax Optimization Intelligence — FY 2025–26
+          </h1>
+          <p className="mt-4 max-w-2xl text-sm sm:text-base text-white/80">
+            Compare Old vs New regime, then unlock a simple execution blueprint.
+          </p>
+          <div className="mt-7">
+            <a
+              href="#tools-tax-optimization"
+              className="inline-flex items-center rounded-md bg-white text-black px-4 py-2 text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              Open Calculator
+            </a>
+          </div>
+        </div>
+      </section>
       <Script
         id="tax-optimization-schema"
         type="application/ld+json"
@@ -169,19 +200,38 @@ export default function TaxOptimizationToolPage() {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-      <TaxCalculator />
-
-      {/* Long SEO Section: Educational, calm, compliance-first */}
-      <div className="px-6 lg:px-10">
-        <div className="flex items-center gap-3 text-[11px] text-slate-300/70">
-          <div className="h-px w-full bg-white/10" />
-          <span>Learn more (optional)</span>
-          <div className="h-px w-full bg-white/10" />
+      {/* Calculator Section (separate from hero) */}
+      <section id="tools-tax-optimization" className="scroll-mt-24 px-6 lg:px-10 py-14 lg:py-20">
+        <div className="w-full">
+          <TaxCalculator />
         </div>
-      </div>
-      <section className="px-6 py-10 lg:px-10 lg:py-16" style={{ color: "#e6e6e6", background: "#000" }}>
-        <div className="prose prose-invert max-w-4xl mx-auto">
-          <h2>How Mumbai Professionals Can Reduce Tax in FY 2025–26</h2>
+      </section>
+
+      {/* Long SEO Section: Educational, calm, compliance-first (collapsed by default) */}
+      <details className="px-6 lg:px-10 group learn-more">
+        <summary className="list-none cursor-pointer select-none learn-more-summary">
+          <div className="flex items-center gap-3 text-[11px] text-slate-300/70">
+            <div className="h-px w-full bg-white/10" />
+            <span className="tracking-[0.18em] uppercase">Learn more (optional)</span>
+            <div className="h-px w-full bg-white/10" />
+          </div>
+        </summary>
+        <section className="px-0 py-10 lg:py-16 learn-more-body">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 ultra-luxury-glass">
+            <div className="absolute inset-0 opacity-60 gold-grain-texture" />
+            <div className="relative px-6 py-8 lg:px-10 lg:py-12">
+              <div
+                className="prose prose-invert max-w-5xl mx-auto
+                  prose-headings:font-serif prose-headings:tracking-tight
+                  prose-h2:text-2xl lg:prose-h2:text-3xl
+                  prose-h3:text-xl lg:prose-h3:text-2xl
+                  prose-headings:text-[color:var(--color-matte-gold)]
+                  prose-p:text-white/75 prose-p:leading-relaxed
+                  prose-strong:text-white prose-li:text-white/75
+                  prose-a:text-[color:var(--color-matte-gold)] prose-a:no-underline hover:prose-a:underline
+                  prose-hr:border-white/10"
+              >
+                <h2>How Mumbai Professionals Can Reduce Tax in FY 2025–26</h2>
           <p>
             This educational section explains, in plain language, how a typical salaried professional in Mumbai can
             approach tax planning for FY 2025–26. It focuses on structure and execution rather than products or
@@ -265,6 +315,19 @@ export default function TaxOptimizationToolPage() {
             checklists. These are designed to help you build your own audit trail of decisions across the financial year
             without relying on subjective narratives. The goal is not to promise outcomes but to improve clarity.
           </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </details>
+
+      {/* AdSense / Sponsored slot (content-only, below the tool) */}
+      <section className="px-6 lg:px-10 py-10 lg:py-14">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-center">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/50">Sponsored</div>
+            <div id="adsense-tax-optimization" className="mt-3 min-h-[120px]" />
+          </div>
         </div>
       </section>
     </>
