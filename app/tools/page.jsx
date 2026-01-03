@@ -4,6 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import BackRow from "@/components/shared/BackRow";
 
+/*
+  LAYOUT-LOCKED: /tools hub page
+  Spec:
+  - Hero + exactly 5 cards
+  - Only Tax tool is active
+  - Others show "Coming Soon" and appear disabled
+  Edit only with explicit instruction.
+*/
+
 export const metadata = {
   title: "BM Wealth Intelligence Tools | BM Wealth",
   description:
@@ -11,7 +20,7 @@ export const metadata = {
 };
 
 function ToolCard({ title, subtitle, href, active }) {
-  return (
+  const content = (
     <Card className="bg-white/5 border-white/10 glass-effect">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
@@ -49,6 +58,18 @@ function ToolCard({ title, subtitle, href, active }) {
       </CardContent>
     </Card>
   );
+
+  // Keep "Coming Soon" visuals locked, but allow navigation to internal
+  // Coming Soon pages (still no logic exposed).
+  if (!active && href && href !== "#") {
+    return (
+      <Link href={href} className="block" aria-label={title}>
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
 
 export default function ToolsHubPage() {
@@ -75,22 +96,22 @@ export default function ToolsHubPage() {
             />
             <ToolCard
               title="Mumbai Property vs SIP Analyzer"
-              href="#"
+              href="/tools/property-vs-sip"
               active={false}
             />
             <ToolCard
               title="Retirement Gap Stress Test"
-              href="#"
+              href="/tools/retirement-gap"
               active={false}
             />
             <ToolCard
               title="Lumpsum Growth Planner"
-              href="#"
+              href="/tools/lumpsum-planner"
               active={false}
             />
             <ToolCard
               title="Human Life Value Shield"
-              href="#"
+              href="/tools/insurance-value"
               active={false}
             />
           </div>

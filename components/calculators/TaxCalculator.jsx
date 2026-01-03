@@ -14,6 +14,7 @@ import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLay
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 import { ResultSummary } from "@/components/calculators/ResultSummary";
 import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
+import { ZeroTaxBadge } from "@/components/calculators/ZeroTaxBadge";
 import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
 
 import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
@@ -668,9 +669,7 @@ export function TaxCalculator() {
                       <div className="text-sm font-semibold text-white">
                         Zero Tax Badge
                       </div>
-                      <div className="bm-zero-tax-badge text-[11px] font-semibold">
-                        {zeroTaxNew ? "NEW REGIME: ₹0" : "OLD REGIME: ₹0"}
-                      </div>
+                      <ZeroTaxBadge label={zeroTaxNew ? "NEW REGIME: ₹0" : "OLD REGIME: ₹0"} />
                     </div>
                     <div className="mt-1 text-[11px] text-slate-200/70">
                       If your taxable income is within the rebate threshold (New: ₹12L, Old: ₹5L), the 87A rebate can reduce tax to ₹0 (cess included).
