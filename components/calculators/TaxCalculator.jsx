@@ -3,17 +3,20 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Script from "next/script";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 
 import { LeadCaptureModal } from "@/components/shared/LeadCaptureModal";
 import { PremiumUnlockButton } from "@/components/shared/PremiumUnlockButton";
 import { ExitIntentModal } from "@/components/shared/ExitIntentModal";
 
+import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
+import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
+import { ResultSummary } from "@/components/calculators/ResultSummary";
+import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
+import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
+
 import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
-import { trackEvent } from "@/lib/analytics";
 
 function clamp(n, min, max) {
   const x = Number(n);
@@ -33,6 +36,8 @@ function downloadBlob(filename, blob) {
 }
 
 export function TaxCalculator() {
+  const { track } = useCalculatorTracking("tax_optimization");
+
   const [salary, setSalary] = useState(25_00_000);
   const [i80c, setI80c] = useState(1_20_000);
   const [i80d, setI80d] = useState(50_000);
@@ -92,7 +97,7 @@ export function TaxCalculator() {
   const newRatio = newTax / maxTax;
 
   useEffect(() => {
-    trackEvent("calculator_view");
+    track("calculator_view");
   }, []);
 
   useEffect(() => {
@@ -107,76 +112,97 @@ export function TaxCalculator() {
     if (startedRef.current && !calcCompleteRef.current) {
       calcCompleteRef.current = true;
       armedRef.current = true;
-      trackEvent("calculator_complete");
+      track("calculator_complete");
     }
   }, [inputs]);
 
   function markStarted() {
     if (startedRef.current) return;
     startedRef.current = true;
-    trackEvent("calculator_start");
+    track("calculator_start");
   }
 
-  async function captureLead(payload) {
-    const r = await fetch("/api/leads/capture", {
+  async function handleFree(payload) {
+    track("lead_submit_free");
+    setStatusNote("");
+
+    const res = await fetch("/api/leads/capture", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...payload, source: "tax_optimization" }),
     });
-    const j = await r.json().catch(() => null);
-    if (!r.ok || !j?.ok) throw new Error(j?.error || "lead_capture_failed");
-    return j;
-  }
+    const json = await res.json().catch(() => null);
+    if (!res.ok || !json?.ok) {
+      setStatusNote("Could not save your details. Please try again.");
+      return;
+    }
 
-  async function handleFree(payload) {
-    trackEvent("lead_captured", { mode: "free" });
-    trackEvent("lead_capture", { mode: "free" });
-    await captureLead(payload);
-    setStatusNote("Free basic report will be emailed shortly.");
+    track("lead_captured", { mode: "free" });
     setLeadOpen(false);
-  }
-
-  async function loadRazorpay() {
-    if (window.Razorpay) return true;
-    // Script is included below; this is a safety wait.
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    return Boolean(window.Razorpay);
+    setStatusNote("Thanks! We'll email you a summary shortly.");
   }
 
   async function handlePay(payload) {
-    trackEvent("lead_captured", { mode: "premium" });
-    trackEvent("lead_capture", { mode: "premium" });
-    const leadRes = await captureLead(payload);
+    track("lead_submit_pay");
+    setStatusNote("");
 
-    trackEvent("payment_initiated");
-    const ok = await loadRazorpay();
-    if (!ok) throw new Error("razorpay_not_loaded");
+    if (!inputs) {
+      setStatusNote("Please calculate first, then unlock premium.");
+      return;
+    }
+
+    // 1) Capture lead
+    const leadRes = await fetch("/api/leads/capture", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...payload, source: "tax_optimization" }),
+    });
+    const leadJson = await leadRes.json().catch(() => null);
+    if (!leadRes.ok || !leadJson?.ok) {
+      setStatusNote("Could not save your details. Please try again.");
+      return;
+    }
+
+    const leadId = leadJson?.leadId || null;
+
+    // 2) Create Razorpay order
+    setStatusNote("Starting payment...");
+    track("payment_start");
 
     const orderRes = await fetch("/api/razorpay/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amountPaise: 29900, leadId: leadRes?.leadId || null }),
+      body: JSON.stringify({ amountPaise: 29900, leadId }),
     });
     const orderJson = await orderRes.json().catch(() => null);
-    if (!orderRes.ok || !orderJson?.ok) throw new Error(orderJson?.error || "order_failed");
+    if (!orderRes.ok || !orderJson?.ok) {
+      track("payment_failed", { stage: "create_order" });
+      setStatusNote("Payment could not be started. Please try again.");
+      return;
+    }
+
+    if (typeof window === "undefined" || !window.Razorpay) {
+      track("payment_failed", { stage: "sdk_missing" });
+      setStatusNote("Payment system is still loading. Please try again in a moment.");
+      return;
+    }
 
     const options = {
       key: orderJson.keyId,
       amount: orderJson.amount,
-      currency: orderJson.currency,
+      currency: orderJson.currency || "INR",
       name: "BM Wealth",
-      description: "Tax Optimization Blueprint FY 2025-26",
+      description: "Tax Optimization Blueprint (FY 2025–26)",
       order_id: orderJson.orderId,
       prefill: {
-        name: payload.name,
-        email: payload.email,
-        contact: payload.phone,
+        name: payload?.name || "",
+        email: payload?.email || "",
+        contact: payload?.phone || "",
       },
-      theme: {
-        color: "#000000",
-      },
+      theme: { color: "#C0A062" },
       handler: async (response) => {
         try {
+          // 3) Verify payment (server)
           const verifyRes = await fetch("/api/razorpay/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -188,16 +214,20 @@ export function TaxCalculator() {
           });
           const verifyJson = await verifyRes.json().catch(() => null);
           if (!verifyRes.ok || !verifyJson?.ok) {
-            trackEvent("payment_failed");
+            track("payment_failed", { stage: "verify" });
             setStatusNote("Payment verification failed. Please contact support.");
             return;
           }
 
-          trackEvent("payment_success");
-          trackEvent("purchase", { product: "personal_tax_execution_blueprint", amount: 299, currency: "INR" });
+          track("payment_success");
+          track("purchase", { product: "personal_tax_execution_blueprint", amount: 299, currency: "INR" });
           setStatusNote("Payment successful. Preparing your PDF...");
-          try { localStorage.setItem("tax_premium_bought", "1"); purchaseRef.current = true; } catch {}
+          try {
+            localStorage.setItem("tax_premium_bought", "1");
+            purchaseRef.current = true;
+          } catch {}
 
+          // 4) Download PDF (client)
           const pdfRes = await fetch("/api/pdf/generate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -209,10 +239,10 @@ export function TaxCalculator() {
           }
           const blob = await pdfRes.blob();
           downloadBlob("BM-Wealth-Tax-Blueprint-FY2025-26.pdf", blob);
-          trackEvent("pdf_downloaded");
+          track("pdf_downloaded");
           setStatusNote("Downloaded. Please also check your email.");
         } catch {
-          trackEvent("payment_failed");
+          track("payment_failed", { stage: "post_payment" });
           setStatusNote("Payment was received but processing failed. We'll email you shortly.");
         }
       },
@@ -220,7 +250,7 @@ export function TaxCalculator() {
 
     const rz = new window.Razorpay(options);
     rz.on("payment.failed", () => {
-      trackEvent("payment_failed");
+      track("payment_failed", { stage: "payment_failed" });
       setStatusNote("Payment failed. Please try again.");
     });
 
@@ -249,7 +279,7 @@ export function TaxCalculator() {
       if (!canShow()) return;
       setExitOpen(true);
       markShown();
-      trackEvent("exit_intent_shown");
+      track("exit_intent_shown");
     }
 
     // Desktop: mouse leaves viewport top
@@ -315,8 +345,7 @@ export function TaxCalculator() {
       // Ensure UI has time to update button state smoothly.
       await new Promise((r) => setTimeout(r, 60));
       setInputs(draftInputs);
-      trackEvent("calculator_calculate");
-      trackEvent("calculate");
+      track("calculator_calculate");
       setShowResults(true);
       setHasCalculated(true);
       setEmphasizeWinner(true);
@@ -339,8 +368,8 @@ export function TaxCalculator() {
     }
   }
 
-  function Breakdown({ label, data }) {
-    const rows = data?.slabBreakdown || [];
+  function getBreakdownModel(label, data) {
+    const slabRows = data?.slabBreakdown || [];
     const isOld = data?.regime === "old";
 
     const dStandard = Number(data?.standardDeduction || 0);
@@ -362,83 +391,84 @@ export function TaxCalculator() {
       : [{ k: "Standard deduction", v: dStandard }];
 
     const visibleDeductionsTotal = deductionItems.reduce((acc, it) => acc + (Number(it.v) || 0), 0);
+    const showZeroTaxNote = (data?.taxAmount || 0) === 0;
+    const context = showZeroTaxNote
+      ? "₹0 is typically due to Section 87A rebate (subject to taxable income threshold)."
+      : null;
 
-    return (
-      <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-        <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold text-white">Calculation Breakdown (Audit View)</div>
-          <div className="text-xs text-slate-200/60">FY 2025–26</div>
-        </div>
-        <div className="mt-1 text-[11px] text-slate-200/60">{label}</div>
-
-        <div className="mt-3 grid gap-2 text-xs text-slate-100">
-          <div className="flex justify-between text-slate-200/70">
-            <span>Taxable income</span>
-            <span className="text-[color:var(--color-matte-gold)]">{formatINR(data?.taxableIncome || 0)}</span>
-          </div>
-
-          <div className="mt-1 border-t border-white/10 pt-2 space-y-1">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-slate-200/60">Deductions</div>
-            {deductionItems.map((it) => (
-              <div key={it.k} className="flex justify-between text-slate-200/70">
-                <span>{it.k}</span>
-                <span>{formatINR(it.v || 0)}</span>
-              </div>
-            ))}
-            <div className="mt-1 flex justify-between font-semibold">
-              <span>Total deductions (sum above)</span>
-              <span className="text-[color:var(--color-matte-gold)]">{formatINR(visibleDeductionsTotal)}</span>
-            </div>
-          </div>
-
-          <div className="mt-2 border-t border-white/10 pt-2">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-slate-200/60">Slabs</div>
-            <div className="mt-2 space-y-1">
-              {rows.map((r, idx) => (
-                <div key={idx} className="flex justify-between text-slate-200/75">
-                  <span>
-                    {r.to == null
-                      ? `${formatINR(r.from)}+ @ ${(r.rate * 100).toFixed(0)}%`
-                      : `${formatINR(r.from)}–${formatINR(r.to)} @ ${(r.rate * 100).toFixed(0)}%`}
-                  </span>
-                  <span>{formatINR(r.tax || 0)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-2 border-t border-white/10 pt-2 space-y-1">
-            <div className="flex justify-between text-slate-200/70">
-              <span>Tax (before rebate)</span>
-              <span>{formatINR(data?.taxBeforeRebate || 0)}</span>
-            </div>
-            <div className="flex justify-between text-slate-200/70">
-              <span>Tax (after rebate)</span>
-              <span>{formatINR(data?.taxAfterRebate || 0)}</span>
-            </div>
-            {(data?.taxAmount || 0) === 0 ? (
-              <div className="text-[11px] text-slate-200/60">
-                ₹0 is typically due to Section 87A rebate (subject to taxable income threshold).
-              </div>
-            ) : null}
-            {data?.regime === "new" && (data?.marginalRelief || 0) > 0 ? (
-              <div className="flex justify-between text-slate-200/70">
-                <span>Marginal relief</span>
-                <span>-{formatINR(data?.marginalRelief || 0)}</span>
-              </div>
-            ) : null}
-            <div className="flex justify-between text-slate-200/70">
-              <span>Health & education cess (4%)</span>
-              <span>{formatINR(data?.cess || 0)}</span>
-            </div>
-            <div className="flex justify-between font-semibold">
-              <span>Total tax</span>
-              <span className="text-[color:var(--color-matte-gold)]">{formatINR(data?.taxAmount || 0)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return {
+      label,
+      fiscalYear: "FY 2025–26",
+      context,
+      sections: [
+        {
+          title: "Summary",
+          rows: [
+            {
+              label: "Taxable income",
+              value: formatINR(data?.taxableIncome || 0),
+              accent: true,
+            },
+          ],
+        },
+        {
+          title: "Deductions",
+          rows: [
+            ...deductionItems.map((it) => ({
+              label: it.k,
+              value: formatINR(it.v || 0),
+            })),
+            {
+              label: "Total deductions (sum above)",
+              value: formatINR(visibleDeductionsTotal),
+              emphasis: true,
+              accent: true,
+            },
+          ],
+        },
+        {
+          title: "Slabs",
+          rows: slabRows.map((r, idx) => ({
+            label:
+              r.to == null
+                ? `${idx + 1}. ${formatINR(r.from)}+ @ ${(r.rate * 100).toFixed(0)}%`
+                : `${idx + 1}. ${formatINR(r.from)}–${formatINR(r.to)} @ ${(r.rate * 100).toFixed(0)}%`,
+            value: formatINR(r.tax || 0),
+          })),
+        },
+        {
+          title: "Totals",
+          rows: [
+            {
+              label: "Tax (before rebate)",
+              value: formatINR(data?.taxBeforeRebate || 0),
+            },
+            {
+              label: "Tax (after rebate)",
+              value: formatINR(data?.taxAfterRebate || 0),
+            },
+            ...(data?.regime === "new" && (data?.marginalRelief || 0) > 0
+              ? [
+                  {
+                    label: "Marginal relief",
+                    value: `-${formatINR(data?.marginalRelief || 0)}`,
+                  },
+                ]
+              : []),
+            {
+              label: "Health & education cess (4%)",
+              value: formatINR(data?.cess || 0),
+            },
+            {
+              label: "Total tax",
+              value: formatINR(data?.taxAmount || 0),
+              emphasis: true,
+              accent: true,
+            },
+          ],
+        },
+      ],
+    };
   }
 
   // Lightweight count-up for result numbers (300–500ms)
@@ -471,35 +501,38 @@ export function TaxCalculator() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-      <div className="w-full flex justify-center">
-        <div className="calculator-container w-full max-w-md lg:max-w-6xl">
-          <div className="calculator-inner tabular-nums">
-            {/* Header */}
-            <div className="text-center px-6 pt-6 pb-5 lg:px-10 lg:pt-8 lg:pb-6">
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] tracking-[0.16em] uppercase text-white/55">
+      <BaseCalculatorLayout
+        header={
+          <CalculatorHeader
+            meta={
+              <>
                 <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
                 <span>BM Wealth</span>
                 <span className="text-white/25">•</span>
                 <span>BM Wealth Calculator</span>
                 <span className="text-white/25">•</span>
                 <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
-              </div>
-
-              <h1 className="mt-4 text-2xl lg:text-3xl font-semibold tracking-wide leading-tight text-[color:var(--color-matte-gold)]">
+              </>
+            }
+            title={
+              <>
                 Tax Optimization Intelligence — <span className="whitespace-nowrap">FY 2025–26</span>
-              </h1>
-
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white/75">
+              </>
+            }
+            pill={
+              <>
                 <span className="text-[color:var(--color-matte-gold)] font-semibold">Stop the invisible leak.</span>
                 <span>See if the 2026 “Zero Tax” rule applies to you.</span>
-              </div>
-
-              <p className="mt-3 text-sm text-white/70">
-                Compare Old vs New regime, then unlock a 10-point optimization blueprint.
-              </p>
-            </div>
-
-            <div className="px-6 pb-6 lg:px-10 lg:pb-10">
+              </>
+            }
+            subtitle="Compare Old vs New regime, then unlock a 10-point optimization blueprint."
+          />
+        }
+        disclaimer={
+          "ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing tax rules. For personalised investment advice, consult a SEBI-registered investment adviser."
+        }
+      >
+        <div className="px-6 pb-6 lg:px-10 lg:pb-10">
             <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-10">
               {/* Left: Inputs */}
               <div className="space-y-6">
@@ -657,87 +690,47 @@ export function TaxCalculator() {
                   </div>
                 ) : null}
                 {showResults && comparison ? (
-                  <div className="grid grid-cols-2 gap-4 animate-in fade-in">
-                  <Card
-                    className={
-                      "bg-white/5 border relative glass-effect transition-transform duration-300 hover:-translate-y-0.5 " +
-                      (winner === "old" && emphasizeWinner
-                        ? "border-[color:var(--color-matte-gold)] bg-[rgba(192,160,98,0.08)]"
-                        : winner === "old"
-                          ? "border-[color:var(--color-matte-gold)]"
-                          : "border-white/10")
-                    }
-                  >
-                    {winner === "old" ? (
-                      <Badge className="absolute -top-3 right-3 bg-[color:var(--color-matte-gold)] text-black">WINNER</Badge>
-                    ) : null}
-                    <CardContent className="p-4 space-y-2">
-                      <h3 className="text-sm text-slate-200/70">Old Regime</h3>
-                      <p className="text-xl font-semibold text-[color:var(--color-matte-gold)]">{formatINR(oldTaxDisplay)}</p>
-                      {oldTax === 0 ? (
-                        <p className="text-[11px] text-slate-200/60">₹0 due to Section 87A rebate (threshold-based).</p>
-                      ) : null}
-                      <p
-                        className={
-                          "text-[11px] leading-snug " +
-                          (winner === "old"
-                            ? "text-emerald-200/80"
+                  <ResultSummary
+                    winnerKey={winner === "tie" ? null : winner}
+                    emphasizeWinner={emphasizeWinner}
+                    options={[
+                      {
+                        key: "old",
+                        label: "Old Regime",
+                        amount: formatINR(oldTaxDisplay),
+                        amountNote: oldTax === 0 ? "₹0 due to Section 87A rebate (threshold-based)." : null,
+                        statusText:
+                          winner === "old"
+                            ? "You pay LESS tax"
                             : winner === "new"
-                              ? "text-rose-200/70"
-                              : "text-slate-200/60")
-                        }
-                      >
-                        {winner === "old" ? "You pay LESS tax" : winner === "new" ? "You pay MORE tax" : "You pay the SAME tax"}
-                      </p>
-                      <p className="text-xs text-slate-200/60">
-                        Effective Rate: {(comparison.old.effectiveRate * 100).toFixed(1)}%
-                      </p>
-                      <p className="text-xs text-slate-200/60">
-                        Money Saved: {formatINR(winner === "old" ? comparison.savings : 0)}
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card
-                    className={
-                      "bg-white/5 border relative glass-effect transition-transform duration-300 hover:-translate-y-0.5 " +
-                      (winner === "new" && emphasizeWinner
-                        ? "border-[color:var(--color-matte-gold)] bg-[rgba(192,160,98,0.08)]"
-                        : winner === "new"
-                          ? "border-[color:var(--color-matte-gold)]"
-                          : "border-white/10")
-                    }
-                  >
-                    {winner === "new" ? (
-                      <Badge className="absolute -top-3 right-3 bg-[color:var(--color-matte-gold)] text-black">WINNER</Badge>
-                    ) : null}
-                    <CardContent className="p-4 space-y-2">
-                      <h3 className="text-sm text-[color:var(--color-matte-gold)]">New Regime</h3>
-                      <p className="text-xl font-semibold text-[color:var(--color-matte-gold)]">{formatINR(newTaxDisplay)}</p>
-                      {newTax === 0 ? (
-                        <p className="text-[11px] text-slate-200/60">₹0 due to Section 87A rebate (threshold-based).</p>
-                      ) : null}
-                      <p
-                        className={
-                          "text-[11px] leading-snug " +
-                          (winner === "new"
-                            ? "text-emerald-200/80"
+                              ? "You pay MORE tax"
+                              : "You pay the SAME tax",
+                        statusTone: winner === "old" ? "good" : winner === "new" ? "bad" : "neutral",
+                        metaLines: [
+                          `Effective Rate: ${(comparison.old.effectiveRate * 100).toFixed(1)}%`,
+                          `Money Saved: ${formatINR(winner === "old" ? comparison.savings : 0)}`,
+                        ],
+                      },
+                      {
+                        key: "new",
+                        label: "New Regime",
+                        labelAccent: true,
+                        amount: formatINR(newTaxDisplay),
+                        amountNote: newTax === 0 ? "₹0 due to Section 87A rebate (threshold-based)." : null,
+                        statusText:
+                          winner === "new"
+                            ? "You pay LESS tax"
                             : winner === "old"
-                              ? "text-rose-200/70"
-                              : "text-slate-200/60")
-                        }
-                      >
-                        {winner === "new" ? "You pay LESS tax" : winner === "old" ? "You pay MORE tax" : "You pay the SAME tax"}
-                      </p>
-                      <p className="text-xs text-slate-200/60">
-                          Effective Rate: {(comparison.new.effectiveRate * 100).toFixed(1)}%
-                      </p>
-                      <p className="text-xs text-[color:var(--color-matte-gold)]">
-                        Money Saved: {formatINR(winner === "new" ? comparison.savings : 0)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                  </div>
+                              ? "You pay MORE tax"
+                              : "You pay the SAME tax",
+                        statusTone: winner === "new" ? "good" : winner === "old" ? "bad" : "neutral",
+                        metaLines: [
+                          `Effective Rate: ${(comparison.new.effectiveRate * 100).toFixed(1)}%`,
+                          `Money Saved: ${formatINR(winner === "new" ? comparison.savings : 0)}`,
+                        ],
+                      },
+                    ]}
+                  />
                 ) : null}
 
                 {showResults && comparison ? (
@@ -798,7 +791,7 @@ export function TaxCalculator() {
                 {showPremium ? (
                   <PremiumUnlockButton
                     onClick={() => {
-                      trackEvent("premium_click");
+                      track("premium_click");
                       setLeadOpen(true);
                     }}
                   />
@@ -833,7 +826,7 @@ export function TaxCalculator() {
                       checked={showBreakdown}
                       onCheckedChange={(v) => {
                         setShowBreakdown(Boolean(v));
-                        trackEvent("breakdown_toggle", { open: Boolean(v) });
+                        track("breakdown_toggle", { open: Boolean(v) });
                       }}
                     />
                   </div>
@@ -841,8 +834,8 @@ export function TaxCalculator() {
 
                 {showResults && comparison && showBreakdown ? (
                   <div className="grid gap-4 lg:grid-cols-2">
-                    <Breakdown label="Old regime" data={comparison.old} />
-                    <Breakdown label="New regime" data={comparison.new} />
+                    <BreakdownPanel {...getBreakdownModel("Old regime", comparison.old)} />
+                    <BreakdownPanel {...getBreakdownModel("New regime", comparison.new)} />
                   </div>
                 ) : null}
 
@@ -851,17 +844,10 @@ export function TaxCalculator() {
                     {statusNote}
                   </p>
                 ) : null}
-                </div>
               </div>
             </div>
           </div>
-
-          {/* Disclaimer */}
-          <p className="px-6 py-6 lg:px-10 text-[10px] text-center text-slate-200/50">
-            ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing tax rules. For personalised investment advice, consult a SEBI-registered investment adviser.
-          </p>
-        </div>
-      </div>
+      </BaseCalculatorLayout>
 
       <LeadCaptureModal
         open={leadOpen}
@@ -874,14 +860,14 @@ export function TaxCalculator() {
         open={exitOpen}
         onOpenChange={setExitOpen}
         onPrimary={() => {
-          trackEvent("exit_intent_premium_click");
+          track("exit_intent_premium_click");
           setExitOpen(false);
-          trackEvent("exit_intent_lead_capture");
+          track("exit_intent_lead_capture");
           setLeadOpen(true);
         }}
         onSecondary={() => {
           setExitOpen(false);
-          trackEvent("exit_intent_lead_capture");
+          track("exit_intent_lead_capture");
           setLeadOpen(true);
         }}
       />

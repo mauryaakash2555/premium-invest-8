@@ -1292,6 +1292,38 @@ html {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
+/* Subtle behind-the-card hover glow (premium depth) */
+.calculator-backdrop-hover {
+  position: relative;
+}
+
+.calculator-backdrop-hover::before {
+  content: "";
+  position: absolute;
+  inset: -56px;
+  background: radial-gradient(
+    circle at 50% 18%,
+    color-mix(in oklab, var(--color-matte-gold) 26%, transparent),
+    transparent 62%
+  );
+  filter: blur(26px);
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.calculator-backdrop-hover:hover::before {
+  opacity: 0.75;
+  transform: translateY(0) scale(1);
+}
+
+.calculator-backdrop-hover .calculator-container {
+  position: relative;
+  z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .calculator-container {
     animation: none;
