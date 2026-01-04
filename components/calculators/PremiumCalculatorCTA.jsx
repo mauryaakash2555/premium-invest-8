@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./PremiumCalculatorCTA.module.css";
 
 export function PremiumCalculatorCTA({
   labelBefore = "Reveal Detailed Analysis",
-  labelAfter = "Preparing Your Report…",
   onClickAction,
   price,
   buttonClassName = "calculator-premium-cta",
 }) {
-  const [clicked, setClicked] = useState(false);
-
   return (
     <div className={styles.wrap}>
       <div className={styles.inner}>
@@ -19,11 +15,10 @@ export function PremiumCalculatorCTA({
           type="button"
           className={[styles.button, buttonClassName].filter(Boolean).join(" ")}
           onClick={() => {
-            if (!clicked) setClicked(true);
             onClickAction?.({ price });
           }}
         >
-          {clicked ? labelAfter : labelBefore}
+          {labelBefore}
         </button>
 
         <div className={styles.lockedCard} aria-hidden="true">

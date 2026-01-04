@@ -25,14 +25,19 @@
 
 import { Playfair_Display, Inter } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
 import Footer from "@/components/user/Footer";
 import WhatsAppFloat from "@/components/user/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
+import { GA4PageView } from "@/components/analytics/GA4PageView";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata";
+
+const GA4_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || "G-SSN64C0XCY";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -113,7 +118,24 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
-        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+        {GA4_MEASUREMENT_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="ga4-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', '${GA4_MEASUREMENT_ID}', { send_page_view: false });`,
+              }}
+            />
+            <Suspense fallback={null}>
+              <GA4PageView measurementId={GA4_MEASUREMENT_ID} />
+            </Suspense>
+          </>
+        ) : null}
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger

@@ -1,6 +1,7 @@
 import Script from "next/script";
 import Link from "next/link";
 import BackRow from "@/components/shared/BackRow";
+import { getMetadataBase } from "@/lib/seo/metadata";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
 
@@ -13,13 +14,15 @@ export const metadata = {
 };
 
 export default function TaxOptimizationToolPage() {
+  const base = getMetadataBase().toString().replace(/\/$/, "");
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "FinancialCalculator",
     name: "Tax Optimization Intelligence — FY 2025–26",
     description:
       "Mumbai-first FY 2025–26 income tax calculator comparing Old vs New regime with standard deduction, 87A rebate, marginal relief, and 4% cess.",
-    url: "https://bmwealth.example/tools/tax-optimization",
+    url: `${base}/tools/tax-optimization`,
     provider: {
       "@type": "Organization",
       name: "BM Wealth",
@@ -87,19 +90,19 @@ export default function TaxOptimizationToolPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://bmwealth.example/",
+        item: `${base}/`,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Tools",
-        item: "https://bmwealth.example/tools",
+        item: `${base}/tools`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: "Tax Optimization Intelligence",
-        item: "https://bmwealth.example/tools/tax-optimization",
+        item: `${base}/tools/tax-optimization`,
       },
     ],
   };

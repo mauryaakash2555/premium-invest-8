@@ -84,6 +84,11 @@ function formatCroreNumber(valueInINR) {
   return s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1");
 }
 
+function digitsOnlyPhone(v) {
+  const digits = String(v || "").replace(/\D+/g, "");
+  return digits.length >= 10 ? digits.slice(-10) : digits;
+}
+
 export function PropertyVsSipCalculator() {
   const { track } = useCalculatorTracking("property_vs_sip");
 
@@ -289,7 +294,7 @@ export function PropertyVsSipCalculator() {
       prefill: {
         name: payload?.name || "",
         email: payload?.email || "",
-        contact: payload?.phone || "",
+        contact: digitsOnlyPhone(payload?.phone) || "",
       },
       theme: { color: "#C0A062" },
       modal: {
@@ -353,7 +358,13 @@ export function PropertyVsSipCalculator() {
           const blob = await pdfRes.blob();
           downloadBlob(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf", blob);
           track("pdf_downloaded");
-          setStatusNote("Downloaded. Please also check your email.");
+          if (emailStatus === "sent") {
+            setStatusNote("Downloaded. Please also check your email.");
+          } else if (emailStatus === "not_configured" || emailStatus === "failed") {
+            setStatusNote("Downloaded. Email delivery is unavailable right now.");
+          } else {
+            setStatusNote("Downloaded.");
+          }
         } catch {
           track("payment_failed", { stage: "post_payment" });
           setStatusNote("Payment was received but processing failed. We'll email you shortly.");
@@ -744,7 +755,7 @@ export function PropertyVsSipCalculator() {
         payLabel="Send It Now — ₹399"
         payButtonClassName="calculator-premium-cta"
         optInLabel="Send investment tips via WhatsApp"
-        whatsappHelpText="Use +91 format so we can deliver your PDF instantly."
+        whatsappHelpText="Optional for Email Summary. For premium, WhatsApp helps us support delivery if email fails. Use +91XXXXXXXXXX."
         footerNote={`This is an illustrative educational tool based on your inputs and locked assumptions. Not SEBI-registered investment advice. Consult a financial advisor before making decisions.\n\nARN 90008 | IRDAI 277925 | Educational purposes only`}
       />
 

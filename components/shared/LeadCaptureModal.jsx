@@ -69,7 +69,18 @@ export function LeadCaptureModal({
   const [info, setInfo] = useState("");
   const [pendingAction, setPendingAction] = useState("");
 
-  const canSubmit = useMemo(() => {
+  const canSubmitFree = useMemo(() => {
+    const trimmedName = String(name || "").trim();
+    const trimmedEmail = String(email || "").trim();
+    if (trimmedName.length < 2) return false;
+    if (!isValidEmail(trimmedEmail)) return false;
+
+    const rawPhone = String(whatsapp || "").trim();
+    if (!rawPhone) return true;
+    return Boolean(normalizeWhatsApp(rawPhone));
+  }, [name, email, whatsapp]);
+
+  const canSubmitPay = useMemo(() => {
     return (
       String(name || "").trim().length >= 2 &&
       isValidEmail(email) &&
@@ -86,6 +97,7 @@ export function LeadCaptureModal({
     const trimmedName = String(name || "").trim();
     const trimmedEmail = String(email || "").trim();
     const normalizedPhone = normalizeWhatsApp(whatsapp);
+    const hasAnyPhoneInput = Boolean(String(whatsapp || "").trim());
 
     if (process.env.NODE_ENV !== "production") {
       // eslint-disable-next-line no-console
@@ -112,15 +124,31 @@ export function LeadCaptureModal({
       setErr("Please enter a valid email.");
       return;
     }
-    if (!normalizedPhone) {
-      setErr("Please enter a valid 10-digit mobile number.");
-      return;
+
+    if (action === "pay") {
+      if (!normalizedPhone) {
+        setErr("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+      if (!canSubmitPay) {
+        setErr("Please check your details and try again.");
+        return;
+      }
+    } else {
+      if (!canSubmitFree) {
+        if (hasAnyPhoneInput && !normalizedPhone) {
+          setErr("Please enter a valid 10-digit mobile number (or leave it blank).");
+        } else {
+          setErr("Please check your details and try again.");
+        }
+        return;
+      }
     }
 
     const payload = {
       name: trimmedName,
       email: trimmedEmail,
-      phone: normalizedPhone,
+      phone: normalizedPhone || "",
       whatsappOptIn: Boolean(whatsappConsent),
     };
 

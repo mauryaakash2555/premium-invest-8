@@ -38,7 +38,7 @@ export async function POST(req) {
     const inputs = body?.inputs || {};
     const results = body?.results || {};
 
-    if (!name || name.length < 2 || !isValidEmail(email) || !phone) {
+    if (!name || name.length < 2 || !isValidEmail(email)) {
       return NextResponse.json({ ok: false, error: "invalid_fields" }, { status: 400 });
     }
 
@@ -78,7 +78,7 @@ export async function POST(req) {
       </div>
     `;
 
-    const { lead: savedLead, error: leadError } = await LeadsDB.create({ name, email, phone });
+    const { lead: savedLead, error: leadError } = await LeadsDB.create({ name, email, phone: phone || null });
     if (leadError) {
       return NextResponse.json({ ok: false, error: "lead_save_failed" }, { status: 500 });
     }
@@ -88,7 +88,7 @@ export async function POST(req) {
       data: {
         source: "property_vs_sip",
         email,
-        phone,
+        phone: phone || null,
         whatsappOptIn,
       },
     });
