@@ -251,9 +251,22 @@ export function TaxCalculator() {
             return;
           }
 
+          const emailStatus = String(verifyJson?.emailStatus || "").trim();
+          if (emailStatus && emailStatus !== "sent") {
+            if (emailStatus === "not_configured") {
+              setStatusNote("Payment successful, but email delivery is not configured yet. Downloading your PDF now.");
+            } else if (emailStatus === "failed") {
+              setStatusNote("Payment successful, but we could not email your PDF. Downloading it now.");
+            }
+          }
+
           track("payment_success");
           track("purchase", { product: "personal_tax_execution_blueprint", amount: 299, currency: "INR" });
-          setStatusNote("Payment successful. Preparing your PDF...");
+          if (emailStatus === "sent") {
+            setStatusNote("Payment successful. Email sent. Preparing your PDF...");
+          } else {
+            setStatusNote("Payment successful. Preparing your PDF...");
+          }
           try {
             localStorage.setItem("tax_premium_bought", "1");
             purchaseRef.current = true;

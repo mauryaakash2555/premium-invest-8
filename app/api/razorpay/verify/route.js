@@ -106,8 +106,11 @@ export async function POST(req) {
       emailHtml = await buildEmailHtml({ name: lead?.name, inputs });
     }
 
+    let emailStatus = "missing_email";
+    let emailError = null;
+
     if (emailTo) {
-      await EmailService.sendWithAttachments({
+      const emailRes = await EmailService.sendWithAttachments({
         to: emailTo,
         subject: emailSubject,
         html: emailHtml,
@@ -119,6 +122,16 @@ export async function POST(req) {
           },
         ],
       });
+
+      if (emailRes?.ok) {
+        emailStatus = "sent";
+      } else if (emailRes?.skipped) {
+        emailStatus = "not_configured";
+        emailError = emailRes?.reason || "not_configured_or_missing_fields";
+      } else {
+        emailStatus = "failed";
+        emailError = emailRes?.error ? "send_failed" : "unknown";
+      }
     }
 
     // WhatsApp notification requested: send an admin email as a reliable placeholder.
@@ -142,7 +155,7 @@ export async function POST(req) {
     });
 
     if (!isPayloadMode) {
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, emailStatus, emailError });
     }
 
     const tokenPayload = JSON.stringify({
@@ -154,7 +167,7 @@ export async function POST(req) {
     const tokenSecret = String(process.env.PDF_DOWNLOAD_TOKEN_SECRET || process.env.RAZORPAY_KEY_SECRET || "").trim();
     const downloadToken = crypto.createHmac("sha256", tokenSecret).update(tokenPayload).digest("hex");
 
-    return NextResponse.json({ ok: true, downloadToken, tokenPayload });
+    return NextResponse.json({ ok: true, downloadToken, tokenPayload, emailStatus, emailError });
   } catch (e) {
     return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
   }
