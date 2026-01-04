@@ -1,16 +1,46 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals.js";
+import { createRequire } from "node:module";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  // Override default ignores of eslint-config-next.
+import { defineConfig, globalIgnores } from "eslint/config";
+
+const require = createRequire(import.meta.url);
+const nextPlugin = require("@next/eslint-plugin-next");
+const reactPlugin = require("eslint-plugin-react");
+const reactHooksPlugin = require("eslint-plugin-react-hooks");
+
+const nextRecommendedRules = nextPlugin?.configs?.recommended?.rules || {};
+const nextCoreWebVitalsRules = nextPlugin?.configs?.["core-web-vitals"]?.rules || {};
+
+export default defineConfig([
+  {
+    files: ["**/*.{js,jsx,mjs,cjs}"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      "@next/next": nextPlugin,
+      react: reactPlugin,
+      "react-hooks": reactHooksPlugin,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      ...nextRecommendedRules,
+      ...nextCoreWebVitalsRules,
+    },
+  },
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
   ]),
 ]);
-
-export default eslintConfig;

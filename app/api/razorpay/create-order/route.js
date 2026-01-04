@@ -42,8 +42,11 @@ export async function POST(req) {
     const amountPaise = Number(body?.amountPaise || 29900);
     const leadId = body?.leadId ? String(body.leadId) : "";
 
+    const receiptPrefix = body?.receiptPrefix ? String(body.receiptPrefix) : "tax";
+
     const safeAmount = Number.isFinite(amountPaise) ? amountPaise : 29900;
-    const receipt = leadId ? `tax_${leadId}_${Date.now()}` : `tax_${Date.now()}`;
+    const prefix = receiptPrefix.trim() || "tax";
+    const receipt = leadId ? `${prefix}_${leadId}_${Date.now()}` : `${prefix}_${Date.now()}`;
 
     const res = await razorpayCreateOrder({ amountPaise: safeAmount, receipt });
     if (!res.ok) {

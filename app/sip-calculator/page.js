@@ -22,6 +22,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import sipPlans from "@/data/sipPlans.json";
 
 const formatCurrency = (value) =>
@@ -60,13 +61,13 @@ export default function SipCalculatorPage() {
         >
           ← Back
         </button>
-        <a
+        <Link
           href="/"
           className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs tracking-wider hover:bg-white/10"
           aria-label="Close calculator"
         >
           Close
-        </a>
+        </Link>
       </div>
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Planner</p>

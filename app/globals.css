@@ -254,6 +254,54 @@
     transform: translateY(-2px);
   }
 
+  /* Premium Gold CTA - reusable (same as calculator CTA glow) */
+  .calculator-premium-cta {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 0%,
+      color-mix(in oklab, var(--color-matte-gold) 70%, white 30%) 50%,
+      color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 100%
+    ) !important;
+    background-size: 200% 200% !important;
+    color: var(--color-luxury-black) !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .calculator-premium-cta:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 8px 30px color-mix(in oklab, var(--color-matte-gold) 55%, transparent),
+      0 0 40px color-mix(in oklab, var(--color-matte-gold) 40%, transparent);
+    filter: brightness(1.08);
+    background-position: 100% 50% !important;
+  }
+
+  .calculator-premium-cta:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .calculator-premium-cta::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .calculator-premium-cta:hover::before {
+    left: 100%;
+  }
+
   .luxury-particles {
     position: relative;
   }

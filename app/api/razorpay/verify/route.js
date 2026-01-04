@@ -5,6 +5,7 @@ import { EmailService } from "@/lib/email/emailService";
 import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
 import { logEventSafe } from "@/lib/db/events";
 import { generateTaxBlueprintPdfBytes } from "@/lib/pdf/taxBlueprint";
+import { generateBmWealthBlueprint15PdfBytes } from "@/lib/pdf/bmWealthBlueprint15";
 
 export const runtime = "nodejs";
 
@@ -47,6 +48,7 @@ export async function POST(req) {
     const signature = String(body?.razorpay_signature || "");
     const lead = body?.lead || {};
     const inputs = body?.inputs || {};
+    const pdfPayload = body?.pdfPayload || null;
 
     if (!orderId || !paymentId || !signature) {
       return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
@@ -71,26 +73,62 @@ export async function POST(req) {
       },
     });
 
-    const pdfBytes = generateTaxBlueprintPdfBytes({ lead, inputs });
+    const emailTo = String(lead?.email || "").trim();
+    const isPayloadMode = Boolean(pdfPayload);
 
-    const html = await buildEmailHtml({ name: lead?.name, inputs });
-    await EmailService.sendWithAttachments({
-      to: String(lead?.email || "").trim(),
-      subject: "Your Tax Optimization Blueprint is Ready!",
-      html,
-      attachments: [
-        {
-          filename: "BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf",
-          content: pdfBytes,
-          contentType: "application/pdf",
-        },
-      ],
-    });
+    let pdfBytes;
+    let emailSubject;
+    let emailHtml;
+    let attachmentName;
+
+    if (isPayloadMode) {
+      pdfBytes = generateBmWealthBlueprint15PdfBytes(pdfPayload);
+      attachmentName = String(pdfPayload?.meta?.filename || "BM-Wealth-Premium-Report.pdf");
+      emailSubject = String(pdfPayload?.meta?.emailSubject || "Your BM Wealth Premium Report is Ready");
+
+      const emailTitle = String(pdfPayload?.meta?.emailTitle || "Your BM Wealth Premium Report is Ready");
+      const emailSubtitle = String(pdfPayload?.meta?.emailSubtitle || "Your PDF is attached.");
+      const emailFooter = String(pdfPayload?.meta?.emailFooter || "ARN 90008 | Educational use only. Not investment advice.");
+
+      emailHtml = `
+        <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
+          <h2>${emailTitle}</h2>
+          <p>Hi ${String(lead?.name || "").trim() || "there"},</p>
+          <p>${emailSubtitle}</p>
+          <hr/>
+          <p style="font-size:12px;color:#555">${emailFooter}</p>
+        </div>
+      `;
+    } else {
+      pdfBytes = generateTaxBlueprintPdfBytes({ lead, inputs });
+      attachmentName = "BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf";
+      emailSubject = "Your Tax Optimization Blueprint is Ready!";
+      emailHtml = await buildEmailHtml({ name: lead?.name, inputs });
+    }
+
+    if (emailTo) {
+      await EmailService.sendWithAttachments({
+        to: emailTo,
+        subject: emailSubject,
+        html: emailHtml,
+        attachments: [
+          {
+            filename: attachmentName,
+            content: pdfBytes,
+            contentType: "application/pdf",
+          },
+        ],
+      });
+    }
 
     // WhatsApp notification requested: send an admin email as a reliable placeholder.
+    const adminLabel = isPayloadMode
+      ? String(pdfPayload?.meta?.adminLabel || "New premium customer")
+      : "New premium customer: Tax Optimization Blueprint ₹299";
+
     await EmailService.sendRaw({
       to: "mauryaakash2555@gmail.com",
-      subject: "New premium customer: Tax Optimization Blueprint ₹299",
+      subject: adminLabel,
       html: `
         <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
           <h2>New premium customer</h2>
@@ -103,7 +141,20 @@ export async function POST(req) {
       `,
     });
 
-    return NextResponse.json({ ok: true });
+    if (!isPayloadMode) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const tokenPayload = JSON.stringify({
+      orderId,
+      paymentId,
+      filename: attachmentName,
+      ts: Date.now(),
+    });
+    const tokenSecret = String(process.env.PDF_DOWNLOAD_TOKEN_SECRET || process.env.RAZORPAY_KEY_SECRET || "").trim();
+    const downloadToken = crypto.createHmac("sha256", tokenSecret).update(tokenPayload).digest("hex");
+
+    return NextResponse.json({ ok: true, downloadToken, tokenPayload });
   } catch (e) {
     return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
   }
