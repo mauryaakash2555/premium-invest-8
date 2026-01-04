@@ -66,6 +66,8 @@ export function LeadCaptureModal({
   const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [info, setInfo] = useState("");
+  const [pendingAction, setPendingAction] = useState("");
 
   const canSubmit = useMemo(() => {
     return (
@@ -78,6 +80,8 @@ export function LeadCaptureModal({
   async function handle(action) {
     if (busy) return;
     setErr("");
+    setInfo("");
+    setPendingAction(action);
 
     const trimmedName = String(name || "").trim();
     const trimmedEmail = String(email || "").trim();
@@ -121,14 +125,21 @@ export function LeadCaptureModal({
     };
 
     setBusy(true);
+    setInfo(action === "free" ? "Sending your summary…" : "Starting payment…");
     try {
-      if (action === "free") await onFree?.(payload);
-      else await onPay?.(payload);
+      if (action === "free") {
+        await onFree?.(payload);
+        setInfo("Email sent. Please check your inbox (and Spam/Promotions). ");
+      } else {
+        await onPay?.(payload);
+      }
     } catch (e) {
       const msg = typeof e?.message === "string" && e.message.trim() ? e.message.trim() : "Something went wrong. Please try again.";
       setErr(msg);
+      setInfo("");
     } finally {
       setBusy(false);
+      setPendingAction("");
     }
   }
 
@@ -191,16 +202,17 @@ export function LeadCaptureModal({
           </div>
 
           {err ? <div className="text-sm text-red-300">{err}</div> : null}
+          {!err && info ? <div className="text-sm text-slate-200/80">{info}</div> : null}
 
           <div className="flex gap-3">
             <Button
               type="button"
               variant="outline"
-              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10"
+              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-100"
               disabled={busy}
               onClick={() => handle("free")}
             >
-              {freeLabel}
+              {busy && pendingAction === "free" ? "Sending…" : freeLabel}
             </Button>
             <Button
               type="button"
@@ -214,7 +226,7 @@ export function LeadCaptureModal({
               disabled={busy}
               onClick={() => handle("pay")}
             >
-              {payLabel}
+              {busy && pendingAction === "pay" ? "Starting…" : payLabel}
             </Button>
           </div>
 

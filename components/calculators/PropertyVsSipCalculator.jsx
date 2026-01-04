@@ -209,8 +209,7 @@ export function PropertyVsSipCalculator() {
     }
 
     track("lead_captured", { mode: "free" });
-    setLeadOpen(false);
-    setStatusNote("Email sent. Please check your inbox (and Promotions/Spam).");
+    setStatusNote("Email sent. Please check your inbox (and Promotions/Spam). ");
   }
 
   async function handlePay(payload) {
