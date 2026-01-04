@@ -61,6 +61,10 @@ export async function POST(req) {
       currency: res.order?.currency,
     });
   } catch (e) {
+    const message = typeof e?.message === "string" ? e.message : "";
+    if (message === "razorpay_not_configured") {
+      return NextResponse.json({ ok: false, error: "razorpay_not_configured" }, { status: 500 });
+    }
     return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
   }
 }

@@ -2,6 +2,44 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "stop-dev-premium-invest-8 (3000)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}\\scripts\\stop-dev-server.ps1",
+				"-Port",
+				"3000"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "start-dev-premium-invest-8 (reliable, waits ready)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}\\scripts\\start-dev-server.ps1",
+				"-Port",
+				"3000",
+				"-TimeoutSeconds",
+				"30"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
 			"label": "start-frontend",
 			"type": "shell",
 			"command": "cmd",

@@ -24,6 +24,7 @@
  */
 
 import { Playfair_Display, Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
 import Footer from "@/components/user/Footer";
@@ -112,6 +113,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger

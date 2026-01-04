@@ -125,7 +125,8 @@ export function LeadCaptureModal({
       if (action === "free") await onFree?.(payload);
       else await onPay?.(payload);
     } catch (e) {
-      setErr("Something went wrong. Please try again.");
+      const msg = typeof e?.message === "string" && e.message.trim() ? e.message.trim() : "Something went wrong. Please try again.";
+      setErr(msg);
     } finally {
       setBusy(false);
     }

@@ -2,6 +2,36 @@
 
 ## ⚠️ STOP BEFORE YOU CODE!
 
+## ✅ DEV SERVER (1-CLICK, RELIABLE)
+
+Use the VS Code Task (recommended):
+
+- Task: start-dev-premium-invest-8 (reliable, waits ready)
+  - What it does: kills anything stuck on port 3000 → starts Next dev in premium-invest-8 → waits until http://localhost:3000/ is reachable.
+
+Optional stop task:
+
+- Task: stop-dev-premium-invest-8 (3000)
+
+Logs if startup fails:
+
+- premium-invest-8/dev_out.log
+- premium-invest-8/dev_err.log
+
+If you need to run scripts manually:
+
+- premium-invest-8/scripts/start-dev-server.ps1
+- premium-invest-8/scripts/stop-dev-server.ps1
+
+## 💳 RAZORPAY (TEST MODE) REQUIRED ENV VARS
+
+If the UI shows "razorpay_not_configured", set these (do NOT commit real values):
+
+- RAZORPAY_KEY_ID
+- RAZORPAY_KEY_SECRET
+
+See premium-invest-8/.env.example for placeholders.
+
 **You must read these 2 files FIRST:**
 
 ### 1️⃣ **`AI_DESIGN_RULES.md`** ← MASTER GUIDE

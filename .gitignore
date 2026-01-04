@@ -30,6 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 devserver*.log
+dev_out.log
+dev_err.log
 
 # env files (never commit real secrets)
 .env

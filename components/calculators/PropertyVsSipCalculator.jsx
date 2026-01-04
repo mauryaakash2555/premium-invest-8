@@ -177,6 +177,10 @@ export function PropertyVsSipCalculator() {
     track("lead_submit_free");
     setStatusNote("");
 
+    if (!model || !formatted) {
+      throw new Error("Please click Calculate first, then email your summary.");
+    }
+
     const res = await fetch("/api/leads/capture", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -184,13 +188,27 @@ export function PropertyVsSipCalculator() {
     });
     const json = await res.json().catch(() => null);
     if (!res.ok || !json?.ok) {
-      setStatusNote("Could not save your details. Please try again.");
-      return;
+      throw new Error("Could not save your details. Please try again.");
     }
 
     track("lead_captured", { mode: "free" });
     setLeadOpen(false);
-    setStatusNote("Thanks! We'll email you a summary shortly.");
+
+    try {
+      const subject = encodeURIComponent(`Property vs SIP Analysis - ₹${gapCr}Cr Opportunity`);
+      const body = encodeURIComponent(
+        `Hi,\n\nI used BM Wealth's Property vs SIP Calculator.\n\nMy Scenario:\n- Property: ${formatINR(model.inputs.propertyPrice)}\n- Monthly SIP: ${formatINR(model.inputs.monthlySip)}\n- Timeline: ${yearsFinal} years\n\nResults:\n- Property Future Value: ${formatted.values.propertyEndValue}\n- Equity Future Value: ${formatted.values.sipFutureValue}\n- Wealth Gap: ${formatted.values.wealthGap} (≈ ₹${gapCr}Cr)\n\nI'd like to understand my options better.\n\nBest regards,\n${payload?.name || ""}\n`
+      );
+
+      const toEmail = String(payload?.email || "").trim();
+      if (!toEmail) throw new Error("Please enter your email.");
+
+      const mailtoLink = `mailto:${encodeURIComponent(toEmail)}?subject=${subject}&body=${body}&cc=support@bmwealth.co.in`;
+      window.location.href = mailtoLink;
+      setStatusNote("Opening your email client...");
+    } catch {
+      setStatusNote("Summary prepared. If your email app didn't open, please try again.");
+    }
   }
 
   async function handlePay(payload) {
@@ -198,8 +216,7 @@ export function PropertyVsSipCalculator() {
     setStatusNote("");
 
     if (!model) {
-      setStatusNote("Please calculate first, then unlock premium.");
-      return;
+      throw new Error("Please click Calculate first, then unlock premium.");
     }
 
     const leadRes = await fetch("/api/leads/capture", {
@@ -209,8 +226,7 @@ export function PropertyVsSipCalculator() {
     });
     const leadJson = await leadRes.json().catch(() => null);
     if (!leadRes.ok || !leadJson?.ok) {
-      setStatusNote("Could not save your details. Please try again.");
-      return;
+      throw new Error("Could not save your details. Please try again.");
     }
 
     const leadId = leadJson?.leadId || null;
@@ -226,15 +242,18 @@ export function PropertyVsSipCalculator() {
     const orderJson = await orderRes.json().catch(() => null);
     if (!orderRes.ok || !orderJson?.ok) {
       track("payment_failed", { stage: "create_order" });
-      setStatusNote("Payment could not be started. Please try again.");
-      return;
+      if (orderJson?.error === "razorpay_not_configured") {
+        throw new Error(
+          "Razorpay is not configured yet. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET (Test Mode keys) on the server, then retry."
+        );
+      }
+      throw new Error("Payment could not be started. Please try again.");
     }
 
     const sdkOk = await loadRazorpaySdk();
     if (!sdkOk) {
       track("payment_failed", { stage: "sdk_load_failed" });
-      setStatusNote("Payment system could not be loaded. Please disable blockers or try again.");
-      return;
+      throw new Error("Payment system could not be loaded. Please disable blockers or try again.");
     }
 
     const computedInputs = model?.inputs || draftInputs;
@@ -245,14 +264,26 @@ export function PropertyVsSipCalculator() {
       amount: orderJson.amount,
       currency: orderJson.currency || "INR",
       name: "BM Wealth",
-      description: "Mumbai Property vs SIP Wealth Gap Report",
+      description: `Property Analysis - ₹${gapCr}Cr Opportunity`,
       order_id: orderJson.orderId,
+      notes: {
+        property_value: String(computedInputs?.propertyPrice ?? ""),
+        sip_amount: String(computedInputs?.monthlySip ?? ""),
+        timeline_years: String(computedInputs?.years ?? ""),
+        wealth_gap_inr: String(Number(model?.wealthGap || 0)),
+      },
       prefill: {
         name: payload?.name || "",
         email: payload?.email || "",
         contact: payload?.phone || "",
       },
       theme: { color: "#C0A062" },
+      modal: {
+        ondismiss: () => {
+          track("payment_cancelled");
+          setStatusNote("Payment cancelled. You can try again anytime.");
+        },
+      },
       handler: async (response) => {
         try {
           const verifyRes = await fetch("/api/razorpay/verify", {
@@ -309,8 +340,9 @@ export function PropertyVsSipCalculator() {
       setStatusNote("Payment failed. Please try again.");
     });
 
-    rz.open();
+    // Close the lead modal before opening Razorpay.
     setLeadOpen(false);
+    rz.open();
   }
 
   useEffect(() => {
