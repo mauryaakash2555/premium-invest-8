@@ -21,11 +21,11 @@ export const metadata = {
 
 function ToolCard({ title, subtitle, href, active }) {
   const content = (
-    <Card className="bg-white/5 border-white/10 glass-effect">
+    <Card className="border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold text-[color:var(--color-matte-gold)] truncate">
+            <h2 className="text-base font-semibold gold-gradient-text truncate">
               {title}
             </h2>
             {subtitle ? (
@@ -42,7 +42,7 @@ function ToolCard({ title, subtitle, href, active }) {
         <div className="mt-5">
           {active ? (
             <Link href={href} className="inline-flex">
-              <Button className="bg-[color:var(--color-matte-gold)] text-black hover:bg-[color:var(--color-matte-gold)]/90">
+              <Button className="calculator-premium-cta">
                 Open Tool
               </Button>
             </Link>
@@ -79,7 +79,7 @@ export default function ToolsHubPage() {
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-semibold text-[color:var(--color-matte-gold)]">
+            <h1 className="text-3xl sm:text-4xl font-semibold gold-gradient-text">
               BM Wealth Intelligence Tools
             </h1>
             <p className="mt-3 text-sm sm:text-base text-white/75 max-w-2xl mx-auto">
@@ -97,7 +97,8 @@ export default function ToolsHubPage() {
             <ToolCard
               title="Mumbai Property vs SIP Analyzer"
               href="/tools/property-vs-sip"
-              active={false}
+              subtitle="Wealth gap • Opportunity cost • Premium report"
+              active
             />
             <ToolCard
               title="Retirement Gap Stress Test"
@@ -116,7 +117,7 @@ export default function ToolsHubPage() {
             />
           </div>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
             <p className="text-sm text-white/75">
               Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
             </p>
