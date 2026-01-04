@@ -254,6 +254,17 @@
     transform: translateY(-2px);
   }
 
+  .secondary-button {
+    transition: all 0.2s ease;
+  }
+
+  .secondary-button:hover {
+    box-shadow:
+      0 8px 22px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+  }
+
   /* Premium Gold CTA - reusable (same as calculator CTA glow) */
   .calculator-premium-cta {
     background: linear-gradient(
@@ -271,6 +282,7 @@
       0 4px 15px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+    animation: premium-cta-gradient 6s ease-in-out infinite;
   }
 
   .calculator-premium-cta:hover {
@@ -295,11 +307,38 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
+    pointer-events: none;
+    animation: premium-cta-shimmer 2.8s linear infinite;
   }
 
   .calculator-premium-cta:hover::before {
-    left: 100%;
+    opacity: 1;
+  }
+
+  @keyframes premium-cta-shimmer {
+    0% {
+      left: -100%;
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 0.35;
+    }
+    100% {
+      left: 100%;
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes premium-cta-gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   .luxury-particles {

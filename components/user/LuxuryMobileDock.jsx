@@ -263,7 +263,7 @@ export function LuxuryMobileDock() {
       {/* Main Dock - ULTRA LUXURY EDITION */}
       <nav
         className={cn(
-          "fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] lg:hidden",
+          "fixed bottom-3 left-1/2 -translate-x-1/2 z-[9999] lg:hidden",
           "transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]", // Premium ultra-smooth easing
           scrolled ? "scale-90" : "scale-100",
           isReading ? "opacity-0 pointer-events-none scale-75 translate-y-10 blur-sm" : "opacity-100 pointer-events-auto scale-100 translate-y-0 blur-0"
@@ -273,7 +273,7 @@ export function LuxuryMobileDock() {
           className={cn(
             "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
             isScrolling && "gold-shimmer",
-            "relative flex items-center gap-1.5 px-4.5 py-3 bg-[#000000] rounded-full", // Pitch black bg
+            "relative flex items-center gap-1 px-3 py-2 bg-[#000000] rounded-full", // Pitch black bg
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
           )}

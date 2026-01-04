@@ -7,22 +7,38 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
-function normalizePhone(v) {
+function normalizeWhatsApp(v) {
   const raw = String(v || "").trim();
-  const onlyDigits = raw.replace(/\D+/g, "");
-  if (!onlyDigits) return "";
+  if (!raw) return "";
 
-  // Accept "91XXXXXXXXXX" or "XXXXXXXXXX" and normalize to +91XXXXXXXXXX.
-  if (onlyDigits.length === 10) return `+91${onlyDigits}`;
-  if (onlyDigits.length === 12 && onlyDigits.startsWith("91")) return `+${onlyDigits}`;
+  // Accept formats:
+  // +918850977259
+  // +91 8850977259
+  // 918850977259
+  // 8850977259
+  const digits = raw.replace(/\D+/g, "");
+  if (!digits) return "";
 
-  // If user typed +91..., normalize too.
-  const plusDigits = raw.replace(/[^\d+]/g, "");
-  if (plusDigits.startsWith("+91") && plusDigits.replace(/\D+/g, "").length === 12) {
-    return `+${plusDigits.replace(/\D+/g, "")}`;
-  }
+  let tenDigits = "";
+  if (digits.length === 10) tenDigits = digits;
+  else if (digits.length === 12 && digits.startsWith("91")) tenDigits = digits.slice(2);
+  else return "";
 
-  return "";
+  if (!/^[6-9]\d{9}$/.test(tenDigits)) return "";
+  return `+91${tenDigits}`;
+}
+
+function formatWhatsAppInput(v) {
+  const raw = String(v || "");
+  const digits = raw.replace(/\D+/g, "");
+  if (!digits) return "";
+
+  // While typing:
+  // - if user enters 10 digits, auto-prefix +91
+  // - if user enters 91XXXXXXXXXX, render as +91XXXXXXXXXX
+  if (digits.startsWith("91")) return `+${digits.slice(0, 12)}`;
+  if (digits.length < 10) return digits.slice(0, 10);
+  return `+91${digits.slice(0, 10)}`;
 }
 
 function isValidEmail(v) {
@@ -47,32 +63,61 @@ export function LeadCaptureModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-  const [optIn, setOptIn] = useState(false);
+  const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
   const canSubmit = useMemo(() => {
     return (
-      Boolean(String(name || "").trim()) &&
+      String(name || "").trim().length >= 2 &&
       isValidEmail(email) &&
-      Boolean(normalizePhone(whatsapp)) &&
-      Boolean(optIn)
+      Boolean(normalizeWhatsApp(whatsapp))
     );
-  }, [name, email, whatsapp, optIn]);
+  }, [name, email, whatsapp]);
 
   async function handle(action) {
     if (busy) return;
     setErr("");
-    if (!canSubmit) {
-      setErr("Please enter name, valid email, WhatsApp in +91 format, and consent for WhatsApp updates.");
+
+    const trimmedName = String(name || "").trim();
+    const trimmedEmail = String(email || "").trim();
+    const normalizedPhone = normalizeWhatsApp(whatsapp);
+
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[LeadCaptureModal] Form values:", {
+        name: trimmedName,
+        email: trimmedEmail,
+        whatsapp,
+        normalizedPhone,
+        consent: whatsappConsent,
+      });
+      // eslint-disable-next-line no-console
+      console.log("[LeadCaptureModal] Validation:", {
+        nameValid: trimmedName.length >= 2,
+        emailValid: isValidEmail(trimmedEmail),
+        whatsappValid: Boolean(normalizedPhone),
+      });
+    }
+
+    if (trimmedName.length < 2) {
+      setErr("Please enter your name.");
+      return;
+    }
+    if (!isValidEmail(trimmedEmail)) {
+      setErr("Please enter a valid email.");
+      return;
+    }
+    if (!normalizedPhone) {
+      setErr("Please enter a valid 10-digit mobile number.");
       return;
     }
 
     const payload = {
-      name: String(name).trim(),
-      email: String(email).trim(),
-      phone: normalizePhone(whatsapp),
-      whatsappOptIn: Boolean(optIn),
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: normalizedPhone,
+      whatsappOptIn: Boolean(whatsappConsent),
     };
 
     setBusy(true);
@@ -88,9 +133,9 @@ export function LeadCaptureModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border border-white/10 bg-black/90 text-white max-h-[92vh] overflow-y-auto scrollbar-hide sm:max-w-[760px] lg:max-w-[920px]">
+      <DialogContent className="border border-white/10 bg-black/90 text-white max-h-[92vh] overflow-y-auto scrollbar-hide pointer-events-auto sm:max-w-[760px] lg:max-w-[920px] pt-16 pb-8">
         <DialogHeader>
-          <DialogTitle className="text-white">{title}</DialogTitle>
+          <DialogTitle className="text-white text-lg">{title}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -109,6 +154,7 @@ export function LeadCaptureModal({
           <div className="space-y-2">
             <Label className="text-slate-200">Email</Label>
             <Input
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="border-white/10 bg-white/5 text-white"
@@ -121,8 +167,9 @@ export function LeadCaptureModal({
           <div className="space-y-2">
             <Label className="text-slate-200">WhatsApp Number</Label>
             <Input
+              type="tel"
               value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
+              onChange={(e) => setWhatsapp(formatWhatsAppInput(e.target.value))}
               className="border-white/10 bg-white/5 text-white"
               placeholder="+91XXXXXXXXXX"
               inputMode="tel"
@@ -132,7 +179,11 @@ export function LeadCaptureModal({
           </div>
 
           <div className="flex items-center gap-2">
-            <Checkbox checked={optIn} onCheckedChange={(v) => setOptIn(Boolean(v))} id="waOpt" />
+            <Checkbox
+              checked={whatsappConsent}
+              onCheckedChange={(v) => setWhatsappConsent(Boolean(v))}
+              id="waOpt"
+            />
             <Label htmlFor="waOpt" className="text-sm text-slate-200">
               {optInLabel}
             </Label>
@@ -140,11 +191,11 @@ export function LeadCaptureModal({
 
           {err ? <div className="text-sm text-red-300">{err}</div> : null}
 
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="flex gap-3">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-white/5 text-white hover:bg-white/10"
+              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10"
               disabled={busy}
               onClick={() => handle("free")}
             >
@@ -153,12 +204,11 @@ export function LeadCaptureModal({
             <Button
               type="button"
               className={[
-                payButtonClassName?.includes("calculator-premium-cta")
-                  ? "calculator-premium-cta"
-                  : "bg-[color:var(--color-matte-gold)] text-black hover:bg-[color:var(--color-matte-gold)]/90",
+                "calculator-premium-cta",
                 payButtonClassName,
               ]
                 .filter(Boolean)
+                .concat(["flex-1"])
                 .join(" ")}
               disabled={busy}
               onClick={() => handle("pay")}

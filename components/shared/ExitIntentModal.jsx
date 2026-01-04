@@ -43,7 +43,7 @@ export function ExitIntentModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border border-white/10 bg-black/90 text-white max-h-[85vh] overflow-y-auto scrollbar-hide">
+      <DialogContent className="border border-white/10 bg-black/90 text-white max-h-[85vh] overflow-y-auto scrollbar-hide pointer-events-auto pt-16 pb-8">
         <DialogHeader>
           <DialogTitle className="text-white">{title}</DialogTitle>
         </DialogHeader>
@@ -56,16 +56,26 @@ export function ExitIntentModal({
             {bodySecondary}
           </p>
 
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10"
+              onClick={() => {
+                suppress();
+                onSecondary?.();
+              }}
+            >
+              {secondaryLabel}
+            </Button>
             <Button
               type="button"
               className={[
-                primaryButtonClassName?.includes("calculator-premium-cta")
-                  ? "calculator-premium-cta"
-                  : "bg-[color:var(--color-matte-gold)] text-black hover:bg-[color:var(--color-matte-gold)]/90",
+                "calculator-premium-cta",
                 primaryButtonClassName,
               ]
                 .filter(Boolean)
+                .concat(["flex-1"])
                 .join(" ")}
               onClick={() => {
                 suppress();
@@ -73,17 +83,6 @@ export function ExitIntentModal({
               }}
             >
               {primaryLabel}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="border-white/10 bg-white/5 text-white hover:bg-white/10"
-              onClick={() => {
-                suppress();
-                onSecondary?.();
-              }}
-            >
-              {secondaryLabel}
             </Button>
           </div>
           {note ? <div className="text-[11px] text-slate-300/70">{note}</div> : null}
