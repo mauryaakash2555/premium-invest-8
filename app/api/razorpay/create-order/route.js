@@ -42,6 +42,26 @@ async function razorpayCreateOrder({ amountPaise, receipt }) {
   return { ok: true, order: j };
 }
 
+function sanitizeReceiptPrefix(prefix) {
+  const raw = String(prefix || "").trim() || "tax";
+  return raw
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 10);
+}
+
+function buildReceipt({ receiptPrefix, leadId }) {
+  // Razorpay constraint: receipt length must be <= 40.
+  // Keep it short and unique enough for basic tracing.
+  const prefix = sanitizeReceiptPrefix(receiptPrefix);
+  const leadFrag = String(leadId || "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 8);
+  const ts = Date.now().toString(36); // shorter than millis
+
+  const base = leadFrag ? `${prefix}_${ts}_${leadFrag}` : `${prefix}_${ts}`;
+  return base.length <= 40 ? base : base.slice(0, 40);
+}
+
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -51,8 +71,7 @@ export async function POST(req) {
     const receiptPrefix = body?.receiptPrefix ? String(body.receiptPrefix) : "tax";
 
     const safeAmount = Number.isFinite(amountPaise) ? amountPaise : 29900;
-    const prefix = receiptPrefix.trim() || "tax";
-    const receipt = leadId ? `${prefix}_${leadId}_${Date.now()}` : `${prefix}_${Date.now()}`;
+    const receipt = buildReceipt({ receiptPrefix, leadId });
 
     const res = await razorpayCreateOrder({ amountPaise: safeAmount, receipt });
     if (!res.ok) {
