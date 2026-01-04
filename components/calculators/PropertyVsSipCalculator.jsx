@@ -181,34 +181,36 @@ export function PropertyVsSipCalculator() {
       throw new Error("Please click Calculate first, then email your summary.");
     }
 
-    const res = await fetch("/api/leads/capture", {
+    setStatusNote("Sending your summary...");
+    const res = await fetch("/api/property-vs-sip/email-summary", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, source: "property_vs_sip" }),
+      body: JSON.stringify({
+        lead: payload,
+        inputs: {
+          propertyPrice: formatINR(model.inputs.propertyPrice),
+          monthlySip: formatINR(model.inputs.monthlySip),
+          years: yearsFinal,
+        },
+        results: {
+          propertyEndValue: formatted.values.propertyEndValue,
+          sipFutureValue: formatted.values.sipFutureValue,
+          wealthGap: formatted.values.wealthGap,
+          gapCr,
+        },
+      }),
     });
     const json = await res.json().catch(() => null);
     if (!res.ok || !json?.ok) {
-      throw new Error("Could not save your details. Please try again.");
+      if (json?.error === "email_not_configured") {
+        throw new Error("Email delivery is not configured yet. Please contact support.");
+      }
+      throw new Error("Could not send your email right now. Please try again.");
     }
 
     track("lead_captured", { mode: "free" });
     setLeadOpen(false);
-
-    try {
-      const subject = encodeURIComponent(`Property vs SIP Analysis - ₹${gapCr}Cr Opportunity`);
-      const body = encodeURIComponent(
-        `Hi,\n\nI used BM Wealth's Property vs SIP Calculator.\n\nMy Scenario:\n- Property: ${formatINR(model.inputs.propertyPrice)}\n- Monthly SIP: ${formatINR(model.inputs.monthlySip)}\n- Timeline: ${yearsFinal} years\n\nResults:\n- Property Future Value: ${formatted.values.propertyEndValue}\n- Equity Future Value: ${formatted.values.sipFutureValue}\n- Wealth Gap: ${formatted.values.wealthGap} (≈ ₹${gapCr}Cr)\n\nI'd like to understand my options better.\n\nBest regards,\n${payload?.name || ""}\n`
-      );
-
-      const toEmail = String(payload?.email || "").trim();
-      if (!toEmail) throw new Error("Please enter your email.");
-
-      const mailtoLink = `mailto:${encodeURIComponent(toEmail)}?subject=${subject}&body=${body}&cc=support@bmwealth.co.in`;
-      window.location.href = mailtoLink;
-      setStatusNote("Opening your email client...");
-    } catch {
-      setStatusNote("Summary prepared. If your email app didn't open, please try again.");
-    }
+    setStatusNote("Email sent. Please check your inbox (and Promotions/Spam).");
   }
 
   async function handlePay(payload) {
@@ -247,7 +249,20 @@ export function PropertyVsSipCalculator() {
           "Razorpay is not configured yet. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET (Test Mode keys) on the server, then retry."
         );
       }
+      const msg = typeof orderJson?.error === "string" ? orderJson.error.trim() : "";
+      if (msg === "razorpay_request_failed") {
+        throw new Error("Payment provider is temporarily unreachable. Please try again.");
+      }
+      if (msg === "server_error") {
+        throw new Error("Payment server error. Please retry in a moment.");
+      }
+      if (msg) throw new Error(`Payment could not be started: ${msg}`);
       throw new Error("Payment could not be started. Please try again.");
+    }
+
+    if (!orderJson?.keyId || !orderJson?.orderId) {
+      track("payment_failed", { stage: "create_order_invalid" });
+      throw new Error("Payment server returned an invalid response. Please try again.");
     }
 
     const sdkOk = await loadRazorpaySdk();

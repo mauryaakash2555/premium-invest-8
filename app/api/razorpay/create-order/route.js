@@ -3,11 +3,12 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 function getKeyId() {
-  return String(process.env.RAZORPAY_KEY_ID || "").trim();
+  // Allow both server-only and NEXT_PUBLIC naming (some deployments only set the latter).
+  return String(process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "").trim();
 }
 
 function getKeySecret() {
-  return String(process.env.RAZORPAY_KEY_SECRET || "").trim();
+  return String(process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_SECRET || "").trim();
 }
 
 async function razorpayCreateOrder({ amountPaise, receipt }) {
@@ -15,19 +16,24 @@ async function razorpayCreateOrder({ amountPaise, receipt }) {
   const keySecret = getKeySecret();
   if (!keyId || !keySecret) throw new Error("razorpay_not_configured");
 
-  const r = await fetch("https://api.razorpay.com/v1/orders", {
-    method: "POST",
-    headers: {
-      Authorization: "Basic " + Buffer.from(keyId + ":" + keySecret).toString("base64"),
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: Number(amountPaise),
-      currency: "INR",
-      receipt: String(receipt || "bm-tax-299"),
-      payment_capture: 1,
-    }),
-  });
+  let r;
+  try {
+    r = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        Authorization: "Basic " + Buffer.from(keyId + ":" + keySecret).toString("base64"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: Number(amountPaise),
+        currency: "INR",
+        receipt: String(receipt || "bm-tax-299"),
+        payment_capture: 1,
+      }),
+    });
+  } catch {
+    return { ok: false, error: "razorpay_request_failed" };
+  }
 
   const j = await r.json().catch(() => null);
   if (!r.ok) {

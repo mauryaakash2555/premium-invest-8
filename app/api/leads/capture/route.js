@@ -21,6 +21,7 @@ function normalizePhone(v) {
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));
+    const source = String(body?.source || "tax_optimization").trim() || "tax_optimization";
     const name = String(body?.name || "").trim();
     const email = String(body?.email || "").trim();
     const phone = normalizePhone(body?.phone || body?.whatsapp || "");
@@ -38,25 +39,28 @@ export async function POST(req) {
     await logEventSafe({
       event_type: "lead_captured",
       data: {
-        source: String(body?.source || "tax_optimization"),
+        source,
         email,
         phone,
         whatsappOptIn,
       },
     });
 
-    await EmailService.sendRaw({
-      to: email,
-      subject: "BM Wealth — Your Tax Optimization Intelligence summary is initiated",
-      html: `
-        <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
-          <h2>Welcome to BM Wealth</h2>
-          <p>Hi ${name},</p>
-          <p>Thanks for using Tax Optimization Intelligence (FY 2025–26). If you opted for premium, you’ll receive your PDF after payment.</p>
-          <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only.</p>
-        </div>
-      `,
-    });
+    // Only send the Tax Optimization welcome email for that specific tool.
+    if (source === "tax_optimization") {
+      await EmailService.sendRaw({
+        to: email,
+        subject: "BM Wealth — Your Tax Optimization Intelligence summary is initiated",
+        html: `
+          <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
+            <h2>Welcome to BM Wealth</h2>
+            <p>Hi ${name},</p>
+            <p>Thanks for using Tax Optimization Intelligence (FY 2025–26). If you opted for premium, you’ll receive your PDF after payment.</p>
+            <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only.</p>
+          </div>
+        `,
+      });
+    }
 
     return NextResponse.json({ ok: true, leadId: lead?.id || null });
   } catch {
