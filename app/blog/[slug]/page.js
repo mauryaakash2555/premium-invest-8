@@ -1,6 +1,7 @@
 import BlogDetailClient from "./BlogDetailClient";
 import { buildMetadata, DEFAULT_OG_IMAGE } from "@/lib/seo/metadata";
 import { staticBlogData, staticBlogPost } from "@/data/staticBlogData";
+import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
   const all = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
@@ -16,6 +17,21 @@ export async function generateMetadata({ params }) {
   const slug = resolved?.slug;
   const all = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
   const post = all.find((p) => p?.slug === slug) || null;
+
+  if (!post) {
+    return {
+      ...buildMetadata({
+        title: "Blog | BM Wealth",
+        description: "Investment insights and educational articles from BM Wealth.",
+        path: "/blog",
+        type: "article",
+      }),
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
 
   const title = post?.title ? `${post.title} | BM Wealth` : "BM Wealth Blog";
   const description =
@@ -34,5 +50,13 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogDetailPage({ params }) {
   const resolved = await params;
-  return <BlogDetailClient slug={resolved?.slug} />;
+  const slug = resolved?.slug;
+  const all = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
+  const post = all.find((p) => p?.slug === slug) || null;
+
+  if (!post) {
+    notFound();
+  }
+
+  return <BlogDetailClient slug={slug} />;
 }

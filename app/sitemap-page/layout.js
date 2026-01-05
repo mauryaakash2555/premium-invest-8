@@ -6,6 +6,11 @@ export const metadata = buildMetadata({
   path: "/sitemap-page",
 });
 
+export const robots = {
+  index: false,
+  follow: false,
+};
+
 export default function Layout({ children }) {
   return children;
 }
