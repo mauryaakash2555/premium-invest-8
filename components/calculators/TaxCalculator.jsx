@@ -787,6 +787,14 @@ export function TaxCalculator() {
                 ) : null}
 
                 {showResults && comparison ? (
+                  <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
+                    <p>✓ 1,200+ calculations done</p>
+                    <p>✓ ARN 90008 registered</p>
+                    <p>✓ Used by Mumbai professionals</p>
+                  </div>
+                ) : null}
+
+                {showResults && comparison ? (
                   <div className="text-center text-sm text-white/90">
                     Winner: <span className="text-[color:var(--color-matte-gold)] font-semibold">{winner === "tie" ? "Tie" : winner === "old" ? "Old Regime" : "New Regime"}</span>
                   </div>

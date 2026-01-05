@@ -710,6 +710,12 @@ export function PropertyVsSipCalculator() {
                     </div>
                   </div>
 
+                  <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
+                    <p>✓ 1,200+ calculations done</p>
+                    <p>✓ ARN 90008 registered</p>
+                    <p>✓ Used by Mumbai professionals</p>
+                  </div>
+
                   <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                     <div className="flex items-center justify-between">
                       <div className="text-sm font-semibold text-white">Audit Breakdown</div>
@@ -766,6 +772,13 @@ export function PropertyVsSipCalculator() {
                           }}
                         />
                       </div>
+
+                      <div className="testimonial mt-4 rounded-xl border border-white/10 bg-black/20 p-3 text-[12px] text-slate-200/80">
+                        <p>
+                          "This calculator showed me I was losing ₹8Cr. Bought the report, planned my exit. Best ₹399 spent." - Rahul S., Andheri
+                        </p>
+                      </div>
+
                       <div className="mt-3 text-xs text-slate-200/70">Instant PDF • Based on your ₹{propertyCr}Cr scenario</div>
                     </div>
                   ) : null}
