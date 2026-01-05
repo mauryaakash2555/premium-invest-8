@@ -313,7 +313,7 @@ const Disclaimer = () => {
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Third-party actions, including but not limited to mutual fund companies and insurance providers</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                Your use of our services is at your own risk. We recommend diversification and 
+                Your use of our services is at your own risk. Consider diversification and 
                 prudent investment practices to manage risk.
               </p>
             </section>

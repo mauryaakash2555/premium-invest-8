@@ -24,16 +24,13 @@
  */
 
 import { Playfair_Display, Inter } from "next/font/google";
-import Script from "next/script";
-import { Suspense } from "react";
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
 import Footer from "@/components/user/Footer";
 import WhatsAppFloat from "@/components/user/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
-import { GA4PageView } from "@/components/analytics/GA4PageView";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
+import CookieConsent from "@/components/shared/CookieConsent";
+import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
 import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata";
 
 const GA4_MEASUREMENT_ID =
@@ -117,42 +114,45 @@ export default function RootLayout({ children }) {
   };
   return (
     <html lang="en">
-      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
-        {GA4_MEASUREMENT_ID ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script
-              id="ga4-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', '${GA4_MEASUREMENT_ID}', { send_page_view: false });`,
-              }}
-            />
-            <Suspense fallback={null}>
-              <GA4PageView measurementId={GA4_MEASUREMENT_ID} />
-            </Suspense>
-          </>
-        ) : null}
+      <body
+        className={`${playfair.variable} ${inter.variable}`}
+        style={{
+          backgroundColor: "#000",
+          color: "#fff",
+          margin: 0,
+          overflowX: "hidden",
+          maxWidth: "100%",
+          width: "100%",
+        }}
+      >
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
         />
-        <div className="main-wrapper" style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%', position: 'relative' }}>
+        <div
+          className="main-wrapper"
+          style={{
+            overflowX: "hidden",
+            maxWidth: "100%",
+            width: "100%",
+            position: "relative",
+          }}
+        >
           <Navigation />
-          <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
+          <main style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}>
+            {children}
+          </main>
           <Footer />
         </div>
         <LuxuryMobileDock />
         <WhatsAppFloat />
-        <Analytics />
-        <SpeedInsights />
+        <CookieConsent />
+        <AnalyticsGate measurementId={GA4_MEASUREMENT_ID} />
       </body>
     </html>
   );
+
 }
 
 

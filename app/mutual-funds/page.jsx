@@ -35,7 +35,7 @@ const MutualFunds = () => {
   const faqs = [
     {
       question: "What is the minimum amount to start SIP in mutual funds?",
-      answer: "You can start SIP in most mutual funds with as little as ₹500 per month. However, we recommend at least ₹5,000-10,000 monthly SIP for meaningful wealth creation. The minimum varies by fund - some premium funds require ₹5,000-10,000 monthly."
+      answer: "You can start SIP in most mutual funds with as little as ₹500 per month. For meaningful wealth creation, many investors start around ₹5,000-10,000 per month depending on goals and cashflow. The minimum varies by fund - some premium funds require ₹5,000-10,000 monthly."
     },
     {
       question: "What is the difference between Direct and Regular plans?",
@@ -55,7 +55,7 @@ const MutualFunds = () => {
     },
     {
       question: "Can I withdraw from mutual funds anytime?",
-      answer: "Yes, most open-ended mutual funds offer liquidity - you can redeem anytime. However, tax implications and exit loads may apply. ELSS funds have 3-year lock-in. We recommend treating mutual fund investments as long-term commitments for goals, not emergency funds. Build separate emergency corpus in liquid funds."
+      answer: "Yes, most open-ended mutual funds offer liquidity - you can redeem anytime. However, tax implications and exit loads may apply. ELSS funds have 3-year lock-in. Many investors treat mutual fund investments as long-term commitments for goals, not emergency funds. Build a separate emergency corpus in liquid funds."
     }
   ];
 
@@ -205,7 +205,7 @@ const MutualFunds = () => {
               <strong style={{ color: '#C0A062' }}>Mid Cap Funds:</strong> Investing in companies ranked 101-250 by market cap, mid cap funds target businesses in their growth phase. These companies, often found in Mumbai's thriving sectors like pharmaceuticals, IT services, and manufacturing, offer higher growth potential than large caps but with increased volatility. Mid cap funds are suitable for investors with 7-10 year investment horizons who can weather short-term market fluctuations for potentially higher returns of 12-15% annually.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              <strong style={{ color: '#C0A062' }}>Small Cap Funds:</strong> These high-risk, high-reward funds invest in companies beyond the top 250, including emerging businesses and niche players. Small cap funds require strong conviction and a 10+ year investment horizon. They can deliver exceptional returns of 15-18% or more during bull markets but may experience significant corrections during market downturns. We recommend limiting small cap exposure to 10-15% of your equity portfolio.
+              <strong style={{ color: '#C0A062' }}>Small Cap Funds:</strong> These high-risk, high-reward funds invest in companies beyond the top 250, including emerging businesses and niche players. Small cap funds require strong conviction and a 10+ year investment horizon. They can deliver exceptional returns of 15-18% or more during bull markets but may experience significant corrections during market downturns. A common risk control is limiting small cap exposure to 10-15% of your equity portfolio.
             </p>
           </div>
 

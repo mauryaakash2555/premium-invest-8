@@ -42,5 +42,10 @@ export default defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "DELETE_ME/**",
+    "templates/**",
+    "scripts/safety/backups/**",
+    "frontend/**",
+    "temp_*.{js,jsx}",
   ]),
 ]);
