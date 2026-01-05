@@ -7,17 +7,17 @@ import { logEventSafe } from "@/lib/db/events";
 export const runtime = "nodejs";
 
 function requireCronAuth(req) {
+  const h = req.headers.get("authorization") || "";
   const secret = String(process.env.CRON_SECRET || "").trim();
   if (!secret) return false;
-  const got = String(req.headers.get("x-cron-secret") || "").trim();
-  return got && got === secret;
+  return h === `Bearer ${secret}`;
 }
 
 function safeText(v) {
   return String(v ?? "").trim();
 }
 
-export async function POST(req) {
+export async function GET(req) {
   if (!requireCronAuth(req)) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
