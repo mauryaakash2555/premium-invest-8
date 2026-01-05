@@ -179,7 +179,7 @@ const TradingServices = () => {
               <a 
                 href="/track/zerodha" 
                 target="_blank" 
-                rel="nofollow noopener noreferrer"
+                rel="sponsored nofollow noopener noreferrer"
                 style={{
                   display: 'inline-block',
                   padding: '12px 24px',
@@ -211,7 +211,7 @@ const TradingServices = () => {
               <a 
                 href="/track/groww" 
                 target="_blank" 
-                rel="nofollow noopener noreferrer"
+                rel="sponsored nofollow noopener noreferrer"
                 style={{
                   display: 'inline-block',
                   padding: '12px 24px',
@@ -243,7 +243,7 @@ const TradingServices = () => {
               <a 
                 href="/track/smallcase" 
                 target="_blank" 
-                rel="nofollow noopener noreferrer"
+                rel="sponsored nofollow noopener noreferrer"
                 style={{
                   display: 'inline-block',
                   padding: '12px 24px',
