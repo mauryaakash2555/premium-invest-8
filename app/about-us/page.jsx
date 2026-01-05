@@ -138,7 +138,7 @@ const About = () => {
               style={{
                 fontSize: '18px',
                 color: '#CCCCCC',
-                lineHeight: 1.8',
+                lineHeight: 1.8,
                 marginBottom: '20px',
               }}
             >
