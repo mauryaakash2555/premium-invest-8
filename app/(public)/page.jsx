@@ -313,6 +313,17 @@ export default function HomePage() {
             >
               Why Choose BM Wealth?
             </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#B8B8B8',
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: '1.7'
+            }}>
+              In Mumbai's competitive financial landscape, choosing the right wealth advisor can make the difference 
+              between mediocre returns and substantial wealth creation. Here's why Mumbai investors trust BM Wealth 
+              with their financial future.
+            </p>
           </div>
 
           <div
@@ -339,11 +350,11 @@ export default function HomePage() {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                AMFI Registered Wealth Distribution
+                AMFI Registered & IRDAI Licensed
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Fully compliant and registered wealth distribution
-                services
+                Fully compliant wealth distribution with AMFI Registration (ARN 90008) and IRDAI License (277925). 
+                Your investments are managed by qualified, regulated professionals who adhere to industry standards.
               </p>
             </div>
 
@@ -364,10 +375,11 @@ export default function HomePage() {
                 <TrendingUp size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Elite Guidance
+                Mumbai-Focused Expertise
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Decades of expertise in financial markets and wealth management
+                Deep understanding of Mumbai's financial ecosystem, real estate market, and career progression patterns. 
+                We tailor strategies for Mumbai's unique cost of living and investment opportunities.
               </p>
             </div>
 
@@ -388,10 +400,11 @@ export default function HomePage() {
                 <PieChart size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Tailored Solutions
+                Personalized Strategies
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Personalized investment strategies aligned with your financial goals
+                No cookie-cutter solutions. Every portfolio is customized based on your income, goals, risk tolerance, 
+                and life stage. From ₹5,000/month SIPs to multi-crore PMS, we build strategies that fit your reality.
               </p>
             </div>
           </div>
