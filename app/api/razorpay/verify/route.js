@@ -6,6 +6,7 @@ import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
 import { logEventSafe } from "@/lib/db/events";
 import { generateTaxBlueprintPdfBytes } from "@/lib/pdf/taxBlueprint";
 import { generateBmWealthBlueprint15PdfBytes } from "@/lib/pdf/bmWealthBlueprint15";
+import { buildPropertyVsSipPaidPdfEmail } from "@/lib/email/propertyVsSipTemplates";
 
 export const runtime = "nodejs";
 
@@ -111,51 +112,28 @@ export async function POST(req) {
       attachmentName = String(pdfPayload?.meta?.filename || "BM-Wealth-Premium-Report.pdf");
       emailSubject = String(pdfPayload?.meta?.emailSubject || "Your BM Wealth Premium Report is Ready");
 
-      const coverLines = pdfPayload?.blocks?.coverLines;
-      const propertyPriceStr = pickFromCoverLines(coverLines, "Property Price");
-      const monthlySipStr = pickFromCoverLines(coverLines, "Monthly SIP");
-      const yearsStr = pickFromCoverLines(coverLines, "Years");
-      const summaryLines = Array.isArray(pdfPayload?.blocks?.summaryLines) ? pdfPayload.blocks.summaryLines : [];
-      const wealthGapLine = summaryLines.find((l) => String(l || "").toLowerCase().includes("wealth gap")) || "";
-      const wealthGapNum = Math.abs(parseINR(wealthGapLine));
-      const wealthGapFormatted = wealthGapNum ? `₹${Math.round(wealthGapNum).toLocaleString("en-IN")}` : "₹0";
+      const isPropertyVsSip = String(pdfPayload?.meta?.coverTitle || "").toLowerCase().includes("property") &&
+        String(pdfPayload?.meta?.coverTitle || "").toLowerCase().includes("sip");
 
-      const emailFooter = String(
-        pdfPayload?.meta?.emailFooter ||
-          pdfPayload?.meta?.disclaimerFooter ||
-          "Disclaimer: BM Wealth (ARN 90008) is an AMFI-registered Mutual Fund Distributor. This report is a mathematical projection based on historical market data (Property 4% / Equity 14.5%) and is intended for educational purposes only. This is not SEBI-regulated investment advice. Mutual fund investments are subject to market risks; read all scheme-related documents carefully."
-      );
+      if (isPropertyVsSip) {
+        const built = buildPropertyVsSipPaidPdfEmail({ lead, pdfPayload, attachmentName });
+        emailSubject = built.subject;
+        emailHtml = built.html;
+      } else {
+        const emailTitle = String(pdfPayload?.meta?.emailTitle || "Your BM Wealth Premium Report is Ready");
+        const emailSubtitle = String(pdfPayload?.meta?.emailSubtitle || "Your PDF is attached.");
+        const emailFooter = String(pdfPayload?.meta?.emailFooter || "ARN 90008 | Educational use only. Not investment advice.");
 
-      emailHtml = `
-        <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#111;max-width:680px">
-          <p>Dear ${safeHtml(String(lead?.name || "").trim() || "Customer")},</p>
-          <p>Your payment of <strong>₹399</strong> has been successfully processed.</p>
-          <p><strong>Attached is your 18-Page Property vs. SIP Exit Strategy.</strong></p>
-          <p>
-            This report is a cold, mathematical audit of your financial trajectory. It replaces emotional bias with the brutal reality of compounding and maintenance drag.
-          </p>
-
-          <p style="margin:16px 0 8px"><strong>Inside your Roadmap:</strong></p>
-          <ul style="margin:8px 0 0;padding-left:20px">
-            <li><strong>The ${safeHtml(wealthGapFormatted)} Factor:</strong> See exactly where your wealth is leaking.</li>
-            <li><strong>The Mumbai Micro-Market Heatmap:</strong> Localized data for your suburb.</li>
-            <li><strong>The 3-Year Transition Plan:</strong> How to pivot from fixed to liquid assets safely.</li>
-          </ul>
-
-          <p style="margin:16px 0 0"><strong>Why this matters:</strong> In the Mumbai of 2026, wealth is no longer about how many walls you own; it’s about how fast your capital doubles.</p>
-
-          <p style="margin:12px 0 0;color:#555;font-size:13px">
-            [ATTACHMENT: ${safeHtml(attachmentName)}]
-          </p>
-
-          <p style="margin:14px 0 0"><em>Need help decoding these numbers? Reply to this email or message our desk at +91 8850977259.</em></p>
-          <p style="margin:14px 0 0"><strong>Invest in Logic. Not Emotion.</strong></p>
-          <p style="margin:8px 0 0">— BM Wealth (ARN 90008)</p>
-
-          <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
-          <p style="font-size:12px;color:#555">${safeHtml(emailFooter)}</p>
-        </div>
-      `;
+        emailHtml = `
+          <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
+            <h2>${emailTitle}</h2>
+            <p>Hi ${String(lead?.name || "").trim() || "there"},</p>
+            <p>${emailSubtitle}</p>
+            <hr/>
+            <p style="font-size:12px;color:#555">${emailFooter}</p>
+          </div>
+        `;
+      }
     } else {
       pdfBytes = generateTaxBlueprintPdfBytes({ lead, inputs });
       attachmentName = "BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf";
