@@ -12,6 +12,8 @@ import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
 import { PremiumCalculatorCTA } from "@/components/calculators/PremiumCalculatorCTA";
 
+import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
+
 import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
 import { formatINR } from "@/lib/tax-formulas";
 
@@ -520,6 +522,8 @@ export function PropertyVsSipCalculator() {
   }, []);
 
   const wealthGap = model ? Number(model.wealthGap || 0) : 0;
+  const wealthGapAbs = Math.max(0, Math.abs(wealthGap));
+  const wealthGapCrValue = wealthGapAbs / 10_000_000;
   const yearsFinal = model?.inputs?.years || a.defaultYears;
   const sipValueNum = model ? Number(model.sipFutureValue || 0) : 0;
   const propertyWealthNum = model ? Number(model.propertyFutureValue || 0) : 0;
@@ -536,7 +540,6 @@ export function PropertyVsSipCalculator() {
   const sipTotalInvestedNum = model ? Number(model.sipTotalInvested || 0) : 0;
   const sipWealthCreatedNum = model ? Number(model.sipWealthCreated || 0) : 0;
 
-  const wealthGapDisplay = useCountUp(wealthGap, 650, showResults ? `gap-${yearsFinal}-${wealthGap}` : "gap-init");
   const propertyFutureDisplay = useCountUp(propertyWealthNum, 650, showResults ? `prop-${yearsFinal}-${propertyWealthNum}` : "prop-init");
   const sipFutureDisplay = useCountUp(sipValueNum, 650, showResults ? `sip-${yearsFinal}-${sipValueNum}` : "sip-init");
 
@@ -714,11 +717,45 @@ export function PropertyVsSipCalculator() {
                     )}
                   </div>
 
-                  <div className="bm-wealth-gap-showcase">
-                    <div className="bm-gap-label">Estimated opportunity cost</div>
-                    <div className="bm-gap-amount">₹{formatCroreNumber(wealthGapDisplay)}Cr</div>
-                    <div className="bm-gap-impact">
-                      That’s about {formatINR(Math.max(0, Math.round(wealthGapDisplay / Math.max(1, yearsFinal * 12))))} per month over {yearsFinal} years.
+                  <div className="bm-wealth-gap-hero-container">
+                    <div className="bm-wealth-gap-hero">
+                      <div className="bm-wealth-gap-label">ESTIMATED OPPORTUNITY COST</div>
+
+                      <div className="bm-wealth-gap-value-wrapper">
+                        <AnimatedCounter
+                          value={wealthGapCrValue}
+                          duration={2500}
+                          format={(n) => {
+                            const v = Number(n);
+                            if (!Number.isFinite(v)) return "₹0Cr";
+                            const s = v >= 10 ? v.toFixed(1) : v.toFixed(2);
+                            return `₹${s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1")}Cr`;
+                          }}
+                          className="bm-wealth-gap-value"
+                        />
+                      </div>
+
+                      <div className="bm-wealth-gap-message">You could lose this much by choosing property</div>
+
+                      <div className="bm-wealth-gap-breakdown">
+                        <div className="bm-wealth-breakdown-item">
+                          <span className="bm-wealth-breakdown-label">Per month</span>
+                          <span className="bm-wealth-breakdown-value">
+                            {formatINR(Math.max(0, Math.round(wealthGapAbs / Math.max(1, yearsFinal * 12))))}
+                          </span>
+                        </div>
+                        <div className="bm-wealth-breakdown-item">
+                          <span className="bm-wealth-breakdown-label">Monthly loss</span>
+                          <span className="bm-wealth-breakdown-value">
+                            {(() => {
+                              const perMonth = wealthGapAbs / Math.max(1, yearsFinal * 12);
+                              const l = perMonth / 100_000;
+                              const s = l >= 10 ? l.toFixed(0) : l.toFixed(2);
+                              return `${s.replace(/\.0+$/, "")}L`;
+                            })()}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -744,7 +781,7 @@ export function PropertyVsSipCalculator() {
                       </div>
                       {sipWins ? (
                         <div className="mt-2 text-sm font-semibold text-[color:var(--color-matte-gold)] break-words whitespace-normal">
-                          +₹{formatCroreNumber(wealthGapDisplay)}Cr advantage
+                          +₹{formatCroreNumber(wealthGapAbs)}Cr advantage
                         </div>
                       ) : null}
                     </div>
@@ -752,7 +789,7 @@ export function PropertyVsSipCalculator() {
 
                   {showPremium ? (
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                      <div className="text-base font-semibold text-white">🏠 Ready to act on this?</div>
+                      <div className="text-base font-semibold text-white">Ready to act on this?</div>
                       <div className="mt-2 text-sm text-slate-200/75">
                         Your {formatINR(model.inputs.propertyPrice)} scenario shows an estimated gap of ₹{gapCr}Cr.
                         Unlock the ₹399 report for the step-by-step roadmap.
@@ -780,9 +817,9 @@ export function PropertyVsSipCalculator() {
                   ) : null}
 
                   <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
-                    <p>✓ 1,200+ calculations done</p>
-                    <p>✓ ARN 90008 registered</p>
-                    <p>✓ Used by Mumbai professionals</p>
+                    <p>1,200+ calculations done</p>
+                    <p>ARN 90008 registered</p>
+                    <p>Used by Mumbai professionals</p>
                   </div>
 
                   <div className="rounded-xl border border-white/10 bg-white/5 p-4">
@@ -813,7 +850,6 @@ export function PropertyVsSipCalculator() {
         .bm-calc-button {
           position: relative;
           overflow: hidden;
-          animation: bmPulse 2.2s ease-in-out infinite;
         }
 
         .bm-calc-button::before {
@@ -845,38 +881,104 @@ export function PropertyVsSipCalculator() {
           }
         }
 
-        .bm-wealth-gap-showcase {
-          text-align: center;
-          padding: 36px 18px;
+        .bm-wealth-gap-hero-container {
+          margin: 26px 0;
+          position: relative;
+        }
+
+        .bm-wealth-gap-hero {
           background: radial-gradient(
-            circle at center,
-            color-mix(in oklab, var(--color-matte-gold) 16%, transparent) 0%,
-            transparent 70%
+            circle at 50% 0%,
+            color-mix(in oklab, var(--color-matte-gold) 18%, transparent) 0%,
+            color-mix(in oklab, var(--color-matte-gold) 6%, transparent) 52%,
+            transparent 100%
           );
-          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 25%, transparent);
-          border-radius: 16px;
+          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
+          border-radius: 20px;
+          padding: 40px 22px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          box-shadow:
+            0 0 44px color-mix(in oklab, var(--color-matte-gold) 22%, transparent),
+            inset 0 0 22px color-mix(in oklab, var(--color-matte-gold) 10%, transparent);
         }
 
-        .bm-gap-label {
+        .bm-wealth-gap-hero::before {
+          content: "";
+          position: absolute;
+          top: -50%;
+          right: -50%;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, color-mix(in oklab, var(--color-matte-gold) 12%, transparent) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .bm-wealth-gap-label {
           font-size: 12px;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: color-mix(in oklab, var(--color-matte-gold) 88%, white 12%);
-          margin-bottom: 10px;
-        }
-
-        .bm-gap-amount {
           font-weight: 900;
-          line-height: 1;
-          font-size: 64px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
           color: var(--color-matte-gold);
-          text-shadow: 0 0 28px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
-          margin-bottom: 10px;
+          margin-bottom: 14px;
+          position: relative;
+          z-index: 1;
         }
 
-        .bm-gap-impact {
-          font-size: 13px;
-          color: color-mix(in oklab, white 75%, transparent);
+        .bm-wealth-gap-value-wrapper {
+          position: relative;
+          z-index: 1;
+          margin: 18px 0;
+          line-height: 1;
+        }
+
+        .bm-wealth-gap-value {
+          font-weight: 950;
+          font-size: 86px;
+          color: var(--color-matte-gold);
+          text-shadow: 0 0 26px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+          display: inline-block;
+        }
+
+        .bm-wealth-gap-message {
+          position: relative;
+          z-index: 1;
+          font-size: 16px;
+          color: rgba(255, 255, 255, 0.78);
+          font-weight: 600;
+          margin-top: 6px;
+        }
+
+        .bm-wealth-gap-breakdown {
+          position: relative;
+          z-index: 1;
+          margin-top: 22px;
+          padding-top: 18px;
+          border-top: 1px solid color-mix(in oklab, var(--color-matte-gold) 24%, transparent);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+
+        .bm-wealth-breakdown-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .bm-wealth-breakdown-label {
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+        }
+
+        .bm-wealth-breakdown-value {
+          font-size: 20px;
+          font-weight: 950;
+          color: var(--color-matte-gold);
         }
 
         .bm-results-comparison {
@@ -930,8 +1032,16 @@ export function PropertyVsSipCalculator() {
         }
 
         @media (max-width: 768px) {
-          .bm-gap-amount {
-            font-size: 44px;
+          .bm-wealth-gap-hero {
+            padding: 32px 18px;
+          }
+
+          .bm-wealth-gap-value {
+            font-size: 64px;
+          }
+
+          .bm-wealth-gap-breakdown {
+            grid-template-columns: 1fr;
           }
 
           .bm-results-comparison {
@@ -954,7 +1064,7 @@ export function PropertyVsSipCalculator() {
         onFree={handleFree}
         onPay={handlePay}
         title="What Do I Do Now? — ₹399"
-        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\n📋 YOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\n💰 WEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\n📊 MUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\n✓ Instant download\n✓ Email delivery\n✓ Support via WhatsApp`}
+        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\nYOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\nWEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\nMUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
         freeLabel="Email Summary"
         payLabel="Send It Now — ₹399"
         payButtonClassName="calculator-premium-cta"

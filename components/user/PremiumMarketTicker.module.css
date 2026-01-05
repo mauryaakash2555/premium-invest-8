@@ -14,12 +14,12 @@
      If we reduce height, the top edge moves DOWN (looks like it “came down”).
      This offsets it upward by the same delta so the visual top edge stays put. */
   transform: translateY(-4px);
-  /* Fully invisible container (no panel) */
-  background: rgba(0, 0, 0, 0);
+  /* Subtle visible strip so it never looks "missing" */
+  background: rgba(0, 0, 0, 0.32);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  border-top: 0;
   /* Keep a single premium gold rule (top only) */
+  border-top: 1px solid rgba(192, 160, 98, 0.22);
 }
 
 .inner {

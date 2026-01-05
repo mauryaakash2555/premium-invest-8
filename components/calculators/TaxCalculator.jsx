@@ -582,7 +582,7 @@ export function TaxCalculator() {
             <div className="bm-sticky-premium-savings-label">Your potential savings</div>
             <div className="bm-sticky-premium-savings-amount">{formatINR(savingsValue || 0)}</div>
           </div>
-          <div className="bm-sticky-premium-headline">⚡ Ready to execute this plan?</div>
+          <div className="bm-sticky-premium-headline">Ready to execute this plan?</div>
           <div className="bm-sticky-premium-subtext">Unlock the step-by-step blueprint (₹299)</div>
           <div className="bm-sticky-premium-cta">Unlock Full Plan</div>
         </button>
@@ -762,7 +762,7 @@ export function TaxCalculator() {
                     className={
                       busy
                         ? "bm-btn bm-btn-primary w-full px-5 py-4 text-base font-semibold opacity-60 cursor-not-allowed"
-                        : "bm-btn bm-btn-primary w-full px-5 py-4 text-base font-semibold tracking-wide bm-calc-button"
+                        : "bm-btn bm-btn-primary w-full px-5 py-4 text-base font-semibold tracking-wide bm-calc-button bm-calc-button-hero"
                     }
                   >
                     {busy ? (
@@ -771,7 +771,9 @@ export function TaxCalculator() {
                         Calculating...
                       </span>
                     ) : (
-                      <span className="inline-flex items-center justify-center">Calculate My Tax Optimization</span>
+                        <span className="inline-flex items-center justify-center gap-2 relative">
+                          Calculate My Tax Optimization
+                        </span>
                     )}
                   </button>
                 </div>
@@ -807,9 +809,12 @@ export function TaxCalculator() {
 
                 {showResults && comparison && winner !== "tie" && savings > 0 ? (
                   <div className="bm-savings-hero">
-                    <div className="bm-savings-label">Estimated tax saved (this FY)</div>
+                    <div className="bm-savings-badge">ANNUAL SAVINGS</div>
                     <div className="bm-savings-amount">{formatINR(savingsDisplay)}</div>
-                    <div className="bm-savings-subtext">Compared to the higher-tax option for your inputs.</div>
+                    <div className="bm-savings-subtext">
+                      That’s {formatINR(Math.max(0, Math.round(savingsDisplay / 12)))} per month
+                    </div>
+                    <div className="bm-savings-yearly">Over 30 years: {formatINR(Math.max(0, Math.round(savingsDisplay * 30)))}</div>
                   </div>
                 ) : null}
 
@@ -825,54 +830,100 @@ export function TaxCalculator() {
                 ) : null}
 
                 {showResults && comparison ? (
-                  <ResultSummary
-                    winnerKey={winner === "tie" ? null : winner}
-                    emphasizeWinner={emphasizeWinner}
-                    options={[
-                      {
-                        key: "old",
-                        label: "Old Regime",
-                        amount: formatINR(oldTaxDisplay),
-                        amountNote: oldTax === 0 ? "₹0 due to Section 87A rebate (threshold-based)." : null,
-                        statusText:
-                          winner === "old"
-                            ? "You pay LESS tax"
-                            : winner === "new"
-                              ? "You pay MORE tax"
-                              : "You pay the SAME tax",
-                        statusTone: winner === "old" ? "good" : winner === "new" ? "bad" : "neutral",
-                        metaLines: [
-                          `Effective Rate: ${(comparison.old.effectiveRate * 100).toFixed(1)}%`,
-                          `Money Saved: ${formatINR(winner === "old" ? comparison.savings : 0)}`,
-                        ],
-                      },
-                      {
-                        key: "new",
-                        label: "New Regime",
-                        labelAccent: true,
-                        amount: formatINR(newTaxDisplay),
-                        amountNote: newTax === 0 ? "₹0 due to Section 87A rebate (threshold-based)." : null,
-                        statusText:
-                          winner === "new"
-                            ? "You pay LESS tax"
-                            : winner === "old"
-                              ? "You pay MORE tax"
-                              : "You pay the SAME tax",
-                        statusTone: winner === "new" ? "good" : winner === "old" ? "bad" : "neutral",
-                        metaLines: [
-                          `Effective Rate: ${(comparison.new.effectiveRate * 100).toFixed(1)}%`,
-                          `Money Saved: ${formatINR(winner === "new" ? comparison.savings : 0)}`,
-                        ],
-                      },
-                    ]}
-                  />
+                  <div className="regime-comparison-hero">
+                    <div
+                      className={`regime-card regime-card-old ${oldTax > newTax ? "losing" : oldTax < newTax ? "winning" : "neutral"}`}
+                    >
+                      <div className="regime-header">
+                        <h3>Old Regime</h3>
+                        {oldTax > newTax ? <span className="losing-badge">Higher</span> : null}
+                        {oldTax < newTax ? <span className="winning-badge">Better</span> : null}
+                      </div>
+                      <div className={`regime-tax-amount ${oldTax < newTax ? "winning" : ""}`}>{formatINR(oldTaxDisplay)}</div>
+                      <div className="regime-label">Annual Tax</div>
+                      <ul className="regime-perks">
+                        <li>HRA exemption</li>
+                        <li>80C deductions</li>
+                        <li>Section 24(b) benefits</li>
+                      </ul>
+                    </div>
+
+                    <div className="vs-divider" aria-hidden>
+                      <span className="vs-text">VS</span>
+                    </div>
+
+                    <div
+                      className={`regime-card regime-card-new ${newTax < oldTax ? "winning" : newTax > oldTax ? "losing" : "neutral"}`}
+                    >
+                      <div className="regime-header">
+                        <h3>New Regime</h3>
+                        {newTax < oldTax ? <span className="winning-badge">Better</span> : null}
+                        {newTax > oldTax ? <span className="losing-badge">Higher</span> : null}
+                      </div>
+                      <div className={`regime-tax-amount ${newTax < oldTax ? "winning" : ""}`}>{formatINR(newTaxDisplay)}</div>
+                      <div className="regime-label">Annual Tax</div>
+                      <ul className="regime-perks">
+                        <li>Lower rates</li>
+                        <li>Higher rebate threshold</li>
+                        <li>Simpler filing</li>
+                      </ul>
+                    </div>
+                  </div>
+                ) : null}
+
+                {showResults && comparison ? (
+                  <div className="bm-audit-preview-hero">
+                    <div className="bm-audit-header">
+                      <h3>Your 10-Point Optimization Blueprint</h3>
+                      <p className="bm-audit-subheader">
+                        Execution-oriented plan based on your inputs.
+                      </p>
+                    </div>
+
+                    <div className="bm-audit-section-preview">
+                      <div className="bm-audit-item">
+                        <div className="bm-audit-number">1</div>
+                        <div className="bm-audit-content-preview">
+                          <h4>HRA exemption optimization</h4>
+                          <p className="bm-audit-preview-text">Maximize metro HRA through correct rent + salary structure inputs.</p>
+                        </div>
+                      </div>
+
+                      <div className="bm-audit-item">
+                        <div className="bm-audit-number">2</div>
+                        <div className="bm-audit-content-preview">
+                          <h4>80C deployment strategy</h4>
+                          <p className="bm-audit-preview-text">Sequence EPF / PPF / ELSS decisions based on liquidity and horizon.</p>
+                        </div>
+                      </div>
+
+                      <div className="bm-audit-item">
+                        <div className="bm-audit-number">3</div>
+                        <div className="bm-audit-content-preview">
+                          <h4>Section 24(b) leverage</h4>
+                          <p className="bm-audit-preview-text">Home-loan interest positioning and documentation discipline.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="bm-unlock-audit-btn"
+                      onClick={() => {
+                        track("premium_click", { source: "audit_preview" });
+                        setLeadOpen(true);
+                      }}
+                    >
+                      Unlock Full 10-Point Audit + Execution Roadmap
+                    </button>
+                  </div>
                 ) : null}
 
                 {showResults && comparison ? (
                   <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
-                    <p>✓ 1,200+ calculations done</p>
-                    <p>✓ ARN 90008 registered</p>
-                    <p>✓ Used by Mumbai professionals</p>
+                    <p>1,200+ calculations done</p>
+                    <p>ARN 90008 registered</p>
+                    <p>Used by Mumbai professionals</p>
                   </div>
                 ) : null}
 
@@ -898,11 +949,11 @@ export function TaxCalculator() {
                     </div>
                     <div className="mt-3 grid gap-2">
                       <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
-                        <div className="text-xs font-semibold text-white">🔓 What You See Free</div>
+                          <div className="text-xs font-semibold text-white">What You See Free</div>
                         <div className="text-[11px] text-slate-200/75">Your tax number • Old vs New comparison</div>
                       </div>
                       <div className="rounded-lg border border-white/10 bg-black/30 p-3 transition-colors hover:border-white/20 hover:bg-black/40">
-                        <div className="text-xs font-semibold text-white">🔒 What Professionals Actually Need (₹299)</div>
+                          <div className="text-xs font-semibold text-white">What Professionals Actually Need (₹299)</div>
                         <div className="text-[11px] text-slate-200/75">EXECUTION, NOT CALCULATION</div>
                         <div className="text-[11px] text-slate-200/60">Your exact tax-saving potential ({formatINR(comparison?.savings || 0)}) • Why this regime works for you</div>
                       </div>
@@ -1034,7 +1085,10 @@ export function TaxCalculator() {
         .bm-calc-button {
           position: relative;
           overflow: hidden;
-          animation: bmPulse 2.2s ease-in-out infinite;
+        }
+
+        .bm-calc-button-hero {
+          background-size: 200% 200%;
         }
 
         .bm-sticky-calc {
@@ -1082,15 +1136,6 @@ export function TaxCalculator() {
           height: 320px;
         }
 
-        @keyframes bmPulse {
-          0%,
-          100% {
-            box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
-          }
-          50% {
-            box-shadow: 0 0 0 10px transparent;
-          }
-        }
 
         .bm-savings-hero {
           text-align: center;
@@ -1102,6 +1147,16 @@ export function TaxCalculator() {
           );
           border: 1px solid color-mix(in oklab, var(--color-matte-gold) 25%, transparent);
           border-radius: 16px;
+          box-shadow: 0 0 40px color-mix(in oklab, var(--color-matte-gold) 28%, transparent);
+        }
+
+        .bm-savings-badge {
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: color-mix(in oklab, var(--color-matte-gold) 88%, white 12%);
+          margin-bottom: 10px;
         }
 
         .bm-savings-label {
@@ -1115,7 +1170,7 @@ export function TaxCalculator() {
         .bm-savings-amount {
           font-weight: 900;
           line-height: 1;
-          font-size: 48px;
+          font-size: 60px;
           color: var(--color-matte-gold);
           text-shadow: 0 0 28px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
           margin-bottom: 10px;
@@ -1124,6 +1179,231 @@ export function TaxCalculator() {
         .bm-savings-subtext {
           font-size: 13px;
           color: color-mix(in oklab, white 75%, transparent);
+        }
+
+        .bm-savings-yearly {
+          margin-top: 8px;
+          font-size: 12px;
+          color: color-mix(in oklab, var(--color-matte-gold) 65%, white 35%);
+          font-style: italic;
+        }
+
+        .regime-comparison-hero {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          gap: 18px;
+          align-items: stretch;
+          margin: 26px 0;
+        }
+
+        .regime-card {
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 16px;
+          padding: 22px;
+          position: relative;
+          overflow: hidden;
+          transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+
+        .regime-card.winning {
+          border-color: color-mix(in oklab, var(--color-matte-gold) 55%, transparent);
+          box-shadow: 0 0 32px color-mix(in oklab, var(--color-matte-gold) 22%, transparent);
+          transform: translateY(-2px);
+        }
+
+        .regime-card.losing {
+          border-color: rgba(255, 255, 255, 0.12);
+          box-shadow: none;
+        }
+
+        .regime-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+
+        .regime-header h3 {
+          font-size: 16px;
+          font-weight: 800;
+          color: rgba(255, 255, 255, 0.92);
+          margin: 0;
+        }
+
+        .losing-badge {
+          background: rgba(0, 0, 0, 0.28);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          color: rgba(255, 255, 255, 0.78);
+          padding: 4px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 800;
+        }
+
+        .winning-badge {
+          background: color-mix(in oklab, var(--color-matte-gold) 22%, transparent);
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 38%, transparent);
+          color: var(--color-matte-gold);
+          padding: 4px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .regime-tax-amount {
+          font-size: 40px;
+          font-weight: 900;
+          color: rgba(255, 255, 255, 0.9);
+          line-height: 1;
+          margin: 12px 0;
+        }
+
+        .regime-tax-amount.winning {
+          color: var(--color-matte-gold);
+          text-shadow: 0 0 18px color-mix(in oklab, var(--color-matte-gold) 30%, transparent);
+        }
+
+        .regime-label {
+          font-size: 12px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+          margin-bottom: 12px;
+        }
+
+        .regime-perks {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .regime-perks li {
+          margin: 8px 0;
+        }
+
+        .vs-divider {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 58px;
+        }
+
+        .vs-text {
+          width: 50px;
+          height: 50px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          color: var(--color-matte-gold);
+          background: color-mix(in oklab, var(--color-matte-gold) 14%, transparent);
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+        }
+
+        .bm-audit-preview-hero {
+          background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--color-matte-gold) 12%, transparent) 0%,
+            color-mix(in oklab, var(--color-matte-gold) 6%, transparent) 100%
+          );
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 28%, transparent);
+          border-radius: 16px;
+          padding: 26px;
+          margin: 26px 0;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .bm-audit-header h3 {
+          font-size: 18px;
+          font-weight: 900;
+          color: var(--color-matte-gold);
+          margin: 0 0 6px 0;
+        }
+
+        .bm-audit-subheader {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.72);
+          margin: 0 0 16px 0;
+        }
+
+        .bm-audit-section-preview {
+          display: grid;
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+
+        .bm-audit-item {
+          display: flex;
+          gap: 14px;
+          padding: 14px;
+          background: rgba(0, 0, 0, 0.25);
+          border-radius: 12px;
+          border-left: 4px solid var(--color-matte-gold);
+          transition: transform 180ms ease, background 180ms ease, border-left-color 180ms ease;
+        }
+
+        .bm-audit-item:hover {
+          background: rgba(0, 0, 0, 0.38);
+          border-left-color: color-mix(in oklab, var(--color-matte-gold) 85%, white 15%);
+          transform: translateX(6px);
+        }
+
+        .bm-audit-number {
+          min-width: 44px;
+          height: 44px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          color: black;
+          background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--color-matte-gold) 92%, white 8%),
+            color-mix(in oklab, var(--color-matte-gold) 82%, black 18%)
+          );
+          flex-shrink: 0;
+        }
+
+        .bm-audit-content-preview h4 {
+          margin: 0 0 4px 0;
+          font-size: 14px;
+          font-weight: 800;
+          color: rgba(255, 255, 255, 0.92);
+        }
+
+        .bm-audit-preview-text {
+          margin: 0;
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.72);
+          line-height: 1.5;
+        }
+
+        .bm-unlock-audit-btn {
+          width: 100%;
+          padding: 16px 18px;
+          border-radius: 12px;
+          font-weight: 850;
+          background: color-mix(in oklab, var(--color-matte-gold) 92%, white 8%);
+          color: black;
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
+          box-shadow: 0 0 30px color-mix(in oklab, var(--color-matte-gold) 22%, transparent);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+
+        .bm-unlock-audit-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 0 50px color-mix(in oklab, var(--color-matte-gold) 32%, transparent);
         }
 
         .bm-premium-above-fold :global(button),
@@ -1236,7 +1516,15 @@ export function TaxCalculator() {
 
         @media (max-width: 768px) {
           .bm-savings-amount {
-            font-size: 38px;
+            font-size: 44px;
+          }
+
+          .regime-comparison-hero {
+            grid-template-columns: 1fr;
+          }
+
+          .vs-divider {
+            display: none;
           }
         }
       `}</style>

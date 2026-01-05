@@ -442,26 +442,6 @@ const Contact = () => {
               Send Us a Message
             </h2>
             <form onSubmit={handleSubmit} data-testid="contact-form">
-              {submitNote ? (
-                <div
-                  style={{
-                    marginBottom: '18px',
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    border: submitNote.startsWith('Message sent')
-                      ? '1px solid rgba(218, 165, 32, 0.35)'
-                      : '1px solid rgba(218, 165, 32, 0.18)',
-                    background: submitNote.startsWith('Message sent')
-                      ? 'rgba(218, 165, 32, 0.08)'
-                      : 'rgba(255, 255, 255, 0.03)',
-                    color: submitNote.startsWith('Message sent') ? '#DAA520' : '#CCCCCC',
-                    fontSize: '14px',
-                    lineHeight: 1.35,
-                  }}
-                >
-                  {submitNote}
-                </div>
-              ) : null}
               <div style={{ marginBottom: '24px' }}>
                 <label
                   htmlFor="name"
@@ -500,6 +480,8 @@ const Contact = () => {
                   onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
                 />
               </div>
+
+              {/* Submit button appears later in the form; keep status note near CTA for visibility */}
 
               <div style={{ marginBottom: '24px' }}>
                 <label
@@ -646,6 +628,27 @@ const Contact = () => {
                   </>
                 )}
               </button>
+
+              {submitNote ? (
+                <div
+                  style={{
+                    marginTop: '14px',
+                    padding: '12px 14px',
+                    borderRadius: '10px',
+                    border: submitNote.startsWith('Message sent')
+                      ? '1px solid rgba(218, 165, 32, 0.35)'
+                      : '1px solid rgba(218, 165, 32, 0.18)',
+                    background: submitNote.startsWith('Message sent')
+                      ? 'rgba(218, 165, 32, 0.08)'
+                      : 'rgba(255, 255, 255, 0.03)',
+                    color: submitNote.startsWith('Message sent') ? '#DAA520' : '#CCCCCC',
+                    fontSize: '14px',
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {submitNote}
+                </div>
+              ) : null}
 
               {/* WhatsApp Fallback - Shows only when form times out or fails */}
               {showWhatsAppFallback && (

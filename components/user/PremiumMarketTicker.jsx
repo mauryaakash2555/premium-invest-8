@@ -172,6 +172,16 @@ export default function PremiumMarketTicker({ className }) {
   const [asOf, setAsOf] = useState(null);
   const lastDataRef = useRef([]);
 
+  const placeholderItems = useMemo(
+    () => [
+      { id: "SENSEX", name: "SENSEX", kind: "index", direction: "flat", placeholder: true },
+      { id: "NIFTY", name: "NIFTY 50", kind: "index", direction: "flat", placeholder: true },
+      { id: "USDINR", name: "USD/INR", kind: "fx", direction: "flat", placeholder: true },
+      { id: "GOLD", name: "GOLD", kind: "metal", direction: "flat", placeholder: true },
+    ],
+    []
+  );
+
   // flash state per id when values change
   const [flashById, setFlashById] = useState({});
 
@@ -190,9 +200,9 @@ export default function PremiumMarketTicker({ className }) {
   const paused = pausedHover || pausedTap;
 
   const doubled = useMemo(() => {
-    if (!data.length) return [];
-    return [...data, ...data];
-  }, [data]);
+    const base = data.length ? data : placeholderItems;
+    return base.length ? [...base, ...base] : [];
+  }, [data, placeholderItems]);
 
   useEffect(() => {
     let stop = false;
@@ -325,6 +335,10 @@ export default function PremiumMarketTicker({ className }) {
             const isUp = dir === "up";
             const isDown = dir === "down";
 
+            const isPlaceholder = Boolean(item.placeholder);
+            const valueText = isPlaceholder ? "—" : fmtValue(item);
+            const changeText = isPlaceholder ? "—" : fmtPct(item.changePct);
+
             // Keep SENSEX palette exactly as-is (your current look): label/value neutral, delta red/green only.
             const isSensex = item.id === "SENSEX";
 
@@ -341,10 +355,10 @@ export default function PremiumMarketTicker({ className }) {
               >
                 <div className={styles.iconWrap}>{getIcon(item)}</div>
                 <div className={styles.name}>{item.name}</div>
-                <div className={styles.value}>{fmtValue(item)}</div>
+                <div className={styles.value}>{valueText}</div>
                 <div className={[styles.change, isUp ? styles.changeUp : isDown ? styles.changeDown : styles.changeFlat].join(" ")}
                 >
-                  {fmtPct(item.changePct)}
+                  {changeText}
                 </div>
                 <div className={styles.dot} aria-hidden="true" />
               </div>
