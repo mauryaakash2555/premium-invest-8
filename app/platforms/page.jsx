@@ -170,7 +170,7 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="https://zerodha.com" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
+            <a href="/track/zerodha" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
               Open Free Demat Account <ExternalLink size={16} />
             </a>
           </div>
@@ -196,7 +196,7 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="https://smallcase.com" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
+            <a href="/track/smallcase" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
               Explore Smallcases <ExternalLink size={16} />
             </a>
           </div>
@@ -222,7 +222,7 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="https://groww.in" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
+            <a href="/track/groww" target="_blank" rel="nofollow noopener noreferrer" className="btn-primary">
               Start Free Account <ExternalLink size={16} />
             </a>
           </div>

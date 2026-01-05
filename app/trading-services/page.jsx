@@ -177,7 +177,7 @@ const TradingServices = () => {
                 Trusted by 1+ crore investors.
               </p>
               <a 
-                href="https://zerodha.com" 
+                href="/track/zerodha" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -209,7 +209,7 @@ const TradingServices = () => {
                 Zero account opening fees.
               </p>
               <a 
-                href="https://groww.in" 
+                href="/track/groww" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -241,7 +241,7 @@ const TradingServices = () => {
                 Perfect for strategic equity investing.
               </p>
               <a 
-                href="https://smallcase.com" 
+                href="/track/smallcase" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{

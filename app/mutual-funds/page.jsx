@@ -582,7 +582,7 @@ const MutualFunds = () => {
                 User-friendly app. 2+ crore investors. Wide fund selection including direct plans.
               </p>
               <a 
-                href="https://groww.in" 
+                href="/track/groww" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -613,7 +613,7 @@ const MutualFunds = () => {
                 India's largest broker. Direct mutual funds with zero commissions. Robust platform.
               </p>
               <a 
-                href="https://zerodha.com" 
+                href="/track/coin" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -644,7 +644,7 @@ const MutualFunds = () => {
                 Thematic portfolios. Pre-built strategies. Goal-based investing made easy.
               </p>
               <a 
-                href="https://smallcase.com" 
+                href="/track/smallcase" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{

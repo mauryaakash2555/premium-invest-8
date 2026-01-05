@@ -171,7 +171,7 @@ const SIPServices = () => {
                 Beginner-friendly. Clean interface, zero charges. Trusted by 2+ crore investors.
               </p>
               <a 
-                href="https://groww.in" 
+                href="/track/groww" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -202,7 +202,7 @@ const SIPServices = () => {
                 India's largest broker. Direct funds, zero commissions. Excellent support.
               </p>
               <a 
-                href="https://zerodha.com" 
+                href="/track/coin" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
@@ -233,7 +233,7 @@ const SIPServices = () => {
                 Thematic portfolios. Expert-curated strategies. Automatic rebalancing.
               </p>
               <a 
-                href="https://smallcase.com" 
+                href="/track/smallcase" 
                 target="_blank" 
                 rel="nofollow noopener noreferrer"
                 style={{
