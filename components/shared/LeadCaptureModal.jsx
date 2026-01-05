@@ -232,11 +232,11 @@ export function LeadCaptureModal({
           {err ? <div className="text-sm text-red-300">{err}</div> : null}
           {!err && info ? <div className="text-sm text-slate-200/80">{info}</div> : null}
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               type="button"
               variant="outline"
-              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-100"
+              className="secondary-button w-full sm:flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-100 whitespace-normal leading-snug"
               disabled={busy}
               onClick={() => handle("free")}
             >
@@ -249,7 +249,7 @@ export function LeadCaptureModal({
                 payButtonClassName,
               ]
                 .filter(Boolean)
-                .concat(["flex-1"])
+                .concat(["w-full", "sm:flex-1", "whitespace-normal", "leading-snug", "text-center"])
                 .join(" ")}
               disabled={busy}
               onClick={() => handle("pay")}

@@ -139,7 +139,7 @@ export default function TaxOptimizationToolPage() {
   return (
     <>
       {/* Minimal back row: subtle, visible immediately */}
-      <BackRow />
+      <BackRow href="/tools" label="\u2190 Back to Tools" />
       {/* Hero Section — background image, headline, subtext, ONE CTA */}
       <section
         className="relative overflow-hidden"

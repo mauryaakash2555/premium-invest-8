@@ -11,7 +11,7 @@ export const metadata = {
 export default function RetirementGapToolPage() {
   return (
     <>
-      <BackRow />
+      <BackRow href="/tools" label="\u2190 Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <BaseCalculatorLayout
           header={

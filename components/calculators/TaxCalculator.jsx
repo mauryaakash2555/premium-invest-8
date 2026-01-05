@@ -761,8 +761,8 @@ export function TaxCalculator() {
                     disabled={busy}
                     className={
                       busy
-                        ? "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm opacity-60 cursor-not-allowed"
-                        : "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm bm-calc-button"
+                        ? "bm-btn bm-btn-primary w-full px-4 py-3 text-sm opacity-60 cursor-not-allowed"
+                        : "bm-btn bm-btn-primary w-full px-4 py-3 text-sm bm-calc-button"
                     }
                   >
                     {busy ? (
