@@ -109,7 +109,7 @@ export function PropertyVsSipCalculator() {
 
   const COMPLIANCE_FOOTER = "BM Wealth | ARN 90008 | Educational mathematical projection.\n   Not investment advice.";
   const ASSUMPTIONS_LINE =
-    "Locked assumptions: Property 4% CAGR, Equity 14.5% CAGR, rental yield 2.5%/yr, maintenance 2.5%/yr. Equity path invests the SAME upfront capital + monthly SIP.";
+    "Locked assumptions: Property 4% CAGR, Equity 14.5% CAGR. Equity path invests the SAME upfront capital + monthly SIP.";
 
   const [propertyPriceRaw, setPropertyPriceRaw] = useState("20000000");
   const [monthlySipRaw, setMonthlySipRaw] = useState("50000");
@@ -213,7 +213,7 @@ export function PropertyVsSipCalculator() {
           years: yearsFinal,
         },
         results: {
-          propertyEndValue: formatted.values.propertyEndValue,
+          propertyFutureValue: formatted.values.propertyFutureValue,
           sipFutureValue: formatted.values.sipFutureValue,
           wealthGap: formatted.values.wealthGap,
           gapCr,
@@ -495,7 +495,7 @@ export function PropertyVsSipCalculator() {
   const wealthGap = model ? Number(model.wealthGap || 0) : 0;
   const yearsFinal = model?.inputs?.years || a.defaultYears;
   const sipValueNum = model ? Number(model.sipFutureValue || 0) : 0;
-  const propertyWealthNum = model ? Number(model.netPropertyWealth || 0) : 0;
+  const propertyWealthNum = model ? Number(model.propertyFutureValue || 0) : 0;
   const propertyWins = model ? propertyWealthNum > sipValueNum : false;
   const sipWins = model ? sipValueNum > propertyWealthNum : false;
   const advantageNum = sipWins ? wealthGap : 0;
@@ -514,8 +514,11 @@ export function PropertyVsSipCalculator() {
     const y = model.inputs.years;
     const months = y * 12;
 
+    const propertyStartCr = formatCroreNumber(model.inputs.propertyPrice);
+    const propertyEndCr = formatCroreNumber(model.propertyFutureValue);
+
     return {
-      label: `Locked assumptions: Property CAGR 4%, SIP CAGR 14.5%, rental yield 2.5%/yr, maintenance drag 2.5%/yr. Years clamped to max ${a.maxYears}.`,
+      label: `₹${propertyStartCr}Cr property grows to ₹${propertyEndCr}Cr at 4% over ${y} years. Years clamped to max ${a.maxYears}.`,
       fiscalYear: null,
       context: "No EMI/loan, taxes, stamp duty, or transaction costs included.",
       sections: [
@@ -530,12 +533,7 @@ export function PropertyVsSipCalculator() {
         {
           title: "Property",
           rows: [
-            { label: `Property value after ${y} years`, value: formatted.values.propertyEndValue, accent: true },
-            { label: "Annual rent (2.5% of property price)", value: formatted.values.annualRent },
-            { label: `Total rent (${y} years)`, value: formatted.values.totalRent },
-            { label: "Annual maintenance (2.5% of property price)", value: formatted.values.annualMaintenance },
-            { label: `Total maintenance (${y} years)`, value: formatted.values.totalMaintenance },
-            { label: "Net property wealth", value: formatted.values.netPropertyWealth, emphasis: true, accent: true },
+            { label: `Property value after ${y} years`, value: formatted.values.propertyFutureValue, emphasis: true, accent: true },
           ],
         },
         {
@@ -688,9 +686,8 @@ export function PropertyVsSipCalculator() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white/5 border border-white/10 rounded-xl p-4 min-w-0">
-                      <div className="text-sm text-slate-200/70">Net Property Wealth</div>
-                      <div className="mt-2 text-xl font-semibold text-white break-words">{formatted.values.netPropertyWealth}</div>
-                      <div className="mt-1 text-[11px] text-slate-200/60">Includes rent and maintenance as specified</div>
+                      <div className="text-sm text-slate-200/70">Property Value</div>
+                      <div className="mt-2 text-xl font-semibold text-white break-words">₹{formatCroreNumber(model.propertyFutureValue)}Cr</div>
                     </div>
 
                     <div
@@ -801,7 +798,7 @@ export function PropertyVsSipCalculator() {
         onFree={handleFree}
         onPay={handlePay}
         title="What Do I Do Now? — ₹399"
-        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\n📋 YOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\n💰 WEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\n📊 MUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Rental yield reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\n✓ Instant download\n✓ Email delivery\n✓ Support via WhatsApp`}
+        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\n📋 YOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\n💰 WEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\n📊 MUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\n✓ Instant download\n✓ Email delivery\n✓ Support via WhatsApp`}
         freeLabel="Email Summary"
         payLabel="Send It Now — ₹399"
         payButtonClassName="calculator-premium-cta"
