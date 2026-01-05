@@ -40,16 +40,14 @@ function toFiniteNumber(v) {
   return Number.isFinite(n) ? n : null;
 }
 
-function fmtNumber(v, opts = {}) {
-  const { style = "decimal", currency = "INR", maximumFractionDigits = 2 } = opts;
-  const n = toFiniteNumber(v);
+// Requested: Display formatting
+function formatNumber(num, maximumFractionDigits) {
+  const n = toFiniteNumber(num);
   if (n == null) return "—";
   try {
-    return new Intl.NumberFormat("en-IN", {
-      style,
-      currency,
-      maximumFractionDigits,
-    }).format(n);
+    const opts = {};
+    if (typeof maximumFractionDigits === "number") opts.maximumFractionDigits = maximumFractionDigits;
+    return new Intl.NumberFormat("en-IN", opts).format(n);
   } catch {
     return String(n);
   }
@@ -58,21 +56,9 @@ function fmtNumber(v, opts = {}) {
 function fmtValue(item) {
   const v = toFiniteNumber(item?.value);
   if (v == null) return "—";
-  if (item.kind === "fx") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 3 });
-  if (item.kind === "index") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
-  // Crypto: match common display (TradingView/CMC) using USD
-  if (item.kind === "crypto") {
-    if (String(item.currency || "").toUpperCase() === "USD") {
-      // User preference: no $ symbol, show "USD" suffix like many quote pages
-      const n = new Intl.NumberFormat("en-US", {
-        style: "decimal",
-        maximumFractionDigits: 0,
-      }).format(v);
-      return `${n} USD`;
-    }
-    return fmtNumber(item.value, { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-  }
-  return "INR " + fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
+  // Keep values numeric-only (no currency prefix) to avoid any CSS/spacing issues.
+  if (item.kind === "fx") return formatNumber(v, 2);
+  return formatNumber(v, 0);
 }
 
 function fmtPct(p) {
@@ -174,16 +160,24 @@ function normalizeApi(json) {
   return items
     .map((x) => ({
       id: String(x.id || ""),
-      name: String(x.name || ""),
+      name: String(x.name || x.label || ""),
       kind: String(x.kind || ""),
-      value: toFiniteNumber(x.value),
-      changePct: toFiniteNumber(x.changePct),
+      value: toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close),
+      changePct: toFiniteNumber(x.changePct ?? x.changePercent ?? x.change_percent),
       direction: String(x.direction || "flat"),
       currency: String(x.currency || ""),
     }))
     // Keep items even if changePct is missing; we still want prices to show.
     .filter((x) => x.id && x.value != null);
 }
+
+// Requested: FALLBACK_DATA (if API fails)
+const FALLBACK_DATA = [
+  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 24857, change: 127, changePercent: 0.52, changePct: 0.52, direction: "up", currency: "INR" },
+  { id: "SENSEX", name: "SENSEX", kind: "index", value: 82365, change: 445, changePercent: 0.54, changePct: 0.54, direction: "up", currency: "INR" },
+  { id: "USDINR", name: "USD/INR", kind: "fx", value: 84.32, change: 0.08, changePercent: 0.09, changePct: 0.09, direction: "up", currency: "INR" },
+  { id: "GOLD", name: "GOLD", kind: "metal", value: 7245, change: 12, changePercent: 0.17, changePct: 0.17, direction: "up", currency: "INR" },
+];
 
 export default function PremiumMarketTicker({ className }) {
   const [data, setData] = useState([]);
@@ -225,14 +219,33 @@ export default function PremiumMarketTicker({ className }) {
   useEffect(() => {
     let stop = false;
 
+    function applyFallback(reason, detail) {
+      if (stop) return;
+      // Only apply fallback if we don't already have last-known values.
+      if (Array.isArray(lastDataRef.current) && lastDataRef.current.length) return;
+      console.warn("Ticker fetch failed (fallback used):", reason, detail ?? "");
+      lastDataRef.current = FALLBACK_DATA;
+      setData(FALLBACK_DATA);
+      setAsOf(null);
+    }
+
     async function fetchNow() {
       try {
         const r = await fetch("/api/market-data", { cache: "no-store" });
         const j = await r.json().catch(() => null);
-        if (!r.ok || !j?.ok) return;
+
+        console.log("Ticker data received:", j);
+
+        if (!r.ok || !j?.ok) {
+          applyFallback("bad_response", { status: r.status, ok: r.ok, bodyOk: Boolean(j?.ok) });
+          return;
+        }
 
         const next = normalizeApi(j);
-        if (!next.length) return;
+        if (!next.length) {
+          applyFallback("empty_items", j);
+          return;
+        }
 
         // detect changes for micro-highlight
         const prev = lastDataRef.current;
@@ -259,8 +272,9 @@ export default function PremiumMarketTicker({ className }) {
         lastDataRef.current = next;
         setData(next);
         setAsOf(String(j.asOf || ""));
-      } catch {
-        // silent: keep last known values
+      } catch (err) {
+        console.error("Ticker fetch failed:", err);
+        applyFallback("fetch_failed", String(err?.message || err));
       }
     }
 
