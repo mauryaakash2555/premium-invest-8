@@ -123,7 +123,7 @@ export async function POST(req) {
     const wealthGapLine = `₹${Math.round(wealthGapAbs).toLocaleString("en-IN")}`;
 
     const html = `
-      <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#111;max-width:680px">
+      <div style="font-family:Inter,Arial,sans-serif;line-height:1.6;color:#111;max-width:700px">
         <p>Hi ${safeHtml(name || "there")},</p>
 
         <p>You just ran the numbers.</p>
@@ -133,46 +133,123 @@ export async function POST(req) {
 
         <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
 
-        <p style="margin:0 0 8px"><strong>🚨 YOUR SPECIFIC ANALYSIS:</strong></p>
-        <p style="margin:0">Property: ${safeHtml(propertyLine)}</p>
-        <p style="margin:0">Monthly Deployment: ${safeHtml(sipLine)}</p>
-        <p style="margin:0">Timeline: ${safeHtml(timelineLine)}</p>
+        <p style="margin:0 0 10px"><strong>🚨 YOUR SPECIFIC ANALYSIS:</strong></p>
+        <p style="margin:0">Property: <strong>${safeHtml(propertyLine)}</strong></p>
+        <p style="margin:0">Monthly Deployment: <strong>${safeHtml(sipLine)}</strong></p>
+        <p style="margin:0">Timeline: <strong>${safeHtml(timelineLine)}</strong></p>
 
         <p style="margin:14px 0 8px"><strong>Wealth Gap: ${safeHtml(wealthGapLine)}</strong>${gapCrRounded ? ` <span style="color:#555">(≈ ${safeHtml(formatCrLakh(wealthGapAbs))})</span>` : ""}</p>
 
-        <p style="margin:0 0 8px">This isn’t just a number.</p>
-        <p style="margin:0">It’s wealth that can silently leak into:</p>
-        <ul style="margin:8px 0 0;padding-left:20px">
-          <li>Society maintenance and repairs</li>
-          <li>Property tax and ongoing drag</li>
-          <li>Zero liquidity for years</li>
-          <li>4% appreciation vs 14.5% compounding (model assumption)</li>
+        <p style="margin:0">This isn’t just a number.</p>
+        <p style="margin:10px 0 6px">This is:</p>
+        <ul style="margin:6px 0 0;padding-left:20px">
+          <li>A luxury retirement in Goa (₹5Cr villa)</li>
+          <li>Your child’s Ivy League education (₹1.5Cr)</li>
+          <li>Years of absolute financial freedom (liquid corpus)</li>
         </ul>
+
+        <p style="margin:14px 0 0">That’s currently leaking into:</p>
+        <p style="margin:6px 0 0">→ Society maintenance</p>
+        <p style="margin:0">→ Property tax</p>
+        <p style="margin:0">→ Repairs & depreciation</p>
+        <p style="margin:0">→ Zero liquidity for ${safeHtml(String(years))} years</p>
+        <p style="margin:0">→ 4% appreciation vs 14.5% compounding (model assumption)</p>
 
         <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
 
-        <p style="margin:0 0 8px"><strong>⏰ THE DAILY LEAK:</strong></p>
+        <p style="margin:0 0 10px"><strong>⏰ THE DAILY LEAK:</strong></p>
         <p style="margin:0">Every day you stay in this property trap:</p>
         <p style="margin:6px 0 0">→ You lose <strong>₹${Math.round(dailyLeak).toLocaleString("en-IN")}</strong> in potential compounding</p>
         <p style="margin:0">→ That’s <strong>₹${Math.round(monthlyLeak).toLocaleString("en-IN")}/month</strong></p>
         <p style="margin:0">→ Or <strong>₹${Math.round(yearlyLeak).toLocaleString("en-IN")}/year</strong></p>
 
+        <p style="margin:10px 0 0;color:#555">Slipping away. Silently. Irreversibly.</p>
+
         <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
 
-        <p style="margin:0 0 10px"><strong>💡 Want the Private Exit Plan?</strong></p>
-        <p style="margin:0 0 14px">I’ve prepared your <strong>Private Exit Plan (Premium Blueprint)</strong> — a structured, math-first roadmap to help you act on these numbers.</p>
+        <p style="margin:0 0 10px"><strong>💼 WHY WAIT TO LOSE MORE?</strong></p>
+        <p style="margin:0">I’ve prepared your <strong>Private Exit Plan</strong> (Premium Blueprint).</p>
+        <p style="margin:10px 0 0">This isn’t a generic PDF.</p>
+        <p style="margin:0">It’s a structured transition strategy designed to help you exit the “Concrete Trap” and build a liquid portfolio (educational model, not advice).</p>
 
-        <p style="margin:0 0 16px">
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 10px"><strong>🎯 WHAT’S INSIDE YOUR BESPOKE STRATEGY:</strong></p>
+        <p style="margin:0 0 6px"><strong>🏠 PROPERTY EXIT ARCHITECTURE</strong></p>
+        <p style="margin:0">→ Month-by-month exit timeline (your scenario)</p>
+        <p style="margin:0">→ Micro-market timing framework (locality context)</p>
+        <p style="margin:0">→ Buyer psychology tactics</p>
+        <p style="margin:0">→ Society clearance checklist</p>
+
+        <p style="margin:12px 0 6px"><strong>💰 TAX HARVESTING BLUEPRINT</strong></p>
+        <p style="margin:0">→ Capital gains framework for your property</p>
+        <p style="margin:0">→ Indexation logic</p>
+        <p style="margin:0">→ Section 54 model scenarios</p>
+        <p style="margin:0">→ Reinvestment math (deployment planning)</p>
+
+        <p style="margin:12px 0 6px"><strong>📊 LIQUID EMPIRE DEPLOYMENT</strong></p>
+        <p style="margin:0">→ Mutual Fund + PMS allocation concepts (model)</p>
+        <p style="margin:0">→ SIP optimization framework</p>
+        <p style="margin:0">→ Rebalancing triggers</p>
+        <p style="margin:0">→ Downside risk framing</p>
+
+        <p style="margin:12px 0 6px"><strong>🛡️ RISK MITIGATION FRAMEWORK</strong></p>
+        <p style="margin:0">→ Stress-test scenarios</p>
+        <p style="margin:0">→ Emergency liquidity vs lock-in trade-offs</p>
+        <p style="margin:0">→ Insurance continuity considerations</p>
+        <p style="margin:0">→ Hybrid allocation models (70–30 / 50–50)</p>
+
+        <p style="margin:12px 0 6px"><strong>👨‍👩‍👧‍👦 FAMILY OFFICE CONVERSATION SCRIPT</strong></p>
+        <p style="margin:0">→ Handling “property = security” mindset</p>
+        <p style="margin:0">→ Talking points for family alignment</p>
+        <p style="margin:0">→ Case-style examples (for learning)</p>
+
+        <p style="margin:12px 0 6px"><strong>🏙️ MUMBAI WEALTH INTELLIGENCE</strong></p>
+        <p style="margin:0">→ Rental yield reality checks</p>
+        <p style="margin:0">→ When property can make sense (edge cases)</p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 10px"><strong>⚡ THIS IS WHAT BM WEALTH CHARGES ₹50,000 FOR</strong></p>
+        <p style="margin:0">You’re getting it for <strong>₹399</strong>.</p>
+        <p style="margin:10px 0 0">Why?</p>
+        <p style="margin:0">Because we’re building our brand on <strong>logic, not emotion</strong>.</p>
+        <p style="margin:0">We want you to experience our Family Office thinking.</p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 10px"><strong>🎁 INSTANT ACCESS:</strong></p>
+        <p style="margin:0">✓ Premium PDF blueprint</p>
+        <p style="margin:0">✓ Delivered to email + instant download</p>
+        <p style="margin:0">✓ Clear next steps for Monday morning</p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 10px"><strong>💡 THE LUXURY BARRIER:</strong></p>
+        <p style="margin:0">Mumbai HNIs don’t want “calculators.”</p>
+        <p style="margin:0"><strong>They want bespoke wealth architecture.</strong></p>
+        <p style="margin:0">This is it.</p>
+        <p style="margin:10px 0 0;color:#555">For the price of dinner at Soho House.</p>
+
+        <p style="margin:16px 0 16px">
           <a href="${safeHtml(ctaUrl)}" style="background:#C6A15B;color:#111;text-decoration:none;padding:12px 18px;border-radius:6px;display:inline-block">
             🔥 DOWNLOAD MY PRIVATE EXIT PLAN — ₹399
           </a>
         </p>
 
-        <p style="margin:0"><strong>INVEST IN LOGIC. NOT EMOTION.</strong></p>
-        <p style="margin:8px 0 0">— BM Wealth (ARN 90008)</p>
+        <p style="margin:0"><strong>🏆 INVEST IN LOGIC. NOT EMOTION.</strong></p>
+        <p style="margin:8px 0 0">Your move, ${safeHtml(name || "there")}.</p>
+        <p style="margin:10px 0 0">— BM Wealth</p>
+        <p style="margin:0;color:#555">ARN 90008 | Mumbai, Maharashtra</p>
 
-        <p style="margin:18px 0 0;font-size:12px;color:#555">
+        <p style="margin:16px 0 0"><strong>P.S.</strong> — Your calculation is 80% complete. The “Tax Harvesting Blueprint” and “Micro-Market Heatmap” are locked in the Premium version.</p>
+        <p style="margin:10px 0 0"><strong>P.P.S.</strong> — That daily leak compounds. Every day you delay costs you more. Act now.</p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0;font-size:12px;color:#555">
           This is an illustrative educational tool and mathematical projection. Not SEBI-regulated investment advice.
+          Consult your financial advisor before making decisions.
           Mutual fund investments are subject to market risks; read all scheme-related documents carefully.
           <br/>ARN 90008 | IRDAI 277925 | Mumbai
           <br/><a href="${safeHtml(ctaUrl)}">View Full Calculator</a> | <a href="${safeHtml(unsubscribeUrl)}">Unsubscribe</a>
