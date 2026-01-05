@@ -147,7 +147,7 @@ export default function Compliance() {
               color: '#B8B8B8',
               marginBottom: '30px'
             }}>
-              BM Wealth is committed to providing professional investment advisory services with the highest standards of integrity, transparency, and investor protection in accordance with IRDAI and AMFI regulations.
+              BM Wealth is committed to delivering transparent mutual fund distribution (AMFI ARN 90008) and IRDAI-licensed insurance advisory (License 277925) with the highest standards of integrity, transparency, and investor protection.
             </p>
             
             <h3 style={{
@@ -1457,7 +1457,7 @@ export default function Compliance() {
                 color: '#888888',
                 margin: '0'
               }}>
-                BM Wealth is an <strong style={{ color: '#999999' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#999999' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines for mutual fund distribution but are <strong style={{ color: '#999999' }}>NOT SEBI-registered Investment Advisors</strong>. Our PMS and FD services are advisory in nature and provided through partnerships with SEBI-registered institutions.
+                BM Wealth is an <strong style={{ color: '#999999' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#999999' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. We follow SEBI guidelines applicable to mutual fund distribution but are <strong style={{ color: '#999999' }}>NOT SEBI-registered Investment Advisors</strong>. Portfolio management services (PMS) and fixed-deposit products, where applicable, are offered by regulated third-party providers; BM Wealth may assist with introductions and execution support.
               </p>
             </div>
             

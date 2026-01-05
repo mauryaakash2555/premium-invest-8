@@ -392,7 +392,7 @@ const Services = () => {
           }}>
             Mumbai's financial landscape is complex and competitive. At BM Wealth, we bring together regulatory 
             expertise, market intelligence, and personalized service to help you navigate your wealth creation 
-            journey with confidence. Here's what sets us apart in Mumbai's crowded financial advisory space.
+            journey with confidence. Here's what sets us apart in Mumbai's crowded wealth services space.
           </p>
           
           <div style={{

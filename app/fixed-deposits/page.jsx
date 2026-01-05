@@ -45,7 +45,7 @@ const FixedDeposits = () => {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Fixed Deposit Investment Advisory Mumbai
+            Fixed Deposit Guidance Mumbai
           </h1>
           <p style={{
             fontSize: '20px',

@@ -75,17 +75,17 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>2. Services Provided</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                BM Wealth provides financial advisory services including but not limited to:
+                BM Wealth provides financial services including but not limited to:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Mutual fund distribution services as an AMFI Registered Distributor (ARN 90008)</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Insurance advisory services as an IRDAI Licensed Advisor (License Number: 277925)</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio management guidance</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning and advisory</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio planning and asset allocation guidance</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning support</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Financial planning consultations</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                We are IRDAI Licensed and AMFI Registered. We operate in compliance with applicable financial regulations.
+                We are IRDAI Licensed and AMFI Registered. We do not provide SEBI-registered investment advisory services.
               </p>
             </section>
 
@@ -216,13 +216,13 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>8. Cookies and Analytics</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                We use cookies and similar tracking technologies to enhance user experience, analyze site 
-                traffic, and understand user behavior. This includes Google Analytics for performance tracking.
+                We use essential cookies to operate the website. Where enabled, we may also use optional analytics 
+                technologies (such as Google Analytics) to understand site performance and improve user experience.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                By continuing to use our website, you consent to our use of cookies as described in our 
-                Privacy Policy. You may disable cookies in your browser settings, though some features 
-                may not function properly.
+                Optional analytics is loaded only after you provide consent via our cookie consent banner. 
+                You can also control cookies through your browser settings; disabling certain cookies may affect 
+                website functionality.
               </p>
             </section>
 
