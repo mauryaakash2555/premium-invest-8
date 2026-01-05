@@ -716,6 +716,43 @@ export function PropertyVsSipCalculator() {
                     ) : null}
                   </div>
 
+                  <div
+                    className="incomplete-banner"
+                    style={{
+                      background: "rgba(212, 175, 55, 0.1)",
+                      border: "2px solid #D4AF37",
+                      borderRadius: "12px",
+                      padding: "24px",
+                      margin: "32px 0",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ fontSize: "20px", marginBottom: "8px" }}>⚠️ YOUR ANALYSIS IS 80% COMPLETE</div>
+
+                    <p style={{ marginBottom: "16px", opacity: 0.9 }}>
+                      You're seeing the wealth gap calculation.
+                      <br />
+                      But you're missing the most critical sections:
+                    </p>
+
+                    <ul style={{ textAlign: "left", maxWidth: "500px", margin: "0 auto 20px", lineHeight: 1.8 }}>
+                      <li>Tax Harvesting Blueprint (save ₹8-12L)</li>
+                      <li>Mumbai Micro-Market Heatmap</li>
+                      <li>Month-by-month Exit Timeline</li>
+                      <li>Family Conversation Scripts</li>
+                    </ul>
+
+                    <button
+                      type="button"
+                      className="calculator-premium-cta"
+                      onClick={() => {
+                        setLeadOpen(true);
+                      }}
+                    >
+                      UNLOCK COMPLETE ANALYSIS — ₹399
+                    </button>
+                  </div>
+
                   {showPremium ? (
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                       <div className="text-base font-semibold text-white">🏠 Ready to Escape the Property Trap?</div>
