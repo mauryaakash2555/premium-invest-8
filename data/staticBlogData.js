@@ -3592,8 +3592,15 @@ export const staticBlogPost9 = {
   image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
-  tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
-  keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
+  tags: [
+    "real estate vs mutual funds Mumbai",
+    "property investment India",
+    "wealth creation strategies Mumbai",
+    "investment comparison 15 years",
+    "worli property investment",
+    "worli real estate investment 2026",
+  ],
+  keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years, worli property investment, worli real estate investment 2026",
   
   faqs: [
     {
@@ -3603,6 +3610,10 @@ export const staticBlogPost9 = {
     {
       question: "Is Mumbai real estate still a good investment in 2025?",
       answer: "Depends on location and purpose. Prime areas (BKC, Lower Parel, South Mumbai) have limited supply and steady appreciation. Suburbs depend heavily on infrastructure development. Real estate works best as live-in asset (save rent) or long-term hold (15+ years). Short-term flipping is mostly dead in Mumbai."
+    },
+    {
+      question: "Is Worli real estate a good investment in 2026?",
+      answer: "Worli is a premium micro-market, but investment outcome depends on entry price, rental yield (often low), holding period, and total costs (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare the property scenario against an equity SIP using the same assumptions for time horizon, costs, and taxes. There is no one-size-fits-all answer."
     },
     {
       question: "What's better for wealth creation?",
@@ -3628,10 +3639,10 @@ export const staticBlogPost9 = {
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-03-05",
-    "dateModified": "2025-12-15",
+    "dateModified": "2026-01-05",
     "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
     "articleSection": "Investment Education",
-    "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years"
+    "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years, worli property investment, worli real estate investment 2026"
   }
   </script>
 
@@ -3824,6 +3835,46 @@ export const staticBlogPost9 = {
     </div>
   </div>
 
+  <div style="margin-bottom: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
+      Worli Real Estate in 2026: What Actually Matters
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
+      Worli is a premium micro-market. But premium locations can still be poor wealth creators if the entry price is high, rental yield is low, and friction costs (stamp duty, maintenance, vacancy, taxes) quietly eat returns.
+    </p>
+    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 25px 0;">
+      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 14px; font-family: 'Playfair Display', serif;">
+        A quick checklist before calling it an “investment”
+      </h4>
+      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin: 0;">
+        • Entry price vs rent: If yield is ~2% gross, most of your return must come from appreciation.<br/>
+        • Holding period: If you're not prepared to hold 10-15+ years, real estate math often disappoints.<br/>
+        • Total ownership cost: stamp duty, brokerage, maintenance, repairs, vacancy, property tax.<br/>
+        • Exit reality: liquidity risk, negotiation discount, time-to-sell, and capital gains tax.
+      </p>
+    </div>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 0;">
+      If your goal is maximum wealth creation (not self-use housing), the cleanest way to decide is to compare a Worli property scenario against a systematic equity SIP over the same horizon, using transparent cost and tax assumptions.
+    </p>
+  </div>
+
+  <div style="background: rgba(192, 160, 98, 0.06); border: 1px solid rgba(192, 160, 98, 0.28); border-radius: 14px; padding: 34px; margin: 0 0 70px 0;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 14px;">
+      Run Your Own Property vs SIP Analysis
+    </h3>
+    <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 20px;">
+      Instead of relying on generic city averages, compare your exact numbers: property price, down payment, expected rent, maintenance, holding period, taxes, and the SIP alternative.
+    </p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+      <a href="/tools/property-vs-sip" style="display: inline-block; padding: 14px 20px; background: linear-gradient(135deg, rgba(192, 160, 98, 0.95) 0%, rgba(192, 160, 98, 0.8) 100%); color: #000000; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
+        Open Property vs SIP Calculator →
+      </a>
+      <span style="font-size: 14px; color: rgba(229, 229, 229, 0.7);">
+        Educational projection based on your inputs. Not investment advice.
+      </span>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <script type="application/ld+json">
@@ -3861,6 +3912,14 @@ export const staticBlogPost9 = {
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Possible in hot micro-markets, but rare across entire city. Mumbai property has averaged 7-9% CAGR over last 15 years. Equity mutual funds averaged 12-14%. Past doesn't guarantee future, but diversified equity has historically outperformed real estate for wealth creation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Worli real estate a good investment in 2026?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Worli is a premium micro-market, but investment outcome depends on entry price, rental yield, holding period, and total costs (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare your property scenario against an equity SIP using consistent assumptions. There is no one-size-fits-all answer."
         }
       },
       {
@@ -3910,6 +3969,14 @@ export const staticBlogPost9 = {
         </h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
           Possible in very hot micro-markets or during boom cycles, but rare across entire Mumbai. Property has averaged 7-9% CAGR over last 15 years citywide. Equity mutual funds averaged 12-14% in the same period. Past doesn't guarantee future, but diversified equity funds have historically outperformed real estate for long-term wealth creation.
+        </p>
+      </div>
+      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
+        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
+          Is Worli real estate a good investment in 2026?
+        </h3>
+        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
+          Worli is a premium micro-market, but the outcome depends on entry price, rental yield, holding period, and the full cost stack (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare your property scenario against an equity SIP using consistent assumptions for time horizon, costs, and taxes. There is no one-size-fits-all answer.
         </p>
       </div>
       <div style="margin-bottom: 0;">
