@@ -85,6 +85,7 @@ export function TaxCalculator() {
   const [exitOpen, setExitOpen] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
+  const [showStickyPremium, setShowStickyPremium] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false);
   const [emphasizeWinner, setEmphasizeWinner] = useState(false);
   const [calcTick, setCalcTick] = useState(0);
@@ -395,6 +396,7 @@ export function TaxCalculator() {
       setHasCalculated(true);
       setEmphasizeWinner(true);
       setShowPremium(true);
+      setShowStickyPremium(true);
       setCalcTick((t) => t + 1);
       // Fade winner emphasis after ~800ms
       setTimeout(() => setEmphasizeWinner(false), 800);
@@ -559,8 +561,50 @@ export function TaxCalculator() {
     hasCalculated ? `sav-${calcTick}-${Math.max(0, savings)}` : "sav-init"
   );
 
+  function StickyPremiumCTA({ isVisible, savingsValue, onClose, onOpen }) {
+    if (!isVisible) return null;
+    return (
+      <div className="bm-sticky-premium" role="region" aria-label="Premium upgrade">
+        <button
+          type="button"
+          className="bm-sticky-premium-close"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          aria-label="Dismiss"
+        >
+          ✕
+        </button>
+
+        <button type="button" className="bm-sticky-premium-inner" onClick={onOpen}>
+          <div className="bm-sticky-premium-savings">
+            <div className="bm-sticky-premium-savings-label">Your potential savings</div>
+            <div className="bm-sticky-premium-savings-amount">{formatINR(savingsValue || 0)}</div>
+          </div>
+          <div className="bm-sticky-premium-headline">⚡ Ready to execute this plan?</div>
+          <div className="bm-sticky-premium-subtext">Unlock the step-by-step blueprint (₹299)</div>
+          <div className="bm-sticky-premium-cta">Unlock Full Plan</div>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
+      <StickyPremiumCTA
+        isVisible={Boolean(showResults && showPremium && showStickyPremium && !leadOpen && winner !== "tie" && savings > 0)}
+        savingsValue={savingsDisplay}
+        onClose={() => {
+          setShowStickyPremium(false);
+          track("premium_banner_close");
+        }}
+        onOpen={() => {
+          track("premium_click", { source: "sticky_banner" });
+          setLeadOpen(true);
+        }}
+      />
+
       <BaseCalculatorLayout
         header={
           <CalculatorHeader
@@ -708,20 +752,32 @@ export function TaxCalculator() {
                   </p>
                 </div>
 
-                <p className="text-[11px] text-slate-200/60">Results are shown after calculation.</p>
+                <div className="bm-sticky-calc">
+                  <p className="text-[11px] text-slate-200/60">Takes 2 seconds • See your exact savings</p>
 
-                <button
-                  type="button"
-                  onClick={handleCalculate}
-                  disabled={busy}
-                  className={
-                    busy
-                      ? "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm opacity-60 cursor-not-allowed"
-                      : "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm bm-calc-button"
-                  }
-                >
-                  {busy ? "Calculating..." : "Calculate"}
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleCalculate}
+                    disabled={busy}
+                    className={
+                      busy
+                        ? "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm opacity-60 cursor-not-allowed"
+                        : "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm bm-calc-button"
+                    }
+                  >
+                    {busy ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <span className="bm-spinner" aria-hidden />
+                        Calculating...
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <span aria-hidden>⚡</span>
+                        Calculate My Tax Optimization
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Right: Results + Winner + Premium + Chart + Breakdown */}
@@ -984,6 +1040,32 @@ export function TaxCalculator() {
           animation: bmPulse 2.2s ease-in-out infinite;
         }
 
+        .bm-sticky-calc {
+          position: sticky;
+          bottom: 12px;
+          z-index: 10;
+          padding: 12px;
+          border-radius: 14px;
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 18%, transparent);
+          background: color-mix(in oklab, black 70%, transparent);
+          backdrop-filter: blur(10px);
+        }
+
+        .bm-spinner {
+          width: 14px;
+          height: 14px;
+          border-radius: 999px;
+          border: 2px solid color-mix(in oklab, white 20%, transparent);
+          border-top-color: color-mix(in oklab, var(--color-matte-gold) 80%, white 20%);
+          animation: bmSpin 0.8s linear infinite;
+        }
+
+        @keyframes bmSpin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
         .bm-calc-button::before {
           content: "";
           position: absolute;
@@ -1050,6 +1132,109 @@ export function TaxCalculator() {
         .bm-premium-above-fold :global(button),
         .bm-premium-above-fold :global(a) {
           width: 100%;
+        }
+
+        .bm-sticky-premium {
+          position: fixed;
+          bottom: 18px;
+          right: 18px;
+          z-index: 999;
+          width: min(360px, calc(100vw - 36px));
+          border-radius: 14px;
+          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 55%, transparent);
+          background: color-mix(in oklab, black 72%, transparent);
+          backdrop-filter: blur(10px);
+        }
+
+        .bm-sticky-premium::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 14px;
+          background: radial-gradient(
+            circle at top right,
+            color-mix(in oklab, var(--color-matte-gold) 18%, transparent),
+            transparent 70%
+          );
+          pointer-events: none;
+        }
+
+        .bm-sticky-premium-inner {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          text-align: left;
+          padding: 16px;
+          background: transparent;
+          border: 0;
+          cursor: pointer;
+        }
+
+        .bm-sticky-premium-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 2;
+          width: 30px;
+          height: 30px;
+          border-radius: 999px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(0, 0, 0, 0.35);
+          color: rgba(255, 255, 255, 0.7);
+          cursor: pointer;
+        }
+
+        .bm-sticky-premium-savings {
+          padding-bottom: 10px;
+          margin-bottom: 10px;
+          border-bottom: 1px solid color-mix(in oklab, var(--color-matte-gold) 18%, transparent);
+        }
+
+        .bm-sticky-premium-savings-label {
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+        }
+
+        .bm-sticky-premium-savings-amount {
+          margin-top: 6px;
+          font-size: 22px;
+          font-weight: 900;
+          line-height: 1;
+          color: var(--color-matte-gold);
+        }
+
+        .bm-sticky-premium-headline {
+          font-size: 14px;
+          font-weight: 800;
+          color: rgba(255, 255, 255, 0.92);
+          margin-bottom: 6px;
+        }
+
+        .bm-sticky-premium-subtext {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.68);
+          margin-bottom: 12px;
+        }
+
+        .bm-sticky-premium-cta {
+          width: 100%;
+          text-align: center;
+          padding: 10px 12px;
+          border-radius: 10px;
+          font-weight: 800;
+          background: color-mix(in oklab, var(--color-matte-gold) 92%, white 8%);
+          color: black;
+        }
+
+        @media (max-width: 768px) {
+          .bm-sticky-premium {
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            width: auto;
+          }
         }
 
         @media (max-width: 768px) {
