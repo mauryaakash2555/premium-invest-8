@@ -191,7 +191,7 @@ const MutualFunds = () => {
         {/* Types of Mutual Funds */}
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Types of Mutual Funds We Offer
+            Types of Mutual Funds We Cover
           </h2>
           
           <div style={{ marginBottom: '40px' }}>
@@ -199,7 +199,7 @@ const MutualFunds = () => {
               Equity Funds - Growth-Oriented Investments
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              <strong style={{ color: '#C0A062' }}>Large Cap Funds:</strong> These funds invest primarily in India's top 100 companies by market capitalization. Think of established blue-chip companies like Reliance Industries, TCS, HDFC Bank, and Infosys. Large cap funds offer relative stability with moderate growth potential, making them ideal for conservative equity investors in Mumbai looking for steady returns over 5-7 years. Our recommended large cap funds have consistently delivered 10-12% annual returns over the long term.
+              <strong style={{ color: '#C0A062' }}>Large Cap Funds:</strong> These funds invest primarily in India's top 100 companies by market capitalization. Think of established blue-chip companies like Reliance Industries, TCS, HDFC Bank, and Infosys. Large cap funds offer relative stability with moderate growth potential, and are often considered for longer horizons (e.g., 5–7 years). Returns can vary by fund and market cycle.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
               <strong style={{ color: '#C0A062' }}>Mid Cap Funds:</strong> Investing in companies ranked 101-250 by market cap, mid cap funds target businesses in their growth phase. These companies, often found in Mumbai's thriving sectors like pharmaceuticals, IT services, and manufacturing, offer higher growth potential than large caps but with increased volatility. Mid cap funds are suitable for investors with 7-10 year investment horizons who can weather short-term market fluctuations for potentially higher returns of 12-15% annually.
@@ -214,7 +214,7 @@ const MutualFunds = () => {
               Debt Funds - Stable Income Generation
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              Debt funds invest in fixed-income securities like government bonds, corporate bonds, treasury bills, and money market instruments. For risk-averse Mumbai investors or those nearing retirement, debt funds offer better returns than traditional fixed deposits while maintaining relatively low risk. Our debt fund recommendations span across various categories:
+              Debt funds invest in fixed-income securities like government bonds, corporate bonds, treasury bills, and money market instruments. For risk-averse investors or those nearing retirement, debt funds may offer an alternative to traditional fixed deposits while generally aiming for lower volatility than equity. We cover multiple debt fund categories, such as:
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
               <strong style={{ color: '#C0A062' }}>Liquid Funds:</strong> Perfect for parking emergency funds or surplus cash for short periods (1-3 months). These funds invest in very short-term debt instruments and offer returns typically 1-2% higher than savings accounts with high liquidity. Mumbai professionals often use liquid funds as a superior alternative to keeping excess cash idle in bank accounts.
@@ -241,7 +241,7 @@ const MutualFunds = () => {
               ELSS - Tax Saving Funds
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              Equity Linked Savings Schemes (ELSS) are the most popular tax-saving investment option under Section 80C of the Income Tax Act. With a short 3-year lock-in period (shortest among 80C options), ELSS funds offer dual benefits: tax deduction up to ₹1.5 lakh annually and wealth creation through equity market exposure. For Mumbai's salaried professionals in higher tax brackets, ELSS is a no-brainer investment that combines tax efficiency with growth potential. Our recommended ELSS funds have delivered 12-14% returns over 5-year periods while providing tax savings of up to ₹46,800 (at 31.2% tax rate including cess).
+              Equity Linked Savings Schemes (ELSS) are a common tax-saving investment option under Section 80C of the Income Tax Act. With a 3-year lock-in period (shortest among many 80C options), ELSS funds offer a tax deduction (up to ₹1.5 lakh annually) alongside equity market exposure. Like all equity investments, returns are market-linked and can vary. Tax savings can be up to ₹46,800 (at 31.2% tax rate including cess).
             </p>
           </div>
 
@@ -250,7 +250,7 @@ const MutualFunds = () => {
               Index Funds and ETFs - Low-Cost Passive Investing
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              Index funds and Exchange Traded Funds (ETFs) have gained significant traction among cost-conscious Mumbai investors. These passive funds simply replicate a market index like Nifty 50 or Sensex, offering broad market exposure at very low expense ratios (0.1-0.5% vs 1-2% for actively managed funds). While they won't beat the market, they guarantee market returns, which historically have been 10-12% annually for Indian equity indices. For DIY investors or those wanting core portfolio holdings, index funds provide an excellent low-maintenance option.
+              Index funds and Exchange Traded Funds (ETFs) have gained significant traction among cost-conscious investors. These passive funds aim to track a market index like Nifty 50 or Sensex, offering broad market exposure at relatively low expense ratios (often lower than actively managed funds). They don't "guarantee" returns; they typically seek to deliver index-like performance (subject to tracking error and costs). For DIY investors or those wanting core portfolio holdings, index funds can be a simple, low-maintenance option.
             </p>
           </div>
         </section>

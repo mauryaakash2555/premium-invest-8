@@ -84,7 +84,7 @@ export default function Platforms() {
               lineHeight: 1.2,
             }}
           >
-            Recommended Investment Platforms
+            Investment Platforms
           </h1>
           <p
             style={{
@@ -95,7 +95,7 @@ export default function Platforms() {
               lineHeight: 1.7,
             }}
           >
-            Trusted investment platforms vetted by our experts
+            Popular platforms and partners commonly used by investors
           </p>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default function Platforms() {
                 'Maximum Authority & Industry Dominance',
                 'Prime Real-Estate on Platform Directory',
                 'Priority Traffic & Direct Investor Funnel',
-                'Current Bidding: ₹2-3 Lakh / Month'
+                'Current Bidding: Private'
               ].map((benefit, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Sparkles size={18} style={{ color: '#FFF', flexShrink: 0, filter: 'drop-shadow(0 0 5px #FFF)' }} />
