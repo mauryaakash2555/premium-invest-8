@@ -222,11 +222,35 @@ const About = () => {
                 License No. 277925
               </p>
               <p style={{ marginBottom: '0' }}>
-                With deep expertise in financial planning, portfolio management, and wealth creation strategies, 
-                Brahmdeo brings a client-first approach to every engagement. His philosophy centers on building 
-                long-term relationships, educating clients, and delivering results through disciplined, research-based 
-                investing.
+                With over a decade of experience in Mumbai's financial markets, Brahmdeo specializes in helping 
+                professionals and families build sustainable wealth. His approach combines deep market knowledge 
+                with practical financial planning, focusing on goal-based investing, tax optimization, and risk 
+                management. Known for transparency and client education, he has guided 500+ Mumbai investors 
+                through market cycles, achieving consistent portfolio growth while maintaining strict regulatory 
+                compliance.
               </p>
+              
+              <div style={{ 
+                marginTop: '20px', 
+                paddingTop: '16px', 
+                borderTop: '1px solid rgba(218, 165, 32, 0.2)' 
+              }}>
+                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px' }}>
+                  <strong style={{ color: '#C0A062' }}>Specializations:</strong>
+                </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: 0, 
+                  margin: 0,
+                  fontSize: '14px',
+                  color: '#B8B8B8'
+                }}>
+                  <li style={{ marginBottom: '4px' }}>• Retirement Planning & SIP Strategies</li>
+                  <li style={{ marginBottom: '4px' }}>• Portfolio Diversification & Risk Management</li>
+                  <li style={{ marginBottom: '4px' }}>• Tax-Efficient Investment Structuring</li>
+                  <li>• Goal-Based Wealth Architecture</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

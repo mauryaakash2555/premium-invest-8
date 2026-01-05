@@ -41,6 +41,7 @@ import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
+import Testimonials from '@/components/shared/Testimonials';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -410,6 +411,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Latest Insights Section */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
