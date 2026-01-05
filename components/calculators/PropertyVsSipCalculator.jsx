@@ -84,6 +84,19 @@ function formatCroreNumber(valueInINR) {
   return s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1");
 }
 
+function formatLakhs(valueInINR) {
+  const n = Number(valueInINR);
+  if (!Number.isFinite(n) || n <= 0) return "0";
+  if (n >= 10_000_000) {
+    const cr = n / 10_000_000;
+    const s = cr.toFixed(cr >= 10 ? 1 : 2);
+    return `${s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1")}Cr`;
+  }
+  const l = n / 100_000;
+  const s = l.toFixed(l >= 10 ? 0 : 1);
+  return `${s.replace(/\.0$/, "")}L`;
+}
+
 function digitsOnlyPhone(v) {
   const digits = String(v || "").replace(/\D+/g, "");
   return digits.length >= 10 ? digits.slice(-10) : digits;
@@ -491,6 +504,7 @@ export function PropertyVsSipCalculator() {
   const propertyCr = model ? formatCroreNumber(model.inputs.propertyPrice) : "0";
 
   const draftPropertyCr = formatCroreNumber(draftInputs.propertyPrice);
+  const draftPropertyPretty = formatLakhs(draftInputs.propertyPrice);
 
   const sipTotalInvestedNum = model ? Number(model.sipTotalInvested || 0) : 0;
   const sipWealthCreatedNum = model ? Number(model.sipWealthCreated || 0) : 0;
@@ -566,8 +580,8 @@ export function PropertyVsSipCalculator() {
                 <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
               </>
             }
-            title="Property Purchase vs Disciplined Equity Investment"
-            subtitle={`Compare deploying ₹${draftPropertyCr}Cr in property vs equity markets`}
+            title="Mumbai Property vs SIP Calculator"
+            subtitle="Should you buy property or invest in SIP? See the math."
           />
         }
         disclaimer={<span className="whitespace-pre-line">{COMPLIANCE_FOOTER}</span>}
@@ -596,7 +610,7 @@ export function PropertyVsSipCalculator() {
 
                   <div className="grid gap-1">
                     <div className="text-xs text-slate-200/70">Additional Monthly Investment (₹)</div>
-                    <div className="text-[11px] text-slate-200/55">(Beyond initial ₹{draftPropertyCr}Cr capital deployment)</div>
+                    <div className="text-[11px] text-slate-200/55">(Beyond your ₹{draftPropertyPretty} capital)</div>
                     <input
                       type="text"
                       inputMode="numeric"
@@ -733,15 +747,15 @@ export function PropertyVsSipCalculator() {
                       </p>
 
                       <ul className="incomplete-banner__list">
-                        <li>Tax harvesting framework & examples</li>
-                        <li>Mumbai Micro-Market Heatmap</li>
-                        <li>Month-by-month Exit Timeline</li>
+                        <li>Tax planning framework</li>
+                        <li>Mumbai area comparison</li>
+                        <li>Property exit timeline</li>
                         <li>Family Conversation Scripts</li>
                       </ul>
 
                       <div className="incomplete-banner__cta">
                         <PremiumCalculatorCTA
-                          labelBefore="UNLOCK COMPLETE ANALYSIS — ₹399"
+                          labelBefore="Get Full Report — ₹399"
                           labelAfter="Preparing Your Report…"
                           price={399}
                           onClickAction={() => {
