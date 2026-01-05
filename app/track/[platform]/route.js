@@ -36,15 +36,20 @@ function safeSlug(v) {
     .slice(0, 80);
 }
 
+function compactKey(v) {
+  return safeSlug(v).replace(/[\s\-]/g, "");
+}
+
 export async function GET(request, { params }) {
   const platformSlug = safeSlug(params?.platform);
+  const platformKey = compactKey(platformSlug);
   const leadId = request?.nextUrl?.searchParams?.get("lead") || null;
 
   if (!platformSlug) {
     return redirect307(request, new URL("/", request.url));
   }
 
-  const fallback = FALLBACK_DESTINATIONS[platformSlug];
+  const fallback = FALLBACK_DESTINATIONS[platformKey] || FALLBACK_DESTINATIONS[platformSlug];
 
   let sb;
   try {
@@ -55,13 +60,17 @@ export async function GET(request, { params }) {
   }
 
   try {
-    // Match against stored platform names case-insensitively.
-    const { data: affiliate, error } = await sb
+    // Fetch active links and match by a normalized slug key.
+    // This is more robust than an ilike equality (e.g., "Angel One" should match /track/angelone).
+    const { data: rows, error } = await sb
       .from("affiliate_links")
-      .select("*")
-      .ilike("platform", platformSlug)
+      .select("id,platform,affiliate_url,placeholder,is_active")
       .eq("is_active", true)
-      .maybeSingle();
+      .limit(200);
+
+    const affiliate = Array.isArray(rows)
+      ? rows.find((r) => compactKey(r?.platform) === platformKey)
+      : null;
 
     if (error || !affiliate?.affiliate_url) {
       return redirect307(request, new URL(fallback || "/", request.url));

@@ -1,11 +1,17 @@
 import BackRow from "@/components/shared/BackRow";
+import { buildMetadata } from "@/lib/seo/metadata";
 
 import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 
+const PATH = "/tools/retirement-gap";
+
 export const metadata = {
-  title: "Retirement Gap — Coming Soon | BM Wealth",
-  description: "Retirement gap estimator (Coming Soon).",
+  ...buildMetadata({
+    title: "Retirement Gap — Coming Soon | BM Wealth",
+    description: "Retirement gap estimator (Coming Soon).",
+    path: PATH,
+  }),
 };
 
 export default function RetirementGapToolPage() {

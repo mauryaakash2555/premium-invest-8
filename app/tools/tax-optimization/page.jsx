@@ -1,14 +1,19 @@
 import Script from "next/script";
 import Link from "next/link";
 import BackRow from "@/components/shared/BackRow";
-import { getMetadataBase } from "@/lib/seo/metadata";
+import { buildMetadata, getMetadataBase } from "@/lib/seo/metadata";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
 
+const PATH = "/tools/tax-optimization";
+
 export const metadata = {
-  title: "Tax Optimization Intelligence 2026 | Old vs New Regime Calculator Mumbai | BM Wealth",
-  description:
-    "Accurate FY 2025-26 tax calculator for Mumbai professionals. Compare old vs new regime, find savings, and unlock your personal execution blueprint. AMFI ARN-90008.",
+  ...buildMetadata({
+    title: "Tax Optimization Intelligence 2026 | Old vs New Regime Calculator Mumbai | BM Wealth",
+    description:
+      "Accurate FY 2025-26 tax calculator for Mumbai professionals. Compare old vs new regime, find savings, and unlock your personal execution blueprint. AMFI ARN-90008.",
+    path: PATH,
+  }),
   keywords:
     "tax optimization intelligence, tax calculator 2026, old vs new tax regime, FY 2025-26 tax, Mumbai tax calculator, income tax calculator India, tax planning",
 };
@@ -22,7 +27,7 @@ export default function TaxOptimizationToolPage() {
     name: "Tax Optimization Intelligence — FY 2025–26",
     description:
       "Mumbai-first FY 2025–26 income tax calculator comparing Old vs New regime with standard deduction, 87A rebate, marginal relief, and 4% cess.",
-    url: `${base}/tools/tax-optimization`,
+    url: `${base}${PATH}`,
     provider: {
       "@type": "Organization",
       name: "BM Wealth",

@@ -1,11 +1,17 @@
 import BackRow from "@/components/shared/BackRow";
+import { buildMetadata } from "@/lib/seo/metadata";
 
 import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 
+const PATH = "/tools/insurance-value";
+
 export const metadata = {
-  title: "Insurance Value — Coming Soon | BM Wealth",
-  description: "Insurance value/coverage sanity checker (Coming Soon).",
+  ...buildMetadata({
+    title: "Insurance Value — Coming Soon | BM Wealth",
+    description: "Insurance value/coverage sanity checker (Coming Soon).",
+    path: PATH,
+  }),
 };
 
 export default function InsuranceValueToolPage() {

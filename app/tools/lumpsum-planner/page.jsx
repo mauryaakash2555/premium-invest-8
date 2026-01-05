@@ -1,11 +1,17 @@
 import BackRow from "@/components/shared/BackRow";
+import { buildMetadata } from "@/lib/seo/metadata";
 
 import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 
+const PATH = "/tools/lumpsum-planner";
+
 export const metadata = {
-  title: "Lumpsum Planner — Coming Soon | BM Wealth",
-  description: "Lumpsum investment planner (Coming Soon).",
+  ...buildMetadata({
+    title: "Lumpsum Planner — Coming Soon | BM Wealth",
+    description: "Lumpsum investment planner (Coming Soon).",
+    path: PATH,
+  }),
 };
 
 export default function LumpsumPlannerToolPage() {
