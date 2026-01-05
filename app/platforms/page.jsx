@@ -284,7 +284,7 @@ export default function Platforms() {
         {/* Affiliate Disclaimer */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
-            <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> We may earn commission when you sign up through our links at no extra cost to you. This helps us provide free educational content.
+            <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> Some outbound links may be affiliate/sponsored links. If you sign up through them, we may earn a commission at no extra cost to you. This helps us support free educational content.
           </p>
         </div>
 

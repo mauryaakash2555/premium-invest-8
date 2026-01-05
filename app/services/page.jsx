@@ -40,7 +40,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of wealth architects empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
+        'Explore a wide range of mutual fund schemes aligned to your goals and risk comfort. We help you understand options using performance insights, costs, and portfolio check-ins so you can make informed decisions.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -55,7 +55,7 @@ const Services = () => {
       icon: <TrendingUp size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
-        'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to maximize your returns.',
+        'Personalized wealth management strategies designed around your goals and risk profile. Our PMS offerings combine market research, active portfolio oversight, and disciplined processes to help you pursue long-term outcomes.',
       features: [
         'Customized investment strategies',
         'Dedicated portfolio manager',
@@ -70,12 +70,12 @@ const Services = () => {
       icon: <CreditCard size={50} />,
       title: 'Trading Services',
       description:
-        'Gain access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+        'Access market data, trading tools, and educational resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
       features: [
         'Real-time market access',
         'Advanced charting tools',
-        'Research and recommendations',
-        'Low brokerage rates',
+        'Research insights and education',
+        'Brokerage comparisons',
         'Expert trading support',
       ],
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
@@ -85,7 +85,7 @@ const Services = () => {
       icon: <Shield size={50} />,
       title: 'Insurance',
       description:
-        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we empower you to choose optimal policies that provide financial security and peace of mind.',
+        'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
       features: [
         'Life insurance policies',
         'Health insurance plans',

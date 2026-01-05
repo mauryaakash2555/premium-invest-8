@@ -242,12 +242,12 @@ const TermsAndConditions = () => {
                 when you sign up through these links.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                These affiliate partnerships do not influence our educational content or recommendations. 
-                All opinions and guidance provided are independent and based on our professional assessment.
+                These commercial relationships do not influence our educational content. We aim to keep our
+                content fair, transparent, and written in your best interest.
               </p>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                Disclosure: We are compensated for referrals to partner platforms. You are not charged 
-                any extra fees for using our referral links.
+                Disclosure: Some links may be affiliate/sponsored links. If you use them, we may be compensated.
+                You are not charged any extra fees for using our links.
               </p>
             </section>
 

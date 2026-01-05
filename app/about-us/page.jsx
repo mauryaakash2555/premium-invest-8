@@ -96,7 +96,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Empowering Mumbai investors with exceptional wealth architecture since inception
+            Empowering Mumbai investors with exceptional wealth architecture since 1989
           </p>
         </div>
       </section>
@@ -133,6 +133,18 @@ const About = () => {
               has emerged as a trusted name in Mumbai's financial advisory landscape. Founded with a vision to democratize 
               sophisticated wealth management, we serve over 500 Mumbai investors ranging from young professionals taking 
               their first steps in SIP investing to established entrepreneurs managing multi-crore portfolios.
+            </p>
+
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#CCCCCC',
+                lineHeight: 1.8,
+                marginBottom: '20px',
+              }}
+            >
+              BM Wealth began in 1989, with a long-term commitment to client-first financial education, disciplined processes,
+              and transparent service.
             </p>
             <p
               style={{
@@ -222,7 +234,7 @@ const About = () => {
                 License No. 277925
               </p>
               <p style={{ marginBottom: '0' }}>
-                With over a decade of experience in Mumbai's financial markets, Brahmdeo specializes in helping 
+                With extensive experience in Mumbai's financial markets, Brahmdeo specializes in helping 
                 professionals and families build sustainable wealth. His approach combines deep market knowledge 
                 with practical financial planning, focusing on goal-based investing, tax optimization, and risk 
                 management. Known for transparency and client education, he has guided 500+ Mumbai investors 

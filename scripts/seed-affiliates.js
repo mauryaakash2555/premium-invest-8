@@ -1,6 +1,9 @@
 /**
- * Seed dummy affiliate links
- * Replace with real links when available
+ * Seed placeholder affiliate links.
+ *
+ * IMPORTANT:
+ * - Placeholder links must not look like real affiliate/tracking URLs.
+ * - Commission fields should be null while placeholder=true.
  *
  * Usage:
  *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/seed-affiliates.js
@@ -12,45 +15,45 @@ const dummyAffiliates = [
   {
     platform: 'Zerodha',
     category: 'trading',
-    affiliate_url: 'https://zerodha.com?ref=PLACEHOLDER',
-    commission_rate: 500,
-    commission_type: 'per_signup',
+    affiliate_url: 'https://zerodha.com',
+    commission_rate: null,
+    commission_type: null,
     placeholder: true,
     description: 'Zero brokerage equity delivery',
   },
   {
     platform: 'Groww',
     category: 'trading',
-    affiliate_url: 'https://groww.in?ref=PLACEHOLDER',
-    commission_rate: 300,
-    commission_type: 'per_signup',
+    affiliate_url: 'https://groww.in',
+    commission_rate: null,
+    commission_type: null,
     placeholder: true,
     description: 'User-friendly investing app',
   },
   {
     platform: 'Angel One',
     category: 'trading',
-    affiliate_url: 'https://angelone.in?ref=PLACEHOLDER',
-    commission_rate: 400,
-    commission_type: 'per_signup',
+    affiliate_url: 'https://www.angelone.in',
+    commission_rate: null,
+    commission_type: null,
     placeholder: true,
     description: 'Advanced trading platform',
   },
   {
     platform: 'HDFC Life',
     category: 'insurance',
-    affiliate_url: 'https://hdfclife.com?ref=PLACEHOLDER',
-    commission_rate: 5000,
-    commission_type: 'per_policy',
+    affiliate_url: 'https://www.hdfclife.com',
+    commission_rate: null,
+    commission_type: null,
     placeholder: true,
     description: 'Life insurance plans',
   },
   {
     platform: 'Smallcase',
     category: 'mutual_fund',
-    affiliate_url: 'https://smallcase.com?ref=PLACEHOLDER',
-    commission_rate: 200,
-    commission_type: 'per_signup',
+    affiliate_url: 'https://smallcase.com',
+    commission_rate: null,
+    commission_type: null,
     placeholder: true,
     description: 'Thematic investing portfolios',
   },
@@ -93,8 +96,8 @@ async function main() {
       platform: a.platform,
       category: a.category,
       affiliate_url: a.affiliate_url,
-      commission_rate: a.commission_rate,
-      commission_type: a.commission_type,
+      commission_rate: a.placeholder ? null : a.commission_rate,
+      commission_type: a.placeholder ? null : a.commission_type,
       placeholder: Boolean(a.placeholder),
       is_active: true,
     };
