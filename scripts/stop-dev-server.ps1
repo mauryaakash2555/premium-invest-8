@@ -15,17 +15,17 @@ function Get-ListeningPid([int]$LocalPort) {
   return $null
 }
 
-$pid = Get-ListeningPid -LocalPort $Port
-if (-not $pid) {
+$procId = Get-ListeningPid -LocalPort $Port
+if (-not $procId) {
   Write-Host "NO_LISTENER :$Port"
   exit 0
 }
 
 try {
-  Stop-Process -Id $pid -Force -ErrorAction Stop
-  Write-Host "STOPPED_PID=$pid"
+  Stop-Process -Id $procId -Force -ErrorAction Stop
+  Write-Host "STOPPED_PID=$procId"
   exit 0
 } catch {
-  Write-Error "Failed to stop PID $pid on :$Port"
+  Write-Error "Failed to stop PID $procId on :$Port"
   exit 1
 }
