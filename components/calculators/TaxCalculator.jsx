@@ -553,6 +553,11 @@ export function TaxCalculator() {
 
   const oldTaxDisplay = useCountUp(oldTax, 400, hasCalculated ? `old-${calcTick}-${oldTax}` : "old-init");
   const newTaxDisplay = useCountUp(newTax, 400, hasCalculated ? `new-${calcTick}-${newTax}` : "new-init");
+  const savingsDisplay = useCountUp(
+    Math.max(0, savings),
+    500,
+    hasCalculated ? `sav-${calcTick}-${Math.max(0, savings)}` : "sav-init"
+  );
 
   return (
     <>
@@ -709,7 +714,11 @@ export function TaxCalculator() {
                   type="button"
                   onClick={handleCalculate}
                   disabled={busy}
-                  className="bm-btn bm-btn-secondary w-full px-4 py-3 text-sm"
+                  className={
+                    busy
+                      ? "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm opacity-60 cursor-not-allowed"
+                      : "bm-btn bm-btn-secondary w-full px-4 py-3 text-sm bm-calc-button"
+                  }
                 >
                   {busy ? "Calculating..." : "Calculate"}
                 </button>
@@ -742,6 +751,26 @@ export function TaxCalculator() {
                     </div>
                   </div>
                 ) : null}
+
+                {showResults && comparison && winner !== "tie" && savings > 0 ? (
+                  <div className="bm-savings-hero">
+                    <div className="bm-savings-label">Estimated tax saved (this FY)</div>
+                    <div className="bm-savings-amount">{formatINR(savingsDisplay)}</div>
+                    <div className="bm-savings-subtext">Compared to the higher-tax option for your inputs.</div>
+                  </div>
+                ) : null}
+
+                {showPremium ? (
+                  <div className="bm-premium-above-fold">
+                    <PremiumUnlockButton
+                      onClick={() => {
+                        track("premium_click");
+                        setLeadOpen(true);
+                      }}
+                    />
+                  </div>
+                ) : null}
+
                 {showResults && comparison ? (
                   <ResultSummary
                     winnerKey={winner === "tie" ? null : winner}
@@ -849,15 +878,6 @@ export function TaxCalculator() {
                   </div>
                 )}
 
-                {showPremium ? (
-                  <PremiumUnlockButton
-                    onClick={() => {
-                      track("premium_click");
-                      setLeadOpen(true);
-                    }}
-                  />
-                ) : null}
-
                 {/* SEO Content Block (Visible, no accordions/tabs) */}
                 <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
                   <h2 className="text-base font-semibold text-white">Tax Planning for the Sophisticated Mumbai Investor</h2>
@@ -956,6 +976,88 @@ export function TaxCalculator() {
             </div>
           </div>
       </BaseCalculatorLayout>
+
+      <style jsx>{`
+        .bm-calc-button {
+          position: relative;
+          overflow: hidden;
+          animation: bmPulse 2.2s ease-in-out infinite;
+        }
+
+        .bm-calc-button::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 999px;
+          background: color-mix(in oklab, white 18%, transparent);
+          transform: translate(-50%, -50%);
+          transition: width 600ms ease, height 600ms ease;
+          pointer-events: none;
+        }
+
+        .bm-calc-button:hover::before {
+          width: 320px;
+          height: 320px;
+        }
+
+        @keyframes bmPulse {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
+          }
+          50% {
+            box-shadow: 0 0 0 10px transparent;
+          }
+        }
+
+        .bm-savings-hero {
+          text-align: center;
+          padding: 26px 16px;
+          background: radial-gradient(
+            circle at center,
+            color-mix(in oklab, var(--color-matte-gold) 16%, transparent) 0%,
+            transparent 70%
+          );
+          border: 1px solid color-mix(in oklab, var(--color-matte-gold) 25%, transparent);
+          border-radius: 16px;
+        }
+
+        .bm-savings-label {
+          font-size: 12px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: color-mix(in oklab, var(--color-matte-gold) 88%, white 12%);
+          margin-bottom: 10px;
+        }
+
+        .bm-savings-amount {
+          font-weight: 900;
+          line-height: 1;
+          font-size: 48px;
+          color: var(--color-matte-gold);
+          text-shadow: 0 0 28px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+          margin-bottom: 10px;
+        }
+
+        .bm-savings-subtext {
+          font-size: 13px;
+          color: color-mix(in oklab, white 75%, transparent);
+        }
+
+        .bm-premium-above-fold :global(button),
+        .bm-premium-above-fold :global(a) {
+          width: 100%;
+        }
+
+        @media (max-width: 768px) {
+          .bm-savings-amount {
+            font-size: 38px;
+          }
+        }
+      `}</style>
 
       <LeadCaptureModal
         open={leadOpen}
