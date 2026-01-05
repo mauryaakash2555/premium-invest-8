@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
   return buildMetadata({
     title,
     description,
-    path: `/blog/${slug}`,
+    path: slug ? `/blog/${slug}` : "/blog",
     type: "article",
     image,
   });
