@@ -609,7 +609,7 @@ export function PropertyVsSipCalculator() {
                 <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
               </>
             }
-            title="Property vs SIP Calculator"
+            title="Mumbai Property vs SIP Calculator"
             subtitle="Should you buy property or invest in SIP? See the math."
           />
         }
