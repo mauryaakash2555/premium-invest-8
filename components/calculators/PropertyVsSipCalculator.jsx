@@ -728,40 +728,24 @@ export function PropertyVsSipCalculator() {
                     ) : null}
                   </div>
 
-                  <div className="incomplete-banner">
-                    <div className="incomplete-banner__inner">
-                      <div className="incomplete-banner__header">
-                        <div className="incomplete-banner__badge">⚠️ YOUR ANALYSIS IS 80% COMPLETE</div>
-                        <div className="incomplete-banner__progress" aria-hidden>
-                          <div className="incomplete-banner__progressFill" style={{ width: "80%" }} />
-                        </div>
-                      </div>
-
-                      <p className="incomplete-banner__copy">
-                        You're seeing the wealth gap calculation.
-                        <br />
-                        But you're missing the most critical sections:
-                      </p>
-
-                      <ul className="incomplete-banner__list">
-                        <li>Tax planning framework</li>
-                        <li>Mumbai area comparison</li>
-                        <li>Property exit timeline</li>
-                        <li>Family Conversation Scripts</li>
-                      </ul>
-
-                      <div className="incomplete-banner__cta">
-                        <PremiumCalculatorCTA
-                          labelBefore="Get Full Report — ₹399"
-                          labelAfter="Preparing Your Report…"
-                          price={399}
-                          onClickAction={() => {
-                            track("premium_click", { source: "zeigarnik_banner" });
-                            setLeadOpen(true);
-                          }}
-                        />
-                      </div>
-                    </div>
+                  <div className="upgrade-banner">
+                    <h3>Want the full breakdown?</h3>
+                    <p>This free calculator shows the wealth gap.</p>
+                    <p>The ₹399 report includes:</p>
+                    <ul>
+                      <li>Tax planning tips</li>
+                      <li>Mumbai area data</li>
+                      <li>Property exit timeline</li>
+                    </ul>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        track("premium_click", { source: "upgrade_banner" });
+                        setLeadOpen(true);
+                      }}
+                    >
+                      Get Full Report — ₹399
+                    </button>
                   </div>
 
                   {showPremium ? (
