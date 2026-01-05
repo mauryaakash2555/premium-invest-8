@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function BackRow({ href = "/", label = "\u2190 Back to Home" }) {
+export default function BackRow({ href = "/", label = "← Back to Home" }) {
   function handleBackClick(e) {
     try { sessionStorage.setItem("exit_intent_suppress", "1"); } catch {}
     // let the browser navigate normally; add a safety hard nav for older browsers

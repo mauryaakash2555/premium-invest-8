@@ -675,7 +675,7 @@ export function PropertyVsSipCalculator() {
                     type="button"
                     onClick={handleCalculate}
                     disabled={busy}
-                    className="bm-btn bm-btn-primary w-full py-3 rounded-xl bm-calc-button"
+                    className="bm-btn bm-btn-primary w-full px-5 py-4 text-base font-semibold tracking-wide rounded-xl bm-calc-button"
                   >
                     {busy ? "Calculating…" : "Calculate"}
                   </button>

@@ -339,11 +339,10 @@ export default function HomePage() {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                AMFI Registered Wealth Distribution
+                Regulatory & Process
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Fully compliant and registered wealth distribution
-                services
+                AMFI registered. Clear, disclosure-led process.
               </p>
             </div>
 
@@ -364,10 +363,10 @@ export default function HomePage() {
                 <TrendingUp size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Elite Guidance
+                Execution Discipline
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Decades of expertise in financial markets and wealth management
+                Not slide decks — we focus on implementation and review cadence.
               </p>
             </div>
 
@@ -388,10 +387,10 @@ export default function HomePage() {
                 <PieChart size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Tailored Solutions
+                Mumbai-Fit Planning
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Personalized investment strategies aligned with your financial goals
+                Strategies tuned to Mumbai incomes, costs, and risk realities.
               </p>
             </div>
           </div>
@@ -446,7 +445,7 @@ export default function HomePage() {
         <div
           className="glass-effect"
           style={{
-            padding: '60px 40px',
+            padding: '70px 40px',
             textAlign: 'center',
             background: 'rgba(218, 165, 32, 0.05)',
           }}
@@ -454,22 +453,22 @@ export default function HomePage() {
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
-              marginBottom: '20px',
+              marginBottom: '18px',
               color: '#DAA520',
             }}
           >
-            Ready to Commence Your Wealth Journey?
+            Private Consultation
           </h2>
           <p
             style={{
-              fontSize: '18px',
+              fontSize: '17px',
               color: '#CCCCCC',
-              marginBottom: '30px',
+              marginBottom: '32px',
               maxWidth: '600px',
               margin: '0 auto 30px',
             }}
           >
-            Connect with our experts today for a complimentary financial consultation
+            Speak with BM Wealth. We’ll review your goals and next steps.
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a
@@ -478,10 +477,10 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="btn-primary"
             >
-              Chat on WhatsApp
+              WhatsApp Concierge
             </a>
-            <Link href="/contact" className="btn-secondary">
-              Contact Us
+            <Link href="/contact" className="btn-secondary" style={{ textDecoration: 'none' }}>
+              Contact Form
             </Link>
           </div>
         </div>

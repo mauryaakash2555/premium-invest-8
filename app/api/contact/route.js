@@ -46,7 +46,11 @@ export async function POST(req) {
       return json(upstream.status || 502, { success: false, detail });
     }
 
-    return json(200, typeof data === "object" ? data : { success: true });
+    if (typeof data === "object" && data) {
+      return json(200, { ...data, success: true });
+    }
+
+    return json(200, { success: true });
   } catch (e) {
     const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
     return json(aborted ? 504 : 502, {
