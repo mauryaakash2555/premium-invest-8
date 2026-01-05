@@ -130,7 +130,22 @@ const About = () => {
               }}
             >
               Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
-              orchestrates comprehensive wealth strategies for discerning Mumbai investors.
+              has emerged as a trusted name in Mumbai's financial advisory landscape. Founded with a vision to democratize 
+              sophisticated wealth management, we serve over 500 Mumbai investors ranging from young professionals taking 
+              their first steps in SIP investing to established entrepreneurs managing multi-crore portfolios.
+            </p>
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#CCCCCC',
+                lineHeight: 1.8',
+                marginBottom: '20px',
+              }}
+            >
+              What began as a mission to help Mumbai's ambitious professionals navigate the complex world of mutual funds 
+              has evolved into a comprehensive wealth architecture firm. We hold AMFI Registration (ARN 90008) for mutual 
+              fund distribution and IRDAI License (277925) for insurance advisory, ensuring our clients receive guidance 
+              from qualified, regulated professionals.
             </p>
             <p
               style={{
@@ -140,10 +155,10 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              With decades of combined expertise in financial markets, mutual funds, portfolio
-              management, and portfolio curation, we have established a distinguished reputation for delivering
-              personalized wealth management strategies that align with our clients' unique
-              financial goals.
+              Our practice is built on deep expertise in financial markets, rigorous research methodologies, and personalized 
+              service. We don't believe in cookie-cutter solutions or one-size-fits-all portfolios. Every client receives a 
+              customized wealth strategy that accounts for their unique income profile, family situation, risk tolerance, 
+              life goals, and Mumbai's specific economic realities.
             </p>
             <p
               style={{
@@ -152,9 +167,11 @@ const About = () => {
                 lineHeight: 1.8,
               }}
             >
-              Our mission is to make sophisticated wealth strategies accessible to every
-              investor, whether you're commencing your investment journey or looking to
-              enhance your existing portfolio.
+              Whether you're a 25-year-old starting your career in Mumbai's corporate sector, a mid-career professional 
+              balancing EMIs with investments, or a business owner planning succession and legacy wealth transfer, we bring 
+              the expertise, tools, and dedication to help you achieve your financial goals. Our mission is making 
+              sophisticated wealth strategies accessible, understandable, and actionable for every Mumbai investor who 
+              aspires to build lasting wealth.
             </p>
           </div>
 
@@ -185,9 +202,32 @@ const About = () => {
             <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
-              Principal
+            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '16px' }}>
+              Founder & Principal Advisor
             </p>
+            <div style={{ 
+              fontSize: '15px', 
+              color: '#B8B8B8', 
+              lineHeight: '1.7',
+              textAlign: 'left',
+              maxWidth: '400px',
+              margin: '0 auto'
+            }}>
+              <p style={{ marginBottom: '12px' }}>
+                <strong style={{ color: '#DAA520' }}>AMFI Registered Mutual Fund Distributor</strong><br/>
+                ARN 90008
+              </p>
+              <p style={{ marginBottom: '12px' }}>
+                <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor</strong><br/>
+                License No. 277925
+              </p>
+              <p style={{ marginBottom: '0' }}>
+                With deep expertise in financial planning, portfolio management, and wealth creation strategies, 
+                Brahmdeo brings a client-first approach to every engagement. His philosophy centers on building 
+                long-term relationships, educating clients, and delivering results through disciplined, research-based 
+                investing.
+              </p>
+            </div>
           </div>
         </div>
       </section>

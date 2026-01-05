@@ -366,6 +366,212 @@ const Services = () => {
         </div>
       </section>
 
+      {/* Why Choose BM Wealth - NEW CONTENT SECTION */}
+      <section style={{ 
+        background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)', 
+        padding: '80px 20px' 
+      }}>
+        <div className="section-container">
+          <h2 style={{
+            fontSize: 'clamp(32px, 5vw, 48px)',
+            fontFamily: '"Playfair Display", serif',
+            color: '#DAA520',
+            textAlign: 'center',
+            marginBottom: '24px',
+            fontWeight: '600'
+          }}>
+            Why Choose BM Wealth for Your Financial Journey?
+          </h2>
+          <p style={{
+            fontSize: 'clamp(16px, 2.5vw, 18px)',
+            color: '#B8B8B8',
+            textAlign: 'center',
+            maxWidth: '900px',
+            margin: '0 auto 60px',
+            lineHeight: '1.8'
+          }}>
+            Mumbai's financial landscape is complex and competitive. At BM Wealth, we bring together regulatory 
+            expertise, market intelligence, and personalized service to help you navigate your wealth creation 
+            journey with confidence. Here's what sets us apart in Mumbai's crowded financial advisory space.
+          </p>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '32px',
+            marginBottom: '60px'
+          }}>
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                AMFI Registered & IRDAI Licensed
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                We hold official AMFI Registration (ARN 90008) for mutual fund distribution and IRDAI 
+                License (277925) for insurance advisory. This dual certification ensures you're working 
+                with qualified professionals who adhere to strict regulatory standards.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                Our compliance with industry regulations means your investments are handled with the 
+                highest standards of transparency, ethics, and accountability.
+              </p>
+            </div>
+
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                Mumbai-Focused Expertise
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                Based in Mumbai's financial district, we understand the unique challenges and opportunities 
+                facing Mumbai professionals, entrepreneurs, and families. From property vs. SIP decisions 
+                to tax optimization strategies, our advice is tailored to Mumbai's economic reality.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                We help clients navigate Mumbai's high cost of living, real estate dynamics, and career 
+                progression patterns to build wealth strategies that actually work in this city.
+              </p>
+            </div>
+
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                Technology-Enabled Service
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                Our digital platform provides 24/7 access to your portfolio, real-time performance tracking, 
+                and comprehensive wealth planning tools. Whether you're tracking SIP returns or analyzing 
+                tax optimization, everything is available at your fingertips.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                We combine premium personal service with cutting-edge technology to deliver the best of 
+                both worlds—human expertise backed by powerful digital tools.
+              </p>
+            </div>
+
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                Holistic Wealth Planning
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                We don't just sell products—we architect comprehensive wealth solutions. Our approach 
+                integrates mutual funds, insurance, SIPs, portfolio management, and tax planning into a 
+                cohesive strategy aligned with your life goals.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                From your first SIP to retirement planning to legacy wealth transfer, we're your partners 
+                at every stage of your financial journey.
+              </p>
+            </div>
+
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                Transparent, Fee-Based Model
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                No hidden charges, no commission bias. We earn through transparent distributor commissions 
+                from fund houses (as permitted by AMFI) and clearly disclosed advisory fees. You always 
+                know exactly what you're paying for.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                Our recommendations are based on your best interests, not commission maximization. We 
+                prioritize Direct Plans where beneficial and Regular Plans where appropriate.
+              </p>
+            </div>
+
+            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                color: '#DAA520', 
+                marginBottom: '16px',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: '600'
+              }}>
+                Track Record & Client Trust
+              </h3>
+              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
+                Trusted by 500+ Mumbai investors including young professionals, entrepreneurs, corporate 
+                executives, and high-net-worth families. Our client retention rate exceeds 85%, reflecting 
+                the quality of service and results we deliver.
+              </p>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
+                Many of our clients have been with us for 5+ years, trusting us through market cycles, 
+                career changes, and major life events.
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)',
+            border: '1px solid rgba(218, 165, 32, 0.3)',
+            borderRadius: '12px',
+            padding: '40px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: 'clamp(24px, 4vw, 32px)',
+              fontFamily: '"Playfair Display", serif',
+              color: '#DAA520',
+              marginBottom: '20px',
+              fontWeight: '600'
+            }}>
+              Our Investment Philosophy
+            </h3>
+            <p style={{
+              fontSize: 'clamp(15px, 2.5vw, 17px)',
+              color: '#d0d0d0',
+              lineHeight: '1.8',
+              maxWidth: '900px',
+              margin: '0 auto 24px'
+            }}>
+              We believe wealth creation is a marathon, not a sprint. Our philosophy centers on disciplined 
+              SIP investing, asset allocation based on life stages, tax-efficient structuring, and regular 
+              portfolio rebalancing. We focus on sustainable, long-term wealth building rather than chasing 
+              market fads or promising unrealistic returns.
+            </p>
+            <p style={{
+              fontSize: 'clamp(15px, 2.5vw, 17px)',
+              color: '#d0d0d0',
+              lineHeight: '1.8',
+              maxWidth: '900px',
+              margin: '0 auto'
+            }}>
+              Every client's situation is unique. A ₹25,000/month SIP strategy for a 28-year-old IT 
+              professional in Andheri looks different from a ₹2 lakh/month portfolio for a 45-year-old 
+              business owner in South Mumbai. We customize everything based on your income, expenses, 
+              risk tolerance, time horizon, and life goals.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section
         style={{
