@@ -716,41 +716,40 @@ export function PropertyVsSipCalculator() {
                     ) : null}
                   </div>
 
-                  <div
-                    className="incomplete-banner"
-                    style={{
-                      background: "rgba(212, 175, 55, 0.1)",
-                      border: "2px solid #D4AF37",
-                      borderRadius: "12px",
-                      padding: "24px",
-                      margin: "32px 0",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div style={{ fontSize: "20px", marginBottom: "8px" }}>⚠️ YOUR ANALYSIS IS 80% COMPLETE</div>
+                  <div className="incomplete-banner">
+                    <div className="incomplete-banner__inner">
+                      <div className="incomplete-banner__header">
+                        <div className="incomplete-banner__badge">⚠️ YOUR ANALYSIS IS 80% COMPLETE</div>
+                        <div className="incomplete-banner__progress" aria-hidden>
+                          <div className="incomplete-banner__progressFill" style={{ width: "80%" }} />
+                        </div>
+                      </div>
 
-                    <p style={{ marginBottom: "16px", opacity: 0.9 }}>
-                      You're seeing the wealth gap calculation.
-                      <br />
-                      But you're missing the most critical sections:
-                    </p>
+                      <p className="incomplete-banner__copy">
+                        You're seeing the wealth gap calculation.
+                        <br />
+                        But you're missing the most critical sections:
+                      </p>
 
-                    <ul style={{ textAlign: "left", maxWidth: "500px", margin: "0 auto 20px", lineHeight: 1.8 }}>
-                      <li>Tax Harvesting Blueprint (save ₹8-12L)</li>
-                      <li>Mumbai Micro-Market Heatmap</li>
-                      <li>Month-by-month Exit Timeline</li>
-                      <li>Family Conversation Scripts</li>
-                    </ul>
+                      <ul className="incomplete-banner__list">
+                        <li>Tax Harvesting Blueprint (save ₹8-12L)</li>
+                        <li>Mumbai Micro-Market Heatmap</li>
+                        <li>Month-by-month Exit Timeline</li>
+                        <li>Family Conversation Scripts</li>
+                      </ul>
 
-                    <button
-                      type="button"
-                      className="calculator-premium-cta"
-                      onClick={() => {
-                        setLeadOpen(true);
-                      }}
-                    >
-                      UNLOCK COMPLETE ANALYSIS — ₹399
-                    </button>
+                      <div className="incomplete-banner__cta">
+                        <PremiumCalculatorCTA
+                          labelBefore="UNLOCK COMPLETE ANALYSIS — ₹399"
+                          labelAfter="Preparing Your Report…"
+                          price={399}
+                          onClickAction={() => {
+                            track("premium_click", { source: "zeigarnik_banner" });
+                            setLeadOpen(true);
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {showPremium ? (

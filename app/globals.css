@@ -1379,6 +1379,108 @@ html {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
+/* Zeigarnik / FOMO banner (Property vs SIP results) */
+.incomplete-banner {
+  margin: 32px 0;
+}
+
+.incomplete-banner__inner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--color-matte-gold) 18%, transparent), transparent 55%),
+    rgba(255, 255, 255, 0.04);
+
+  border: 1px solid color-mix(in oklab, var(--color-matte-gold) 38%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 16%, transparent),
+    0 0 22px color-mix(in oklab, var(--color-matte-gold) 18%, transparent);
+}
+
+@media (min-width: 768px) {
+  .incomplete-banner__inner {
+    padding: 24px;
+  }
+}
+
+.incomplete-banner__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  color: #000;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-matte-gold) 92%, white 8%) 0%,
+    color-mix(in oklab, var(--color-matte-gold) 82%, black 18%) 100%
+  );
+}
+
+.incomplete-banner__progress {
+  margin: 12px auto 0;
+  height: 8px;
+  max-width: 520px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.incomplete-banner__progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-matte-gold) 92%, white 8%) 0%,
+    color-mix(in oklab, var(--color-matte-gold) 70%, white 30%) 55%,
+    color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 100%
+  );
+  box-shadow: 0 0 18px color-mix(in oklab, var(--color-matte-gold) 22%, transparent);
+}
+
+.incomplete-banner__copy {
+  margin: 14px 0 0;
+  opacity: 0.9;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.incomplete-banner__list {
+  margin: 16px auto 0;
+  max-width: 520px;
+  text-align: left;
+  line-height: 1.9;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.incomplete-banner__list li {
+  padding-left: 10px;
+  position: relative;
+}
+
+.incomplete-banner__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--color-matte-gold) 72%, transparent);
+}
+
+.incomplete-banner__cta {
+  margin-top: 16px;
+}
+
 /* Subtle behind-the-card hover glow (premium depth) */
 .calculator-backdrop-hover {
   position: relative;
