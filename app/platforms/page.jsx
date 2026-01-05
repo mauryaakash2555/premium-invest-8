@@ -26,14 +26,57 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
+import FAQSection from '@/components/shared/FAQSection';
 
 export default function Platforms() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const faqs = [
+    {
+      question: 'Are these platforms SEBI registered?',
+      answer:
+        'Platforms and brokers typically operate under SEBI/stock exchange regulations (as applicable). Always verify current registration details on official sources before opening an account.',
+    },
+    {
+      question: 'Do you guarantee returns if I use these platforms?',
+      answer:
+        'No. Returns depend on market performance and your investment decisions. Platform selection does not guarantee outcomes.',
+    },
+    {
+      question: 'Are these links affiliate links?',
+      answer:
+        'Some links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
+    },
+    {
+      question: 'Which platform should I choose?',
+      answer:
+        'It depends on your needs (costs, interface, products offered, support). You can compare features and choose what fits your investing style.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
+
+      <script
+        id="platforms-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* Hero Section */}
       <section
@@ -227,6 +270,16 @@ export default function Platforms() {
             </a>
           </div>
         </MobileScrollBoost>
+
+        <section style={{ padding: '10px 20px 0' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: 'rgba(255,255,255,0.75)', maxWidth: '900px', margin: '0 auto 0', textAlign: 'center' }}>
+            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP</Link> ·{' '}
+            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+          </p>
+        </section>
+
+        <FAQSection faqs={faqs} />
 
         {/* Affiliate Disclaimer */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>

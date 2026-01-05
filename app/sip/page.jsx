@@ -20,13 +20,57 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Link from 'next/link';
+import FAQSection from '@/components/shared/FAQSection';
 const SIPServices = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const faqs = [
+    {
+      question: 'What is SIP and how does it work?',
+      answer:
+        'A SIP (Systematic Investment Plan) is a method of investing a fixed amount at a regular interval into mutual funds. It supports disciplined investing and can spread your purchases across market cycles.',
+    },
+    {
+      question: 'What is a good SIP amount to start with?',
+      answer:
+        'Many funds allow SIPs starting from ₹500. The right amount depends on your goal, timeline, and monthly cashflow. Many investors start small and increase annually.',
+    },
+    {
+      question: 'Should I stop SIP when markets are volatile?',
+      answer:
+        'SIPs are typically used for long-term goals. Many investors continue through market ups and downs rather than trying to time short-term moves.',
+    },
+    {
+      question: 'Is SIP guaranteed?',
+      answer:
+        'No. SIP is just a way to invest. Returns depend on the mutual fund’s performance and market conditions; past performance does not guarantee future results.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <script
+        id="sip-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
 
       <section style={{
@@ -120,6 +164,16 @@ const SIPServices = () => {
             Investing in too many funds dilutes focus and creates monitoring complexity. Many Mumbai investors have 15-20 SIPs across numerous funds, creating overlap and confusion. A focused portfolio of 4-6 well-selected funds across categories provides adequate diversification without complexity. Stop-start SIP behavior destroys compounding. Investors stop SIPs after few months for various reasons, restart later, stop again – this inconsistency prevents compounding magic from working. SIP's power comes from uninterrupted long-term investing, not sporadic contributions. Commit to non-negotiable monthly SIPs treated like EMIs – automate deductions and forget about them. Not increasing SIPs with income growth is missed opportunity. Mumbai professionals earning ₹8-10 lakhs starting career might earn ₹20-40 lakhs mid-career and ₹50 lakhs+ senior career. Yet many continue same ₹5,000 SIPs from beginning. Consider increasing SIPs 10-15% annually to match salary hikes, which can meaningfully accelerate wealth accumulation while maintaining lifestyle since expenses also rise.
           </p>
         </section>
+
+        <section style={{ marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Free Tools</Link> ·{' '}
+            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+          </p>
+        </section>
+
+        <FAQSection faqs={faqs} />
 
         {/* Platform Recommendations Section */}
         <section style={{

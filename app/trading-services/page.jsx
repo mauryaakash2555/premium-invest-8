@@ -23,13 +23,56 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import RiskWarning from '@/components/shared/RiskWarning';
+import FAQSection from '@/components/shared/FAQSection';
 const TradingServices = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const faqs = [
+    {
+      question: 'Do you provide stock tips or guaranteed trading returns?',
+      answer:
+        'No. Trading involves significant risk and returns are not guaranteed. We focus on education, platform selection support, and risk-awareness guidance rather than promises or guarantees.',
+    },
+    {
+      question: 'What is required to open a demat account?',
+      answer:
+        'Typically PAN, Aadhaar, bank account details, and a photo. Some segments (like derivatives) may require income proof depending on the broker.',
+    },
+    {
+      question: 'Is intraday trading suitable for beginners?',
+      answer:
+        'Intraday trading can be high risk. Many beginners start with learning, paper trading, and small position sizes before risking meaningful capital.',
+    },
+    {
+      question: 'Are the platform links affiliate links?',
+      answer:
+        'Some platform links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <script
+        id="trading-services-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
 
       <section style={{
@@ -269,6 +312,16 @@ const TradingServices = () => {
             We may earn referral commissions when you open accounts through these links.
           </p>
         </section>
+
+        <section style={{ marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/platforms" style={{ color: '#C0A062', textDecoration: 'underline' }}>Platforms</Link> ·{' '}
+            <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+          </p>
+        </section>
+
+        <FAQSection faqs={faqs} />
 
       </div>
     </div>
