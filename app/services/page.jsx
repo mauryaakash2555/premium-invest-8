@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
+import FAQSection from '@/components/shared/FAQSection';
 
 const Services = () => {
   useEffect(() => {
@@ -127,8 +128,49 @@ const Services = () => {
     },
   ];
 
+  const faqs = [
+    {
+      question: 'Do you provide investment advice or guaranteed returns?',
+      answer:
+        'No. We provide educational information and distribution/support services where applicable. Returns are market-linked and not guaranteed. For personalized advice, please consult a SEBI-registered investment advisor (RIA).',
+    },
+    {
+      question: 'Which service should I start with?',
+      answer:
+        'If you are starting out, our Mutual Funds and SIP sections are common entry points. You can also explore our free tools to understand scenarios before taking action.',
+    },
+    {
+      question: 'Can I speak to someone before starting?',
+      answer:
+        'Yes. Use the Contact page to reach us, and we will guide you to the right next step based on your requirements and eligibility.',
+    },
+    {
+      question: 'Are affiliate links used on the website?',
+      answer:
+        'Some platform links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+      <script
+        id="services-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <style>{`
         /* Mobile-first responsive styles */
         .service-detail-grid {
@@ -633,6 +675,8 @@ const Services = () => {
           </div>
         </div>
       </section>
+
+      <FAQSection faqs={faqs} />
 
       {/* SEBI Disclaimer */}
       <section className="section-container">

@@ -22,13 +22,56 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import FAQSection from '@/components/shared/FAQSection';
 const Insurance = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const faqs = [
+    {
+      question: 'How much term insurance cover should I take?',
+      answer:
+        'Coverage depends on income, liabilities, and family goals. Many people start by considering income replacement plus outstanding loans and key goals (education, family support). A needs-based review is the safest way to size cover.',
+    },
+    {
+      question: 'Is term insurance better than endowment/ULIP for protection?',
+      answer:
+        'Term insurance is designed for pure protection at lower cost. Endowment plans and ULIPs combine insurance and savings/investment features; suitability depends on goals, time horizon, and risk comfort. Many investors compare a “separate insurance + separate investing” approach for clarity and flexibility.',
+    },
+    {
+      question: 'Should I rely only on employer health insurance?',
+      answer:
+        'Employer cover is helpful, but it can change or stop when you switch jobs. Many families keep a separate personal health policy for continuity and to build long-term coverage over time.',
+    },
+    {
+      question: 'How do claims work?',
+      answer:
+        'Claims are processed by the insurer based on policy terms, conditions, and exclusions. We can help you understand documentation requirements and the steps for cashless/reimbursement claims, but final approval always rests with the insurer.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <script
+        id="insurance-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
 
       <section style={{
@@ -127,7 +170,14 @@ const Insurance = () => {
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             A fundamental mistake many Mumbai investors make is confusing insurance with investment. Traditional insurance agents often push endowment plans, money-back policies, or ULIPs as investment vehicles. While these products provide some returns, they significantly underperform separate strategies. Our principle: insurance should primarily provide protection, not investment returns. Buy term insurance for pure death benefit protection at lowest cost. This provides maximum coverage freeing substantial money for wealth creation investments. Invest freed-up premiums in mutual funds through SIPs, building wealth more efficiently than insurance-cum-investment products. This separation provides clarity (insurance protects, investments grow wealth), flexibility (change investments without affecting insurance or vice versa), cost efficiency (no high insurance charges eating investment returns), and better returns (mutual funds historically outperform insurance investment components).
           </p>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP Guide</Link> ·{' '}
+            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+          </p>
         </section>
+
+        <FAQSection faqs={faqs} />
 
         <section style={{
           marginTop: '60px',

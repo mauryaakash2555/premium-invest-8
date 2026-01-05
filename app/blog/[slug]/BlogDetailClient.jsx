@@ -636,6 +636,80 @@ export default function BlogDetailClient({ slug }) {
           </div>
         </div>
 
+        {/* Internal Links */}
+        <div style={{
+          background: 'rgba(0,0,0,0.35)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '12px',
+          padding: '28px',
+          margin: '0 0 40px 0'
+        }}>
+          <h3 style={{
+            fontSize: '20px',
+            color: '#C0A062',
+            marginBottom: '14px',
+            fontFamily: '"Playfair Display", serif'
+          }}>
+            Explore Related Pages
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px'
+          }}>
+            <Link href="/mutual-funds" style={{
+              display: 'inline-block',
+              padding: '10px 14px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(192, 160, 98, 0.12)',
+              border: '1px solid rgba(192, 160, 98, 0.25)',
+              color: '#e5e5e5',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}>Mutual Funds</Link>
+            <Link href="/sip" style={{
+              display: 'inline-block',
+              padding: '10px 14px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(192, 160, 98, 0.12)',
+              border: '1px solid rgba(192, 160, 98, 0.25)',
+              color: '#e5e5e5',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}>SIP Guide</Link>
+            <Link href="/insurance" style={{
+              display: 'inline-block',
+              padding: '10px 14px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(192, 160, 98, 0.12)',
+              border: '1px solid rgba(192, 160, 98, 0.25)',
+              color: '#e5e5e5',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}>Insurance</Link>
+            <Link href="/tools" style={{
+              display: 'inline-block',
+              padding: '10px 14px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(192, 160, 98, 0.12)',
+              border: '1px solid rgba(192, 160, 98, 0.25)',
+              color: '#e5e5e5',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}>Free Tools</Link>
+            <Link href="/contact" style={{
+              display: 'inline-block',
+              padding: '10px 14px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(192, 160, 98, 0.12)',
+              border: '1px solid rgba(192, 160, 98, 0.25)',
+              color: '#e5e5e5',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}>Contact</Link>
+          </div>
+        </div>
+
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div style={{
