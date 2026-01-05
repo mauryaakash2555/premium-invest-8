@@ -177,6 +177,32 @@ export function LeadCaptureModal({
         hideClose
         className="border border-white/10 bg-black/90 text-white max-h-[92vh] overflow-y-auto scrollbar-hide pointer-events-auto sm:max-w-[760px] lg:max-w-[920px] pt-10 pb-8"
       >
+        <div className="absolute left-3 top-3 z-10 flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            onClick={() => onOpenChange?.(false)}
+            className="text-slate-200/80 hover:text-white hover:bg-white/10"
+          >
+            Back
+          </Button>
+        </div>
+
+        <div className="absolute right-3 top-3 z-10">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            onClick={() => onOpenChange?.(false)}
+            className="text-slate-200/80 hover:text-white hover:bg-white/10"
+          >
+            Close
+          </Button>
+        </div>
+
         <DialogHeader>
           <DialogTitle className="text-white text-lg">{title}</DialogTitle>
         </DialogHeader>
