@@ -372,6 +372,9 @@ export function PropertyVsSipCalculator() {
             if (leadIdRef.current) qs.set("leadId", String(leadIdRef.current));
             qs.set("filename", String(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf"));
             if (emailStatus) qs.set("emailStatus", String(emailStatus));
+            if (payload?.name) qs.set("name", String(payload.name));
+            if (payload?.email) qs.set("email", String(payload.email));
+            if (gapCr) qs.set("gap", String(gapCr));
             window.location.assign(`/payment-success?${qs.toString()}`);
             return;
           } catch {

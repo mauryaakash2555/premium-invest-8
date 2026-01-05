@@ -6,9 +6,9 @@ export function PremiumUnlockButton({ onClick }) {
   return (
     <Button
       onClick={onClick}
-      className="bm-btn bm-btn-primary w-full py-6 rounded-xl text-lg"
+      className="calculator-premium-cta w-full py-6 rounded-xl text-lg"
     >
-      Get My Execution Plan — ₹299
+      Show Me How — ₹299
     </Button>
   );
 }

@@ -4,12 +4,11 @@ export const metadata = buildMetadata({
   title: "Sitemap | BM Wealth Mumbai",
   description: "Complete sitemap of BM Wealth website.",
   path: "/sitemap-page",
+  robots: {
+    index: false,
+    follow: false,
+  },
 });
-
-export const robots = {
-  index: false,
-  follow: false,
-};
 
 export default function Layout({ children }) {
   return children;
