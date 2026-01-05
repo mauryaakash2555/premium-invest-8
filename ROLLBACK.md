@@ -1,5 +1,33 @@
 # 🚨 EMERGENCY ROLLBACK GUIDE
 
+## ✅ Staging Lock (Jan 5, 2026)
+
+**Lock commit (known-good):** `012dde3` (`012dde31412dbe53177aa5b6533281adb39e8b4d`)
+
+This lock includes:
+- Property vs SIP WhatsApp follow-up scheduling
+- WhatsApp follow-up cron runner + webhook verification
+- Cron auth aligned with existing `CRON_SECRET` Bearer pattern
+
+### Fast rollback options (staging)
+
+**Option A: Vercel Dashboard (fastest)**
+- Go to Vercel → Project → Deployments → select the last good deployment → **Promote**.
+
+**Option B: Git reset to lock commit (fast + deterministic)**
+```bash
+cd "C:\Users\admin\premium-invest-8"
+git checkout staging
+git fetch origin
+git reset --hard 012dde31412dbe53177aa5b6533281adb39e8b4d
+git push --force-with-lease origin staging
+```
+
+**Option C: Git revert (safer history, slower)**
+- Revert the newer commits (no force-push), then push.
+
+---
+
 ## If Contact Form Breaks After Deployment
 
 ### ⚡ INSTANT ROLLBACK (30 seconds):
