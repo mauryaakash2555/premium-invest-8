@@ -17,9 +17,35 @@ function Get-ListeningPid([int]$LocalPort) {
     $conn = Get-NetTCPConnection -LocalPort $LocalPort -State Listen -ErrorAction Stop | Select-Object -First 1
     if ($null -ne $conn) { return $conn.OwningProcess }
   } catch {
+    # Fall through to netstat fallback
+  }
+
+  # Fallback: parse netstat (works even when Get-NetTCPConnection is restricted)
+  try {
+    $lines = & netstat.exe -ano -p TCP | Select-String -Pattern (":$LocalPort\s+")
+    foreach ($m in $lines) {
+      $parts = ($m.Line -replace "\s+", " ").Trim().Split(' ')
+      # Expected: Proto LocalAddress ForeignAddress State PID
+      if ($parts.Length -ge 5 -and $parts[3] -eq 'LISTENING') {
+        $listenerPid = [int]$parts[4]
+        if ($listenerPid -gt 0) { return $listenerPid }
+      }
+    }
+  } catch {
     return $null
   }
+
   return $null
+}
+
+function Wait-PortFree([int]$LocalPort, [int]$TimeoutMs = 2500) {
+  $deadline = (Get-Date).AddMilliseconds([Math]::Max(500, $TimeoutMs))
+  while ((Get-Date) -lt $deadline) {
+    $listenerPid = Get-ListeningPid -LocalPort $LocalPort
+    if (-not $listenerPid) { return $true }
+    Start-Sleep -Milliseconds 150
+  }
+  return $false
 }
 
 function Wait-Ready([string]$Url, [int]$TimeoutSec) {
@@ -69,14 +95,17 @@ while ($true) {
     } catch {}
   }
 
+  [void](Wait-PortFree -LocalPort $Port -TimeoutMs 2500)
+
   # NOTE: package.json already sets the dev port (next dev -p 3000).
   # Also, on Windows, launching via `cmd.exe /c` can trigger a non-interactive
   # "Terminate batch job (Y/N)?" prompt (which makes the process exit quickly).
   # Start npm directly to keep the dev server alive and log output cleanly.
-  Write-Host "KEEP_ALIVE START npm.cmd run dev"
+  $nextBin = Join-Path $AppRoot 'node_modules\next\dist\bin\next'
+  Write-Host "KEEP_ALIVE START node $nextBin dev -p $Port"
 
-  # Start Next in this same task so VS Code keeps it alive. Also log output.
-  $p = Start-Process -FilePath 'npm.cmd' -ArgumentList @('run', 'dev') -WorkingDirectory $AppRoot -NoNewWindow -PassThru -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr
+  # Start Next directly via node so the process we wait on is the long-lived dev server.
+  $p = Start-Process -FilePath 'node' -ArgumentList @($nextBin, 'dev', '-p', "$Port") -WorkingDirectory $AppRoot -NoNewWindow -PassThru -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr
 
   if (Wait-Ready -Url $ReadyUrl -TimeoutSec $TimeoutSeconds) {
     Write-Host "READY $ReadyUrl"

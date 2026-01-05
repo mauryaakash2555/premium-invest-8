@@ -22,6 +22,20 @@ import { Logger } from "@/lib/monitoring/logger";
 // Premium Market Snapshot (informational only)
 // Resilient to partial symbol failures: retain last-known values on the client.
 
+const CACHE_TTL_MS = 55_000;
+const CACHE_KEY = "__bm_market_data_cache__";
+
+function getCache() {
+  const c = globalThis[CACHE_KEY];
+  if (!c || !c.ts || !c.payload) return null;
+  if (Date.now() - c.ts > CACHE_TTL_MS) return null;
+  return c.payload;
+}
+
+function setCache(payload) {
+  globalThis[CACHE_KEY] = { ts: Date.now(), payload };
+}
+
 const INSTRUMENTS = [
   { id: "NIFTY50", name: "NIFTY 50", kind: "index", yahooCandidates: ["^NSEI"] },
   { id: "SENSEX", name: "SENSEX", kind: "index", yahooCandidates: ["^BSESN"] },
@@ -61,15 +75,23 @@ function directionFrom(changePct) {
 }
 
 async function fetchYahooMeta(symbol) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 4500);
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
-  const res = await fetch(url, {
-    // UI refreshes every 60 seconds
-    next: { revalidate: 60 },
-    headers: {
-      "User-Agent": "bmwealth-market-ticker/1.0",
-      Accept: "application/json",
-    },
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      // UI refreshes every 60 seconds
+      next: { revalidate: 60 },
+      headers: {
+        "User-Agent": "bmwealth-market-ticker/1.0",
+        Accept: "application/json",
+      },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) throw new Error(`Yahoo fetch failed for ${symbol}: ${res.status}`);
   const data = await res.json();
@@ -105,6 +127,11 @@ function computeChange(price, prevClose) {
 
 export async function GET() {
   try {
+    const cached = getCache();
+    if (cached) {
+      return NextResponse.json({ ...cached, cached: true });
+    }
+
     // Always fetch USD/INR first so we can convert metals when needed.
     const usdInrInst = INSTRUMENTS.find((x) => x.id === "USDINR");
     const usdMetaWrap = await firstWorkingMeta(usdInrInst.yahooCandidates);
@@ -116,45 +143,57 @@ export async function GET() {
 
     const items = [];
 
-    for (const inst of INSTRUMENTS) {
-      if (inst.id === "USDINR") {
-        const { changePct, direction } = computeChange(usdInr, usdPrev);
-        items.push({
-          id: inst.id,
-          name: inst.name,
-          kind: inst.kind,
-          value: usdInr,
-          changePct: round(changePct, 2),
-          direction,
-          source: usdMetaWrap.sym,
-          currency: "INR",
-        });
-        continue;
-      }
+    // USD/INR always included
+    {
+      const { changePct, direction } = computeChange(usdInr, usdPrev);
+      items.push({
+        id: "USDINR",
+        name: "USD/INR",
+        kind: "fx",
+        value: usdInr,
+        changePct: round(changePct, 2),
+        direction,
+        source: usdMetaWrap.sym,
+        currency: "INR",
+      });
+    }
 
-      const wrap = await firstWorkingMeta(inst.yahooCandidates);
+    const others = INSTRUMENTS.filter((x) => x.id !== "USDINR");
+    const metaResults = await Promise.all(
+      others.map(async (inst) => {
+        try {
+          const wrap = await firstWorkingMeta(inst.yahooCandidates);
+          return { inst, wrap };
+        } catch (error) {
+          return { inst, error };
+        }
+      })
+    );
+
+    for (const r of metaResults) {
+      if (r.error || !r.wrap) continue;
+      const inst = r.inst;
+      const wrap = r.wrap;
       const meta = wrap.meta;
 
       let price = toNumber(meta.regularMarketPrice);
       let prevClose = toNumber(meta.previousClose);
-
-      if (price == null || prevClose == null) throw new Error(`Bad numbers for ${inst.id}`);
+      if (price == null || prevClose == null) continue;
 
       const isMetal = inst.kind === "metal";
-      const isCrypto = inst.kind === "crypto";
       const isCommodity = inst.kind === "commodity";
 
       const looksUsdPerOz =
         wrap.sym.endsWith("USD=X") ||
-        wrap.sym === "GC=F" || // gold futures (USD per oz)
-        wrap.sym === "SI=F" || // silver futures (USD per oz)
+        wrap.sym === "GC=F" ||
+        wrap.sym === "SI=F" ||
         wrap.sym === "BTC-USD" ||
-        wrap.sym === "CL=F"; // crude futures (USD per barrel)
+        wrap.sym === "CL=F";
 
       const looksInrPair = wrap.sym.endsWith("INR=X");
 
       // Convert USD quotes to INR where it helps UX (metals + crude).
-      // NOTE: BTC is kept in USD to match common display on TradingView/CoinMarketCap.
+      // NOTE: BTC is kept in USD to match common display.
       if ((isMetal || isCommodity) && looksUsdPerOz) {
         price = price * usdInr;
         prevClose = prevClose * usdPrev;
@@ -183,7 +222,6 @@ export async function GET() {
       }
 
       const { changePct, direction } = computeChange(price, prevClose);
-
       const convertedToInr = (isMetal || isCommodity) && looksUsdPerOz;
       const currency = convertedToInr ? "INR" : String(meta.currency || "INR");
 
@@ -191,7 +229,7 @@ export async function GET() {
         id: inst.id,
         name: inst.name,
         kind: inst.kind,
-        value: inst.kind === "index" ? round(price, 2) : round(price, 2),
+        value: round(price, 2),
         changePct: round(changePct, 2),
         direction,
         source: wrap.sym,
@@ -199,9 +237,18 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json({ ok: true, asOf: new Date().toISOString(), items });
+    const payload = { ok: true, asOf: new Date().toISOString(), items };
+    setCache(payload);
+    return NextResponse.json(payload);
   } catch (e) {
     Logger.error("market_data_fetch_error", { error: String(e?.message || e), stack: e?.stack });
+
+    const cached = globalThis[CACHE_KEY]?.payload;
+    if (cached?.ok && Array.isArray(cached.items) && cached.items.length) {
+      // If Yahoo is down/slow, serve last known snapshot so the UI still has numbers.
+      return NextResponse.json({ ...cached, stale: true });
+    }
+
     return NextResponse.json({ ok: false }, { status: 502 });
   }
 }
