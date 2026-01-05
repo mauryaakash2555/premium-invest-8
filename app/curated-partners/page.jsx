@@ -260,8 +260,7 @@ export default function CuratedPartners() {
             <div style={{ textAlign: 'center', background: 'rgba(0, 0, 0, 0.6)', padding: '35px 45px', borderRadius: '24px', border: '3px solid #C0A062', marginBottom: '15px', boxShadow: '0 0 50px rgba(192, 160, 98, 0.5), inset 0 0 20px rgba(192,160,98,0.2)' }}>
               <div style={{ fontSize: '18px', color: '#C0A062', marginBottom: '12px', letterSpacing: '3px', fontWeight: 900 }}>CURRENT BIDDING</div>
               <div style={{ fontSize: '46px', color: '#FFF', fontWeight: 900, fontFamily: '"Playfair Display", serif', letterSpacing: '1px', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '38px' }}>₹</span>
-                <span>2-3 Lakh</span>
+                <span>Private</span>
               </div>
               <div style={{ fontSize: '15px', color: '#C0A062', marginTop: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>🔥 12 SPONSORS VYING</div>
             </div>
