@@ -113,12 +113,25 @@ while ($true) {
     Write-Host "KEEP_ALIVE WARNING: Server not ready within ${TimeoutSeconds}s (will keep running/restart on exit)."
   }
 
-  # Wait until Next exits, then restart.
-  try { Wait-Process -Id $p.Id } catch {}
+  # IMPORTANT:
+  # On Windows, the initial process we spawn can exit while the actual dev server
+  # continues running under a child process. Waiting on $p.Id would then cause a
+  # false-positive "EXITED" and restart-loop (breaking fetches).
+  # Instead, monitor the port health and only restart when it goes down.
+  $failStreak = 0
+  while ($true) {
+    if (Wait-Ready -Url $ReadyUrl -TimeoutSec 2) {
+      $failStreak = 0
+    } else {
+      $failStreak++
+      if ($failStreak -ge 3) { break }
+    }
+    Start-Sleep -Seconds 1
+  }
 
   # If Next is crash-looping due to corrupted build artifacts, clear cache before restart.
   [void](Repair-NextCacheIfCorrupt -StdErrPath $StdErr)
 
-  Write-Host "KEEP_ALIVE EXITED (pid=$($p.Id)). Restarting in ${RestartDelaySeconds}s..."
+  Write-Host "KEEP_ALIVE DOWN. Restarting in ${RestartDelaySeconds}s..."
   Start-Sleep -Seconds ([Math]::Max(1, $RestartDelaySeconds))
 }
