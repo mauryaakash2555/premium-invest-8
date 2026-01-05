@@ -86,6 +86,13 @@ function formatCroreNumber(valueInINR) {
   return s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1");
 }
 
+function formatSignedCrore(valueInINR) {
+  const n = Number(valueInINR);
+  if (!Number.isFinite(n) || n === 0) return "0";
+  const sign = n < 0 ? "−" : "";
+  return `${sign}${formatCroreNumber(n)}`;
+}
+
 function formatLakhs(valueInINR) {
   const n = Number(valueInINR);
   if (!Number.isFinite(n) || n <= 0) return "0";
@@ -531,7 +538,8 @@ export function PropertyVsSipCalculator() {
   const sipWins = model ? sipValueNum > propertyWealthNum : false;
   const advantageNum = sipWins ? wealthGap : 0;
 
-  const gapCr = formatCroreNumber(wealthGap);
+  const gapCrSigned = formatSignedCrore(wealthGap);
+  const gapCrAbs = formatCroreNumber(wealthGapAbs);
   const propertyCr = model ? formatCroreNumber(model.inputs.propertyPrice) : "0";
 
   const draftPropertyCr = formatCroreNumber(draftInputs.propertyPrice);
@@ -719,7 +727,7 @@ export function PropertyVsSipCalculator() {
 
                   <div className="bm-wealth-gap-hero-container">
                     <div className="bm-wealth-gap-hero">
-                      <div className="bm-wealth-gap-label">ESTIMATED OPPORTUNITY COST</div>
+                      <div className="bm-wealth-gap-label">{sipWins ? "ESTIMATED OPPORTUNITY COST" : "ESTIMATED GAP"}</div>
 
                       <div className="bm-wealth-gap-value-wrapper">
                         <AnimatedCounter
@@ -735,7 +743,13 @@ export function PropertyVsSipCalculator() {
                         />
                       </div>
 
-                      <div className="bm-wealth-gap-message">You could lose this much by choosing property</div>
+                      <div className="bm-wealth-gap-message">
+                        {sipWins
+                          ? "You could lose this much by choosing property"
+                          : propertyWins
+                            ? `In this scenario, property is ahead by ₹${gapCrAbs}Cr`
+                            : `Estimated gap: ₹${gapCrAbs}Cr`}
+                      </div>
 
                       <div className="bm-wealth-gap-breakdown">
                         <div className="bm-wealth-breakdown-item">
@@ -791,7 +805,7 @@ export function PropertyVsSipCalculator() {
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                       <div className="text-base font-semibold text-white">Ready to act on this?</div>
                       <div className="mt-2 text-sm text-slate-200/75">
-                        Your {formatINR(model.inputs.propertyPrice)} scenario shows an estimated gap of ₹{gapCr}Cr.
+                        Your {formatINR(model.inputs.propertyPrice)} scenario shows an estimated gap of ₹{gapCrAbs}Cr.
                         Unlock the ₹399 report for the step-by-step roadmap.
                       </div>
                       <div className="mt-4">
@@ -1064,7 +1078,7 @@ export function PropertyVsSipCalculator() {
         onFree={handleFree}
         onPay={handlePay}
         title="What Do I Do Now? — ₹399"
-        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\nYOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\nWEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\nMUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
+        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\nYOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\nWEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCrAbs}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\nMUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
         freeLabel="Email Summary"
         payLabel="Send It Now — ₹399"
         payButtonClassName="calculator-premium-cta"
@@ -1077,8 +1091,8 @@ export function PropertyVsSipCalculator() {
         open={exitOpen}
         onOpenChange={setExitOpen}
         suppressKey="pvs_exit_intent_suppress"
-        title={`Wait. Don't lose ₹${gapCr}Cr.`}
-        bodyPrimary={`Your calculation shows ₹${gapCr}Cr opportunity cost over ${yearsFinal} years.\n\nMost Mumbai property owners never see this clearly.\n\nWant to understand your options?`}
+        title={`Wait. Don't lose ₹${gapCrAbs}Cr.`}
+        bodyPrimary={`Your calculation shows ₹${gapCrAbs}Cr opportunity cost over ${yearsFinal} years.\n\nMost Mumbai property owners never see this clearly.\n\nWant to understand your options?`}
         bodySecondary=""
         primaryLabel="Show Me How — ₹399"
         primaryButtonClassName="calculator-premium-cta"
