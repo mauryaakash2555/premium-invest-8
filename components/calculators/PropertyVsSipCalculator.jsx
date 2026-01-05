@@ -490,6 +490,8 @@ export function PropertyVsSipCalculator() {
   const gapCr = formatCroreNumber(wealthGap);
   const propertyCr = model ? formatCroreNumber(model.inputs.propertyPrice) : "0";
 
+  const draftPropertyCr = formatCroreNumber(draftInputs.propertyPrice);
+
   const sipTotalInvestedNum = model ? Number(model.sipTotalInvested || 0) : 0;
   const sipWealthCreatedNum = model ? Number(model.sipWealthCreated || 0) : 0;
 
@@ -565,7 +567,7 @@ export function PropertyVsSipCalculator() {
               </>
             }
             title="Property Purchase vs Disciplined Equity Investment"
-            subtitle="Compare deploying ₹2Cr in property vs equity markets"
+            subtitle={`Compare deploying ₹${draftPropertyCr}Cr in property vs equity markets`}
           />
         }
         disclaimer={<span className="whitespace-pre-line">{COMPLIANCE_FOOTER}</span>}
@@ -594,7 +596,7 @@ export function PropertyVsSipCalculator() {
 
                   <div className="grid gap-1">
                     <div className="text-xs text-slate-200/70">Additional Monthly Investment (₹)</div>
-                    <div className="text-[11px] text-slate-200/55">(Beyond initial ₹2Cr capital deployment)</div>
+                    <div className="text-[11px] text-slate-200/55">(Beyond initial ₹{draftPropertyCr}Cr capital deployment)</div>
                     <input
                       type="text"
                       inputMode="numeric"
@@ -731,7 +733,7 @@ export function PropertyVsSipCalculator() {
                       </p>
 
                       <ul className="incomplete-banner__list">
-                        <li>Tax Harvesting Blueprint (save ₹8-12L)</li>
+                        <li>Tax harvesting framework & examples</li>
                         <li>Mumbai Micro-Market Heatmap</li>
                         <li>Month-by-month Exit Timeline</li>
                         <li>Family Conversation Scripts</li>

@@ -865,11 +865,11 @@ export function TaxCalculator() {
                     BM Wealth’s optimization logic compares your actual rent against the 50% metro rule to see if the Old Regime’s deductions still outweigh the New Regime’s lower slabs.
                   </p>
 
-                  <h3 className="mt-4 text-sm font-semibold text-white/90">Beyond the Basics: Surcharge &amp; Cess Management</h3>
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Beyond the Basics: High-Income Tax Layers</h3>
                   <p className="mt-2 text-sm text-slate-200/75">
-                    For the "Elite" bracket—those earning above ₹50 Lakhs—the surcharge adds a heavy layer of complexity.
-                    With surcharges ranging from 10% to 25% for high-income earners, the "effective" tax rate can climb significantly.
-                    Sophisticated tax planning involves more than just Section 80C; it requires strategic income distribution and understanding how 4% Health and Education Cess compounds on top of your surcharge.
+                    For higher incomes, your final tax can include additional layers like surcharge (as applicable) and the 4% Health &amp; Education Cess.
+                    This calculator currently focuses on the core slab computation, rebates/marginal relief, and cess based on your inputs.
+                    For surcharge-specific outcomes, consult a qualified professional.
                   </p>
 
                   <h3 className="mt-4 text-sm font-semibold text-white/90">Investment Harvesting in FY 2026</h3>
