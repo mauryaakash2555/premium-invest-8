@@ -12,8 +12,7 @@ describe("Property vs SIP email personalization", () => {
         siteUrl: "https://bmwealth.co.in",
       });
 
-      expect(built.subject).toContain(name);
-      expect(built.subject).toMatch(/^Your ₹[0-9.]+Cr opportunity - /);
+      expect(built.subject).toMatch(/^You're losing ₹[0-9.]+Cr\. Here's how\.$/);
 
       // Greeting is HTML-escaped for special characters.
       if (name.includes("'")) {
@@ -34,7 +33,7 @@ describe("Property vs SIP email personalization", () => {
       attachmentName: "D'Silva_Report.pdf",
     });
 
-    expect(built.html).toContain("Dear D&#39;Silva");
-    expect(built.html).not.toContain("Dear Akash,");
+    expect(built.html).toContain("Hi D&#39;Silva");
+    expect(built.html).not.toContain("Hi Akash,");
   });
 });
