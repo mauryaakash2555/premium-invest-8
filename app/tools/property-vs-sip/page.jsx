@@ -9,7 +9,7 @@ const PATH = "/tools/property-vs-sip";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Mumbai Property vs SIP Analyzer | BM Wealth",
+    title: "Property vs SIP Calculator | BM Wealth",
     description:
       "Compare Mumbai property growth vs SIP compounding with locked assumptions. Unlock a 15-page wealth gap report.",
     path: PATH,
@@ -26,7 +26,7 @@ export default function PropertyVsSipToolPage() {
   const calculatorSchema = {
     "@context": "https://schema.org",
     "@type": "FinancialCalculator",
-    name: "Mumbai Property vs SIP Analyzer",
+    name: "Property vs SIP Calculator",
     description:
       "Compare an equivalent capital deployment into Mumbai property vs disciplined equity SIP compounding using locked assumptions. Educational illustration only.",
     url: pageUrl,
@@ -46,7 +46,7 @@ export default function PropertyVsSipToolPage() {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${base}/` },
       { "@type": "ListItem", position: 2, name: "Tools", item: `${base}/tools` },
-      { "@type": "ListItem", position: 3, name: "Mumbai Property vs SIP Analyzer", item: pageUrl },
+      { "@type": "ListItem", position: 3, name: "Property vs SIP", item: pageUrl },
     ],
   };
 
