@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { EmailService } from "@/lib/email/emailService";
 import { LeadsDB } from "@/lib/db/leads";
 import { logEventSafe } from "@/lib/db/events";
+import { computeMumbaiPropertyVsSip } from "@/lib/property-vs-sip";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,50 @@ function safeStr(v) {
   return String(v ?? "").trim();
 }
 
+function safeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function parseINR(v) {
+  const raw = String(v ?? "").trim();
+  if (!raw) return 0;
+  const cleaned = raw.replace(/[^0-9\-\.]/g, "");
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function hashMod3(s) {
+  const str = String(s ?? "");
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h + str.charCodeAt(i)) % 3;
+  }
+  return h;
+}
+
+function formatCrLakh(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v) || v <= 0) return "₹0";
+  const cr = v / 1e7;
+  if (cr >= 1) {
+    const rounded = Math.round(cr * 10) / 10;
+    const clean = String(rounded).endsWith(".0") ? String(Math.round(rounded)) : String(rounded);
+    return `₹${clean}Cr`;
+  }
+  const lakh = v / 1e5;
+  if (lakh >= 1) {
+    const rounded = Math.round(lakh * 10) / 10;
+    const clean = String(rounded).endsWith(".0") ? String(Math.round(rounded)) : String(rounded);
+    return `₹${clean}L`;
+  }
+  return `₹${Math.round(v).toLocaleString("en-IN")}`;
+}
+
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -42,39 +87,96 @@ export async function POST(req) {
       return NextResponse.json({ ok: false, error: "invalid_fields" }, { status: 400 });
     }
 
-    const propertyPrice = safeStr(inputs?.propertyPrice);
-    const monthlySip = safeStr(inputs?.monthlySip);
-    const years = safeStr(inputs?.years);
+    const propertyPriceStr = safeStr(inputs?.propertyPrice);
+    const monthlySipStr = safeStr(inputs?.monthlySip);
+    const yearsStr = safeStr(inputs?.years);
 
-    const propertyEndValue = safeStr(results?.propertyEndValue);
-    const sipFutureValue = safeStr(results?.sipFutureValue);
-    const wealthGap = safeStr(results?.wealthGap);
-    const gapCr = safeStr(results?.gapCr);
+    const propertyPrice = parseINR(propertyPriceStr);
+    const monthlySip = parseINR(monthlySipStr);
+    const years = Math.max(1, Math.min(30, Math.round(Number(yearsStr || 0) || 0) || 15));
 
-    const subject = gapCr
-      ? `BM Wealth — Your Property vs SIP Summary (₹${gapCr}Cr gap)`
-      : "BM Wealth — Your Property vs SIP Summary";
+    const model = computeMumbaiPropertyVsSip({ propertyPrice, monthlySip, years });
+
+    const wealthGapNum = Number(model?.wealthGap || 0);
+    const wealthGapAbs = Math.max(0, Math.abs(wealthGapNum));
+    const gapCrRounded = Math.round((wealthGapAbs / 1e7) * 10) / 10;
+
+    const dailyLeak = years > 0 ? wealthGapAbs / (years * 365) : 0;
+    const monthlyLeak = dailyLeak * 30;
+    const yearlyLeak = dailyLeak * 360;
+
+    const variant = hashMod3(email);
+    const subjectA = `🚨 CRITICAL: Your ${formatCrLakh(wealthGapAbs)} Wealth Leak identified`;
+    const subjectB = `${name || "You"}, your ${formatCrLakh(propertyPrice)} property is bleeding money`;
+    const subjectC = `This Mumbai property mistake costs ₹${Math.round(monthlyLeak).toLocaleString("en-IN")}/month`;
+    const subject = variant === 1 ? subjectB : variant === 2 ? subjectC : subjectA;
+
+    const ctaUrl = String(process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in").replace(/\/+$/, "") +
+      "/tools/property-vs-sip";
+    const unsubscribeUrl = `mailto:support@bmwealth.co.in?subject=${encodeURIComponent("Unsubscribe")}&body=${encodeURIComponent(
+      `Please unsubscribe ${email} from Property vs SIP emails.`
+    )}`;
+
+    const propertyLine = propertyPriceStr || `₹${Math.round(propertyPrice).toLocaleString("en-IN")}`;
+    const sipLine = monthlySipStr || `₹${Math.round(monthlySip).toLocaleString("en-IN")}`;
+    const timelineLine = yearsStr ? `${yearsStr} years` : `${years} years`;
+    const wealthGapLine = `₹${Math.round(wealthGapAbs).toLocaleString("en-IN")}`;
 
     const html = `
-      <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
-        <h2>Your Property vs SIP Summary</h2>
-        <p>Hi ${name},</p>
-        <p>Here’s a snapshot based on your inputs:</p>
-        <ul>
-          <li><strong>Property price:</strong> ${propertyPrice || "-"}</li>
-          <li><strong>Monthly SIP:</strong> ${monthlySip || "-"}</li>
-          <li><strong>Timeline:</strong> ${years ? `${years} years` : "-"}</li>
+      <div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#111;max-width:680px">
+        <p>Hi ${safeHtml(name || "there")},</p>
+
+        <p>You just ran the numbers.</p>
+
+        <p>Most people in Mumbai think their property is their “Golden Nest Egg.”</p>
+        <p><strong>The math says otherwise.</strong></p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 8px"><strong>🚨 YOUR SPECIFIC ANALYSIS:</strong></p>
+        <p style="margin:0">Property: ${safeHtml(propertyLine)}</p>
+        <p style="margin:0">Monthly Deployment: ${safeHtml(sipLine)}</p>
+        <p style="margin:0">Timeline: ${safeHtml(timelineLine)}</p>
+
+        <p style="margin:14px 0 8px"><strong>Wealth Gap: ${safeHtml(wealthGapLine)}</strong>${gapCrRounded ? ` <span style="color:#555">(≈ ${safeHtml(formatCrLakh(wealthGapAbs))})</span>` : ""}</p>
+
+        <p style="margin:0 0 8px">This isn’t just a number.</p>
+        <p style="margin:0">It’s wealth that can silently leak into:</p>
+        <ul style="margin:8px 0 0;padding-left:20px">
+          <li>Society maintenance and repairs</li>
+          <li>Property tax and ongoing drag</li>
+          <li>Zero liquidity for years</li>
+          <li>4% appreciation vs 14.5% compounding (model assumption)</li>
         </ul>
-        <p><strong>Results</strong></p>
-        <ul>
-          <li><strong>Property future value:</strong> ${propertyEndValue || "-"}</li>
-          <li><strong>Equity (SIP) future value:</strong> ${sipFutureValue || "-"}</li>
-          <li><strong>Wealth gap (SIP − property):</strong> ${wealthGap || "-"}${gapCr ? ` (≈ ₹${gapCr}Cr)` : ""}</li>
-        </ul>
-        <p>If you want the premium blueprint (PDF + action plan), you can unlock it from the calculator.</p>
-        <p style="margin-top:16px">Support: <a href="mailto:support@bmwealth.co.in">support@bmwealth.co.in</a></p>
-        <hr/>
-        <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only. Not investment advice.</p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 8px"><strong>⏰ THE DAILY LEAK:</strong></p>
+        <p style="margin:0">Every day you stay in this property trap:</p>
+        <p style="margin:6px 0 0">→ You lose <strong>₹${Math.round(dailyLeak).toLocaleString("en-IN")}</strong> in potential compounding</p>
+        <p style="margin:0">→ That’s <strong>₹${Math.round(monthlyLeak).toLocaleString("en-IN")}/month</strong></p>
+        <p style="margin:0">→ Or <strong>₹${Math.round(yearlyLeak).toLocaleString("en-IN")}/year</strong></p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:18px 0"/>
+
+        <p style="margin:0 0 10px"><strong>💡 Want the Private Exit Plan?</strong></p>
+        <p style="margin:0 0 14px">I’ve prepared your <strong>Private Exit Plan (Premium Blueprint)</strong> — a structured, math-first roadmap to help you act on these numbers.</p>
+
+        <p style="margin:0 0 16px">
+          <a href="${safeHtml(ctaUrl)}" style="background:#C6A15B;color:#111;text-decoration:none;padding:12px 18px;border-radius:6px;display:inline-block">
+            🔥 DOWNLOAD MY PRIVATE EXIT PLAN — ₹399
+          </a>
+        </p>
+
+        <p style="margin:0"><strong>INVEST IN LOGIC. NOT EMOTION.</strong></p>
+        <p style="margin:8px 0 0">— BM Wealth (ARN 90008)</p>
+
+        <p style="margin:18px 0 0;font-size:12px;color:#555">
+          This is an illustrative educational tool and mathematical projection. Not SEBI-regulated investment advice.
+          Mutual fund investments are subject to market risks; read all scheme-related documents carefully.
+          <br/>ARN 90008 | IRDAI 277925 | Mumbai
+          <br/><a href="${safeHtml(ctaUrl)}">View Full Calculator</a> | <a href="${safeHtml(unsubscribeUrl)}">Unsubscribe</a>
+        </p>
       </div>
     `;
 
