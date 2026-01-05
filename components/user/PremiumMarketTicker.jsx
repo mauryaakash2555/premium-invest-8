@@ -27,20 +27,37 @@ function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
 }
 
+function toFiniteNumber(v) {
+  if (v == null) return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  if (typeof v === "string") {
+    // allow "24,857.30" / "₹7,245" / "90.214" etc.
+    const cleaned = v.replace(/[^0-9.+-]/g, "");
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : null;
+  }
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
 function fmtNumber(v, opts = {}) {
   const { style = "decimal", currency = "INR", maximumFractionDigits = 2 } = opts;
+  const n = toFiniteNumber(v);
+  if (n == null) return "—";
   try {
     return new Intl.NumberFormat("en-IN", {
       style,
       currency,
       maximumFractionDigits,
-    }).format(v);
+    }).format(n);
   } catch {
-    return String(v);
+    return String(n);
   }
 }
 
 function fmtValue(item) {
+  const v = toFiniteNumber(item?.value);
+  if (v == null) return "—";
   if (item.kind === "fx") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 3 });
   if (item.kind === "index") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
   // Crypto: match common display (TradingView/CMC) using USD
@@ -50,7 +67,7 @@ function fmtValue(item) {
       const n = new Intl.NumberFormat("en-US", {
         style: "decimal",
         maximumFractionDigits: 0,
-      }).format(item.value);
+      }).format(v);
       return `${n} USD`;
     }
     return fmtNumber(item.value, { style: "currency", currency: "INR", maximumFractionDigits: 0 });
@@ -59,8 +76,8 @@ function fmtValue(item) {
 }
 
 function fmtPct(p) {
-  const n = Number(p);
-  if (!Number.isFinite(n)) return "0.00%";
+  const n = toFiniteNumber(p);
+  if (n == null) return "—";
   const sign = n > 0 ? "+" : n < 0 ? "" : "";
   return `${sign}${n.toFixed(2)}%`;
 }
@@ -159,12 +176,13 @@ function normalizeApi(json) {
       id: String(x.id || ""),
       name: String(x.name || ""),
       kind: String(x.kind || ""),
-      value: Number(x.value),
-      changePct: Number(x.changePct),
+      value: toFiniteNumber(x.value),
+      changePct: toFiniteNumber(x.changePct),
       direction: String(x.direction || "flat"),
       currency: String(x.currency || ""),
     }))
-    .filter((x) => x.id && Number.isFinite(x.value) && Number.isFinite(x.changePct));
+    // Keep items even if changePct is missing; we still want prices to show.
+    .filter((x) => x.id && x.value != null);
 }
 
 export default function PremiumMarketTicker({ className }) {
