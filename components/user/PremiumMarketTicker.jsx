@@ -180,9 +180,10 @@ const FALLBACK_DATA = [
 ];
 
 export default function PremiumMarketTicker({ className }) {
-  const [data, setData] = useState([]);
+  // Show numbers immediately on first paint (SSR + hydration) while live data loads.
+  const [data, setData] = useState(FALLBACK_DATA);
   const [asOf, setAsOf] = useState(null);
-  const lastDataRef = useRef([]);
+  const lastDataRef = useRef(FALLBACK_DATA);
 
   const placeholderItems = useMemo(
     () => [
