@@ -571,6 +571,71 @@ export default function BlogDetailClient({ slug }) {
 
         <BlogDisclaimer />
 
+        {/* Free Tools CTA */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)',
+          border: '1px solid rgba(218, 165, 32, 0.3)',
+          borderRadius: '12px',
+          padding: '32px',
+          margin: '40px 0',
+          textAlign: 'center'
+        }}>
+          <h3 style={{
+            fontSize: '24px',
+            color: '#C0A062',
+            marginBottom: '16px',
+            fontFamily: '"Playfair Display", serif'
+          }}>
+            Make Better Financial Decisions with Our Free Tools
+          </h3>
+          <p style={{
+            fontSize: '16px',
+            color: '#d0d0d0',
+            marginBottom: '24px',
+            lineHeight: '1.7'
+          }}>
+            Use our calculators to analyze investment scenarios and plan your wealth journey
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <a 
+              href="/tools/property-vs-sip"
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: 'linear-gradient(135deg, #C0A062 0%, #B8860B 100%)',
+                color: '#000',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                fontWeight: '600',
+                fontSize: '15px'
+              }}
+            >
+              Property vs SIP Calculator
+            </a>
+            <a 
+              href="/tools"
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: 'transparent',
+                color: '#C0A062',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                fontWeight: '600',
+                fontSize: '15px',
+                border: '1px solid #C0A062'
+              }}
+            >
+              View All Tools →
+            </a>
+          </div>
+        </div>
+
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div style={{
