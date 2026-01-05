@@ -3858,18 +3858,18 @@ export const staticBlogPost9 = {
     </p>
   </div>
 
-  <div style="background: rgba(192, 160, 98, 0.06); border: 1px solid rgba(192, 160, 98, 0.28); border-radius: 14px; padding: 34px; margin: 0 0 70px 0;">
-    <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 14px;">
+  <div style="background: linear-gradient(135deg, rgba(192, 160, 98, 0.12) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(192, 160, 98, 0.08) 100%); border: 1px solid rgba(192, 160, 98, 0.34); border-radius: 16px; padding: 34px; margin: 0 0 70px 0; box-shadow: 0 18px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 30px; color: #C0A062; margin-bottom: 10px; line-height: 1.2;">
       Run Your Own Property vs SIP Analysis
     </h3>
-    <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 20px;">
+    <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
       Instead of relying on generic city averages, compare your exact numbers: property price, down payment, expected rent, maintenance, holding period, taxes, and the SIP alternative.
     </p>
     <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-      <a href="/tools/property-vs-sip" style="display: inline-block; padding: 14px 20px; background: linear-gradient(135deg, rgba(192, 160, 98, 0.95) 0%, rgba(192, 160, 98, 0.8) 100%); color: #000000; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px;">
-        Open Property vs SIP Calculator →
+      <a href="/tools/property-vs-sip" style="display: inline-block; padding: 14px 22px; background: linear-gradient(135deg, rgba(192, 160, 98, 0.95) 0%, rgba(192, 160, 98, 0.72) 55%, rgba(192, 160, 98, 0.92) 100%); color: #000000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 16px; letter-spacing: 0.2px; box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 34px rgba(192, 160, 98, 0.22);">
+        Open Property vs SIP Calculator 
       </a>
-      <span style="font-size: 14px; color: rgba(229, 229, 229, 0.7);">
+      <span style="font-size: 13px; color: rgba(229, 229, 229, 0.68); line-height: 1.5;">
         Educational projection based on your inputs. Not investment advice.
       </span>
     </div>
