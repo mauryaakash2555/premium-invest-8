@@ -126,6 +126,150 @@ const TradingServices = () => {
           </p>
         </section>
 
+        {/* Platform Recommendations Section */}
+        <section style={{
+          background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(184, 134, 11, 0.08) 100%)',
+          border: '1px solid rgba(218, 165, 32, 0.3)',
+          borderRadius: '12px',
+          padding: '40px',
+          marginBottom: '40px'
+        }}>
+          <h2 style={{ 
+            fontSize: '36px', 
+            color: '#DAA520', 
+            marginBottom: '20px', 
+            fontWeight: '600', 
+            fontFamily: '"Playfair Display", serif',
+            textAlign: 'center'
+          }}>
+            Open Your Trading & Demat Account
+          </h2>
+          <p style={{ 
+            fontSize: '17px', 
+            lineHeight: '1.8', 
+            color: '#e5e5e5', 
+            marginBottom: '32px', 
+            textAlign: 'center',
+            maxWidth: '800px',
+            margin: '0 auto 32px'
+          }}>
+            These SEBI-registered brokers offer seamless trading experience with low costs and robust platforms. 
+            Choose based on your trading style and preferences.
+          </p>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: '24px',
+            marginBottom: '32px'
+          }}>
+            <div style={{ 
+              background: 'rgba(0,0,0,0.4)', 
+              padding: '28px', 
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.2)'
+            }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
+                Zerodha
+              </h3>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
+                India's largest broker. Zero brokerage on equity delivery. Advanced trading tools. 
+                Trusted by 1+ crore investors.
+              </p>
+              <a 
+                href="https://zerodha.com" 
+                target="_blank" 
+                rel="nofollow noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
+                  color: '#000',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '600',
+                  fontSize: '15px'
+                }}
+              >
+                Open Zerodha Account →
+              </a>
+            </div>
+
+            <div style={{ 
+              background: 'rgba(0,0,0,0.4)', 
+              padding: '28px', 
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.2)'
+            }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
+                Groww
+              </h3>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
+                Simple, beginner-friendly platform. Stocks, F&O, IPOs, mutual funds all in one app. 
+                Zero account opening fees.
+              </p>
+              <a 
+                href="https://groww.in" 
+                target="_blank" 
+                rel="nofollow noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
+                  color: '#000',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '600',
+                  fontSize: '15px'
+                }}
+              >
+                Start Trading on Groww →
+              </a>
+            </div>
+
+            <div style={{ 
+              background: 'rgba(0,0,0,0.4)', 
+              padding: '28px', 
+              borderRadius: '8px',
+              border: '1px solid rgba(218, 165, 32, 0.2)'
+            }}>
+              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
+                Smallcase
+              </h3>
+              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
+                Invest in curated equity portfolios. Thematic baskets managed by experts. 
+                Perfect for strategic equity investing.
+              </p>
+              <a 
+                href="https://smallcase.com" 
+                target="_blank" 
+                rel="nofollow noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
+                  color: '#000',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '600',
+                  fontSize: '15px'
+                }}
+              >
+                Explore Smallcase →
+              </a>
+            </div>
+          </div>
+
+          <p style={{ 
+            fontSize: '13px', 
+            color: '#999', 
+            textAlign: 'center',
+            fontStyle: 'italic'
+          }}>
+            We may earn referral commissions when you open accounts through these links.
+          </p>
+        </section>
+
       </div>
     </div>
   );
