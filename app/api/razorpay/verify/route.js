@@ -2,11 +2,12 @@ import crypto from "crypto";
 import { NextResponse } from "next/server";
 
 import { EmailService } from "@/lib/email/emailService";
-import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
 import { logEventSafe } from "@/lib/db/events";
 import { generateTaxBlueprintPdfBytes } from "@/lib/pdf/taxBlueprint";
 import { generateBmWealthBlueprint15PdfBytes } from "@/lib/pdf/bmWealthBlueprint15";
+import { generatePropertyVsSipPremium18PdfBytes } from "@/lib/pdf/propertyVsSipPremium18";
 import { buildPropertyVsSipPaidPdfEmail } from "@/lib/email/propertyVsSipTemplates";
+import { buildTaxBlueprintPaidPdfEmail } from "@/lib/email/taxBlueprintTemplates";
 
 export const runtime = "nodejs";
 
@@ -20,15 +21,6 @@ function verifySignature({ orderId, paymentId, signature }) {
   const body = `${orderId}|${paymentId}`;
   const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
   return expected === String(signature || "");
-}
-
-function safeHtml(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
 
 function parseINR(v) {
@@ -47,22 +39,9 @@ function pickFromCoverLines(lines, prefix) {
   return parts.length >= 2 ? parts.slice(1).join(":").trim() : "";
 }
 
-async function buildEmailHtml({ name, inputs }) {
-  const cmp = compareRegimesFY2526(inputs || {});
-  const best = cmp.winner === "old" ? "Old Regime" : cmp.winner === "new" ? "New Regime" : "Tie";
-
-  return `
-    <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
-      <h2>Your Tax Optimization Blueprint is Ready</h2>
-      <p>Hi ${String(name || "").trim() || "there"},</p>
-      <p>Payment received for <strong>BM Wealth Tax Optimization Intelligence (FY 2025–26)</strong>.</p>
-      <p><strong>Optimal regime:</strong> ${best}<br/>
-         <strong>Estimated savings:</strong> ${formatINR(cmp.savings)}</p>
-      <p>Your PDF is attached. If you need help, reply to this email.</p>
-      <hr/>
-      <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only. Not investment advice.</p>
-    </div>
-  `;
+async function buildEmailHtml({ lead, inputs }) {
+  const built = buildTaxBlueprintPaidPdfEmail({ lead, inputs });
+  return built.html;
 }
 
 export async function POST(req) {
@@ -72,6 +51,7 @@ export async function POST(req) {
     const orderId = String(body?.razorpay_order_id || "");
     const paymentId = String(body?.razorpay_payment_id || "");
     const signature = String(body?.razorpay_signature || "");
+    const leadId = body?.leadId ? String(body.leadId) : "";
     const lead = body?.lead || {};
     const inputs = body?.inputs || {};
     const pdfPayload = body?.pdfPayload || null;
@@ -83,6 +63,7 @@ export async function POST(req) {
     const sigOk = verifySignature({ orderId, paymentId, signature });
     if (!sigOk) {
       await logEventSafe({
+        leadId: leadId || null,
         event_type: "payment_failed",
         data: { provider: "razorpay", reason: "bad_signature", orderId },
       });
@@ -90,6 +71,7 @@ export async function POST(req) {
     }
 
     await logEventSafe({
+      leadId: leadId || null,
       event_type: "payment_success",
       data: {
         provider: "razorpay",
@@ -102,13 +84,15 @@ export async function POST(req) {
     const emailTo = String(lead?.email || "").trim();
     const isPayloadMode = Boolean(pdfPayload);
 
+    let propertyVsSipPaidMessageId = null;
+    let propertyVsSipPaidTracking = null;
+
     let pdfBytes;
     let emailSubject;
     let emailHtml;
     let attachmentName;
 
     if (isPayloadMode) {
-      pdfBytes = generateBmWealthBlueprint15PdfBytes(pdfPayload);
       attachmentName = String(pdfPayload?.meta?.filename || "BM-Wealth-Premium-Report.pdf");
       emailSubject = String(pdfPayload?.meta?.emailSubject || "Your BM Wealth Premium Report is Ready");
 
@@ -116,10 +100,36 @@ export async function POST(req) {
         String(pdfPayload?.meta?.coverTitle || "").toLowerCase().includes("sip");
 
       if (isPropertyVsSip) {
-        const built = buildPropertyVsSipPaidPdfEmail({ lead, pdfPayload, attachmentName });
+        pdfBytes = generatePropertyVsSipPremium18PdfBytes(pdfPayload);
+        const messageId = crypto.randomUUID();
+        const tracking = {
+          leadId: leadId || null,
+          messageId,
+          campaign: "property_vs_sip_paid",
+          template: "property_vs_sip_paid_pdf",
+        };
+
+        propertyVsSipPaidMessageId = messageId;
+        propertyVsSipPaidTracking = tracking;
+
+        const built = buildPropertyVsSipPaidPdfEmail({ lead, pdfPayload, attachmentName, tracking });
         emailSubject = built.subject;
         emailHtml = built.html;
+
+        await logEventSafe({
+          leadId: leadId || null,
+          event_type: "revenue",
+          data: {
+            amount: 399,
+            currency: "INR",
+            product: "property_vs_sip_pdf",
+            provider: "razorpay",
+            orderId,
+            paymentId,
+          },
+        });
       } else {
+        pdfBytes = generateBmWealthBlueprint15PdfBytes(pdfPayload);
         const emailTitle = String(pdfPayload?.meta?.emailTitle || "Your BM Wealth Premium Report is Ready");
         const emailSubtitle = String(pdfPayload?.meta?.emailSubtitle || "Your PDF is attached.");
         const emailFooter = String(pdfPayload?.meta?.emailFooter || "ARN 90008 | Educational use only. Not investment advice.");
@@ -137,8 +147,9 @@ export async function POST(req) {
     } else {
       pdfBytes = generateTaxBlueprintPdfBytes({ lead, inputs });
       attachmentName = "BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf";
-      emailSubject = "Your Tax Optimization Blueprint is Ready!";
-      emailHtml = await buildEmailHtml({ name: lead?.name, inputs });
+      const built = buildTaxBlueprintPaidPdfEmail({ lead, inputs });
+      emailSubject = built.subject;
+      emailHtml = built.html;
     }
 
     let emailStatus = "missing_email";
@@ -166,6 +177,58 @@ export async function POST(req) {
       } else {
         emailStatus = "failed";
         emailError = emailRes?.error ? "send_failed" : "unknown";
+      }
+
+      if (propertyVsSipPaidMessageId && propertyVsSipPaidTracking) {
+        await logEventSafe({
+          leadId: leadId || null,
+          event_type: "property_vs_sip_paid_email_sent",
+          data: {
+            messageId: propertyVsSipPaidMessageId,
+            campaign: propertyVsSipPaidTracking.campaign,
+            template: propertyVsSipPaidTracking.template,
+            email: emailTo || null,
+            status: emailStatus,
+            error: emailError,
+            attachmentName,
+            email_subject: emailSubject,
+            email_html: emailHtml,
+            pdfPayload,
+          },
+        });
+      }
+
+      // Generic deliverables logging so Super Admin can preview what was actually sent.
+      if (isPayloadMode && !propertyVsSipPaidMessageId) {
+        await logEventSafe({
+          leadId: leadId || null,
+          event_type: "premium_pdf_paid_email_sent",
+          data: {
+            email: emailTo || null,
+            status: emailStatus,
+            error: emailError,
+            attachmentName,
+            email_subject: emailSubject,
+            email_html: emailHtml,
+            pdfPayload,
+          },
+        });
+      }
+
+      if (!isPayloadMode) {
+        await logEventSafe({
+          leadId: leadId || null,
+          event_type: "tax_blueprint_paid_email_sent",
+          data: {
+            email: emailTo || null,
+            status: emailStatus,
+            error: emailError,
+            attachmentName,
+            email_subject: emailSubject,
+            email_html: emailHtml,
+            inputs,
+          },
+        });
       }
     }
 
@@ -197,6 +260,8 @@ export async function POST(req) {
       orderId,
       paymentId,
       filename: attachmentName,
+      leadId: leadId || null,
+      kind: isPayloadMode ? "payload" : "tax_blueprint_paid",
       ts: Date.now(),
     });
     const tokenSecret = String(process.env.PDF_DOWNLOAD_TOKEN_SECRET || process.env.RAZORPAY_KEY_SECRET || "").trim();

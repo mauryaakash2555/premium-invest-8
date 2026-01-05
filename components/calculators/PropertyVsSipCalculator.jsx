@@ -111,6 +111,8 @@ export function PropertyVsSipCalculator() {
   const [showResults, setShowResults] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
 
+  const leadIdRef = useRef(null);
+
   const resultsRef = useRef(null);
   const startedRef = useRef(false);
   const purchaseRef = useRef(false);
@@ -213,7 +215,9 @@ export function PropertyVsSipCalculator() {
       throw new Error("Could not send your email right now. Please try again.");
     }
 
-    track("lead_captured", { mode: "free" });
+    if (json?.leadId) leadIdRef.current = String(json.leadId);
+
+    track("lead_captured", { mode: "free", leadId: leadIdRef.current || undefined });
     setStatusNote("Email sent. Please check your inbox (and Promotions/Spam). ");
   }
 
@@ -236,9 +240,10 @@ export function PropertyVsSipCalculator() {
     }
 
     const leadId = leadJson?.leadId || null;
+    if (leadId) leadIdRef.current = String(leadId);
 
     setStatusNote("Starting payment...");
-    track("payment_start");
+    track("payment_start", { leadId: leadIdRef.current || undefined });
 
     const orderRes = await fetch("/api/razorpay/create-order", {
       method: "POST",
@@ -310,6 +315,7 @@ export function PropertyVsSipCalculator() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               ...response,
+              leadId: leadIdRef.current || null,
               lead: payload,
               inputs: computedInputs,
               pdfPayload,
@@ -334,8 +340,8 @@ export function PropertyVsSipCalculator() {
           const downloadToken = verifyJson?.downloadToken;
           const tokenPayload = verifyJson?.tokenPayload;
 
-          track("payment_success");
-          track("purchase", { product: "mumbai_property_vs_sip_report", amount: 399, currency: "INR" });
+          track("payment_success", { leadId: leadIdRef.current || undefined });
+          track("purchase", { leadId: leadIdRef.current || undefined, product: "mumbai_property_vs_sip_report", amount: 399, currency: "INR" });
           if (emailStatus === "sent") {
             setStatusNote("Payment successful. Email sent. Preparing your PDF...");
           } else {
@@ -346,24 +352,17 @@ export function PropertyVsSipCalculator() {
             purchaseRef.current = true;
           } catch {}
 
-          const pdfRes = await fetch("/api/pdf/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lead: payload, inputs: computedInputs, pdfPayload, downloadToken, tokenPayload }),
-          });
-          if (!pdfRes.ok) {
-            setStatusNote("Payment successful, but PDF generation failed. We'll email it shortly.");
+          try {
+            const qs = new URLSearchParams();
+            if (downloadToken) qs.set("downloadToken", String(downloadToken));
+            if (tokenPayload) qs.set("tokenPayload", String(tokenPayload));
+            if (leadIdRef.current) qs.set("leadId", String(leadIdRef.current));
+            qs.set("filename", String(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf"));
+            if (emailStatus) qs.set("emailStatus", String(emailStatus));
+            window.location.assign(`/payment-success?${qs.toString()}`);
             return;
-          }
-          const blob = await pdfRes.blob();
-          downloadBlob(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf", blob);
-          track("pdf_downloaded");
-          if (emailStatus === "sent") {
-            setStatusNote("Downloaded. Please also check your email.");
-          } else if (emailStatus === "not_configured" || emailStatus === "failed") {
-            setStatusNote("Downloaded. Email delivery is unavailable right now.");
-          } else {
-            setStatusNote("Downloaded.");
+          } catch {
+            setStatusNote("Payment successful. Please check your email for the PDF.");
           }
         } catch {
           track("payment_failed", { stage: "post_payment" });

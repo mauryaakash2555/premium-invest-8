@@ -6,6 +6,8 @@ import { LeadsList } from '@/components/admin/LeadsList';
 import { AnalyticsView } from '@/components/admin/AnalyticsView';
 import { AffiliateTracking } from '@/components/admin/AffiliateTracking';
 import { EmailPreferences } from '@/components/admin/EmailPreferences';
+import { DailyKpisPanel } from '@/components/admin/DailyKpisPanel';
+import { DeliverablesView } from '@/components/admin/DeliverablesView';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -234,8 +236,8 @@ export function SuperAdminDashboard({ onLogout }) {
     <div className="sa-shell">
       <header className="sa-topbar">
         <div className="sa-brand">
-          <div className="sa-title">🎛️ Akash&apos;s Control Panel</div>
-          <div className="sa-sub">BM Wealth · Super Admin</div>
+          <div className="sa-title">🎛️ Akash&apos;s Control Panel (Premium)</div>
+          <div className="sa-sub">BM Wealth · Super Admin · God Mode</div>
         </div>
         <div className="sa-actions">
           {verifyNote ? <div className="sa-sub" style={{ marginRight: 10 }}>{verifyNote}</div> : null}
@@ -251,6 +253,7 @@ export function SuperAdminDashboard({ onLogout }) {
       <nav className="sa-tabs">
         <button className={tab === 'overview' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('overview')}>Overview</button>
         <button className={tab === 'leads' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('leads')}>Leads</button>
+        <button className={tab === 'deliverables' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('deliverables')}>Deliverables</button>
         <button className={tab === 'analytics' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('analytics'); if (!analytics) void loadAnalytics(); }}>Analytics</button>
         <button className={tab === 'system' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('system')}>System</button>
       </nav>
@@ -277,6 +280,8 @@ export function SuperAdminDashboard({ onLogout }) {
                 <div className="sa-cardSub">Live activity</div>
               </div>
             </div>
+
+            <DailyKpisPanel days={7} />
 
             <div className="sa-grid2">
               <section className="sa-panel">
@@ -373,6 +378,7 @@ export function SuperAdminDashboard({ onLogout }) {
         ) : null}
 
         {tab === 'leads' ? <LeadsList summary={summary} /> : null}
+        {tab === 'deliverables' ? <DeliverablesView /> : null}
         {tab === 'analytics' ? <AnalyticsView analytics={analytics} /> : null}
 
         {tab === 'system' ? (

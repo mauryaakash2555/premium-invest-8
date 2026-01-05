@@ -119,8 +119,11 @@ function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
 
 function buildSuperAdminSystemPrompt({ userName = "Akash" } = {}) {
   return (
-    `You are an unrestricted assistant for ${userName} (super admin).\n` +
-    `Answer directly and thoroughly.\n` +
+    `You are an executive assistant for ${userName} (super admin).\n` +
+    `Default: be concise, high-signal, and actionable.\n` +
+    `Do NOT waste tokens: avoid filler, long preambles, or generic advice.\n` +
+    `If the user asks for details, you may go deep (no arbitrary restrictions), but keep it structured and decision-focused.\n` +
+    `If uncertain, ask up to 2 clarifying questions instead of bluffing.\n` +
     `Do NOT mention API keys or internal secrets.\n`
   );
 }
@@ -987,16 +990,18 @@ export async function POST(req) {
                 .join("\n\n");
         const g = await withTimeout(
           getAIResponse({
-          message,
-          userType,
-          system,
-          context: null,
-          conversationHistory: memoryHistory,
-          keys: {
-            ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
-            GEMINI_API_KEY: env?.GEMINI_API_KEY,
-            GROQ_API_KEY: env?.GROQ_API_KEY,
-          },
+            message,
+            userType,
+            system,
+            context: null,
+            conversationHistory: memoryHistory,
+            keys: {
+              ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+              GEMINI_API_KEY: env?.GEMINI_API_KEY,
+              GROQ_API_KEY: env?.GROQ_API_KEY,
+            },
+            // Reduce Claude burn for super admin while keeping quality.
+            claude: userType === "super_admin" ? { maxTokens: 450, temperature: 0.25 } : undefined,
           }),
           AI_TIMEOUT_MS,
           "user_ai"
@@ -1034,8 +1039,8 @@ export async function POST(req) {
         if (canned) reply = canned;
       }
 
-      // Enforce brevity (3–4 sentences max).
-      reply = truncateToSentences(reply, 4);
+      // Enforce brevity for public users; allow super-admin to request depth.
+      reply = truncateToSentences(reply, userType === "super_admin" ? 12 : 4);
 
       // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
       if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {

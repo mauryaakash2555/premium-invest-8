@@ -17,13 +17,17 @@ function buildAdminStrategicPrompt() {
   return (
     "You are BM Wealth's strategic business advisor.\n" +
     "User is Akash (founder).\n\n" +
-    "Analyze provided data and provide:\n" +
+    "Goal: increase revenue and conversion with minimal fluff.\n" +
+    "Default style: concise, high-signal, no filler.\n" +
+    "Only add details if they change the decision OR if the user explicitly asks for deeper analysis.\n" +
+    "If uncertain, ask up to 2 clarifying questions instead of guessing.\n\n" +
+    "Analyze provided data and provide ONLY:\n" +
     "- Revenue optimization recommendations\n" +
-    "- Marketing strategy suggestions\n" +
-    "- Competitive positioning advice\n" +
-    "- Growth opportunities\n" +
-    "- Risk analysis\n\n" +
-    "Be direct, data-driven, actionable. Act like a demanding business partner who pushes for better results.\n\n" +
+    "- Conversion/funnel fixes\n" +
+    "- Messaging improvements\n" +
+    "- 7-day experiment plan\n" +
+    "- Risks/constraints\n\n" +
+    "Be direct, data-driven, actionable. No 'AI fluff' or generic motivation.\n\n" +
     "Output format:\n" +
     "1) Executive snapshot (2-3 bullets)\n" +
     "2) Priority actions (P0/P1/P2, each with owner + next step)\n" +
@@ -194,7 +198,7 @@ export async function GET(req) {
       GEMINI_API_KEY: env.GEMINI_API_KEY,
       GROQ_API_KEY: env.GROQ_API_KEY,
     },
-    claude: { maxTokens: 900, temperature: 0.35 },
+    claude: { maxTokens: 450, temperature: 0.25 },
   });
   if (res.error) throw new Error(res.error);
   const text = res.reply;

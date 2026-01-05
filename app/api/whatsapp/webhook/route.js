@@ -93,9 +93,11 @@ export async function POST(req) {
     return NextResponse.json({ ok: false, error: "missing_from" }, { status: 400 });
   }
 
+  const { leadId } = await WhatsAppFollowupsDB.findLeadIdByPhone(from);
   const stopRes = await WhatsAppFollowupsDB.stopPhone({ phone: from });
 
   await logEventSafe({
+    leadId: leadId || null,
     event_type: "whatsapp_reply_received",
     data: {
       phone: from,

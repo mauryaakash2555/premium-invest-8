@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 
 import { EmailService } from "@/lib/email/emailService";
 import { LeadsDB } from "@/lib/db/leads";
@@ -117,6 +118,14 @@ export async function POST(req) {
 
     const { lead: savedLead } = await LeadsDB.create({ name, email, phone });
 
+    const messageId = crypto.randomUUID();
+    const tracking = {
+      leadId: savedLead?.id || null,
+      messageId,
+      campaign: "property_vs_sip_free",
+      template: "property_vs_sip_free_summary",
+    };
+
     const built = buildPropertyVsSipFreeSummaryEmail({
       lead: { name, email },
       inputs: {
@@ -125,6 +134,7 @@ export async function POST(req) {
         years: String(inputs?.years ?? ""),
       },
       siteUrl: getBaseUrlSafe(),
+      tracking,
     });
 
     const emailRes = await EmailService.sendRaw({
@@ -137,9 +147,14 @@ export async function POST(req) {
       leadId: savedLead?.id || null,
       event_type: "property_vs_sip_email_sent",
       data: {
+        messageId,
+        campaign: tracking.campaign,
+        template: tracking.template,
         email,
         phone: phone || null,
         whatsappOptIn,
+        email_subject: built.subject,
+        email_html: built.html,
         inputs: { propertyPrice, monthlySip, years },
         computed: { wealthGap: Number(model?.wealthGap || 0) },
       },
