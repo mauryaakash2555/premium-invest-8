@@ -25,11 +25,39 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Shield, Target, Calculator, Phone, Mail } from 'lucide-react';
 import RiskWarning from '@/components/shared/RiskWarning';
+import FAQSection from '@/components/shared/FAQSection';
 
 const MutualFunds = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const faqs = [
+    {
+      question: "What is the minimum amount to start SIP in mutual funds?",
+      answer: "You can start SIP in most mutual funds with as little as ₹500 per month. However, we recommend at least ₹5,000-10,000 monthly SIP for meaningful wealth creation. The minimum varies by fund - some premium funds require ₹5,000-10,000 monthly."
+    },
+    {
+      question: "What is the difference between Direct and Regular plans?",
+      answer: "Direct plans have no distributor commission, resulting in lower expense ratios (typically 0.5-1% lower) and higher returns over time. Regular plans include distributor commissions. For long-term investments, Direct plans can generate significantly higher corpus due to compounding of saved expenses. We help you choose based on your needs for advisory support."
+    },
+    {
+      question: "How much should I invest in equity vs debt funds?",
+      answer: "Asset allocation depends on age, risk tolerance, and goals. A common rule: Equity allocation = 100 - your age. So a 30-year-old might allocate 70% equity, 30% debt. For retirement 20+ years away, 80-100% equity works. For goals within 5 years, shift to 50-70% debt. We customize allocation based on your specific situation."
+    },
+    {
+      question: "Should I stop SIP when markets are high?",
+      answer: "No! This defeats the purpose of SIP. Market timing doesn't work - even experts can't predict peaks and troughs. SIP works precisely because you invest through all market cycles - buying more units when markets fall, fewer when they rise. This rupee cost averaging smooths returns. Continue SIPs regardless of market levels for long-term goals."
+    },
+    {
+      question: "How long should I stay invested in equity mutual funds?",
+      answer: "Minimum 5 years for equity funds, ideally 7-10+ years for optimal wealth creation. Short-term equity investing (under 3 years) is risky due to market volatility. The power of equity compounding truly manifests over 10-15+ year periods. Our data shows investors staying invested 10+ years rarely lose money and often significantly outperform other assets."
+    },
+    {
+      question: "Can I withdraw from mutual funds anytime?",
+      answer: "Yes, most open-ended mutual funds offer liquidity - you can redeem anytime. However, tax implications and exit loads may apply. ELSS funds have 3-year lock-in. We recommend treating mutual fund investments as long-term commitments for goals, not emergency funds. Build separate emergency corpus in liquid funds."
+    }
+  ];
 
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>

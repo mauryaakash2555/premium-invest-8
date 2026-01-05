@@ -28,6 +28,7 @@ import { useState, useEffect, useRef } from "react"
 import { useIsMobile } from "@/hooks/useIsMobile"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import NewsletterSignup from "@/components/shared/NewsletterSignup"
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null)
@@ -419,6 +420,12 @@ return (
 
         {/* INTERACTIVE HALF-TO-FULL SIDE LINE DISCLAIMERS */}
         <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[#C0A062]/15 relative z-20">
+          
+          {/* Newsletter Signup */}
+          <div className="mb-16">
+            <NewsletterSignup />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div ref={sebiRef} className={cn("premium-half-line group", sebiActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setSebiActive(true); setTimeout(() => setSebiActive(false), 2500); }}>
               <div className="side-line" />
