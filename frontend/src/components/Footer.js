@@ -32,6 +32,15 @@ const Footer = () => {
           }}>
             <strong style={{ color: '#B8860B' }}>SEBI Disclaimer:</strong> Investments in securities market are subject to market risks. Read all related documents carefully before investing.
           </p>
+          <p style={{
+            fontSize: '13px',
+            lineHeight: '1.6',
+            color: '#999',
+            margin: '10px 0 0 0',
+            textAlign: 'center'
+          }}>
+            This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. ARN 90008 | Consult your advisor before investing.
+          </p>
         </div>
       </div>
 

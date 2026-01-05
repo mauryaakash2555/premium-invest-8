@@ -130,9 +130,9 @@ const Services = () => {
 
   const faqs = [
     {
-      question: 'Do you provide investment advice or guaranteed returns?',
+      question: 'Do you provide investment advice or assured returns?',
       answer:
-        'No. We provide educational information and distribution/support services where applicable. Returns are market-linked and not guaranteed. For personalized advice, please consult a SEBI-registered investment advisor (RIA).',
+        'No. We provide educational information and distribution/support services where applicable. Returns are market-linked and not assured. For personalized advice, please consult a SEBI-registered investment advisor (RIA).',
     },
     {
       question: 'Which service should I start with?',

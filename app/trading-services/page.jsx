@@ -31,9 +31,9 @@ const TradingServices = () => {
 
   const faqs = [
     {
-      question: 'Do you provide stock tips or guaranteed trading returns?',
+      question: 'Do you provide stock tips or assured trading returns?',
       answer:
-        'No. Trading involves significant risk and returns are not guaranteed. We focus on education, platform selection support, and risk-awareness guidance rather than promises or guarantees.',
+        'No. Trading involves significant risk and returns are not assured. We focus on education, platform selection support, and risk-awareness guidance rather than promises or assurances.',
     },
     {
       question: 'What is required to open a demat account?',

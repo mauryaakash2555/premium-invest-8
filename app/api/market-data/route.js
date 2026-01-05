@@ -29,7 +29,7 @@ const INSTRUMENTS = [
   // Use XAU/XAG in USD and convert to INR using USD/INR, then convert into Indian-friendly units:
   // - Gold: INR per 10g
   // - Silver: INR per kg
-  // Note: These are indicative conversions and are NOT guaranteed to match MCX spot/futures.
+  // Note: These are indicative conversions and are NOT assured to match MCX spot/futures.
   { id: "GOLD", name: "GOLD (10g)", kind: "metal", yahooCandidates: ["XAUUSD=X", "GC=F", "XAUINR=X"] },
   { id: "SILVER", name: "SILVER (1kg)", kind: "metal", yahooCandidates: ["XAGUSD=X", "SI=F", "XAGINR=X"] },
   // Commodities / Crypto (informational only)

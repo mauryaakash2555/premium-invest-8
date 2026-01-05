@@ -44,9 +44,9 @@ const SIPServices = () => {
         'SIPs are typically used for long-term goals. Many investors continue through market ups and downs rather than trying to time short-term moves.',
     },
     {
-      question: 'Is SIP guaranteed?',
+      question: 'Is SIP assured?',
       answer:
-        'No. SIP is just a way to invest. Returns depend on the mutual fund’s performance and market conditions; past performance does not guarantee future results.',
+        'No. SIP is just a way to invest. Returns depend on the mutual fund’s performance and market conditions; past performance does not assure future results.',
     },
   ];
 

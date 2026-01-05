@@ -167,7 +167,7 @@ All blogs include:
 - ✓ "Past performance not indicative of future results" language
 - ✓ "NOT SEBI RIA" clarification
 - ✓ IRDAI and AMFI licensing information
-- ✓ No guaranteed returns promises
+- ✓ No fixed-return promises
 - ✓ Proper risk disclosures
 - ✓ Links to SEBI and AMFI websites
 - ✓ Client privacy anonymization notes

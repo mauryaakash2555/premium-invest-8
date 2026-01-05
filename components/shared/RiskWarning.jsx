@@ -6,7 +6,7 @@ export default function RiskWarning({ type = "general" }) {
   const warnings = {
     mutualFunds: {
       title: "Investment Risk Disclosure",
-      text: "Mutual fund investments are subject to market risks. Past performance does not guarantee future returns. Please read all scheme-related documents carefully before investing. Consider your investment objectives and risk tolerance."
+      text: "Mutual fund investments are subject to market risks. Past performance does not assure future returns. Please read all scheme-related documents carefully before investing. Consider your investment objectives and risk tolerance."
     },
     trading: {
       title: "Trading Risk Warning",
@@ -14,7 +14,7 @@ export default function RiskWarning({ type = "general" }) {
     },
     pms: {
       title: "Portfolio Management Disclosure",
-      text: "Portfolio management services involve market risks. Returns are not guaranteed and capital may be at risk. Investments are subject to market volatility. Carefully assess your risk appetite before investing."
+      text: "Portfolio management services involve market risks. Returns are not assured and capital may be at risk. Investments are subject to market volatility. Carefully assess your risk appetite before investing."
     },
     general: {
       title: "Important Disclosure",

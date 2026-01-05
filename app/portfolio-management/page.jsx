@@ -34,9 +34,9 @@ const PortfolioManagement = () => {
 
   const faqs = [
     {
-      question: 'Do you provide guaranteed returns or performance assurances?',
+      question: 'Do you provide assured returns or performance assurances?',
       answer:
-        'No. Returns are market-linked and not guaranteed. Portfolio construction and outcomes depend on market conditions, asset allocation, and the investor’s risk profile and time horizon.',
+        'No. Returns are market-linked and not assured. Portfolio construction and outcomes depend on market conditions, asset allocation, and the investor’s risk profile and time horizon.',
     },
     {
       question: 'Is this SEBI-registered PMS or investment advisory?',
