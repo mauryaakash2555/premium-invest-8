@@ -501,6 +501,18 @@ export function TaxCalculator() {
                 ]
               : []),
             {
+              label: "Surcharge",
+              value: formatINR(data?.surcharge || 0),
+            },
+            ...(Number(data?.surchargeMarginalRelief || 0) > 0
+              ? [
+                  {
+                    label: "Surcharge marginal relief",
+                    value: `-${formatINR(data?.surchargeMarginalRelief || 0)}`,
+                  },
+                ]
+              : []),
+            {
               label: "Health & education cess (4%)",
               value: formatINR(data?.cess || 0),
             },
@@ -585,9 +597,9 @@ export function TaxCalculator() {
                     value: salary,
                     setValue: (v) => setSalary(v),
                     min: 0,
-                    max: 50_00_000,
-                    step: 10_000,
-                    maxLabel: "50L",
+                    max: 10_00_00_000,
+                    step: 50_000,
+                    maxLabel: "10Cr",
                   },
                   {
                     label: "80C Investments",
@@ -659,7 +671,7 @@ export function TaxCalculator() {
                       onChange={(e) => {
                         markStarted();
                         const raw = String(e.target.value || "").replace(/[^\d]/g, "");
-                        setHra(clamp(Number(raw || 0), 0, 50_00_000));
+                        setHra(clamp(Number(raw || 0), 0, 10_00_00_000));
                       }}
                       className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                     />
@@ -670,7 +682,7 @@ export function TaxCalculator() {
                       onChange={(e) => {
                         markStarted();
                         const raw = String(e.target.value || "").replace(/[^\d]/g, "");
-                        setRentPaid(clamp(Number(raw || 0), 0, 50_00_000));
+                        setRentPaid(clamp(Number(raw || 0), 0, 10_00_00_000));
                       }}
                       className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                     />
@@ -682,7 +694,7 @@ export function TaxCalculator() {
                     onChange={(e) => {
                       markStarted();
                       const raw = String(e.target.value || "").replace(/[^\d]/g, "");
-                      setBasicSalary(clamp(Number(raw || 0), 0, 50_00_000));
+                      setBasicSalary(clamp(Number(raw || 0), 0, 10_00_00_000));
                     }}
                     className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[color:var(--color-matte-gold)] placeholder:text-slate-200/40 transition-colors hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
                   />
@@ -865,11 +877,10 @@ export function TaxCalculator() {
                     BM Wealth’s optimization logic compares your actual rent against the 50% metro rule to see if the Old Regime’s deductions still outweigh the New Regime’s lower slabs.
                   </p>
 
-                  <h3 className="mt-4 text-sm font-semibold text-white/90">Beyond the Basics: High-Income Tax Layers</h3>
+                  <h3 className="mt-4 text-sm font-semibold text-white/90">Beyond the Basics: Surcharge &amp; Cess</h3>
                   <p className="mt-2 text-sm text-slate-200/75">
-                    For higher incomes, your final tax can include additional layers like surcharge (as applicable) and the 4% Health &amp; Education Cess.
-                    This calculator currently focuses on the core slab computation, rebates/marginal relief, and cess based on your inputs.
-                    For surcharge-specific outcomes, consult a qualified professional.
+                    For higher taxable incomes, surcharge can apply above ₹50L (as per FY 2025–26 rules), and 4% Health &amp; Education Cess applies on top of tax plus surcharge.
+                    This calculator includes surcharge and marginal relief (where applicable) based on your inputs.
                   </p>
 
                   <h3 className="mt-4 text-sm font-semibold text-white/90">Investment Harvesting in FY 2026</h3>
