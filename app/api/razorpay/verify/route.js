@@ -39,6 +39,16 @@ function pickFromCoverLines(lines, prefix) {
   return parts.length >= 2 ? parts.slice(1).join(":").trim() : "";
 }
 
+function buildAttachmentNameFromLead(lead) {
+  const raw = String(lead?.name || "").trim();
+  const safe = raw
+    .replace(/[\r\n]+/g, " ")
+    .replace(/\s+/g, "_")
+    .replace(/[\\/]+/g, "_")
+    .trim();
+  return `${safe || "Customer"}_Report.pdf`;
+}
+
 async function buildEmailHtml({ lead, inputs }) {
   const built = buildTaxBlueprintPaidPdfEmail({ lead, inputs });
   return built.html;
@@ -100,6 +110,7 @@ export async function POST(req) {
         String(pdfPayload?.meta?.coverTitle || "").toLowerCase().includes("sip");
 
       if (isPropertyVsSip) {
+        attachmentName = buildAttachmentNameFromLead(lead);
         pdfBytes = generatePropertyVsSipPremium18PdfBytes(pdfPayload);
         const messageId = crypto.randomUUID();
         const tracking = {

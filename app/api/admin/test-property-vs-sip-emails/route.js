@@ -12,6 +12,7 @@ export const runtime = "nodejs";
 
 const reqSchema = z.object({
   to: z.string().email().optional(),
+  name: z.string().min(1).optional(),
 });
 
 export async function POST(req) {
@@ -28,10 +29,11 @@ export async function POST(req) {
   }
 
   const to = parsed.data.to || "mauryaaksh2555@gmail.com";
+  const displayName = String(parsed.data.name || "Akash").trim();
 
   // Deterministic sample data.
   const lead = {
-    name: "Akash",
+    name: displayName,
     email: to,
     phone: "+918850977259",
   };
@@ -63,7 +65,7 @@ export async function POST(req) {
     html: paidEmail.html,
     attachments: [
       {
-        filename: String(pdfPayload?.meta?.filename || "BM-Wealth-Property-vs-SIP-Report.pdf"),
+        filename: `${displayName.replace(/\s+/g, "_")}_Report.pdf`,
         content: pdfBytes,
         contentType: "application/pdf",
       },
