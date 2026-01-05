@@ -22,6 +22,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import RiskWarning from '@/components/shared/RiskWarning';
 const TradingServices = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -63,6 +64,8 @@ const TradingServices = () => {
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
+        <RiskWarning type="trading" />
+
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Trading Solutions

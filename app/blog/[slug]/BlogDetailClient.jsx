@@ -26,6 +26,7 @@ import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft, ChevronUp } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
+import BlogDisclaimer from '@/components/shared/BlogDisclaimer';
 
 function isMobileViewport() {
   if (typeof window === 'undefined') return false;
@@ -567,6 +568,8 @@ export default function BlogDetailClient({ slug }) {
             __html: renderedHtml || 'No content available.'
           }}
         />
+
+        <BlogDisclaimer />
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (

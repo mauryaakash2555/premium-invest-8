@@ -24,6 +24,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Shield, PieChart, Phone, Mail } from 'lucide-react';
+import RiskWarning from '@/components/shared/RiskWarning';
 
 const PortfolioManagement = () => {
   useEffect(() => {
@@ -87,6 +88,8 @@ const PortfolioManagement = () => {
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
+        <RiskWarning type="pms" />
+
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Wealth Architecture Solutions
