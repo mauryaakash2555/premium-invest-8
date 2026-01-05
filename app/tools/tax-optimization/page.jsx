@@ -64,7 +64,7 @@ export default function TaxOptimizationToolPage() {
       },
       {
         "@type": "Question",
-        name: "Do you guarantee tax outcomes?",
+        name: "Do you guarantee tax outcomes or refunds?",
         acceptedAnswer: {
           "@type": "Answer",
           text:

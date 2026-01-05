@@ -380,7 +380,7 @@ const MutualFunds = () => {
               Step 6: Ongoing Monitoring & Review
             </h4>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-              Our relationship doesn't end with investment. We conduct quarterly portfolio reviews, comparing your funds' performance against benchmarks and peer groups. We provide detailed reports showing returns, asset allocation, and goal progress. Annual reviews ensure your portfolio stays aligned with evolving goals, changing risk appetite, or life events. We proactively recommend rebalancing or fund changes when necessary, always prioritizing your best interests as AMFI registered wealth architects.
+              Our relationship doesn't end at execution. We conduct periodic portfolio reviews, comparing fund performance against benchmarks and peer groups, and provide reports showing returns, asset allocation, and goal progress. Reviews help keep your portfolio aligned with evolving goals, changing risk appetite, or life events. Where changes may be appropriate (e.g., drift from target allocation or a material change in a scheme), we can discuss options based on your profile and preferences.
             </p>
           </div>
         </section>
@@ -410,22 +410,22 @@ const MutualFunds = () => {
             Risk Assessment and Portfolio Allocation
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Successful mutual fund investing hinges on appropriate asset allocation matching your risk profile. At BM Wealth, we categorize Mumbai investors into five risk profiles with corresponding recommended allocations:
+            Successful mutual fund investing hinges on an asset allocation that matches your risk profile and time horizon. Below are example risk profiles with illustrative allocation ranges (not a promise of outcomes):
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-            <strong style={{ color: '#C0A062' }}>Conservative (Low Risk):</strong> Suitable for retirees or near-retirees prioritizing capital preservation. Allocation: 15-20% equity (large cap only), 80-85% debt funds and liquid funds. Expected returns: 7-9% annually with minimal volatility.
+            <strong style={{ color: '#C0A062' }}>Conservative (Lower Risk):</strong> Often considered by retirees or near-retirees prioritizing capital preservation. Illustrative allocation: 15-20% equity (primarily large cap), 80-85% debt and liquid-oriented funds. Returns are market-linked and can vary.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-            <strong style={{ color: '#C0A062' }}>Moderately Conservative (Low-Medium Risk):</strong> For investors 10-15 years from retirement seeking stability with modest growth. Allocation: 30-40% equity (large and mid cap), 60-70% debt. Expected returns: 8-10% annually.
+            <strong style={{ color: '#C0A062' }}>Moderately Conservative (Low-Medium Risk):</strong> Common for investors 10-15 years from retirement seeking stability with modest growth potential. Illustrative allocation: 30-40% equity (large and mid cap), 60-70% debt.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-            <strong style={{ color: '#C0A062' }}>Moderate (Medium Risk):</strong> Balanced investors comfortable with moderate volatility for reasonable growth. Allocation: 50-60% equity (diversified across market caps), 40-50% debt. Expected returns: 10-12% annually. This suits Mumbai professionals in their 40s with stable incomes.
+            <strong style={{ color: '#C0A062' }}>Moderate (Medium Risk):</strong> Balanced investors comfortable with moderate volatility for growth potential. Illustrative allocation: 50-60% equity (diversified across market caps), 40-50% debt.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-            <strong style={{ color: '#C0A062' }}>Moderately Aggressive (Medium-High Risk):</strong> For younger investors with long investment horizons seeking significant growth. Allocation: 70-80% equity (including mid and small cap exposure), 20-30% debt. Expected returns: 12-14% annually. Ideal for Mumbai professionals under 40.
+            <strong style={{ color: '#C0A062' }}>Moderately Aggressive (Medium-High Risk):</strong> Often used by investors with longer horizons seeking higher growth potential. Illustrative allocation: 70-80% equity (including some mid/small-cap exposure), 20-30% debt.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px', textAlign: 'justify' }}>
-            <strong style={{ color: '#C0A062' }}>Aggressive (High Risk):</strong> Young investors with 15+ year horizons comfortable with significant short-term volatility. Allocation: 90-100% equity (including 20-30% mid and small cap), minimal debt. Expected returns: 14-16%+ annually. Best suited for Mumbai investors under 35 with no immediate financial obligations.
+            <strong style={{ color: '#C0A062' }}>Aggressive (Higher Risk):</strong> Investors with long horizons who can tolerate significant short-term volatility. Illustrative allocation: 90-100% equity (including 20-30% mid and small cap), minimal debt.
           </p>
         </section>
 
@@ -441,7 +441,7 @@ const MutualFunds = () => {
             Need Help Choosing the Right Funds?
           </h3>
           <p style={{ fontSize: '17px', color: '#e5e5e5', marginBottom: '24px', textAlign: 'center' }}>
-            Our AMFI registered wealth architects provide unbiased recommendations tailored to your financial goals
+            Our AMFI registered wealth architects can help you understand options and align choices to your financial goals
           </p>
           <div style={{ textAlign: 'center' }}>
             <Link href="/contact" style={{

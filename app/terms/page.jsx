@@ -89,7 +89,7 @@ const TermsAndConditions = () => {
               </p>
             </section>
 
-            {/* No Investment Advice Guarantee */}
+            {/* No Investment Advice / No Returns Guarantee */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
@@ -98,7 +98,7 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>3. No Investment Advice Guarantee</h2>
+              }}>3. No Investment Advice / No Returns Guarantee</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 While we strive to provide accurate and helpful financial guidance, the information and educational 
                 content provided by BM Wealth are for informational purposes only and should not be construed as a 
