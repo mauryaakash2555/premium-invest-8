@@ -8,9 +8,9 @@ const PATH = "/tools/property-vs-sip";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Mumbai Property vs SIP Analyzer | BM Wealth",
+    title: "Mumbai Property vs SIP Calculator | Real Estate vs Mutual Fund Returns",
     description:
-      "Compare Mumbai property growth vs SIP compounding with locked assumptions. Unlock a 15-page wealth gap report.",
+      "Compare Mumbai real estate vs SIP mutual fund returns. Free calculator shows 15-year wealth gap. Locked assumptions: 8% property, 12% SIP CAGR. Download detailed PDF report.",
     path: PATH,
     type: "website",
   }),

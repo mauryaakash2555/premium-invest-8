@@ -18,8 +18,8 @@
  */
 
 export const metadata = {
-  title: 'Mutual Funds Advisory | BM Wealth Mumbai ARN 90008',
-  description: 'Expert mutual fund advisory services by BM Wealth Mumbai.',
+  title: 'Mutual Funds Mumbai | AMFI Registered Advisor ARN 90008 | BM Wealth',
+  description: 'Expert mutual fund advisory in Mumbai. AMFI Registered (ARN 90008). Equity, debt, hybrid funds. SIP planning, portfolio review, tax-efficient investing. Trusted by 500+ Mumbai investors.',
 };
 
 export default function Layout({ children }) {

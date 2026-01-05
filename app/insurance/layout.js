@@ -18,8 +18,8 @@
  */
 
 export const metadata = {
-  title: 'Insurance Services | BM Wealth Mumbai IRDAI 277925',
-  description: 'Comprehensive life and health insurance solutions.',
+  title: 'Insurance Advisory Mumbai | Life & Health Insurance | IRDAI 277925',
+  description: 'Comprehensive insurance advisory in Mumbai. Term life insurance, health insurance, family protection plans. IRDAI Licensed (277925). Expert guidance for financial security & risk management.',
 };
 
 export default function Layout({ children }) {

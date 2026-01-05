@@ -18,8 +18,8 @@
  */
 
 export const metadata = {
-  title: 'SIP - Systematic Investment Plans | BM Wealth Mumbai ARN 90008',
-  description: 'Start your SIP journey with BM Wealth.',
+  title: 'SIP Investment Mumbai | Systematic Investment Plan Services | BM Wealth',
+  description: 'Start SIP in Mumbai with expert guidance. Mutual fund SIPs from ₹500/month. Portfolio diversification, goal-based investing, tax benefits. AMFI Registered ARN 90008. Free consultation.',
 };
 
 export default function Layout({ children }) {

@@ -18,8 +18,8 @@
  */
 
 export const metadata = {
-  title: 'Portfolio Management Services | BM Wealth Mumbai ARN 90008',
-  description: 'Expert portfolio management services by BM Wealth.',
+  title: 'Portfolio Management Services Mumbai | PMS Advisory | BM Wealth ARN 90008',
+  description: 'Professional portfolio management in Mumbai. Customized investment strategies, active fund management, wealth architecture for HNI clients. AMFI Registered. Expert PMS advisory services.',
 };
 
 export default function Layout({ children }) {

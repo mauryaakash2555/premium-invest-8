@@ -2,9 +2,9 @@ import BlogIndexClient from "./BlogIndexClient";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "BM Wealth Blog | Financial Insights & Market Analysis",
+  title: "Investment Insights Mumbai | Financial Planning Blog | BM Wealth",
   description:
-    "Elite insights, market analysis, and updates from BM Wealth Talks.",
+    "Expert insights on mutual funds, SIP investing, tax planning, portfolio management in Mumbai. Real case studies, market analysis, wealth creation strategies from AMFI registered advisors.",
   path: "/blog",
 });
 
