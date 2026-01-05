@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import BackRow from "@/components/shared/BackRow";
+import FAQSection from "@/components/shared/FAQSection";
+import { buildMetadata } from "@/lib/seo/metadata";
 
 /*
   LAYOUT-LOCKED: /tools hub page
@@ -13,11 +15,12 @@ import BackRow from "@/components/shared/BackRow";
   Edit only with explicit instruction.
 */
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "BM Wealth Intelligence Tools | BM Wealth",
   description:
     "Professional-grade calculators built for Mumbai’s high-income professionals.",
-};
+  path: "/tools",
+});
 
 function ToolCard({ title, subtitle, href, active }) {
   const content = (
@@ -73,9 +76,50 @@ function ToolCard({ title, subtitle, href, active }) {
 }
 
 export default function ToolsHubPage() {
+  const faqs = [
+    {
+      question: "Are these tools free to use?",
+      answer:
+        "Yes. The tools are designed to be educational-first. Some tools may offer optional premium blueprints, but the core calculators can be used without buying anything.",
+    },
+    {
+      question: "Do these calculators give personalised advice?",
+      answer:
+        "No. The outputs are general information based on your inputs and published rules/assumptions. For personalised advice, consult a qualified professional.",
+    },
+    {
+      question: "Which tool should I start with?",
+      answer:
+        "If your goal is tax clarity, start with Tax Optimization Intelligence. If you're comparing real estate vs investing discipline, use the Mumbai Property vs SIP Analyzer.",
+    },
+    {
+      question: "Will you call me if I use the tools?",
+      answer:
+        "No. The experience is built to be calm and educational. If you request a consultation, you can contact us from the Contact page.",
+    },
+  ];
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <>
       <BackRow />
+      <script
+        id="tools-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
@@ -124,7 +168,14 @@ export default function ToolsHubPage() {
             <p className="mt-4 text-[11px] text-white/55">
               AMFI Registered ARN 90008 | Educational tools only | No investment advice
             </p>
+            <p className="mt-3 text-[11px] text-white/55">
+              Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}
+              <Link href="/services" className="underline underline-offset-4">Services</Link> ·{' '}
+              <Link href="/contact" className="underline underline-offset-4">Contact</Link>
+            </p>
           </div>
+
+          <FAQSection faqs={faqs} />
         </div>
       </section>
     </>

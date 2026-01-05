@@ -59,8 +59,26 @@ const MutualFunds = () => {
     }
   ];
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+      <script
+        id="mutual-funds-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
 
       {/* Hero Section */}
@@ -144,8 +162,6 @@ const MutualFunds = () => {
 
       {/* Main Content */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
-        <RiskWarning type="mutualFunds" />
 
         {/* Why Choose Mutual Funds */}
         <section style={{ marginBottom: '60px' }}>
@@ -672,6 +688,19 @@ const MutualFunds = () => {
             We may earn referral commissions from these platforms. This doesn't affect your investment costs.
           </p>
         </section>
+
+        <RiskWarning type="mutualFunds" />
+
+        <section style={{ marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
+            <Link href="/tools/tax-optimization" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
+            <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP</Link> ·{' '}
+            <Link href="/blog" style={{ color: '#C0A062', textDecoration: 'underline' }}>Blogs</Link>
+          </p>
+        </section>
+
+        <FAQSection faqs={faqs} />
 
         {/* Final CTA */}
         <section style={{

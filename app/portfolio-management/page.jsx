@@ -25,14 +25,56 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Shield, PieChart, Phone, Mail } from 'lucide-react';
 import RiskWarning from '@/components/shared/RiskWarning';
+import FAQSection from '@/components/shared/FAQSection';
 
 const PortfolioManagement = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const faqs = [
+    {
+      question: 'Do you provide guaranteed returns or performance assurances?',
+      answer:
+        'No. Returns are market-linked and not guaranteed. Portfolio construction and outcomes depend on market conditions, asset allocation, and the investor’s risk profile and time horizon.',
+    },
+    {
+      question: 'Is this SEBI-registered PMS or investment advisory?',
+      answer:
+        'BM Wealth operates as a distributor and facilitator where applicable. For PMS/AIF or regulated advisory requirements, we provide access/referrals to appropriately regulated entities when suitable.',
+    },
+    {
+      question: 'How do you decide asset allocation?',
+      answer:
+        'Asset allocation is based on goals, time horizon, cashflow needs, and risk capacity. We use a structured discovery process and review periodically to avoid drift.',
+    },
+    {
+      question: 'How often is the portfolio reviewed?',
+      answer:
+        'Reviews are typically periodic (e.g., quarterly/half-yearly) and also event-driven (life changes or large market moves). The goal is discipline, not frequent churn.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+      <script
+        id="portfolio-management-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
 
       {/* Hero */}
@@ -87,8 +129,6 @@ const PortfolioManagement = () => {
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
-        <RiskWarning type="pms" />
 
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
@@ -149,6 +189,19 @@ const PortfolioManagement = () => {
             Call +91 8850977259
           </a>
         </div>
+
+        <RiskWarning type="pms" />
+
+        <section style={{ marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/services" style={{ color: '#C0A062', textDecoration: 'underline' }}>All Services</Link> ·{' '}
+            <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
+            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+          </p>
+        </section>
+
+        <FAQSection faqs={faqs} />
 
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>

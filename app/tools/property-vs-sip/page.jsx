@@ -1,4 +1,5 @@
 import Script from "next/script";
+import Link from "next/link";
 
 import BackRow from "@/components/shared/BackRow";
 import { PropertyVsSipCalculator } from "@/components/calculators/PropertyVsSipCalculator";
@@ -88,6 +89,15 @@ export default function PropertyVsSipToolPage() {
       <BackRow />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <PropertyVsSipCalculator />
+      </section>
+
+      <section className="px-6 lg:px-10 pb-6">
+        <p className="text-sm text-white/75">
+          Related resources: <Link href="/tools" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">All Tools</Link> ·{' '}
+          <Link href="/tools/tax-optimization" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Tax Intelligence</Link> ·{' '}
+          <Link href="/sip" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">SIP</Link> ·{' '}
+          <Link href="/blog" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Blogs</Link>
+        </p>
       </section>
 
       <Script

@@ -202,6 +202,15 @@ export default function TaxOptimizationToolPage() {
         </div>
       </section>
 
+      <section className="px-6 lg:px-10 pb-6">
+        <p className="text-sm text-white/75">
+          Related resources: <Link href="/tools" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">All Tools</Link> ·{' '}
+          <Link href="/tools/property-vs-sip" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Property vs SIP</Link> ·{' '}
+          <Link href="/blog" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Blogs</Link> ·{' '}
+          <Link href="/contact" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Contact</Link>
+        </p>
+      </section>
+
       {/* Long SEO Section: Educational, calm, compliance-first (collapsed by default) */}
       <details className="px-6 lg:px-10 group learn-more">
         <summary className="list-none cursor-pointer select-none learn-more-summary">
