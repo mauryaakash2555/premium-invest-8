@@ -24,6 +24,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Shield, Target, Calculator, Phone, Mail } from 'lucide-react';
+import RiskWarning from '@/components/shared/RiskWarning';
 
 const MutualFunds = () => {
   useEffect(() => {
@@ -116,6 +117,8 @@ const MutualFunds = () => {
       {/* Main Content */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
+        <RiskWarning type="mutualFunds" />
+
         {/* Why Choose Mutual Funds */}
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>

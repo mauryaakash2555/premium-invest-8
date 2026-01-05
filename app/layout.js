@@ -35,6 +35,7 @@ import { GA4PageView } from "@/components/analytics/GA4PageView";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata";
+import CookieConsent from "@/components/shared/CookieConsent";
 
 const GA4_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || "G-SSN64C0XCY";
@@ -148,6 +149,7 @@ export default function RootLayout({ children }) {
         </div>
         <LuxuryMobileDock />
         <WhatsAppFloat />
+        <CookieConsent />
         <Analytics />
         <SpeedInsights />
       </body>
