@@ -18,8 +18,8 @@
  */
 
 export const metadata = {
-  title: 'Trading Services | BM Wealth Mumbai ARN 90008',
-  description: 'Professional trading services with real-time market access.',
+  title: 'Stock Trading Services Mumbai | Demat Account Advisory | BM Wealth',
+  description: 'Stock trading & demat account services in Mumbai. Zerodha, Groww, Smallcase platform guidance. Equity, derivatives, commodities trading support. Real-time market access & research.',
 };
 
 export default function Layout({ children }) {

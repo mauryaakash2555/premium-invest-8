@@ -2,8 +2,8 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Contact BM Wealth Mumbai | Financial Advisory",
-    description: "Contact BM Wealth for expert financial advisory services in Mumbai.",
+    title: "Contact Financial Advisor Mumbai | BM Wealth ARN 90008 | Free Consultation",
+    description: "Contact BM Wealth Mumbai for financial planning consultation. AMFI & IRDAI licensed. Office in Kalbadevi. Call +91 88509 77259 or WhatsApp. Free portfolio review for Mumbai investors.",
     path: "/contact",
   }),
 };
