@@ -96,7 +96,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Empowering Mumbai investors with exceptional wealth architecture since 1989
+            Mumbai-based wealth distribution and insurance support since 1989
           </p>
         </div>
       </section>

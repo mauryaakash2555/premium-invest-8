@@ -220,7 +220,7 @@ const Sitemap = () => {
         {/* Quick Links CTA */}
         <div style={{ marginTop: '60px', textAlign: 'center' }}>
           <h3 style={{ fontSize: '28px', color: '#C0A062', marginBottom: '24px', fontWeight: '600' }}>
-            Ready to Start Your Financial Journey?
+            Looking for a specific page?
           </h3>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/contact" style={{
@@ -232,7 +232,7 @@ const Sitemap = () => {
               fontWeight: '600',
               fontSize: '16px'
             }}>
-              Schedule Consultation
+              Contact
             </Link>
             <Link href="/services" style={{
               backgroundColor: 'transparent',
@@ -244,7 +244,7 @@ const Sitemap = () => {
               fontSize: '16px',
               border: '2px solid #DAA520'
             }}>
-              View All Services
+              Browse Guides
             </Link>
           </div>
         </div>
@@ -255,13 +255,13 @@ const Sitemap = () => {
             About BM Wealth Mumbai
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            BM Wealth is a trusted wealth distribution and insurance planning firm based in Mumbai. As AMFI registered mutual fund distributors (ARN 90008) and IRDAI licensed insurance advisors (License 277925), we adhere to high standards of regulatory compliance and ethical conduct.
+            BM Wealth is a Mumbai-based wealth distribution and insurance support firm. We are an AMFI registered mutual fund distributor (ARN 90008) and an IRDAI licensed insurance distributor (License 277925), operating with disclosure-led processes and regulatory compliance.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Our services span a wide spectrum of financial planning needs including mutual fund investing through systematic investment plans (SIPs), portfolio planning and asset allocation guidance, assistance with demat account setup via partner platforms, comprehensive life and health insurance planning, fixed deposit guidance and optimization, retirement planning solutions, children's education and wedding planning, and tax-efficient investment strategies. We serve Mumbai residents from our centrally located Kalbadevi office, providing personalized financial guidance tailored to each client's unique circumstances, goals, and risk tolerance.
+            Our content spans educational guides and checklists across mutual funds (including SIP basics), insurance, trading/demat basics, fixed deposits, and portfolio planning concepts. Where applicable, we may assist with execution support or introductions to regulated third-party providers.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Whether you're a young professional starting your investment journey, a mid-career executive building substantial wealth, a business owner managing complex financial affairs, or a retiree seeking income and capital preservation, BM Wealth provides expert guidance helping you navigate financial decisions confidently. Our client-first philosophy, transparent communication, and commitment to long-term relationships have earned us the trust of 500+ Mumbai families who rely on our advice for their financial futures. Contact us today to schedule a complimentary consultation and begin your journey toward financial security and prosperity.
+            This website is intended for general education only and does not provide SEBI-registered investment advice or promises of returns. If you need personalized advice, consider consulting a SEBI-registered investment adviser.
           </p>
         </section>
 

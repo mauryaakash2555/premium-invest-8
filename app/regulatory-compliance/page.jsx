@@ -62,7 +62,7 @@ export default function RegulatoryCompliance() {
               IRDAI Guidelines
             </h2>
             <p className="text-gray-300">
-              As a licensed corporate agent under IRDAI, we facilitate access to insurance solutions from leading providers. All recommendations are based on a thorough understanding of client requirements and are aligned with the protective frameworks mandated by the authority.
+              As an IRDAI-licensed entity, we facilitate access to insurance solutions from providers. Where product discussions occur, they follow disclosure-led processes and are aligned with the protective frameworks mandated by the authority.
             </p>
           </section>
 
@@ -85,7 +85,7 @@ export default function RegulatoryCompliance() {
               Transparency & Disclosure
             </h2>
             <p className="text-gray-300">
-              Transparency is the cornerstone of our wealth architecture. We ensure that all material information regarding products, risks, and distribution remuneration is disclosed to our clients, enabling informed decision-making.
+              Transparency is central to our approach. We ensure that material information regarding products, risks, and distribution remuneration is disclosed so users can make informed decisions.
             </p>
           </section>
         </div>

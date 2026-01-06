@@ -93,7 +93,7 @@ const Careers = () => {
             margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            Build your career with Mumbai's premier financial advisory firm
+            Build your career in wealth distribution and insurance support
           </p>
         </div>
       </section>
@@ -105,7 +105,7 @@ const Careers = () => {
             Why Choose a Career with BM Wealth?
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            At BM Wealth, we're building more than a business – we're creating a mission-driven organization transforming financial advisory in Mumbai. Our vision is becoming the most trusted financial advisory firm in Mumbai, known for integrity, expertise, and genuine client-centric service. We believe financial advisory should be about improving clients' lives, not selling products. This philosophy attracts passionate professionals who want meaningful careers helping families achieve financial security and prosperity. Our team culture emphasizes collaboration, continuous learning, ethical conduct, client-first mindset, and work-life balance. We're small enough that every team member makes visible impact yet growing fast enough to provide abundant career advancement opportunities.
+            At BM Wealth, we focus on disclosure-led, compliance-first processes for wealth distribution and insurance support. We value integrity, learning, and clear communication. Our team culture emphasizes collaboration, ethical conduct, and long-term trust.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
             Financial advisory offers unique career benefits – intellectual challenge (finance, psychology, strategy), relationship depth (becoming trusted advisor to families across generations), income potential (performance-based compensation rewarding excellence), flexibility (substantial autonomy after proving competence), and social impact (genuinely improving people's financial well-being). Mumbai, as India's financial capital, provides unparalleled opportunity for finance professionals. The city hosts millions of affluent families, thriving business community, sophisticated investor base, and concentration of financial institutions. Building financial advisory career in Mumbai means access to large, growing market with increasing financial sophistication. Our Kalbadevi location puts us heart of Mumbai's business district with easy access to clients across South Mumbai, Central Mumbai, and Western suburbs.

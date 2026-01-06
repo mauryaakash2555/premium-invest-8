@@ -198,7 +198,7 @@ export default function HomePage() {
               backgroundSize: '200% auto',
             }}
           >
-            Mumbai&apos;s Premier Wealth Architecture
+            Educational guides for everyday investing
           </motion.h1>
           <p
             className="hero-description-responsive"
@@ -215,7 +215,7 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Exceptional wealth management solutions tailored to your prosperity
+            Educational guides and tools—no advice, no guarantees
           </p>
 
           <div
@@ -229,10 +229,10 @@ export default function HomePage() {
             }}
           >
             <Link href="/tools" className="btn-primary">
-              Access Your Complimentary Wealth Blueprint
+              Explore Free Tools
             </Link>
             <Link href="/services" className="btn-secondary">
-              Explore Services {"\u2192"}
+              Explore Guides {"\u2192"}
             </Link>
           </div>
         </div>
@@ -270,8 +270,7 @@ export default function HomePage() {
               margin: '0 auto',
             }}
           >
-            Bespoke wealth architectures meticulously crafted to elevate your
-            wealth trajectory
+            Educational guides designed for clarity and safe learning
           </p>
         </div>
 
