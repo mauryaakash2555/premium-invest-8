@@ -228,16 +228,13 @@ export default function HomePage() {
           >
             <Link
               href="/tools"
+              className="mobile-cta-lux"
               style={{
-                fontSize: '12px',
+                fontSize: '11px',
                 lineHeight: 1.2,
-                color: '#C0A062',
-                opacity: 0.82,
                 textDecoration: 'none',
                 letterSpacing: '0.9px',
                 textTransform: 'uppercase',
-                borderBottom: '1px solid rgba(192,160,98,0.35)',
-                paddingBottom: '3px',
               }}
             >
               Access Your Complimentary Wealth Blueprint
