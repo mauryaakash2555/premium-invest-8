@@ -76,40 +76,50 @@ function directionFrom(changePct) {
   return "flat";
 }
 
-async function fetchYahooMeta(symbol) {
+async function fetchYahooQuoteMap(symbols) {
+  const uniq = Array.from(new Set((symbols || []).map((s) => String(s || "").trim()).filter(Boolean)));
+  if (!uniq.length) return new Map();
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 4500);
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
-  let res;
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(uniq.join(","))}`;
   try {
-    res = await fetch(url, {
-      // UI refreshes every 60 seconds
-      next: { revalidate: 60 },
+    const res = await fetch(url, {
+      cache: "no-store",
       headers: {
         "User-Agent": "bmwealth-market-ticker/1.0",
         Accept: "application/json",
       },
       signal: controller.signal,
     });
+    if (!res.ok) throw new Error(`Yahoo quote fetch failed: ${res.status}`);
+    const data = await res.json();
+    const results = Array.isArray(data?.quoteResponse?.result) ? data.quoteResponse.result : [];
+    const map = new Map();
+    for (const q of results) {
+      const sym = String(q?.symbol || "").trim();
+      if (!sym) continue;
+      // Keep a minimal meta-like surface to reduce downstream changes.
+      map.set(sym, {
+        regularMarketPrice: q?.regularMarketPrice,
+        previousClose: q?.regularMarketPreviousClose,
+        currency: q?.currency,
+      });
+    }
+    return map;
   } finally {
     clearTimeout(timeout);
   }
-
-  if (!res.ok) throw new Error(`Yahoo fetch failed for ${symbol}: ${res.status}`);
-  const data = await res.json();
-  const meta = data?.chart?.result?.[0]?.meta;
-  if (!meta) throw new Error(`Yahoo response missing meta for ${symbol}`);
-  return meta;
 }
 
-async function firstWorkingMeta(candidates) {
+function firstWorkingMeta(candidates, quoteMap) {
   let lastErr;
   for (const sym of candidates) {
     try {
-      const meta = await fetchYahooMeta(sym);
-      const price = toNumber(meta.regularMarketPrice);
-      const prev = toNumber(meta.previousClose);
-      if (price == null || prev == null) throw new Error(`Bad meta numbers for ${sym}`);
+      const meta = quoteMap?.get?.(sym);
+      const price = toNumber(meta?.regularMarketPrice);
+      const prev = toNumber(meta?.previousClose);
+      if (price == null || prev == null) throw new Error(`Bad quote numbers for ${sym}`);
       return { sym, meta };
     } catch (e) {
       lastErr = e;
@@ -136,9 +146,13 @@ export async function GET() {
       return res;
     }
 
+    // Fetch all candidates in one request for reliability/performance (important on serverless staging).
+    const allSymbols = INSTRUMENTS.flatMap((x) => x.yahooCandidates || []);
+    const quoteMap = await fetchYahooQuoteMap(allSymbols);
+
     // Always fetch USD/INR first so we can convert metals when needed.
     const usdInrInst = INSTRUMENTS.find((x) => x.id === "USDINR");
-    const usdMetaWrap = await firstWorkingMeta(usdInrInst.yahooCandidates);
+    const usdMetaWrap = firstWorkingMeta(usdInrInst.yahooCandidates, quoteMap);
     const usdMeta = usdMetaWrap.meta;
     const usdInr = toNumber(usdMeta.regularMarketPrice);
     const usdPrev = toNumber(usdMeta.previousClose);
@@ -166,7 +180,7 @@ export async function GET() {
     const metaResults = await Promise.all(
       others.map(async (inst) => {
         try {
-          const wrap = await firstWorkingMeta(inst.yahooCandidates);
+          const wrap = firstWorkingMeta(inst.yahooCandidates, quoteMap);
           return { inst, wrap };
         } catch (error) {
           return { inst, error };
