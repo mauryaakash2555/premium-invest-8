@@ -7,6 +7,9 @@ import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { BrokerageEstimator } from '@/components/calculators/BrokerageEstimator';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
+const ACCENT = '#D6B36A';
+const ACCENT_RGB = '214, 179, 106';
+
 const TradingServices = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,19 +45,6 @@ const TradingServices = () => {
     },
   ];
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
-
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -82,18 +72,25 @@ const TradingServices = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'rgba(218, 165, 32, 0.12)',
-    border: '1px solid rgba(218, 165, 32, 0.22)',
-    color: '#DAA520',
+    background: 'rgba(255,255,255,0.04)',
+    border: `1px solid rgba(${ACCENT_RGB}, 0.26)`,
+    color: ACCENT,
     fontWeight: 700,
     flex: '0 0 auto',
   };
 
   const card = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(218, 165, 32, 0.18)',
-    borderRadius: '12px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '16px',
     padding: '22px',
+    backdropFilter: 'blur(10px)',
+  };
+
+  const divider = {
+    height: 1,
+    background: `linear-gradient(90deg, rgba(255,255,255,0), rgba(${ACCENT_RGB}, 0.35), rgba(255,255,255,0))`,
+    margin: '0 0 56px 0',
   };
 
   return (
@@ -107,12 +104,6 @@ const TradingServices = () => {
         id="trading-services-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-
-      <script
-        id="trading-services-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}
@@ -149,11 +140,12 @@ const TradingServices = () => {
           <h1
             style={{
               fontFamily: '"Playfair Display", serif',
-              fontSize: '52px',
+              fontSize: 'clamp(40px, 5vw, 60px)',
               fontWeight: '700',
-              color: '#DAA520',
-              marginBottom: '16px',
+              color: ACCENT,
+              marginBottom: '24px',
               lineHeight: '1.2',
+              letterSpacing: '-0.02em',
             }}
           >
             Trading & Demat
@@ -169,7 +161,7 @@ const TradingServices = () => {
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             How Trading & Demat Works (Simple Flow)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
@@ -183,7 +175,7 @@ const TradingServices = () => {
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={step}>{x.n}</div>
                   <div>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                     <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
                   </div>
                 </div>
@@ -192,10 +184,10 @@ const TradingServices = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Trading Styles (At a Glance)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
@@ -205,17 +197,17 @@ const TradingServices = () => {
               { t: 'Derivatives (F&O)', d: 'Advanced segment; margin and risk can change quickly with volatility.' },
             ].map((x) => (
               <div key={x.t} style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                 <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Delivery vs Intraday vs F&O — Neutral Comparison
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
@@ -237,7 +229,7 @@ const TradingServices = () => {
               },
             ].map((x) => (
               <div key={x.t} style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                 <p style={{ margin: '0 0 10px 0', fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.a}</p>
                 <p style={{ margin: 0, fontSize: '14px', color: '#d0d0d0', lineHeight: '1.75' }}>{x.b}</p>
               </div>
@@ -245,19 +237,19 @@ const TradingServices = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Brokerage & Charges Snapshot
           </h2>
           <BrokerageEstimator />
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Our Role
           </h2>
           <div style={card}>
@@ -277,7 +269,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Quick Start
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -291,12 +283,14 @@ const TradingServices = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(218, 165, 32, 0.28)',
-                  background: 'rgba(218, 165, 32, 0.12)',
-                  color: '#DAA520',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: `1px solid rgba(${ACCENT_RGB}, 0.35)`,
+                  background: `linear-gradient(180deg, rgba(${ACCENT_RGB}, 0.14) 0%, rgba(${ACCENT_RGB}, 0.05) 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  color: '#ffffff',
                   fontWeight: 600,
+                  letterSpacing: '0.01em',
                   textDecoration: 'none',
                 }}
               >
@@ -323,7 +317,7 @@ const TradingServices = () => {
           </div>
         </section>
 
-        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
 
         <ClosingPerspective>
           In trading, process is the product. A clean setup and clear rules help reduce noise, improve decision quality, and keep risk controlled over time.
@@ -331,8 +325,8 @@ const TradingServices = () => {
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: 0, textAlign: 'justify' }}>
-            Related resources: <Link href="/platforms" style={{ color: '#C0A062', textDecoration: 'underline' }}>Platforms</Link> ·{' '}
-            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link>
+            Related resources: <Link href="/platforms" style={{ color: ACCENT, textDecoration: 'underline' }}>Platforms</Link> ·{' '}
+            <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
 

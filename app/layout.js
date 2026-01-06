@@ -47,9 +47,8 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadataBase = getMetadataBase();
-
 export const metadata = {
+  metadataBase: getMetadataBase(),
   title: "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
   description: "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
   alternates: {
@@ -84,7 +83,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const siteUrl = metadataBase?.toString?.() || "https://bmwealth.co.in";
+  const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
   const schemaGraph = {
     "@context": "https://schema.org",
     "@graph": [

@@ -6,6 +6,10 @@ import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import FAQSection from '@/components/shared/FAQSection';
 import { FdMaturitySnapshot } from '@/components/calculators/FdMaturitySnapshot';
+
+const ACCENT = '#D6B36A';
+const ACCENT_RGB = '214, 179, 106';
+
 const FixedDeposits = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,28 +44,34 @@ const FixedDeposits = () => {
 
   const faqs = [
     {
-      q: 'Are fixed deposits risk-free?',
-      a: 'Fixed deposits are generally considered lower-risk compared to market-linked products, but the risk profile depends on the issuer and the terms. Always review the issuer, payout terms, and applicable protections before deciding.',
+      question: 'Are fixed deposits risk-free?',
+      answer:
+        'Fixed deposits are generally considered lower-risk compared to market-linked products, but the risk profile depends on the issuer and the terms. Always review the issuer, payout terms, and applicable protections before deciding.',
     },
     {
-      q: 'Cumulative vs payout FD — what is the difference?',
-      a: 'Cumulative FDs reinvest interest and pay at maturity. Payout FDs pay interest periodically (monthly/quarterly/annual) based on the chosen option.',
+      question: 'Cumulative vs payout FD — what is the difference?',
+      answer:
+        'Cumulative FDs reinvest interest and pay at maturity. Payout FDs pay interest periodically (monthly/quarterly/annual) based on the chosen option.',
     },
     {
-      q: 'What is FD laddering?',
-      a: 'FD laddering means splitting the total amount into multiple deposits with different maturities so part of the money becomes available at regular intervals.',
+      question: 'What is FD laddering?',
+      answer:
+        'FD laddering means splitting the total amount into multiple deposits with different maturities so part of the money becomes available at regular intervals.',
     },
     {
-      q: 'Can I break an FD early?',
-      a: 'Many FDs allow premature withdrawal, but it may involve penalties or a different interest rate. Terms vary by institution—confirm before you invest.',
+      question: 'Can I break an FD early?',
+      answer:
+        'Many FDs allow premature withdrawal, but it may involve penalties or a different interest rate. Terms vary by institution—confirm before you invest.',
     },
     {
-      q: 'How is FD interest taxed?',
-      a: 'FD interest is typically taxable as per your income tax slab, and may attract TDS above certain thresholds. Please verify with official sources or your tax advisor for your situation.',
+      question: 'How is FD interest taxed?',
+      answer:
+        'FD interest is typically taxable as per your income tax slab, and may attract TDS above certain thresholds. Please verify with official sources or your tax advisor for your situation.',
     },
     {
-      q: 'How can BM Wealth help with fixed deposits?',
-      a: 'We can help explain issuer options, tenure/payout choices, documentation flow, and maturity tracking. This is informational support; final terms depend on the issuing institution.',
+      question: 'How can BM Wealth help with fixed deposits?',
+      answer:
+        'We can help explain issuer options, tenure/payout choices, documentation flow, and maturity tracking. This is informational support; final terms depend on the issuing institution.',
     },
   ];
 
@@ -72,18 +82,25 @@ const FixedDeposits = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'rgba(218, 165, 32, 0.12)',
-    border: '1px solid rgba(218, 165, 32, 0.22)',
-    color: '#DAA520',
+    background: 'rgba(255,255,255,0.04)',
+    border: `1px solid rgba(${ACCENT_RGB}, 0.26)`,
+    color: ACCENT,
     fontWeight: 700,
     flex: '0 0 auto',
   };
 
   const card = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(218, 165, 32, 0.18)',
-    borderRadius: '12px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '16px',
     padding: '22px',
+    backdropFilter: 'blur(10px)',
+  };
+
+  const divider = {
+    height: 1,
+    background: `linear-gradient(90deg, rgba(255,255,255,0), rgba(${ACCENT_RGB}, 0.35), rgba(255,255,255,0))`,
+    margin: '0 0 56px 0',
   };
 
   return (
@@ -131,19 +148,20 @@ const FixedDeposits = () => {
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: '52px',
+            fontSize: 'clamp(40px, 5vw, 60px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: ACCENT,
             marginBottom: '24px',
-            lineHeight: '1.2'
+            lineHeight: '1.2',
+            letterSpacing: '-0.02em',
           }}>
             Fixed Deposits (FD)
           </h1>
           <p style={{
             fontSize: '20px',
             color: '#e5e5e5',
-            maxWidth: '800px',
-            margin: '0 auto 32px',
+            maxWidth: '820px',
+            margin: '0 auto 18px',
             lineHeight: '1.6'
           }}>
             A Structured Way to Park Capital With Predictability
@@ -158,7 +176,7 @@ const FixedDeposits = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             How Fixed Deposits Work (Simple Flow)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
@@ -172,7 +190,7 @@ const FixedDeposits = () => {
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={step}>{x.n}</div>
                   <div>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                     <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
                   </div>
                 </div>
@@ -181,10 +199,10 @@ const FixedDeposits = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Types of Fixed Deposits (At a Glance)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
@@ -194,22 +212,22 @@ const FixedDeposits = () => {
               { t: 'Tax-Saver FD', d: 'A fixed-tenure structure used by some investors for tax planning based on eligibility.' },
             ].map((x) => (
               <div key={x.t} style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                 <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Cumulative vs Payout — Neutral Comparison
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Cumulative</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Cumulative</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>Interest reinvested</li>
                 <li>Paid at maturity</li>
@@ -217,7 +235,7 @@ const FixedDeposits = () => {
               </ul>
             </div>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Payout</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Payout</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>Periodic interest payout</li>
                 <li>Useful for cashflow preference</li>
@@ -227,10 +245,10 @@ const FixedDeposits = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Laddering — A Simple Structure
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.85', color: '#e5e5e5', margin: '0 0 18px 0' }}>
@@ -245,10 +263,10 @@ const FixedDeposits = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Our Role
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -262,14 +280,14 @@ const FixedDeposits = () => {
         </section>
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Maturity Snapshot — FD Projection
           </h2>
           <FdMaturitySnapshot />
         </section>
 
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Quick Start
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -283,12 +301,14 @@ const FixedDeposits = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(218, 165, 32, 0.28)',
-                  background: 'rgba(218, 165, 32, 0.12)',
-                  color: '#DAA520',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: `1px solid rgba(${ACCENT_RGB}, 0.35)`,
+                  background: `linear-gradient(180deg, rgba(${ACCENT_RGB}, 0.14) 0%, rgba(${ACCENT_RGB}, 0.05) 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  color: '#ffffff',
                   fontWeight: 600,
+                  letterSpacing: '0.01em',
                   textDecoration: 'none',
                 }}
               >
@@ -317,12 +337,12 @@ const FixedDeposits = () => {
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
-            Related resources: <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
-            <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link>
+            Related resources: <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link> ·{' '}
+            <Link href="/mutual-funds" style={{ color: ACCENT, textDecoration: 'underline' }}>Mutual Funds</Link>
           </p>
         </section>
 
-        <FAQSection title="FAQ" faqs={faqs} pageUrl={pageUrl} withSchema />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
 
         <ClosingPerspective>
           Fixed deposits are about predictability and timelines. When the structure is chosen thoughtfully—tenure, payout, and maturity management—they can play a calm, stabilizing role alongside growth assets.
