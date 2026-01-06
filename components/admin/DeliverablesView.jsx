@@ -59,7 +59,6 @@ export function DeliverablesView() {
         if (pdfUrl) URL.revokeObjectURL(pdfUrl);
       } catch {}
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectedId = selected?.id || null;

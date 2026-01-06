@@ -22,6 +22,9 @@
 import blogPosts from "@/data/blog.json";
 import products from "@/data/products.json";
 import sipPlans from "@/data/sipPlans.json";
+import { buildMetadata } from "@/lib/seo/metadata";
+
+const PATH = "/dashboard";
 
 const kpiCards = [
   {
@@ -42,8 +45,11 @@ const kpiCards = [
 ];
 
 export const metadata = {
-  title: "Dashboard",
-  description: "Demo dashboard view for BM Wealth Next.",
+  ...buildMetadata({
+    title: "Dashboard | BM Wealth",
+    description: "Demo dashboard view for BM Wealth Next.",
+    path: PATH,
+  }),
 };
 
 export default function DashboardPage() {

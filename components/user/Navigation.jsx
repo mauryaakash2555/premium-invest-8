@@ -23,6 +23,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
@@ -90,11 +91,14 @@ const Navigation = () => {
         <div className="absolute inset-0 bg-[#C0A062] blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-full animate-ambientGlowPulse" />
         <div className="absolute inset-0 bg-[#C0A062] blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 rounded-full animate-ambientGlowPulse delay-200" />
         
-        <img 
-          src="/logo.webp" 
-          alt="BM Wealth Logo" 
+        <Image
+          src="/logo.webp"
+          alt="BM Wealth Logo"
+          width={size}
+          height={size}
           className="relative z-10 transition-transform duration-500 group-hover:scale-110"
-          style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', display: 'block' }}
+          style={{ objectFit: 'contain', display: 'block' }}
+          priority
         />
       </div>
       <div className="flex flex-col">

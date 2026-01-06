@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 import { Slider } from "@/components/ui/slider";
 
@@ -130,7 +131,6 @@ function useCountUp(value, durationMs, key) {
 
     raf = requestAnimationFrame(step);
     return () => raf && cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
   return display;
 }
@@ -612,7 +612,7 @@ export function PropertyVsSipCalculator() {
           <CalculatorHeader
             meta={
               <>
-                <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                <Image src="/logo.webp" alt="BM Wealth" width={20} height={20} className="h-5 w-auto" priority />
                 <span>BM Wealth</span>
                 <span className="text-white/25">•</span>
                 <span>BM Wealth Calculator</span>

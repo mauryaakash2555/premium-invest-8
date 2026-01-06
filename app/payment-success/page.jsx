@@ -90,7 +90,6 @@ export default function PaymentSuccessPage() {
 
     // Auto-download once on load.
     void doDownload();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -223,7 +223,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
   const sessionId = useMemo(() => {
     try {
-      // eslint-disable-next-line no-undef
       return crypto?.randomUUID?.() || Math.random().toString(16).slice(2);
     } catch {
       return Math.random().toString(16).slice(2);
@@ -271,7 +270,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     } catch {
       // ignore
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

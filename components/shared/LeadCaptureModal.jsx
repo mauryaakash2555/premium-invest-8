@@ -100,7 +100,6 @@ export function LeadCaptureModal({
     const hasAnyPhoneInput = Boolean(String(whatsapp || "").trim());
 
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
       console.log("[LeadCaptureModal] Form values:", {
         name: trimmedName,
         email: trimmedEmail,
@@ -108,7 +107,6 @@ export function LeadCaptureModal({
         normalizedPhone,
         consent: whatsappConsent,
       });
-      // eslint-disable-next-line no-console
       console.log("[LeadCaptureModal] Validation:", {
         nameValid: trimmedName.length >= 2,
         emailValid: isValidEmail(trimmedEmail),

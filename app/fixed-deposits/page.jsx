@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
+import FAQSection from '@/components/shared/FAQSection';
 const FixedDeposits = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,6 +36,33 @@ const FixedDeposits = () => {
     author: { '@type': 'Organization', name: SITE_NAME },
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
+
+  const faqs = [
+    {
+      q: 'Are fixed deposits risk-free?',
+      a: 'Fixed deposits are generally considered lower-risk compared to market-linked products, but the risk profile depends on the issuer and the terms. Always review the issuer, payout terms, and applicable protections before deciding.',
+    },
+    {
+      q: 'Cumulative vs payout FD — what is the difference?',
+      a: 'Cumulative FDs reinvest interest and pay at maturity. Payout FDs pay interest periodically (monthly/quarterly/annual) based on the chosen option.',
+    },
+    {
+      q: 'What is FD laddering?',
+      a: 'FD laddering means splitting the total amount into multiple deposits with different maturities so part of the money becomes available at regular intervals.',
+    },
+    {
+      q: 'Can I break an FD early?',
+      a: 'Many FDs allow premature withdrawal, but it may involve penalties or a different interest rate. Terms vary by institution—confirm before you invest.',
+    },
+    {
+      q: 'How is FD interest taxed?',
+      a: 'FD interest is typically taxable as per your income tax slab, and may attract TDS above certain thresholds. Please verify with official sources or your tax advisor for your situation.',
+    },
+    {
+      q: 'How can BM Wealth help with fixed deposits?',
+      a: 'We can help explain issuer options, tenure/payout choices, documentation flow, and maturity tracking. This is informational support; final terms depend on the issuing institution.',
+    },
+  ];
 
   const step = {
     width: 34,
@@ -238,6 +266,8 @@ const FixedDeposits = () => {
             <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link>
           </p>
         </section>
+
+        <FAQSection title="FAQ" faqs={faqs} pageUrl={pageUrl} withSchema />
 
         <ClosingPerspective>
           Fixed deposits are about predictability and timelines. When the structure is chosen thoughtfully—tenure, payout, and maturity management—they can play a calm, stabilizing role alongside growth assets.

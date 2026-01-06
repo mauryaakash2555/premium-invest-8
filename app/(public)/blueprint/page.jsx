@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo/metadata";
+
+const PATH = "/blueprint";
 
 export const metadata = {
-  title: "Planning Checklist | BM Wealth",
-  description:
-    "Start with a planning checklist and explore tools designed to improve clarity and decision-making.",
+  ...buildMetadata({
+    title: "Planning Checklist | BM Wealth",
+    description:
+      "Start with a planning checklist and explore tools designed to improve clarity and decision-making.",
+    path: PATH,
+  }),
 };
 
 export default function BlueprintPage() {

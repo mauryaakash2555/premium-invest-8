@@ -36,7 +36,6 @@ function isMobileViewport() {
   const noHover = hasMatchMedia ? window.matchMedia('(hover: none)').matches : false;
   const touch =
     (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0) ||
-    // eslint-disable-next-line no-prototype-builtins
     ('ontouchstart' in window);
 
   // iOS/iPadOS/Android WebViews can misreport hover/pointer; treat "touch-ish" and
@@ -441,6 +440,7 @@ export default function BlogDetailClient({ slug }) {
                 'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 60%, rgba(10,10,10,0.82) 100%)',
             }}
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={heroImage}
             alt={post.title}

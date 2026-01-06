@@ -76,6 +76,11 @@ export async function GET(request, { params }) {
       return redirect307(request, new URL(fallback || "/", request.url));
     }
 
+    // Never redirect users to placeholder destinations.
+    if (affiliate.placeholder) {
+      return redirect307(request, new URL(fallback || "/", request.url));
+    }
+
     // Log the click (best-effort)
     try {
       await sb.from("affiliate_clicks").insert({

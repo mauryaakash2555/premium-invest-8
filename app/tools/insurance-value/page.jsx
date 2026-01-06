@@ -1,5 +1,6 @@
 import BackRow from "@/components/shared/BackRow";
 import { buildMetadata } from "@/lib/seo/metadata";
+import Image from "next/image";
 
 import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
@@ -24,7 +25,7 @@ export default function InsuranceValueToolPage() {
             <CalculatorHeader
               meta={
                 <>
-                  <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                  <Image src="/logo.webp" alt="BM Wealth" width={20} height={20} className="h-5 w-auto" priority />
                   <span>BM Wealth</span>
                   <span className="text-white/25">•</span>
                   <span>BM Wealth Calculator</span>

@@ -171,7 +171,6 @@ export function SuperAdminDashboard({ onLogout }) {
         sm.active = false;
       } catch {}
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onLogout]);
 
   async function loadAnalytics() {

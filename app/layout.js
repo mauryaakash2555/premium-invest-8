@@ -53,6 +53,9 @@ export const metadataBase = getMetadataBase();
 export const metadata = {
   title: "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
   description: "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -127,7 +130,6 @@ export default function RootLayout({ children }) {
       >
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
         />
         <div
