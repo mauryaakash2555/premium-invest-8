@@ -135,6 +135,28 @@ const SIPServices = () => {
             A Systematic Investment Plan (SIP) is a way of investing in mutual funds at regular intervals. It is commonly
             used for long-term participation with a disciplined, structured approach.
           </p>
+
+          <div style={{ marginTop: '26px', display: 'flex', justifyContent: 'center' }}>
+            <Link
+              href="/sip-calculator"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 18px',
+                borderRadius: '10px',
+                border: '1px solid rgba(218, 165, 32, 0.28)',
+                background: 'rgba(218, 165, 32, 0.12)',
+                color: '#DAA520',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+              aria-label="Open SIP calculator"
+            >
+              Try SIP Calculator
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
       </section>
 

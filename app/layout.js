@@ -33,8 +33,7 @@ import CookieConsent from "@/components/shared/CookieConsent";
 import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
 import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata";
 
-const GA4_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || "G-SSN64C0XCY";
+const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",

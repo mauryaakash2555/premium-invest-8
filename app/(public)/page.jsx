@@ -127,9 +127,9 @@ export default function HomePage() {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          minHeight: '85vh',
-          maxHeight: '85vh',
-          height: '85vh',
+          minHeight: '75vh',
+          maxHeight: '75vh',
+          height: '75vh',
         }}
       >
         {/* Background Image */}
@@ -245,6 +245,44 @@ export default function HomePage() {
         {/* PREMIUM LIVE MARKET TICKER (inside hero, same position as your reference) */}
         <div className="absolute bottom-0 left-0 w-full z-50">
           <PremiumMarketTicker />
+        </div>
+      </section>
+
+      {/* Calculator Strip (not inside hero) */}
+      <section
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(10,10,10,1) 100%)',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          padding: '26px 20px',
+        }}
+      >
+        <div
+          className="section-container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ minWidth: '260px' }}>
+            <p style={{ margin: 0, fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: '#C0A062' }}>
+              Calculators
+            </p>
+            <p style={{ margin: '6px 0 0 0', fontSize: '16px', lineHeight: 1.5, color: '#e5e5e5' }}>
+              Try our SIP calculator for quick estimates.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <Link href="/sip-calculator" className="btn-primary">
+              SIP Calculator
+            </Link>
+            <Link href="/tools" className="btn-secondary">
+              View All Tools →
+            </Link>
+          </div>
         </div>
       </section>
 
