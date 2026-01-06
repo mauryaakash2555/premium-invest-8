@@ -23,10 +23,18 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 const Insurance = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const PAGE_PATH = '/insurance';
+  const baseUrl = getMetadataBase().origin;
+  const pageUrl = `${baseUrl}${PAGE_PATH}`;
+  const title = 'Insurance — Educational Guide';
+  const description =
+    'Educational guide to insurance basics: term insurance, health insurance, key terms, and claim process checklists. No advice, no guarantees.';
 
   const faqs = [
     {
@@ -64,8 +72,39 @@ const Insurance = () => {
     })),
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${baseUrl}/services` },
+      { '@type': 'ListItem', position: 3, name: 'Insurance Guide', item: pageUrl },
+    ],
+  };
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <script
+        id="insurance-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        id="insurance-article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
 
       <script
         id="insurance-faq-schema"
@@ -90,7 +129,7 @@ const Insurance = () => {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Comprehensive Insurance Planning Services Mumbai
+            Insurance — Educational Guide
           </h1>
           <p style={{
             fontSize: '20px',
@@ -99,81 +138,62 @@ const Insurance = () => {
             margin: '0 auto 32px',
             lineHeight: '1.6'
           }}>
-            IRDAI Licensed 277925 | Protecting Mumbai families with expert protection planning
+            A practical overview of term and health insurance concepts, key terms, and claim process basics.
           </p>
         </div>
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Life Insurance Solutions
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            How to think about insurance
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Life insurance forms the foundation of comprehensive wealth architecture, providing financial security to your family in your absence. At BM Wealth, we hold IRDAI License 277925, authorizing us to provide professional insurance distribution services across life, health, and general insurance. Our insurance practice serves Mumbai families with customized protection planning ensuring loved ones remain financially secure regardless of life's uncertainties. Insurance needs vary dramatically based on life stage, family composition, income levels, liabilities, and future obligations. A 28-year-old single professional has vastly different needs than a 40-year-old parent supporting two children, aging parents, and carrying home loan obligations. Our needs analysis process comprehensively evaluates your situation before facilitating appropriate coverage.
-          </p>
-          
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Term Insurance - Pure Protection
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Term insurance provides maximum coverage at minimum cost, making it the cornerstone of life insurance planning. A term plan offers pure death benefit protection without investment component, keeping premiums affordable. For example, a 30-year-old Mumbai male can secure ₹1 crore coverage for 30 years at approximately ₹12,000-15,000 annual premium – extraordinary value providing family security against catastrophic loss. Coverage amount calculations consider multiple factors. The Human Life Value (HLV) method calculates your economic value based on earning potential – typically 15-20 times annual income. A Mumbai professional earning ₹12 lakhs annually might need ₹1.8-2.4 crore coverage. Alternative methods consider outstanding liabilities (home loans, personal loans requiring ₹80 lakhs-1.2 crores coverage), future financial goals (children's education needing ₹1-1.5 crores, wedding expenses), spouse's income replacement needs, and lifestyle maintenance requirements. Most Mumbai families require ₹1-3 crore term coverage depending on circumstances.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Term policy features merit careful evaluation. Return of Premium (ROP) riders return premiums if you survive policy term, though this increases premiums 40-50%. Critical illness riders provide lump sum upon diagnosis of specified illnesses (cancer, heart attack, stroke), typically 10-25% of base coverage. Waiver of premium riders continue coverage without further premiums if policyholder becomes disabled. Income benefit options provide monthly income instead of lump sum, helping families manage money better. For many Mumbai families, pure term plans are the foundation – premium savings versus traditional plans or ULIPs can then be invested separately in mutual funds for wealth creation. Policy term should cover your working years plus 5-10 years – typically 25-30 year terms for those in their 30s, 20-25 years for 40-somethings. Coverage should continue until children become independent and major liabilities (home loans) are paid off.
-          </p>
-
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Whole Life Insurance & Endowment Plans
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Whole life insurance provides lifelong coverage plus maturity benefits, combining protection and savings. These policies cost 5-7 times more than term insurance for same coverage due to savings component. For example, ₹1 crore whole life coverage might cost ₹80,000-1,00,000 annually versus ₹12,000-15,000 for equivalent term plan. Endowment plans return sum assured plus bonuses upon maturity or provide death benefit. While providing relatively stable returns (historically 4-6% annually), these returns can lag long-term equity market-linked instruments (often cited at 10-12% historically). Past performance is not indicative of future returns. Many investors consider separating insurance and investments (adequate term protection + separate investments) when comparing endowment/whole life with other options, but suitability depends on goals, time horizon, risk tolerance, and cash-flow stability. Whole life policies can suit specific situations: legacy planning, forced savings preferences, or strong risk aversion where equity volatility causes discomfort. If considering endowment or whole life policies, ensure premiums don't exceed 10-15% of annual income, leaving sufficient surplus for goal-based investing.
-          </p>
-
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Unit Linked Insurance Plans (ULIPs)
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            ULIPs combine insurance protection with market-linked investments, allocating premiums between mortality charges and equity/debt fund investments. After regulatory reforms capping charges, ULIPs have become more competitive, offering 5-year lock-in period (versus 3 years for ELSS mutual funds) with potential for good returns. However, many investors prefer separating insurance and investment – buy adequate term insurance for protection and invest separately in mutual funds for wealth creation. This separation can provide stronger protection, better investment flexibility, lower costs overall, and simpler financial planning. ULIPs might suit high-income individuals seeking additional tax-efficient investment avenues (premium upto ₹2.5 lakh qualifies for 80C deduction, and death benefits are tax-free) or those wanting forced long-term investing discipline with insurance component bundled.
-          </p>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(218, 165, 32, 0.18)', borderRadius: '12px', padding: '24px' }}>
+            <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+              <li>Protection first: cover high-impact risks before chasing “returns”.</li>
+              <li>Keep policy documents and nominee details up to date.</li>
+              <li>Understand exclusions, waiting periods, and claim documentation.</li>
+            </ul>
+          </div>
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Health Insurance Planning
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Term insurance checklist
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Health insurance is arguably more critical than life insurance – medical emergencies drain savings faster than almost any other financial shock. Mumbai's world-class but expensive healthcare system (a week in ICU can cost ₹2-5 lakhs, major surgeries ₹5-15 lakhs, critical illness treatment ₹10-25 lakhs+) makes comprehensive health insurance mandatory for every family. Yet only 30-35% of Mumbai residents carry adequate health coverage, leaving majority vulnerable to catastrophic medical expenses. Health insurance needs assessment considers family size, age profile, pre-existing conditions, preferred hospitals, and financial capacity. A young couple might start with ₹10 lakh family floater coverage, increasing to ₹15-20 lakhs when children arrive. Parents and in-laws should have separate senior citizen policies of ₹5-10 lakhs each. Mumbai families should target minimum ₹15-20 lakh cumulative health coverage considering city's healthcare costs.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Policy features significantly impact claim experience. Cashless hospitalization network matters immensely – ensure your preferred Mumbai hospitals (Breach Candy, Lilavati, Hinduja, Bombay Hospital, Nanavati) are covered. Room rent limits often become claim rejection points; opt for policies with no room rent capping or minimum 2% of sum insured allowing single/private rooms. Pre and post hospitalization coverage (typically 60-90 days pre-hospitalization, 90-180 days post) pays for diagnostic tests, consultations, and follow-up care. Day-care procedures cover treatments not requiring 24-hour hospitalization (cataract surgery, chemotherapy, dialysis). Maternity coverage, if needed, should be included from policy start as waiting periods are 2-4 years. Critical illness riders or standalone policies provide lump sums upon diagnosis, covering non-medical expenses (income loss, lifestyle changes, experimental treatments). Restoration benefits automatically restore sum insured if exhausted during policy year, crucial for families with multiple members falling ill.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Employer health insurance while valuable shouldn't be sole coverage. Corporate policies typically provide ₹3-5 lakh coverage (inadequate for serious illnesses), coverage ceases upon job change or retirement, coverage often excludes parents, and no-claim bonuses don't accumulate in your name. Many families supplement corporate coverage with individual policies purchased young (locking lower premiums for longer, building cumulative bonuses, and ensuring continuity regardless of employment status). A 30-year-old can secure ₹10 lakh coverage for ₹8,000-10,000 annually; starting at 40+ sees premiums jump 50-80%. Start early, maintain continuously (even minimal coverage), and enhance coverage as income grows. For senior parents, consider specialized senior citizen plans despite higher premiums (₹25,000-40,000 annually for ₹5 lakh coverage at 60+ years), as these policies account for age-related claim likelihood with appropriate pricing and coverage.
-          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
+            {[
+              { t: 'Cover amount logic', d: 'Consider income replacement, liabilities, and key family goals (education).', },
+              { t: 'Policy term', d: 'Often aligned to working years and major liabilities.', },
+              { t: 'Disclosure', d: 'Disclose health and lifestyle accurately to avoid claim issues.', },
+            ].map((x) => (
+              <div key={x.t} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(218, 165, 32, 0.18)', borderRadius: '10px', padding: '20px' }}>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: '600' }}>{x.t}</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.7' }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            General Insurance Services
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Health insurance checklist
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            General insurance protects your assets and liabilities beyond life and health. Motor insurance is mandatory in India – third-party coverage required by law, while comprehensive policies additionally cover your vehicle damage. For Mumbai car owners, comprehensive insurance typically costs ₹15,000-25,000 annually depending on vehicle value, providing coverage against accidents, theft, natural disasters, and third-party liabilities. Home insurance protects Mumbai's valuable real estate investments against fire, theft, natural calamities, and structural damage. Considering Mumbai property values (₹1-5 crore commonly), home insurance at ₹5,000-10,000 annually provides ₹50 lakh-1 crore building coverage plus contents insurance. Especially relevant for coastal areas vulnerable to monsoon damage or older buildings with structural concerns. Travel insurance covers international and domestic trips against medical emergencies abroad, trip cancellations, baggage loss, and travel delays. Critical for frequent travelers or expensive international holidays where medical costs can be exorbitant.
-          </p>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(218, 165, 32, 0.18)', borderRadius: '12px', padding: '24px' }}>
+            <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+              <li>Network hospitals and cashless process basics.</li>
+              <li>Room rent limits, co-pay, and sub-limits (if any).</li>
+              <li>Waiting periods and pre-existing condition rules.</li>
+              <li>Keep an updated medical history record for claims.</li>
+            </ul>
+          </div>
         </section>
 
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Insurance vs Investment Products
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            A fundamental mistake many Mumbai investors make is confusing insurance with investment. Traditional insurance agents often push endowment plans, money-back policies, or ULIPs as investment vehicles. While these products provide some returns, they significantly underperform separate strategies. Our principle: insurance should primarily provide protection, not investment returns. Buy term insurance for pure death benefit protection at lowest cost. This provides maximum coverage freeing substantial money for wealth creation investments. Invest freed-up premiums in mutual funds through SIPs, building wealth more efficiently than insurance-cum-investment products. This separation provides clarity (insurance protects, investments grow wealth), flexibility (change investments without affecting insurance or vice versa), cost efficiency (no high insurance charges eating investment returns), and better returns (mutual funds historically outperform insurance investment components).
-          </p>
+        <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
-            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
-            <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP Guide</Link> ·{' '}
-            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+            Related resources: <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP Guide</Link> ·{' '}
+            <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds Guide</Link> ·{' '}
+            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
 
@@ -186,8 +206,8 @@ const Insurance = () => {
           borderRadius: '8px',
           border: '1px solid rgba(251, 191, 36, 0.3)'
         }}>
-          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            <strong>Insurance Disclaimer:</strong> BM Wealth holds IRDAI License 277925 for insurance distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed protection specialists for personalized insurance planning suited to your family's protection needs.
+          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '0' }}>
+            <strong>Educational + distribution disclaimer:</strong> {SITE_NAME} is not SEBI-registered. This page is general educational information and not financial advice. BM Wealth holds IRDAI License 277925 for insurance distribution. Policy issuance and claims are subject to the insurer’s terms and approval. Always read policy documents carefully.
           </p>
         </section>
 

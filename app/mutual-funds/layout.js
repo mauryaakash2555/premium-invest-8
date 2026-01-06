@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Mutual Funds Mumbai | AMFI Registered Distributor ARN 90008 | BM Wealth",
+  title: "Mutual Funds — Educational Guide | BM Wealth",
   description:
-    "Mutual fund distribution and investor guidance in Mumbai. AMFI Registered (ARN 90008). Equity, debt, and hybrid funds. SIP planning and portfolio review.",
+    "Educational guide to mutual funds: types, direct vs regular, SIP vs lump sum, and practical checklists. No advice, no guarantees.",
   path: "/mutual-funds",
 });
 

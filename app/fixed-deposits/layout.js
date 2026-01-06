@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Fixed Deposits Guidance | BM Wealth Mumbai",
+  title: "Fixed Deposits (FD) — Educational Guide | BM Wealth",
   description:
-    "Fixed deposit guidance in Mumbai: comparing bank vs corporate FDs, laddering, liquidity, and risk basics.",
+    "Educational overview of fixed deposits: where they fit, laddering, liquidity, taxation basics, and common risks. No advice, no guarantees.",
   path: "/fixed-deposits",
 });
 

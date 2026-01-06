@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Portfolio Planning & Allocation Guidance Mumbai | BM Wealth",
+  title: "Portfolio Planning — Educational Guide | BM Wealth",
   description:
-    "Portfolio planning and asset allocation guidance in Mumbai for long-term wealth building and risk management.",
+    "Educational guide to portfolio planning: asset allocation, diversification, rebalancing, and review cadence. No advice, no guarantees.",
   path: "/portfolio-management",
 });
 

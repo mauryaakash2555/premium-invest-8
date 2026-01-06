@@ -1,20 +1,7 @@
 /**
  * FILE: app\sip\page.jsx
- * PURPOSE: (auto-added) Explain what this file does.
+ * PURPOSE: Educational-only SIP guide page with FAQ + Article + Breadcrumb schema.
  * CATEGORY: app
- *
- * DEPENDENCIES:
- * - react
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
 'use client';
@@ -22,31 +9,45 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+
 const SIPServices = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const PAGE_PATH = '/sip';
+  const baseUrl = getMetadataBase().origin;
+  const pageUrl = `${baseUrl}${PAGE_PATH}`;
+  const title = 'SIP (Systematic Investment Plan) — Educational Guide';
+  const description =
+    'Educational guide to SIPs: how they work, key terms, checklists, and common myths. No advice, no promises.';
+
   const faqs = [
     {
       question: 'What is SIP and how does it work?',
       answer:
-        'A SIP (Systematic Investment Plan) is a method of investing a fixed amount at a regular interval into mutual funds. It supports disciplined investing and can spread your purchases across market cycles.',
+        'A SIP (Systematic Investment Plan) is a recurring instruction (often monthly) to invest into a mutual fund. It spreads purchases across time and can help build discipline.',
     },
     {
-      question: 'What is a good SIP amount to start with?',
+      question: 'Is SIP assured or guaranteed?',
       answer:
-        'Many funds allow SIPs starting from ₹500. The right amount depends on your goal, timeline, and monthly cashflow. Many investors start small and increase annually.',
+        'No. SIP is a method of investing, not a guarantee. Outcomes depend on the fund chosen, market conditions, and how long you stay invested.',
     },
     {
-      question: 'Should I stop SIP when markets are volatile?',
+      question: 'Should I stop SIP when markets fall?',
       answer:
-        'SIPs are typically used for long-term goals. Many investors continue through market ups and downs rather than trying to time short-term moves.',
+        'Many investors prefer focusing on the goal and timeline instead of short-term market moves. Review your plan if your goal, time horizon, or ability to take risk changes.',
     },
     {
-      question: 'Is SIP assured?',
+      question: 'What SIP amount should I start with?',
       answer:
-        'No. SIP is just a way to invest. Returns depend on the mutual fund’s performance and market conditions; past performance does not assure future results.',
+        'A practical approach is to start with an amount you can continue consistently and increase it gradually if your cashflow allows. Consistency often matters more than choosing a “perfect” starting number.',
+    },
+    {
+      question: 'Is SIP the same as a mutual fund?',
+      answer:
+        'Not exactly. A mutual fund is the product; SIP is one way to invest into it (a recurring schedule). You can also invest via lump sum.',
     },
   ];
 
@@ -63,277 +64,187 @@ const SIPServices = () => {
     })),
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${baseUrl}/services` },
+      { '@type': 'ListItem', position: 3, name: 'SIP Guide', item: pageUrl },
+    ],
+  };
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
-
+      <script
+        id="sip-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        id="sip-article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <script
         id="sip-faq-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      
 
-      <section style={{
-        position: 'relative',
-        backgroundColor: '#000000',
-        padding: '120px 0 80px 0',
-        textAlign: 'center',
-        marginTop: '80px'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <h1 style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: '52px',
-            fontWeight: '700',
-            color: '#DAA520',
-            marginBottom: '24px',
-            lineHeight: '1.2'
-          }}>
-            Systematic Investment Plan (SIP) Services Mumbai
+      {/* Hero */}
+      <section
+        style={{
+          position: 'relative',
+          backgroundColor: '#000000',
+          padding: '120px 0 80px 0',
+          textAlign: 'center',
+          marginTop: '80px',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: 'url(https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1920&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.12,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.96) 100%)',
+          }}
+        />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <h1
+            style={{
+              fontFamily: '"Playfair Display", serif',
+              fontSize: '52px',
+              fontWeight: '700',
+              color: '#DAA520',
+              marginBottom: '24px',
+              lineHeight: '1.2',
+            }}
+          >
+            SIP (Systematic Investment Plan) — Educational Guide
           </h1>
-          <p style={{
-            fontSize: '20px',
-            color: '#e5e5e5',
-            maxWidth: '800px',
-            margin: '0 auto 32px',
-            lineHeight: '1.6'
-          }}>
-            Build wealth systematically with expert SIP guidance from AMFI registered advisors
+          <p style={{ fontSize: '20px', color: '#e5e5e5', maxWidth: '820px', margin: '0 auto', lineHeight: '1.6' }}>
+            How SIPs work, what to check before starting, and common myths—no advice, no promises.
           </p>
         </div>
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Power of SIP Investment
+          <h2
+            style={{
+              fontSize: '36px',
+              color: '#DAA520',
+              marginBottom: '18px',
+              fontWeight: '600',
+              fontFamily: '"Playfair Display", serif',
+            }}
+          >
+            SIP in one minute
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Systematic Investment Plans (SIPs) have revolutionized Indian investing, democratizing wealth creation by making equity markets accessible to common investors. SIP is simply investing a fixed amount regularly (monthly, quarterly) in mutual funds, similar to recurring deposits but with equity exposure and wealth creation potential. The beauty of SIPs lies in their simplicity and power of compounding. Start with as little as ₹500 monthly, invest consistently for years, and watch small contributions grow into substantial corpus through market returns and rupee cost averaging. For Mumbai's salaried professionals juggling demanding careers, SIPs provide perfect investing solution – automated, disciplined, stress-free wealth creation without active market monitoring. Our AMFI registered advisors (ARN 90008) have helped hundreds of Mumbai families build significant wealth through disciplined SIP investing.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Consider this real example: A Mumbai professional starting ₹10,000 monthly SIP in diversified equity fund at age 30, continuing until 60, accumulates approximately ₹3.5-4 crore assuming 12% annual returns (historically conservative for Indian equity funds). Total investment is ₹36 lakhs over 30 years, but compounding grows it to ₹3.5+ crores – nearly 10x! Even modest ₹5,000 monthly SIP grows to ₹1.75-2 crores over 30 years. This demonstrates compounding magic – not just earning returns on principal but returns on returns, snowballing wealth exponentially over time. Starting early amplifies impact. A 25-year-old investing ₹5,000 monthly for 35 years builds larger corpus than a 35-year-old investing ₹15,000 monthly for 25 years, despite contributing less total capital. Time matters more than amount in long-term compounding. For Mumbai youth, starting SIPs immediately after first job, even with small amounts, builds invaluable wealth creation foundation.
-          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
+            {[
+              { t: 'What it is', d: 'A recurring instruction (often monthly) to invest into a mutual fund.' },
+              { t: 'Why people use it', d: 'Discipline and reduced need to time the market.' },
+              { t: 'What it does not do', d: 'It does not guarantee returns or remove market risk.' },
+            ].map((x) => (
+              <div
+                key={x.t}
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(218, 165, 32, 0.18)',
+                  borderRadius: '10px',
+                  padding: '20px',
+                }}
+              >
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: '600' }}>{x.t}</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.7' }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            SIP Planning for Different Goals
+          <h2
+            style={{
+              fontSize: '36px',
+              color: '#DAA520',
+              marginBottom: '18px',
+              fontWeight: '600',
+              fontFamily: '"Playfair Display", serif',
+            }}
+          >
+            Before you start: a practical checklist
           </h2>
-          
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Retirement Planning Through SIPs
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Retirement planning is perhaps the most critical financial goal, yet most Mumbai professionals grossly underestimate required corpus. With life expectancy exceeding 75-80 years, retirement spanning 20-25 years is common. Mumbai's high cost of living requires substantial corpus – typically ₹5-10 crores for comfortable retirement maintaining current lifestyle. SIPs started early make this achievable. A 30-year-old starting ₹15,000 monthly SIP in diversified equity funds, increasing 10% annually with salary hikes, accumulates ₹5-6 crore by 60 assuming 12% returns. This provides sustainable retirement income through systematic withdrawal plans (SWPs) drawing 6-7% annually (₹30-42 lakhs annual income) while keeping principal largely intact. Many investors allocate 30-40% of monthly savings toward retirement SIPs, spread across 2-3 diversified equity funds. As retirement approaches (50+ years), gradually shift from aggressive equity funds to balanced or conservative funds reducing volatility while maintaining growth.
-          </p>
-
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Child Education & Wedding Planning
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Children's education costs escalate frighteningly – quality undergraduate education in India costs ₹20-30 lakhs, international education ₹50 lakhs-1 crore+. Starting SIPs at child's birth provides 17-18 years compounding for college, and 20+ years for postgraduate education. A ₹8,000 monthly SIP started at child's birth grows to ₹60-70 lakhs by age 18 for undergraduate expenses. Another ₹5,000 SIP grows to ₹1-1.2 crores by age 22-23 for postgraduate or MBA education. Wedding expenses, though optional to over-budget, typically require ₹20-40 lakhs for middle-class Mumbai families. A ₹5,000 monthly SIP started when child is 5-10 years old accumulates ₹25-35 lakhs by age 25, comfortably covering wedding expenses. Many families set separate SIP goals for each child's education and wedding, investing in age-appropriate funds. For young children (0-10 years), aggressive equity funds maximize growth. As goals approach (child turns 14-15), gradually shift to hybrid or debt funds protecting accumulated corpus from market volatility.
-          </p>
-
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Wealth Creation SIPs
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Beyond specific goals, wealth creation SIPs build general financial security and freedom. Many Mumbai professionals allocate ₹10,000-20,000 monthly in open-ended wealth creation SIPs without specific timeline, letting them compound for 15-20+ years. These funds provide financial cushion for opportunities (business ventures, property investments, career breaks) or emergencies without depleting retirement or goal-specific savings. Wealth creation SIPs can be more aggressive, investing in small and mid cap funds alongside large cap for higher growth potential. Since timeline is flexible, you can weather short-term volatility for long-term appreciation. Many Mumbai investors have converted these wealth SIPs into substantial corpus enabling second homes, vacation properties, or even early retirement.
-          </p>
-        </section>
-
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            STP and SWP Strategies
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Systematic Transfer Plan (STP) transfers fixed amounts from one fund to another periodically, typically from debt/liquid funds to equity funds. STP is perfect for deploying lump sums (bonus, inheritance, property sale proceeds) into equity markets without market timing risk. Instead of investing ₹10 lakhs immediately in equity (risking buying at peak), park it in liquid fund and set ₹50,000-1,00,000 monthly STP to equity fund over 10-20 months. This achieves rupee cost averaging while earning liquid fund returns on uninvested balance. Mumbai investors often use STP for year-end bonuses or annual insurance maturity proceeds, gradually moving money to equity for wealth creation. Systematic Withdrawal Plan (SWP) is opposite – redeeming fixed amounts periodically from mutual funds, creating regular income stream. SWP particularly suits retirees converting accumulated corpus into monthly/quarterly income. Instead of bank FD interest (fully taxable), SWP from equity funds is more tax-efficient (only capital gains taxed, that too at 10% LTCG rates). A ₹1 crore corpus in balanced fund with ₹70,000 monthly SWP provides ₹8.4 lakh annual income while keeping principal largely intact if fund grows 8-9% annually. SWP gives better post-tax income than fixed deposits for retirees, plus inflation protection through equity exposure.
-          </p>
-        </section>
-
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Common SIP Mistakes to Avoid
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Despite SIP's simplicity, Mumbai investors make common mistakes reducing wealth creation potential. Stopping SIPs during market falls is most destructive – when markets crash, your SIP buys more units at lower prices, setting stage for higher returns during recovery. Stopping SIPs during downturns is selling low, the opposite of wealth creation. Market crashes are SIP's superpower moments. Investing too little initially means lost compounding time. Many Mumbai investors start with ₹2,000-3,000 SIPs planning to increase later, but life expenses expand and increases never happen. Start with stretch amount immediately, even if slightly uncomfortable. You'll adjust lifestyle and benefit from higher compounding base. Chasing past performance selecting last year's top-performing funds almost guarantees disappointment. Fund performance is cyclical; last year's winner often becomes next year's laggard. Focus on consistent performers with reasonable performance across market cycles rather than temporary stars.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Investing in too many funds dilutes focus and creates monitoring complexity. Many Mumbai investors have 15-20 SIPs across numerous funds, creating overlap and confusion. A focused portfolio of 4-6 well-selected funds across categories provides adequate diversification without complexity. Stop-start SIP behavior destroys compounding. Investors stop SIPs after few months for various reasons, restart later, stop again – this inconsistency prevents compounding magic from working. SIP's power comes from uninterrupted long-term investing, not sporadic contributions. Commit to non-negotiable monthly SIPs treated like EMIs – automate deductions and forget about them. Not increasing SIPs with income growth is missed opportunity. Mumbai professionals earning ₹8-10 lakhs starting career might earn ₹20-40 lakhs mid-career and ₹50 lakhs+ senior career. Yet many continue same ₹5,000 SIPs from beginning. Consider increasing SIPs 10-15% annually to match salary hikes, which can meaningfully accelerate wealth accumulation while maintaining lifestyle since expenses also rise.
-          </p>
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(218, 165, 32, 0.18)',
+              borderRadius: '12px',
+              padding: '24px',
+            }}
+          >
+            <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+              <li>Goal + time horizon (short-term vs long-term makes a big difference).</li>
+              <li>Emergency fund first (reduces forced stopping).</li>
+              <li>Costs (expense ratio) and basic tax rules for the fund category.</li>
+              <li>Avoid overlapping too many similar funds.</li>
+              <li>Review occasionally (e.g., yearly) and after major life events.</li>
+            </ul>
+          </div>
         </section>
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
-            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
-            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Free Tools</Link> ·{' '}
-            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
+            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds Guide</Link> ·{' '}
+            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
 
         <FAQSection faqs={faqs} />
 
-        {/* Platform Recommendations Section */}
-        <section style={{
-          background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(184, 134, 11, 0.08) 100%)',
-          border: '1px solid rgba(218, 165, 32, 0.3)',
-          borderRadius: '12px',
-          padding: '40px',
-          marginBottom: '40px'
-        }}>
-          <h2 style={{ 
-            fontSize: '36px', 
-            color: '#DAA520', 
-            marginBottom: '20px', 
-            fontWeight: '600', 
-            fontFamily: '"Playfair Display", serif',
-            textAlign: 'center'
-          }}>
-            Start Your SIP Journey Today
-          </h2>
-          <p style={{ 
-            fontSize: '17px', 
-            lineHeight: '1.8', 
-            color: '#e5e5e5', 
-            marginBottom: '32px', 
-            textAlign: 'center',
-            maxWidth: '800px',
-            margin: '0 auto 32px'
-          }}>
-            These trusted platforms make starting SIPs simple. All are SEBI-registered and secure. Choose based on 
-            your preferences for interface and features.
-          </p>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-            gap: '24px',
-            marginBottom: '32px'
-          }}>
-            <div style={{ 
-              background: 'rgba(0,0,0,0.4)', 
-              padding: '28px', 
-              borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.2)'
-            }}>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
-                Groww
-              </h3>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
-                Beginner-friendly. Clean interface, zero charges. Trusted by 2+ crore investors.
-              </p>
-              <a 
-                href="/track/groww" 
-                target="_blank" 
-                rel="sponsored nofollow noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '12px 24px',
-                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
-                  color: '#000',
-                  textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontWeight: '600',
-                  fontSize: '15px'
-                }}
-              >
-                Start SIP on Groww →
-              </a>
-            </div>
-
-            <div style={{ 
-              background: 'rgba(0,0,0,0.4)', 
-              padding: '28px', 
-              borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.2)'
-            }}>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
-                Zerodha Coin
-              </h3>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
-                India's largest broker. Direct funds, zero commissions. Excellent support.
-              </p>
-              <a 
-                href="/track/coin" 
-                target="_blank" 
-                rel="sponsored nofollow noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '12px 24px',
-                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
-                  color: '#000',
-                  textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontWeight: '600',
-                  fontSize: '15px'
-                }}
-              >
-                Open Zerodha Account →
-              </a>
-            </div>
-
-            <div style={{ 
-              background: 'rgba(0,0,0,0.4)', 
-              padding: '28px', 
-              borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.2)'
-            }}>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px', fontWeight: '600' }}>
-                Smallcase
-              </h3>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.7', marginBottom: '16px' }}>
-                Thematic portfolios. Expert-curated strategies. Automatic rebalancing.
-              </p>
-              <a 
-                href="/track/smallcase" 
-                target="_blank" 
-                rel="sponsored nofollow noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '12px 24px',
-                  background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
-                  color: '#000',
-                  textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontWeight: '600',
-                  fontSize: '15px'
-                }}
-              >
-                Explore Smallcase →
-              </a>
-            </div>
-          </div>
-
-          <p style={{ 
-            fontSize: '13px', 
-            color: '#999', 
-            textAlign: 'center',
-            fontStyle: 'italic'
-          }}>
-            We may earn commissions from these referrals. This doesn't affect your fees or our guidance.
+        <section
+          style={{
+            marginTop: '60px',
+            padding: '24px',
+            background: 'rgba(251, 191, 36, 0.1)',
+            borderRadius: '8px',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+          }}
+        >
+          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '0' }}>
+            <strong>Educational disclaimer:</strong> {SITE_NAME} is not SEBI-registered. This page is for general educational information only and does not constitute investment advice, a recommendation, or a promise of returns. For personalized advice, consult a SEBI-registered investment adviser.
           </p>
         </section>
-
-        <section style={{
-          marginTop: '60px',
-          padding: '24px',
-          background: 'rgba(251, 191, 36, 0.1)',
-          borderRadius: '8px',
-          border: '1px solid rgba(251, 191, 36, 0.3)'
-        }}>
-          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            <strong>SIP Investment Disclaimer:</strong> SIP investments are subject to market risks. Past SIP returns do not guarantee future performance. Equity mutual funds can be volatile short-term. SIP is most effective for long-term goals (5+ years). Maintain SIPs even during market downturns for maximum benefit. Returns mentioned are illustrative based on historical data and may vary. Consider your risk tolerance, investment horizon, and financial goals before starting SIPs. Consult our AMFI registered advisors (ARN 90008) for personalized SIP planning tailored to your financial objectives.
-          </p>
-        </section>
-
       </div>
     </div>
   );
 };
 
 export default SIPServices;
-
-
-
