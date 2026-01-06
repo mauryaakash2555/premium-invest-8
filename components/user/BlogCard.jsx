@@ -78,8 +78,6 @@ export default function BlogCard({ post }) {
     >
       <Link href="/blog" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
         <div>
-          {/* Dynamic remote images may not be in next/image allowlist; keep <img>. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={post.image_url || post.image}
             alt={post.image_alt || post.title}

@@ -30,7 +30,6 @@ import Link from 'next/link';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
-import FAQSection from '@/components/shared/FAQSection';
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -106,44 +105,8 @@ export default function BlogPage() {
     });
   };
 
-  const faqs = [
-    {
-      question: 'Are these blog posts personalised financial advice?',
-      answer:
-        'No. The blog is educational and informational. For advice specific to your situation, consult a qualified professional.',
-    },
-    {
-      question: 'Where can I find your calculators and tools?',
-      answer:
-        'You can access BM Wealth Intelligence Tools from the Tools page. It includes the Tax Optimization Intelligence calculator and more.',
-    },
-    {
-      question: 'Do you use affiliate links in posts?',
-      answer:
-        'Some pages may contain affiliate links. If you sign up through them, BM Wealth may earn a commission at no extra cost to you.',
-    },
-  ];
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <div>
-      <script
-        id="blog-index-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       {/* Mobile optimization for blog card images */}
       <style>{`
         @media (max-width: 768px) {
@@ -471,16 +434,6 @@ export default function BlogPage() {
           </div>
         )}
       </section>
-
-      <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '60px' }}>
-        <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'center' }}>
-          Explore: <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
-          <Link href="/tools/tax-optimization" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
-          <Link href="/services" style={{ color: '#C0A062', textDecoration: 'underline' }}>Services</Link>
-        </p>
-      </section>
-
-      <FAQSection faqs={faqs} />
     </div>
   );
 }

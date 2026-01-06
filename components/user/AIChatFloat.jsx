@@ -21,7 +21,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { clearFamilyToken, getFamilyToken, setFamilyToken } from "@/lib/auth/familyTokenClient";
 import ReactMarkdown from "react-markdown";
 import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
@@ -41,9 +40,7 @@ const FEATURE_ANALYTICS = isFeatureEnabled("ANALYTICS");
 const FEATURE_CLAUDE_ADMIN = isFeatureEnabled("CLAUDE_ADMIN");
 
 function isValidEmail(v) {
-  // Intentionally strict: avoids treating passwords like "Mmaurya@8080" as valid emails.
-  // Requires a dot in the domain and a letter-only TLD of 2+ chars.
-  return /^[^\s@]+@[^\s@.]+\.[A-Za-z]{2,}$/.test(String(v || "").trim());
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim());
 }
 
 function normalizePhone(v) {
@@ -158,62 +155,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [strategy, setStrategy] = useState(null);
   const [strategyBusy, setStrategyBusy] = useState(false);
 
-  function isLeakedAuthTranscriptMessage(m) {
-    try {
-      if (!m || m.sender !== "bot") return false;
-      const t = String(m.text || "").trim();
-      if (!t) return false;
-      if (t === "Exited family admin mode.") return true;
-      if (t === "Exited admin mode.") return true;
-      if (t === "Family code not recognized.") return true;
-      if (t === "Super admin code not recognized.") return true;
-      if (t === "Opening control panel...") return true;
-      if (t.includes("Viewing family dashboard")) return true;
-      return false;
-    } catch {
-      return false;
-    }
-  }
-
-  function sanitizePublicTranscript(list) {
-    if (!Array.isArray(list)) return list;
-    const cleaned = list.filter((m) => !isLeakedAuthTranscriptMessage(m));
-    return cleaned.length ? cleaned : list;
-  }
-
-  async function openSuperAdminControlPanel(res) {
-    try {
-      if (res?.token && typeof window !== "undefined") {
-        window.localStorage.setItem("bm_admin_token_v1", String(res.token));
-      }
-    } catch {
-      // ignore
-    }
-
-    flashStatus("Opening control panel...", "info");
-    let adminToken = "";
-    try {
-      adminToken = typeof window !== "undefined" ? String(window.localStorage.getItem("bm_admin_token_v1") || "") : "";
-    } catch {}
-    const v = await fetch("/api/admin/verify", {
-      method: "GET",
-      cache: "no-store",
-      credentials: "include",
-      headers: adminToken ? { "x-bm-admin-token": adminToken } : undefined,
-    })
-      .then(async (r) => ({ ok: r.ok, j: await r.json().catch(() => null) }))
-      .catch(() => ({ ok: false, j: null }));
-    if (v.ok && v.j?.authenticated) {
-      window.location.href = "/admin-secret-akash";
-      return true;
-    }
-    flashStatus(
-      "Login succeeded, but this browser isn't accepting the admin cookie. Please open in Chrome/Edge at http://localhost:3000 and try again.",
-      "error"
-    );
-    return false;
-  }
-
   function exitAdminMode() {
     setAdmin(false);
     setTab("chat");
@@ -226,10 +167,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   async function exitFamilyAdminMode() {
     setFamilyAdmin(false);
     setTab("chat");
-    flashStatus("Exited family admin mode.", "info");
+    pushBotUser("Exited family admin mode.");
     try {
-      clearFamilyToken();
-      await fetch("/api/admin/family/logout", { method: "POST", credentials: "include" });
+      await fetch("/api/admin/family/logout", { method: "POST" });
     } catch {
       // ignore
     }
@@ -240,12 +180,10 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
-      credentials: "include",
     });
     const j = await r.json().catch(() => null);
     if (r.status === 503 && j?.error === "setup_required") return { ok: false, setupRequired: true };
     if (!r.ok) return { ok: false, setupRequired: false };
-    if (j?.token) setFamilyToken(j.token);
     return { ok: Boolean(j?.ok), setupRequired: false };
   }
   async function exportLeads() {
@@ -281,6 +219,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
   const sessionId = useMemo(() => {
     try {
+      // eslint-disable-next-line no-undef
       return crypto?.randomUUID?.() || Math.random().toString(16).slice(2);
     } catch {
       return Math.random().toString(16).slice(2);
@@ -291,33 +230,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const pitchStateRef = useRef({ lastPitchAt: null, seenPitches: [] });
   const listRef = useRef(null);
   const inputRef = useRef(null);
-  const statusTimerRef = useRef(null);
-
-  const [statusNote, setStatusNote] = useState(null); // { text: string, tone: 'info'|'error' }
-
-  function flashStatus(text, tone = "info") {
-    try {
-      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
-    } catch {
-      // ignore
-    }
-    if (!text) {
-      setStatusNote(null);
-      return;
-    }
-    setStatusNote({ text: String(text), tone: tone === "error" ? "error" : "info" });
-    statusTimerRef.current = setTimeout(() => setStatusNote(null), 4200);
-  }
-
-  useEffect(() => {
-    return () => {
-      try {
-        if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
-      } catch {
-        // ignore
-      }
-    };
-  }, []);
 
   const [messages, setMessages] = useState(() => [
     {
@@ -340,38 +252,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   ]);
 
   const activeMessages = admin ? adminMessages : messages;
-
-  // Persist chat state locally to avoid restart on reopen/navigation
-  useEffect(() => {
-    try {
-      const key = "bmw_chat_state_v1";
-      const raw = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
-      if (raw) {
-        const s = JSON.parse(raw);
-        if (Array.isArray(s?.messages) && s.messages.length) setMessages(sanitizePublicTranscript(s.messages));
-        if (s?.leadId) setLeadId(s.leadId);
-        if (typeof s?.captureStep === "string") setCaptureStep(s.captureStep);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  // Cleanup: remove any previously-leaked auth messages from the public transcript.
-  // This matters because we persist state in localStorage and React Fast Refresh can preserve old messages.
-  useEffect(() => {
-    setMessages((prev) => sanitizePublicTranscript(prev));
-  }, []);
-
-  useEffect(() => {
-    try {
-      const key = "bmw_chat_state_v1";
-      const payload = JSON.stringify({ messages, leadId, captureStep });
-      if (typeof window !== "undefined") window.localStorage.setItem(key, payload);
-    } catch {
-      // ignore
-    }
-  }, [messages, leadId, captureStep]);
 
   useEffect(() => {
     if (!enabled || !open) return;
@@ -429,22 +309,17 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   async function tryAdminLogin(password) {
-    try {
-      const r = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-        credentials: "include",
-      });
-      const j = await r.json().catch(() => null);
-      if (r.status === 503 && j?.error === "setup_required") {
-        return { ok: false, setupRequired: true, status: r.status };
-      }
-      if (!r.ok) return { ok: false, setupRequired: false, status: r.status, error: j?.error || null };
-      return { ok: Boolean(j?.ok), setupRequired: false, status: r.status, token: j?.token || null };
-    } catch {
-      return { ok: false, setupRequired: false, status: 0, networkError: true };
+    const r = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const j = await r.json().catch(() => null);
+    if (r.status === 503 && j?.error === "setup_required") {
+      return { ok: false, setupRequired: true };
     }
+    if (!r.ok) return { ok: false, setupRequired: false };
+    return { ok: Boolean(j?.ok), setupRequired: false };
   }
 
   async function refreshDashboard() {
@@ -633,13 +508,9 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
     const conversationIdSafe = typeof sessionId === "string" && sessionId.trim().length > 0 ? sessionId.trim() : undefined;
 
-    const familyToken = familyAdmin ? getFamilyToken() : null;
-    const headers = new Headers({ "Content-Type": "application/json" });
-    if (familyToken) headers.set("x-bm-family-token", familyToken);
-
     const r = await fetch("/api/chat", {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message,
         mode,
@@ -668,7 +539,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       affiliatePlatforms: Array.isArray(j?.affiliate_platforms) ? j.affiliate_platforms : null,
       pitch: j.pitch || null,
       pitchType: typeof j?.pitch_type === "string" ? j.pitch_type : null,
-      suggestions: Array.isArray(j?.suggestions) ? j.suggestions.filter(Boolean).slice(0, 3) : null,
     };
   }
 
@@ -770,80 +640,51 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     const text = String(raw || "").trim();
     if (!text || busy) return;
 
-    // Numeric unlock code (4 digits) — attempt super admin first (so ADMIN_PASSWORD=7287 can open the panel),
-    // then fall back to family admin.
+    // Family admin unlock (password typed into chat) — do this BEFORE we push user text into the chat.
+    // We only attempt when it looks like a 4-digit family PIN (avoids extra calls on normal messages).
     if (!admin && !familyAdmin && /^\d{4}$/.test(text)) {
+      // Keep DOM + state in sync
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
       try {
-        const superRes = await tryAdminLogin(text);
-        if (superRes?.setupRequired) {
-          flashStatus("Super admin is not configured on this environment yet.", "error");
+        const res = await tryFamilyLogin(text);
+        if (res?.setupRequired) {
+          pushBotUser("Family dashboard is not configured on this environment yet.");
           return;
         }
-        if (superRes?.networkError) {
-          flashStatus("Super admin login failed due to a network error. Open http://localhost:3000 and try again.", "error");
-          return;
-        }
-        if (superRes?.status === 404) {
-          flashStatus("Super admin login isn't available here. Open http://localhost:3000 and try again.", "error");
-          return;
-        }
-        if (superRes?.ok) {
-          await openSuperAdminControlPanel(superRes);
-          return;
-        }
-
-        const familyRes = await tryFamilyLogin(text);
-        if (familyRes?.setupRequired) {
-          flashStatus("Family dashboard is not configured on this environment yet.", "error");
-          return;
-        }
-        if (familyRes?.ok) {
+        if (res?.ok) {
           setFamilyAdmin(true);
           setTab("family");
-          flashStatus(null);
+          pushBotUser("Welcome BM Wealth! \u{1F4CA} Viewing family dashboard...");
           return;
         }
       } finally {
         setBusy(false);
       }
-      flashStatus("Code not recognized.", "error");
+      pushBotUser("Family code not recognized.");
       return;
     }
     // Super admin unlock (redirect to hidden control panel) - intercept before echo
     // Trigger only for password-like inputs (contains '@') to avoid catching normal chat.
-    if (
-      !admin &&
-      !familyAdmin &&
-      !(captureStep === "email" && isValidEmail(text)) &&
-      !/^\d{4}$/.test(text) &&
-      text.includes("@") &&
-      text.length <= 64
-    ) {
+    if (!admin && !familyAdmin && !(captureStep === "email" && isValidEmail(text)) && text.includes("@") && text.length <= 64) {
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
       try {
         const res = await tryAdminLogin(text);
         if (res?.setupRequired) {
-          flashStatus("Super admin is not configured on this environment yet.", "error");
-          return;
-        }
-        if (res?.networkError) {
-          flashStatus("Super admin login failed due to a network error. Open http://localhost:3000 and try again.", "error");
-          return;
-        }
-        if (res?.status === 404) {
-          flashStatus("Super admin login isn't available here. Open http://localhost:3000 and try again.", "error");
+          pushBotUser("Super admin is not configured on this environment yet.");
           return;
         }
         if (res?.ok) {
-          await openSuperAdminControlPanel(res);
+          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Redirecting to control panel...");
+          setTimeout(() => {
+            window.location.href = "/admin-secret-akash";
+          }, 250);
           return;
         }
-        flashStatus("Super admin code not recognized.", "error");
+        pushBotUser("Super admin code not recognized.");
         return;
       } finally {
         setBusy(false);
@@ -943,7 +784,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
 
       // Normal chat
-      const { reply, cta, affiliatePlatforms, pitch, pitchType, suggestions } = await sendChat({
+      const { reply, cta, affiliatePlatforms, pitch, pitchType } = await sendChat({
         message: text,
         mode: admin ? "admin" : "user",
         leadId,
@@ -964,15 +805,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       }
       if (!admin && Array.isArray(affiliatePlatforms) && affiliatePlatforms.length) {
         extra.affiliatePlatforms = affiliatePlatforms;
-      }
-
-      if (!admin && Array.isArray(suggestions) && suggestions.length) {
-        extra.suggestions = suggestions;
-      }
-
-      // Auto-open calculator when CTA targets internal calculator route
-      if (!admin && cta && typeof cta.href === "string" && cta.href === "/sip-calculator") {
-        window.location.href = cta.href;
       }
 
       if (admin) pushBotAdmin(reply, Object.keys(extra).length ? extra : null);
@@ -1590,30 +1422,26 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
           ) : (
             <>
               <div ref={listRef} className={styles.body}>
-                {activeMessages.map((m) => {
-                  const ctaHref = m?.cta?.href || whatsappHref;
-                  const ctaExternal = /^https?:\/\//i.test(String(ctaHref || ""));
-
-                  return (
-                    <div
-                      key={m.id}
-                      className={[
-                        styles.bubble,
-                        m.sender === "user" ? styles.bubbleUser : styles.bubbleBot,
-                      ].join(" ")}
-                    >
-                      {m.text}
-                      {m?.cta?.label && ctaHref ? (
-                        <a
-                          className={styles.consultCta}
-                          href={ctaHref}
-                          target={ctaExternal ? "_blank" : undefined}
-                          rel={ctaExternal ? "noopener noreferrer" : undefined}
-                          onClick={() => void logEvent("consultation_click", { sessionId, leadId })}
-                        >
-                          {m.cta.label}
-                        </a>
-                      ) : null}
+                {activeMessages.map((m) => (
+                  <div
+                    key={m.id}
+                    className={[
+                      styles.bubble,
+                      m.sender === "user" ? styles.bubbleUser : styles.bubbleBot,
+                    ].join(" ")}
+                  >
+                    {m.text}
+                    {m?.cta?.label && m?.cta?.href ? (
+                      <a
+                        className={styles.consultCta}
+                        href={whatsappHref || m.cta.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => void logEvent("consultation_click", { sessionId, leadId })}
+                      >
+                        {m.cta.label}
+                      </a>
+                    ) : null}
 
                     {Array.isArray(m?.affiliatePlatforms) && m.affiliatePlatforms.length ? (
                       <div className={styles.platformOptions}>
@@ -1630,29 +1458,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                             >
                               Open {p} →
                             </a>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {Array.isArray(m?.suggestions) && m.suggestions.length ? (
-                      <div className={styles.suggestionsWrap}>
-                        <div className={styles.suggestionsTitle}>Quick suggestions:</div>
-                        <div className={styles.suggestionsButtons}>
-                          {m.suggestions.map((s, idx) => (
-                            <button
-                              key={`${idx}-${s}`}
-                              type="button"
-                              className={styles.suggestionBtn}
-                              onClick={() => {
-                                if (busy) return;
-                                if (inputRef.current) inputRef.current.value = String(s || "");
-                                setInput(String(s || ""));
-                                void send();
-                              }}
-                            >
-                              {String(s)}
-                            </button>
                           ))}
                         </div>
                       </div>
@@ -1683,9 +1488,8 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                         </button>
                       </div>
                     ) : null}
-                    </div>
-                  );
-                })}
+                  </div>
+                ))}
 
                 {humanReady && whatsappHref ? (
                   <a
@@ -1709,18 +1513,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </div>
                 )}
               </div>
-
-              {statusNote?.text ? (
-                <div
-                  className={[styles.statusNote, statusNote.tone === "error" ? styles.statusNoteError : styles.statusNoteInfo].join(
-                    " "
-                  )}
-                  role="status"
-                  aria-live="polite"
-                >
-                  {statusNote.text}
-                </div>
-              ) : null}
 
               <div className={styles.inputBar}>
                 <input

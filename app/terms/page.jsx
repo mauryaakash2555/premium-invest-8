@@ -75,21 +75,22 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>2. Services Provided</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                BM Wealth provides financial services including but not limited to:
+                BM Wealth provides financial advisory services including but not limited to:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Mutual fund distribution services as an AMFI Registered Distributor (ARN 90008)</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Insurance advisory services as an IRDAI Licensed Advisor (License Number: 277925)</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio planning and asset allocation guidance</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning support</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio management guidance</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning and advisory</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Financial planning consultations</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                We are IRDAI Licensed and AMFI Registered.
+                We are IRDAI Licensed and AMFI Registered. We follow SEBI guidelines but are NOT SEBI-registered 
+                investment advisors.
               </p>
             </section>
 
-            {/* Information & Risk */}
+            {/* No Investment Advice Guarantee */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
@@ -98,14 +99,15 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>3. Information & Risk</h2>
+              }}>3. No Investment Advice Guarantee</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                While we strive to provide accurate and helpful information, outcomes can vary and depend on markets,
-                product terms, and individual circumstances.
+                While we strive to provide accurate and helpful financial guidance, the information and advice 
+                provided by BM Wealth are for informational purposes only and should not be construed as a 
+                guarantee of investment returns or financial outcomes.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                All investment decisions made by you are at your own risk and discretion. Mutual fund investments 
-                are subject to market risks. Past performance is not indicative of future returns. Please read all 
+                All investment decisions made by you are at your own risk. Mutual fund investments are subject 
+                to market risks. Past performance is not indicative of future returns. Please read all 
                 scheme-related documents carefully before investing.
               </p>
             </section>
@@ -204,72 +206,6 @@ const TermsAndConditions = () => {
               </p>
             </section>
 
-            {/* Cookies and Analytics */}
-            <section style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(24px, 4vw, 32px)',
-                fontWeight: '600',
-                color: '#DAA520',
-                marginBottom: '20px',
-                lineHeight: '1.3'
-              }}>8. Cookies and Analytics</h2>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                We use essential cookies to operate the website. Where enabled, we may also use optional analytics 
-                technologies (such as Google Analytics) to understand site performance and improve user experience.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                Optional analytics is loaded only after you provide consent via our cookie consent banner. 
-                You can also control cookies through your browser settings; disabling certain cookies may affect 
-                website functionality.
-              </p>
-            </section>
-
-            {/* Third-Party Links and Affiliate Disclosure */}
-            <section style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(24px, 4vw, 32px)',
-                fontWeight: '600',
-                color: '#DAA520',
-                marginBottom: '20px',
-                lineHeight: '1.3'
-              }}>9. Third-Party Links and Affiliate Disclosure</h2>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                Our website may contain links to third-party platforms including but not limited to Groww, 
-                Zerodha, Smallcase, and other financial service providers. We may earn referral commissions 
-                when you sign up through these links.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                These commercial relationships do not influence our educational content. We aim to keep our
-                content fair, transparent, and written in your best interest.
-              </p>
-              <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                Disclosure: Some links may be affiliate/sponsored links. If you use them, we may be compensated.
-                You are not charged any extra fees for using our links.
-              </p>
-            </section>
-
-            {/* Future Advertising */}
-            <section style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(24px, 4vw, 32px)',
-                fontWeight: '600',
-                color: '#DAA520',
-                marginBottom: '20px',
-                lineHeight: '1.3'
-              }}>10. Advertising and Monetization</h2>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                BM Wealth may display third-party advertisements through Google AdSense or similar advertising 
-                networks. These advertisements are clearly marked and distinguished from our editorial content.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                We do not endorse or take responsibility for the products or services advertised by third 
-                parties. Please conduct your own research before engaging with any advertised content.
-              </p>
-            </section>
-
             {/* Governing Law */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
@@ -279,7 +215,7 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>11. Governing Law and Jurisdiction</h2>
+              }}>8. Governing Law and Jurisdiction</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 These Terms and Conditions shall be governed by and construed in accordance with the laws 
                 of India. Any disputes arising from or relating to these terms shall be subject to the 
@@ -296,7 +232,7 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>12. Contact Information</h2>
+              }}>9. Contact Information</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 If you have any questions or concerns about these Terms and Conditions, please contact us:
               </p>
@@ -336,7 +272,7 @@ const TermsAndConditions = () => {
                 <strong style={{ color: '#E5E5E5' }}>AMFI Registration:</strong> ARN 90008
               </p>
               <p style={{ fontSize: '14px', color: '#B8B8B8', margin: 0 }}>
-                We are AMFI Registered and IRDAI Licensed. We operate in compliance with applicable regulations.
+                We are AMFI Registered and IRDAI Licensed. We are NOT SEBI-registered investment advisors.
               </p>
             </section>
           </div>

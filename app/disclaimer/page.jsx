@@ -100,7 +100,7 @@ const Disclaimer = () => {
                 lineHeight: '1.3'
               }}>1. Investment Disclaimer</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                <strong style={{ color: '#E5E5E5' }}>Regulatory status:</strong> BM Wealth operates as a mutual fund distributor (AMFI ARN-90008) and an IRDAI-licensed insurance advisor (License: 277925).
+                <strong style={{ color: '#E5E5E5' }}>Regulatory status:</strong> BM Wealth operates as a mutual fund distributor (AMFI ARN-90008) and an IRDAI-licensed insurance advisor (License: 277925). We are not a SEBI-registered Investment Adviser (RIA) and we do not provide stock tips, buy/sell calls, or personalized investment advice requiring SEBI RIA registration.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 Market prices shown on our website (including third-party embedded widgets) are for general awareness only and may be delayed or differ across sources.
@@ -109,7 +109,10 @@ const Disclaimer = () => {
                 Any market snapshot/ticker data (indices, commodities, FX, crypto) is indicative and may be delayed. Where labels reference local units, values may be derived from publicly available third-party sources and may not match official exchange feeds (e.g., NSE/BSE/MCX) at all times.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                The information provided by BM Wealth is intended to support informed decision-making. Please verify details from official sources and product documents before acting.
+                The information, analysis, and recommendations provided by BM Wealth are for 
+                informational and educational purposes only. They should not be construed as 
+                investment advice or a recommendation to buy, sell, or hold any securities or 
+                financial products.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 All investment decisions are solely your responsibility. You should conduct your 
@@ -278,8 +281,13 @@ const Disclaimer = () => {
                   </li>
                 </ul>
               </div>
+              <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', marginBottom: '20px' }}>
+                IMPORTANT: We are NOT SEBI-registered investment advisors.
+              </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                We operate with disclosure-led processes aligned to our AMFI and IRDAI registrations. Please read all product documents carefully before making decisions.
+                We follow SEBI guidelines and regulations applicable to mutual fund distributors, 
+                but we are not registered as investment advisors under SEBI's Investment Advisers 
+                Regulations, 2013.
               </p>
             </section>
 
@@ -305,7 +313,7 @@ const Disclaimer = () => {
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Third-party actions, including but not limited to mutual fund companies and insurance providers</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                Your use of our services is at your own risk. Consider diversification and 
+                Your use of our services is at your own risk. We recommend diversification and 
                 prudent investment practices to manage risk.
               </p>
             </section>

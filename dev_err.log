@@ -1,0 +1,528 @@
+[TypeError: fetch failed] {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+      localPort: 56339,
+      remoteAddress: '2406:8600:f03f:1fa::3000',
+      remotePort: 443,
+      remoteFamily: 'IPv6',
+      timeout: undefined,
+      bytesWritten: 263,
+      bytesRead: 0
+    }
+  }
+}
+[TypeError: fetch failed] {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+      localPort: 56339,
+      remoteAddress: '2406:8600:f03f:1fa::3000',
+      remotePort: 443,
+      remoteFamily: 'IPv6',
+      timeout: undefined,
+      bytesWritten: 263,
+      bytesRead: 0
+    }
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error [SocketError]: other side closed] {
+      code: 'UND_ERR_SOCKET',
+      socket: {
+        localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+        localPort: 56339,
+        remoteAddress: '2406:8600:f03f:1fa::3000',
+        remotePort: 443,
+        remoteFamily: 'IPv6',
+        timeout: undefined,
+        bytesWritten: 263,
+        bytesRead: 0
+      }
+    }
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error [SocketError]: other side closed] {
+      code: 'UND_ERR_SOCKET',
+      socket: {
+        localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+        localPort: 56339,
+        remoteAddress: '2406:8600:f03f:1fa::3000',
+        remotePort: 443,
+        remoteFamily: 'IPv6',
+        timeout: undefined,
+        bytesWritten: 263,
+        bytesRead: 0
+      }
+    }
+  }
+}
+[TypeError: fetch failed] {
+  [cause]: [Error: Client network socket disconnected before secure TLS connection was established] {
+    code: 'ECONNRESET',
+    path: undefined,
+    host: 'query1.finance.yahoo.com',
+    port: 443,
+    localAddress: null
+  }
+}
+[TypeError: fetch failed] {
+  [cause]: [Error: Client network socket disconnected before secure TLS connection was established] {
+    code: 'ECONNRESET',
+    path: undefined,
+    host: 'query1.finance.yahoo.com',
+    port: 443,
+    localAddress: null
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error: Client network socket disconnected before secure TLS connection was established] {
+      code: 'ECONNRESET',
+      path: undefined,
+      host: 'query1.finance.yahoo.com',
+      port: 443,
+      localAddress: null
+    }
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error: Client network socket disconnected before secure TLS connection was established] {
+      code: 'ECONNRESET',
+      path: undefined,
+      host: 'query1.finance.yahoo.com',
+      port: 443,
+      localAddress: null
+    }
+  }
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[ERROR] market_data_fetch_error {
+  error: 'Yahoo quote fetch failed: 401',
+  stack: 'Error: Yahoo quote fetch failed: 401\n' +
+    '    at fetchYahooQuoteMap (webpack-internal:///(rsc)/./app/api/market-data/route.js:145:28)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n' +
+    '    at async GET (webpack-internal:///(rsc)/./app/api/market-data/route.js:211:26)\n' +
+    '    at async AppRouteRouteModule.do (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:32847)\n' +
+    '    at async AppRouteRouteModule.handle (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:10:39868)\n' +
+    '    at async doRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1452:42)\n' +
+    '    at async responseGenerator (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1822:28)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:1832:28)\n' +
+    '    at async DevServer.renderPageComponent (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2257:24)\n' +
+    '    at async DevServer.renderToResponseImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:2295:32)\n' +
+    '    at async DevServer.pipeImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:959:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\next-server.js:281:17)\n' +
+    '    at async DevServer.handleRequestImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\base-server.js:853:17)\n' +
+    '    at async C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:371:20\n' +
+    '    at async Span.traceAsyncFn (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\trace\\trace.js:153:20)\n' +
+    '    at async DevServer.handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:368:24)\n' +
+    '    at async invokeRender (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:230:21)\n' +
+    '    at async handleRequest (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:408:24)\n' +
+    '    at async requestHandlerImpl (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\router-server.js:432:13)\n' +
+    '    at async Server.requestListener (C:\\Users\\admin\\premium-invest-8\\node_modules\\next\\dist\\server\\lib\\start-server.js:146:13)'
+}
+[TypeError: fetch failed] {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+      localPort: 61849,
+      remoteAddress: '2406:8600:f040:1fa::2000',
+      remotePort: 443,
+      remoteFamily: 'IPv6',
+      timeout: undefined,
+      bytesWritten: 262,
+      bytesRead: 0
+    }
+  }
+}
+[TypeError: fetch failed] {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+      localPort: 61849,
+      remoteAddress: '2406:8600:f040:1fa::2000',
+      remotePort: 443,
+      remoteFamily: 'IPv6',
+      timeout: undefined,
+      bytesWritten: 262,
+      bytesRead: 0
+    }
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error [SocketError]: other side closed] {
+      code: 'UND_ERR_SOCKET',
+      socket: {
+        localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+        localPort: 61849,
+        remoteAddress: '2406:8600:f040:1fa::2000',
+        remotePort: 443,
+        remoteFamily: 'IPv6',
+        timeout: undefined,
+        bytesWritten: 262,
+        bytesRead: 0
+      }
+    }
+  }
+}
+ ⨯ [Error: failed to pipe response] {
+  [cause]: [TypeError: fetch failed] {
+    [cause]: [Error [SocketError]: other side closed] {
+      code: 'UND_ERR_SOCKET',
+      socket: {
+        localAddress: '2409:4090:2:6802:31a3:dd17:39aa:623b',
+        localPort: 61849,
+        remoteAddress: '2406:8600:f040:1fa::2000',
+        remotePort: 443,
+        remoteFamily: 'IPv6',
+        timeout: undefined,
+        bytesWritten: 262,
+        bytesRead: 0
+      }
+    }
+  }
+}

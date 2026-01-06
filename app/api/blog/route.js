@@ -26,37 +26,11 @@ import { join } from 'path';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-function toTitleCase(value) {
-  return String(value || '')
-    .trim()
-    .replace(/\s+/g, ' ')
-    .split(' ')
-    .filter(Boolean)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-function normalizeCategory(post) {
-  if (post && typeof post.category === 'string' && post.category.trim()) {
-    return toTitleCase(post.category);
-  }
-
-  if (post && Array.isArray(post.tags) && post.tags.length > 0) {
-    const firstTag = post.tags.find((t) => typeof t === 'string' && t.trim());
-    if (firstTag) return toTitleCase(firstTag);
-  }
-
-  return 'General';
-}
-
 export async function GET() {
   try {
     const filePath = join(process.cwd(), 'data', 'blog.json');
     const fileContents = await readFile(filePath, 'utf8');
-    const blogPostsRaw = JSON.parse(fileContents);
-    const blogPosts = Array.isArray(blogPostsRaw)
-      ? blogPostsRaw.map((p) => ({ ...p, category: normalizeCategory(p) }))
-      : [];
+    const blogPosts = JSON.parse(fileContents);
     
     // Add debug info
     const debugInfo = {

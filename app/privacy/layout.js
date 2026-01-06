@@ -17,13 +17,10 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
-import { buildMetadata } from "@/lib/seo/metadata";
-
-export const metadata = buildMetadata({
-  title: "Privacy Policy | BM Wealth Mumbai",
-  description: "BM Wealth privacy policy.",
-  path: "/privacy",
-});
+export const metadata = {
+  title: 'Privacy Policy | BM Wealth Mumbai',
+  description: 'BM Wealth privacy policy.',
+};
 
 export default function Layout({ children }) {
   return children;

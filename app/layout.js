@@ -29,11 +29,9 @@ import Navigation from "@/components/user/Navigation";
 import Footer from "@/components/user/Footer";
 import WhatsAppFloat from "@/components/user/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
-import CookieConsent from "@/components/shared/CookieConsent";
-import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata";
-
-const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -47,13 +45,11 @@ const inter = Inter({
   display: "swap",
 });
 
+export const metadataBase = getMetadataBase();
+
 export const metadata = {
-  metadataBase: getMetadataBase(),
-  title: "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
-  description: "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
-  alternates: {
-    canonical: "/",
-  },
+  title: "BM Wealth - Mumbai's Distinguished Wealth Architecture | Mutual Funds, SIP, PMS | ARN 90008",
+  description: "BM Wealth offers expert wealth distribution, mutual funds, SIP, portfolio curation, and insurance services in Mumbai. IRDAI Licensed & AMFI Registered ARN 90008.",
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -64,9 +60,9 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: "BM Wealth",
+    title: "BM Wealth - Mumbai's Distinguished Wealth Architecture",
     description:
-      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "BM Wealth offers expert wealth distribution, mutual funds, SIP, portfolio curation, and insurance services in Mumbai.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -75,15 +71,15 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BM Wealth",
+    title: "BM Wealth - Mumbai's Distinguished Wealth Architecture",
     description:
-      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "Expert wealth distribution, mutual funds, SIP, and insurance services in Mumbai.",
     images: [DEFAULT_OG_IMAGE],
     },
 };
 
 export default function RootLayout({ children }) {
-  const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
+  const siteUrl = metadataBase?.toString?.() || "https://bmwealth.co.in";
   const schemaGraph = {
     "@context": "https://schema.org",
     "@graph": [
@@ -115,44 +111,24 @@ export default function RootLayout({ children }) {
   };
   return (
     <html lang="en">
-      <body
-        className={`${playfair.variable} ${inter.variable}`}
-        style={{
-          backgroundColor: "#000",
-          color: "#fff",
-          margin: 0,
-          overflowX: "hidden",
-          maxWidth: "100%",
-          width: "100%",
-        }}
-      >
+      <body className={`${playfair.variable} ${inter.variable}`} style={{ backgroundColor: '#000', color: '#fff', margin: 0, overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
         <script
           type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
         />
-        <div
-          className="main-wrapper"
-          style={{
-            overflowX: "hidden",
-            maxWidth: "100%",
-            width: "100%",
-            position: "relative",
-          }}
-        >
+        <div className="main-wrapper" style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%', position: 'relative' }}>
           <Navigation />
-          <main style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}>
-            {children}
-          </main>
+          <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>{children}</main>
           <Footer />
         </div>
         <LuxuryMobileDock />
         <WhatsAppFloat />
-        <CookieConsent />
-        <AnalyticsGate measurementId={GA4_MEASUREMENT_ID} />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
-
 }
 
 

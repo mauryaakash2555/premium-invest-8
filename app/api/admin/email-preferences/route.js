@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { isAdminFromRequest } from '@/lib/adminSession';
+import { isAdminFromCookies } from '@/lib/adminSession';
 import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
 
 const prefsSchema = z.object({
@@ -15,8 +15,7 @@ const prefsSchema = z.object({
 
 export async function GET() {
   const cookieStore = await cookies();
-  const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) {
+  if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
 
@@ -26,8 +25,7 @@ export async function GET() {
 
 export async function POST(req) {
   const cookieStore = await cookies();
-  const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) {
+  if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
 

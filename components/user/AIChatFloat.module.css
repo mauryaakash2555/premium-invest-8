@@ -610,46 +610,6 @@ transform-style: preserve-3d;
   filter: brightness(1.02);
 }
 
-.suggestionsWrap {
-  margin-top: 10px;
-}
-
-.suggestionsTitle {
-  font-size: 11px;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  opacity: 0.8;
-  margin-bottom: 8px;
-}
-
-.suggestionsButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.suggestionBtn {
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 8px 12px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(192, 160, 98, 0.35);
-  color: rgba(192, 160, 98, 0.95);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.suggestionBtn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.02);
-}
-
 .pitchCard {
   margin-top: 10px;
   padding: 12px;
@@ -771,28 +731,6 @@ padding: 18px;
 .bubbleBot {
   align-self: flex-start;
   border-bottom-left-radius: 6px;
-}
-
-.statusNote {
-  margin: 10px 18px 0;
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  line-height: 1.4;
-  letter-spacing: 0.01em;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.22);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.statusNoteInfo {
-  border-color: rgba(192, 160, 98, 0.22);
-  color: rgba(192, 160, 98, 0.92);
-}
-
-.statusNoteError {
-  border-color: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.78);
 }
 
 .inputBar {
@@ -917,8 +855,7 @@ padding: 18px;
 @media (max-width: 768px) {
   .launcher {
     right: 20px;
-    /* Keep above WhatsAppFloat + LuxuryMobileDock */
-    bottom: calc(230px + env(safe-area-inset-bottom));
+    bottom: 160px;
     width: 58px;
     height: 58px;
   }

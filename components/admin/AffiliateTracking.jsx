@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 function fmtINR(n) {
   const x = Number(n);
@@ -26,6 +25,12 @@ function fmtDate(iso) {
   }
 }
 
+async function fetchJSON(url, opts) {
+  const r = await fetch(url, opts);
+  const j = await r.json().catch(() => null);
+  return { r, j };
+}
+
 export function AffiliateTracking() {
   const [busy, setBusy] = useState(false);
   const [stats, setStats] = useState(null);
@@ -36,7 +41,7 @@ export function AffiliateTracking() {
   async function loadStats() {
     setBusy(true);
     try {
-      const { r, j } = await fetchAdminJSON('/api/admin/affiliate-stats');
+      const { r, j } = await fetchJSON('/api/admin/affiliate-stats');
       setStats(r.ok && j?.ok ? j : null);
     } finally {
       setBusy(false);
@@ -54,7 +59,7 @@ export function AffiliateTracking() {
     if (!p?.id) return;
     setBusy(true);
     try {
-      await fetchAdminJSON('/api/admin/affiliate-update', {
+      await fetchJSON('/api/admin/affiliate-update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: p.id, is_active: !p.is_active }),
@@ -69,7 +74,7 @@ export function AffiliateTracking() {
     if (!clickId) return;
     setBusy(true);
     try {
-      await fetchAdminJSON('/api/admin/affiliate-convert', {
+      await fetchJSON('/api/admin/affiliate-convert', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clickId, amount }),
@@ -84,7 +89,7 @@ export function AffiliateTracking() {
     if (!clickId) return;
     setBusy(true);
     try {
-      await fetchAdminJSON('/api/admin/affiliate-fail', {
+      await fetchJSON('/api/admin/affiliate-fail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clickId }),
@@ -107,7 +112,7 @@ export function AffiliateTracking() {
 
     setEditBusy(true);
     try {
-      await fetchAdminJSON('/api/admin/affiliate-update', {
+      await fetchJSON('/api/admin/affiliate-update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

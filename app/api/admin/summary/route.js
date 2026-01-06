@@ -1,16 +1,14 @@
 ﻿import { NextResponse } from "next/server";
-import { cookies, headers } from "next/headers";
-import { isAdminFromRequest } from "@/lib/adminSession";
+import { cookies } from "next/headers";
+import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { isFeatureEnabled } from "@/config/features";
-import { CONSTANTS } from "@/config/constants";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
 
 export async function GET(req) {
   const cookieStore = await cookies();
-  const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) {
+  if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
@@ -76,7 +74,6 @@ export async function GET(req) {
     revRes,
     scoreRes,
     aiRes,
-    apiUsageRes,
     cacheHitsRes,
     leadsCountRes,
   ] = await Promise.all([
@@ -136,15 +133,6 @@ export async function GET(req) {
       .order("created_at", { ascending: false })
       .limit(1000),
 
-    // Token usage (best-effort): populated by app/api/chat via logAPIUsage
-    sb
-      .from("events")
-      .select("id,data,created_at")
-      .gte("created_at", start.toISOString())
-      .eq("event_type", "api_usage")
-      .order("created_at", { ascending: false })
-      .limit(2000),
-
     // Smart cache hits today (API calls saved)
     sb
       .from("events")
@@ -166,7 +154,6 @@ export async function GET(req) {
     revRes.error ||
     scoreRes.error ||
     aiRes.error ||
-    apiUsageRes.error ||
     cacheHitsRes.error ||
     leadsCountRes.error
   ) {
@@ -181,7 +168,6 @@ export async function GET(req) {
           revRes.error?.message ||
           scoreRes.error?.message ||
           aiRes.error?.message ||
-          apiUsageRes.error?.message ||
           cacheHitsRes.error?.message ||
           leadsCountRes.error?.message ||
           "Supabase error",
@@ -227,7 +213,7 @@ export async function GET(req) {
     lead_score_counts[tier] = (lead_score_counts[tier] || 0) + 1;
   }
 
-  const ai_provider_counts = { gemini: 0, groq: 0, anthropic: 0, rule: 0 };
+  const ai_provider_counts = { gemini: 0, groq: 0, rule: 0 };
   let ai_calls_today = 0;
   for (const e of aiRes.data || []) {
     const p = String(e?.data?.provider || "").toLowerCase();
@@ -235,26 +221,8 @@ export async function GET(req) {
     ai_calls_today += 1;
     if (p === "groq") ai_provider_counts.groq += 1;
     else if (p === "gemini") ai_provider_counts.gemini += 1;
-    else if (p === "anthropic" || p === "claude") ai_provider_counts.anthropic += 1;
     else if (p === "rule") ai_provider_counts.rule += 1;
   }
-
-  const ai_tokens_by_provider = { gemini: 0, groq: 0, anthropic: 0, rule: 0, cache: 0, unknown: 0 };
-  let ai_tokens_today = 0;
-  for (const e of apiUsageRes.data || []) {
-    const p = String(e?.data?.provider || "unknown").toLowerCase();
-    const tok = Number(e?.data?.tokens_used);
-    if (!Number.isFinite(tok) || tok <= 0) continue;
-    ai_tokens_today += tok;
-    if (ai_tokens_by_provider[p] == null) ai_tokens_by_provider[p] = 0;
-    ai_tokens_by_provider[p] += tok;
-  }
-
-  const ai_daily_limits = {
-    gemini: Number(CONSTANTS?.API_LIMITS?.GEMINI_DAILY_LIMIT) || null,
-    groq: Number(CONSTANTS?.API_LIMITS?.GROQ_DAILY_LIMIT) || null,
-    anthropic: Number(CONSTANTS?.API_LIMITS?.CLAUDE_DAILY_LIMIT) || null,
-  };
 
   // Smart cache stats (best-effort; may be unavailable until schema is applied).
   let questions_in_cache = 0;
@@ -305,9 +273,6 @@ export async function GET(req) {
       lead_scores,
       lead_score_counts,
       ai_provider_counts,
-      ai_tokens_today,
-      ai_tokens_by_provider,
-      ai_daily_limits,
       smart_cache: {
         cache_hit_rate,
         api_calls_saved_today: cacheHitsToday,

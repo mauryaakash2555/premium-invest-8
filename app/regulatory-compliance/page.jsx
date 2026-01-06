@@ -50,10 +50,10 @@ export default function RegulatoryCompliance() {
 
           <section className="space-y-6">
             <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
-              Compliance Statement
+              SEBI Compliance Statement
             </h2>
             <p className="text-gray-300">
-              We operate as a registered distributor under AMFI guidelines. Our role is to curate and distribute premier investment products while providing execution support and market insights.
+              We operate as a registered distributor under AMFI guidelines. We do not provide SEBI-registered investment advisory services. Our role is to curate and distribute premier investment products while providing execution support and market insights.
             </p>
           </section>
 
@@ -62,7 +62,7 @@ export default function RegulatoryCompliance() {
               IRDAI Guidelines
             </h2>
             <p className="text-gray-300">
-              As an IRDAI-licensed entity, we facilitate access to insurance solutions from providers. Where product discussions occur, they follow disclosure-led processes and are aligned with the protective frameworks mandated by the authority.
+              As a licensed corporate agent under IRDAI, we facilitate access to insurance solutions from leading providers. All recommendations are based on a thorough understanding of client requirements and are aligned with the protective frameworks mandated by the authority.
             </p>
           </section>
 
@@ -85,7 +85,7 @@ export default function RegulatoryCompliance() {
               Transparency & Disclosure
             </h2>
             <p className="text-gray-300">
-              Transparency is central to our approach. We ensure that material information regarding products, risks, and distribution remuneration is disclosed so users can make informed decisions.
+              Transparency is the cornerstone of our wealth architecture. We ensure that all material information regarding products, risks, and distribution remuneration is disclosed to our clients, enabling informed decision-making.
             </p>
           </section>
         </div>

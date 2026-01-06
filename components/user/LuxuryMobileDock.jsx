@@ -22,7 +22,7 @@
 
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Briefcase, Users, Menu, X, Info, Layers, BookOpen, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,6 @@ const mainNavItems = [
   { label: "Home", icon: <Home className="w-5 h-5" strokeWidth={1} />, href: "/" },
   { label: "Services", icon: <Briefcase className="w-5 h-5" strokeWidth={1} />, href: "/services" },
   { label: "Partners", icon: <Users className="w-5 h-5" strokeWidth={1} />, href: "/curated-partners" },
-  { label: "Tools", icon: <Layers className="w-5 h-5" strokeWidth={1} />, href: "/tools" },
 ];
 
 const allNavItems = [
@@ -39,8 +38,6 @@ const allNavItems = [
   { label: "About", icon: <Info className="w-6 h-6" strokeWidth={1} />, href: "/about-us" },
   { label: "Services", icon: <Briefcase className="w-6 h-6" strokeWidth={1} />, href: "/services" },
   { label: "Platforms", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/platforms" },
-  { label: "Tools", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools" },
-  { label: "Tax Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools/tax-optimization" },
   { label: "Curated Partners", icon: <Users className="w-6 h-6" strokeWidth={1} />, href: "/curated-partners" },
   { label: "Blog", icon: <BookOpen className="w-6 h-6" strokeWidth={1} />, href: "/blog" },
   { label: "Contact", icon: <Mail className="w-6 h-6" strokeWidth={1} />, href: "/contact" },
@@ -53,127 +50,67 @@ export function LuxuryMobileDock() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [idleIndex, setIdleIndex] = useState(null);
-  const [pressedIndex, setPressedIndex] = useState(null);
-  const [menuIsScrolling, setMenuIsScrolling] = useState(false);
-  const lastScrollYRef = useRef(0);
-  const scrollRafRef = useRef(0);
-  const scrollTimeoutRef = useRef(0);
-  const highlightTimeoutRef = useRef(0);
-  const pressedTimeoutRef = useRef(0);
-  const menuScrollRafRef = useRef(0);
-  const menuScrollTimeoutRef = useRef(0);
   const pathname = usePathname();
   const router = useRouter();
-
-  // Keep the calculator screen clean (no dock overlay)
-  // IMPORTANT: Do NOT return early before hooks below (breaks hook ordering).
-  const hideDock =
-    pathname?.startsWith("/tools/tax-optimization") ||
-    pathname?.startsWith("/tools/tax-leak-detector") ||
-    pathname?.startsWith("/tax-leak-detector");
-
-  // If we navigate into a route where the dock is hidden, force-close any open menu
-  // and clear transient highlight state.
-  useEffect(() => {
-    if (!hideDock) return;
-    setIsMenuOpen(false);
-    setHoveredIndex(null);
-    setIdleIndex(null);
-    setPressedIndex(null);
-    setMenuIsScrolling(false);
-    setIsReading(false);
-    setIsScrolling(false);
-  }, [hideDock]);
 
   // When the "pop-out" (full-screen) menu closes, ensure no stale hover state
   // remains (hover events may not fire on unmount, causing buttons to look stuck).
   useEffect(() => {
-    if (hideDock) return;
     if (!isMenuOpen) {
       setHoveredIndex(null);
       setIdleIndex(null);
-      setPressedIndex(null);
     }
-  }, [isMenuOpen, hideDock]);
+  }, [isMenuOpen]);
 
   useEffect(() => {
-    if (hideDock) return;
-    lastScrollYRef.current = typeof window !== "undefined" ? window.scrollY : 0;
-
+    let lastScrollY = window.scrollY;
+    let scrollTimeout = null;
     const handleScroll = () => {
       // When the overlay menu is open, don't let scroll-driven UI states fight the animation
       if (isMenuOpen) return;
-      if (scrollRafRef.current) return;
-      scrollRafRef.current = window.requestAnimationFrame(() => {
-        scrollRafRef.current = 0;
 
-        const currentScrollY = window.scrollY;
-        const nextScrolled = currentScrollY > 50;
-        setScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
 
-        // "Animate while scrolling" (brief shimmer burst)
-        setIsScrolling((prev) => (prev ? prev : true));
-        if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = window.setTimeout(() => setIsScrolling(false), 180);
-
-        // Super smooth reading mode detection
-        const last = lastScrollYRef.current;
-        const nextReading =
-          (currentScrollY > last + 15 && currentScrollY > 250) ? true :
-          (currentScrollY < last - 15 || currentScrollY < 50) ? false :
-          null;
-        if (nextReading !== null) {
-          setIsReading((prev) => (prev === nextReading ? prev : nextReading));
-        }
-        lastScrollYRef.current = currentScrollY;
-      });
+      // "Animate while scrolling" (brief shimmer burst)
+      setIsScrolling(true);
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => setIsScrolling(false), 180);
+      
+      // Super smooth reading mode detection
+      if (currentScrollY > lastScrollY + 15 && currentScrollY > 250) {
+        setIsReading(true);
+      } else if (currentScrollY < lastScrollY - 15 || currentScrollY < 50) {
+        setIsReading(false);
+      }
+      lastScrollY = currentScrollY;
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (scrollRafRef.current) window.cancelAnimationFrame(scrollRafRef.current);
-      scrollRafRef.current = 0;
-      if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = 0;
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
     };
-  }, [isMenuOpen, hideDock]);
+  }, [isMenuOpen]);
 
-  const pulseHighlight = (index) => {
-    if (typeof window === "undefined") return;
-    if (highlightTimeoutRef.current) window.clearTimeout(highlightTimeoutRef.current);
-    setHoveredIndex(index);
-    highlightTimeoutRef.current = window.setTimeout(() => {
-      setHoveredIndex(null);
-    }, 520);
-  };
-
-  const pulsePressed = (index) => {
-    if (typeof window === "undefined") return;
-    if (pressedTimeoutRef.current) window.clearTimeout(pressedTimeoutRef.current);
-    setPressedIndex(index);
-    pressedTimeoutRef.current = window.setTimeout(() => {
-      setPressedIndex(null);
-    }, 650);
-  };
-
-  // Idle "alive" animation (dock): gently cycles highlight across dock buttons.
+  // Idle "alive" animation: gently cycles a highlight across buttons when user isn't interacting.
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (hideDock) return;
-    if (isMenuOpen) return;
+    if (isMenuOpen) {
+      setIdleIndex(null);
+      return;
+    }
 
     let i = 0;
     let cancelled = false;
     const tick = () => {
       if (cancelled) return;
+      // Don't fight real interactions; only run when no hover state + not actively scrolling.
       if (hoveredIndex === null && !isScrolling && !isReading) {
         setIdleIndex(i % (mainNavItems.length + 1)); // last slot used for "More"
         i += 1;
       }
     };
 
+    // Start after a short delay so it doesn't feel jumpy on first load
     const start = window.setTimeout(() => tick(), 1200);
     const interval = window.setInterval(() => tick(), 2600);
     return () => {
@@ -182,38 +119,10 @@ export function LuxuryMobileDock() {
       window.clearInterval(interval);
       setIdleIndex(null);
     };
-  }, [isMenuOpen, hoveredIndex, isScrolling, isReading, hideDock]);
-
-  // Idle "alive" animation (menu): when full-screen menu is open, cycle a gentle highlight.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (hideDock) return;
-    if (!isMenuOpen) return;
-
-    let i = 0;
-    let cancelled = false;
-    const tick = () => {
-      if (cancelled) return;
-      // Only when not hovering and not actively scrolling inside menu.
-      if (hoveredIndex === null && !menuIsScrolling) {
-        setIdleIndex(i % allNavItems.length);
-        i += 1;
-      }
-    };
-
-    const start = window.setTimeout(() => tick(), 500);
-    const interval = window.setInterval(() => tick(), 2200);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(start);
-      window.clearInterval(interval);
-      setIdleIndex(null);
-    };
-  }, [isMenuOpen, hoveredIndex, menuIsScrolling, hideDock]);
+  }, [isMenuOpen, hoveredIndex, isScrolling, isReading]);
 
   // Lock background scroll while the full-screen menu is open (prevents flicker/glitch)
   useEffect(() => {
-    if (hideDock) return;
     if (!isMenuOpen) return;
     setIsReading(false);
 
@@ -226,44 +135,23 @@ export function LuxuryMobileDock() {
       document.body.style.overflow = prevOverflow;
       document.body.style.touchAction = prevTouchAction;
     };
-  }, [isMenuOpen, hideDock]);
+  }, [isMenuOpen]);
 
   const handleNavClick = (href) => {
     setIsMenuOpen(false);
     setHoveredIndex(null);
     setIdleIndex(null);
-    setPressedIndex(null);
     router.push(href);
   };
 
-  const handleMenuNavClick = (href, index) => {
-    setHoveredIndex(null);
-    setIdleIndex(index);
-    pulsePressed(index);
-    window.setTimeout(() => handleNavClick(href), 220);
-  };
-
   const highlightIndex = hoveredIndex ?? idleIndex;
-
-  const handleMenuScroll = () => {
-    if (typeof window === "undefined") return;
-    if (menuScrollRafRef.current) return;
-    menuScrollRafRef.current = window.requestAnimationFrame(() => {
-      menuScrollRafRef.current = 0;
-      setMenuIsScrolling(true);
-      if (menuScrollTimeoutRef.current) window.clearTimeout(menuScrollTimeoutRef.current);
-      menuScrollTimeoutRef.current = window.setTimeout(() => setMenuIsScrolling(false), 180);
-    });
-  };
-
-  if (hideDock) return null;
 
   return (
     <>
       {/* Main Dock - ULTRA LUXURY EDITION */}
       <nav
         className={cn(
-          "fixed bottom-3 left-1/2 -translate-x-1/2 z-[9999] lg:hidden",
+          "fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] lg:hidden",
           "transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]", // Premium ultra-smooth easing
           scrolled ? "scale-90" : "scale-100",
           isReading ? "opacity-0 pointer-events-none scale-75 translate-y-10 blur-sm" : "opacity-100 pointer-events-auto scale-100 translate-y-0 blur-0"
@@ -273,7 +161,7 @@ export function LuxuryMobileDock() {
           className={cn(
             "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
             isScrolling && "gold-shimmer",
-            "relative flex items-center gap-1 px-3 py-2 bg-[#000000] rounded-full", // Pitch black bg
+            "relative flex items-center gap-1.5 px-4.5 py-3 bg-[#000000] rounded-full", // Pitch black bg
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
           )}
@@ -304,8 +192,6 @@ export function LuxuryMobileDock() {
                 onClick={() => handleNavClick(item.href)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                onTouchStart={() => pulseHighlight(index)}
-                onPointerDown={() => pulseHighlight(index)}
                 className={cn(
                   "relative flex flex-col items-center justify-center px-4 py-1.5",
                   "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -342,10 +228,8 @@ export function LuxuryMobileDock() {
 
           <button
             onClick={() => setIsMenuOpen(true)}
-            onMouseEnter={() => setHoveredIndex(mainNavItems.length)}
+            onMouseEnter={() => setHoveredIndex(999)}
             onMouseLeave={() => setHoveredIndex(null)}
-            onTouchStart={() => pulseHighlight(mainNavItems.length)}
-            onPointerDown={() => pulseHighlight(mainNavItems.length)}
             className={cn(
               "relative flex flex-col items-center justify-center px-4 py-1.5",
               "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -353,7 +237,7 @@ export function LuxuryMobileDock() {
             )}
             aria-label="More menu"
           >
-            {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
+            {(hoveredIndex === 999 || highlightIndex === mainNavItems.length) && (
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
             )}
 
@@ -383,22 +267,15 @@ export function LuxuryMobileDock() {
 
       {/* Full-Screen Overlay Menu - FIXED ALIGNMENT & FOLLOW-THE-MOUSE LOGIC */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[10000] animate-in fade-in duration-300 transform-gpu" style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}>
-          <div
-            className="absolute inset-0 backdrop-blur-xl transform-gpu"
-            style={{ backgroundColor: "rgba(0,0,0,0.995)", WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
-            onClick={() => setIsMenuOpen(false)}
-          />
+        <div className="fixed inset-0 z-[10000] animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-black/98 backdrop-blur-xl" onClick={() => setIsMenuOpen(false)} />
 
           <div
             className={cn(
               "gold-grain-texture luxury-particles scrollbar-hide", 
-              "relative h-full flex flex-col items-center p-8 overflow-y-auto overscroll-contain transform-gpu", 
-              "bg-gradient-to-b from-[#000000] via-[#0a0a0a] to-[#000000]",
-              "animate-in slide-in-from-bottom-8 fade-in duration-500"
+              "relative h-full flex flex-col items-center p-8 overflow-y-auto", 
+              "bg-gradient-to-b from-[#000000] via-[#0a0a0a] to-[#000000]"
             )}
-            style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden" }}
-            onScroll={handleMenuScroll}
           >
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -423,24 +300,12 @@ export function LuxuryMobileDock() {
             <nav className="flex flex-col items-stretch gap-4 w-full max-w-sm pt-24 pb-12"> 
               {allNavItems.map((item, index) => {
                 const isActive = pathname === item.href;
-                const isMenuHighlighted = (hoveredIndex ?? idleIndex) === index;
-                const isPressed = pressedIndex === index;
                 return (
                   <button
                     key={index}
-                    onClick={() => handleMenuNavClick(item.href, index)}
+                    onClick={() => handleNavClick(item.href)}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
-                    onTouchStart={() => {
-                      pulseHighlight(index);
-                      pulsePressed(index);
-                      setIdleIndex(index);
-                    }}
-                    onPointerDown={() => {
-                      pulseHighlight(index);
-                      pulsePressed(index);
-                      setIdleIndex(index);
-                    }}
                     className={cn(
                       "group w-full relative",
                       "flex items-center gap-6 px-8 py-5 rounded-2xl",
@@ -449,16 +314,11 @@ export function LuxuryMobileDock() {
                       "hover:bg-gradient-to-r hover:from-[#C0A062]/15 hover:via-[#C0A062]/5 hover:to-transparent",
                       "hover:border-[#C0A062]/60 hover:shadow-[0_0_35px_rgba(192,160,98,0.4)]",
                       "hover:scale-105 hover:translate-x-2",
-                      "backdrop-blur-sm",
-                      isMenuHighlighted &&
-                        "bg-gradient-to-r from-[#C0A062]/10 via-transparent to-transparent border-[#C0A062]/45 scale-[1.03] translate-x-2 shadow-[0_0_35px_rgba(192,160,98,0.35)]",
-                      isPressed &&
-                        "bg-gradient-to-r from-[#C0A062]/15 via-[#C0A062]/5 to-transparent border-[#C0A062]/60 shadow-[0_0_35px_rgba(192,160,98,0.4)] scale-105 translate-x-2"
+                      "backdrop-blur-sm"
                     )}
-                    style={{ animationDelay: `${index * 45}ms` }}
                   >
                     {/* Only show the glowing pop on hover (follow the mouse) */}
-                    {(hoveredIndex === index || (hoveredIndex === null && idleIndex === index)) && (
+                    {hoveredIndex === index && (
                       <div className="absolute left-8 w-12 h-12 bg-[#C0A062]/25 rounded-full blur-2xl transition-all duration-500 animate-pulse" />
                     )}
 
@@ -498,7 +358,7 @@ export function LuxuryMobileDock() {
                     <div
                       className={cn(
                         "relative z-10 w-2.5 h-2.5 rounded-full transition-all duration-500",
-                        isMenuHighlighted ? "bg-[#C0A062] shadow-[0_0_20px_rgba(192,160,98,1)] scale-150" : "bg-transparent scale-0",
+                        hoveredIndex === index ? "bg-[#C0A062] shadow-[0_0_20px_rgba(192,160,98,1)] scale-150" : "bg-transparent scale-0",
                         "group-hover:scale-150"
                       )}
                     >
@@ -508,7 +368,7 @@ export function LuxuryMobileDock() {
                     {/* Luxury Shimmer - always slightly on, strong on hover */}
                     <div className={cn(
                       "absolute inset-0 rounded-2xl overflow-hidden pointer-events-none transition-opacity duration-700",
-                      hoveredIndex === index || isPressed ? "opacity-100" : isMenuHighlighted ? "opacity-45" : "opacity-20"
+                      hoveredIndex === index ? "opacity-100" : "opacity-20"
                     )}>
                       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-[#C0A062]/15 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1200" />
                     </div>

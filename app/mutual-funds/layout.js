@@ -1,11 +1,26 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+/**
+ * FILE: app\mutual-funds\layout.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - (none)
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
 
-export const metadata = buildMetadata({
-  title: "Mutual Funds | BM Wealth",
-  description:
-    "Mutual fund support with clear comparisons, portfolio fit, and disciplined review—delivered with premium documentation and transparency.",
-  path: "/mutual-funds",
-});
+export const metadata = {
+  title: 'Mutual Funds Advisory | BM Wealth Mumbai ARN 90008',
+  description: 'Expert mutual fund advisory services by BM Wealth Mumbai.',
+};
 
 export default function Layout({ children }) {
   return children;

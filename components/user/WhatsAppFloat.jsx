@@ -43,9 +43,8 @@ const WhatsAppFloat = () => {
         <div
           style={{
             position: 'fixed',
-            // Lower tooltip to match button position
-            bottom: 'calc(140px + env(safe-area-inset-bottom))',
-            right: '20px',
+            bottom: '100px',
+            right: '30px',
             background: '#25D366',
             color: '#FFFFFF',
             padding: '8px 16px',

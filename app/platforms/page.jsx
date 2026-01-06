@@ -26,57 +26,14 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
-import FAQSection from '@/components/shared/FAQSection';
 
 export default function Platforms() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const faqs = [
-    {
-      question: 'Are these platforms SEBI registered?',
-      answer:
-        'Platforms and brokers typically operate under SEBI/stock exchange regulations (as applicable). Always verify current registration details on official sources before opening an account.',
-    },
-    {
-      question: 'Do you guarantee returns if I use these platforms?',
-      answer:
-        'No. Returns depend on market performance and your investment decisions. Platform selection does not guarantee outcomes.',
-    },
-    {
-      question: 'Are these links affiliate links?',
-      answer:
-        'Some links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
-    },
-    {
-      question: 'Which platform should I choose?',
-      answer:
-        'It depends on your needs (costs, interface, products offered, support). You can compare features and choose what fits your investing style.',
-    },
-  ];
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
-
-      <script
-        id="platforms-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
 
       {/* Hero Section */}
       <section
@@ -127,7 +84,7 @@ export default function Platforms() {
               lineHeight: 1.2,
             }}
           >
-            Investment Platforms
+            Recommended Investment Platforms
           </h1>
           <p
             style={{
@@ -138,7 +95,7 @@ export default function Platforms() {
               lineHeight: 1.7,
             }}
           >
-            Popular platforms and partners commonly used by investors
+            Trusted investment platforms vetted by our experts
           </p>
         </div>
       </section>
@@ -170,7 +127,7 @@ export default function Platforms() {
                 'Maximum Authority & Industry Dominance',
                 'Prime Real-Estate on Platform Directory',
                 'Priority Traffic & Direct Investor Funnel',
-                'Current Bidding: Private'
+                'Current Bidding: ₹2-3 Lakh / Month'
               ].map((benefit, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Sparkles size={18} style={{ color: '#FFF', flexShrink: 0, filter: 'drop-shadow(0 0 5px #FFF)' }} />
@@ -213,7 +170,7 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="/track/zerodha" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
+            <a href="https://zerodha.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
               Open Free Demat Account <ExternalLink size={16} />
             </a>
           </div>
@@ -239,7 +196,7 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="/track/smallcase" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
+            <a href="https://smallcase.com" target="_blank" rel="noopener noreferrer" className="btn-primary">
               Explore Smallcases <ExternalLink size={16} />
             </a>
           </div>
@@ -265,26 +222,16 @@ export default function Platforms() {
             </div>
           </div>
           <div className="platform-button">
-            <a href="/track/groww" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
+            <a href="https://groww.in" target="_blank" rel="noopener noreferrer" className="btn-primary">
               Start Free Account <ExternalLink size={16} />
             </a>
           </div>
         </MobileScrollBoost>
 
-        <section style={{ padding: '10px 20px 0' }}>
-          <p style={{ fontSize: '16px', lineHeight: '1.8', color: 'rgba(255,255,255,0.75)', maxWidth: '900px', margin: '0 auto 0', textAlign: 'center' }}>
-            Related resources: <Link href="/mutual-funds" style={{ color: '#C0A062', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
-            <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP</Link> ·{' '}
-            <Link href="/contact" style={{ color: '#C0A062', textDecoration: 'underline' }}>Contact</Link>
-          </p>
-        </section>
-
-        <FAQSection faqs={faqs} />
-
         {/* Affiliate Disclaimer */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
-            <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> Some outbound links may be affiliate/sponsored links. If you sign up through them, we may earn a commission at no extra cost to you. This helps us support free educational content.
+            <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> We may earn commission when you sign up through our links at no extra cost to you. This helps us provide free educational content.
           </p>
         </div>
 

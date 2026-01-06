@@ -96,7 +96,7 @@ const About = () => {
               lineHeight: 1.6,
             }}
           >
-            Mumbai-based wealth distribution and insurance support since 1989
+            Empowering Mumbai investors with exceptional wealth architecture since inception
           </p>
         </div>
       </section>
@@ -130,21 +130,7 @@ const About = () => {
               }}
             >
               Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
-              has emerged as a trusted name in Mumbai's financial advisory landscape. Founded with a vision to democratize 
-              sophisticated wealth management, we serve over 500 Mumbai investors ranging from young professionals taking 
-              their first steps in SIP investing to established entrepreneurs managing multi-crore portfolios.
-            </p>
-
-            <p
-              style={{
-                fontSize: '18px',
-                color: '#CCCCCC',
-                lineHeight: 1.8,
-                marginBottom: '20px',
-              }}
-            >
-              BM Wealth began in 1989, with a long-term commitment to client-first financial education, disciplined processes,
-              and transparent service.
+              orchestrates comprehensive wealth strategies for discerning Mumbai investors.
             </p>
             <p
               style={{
@@ -154,20 +140,10 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              What began as a mission to help Mumbai's ambitious professionals navigate the complex world of mutual funds 
-              has evolved into a wealth distribution and insurance support firm. We hold AMFI Registration (ARN 90008) for mutual 
-              fund distribution and IRDAI License (277925) for insurance distribution, with a focus on disclosure-led processes.
-            </p>
-            <p
-              style={{
-                fontSize: '18px',
-                color: '#CCCCCC',
-                lineHeight: 1.8,
-                marginBottom: '20px',
-              }}
-            >
-              Our practice is built on clear communication, documented disclosures, and a process-first approach. We aim to help you 
-              understand options, costs, and risks before you decide on the next step.
+              With decades of combined expertise in financial markets, mutual funds, portfolio
+              management, and portfolio curation, we have established a distinguished reputation for delivering
+              personalized wealth management strategies that align with our clients' unique
+              financial goals.
             </p>
             <p
               style={{
@@ -176,10 +152,9 @@ const About = () => {
                 lineHeight: 1.8,
               }}
             >
-              Whether you're a 25-year-old starting your career in Mumbai's corporate sector, a mid-career professional 
-              balancing EMIs with investments, or a business owner planning succession and legacy wealth transfer, we bring 
-              practical tools and premium support to help you navigate decisions more confidently. Our mission is making 
-              financial concepts accessible, understandable, and actionable.
+              Our mission is to make sophisticated wealth strategies accessible to every
+              investor, whether you're commencing your investment journey or looking to
+              enhance your existing portfolio.
             </p>
           </div>
 
@@ -210,56 +185,9 @@ const About = () => {
             <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '16px' }}>
-              Founder & Principal Advisor
+            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
+              Principal
             </p>
-            <div style={{ 
-              fontSize: '15px', 
-              color: '#B8B8B8', 
-              lineHeight: '1.7',
-              textAlign: 'left',
-              maxWidth: '400px',
-              margin: '0 auto'
-            }}>
-              <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>AMFI Registered Mutual Fund Distributor</strong><br/>
-                ARN 90008
-              </p>
-              <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor</strong><br/>
-                License No. 277925
-              </p>
-              <p style={{ marginBottom: '0' }}>
-                With extensive experience in Mumbai's financial markets, Brahmdeo specializes in helping 
-                professionals and families build sustainable wealth. His approach combines deep market knowledge 
-                with practical financial planning, focusing on goal-based investing, tax optimization, and risk 
-                management. Known for transparency and client education, he has guided 500+ Mumbai investors 
-                through market cycles, achieving consistent portfolio growth while maintaining strict regulatory 
-                compliance.
-              </p>
-              
-              <div style={{ 
-                marginTop: '20px', 
-                paddingTop: '16px', 
-                borderTop: '1px solid rgba(218, 165, 32, 0.2)' 
-              }}>
-                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px' }}>
-                  <strong style={{ color: '#C0A062' }}>Specializations:</strong>
-                </p>
-                <ul style={{ 
-                  listStyle: 'none', 
-                  padding: 0, 
-                  margin: 0,
-                  fontSize: '14px',
-                  color: '#B8B8B8'
-                }}>
-                  <li style={{ marginBottom: '4px' }}>• Retirement Planning & SIP Strategies</li>
-                  <li style={{ marginBottom: '4px' }}>• Portfolio Diversification & Risk Management</li>
-                  <li style={{ marginBottom: '4px' }}>• Tax-Efficient Investment Structuring</li>
-                  <li>• Goal-Based Planning Framework</li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -339,7 +267,8 @@ const About = () => {
                 Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We maintain high standards in compliance, disclosure, and documentation.
+                We maintain the premier standards in wealth architecture, continuously enhancing
+                our expertise and methodologies.
               </p>
             </div>
 
@@ -360,10 +289,11 @@ const About = () => {
                 <Target size={35} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Education-Focused
+                Results-Driven
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We focus on clarity: helping you understand choices, risks, and trade-offs before acting.
+                We focus on delivering measurable outcomes and empowering you to achieve your wealth
+                creation objectives.
               </p>
             </div>
 

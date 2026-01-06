@@ -46,7 +46,7 @@ const RefundPolicy = () => {
             {/* Introduction */}
             <section style={{ marginBottom: '40px' }}>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                At BM Wealth, we are committed to providing high-quality services. 
+                At BM Wealth, we are committed to providing high-quality financial advisory services. 
                 This Refund Policy outlines the terms and conditions for refunds and cancellations 
                 across our various service offerings.
               </p>
@@ -55,7 +55,7 @@ const RefundPolicy = () => {
               </p>
             </section>
 
-            {/* Consultation and Support Services */}
+            {/* Advisory and Consultation Services */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
@@ -64,11 +64,11 @@ const RefundPolicy = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>1. Consultation and Support Services</h2>
+              }}>1. Advisory and Consultation Services</h2>
               
               <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#E5E5E5', marginTop: '24px', marginBottom: '16px' }}>Cancellation Policy</h3>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                For one-time consultation sessions:
+                For one-time consultation or advisory sessions:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>

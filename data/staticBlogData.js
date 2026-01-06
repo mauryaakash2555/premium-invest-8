@@ -231,7 +231,7 @@ export const staticBlogPost = {
       <li>Five mutual fund statements (all different fund houses, no clear strategy)</li>
       <li>Three ULIP policies with 5-year lock-in periods</li>
       <li>Two traditional insurance plans marketed as "investment schemes"</li>
-      <li>Multiple "assured return" endowment plans</li>
+      <li>Multiple "guaranteed return" endowment plans</li>
       <li>Several debt funds with expense ratios above 2%</li>
     </ul>
     <p style="font-size: 18px; line-height: 2;">
@@ -616,7 +616,7 @@ export const staticBlogPost = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market datathey are not assured or certain. Actual returns may vary significantly.
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
@@ -628,7 +628,7 @@ export const staticBlogPost = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      <strong style="color: #C0A062;">No Assurances:</strong> No financial outcome can be assured. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
     </p>
   </div>
 
@@ -1107,7 +1107,7 @@ export const staticBlogPost2 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Projected returns mentioned are illustrative based on historical market data—they are not assured or certain. Actual returns may vary significantly.
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Projected returns mentioned are illustrative based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
@@ -1119,7 +1119,7 @@ export const staticBlogPost2 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      <strong style="color: #C0A062;">No Assurances:</strong> No financial outcome can be assured. Retirement corpus calculations presented are illustrative projections based on historical market data and standard withdrawal rate principles. Individual results may differ significantly based on specific circumstances, timing, product selection, and actual market conditions.
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. Retirement corpus calculations presented are illustrative projections based on historical market data and standard withdrawal rate principles. Individual results may differ significantly based on specific circumstances, timing, product selection, and actual market conditions.
     </p>
   </div>
 
@@ -1146,7 +1146,7 @@ export const staticBlogPost3 = {
   readTime: "10 min read",
   read_time: "10 minutes",
   category: "Investment Education",
-  excerpt: "A Ghatkopar CA discovers his 'assured return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+  excerpt: "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
   image: "/blog-images/blog-3-yacht-sunset.png.jpeg",
   image_url: "/blog-images/blog-3-yacht-sunset.png.jpeg",
   image_alt: "Mumbai corporate office premium workspace financial planning professional",
@@ -1182,7 +1182,7 @@ export const staticBlogPost3 = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "The Chartered Accountant Who Lost ₹31 Lakh in His Own Endowment Policy",
-    "description": "A Ghatkopar CA discovers his 'assured return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
+    "description": "A Ghatkopar CA discovers his 'guaranteed return' policy cost him ₹31.68 lakh opportunity cost—while reviewing a client's portfolio. The irony is brutal.",
     "author": {
       "@type": "Organization",
       "name": "BM Wealth Editorial Team"
@@ -1211,7 +1211,7 @@ export const staticBlogPost3 = {
       "Sir, should I continue this endowment policy my father bought for me?"
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
-      Rajesh, 43, a Chartered Accountant with his own practice in Ghatkopar, pulled out the policy document. A 20-year traditional endowment plan bought in 2008. Premium: ₹50,000 per year. "Assured returns" promised.
+      Rajesh, 43, a Chartered Accountant with his own practice in Ghatkopar, pulled out the policy document. A 20-year traditional endowment plan bought in 2008. Premium: ₹50,000 per year. "Guaranteed returns" promised.
     </p>
     <p style="font-size: 18px; line-height: 2; margin-bottom: 25px;">
       He started analyzing the numbers for his client. Maturity value projected: ₹18.5 lakh after 20 years. Total premiums paid: ₹10 lakh.
@@ -1270,22 +1270,22 @@ export const staticBlogPost3 = {
 
     <div style="margin-bottom: 45px;">
       <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #C0A062; margin-bottom: 22px;">
-        1. The "Assured Returns" Illusion
+        1. The "Guaranteed Returns" Illusion
       </h3>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
-        When Rajesh bought the policy at 28, fresh from clearing his CA exams, the agent emphasized: "Assured maturity benefit. No market risk. Tax-free returns under Section 10(10D)."
+        When Rajesh bought the policy at 28, fresh from clearing his CA exams, the agent emphasized: "Guaranteed maturity benefit. No market risk. Tax-free returns under Section 10(10D)."
       </p>
       <p style="font-size: 18px; line-height: 2; margin-bottom: 15px;">
         What the agent didn't mention clearly:
       </p>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 15px;">
-        <li>The so-called 5-6% returns barely beat inflation</li>
+        <li>The "guaranteed" 5-6% returns barely beat inflation</li>
         <li>Huge policy charges and commissions eating into the corpus</li>
         <li>Lock-in period of 20 years with severe penalties for early exit</li>
         <li>Inflation risk—₹23 lakh in 2028 won't have the same purchasing power as ₹23 lakh in 2008</li>
       </ul>
       <p style="font-size: 18px; line-height: 2;">
-        The word "assured" creates a false sense of security that prevents proper financial analysis.
+        The word "guaranteed" creates a false sense of security that prevents proper financial analysis.
       </p>
     </div>
 
@@ -1593,7 +1593,7 @@ export const staticBlogPost3 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative based on historical market data—they are not assured or certain. Actual returns may vary significantly.
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
@@ -1605,7 +1605,7 @@ export const staticBlogPost3 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      <strong style="color: #C0A062;">No Assurances:</strong> No financial outcome can be assured. Opportunity cost calculations and return comparisons presented are illustrative based on historical market data. Individual results may differ significantly based on specific circumstances, timing, product selection, and actual market conditions.
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. Opportunity cost calculations and return comparisons presented are illustrative based on historical market data. Individual results may differ significantly based on specific circumstances, timing, product selection, and actual market conditions.
     </p>
   </div>
 
@@ -1914,10 +1914,10 @@ export const staticBlogPost5 = {
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid rgba(192, 160, 98, 0.2); margin-bottom: 40px;">
     <h3 style="color: #C0A062; font-size: 24px; margin-bottom: 25px; font-family: 'Playfair Display', serif;">Important Disclaimers & Regulatory Information:</h3>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. Case studies are based on real situations but anonymized. Returns mentioned are based on actual market data but past performance is not indicative of future results.</p>
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds and equity markets are subject to market risks. Returns can vary significantly based on market conditions, timing, and specific fund selection. SIP does not assure profits or protect against losses in declining markets.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds and equity markets are subject to market risks. Returns can vary significantly based on market conditions, timing, and specific fund selection. SIP does not guarantee profits or protect against losses in declining markets.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Regulatory Status:</strong> BM Wealth (IRDAI License 277925 | <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">AMFI</a> ARN 90008) is registered to provide insurance advisory and mutual fund distribution. We are NOT <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">SEBI</a> registered investment advisors (RIA) and do not provide portfolio management or personalized investment advice.</p>
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;"><strong style="color: #C0A062;">Due Diligence:</strong> Please read all scheme-related documents carefully before investing. Understand the risk-return profile of investment products. Consult with a qualified financial advisor to assess suitability based on your specific financial situation.</p>
-    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;"><strong style="color: #C0A062;">No Assurances:</strong> No financial outcome can be assured. Market timing is impossible to predict consistently. Investment decisions should be based on financial goals, risk tolerance, and time horizon, not on attempts to time the market.</p>
+    <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;"><strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. Market timing is impossible to predict consistently. Investment decisions should be based on financial goals, risk tolerance, and time horizon, not on attempts to time the market.</p>
   </div>
 
   <div style="border-top: 1px solid rgba(192, 160, 98, 0.15); padding-top: 35px; margin-top: 50px;">
@@ -2720,7 +2720,7 @@ export const staticBlogPost6 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Product Risks:</strong> Liquid mutual funds, while low risk, are subject to market risks. Returns are not assured. Read scheme documents carefully before investing.
+      <strong style="color: #C0A062;">Product Risks:</strong> Liquid mutual funds, while low risk, are subject to market risks. Returns are not guaranteed. Read scheme documents carefully before investing.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
@@ -2760,7 +2760,7 @@ export const staticBlogPost7 = {
   faqs: [
     {
       question: "Which is best for tax saving: ELSS, PPF, or NPS?",
-      answer: "It depends on your goals. ELSS offers highest potential returns (12-15%) with 3-year lock-in. PPF is safest (7.1% government-set) with 15-year maturity. NPS gives additional ₹50K deduction and moderate returns (9-12%) but locked till 60. Most benefit from a combination based on age and risk tolerance."
+      answer: "It depends on your goals. ELSS offers highest potential returns (12-15%) with 3-year lock-in. PPF is safest (7.1% guaranteed) with 15-year maturity. NPS gives additional ₹50K deduction and moderate returns (9-12%) but locked till 60. Most benefit from a combination based on age and risk tolerance."
     },
     {
       question: "Can I invest in all three ELSS, PPF, and NPS?",
@@ -2929,7 +2929,7 @@ export const staticBlogPost7 = {
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
         <li>You cannot tolerate any market risk</li>
         <li>You're above 55 and need capital protection</li>
-        <li>You want government-set, tax-free returns</li>
+        <li>You want guaranteed, tax-free returns</li>
         <li>Your priority is safety over growth</li>
         <li>You're building a debt component of portfolio</li>
       </ul>
@@ -2964,7 +2964,7 @@ export const staticBlogPost7 = {
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
         <li>₹80,000 → ELSS (growth component)</li>
-        <li>₹70,000 → PPF (safety + government-set returns)</li>
+        <li>₹70,000 → PPF (safety + guaranteed returns)</li>
         <li><strong style="color: #C0A062;">Benefit:</strong> Balanced approach with both growth and safety</li>
       </ul>
     </div>
@@ -2982,7 +2982,7 @@ export const staticBlogPost7 = {
         "name": "Is ELSS better than PPF?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "For long-term wealth creation (10+ years), ELSS historically delivers higher returns (~12% vs ~7%). PPF offers government-set tax-free returns with zero market risk. Choose based on your risk appetite and goals."
+          "text": "For long-term wealth creation (10+ years), ELSS historically delivers higher returns (~12% vs ~7%). PPF offers guaranteed tax-free returns with zero risk. Choose based on your risk appetite and goals."
         }
       },
       {
@@ -3031,7 +3031,7 @@ export const staticBlogPost7 = {
           Is ELSS better than PPF?
         </h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
-          For long-term wealth creation (10+ years), ELSS historically delivers significantly higher returns (~12% vs ~7%). PPF offers government-set, tax-free returns with zero market risk. Choose ELSS if you can tolerate volatility and have long horizon. Choose PPF for higher safety and tax-free income. Many use both for diversification.
+          For long-term wealth creation (10+ years), ELSS historically delivers significantly higher returns (~12% vs ~7%). PPF offers guaranteed, tax-free returns with zero market risk. Choose ELSS if you can tolerate volatility and have long horizon. Choose PPF for guaranteed safety and tax-free income. Many use both for diversification.
         </p>
       </div>
       <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
@@ -3063,7 +3063,7 @@ export const staticBlogPost7 = {
           Can I have all three—ELSS, PPF, and NPS?
         </h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
-          Absolutely yes. Many savvy investors use all three strategically—ELSS for equity exposure and growth, PPF for higher safety and debt allocation, NPS for extra tax benefit and specific retirement planning. This provides diversification across risk levels, liquidity profiles, and time horizons.
+          Absolutely yes. Many savvy investors use all three strategically—ELSS for equity exposure and growth, PPF for guaranteed safety and debt allocation, NPS for extra tax benefit and specific retirement planning. This provides diversification across risk levels, liquidity profiles, and time horizons.
         </p>
       </div>
     </div>
@@ -3144,7 +3144,7 @@ export const staticBlogPost7 = {
     </h3>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. Historical returns mentioned are based on past data and are not assured for future periods.
+      <strong style="color: #C0A062;">Educational Content:</strong> This article is for educational and informational purposes only. It should not be considered personalized investment advice. Historical returns mentioned are based on past data and are not guaranteed for future periods.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
@@ -3592,15 +3592,8 @@ export const staticBlogPost9 = {
   image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
   image_alt: "Luxury apartment Mumbai real estate vs investment portfolio wealth comparison",
-  tags: [
-    "real estate vs mutual funds Mumbai",
-    "property investment India",
-    "wealth creation strategies Mumbai",
-    "investment comparison 15 years",
-    "worli property investment",
-    "worli real estate investment 2026",
-  ],
-  keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years, worli property investment, worli real estate investment 2026",
+  tags: ["real estate vs mutual funds Mumbai", "property investment India", "wealth creation strategies Mumbai", "investment comparison 15 years"],
+  keywords: "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years",
   
   faqs: [
     {
@@ -3610,10 +3603,6 @@ export const staticBlogPost9 = {
     {
       question: "Is Mumbai real estate still a good investment in 2025?",
       answer: "Depends on location and purpose. Prime areas (BKC, Lower Parel, South Mumbai) have limited supply and steady appreciation. Suburbs depend heavily on infrastructure development. Real estate works best as live-in asset (save rent) or long-term hold (15+ years). Short-term flipping is mostly dead in Mumbai."
-    },
-    {
-      question: "Is Worli real estate a good investment in 2026?",
-      answer: "Worli is a premium micro-market, but investment outcome depends on entry price, rental yield (often low), holding period, and total costs (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare the property scenario against an equity SIP using the same assumptions for time horizon, costs, and taxes. There is no one-size-fits-all answer."
     },
     {
       question: "What's better for wealth creation?",
@@ -3639,10 +3628,10 @@ export const staticBlogPost9 = {
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
     "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-03-05",
-    "dateModified": "2026-01-05",
+    "dateModified": "2025-12-15",
     "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
     "articleSection": "Investment Education",
-    "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years, worli property investment, worli real estate investment 2026"
+    "keywords": "real estate vs mutual funds Mumbai, property investment India, wealth creation strategies Mumbai, investment comparison 15 years"
   }
   </script>
 
@@ -3835,46 +3824,6 @@ export const staticBlogPost9 = {
     </div>
   </div>
 
-  <div style="margin-bottom: 70px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #C0A062; margin-bottom: 35px;">
-      Worli Real Estate in 2026: What Actually Matters
-    </h2>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px;">
-      Worli is a premium micro-market. But premium locations can still be poor wealth creators if the entry price is high, rental yield is low, and friction costs (stamp duty, maintenance, vacancy, taxes) quietly eat returns.
-    </p>
-    <div style="background: rgba(192, 160, 98, 0.04); padding: 28px; border-radius: 10px; border-left: 2px solid rgba(192, 160, 98, 0.5); margin: 25px 0;">
-      <h4 style="font-size: 20px; color: #C0A062; margin-bottom: 14px; font-family: 'Playfair Display', serif;">
-        A quick checklist before calling it an “investment”
-      </h4>
-      <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin: 0;">
-        • Entry price vs rent: If yield is ~2% gross, most of your return must come from appreciation.<br/>
-        • Holding period: If you're not prepared to hold 10-15+ years, real estate math often disappoints.<br/>
-        • Total ownership cost: stamp duty, brokerage, maintenance, repairs, vacancy, property tax.<br/>
-        • Exit reality: liquidity risk, negotiation discount, time-to-sell, and capital gains tax.
-      </p>
-    </div>
-    <p style="font-size: 18px; line-height: 2; margin-bottom: 0;">
-      If your goal is maximum wealth creation (not self-use housing), the cleanest way to decide is to compare a Worli property scenario against a systematic equity SIP over the same horizon, using transparent cost and tax assumptions.
-    </p>
-  </div>
-
-  <div style="background: linear-gradient(135deg, rgba(192, 160, 98, 0.12) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(192, 160, 98, 0.08) 100%); border: 1px solid rgba(192, 160, 98, 0.34); border-radius: 16px; padding: 34px; margin: 0 0 70px 0; box-shadow: 0 18px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;">
-    <h3 style="font-family: 'Playfair Display', serif; font-size: 30px; color: #C0A062; margin-bottom: 10px; line-height: 1.2;">
-      Run Your Own Property vs SIP Analysis
-    </h3>
-    <p style="font-size: 18px; line-height: 2; color: #E5E5E5; margin-bottom: 18px;">
-      Instead of relying on generic city averages, compare your exact numbers: property price, down payment, expected rent, maintenance, holding period, taxes, and the SIP alternative.
-    </p>
-    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-      <a href="/tools/property-vs-sip" style="display: inline-block; padding: 14px 22px; background: linear-gradient(135deg, rgba(192, 160, 98, 0.95) 0%, rgba(192, 160, 98, 0.72) 55%, rgba(192, 160, 98, 0.92) 100%); color: #000000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 16px; letter-spacing: 0.2px; box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 34px rgba(192, 160, 98, 0.22);">
-        Open Property vs SIP Calculator 
-      </a>
-      <span style="font-size: 13px; color: rgba(229, 229, 229, 0.68); line-height: 1.5;">
-        Educational projection based on your inputs. Not investment advice.
-      </span>
-    </div>
-  </div>
-
   <hr style="border: none; border-top: 1px solid rgba(192, 160, 98, 0.3); margin: 70px 0;" />
 
   <script type="application/ld+json">
@@ -3912,14 +3861,6 @@ export const staticBlogPost9 = {
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Possible in hot micro-markets, but rare across entire city. Mumbai property has averaged 7-9% CAGR over last 15 years. Equity mutual funds averaged 12-14%. Past doesn't guarantee future, but diversified equity has historically outperformed real estate for wealth creation."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is Worli real estate a good investment in 2026?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Worli is a premium micro-market, but investment outcome depends on entry price, rental yield, holding period, and total costs (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare your property scenario against an equity SIP using consistent assumptions. There is no one-size-fits-all answer."
         }
       },
       {
@@ -3969,14 +3910,6 @@ export const staticBlogPost9 = {
         </h3>
         <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
           Possible in very hot micro-markets or during boom cycles, but rare across entire Mumbai. Property has averaged 7-9% CAGR over last 15 years citywide. Equity mutual funds averaged 12-14% in the same period. Past doesn't guarantee future, but diversified equity funds have historically outperformed real estate for long-term wealth creation.
-        </p>
-      </div>
-      <div style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(192, 160, 98, 0.2);">
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; color: #E5E5E5; margin-bottom: 16px;">
-          Is Worli real estate a good investment in 2026?
-        </h3>
-        <p style="font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.8; color: #B8B8B8; margin: 0;">
-          Worli is a premium micro-market, but the outcome depends on entry price, rental yield, holding period, and the full cost stack (stamp duty, maintenance, vacancy, taxes). For wealth creation, compare your property scenario against an equity SIP using consistent assumptions for time horizon, costs, and taxes. There is no one-size-fits-all answer.
         </p>
       </div>
       <div style="margin-bottom: 0;">
@@ -4223,7 +4156,7 @@ export const staticBlogPost10 = {
         Advantages:
       </h4>
       <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
-        <li>99.99% purity assured (24K)</li>
+        <li>99.99% purity guaranteed (24K)</li>
         <li>No storage risk, no locker costs</li>
         <li>Can buy/sell anytime in small amounts (even ₹1 worth)</li>
         <li>Backed by actual physical gold in vaults</li>

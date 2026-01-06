@@ -7,7 +7,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchFamilyJSON } from "@/lib/auth/familyTokenClient";
 
 function StatCard({ icon, label, value }) {
   return (
@@ -47,18 +46,19 @@ export function FamilyAdminView({ onExit }) {
     setLoading(true);
     setError("");
     try {
-      const { r, j } = await fetchFamilyJSON("/api/admin/family-stats", { method: "GET" });
-      if (!r.ok || !j?.ok) {
-        if (r.status === 401) {
+      const res = await fetch("/api/admin/family-stats", { method: "GET" });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        if (res.status === 401) {
           setError("Session expired. Please re-enter the family PIN in chat to continue.");
         } else {
-          setError(j?.error || "Failed to load stats");
+          setError(data?.error || "Failed to load stats");
         }
         setStats(null);
         setLoading(false);
         return;
       }
-      setStats(j);
+      setStats(data);
     } catch (e) {
       setError(String(e?.message || "Failed to load stats"));
     } finally {

@@ -1,141 +1,87 @@
-# 🤖 START HERE IF YOU'RE AN AI
+# 🤖 START HERE FOR AIs (Fast Navigation)
 
-## ⚠️ STOP BEFORE YOU CODE!
+This repo is a **Next.js 15 (App Router)** project. The goal of this file is to make changes fast and safe: where to edit, what to avoid, and how to run/deploy.
 
-## ✅ DEV SERVER (1-CLICK, RELIABLE)
+## 0) Don’t waste time in the wrong folder
 
-Use the VS Code Task (recommended):
+- **Edit source code in the repo root**: `premium-invest-8/`
+- **Avoid editing build output**: `.next/` (generated)
+- **Worktrees**: `premium-invest-8.worktrees/` contains alternate checkouts. Only work there if you intentionally opened/are running that worktree.
 
-- Task: start-dev-premium-invest-8 (reliable, waits ready)
-  - What it does: kills anything stuck on port 3000 → starts Next dev in premium-invest-8 → waits until http://localhost:3000/ is reachable.
+If you see search results only in `.next/`, that means you’re looking at compiled output — go find the real source in `app/` or `components/`.
 
-Optional stop task:
+## 1) Read first (project rules + structure)
 
-- Task: stop-dev-premium-invest-8 (3000)
+1. `AI_DESIGN_RULES.md` (design + CSS safety rules)
+2. `.github/CONTRIBUTING.md` (quick checklist)
+3. `docs/ARCHITECTURE.md` (what lives where)
 
-Logs if startup fails:
+## 2) Quick commands (local dev)
 
-- premium-invest-8/dev_out.log
-- premium-invest-8/dev_err.log
+From repo root:
 
-If you need to run scripts manually:
+```bash
+npm install
+npm run dev
+```
 
-- premium-invest-8/scripts/start-dev-server.ps1
-- premium-invest-8/scripts/stop-dev-server.ps1
+Default dev URL: `http://localhost:3000`
 
-## 💳 RAZORPAY (TEST MODE) REQUIRED ENV VARS
+## 3) Where things live (the 20-second map)
 
-If the UI shows "razorpay_not_configured", set these (do NOT commit real values):
+- `app/` — Next.js pages (routes) and layouts
+- `app/api/` — Next.js Route Handlers (server endpoints)
+- `components/` — shared React components
+- `components/calculators/` — calculators (Property vs SIP, etc.)
+- `lib/` — utilities, env handling, Supabase admin client, admin session
+- `data/` — blog/content JSON + static data
+- `public/` — static assets
+- `scripts/` — validations, backups, helpers
 
-- RAZORPAY_KEY_ID
-- RAZORPAY_KEY_SECRET
+Legacy / usually ignore unless asked:
 
-See premium-invest-8/.env.example for placeholders.
+- `frontend/` — old CRA frontend
+- `backend/` — old Python backend
+- `api/` — legacy Vercel serverless functions
 
-**You must read these 2 files FIRST:**
+## 4) “Where do I edit THIS?” (common locations)
 
-### 1️⃣ **`AI_DESIGN_RULES.md`** ← MASTER GUIDE
-- How to add new pages without conflicts
-- - CSS structure and organization
-  - - v0.dev integration instructions
-    - - File naming conventions
-      - - Examples and templates
-       
-        - ### 2️⃣ **`.github/CONTRIBUTING.md`** ← QUICK CHECKLIST
-        - - Quick summary of rules
-          - - Common mistakes to avoid
-            - - When you're unsure, stop and ask
-              - 
-              ---
+- **Home page** → `app/page.jsx`
+- **Static marketing pages** → `app/<route>/page.(js|jsx)`
+- **Calculator pages** → usually `app/tools/<tool>/page.(js|jsx)`
+- **Calculator UI logic** → `components/calculators/<Name>.jsx`
+- **Chat (AI concierge)** → `app/api/chat/route.js`
+- **Leads capture** → `app/api/leads/route.js`
+- **Admin endpoints** → `app/api/admin/**/route.js`
 
-              ## 🚨 WHY THIS MATTERS
+Example:
+- The premium message/copy for Property vs SIP is in `components/calculators/PropertyVsSipCalculator.jsx`.
 
-              This project uses **specific CSS rules** to prevent conflicts between:
-              - Multiple AIs working on the same project
-              - - v0.dev designs and custom CSS
-                - - Different pages and components
-                 
-                  - **If you don't follow these rules, you WILL break the design.**
-                 
-                  - ---
+## 5) Staging deploy (GitHub → Vercel)
 
-                  ## ⏱️ QUICK START (5 MINUTES)
+Staging is driven by the `staging` branch.
 
-                  1. **Read:** `AI_DESIGN_RULES.md` (full guide - 10 min)
-                  2. 2. **Skim:** `.github/CONTRIBUTING.md` (checklist - 2 min)
-                     3. 3. **Look:** at existing pages in `frontend/src/components/v0-pages/` (examples)
-                        4. 4. **Then:** Start coding following the patterns you see
-                          
-                           5. ---
-                          
-                           6. ## 📌 THE GOLDEN RULE
-                          
-                           7. **Every new page/component gets:**
-                           8. - ✅ Its own folder in `frontend/src/components/v0-pages/pagename/`
-                              - - ✅ Its own CSS file: `pagename.module.css`
-                                - - ✅ Its own component: `PageNameComponent.jsx`
-                                  - - ✅ README.md with instructions
-                                   
-                                    - **This = ZERO conflicts, clean organization**
-                                   
-                                    - ---
+- Script: `update-staging.ps1`
+- Important: the script checks out branches and merges. **Commit your changes first** or they can be lost.
 
-                                    ## 🚫 DON'T DO THIS
+Typical safe flow:
 
-                                    ```
-                                    ❌ Add CSS to App.css for a specific page
-                                    ❌ Copy styles from other pages
-                                    ❌ Use !important flags everywhere
-                                    ❌ Mix v0 designs with custom CSS
-                                    ❌ Change other pages' CSS files
-                                    ```
+```bash
+git status
+git add -A
+git commit -m "<message>"
+./update-staging.ps1
+```
 
-                                    ---
+## 6) Search tips (fast + accurate)
 
-                                    ## ✅ DO THIS INSTEAD
+- Prefer searching in: `app/`, `components/`, `lib/`, `data/`.
+- If results appear in `.next/` only, the source is elsewhere.
+- When copy is dynamic, search by a nearby stable label/CTA (e.g. `₹399`, component name, or section header).
 
-                                    ```
-                                    ✅ Create new .module.css file
-                                    ✅ Keep styles isolated and scoped
-                                    ✅ Use Tailwind for common utilities
-                                    ✅ Keep v0 designs separate
-                                    ✅ Document your changes
-                                    ```
+## Golden rules (keep it safe)
 
-                                    ---
-
-                                    ## 📚 FILES YOU NEED TO READ
-
-                                    | File | Purpose | Time |
-                                    |------|---------|------|
-                                    | `AI_DESIGN_RULES.md` | Complete guide | 10 min |
-                                    | `.github/CONTRIBUTING.md` | Quick checklist | 2 min |
-                                    | Existing pages | Real examples | 5 min |
-
-                                    ---
-
-                                    ##  I'M AN AI, WHAT DO I DO NOW?
-
-                                    **Step 1:** Navigate to the root of this repo
-                                    **Step 2:** Open file: `AI_DESIGN_RULES.md`
-                                    **Step 3:** Read the entire file
-                                    **Step 4:** Then start making changes
-
-                                    **If you're unsure about something, ASK BEFORE CODING.**
-
-                                    ---
-
-                                    ## 🆘 EMERGENCY QUESTIONS?
-
-                                    - "Where do I put the CSS?" → Read `AI_DESIGN_RULES.md` section "File Naming Convention"
-                                    - - "Should I use App.css?" → NO. Use module.css. See examples.
-                                      - - "Will this affect other pages?" → Only if you ignore the rules. Follow the structure.
-                                        - - "How do I add a v0 design?" → See `AI_DESIGN_RULES.md` section "V0.DEV INTEGRATION CHECKLIST"
-                                         
-                                          - ---
-
-                                          ## ✨ YOU'RE READY!
-
-                                          Once you've read both files, you know everything you need to work on this project WITHOUT breaking it.
-
-                                          **Good luck! 🚀**
+- Don’t refactor unrelated files “for cleanliness”.
+- Don’t touch `.next/`, `node_modules/`.
+- Keep styling consistent with existing Tailwind + design tokens.
+- If you’re unsure which folder is the active checkout (root vs worktree), verify before editing.

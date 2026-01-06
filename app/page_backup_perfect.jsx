@@ -1,5 +1,5 @@
 /**
- * FILE: app\(public)\page.jsx
+ * FILE: app\page_backup_perfect.jsx
  * PURPOSE: (auto-added) Explain what this file does.
  * CATEGORY: app
  *
@@ -8,13 +8,7 @@
  * - next/image
  * - lucide-react
  * - react
- * - framer-motion
  * - @/data/staticBlogData
- * - @/components/user/PremiumMarketTicker
- * - @/components/user/MarketMoodStrip
- * - @/components/user/AnimatedClouds
- * - @/components/user/ServiceCard
- * - @/components/user/BlogCard
  *
  * USED BY:
  * - (search the repo for this filename)
@@ -32,43 +26,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { staticBlogPost } from '@/data/staticBlogData';
-import PremiumMarketTicker from '@/components/user/PremiumMarketTicker';
-import MarketMoodStrip from '@/components/user/MarketMoodStrip';
-
-import AnimatedClouds from '@/components/user/AnimatedClouds';
-import ServiceCard from '@/components/user/ServiceCard';
-import BlogCard from '@/components/user/BlogCard';
-
-// --- LUXURY COMPONENTS KEPT ---
-
-const GoldenHorizonSweep = () => (
-  <motion.div
-    className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
-    initial={{ x: '-100%' }}
-    animate={{ x: '100%' }}
-    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-  >
-    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[#C0A062]/10 to-transparent blur-[120px]" />
-  </motion.div>
-);
 
 export default function HomePage() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [rainEnabled, setRainEnabled] = useState(false);
-
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    const handleMouseMove = (e) => {
-      setMousePos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
   }, []);
 
   const services = [
@@ -134,6 +97,7 @@ export default function HomePage() {
       >
         {/* Background Image */}
         <div
+          className="hero-background-image"
           style={{
             position: 'absolute',
             top: 0,
@@ -144,18 +108,9 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            // restore darker, premium mood
-            opacity: 0.55,
-            filter: 'brightness(0.80) saturate(1.05)',
-            zIndex: 2,
+            zIndex: 0,
           }}
         />
-
-        {/* Animated Clouds + occasional lightning (rain off by default) */}
-        <AnimatedClouds enableRain={rainEnabled} />
-
-        {/* 1. Golden Horizon Sweep Kept */}
-        <GoldenHorizonSweep />
 
         {/* Premium Gradient Overlay - Desktop & Mobile */}
         <div
@@ -166,8 +121,8 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.70) 100%)',
-            zIndex: 2,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)',
+            zIndex: 0,
           }}
         />
 
@@ -176,12 +131,11 @@ export default function HomePage() {
           style={{
             textAlign: 'center',
             position: 'relative',
-            zIndex: 3,
-            paddingTop: 'clamp(20px, 7vh, 180px)',
+            zIndex: 1,
+            paddingTop: '180px',
           }}
         >
-          {/* 7. Gold-Leaf Typography Kept */}
-          <motion.h1
+          <h1
             className="hero-subtitle-responsive"
             style={{
               fontSize: 'clamp(20px, 2.5vw, 32px)',
@@ -192,14 +146,10 @@ export default function HomePage() {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              backgroundImage: `linear-gradient(135deg, #C0A062 ${mousePos.x - 20}%, #FFF ${mousePos.x}%, #C0A062 ${mousePos.x + 20}%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% auto',
             }}
           >
-            Mumbai&apos;s Premier Wealth Architecture
-          </motion.h1>
+            Mumbai&apos;s Premier Financial Advisory
+          </h1>
           <p
             className="hero-description-responsive"
             style={{
@@ -241,19 +191,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-
-        {/* LIVE MOOD (restored) - sits just above ticker */}
-        <div className="absolute bottom-[46px] left-0 w-full z-50">
-          <MarketMoodStrip onToggleRain={() => setRainEnabled(v => !v)} />
-        </div>
-
-        {/* PREMIUM LIVE MARKET TICKER (inside hero, same position as your reference) */}
-        <div className="absolute bottom-0 left-0 w-full z-50">
-          <PremiumMarketTicker />
-        </div>
       </section>
-
-      {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
 
       {/* Services Overview Section */}
       <section className="section-container">
@@ -275,7 +213,7 @@ export default function HomePage() {
               margin: '0 auto',
             }}
           >
-            Bespoke wealth architectures meticulously crafted to elevate your
+            Bespoke financial architectures meticulously crafted to elevate your
             wealth trajectory
           </p>
         </div>
@@ -288,9 +226,71 @@ export default function HomePage() {
           }}
         >
           {services.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            <Link
+              key={index}
+              href={service.link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <div 
+                className="service-card slide-up" 
+                style={{
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+                >
+                  <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '20px', borderRadius: '8px', overflow: 'hidden' }}>
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={index < 3}
+                    />
+                  </div>
+                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
+                  {service.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: '24px',
+                    color: '#DAA520',
+                    marginBottom: '12px',
+                  }}
+                >
+                  {service.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '16px',
+                    color: '#CCCCCC',
+                    lineHeight: 1.6,
+                    marginBottom: '16px',
+                  }}
+                >
+                  {service.description}
+                </p>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#C0A062',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}>
+                  <span>Learn More</span>
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+            </Link>
           ))}
-
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -344,10 +344,10 @@ export default function HomePage() {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                AMFI Registered Wealth Distribution
+                AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Fully compliant and registered wealth distribution
+                Fully compliant and registered financial advisory
                 services
               </p>
             </div>
@@ -436,8 +436,90 @@ export default function HomePage() {
           </p>
         </div>
 
-        <BlogCard post={staticBlogPost} />
-
+        <div className="blog-card-premium" style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: 0,
+        }}
+        >
+          <Link 
+            href="/blog"
+            style={{ 
+              textDecoration: 'none', 
+              color: 'inherit',
+              display: 'block'
+            }}
+          >
+            <div>
+              {/* Blog Image - Seamless, no border */}
+              <img
+                src={staticBlogPost.image_url || staticBlogPost.image}
+                alt={staticBlogPost.image_alt || staticBlogPost.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'cover',
+                  borderRadius: 0,
+                  display: 'block',
+                  marginBottom: 0,
+                }}
+              />
+              
+              {/* Blog Content */}
+              <div style={{
+                padding: 'clamp(30px, 5vw, 50px)',
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                  padding: '6px 16px',
+                  background: 'rgba(218, 165, 32, 0.1)',
+                  borderRadius: '20px',
+                  fontSize: '14px',
+                  color: '#DAA520',
+                  marginBottom: '20px',
+                  fontWeight: 500,
+                }}>
+                  {staticBlogPost.category}
+                </div>
+                
+                <h3
+                  style={{
+                    fontSize: 'clamp(24px, 4vw, 32px)',
+                    color: '#DAA520',
+                    marginBottom: '16px',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {staticBlogPost.title}
+                </h3>
+                
+                <p
+                  style={{
+                    fontSize: 'clamp(16px, 2.5vw, 18px)',
+                    color: '#CCCCCC',
+                    lineHeight: 1.7,
+                    marginBottom: '24px',
+                  }}
+                >
+                  {staticBlogPost.excerpt}
+                </p>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#C0A062',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                }}>
+                  <span>Read Full Article</span>
+                  <ArrowRight size={20} />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
           <Link href="/blog" className="btn-secondary" style={{ textDecoration: 'none' }}>
@@ -491,26 +573,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* INSIGHTS PREVIEW - NEW */}
-
-      <style jsx global>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        .animate-marquee-slow {
-          animation: marquee 30s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
-
-
-
-
-
-
-
 

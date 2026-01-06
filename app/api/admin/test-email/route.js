@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { isAdminFromRequest } from '@/lib/adminSession';
+import { isAdminFromCookies } from '@/lib/adminSession';
 import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
 import { EmailService } from '@/lib/email/emailService';
 
@@ -11,8 +11,7 @@ const reqSchema = z.object({
 
 export async function POST(req) {
   const cookieStore = await cookies();
-  const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) {
+  if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
 

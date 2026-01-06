@@ -47,7 +47,7 @@ const PrivacyPolicy = () => {
             <section style={{ marginBottom: '40px' }}>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 At BM Wealth, we take your privacy seriously. This Privacy Policy explains how we collect, 
-                use, disclose, and safeguard your information when you use our services.
+                use, disclose, and safeguard your information when you use our financial advisory services.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 By using our services, you consent to the data practices described in this policy.
@@ -104,7 +104,7 @@ const PrivacyPolicy = () => {
                 We use the collected information for the following purposes:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: 0, color: '#B8B8B8' }}>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To provide and maintain our services</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To provide and maintain our financial advisory services</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To process transactions and manage your investments</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To comply with KYC (Know Your Customer) regulations</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To communicate with you about your account and services</li>
@@ -204,70 +204,6 @@ const PrivacyPolicy = () => {
               </p>
             </section>
 
-            {/* Cookies and Tracking */}
-            <section style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(24px, 4vw, 32px)',
-                fontWeight: '600',
-                color: '#DAA520',
-                marginBottom: '20px',
-                lineHeight: '1.3'
-              }}>6. Cookies and Tracking Technologies</h2>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                We use cookies and similar tracking technologies to enhance your browsing experience, 
-                analyze website traffic, and understand user behavior. This includes:
-              </p>
-              <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  <strong style={{ color: '#E5E5E5' }}>Essential Cookies:</strong> Required for website functionality
-                </li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  <strong style={{ color: '#E5E5E5' }}>Analytics Cookies:</strong> Google Analytics for traffic analysis
-                </li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  <strong style={{ color: '#E5E5E5' }}>Performance Cookies:</strong> To improve website performance
-                </li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>
-                  <strong style={{ color: '#E5E5E5' }}>Marketing Cookies:</strong> For future advertising purposes (Google AdSense)
-                </li>
-              </ul>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                You can control cookie preferences through your browser settings. Note that disabling 
-                cookies may affect website functionality.
-              </p>
-            </section>
-
-            {/* GDPR Compliance */}
-            <section style={{ marginBottom: '40px' }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 'clamp(24px, 4vw, 32px)',
-                fontWeight: '600',
-                color: '#DAA520',
-                marginBottom: '20px',
-                lineHeight: '1.3'
-              }}>7. GDPR Compliance (For EU Visitors)</h2>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                If you are accessing our services from the European Union (EU) or European Economic Area (EEA), 
-                you are protected under the General Data Protection Regulation (GDPR). We are committed to 
-                complying with GDPR requirements.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                <strong style={{ color: '#E5E5E5' }}>Legal Basis for Processing:</strong> We process your personal 
-                data based on consent, contractual necessity, legal obligations, and legitimate business interests.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                <strong style={{ color: '#E5E5E5' }}>Data Transfers:</strong> Your data may be transferred to and 
-                processed in India. We ensure appropriate safeguards are in place for such transfers.
-              </p>
-              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                <strong style={{ color: '#E5E5E5' }}>Right to Lodge a Complaint:</strong> You have the right to 
-                lodge a complaint with your local data protection authority if you believe we have not complied 
-                with GDPR requirements.
-              </p>
-            </section>
-
             {/* Contact Information */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
@@ -277,7 +213,7 @@ const PrivacyPolicy = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>8. Contact Information</h2>
+              }}>6. Contact Information</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 If you have any questions, concerns, or requests regarding this Privacy Policy or our 
                 data practices, please contact us:

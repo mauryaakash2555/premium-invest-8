@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies, headers } from "next/headers";
-import { isAdminFromRequest } from "@/lib/adminSession";
+import { cookies } from "next/headers";
+import { isAdminFromCookies } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 function startOfDayISO() {
@@ -31,8 +31,7 @@ function computeEarning({ click, link }) {
 
 export async function GET() {
   const cookieStore = await cookies();
-  const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) {
+  if (!isAdminFromCookies(cookieStore)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 

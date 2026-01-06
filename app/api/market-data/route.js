@@ -22,22 +22,6 @@ import { Logger } from "@/lib/monitoring/logger";
 // Premium Market Snapshot (informational only)
 // Resilient to partial symbol failures: retain last-known values on the client.
 
-export const dynamic = "force-dynamic";
-
-const CACHE_TTL_MS = 55_000;
-const CACHE_KEY = "__bm_market_data_cache__";
-
-function getCache() {
-  const c = globalThis[CACHE_KEY];
-  if (!c || !c.ts || !c.payload) return null;
-  if (Date.now() - c.ts > CACHE_TTL_MS) return null;
-  return c.payload;
-}
-
-function setCache(payload) {
-  globalThis[CACHE_KEY] = { ts: Date.now(), payload };
-}
-
 const INSTRUMENTS = [
   { id: "NIFTY50", name: "NIFTY 50", kind: "index", yahooCandidates: ["^NSEI"] },
   { id: "SENSEX", name: "SENSEX", kind: "index", yahooCandidates: ["^BSESN"] },
@@ -45,7 +29,7 @@ const INSTRUMENTS = [
   // Use XAU/XAG in USD and convert to INR using USD/INR, then convert into Indian-friendly units:
   // - Gold: INR per 10g
   // - Silver: INR per kg
-  // Note: These are indicative conversions and are NOT assured to match MCX spot/futures.
+  // Note: These are indicative conversions and are NOT guaranteed to match MCX spot/futures.
   { id: "GOLD", name: "GOLD (10g)", kind: "metal", yahooCandidates: ["XAUUSD=X", "GC=F", "XAUINR=X"] },
   { id: "SILVER", name: "SILVER (1kg)", kind: "metal", yahooCandidates: ["XAGUSD=X", "SI=F", "XAGINR=X"] },
   // Commodities / Crypto (informational only)
@@ -76,50 +60,32 @@ function directionFrom(changePct) {
   return "flat";
 }
 
-async function fetchYahooQuoteMap(symbols) {
-  const uniq = Array.from(new Set((symbols || []).map((s) => String(s || "").trim()).filter(Boolean)));
-  if (!uniq.length) return new Map();
+async function fetchYahooMeta(symbol) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
+  const res = await fetch(url, {
+    // UI refreshes every 60 seconds
+    next: { revalidate: 60 },
+    headers: {
+      "User-Agent": "bmwealth-market-ticker/1.0",
+      Accept: "application/json",
+    },
+  });
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 4500);
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(uniq.join(","))}`;
-  try {
-    const res = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        "User-Agent": "bmwealth-market-ticker/1.0",
-        Accept: "application/json",
-      },
-      signal: controller.signal,
-    });
-    if (!res.ok) throw new Error(`Yahoo quote fetch failed: ${res.status}`);
-    const data = await res.json();
-    const results = Array.isArray(data?.quoteResponse?.result) ? data.quoteResponse.result : [];
-    const map = new Map();
-    for (const q of results) {
-      const sym = String(q?.symbol || "").trim();
-      if (!sym) continue;
-      // Keep a minimal meta-like surface to reduce downstream changes.
-      map.set(sym, {
-        regularMarketPrice: q?.regularMarketPrice,
-        previousClose: q?.regularMarketPreviousClose,
-        currency: q?.currency,
-      });
-    }
-    return map;
-  } finally {
-    clearTimeout(timeout);
-  }
+  if (!res.ok) throw new Error(`Yahoo fetch failed for ${symbol}: ${res.status}`);
+  const data = await res.json();
+  const meta = data?.chart?.result?.[0]?.meta;
+  if (!meta) throw new Error(`Yahoo response missing meta for ${symbol}`);
+  return meta;
 }
 
-function firstWorkingMeta(candidates, quoteMap) {
+async function firstWorkingMeta(candidates) {
   let lastErr;
   for (const sym of candidates) {
     try {
-      const meta = quoteMap?.get?.(sym);
-      const price = toNumber(meta?.regularMarketPrice);
-      const prev = toNumber(meta?.previousClose);
-      if (price == null || prev == null) throw new Error(`Bad quote numbers for ${sym}`);
+      const meta = await fetchYahooMeta(sym);
+      const price = toNumber(meta.regularMarketPrice);
+      const prev = toNumber(meta.previousClose);
+      if (price == null || prev == null) throw new Error(`Bad meta numbers for ${sym}`);
       return { sym, meta };
     } catch (e) {
       lastErr = e;
@@ -139,20 +105,9 @@ function computeChange(price, prevClose) {
 
 export async function GET() {
   try {
-    const cached = getCache();
-    if (cached) {
-      const res = NextResponse.json({ ...cached, cached: true });
-      res.headers.set("Cache-Control", "no-store, max-age=0");
-      return res;
-    }
-
-    // Fetch all candidates in one request for reliability/performance (important on serverless staging).
-    const allSymbols = INSTRUMENTS.flatMap((x) => x.yahooCandidates || []);
-    const quoteMap = await fetchYahooQuoteMap(allSymbols);
-
     // Always fetch USD/INR first so we can convert metals when needed.
     const usdInrInst = INSTRUMENTS.find((x) => x.id === "USDINR");
-    const usdMetaWrap = firstWorkingMeta(usdInrInst.yahooCandidates, quoteMap);
+    const usdMetaWrap = await firstWorkingMeta(usdInrInst.yahooCandidates);
     const usdMeta = usdMetaWrap.meta;
     const usdInr = toNumber(usdMeta.regularMarketPrice);
     const usdPrev = toNumber(usdMeta.previousClose);
@@ -161,57 +116,45 @@ export async function GET() {
 
     const items = [];
 
-    // USD/INR always included
-    {
-      const { changePct, direction } = computeChange(usdInr, usdPrev);
-      items.push({
-        id: "USDINR",
-        name: "USD/INR",
-        kind: "fx",
-        value: usdInr,
-        changePct: round(changePct, 2),
-        direction,
-        source: usdMetaWrap.sym,
-        currency: "INR",
-      });
-    }
+    for (const inst of INSTRUMENTS) {
+      if (inst.id === "USDINR") {
+        const { changePct, direction } = computeChange(usdInr, usdPrev);
+        items.push({
+          id: inst.id,
+          name: inst.name,
+          kind: inst.kind,
+          value: usdInr,
+          changePct: round(changePct, 2),
+          direction,
+          source: usdMetaWrap.sym,
+          currency: "INR",
+        });
+        continue;
+      }
 
-    const others = INSTRUMENTS.filter((x) => x.id !== "USDINR");
-    const metaResults = await Promise.all(
-      others.map(async (inst) => {
-        try {
-          const wrap = firstWorkingMeta(inst.yahooCandidates, quoteMap);
-          return { inst, wrap };
-        } catch (error) {
-          return { inst, error };
-        }
-      })
-    );
-
-    for (const r of metaResults) {
-      if (r.error || !r.wrap) continue;
-      const inst = r.inst;
-      const wrap = r.wrap;
+      const wrap = await firstWorkingMeta(inst.yahooCandidates);
       const meta = wrap.meta;
 
       let price = toNumber(meta.regularMarketPrice);
       let prevClose = toNumber(meta.previousClose);
-      if (price == null || prevClose == null) continue;
+
+      if (price == null || prevClose == null) throw new Error(`Bad numbers for ${inst.id}`);
 
       const isMetal = inst.kind === "metal";
+      const isCrypto = inst.kind === "crypto";
       const isCommodity = inst.kind === "commodity";
 
       const looksUsdPerOz =
         wrap.sym.endsWith("USD=X") ||
-        wrap.sym === "GC=F" ||
-        wrap.sym === "SI=F" ||
+        wrap.sym === "GC=F" || // gold futures (USD per oz)
+        wrap.sym === "SI=F" || // silver futures (USD per oz)
         wrap.sym === "BTC-USD" ||
-        wrap.sym === "CL=F";
+        wrap.sym === "CL=F"; // crude futures (USD per barrel)
 
       const looksInrPair = wrap.sym.endsWith("INR=X");
 
       // Convert USD quotes to INR where it helps UX (metals + crude).
-      // NOTE: BTC is kept in USD to match common display.
+      // NOTE: BTC is kept in USD to match common display on TradingView/CoinMarketCap.
       if ((isMetal || isCommodity) && looksUsdPerOz) {
         price = price * usdInr;
         prevClose = prevClose * usdPrev;
@@ -240,6 +183,7 @@ export async function GET() {
       }
 
       const { changePct, direction } = computeChange(price, prevClose);
+
       const convertedToInr = (isMetal || isCommodity) && looksUsdPerOz;
       const currency = convertedToInr ? "INR" : String(meta.currency || "INR");
 
@@ -247,7 +191,7 @@ export async function GET() {
         id: inst.id,
         name: inst.name,
         kind: inst.kind,
-        value: round(price, 2),
+        value: inst.kind === "index" ? round(price, 2) : round(price, 2),
         changePct: round(changePct, 2),
         direction,
         source: wrap.sym,
@@ -255,25 +199,10 @@ export async function GET() {
       });
     }
 
-    const payload = { ok: true, asOf: new Date().toISOString(), items };
-    setCache(payload);
-    const res = NextResponse.json(payload);
-    res.headers.set("Cache-Control", "no-store, max-age=0");
-    return res;
+    return NextResponse.json({ ok: true, asOf: new Date().toISOString(), items });
   } catch (e) {
     Logger.error("market_data_fetch_error", { error: String(e?.message || e), stack: e?.stack });
-
-    const cached = globalThis[CACHE_KEY]?.payload;
-    if (cached?.ok && Array.isArray(cached.items) && cached.items.length) {
-      // If Yahoo is down/slow, serve last known snapshot so the UI still has numbers.
-      const res = NextResponse.json({ ...cached, stale: true });
-      res.headers.set("Cache-Control", "no-store, max-age=0");
-      return res;
-    }
-
-    const res = NextResponse.json({ ok: false }, { status: 502 });
-    res.headers.set("Cache-Control", "no-store, max-age=0");
-    return res;
+    return NextResponse.json({ ok: false }, { status: 502 });
   }
 }
 

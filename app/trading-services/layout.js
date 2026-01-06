@@ -1,11 +1,26 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+/**
+ * FILE: app\trading-services\layout.js
+ * PURPOSE: (auto-added) Explain what this file does.
+ * CATEGORY: app
+ *
+ * DEPENDENCIES:
+ * - (none)
+ *
+ * USED BY:
+ * - (search the repo for this filename)
+ *
+ * SIMPLE EXPLANATION:
+ * This file is part of the app.
+ * It helps one specific feature work correctly.
+ *
+ * TO MODIFY:
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
+ */
 
-export const metadata = buildMetadata({
-  title: "Trading & Demat | BM Wealth",
-  description:
-    "Trading and demat support with disciplined process, clear documentation, and risk management basics.",
-  path: "/trading-services",
-});
+export const metadata = {
+  title: 'Trading Services | BM Wealth Mumbai ARN 90008',
+  description: 'Professional trading services with real-time market access.',
+};
 
 export default function Layout({ children }) {
   return children;

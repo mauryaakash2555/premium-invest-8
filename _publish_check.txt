@@ -1,0 +1,31 @@
+--- origin/main (last 12) ---
+79550b1 (HEAD -> staging, origin/main, origin/HEAD, main) Fix: market-data reliability on staging
+6923402 Fix: allow super-admin password during lead capture
+12410cc Fix: admin passwords + market ticker cache
+f618e86 chore: trigger staging deploy
+a1a47f1 Auth: fix super admin login with ADMIN_PASSWORD env
+40eb6e1 Chat: fix admin unlock + purge auth bubbles
+252b96c Dev: scheduled task installer
+78ccc8e Auth: fix family login
+951cfe6 Chat: hide admin auth messages
+9924e26 Homepage: remove SIP widget section
+ae3b5bb Homepage: add SIP widget; dedupe services FAQ
+54bde3b Premium: unify service pages template
+--- origin/staging (last 12) ---
+cbff0d3 (origin/staging, worktree-2026-01-04T23-52-33) Merge staging and update premium copy
+107eb49 Update Property vs SIP premium copy
+79550b1 (HEAD -> staging, origin/main, origin/HEAD, main) Fix: market-data reliability on staging
+6923402 Fix: allow super-admin password during lead capture
+12410cc Fix: admin passwords + market ticker cache
+f618e86 chore: trigger staging deploy
+a1a47f1 Auth: fix super admin login with ADMIN_PASSWORD env
+40eb6e1 Chat: fix admin unlock + purge auth bubbles
+252b96c Dev: scheduled task installer
+78ccc8e Auth: fix family login
+951cfe6 Chat: hide admin auth messages
+9924e26 Homepage: remove SIP widget section
+--- diff stat origin/main..origin/staging ---
+ components/calculators/PropertyVsSipCalculator.jsx | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+--- is-ancestor(main, staging)? (0=yes) ---
+exitcode=0

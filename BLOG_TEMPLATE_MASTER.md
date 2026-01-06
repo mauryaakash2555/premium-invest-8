@@ -389,7 +389,7 @@ export const staticBlogPost2 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
-      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market data—they are not assured or certain. Actual returns may vary significantly.
+      <strong style="color: #C0A062;">Investment Risks:</strong> All investments in mutual funds, insurance products, and other financial instruments are subject to market risks. Past performance is not indicative of future results. Returns mentioned are illustrative and based on historical market data—they are not guaranteed or assured. Actual returns may vary significantly.
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC; margin-bottom: 20px;">
@@ -401,7 +401,7 @@ export const staticBlogPost2 = {
     </p>
 
     <p style="font-size: 16px; line-height: 1.8; color: #CCCCCC;">
-      <strong style="color: #C0A062;">No Assurances:</strong> No financial outcome can be assured. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
+      <strong style="color: #C0A062;">No Guarantees:</strong> No financial outcome can be guaranteed. The opportunity cost calculations presented are illustrative comparisons based on historical market data and standard portfolio construction principles. Individual results may differ based on specific circumstances, timing, product selection, and market conditions.
     </p>
   </div>
 
@@ -465,7 +465,7 @@ export const staticBlogData = [
 ### 🚫 NEVER Use These Words:
 
 ```
-❌ "Fixed returns"
+❌ "Guaranteed returns"
 ❌ "Risk-free"
 ❌ "Best investment"
 ❌ "Get rich quick"
@@ -483,7 +483,7 @@ export const staticBlogData = [
 ✓ "May have delivered" (not "would have")
 ✓ "Historically" (not "will")
 ✓ "Could potentially" (not "definitely")
-✓ "Based on historical data" (not "certain")
+✓ "Based on historical data" (not "guaranteed")
 ✓ "Generally works better" (not "always best")
 ✓ "For educational purposes" (at start)
 ```
@@ -626,7 +626,7 @@ export const staticBlogData = [
 ### Mistakes to Avoid:
 11. ✅ 5 Common Mutual Fund Selection Mistakes
 12. ✅ Why Timing the Market Usually Fails
-13. ✅ The Hidden Cost of "Fixed Return" Products
+13. ✅ The Hidden Cost of "Guaranteed Return" Products
 14. ✅ Lock-in Periods: When They Help, When They Hurt
 15. ✅ Chasing Past Performance: A Costly Trap
 
@@ -665,7 +665,7 @@ export const staticBlogData = [
 ✅ "Based on past data, equity funds have shown..."
 ✅ "Market-linked returns can vary significantly"
 ❌ "Will give you X% returns"
-❌ "Promise to beat inflation"
+❌ "Guaranteed to beat inflation"
 ```
 
 **When giving advice:**
@@ -782,7 +782,7 @@ export const staticBlogPost2 = {
 TONE: Educational storyteller, not salesman
 LENGTH: 2000-2500 words
 STRUCTURE: Story → Problem → Solution → Resolution → FAQ → CTA
-COMPLIANCE: "May/could/historically" NOT "will/certain"
+COMPLIANCE: "May/could/historically" NOT "will/guaranteed"
 STYLE: NO emojis, muted gold colors, generous spacing
 SEO: Schema + FAQs + internal links + alt tags
 ```
@@ -794,7 +794,7 @@ SEO: Schema + FAQs + internal links + alt tags
 ✓ Real numbers and Mumbai context
 ✓ 3-5 H2 sections
 ✓ 5 FAQs with schema
-✓ No certainty/promise language
+✓ No "guaranteed" language
 ✓ Disclaimers intact
 ✓ Coming Next section
 ✓ Internal + external links
@@ -808,7 +808,7 @@ SEO: Schema + FAQs + internal links + alt tags
 ### ❌ NEVER:
 - Change disclaimer text (legal requirement)
 - Add product recommendations
-- Use certainty-implying words (e.g., "assured", "certain")
+- Use "guaranteed" or "assured"
 - Remove compliance language
 - Add emojis inside content
 - Give specific stock tips
@@ -921,7 +921,7 @@ SEO:
   [ ] Meta description 150-160 chars
 
 COMPLIANCE:
-  [ ] No certainty/promise language
+  [ ] No "guaranteed" language
   [ ] "NOT SEBI RIA" stated clearly
   [ ] All disclaimers present
   [ ] Risk warnings included

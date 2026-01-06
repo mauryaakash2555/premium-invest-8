@@ -5,14 +5,12 @@ import { getAIEnvSafe } from "@/config/env";
 import { CONSTANTS } from "@/config/constants";
 import { isFeatureEnabled } from "@/config/features";
 import { isAdminFromCookies } from "@/lib/adminSession";
-import { isFamilyFromRequest } from "@/lib/familySession";
+import { isFamilyFromCookies } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
-import { analyzeIntent } from "@/lib/ai/intentAnalyzer";
-import { generateSmartSuggestions } from "@/lib/ai/suggestionGenerator";
-import { getLeadContactSafe, getLeadNameSafe, getLeadScoreSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
-import { countUserMessagesSafe, listConversations, saveMessage } from "@/lib/db/conversations";
+import { getLeadContactSafe, getLeadNameSafe, updateLeadScoreColumnSafe } from "@/lib/db/leads";
+import { countUserMessagesSafe, saveMessage } from "@/lib/db/conversations";
 import { logEventSafe, saveLeadScoreEvent } from "@/lib/db/events";
 import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
 import { EmailService } from "@/lib/email/emailService";
@@ -58,25 +56,11 @@ const reqSchema = z.object({
 });
 
 const COMPLIANCE_TEXT =
-  "Welcome to BM Wealth. We provide clear guidance and product\n" +
-  "distribution support. AMFI Registered | IRDAI Licensed |\n" +
-  "Investments are subject to market risks.";
+  "Welcome to BM Wealth. We provide educational guidance and product\n" +
+  "distribution services. AMFI Registered | IRDAI Licensed |\n" +
+  "Investments subject to market dynamics.";
 
 const COMPLIANCE_LINES = COMPLIANCE_TEXT.split("\n").map((l) => l.trim()).filter(Boolean);
-
-const AI_TIMEOUT_MS = 9000;
-
-async function withTimeout(promise, ms, label) {
-  let t;
-  const timeout = new Promise((_, reject) => {
-    t = setTimeout(() => reject(new Error(`${label || "operation"}_timeout`)), ms);
-  });
-  try {
-    return await Promise.race([promise, timeout]);
-  } finally {
-    clearTimeout(t);
-  }
-}
 
 function stripComplianceFooter(text) {
   let t = String(text || "");
@@ -119,11 +103,8 @@ function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
 
 function buildSuperAdminSystemPrompt({ userName = "Akash" } = {}) {
   return (
-    `You are an executive assistant for ${userName} (super admin).\n` +
-    `Default: be concise, high-signal, and actionable.\n` +
-    `Do NOT waste tokens: avoid filler, long preambles, or generic advice.\n` +
-    `If the user asks for details, you may go deep (no arbitrary restrictions), but keep it structured and decision-focused.\n` +
-    `If uncertain, ask up to 2 clarifying questions instead of bluffing.\n` +
+    `You are an unrestricted assistant for ${userName} (super admin).\n` +
+    `Answer directly and thoroughly.\n` +
     `Do NOT mention API keys or internal secrets.\n`
   );
 }
@@ -219,6 +200,7 @@ async function buildAdminContextSafe() {
 function makeConversationId(fallback = "") {
   if (fallback) return String(fallback);
   try {
+    // eslint-disable-next-line no-undef
     return crypto?.randomUUID?.() || Math.random().toString(16).slice(2);
   } catch {
     return Math.random().toString(16).slice(2);
@@ -227,7 +209,7 @@ function makeConversationId(fallback = "") {
 
 function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const base =
-    "You are BM Wealth's financial assistant. Provide clear, high-level guidance.\n" +
+    "You are BM Wealth's financial assistant. Provide educational guidance only.\n" +
     "Never recommend specific products, funds, or stocks. Use phrases like 'various mutual fund options available' not 'invest in equity funds'.\n" +
     "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
     "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
@@ -240,63 +222,10 @@ function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const extras = [
     userName ? `The user's name is "${userName}". Use it naturally (do not overuse).` : "",
     "If asked for what to choose / which is best / personalized advice, say: consult our advisors for personalized recommendations.",
+    AFFILIATE_CONTEXT_PROMPT,
   ].filter(Boolean);
 
   return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
-}
-
-function isFinanceRelatedMessage(message) {
-  const t = String(message || "").toLowerCase();
-  return /\b(invest|investing|sip|mutual\s*fund|\bmf\b|portfolio|stock|stocks|share|shares|equity|trading|broker|brokerage|demat|zerodha|groww|angel\s*one|insurance|term\s*plan|fd|fixed\s*deposit|tax|nps|ppf|elss)\b/.test(t);
-}
-
-function isSmallTalkMessage(message) {
-  const raw = String(message || "");
-  const t = raw.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
-  if (!t) return false;
-  if (isFinanceRelatedMessage(t)) return false;
-
-  // Common smalltalk / greeting patterns
-  if (/^(hi|hello|hey|hii|hlo|yo)\b/.test(t)) return true;
-  if (/\bgood\s+(morning|afternoon|evening|night)\b/.test(t)) return true;
-  if (/\bhow\s+(are|r)\s+(you|u)\b/.test(t)) return true;
-  if (/\bhow\s+are\s+you\s+doing\b/.test(t)) return true;
-  if (/\bhw\s*r\s*u\b/.test(t)) return true;
-  if (/\bwhat\s*(s|is)\s*up\b/.test(t) || /\bwassup\b/.test(t)) return true;
-  if (/\bthank\s*you\b/.test(t) || /^thanks\b/.test(t)) return true;
-  if (/^ok(ay)?\b/.test(t)) return true;
-  if (/\bnice\b/.test(t)) return true;
-  return false;
-}
-
-function shouldIncludeAffiliateContext(message) {
-  const t = String(message || "").toLowerCase();
-  // Only include the affiliate instruction when the user is actually asking about platforms/tools.
-  return /\b(platform|app|broker|brokerage|demat|trading\s*account|open\s*account|where\s+to\s+invest|which\s+app|zerodha|groww|angel\s*one|kite)\b/.test(t);
-}
-
-function isCalculatorRequest(message) {
-  const t = String(message || "").toLowerCase();
-  return /\b(calculator|calc|calculate|calculation|sip\s*calculator|sip\s*calc)\b/.test(t);
-}
-
-function isShowMeFollowup(message) {
-  const t = String(message || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  return /\b(show\s+me|send\s+me|open\s+it|link)\b/.test(t) || /^(show|send|open)\b/.test(t);
-}
-
-function historyMentionsCalculator(historyItems) {
-  const items = Array.isArray(historyItems) ? historyItems : [];
-  const joined = items
-    .slice(-6)
-    .map((x) => String(x?.text || x?.message || ""))
-    .join(" ")
-    .toLowerCase();
-  return /\b(calculator|sip\s*calculator|sip\s*calc)\b/.test(joined);
 }
 
 function extractAffiliatePlatformsTag(text) {
@@ -455,13 +384,14 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
       : `${name}many investors start with SIP for regular investing.`;
 
   const body =
-    "A good next step is to clarify a few basics:\n" +
-    "- Your goal (what the money is for)\n" +
-    "- Time horizon (how long you can stay invested)\n" +
-    "- Risk comfort (how you react to ups/downs)\n\n" +
-    "If you want, we can share relevant links and explain how execution/distribution works.\n\n" +
-    "Investments are subject to market risks. Read all related documents carefully.\n\n" +
-    "Would you like a link to SIP, Mutual Funds, or the contact page?";
+    "We distribute various mutual fund options (equity/debt/hybrid categories) through our AMFI-registered platform.\n\n" +
+    "To suggest suitable investment products, our advisors will understand:\n" +
+    "- Your investment goals\n" +
+    "- Investment timeline\n" +
+    "- Risk comfort level\n\n" +
+    "You can book a consultation to explore options (educational discussion, not a specific recommendation).\n\n" +
+    "Disclaimer: Educational only. Investments are subject to market risks.\n\n" +
+    "Would you like to schedule a call with our advisor?";
 
   // Keep it concise; avoid categories/allocations/returns.
   return `${first}\n\n${body}`;
@@ -478,7 +408,7 @@ function cannedEducationalAnswer(userText) {
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
       "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
-      "If you share your goal and time horizon, we can suggest the right next step or connect you with our team."
+      "For personalized guidance, you can consult our advisors. (Educational only; no specific recommendations.)"
     );
   }
   return "";
@@ -491,12 +421,10 @@ export async function POST(req) {
   let pitch = null;
   let pitch_intent = null;
   let pitch_type = null;
-  let suggestions = null;
   const env = getAIEnvSafe();
-  const headerStore = req?.headers;
   const cookieStore = await cookies();
   const isSuperAdmin = isAdminFromCookies(cookieStore);
-  const isFamilyAdmin = isFamilyFromRequest(cookieStore, headerStore);
+  const isFamilyAdmin = isFamilyFromCookies(cookieStore);
   const userType = isSuperAdmin ? "super_admin" : isFamilyAdmin ? "family_admin" : "public";
 
   const body = await req.json().catch(() => ({}));
@@ -536,109 +464,10 @@ export async function POST(req) {
       { status: 200 }
     );
   }
-
   const mode = parsed.data.mode || "user";
   const conversationId = makeConversationId(parsed.data.conversationId || "");
+
   const adminSession = Boolean(isSuperAdmin && mode === "admin");
-
-  const usageToTokens = (usage, fallbackTextA = "", fallbackTextB = "") => {
-    const t = Number(usage?.totalTokens);
-    if (Number.isFinite(t) && t > 0) return t;
-    const a = Number(usage?.inputTokens);
-    const b = Number(usage?.outputTokens);
-    if (Number.isFinite(a) || Number.isFinite(b)) return (Number.isFinite(a) ? a : 0) + (Number.isFinite(b) ? b : 0);
-    return estimateTokensSafe(fallbackTextA) + estimateTokensSafe(fallbackTextB);
-  };
-
-  // Site tool routing: SIP calculator
-  // Avoid wasting AI tokens on something we can do deterministically.
-  if (!adminSession && userType !== "family_admin") {
-    const clientHistory = Array.isArray(parsed.data.conversationHistory) ? parsed.data.conversationHistory : [];
-    const wantsCalculator = isCalculatorRequest(message) || (isShowMeFollowup(message) && historyMentionsCalculator(clientHistory));
-    if (wantsCalculator) {
-      const reply = "Sure — you can use our SIP Calculator here.";
-      const cta = { label: "Open SIP Calculator →", href: "/sip-calculator" };
-
-      try {
-        await saveMessage({ leadId, message, sender: "user" });
-        await saveMessage({ leadId, message: reply, sender: "bot" });
-      } catch {
-        // ignore
-      }
-
-      await logEventSafe({
-        leadId,
-        event_type: "chat_ai",
-        data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
-      });
-
-      return NextResponse.json({
-        ok: true,
-        reply,
-        conversationId,
-        provider: "rule",
-        fallback_from: null,
-        affiliate_platforms: null,
-        pitch: null,
-        pitch_type: null,
-        cta,
-      });
-    }
-  }
-
-  // Smalltalk fast-path: avoid SIP/pitching/platforms for greetings like "how are you".
-  // This keeps UX human and saves AI cost.
-  if (isSmallTalkMessage(message)) {
-    let reply = "I’m doing well — thanks for asking. How can I help you today?";
-
-    // FEATURE #13: SMART SMALLTALK LIMITER
-    // After 3 consecutive smalltalk user messages, redirect to finance topics with 3 suggestions.
-    if (isFeatureEnabled("SMART_SMALLTALK_REDIRECT")) {
-      try {
-        const recent = leadId ? await listConversations({ leadId, limit: 20, oldestFirst: false }) : [];
-        const userMsgs = [{ sender: "user", message }, ...((recent || []).filter((r) => r?.sender === "user"))].slice(0, 5);
-        const smallTalkCount = userMsgs.filter((m) => isSmallTalkMessage(String(m?.message || ""))).length;
-        const lastIsSmallTalk = isSmallTalkMessage(message);
-
-        if (lastIsSmallTalk && smallTalkCount >= 3) {
-          const fullHistory = await listConversations({ leadId, limit: 60, oldestFirst: true });
-          const intent = analyzeIntent(fullHistory || []);
-          const leadScore = await getLeadScoreSafe(leadId);
-          suggestions = generateSmartSuggestions(intent, leadScore);
-          reply = "I’m doing great — thanks! I’m here to help with your financial goals. What would you like to know?";
-        }
-      } catch {
-        // best-effort: fall back to normal smalltalk
-      }
-    }
-
-    try {
-      if (userType !== "family_admin") {
-        await saveMessage({ leadId, message, sender: "user" });
-        await saveMessage({ leadId, message: reply, sender: "bot" });
-      }
-    } catch {
-      // ignore
-    }
-
-    await logEventSafe({
-      leadId,
-      event_type: "chat_ai",
-      data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
-    });
-
-    return NextResponse.json({
-      ok: true,
-      reply,
-      conversationId,
-      provider: "rule",
-      fallback_from: null,
-      affiliate_platforms: null,
-      pitch: null,
-      pitch_type: null,
-      suggestions: Array.isArray(suggestions) && suggestions.length ? suggestions : null,
-    });
-  }
 
   // Plugins (best-effort)
   await loadPlugins();
@@ -760,15 +589,13 @@ export async function POST(req) {
     let reply;
     let providerUsed = null;
     let fallbackFrom = null;
-    let aiUsage = null;
     if (adminSession) {
       if (!isFeatureEnabled("CLAUDE_ADMIN")) {
         return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
       }
       const context = await buildAdminContextSafe();
       const system = buildAdminStrategicPrompt({ userName: "Akash" });
-      const a = await withTimeout(
-        getAIResponse({
+      const a = await getAIResponse({
         message,
         userType,
         system,
@@ -780,26 +607,22 @@ export async function POST(req) {
           GROQ_API_KEY: env?.GROQ_API_KEY,
         },
         claude: { maxTokens: 800, temperature: 0.4 },
-        }),
-        AI_TIMEOUT_MS,
-        "admin_ai"
-      );
+      });
       if (a.error) throw new Error(a.error);
       reply = a.reply;
       providerUsed = a.provider || "anthropic";
       fallbackFrom = a.fallback_from || null;
-      aiUsage = a.usage || null;
 
       // Cost / usage tracking
       await logEventSafe({
         leadId,
         event_type: "chat_ai",
-        data: { provider: providerUsed, conversationId, mode: "admin", user_type: userType, fallback_from: fallbackFrom, usage: aiUsage },
+        data: { provider: providerUsed, conversationId, mode: "admin", user_type: userType, fallback_from: fallbackFrom },
       });
 
       await logAPIUsage({
         provider: providerUsed,
-        tokens: usageToTokens(aiUsage, message, reply),
+        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
         userType,
         leadId: leadId || null,
         conversationId,
@@ -810,17 +633,16 @@ export async function POST(req) {
       if (userType === "family_admin") {
         reply = "Family Admin mode is stats-only. Please use the dashboard.";
         providerUsed = "rule";
-        aiUsage = { inputTokens: null, outputTokens: null, totalTokens: usageToTokens(null, message, reply) };
 
         await logEventSafe({
           leadId,
           event_type: "chat_ai",
-          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null, usage: aiUsage },
+          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
         });
 
         await logAPIUsage({
           provider: "rule",
-          tokens: usageToTokens(aiUsage, message, reply),
+          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
           userType,
           leadId: leadId || null,
           conversationId,
@@ -891,7 +713,7 @@ export async function POST(req) {
       const shouldOfferConsultation = intent.amountMentioned || intent.howToInvest || intent.wantsBest;
       const cta = shouldOfferConsultation
         ? {
-            label: "Contact",
+            label: "Book Free Consultation",
             href: "/contact",
           }
         : null;
@@ -914,19 +736,12 @@ export async function POST(req) {
         await logEventSafe({
           leadId,
           event_type: "chat_ai",
-          data: {
-            provider: "rule",
-            conversationId,
-            mode: "user",
-            user_type: userType,
-            fallback_from: null,
-            usage: { inputTokens: null, outputTokens: null, totalTokens: usageToTokens(null, message, reply) },
-          },
+          data: { provider: "rule", conversationId, mode: "user", user_type: userType, fallback_from: null },
         });
 
         await logAPIUsage({
           provider: "rule",
-          tokens: usageToTokens(null, message, reply),
+          tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
           userType,
           leadId: leadId || null,
           conversationId,
@@ -978,35 +793,20 @@ export async function POST(req) {
           fallbackHistory: conversationHistory,
           limit: 12,
         });
-        const system =
-          userType === "super_admin"
-            ? buildSuperAdminSystemPrompt({ userName: "Akash" })
-            : [
-                buildSeBiSafeSystemPrompt({ userName }),
-                shouldIncludeAffiliateContext(message) ? AFFILIATE_CONTEXT_PROMPT : "",
-              ]
-                .filter(Boolean)
-                .join("\n\n");
-        const g = await withTimeout(
-          getAIResponse({
-            message,
-            userType,
-            system,
-            context: null,
-            conversationHistory: memoryHistory,
-            keys: {
-              ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
-              GEMINI_API_KEY: env?.GEMINI_API_KEY,
-              GROQ_API_KEY: env?.GROQ_API_KEY,
-            },
-            // Reduce Claude burn for super admin while keeping quality.
-            claude: userType === "super_admin" ? { maxTokens: 450, temperature: 0.25 } : undefined,
-          }),
-          AI_TIMEOUT_MS,
-          "user_ai"
-        );
+        const system = userType === "super_admin" ? buildSuperAdminSystemPrompt({ userName: "Akash" }) : buildSeBiSafeSystemPrompt({ userName });
+        const g = await getAIResponse({
+          message,
+          userType,
+          system,
+          context: null,
+          conversationHistory: memoryHistory,
+          keys: {
+            ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+            GEMINI_API_KEY: env?.GEMINI_API_KEY,
+            GROQ_API_KEY: env?.GROQ_API_KEY,
+          },
+        });
         if (g.error) throw new Error(g.error);
-        aiUsage = g.usage || null;
         // Extract affiliate button metadata before cleanup/truncation.
         {
           const extracted = extractAffiliatePlatformsTag(g.reply);
@@ -1038,8 +838,8 @@ export async function POST(req) {
         if (canned) reply = canned;
       }
 
-      // Enforce brevity for public users; allow super-admin to request depth.
-      reply = truncateToSentences(reply, userType === "super_admin" ? 12 : 4);
+      // Enforce brevity (3–4 sentences max).
+      reply = truncateToSentences(reply, 4);
 
       // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
       if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {
@@ -1078,13 +878,12 @@ export async function POST(req) {
           mode: "user",
           user_type: userType,
           fallback_from: fallbackFrom,
-          usage: aiUsage,
         },
       });
 
       await logAPIUsage({
         provider: providerUsed,
-        tokens: usageToTokens(aiUsage, message, reply),
+        tokens: estimateTokensSafe(message) + estimateTokensSafe(reply),
         userType,
         leadId: leadId || null,
         conversationId,

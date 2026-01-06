@@ -28,7 +28,6 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
-import FAQSection from '@/components/shared/FAQSection';
 
 const Services = () => {
   useEffect(() => {
@@ -40,7 +39,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Explore a wide range of mutual fund schemes aligned to your goals and risk comfort. We help you understand options using performance insights, costs, and portfolio check-ins so you can make informed decisions.',
+        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of wealth architects empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -55,7 +54,7 @@ const Services = () => {
       icon: <TrendingUp size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
-        'Personalized wealth management strategies designed around your goals and risk profile. Our PMS offerings combine market research, active portfolio oversight, and disciplined processes to help you pursue long-term outcomes.',
+        'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to maximize your returns.',
       features: [
         'Customized investment strategies',
         'Dedicated portfolio manager',
@@ -70,12 +69,12 @@ const Services = () => {
       icon: <CreditCard size={50} />,
       title: 'Trading Services',
       description:
-        'Access market data, trading tools, and resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
+        'Gain access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
       features: [
         'Real-time market access',
         'Advanced charting tools',
-        'Research insights and resources',
-        'Brokerage comparisons',
+        'Research and recommendations',
+        'Low brokerage rates',
         'Expert trading support',
       ],
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
@@ -85,7 +84,7 @@ const Services = () => {
       icon: <Shield size={50} />,
       title: 'Insurance',
       description:
-        'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
+        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we empower you to choose optimal policies that provide financial security and peace of mind.',
       features: [
         'Life insurance policies',
         'Health insurance plans',
@@ -100,11 +99,11 @@ const Services = () => {
       icon: <DollarSign size={50} />,
       title: 'Fixed Deposits (FD)',
       description:
-        'Seek predictable interest rates with our fixed deposit options. Choose from a variety of tenures and interest rates from premier banks and financial institutions to support your capital preservation goals.',
+        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
       features: [
         'Competitive interest rates',
         'Flexible tenure options',
-        'Predictable interest rates',
+        'Guaranteed returns',
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
@@ -125,29 +124,6 @@ const Services = () => {
       ],
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/sip',
-    },
-  ];
-
-  const faqs = [
-    {
-      question: 'How does the process work?',
-      answer:
-        'We start with your goals and constraints, then help you compare suitable options, assist with execution and documentation, and support periodic reviews over time.',
-    },
-    {
-      question: 'Which service should I start with?',
-      answer:
-        'If you are starting out, our Mutual Funds and SIP sections are common entry points. You can also explore our free tools to understand scenarios before taking action.',
-    },
-    {
-      question: 'Can I speak to someone before starting?',
-      answer:
-        'Yes. Use the Contact page to reach us, and we will guide you to the right next step based on your requirements and eligibility.',
-    },
-    {
-      question: 'Are affiliate links used on the website?',
-      answer:
-        'Some platform links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
     },
   ];
 
@@ -244,65 +220,8 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Premium wealth services with a process-led approach and clear documentation
+            Bespoke wealth architectures meticulously crafted to elevate your wealth trajectory
           </p>
-        </div>
-      </section>
-
-      {/* Start Here */}
-      <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
-        <div className="glass-effect" style={{ padding: 'clamp(18px, 4vw, 28px)', maxWidth: '100%' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(22px, 4vw, 30px)',
-              color: '#DAA520',
-              margin: '0 0 12px 0',
-              fontFamily: '"Playfair Display", serif',
-              fontWeight: 600,
-            }}
-          >
-            Start in 60 seconds
-          </h2>
-          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#CCCCCC', lineHeight: 1.8 }}>
-            If you want clarity before you act, explore our tools. If you want execution and documentation support,
-            reach us on the contact page.
-          </p>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <Link
-              href="/tools"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                border: '1px solid rgba(218, 165, 32, 0.28)',
-                background: 'rgba(218, 165, 32, 0.12)',
-                color: '#DAA520',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
-              Explore Tools <span aria-hidden="true">→</span>
-            </Link>
-            <Link
-              href="/contact"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.14)',
-                background: 'rgba(255,255,255,0.04)',
-                color: '#e5e5e5',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
-              Contact Us <span aria-hidden="true">→</span>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -447,212 +366,6 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Why Choose BM Wealth - NEW CONTENT SECTION */}
-      <section style={{ 
-        background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)', 
-        padding: '80px 20px' 
-      }}>
-        <div className="section-container">
-          <h2 style={{
-            fontSize: 'clamp(32px, 5vw, 48px)',
-            fontFamily: '"Playfair Display", serif',
-            color: '#DAA520',
-            textAlign: 'center',
-            marginBottom: '24px',
-            fontWeight: '600'
-          }}>
-            Why Choose BM Wealth for Your Financial Journey?
-          </h2>
-          <p style={{
-            fontSize: 'clamp(16px, 2.5vw, 18px)',
-            color: '#B8B8B8',
-            textAlign: 'center',
-            maxWidth: '900px',
-            margin: '0 auto 60px',
-            lineHeight: '1.8'
-          }}>
-            Mumbai's financial landscape is complex and competitive. At BM Wealth, we bring together regulatory 
-            expertise, market intelligence, and personalized service to help you navigate your wealth creation 
-            journey with confidence. Here's what sets us apart in Mumbai's crowded wealth services space.
-          </p>
-          
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '32px',
-            marginBottom: '60px'
-          }}>
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                AMFI Registered & IRDAI Licensed
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                We hold official AMFI Registration (ARN 90008) for mutual fund distribution and IRDAI 
-                License (277925) for insurance advisory. This dual certification ensures you're working 
-                with qualified professionals who adhere to strict regulatory standards.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Our compliance with industry regulations means your investments are handled with the 
-                highest standards of transparency, ethics, and accountability.
-              </p>
-            </div>
-
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Mumbai-Focused Expertise
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Based in Mumbai's financial district, we understand the unique challenges and opportunities 
-                facing Mumbai professionals, entrepreneurs, and families. From property vs. SIP decisions 
-                to tax optimization strategies, our advice is tailored to Mumbai's economic reality.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                We help clients navigate Mumbai's high cost of living, real estate dynamics, and career 
-                progression patterns to build wealth strategies that actually work in this city.
-              </p>
-            </div>
-
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Technology-Enabled Service
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Our digital platform provides 24/7 access to your portfolio, real-time performance tracking, 
-                and comprehensive wealth planning tools. Whether you're tracking SIP returns or analyzing 
-                tax optimization, everything is available at your fingertips.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                We combine premium personal service with cutting-edge technology to deliver the best of 
-                both worlds—human expertise backed by powerful digital tools.
-              </p>
-            </div>
-
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Holistic Wealth Planning
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                We don't just sell products—we architect comprehensive wealth solutions. Our approach 
-                integrates mutual funds, insurance, SIPs, portfolio management, and tax planning into a 
-                cohesive strategy aligned with your life goals.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                From your first SIP to retirement planning to legacy wealth transfer, we're your partners 
-                at every stage of your financial journey.
-              </p>
-            </div>
-
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Transparent, Fee-Based Model
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                No hidden charges, no commission bias. We earn through transparent distributor commissions 
-                from fund houses (as permitted by AMFI) and clearly disclosed advisory fees. You always 
-                know exactly what you're paying for.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Our recommendations are based on your best interests, not commission maximization. We 
-                prioritize Direct Plans where beneficial and Regular Plans where appropriate.
-              </p>
-            </div>
-
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#DAA520', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Track Record & Client Trust
-              </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Trusted by 500+ Mumbai investors including young professionals, entrepreneurs, corporate 
-                executives, and high-net-worth families. Our client retention rate exceeds 85%, reflecting 
-                the quality of service and results we deliver.
-              </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Many of our clients have been with us for 5+ years, trusting us through market cycles, 
-                career changes, and major life events.
-              </p>
-            </div>
-          </div>
-
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)',
-            border: '1px solid rgba(218, 165, 32, 0.3)',
-            borderRadius: '12px',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
-            <h3 style={{
-              fontSize: 'clamp(24px, 4vw, 32px)',
-              fontFamily: '"Playfair Display", serif',
-              color: '#DAA520',
-              marginBottom: '20px',
-              fontWeight: '600'
-            }}>
-              Our Investment Philosophy
-            </h3>
-            <p style={{
-              fontSize: 'clamp(15px, 2.5vw, 17px)',
-              color: '#d0d0d0',
-              lineHeight: '1.8',
-              maxWidth: '900px',
-              margin: '0 auto 24px'
-            }}>
-              We believe wealth creation is a marathon, not a sprint. Our philosophy centers on disciplined 
-              SIP investing, asset allocation based on life stages, tax-efficient structuring, and regular 
-              portfolio rebalancing. We focus on sustainable, long-term wealth building rather than chasing 
-              market fads or promising unrealistic returns.
-            </p>
-            <p style={{
-              fontSize: 'clamp(15px, 2.5vw, 17px)',
-              color: '#d0d0d0',
-              lineHeight: '1.8',
-              maxWidth: '900px',
-              margin: '0 auto'
-            }}>
-              Every client's situation is unique. A ₹25,000/month SIP strategy for a 28-year-old IT 
-              professional in Andheri looks different from a ₹2 lakh/month portfolio for a 45-year-old 
-              business owner in South Mumbai. We customize everything based on your income, expenses, 
-              risk tolerance, time horizon, and life goals.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section
         style={{
@@ -676,7 +389,7 @@ const Services = () => {
                 color: '#DAA520',
               }}
             >
-              Explore services
+              Let's Establish Your Financial Future Together
             </h2>
             <p
               style={{
@@ -687,7 +400,8 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Explore our services and tools. For execution and documentation support, reach us via WhatsApp or the contact page.
+              Schedule a consultation with our wealth architects to discuss your investment
+              objectives
             </p>
             <div
               style={{
@@ -704,7 +418,7 @@ const Services = () => {
                 className="btn-primary"
                 data-testid="services-whatsapp-cta"
               >
-                Message on WhatsApp
+                Secure Complimentary Consultation
               </a>
               <Link href="/contact" className="btn-secondary" data-testid="services-contact-cta">
                 Contact Us
@@ -714,13 +428,16 @@ const Services = () => {
         </div>
       </section>
 
-      <FAQSection title="Questions People Quietly Ask" faqs={faqs} />
-
-      {/* Risk & Disclosure */}
+      {/* SEBI Disclaimer */}
       <section className="section-container">
-        <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', margin: 0 }}>
-          Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
-        </p>
+        <div className="sebi-disclaimer">
+          <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to
+          market risks. Read all the related documents carefully before investing. Past
+          performance is not indicative of future returns. Please consider your specific
+          investment requirements, risk tolerance, investment goal, time frame, risk and reward
+          balance and cost associated with the investment before choosing a fund or designing a
+          portfolio that suits your needs.
+        </div>
       </section>
     </div>
   );

@@ -18,16 +18,10 @@
  */
 
 import products from "@/data/products.json";
-import { buildMetadata } from "@/lib/seo/metadata";
-
-const PATH = "/products";
 
 export const metadata = {
-  ...buildMetadata({
-    title: "Products | BM Wealth",
-    description: "Demo product listing for BM Wealth Next.",
-    path: PATH,
-  }),
+  title: "Products",
+  description: "Demo product listing for BM Wealth Next.",
 };
 
 export default function ProductsPage() {
