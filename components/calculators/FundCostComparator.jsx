@@ -36,7 +36,11 @@ function netRate(expectedReturnPct, expenseRatioPct) {
   return gross - exp;
 }
 
-export function FundCostComparator() {
+export function FundCostComparator({
+  title = "Fund Cost & Return Comparator (Educational)",
+  accentColor = "#DAA520",
+  variant = "gold",
+} = {}) {
   const [lumpsum, setLumpsum] = useState(500000);
   const [sip, setSip] = useState(25000);
   const [years, setYears] = useState(10);
@@ -63,11 +67,13 @@ export function FundCostComparator() {
     };
   }, [lumpsum, sip, years, expectedA, expenseA, expectedB, expenseB]);
 
+  const isNeutral = variant === "neutral";
+
   const field = {
     width: "100%",
     padding: "10px 12px",
     borderRadius: 10,
-    border: "1px solid rgba(218, 165, 32, 0.22)",
+    border: isNeutral ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(218, 165, 32, 0.22)",
     background: "rgba(255,255,255,0.03)",
     color: "#fff",
     outline: "none",
@@ -80,11 +86,15 @@ export function FundCostComparator() {
   };
 
   const card = {
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(218, 165, 32, 0.18)",
-    borderRadius: 12,
+    background: isNeutral ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.04)",
+    border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(218, 165, 32, 0.18)",
+    borderRadius: isNeutral ? 16 : 12,
     padding: 18,
+    backdropFilter: isNeutral ? "blur(10px)" : undefined,
   };
+
+  const scenarioLabelColor = isNeutral ? accentColor : "#C0A062";
+  const valueAccentColor = accentColor;
 
   return (
     <div style={card}>
@@ -92,11 +102,11 @@ export function FundCostComparator() {
         style={{
           margin: "0 0 10px 0",
           fontSize: 18,
-          color: "#DAA520",
+          color: valueAccentColor,
           fontWeight: 700,
         }}
       >
-        Fund Cost & Return Comparator (Educational)
+        {title}
       </h3>
       <p style={{ margin: "0 0 16px 0", fontSize: 14, color: "#d0d0d0", lineHeight: 1.75 }}>
         This compares two scenarios using your assumptions (expected return and expense ratio). It is not a fund
@@ -141,8 +151,15 @@ export function FundCostComparator() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
-        <div style={{ padding: 16, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12 }}>
-          <div style={{ fontSize: 13, color: "#C0A062", fontWeight: 700, marginBottom: 10 }}>Scenario A</div>
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 14,
+            background: isNeutral ? "rgba(0,0,0,0.18)" : undefined,
+          }}
+        >
+          <div style={{ fontSize: 13, color: scenarioLabelColor, fontWeight: 700, marginBottom: 10 }}>Scenario A</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <div style={label}>Expected return (%/yr)</div>
@@ -167,12 +184,19 @@ export function FundCostComparator() {
             Net modeled return: <strong style={{ color: "#fff" }}>{results.netA.toFixed(2)}%</strong>
           </p>
           <p style={{ margin: "10px 0 0 0", fontSize: 13, color: "#e5e5e5" }}>
-            Estimated value: <strong style={{ color: "#DAA520" }}>{formatINR(results.fvA)}</strong>
+            Estimated value: <strong style={{ color: valueAccentColor }}>{formatINR(results.fvA)}</strong>
           </p>
         </div>
 
-        <div style={{ padding: 16, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12 }}>
-          <div style={{ fontSize: 13, color: "#C0A062", fontWeight: 700, marginBottom: 10 }}>Scenario B</div>
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 14,
+            background: isNeutral ? "rgba(0,0,0,0.18)" : undefined,
+          }}
+        >
+          <div style={{ fontSize: 13, color: scenarioLabelColor, fontWeight: 700, marginBottom: 10 }}>Scenario B</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <div style={label}>Expected return (%/yr)</div>
@@ -197,7 +221,7 @@ export function FundCostComparator() {
             Net modeled return: <strong style={{ color: "#fff" }}>{results.netB.toFixed(2)}%</strong>
           </p>
           <p style={{ margin: "10px 0 0 0", fontSize: 13, color: "#e5e5e5" }}>
-            Estimated value: <strong style={{ color: "#DAA520" }}>{formatINR(results.fvB)}</strong>
+            Estimated value: <strong style={{ color: valueAccentColor }}>{formatINR(results.fvB)}</strong>
           </p>
         </div>
       </div>
@@ -206,15 +230,15 @@ export function FundCostComparator() {
         style={{
           marginTop: 14,
           padding: 14,
-          borderRadius: 12,
-          border: "1px solid rgba(218, 165, 32, 0.18)",
-          background: "rgba(218, 165, 32, 0.06)",
+          borderRadius: 14,
+          border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(218, 165, 32, 0.18)",
+          background: isNeutral ? "rgba(255,255,255,0.03)" : "rgba(218, 165, 32, 0.06)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <div style={{ fontSize: 13, color: "#e5e5e5" }}>
             Difference (B − A):{" "}
-            <strong style={{ color: results.delta >= 0 ? "#DAA520" : "#fff" }}>{formatINR(results.delta)}</strong>
+            <strong style={{ color: results.delta >= 0 ? valueAccentColor : "#fff" }}>{formatINR(results.delta)}</strong>
           </div>
           <div style={{ fontSize: 12, color: "#b8b8b8" }}>Assumption-only • Not advice</div>
         </div>

@@ -80,7 +80,14 @@ function buildFaqSchema(faqs, pageUrl) {
   return schema;
 }
 
-export default function FAQSection({ faqs: faqsProp, items, pageUrl, title = "FAQs", withSchema = true }) {
+export default function FAQSection({
+  faqs: faqsProp,
+  items,
+  pageUrl,
+  title = "FAQs",
+  subtitle = "Clear answers, minimal noise.",
+  withSchema = true,
+}) {
   const faqs = normalizeFaqs(items ?? faqsProp);
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -104,9 +111,9 @@ export default function FAQSection({ faqs: faqsProp, items, pageUrl, title = "FA
         <h2 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-white">
           {title}
         </h2>
-        <p className="mt-3 text-sm sm:text-base text-white/55">
-          Clear answers, minimal noise.
-        </p>
+        {subtitle ? (
+          <p className="mt-3 text-sm sm:text-base text-white/55">{subtitle}</p>
+        ) : null}
       </header>
 
       <div className="mt-8 sm:mt-10">
