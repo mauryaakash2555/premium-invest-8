@@ -198,7 +198,7 @@ export default function HomePage() {
               backgroundSize: '200% auto',
             }}
           >
-            Premium wealth support for everyday decisions
+            BM WEALTH - DISTINGUISHED WEALTH ARCHITECTURE
           </motion.h1>
           <p
             className="hero-description-responsive"
@@ -215,7 +215,7 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Tools, insights, and execution support—built for clarity.
+            Empowering Mumbai's elite investors with bespoke wealth strategies
           </p>
 
           <div
