@@ -383,7 +383,7 @@ const MutualFunds = () => {
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
-            Related resources: <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP Guide</Link> ·{' '}
+            Related resources: <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP</Link> ·{' '}
             <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
