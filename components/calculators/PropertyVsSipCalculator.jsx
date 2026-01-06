@@ -720,8 +720,7 @@ export function PropertyVsSipCalculator() {
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                       <div className="text-base font-semibold text-white">🏠 Ready to Escape the Property Trap?</div>
                       <div className="mt-2 text-sm text-slate-200/75">
-                        Your ₹{propertyCr}Cr is costing you ₹{gapCr}Cr in lost wealth.
-                        Here's how to fix it:
+                        Property vs SIP, which one is for You, Unlock the ₹399, and find out the hidden charges which normal people failed to recognise
                       </div>
                       <div className="mt-4">
                         <PremiumCalculatorCTA
