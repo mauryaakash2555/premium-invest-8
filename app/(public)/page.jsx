@@ -215,7 +215,7 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Empowering Mumbai's elite investors with bespoke wealth strategies
+            Bespoke wealth architecture for Mumbai’s most discerning families.
           </p>
 
           <div
