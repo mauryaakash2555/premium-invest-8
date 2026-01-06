@@ -220,10 +220,8 @@ export default function HomePage() {
 
           {/* Mobile-only minimal CTA (keeps background fully visible) */}
           <div
-            className="md:hidden"
+            className="md:hidden flex justify-center"
             style={{
-              display: 'flex',
-              justifyContent: 'center',
               margin: '0 auto 48px',
               padding: '0 16px',
             }}
