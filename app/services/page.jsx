@@ -151,26 +151,8 @@ const Services = () => {
     },
   ];
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
-      <script
-        id="services-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <style>{`
         /* Mobile-first responsive styles */
         .service-detail-grid {
@@ -732,7 +714,7 @@ const Services = () => {
         </div>
       </section>
 
-      <FAQSection faqs={faqs} />
+      <FAQSection title="Questions People Quietly Ask" faqs={faqs} />
 
       {/* Risk & Disclosure */}
       <section className="section-container">
