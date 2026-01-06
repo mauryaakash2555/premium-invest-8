@@ -17,9 +17,16 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
+import { buildMetadata } from "@/lib/seo/metadata";
+
+const PATH = "/v0-test";
+
 export const metadata = {
-  title: 'V0.dev Component Test | BM Wealth',
-  description: 'Testing v0.dev component compatibility',
+  ...buildMetadata({
+    title: "V0.dev Component Test | BM Wealth",
+    description: "Testing v0.dev component compatibility.",
+    path: PATH,
+  }),
 };
 
 export default function V0TestPage() {

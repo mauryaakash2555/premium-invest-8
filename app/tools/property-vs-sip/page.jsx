@@ -1,4 +1,5 @@
 import Script from "next/script";
+import Link from "next/link";
 
 import BackRow from "@/components/shared/BackRow";
 import { PropertyVsSipCalculator } from "@/components/calculators/PropertyVsSipCalculator";
@@ -8,9 +9,9 @@ const PATH = "/tools/property-vs-sip";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Mumbai Property vs SIP Calculator | Real Estate vs Mutual Fund Returns",
+    title: "Property vs SIP Calculator | BM Wealth",
     description:
-      "Compare Mumbai real estate vs SIP mutual fund returns. Free calculator shows 15-year wealth gap. Locked assumptions: 8% property, 12% SIP CAGR. Download detailed PDF report.",
+      "Compare Mumbai property growth vs SIP compounding with locked assumptions. Unlock a 15-page wealth gap report.",
     path: PATH,
     type: "website",
   }),
@@ -25,9 +26,9 @@ export default function PropertyVsSipToolPage() {
   const calculatorSchema = {
     "@context": "https://schema.org",
     "@type": "FinancialCalculator",
-    name: "Mumbai Property vs SIP Analyzer",
+    name: "Property vs SIP Calculator",
     description:
-      "Compare an equivalent capital deployment into Mumbai property vs disciplined equity SIP compounding using locked assumptions. Educational illustration only.",
+      "Compare an equivalent capital deployment into Mumbai property vs disciplined equity SIP compounding using locked assumptions.",
     url: pageUrl,
     provider: {
       "@type": "Organization",
@@ -45,7 +46,7 @@ export default function PropertyVsSipToolPage() {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${base}/` },
       { "@type": "ListItem", position: 2, name: "Tools", item: `${base}/tools` },
-      { "@type": "ListItem", position: 3, name: "Mumbai Property vs SIP Analyzer", item: pageUrl },
+      { "@type": "ListItem", position: 3, name: "Property vs SIP", item: pageUrl },
     ],
   };
 
@@ -59,7 +60,7 @@ export default function PropertyVsSipToolPage() {
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This is an educational illustration using locked assumptions. It does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
+            "No. This comparison uses locked assumptions and does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
         },
       },
       {
@@ -73,11 +74,11 @@ export default function PropertyVsSipToolPage() {
       },
       {
         "@type": "Question",
-        name: "Is this investment advice?",
+        name: "What does this tool help you decide?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This tool provides educational information only and is not personalised investment advice. Consult a qualified professional for advice specific to your situation.",
+            "It helps quantify opportunity cost under fixed assumptions so you can compare scenarios more clearly. For a personalised plan, connect with our team.",
         },
       },
     ],
@@ -85,9 +86,18 @@ export default function PropertyVsSipToolPage() {
 
   return (
     <>
-      <BackRow />
+      <BackRow href="/tools" label="← Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <PropertyVsSipCalculator />
+      </section>
+
+      <section className="px-6 lg:px-10 pb-6">
+        <p className="text-sm text-white/75">
+          Related resources: <Link href="/tools" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">All Tools</Link> ·{' '}
+          <Link href="/tools/tax-optimization" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Tax Intelligence</Link> ·{' '}
+          <Link href="/sip" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">SIP</Link> ·{' '}
+          <Link href="/blog" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Blogs</Link>
+        </p>
       </section>
 
       <Script
@@ -137,7 +147,7 @@ export default function PropertyVsSipToolPage() {
               </p>
               <p>
                 The model intentionally uses <strong>locked assumptions</strong> so the comparison is consistent and
-                audit-able. It is an educational illustration — not a promise of returns.
+                audit-able. Outputs are illustrative and will vary with market and property cycles.
               </p>
 
               <h3>Important Limitations</h3>
@@ -155,7 +165,7 @@ export default function PropertyVsSipToolPage() {
               </p>
               <hr />
               <p className="text-[11px] text-white/60">
-                Educational tool only • Not investment advice • ARN 90008
+                Market-linked outcomes can fluctuate • ARN 90008
               </p>
             </div>
           </div>

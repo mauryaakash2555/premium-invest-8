@@ -93,7 +93,7 @@ const Careers = () => {
             margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            Build your career with Mumbai's premier financial advisory firm
+            Build your career in wealth distribution and insurance support
           </p>
         </div>
       </section>
@@ -105,10 +105,10 @@ const Careers = () => {
             Why Choose a Career with BM Wealth?
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            At BM Wealth, we're building more than a business – we're creating a mission-driven organization transforming financial advisory in Mumbai. Our vision is becoming the most trusted financial advisory firm in Mumbai, known for integrity, expertise, and genuine client-centric service. We believe financial advisory should be about improving clients' lives, not selling products. This philosophy attracts passionate professionals who want meaningful careers helping families achieve financial security and prosperity. Our team culture emphasizes collaboration, continuous learning, ethical conduct, client-first mindset, and work-life balance. We're small enough that every team member makes visible impact yet growing fast enough to provide abundant career advancement opportunities.
+            At BM Wealth, we focus on disclosure-led, compliance-first processes for wealth distribution and insurance support. We value integrity, learning, and clear communication. Our team culture emphasizes collaboration, ethical conduct, and long-term trust.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Financial advisory offers unique career benefits – intellectual challenge (finance, psychology, strategy), relationship depth (becoming trusted advisor to families across generations), income potential (performance-based compensation rewarding excellence), flexibility (substantial autonomy after proving competence), and social impact (genuinely improving people's financial well-being). Mumbai, as India's financial capital, provides unparalleled opportunity for finance professionals. The city hosts millions of affluent families, thriving business community, sophisticated investor base, and concentration of financial institutions. Building financial advisory career in Mumbai means access to large, growing market with increasing financial sophistication. Our Kalbadevi location puts us heart of Mumbai's business district with easy access to clients across South Mumbai, Central Mumbai, and Western suburbs.
+            Client-facing distribution roles offer intellectual challenge (finance, behavior, and decision-making), relationship depth (long-term client support), structured learning (regulations, products, disclosures), and meaningful impact through clear communication. Mumbai, as India's financial capital, offers strong exposure to a wide range of client needs and financial institutions. Our Kalbadevi location is well-connected across South Mumbai, Central Mumbai, and the Western suburbs.
           </p>
         </section>
 
@@ -119,16 +119,16 @@ const Careers = () => {
           
           <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
             <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-              Financial Advisor / Wealth Advisor
+              Client Relationship Associate (Wealth Distribution)
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Experience:</strong> 1-5 years in financial services, mutual fund distribution, insurance advisory, or wealth management
+              <strong>Experience:</strong> 1-5 years in financial services, mutual fund distribution, insurance distribution, or client servicing
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
               <strong>Qualifications:</strong> Bachelor's degree (finance, commerce, economics preferred). AMFI/NISM certifications required or willingness to obtain. CFP certification preferred.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
-              <strong>Responsibilities:</strong> Client relationship management, financial planning and goal assessment, mutual fund and insurance recommendations, portfolio monitoring and reviews, business development and client acquisition, staying updated on financial markets and products.
+              <strong>Responsibilities:</strong> Client relationship management, needs understanding, product information and disclosures, documentation support, portfolio review coordination, and staying updated on regulations and products.
             </p>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
               <strong>Compensation:</strong> Fixed salary (₹XX lakhs annually depending on experience) plus performance-based incentives (can exceed fixed salary for top performers). Total compensation range: ₹XX lakhs annually.

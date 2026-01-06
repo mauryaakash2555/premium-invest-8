@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 
 import { EmailService } from "@/lib/email/emailService";
 import { LeadsDB } from "@/lib/db/leads";
 import { logEventSafe } from "@/lib/db/events";
+import { buildPropertyVsSipFreeSummaryEmail } from "@/lib/email/propertyVsSipTemplates";
+import { computeMumbaiPropertyVsSip } from "@/lib/property-vs-sip";
+import { WhatsAppFollowupsDB } from "@/lib/db/whatsappFollowups";
+import { buildPropertyVsSipWhatsAppSequence } from "@/lib/whatsapp/propertyVsSipFollowupTemplates";
 
 export const runtime = "nodejs";
 
@@ -25,6 +30,70 @@ function safeStr(v) {
   return String(v ?? "").trim();
 }
 
+function parseINR(v) {
+  const raw = String(v ?? "").trim();
+  if (!raw) return 0;
+  const cleaned = raw.replace(/[^0-9\-\.]/g, "");
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function getBaseUrlSafe() {
+  return String(process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in").replace(/\/+$/, "");
+}
+
+function buildPaymentLinkSafe() {
+  const explicit = String(process.env.PROPERTY_VS_SIP_PAYMENT_LINK || "").trim();
+  if (explicit) return explicit;
+  return `${getBaseUrlSafe()}/tools/property-vs-sip`;
+}
+
+async function scheduleWhatsAppSequence({ leadId, phone, name, inputs, model }) {
+  const to = String(phone || "").trim();
+  if (!to) return { ok: false, reason: "missing_phone" };
+
+  const now = Date.now();
+  const emailSentAtIso = new Date(now).toISOString();
+  const step1Due = new Date(now + 2 * 60 * 60 * 1000).toISOString();
+  const step2Due = new Date(now + 6 * 60 * 60 * 1000).toISOString();
+  const step3Due = new Date(now + 24 * 60 * 60 * 1000).toISOString();
+
+  const seq = buildPropertyVsSipWhatsAppSequence({
+    leadName: name,
+    propertyPrice: Number(model?.inputs?.propertyPrice || 0),
+    monthlySip: Number(model?.inputs?.monthlySip || 0),
+    years: Number(model?.inputs?.years || 15),
+    wealthGap: Number(model?.wealthGap || 0),
+    paymentLink: buildPaymentLinkSafe(),
+    agentName: String(process.env.WHATSAPP_AGENT_NAME || "Brahmdeo"),
+    agentSignature: String(process.env.WHATSAPP_AGENT_SIGNATURE || "").trim() || undefined,
+  });
+
+  const context = {
+    tool: "property_vs_sip",
+    emailSentAt: emailSentAtIso,
+    inputs: {
+      propertyPrice: Number(model?.inputs?.propertyPrice || 0),
+      monthlySip: Number(model?.inputs?.monthlySip || 0),
+      years: Number(model?.inputs?.years || 15),
+    },
+    computed: {
+      wealthGap: Number(model?.wealthGap || 0),
+    },
+    paymentLink: buildPaymentLinkSafe(),
+  };
+
+  const rows = [
+    { lead_id: leadId || null, phone: to, source: "property_vs_sip_email", step: 1, due_at: step1Due, context: { ...context, body: seq.message1 } },
+    { lead_id: leadId || null, phone: to, source: "property_vs_sip_email", step: 2, due_at: step2Due, context: { ...context, body: seq.message2 } },
+    { lead_id: leadId || null, phone: to, source: "property_vs_sip_email", step: 3, due_at: step3Due, context: { ...context, body: seq.message3 } },
+  ];
+
+  const { error } = await WhatsAppFollowupsDB.createMany(rows);
+  if (error) return { ok: false, reason: "db_unavailable" };
+  return { ok: true };
+}
+
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -36,67 +105,59 @@ export async function POST(req) {
     const whatsappOptIn = Boolean(lead?.whatsappOptIn);
 
     const inputs = body?.inputs || {};
-    const results = body?.results || {};
 
     if (!name || name.length < 2 || !isValidEmail(email)) {
       return NextResponse.json({ ok: false, error: "invalid_fields" }, { status: 400 });
     }
 
-    const propertyPrice = safeStr(inputs?.propertyPrice);
-    const monthlySip = safeStr(inputs?.monthlySip);
-    const years = safeStr(inputs?.years);
+    const propertyPrice = parseINR(inputs?.propertyPrice);
+    const monthlySip = parseINR(inputs?.monthlySip);
+    const years = Math.max(1, Math.min(30, Math.round(Number(inputs?.years || 0) || 0) || 15));
 
-    const propertyEndValue = safeStr(results?.propertyEndValue);
-    const sipFutureValue = safeStr(results?.sipFutureValue);
-    const wealthGap = safeStr(results?.wealthGap);
-    const gapCr = safeStr(results?.gapCr);
+    const model = computeMumbaiPropertyVsSip({ propertyPrice, monthlySip, years });
 
-    const subject = gapCr
-      ? `BM Wealth — Your Property vs SIP Summary (₹${gapCr}Cr gap)`
-      : "BM Wealth — Your Property vs SIP Summary";
+    const { lead: savedLead } = await LeadsDB.create({ name, email, phone });
 
-    const html = `
-      <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">
-        <h2>Your Property vs SIP Summary</h2>
-        <p>Hi ${name},</p>
-        <p>Here’s a snapshot based on your inputs:</p>
-        <ul>
-          <li><strong>Property price:</strong> ${propertyPrice || "-"}</li>
-          <li><strong>Monthly SIP:</strong> ${monthlySip || "-"}</li>
-          <li><strong>Timeline:</strong> ${years ? `${years} years` : "-"}</li>
-        </ul>
-        <p><strong>Results</strong></p>
-        <ul>
-          <li><strong>Property future value:</strong> ${propertyEndValue || "-"}</li>
-          <li><strong>Equity (SIP) future value:</strong> ${sipFutureValue || "-"}</li>
-          <li><strong>Wealth gap (SIP − property):</strong> ${wealthGap || "-"}${gapCr ? ` (≈ ₹${gapCr}Cr)` : ""}</li>
-        </ul>
-        <p>If you want the premium blueprint (PDF + action plan), you can unlock it from the calculator.</p>
-        <p style="margin-top:16px">Support: <a href="mailto:support@bmwealth.co.in">support@bmwealth.co.in</a></p>
-        <hr/>
-        <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only. Not investment advice.</p>
-      </div>
-    `;
+    const messageId = crypto.randomUUID();
+    const tracking = {
+      leadId: savedLead?.id || null,
+      messageId,
+      campaign: "property_vs_sip_free",
+      template: "property_vs_sip_free_summary",
+    };
 
-    const { lead: savedLead, error: leadError } = await LeadsDB.create({ name, email, phone: phone || null });
-    if (leadError) {
-      return NextResponse.json({ ok: false, error: "lead_save_failed" }, { status: 500 });
-    }
-
-    await logEventSafe({
-      event_type: "lead_captured",
-      data: {
-        source: "property_vs_sip",
-        email,
-        phone: phone || null,
-        whatsappOptIn,
+    const built = buildPropertyVsSipFreeSummaryEmail({
+      lead: { name, email },
+      inputs: {
+        propertyPrice: String(inputs?.propertyPrice ?? ""),
+        monthlySip: String(inputs?.monthlySip ?? ""),
+        years: String(inputs?.years ?? ""),
       },
+      siteUrl: getBaseUrlSafe(),
+      tracking,
     });
 
     const emailRes = await EmailService.sendRaw({
       to: email,
-      subject,
-      html,
+      subject: built.subject,
+      html: built.html,
+    });
+
+    await logEventSafe({
+      leadId: savedLead?.id || null,
+      event_type: "property_vs_sip_email_sent",
+      data: {
+        messageId,
+        campaign: tracking.campaign,
+        template: tracking.template,
+        email,
+        phone: phone || null,
+        whatsappOptIn,
+        email_subject: built.subject,
+        email_html: built.html,
+        inputs: { propertyPrice, monthlySip, years },
+        computed: { wealthGap: Number(model?.wealthGap || 0) },
+      },
     });
 
     if (!emailRes?.ok) {
@@ -104,7 +165,18 @@ export async function POST(req) {
       return NextResponse.json({ ok: false, error: err }, { status: 500 });
     }
 
-    return NextResponse.json({ ok: true, leadId: savedLead?.id || null });
+    let waScheduled = false;
+    if (whatsappOptIn && phone) {
+      const r = await scheduleWhatsAppSequence({ leadId: savedLead?.id || null, phone, name, inputs, model });
+      waScheduled = Boolean(r?.ok);
+      await logEventSafe({
+        leadId: savedLead?.id || null,
+        event_type: "whatsapp_followup_scheduled",
+        data: { ok: waScheduled, phone, reason: r?.reason || null },
+      });
+    }
+
+    return NextResponse.json({ ok: true, leadId: savedLead?.id || null, waScheduled });
   } catch {
     return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
   }

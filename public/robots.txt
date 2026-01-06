@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://bmwealth.co.in/sitemap.xml

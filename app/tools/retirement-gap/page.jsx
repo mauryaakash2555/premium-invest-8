@@ -1,24 +1,31 @@
 import BackRow from "@/components/shared/BackRow";
+import { buildMetadata } from "@/lib/seo/metadata";
+import Image from "next/image";
 
 import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLayout";
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 
+const PATH = "/tools/retirement-gap";
+
 export const metadata = {
-  title: "Retirement Gap — Coming Soon | BM Wealth",
-  description: "Retirement gap estimator (Coming Soon).",
+  ...buildMetadata({
+    title: "Retirement Gap — Coming Soon | BM Wealth",
+    description: "Retirement gap estimator (Coming Soon).",
+    path: PATH,
+  }),
 };
 
 export default function RetirementGapToolPage() {
   return (
     <>
-      <BackRow />
+      <BackRow href="/tools" label="← Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <BaseCalculatorLayout
           header={
             <CalculatorHeader
               meta={
                 <>
-                  <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                  <Image src="/logo.webp" alt="BM Wealth" width={20} height={20} className="h-5 w-auto" priority />
                   <span>BM Wealth</span>
                   <span className="text-white/25">•</span>
                   <span>BM Wealth Calculator</span>
@@ -31,7 +38,7 @@ export default function RetirementGapToolPage() {
             />
           }
           disclaimer={
-            "ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing rules. For personalised investment advice, consult a SEBI-registered investment adviser."
+            "ARN 90008 | IRDAI 277925. For informational purposes; calculations depend on your inputs and prevailing rules. Please verify with official sources for final outcomes."
           }
         >
           <div className="px-6 pb-6 lg:px-10 lg:pb-10">

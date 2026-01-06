@@ -47,7 +47,7 @@ const PrivacyPolicy = () => {
             <section style={{ marginBottom: '40px' }}>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 At BM Wealth, we take your privacy seriously. This Privacy Policy explains how we collect, 
-                use, disclose, and safeguard your information when you use our financial advisory services.
+                use, disclose, and safeguard your information when you use our services.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 By using our services, you consent to the data practices described in this policy.
@@ -104,7 +104,7 @@ const PrivacyPolicy = () => {
                 We use the collected information for the following purposes:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: 0, color: '#B8B8B8' }}>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To provide and maintain our financial advisory services</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To provide and maintain our services</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To process transactions and manage your investments</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To comply with KYC (Know Your Customer) regulations</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>To communicate with you about your account and services</li>

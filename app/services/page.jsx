@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
+import FAQSection from '@/components/shared/FAQSection';
 
 const Services = () => {
   useEffect(() => {
@@ -39,7 +40,7 @@ const Services = () => {
       icon: <PieChart size={50} />,
       title: 'Mutual Funds',
       description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of wealth architects empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
+        'Explore a wide range of mutual fund schemes aligned to your goals and risk comfort. We help you understand options using performance insights, costs, and portfolio check-ins so you can make informed decisions.',
       features: [
         'Diversified fund selection',
         'Performance tracking and analysis',
@@ -54,7 +55,7 @@ const Services = () => {
       icon: <TrendingUp size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
-        'Personalized wealth management strategies designed exclusively for you. Our PMS offerings combine in-depth market research, active portfolio management, and customized investment strategies to maximize your returns.',
+        'Personalized wealth management strategies designed around your goals and risk profile. Our PMS offerings combine market research, active portfolio oversight, and disciplined processes to help you pursue long-term outcomes.',
       features: [
         'Customized investment strategies',
         'Dedicated portfolio manager',
@@ -69,12 +70,12 @@ const Services = () => {
       icon: <CreditCard size={50} />,
       title: 'Trading Services',
       description:
-        'Gain access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+        'Access market data, trading tools, and resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
       features: [
         'Real-time market access',
         'Advanced charting tools',
-        'Research and recommendations',
-        'Low brokerage rates',
+        'Research insights and resources',
+        'Brokerage comparisons',
         'Expert trading support',
       ],
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
@@ -84,7 +85,7 @@ const Services = () => {
       icon: <Shield size={50} />,
       title: 'Insurance',
       description:
-        'Comprehensive insurance solutions to protect you and your loved ones. From life insurance to health coverage, we empower you to choose optimal policies that provide financial security and peace of mind.',
+        'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
       features: [
         'Life insurance policies',
         'Health insurance plans',
@@ -99,11 +100,11 @@ const Services = () => {
       icon: <DollarSign size={50} />,
       title: 'Fixed Deposits (FD)',
       description:
-        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
+        'Seek predictable interest rates with our fixed deposit options. Choose from a variety of tenures and interest rates from premier banks and financial institutions to support your capital preservation goals.',
       features: [
         'Competitive interest rates',
         'Flexible tenure options',
-        'Guaranteed returns',
+        'Predictable interest rates',
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],
@@ -124,6 +125,29 @@ const Services = () => {
       ],
       image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
       link: '/sip',
+    },
+  ];
+
+  const faqs = [
+    {
+      question: 'How does the process work?',
+      answer:
+        'We start with your goals and constraints, then help you compare suitable options, assist with execution and documentation, and support periodic reviews over time.',
+    },
+    {
+      question: 'Which service should I start with?',
+      answer:
+        'If you are starting out, our Mutual Funds and SIP sections are common entry points. You can also explore our free tools to understand scenarios before taking action.',
+    },
+    {
+      question: 'Can I speak to someone before starting?',
+      answer:
+        'Yes. Use the Contact page to reach us, and we will guide you to the right next step based on your requirements and eligibility.',
+    },
+    {
+      question: 'Are affiliate links used on the website?',
+      answer:
+        'Some platform links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
     },
   ];
 
@@ -220,8 +244,65 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Bespoke wealth architectures meticulously crafted to elevate your wealth trajectory
+            Premium wealth services with a process-led approach and clear documentation
           </p>
+        </div>
+      </section>
+
+      {/* Start Here */}
+      <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(18px, 4vw, 28px)', maxWidth: '100%' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(22px, 4vw, 30px)',
+              color: '#DAA520',
+              margin: '0 0 12px 0',
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 600,
+            }}
+          >
+            Start in 60 seconds
+          </h2>
+          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#CCCCCC', lineHeight: 1.8 }}>
+            If you want clarity before you act, explore our tools. If you want execution and documentation support,
+            reach us on the contact page.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <Link
+              href="/tools"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 18px',
+                borderRadius: '10px',
+                border: '1px solid rgba(218, 165, 32, 0.28)',
+                background: 'rgba(218, 165, 32, 0.12)',
+                color: '#DAA520',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Explore Tools <span aria-hidden="true">→</span>
+            </Link>
+            <Link
+              href="/contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 18px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255,255,255,0.14)',
+                background: 'rgba(255,255,255,0.04)',
+                color: '#e5e5e5',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Contact Us <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -392,7 +473,7 @@ const Services = () => {
           }}>
             Mumbai's financial landscape is complex and competitive. At BM Wealth, we bring together regulatory 
             expertise, market intelligence, and personalized service to help you navigate your wealth creation 
-            journey with confidence. Here's what sets us apart in Mumbai's crowded financial advisory space.
+            journey with confidence. Here's what sets us apart in Mumbai's crowded wealth services space.
           </p>
           
           <div style={{
@@ -595,7 +676,7 @@ const Services = () => {
                 color: '#DAA520',
               }}
             >
-              Let's Establish Your Financial Future Together
+              Explore services
             </h2>
             <p
               style={{
@@ -606,8 +687,7 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Schedule a consultation with our wealth architects to discuss your investment
-              objectives
+              Explore our services and tools. For execution and documentation support, reach us via WhatsApp or the contact page.
             </p>
             <div
               style={{
@@ -624,7 +704,7 @@ const Services = () => {
                 className="btn-primary"
                 data-testid="services-whatsapp-cta"
               >
-                Secure Complimentary Consultation
+                Message on WhatsApp
               </a>
               <Link href="/contact" className="btn-secondary" data-testid="services-contact-cta">
                 Contact Us
@@ -634,16 +714,13 @@ const Services = () => {
         </div>
       </section>
 
-      {/* SEBI Disclaimer */}
+      <FAQSection title="Questions People Quietly Ask" faqs={faqs} />
+
+      {/* Risk & Disclosure */}
       <section className="section-container">
-        <div className="sebi-disclaimer">
-          <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to
-          market risks. Read all the related documents carefully before investing. Past
-          performance is not indicative of future returns. Please consider your specific
-          investment requirements, risk tolerance, investment goal, time frame, risk and reward
-          balance and cost associated with the investment before choosing a fund or designing a
-          portfolio that suits your needs.
-        </div>
+        <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', margin: 0 }}>
+          Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
+        </p>
       </section>
     </div>
   );

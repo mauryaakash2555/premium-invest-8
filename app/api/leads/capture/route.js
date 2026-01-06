@@ -56,7 +56,7 @@ export async function POST(req) {
             <h2>Welcome to BM Wealth</h2>
             <p>Hi ${name},</p>
             <p>Thanks for using Tax Optimization Intelligence (FY 2025–26). If you opted for premium, you’ll receive your PDF after payment.</p>
-            <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925. Educational tool only.</p>
+            <p style="font-size:12px;color:#555">ARN 90008 | IRDAI 277925</p>
           </div>
         `,
       });

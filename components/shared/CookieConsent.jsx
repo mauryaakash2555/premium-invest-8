@@ -15,11 +15,13 @@ export default function CookieConsent() {
 
   const acceptCookies = () => {
     localStorage.setItem("cookieConsent", "accepted");
+    window.dispatchEvent(new Event("cookie-consent"));
     setShow(false);
   };
 
   const declineCookies = () => {
     localStorage.setItem("cookieConsent", "declined");
+    window.dispatchEvent(new Event("cookie-consent"));
     setShow(false);
   };
 

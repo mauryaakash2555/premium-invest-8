@@ -1,143 +1,377 @@
-/**
- * FILE: app\insurance\page.jsx
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: app
- *
- * DEPENDENCIES:
- * - react
- * - next/link
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
- */
-
 'use client';
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
+import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import { InsuranceCoverSnapshot } from '@/components/calculators/InsuranceCoverSnapshot';
+
+const ACCENT = '#D6B36A';
+const ACCENT_RGB = '214, 179, 106';
+
 const Insurance = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const PAGE_PATH = '/insurance';
+  const baseUrl = getMetadataBase().origin;
+  const pageUrl = `${baseUrl}${PAGE_PATH}`;
+  const title = 'Insurance';
+  const description =
+    'A structured way to protect what matters — with clear comparisons and servicing support.';
+
+  const faqs = [
+    {
+      question: 'Do insurance policies guarantee claim approval?',
+      answer:
+        'Claims are assessed by the insurer based on policy terms, conditions, disclosures, and documentation. Final approval always rests with the insurer.',
+    },
+    {
+      question: 'Is term insurance the same as investment?',
+      answer:
+        'No. Term insurance is designed for protection. Other policies may combine benefits, but suitability depends on goals and preferences.',
+    },
+    {
+      question: 'How often should coverage be reviewed?',
+      answer:
+        'Many families review coverage after major life events (marriage, children, home loan, business change) and periodically as income and liabilities evolve.',
+    },
+  ];
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${baseUrl}/services` },
+      { '@type': 'ListItem', position: 3, name: 'Insurance', item: pageUrl },
+    ],
+  };
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
+  };
+
+  const step = {
+    width: 34,
+    height: 34,
+    borderRadius: 999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'rgba(255,255,255,0.04)',
+    border: `1px solid rgba(${ACCENT_RGB}, 0.26)`,
+    color: ACCENT,
+    fontWeight: 700,
+    flex: '0 0 auto',
+  };
+
+  const card = {
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '16px',
+    padding: '22px',
+    backdropFilter: 'blur(10px)',
+  };
+
+  const divider = {
+    height: 1,
+    background: `linear-gradient(90deg, rgba(255,255,255,0), rgba(${ACCENT_RGB}, 0.35), rgba(255,255,255,0))`,
+    margin: '0 0 56px 0',
+  };
+
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
-      
 
-      <section style={{
-        position: 'relative',
-        backgroundColor: '#000000',
-        padding: '120px 0 80px 0',
-        textAlign: 'center',
-        marginTop: '80px'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+      <script
+        id="insurance-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        id="insurance-article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+
+      <section
+        style={{
+          position: 'relative',
+          backgroundColor: '#000000',
+          padding: '120px 0 80px 0',
+          textAlign: 'center',
+          marginTop: '80px',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage:
+              'linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)',
+            backgroundSize: '80px 80px',
+            opacity: 0.12,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.96) 100%)',
+          }}
+        />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: '52px',
+            fontSize: 'clamp(40px, 5vw, 60px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: ACCENT,
             marginBottom: '24px',
-            lineHeight: '1.2'
+            lineHeight: '1.2',
+            letterSpacing: '-0.02em',
           }}>
-            Comprehensive Insurance Planning Services Mumbai
+            Insurance
           </h1>
           <p style={{
             fontSize: '20px',
             color: '#e5e5e5',
-            maxWidth: '800px',
-            margin: '0 auto 32px',
+            maxWidth: '820px',
+            margin: '0 auto 18px',
             lineHeight: '1.6'
           }}>
-            IRDAI Licensed 277925 | Protecting Mumbai families with expert protection planning
+            A Structured Way to Protect What Matters
+          </p>
+          <p style={{ fontSize: '16px', color: '#d0d0d0', maxWidth: '920px', margin: '0 auto', lineHeight: '1.8' }}>
+            Insurance is designed to transfer risk. The right structure depends on your responsibilities, liabilities,
+            and the kind of protection you want in place.
           </p>
         </div>
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Life Insurance Solutions
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            How Insurance Works (Simple Flow)
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Life insurance forms the foundation of comprehensive wealth architecture, providing financial security to your family in your absence. At BM Wealth, we hold IRDAI License 277925, authorizing us to provide professional insurance distribution services across life, health, and general insurance. Our insurance practice serves Mumbai families with customized protection planning ensuring loved ones remain financially secure regardless of life's uncertainties. Insurance needs vary dramatically based on life stage, family composition, income levels, liabilities, and future obligations. A 28-year-old single professional has vastly different needs than a 40-year-old parent supporting two children, aging parents, and carrying home loan obligations. Our needs analysis process comprehensively evaluates your situation before facilitating appropriate coverage.
-          </p>
-          
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Term Insurance - Pure Protection
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Term insurance provides maximum coverage at minimum cost, making it the cornerstone of life insurance planning. A term plan offers pure death benefit protection without investment component, keeping premiums affordable. For example, a 30-year-old Mumbai male can secure ₹1 crore coverage for 30 years at approximately ₹12,000-15,000 annual premium – extraordinary value providing family security against catastrophic loss. Coverage amount calculations consider multiple factors. The Human Life Value (HLV) method calculates your economic value based on earning potential – typically 15-20 times annual income. A Mumbai professional earning ₹12 lakhs annually might need ₹1.8-2.4 crore coverage. Alternative methods consider outstanding liabilities (home loans, personal loans requiring ₹80 lakhs-1.2 crores coverage), future financial goals (children's education needing ₹1-1.5 crores, wedding expenses), spouse's income replacement needs, and lifestyle maintenance requirements. Most Mumbai families require ₹1-3 crore term coverage depending on circumstances.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Term policy features merit careful evaluation. Return of Premium (ROP) riders return premiums if you survive policy term, though this increases premiums 40-50%. Critical illness riders provide lump sum upon diagnosis of specified illnesses (cancer, heart attack, stroke), typically 10-25% of base coverage. Waiver of premium riders continue coverage without further premiums if policyholder becomes disabled. Income benefit options provide monthly income instead of lump sum, helping families manage money better. We recommend pure term plans for most Mumbai families – the premium savings versus traditional plans or ULIPs are better invested separately in mutual funds for wealth creation. Policy term should cover your working years plus 5-10 years – typically 25-30 year terms for those in their 30s, 20-25 years for 40-somethings. Coverage should continue until children become independent and major liabilities (home loans) are paid off.
-          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
+            {[
+              { n: '1', t: 'Define protection need', d: 'Clarify responsibilities, liabilities, and the risks you want covered.' },
+              { n: '2', t: 'Choose policy structure', d: 'Select type (term/health/general) and key features based on preference.' },
+              { n: '3', t: 'Complete documentation', d: 'KYC, disclosures, and forms are aligned to insurer requirements.' },
+              { n: '4', t: 'Ongoing servicing', d: 'Policy servicing and claims process support, where applicable.' },
+            ].map((x) => (
+              <div key={x.t} style={card}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <div style={step}>{x.n}</div>
+                  <div>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
+                    <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Whole Life Insurance & Endowment Plans
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Whole life insurance provides lifelong coverage plus maturity benefits, combining protection and savings. These policies cost 5-7 times more than term insurance for same coverage due to savings component. For example, ₹1 crore whole life coverage might cost ₹80,000-1,00,000 annually versus ₹12,000-15,000 for equivalent term plan. Endowment plans return sum assured plus bonuses upon maturity or provide death benefit. While providing stable returns (historically 4-6% annually), these returns significantly lag mutual fund potential (historically 10-12% returns). Past performance is not indicative of future returns. We generally recommend term insurance plus separate mutual fund investments over endowment plans for most Mumbai investors. However, whole life policies suit specific situations: legacy planning where you want to leave inheritance regardless of longevity, forced savings for undisciplined savers who wouldn't invest separately, or complete risk aversion where even equity mutual fund volatility causes anxiety. If considering endowment or whole life policies, ensure premiums don't exceed 10-15% of annual income, leaving sufficient surplus for goal-based investing.
-          </p>
+        <div aria-hidden="true" style={divider} />
 
-          <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
-            Unit Linked Insurance Plans (ULIPs)
-          </h3>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            ULIPs combine insurance protection with market-linked investments, allocating premiums between mortality charges and equity/debt fund investments. After regulatory reforms capping charges, ULIPs have become more competitive, offering 5-year lock-in period (versus 3 years for ELSS mutual funds) with potential for good returns. However, we still prefer separating insurance and investment for most Mumbai investors – buy adequate term insurance for protection and invest separately in mutual funds for wealth creation. This separation provides superior insurance coverage, better investment flexibility, lower costs overall, and simpler financial planning. ULIPs might suit high-income individuals seeking additional tax-efficient investment avenues (premium upto ₹2.5 lakh qualifies for 80C deduction, and death benefits are tax-free) or those wanting forced long-term investing discipline with insurance component bundled.
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Types of Insurance (At a Glance)
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
+            {[
+              { t: 'Term Insurance', d: 'Focused on protection. Commonly used to secure family obligations and liabilities.' },
+              { t: 'Health Insurance', d: 'Designed to help manage medical expenses based on policy structure and terms.' },
+              { t: 'General Insurance', d: 'Covers categories like motor, home, travel, and other defined risks.' },
+            ].map((x) => (
+              <div key={x.t} style={card}>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div aria-hidden="true" style={divider} />
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Term vs Combined Policies — Neutral View
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
+            <div style={card}>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Term Insurance</h3>
+              <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+                <li>Protection-first</li>
+                <li>Focused on risk cover</li>
+                <li>Chosen for clarity and simplicity</li>
+              </ul>
+            </div>
+            <div style={card}>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Combined Policies</h3>
+              <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+                <li>May combine protection with other benefits</li>
+                <li>Suitability depends on objective and preference</li>
+                <li>Requires careful reading of terms and structure</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ margin: '16px 0 0 0', fontSize: '16px', color: '#d0d0d0', lineHeight: '1.8' }}>
+            Both approaches are used based on individual circumstances.
           </p>
         </section>
 
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Health Insurance Planning
+        <div aria-hidden="true" style={divider} />
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Insurance in One Minute
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Health insurance is arguably more critical than life insurance – medical emergencies drain savings faster than almost any other financial shock. Mumbai's world-class but expensive healthcare system (a week in ICU can cost ₹2-5 lakhs, major surgeries ₹5-15 lakhs, critical illness treatment ₹10-25 lakhs+) makes comprehensive health insurance mandatory for every family. Yet only 30-35% of Mumbai residents carry adequate health coverage, leaving majority vulnerable to catastrophic medical expenses. Health insurance needs assessment considers family size, age profile, pre-existing conditions, preferred hospitals, and financial capacity. A young couple might start with ₹10 lakh family floater coverage, increasing to ₹15-20 lakhs when children arrive. Parents and in-laws should have separate senior citizen policies of ₹5-10 lakhs each. Mumbai families should target minimum ₹15-20 lakh cumulative health coverage considering city's healthcare costs.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Policy features significantly impact claim experience. Cashless hospitalization network matters immensely – ensure your preferred Mumbai hospitals (Breach Candy, Lilavati, Hinduja, Bombay Hospital, Nanavati) are covered. Room rent limits often become claim rejection points; opt for policies with no room rent capping or minimum 2% of sum insured allowing single/private rooms. Pre and post hospitalization coverage (typically 60-90 days pre-hospitalization, 90-180 days post) pays for diagnostic tests, consultations, and follow-up care. Day-care procedures cover treatments not requiring 24-hour hospitalization (cataract surgery, chemotherapy, dialysis). Maternity coverage, if needed, should be included from policy start as waiting periods are 2-4 years. Critical illness riders or standalone policies provide lump sums upon diagnosis, covering non-medical expenses (income loss, lifestyle changes, experimental treatments). Restoration benefits automatically restore sum insured if exhausted during policy year, crucial for families with multiple members falling ill.
-          </p>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Employer health insurance while valuable shouldn't be sole coverage. Corporate policies typically provide ₹3-5 lakh coverage (inadequate for serious illnesses), coverage ceases upon job change or retirement, coverage often excludes parents, and no-claim bonuses don't accumulate in your name. We recommend supplementing corporate coverage with individual policies purchased young (locking low premiums for life, building cumulative bonuses, and ensuring continuity regardless of employment status). A 30-year-old can secure ₹10 lakh coverage for ₹8,000-10,000 annually; starting at 40+ sees premiums jump 50-80%. Start early, maintain continuously (even minimal coverage), and enhance coverage as income grows. For senior parents, consider specialized senior citizen plans despite higher premiums (₹25,000-40,000 annually for ₹5 lakh coverage at 60+ years), as these policies account for age-related claim likelihood with appropriate pricing and coverage.
+          <div style={{ ...card, padding: '24px' }}>
+            <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.9', fontSize: '16px' }}>
+              <li>Defined protection for defined risks</li>
+              <li>Structured through policy terms and disclosures</li>
+              <li>Claims depend on documentation and conditions</li>
+              <li>Best used with clarity on responsibilities</li>
+              <li>Servicing matters over long horizons</li>
+            </ul>
+          </div>
+        </section>
+
+        <div aria-hidden="true" style={divider} />
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Who Typically Uses Insurance
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+            {[
+              'Working professionals',
+              'Business owners',
+              'Families planning long-term goals',
+              'Retired individuals',
+              'High-net-worth investors',
+            ].map((t) => (
+              <div key={t} style={{ ...card, padding: '18px' }}>
+                <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.6' }}>{t}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ margin: '16px 0 0 0', fontSize: '16px', color: '#d0d0d0', lineHeight: '1.8' }}>
+            Usage depends on needs, liabilities, and preferences.
           </p>
         </section>
 
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            General Insurance Services
+        <div aria-hidden="true" style={divider} />
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Our Role
           </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            General insurance protects your assets and liabilities beyond life and health. Motor insurance is mandatory in India – third-party coverage required by law, while comprehensive policies additionally cover your vehicle damage. For Mumbai car owners, comprehensive insurance typically costs ₹15,000-25,000 annually depending on vehicle value, providing coverage against accidents, theft, natural disasters, and third-party liabilities. Home insurance protects Mumbai's valuable real estate investments against fire, theft, natural calamities, and structural damage. Considering Mumbai property values (₹1-5 crore commonly), home insurance at ₹5,000-10,000 annually provides ₹50 lakh-1 crore building coverage plus contents insurance. Especially relevant for coastal areas vulnerable to monsoon damage or older buildings with structural concerns. Travel insurance covers international and domestic trips against medical emergencies abroad, trip cancellations, baggage loss, and travel delays. Critical for frequent travelers or expensive international holidays where medical costs can be exorbitant.
+          <div style={{ ...card, padding: '24px' }}>
+            <p style={{ margin: '0 0 10px 0', fontSize: '16px', color: '#e5e5e5', lineHeight: '1.8' }}>BM Wealth operates as:</p>
+            <ul style={{ margin: '0 0 18px 0', paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+              <li>IRDAI-licensed Insurance Intermediary</li>
+              <li>AMFI-registered Mutual Fund Distributor</li>
+            </ul>
+            <p style={{ margin: '0 0 10px 0', fontSize: '16px', color: '#e5e5e5', lineHeight: '1.8' }}>Our role is to:</p>
+            <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
+              <li>Facilitate access to products</li>
+              <li>Explain structures and processes</li>
+              <li>Support execution and servicing</li>
+            </ul>
+            <p style={{ margin: '16px 0 0 0', fontSize: '16px', color: '#d0d0d0', lineHeight: '1.8' }}>
+              Insurance decisions remain with the customer.
+            </p>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Cover Snapshot — Protection Band
+          </h2>
+          <InsuranceCoverSnapshot />
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            Quick Start
+          </h2>
+          <div style={{ ...card, padding: '24px' }}>
+            <p style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#e5e5e5', lineHeight: '1.85' }}>
+              If you want to act with clarity: start with your cover needs and then proceed with documentation support.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <Link
+                href="/tools"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: `1px solid rgba(${ACCENT_RGB}, 0.35)`,
+                  background: `linear-gradient(180deg, rgba(${ACCENT_RGB}, 0.14) 0%, rgba(${ACCENT_RGB}, 0.05) 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  color: '#ffffff',
+                  fontWeight: 600,
+                  letterSpacing: '0.01em',
+                  textDecoration: 'none',
+                }}
+              >
+                Explore Tools <span aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'rgba(255,255,255,0.04)',
+                  color: '#e5e5e5',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Talk to BM Wealth <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
+            Related resources: <Link href="/sip" style={{ color: ACCENT, textDecoration: 'underline' }}>SIP</Link> ·{' '}
+            <Link href="/mutual-funds" style={{ color: ACCENT, textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
 
-        <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Insurance vs Investment Products
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            A fundamental mistake many Mumbai investors make is confusing insurance with investment. Traditional insurance agents often push endowment plans, money-back policies, or ULIPs as investment vehicles. While these products provide some returns, they significantly underperform separate strategies. Our principle: insurance should primarily provide protection, not investment returns. Buy term insurance for pure death benefit protection at lowest cost. This provides maximum coverage freeing substantial money for wealth creation investments. Invest freed-up premiums in mutual funds through SIPs, building wealth more efficiently than insurance-cum-investment products. This separation provides clarity (insurance protects, investments grow wealth), flexibility (change investments without affecting insurance or vice versa), cost efficiency (no high insurance charges eating investment returns), and better returns (mutual funds historically outperform insurance investment components).
-          </p>
-        </section>
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
 
-        <section style={{
-          marginTop: '60px',
-          padding: '24px',
-          background: 'rgba(251, 191, 36, 0.1)',
-          borderRadius: '8px',
-          border: '1px solid rgba(251, 191, 36, 0.3)'
-        }}>
-          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            <strong>Insurance Disclaimer:</strong> BM Wealth holds IRDAI License 277925 for insurance distribution. All insurance recommendations are based on individual needs assessment. Policy terms, conditions, and exclusions vary by insurer and product. Read policy documents carefully before purchasing. Claims are subject to terms, conditions, and insurer approval. Premium rates shown are indicative and vary by age, health status, coverage amount, and insurer. Consult our IRDAI licensed protection specialists for personalized insurance planning suited to your family's protection needs.
+        <ClosingPerspective>
+          Insurance works best when the structure is clear and the servicing is consistent. The goal is simple: protect what matters, with documentation and expectations aligned from day one.
+        </ClosingPerspective>
+
+        <section style={{ marginTop: '60px' }}>
+          <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: 0 }}>
+            Policy issuance and claims are subject to the insurer’s terms, conditions, and approval. Please read policy
+            documents carefully.
           </p>
         </section>
 

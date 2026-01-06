@@ -75,21 +75,21 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>2. Services Provided</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                BM Wealth provides financial advisory services including but not limited to:
+                BM Wealth provides financial services including but not limited to:
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Mutual fund distribution services as an AMFI Registered Distributor (ARN 90008)</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Insurance advisory services as an IRDAI Licensed Advisor (License Number: 277925)</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio management guidance</li>
-                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning and advisory</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Portfolio planning and asset allocation guidance</li>
+                <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning support</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Financial planning consultations</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                We are IRDAI Licensed and AMFI Registered. We operate in compliance with applicable financial regulations.
+                We are IRDAI Licensed and AMFI Registered.
               </p>
             </section>
 
-            {/* No Investment Advice Guarantee */}
+            {/* Information & Risk */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
@@ -98,11 +98,10 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>3. No Investment Advice Guarantee</h2>
+              }}>3. Information & Risk</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                While we strive to provide accurate and helpful financial guidance, the information and educational 
-                content provided by BM Wealth are for informational purposes only and should not be construed as a 
-                guarantee of investment returns or financial outcomes.
+                While we strive to provide accurate and helpful information, outcomes can vary and depend on markets,
+                product terms, and individual circumstances.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 All investment decisions made by you are at your own risk and discretion. Mutual fund investments 
@@ -216,13 +215,13 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>8. Cookies and Analytics</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                We use cookies and similar tracking technologies to enhance user experience, analyze site 
-                traffic, and understand user behavior. This includes Google Analytics for performance tracking.
+                We use essential cookies to operate the website. Where enabled, we may also use optional analytics 
+                technologies (such as Google Analytics) to understand site performance and improve user experience.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
-                By continuing to use our website, you consent to our use of cookies as described in our 
-                Privacy Policy. You may disable cookies in your browser settings, though some features 
-                may not function properly.
+                Optional analytics is loaded only after you provide consent via our cookie consent banner. 
+                You can also control cookies through your browser settings; disabling certain cookies may affect 
+                website functionality.
               </p>
             </section>
 
@@ -242,12 +241,12 @@ const TermsAndConditions = () => {
                 when you sign up through these links.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                These affiliate partnerships do not influence our educational content or recommendations. 
-                All opinions and guidance provided are independent and based on our professional assessment.
+                These commercial relationships do not influence our educational content. We aim to keep our
+                content fair, transparent, and written in your best interest.
               </p>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                Disclosure: We are compensated for referrals to partner platforms. You are not charged 
-                any extra fees for using our referral links.
+                Disclosure: Some links may be affiliate/sponsored links. If you use them, we may be compensated.
+                You are not charged any extra fees for using our links.
               </p>
             </section>
 

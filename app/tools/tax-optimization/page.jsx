@@ -1,16 +1,21 @@
 import Script from "next/script";
 import Link from "next/link";
 import BackRow from "@/components/shared/BackRow";
-import { getMetadataBase } from "@/lib/seo/metadata";
+import { buildMetadata, getMetadataBase } from "@/lib/seo/metadata";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
 
+const PATH = "/tools/tax-optimization";
+
 export const metadata = {
-  title: "Tax Optimization Intelligence 2026 | Old vs New Regime Calculator Mumbai | BM Wealth",
-  description:
-    "Accurate FY 2025-26 tax calculator for Mumbai professionals. Compare old vs new regime, find savings, and unlock your personal execution blueprint. AMFI ARN-90008.",
+  ...buildMetadata({
+    title: "Tax Optimization Intelligence 2026 | Old vs New Regime Calculator Mumbai | BM Wealth",
+    description:
+      "Accurate FY 2025-26 tax calculator for Mumbai professionals. Compare old vs new regime, find savings, and unlock your personal execution blueprint. AMFI ARN-90008.",
+    path: PATH,
+  }),
   keywords:
-    "tax optimization intelligence, tax calculator 2026, old vs new tax regime, FY 2025-26 tax, Mumbai tax calculator, income tax calculator India, tax planning",
+    "tax calculator FY 2025-26, old vs new regime, Mumbai tax planning, HRA exemption, 80C 80D NPS, marginal relief, BM Wealth tools",
 };
 
 export default function TaxOptimizationToolPage() {
@@ -22,7 +27,7 @@ export default function TaxOptimizationToolPage() {
     name: "Tax Optimization Intelligence — FY 2025–26",
     description:
       "Mumbai-first FY 2025–26 income tax calculator comparing Old vs New regime with standard deduction, 87A rebate, marginal relief, and 4% cess.",
-    url: `${base}/tools/tax-optimization`,
+    url: `${base}${PATH}`,
     provider: {
       "@type": "Organization",
       name: "BM Wealth",
@@ -46,11 +51,11 @@ export default function TaxOptimizationToolPage() {
       },
       {
         "@type": "Question",
-        name: "Does this tool provide investment advice?",
+        name: "What is this tool meant to show?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This tool provides educational, general information based on your inputs and published rules. It does not constitute personalised investment advice. Consult a qualified professional for personalised guidance.",
+            "A clear estimate and comparison of Old vs New regime outcomes based on your inputs and published rules, along with a breakdown you can verify.",
         },
       },
       {
@@ -64,11 +69,11 @@ export default function TaxOptimizationToolPage() {
       },
       {
         "@type": "Question",
-        name: "Do you guarantee tax outcomes?",
+        name: "How accurate are the results?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No guarantees are made. The calculations are illustrative based on your inputs and current rules and may change with future updates.",
+            "They are estimates based on your inputs and current rules. Please verify with official sources or your tax professional for final outcomes.",
         },
       },
       {
@@ -76,7 +81,7 @@ export default function TaxOptimizationToolPage() {
         name: "Will I receive sales calls?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No. The experience is designed to be educational-first. Communication is limited to sharing your calculation and related updates.",
+          text: "No. Communication is limited to sharing your calculation and related updates.",
         },
       },
     ],
@@ -112,7 +117,7 @@ export default function TaxOptimizationToolPage() {
     "@type": "HowTo",
     name: "How to time your FY 2025–26 tax execution",
     description:
-      "Educational steps to plan tax execution across the financial year. General information, not investment advice.",
+      "A simple timing framework to plan FY 2025–26 tax execution across the financial year.",
     totalTime: "P12M",
     step: [
       {
@@ -139,7 +144,7 @@ export default function TaxOptimizationToolPage() {
   return (
     <>
       {/* Minimal back row: subtle, visible immediately */}
-      <BackRow />
+      <BackRow href="/tools" label="← Back to Tools" />
       {/* Hero Section — background image, headline, subtext, ONE CTA */}
       <section
         className="relative overflow-hidden"
@@ -202,6 +207,15 @@ export default function TaxOptimizationToolPage() {
         </div>
       </section>
 
+      <section className="px-6 lg:px-10 pb-6">
+        <p className="text-sm text-white/75">
+          Related resources: <Link href="/tools" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">All Tools</Link> ·{' '}
+          <Link href="/tools/property-vs-sip" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Property vs SIP</Link> ·{' '}
+          <Link href="/blog" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Blogs</Link> ·{' '}
+          <Link href="/contact" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Contact</Link>
+        </p>
+      </section>
+
       {/* Long SEO Section: Educational, calm, compliance-first (collapsed by default) */}
       <details className="px-6 lg:px-10 group learn-more">
         <summary className="list-none cursor-pointer select-none learn-more-summary">
@@ -227,89 +241,63 @@ export default function TaxOptimizationToolPage() {
                   prose-hr:border-white/10"
               >
                 <h2>How Mumbai Professionals Can Reduce Tax in FY 2025–26</h2>
-          <p>
-            This educational section explains, in plain language, how a typical salaried professional in Mumbai can
-            approach tax planning for FY 2025–26. It focuses on structure and execution rather than products or
-            promises. The goal is to help you understand the moving parts: income heads, deductions, exemptions, and
-            timing. All illustrations are general information, not personalized advice.
-          </p>
-          <p>
-            At a high level, tax outcomes depend on your salary composition (basic, HRA, allowances), eligible
-            deductions (80C, 80D, NPS under 80CCD(1B)), and housing-related provisions (home-loan interest under
-            Section 24). The statutory slabs and rebates differ across the old and new regimes; the correct choice is
-            the one that yields a lower total tax for your inputs. This tool computes both sides using current rules and
-            shows an illustrative difference so you can plan prudently.
-          </p>
+                <p>
+                  A practical, Mumbai-first approach to tax planning for FY 2025–26 focuses on two things: getting the
+                  calculation right (regime choice, deductions, exemptions, reliefs) and executing cleanly (documents,
+                  timing, employer proof cycles).
+                </p>
 
-          <h2>Old vs New Regime — What Actually Matters</h2>
-          <p>
-            Under the old regime, deductions and exemptions matter more—especially 80C, 80D, HRA exemption, and home-
-            loan interest. Under the new regime, the slabs are broader and simpler; certain deductions are limited, and
-            a rebate applies up to the threshold. For incomes around the rebate limit, new-regime marginal relief can
-            impact the effective rate. What matters is not speculation but a disciplined, input-true comparison with a
-            clear breakdown of slabs, cess, and applicable relief. That is exactly what the calculator above performs.
-          </p>
-          <p>
-            Importantly, this is not about “beating the system.” It is about using published rules correctly. The tool’s
-            methodology follows publicly available formulae—for instance, HRA exemption is the minimum of actual HRA
-            received, rent paid minus 10% of basic, and 50% of basic for Mumbai—as a transparent, auditable approach.
-          </p>
+                <h2>Old vs New Regime — What Actually Matters</h2>
+                <p>
+                  The decision is input-driven. Under the old regime, deductions and exemptions usually matter more—80C,
+                  80D, HRA exemption, and eligible home-loan interest. Under the new regime, slabs are simpler and certain
+                  deductions are restricted, with rebate and marginal relief influencing outcomes near key thresholds.
+                </p>
+                <p>
+                  The best regime is the one that yields a lower total tax for your inputs. This tool computes both sides
+                  and shows a clear breakdown (slab tax, surcharge where applicable, and cess) so you can verify the
+                  result.
+                </p>
 
-          <h2>Why Most Salaried Professionals Overpay Tax</h2>
-          <p>
-            Overpayment typically happens for practical reasons: incomplete documentation at the time of proof
-            submission, late decisions on eligible investments, or not aligning rent agreements and basic salary levels
-            to the HRA framework. A second pattern involves assuming that one regime is always better; in practice, the
-            answer depends on current year data and must be recomputed when components change. A third pattern is mixing
-            investment selection with tax calculation—these are separate decisions and should be kept independent.
-          </p>
-          <p>
-            A clean process includes: estimating annual salary components, validating rent/basic numbers for HRA, using
-            health insurance and retirement contributions prudently, and re-checking the regime decision before filing.
-            The calculator’s breakdown (slab-by-slab and deduction-wise) is intended to support such a process in a calm
-            and methodical way.
-          </p>
+                <h2>Why Most Salaried Professionals Overpay</h2>
+                <p>
+                  Overpayment is usually operational: missing documents during proof submission, late decisions on
+                  eligible deductions, or mismatches between rent documentation and salary structure for HRA. Another
+                  common issue is assuming one regime is always better—recompute whenever components change.
+                </p>
 
-          <h2>Execution Timing vs Calculation</h2>
-          <p>
-            The execution calendar often matters more than the calculation itself. For example, if rent agreements or
-            health insurance premiums are finalized late, deductions may not reflect in the employer cycle and may need
-            to be reconciled while filing. Similarly, NPS contributions under 80CCD(1B) have a separate cap and timing
-            window. Setting calendar reminders for proof collection, premium payments, and any planned contributions can
-            improve outcomes without changing risk profiles. Calculation is a lens; execution delivers the impact.
-          </p>
+                <h2>Execution Timing vs Calculation</h2>
+                <p>
+                  The calendar matters. Rent agreements, insurance premiums, and NPS contributions often need to align
+                  with employer cycles and filing timelines. A simple checklist across the year reduces last-minute
+                  corrections and improves confidence.
+                </p>
 
-          <h2>Common Mistakes Even at ₹20L+ Income</h2>
-          <p>
-            At higher incomes, the cost of small errors compounds. Common issues include: not updating basic salary
-            proportions when roles change, inconsistent rent documentation, ignoring home-loan interest capping under
-            Section 24, and overlooking the new-regime marginal relief near the rebate threshold. Another mistake is to
-            frame the choice as permanent. In reality, you can re-evaluate annually based on your inputs—sometimes old
-            regime wins decisively due to deductions; other times the new regime’s simplicity provides the edge.
-          </p>
-          <p>
-            Keep records tidy, reconcile employer and personal computations, and use the slab breakdown to cross-check
-            reasonableness. Consider maintaining a simple year-on-year worksheet that tracks which variables changed and
-            why the regime decision shifted, if at all. This builds internal confidence and reduces filing stress.
-          </p>
+                <h2>Common Mistakes at Higher Income</h2>
+                <p>
+                  Small errors compound at higher incomes: inconsistent rent proofs, ignoring caps where they apply,
+                  failing to update salary structure when roles change, or not revisiting the regime decision before
+                  filing.
+                </p>
 
-          <h3>Further Reading and Policies</h3>
-          <p>
-            For policy and disclosures, please review our
-            {" "}
-            <Link href="/compliance" className="underline text-[color:var(--color-matte-gold)]">Privacy & Compliance</Link>
-            {" "}and{" "}
-            <Link href="/regulatory-compliance" className="underline text-[color:var(--color-matte-gold)]">Disclaimers</Link>.
-            These materials clarify scope, assumptions, and responsibilities. All content here is illustrative and for
-            general information purposes only.
-          </p>
+                <h3>Further Reading and Policies</h3>
+                <p>
+                  For policy and disclosures, please review our{" "}
+                  <Link href="/compliance" className="underline text-[color:var(--color-matte-gold)]">
+                    Privacy & Compliance
+                  </Link>
+                  {" "}and{" "}
+                  <Link href="/regulatory-compliance" className="underline text-[color:var(--color-matte-gold)]">
+                    Disclaimers
+                  </Link>
+                  .
+                </p>
 
-          <h3>What’s Next</h3>
-          <p>
-            We will continue to add educational tools (coming soon) on salary structuring, HRA planners, and timing
-            checklists. These are designed to help you build your own audit trail of decisions across the financial year
-            without relying on subjective narratives. The goal is not to promise outcomes but to improve clarity.
-          </p>
+                <h3>What’s Next</h3>
+                <p>
+                  We’ll continue to add tools (coming soon) across salary structuring, HRA planning, and timing
+                  checklists—designed for clarity and execution.
+                </p>
               </div>
             </div>
           </div>

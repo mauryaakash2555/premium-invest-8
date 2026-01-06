@@ -301,7 +301,7 @@ async def seed_blog_data():
 
                 <section style="margin-bottom: 40px;">
                     <p style="font-size: 18px; margin-bottom: 20px;">
-                        Rajesh Kumar (name changed), a 42-year-old software engineer from Mumbai, thought he was making the smartest financial move of his life. He had ₹50 lakh in savings, and his "financial advisor" promised 18% annual returns through a "guaranteed" investment scheme.
+                        Rajesh Kumar (name changed), a 42-year-old software engineer from Mumbai, thought he was making the smartest financial move of his life. He had ₹50 lakh in savings, and his "financial advisor" promised 18% annual returns through a "so-called assured" investment scheme.
                     </p>
                     <p style="font-size: 18px; margin-bottom: 20px;">
                         Two years later, Rajesh had lost ₹47 lakh. The advisor had disappeared, and the scheme turned out to be unregistered and illegal.
@@ -314,7 +314,7 @@ async def seed_blog_data():
                     </h2>
                     <div style="background: rgba(218, 165, 32, 0.1); border-left: 4px solid #DAA520; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
                         <p style="margin-bottom: 15px;"><strong style="color: #DAA520;">Red Flag #1:</strong> The advisor wasn't registered with SEBI</p>
-                        <p style="margin-bottom: 15px;"><strong style="color: #DAA520;">Red Flag #2:</strong> Promised "guaranteed" returns of 18%</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: #DAA520;">Red Flag #2:</strong> Promised "assured" returns of 18%</p>
                         <p style="margin-bottom: 15px;"><strong style="color: #DAA520;">Red Flag #3:</strong> No proper documentation or regulatory compliance</p>
                         <p><strong style="color: #DAA520;">Red Flag #4:</strong> Pressure to invest quickly without due diligence</p>
                     </div>
@@ -329,7 +329,7 @@ async def seed_blog_data():
                             <strong style="color: #DAA520;">Verify Registration:</strong> Always check if your advisor is registered with SEBI. Visit <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" style="color: #C0A062; text-decoration: underline;">sebi.gov.in</a> to verify credentials.
                         </li>
                         <li style="margin-bottom: 15px; font-size: 16px;">
-                            <strong style="color: #DAA520;">Be Skeptical of High Returns:</strong> If someone promises guaranteed returns above 12-15%, it's likely a scam. No legitimate investment can guarantee high returns.
+                            <strong style="color: #DAA520;">Be Skeptical of High Returns:</strong> If someone promises assured returns above 12-15%, it's likely a scam. No legitimate investment can assure high returns.
                         </li>
                         <li style="margin-bottom: 15px; font-size: 16px;">
                             <strong style="color: #DAA520;">Demand Documentation:</strong> Legitimate advisors provide proper agreements, disclosure documents, and follow regulatory guidelines.
@@ -384,7 +384,7 @@ async def seed_blog_data():
                     
                     <div style="font-size: 14px; color: #CCCCCC; line-height: 1.8; margin-bottom: 20px;">
                         <p style="margin-bottom: 15px;">
-                            <strong style="color: #DAA520;">1. SEBI Registration Disclosure:</strong> BM Wealth is a SEBI Registered Investment Advisor with ARN: 90008. This registration does not imply endorsement by SEBI, nor does it guarantee investment returns or protect against losses.
+                            <strong style="color: #DAA520;">1. SEBI Registration Disclosure:</strong> BM Wealth is a SEBI Registered Investment Advisor with ARN: 90008. This registration does not imply endorsement by SEBI, nor does it assure investment returns or protect against losses.
                         </p>
                         
                         <p style="margin-bottom: 15px;">
@@ -392,7 +392,7 @@ async def seed_blog_data():
                         </p>
                         
                         <p style="margin-bottom: 15px;">
-                            <strong style="color: #DAA520;">3. No Guaranteed Returns:</strong> We do not promise or guarantee any specific returns on investments. All investment decisions should be based on your individual financial goals, risk appetite, and investment horizon. Returns are subject to market volatility and various economic factors beyond our control.
+                            <strong style="color: #DAA520;">3. No Assured Returns:</strong> We do not promise or assure any specific returns on investments. All investment decisions should be based on your individual financial goals, risk appetite, and investment horizon. Returns are subject to market volatility and various economic factors beyond our control.
                         </p>
                         
                         <p style="margin-bottom: 15px;">
@@ -404,7 +404,7 @@ async def seed_blog_data():
                         </p>
                         
                         <p style="margin-bottom: 15px;">
-                            <strong style="color: #DAA520;">6. Liability Disclaimer:</strong> BM Wealth and its advisors shall not be liable for any losses, damages, or claims arising from investment decisions made by readers. This content is based on information believed to be reliable but is not guaranteed to be accurate or complete.
+                            <strong style="color: #DAA520;">6. Liability Disclaimer:</strong> BM Wealth and its advisors shall not be liable for any losses, damages, or claims arising from investment decisions made by readers. This content is based on information believed to be reliable but is not assured to be accurate or complete.
                         </p>
                         
                         <p>

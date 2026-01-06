@@ -58,9 +58,9 @@ const reqSchema = z.object({
 });
 
 const COMPLIANCE_TEXT =
-  "Welcome to BM Wealth. We provide educational guidance and product\n" +
-  "distribution services. AMFI Registered | IRDAI Licensed |\n" +
-  "Investments subject to market dynamics.";
+  "Welcome to BM Wealth. We provide clear guidance and product\n" +
+  "distribution support. AMFI Registered | IRDAI Licensed |\n" +
+  "Investments are subject to market risks.";
 
 const COMPLIANCE_LINES = COMPLIANCE_TEXT.split("\n").map((l) => l.trim()).filter(Boolean);
 
@@ -119,8 +119,11 @@ function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
 
 function buildSuperAdminSystemPrompt({ userName = "Akash" } = {}) {
   return (
-    `You are an unrestricted assistant for ${userName} (super admin).\n` +
-    `Answer directly and thoroughly.\n` +
+    `You are an executive assistant for ${userName} (super admin).\n` +
+    `Default: be concise, high-signal, and actionable.\n` +
+    `Do NOT waste tokens: avoid filler, long preambles, or generic advice.\n` +
+    `If the user asks for details, you may go deep (no arbitrary restrictions), but keep it structured and decision-focused.\n` +
+    `If uncertain, ask up to 2 clarifying questions instead of bluffing.\n` +
     `Do NOT mention API keys or internal secrets.\n`
   );
 }
@@ -224,7 +227,7 @@ function makeConversationId(fallback = "") {
 
 function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const base =
-    "You are BM Wealth's financial assistant. Provide educational guidance only.\n" +
+    "You are BM Wealth's financial assistant. Provide clear, high-level guidance.\n" +
     "Never recommend specific products, funds, or stocks. Use phrases like 'various mutual fund options available' not 'invest in equity funds'.\n" +
     "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
     "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
@@ -452,14 +455,13 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
       : `${name}many investors start with SIP for regular investing.`;
 
   const body =
-    "We distribute various mutual fund options (equity/debt/hybrid categories) through our AMFI-registered platform.\n\n" +
-    "To suggest suitable investment products, our advisors will understand:\n" +
-    "- Your investment goals\n" +
-    "- Investment timeline\n" +
-    "- Risk comfort level\n\n" +
-    "You can book a consultation to explore options (educational discussion, not a specific recommendation).\n\n" +
-    "Disclaimer: Educational only. Investments are subject to market risks.\n\n" +
-    "Would you like to schedule a call with our advisor?";
+    "A good next step is to clarify a few basics:\n" +
+    "- Your goal (what the money is for)\n" +
+    "- Time horizon (how long you can stay invested)\n" +
+    "- Risk comfort (how you react to ups/downs)\n\n" +
+    "If you want, we can share relevant links and explain how execution/distribution works.\n\n" +
+    "Investments are subject to market risks. Read all related documents carefully.\n\n" +
+    "Would you like a link to SIP, Mutual Funds, or the contact page?";
 
   // Keep it concise; avoid categories/allocations/returns.
   return `${first}\n\n${body}`;
@@ -476,7 +478,7 @@ function cannedEducationalAnswer(userText) {
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
       "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
-      "For personalized guidance, you can consult our advisors. (Educational only; no specific recommendations.)"
+      "If you share your goal and time horizon, we can suggest the right next step or connect you with our team."
     );
   }
   return "";
@@ -889,7 +891,7 @@ export async function POST(req) {
       const shouldOfferConsultation = intent.amountMentioned || intent.howToInvest || intent.wantsBest;
       const cta = shouldOfferConsultation
         ? {
-            label: "Book Free Consultation",
+            label: "Contact",
             href: "/contact",
           }
         : null;
@@ -987,16 +989,18 @@ export async function POST(req) {
                 .join("\n\n");
         const g = await withTimeout(
           getAIResponse({
-          message,
-          userType,
-          system,
-          context: null,
-          conversationHistory: memoryHistory,
-          keys: {
-            ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
-            GEMINI_API_KEY: env?.GEMINI_API_KEY,
-            GROQ_API_KEY: env?.GROQ_API_KEY,
-          },
+            message,
+            userType,
+            system,
+            context: null,
+            conversationHistory: memoryHistory,
+            keys: {
+              ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+              GEMINI_API_KEY: env?.GEMINI_API_KEY,
+              GROQ_API_KEY: env?.GROQ_API_KEY,
+            },
+            // Reduce Claude burn for super admin while keeping quality.
+            claude: userType === "super_admin" ? { maxTokens: 450, temperature: 0.25 } : undefined,
           }),
           AI_TIMEOUT_MS,
           "user_ai"
@@ -1034,8 +1038,8 @@ export async function POST(req) {
         if (canned) reply = canned;
       }
 
-      // Enforce brevity (3–4 sentences max).
-      reply = truncateToSentences(reply, 4);
+      // Enforce brevity for public users; allow super-admin to request depth.
+      reply = truncateToSentences(reply, userType === "super_admin" ? 12 : 4);
 
       // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
       if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {

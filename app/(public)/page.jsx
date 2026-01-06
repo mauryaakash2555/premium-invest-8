@@ -41,7 +41,6 @@ import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
-import Testimonials from '@/components/shared/Testimonials';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -76,35 +75,35 @@ export default function HomePage() {
     {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
-      description: 'Diversified investment options with expert fund selection and performance insights.',
+      description: 'Mutual fund selection support, execution, and disciplined review cadence.',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/mutual-funds',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
-      description: 'Personalized wealth management strategies tailored to your financial goals.',
+      description: 'Portfolio planning, allocation frameworks, and periodic review.',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/portfolio-management',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading Services',
-      description: 'Real-time market access with advanced tools and expert guidance.',
+      description: 'Demat onboarding, platform selection support, and execution framework.',
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/trading-services',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
-      description: 'Comprehensive life and health insurance plans for financial security.',
+      description: 'Insurance comparisons, documentation support, and claims-ready guidance.',
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/insurance',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
-      description: 'Secure returns with flexible tenure options and competitive rates.',
+      description: 'Fixed deposit comparisons across tenure, payout options, and liquidity.',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/fixed-deposits',
     },
@@ -167,7 +166,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.70) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.58) 100%)',
             zIndex: 2,
           }}
         />
@@ -185,11 +184,11 @@ export default function HomePage() {
           <motion.h1
             className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(20px, 2.5vw, 32px)',
+              fontSize: 'clamp(18px, 2.1vw, 28px)',
               color: '#C0A062',
               marginBottom: '24px',
               fontWeight: 300,
-              letterSpacing: '3px',
+              letterSpacing: '2.2px',
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
@@ -199,7 +198,7 @@ export default function HomePage() {
               backgroundSize: '200% auto',
             }}
           >
-            Mumbai&apos;s Premier Wealth Architecture
+            BM WEALTH - DISTINGUISHED WEALTH ARCHITECTURE
           </motion.h1>
           <p
             className="hero-description-responsive"
@@ -216,8 +215,31 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Exceptional wealth management solutions tailored to your prosperity
+            Empowering Mumbai's elite investors with bespoke wealth strategies
           </p>
+
+          {/* Mobile-only minimal CTA (keeps background fully visible) */}
+          <div
+            className="md:hidden flex justify-center"
+            style={{
+              margin: '0 auto 48px',
+              padding: '0 16px',
+            }}
+          >
+            <Link
+              href="/tools"
+              className="mobile-cta-lux"
+              style={{
+                fontSize: '11px',
+                lineHeight: 1.2,
+                textDecoration: 'none',
+                letterSpacing: '0.9px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Access Your Complimentary Wealth Blueprint
+            </Link>
+          </div>
 
           <div
             className="hero-cta-buttons-responsive hide-cta-on-mobile"
@@ -271,8 +293,7 @@ export default function HomePage() {
               margin: '0 auto',
             }}
           >
-            Bespoke wealth architectures meticulously crafted to elevate your
-            wealth trajectory
+            Premium services designed for clarity and confidence
           </p>
         </div>
 
@@ -314,17 +335,6 @@ export default function HomePage() {
             >
               Why Choose BM Wealth?
             </h2>
-            <p style={{
-              fontSize: '18px',
-              color: '#B8B8B8',
-              maxWidth: '800px',
-              margin: '0 auto',
-              lineHeight: '1.7'
-            }}>
-              In Mumbai's competitive financial landscape, choosing the right wealth advisor can make the difference 
-              between mediocre returns and substantial wealth creation. Here's why Mumbai investors trust BM Wealth 
-              with their financial future.
-            </p>
           </div>
 
           <div
@@ -351,11 +361,10 @@ export default function HomePage() {
                 <Shield size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                AMFI Registered & IRDAI Licensed
+                Regulatory & Process
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Fully compliant wealth distribution with AMFI Registration (ARN 90008) and IRDAI License (277925). 
-                Your investments are managed by qualified, regulated professionals who adhere to industry standards.
+                AMFI registered. Clear, disclosure-led process.
               </p>
             </div>
 
@@ -376,11 +385,10 @@ export default function HomePage() {
                 <TrendingUp size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Mumbai-Focused Expertise
+                Execution Discipline
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Deep understanding of Mumbai's financial ecosystem, real estate market, and career progression patterns. 
-                We tailor strategies for Mumbai's unique cost of living and investment opportunities.
+                Not slide decks — we focus on implementation and review cadence.
               </p>
             </div>
 
@@ -401,19 +409,15 @@ export default function HomePage() {
                 <PieChart size={40} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Personalized Strategies
+                Mumbai-Fit Planning
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                No cookie-cutter solutions. Every portfolio is customized based on your income, goals, risk tolerance, 
-                and life stage. From ₹5,000/month SIPs to multi-crore PMS, we build strategies that fit your reality.
+                Strategies tuned to Mumbai incomes, costs, and risk realities.
               </p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      <Testimonials />
 
       {/* Latest Insights Section */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
@@ -463,7 +467,7 @@ export default function HomePage() {
         <div
           className="glass-effect"
           style={{
-            padding: '60px 40px',
+            padding: '70px 40px',
             textAlign: 'center',
             background: 'rgba(218, 165, 32, 0.05)',
           }}
@@ -471,22 +475,22 @@ export default function HomePage() {
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
-              marginBottom: '20px',
+              marginBottom: '18px',
               color: '#DAA520',
             }}
           >
-            Ready to Commence Your Wealth Journey?
+            Private Consultation
           </h2>
           <p
             style={{
-              fontSize: '18px',
+              fontSize: '17px',
               color: '#CCCCCC',
-              marginBottom: '30px',
+              marginBottom: '32px',
               maxWidth: '600px',
               margin: '0 auto 30px',
             }}
           >
-            Connect with our experts today for a complimentary financial consultation
+            Speak with BM Wealth. We’ll review your goals and next steps.
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a
@@ -495,10 +499,10 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="btn-primary"
             >
-              Chat on WhatsApp
+              WhatsApp Concierge
             </a>
-            <Link href="/contact" className="btn-secondary">
-              Contact Us
+            <Link href="/contact" className="btn-secondary" style={{ textDecoration: 'none' }}>
+              Contact Form
             </Link>
           </div>
         </div>

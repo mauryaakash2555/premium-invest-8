@@ -74,11 +74,11 @@ const Services = () => {
       icon: <DollarSign size={50} />,
       title: 'Fixed Deposits (FD)',
       description:
-        'Secure and guaranteed returns with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
+        'Seek predictable interest rates with our fixed deposit options. Choose from a variety of tenure periods and interest rates from premier banks and financial institutions to meet your capital preservation goals.',
       features: [
         'Competitive interest rates',
         'Flexible tenure options',
-        'Guaranteed returns',
+        'Pre-declared interest rates',
         'Bank and NBFC FDs',
         'Premature withdrawal options',
       ],

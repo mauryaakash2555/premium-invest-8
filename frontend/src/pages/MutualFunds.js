@@ -580,7 +580,7 @@ const MutualFunds = () => {
             <strong>Mutual fund investments are subject to market risks. Read all scheme-related documents carefully before investing.</strong>
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
-            Past performance is not indicative of future returns. The returns mentioned are illustrative and not guaranteed. Actual returns may vary based on market conditions, fund performance, and investment timing.
+            Past performance is not indicative of future returns. The returns mentioned are illustrative and not assured. Actual returns may vary based on market conditions, fund performance, and investment timing.
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '12px' }}>
             BM Wealth (AMFI ARN 90008) is a registered mutual fund distributor, not a SEBI-registered Investment Advisor. We receive commissions from mutual fund houses for distribution services. All recommendations are made in clients' best interests following AMFI guidelines and code of conduct.

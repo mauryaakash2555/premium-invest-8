@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Mail } from "lucide-react";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -33,143 +32,128 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div
-      style={{
-        background: "linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(184, 134, 11, 0.08) 100%)",
-        border: "1px solid rgba(218, 165, 32, 0.3)",
-        borderRadius: "12px",
-        padding: "40px",
-        textAlign: "center",
-      }}
-    >
-      <div
-        style={{
-          width: "60px",
-          height: "60px",
-          background: "linear-gradient(135deg, #DAA520 0%, #B8860B 100%)",
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "0 auto 20px",
-        }}
-      >
-        <Mail size={28} style={{ color: "#000" }} />
+    <div className="bm-newsletter relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 px-6 py-8 md:px-10 md:py-9">
+      <div className="bm-newsletter__accent" aria-hidden />
+
+      <div className="relative z-10 flex flex-col items-center justify-between gap-6 md:flex-row md:items-center">
+        <div className="text-center md:text-left">
+          <div className="inline-flex items-center gap-3">
+            <span className="h-[1px] w-10 bg-[color:color-mix(in_oklab,var(--color-matte-gold)_35%,transparent)]" aria-hidden />
+            <div className="text-[10px] uppercase tracking-[0.55em] text-white/55">Private Note</div>
+            <span className="h-[1px] w-10 bg-[color:color-mix(in_oklab,var(--color-matte-gold)_35%,transparent)]" aria-hidden />
+          </div>
+
+          <h3 className="mt-3 text-2xl md:text-[34px] font-serif text-[color:var(--color-matte-gold)] m-0 tracking-[0.02em]">
+            BM Wealth Dispatch
+          </h3>
+          <p className="mt-2 text-sm md:text-[13px] text-white/70 m-0 max-w-xl tracking-wide">
+            One note monthly.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="w-full md:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="bm-newsletter__fieldwrap w-full">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+                disabled={status === "loading"}
+                className="w-full sm:w-[320px] rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-white placeholder:text-white/45 outline-none transition-colors hover:border-white/20 focus:ring-1 focus:ring-[color:var(--color-matte-gold)]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className={
+                status === "loading"
+                  ? "bm-btn bm-btn-primary rounded-xl px-7 py-3 text-sm opacity-70 cursor-not-allowed"
+                  : "bm-btn bm-btn-primary rounded-xl px-7 py-3 text-sm"
+              }
+            >
+              {status === "loading" ? "Subscribing..." : "Subscribe"}
+            </button>
+          </div>
+
+          {status === "success" ? (
+            <div className="mt-3 text-[11px] text-emerald-300/90">Subscribed. Check your inbox.</div>
+          ) : status === "error" ? (
+            <div className="mt-3 text-[11px] text-red-300/90">Unable to subscribe right now. Try again.</div>
+          ) : (
+            <div className="mt-3 text-[11px] text-white/50">Unsubscribe anytime.</div>
+          )}
+        </form>
       </div>
 
-      <h3
-        style={{
-          fontSize: "clamp(24px, 4vw, 32px)",
-          fontFamily: '"Playfair Display", serif',
-          color: "#DAA520",
-          marginBottom: "12px",
-          fontWeight: "600",
-        }}
-      >
-        Stay Informed on Wealth Creation
-      </h3>
+      <style jsx>{`
+        .bm-newsletter {
+          box-shadow:
+            0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 10%, transparent),
+            0 18px 60px rgba(0, 0, 0, 0.55);
+        }
 
-      <p
-        style={{
-          fontSize: "16px",
-          color: "#d0d0d0",
-          marginBottom: "28px",
-          lineHeight: "1.7",
-          maxWidth: "500px",
-          margin: "0 auto 28px",
-        }}
-      >
-        Get exclusive investment insights, market updates, and financial planning tips delivered to your inbox.
-      </p>
+        .bm-newsletter__accent {
+          position: absolute;
+          inset: -1px;
+          pointer-events: none;
+          background:
+            radial-gradient(900px 320px at 10% 10%, color-mix(in oklab, var(--color-matte-gold) 18%, transparent) 0%, transparent 60%),
+            radial-gradient(700px 260px at 90% 0%, color-mix(in oklab, var(--color-matte-gold) 14%, transparent) 0%, transparent 62%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0) 55%);
+          opacity: 0.9;
+        }
 
-      {status === "success" ? (
-        <div
-          style={{
-            padding: "16px",
-            background: "rgba(34, 197, 94, 0.1)",
-            border: "1px solid rgba(34, 197, 94, 0.3)",
-            borderRadius: "8px",
-            color: "#22c55e",
-            fontSize: "15px",
-          }}
-        >
-          ✓ Successfully subscribed! Check your email for confirmation.
-        </div>
-      ) : status === "error" ? (
-        <div
-          style={{
-            padding: "16px",
-            background: "rgba(239, 68, 68, 0.1)",
-            border: "1px solid rgba(239, 68, 68, 0.3)",
-            borderRadius: "8px",
-            color: "#ef4444",
-            fontSize: "15px",
-            marginBottom: "20px",
-          }}
-        >
-          Something went wrong. Please try again.
-        </div>
-      ) : null}
+        .bm-newsletter::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(
+            110deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.06) 18%,
+            transparent 38%,
+            transparent 100%
+          );
+          transform: translateX(-120%);
+          animation: bmNewsletterSheen 9s ease-in-out infinite;
+        }
 
-      <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "0 auto" }}>
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexDirection: window.innerWidth < 640 ? "column" : "row",
-          }}
-        >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
-            required
-            disabled={status === "loading"}
-            style={{
-              flex: 1,
-              padding: "14px 20px",
-              borderRadius: "8px",
-              border: "1px solid rgba(218, 165, 32, 0.3)",
-              background: "rgba(0, 0, 0, 0.4)",
-              color: "#fff",
-              fontSize: "15px",
-              outline: "none",
-            }}
-          />
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            style={{
-              padding: "14px 32px",
-              background: status === "loading" 
-                ? "rgba(218, 165, 32, 0.5)" 
-                : "linear-gradient(135deg, #DAA520 0%, #B8860B 100%)",
-              color: "#000",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: status === "loading" ? "not-allowed" : "pointer",
-              transition: "all 0.3s ease",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {status === "loading" ? "Subscribing..." : "Subscribe"}
-          </button>
-        </div>
-      </form>
+        .bm-newsletter__fieldwrap {
+          position: relative;
+        }
 
-      <p
-        style={{
-          fontSize: "13px",
-          color: "#999",
-          marginTop: "16px",
-          fontStyle: "italic",
-        }}
-      >
-        No spam, unsubscribe anytime. Your email is safe with us.
-      </p>
+        .bm-newsletter__fieldwrap::after {
+          content: "";
+          position: absolute;
+          inset: -1px;
+          border-radius: 14px;
+          pointer-events: none;
+          box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 14%, transparent);
+          opacity: 0.55;
+        }
+
+        @keyframes bmNewsletterSheen {
+          0%, 55% {
+            transform: translateX(-120%);
+            opacity: 0;
+          }
+          62% {
+            opacity: 1;
+          }
+          78% {
+            transform: translateX(120%);
+            opacity: 0.85;
+          }
+          100% {
+            transform: translateX(120%);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }

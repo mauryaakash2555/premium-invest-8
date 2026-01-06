@@ -100,7 +100,6 @@ export function LeadCaptureModal({
     const hasAnyPhoneInput = Boolean(String(whatsapp || "").trim());
 
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
       console.log("[LeadCaptureModal] Form values:", {
         name: trimmedName,
         email: trimmedEmail,
@@ -108,7 +107,6 @@ export function LeadCaptureModal({
         normalizedPhone,
         consent: whatsappConsent,
       });
-      // eslint-disable-next-line no-console
       console.log("[LeadCaptureModal] Validation:", {
         nameValid: trimmedName.length >= 2,
         emailValid: isValidEmail(trimmedEmail),
@@ -173,7 +171,36 @@ export function LeadCaptureModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border border-white/10 bg-black/90 text-white max-h-[92vh] overflow-y-auto scrollbar-hide pointer-events-auto sm:max-w-[760px] lg:max-w-[920px] pt-16 pb-8">
+      <DialogContent
+        hideClose
+        className="border border-white/10 bg-black/90 text-white max-h-[92vh] overflow-y-auto scrollbar-hide pointer-events-auto sm:max-w-[760px] lg:max-w-[920px] pt-10 pb-8"
+      >
+        <div className="absolute left-3 top-3 z-10 flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            onClick={() => onOpenChange?.(false)}
+            className="text-slate-200/80 hover:text-white hover:bg-white/10"
+          >
+            Back
+          </Button>
+        </div>
+
+        <div className="absolute right-3 top-3 z-10">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            onClick={() => onOpenChange?.(false)}
+            className="text-slate-200/80 hover:text-white hover:bg-white/10"
+          >
+            Close
+          </Button>
+        </div>
+
         <DialogHeader>
           <DialogTitle className="text-white text-lg">{title}</DialogTitle>
         </DialogHeader>
@@ -185,7 +212,7 @@ export function LeadCaptureModal({
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border-white/10 bg-white/5 text-white"
+              className="bg-white/5 text-white border-[color:var(--color-matte-gold)] focus-visible:ring-[color:var(--color-matte-gold)]"
               placeholder="Your name"
               autoComplete="name"
             />
@@ -197,7 +224,7 @@ export function LeadCaptureModal({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-white/10 bg-white/5 text-white"
+              className="bg-white/5 text-white border-[color:var(--color-matte-gold)] focus-visible:ring-[color:var(--color-matte-gold)]"
               placeholder="you@example.com"
               autoComplete="email"
               inputMode="email"
@@ -210,7 +237,7 @@ export function LeadCaptureModal({
               type="tel"
               value={whatsapp}
               onChange={(e) => setWhatsapp(formatWhatsAppInput(e.target.value))}
-              className="border-white/10 bg-white/5 text-white"
+              className="bg-white/5 text-white border-[color:var(--color-matte-gold)] focus-visible:ring-[color:var(--color-matte-gold)]"
               placeholder="+91XXXXXXXXXX"
               inputMode="tel"
               autoComplete="tel"
@@ -232,11 +259,11 @@ export function LeadCaptureModal({
           {err ? <div className="text-sm text-red-300">{err}</div> : null}
           {!err && info ? <div className="text-sm text-slate-200/80">{info}</div> : null}
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               type="button"
               variant="outline"
-              className="secondary-button flex-1 border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-100"
+              className="bm-btn w-full sm:flex-1 whitespace-normal leading-snug disabled:opacity-100 border-[color:var(--color-matte-gold)] bg-white/5 text-[color:var(--color-matte-gold)] hover:bg-white/10 hover:border-[color:var(--color-matte-gold)]"
               disabled={busy}
               onClick={() => handle("free")}
             >
@@ -249,7 +276,7 @@ export function LeadCaptureModal({
                 payButtonClassName,
               ]
                 .filter(Boolean)
-                .concat(["flex-1"])
+                .concat(["w-full", "sm:flex-1", "whitespace-normal", "leading-snug", "text-center"])
                 .join(" ")}
               disabled={busy}
               onClick={() => handle("pay")}

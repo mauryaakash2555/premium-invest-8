@@ -2,9 +2,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
   title:
-    "Financial Advisor Mumbai | Mutual Funds, SIP, Portfolio Management | BM Wealth ARN 90008",
+    "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
   description:
-    "Mumbai's trusted financial advisor. AMFI Registered (ARN 90008) & IRDAI Licensed. Expert mutual funds, SIP planning, portfolio management, insurance advisory. Serving 500+ Mumbai investors since inception.",
+    "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
   path: "/",
 });
 

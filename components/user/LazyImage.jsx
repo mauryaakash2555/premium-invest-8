@@ -25,6 +25,7 @@ export default function LazyImage({ src, alt, className, style, loading, decodin
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt={alt}

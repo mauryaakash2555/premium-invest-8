@@ -41,7 +41,9 @@ const FEATURE_ANALYTICS = isFeatureEnabled("ANALYTICS");
 const FEATURE_CLAUDE_ADMIN = isFeatureEnabled("CLAUDE_ADMIN");
 
 function isValidEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim());
+  // Intentionally strict: avoids treating passwords like "Mmaurya@8080" as valid emails.
+  // Requires a dot in the domain and a letter-only TLD of 2+ chars.
+  return /^[^\s@]+@[^\s@.]+\.[A-Za-z]{2,}$/.test(String(v || "").trim());
 }
 
 function normalizePhone(v) {
@@ -156,6 +158,62 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const [strategy, setStrategy] = useState(null);
   const [strategyBusy, setStrategyBusy] = useState(false);
 
+  function isLeakedAuthTranscriptMessage(m) {
+    try {
+      if (!m || m.sender !== "bot") return false;
+      const t = String(m.text || "").trim();
+      if (!t) return false;
+      if (t === "Exited family admin mode.") return true;
+      if (t === "Exited admin mode.") return true;
+      if (t === "Family code not recognized.") return true;
+      if (t === "Super admin code not recognized.") return true;
+      if (t === "Opening control panel...") return true;
+      if (t.includes("Viewing family dashboard")) return true;
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  function sanitizePublicTranscript(list) {
+    if (!Array.isArray(list)) return list;
+    const cleaned = list.filter((m) => !isLeakedAuthTranscriptMessage(m));
+    return cleaned.length ? cleaned : list;
+  }
+
+  async function openSuperAdminControlPanel(res) {
+    try {
+      if (res?.token && typeof window !== "undefined") {
+        window.localStorage.setItem("bm_admin_token_v1", String(res.token));
+      }
+    } catch {
+      // ignore
+    }
+
+    flashStatus("Opening control panel...", "info");
+    let adminToken = "";
+    try {
+      adminToken = typeof window !== "undefined" ? String(window.localStorage.getItem("bm_admin_token_v1") || "") : "";
+    } catch {}
+    const v = await fetch("/api/admin/verify", {
+      method: "GET",
+      cache: "no-store",
+      credentials: "include",
+      headers: adminToken ? { "x-bm-admin-token": adminToken } : undefined,
+    })
+      .then(async (r) => ({ ok: r.ok, j: await r.json().catch(() => null) }))
+      .catch(() => ({ ok: false, j: null }));
+    if (v.ok && v.j?.authenticated) {
+      window.location.href = "/admin-secret-akash";
+      return true;
+    }
+    flashStatus(
+      "Login succeeded, but this browser isn't accepting the admin cookie. Please open in Chrome/Edge at http://localhost:3000 and try again.",
+      "error"
+    );
+    return false;
+  }
+
   function exitAdminMode() {
     setAdmin(false);
     setTab("chat");
@@ -168,7 +226,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   async function exitFamilyAdminMode() {
     setFamilyAdmin(false);
     setTab("chat");
-    pushBotUser("Exited family admin mode.");
+    flashStatus("Exited family admin mode.", "info");
     try {
       clearFamilyToken();
       await fetch("/api/admin/family/logout", { method: "POST", credentials: "include" });
@@ -223,7 +281,6 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
 
   const sessionId = useMemo(() => {
     try {
-      // eslint-disable-next-line no-undef
       return crypto?.randomUUID?.() || Math.random().toString(16).slice(2);
     } catch {
       return Math.random().toString(16).slice(2);
@@ -234,6 +291,33 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const pitchStateRef = useRef({ lastPitchAt: null, seenPitches: [] });
   const listRef = useRef(null);
   const inputRef = useRef(null);
+  const statusTimerRef = useRef(null);
+
+  const [statusNote, setStatusNote] = useState(null); // { text: string, tone: 'info'|'error' }
+
+  function flashStatus(text, tone = "info") {
+    try {
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    } catch {
+      // ignore
+    }
+    if (!text) {
+      setStatusNote(null);
+      return;
+    }
+    setStatusNote({ text: String(text), tone: tone === "error" ? "error" : "info" });
+    statusTimerRef.current = setTimeout(() => setStatusNote(null), 4200);
+  }
+
+  useEffect(() => {
+    return () => {
+      try {
+        if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+      } catch {
+        // ignore
+      }
+    };
+  }, []);
 
   const [messages, setMessages] = useState(() => [
     {
@@ -264,14 +348,19 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       const raw = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
       if (raw) {
         const s = JSON.parse(raw);
-        if (Array.isArray(s?.messages) && s.messages.length) setMessages(s.messages);
+        if (Array.isArray(s?.messages) && s.messages.length) setMessages(sanitizePublicTranscript(s.messages));
         if (s?.leadId) setLeadId(s.leadId);
         if (typeof s?.captureStep === "string") setCaptureStep(s.captureStep);
       }
     } catch {
       // ignore
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Cleanup: remove any previously-leaked auth messages from the public transcript.
+  // This matters because we persist state in localStorage and React Fast Refresh can preserve old messages.
+  useEffect(() => {
+    setMessages((prev) => sanitizePublicTranscript(prev));
   }, []);
 
   useEffect(() => {
@@ -681,83 +770,80 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     const text = String(raw || "").trim();
     if (!text || busy) return;
 
-    // Family admin unlock (password typed into chat) — do this BEFORE we push user text into the chat.
-    // We only attempt when it looks like a 4-digit family PIN (avoids extra calls on normal messages).
+    // Numeric unlock code (4 digits) — attempt super admin first (so ADMIN_PASSWORD=7287 can open the panel),
+    // then fall back to family admin.
     if (!admin && !familyAdmin && /^\d{4}$/.test(text)) {
-      // Keep DOM + state in sync
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
       try {
-        const res = await tryFamilyLogin(text);
-        if (res?.setupRequired) {
-          pushBotUser("Family dashboard is not configured on this environment yet.");
+        const superRes = await tryAdminLogin(text);
+        if (superRes?.setupRequired) {
+          flashStatus("Super admin is not configured on this environment yet.", "error");
           return;
         }
-        if (res?.ok) {
+        if (superRes?.networkError) {
+          flashStatus("Super admin login failed due to a network error. Open http://localhost:3000 and try again.", "error");
+          return;
+        }
+        if (superRes?.status === 404) {
+          flashStatus("Super admin login isn't available here. Open http://localhost:3000 and try again.", "error");
+          return;
+        }
+        if (superRes?.ok) {
+          await openSuperAdminControlPanel(superRes);
+          return;
+        }
+
+        const familyRes = await tryFamilyLogin(text);
+        if (familyRes?.setupRequired) {
+          flashStatus("Family dashboard is not configured on this environment yet.", "error");
+          return;
+        }
+        if (familyRes?.ok) {
           setFamilyAdmin(true);
           setTab("family");
-          pushBotUser("Welcome BM Wealth! \u{1F4CA} Viewing family dashboard...");
+          flashStatus(null);
           return;
         }
       } finally {
         setBusy(false);
       }
-      pushBotUser("Family code not recognized.");
+      flashStatus("Code not recognized.", "error");
       return;
     }
     // Super admin unlock (redirect to hidden control panel) - intercept before echo
     // Trigger only for password-like inputs (contains '@') to avoid catching normal chat.
-    if (!admin && !familyAdmin && !(captureStep === "email" && isValidEmail(text)) && text.includes("@") && text.length <= 64) {
+    if (
+      !admin &&
+      !familyAdmin &&
+      !(captureStep === "email" && isValidEmail(text)) &&
+      !/^\d{4}$/.test(text) &&
+      text.includes("@") &&
+      text.length <= 64
+    ) {
       if (inputRef.current) inputRef.current.value = "";
       setInput("");
       setBusy(true);
       try {
         const res = await tryAdminLogin(text);
         if (res?.setupRequired) {
-          pushBotUser("Super admin is not configured on this environment yet.");
+          flashStatus("Super admin is not configured on this environment yet.", "error");
           return;
         }
         if (res?.networkError) {
-          pushBotUser("Super admin login failed due to a network error. If you're on the React frontend (port 3001), open the Next app at http://localhost:3000 and try again.");
+          flashStatus("Super admin login failed due to a network error. Open http://localhost:3000 and try again.", "error");
           return;
         }
         if (res?.status === 404) {
-          pushBotUser("Super admin login endpoint isn't available on this page. Open http://localhost:3000 (Next app) and try again.");
+          flashStatus("Super admin login isn't available here. Open http://localhost:3000 and try again.", "error");
           return;
         }
         if (res?.ok) {
-          try {
-            if (res?.token && typeof window !== "undefined") {
-              window.localStorage.setItem("bm_admin_token_v1", String(res.token));
-            }
-          } catch {
-            // ignore
-          }
-          // Verify once before redirect so we can show a useful error if cookies are blocked.
-          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Opening control panel...");
-          let adminToken = "";
-          try {
-            adminToken = typeof window !== "undefined" ? String(window.localStorage.getItem("bm_admin_token_v1") || "") : "";
-          } catch {}
-          const v = await fetch("/api/admin/verify", {
-            method: "GET",
-            cache: "no-store",
-            credentials: "include",
-            headers: adminToken ? { "x-bm-admin-token": adminToken } : undefined,
-          })
-            .then(async (r) => ({ ok: r.ok, j: await r.json().catch(() => null) }))
-            .catch(() => ({ ok: false, j: null }));
-          if (v.ok && v.j?.authenticated) {
-            window.location.href = "/admin-secret-akash";
-            return;
-          }
-          pushBotUser(
-            "Login succeeded, but this browser isn't sending/accepting the admin cookie (so the dashboard can't stay logged in). Please open the site in Chrome/Edge at http://localhost:3000 and try again."
-          );
+          await openSuperAdminControlPanel(res);
           return;
         }
-        pushBotUser("Super admin code not recognized.");
+        flashStatus("Super admin code not recognized.", "error");
         return;
       } finally {
         setBusy(false);
@@ -1623,6 +1709,18 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </div>
                 )}
               </div>
+
+              {statusNote?.text ? (
+                <div
+                  className={[styles.statusNote, statusNote.tone === "error" ? styles.statusNoteError : styles.statusNoteInfo].join(
+                    " "
+                  )}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {statusNote.text}
+                </div>
+              ) : null}
 
               <div className={styles.inputBar}>
                 <input

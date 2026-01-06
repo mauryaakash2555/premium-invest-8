@@ -260,8 +260,7 @@ export default function CuratedPartners() {
             <div style={{ textAlign: 'center', background: 'rgba(0, 0, 0, 0.6)', padding: '35px 45px', borderRadius: '24px', border: '3px solid #C0A062', marginBottom: '15px', boxShadow: '0 0 50px rgba(192, 160, 98, 0.5), inset 0 0 20px rgba(192,160,98,0.2)' }}>
               <div style={{ fontSize: '18px', color: '#C0A062', marginBottom: '12px', letterSpacing: '3px', fontWeight: 900 }}>CURRENT BIDDING</div>
               <div style={{ fontSize: '46px', color: '#FFF', fontWeight: 900, fontFamily: '"Playfair Display", serif', letterSpacing: '1px', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '38px' }}>₹</span>
-                <span>2-3 Lakh</span>
+                <span>Private</span>
               </div>
               <div style={{ fontSize: '15px', color: '#C0A062', marginTop: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>🔥 12 SPONSORS VYING</div>
             </div>
@@ -343,19 +342,19 @@ export default function CuratedPartners() {
             </h2>
 
             <p style={{ fontSize: '18px', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '20px', fontWeight: 600 }}>
-              Personalized Financial Planning & Wealth Management
+              Premium wealth services + distribution support
             </p>
 
             <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.7, marginBottom: '24px' }}>
-              Mumbai&apos;s trusted advisors for comprehensive wealth management. We provide tailored solutions for portfolio optimization, tax planning, insurance strategies, and retirement planning.
+              A process-led approach across products, execution, and documentation—delivered with premium clarity.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }} className="features-grid">
               {[
-                { icon: <TrendingUp size={20} />, text: 'Portfolio Management & Asset Allocation' },
-                { icon: <Shield size={20} />, text: 'Insurance & Risk Planning' },
-                { icon: <CheckCircle size={20} />, text: 'Tax Optimization Strategies' },
-                { icon: <Users size={20} />, text: 'Retirement & Estate Planning' },
+                { icon: <TrendingUp size={20} />, text: 'Portfolio planning & asset allocation' },
+                { icon: <Shield size={20} />, text: 'Insurance planning & claims-ready support' },
+                { icon: <CheckCircle size={20} />, text: 'Tax coordination awareness' },
+                { icon: <Users size={20} />, text: 'Goal planning checklists' },
               ].map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(192, 160, 98, 0.08)', padding: '12px 14px', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.2)', transition: 'all 0.3s ease' }}>
                   <div style={{ color: '#C0A062', flexShrink: 0 }}>{item.icon}</div>
@@ -378,7 +377,7 @@ export default function CuratedPartners() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-right-side">
             <Link href="/contact" className="btn-gold">
               <Calendar size={20} />
-              Schedule Consultation
+              Contact
             </Link>
           </div>
         </MobileScrollBoost>

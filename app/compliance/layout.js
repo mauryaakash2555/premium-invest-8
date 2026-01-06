@@ -17,10 +17,13 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
-export const metadata = {
-  title: 'Regulatory Compliance & Investor Charter | BM Wealth Mumbai ARN 90008',
-  description: 'BM Wealth regulatory compliance, investor charter, and grievance redressal.',
-};
+import { buildMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildMetadata({
+  title: "Regulatory Compliance & Investor Charter | BM Wealth Mumbai ARN 90008",
+  description: "BM Wealth regulatory compliance, investor charter, and grievance redressal.",
+  path: "/compliance",
+});
 
 export default function Layout({ children }) {
   return children;

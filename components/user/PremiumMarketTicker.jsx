@@ -27,40 +27,43 @@ function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
 }
 
-function fmtNumber(v, opts = {}) {
-  const { style = "decimal", currency = "INR", maximumFractionDigits = 2 } = opts;
+function toFiniteNumber(v) {
+  if (v == null) return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  if (typeof v === "string") {
+    // allow "24,857.30" / "₹7,245" / "90.214" etc.
+    const cleaned = v.replace(/[^0-9.+-]/g, "");
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : null;
+  }
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+// Requested: Display formatting
+function formatNumber(num, maximumFractionDigits) {
+  const n = toFiniteNumber(num);
+  if (n == null) return "—";
   try {
-    return new Intl.NumberFormat("en-IN", {
-      style,
-      currency,
-      maximumFractionDigits,
-    }).format(v);
+    const opts = {};
+    if (typeof maximumFractionDigits === "number") opts.maximumFractionDigits = maximumFractionDigits;
+    return new Intl.NumberFormat("en-IN", opts).format(n);
   } catch {
-    return String(v);
+    return String(n);
   }
 }
 
 function fmtValue(item) {
-  if (item.kind === "fx") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 3 });
-  if (item.kind === "index") return fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
-  // Crypto: match common display (TradingView/CMC) using USD
-  if (item.kind === "crypto") {
-    if (String(item.currency || "").toUpperCase() === "USD") {
-      // User preference: no $ symbol, show "USD" suffix like many quote pages
-      const n = new Intl.NumberFormat("en-US", {
-        style: "decimal",
-        maximumFractionDigits: 0,
-      }).format(item.value);
-      return `${n} USD`;
-    }
-    return fmtNumber(item.value, { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-  }
-  return "INR " + fmtNumber(item.value, { style: "decimal", maximumFractionDigits: 2 });
+  const v = toFiniteNumber(item?.value);
+  if (v == null) return "—";
+  // Keep values numeric-only (no currency prefix) to avoid any CSS/spacing issues.
+  if (item.kind === "fx") return formatNumber(v, 2);
+  return formatNumber(v, 0);
 }
 
 function fmtPct(p) {
-  const n = Number(p);
-  if (!Number.isFinite(n)) return "0.00%";
+  const n = toFiniteNumber(p);
+  if (n == null) return "—";
   const sign = n > 0 ? "+" : n < 0 ? "" : "";
   return `${sign}${n.toFixed(2)}%`;
 }
@@ -157,20 +160,40 @@ function normalizeApi(json) {
   return items
     .map((x) => ({
       id: String(x.id || ""),
-      name: String(x.name || ""),
+      name: String(x.name || x.label || ""),
       kind: String(x.kind || ""),
-      value: Number(x.value),
-      changePct: Number(x.changePct),
+      value: toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close),
+      changePct: toFiniteNumber(x.changePct ?? x.changePercent ?? x.change_percent),
       direction: String(x.direction || "flat"),
       currency: String(x.currency || ""),
     }))
-    .filter((x) => x.id && Number.isFinite(x.value) && Number.isFinite(x.changePct));
+    // Keep items even if changePct is missing; we still want prices to show.
+    .filter((x) => x.id && x.value != null);
 }
 
+// Requested: FALLBACK_DATA (if API fails)
+const FALLBACK_DATA = [
+  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 24857, change: 127, changePercent: 0.52, changePct: 0.52, direction: "up", currency: "INR" },
+  { id: "SENSEX", name: "SENSEX", kind: "index", value: 82365, change: 445, changePercent: 0.54, changePct: 0.54, direction: "up", currency: "INR" },
+  { id: "USDINR", name: "USD/INR", kind: "fx", value: 84.32, change: 0.08, changePercent: 0.09, changePct: 0.09, direction: "up", currency: "INR" },
+  { id: "GOLD", name: "GOLD", kind: "metal", value: 7245, change: 12, changePercent: 0.17, changePct: 0.17, direction: "up", currency: "INR" },
+];
+
 export default function PremiumMarketTicker({ className }) {
-  const [data, setData] = useState([]);
+  // Show numbers immediately on first paint (SSR + hydration) while live data loads.
+  const [data, setData] = useState(FALLBACK_DATA);
   const [asOf, setAsOf] = useState(null);
-  const lastDataRef = useRef([]);
+  const lastDataRef = useRef(FALLBACK_DATA);
+
+  const placeholderItems = useMemo(
+    () => [
+      { id: "SENSEX", name: "SENSEX", kind: "index", direction: "flat", placeholder: true },
+      { id: "NIFTY", name: "NIFTY 50", kind: "index", direction: "flat", placeholder: true },
+      { id: "USDINR", name: "USD/INR", kind: "fx", direction: "flat", placeholder: true },
+      { id: "GOLD", name: "GOLD", kind: "metal", direction: "flat", placeholder: true },
+    ],
+    []
+  );
 
   // flash state per id when values change
   const [flashById, setFlashById] = useState({});
@@ -190,21 +213,38 @@ export default function PremiumMarketTicker({ className }) {
   const paused = pausedHover || pausedTap;
 
   const doubled = useMemo(() => {
-    if (!data.length) return [];
-    return [...data, ...data];
-  }, [data]);
+    const base = data.length ? data : placeholderItems;
+    return base.length ? [...base, ...base] : [];
+  }, [data, placeholderItems]);
 
   useEffect(() => {
     let stop = false;
+
+    function applyFallback(reason, detail) {
+      if (stop) return;
+      // Only apply fallback if we don't already have last-known values.
+      if (Array.isArray(lastDataRef.current) && lastDataRef.current.length) return;
+      console.warn("Ticker fetch failed (fallback used):", reason, detail ?? "");
+      lastDataRef.current = FALLBACK_DATA;
+      setData(FALLBACK_DATA);
+      setAsOf(null);
+    }
 
     async function fetchNow() {
       try {
         const r = await fetch("/api/market-data", { cache: "no-store" });
         const j = await r.json().catch(() => null);
-        if (!r.ok || !j?.ok) return;
+
+        if (!r.ok || !j?.ok) {
+          applyFallback("bad_response", { status: r.status, ok: r.ok, bodyOk: Boolean(j?.ok) });
+          return;
+        }
 
         const next = normalizeApi(j);
-        if (!next.length) return;
+        if (!next.length) {
+          applyFallback("empty_items", j);
+          return;
+        }
 
         // detect changes for micro-highlight
         const prev = lastDataRef.current;
@@ -231,8 +271,9 @@ export default function PremiumMarketTicker({ className }) {
         lastDataRef.current = next;
         setData(next);
         setAsOf(String(j.asOf || ""));
-      } catch {
-        // silent: keep last known values
+      } catch (err) {
+        console.error("Ticker fetch failed:", err);
+        applyFallback("fetch_failed", String(err?.message || err));
       }
     }
 
@@ -325,6 +366,10 @@ export default function PremiumMarketTicker({ className }) {
             const isUp = dir === "up";
             const isDown = dir === "down";
 
+            const isPlaceholder = Boolean(item.placeholder);
+            const valueText = isPlaceholder ? "—" : fmtValue(item);
+            const changeText = isPlaceholder ? "—" : fmtPct(item.changePct);
+
             // Keep SENSEX palette exactly as-is (your current look): label/value neutral, delta red/green only.
             const isSensex = item.id === "SENSEX";
 
@@ -341,10 +386,10 @@ export default function PremiumMarketTicker({ className }) {
               >
                 <div className={styles.iconWrap}>{getIcon(item)}</div>
                 <div className={styles.name}>{item.name}</div>
-                <div className={styles.value}>{fmtValue(item)}</div>
+                <div className={styles.value}>{valueText}</div>
                 <div className={[styles.change, isUp ? styles.changeUp : isDown ? styles.changeDown : styles.changeFlat].join(" ")}
                 >
-                  {fmtPct(item.changePct)}
+                  {changeText}
                 </div>
                 <div className={styles.dot} aria-hidden="true" />
               </div>

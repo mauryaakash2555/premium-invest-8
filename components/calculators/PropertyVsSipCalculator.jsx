@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 import { Slider } from "@/components/ui/slider";
 
@@ -11,6 +12,8 @@ import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLay
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
 import { PremiumCalculatorCTA } from "@/components/calculators/PremiumCalculatorCTA";
+
+import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
 import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
 import { formatINR } from "@/lib/tax-formulas";
@@ -84,9 +87,52 @@ function formatCroreNumber(valueInINR) {
   return s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1");
 }
 
+function formatSignedCrore(valueInINR) {
+  const n = Number(valueInINR);
+  if (!Number.isFinite(n) || n === 0) return "0";
+  const sign = n < 0 ? "−" : "";
+  return `${sign}${formatCroreNumber(n)}`;
+}
+
+function formatLakhs(valueInINR) {
+  const n = Number(valueInINR);
+  if (!Number.isFinite(n) || n <= 0) return "0";
+  if (n >= 10_000_000) {
+    const cr = n / 10_000_000;
+    const s = cr.toFixed(cr >= 10 ? 1 : 2);
+    return `${s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1")}Cr`;
+  }
+  const l = n / 100_000;
+  const s = l.toFixed(l >= 10 ? 0 : 1);
+  return `${s.replace(/\.0$/, "")}L`;
+}
+
 function digitsOnlyPhone(v) {
   const digits = String(v || "").replace(/\D+/g, "");
   return digits.length >= 10 ? digits.slice(-10) : digits;
+}
+
+function useCountUp(value, durationMs, key) {
+  const [display, setDisplay] = useState(value);
+  useEffect(() => {
+    let raf;
+    const start = performance.now();
+    const from = display;
+    const to = value;
+    const dur = Math.max(350, Math.min(650, durationMs || 500));
+
+    function step(t) {
+      const p = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(from + (to - from) * eased);
+      setDisplay(val);
+      if (p < 1) raf = requestAnimationFrame(step);
+    }
+
+    raf = requestAnimationFrame(step);
+    return () => raf && cancelAnimationFrame(raf);
+  }, [key]);
+  return display;
 }
 
 export function PropertyVsSipCalculator() {
@@ -96,7 +142,7 @@ export function PropertyVsSipCalculator() {
 
   const COMPLIANCE_FOOTER = "BM Wealth | ARN 90008 | Educational mathematical projection.\n   Not investment advice.";
   const ASSUMPTIONS_LINE =
-    "Locked assumptions: Property 4% CAGR, Equity 14.5% CAGR, rental yield 2.5%/yr, maintenance 2.5%/yr. Equity path invests the SAME upfront capital + monthly SIP.";
+    "Locked assumptions: Property 4% CAGR, Equity 14.5% CAGR. Equity path invests the SAME upfront capital + monthly SIP.";
 
   const [propertyPriceRaw, setPropertyPriceRaw] = useState("20000000");
   const [monthlySipRaw, setMonthlySipRaw] = useState("50000");
@@ -110,6 +156,8 @@ export function PropertyVsSipCalculator() {
 
   const [showResults, setShowResults] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
+
+  const leadIdRef = useRef(null);
 
   const resultsRef = useRef(null);
   const startedRef = useRef(false);
@@ -198,7 +246,7 @@ export function PropertyVsSipCalculator() {
           years: yearsFinal,
         },
         results: {
-          propertyEndValue: formatted.values.propertyEndValue,
+          propertyFutureValue: formatted.values.propertyFutureValue,
           sipFutureValue: formatted.values.sipFutureValue,
           wealthGap: formatted.values.wealthGap,
           gapCr,
@@ -213,7 +261,9 @@ export function PropertyVsSipCalculator() {
       throw new Error("Could not send your email right now. Please try again.");
     }
 
-    track("lead_captured", { mode: "free" });
+    if (json?.leadId) leadIdRef.current = String(json.leadId);
+
+    track("lead_captured", { mode: "free", leadId: leadIdRef.current || undefined });
     setStatusNote("Email sent. Please check your inbox (and Promotions/Spam). ");
   }
 
@@ -236,9 +286,10 @@ export function PropertyVsSipCalculator() {
     }
 
     const leadId = leadJson?.leadId || null;
+    if (leadId) leadIdRef.current = String(leadId);
 
     setStatusNote("Starting payment...");
-    track("payment_start");
+    track("payment_start", { leadId: leadIdRef.current || undefined });
 
     const orderRes = await fetch("/api/razorpay/create-order", {
       method: "POST",
@@ -310,6 +361,7 @@ export function PropertyVsSipCalculator() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               ...response,
+              leadId: leadIdRef.current || null,
               lead: payload,
               inputs: computedInputs,
               pdfPayload,
@@ -334,8 +386,8 @@ export function PropertyVsSipCalculator() {
           const downloadToken = verifyJson?.downloadToken;
           const tokenPayload = verifyJson?.tokenPayload;
 
-          track("payment_success");
-          track("purchase", { product: "mumbai_property_vs_sip_report", amount: 399, currency: "INR" });
+          track("payment_success", { leadId: leadIdRef.current || undefined });
+          track("purchase", { leadId: leadIdRef.current || undefined, product: "mumbai_property_vs_sip_report", amount: 399, currency: "INR" });
           if (emailStatus === "sent") {
             setStatusNote("Payment successful. Email sent. Preparing your PDF...");
           } else {
@@ -346,24 +398,20 @@ export function PropertyVsSipCalculator() {
             purchaseRef.current = true;
           } catch {}
 
-          const pdfRes = await fetch("/api/pdf/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lead: payload, inputs: computedInputs, pdfPayload, downloadToken, tokenPayload }),
-          });
-          if (!pdfRes.ok) {
-            setStatusNote("Payment successful, but PDF generation failed. We'll email it shortly.");
+          try {
+            const qs = new URLSearchParams();
+            if (downloadToken) qs.set("downloadToken", String(downloadToken));
+            if (tokenPayload) qs.set("tokenPayload", String(tokenPayload));
+            if (leadIdRef.current) qs.set("leadId", String(leadIdRef.current));
+            qs.set("filename", String(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf"));
+            if (emailStatus) qs.set("emailStatus", String(emailStatus));
+            if (payload?.name) qs.set("name", String(payload.name));
+            if (payload?.email) qs.set("email", String(payload.email));
+            if (gapCr) qs.set("gap", String(gapCr));
+            window.location.assign(`/payment-success?${qs.toString()}`);
             return;
-          }
-          const blob = await pdfRes.blob();
-          downloadBlob(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf", blob);
-          track("pdf_downloaded");
-          if (emailStatus === "sent") {
-            setStatusNote("Downloaded. Please also check your email.");
-          } else if (emailStatus === "not_configured" || emailStatus === "failed") {
-            setStatusNote("Downloaded. Email delivery is unavailable right now.");
-          } else {
-            setStatusNote("Downloaded.");
+          } catch {
+            setStatusNote("Payment successful. Please check your email for the PDF.");
           }
         } catch {
           track("payment_failed", { stage: "post_payment" });
@@ -481,26 +529,38 @@ export function PropertyVsSipCalculator() {
   }, []);
 
   const wealthGap = model ? Number(model.wealthGap || 0) : 0;
+  const wealthGapAbs = Math.max(0, Math.abs(wealthGap));
+  const wealthGapCrValue = wealthGapAbs / 10_000_000;
   const yearsFinal = model?.inputs?.years || a.defaultYears;
   const sipValueNum = model ? Number(model.sipFutureValue || 0) : 0;
-  const propertyWealthNum = model ? Number(model.netPropertyWealth || 0) : 0;
+  const propertyWealthNum = model ? Number(model.propertyFutureValue || 0) : 0;
   const propertyWins = model ? propertyWealthNum > sipValueNum : false;
   const sipWins = model ? sipValueNum > propertyWealthNum : false;
   const advantageNum = sipWins ? wealthGap : 0;
 
-  const gapCr = formatCroreNumber(wealthGap);
+  const gapCrSigned = formatSignedCrore(wealthGap);
+  const gapCrAbs = formatCroreNumber(wealthGapAbs);
   const propertyCr = model ? formatCroreNumber(model.inputs.propertyPrice) : "0";
+
+  const draftPropertyCr = formatCroreNumber(draftInputs.propertyPrice);
+  const draftPropertyPretty = formatLakhs(draftInputs.propertyPrice);
 
   const sipTotalInvestedNum = model ? Number(model.sipTotalInvested || 0) : 0;
   const sipWealthCreatedNum = model ? Number(model.sipWealthCreated || 0) : 0;
+
+  const propertyFutureDisplay = useCountUp(propertyWealthNum, 650, showResults ? `prop-${yearsFinal}-${propertyWealthNum}` : "prop-init");
+  const sipFutureDisplay = useCountUp(sipValueNum, 650, showResults ? `sip-${yearsFinal}-${sipValueNum}` : "sip-init");
 
   const breakdownModel = useMemo(() => {
     if (!model || !formatted) return null;
     const y = model.inputs.years;
     const months = y * 12;
 
+    const propertyStartCr = formatCroreNumber(model.inputs.propertyPrice);
+    const propertyEndCr = formatCroreNumber(model.propertyFutureValue);
+
     return {
-      label: `Locked assumptions: Property CAGR 4%, SIP CAGR 14.5%, rental yield 2.5%/yr, maintenance drag 2.5%/yr. Years clamped to max ${a.maxYears}.`,
+      label: `₹${propertyStartCr}Cr property grows to ₹${propertyEndCr}Cr at 4% over ${y} years. Years clamped to max ${a.maxYears}.`,
       fiscalYear: null,
       context: "No EMI/loan, taxes, stamp duty, or transaction costs included.",
       sections: [
@@ -515,12 +575,7 @@ export function PropertyVsSipCalculator() {
         {
           title: "Property",
           rows: [
-            { label: `Property value after ${y} years`, value: formatted.values.propertyEndValue, accent: true },
-            { label: "Annual rent (2.5% of property price)", value: formatted.values.annualRent },
-            { label: `Total rent (${y} years)`, value: formatted.values.totalRent },
-            { label: "Annual maintenance (2.5% of property price)", value: formatted.values.annualMaintenance },
-            { label: `Total maintenance (${y} years)`, value: formatted.values.totalMaintenance },
-            { label: "Net property wealth", value: formatted.values.netPropertyWealth, emphasis: true, accent: true },
+            { label: `Property value after ${y} years`, value: formatted.values.propertyFutureValue, emphasis: true, accent: true },
           ],
         },
         {
@@ -557,7 +612,7 @@ export function PropertyVsSipCalculator() {
           <CalculatorHeader
             meta={
               <>
-                <img src="/logo.webp" alt="BM Wealth" className="h-5 w-auto" />
+                <Image src="/logo.webp" alt="BM Wealth" width={20} height={20} className="h-5 w-auto" priority />
                 <span>BM Wealth</span>
                 <span className="text-white/25">•</span>
                 <span>BM Wealth Calculator</span>
@@ -565,8 +620,8 @@ export function PropertyVsSipCalculator() {
                 <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
               </>
             }
-            title="Property Purchase vs Disciplined Equity Investment"
-            subtitle="Compare deploying ₹2Cr in property vs equity markets"
+            title="Mumbai Property vs SIP Calculator"
+            subtitle="Should you buy property or invest in SIP? See the math."
           />
         }
         disclaimer={<span className="whitespace-pre-line">{COMPLIANCE_FOOTER}</span>}
@@ -595,7 +650,7 @@ export function PropertyVsSipCalculator() {
 
                   <div className="grid gap-1">
                     <div className="text-xs text-slate-200/70">Additional Monthly Investment (₹)</div>
-                    <div className="text-[11px] text-slate-200/55">(Beyond initial ₹2Cr capital deployment)</div>
+                    <div className="text-[11px] text-slate-200/55">(Beyond your ₹{draftPropertyPretty} capital)</div>
                     <input
                       type="text"
                       inputMode="numeric"
@@ -631,7 +686,7 @@ export function PropertyVsSipCalculator() {
                     type="button"
                     onClick={handleCalculate}
                     disabled={busy}
-                    className="bm-btn bm-btn-primary w-full py-3 rounded-xl"
+                    className="bm-btn bm-btn-primary w-full px-5 py-4 text-base font-semibold tracking-wide rounded-xl bm-calc-button"
                   >
                     {busy ? "Calculating…" : "Calculate"}
                   </button>
@@ -649,10 +704,9 @@ export function PropertyVsSipCalculator() {
                       <>
                         <div className="text-sm font-semibold text-white">Result</div>
                         <div className="mt-2 text-white font-semibold">
-                          By deploying the same {formatINR(model.inputs.propertyPrice)} in equity instead of property,
-                          disciplined investors create{" "}
-                          <span className="text-[color:var(--color-matte-gold)] font-semibold">{formatINR(advantageNum)}</span>
-                          {" "}additional wealth over {yearsFinal} years.
+                          Based on your inputs, investing the same {formatINR(model.inputs.propertyPrice)} into equity (instead of property) results in an estimated
+                          <span className="text-[color:var(--color-matte-gold)] font-semibold"> {formatINR(advantageNum)}</span>
+                          {" "}higher value over {yearsFinal} years.
                         </div>
                         <div className="mt-3 text-[11px] text-slate-200/70 whitespace-pre-line">{ASSUMPTIONS_LINE}</div>
                       </>
@@ -671,31 +725,114 @@ export function PropertyVsSipCalculator() {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-4 min-w-0">
-                      <div className="text-sm text-slate-200/70">Net Property Wealth</div>
-                      <div className="mt-2 text-xl font-semibold text-white break-words">{formatted.values.netPropertyWealth}</div>
-                      <div className="mt-1 text-[11px] text-slate-200/60">Includes rent and maintenance as specified</div>
+                  <div className="bm-wealth-gap-hero-container">
+                    <div className="bm-wealth-gap-hero">
+                      <div className="bm-wealth-gap-label">{sipWins ? "ESTIMATED OPPORTUNITY COST" : "ESTIMATED GAP"}</div>
+
+                      <div className="bm-wealth-gap-value-wrapper">
+                        <AnimatedCounter
+                          value={wealthGapCrValue}
+                          duration={2500}
+                          format={(n) => {
+                            const v = Number(n);
+                            if (!Number.isFinite(v)) return "₹0Cr";
+                            const s = v >= 10 ? v.toFixed(1) : v.toFixed(2);
+                            return `₹${s.replace(/\.0+$/, "").replace(/(\.[1-9])0$/, "$1")}Cr`;
+                          }}
+                          className="bm-wealth-gap-value"
+                        />
+                      </div>
+
+                      <div className="bm-wealth-gap-message">
+                        {sipWins
+                          ? "You could lose this much by choosing property"
+                          : propertyWins
+                            ? `In this scenario, property is ahead by ₹${gapCrAbs}Cr`
+                            : `Estimated gap: ₹${gapCrAbs}Cr`}
+                      </div>
+
+                      <div className="bm-wealth-gap-breakdown">
+                        <div className="bm-wealth-breakdown-item">
+                          <span className="bm-wealth-breakdown-label">Per month</span>
+                          <span className="bm-wealth-breakdown-value">
+                            {formatINR(Math.max(0, Math.round(wealthGapAbs / Math.max(1, yearsFinal * 12))))}
+                          </span>
+                        </div>
+                        <div className="bm-wealth-breakdown-item">
+                          <span className="bm-wealth-breakdown-label">Monthly loss</span>
+                          <span className="bm-wealth-breakdown-value">
+                            {(() => {
+                              const perMonth = wealthGapAbs / Math.max(1, yearsFinal * 12);
+                              const l = perMonth / 100_000;
+                              const s = l >= 10 ? l.toFixed(0) : l.toFixed(2);
+                              return `${s.replace(/\.0+$/, "")}L`;
+                            })()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bm-results-comparison">
+                    <div className="bm-result-card bm-result-card--loser">
+                      <div className="text-sm text-slate-200/70">Property Value</div>
+                      <div className="mt-2 text-xl font-semibold text-white break-words">₹{formatCroreNumber(propertyFutureDisplay)}Cr</div>
+                      <div className="mt-2 text-[11px] text-slate-200/60">Illiquid • Slow compounding • High friction</div>
                     </div>
 
-                    <div
-                      className={
-                        sipWins
-                          ? "bg-white/5 rounded-xl p-4 border border-[color:var(--color-matte-gold)] min-w-0"
-                          : "bg-white/5 border border-white/10 rounded-xl p-4 min-w-0"
-                      }
-                    >
+                    <div className="bm-vs-separator" aria-hidden>
+                      VS
+                    </div>
+
+                    <div className={sipWins ? "bm-result-card bm-result-card--winner" : "bm-result-card"}>
+                      {sipWins ? <div className="bm-winner-badge">WINNER</div> : null}
                       <div className="text-sm text-slate-200/70">Equity Future Value</div>
-                      <div className="mt-2 text-xl font-semibold text-white break-words">{formatted.values.sipFutureValue}</div>
+                      <div className={sipWins ? "mt-2 text-2xl font-semibold text-white break-words bm-winner-amount" : "mt-2 text-xl font-semibold text-white break-words"}>
+                        ₹{formatCroreNumber(sipFutureDisplay)}Cr
+                      </div>
                       <div className="mt-2 text-[11px] text-slate-200/60">
                         Total invested: {formatINR(sipTotalInvestedNum)} • Wealth created: {formatINR(sipWealthCreatedNum)}
                       </div>
                       {sipWins ? (
-                        <div className="mt-2 text-[11px] font-semibold text-[color:var(--color-matte-gold)] break-words whitespace-normal">
-                          vs Property: +{formatINR(advantageNum)} advantage
+                        <div className="mt-2 text-sm font-semibold text-[color:var(--color-matte-gold)] break-words whitespace-normal">
+                          +₹{formatCroreNumber(wealthGapAbs)}Cr advantage
                         </div>
                       ) : null}
                     </div>
+                  </div>
+
+                  {showPremium ? (
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                      <div className="text-base font-semibold text-white">Ready to act on this?</div>
+                      <div className="mt-2 text-sm text-slate-200/75">
+                        Property vs SIP, which one is for You, Unlock the ₹399, and find out the hidden charges which normal people failed to recognise
+                      </div>
+                      <div className="mt-4">
+                        <PremiumCalculatorCTA
+                          labelBefore="Show Me How — ₹399"
+                          labelAfter="Preparing Your Report…"
+                          price={399}
+                          onClickAction={() => {
+                            track("premium_click");
+                            setLeadOpen(true);
+                          }}
+                        />
+                      </div>
+
+                      <div className="testimonial mt-4 rounded-xl border border-white/10 bg-black/20 p-3 text-[12px] text-slate-200/80">
+                        <p>
+                          "This calculator made the gap obvious. The report helped me plan the next steps." — Rahul S., Andheri
+                        </p>
+                      </div>
+
+                      <div className="mt-3 text-xs text-slate-200/70">Instant PDF • Based on your ₹{propertyCr}Cr scenario</div>
+                    </div>
+                  ) : null}
+
+                  <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
+                    <p>1,200+ calculations done</p>
+                    <p>ARN 90008 registered</p>
+                    <p>Used by Mumbai professionals</p>
                   </div>
 
                   <div className="rounded-xl border border-white/10 bg-white/5 p-4">
@@ -715,27 +852,6 @@ export function PropertyVsSipCalculator() {
                       </div>
                     ) : null}
                   </div>
-
-                  {showPremium ? (
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                      <div className="text-base font-semibold text-white">🏠 Ready to Escape the Property Trap?</div>
-                      <div className="mt-2 text-sm text-slate-200/75">
-                        Property vs SIP, which one is for You, Unlock the ₹399, and find out the hidden charges which normal people failed to recognise
-                      </div>
-                      <div className="mt-4">
-                        <PremiumCalculatorCTA
-                          labelBefore="Show Me How — ₹399"
-                          labelAfter="Preparing Your Report…"
-                          price={399}
-                          onClickAction={() => {
-                            track("premium_click");
-                            setLeadOpen(true);
-                          }}
-                        />
-                      </div>
-                      <div className="mt-3 text-xs text-slate-200/70">Instant PDF • Based on your ₹{propertyCr}Cr scenario</div>
-                    </div>
-                  ) : null}
                 </>
               ) : null}
             </div>
@@ -743,13 +859,225 @@ export function PropertyVsSipCalculator() {
         </div>
       </BaseCalculatorLayout>
 
+      <style jsx>{`
+        .bm-calc-button {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .bm-calc-button::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 999px;
+          background: color-mix(in oklab, white 18%, transparent);
+          transform: translate(-50%, -50%);
+          transition: width 600ms ease, height 600ms ease;
+          pointer-events: none;
+        }
+
+        .bm-calc-button:hover::before {
+          width: 320px;
+          height: 320px;
+        }
+
+        @keyframes bmPulse {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
+          }
+          50% {
+            box-shadow: 0 0 0 10px transparent;
+          }
+        }
+
+        .bm-wealth-gap-hero-container {
+          margin: 26px 0;
+          position: relative;
+        }
+
+        .bm-wealth-gap-hero {
+          background: radial-gradient(
+            circle at 50% 0%,
+            color-mix(in oklab, var(--color-matte-gold) 18%, transparent) 0%,
+            color-mix(in oklab, var(--color-matte-gold) 6%, transparent) 52%,
+            transparent 100%
+          );
+          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 45%, transparent);
+          border-radius: 20px;
+          padding: 40px 22px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          box-shadow:
+            0 0 44px color-mix(in oklab, var(--color-matte-gold) 22%, transparent),
+            inset 0 0 22px color-mix(in oklab, var(--color-matte-gold) 10%, transparent);
+        }
+
+        .bm-wealth-gap-hero::before {
+          content: "";
+          position: absolute;
+          top: -50%;
+          right: -50%;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, color-mix(in oklab, var(--color-matte-gold) 12%, transparent) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .bm-wealth-gap-label {
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--color-matte-gold);
+          margin-bottom: 14px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .bm-wealth-gap-value-wrapper {
+          position: relative;
+          z-index: 1;
+          margin: 18px 0;
+          line-height: 1;
+        }
+
+        .bm-wealth-gap-value {
+          font-weight: 950;
+          font-size: 86px;
+          color: var(--color-matte-gold);
+          text-shadow: 0 0 26px color-mix(in oklab, var(--color-matte-gold) 35%, transparent);
+          display: inline-block;
+        }
+
+        .bm-wealth-gap-message {
+          position: relative;
+          z-index: 1;
+          font-size: 16px;
+          color: rgba(255, 255, 255, 0.78);
+          font-weight: 600;
+          margin-top: 6px;
+        }
+
+        .bm-wealth-gap-breakdown {
+          position: relative;
+          z-index: 1;
+          margin-top: 22px;
+          padding-top: 18px;
+          border-top: 1px solid color-mix(in oklab, var(--color-matte-gold) 24%, transparent);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+
+        .bm-wealth-breakdown-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .bm-wealth-breakdown-label {
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+        }
+
+        .bm-wealth-breakdown-value {
+          font-size: 20px;
+          font-weight: 950;
+          color: var(--color-matte-gold);
+        }
+
+        .bm-results-comparison {
+          display: grid;
+          grid-template-columns: 1fr auto 1.5fr;
+          gap: 14px;
+          align-items: center;
+        }
+
+        .bm-result-card {
+          position: relative;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          border-radius: 14px;
+          padding: 16px;
+          min-width: 0;
+        }
+
+        .bm-result-card--loser {
+          opacity: 0.78;
+          transform: scale(0.94);
+        }
+
+        .bm-result-card--winner {
+          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 65%, transparent);
+          box-shadow: 0 0 28px color-mix(in oklab, var(--color-matte-gold) 22%, transparent);
+        }
+
+        .bm-winner-badge {
+          position: absolute;
+          top: -10px;
+          right: 14px;
+          background: var(--color-matte-gold);
+          color: black;
+          padding: 5px 12px;
+          border-radius: 999px;
+          font-weight: 800;
+          font-size: 11px;
+          letter-spacing: 0.06em;
+        }
+
+        .bm-winner-amount {
+          font-size: 30px;
+        }
+
+        .bm-vs-separator {
+          font-weight: 900;
+          font-size: 18px;
+          color: rgba(255, 255, 255, 0.35);
+          letter-spacing: 0.08em;
+        }
+
+        @media (max-width: 768px) {
+          .bm-wealth-gap-hero {
+            padding: 32px 18px;
+          }
+
+          .bm-wealth-gap-value {
+            font-size: 64px;
+          }
+
+          .bm-wealth-gap-breakdown {
+            grid-template-columns: 1fr;
+          }
+
+          .bm-results-comparison {
+            grid-template-columns: 1fr;
+          }
+
+          .bm-vs-separator {
+            display: none;
+          }
+
+          .bm-result-card--loser {
+            transform: none;
+          }
+        }
+      `}</style>
+
       <LeadCaptureModal
         open={leadOpen}
         onOpenChange={setLeadOpen}
         onFree={handleFree}
         onPay={handlePay}
         title="What Do I Do Now? — ₹399"
-        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\n📋 YOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\n💰 WEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCr}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\n📊 MUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Rental yield reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\n✓ Instant download\n✓ Email delivery\n✓ Support via WhatsApp`}
+        body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\nYOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\nWEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCrAbs}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\nMUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
         freeLabel="Email Summary"
         payLabel="Send It Now — ₹399"
         payButtonClassName="calculator-premium-cta"
@@ -762,8 +1090,8 @@ export function PropertyVsSipCalculator() {
         open={exitOpen}
         onOpenChange={setExitOpen}
         suppressKey="pvs_exit_intent_suppress"
-        title={`Wait. Don't lose ₹${gapCr}Cr.`}
-        bodyPrimary={`Your calculation shows ₹${gapCr}Cr opportunity cost over ${yearsFinal} years.\n\nMost Mumbai property owners never see this clearly.\n\nWant to understand your options?`}
+        title={`Wait. Don't lose ₹${gapCrAbs}Cr.`}
+        bodyPrimary={`Your calculation shows ₹${gapCrAbs}Cr opportunity cost over ${yearsFinal} years.\n\nMost Mumbai property owners never see this clearly.\n\nWant to understand your options?`}
         bodySecondary=""
         primaryLabel="Show Me How — ₹399"
         primaryButtonClassName="calculator-premium-cta"

@@ -430,7 +430,7 @@ return (
             <div ref={sebiRef} className={cn("premium-half-line group", sebiActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setSebiActive(true); setTimeout(() => setSebiActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">SEBI Disclosure</h4>
+                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Market Risk Disclosure</h4>
                 <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
@@ -453,14 +453,26 @@ return (
         <div className="relative pt-12 pb-20 px-8 flex flex-col items-center border-t border-[#C0A062]/10 z-20">
           <div className="relative z-10 flex flex-col items-center space-y-10">
             <div className="inline-flex items-center justify-center">
-              <div className="relative overflow-hidden border-[1.5px] border-[#C0A062]/40 rounded-full px-12 py-4 bg-black/60 backdrop-blur-2xl shadow-[0_0_40px_rgba(192,160,98,0.15)] transition-all duration-700 hover:border-[#C0A062] hover:bg-[#C0A062]/10 group cursor-default">
-                <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:animate-[linearSweep_3s_infinite_linear] pointer-events-none z-10" />
-                
-                <p className="relative z-20 text-[14px] font-serif text-[#C0A062] font-bold tracking-[4px] uppercase m-0 flex items-center gap-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" />
-                  IRDAI Licensed | AMFI Registered Wealth Distribution
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C0A062] animate-pulse" />
-                </p>
+              <div className="group inline-flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 backdrop-blur-2xl shadow-[0_0_30px_rgba(0,0,0,0.55)]">
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase text-white/70">
+                  Regulatory IDs
+                </span>
+                <span className="text-white/25">•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                  IRDAI 277925
+                </span>
+                <span className="text-white/25">•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                  AMFI ARN 90008
+                </span>
+                <span className="text-white/25">•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase text-white/70">
+                  Wealth Distribution
+                </span>
+
+                <span className="absolute pointer-events-none inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{
+                  boxShadow: "0 0 0 1px rgba(192,160,98,0.28), 0 0 40px rgba(192,160,98,0.10)",
+                }} />
               </div>
             </div>
 
@@ -478,6 +490,10 @@ return (
               </p>
 
               <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">Market data displayed is indicative and may be delayed. This information is provided for general awareness only and does not constitute investment advice.</p>
+
+              <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">
+                This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. ARN 90008 | Consult your advisor before investing.
+              </p>
 
               {/* LEGAL MICRO-TEXT FOR AUDITORS */}
               <div className="flex flex-col items-center mt-6 space-y-2 opacity-30 hover:opacity-100 transition-opacity duration-500">

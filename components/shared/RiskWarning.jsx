@@ -6,7 +6,7 @@ export default function RiskWarning({ type = "general" }) {
   const warnings = {
     mutualFunds: {
       title: "Investment Risk Disclosure",
-      text: "Mutual fund investments are subject to market risks. Past performance does not guarantee future returns. Please read all scheme-related documents carefully before investing. Consider your investment objectives and risk tolerance."
+      text: "Mutual fund investments are subject to market risks. Past performance does not assure future returns. Please read all scheme-related documents carefully before investing. Consider your investment objectives and risk tolerance."
     },
     trading: {
       title: "Trading Risk Warning",
@@ -14,7 +14,7 @@ export default function RiskWarning({ type = "general" }) {
     },
     pms: {
       title: "Portfolio Management Disclosure",
-      text: "Portfolio management services involve market risks. Returns are not guaranteed and capital may be at risk. Investments are subject to market volatility. Carefully assess your risk appetite before investing."
+      text: "Portfolio management services involve market risks. Returns are not assured and capital may be at risk. Investments are subject to market volatility. Carefully assess your risk appetite before investing."
     },
     general: {
       title: "Important Disclosure",
@@ -30,8 +30,8 @@ export default function RiskWarning({ type = "general" }) {
         background: "linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(184, 134, 11, 0.08) 100%)",
         border: "1px solid rgba(218, 165, 32, 0.3)",
         borderRadius: "8px",
-        padding: "24px",
-        margin: "40px 0",
+        padding: "16px",
+        margin: "24px 0",
         display: "flex",
         gap: "16px",
         alignItems: "flex-start",
@@ -49,7 +49,7 @@ export default function RiskWarning({ type = "general" }) {
         <h3
           style={{
             color: "#DAA520",
-            fontSize: "18px",
+            fontSize: "16px",
             fontWeight: "600",
             marginBottom: "8px",
             fontFamily: "'Playfair Display', serif",
@@ -60,7 +60,7 @@ export default function RiskWarning({ type = "general" }) {
         <p
           style={{
             color: "#e5e5e5",
-            fontSize: "15px",
+            fontSize: "14px",
             lineHeight: "1.7",
             margin: 0,
           }}
