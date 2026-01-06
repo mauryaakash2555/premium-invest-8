@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const PortfolioManagement = () => {
@@ -40,18 +41,7 @@ const PortfolioManagement = () => {
     },
   ];
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
+  
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -105,11 +95,6 @@ const PortfolioManagement = () => {
         id="portfolio-management-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        id="portfolio-management-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}
@@ -264,16 +249,11 @@ const PortfolioManagement = () => {
           </div>
         </section>
 
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            Portfolios perform best when the structure is clear and the review process is calm. A disciplined approach helps you stay aligned to goals while navigating market cycles.
-          </p>
-        </section>
+        <ClosingPerspective>
+          Portfolios perform best when the structure is clear and the review process is calm. A disciplined approach helps you stay aligned to goals while navigating market cycles.
+        </ClosingPerspective>
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: 0, textAlign: 'justify' }}>

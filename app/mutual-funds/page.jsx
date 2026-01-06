@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const MutualFunds = () => {
@@ -35,18 +36,7 @@ const MutualFunds = () => {
     },
   ];
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
+  
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -100,11 +90,6 @@ const MutualFunds = () => {
         id="mutual-funds-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        id="mutual-funds-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}
@@ -368,18 +353,13 @@ const MutualFunds = () => {
         </section>
 
         {/* FAQs */}
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            Mutual funds are tools. Their effectiveness depends on clarity of purpose, discipline, and long-term
-            perspective. A structured approach helps investors navigate markets with greater confidence and
-            understanding.
-          </p>
-        </section>
+        <ClosingPerspective>
+          Mutual funds are tools. Their effectiveness depends on clarity of purpose, discipline, and long-term
+          perspective. A structured approach helps investors navigate markets with greater confidence and
+          understanding.
+        </ClosingPerspective>
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>

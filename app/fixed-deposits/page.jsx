@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 const FixedDeposits = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -238,14 +239,9 @@ const FixedDeposits = () => {
           </p>
         </section>
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            Fixed deposits are about predictability and timelines. When the structure is chosen thoughtfully—tenure, payout, and maturity management—they can play a calm, stabilizing role alongside growth assets.
-          </p>
-        </section>
+        <ClosingPerspective>
+          Fixed deposits are about predictability and timelines. When the structure is chosen thoughtfully—tenure, payout, and maturity management—they can play a calm, stabilizing role alongside growth assets.
+        </ClosingPerspective>
 
         <section style={{ marginTop: '60px' }}>
           <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: 0 }}>

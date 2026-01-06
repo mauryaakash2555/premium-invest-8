@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const SIPServices = () => {
@@ -35,18 +36,7 @@ const SIPServices = () => {
     },
   ];
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer,
-      },
-    })),
-  };
+  
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -100,11 +90,6 @@ const SIPServices = () => {
         id="sip-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        id="sip-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}
@@ -315,17 +300,12 @@ const SIPServices = () => {
           </p>
         </section>
 
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            SIP is a method. Its effectiveness depends on clarity of purpose, consistency, and long-term perspective.
-            A structured approach helps investors navigate markets with greater confidence and discipline.
-          </p>
-        </section>
+        <ClosingPerspective>
+          SIP is a method. Its effectiveness depends on clarity of purpose, consistency, and long-term perspective.
+          A structured approach helps investors navigate markets with greater confidence and discipline.
+        </ClosingPerspective>
 
         <section style={{ marginTop: '60px' }}>
           <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: '0' }}>

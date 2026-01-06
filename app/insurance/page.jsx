@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 const Insurance = () => {
   useEffect(() => {
@@ -312,16 +313,11 @@ const Insurance = () => {
           </p>
         </section>
 
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            Insurance works best when the structure is clear and the servicing is consistent. The goal is simple: protect what matters, with documentation and expectations aligned from day one.
-          </p>
-        </section>
+        <ClosingPerspective>
+          Insurance works best when the structure is clear and the servicing is consistent. The goal is simple: protect what matters, with documentation and expectations aligned from day one.
+        </ClosingPerspective>
 
         <section style={{ marginTop: '60px' }}>
           <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: 0 }}>

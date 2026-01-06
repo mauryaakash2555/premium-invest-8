@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
+import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const TradingServices = () => {
@@ -265,16 +266,11 @@ const TradingServices = () => {
           </div>
         </section>
 
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
 
-        <section style={{ marginTop: '56px', marginBottom: '34px' }}>
-          <h2 style={{ fontSize: '34px', color: '#DAA520', marginBottom: '14px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Closing Perspective
-          </h2>
-          <p style={{ fontSize: '17px', lineHeight: '1.9', color: '#e5e5e5', margin: 0 }}>
-            In trading, process is the product. A clean setup and clear rules help reduce noise, improve decision quality, and keep risk controlled over time.
-          </p>
-        </section>
+        <ClosingPerspective>
+          In trading, process is the product. A clean setup and clear rules help reduce noise, improve decision quality, and keep risk controlled over time.
+        </ClosingPerspective>
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: 0, textAlign: 'justify' }}>

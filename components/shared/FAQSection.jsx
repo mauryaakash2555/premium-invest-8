@@ -1,110 +1,172 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { HelpCircle, Percent, Plus, Receipt, Shield, TrendingUp, Wrench } from "lucide-react";
 
-export default function FAQSection({ faqs }) {
+function normalizeFaqs(input) {
+  if (!input) return [];
+  if (Array.isArray(input)) return input;
+  return [];
+}
+
+function inferCategory(faq) {
+  const explicit = typeof faq?.category === "string" ? faq.category : "";
+  const raw = `${explicit} ${faq?.question ?? ""} ${faq?.answer ?? ""}`.toLowerCase();
+
+  if (raw.includes("risk") || raw.includes("loss") || raw.includes("safe") || raw.includes("volatile")) return "risk";
+  if (raw.includes("return") || raw.includes("performance") || raw.includes("profit") || raw.includes("growth")) return "returns";
+  if (raw.includes("fee") || raw.includes("charge") || raw.includes("cost") || raw.includes("commission")) return "fees";
+  if (raw.includes("tax") || raw.includes("gst") || raw.includes("tds")) return "tax";
+  if (raw.includes("how") || raw.includes("process") || raw.includes("start") || raw.includes("open")) return "process";
+  return explicit || "general";
+}
+
+function CategoryIcon({ category, active }) {
+  const iconClass = active
+    ? "h-4 w-4 text-[color:var(--color-matte-gold)]"
+    : "h-4 w-4 text-white/40";
+
+  switch ((category || "").toLowerCase()) {
+    case "returns":
+    case "performance":
+      return <TrendingUp className={iconClass} aria-hidden="true" />;
+    case "risk":
+    case "safety":
+      return <Shield className={iconClass} aria-hidden="true" />;
+    case "fees":
+    case "cost":
+      return <Percent className={iconClass} aria-hidden="true" />;
+    case "tax":
+    case "taxes":
+      return <Receipt className={iconClass} aria-hidden="true" />;
+    case "process":
+    case "setup":
+      return <Wrench className={iconClass} aria-hidden="true" />;
+    default:
+      return <HelpCircle className={iconClass} aria-hidden="true" />;
+  }
+}
+
+function buildFaqSchema(faqs, pageUrl) {
+  const mainEntity = faqs
+    .map((f) => {
+      const question = typeof f?.question === "string" ? f.question.trim() : "";
+      const answer = typeof f?.answer === "string" ? f.answer.trim() : "";
+      if (!question || !answer) return null;
+      return {
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: answer,
+        },
+      };
+    })
+    .filter(Boolean);
+
+  if (mainEntity.length === 0) return null;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity,
+  };
+
+  if (typeof pageUrl === "string" && pageUrl.trim()) {
+    schema.url = pageUrl.trim();
+  }
+
+  return schema;
+}
+
+export default function FAQSection({ faqs: faqsProp, items, pageUrl, title = "FAQs", withSchema = true }) {
+  const faqs = normalizeFaqs(items ?? faqsProp);
   const [openIndex, setOpenIndex] = useState(null);
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const schema = useMemo(() => {
+    if (!withSchema) return null;
+    return buildFaqSchema(faqs, pageUrl);
+  }, [faqs, pageUrl, withSchema]);
 
   if (!faqs || faqs.length === 0) return null;
 
   return (
-    <div
-      style={{
-        maxWidth: "900px",
-        margin: "60px auto",
-        padding: "0 20px",
-      }}
-    >
-      <h2
-        style={{
-          fontSize: "clamp(32px, 5vw, 42px)",
-          fontFamily: '"Playfair Display", serif',
-          color: "#DAA520",
-          textAlign: "center",
-          marginBottom: "40px",
-          fontWeight: "600",
-        }}
-      >
-        Frequently Asked Questions
-      </h2>
+    <section className="mx-auto w-full max-w-3xl px-4 sm:px-6 py-12 sm:py-14">
+      {schema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ) : null}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            style={{
-              background: openIndex === index
-                ? "linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)"
-                : "rgba(0, 0, 0, 0.4)",
-              border: `1px solid ${openIndex === index ? "rgba(218, 165, 32, 0.4)" : "rgba(218, 165, 32, 0.2)"}`,
-              borderRadius: "12px",
-              overflow: "hidden",
-              transition: "all 0.3s ease",
-            }}
-          >
-            <button
-              onClick={() => toggleFAQ(index)}
-              style={{
-                width: "100%",
-                padding: "24px",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "16px",
-                textAlign: "left",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  color: openIndex === index ? "#DAA520" : "#e5e5e5",
-                  lineHeight: "1.5",
-                  transition: "color 0.3s ease",
-                }}
-              >
-                {faq.question}
-              </span>
-              <ChevronDown
-                size={24}
-                style={{
-                  color: "#DAA520",
-                  transform: openIndex === index ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "transform 0.3s ease",
-                  flexShrink: 0,
-                }}
-              />
-            </button>
+      <header className="text-center">
+        <h2 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+          {title}
+        </h2>
+        <p className="mt-3 text-sm sm:text-base text-white/55">
+          Clear answers, minimal noise.
+        </p>
+      </header>
 
-            <div
-              style={{
-                maxHeight: openIndex === index ? "500px" : "0",
-                overflow: "hidden",
-                transition: "max-height 0.3s ease",
-              }}
-            >
-              <div
-                style={{
-                  padding: "0 24px 24px 24px",
-                  fontSize: "16px",
-                  color: "#d0d0d0",
-                  lineHeight: "1.7",
-                }}
+      <div className="mt-8 sm:mt-10">
+        {faqs.map((faq, index) => {
+          const isOpen = openIndex === index;
+          const category = inferCategory(faq);
+
+          return (
+            <div key={faq?.id ?? faq?.question ?? index} className="border-b border-white/10">
+              <button
+                type="button"
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                aria-expanded={isOpen}
+                className="group flex w-full items-center justify-between gap-4 py-5 sm:py-6 text-left"
               >
-                {faq.answer}
-              </div>
+                <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+                  <div className="mt-1.5 shrink-0">
+                    <CategoryIcon category={category} active={isOpen} />
+                  </div>
+
+                  <span
+                    className={
+                      "block min-w-0 text-xl sm:text-2xl leading-snug transition-colors duration-200 " +
+                      (isOpen ? "text-[color:var(--color-matte-gold)]" : "text-white/90")
+                    }
+                  >
+                    {faq.question}
+                  </span>
+                </div>
+
+                <Plus
+                  aria-hidden="true"
+                  className={
+                    "h-5 w-5 shrink-0 transition-transform duration-200 " +
+                    (isOpen ? "rotate-45 text-[color:var(--color-matte-gold)]" : "rotate-0 text-white/50")
+                  }
+                />
+              </button>
+
+              <AnimatePresence initial={false}>
+                {isOpen ? (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pb-5 sm:pb-6 pr-1">
+                      <div className="text-[15px] sm:text-base leading-relaxed text-gray-400">
+                        {faq.answer}
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
