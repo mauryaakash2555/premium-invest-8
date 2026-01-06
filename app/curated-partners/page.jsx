@@ -342,19 +342,19 @@ export default function CuratedPartners() {
             </h2>
 
             <p style={{ fontSize: '18px', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '20px', fontWeight: 600 }}>
-              Personalized Financial Planning & Wealth Management
+              Educational guides + distribution support
             </p>
 
             <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.7, marginBottom: '24px' }}>
-              Mumbai&apos;s trusted advisors for comprehensive wealth management. We provide tailored solutions for portfolio optimization, tax planning, insurance strategies, and retirement planning.
+              Educational content and tools to help you understand products and processes. No investment advice or guarantees.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }} className="features-grid">
               {[
-                { icon: <TrendingUp size={20} />, text: 'Portfolio Management & Asset Allocation' },
-                { icon: <Shield size={20} />, text: 'Insurance & Risk Planning' },
-                { icon: <CheckCircle size={20} />, text: 'Tax Optimization Strategies' },
-                { icon: <Users size={20} />, text: 'Retirement & Estate Planning' },
+                { icon: <TrendingUp size={20} />, text: 'Portfolio basics & asset allocation (educational)' },
+                { icon: <Shield size={20} />, text: 'Insurance basics & risk awareness' },
+                { icon: <CheckCircle size={20} />, text: 'High-level tax awareness (educational)' },
+                { icon: <Users size={20} />, text: 'Goal planning checklists (educational)' },
               ].map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(192, 160, 98, 0.08)', padding: '12px 14px', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.2)', transition: 'all 0.3s ease' }}>
                   <div style={{ color: '#C0A062', flexShrink: 0 }}>{item.icon}</div>
@@ -377,7 +377,7 @@ export default function CuratedPartners() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="card-right-side">
             <Link href="/contact" className="btn-gold">
               <Calendar size={20} />
-              Schedule Consultation
+              Contact
             </Link>
           </div>
         </MobileScrollBoost>

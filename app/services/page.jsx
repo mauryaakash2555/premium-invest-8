@@ -637,7 +637,7 @@ const Services = () => {
                 color: '#DAA520',
               }}
             >
-              Let's Establish Your Financial Future Together
+              Explore educational guides
             </h2>
             <p
               style={{
@@ -648,8 +648,8 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Schedule a consultation with our wealth architects to discuss your investment
-              objectives
+              Browse our guides and tools. If you have questions about execution or documentation,
+              you can reach us via WhatsApp or the contact page.
             </p>
             <div
               style={{
@@ -666,7 +666,7 @@ const Services = () => {
                 className="btn-primary"
                 data-testid="services-whatsapp-cta"
               >
-                Secure Complimentary Consultation
+                Message on WhatsApp
               </a>
               <Link href="/contact" className="btn-secondary" data-testid="services-contact-cta">
                 Contact Us
@@ -678,15 +678,13 @@ const Services = () => {
 
       <FAQSection faqs={faqs} />
 
-      {/* SEBI Disclaimer */}
+      {/* Risk & Disclosure */}
       <section className="section-container">
         <div className="sebi-disclaimer">
-          <strong>SEBI Disclaimer:</strong> Investments in securities market are subject to
-          market risks. Read all the related documents carefully before investing. Past
-          performance is not indicative of future returns. Please consider your specific
-          investment requirements, risk tolerance, investment goal, time frame, risk and reward
-          balance and cost associated with the investment before choosing a fund or designing a
-          portfolio that suits your needs.
+          <strong>Educational disclosure:</strong> This site provides general educational
+          information only and is not SEBI-registered investment advice. Investments are subject
+          to market risks; read all related documents carefully and consider your own situation
+          before acting.
         </div>
       </section>
     </div>

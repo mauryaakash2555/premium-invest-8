@@ -2,8 +2,8 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Financial Services Mumbai | Mutual Funds, SIP, PMS | BM Wealth ARN 90008",
-    description: "Comprehensive wealth management in Mumbai. Mutual funds, SIP, portfolio management, insurance, trading services. AMFI & IRDAI licensed. Personalized financial planning for Mumbai investors.",
+    title: "Services — Educational Guides | Mutual Funds, SIP, Insurance, Trading | BM Wealth",
+    description: "Educational guides on mutual funds, SIPs, insurance, trading, and portfolio basics. No investment advice or guarantees.",
     path: "/services",
   }),
 };

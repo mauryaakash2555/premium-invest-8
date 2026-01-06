@@ -51,8 +51,8 @@ const inter = Inter({
 export const metadataBase = getMetadataBase();
 
 export const metadata = {
-  title: "BM Wealth - Mumbai's Distinguished Wealth Architecture | Mutual Funds, SIP, PMS | ARN 90008",
-  description: "BM Wealth offers expert wealth distribution, mutual funds, SIP, portfolio curation, and insurance services in Mumbai. IRDAI Licensed & AMFI Registered ARN 90008.",
+  title: "BM Wealth — Educational Guides | Mutual Funds, SIP, Insurance",
+  description: "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics. Not SEBI-registered investment advice; no guarantees.",
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -63,9 +63,9 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: "BM Wealth - Mumbai's Distinguished Wealth Architecture",
+    title: "BM Wealth — Educational Guides",
     description:
-      "BM Wealth offers expert wealth distribution, mutual funds, SIP, portfolio curation, and insurance services in Mumbai.",
+      "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics. No investment advice; no guarantees.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -74,9 +74,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BM Wealth - Mumbai's Distinguished Wealth Architecture",
+    title: "BM Wealth — Educational Guides",
     description:
-      "Expert wealth distribution, mutual funds, SIP, and insurance services in Mumbai.",
+      "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics.",
     images: [DEFAULT_OG_IMAGE],
     },
 };
