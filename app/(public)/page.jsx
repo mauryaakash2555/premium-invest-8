@@ -184,11 +184,11 @@ export default function HomePage() {
           <motion.h1
             className="hero-subtitle-responsive"
             style={{
-              fontSize: 'clamp(20px, 2.5vw, 32px)',
+              fontSize: 'clamp(18px, 2.1vw, 28px)',
               color: '#C0A062',
               marginBottom: '24px',
               fontWeight: 300,
-              letterSpacing: '3px',
+              letterSpacing: '2.2px',
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
