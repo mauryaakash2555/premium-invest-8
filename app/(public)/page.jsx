@@ -41,7 +41,6 @@ import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
-import SipCalculatorWidget from '@/components/calculators/SipCalculatorWidget';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -270,37 +269,6 @@ export default function HomePage() {
         <div className="absolute bottom-0 left-0 w-full z-50">
           <PremiumMarketTicker />
         </div>
-      </section>
-
-      {/* Quick SIP Calculator (below hero, not inside hero) */}
-      <section className="section-container" style={{ paddingTop: '40px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(24px, 3.2vw, 40px)',
-              marginBottom: '10px',
-            }}
-            className="golden-gradient"
-          >
-            Quick SIP Estimate
-          </h2>
-          <p style={{ fontSize: '16px', color: '#C0A062', maxWidth: '780px', margin: '0 auto' }}>
-            Try a fast projection. For deeper planning, open the full calculator.
-          </p>
-          <div style={{ marginTop: '18px' }}>
-            <Link href="/sip-calculator" className="btn-secondary">
-              Open Full SIP Calculator {'\u2192'}
-            </Link>
-          </div>
-        </div>
-
-        <SipCalculatorWidget
-          title=""
-          subtitle={null}
-          defaultMonthly={10000}
-          defaultRate={12}
-          defaultYears={10}
-        />
       </section>
 
       {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
