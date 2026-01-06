@@ -41,7 +41,9 @@ const FEATURE_ANALYTICS = isFeatureEnabled("ANALYTICS");
 const FEATURE_CLAUDE_ADMIN = isFeatureEnabled("CLAUDE_ADMIN");
 
 function isValidEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim());
+  // Intentionally strict: avoids treating passwords like "Mmaurya@8080" as valid emails.
+  // Requires a dot in the domain and a letter-only TLD of 2+ chars.
+  return /^[^\s@]+@[^\s@.]+\.[A-Za-z]{2,}$/.test(String(v || "").trim());
 }
 
 function normalizePhone(v) {
