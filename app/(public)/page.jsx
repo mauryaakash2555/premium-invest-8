@@ -127,9 +127,9 @@ export default function HomePage() {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          minHeight: '75vh',
-          maxHeight: '75vh',
-          height: '75vh',
+          minHeight: '85vh',
+          maxHeight: '85vh',
+          height: '85vh',
         }}
       >
         {/* Background Image */}
