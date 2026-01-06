@@ -229,7 +229,7 @@ export default function HomePage() {
             }}
           >
             <Link href="/tools" className="btn-primary">
-              Explore Free Tools
+              Access Your Complimentary Wealth Blueprint
             </Link>
             <Link href="/services" className="btn-secondary">
               Explore Services {"\u2192"}
