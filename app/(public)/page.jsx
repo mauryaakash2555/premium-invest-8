@@ -166,7 +166,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.70) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.58) 100%)',
             zIndex: 2,
           }}
         />
@@ -215,7 +215,7 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Bespoke wealth architecture for Mumbai’s most discerning families.
+            Empowering Mumbai's elite investors with bespoke wealth strategies
           </p>
 
           <div
