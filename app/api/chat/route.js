@@ -455,14 +455,13 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
       : `${name}many investors start with SIP for regular investing.`;
 
   const body =
-    "We distribute various mutual fund options (equity/debt/hybrid categories) through our AMFI-registered platform.\n\n" +
-    "To suggest suitable investment products, our advisors will understand:\n" +
-    "- Your investment goals\n" +
-    "- Investment timeline\n" +
-    "- Risk comfort level\n\n" +
-    "You can book a consultation to explore options (educational discussion, not a specific recommendation).\n\n" +
-    "Disclaimer: Educational only. Investments are subject to market risks.\n\n" +
-    "Would you like to schedule a call with our advisor?";
+    "A good next step is to clarify a few basics (educational):\n" +
+    "- Your goal (what the money is for)\n" +
+    "- Time horizon (how long you can stay invested)\n" +
+    "- Risk comfort (how you react to ups/downs)\n\n" +
+    "If you want, we can share relevant educational links and explain how execution/distribution works.\n\n" +
+    "Disclaimer: Educational only; not SEBI-registered investment advice. Investments are subject to market risks.\n\n" +
+    "Would you like a link to the SIP guide, mutual funds guide, or the contact page?";
 
   // Keep it concise; avoid categories/allocations/returns.
   return `${first}\n\n${body}`;
@@ -479,7 +478,7 @@ function cannedEducationalAnswer(userText) {
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
       "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
-      "For personalized guidance, you can consult our advisors. (Educational only; no specific recommendations.)"
+      "If you need personalized advice, consider consulting a SEBI-registered investment adviser. (Educational only; no specific recommendations.)"
     );
   }
   return "";
@@ -892,7 +891,7 @@ export async function POST(req) {
       const shouldOfferConsultation = intent.amountMentioned || intent.howToInvest || intent.wantsBest;
       const cta = shouldOfferConsultation
         ? {
-            label: "Book Free Consultation",
+            label: "Contact",
             href: "/contact",
           }
         : null;
