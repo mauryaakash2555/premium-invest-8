@@ -235,8 +235,6 @@ export default function PremiumMarketTicker({ className }) {
         const r = await fetch("/api/market-data", { cache: "no-store" });
         const j = await r.json().catch(() => null);
 
-        console.log("Ticker data received:", j);
-
         if (!r.ok || !j?.ok) {
           applyFallback("bad_response", { status: r.status, ok: r.ok, bodyOk: Boolean(j?.ok) });
           return;

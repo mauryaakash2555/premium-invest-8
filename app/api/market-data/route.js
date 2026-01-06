@@ -22,6 +22,8 @@ import { Logger } from "@/lib/monitoring/logger";
 // Premium Market Snapshot (informational only)
 // Resilient to partial symbol failures: retain last-known values on the client.
 
+export const dynamic = "force-dynamic";
+
 const CACHE_TTL_MS = 55_000;
 const CACHE_KEY = "__bm_market_data_cache__";
 
@@ -129,7 +131,9 @@ export async function GET() {
   try {
     const cached = getCache();
     if (cached) {
-      return NextResponse.json({ ...cached, cached: true });
+      const res = NextResponse.json({ ...cached, cached: true });
+      res.headers.set("Cache-Control", "no-store, max-age=0");
+      return res;
     }
 
     // Always fetch USD/INR first so we can convert metals when needed.
@@ -239,17 +243,23 @@ export async function GET() {
 
     const payload = { ok: true, asOf: new Date().toISOString(), items };
     setCache(payload);
-    return NextResponse.json(payload);
+    const res = NextResponse.json(payload);
+    res.headers.set("Cache-Control", "no-store, max-age=0");
+    return res;
   } catch (e) {
     Logger.error("market_data_fetch_error", { error: String(e?.message || e), stack: e?.stack });
 
     const cached = globalThis[CACHE_KEY]?.payload;
     if (cached?.ok && Array.isArray(cached.items) && cached.items.length) {
       // If Yahoo is down/slow, serve last known snapshot so the UI still has numbers.
-      return NextResponse.json({ ...cached, stale: true });
+      const res = NextResponse.json({ ...cached, stale: true });
+      res.headers.set("Cache-Control", "no-store, max-age=0");
+      return res;
     }
 
-    return NextResponse.json({ ok: false }, { status: 502 });
+    const res = NextResponse.json({ ok: false }, { status: 502 });
+    res.headers.set("Cache-Control", "no-store, max-age=0");
+    return res;
   }
 }
 
