@@ -222,6 +222,66 @@
     animation: gold-shine 4s linear infinite;
   }
 
+  /* Mobile hero CTA: minimal, luxurious, non-blocking */
+  .mobile-hero-cta {
+    position: relative;
+    display: inline-block;
+    padding: 8px 6px;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+
+  .mobile-hero-cta::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    bottom: 4px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-matte-gold) 70%, white 30%),
+      transparent
+    );
+    transform: scaleX(0.25);
+    transform-origin: left;
+    opacity: 0.6;
+    animation: mobile-cta-sweep 6.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
+  .mobile-hero-cta:active {
+    transform: translateY(1px);
+  }
+
+  @keyframes mobile-cta-sweep {
+    0%,
+    62% {
+      transform: scaleX(0.25);
+      opacity: 0.45;
+    }
+    76% {
+      transform: scaleX(1);
+      opacity: 0.75;
+    }
+    100% {
+      transform: scaleX(0.25);
+      opacity: 0.45;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-hero-cta::after {
+      animation: none;
+      transform: scaleX(0.6);
+      opacity: 0.55;
+    }
+
+    .gold-gradient-text {
+      animation: none;
+    }
+  }
+
   @keyframes gold-shine {
     to {
       background-position: 200% center;
