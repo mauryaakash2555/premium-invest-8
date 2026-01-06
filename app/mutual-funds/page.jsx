@@ -7,6 +7,9 @@ import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { FundCostComparator } from '@/components/calculators/FundCostComparator';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
+const ACCENT = '#D6B36A';
+const ACCENT_RGB = '214, 179, 106';
+
 const MutualFunds = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,18 +69,25 @@ const MutualFunds = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'rgba(218, 165, 32, 0.12)',
-    border: '1px solid rgba(218, 165, 32, 0.22)',
-    color: '#DAA520',
+    background: 'rgba(255,255,255,0.04)',
+    border: `1px solid rgba(${ACCENT_RGB}, 0.26)`,
+    color: ACCENT,
     fontWeight: 700,
     flex: '0 0 auto',
   };
 
   const card = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(218, 165, 32, 0.18)',
-    borderRadius: '12px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '16px',
     padding: '22px',
+    backdropFilter: 'blur(10px)',
+  };
+
+  const divider = {
+    height: 1,
+    background: `linear-gradient(90deg, rgba(255,255,255,0), rgba(${ACCENT_RGB}, 0.35), rgba(255,255,255,0))`,
+    margin: '0 0 56px 0',
   };
 
   return (
@@ -129,11 +139,12 @@ const MutualFunds = () => {
           <h1
             style={{
               fontFamily: '"Playfair Display", serif',
-              fontSize: '52px',
+              fontSize: 'clamp(40px, 5vw, 60px)',
               fontWeight: '700',
-              color: '#DAA520',
+              color: ACCENT,
               marginBottom: '24px',
               lineHeight: '1.2',
+              letterSpacing: '-0.02em',
             }}
           >
             Mutual Funds
@@ -155,7 +166,7 @@ const MutualFunds = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         {/* How Mutual Funds Work (Simple Flow) */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             How Mutual Funds Work (Simple Flow)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
@@ -169,7 +180,7 @@ const MutualFunds = () => {
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={step}>{x.n}</div>
                   <div>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                     <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
                   </div>
                 </div>
@@ -178,11 +189,11 @@ const MutualFunds = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Types of Mutual Funds (At a Glance) */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Types of Mutual Funds (At a Glance)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
@@ -192,7 +203,7 @@ const MutualFunds = () => {
               { t: 'Hybrid Funds', d: 'Combine equity and debt to balance growth potential and risk.' },
             ].map((x) => (
               <div key={x.t} style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>{x.t}</h3>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>{x.t}</h3>
                 <p style={{ margin: 0, fontSize: '15px', color: '#e5e5e5', lineHeight: '1.75' }}>{x.d}</p>
               </div>
             ))}
@@ -202,11 +213,11 @@ const MutualFunds = () => {
           </p>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* SIP — A Method, Not a Product */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             SIP — A Method, Not a Product
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.85', color: '#e5e5e5', margin: '0 0 18px 0' }}>
@@ -224,16 +235,16 @@ const MutualFunds = () => {
           </p>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* SIP vs Lump Sum — Neutral Comparison */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             SIP vs Lump Sum — Neutral Comparison
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Systematic Investment (SIP)</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Systematic Investment (SIP)</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>Periodic investing</li>
                 <li>Reduces dependency on market timing</li>
@@ -241,7 +252,7 @@ const MutualFunds = () => {
               </ul>
             </div>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Lump Sum Investment</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Lump Sum Investment</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>One-time allocation</li>
                 <li>Suitable when surplus funds are available</li>
@@ -254,16 +265,16 @@ const MutualFunds = () => {
           </p>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Direct Plans & Regular Plans — Clear Difference */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Direct Plans & Regular Plans — Clear Difference
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Direct Plans</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Direct Plans</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>Lower expense ratio</li>
                 <li>Managed independently by the investor</li>
@@ -271,7 +282,7 @@ const MutualFunds = () => {
               </ul>
             </div>
             <div style={card}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#DAA520', fontWeight: 600 }}>Regular Plans</h3>
+              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: ACCENT, fontWeight: 600 }}>Regular Plans</h3>
               <ul style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.85', fontSize: '16px' }}>
                 <li>Includes distributor commission</li>
                 <li>Preferred by investors who value service, support, and execution assistance</li>
@@ -285,21 +296,21 @@ const MutualFunds = () => {
           </p>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Cost & Return Snapshot */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Cost & Return Snapshot
           </h2>
-          <FundCostComparator />
+          <FundCostComparator accentColor={ACCENT} variant="neutral" />
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Mutual Funds in One Minute */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Mutual Funds in One Minute
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -313,11 +324,11 @@ const MutualFunds = () => {
           </div>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Who Typically Uses Mutual Funds */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Who Typically Uses Mutual Funds
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
@@ -338,11 +349,11 @@ const MutualFunds = () => {
           </p>
         </section>
 
-        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+        <div aria-hidden="true" style={divider} />
 
         {/* Our Role */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Our Role
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -365,7 +376,7 @@ const MutualFunds = () => {
 
         {/* Quick Start */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: ACCENT, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Quick Start
           </h2>
           <div style={{ ...card, padding: '24px' }}>
@@ -379,12 +390,14 @@ const MutualFunds = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(218, 165, 32, 0.28)',
-                  background: 'rgba(218, 165, 32, 0.12)',
-                  color: '#DAA520',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: `1px solid rgba(${ACCENT_RGB}, 0.35)`,
+                  background: `linear-gradient(180deg, rgba(${ACCENT_RGB}, 0.14) 0%, rgba(${ACCENT_RGB}, 0.05) 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  color: '#ffffff',
                   fontWeight: 600,
+                  letterSpacing: '0.01em',
                   textDecoration: 'none',
                 }}
               >
@@ -412,7 +425,7 @@ const MutualFunds = () => {
         </section>
 
         {/* FAQs */}
-        <FAQSection faqs={faqs} pageUrl={pageUrl} title="FAQs" />
+        <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
 
         <ClosingPerspective>
           Mutual funds are tools. Their effectiveness depends on clarity of purpose, discipline, and long-term
@@ -422,8 +435,8 @@ const MutualFunds = () => {
 
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
-            Related resources: <Link href="/sip" style={{ color: '#C0A062', textDecoration: 'underline' }}>SIP</Link> ·{' '}
-            <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link>
+            Related resources: <Link href="/sip" style={{ color: ACCENT, textDecoration: 'underline' }}>SIP</Link> ·{' '}
+            <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link>
           </p>
         </section>
 
