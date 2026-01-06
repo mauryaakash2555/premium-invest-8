@@ -773,6 +773,28 @@ padding: 18px;
   border-bottom-left-radius: 6px;
 }
 
+.statusNote {
+  margin: 10px 18px 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.22);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statusNoteInfo {
+  border-color: rgba(192, 160, 98, 0.22);
+  color: rgba(192, 160, 98, 0.92);
+}
+
+.statusNoteError {
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.78);
+}
+
 .inputBar {
   flex-shrink: 0;
   position: relative;

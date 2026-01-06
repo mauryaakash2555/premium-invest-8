@@ -168,7 +168,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   async function exitFamilyAdminMode() {
     setFamilyAdmin(false);
     setTab("chat");
-    pushBotUser("Exited family admin mode.");
+    flashStatus("Exited family admin mode.", "info");
     try {
       clearFamilyToken();
       await fetch("/api/admin/family/logout", { method: "POST", credentials: "include" });
@@ -233,6 +233,33 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   const pitchStateRef = useRef({ lastPitchAt: null, seenPitches: [] });
   const listRef = useRef(null);
   const inputRef = useRef(null);
+  const statusTimerRef = useRef(null);
+
+  const [statusNote, setStatusNote] = useState(null); // { text: string, tone: 'info'|'error' }
+
+  function flashStatus(text, tone = "info") {
+    try {
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    } catch {
+      // ignore
+    }
+    if (!text) {
+      setStatusNote(null);
+      return;
+    }
+    setStatusNote({ text: String(text), tone: tone === "error" ? "error" : "info" });
+    statusTimerRef.current = setTimeout(() => setStatusNote(null), 4200);
+  }
+
+  useEffect(() => {
+    return () => {
+      try {
+        if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+      } catch {
+        // ignore
+      }
+    };
+  }, []);
 
   const [messages, setMessages] = useState(() => [
     {
@@ -689,19 +716,19 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       try {
         const res = await tryFamilyLogin(text);
         if (res?.setupRequired) {
-          pushBotUser("Family dashboard is not configured on this environment yet.");
+          flashStatus("Family dashboard is not configured on this environment yet.", "error");
           return;
         }
         if (res?.ok) {
           setFamilyAdmin(true);
           setTab("family");
-          pushBotUser("Welcome BM Wealth! \u{1F4CA} Viewing family dashboard...");
+          flashStatus(null);
           return;
         }
       } finally {
         setBusy(false);
       }
-      pushBotUser("Family code not recognized.");
+      flashStatus("Family code not recognized.", "error");
       return;
     }
     // Super admin unlock (redirect to hidden control panel) - intercept before echo
@@ -713,15 +740,15 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       try {
         const res = await tryAdminLogin(text);
         if (res?.setupRequired) {
-          pushBotUser("Super admin is not configured on this environment yet.");
+          flashStatus("Super admin is not configured on this environment yet.", "error");
           return;
         }
         if (res?.networkError) {
-          pushBotUser("Super admin login failed due to a network error. If you're on the React frontend (port 3001), open the Next app at http://localhost:3000 and try again.");
+          flashStatus("Super admin login failed due to a network error. Open http://localhost:3000 and try again.", "error");
           return;
         }
         if (res?.status === 404) {
-          pushBotUser("Super admin login endpoint isn't available on this page. Open http://localhost:3000 (Next app) and try again.");
+          flashStatus("Super admin login isn't available here. Open http://localhost:3000 and try again.", "error");
           return;
         }
         if (res?.ok) {
@@ -733,7 +760,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             // ignore
           }
           // Verify once before redirect so we can show a useful error if cookies are blocked.
-          pushBotUser("Welcome. \u{1F39B}\u{FE0F} Opening control panel...");
+          flashStatus("Opening control panel...", "info");
           let adminToken = "";
           try {
             adminToken = typeof window !== "undefined" ? String(window.localStorage.getItem("bm_admin_token_v1") || "") : "";
@@ -750,12 +777,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
             window.location.href = "/admin-secret-akash";
             return;
           }
-          pushBotUser(
-            "Login succeeded, but this browser isn't sending/accepting the admin cookie (so the dashboard can't stay logged in). Please open the site in Chrome/Edge at http://localhost:3000 and try again."
+          flashStatus(
+            "Login succeeded, but this browser isn't accepting the admin cookie. Please open in Chrome/Edge at http://localhost:3000 and try again.",
+            "error"
           );
           return;
         }
-        pushBotUser("Super admin code not recognized.");
+        flashStatus("Super admin code not recognized.", "error");
         return;
       } finally {
         setBusy(false);
@@ -1621,6 +1649,18 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   </div>
                 )}
               </div>
+
+              {statusNote?.text ? (
+                <div
+                  className={[styles.statusNote, statusNote.tone === "error" ? styles.statusNoteError : styles.statusNoteInfo].join(
+                    " "
+                  )}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {statusNote.text}
+                </div>
+              ) : null}
 
               <div className={styles.inputBar}>
                 <input
