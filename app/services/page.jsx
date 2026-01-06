@@ -282,7 +282,7 @@ const Services = () => {
             Start in 60 seconds
           </h2>
           <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#CCCCCC', lineHeight: 1.8 }}>
-            If you want clarity before you act, explore our free tools. If you want execution and documentation support,
+            If you want clarity before you act, explore our tools. If you want execution and documentation support,
             reach us on the contact page.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -301,7 +301,7 @@ const Services = () => {
                 textDecoration: 'none',
               }}
             >
-              Explore Free Tools <span aria-hidden="true">→</span>
+              Explore Tools <span aria-hidden="true">→</span>
             </Link>
             <Link
               href="/contact"

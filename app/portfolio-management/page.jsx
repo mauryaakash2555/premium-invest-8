@@ -226,7 +226,7 @@ const PortfolioManagement = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Drift Snapshot
+            Drift Snapshot — Rebalance Check
           </h2>
           <RebalanceDriftSnapshot />
         </section>
@@ -281,7 +281,7 @@ const PortfolioManagement = () => {
                   textDecoration: 'none',
                 }}
               >
-                Explore Free Tools <span aria-hidden="true">→</span>
+                Explore Tools <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/contact"

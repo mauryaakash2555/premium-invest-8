@@ -318,7 +318,7 @@ const SIPServices = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Goal Snapshot
+            Goal Snapshot — SIP Projection
           </h2>
           <SipGoalSnapshot />
         </section>
@@ -347,7 +347,7 @@ const SIPServices = () => {
                   textDecoration: 'none',
                 }}
               >
-                Explore Free Tools <span aria-hidden="true">→</span>
+                Explore Tools <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/contact"

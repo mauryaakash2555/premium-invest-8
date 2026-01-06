@@ -55,7 +55,7 @@ export function InsuranceCoverSnapshot() {
   return (
     <div style={card}>
       <p style={{ margin: "0 0 12px 0", fontSize: 14, color: "#d0d0d0", lineHeight: 1.75 }}>
-        A quick protection band using simple income-replacement + liabilities. This is an illustration, not a product recommendation.
+        A compact protection band using simple income-replacement + liabilities. This is an illustration, not a product recommendation.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>

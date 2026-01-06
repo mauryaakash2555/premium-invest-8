@@ -60,7 +60,7 @@ export function SipGoalSnapshot() {
   return (
     <div style={card}>
       <p style={{ margin: "0 0 12px 0", fontSize: 14, color: "#d0d0d0", lineHeight: 1.75 }}>
-        A quick goal-to-SIP estimate using your assumptions. This is an illustration, not a return assurance.
+        A compact goal-to-SIP projection using your assumptions. This is an illustration, not a return assurance.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>

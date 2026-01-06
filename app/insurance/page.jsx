@@ -308,7 +308,7 @@ const Insurance = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
-            Cover Snapshot
+            Cover Snapshot — Protection Band
           </h2>
           <InsuranceCoverSnapshot />
         </section>
@@ -337,7 +337,7 @@ const Insurance = () => {
                   textDecoration: 'none',
                 }}
               >
-                Explore Free Tools <span aria-hidden="true">→</span>
+                Explore Tools <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/contact"

@@ -290,7 +290,7 @@ const MutualFunds = () => {
         {/* Cost & Return Snapshot */}
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Cost & Return Snapshot (Quick Estimator)
+            Cost & Return Snapshot
           </h2>
           <FundCostComparator />
         </section>
@@ -388,7 +388,7 @@ const MutualFunds = () => {
                   textDecoration: 'none',
                 }}
               >
-                Explore Free Tools <span aria-hidden="true">→</span>
+                Explore Tools <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/contact"
