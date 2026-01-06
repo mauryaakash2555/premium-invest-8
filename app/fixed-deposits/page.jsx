@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import FAQSection from '@/components/shared/FAQSection';
+import { FdMaturitySnapshot } from '@/components/calculators/FdMaturitySnapshot';
 const FixedDeposits = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -258,6 +259,13 @@ const FixedDeposits = () => {
               <li>Support tracking and maturity management</li>
             </ul>
           </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Maturity Snapshot
+          </h2>
+          <FdMaturitySnapshot />
         </section>
 
         <section style={{ marginBottom: '56px' }}>

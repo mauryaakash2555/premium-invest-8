@@ -5,6 +5,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import { InsuranceCoverSnapshot } from '@/components/calculators/InsuranceCoverSnapshot';
 const Insurance = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -303,6 +304,13 @@ const Insurance = () => {
               Insurance decisions remain with the customer.
             </p>
           </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Cover Snapshot
+          </h2>
+          <InsuranceCoverSnapshot />
         </section>
 
         <section style={{ marginBottom: '56px' }}>

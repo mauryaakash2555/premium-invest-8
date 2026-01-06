@@ -5,6 +5,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import { RebalanceDriftSnapshot } from '@/components/calculators/RebalanceDriftSnapshot';
 
 const PortfolioManagement = () => {
   useEffect(() => {
@@ -221,6 +222,13 @@ const PortfolioManagement = () => {
               </div>
             ))}
           </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Drift Snapshot
+          </h2>
+          <RebalanceDriftSnapshot />
         </section>
 
         <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />

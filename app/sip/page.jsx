@@ -5,6 +5,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import { SipGoalSnapshot } from '@/components/calculators/SipGoalSnapshot';
 
 const SIPServices = () => {
   useEffect(() => {
@@ -313,6 +314,13 @@ const SIPServices = () => {
               Investment decisions remain with the investor.
             </p>
           </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Goal Snapshot
+          </h2>
+          <SipGoalSnapshot />
         </section>
 
         <section style={{ marginBottom: '56px' }}>
