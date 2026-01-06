@@ -218,8 +218,36 @@ export default function HomePage() {
             Empowering Mumbai's elite investors with bespoke wealth strategies
           </p>
 
+          {/* Mobile-only minimal CTA (keeps background fully visible) */}
           <div
-            className="hero-cta-buttons-responsive"
+            className="md:hidden"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              margin: '0 auto 48px',
+              padding: '0 16px',
+            }}
+          >
+            <Link
+              href="/tools"
+              style={{
+                fontSize: '12px',
+                lineHeight: 1.2,
+                color: '#C0A062',
+                opacity: 0.82,
+                textDecoration: 'none',
+                letterSpacing: '0.9px',
+                textTransform: 'uppercase',
+                borderBottom: '1px solid rgba(192,160,98,0.35)',
+                paddingBottom: '3px',
+              }}
+            >
+              Access Your Complimentary Wealth Blueprint
+            </Link>
+          </div>
+
+          <div
+            className="hero-cta-buttons-responsive hide-cta-on-mobile"
             style={{
               display: 'flex',
               gap: '20px',
@@ -231,7 +259,7 @@ export default function HomePage() {
             <Link href="/tools" className="btn-primary">
               Access Your Complimentary Wealth Blueprint
             </Link>
-            <Link href="/services" className="btn-secondary hidden md:inline-flex">
+            <Link href="/services" className="btn-secondary">
               Explore Services {"\u2192"}
             </Link>
           </div>
