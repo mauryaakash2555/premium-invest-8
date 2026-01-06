@@ -166,7 +166,7 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Our practice is built on clear education, documented disclosures, and a process-first approach. We aim to help you 
+              Our practice is built on clear communication, documented disclosures, and a process-first approach. We aim to help you 
               understand options, costs, and risks before you decide on the next step.
             </p>
             <p
@@ -178,8 +178,8 @@ const About = () => {
             >
               Whether you're a 25-year-old starting your career in Mumbai's corporate sector, a mid-career professional 
               balancing EMIs with investments, or a business owner planning succession and legacy wealth transfer, we bring 
-              educational tools and practical support to help you navigate decisions more confidently. Our mission is making 
-              financial concepts accessible, understandable, and actionable—without promises or guaranteed outcomes.
+              practical tools and premium support to help you navigate decisions more confidently. Our mission is making 
+              financial concepts accessible, understandable, and actionable.
             </p>
           </div>
 

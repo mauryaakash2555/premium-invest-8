@@ -2,9 +2,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
   title:
-    "BM Wealth — Educational Guides | Mutual Funds, SIP, Insurance",
+    "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
   description:
-    "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics. Not SEBI-registered investment advice; no guarantees.",
+    "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
   path: "/",
 });
 

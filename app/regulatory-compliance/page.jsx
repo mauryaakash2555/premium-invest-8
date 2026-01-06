@@ -50,10 +50,10 @@ export default function RegulatoryCompliance() {
 
           <section className="space-y-6">
             <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
-              SEBI Compliance Statement
+              Compliance Statement
             </h2>
             <p className="text-gray-300">
-              We operate as a registered distributor under AMFI guidelines. We do not provide SEBI-registered investment advisory services. Our role is to curate and distribute premier investment products while providing execution support and market insights.
+              We operate as a registered distributor under AMFI guidelines. Our role is to curate and distribute premier investment products while providing execution support and market insights.
             </p>
           </section>
 

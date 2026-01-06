@@ -143,7 +143,7 @@ export async function POST(req) {
         pdfBytes = generateBmWealthBlueprint15PdfBytes(pdfPayload);
         const emailTitle = String(pdfPayload?.meta?.emailTitle || "Your BM Wealth Premium Report is Ready");
         const emailSubtitle = String(pdfPayload?.meta?.emailSubtitle || "Your PDF is attached.");
-        const emailFooter = String(pdfPayload?.meta?.emailFooter || "ARN 90008 | Educational use only. Not investment advice.");
+        const emailFooter = String(pdfPayload?.meta?.emailFooter || "ARN 90008");
 
         emailHtml = `
           <div style="font-family:Inter,Arial,sans-serif;line-height:1.5;color:#111">

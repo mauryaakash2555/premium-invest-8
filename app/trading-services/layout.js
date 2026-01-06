@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Trading & Demat — Educational Guide | BM Wealth",
+  title: "Trading & Demat | BM Wealth",
   description:
-    "Educational overview of trading basics, demat accounts, and risk management concepts. No tips, no guarantees.",
+    "Trading and demat support with disciplined process, clear documentation, and risk management basics.",
   path: "/trading-services",
 });
 

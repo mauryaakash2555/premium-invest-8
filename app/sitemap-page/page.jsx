@@ -244,7 +244,7 @@ const Sitemap = () => {
               fontSize: '16px',
               border: '2px solid #DAA520'
             }}>
-              Browse Guides
+              Browse Services
             </Link>
           </div>
         </div>
@@ -258,10 +258,10 @@ const Sitemap = () => {
             BM Wealth is a Mumbai-based wealth distribution and insurance support firm. We are an AMFI registered mutual fund distributor (ARN 90008) and an IRDAI licensed insurance distributor (License 277925), operating with disclosure-led processes and regulatory compliance.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            Our content spans educational guides and checklists across mutual funds (including SIP basics), insurance, trading/demat basics, fixed deposits, and portfolio planning concepts. Where applicable, we may assist with execution support or introductions to regulated third-party providers.
+            Our services and resources span mutual funds (including SIP setup), insurance, trading & demat onboarding, fixed deposits, and portfolio planning. Where applicable, we may assist with execution support or introductions to regulated third-party providers.
           </p>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
-            This website is intended for general education only and does not provide SEBI-registered investment advice or promises of returns. If you need personalized advice, consider consulting a SEBI-registered investment adviser.
+            Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
           </p>
         </section>
 

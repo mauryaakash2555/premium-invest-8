@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Insurance — Educational Guide | BM Wealth",
+  title: "Insurance | BM Wealth",
   description:
-    "Educational guide to insurance basics: term insurance, health insurance, key terms, and claim process checklists. No advice, no guarantees.",
+    "Insurance planning support with clear comparisons, documentation, and claims-ready guidance through IRDAI-licensed distribution.",
   path: "/insurance",
 });
 

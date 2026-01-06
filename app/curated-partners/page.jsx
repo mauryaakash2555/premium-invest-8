@@ -342,19 +342,19 @@ export default function CuratedPartners() {
             </h2>
 
             <p style={{ fontSize: '18px', color: 'rgba(192, 160, 98, 0.9)', marginBottom: '20px', fontWeight: 600 }}>
-              Educational guides + distribution support
+              Premium wealth services + distribution support
             </p>
 
             <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.7, marginBottom: '24px' }}>
-              Educational content and tools to help you understand products and processes. No investment advice or guarantees.
+              A process-led approach across products, execution, and documentation—delivered with premium clarity.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }} className="features-grid">
               {[
-                { icon: <TrendingUp size={20} />, text: 'Portfolio basics & asset allocation (educational)' },
-                { icon: <Shield size={20} />, text: 'Insurance basics & risk awareness' },
-                { icon: <CheckCircle size={20} />, text: 'High-level tax awareness (educational)' },
-                { icon: <Users size={20} />, text: 'Goal planning checklists (educational)' },
+                { icon: <TrendingUp size={20} />, text: 'Portfolio planning & asset allocation' },
+                { icon: <Shield size={20} />, text: 'Insurance planning & claims-ready support' },
+                { icon: <CheckCircle size={20} />, text: 'Tax coordination awareness' },
+                { icon: <Users size={20} />, text: 'Goal planning checklists' },
               ].map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(192, 160, 98, 0.08)', padding: '12px 14px', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.2)', transition: 'all 0.3s ease' }}>
                   <div style={{ color: '#C0A062', flexShrink: 0 }}>{item.icon}</div>

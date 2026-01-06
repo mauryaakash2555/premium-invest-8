@@ -58,9 +58,9 @@ const reqSchema = z.object({
 });
 
 const COMPLIANCE_TEXT =
-  "Welcome to BM Wealth. We provide educational guidance and product\n" +
-  "distribution services. AMFI Registered | IRDAI Licensed |\n" +
-  "Investments subject to market dynamics.";
+  "Welcome to BM Wealth. We provide clear guidance and product\n" +
+  "distribution support. AMFI Registered | IRDAI Licensed |\n" +
+  "Investments are subject to market risks.";
 
 const COMPLIANCE_LINES = COMPLIANCE_TEXT.split("\n").map((l) => l.trim()).filter(Boolean);
 
@@ -227,7 +227,7 @@ function makeConversationId(fallback = "") {
 
 function buildSeBiSafeSystemPrompt({ userName = "" } = {}) {
   const base =
-    "You are BM Wealth's financial assistant. Provide educational guidance only.\n" +
+    "You are BM Wealth's financial assistant. Provide clear, high-level guidance.\n" +
     "Never recommend specific products, funds, or stocks. Use phrases like 'various mutual fund options available' not 'invest in equity funds'.\n" +
     "Topics: mutual funds, SIP, insurance, fixed deposits. Be helpful, professional, Mumbai-friendly.\n" +
     "Answer ONLY the user's latest message. Do NOT repeat or paraphrase the question at the start.\n" +
@@ -455,13 +455,13 @@ function buildConsultationReply({ userName = "", amountMentioned, howToInvest })
       : `${name}many investors start with SIP for regular investing.`;
 
   const body =
-    "A good next step is to clarify a few basics (educational):\n" +
+    "A good next step is to clarify a few basics:\n" +
     "- Your goal (what the money is for)\n" +
     "- Time horizon (how long you can stay invested)\n" +
     "- Risk comfort (how you react to ups/downs)\n\n" +
-    "If you want, we can share relevant educational links and explain how execution/distribution works.\n\n" +
-    "Disclaimer: Educational only; not SEBI-registered investment advice. Investments are subject to market risks.\n\n" +
-    "Would you like a link to the SIP guide, mutual funds guide, or the contact page?";
+    "If you want, we can share relevant links and explain how execution/distribution works.\n\n" +
+    "Investments are subject to market risks. Read all related documents carefully.\n\n" +
+    "Would you like a link to SIP, Mutual Funds, or the contact page?";
 
   // Keep it concise; avoid categories/allocations/returns.
   return `${first}\n\n${body}`;
@@ -478,7 +478,7 @@ function cannedEducationalAnswer(userText) {
       "A SIP (Systematic Investment Plan) is a way to invest a fixed amount at regular intervals (e.g., monthly) into a mutual fund.\n" +
       "It helps build investing discipline and averages purchase cost across market ups/downs.\n" +
       "Example: investing ₹5,000 every month toward a long-term goal using various mutual fund options.\n\n" +
-      "If you need personalized advice, consider consulting a SEBI-registered investment adviser. (Educational only; no specific recommendations.)"
+      "If you share your goal and time horizon, we can suggest the right next step or connect you with our team."
     );
   }
   return "";

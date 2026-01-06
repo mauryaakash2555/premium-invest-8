@@ -3,7 +3,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 export const metadata = {
   ...buildMetadata({
     title: "Curated Partners | BM Wealth Mumbai",
-    description: "Educational directory of curated partners and tools. No investment advice or guarantees.",
+    description: "Curated partners and tools, selected for quality and transparency.",
     path: "/curated-partners",
   }),
   keywords: "curated partners, investing tools, BM Wealth, Mumbai, AMFI, IRDAI",

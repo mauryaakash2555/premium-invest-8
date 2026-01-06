@@ -37,7 +37,7 @@ export default function LumpsumPlannerToolPage() {
             />
           }
           disclaimer={
-            "ARN 90008 | IRDAI 277925. For education and information only; calculations depend on your inputs and prevailing rules. For personalised investment advice, consult a SEBI-registered investment adviser."
+            "ARN 90008 | IRDAI 277925. For informational purposes; calculations depend on your inputs and prevailing rules. Please verify with official sources for final outcomes."
           }
         >
           <div className="px-6 pb-6 lg:px-10 lg:pb-10">

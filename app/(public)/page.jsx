@@ -75,35 +75,35 @@ export default function HomePage() {
     {
       icon: <PieChart size={40} />,
       title: 'Mutual Funds',
-      description: 'Educational guides on mutual funds, SIP basics, and key risks.',
+      description: 'Mutual fund selection support, execution, and disciplined review cadence.',
       image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/mutual-funds',
     },
     {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
-      description: 'Portfolio planning concepts and allocation basics (educational).',
+      description: 'Portfolio planning, allocation frameworks, and periodic review.',
       image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/portfolio-management',
     },
     {
       icon: <CreditCard size={40} />,
       title: 'Trading Services',
-      description: 'Platform basics, risk awareness, and trading education (no tips).',
+      description: 'Demat onboarding, platform selection support, and execution framework.',
       image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
       link: '/trading-services',
     },
     {
       icon: <Shield size={40} />,
       title: 'Insurance',
-      description: 'Insurance basics, coverage concepts, and disclosure-led support.',
+      description: 'Insurance comparisons, documentation support, and claims-ready guidance.',
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/insurance',
     },
     {
       icon: <DollarSign size={40} />,
       title: 'Fixed Deposits',
-      description: 'Fixed deposit basics, tenure/rate comparison pointers, and risks.',
+      description: 'Fixed deposit comparisons across tenure, payout options, and liquidity.',
       image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/fixed-deposits',
     },
@@ -198,7 +198,7 @@ export default function HomePage() {
               backgroundSize: '200% auto',
             }}
           >
-            Educational guides for everyday investing
+            Premium wealth support for everyday decisions
           </motion.h1>
           <p
             className="hero-description-responsive"
@@ -215,7 +215,7 @@ export default function HomePage() {
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
-            Educational guides and tools—no advice, no guarantees
+            Tools, insights, and execution support—built for clarity.
           </p>
 
           <div
@@ -232,7 +232,7 @@ export default function HomePage() {
               Explore Free Tools
             </Link>
             <Link href="/services" className="btn-secondary">
-              Explore Guides {"\u2192"}
+              Explore Services {"\u2192"}
             </Link>
           </div>
         </div>
@@ -270,7 +270,7 @@ export default function HomePage() {
               margin: '0 auto',
             }}
           >
-            Educational guides designed for clarity and safe learning
+            Premium services designed for clarity and confidence
           </p>
         </div>
 

@@ -80,12 +80,12 @@ export default function ToolsHubPage() {
     {
       question: "Are these tools free to use?",
       answer:
-        "Yes. The tools are designed to be educational-first. Some tools may offer optional premium blueprints, but the core calculators can be used without buying anything.",
+        "Yes. Core calculators are free to use. Some tools may offer optional premium reports, but you can use the calculators without buying anything.",
     },
     {
       question: "Do these calculators give personalised advice?",
       answer:
-        "No. The outputs are general information based on your inputs and published rules/assumptions. For personalised advice, consult a qualified professional.",
+        "The outputs are estimates based on your inputs and published rules/assumptions. Please verify with official sources for final outcomes.",
     },
     {
       question: "Which tool should I start with?",
@@ -95,7 +95,7 @@ export default function ToolsHubPage() {
     {
       question: "Will you call me if I use the tools?",
       answer:
-        "No. The experience is built to be calm and educational. If you request a consultation, you can contact us from the Contact page.",
+        "No. If you want to speak with us, you can reach us from the Contact page.",
     },
   ];
 
@@ -166,7 +166,7 @@ export default function ToolsHubPage() {
               Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
             </p>
             <p className="mt-4 text-[11px] text-white/55">
-              AMFI Registered ARN 90008 | Educational tools only | No investment advice
+              AMFI Registered ARN 90008 | IRDAI 277925
             </p>
             <p className="mt-3 text-[11px] text-white/55">
               Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}

@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "SIP (Systematic Investment Plan) — Educational Guide | BM Wealth",
+  title: "SIP (Systematic Investment Plan) | BM Wealth",
   description:
-    "Educational guide to SIPs: how they work, key terms, checklists, and common myths. No advice, no promises.",
+    "SIP planning support with a premium, process-led approach: goal mapping, fund selection framework, and review cadence.",
   path: "/sip",
 });
 

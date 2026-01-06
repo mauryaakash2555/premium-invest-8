@@ -8,7 +8,6 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import RiskWarning from '@/components/shared/RiskWarning';
 import FAQSection from '@/components/shared/FAQSection';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
@@ -20,20 +19,15 @@ const PortfolioManagement = () => {
   const PAGE_PATH = '/portfolio-management';
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}${PAGE_PATH}`;
-  const title = 'Portfolio Planning — Educational Guide';
+  const title = 'Portfolio Planning';
   const description =
-    'Educational guide to portfolio planning: asset allocation, diversification, rebalancing, and review cadence. No advice, no guarantees.';
+    'Portfolio planning and review cadence delivered with a premium, process-led approach and clear documentation.';
 
   const faqs = [
     {
-      question: 'Is this SEBI-registered investment advice?',
+      question: 'What is asset allocation?',
       answer:
-        'No. This page is educational only. If you need personalized advice, consider consulting a SEBI-registered investment adviser.',
-    },
-    {
-      question: 'Do you provide assured returns?',
-      answer:
-        'No. Returns are market-linked and not assured. Any investing involves risk, including the possible loss of capital.',
+        'Asset allocation is deciding how much to hold across equity, debt, and other assets, based on your goal timeline and risk comfort.',
     },
     {
       question: 'What is rebalancing?',
@@ -43,7 +37,12 @@ const PortfolioManagement = () => {
     {
       question: 'How often should a portfolio be reviewed?',
       answer:
-        'Many people prefer a periodic review (e.g., yearly) and also an event-driven review when goals, income, or major life circumstances change.',
+        'Many investors prefer a periodic review (e.g., yearly) and an event-driven review when goals, income, or major life circumstances change.',
+    },
+    {
+      question: 'Why do portfolios drift over time?',
+      answer:
+        'Different assets grow at different rates. Over time, a portfolio can become more aggressive or conservative than intended unless it’s reviewed and rebalanced.',
     },
   ];
 
@@ -143,16 +142,15 @@ const PortfolioManagement = () => {
               lineHeight: '1.2',
             }}
           >
-            Portfolio Planning — Educational Guide
+            Portfolio Planning
           </h1>
           <p style={{ fontSize: '20px', color: '#e5e5e5', maxWidth: '820px', margin: '0 auto', lineHeight: '1.6' }}>
-            Asset allocation, diversification, and rebalancing—explained simply.
+            A disciplined framework for allocation, diversification, and periodic review.
           </p>
         </div>
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        <RiskWarning type="pms" />
 
         <section style={{ marginBottom: '60px' }}>
           <h2
@@ -207,7 +205,7 @@ const PortfolioManagement = () => {
               fontFamily: '"Playfair Display", serif',
             }}
           >
-            A simple, non-advisory checklist
+            A practical checklist
           </h2>
           <div
             style={{
@@ -237,17 +235,9 @@ const PortfolioManagement = () => {
 
         <FAQSection faqs={faqs} />
 
-        <section
-          style={{
-            marginTop: '60px',
-            padding: '24px',
-            background: 'rgba(251, 191, 36, 0.1)',
-            borderRadius: '8px',
-            border: '1px solid rgba(251, 191, 36, 0.3)',
-          }}
-        >
-          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '0' }}>
-            <strong>Educational disclaimer:</strong> {SITE_NAME} is not SEBI-registered. This page is general educational information only and does not constitute investment advice or a promise of returns. If you need personalized advice, consider consulting a SEBI-registered investment adviser.
+        <section style={{ marginTop: '60px' }}>
+          <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: 0 }}>
+            Investments are subject to market risks. Read all scheme-related documents carefully.
           </p>
         </section>
       </div>

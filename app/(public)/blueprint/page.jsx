@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Educational Planning Checklist | BM Wealth",
+  title: "Planning Checklist | BM Wealth",
   description:
-    "Start with an educational planning checklist and explore tools designed to improve clarity. No investment advice or guarantees.",
+    "Start with a planning checklist and explore tools designed to improve clarity and decision-making.",
 };
 
 export default function BlueprintPage() {
@@ -12,13 +12,13 @@ export default function BlueprintPage() {
       <section className="px-6 lg:px-10 py-16 lg:py-24">
         <div className="max-w-4xl mx-auto">
           <p className="text-[11px] tracking-[0.18em] uppercase text-white/60">
-            BM Wealth • Educational Entry
+            BM Wealth • Planning Entry
           </p>
           <h1 className="mt-4 text-3xl lg:text-5xl font-semibold text-[color:var(--color-matte-gold)]">
-            Start with an educational planning checklist
+            Start with a planning checklist
           </h1>
           <p className="mt-4 text-base lg:text-lg text-white/75 leading-relaxed">
-            This page is a starting point for our educational tools and checklists. Use them to understand concepts,
+            This page is a starting point for our tools and checklists. Use them to understand concepts,
             assumptions, and risks before making any decision.
           </p>
 
@@ -50,12 +50,12 @@ export default function BlueprintPage() {
                   Try the Tax Calculator
                 </Link>
                 <Link href="/services" className="btn-secondary text-center">
-                  Explore Guides {"\u2192"}
+                  Explore Services {"\u2192"}
                 </Link>
               </div>
 
               <p className="mt-4 text-[11px] text-white/55">
-                Educational tools only. No urgency language. No forced decisions.
+                No urgency language. No forced decisions.
               </p>
             </div>
           </div>

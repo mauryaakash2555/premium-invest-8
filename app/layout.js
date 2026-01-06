@@ -51,8 +51,8 @@ const inter = Inter({
 export const metadataBase = getMetadataBase();
 
 export const metadata = {
-  title: "BM Wealth — Educational Guides | Mutual Funds, SIP, Insurance",
-  description: "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics. Not SEBI-registered investment advice; no guarantees.",
+  title: "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
+  description: "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -63,9 +63,9 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: "BM Wealth — Educational Guides",
+    title: "BM Wealth",
     description:
-      "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics. No investment advice; no guarantees.",
+      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -74,9 +74,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BM Wealth — Educational Guides",
+    title: "BM Wealth",
     description:
-      "Educational guides and tools on mutual funds, SIPs, insurance, and portfolio basics.",
+      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
     images: [DEFAULT_OG_IMAGE],
     },
 };

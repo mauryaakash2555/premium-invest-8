@@ -85,11 +85,11 @@ const TermsAndConditions = () => {
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Financial planning consultations</li>
               </ul>
               <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
-                We are IRDAI Licensed and AMFI Registered. We do not provide SEBI-registered investment advisory services.
+                We are IRDAI Licensed and AMFI Registered.
               </p>
             </section>
 
-            {/* No Investment Advice / No Returns Guarantee */}
+            {/* Information & Risk */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
@@ -98,11 +98,10 @@ const TermsAndConditions = () => {
                 color: '#DAA520',
                 marginBottom: '20px',
                 lineHeight: '1.3'
-              }}>3. No Investment Advice / No Returns Guarantee</h2>
+              }}>3. Information & Risk</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
-                While we strive to provide accurate and helpful financial guidance, the information and educational 
-                content provided by BM Wealth are for informational purposes only and should not be construed as a 
-                guarantee of investment returns or financial outcomes.
+                While we strive to provide accurate and helpful information, outcomes can vary and depend on markets,
+                product terms, and individual circumstances.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 All investment decisions made by you are at your own risk and discretion. Mutual fund investments 

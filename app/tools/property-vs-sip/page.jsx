@@ -28,7 +28,7 @@ export default function PropertyVsSipToolPage() {
     "@type": "FinancialCalculator",
     name: "Property vs SIP Calculator",
     description:
-      "Compare an equivalent capital deployment into Mumbai property vs disciplined equity SIP compounding using locked assumptions. Educational illustration only.",
+      "Compare an equivalent capital deployment into Mumbai property vs disciplined equity SIP compounding using locked assumptions.",
     url: pageUrl,
     provider: {
       "@type": "Organization",
@@ -60,7 +60,7 @@ export default function PropertyVsSipToolPage() {
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This is an educational illustration using locked assumptions. It does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
+            "No. This comparison uses locked assumptions and does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
         },
       },
       {
@@ -74,11 +74,11 @@ export default function PropertyVsSipToolPage() {
       },
       {
         "@type": "Question",
-        name: "Is this investment advice?",
+        name: "What does this tool help you decide?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "No. This tool provides educational information only and is not personalised investment advice. Consult a qualified professional for advice specific to your situation.",
+            "It helps quantify opportunity cost under fixed assumptions so you can compare scenarios more clearly. For a personalised plan, connect with our team.",
         },
       },
     ],
@@ -147,7 +147,7 @@ export default function PropertyVsSipToolPage() {
               </p>
               <p>
                 The model intentionally uses <strong>locked assumptions</strong> so the comparison is consistent and
-                audit-able. It is an educational illustration — not a promise of returns.
+                audit-able. Outputs are illustrative and will vary with market and property cycles.
               </p>
 
               <h3>Important Limitations</h3>
@@ -165,7 +165,7 @@ export default function PropertyVsSipToolPage() {
               </p>
               <hr />
               <p className="text-[11px] text-white/60">
-                Educational tool only • Not investment advice • ARN 90008
+                Market-linked outcomes can fluctuate • ARN 90008
               </p>
             </div>
           </div>

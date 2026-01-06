@@ -22,7 +22,6 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import RiskWarning from '@/components/shared/RiskWarning';
 import FAQSection from '@/components/shared/FAQSection';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 const TradingServices = () => {
@@ -33,15 +32,15 @@ const TradingServices = () => {
   const PAGE_PATH = '/trading-services';
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}${PAGE_PATH}`;
-  const title = 'Trading & Demat — Educational Guide';
+  const title = 'Trading & Demat';
   const description =
-    'Educational overview of trading basics, demat accounts, and risk management concepts. No tips, no guarantees.';
+    'Trading and demat support with disciplined process, clear documentation, and risk management basics.';
 
   const faqs = [
     {
-      question: 'Do you provide stock tips or assured trading returns?',
+      question: 'What does disciplined execution mean in trading?',
       answer:
-        'No. Trading involves significant risk and returns are not assured. We focus on education, platform selection support, and risk-awareness guidance rather than promises or assurances.',
+        'It means planning entries and exits, sizing positions appropriately, and following a repeatable approach instead of reacting impulsively to short-term moves.',
     },
     {
       question: 'What is required to open a demat account?',
@@ -49,9 +48,9 @@ const TradingServices = () => {
         'Typically PAN, Aadhaar, bank account details, and a photo. Some segments (like derivatives) may require income proof depending on the broker.',
     },
     {
-      question: 'Is intraday trading suitable for beginners?',
+      question: 'How do you think about risk management?',
       answer:
-        'Intraday trading can be high risk. Many beginners start with learning, paper trading, and small position sizes before risking meaningful capital.',
+        'Risk management is a set of controls—position sizing, exit levels, and exposure limits—designed to keep downsides manageable during adverse moves.',
     },
     {
       question: 'Are the platform links affiliate links?',
@@ -79,7 +78,7 @@ const TradingServices = () => {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
       { '@type': 'ListItem', position: 2, name: 'Services', item: `${baseUrl}/services` },
-      { '@type': 'ListItem', position: 3, name: 'Trading Guide', item: pageUrl },
+      { '@type': 'ListItem', position: 3, name: 'Trading & Demat', item: pageUrl },
     ],
   };
 
@@ -130,7 +129,7 @@ const TradingServices = () => {
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
-            Trading & Demat — Educational Guide
+            Trading & Demat
           </h1>
           <p style={{
             fontSize: '20px',
@@ -139,18 +138,16 @@ const TradingServices = () => {
             margin: '0 auto 32px',
             lineHeight: '1.6'
           }}>
-            Trading is high-risk. This page focuses on basics, risks, and what to check before opening a demat account.
+            Clear demat onboarding, platform selection support, and a disciplined framework for execution and risk management.
           </p>
         </div>
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
-        
-        <RiskWarning type="trading" />
 
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            If you’re new: a safer learning sequence
+            If you’re new: a disciplined learning sequence
           </h2>
           <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(218, 165, 32, 0.18)', borderRadius: '12px', padding: '24px' }}>
             <ol style={{ margin: 0, paddingLeft: '18px', color: '#e5e5e5', lineHeight: '1.9', fontSize: '16px' }}>
@@ -178,7 +175,7 @@ const TradingServices = () => {
 
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Risk basics (non-negotiables)
+            Risk management essentials
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
             {[
@@ -203,15 +200,9 @@ const TradingServices = () => {
 
         <FAQSection faqs={faqs} />
 
-        <section style={{
-          marginTop: '60px',
-          padding: '24px',
-          background: 'rgba(251, 191, 36, 0.1)',
-          borderRadius: '8px',
-          border: '1px solid rgba(251, 191, 36, 0.3)'
-        }}>
-          <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#e5e5e5', marginBottom: '0' }}>
-            <strong>Educational disclaimer:</strong> {SITE_NAME} is not SEBI-registered. This page is for general educational information only and does not constitute trading advice, a recommendation, or a promise of returns. Trading (especially derivatives) is high-risk. Consider seeking advice from a SEBI-registered professional if you need personalized guidance.
+        <section style={{ marginTop: '60px' }}>
+          <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', marginBottom: 0 }}>
+            Trading involves market risk and the possibility of loss. Please read all relevant documents and consider your risk comfort.
           </p>
         </section>
 

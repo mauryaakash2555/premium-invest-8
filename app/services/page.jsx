@@ -70,11 +70,11 @@ const Services = () => {
       icon: <CreditCard size={50} />,
       title: 'Trading Services',
       description:
-        'Access market data, trading tools, and educational resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
+        'Access market data, trading tools, and resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
       features: [
         'Real-time market access',
         'Advanced charting tools',
-        'Research insights and education',
+        'Research insights and resources',
         'Brokerage comparisons',
         'Expert trading support',
       ],
@@ -130,9 +130,9 @@ const Services = () => {
 
   const faqs = [
     {
-      question: 'Do you provide investment advice or assured returns?',
+      question: 'How does the process work?',
       answer:
-        'No. We provide educational information and distribution/support services where applicable. Returns are market-linked and not assured. For personalized advice, please consult a SEBI-registered investment advisor (RIA).',
+        'We start with your goals and constraints, then help you compare suitable options, assist with execution and documentation, and support periodic reviews over time.',
     },
     {
       question: 'Which service should I start with?',
@@ -262,7 +262,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Educational guides and support services — no investment advice or guarantees
+            Premium wealth services with a process-led approach and clear documentation
           </p>
         </div>
       </section>
@@ -637,7 +637,7 @@ const Services = () => {
                 color: '#DAA520',
               }}
             >
-              Explore educational guides
+              Explore services
             </h2>
             <p
               style={{
@@ -648,8 +648,7 @@ const Services = () => {
                 margin: '0 auto 30px',
               }}
             >
-              Browse our guides and tools. If you have questions about execution or documentation,
-              you can reach us via WhatsApp or the contact page.
+              Explore our services and tools. For execution and documentation support, reach us via WhatsApp or the contact page.
             </p>
             <div
               style={{
@@ -680,12 +679,9 @@ const Services = () => {
 
       {/* Risk & Disclosure */}
       <section className="section-container">
-        <div className="sebi-disclaimer">
-          <strong>Educational disclosure:</strong> This site provides general educational
-          information only and is not SEBI-registered investment advice. Investments are subject
-          to market risks; read all related documents carefully and consider your own situation
-          before acting.
-        </div>
+        <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', margin: 0 }}>
+          Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
+        </p>
       </section>
     </div>
   );
