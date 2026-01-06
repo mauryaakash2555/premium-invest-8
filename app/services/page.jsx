@@ -267,6 +267,63 @@ const Services = () => {
         </div>
       </section>
 
+      {/* Start Here */}
+      <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
+        <div className="glass-effect" style={{ padding: 'clamp(18px, 4vw, 28px)', maxWidth: '100%' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(22px, 4vw, 30px)',
+              color: '#DAA520',
+              margin: '0 0 12px 0',
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 600,
+            }}
+          >
+            Start in 60 seconds
+          </h2>
+          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#CCCCCC', lineHeight: 1.8 }}>
+            If you want clarity before you act, explore our free tools. If you want execution and documentation support,
+            reach us on the contact page.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <Link
+              href="/tools"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 18px',
+                borderRadius: '10px',
+                border: '1px solid rgba(218, 165, 32, 0.28)',
+                background: 'rgba(218, 165, 32, 0.12)',
+                color: '#DAA520',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Explore Free Tools <span aria-hidden="true">→</span>
+            </Link>
+            <Link
+              href="/contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 18px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255,255,255,0.14)',
+                background: 'rgba(255,255,255,0.04)',
+                color: '#e5e5e5',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Contact Us <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Services Detail */}
       <section className="section-container">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 8vw, 80px)' }}>

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
+import { BrokerageEstimator } from '@/components/calculators/BrokerageEstimator';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const TradingServices = () => {
@@ -248,6 +249,15 @@ const TradingServices = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Brokerage & Charges Snapshot
+          </h2>
+          <BrokerageEstimator />
+        </section>
+
+        <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0 0 56px 0' }} />
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
             Our Role
           </h2>
           <div style={card}>
@@ -263,6 +273,53 @@ const TradingServices = () => {
             <p style={{ margin: '16px 0 0 0', fontSize: '16px', color: '#d0d0d0', lineHeight: '1.8' }}>
               Trading decisions remain with the client.
             </p>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Quick Start
+          </h2>
+          <div style={{ ...card, padding: '24px' }}>
+            <p style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#e5e5e5', lineHeight: '1.85' }}>
+              If you want a clean setup, start with your segment choice and costs, then move to onboarding support.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <Link
+                href="/platforms"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(218, 165, 32, 0.28)',
+                  background: 'rgba(218, 165, 32, 0.12)',
+                  color: '#DAA520',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Compare Platforms <span aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'rgba(255,255,255,0.04)',
+                  color: '#e5e5e5',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Talk to BM Wealth <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
         </section>
 

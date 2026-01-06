@@ -260,6 +260,53 @@ const FixedDeposits = () => {
           </div>
         </section>
 
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>
+            Quick Start
+          </h2>
+          <div style={{ ...card, padding: '24px' }}>
+            <p style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#e5e5e5', lineHeight: '1.85' }}>
+              If you want predictable timelines, decide the tenure and payout preference first—then proceed with issuer selection and documentation.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <Link
+                href="/tools"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(218, 165, 32, 0.28)',
+                  background: 'rgba(218, 165, 32, 0.12)',
+                  color: '#DAA520',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Explore Free Tools <span aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'rgba(255,255,255,0.04)',
+                  color: '#e5e5e5',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Talk to BM Wealth <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'justify' }}>
             Related resources: <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
