@@ -155,9 +155,8 @@ const About = () => {
               }}
             >
               What began as a mission to help Mumbai's ambitious professionals navigate the complex world of mutual funds 
-              has evolved into a comprehensive wealth architecture firm. We hold AMFI Registration (ARN 90008) for mutual 
-              fund distribution and IRDAI License (277925) for insurance advisory, ensuring our clients receive guidance 
-              from qualified, regulated professionals.
+              has evolved into a wealth distribution and insurance support firm. We hold AMFI Registration (ARN 90008) for mutual 
+              fund distribution and IRDAI License (277925) for insurance distribution, with a focus on disclosure-led processes.
             </p>
             <p
               style={{
@@ -167,10 +166,8 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Our practice is built on deep expertise in financial markets, rigorous research methodologies, and personalized 
-              service. We don't believe in cookie-cutter solutions or one-size-fits-all portfolios. Every client receives a 
-              customized wealth strategy that accounts for their unique income profile, family situation, risk tolerance, 
-              life goals, and Mumbai's specific economic realities.
+              Our practice is built on clear education, documented disclosures, and a process-first approach. We aim to help you 
+              understand options, costs, and risks before you decide on the next step.
             </p>
             <p
               style={{
@@ -181,9 +178,8 @@ const About = () => {
             >
               Whether you're a 25-year-old starting your career in Mumbai's corporate sector, a mid-career professional 
               balancing EMIs with investments, or a business owner planning succession and legacy wealth transfer, we bring 
-              the expertise, tools, and dedication to help you achieve your financial goals. Our mission is making 
-              sophisticated wealth strategies accessible, understandable, and actionable for every Mumbai investor who 
-              aspires to build lasting wealth.
+              educational tools and practical support to help you navigate decisions more confidently. Our mission is making 
+              financial concepts accessible, understandable, and actionable—without promises or guaranteed outcomes.
             </p>
           </div>
 
@@ -260,7 +256,7 @@ const About = () => {
                   <li style={{ marginBottom: '4px' }}>• Retirement Planning & SIP Strategies</li>
                   <li style={{ marginBottom: '4px' }}>• Portfolio Diversification & Risk Management</li>
                   <li style={{ marginBottom: '4px' }}>• Tax-Efficient Investment Structuring</li>
-                  <li>• Goal-Based Wealth Architecture</li>
+                  <li>• Goal-Based Planning Framework</li>
                 </ul>
               </div>
             </div>
@@ -343,8 +339,7 @@ const About = () => {
                 Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We maintain the premier standards in wealth architecture, continuously enhancing
-                our expertise and methodologies.
+                We maintain high standards in compliance, disclosure, and documentation.
               </p>
             </div>
 
@@ -365,11 +360,10 @@ const About = () => {
                 <Target size={35} />
               </div>
               <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Results-Driven
+                Education-Focused
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                We focus on delivering measurable outcomes and empowering you to achieve your wealth
-                creation objectives.
+                We focus on clarity: helping you understand choices, risks, and trade-offs before acting.
               </p>
             </div>
 

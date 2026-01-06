@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Complimentary Wealth Blueprint | BM Wealth",
+  title: "Educational Planning Checklist | BM Wealth",
   description:
-    "Access BM Wealth’s complimentary blueprint gateway, then explore tools and insights designed to bring clarity and execution to your financial decisions.",
+    "Start with an educational planning checklist and explore tools designed to improve clarity. No investment advice or guarantees.",
 };
 
 export default function BlueprintPage() {
@@ -12,14 +12,14 @@ export default function BlueprintPage() {
       <section className="px-6 lg:px-10 py-16 lg:py-24">
         <div className="max-w-4xl mx-auto">
           <p className="text-[11px] tracking-[0.18em] uppercase text-white/60">
-            BM Wealth • Complimentary Entry
+            BM Wealth • Educational Entry
           </p>
           <h1 className="mt-4 text-3xl lg:text-5xl font-semibold text-[color:var(--color-matte-gold)]">
-            Access Your Complimentary Wealth Blueprint
+            Start with an educational planning checklist
           </h1>
           <p className="mt-4 text-base lg:text-lg text-white/75 leading-relaxed">
-            This is the gateway to our proof-led tools and educational insights. Start with a clear diagnostic,
-            understand the variables, then make decisions with confidence.
+            This page is a starting point for our educational tools and checklists. Use them to understand concepts,
+            assumptions, and risks before making any decision.
           </p>
 
           <div className="mt-8 rounded-3xl border border-white/10 ultra-luxury-glass overflow-hidden">
@@ -47,10 +47,10 @@ export default function BlueprintPage() {
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Link href="/tools/tax-optimization" className="btn-primary text-center">
-                  Start With Tax Optimization Proof
+                  Try the Tax Calculator
                 </Link>
                 <Link href="/services" className="btn-secondary text-center">
-                  Explore Services {"\u2192"}
+                  Explore Guides {"\u2192"}
                 </Link>
               </div>
 

@@ -262,7 +262,7 @@ const Services = () => {
               lineHeight: 1.6,
             }}
           >
-            Bespoke wealth architectures meticulously crafted to elevate your wealth trajectory
+            Educational guides and support services — no investment advice or guarantees
           </p>
         </div>
       </section>
