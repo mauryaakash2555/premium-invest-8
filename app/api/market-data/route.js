@@ -614,12 +614,46 @@ async function fetchUsdInrFromGoogle() {
     const res = await fetchWithTimeout("https://www.google.com/finance/quote/USD-INR", { headers: SCRAPE_HEADERS }, 4000);
     if (res.ok) {
       const html = await res.text();
-      const match = html.match(/data-last-price="([0-9.]+)"/);
-      if (match) {
-        const rate = parseNumber(match[1]);
-        if (rate && rate > 70 && rate < 100) {
-          return { value: roundTo2(rate), source: "google" };
+      // Price
+      const pricePatterns = [
+        /data-last-price="([0-9.]+)"/,
+        /class="YMlKec fxKbKc"[^>]*>([0-9,.]+)</,
+      ];
+
+      let rate = null;
+      for (const pattern of pricePatterns) {
+        const m = html.match(pattern);
+        if (!m) continue;
+        const n = parseNumber(m[1]);
+        if (n && n > 70 && n < 100) {
+          rate = roundTo2(n);
+          break;
         }
+      }
+
+      // Change % (when present)
+      const changePatterns = [
+        /data-last-normal-market-change-percent="([+-]?[0-9.]+)"/,
+        /\(([+-]?[0-9.]+)%\)/,
+        /class="[^\"]*JwB6zf[^\"]*"[^>]*>([+-]?[0-9.]+)%/,
+      ];
+
+      let changePct = null;
+      for (const pattern of changePatterns) {
+        const m = html.match(pattern);
+        if (!m) continue;
+        const pct = parseNumber(m[1]);
+        // USD/INR daily % moves are usually small; keep a safe band.
+        if (pct !== null && Math.abs(pct) <= 5) {
+          changePct = roundTo2(pct);
+          break;
+        }
+      }
+
+      if (rate != null) {
+        const out = { value: rate, source: "google" };
+        if (changePct != null) out.changePct = changePct;
+        return out;
       }
     }
   } catch (e) { Logger.warn("g_usd_failed", { error: String(e?.message) }); }
@@ -675,7 +709,8 @@ async function fetchMarketDataFromAPIs() {
     
     // USD/INR - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
     const usdVal = gUsd?.value || av.usdInr?.value || exr?.value || fallbackMap.get("USDINR").value;
-    const usdPct = autoCalculatePct("USDINR", usdVal, gUsd?.changePct || av.usdInr?.changePct || 0);
+    const usdSourcePct = gUsd?.changePct ?? av.usdInr?.changePct ?? null;
+    const usdPct = autoCalculatePct("USDINR", usdVal, usdSourcePct);
     items.push({
       id: "USDINR", name: "USD/INR", kind: "fx", value: usdVal,
       changePct: usdPct, direction: getDirection(usdPct), currency: "INR",
