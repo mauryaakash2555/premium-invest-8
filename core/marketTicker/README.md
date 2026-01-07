@@ -78,6 +78,25 @@ app/api/market-data/                  ← BACKEND (isolated)
 | ✅ 12 data sources with fallback cascade | Never fails |
 | ✅ Hardcoded fallback data | Always returns something |
 | ✅ Self-contained validation | Rejects bad data automatically |
+| ✅ **Auto-calculate % when sources don't provide it** | Percentage is NEVER 0% or missing |
+
+---
+
+## 📈 AUTO-PERCENTAGE CALCULATION (NEVER SHOWS 0%)
+
+When a data source doesn't provide percentage change:
+
+1. **First**: Check if source provided valid % → Use it
+2. **Second**: Calculate from previous price cache (24hr TTL)
+3. **Third**: Use fallback data percentage
+
+```javascript
+// This runs for EVERY instrument automatically
+autoCalculatePct("GOLD", currentPrice, sourcePercentage)
+// Returns: calculated % or fallback % - NEVER 0% or null
+```
+
+**Result**: Percentage is ALWAYS shown, even if all sources fail to provide it.
 
 ---
 

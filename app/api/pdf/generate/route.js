@@ -70,31 +70,48 @@ export async function POST(req) {
       const { data: leadRow } = await sb.from("leads").select("id,name,email,phone").eq("id", finalLeadId).limit(1);
       if (leadRow?.[0]) resolvedLead = leadRow[0];
 
-      const { data: evs } = await sb
+      // Prefer the exact payload used for the paid deliverable (avoids requiring the free-email flow).
+      const { data: paidEvs } = await sb
         .from("events")
         .select("id,created_at,data")
         .eq("lead_id", finalLeadId)
-        .eq("event_type", "property_vs_sip_email_sent")
+        .filter("event_type", "in", '("property_vs_sip_paid_email_sent","premium_pdf_paid_email_sent")')
         .order("created_at", { ascending: false })
         .limit(1);
 
-      const e = evs?.[0];
-      const lastInputs = e?.data?.inputs || null;
-      const calcInputs = lastInputs
-        ? {
-            propertyPrice: Number(lastInputs.propertyPrice) || 0,
-            monthlySip: Number(lastInputs.monthlySip) || 0,
-            years: Number(lastInputs.years) || 15,
-          }
-        : {
-            propertyPrice: Number(inputs?.propertyPrice) || 0,
-            monthlySip: Number(inputs?.monthlySip) || 0,
-            years: Number(inputs?.years) || 15,
-          };
+      const paid = paidEvs?.[0];
+      const paidPayload = paid?.data?.pdfPayload || null;
+      if (paidPayload) {
+        resolvedPayload = paidPayload;
+        resolvedType = "property_vs_sip_premium_18";
+      } else {
+        // Fallback: reconstruct from the last free-email inputs, otherwise from request inputs.
+        const { data: evs } = await sb
+          .from("events")
+          .select("id,created_at,data")
+          .eq("lead_id", finalLeadId)
+          .eq("event_type", "property_vs_sip_email_sent")
+          .order("created_at", { ascending: false })
+          .limit(1);
 
-      const model = computeMumbaiPropertyVsSip(calcInputs);
-      resolvedPayload = buildMumbaiPropertyVsSipPdfPayload({ lead: resolvedLead || {}, model });
-      resolvedType = "property_vs_sip_premium_18";
+        const e = evs?.[0];
+        const lastInputs = e?.data?.inputs || null;
+        const calcInputs = lastInputs
+          ? {
+              propertyPrice: Number(lastInputs.propertyPrice) || 0,
+              monthlySip: Number(lastInputs.monthlySip) || 0,
+              years: Number(lastInputs.years) || 15,
+            }
+          : {
+              propertyPrice: Number(inputs?.propertyPrice) || 0,
+              monthlySip: Number(inputs?.monthlySip) || 0,
+              years: Number(inputs?.years) || 15,
+            };
+
+        const model = computeMumbaiPropertyVsSip(calcInputs);
+        resolvedPayload = buildMumbaiPropertyVsSipPdfPayload({ lead: resolvedLead || {}, model });
+        resolvedType = "property_vs_sip_premium_18";
+      }
     }
 
     const isPropertyVsSipPayload =
