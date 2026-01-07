@@ -155,7 +155,7 @@ const About = () => {
               }}
             >
               What began as a mission to help Mumbai's ambitious professionals navigate the complex world of investing 
-              has evolved into a portfolio-first practice with support across mutual funds, SIP execution, and insurance. We hold AMFI Registration (ARN 90008) for mutual 
+              has evolved into a portfolio-first practice with support across portfolio management (PMS), mutual funds, SIP execution, and insurance. We hold PMS Certification No. 2430447816, AMFI Registration (ARN 90008) for mutual 
               fund distribution and IRDAI License (277925) for insurance distribution, with a focus on disclosure-led processes.
             </p>
             <p
@@ -222,16 +222,16 @@ const About = () => {
               margin: '0 auto'
             }}>
               <p style={{ marginBottom: '12px' }}>
+                <strong style={{ color: '#DAA520' }}>PMS Certification No.</strong><br/>
+                2430447816
+              </p>
+              <p style={{ marginBottom: '12px' }}>
                 <strong style={{ color: '#DAA520' }}>AMFI Registered Mutual Fund Distributor</strong><br/>
                 ARN 90008
               </p>
               <p style={{ marginBottom: '12px' }}>
                 <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor</strong><br/>
                 License No. 277925
-              </p>
-              <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>PMS Certification No.</strong><br/>
-                2430447816
               </p>
               <p style={{ marginBottom: '0' }}>
                 With extensive experience in Mumbai's financial markets, Brahmdeo specializes in helping 
@@ -416,7 +416,7 @@ const About = () => {
               color: '#DAA520',
             }}
           >
-            IRDAI Licensed | AMFI Registered Wealth Distribution
+            PMS Certification 2430447816 | AMFI ARN 90008 | IRDAI 277925
           </h2>
           <p
             style={{

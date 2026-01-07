@@ -459,6 +459,10 @@ return (
                 </span>
                 <span className="text-white/25">•</span>
                 <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                  PMS 2430447816
+                </span>
+                <span className="text-white/25">•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
                   IRDAI 277925
                 </span>
                 <span className="text-white/25">•</span>
@@ -492,13 +496,13 @@ return (
               <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">Market data displayed is indicative and may be delayed. This information is provided for general awareness only and does not constitute investment advice.</p>
 
               <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">
-                This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. ARN 90008 | Consult your advisor before investing.
+                This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. PMS 2430447816 | ARN 90008 | Consult your advisor before investing.
               </p>
 
               {/* LEGAL MICRO-TEXT FOR AUDITORS */}
               <div className="flex flex-col items-center mt-6 space-y-2 opacity-30 hover:opacity-100 transition-opacity duration-500">
                 <p className="text-[8px] text-[#666] tracking-[0.5px] m-0">
-                  AMFI ARN-90008 | IRDAI-277925 | Distribution remuneration as per industry standards
+                  PMS 2430447816 | AMFI ARN-90008 | IRDAI-277925 | Distribution remuneration as per industry standards
                 </p>
                 <div className="flex gap-4">
                   <Link href="/legal-disclosures" className="text-[8px] text-[#666] hover:text-[#C0A062] no-underline">

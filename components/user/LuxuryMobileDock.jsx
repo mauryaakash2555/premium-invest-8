@@ -272,7 +272,7 @@ export function LuxuryMobileDock() {
         <div
           className={cn(
             "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
-            isScrolling && "gold-shimmer",
+            // Removed shimmer sweep on the main dock; glare is handled per-button on hover/highlight.
             "relative flex items-center gap-1 px-3 py-2 bg-[#000000] rounded-full", // Pitch black bg
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
@@ -317,6 +317,12 @@ export function LuxuryMobileDock() {
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
                 )}
 
+                {(isHighlighted || hoveredIndex === index) && (
+                  <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                    <div className="lux-dock-glare" />
+                  </div>
+                )}
+
                 <div
                   className={cn(
                     "relative transition-all duration-500 flex items-center justify-center",
@@ -355,6 +361,12 @@ export function LuxuryMobileDock() {
           >
             {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
+            )}
+
+            {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
+              <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                <div className="lux-dock-glare" />
+              </div>
             )}
 
             <div

@@ -324,7 +324,7 @@ export default function HomePage() {
             }}
           >
             <div
-              className="glass-effect"
+              className="glass-effect gold-grain-texture premium-hover-glow bm-why-card"
               style={{
                 textAlign: 'left',
                 padding: '26px',
@@ -342,32 +342,10 @@ export default function HomePage() {
               <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, marginBottom: '14px' }}>
                 We lead with Portfolio Management Services (PMS) discipline — structured decisions, documented reviews, and clear accountability.
               </p>
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '10px',
-                  marginTop: '8px',
-                }}
-              >
-                <span
-                  style={{
-                    padding: '8px 10px',
-                    borderRadius: '999px',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    background: 'rgba(0,0,0,0.25)',
-                    color: 'rgba(255,255,255,0.85)',
-                    fontSize: '12px',
-                    letterSpacing: '0.08em',
-                  }}
-                >
-                  PMS Certification No. 2430447816
-                </span>
-              </div>
             </div>
 
             <div
-              className="glass-effect"
+              className="glass-effect gold-grain-texture premium-hover-glow bm-why-card"
               style={{
                 textAlign: 'left',
                 padding: '26px',
@@ -388,7 +366,7 @@ export default function HomePage() {
             </div>
 
             <div
-              className="glass-effect"
+              className="glass-effect gold-grain-texture premium-hover-glow bm-why-card"
               style={{
                 textAlign: 'left',
                 padding: '26px',
@@ -457,11 +435,13 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="section-container">
         <div
-          className="glass-effect"
+          className="ultra-luxury-glass gold-grain-texture premium-hover-glow bm-consult"
           style={{
             padding: '70px 40px',
             textAlign: 'center',
-            background: 'rgba(218, 165, 32, 0.05)',
+            borderRadius: '18px',
+            border: '1px solid rgba(214, 179, 106, 0.16)',
+            boxShadow: '0 22px 70px rgba(0,0,0,0.45), 0 0 42px rgba(214,179,106,0.08)',
           }}
         >
           <h2
@@ -509,6 +489,42 @@ export default function HomePage() {
         }
         .animate-marquee-slow {
           animation: marquee 30s linear infinite;
+        }
+
+        @keyframes bm-sheen {
+          0% { transform: translateX(-120%); }
+          100% { transform: translateX(120%); }
+        }
+        .bm-why-card {
+          position: relative;
+          overflow: hidden;
+        }
+        .bm-why-card::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+          transform: translateX(-120%);
+        }
+        .bm-why-card:hover::after {
+          opacity: 1;
+          animation: bm-sheen 1.15s ease;
+        }
+        .bm-consult {
+          position: relative;
+          overflow: hidden;
+        }
+        .bm-consult::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          pointer-events: none;
+          background:
+            radial-gradient(900px 240px at 10% 0%, rgba(214,179,106,0.12), transparent 60%),
+            radial-gradient(760px 240px at 90% 100%, rgba(255,255,255,0.06), transparent 60%);
+          opacity: .95;
         }
       `}</style>
     </div>
