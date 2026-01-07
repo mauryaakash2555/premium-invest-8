@@ -49,8 +49,8 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: getMetadataBase(),
-  title: "BM Wealth | Mutual Funds, SIP, Insurance, Trading",
-  description: "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+  title: "BM Wealth | Portfolio Management (PMS), Mutual Funds, SIP",
+  description: "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
   alternates: {
     canonical: "/",
   },
@@ -66,7 +66,7 @@ export const metadata = {
   openGraph: {
     title: "BM Wealth",
     description:
-      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -77,7 +77,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "BM Wealth",
     description:
-      "Premium wealth services and tools across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
     images: [DEFAULT_OG_IMAGE],
     },
 };

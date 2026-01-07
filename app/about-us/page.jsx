@@ -154,8 +154,8 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              What began as a mission to help Mumbai's ambitious professionals navigate the complex world of mutual funds 
-              has evolved into a wealth distribution and insurance support firm. We hold AMFI Registration (ARN 90008) for mutual 
+              What began as a mission to help Mumbai's ambitious professionals navigate the complex world of investing 
+              has evolved into a portfolio-first practice with support across mutual funds, SIP execution, and insurance. We hold AMFI Registration (ARN 90008) for mutual 
               fund distribution and IRDAI License (277925) for insurance distribution, with a focus on disclosure-led processes.
             </p>
             <p
@@ -228,6 +228,10 @@ const About = () => {
               <p style={{ marginBottom: '12px' }}>
                 <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor</strong><br/>
                 License No. 277925
+              </p>
+              <p style={{ marginBottom: '12px' }}>
+                <strong style={{ color: '#DAA520' }}>PMS Certification No.</strong><br/>
+                2430447816
               </p>
               <p style={{ marginBottom: '0' }}>
                 With extensive experience in Mumbai's financial markets, Brahmdeo specializes in helping 

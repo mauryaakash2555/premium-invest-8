@@ -47,7 +47,7 @@ const Services = () => {
     {
       question: 'Which service should I start with?',
       answer:
-        'If you are starting out, our Mutual Funds and SIP sections are common entry points. You can also explore our free tools to understand scenarios before taking action.',
+        'If you want your core strategy set first, start with Portfolio Management (PMS). From there, Mutual Funds and SIP can be used for disciplined execution. You can also explore our free tools to understand scenarios before taking action.',
     },
     {
       question: 'Can I speak to someone before starting?',

@@ -101,7 +101,7 @@ export default function Platforms() {
             backgroundImage: 'url(/6th.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.3,
+            opacity: 0.42,
           }}
         />
         <div
@@ -111,7 +111,7 @@ export default function Platforms() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.5) 100%)',
+            background: 'linear-gradient(180deg, rgba(10,10,10,0.18) 0%, rgba(10,10,10,0.35) 100%)',
           }}
         />
         

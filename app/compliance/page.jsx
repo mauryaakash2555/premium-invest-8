@@ -1457,7 +1457,7 @@ export default function Compliance() {
                 color: '#888888',
                 margin: '0'
               }}>
-                BM Wealth is an <strong style={{ color: '#999999' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#999999' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. Portfolio management services (PMS) and fixed-deposit products, where applicable, are offered by regulated third-party providers; BM Wealth may assist with introductions and execution support.
+                BM Wealth is an <strong style={{ color: '#999999' }}>IRDAI Licensed Insurance Advisor (License No. 277925)</strong> and <strong style={{ color: '#999999' }}>AMFI Registered Mutual Fund Distributor (ARN 90008)</strong>. <strong style={{ color: '#999999' }}>PMS Certification No. 2430447816</strong>. Portfolio management services (PMS) and fixed-deposit products, where applicable, are offered by regulated third-party providers; BM Wealth may assist with introductions and execution support.
               </p>
             </div>
             
