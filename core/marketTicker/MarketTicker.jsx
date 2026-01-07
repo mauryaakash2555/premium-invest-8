@@ -1,16 +1,25 @@
 /**
- * 🔒 CORE PROTECTED MODULE - DO NOT EDIT
- * 
- * FILE: core/marketTicker/MarketTicker.jsx
- * PURPOSE: Self-contained, isolated market ticker component
- * 
- * ISOLATION RULES:
- * 1. NO imports from outside core/marketTicker/
- * 2. NO global state or context
- * 3. CSS is module-scoped
- * 4. API calls are internal only
- * 
- * LAST LOCKED: 2026-01-07
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║  🔒🔒🔒 CORE PROTECTED MODULE - BANK LEVEL ISOLATION 🔒🔒🔒               ║
+ * ╠══════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                          ║
+ * ║  ⛔ STOP! AI ASSISTANT - READ /core/marketTicker/README.md FIRST! ⛔     ║
+ * ║                                                                          ║
+ * ║  FILE: core/marketTicker/MarketTicker.jsx                                ║
+ * ║  PURPOSE: Self-contained, isolated market ticker component               ║
+ * ║                                                                          ║
+ * ║  ISOLATION RULES (NEVER BREAK THESE):                                    ║
+ * ║  ✗ NO imports from outside core/marketTicker/                            ║
+ * ║  ✗ NO global state or context                                            ║
+ * ║  ✗ NO external dependencies                                              ║
+ * ║  ✓ CSS is module-scoped (MarketTicker.module.css)                        ║
+ * ║  ✓ API calls to /api/market-data only                                    ║
+ * ║  ✓ All utilities are internal                                            ║
+ * ║                                                                          ║
+ * ║  WHY ISOLATED: Other code changes CANNOT break this component            ║
+ * ║                                                                          ║
+ * ║  LAST LOCKED: 2026-01-07 | BULLETPROOF VERSION                           ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
 "use client";

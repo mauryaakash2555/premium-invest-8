@@ -1,13 +1,21 @@
 /**
- * 🔒 CORE PROTECTED STYLES - DO NOT EDIT
- * 
- * FILE: core/marketTicker/MarketTicker.module.css
- * PURPOSE: Self-contained styles for market ticker
- * 
- * ISOLATION: These styles are CSS modules (scoped)
- * No global styles, no external dependencies
- * 
- * LAST LOCKED: 2026-01-07
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║  🔒 CORE PROTECTED STYLES - BANK LEVEL ISOLATION                         ║
+ * ╠══════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                          ║
+ * ║  ⛔ AI ASSISTANT: READ /core/marketTicker/README.md BEFORE CHANGES ⛔    ║
+ * ║                                                                          ║
+ * ║  FILE: core/marketTicker/MarketTicker.module.css                         ║
+ * ║  PURPOSE: Self-contained scoped styles for market ticker                 ║
+ * ║                                                                          ║
+ * ║  RULES:                                                                  ║
+ * ║  ✗ NO global CSS selectors                                               ║
+ * ║  ✗ NO @import from outside this folder                                   ║
+ * ║  ✓ All class names are auto-scoped by CSS Modules                        ║
+ * ║  ✓ Changes here ONLY affect MarketTicker component                       ║
+ * ║                                                                          ║
+ * ║  LAST LOCKED: 2026-01-07 | BULLETPROOF VERSION                           ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
 .wrap {
