@@ -166,8 +166,8 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 href={link.path}
-                className="relative text-[12px] font-bold uppercase tracking-[2.5px] no-underline text-[#C0A062] drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]"
-                style={{ pointerEvents: 'auto' }}
+                className="bm-navlink-active relative text-[12px] font-bold uppercase tracking-[2.5px] no-underline text-[#C0A062] drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]"
+                style={{ textDecoration: 'none', borderBottom: 'none', pointerEvents: 'auto' }}
               >
                 {link.label}
                 <span 
@@ -180,7 +180,7 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 href={link.path}
-                className="group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
+                className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
               >
                 {link.label}
                 <span 
