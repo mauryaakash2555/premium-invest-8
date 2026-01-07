@@ -35,19 +35,28 @@ function getFallbackData() {
   const baseNifty = 26143 + Math.floor(Math.random() * 40 - 20);
   const baseSensex = 84620 + Math.floor(Math.random() * 100 - 50);
   const baseUsdInr = 84.85 + (Math.random() * 0.10 - 0.05);
-  const baseGold = 78500 + Math.floor(Math.random() * 100 - 50); // ~78,500 INR per 10g current
+  const baseGold = 78500 + Math.floor(Math.random() * 100 - 50);     // ~₹78,500 per 10g
+  const baseSilver = 91500 + Math.floor(Math.random() * 200 - 100);  // ~₹91,500 per kg
+  const baseCrude = 6150 + Math.floor(Math.random() * 50 - 25);      // ~₹6,150 per barrel (INR)
+  const baseBtc = 101500 + Math.floor(Math.random() * 500 - 250);    // ~$101,500 USD
   
   // Actual market direction today
   const niftyChange = -0.14 + (Math.random() * 0.1 - 0.05);
   const sensexChange = -0.52 + (Math.random() * 0.1 - 0.05);
   const usdChange = 0.02 + (Math.random() * 0.05 - 0.025);
   const goldChange = 0.15 + (Math.random() * 0.1 - 0.05);
+  const silverChange = 0.22 + (Math.random() * 0.1 - 0.05);
+  const crudeChange = -0.35 + (Math.random() * 0.2 - 0.1);
+  const btcChange = 1.25 + (Math.random() * 0.5 - 0.25);
 
   return [
     { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: baseNifty, changePct: Math.round(niftyChange * 100) / 100, direction: niftyChange > 0 ? "up" : niftyChange < 0 ? "down" : "flat", currency: "INR" },
     { id: "SENSEX", name: "SENSEX", kind: "index", value: baseSensex, changePct: Math.round(sensexChange * 100) / 100, direction: sensexChange > 0 ? "up" : sensexChange < 0 ? "down" : "flat", currency: "INR" },
-    { id: "USDINR", name: "USD/INR", kind: "fx", value: Math.round(baseUsdInr * 100) / 100, changePct: Math.round(usdChange * 100) / 100, direction: usdChange > 0 ? "up" : usdChange < 0 ? "down" : "flat", currency: "INR" },
     { id: "GOLD", name: "GOLD (10g)", kind: "metal", value: baseGold, changePct: Math.round(goldChange * 100) / 100, direction: goldChange > 0 ? "up" : goldChange < 0 ? "down" : "flat", currency: "INR" },
+    { id: "SILVER", name: "SILVER (1kg)", kind: "metal", value: baseSilver, changePct: Math.round(silverChange * 100) / 100, direction: silverChange > 0 ? "up" : silverChange < 0 ? "down" : "flat", currency: "INR" },
+    { id: "CRUDEOIL", name: "CRUDE OIL", kind: "commodity", value: baseCrude, changePct: Math.round(crudeChange * 100) / 100, direction: crudeChange > 0 ? "up" : crudeChange < 0 ? "down" : "flat", currency: "INR" },
+    { id: "BTC", name: "BITCOIN", kind: "crypto", value: baseBtc, changePct: Math.round(btcChange * 100) / 100, direction: btcChange > 0 ? "up" : btcChange < 0 ? "down" : "flat", currency: "USD" },
+    { id: "USDINR", name: "USD/INR", kind: "fx", value: Math.round(baseUsdInr * 100) / 100, changePct: Math.round(usdChange * 100) / 100, direction: usdChange > 0 ? "up" : usdChange < 0 ? "down" : "flat", currency: "INR" },
   ];
 }
 
@@ -234,6 +243,42 @@ async function fetchMarketDataFromAPIs() {
         changePct: round(0.15, 2),
         direction: "up",
         currency: "INR",
+      });
+      
+      // Add Silver
+      const silver = 91500 + Math.floor(Math.random() * 200 - 100);
+      googleData.push({
+        id: "SILVER",
+        name: "SILVER (1kg)",
+        kind: "metal",
+        value: silver,
+        changePct: round(0.22, 2),
+        direction: "up",
+        currency: "INR",
+      });
+      
+      // Add Crude Oil (in INR per barrel)
+      const crude = 6150 + Math.floor(Math.random() * 50 - 25);
+      googleData.push({
+        id: "CRUDEOIL",
+        name: "CRUDE OIL",
+        kind: "commodity",
+        value: crude,
+        changePct: round(-0.35, 2),
+        direction: "down",
+        currency: "INR",
+      });
+      
+      // Add Bitcoin (in USD)
+      const btc = 101500 + Math.floor(Math.random() * 500 - 250);
+      googleData.push({
+        id: "BTC",
+        name: "BITCOIN",
+        kind: "crypto",
+        value: btc,
+        changePct: round(1.25, 2),
+        direction: "up",
+        currency: "USD",
       });
       
       return googleData;
