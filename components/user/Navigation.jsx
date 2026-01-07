@@ -161,26 +161,32 @@ const Navigation = () => {
         <div className="flex gap-10 items-center">
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
-            return (
+            return isActive ? (
+              /* ACTIVE PAGE - Gold text + permanent underline, NO hover effects whatsoever */
               <Link
                 key={link.path}
                 href={link.path}
-                className={cn(
-                  "relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline",
-                  isActive 
-                    ? "text-[#C0A062] font-bold drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]" 
-                    : "text-white/90 hover:text-white hover:scale-105 group"
-                )}
+                className="relative text-[12px] font-bold uppercase tracking-[2.5px] no-underline text-[#C0A062] drop-shadow-[0_0_8px_rgba(192,160,98,0.6)]"
+                style={{ pointerEvents: 'auto' }}
               >
                 {link.label}
-                {/* Active page: permanent underline, no hover effect */}
-                {isActive && (
-                  <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent" />
-                )}
-                {/* Non-active: hover underline only */}
-                {!isActive && (
-                  <span className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent transition-all duration-300 group-hover:left-0 group-hover:w-full" />
-                )}
+                <span 
+                  className="absolute -bottom-2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
+              </Link>
+            ) : (
+              /* NON-ACTIVE - White text + hover underline animation */
+              <Link
+                key={link.path}
+                href={link.path}
+                className="group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
+              >
+                {link.label}
+                <span 
+                  className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none"
+                  aria-hidden="true"
+                />
               </Link>
             );
           })}
