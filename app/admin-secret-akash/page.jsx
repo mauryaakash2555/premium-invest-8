@@ -1,15 +1,17 @@
 /**
  * Super Admin Dashboard
  * Full control panel for Akash only
+ * 
+ * 🔒 Uses CORE isolated auth module (never breaks)
  */
 
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminLogin } from '@/components/admin/AdminLogin';
+// 🔒 CORE: Using isolated admin auth (never breaks)
+import { AdminLogin, AdminLoading, setAdminToken, clearAdminToken, fetchAdminJSON } from '@/core/admin';
 import { SuperAdminDashboard } from '@/components/admin/SuperAdminDashboard';
-import { clearAdminToken, setAdminToken, fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
 import './admin.css';
 

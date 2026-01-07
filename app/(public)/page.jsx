@@ -36,7 +36,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 import { getServicesForHome } from '@/data/servicesCatalog';
-import PremiumMarketTicker from '@/components/user/PremiumMarketTicker';
+// 🔒 CORE: Using isolated market ticker (never breaks)
+import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 
 import AnimatedClouds from '@/components/user/AnimatedClouds';
