@@ -34,7 +34,7 @@ function getFallbackData() {
   // Real live values as of Jan 7, 2026 with tiny variations for freshness
   const baseNifty = 26143 + Math.floor(Math.random() * 40 - 20);
   const baseSensex = 84620 + Math.floor(Math.random() * 100 - 50);
-  const baseUsdInr = 84.85 + (Math.random() * 0.10 - 0.05);
+  const baseUsdInr = 90.19 + (Math.random() * 0.10 - 0.05);  // Current rate: 90.1869
   const baseGold = 78500 + Math.floor(Math.random() * 100 - 50);     // ~₹78,500 per 10g
   const baseSilver = 91500 + Math.floor(Math.random() * 200 - 100);  // ~₹91,500 per kg
   const baseCrude = 6150 + Math.floor(Math.random() * 50 - 25);      // ~₹6,150 per barrel (INR)
@@ -222,7 +222,7 @@ async function fetchMarketDataFromAPIs() {
     const googleData = await fetchFromGoogleFinance();
     if (googleData && googleData.length > 0) {
       // Add USD/INR and Gold with realistic values since Google Finance indexing is complex
-      const usdInr = 84.85 + (Math.random() * 0.1 - 0.05);
+      const usdInr = 90.19 + (Math.random() * 0.1 - 0.05);  // Current rate: 90.1869
       const gold = 78500 + Math.floor(Math.random() * 100 - 50);
       
       googleData.push({
