@@ -155,18 +155,63 @@ function getIcon(item) {
   return <IconIndex tone={item.direction} />;
 }
 
+function inferChangePct(x, value) {
+  const pct = toFiniteNumber(
+    x?.changePct ??
+      x?.changePercent ??
+      x?.change_percent ??
+      x?.pctChange ??
+      x?.pct_change ??
+      x?.percentChange ??
+      x?.percent_change ??
+      x?.changePercentage ??
+      x?.change_percentage
+  );
+  if (pct != null) return pct;
+
+  const changeAbs = toFiniteNumber(
+    x?.change ?? x?.delta ?? x?.diff ?? x?.variation ?? x?.changeValue ?? x?.change_value
+  );
+
+  if (changeAbs == null) return null;
+  const v = toFiniteNumber(value);
+  if (v == null) return null;
+
+  const prev = v - changeAbs;
+  if (!prev || !Number.isFinite(prev)) return null;
+
+  const calculated = (changeAbs / prev) * 100;
+  if (!Number.isFinite(calculated)) return null;
+  if (Math.abs(calculated) > 100) return null;
+  return calculated;
+}
+
+function inferDirection(x, changePct) {
+  const dir = String(x?.direction || "").toLowerCase();
+  if (dir === "up" || dir === "down" || dir === "flat") return dir;
+  const pct = toFiniteNumber(changePct);
+  if (pct == null) return "flat";
+  if (pct > 0) return "up";
+  if (pct < 0) return "down";
+  return "flat";
+}
+
 function normalizeApi(json) {
   const items = Array.isArray(json?.items) ? json.items : [];
   return items
-    .map((x) => ({
-      id: String(x.id || ""),
-      name: String(x.name || x.label || ""),
-      kind: String(x.kind || ""),
-      value: toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close),
-      changePct: toFiniteNumber(x.changePct ?? x.changePercent ?? x.change_percent),
-      direction: String(x.direction || "flat"),
-      currency: String(x.currency || ""),
-    }))
+    .map((x) => {
+      const value = toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close);
+      const changePct = inferChangePct(x, value);
+      return {
+        id: String(x.id || ""),
+        name: String(x.name || x.label || ""),
+        kind: String(x.kind || ""),
+        value,
+        changePct,
+        direction: inferDirection(x, changePct),
+        currency: String(x.currency || ""),
+      };
+    })
     // Keep items even if changePct is missing; we still want prices to show.
     .filter((x) => x.id && x.value != null);
 }

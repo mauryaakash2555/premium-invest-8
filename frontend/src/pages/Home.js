@@ -12,13 +12,6 @@ const Home = () => {
 
   const services = [
     {
-      icon: <PieChart size={40} />,
-      title: 'Mutual Funds',
-      description: 'Diversified investment options with expert fund selection and performance insights.',
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
-      link: '/mutual-funds',
-    },
-    {
       icon: <TrendingUp size={40} />,
       title: 'Portfolio Management',
       description: 'Personalized wealth management strategies tailored to your financial goals.',
@@ -26,11 +19,11 @@ const Home = () => {
       link: '/portfolio-management',
     },
     {
-      icon: <CreditCard size={40} />,
-      title: 'Trading Services',
-      description: 'Real-time market access with advanced tools and expert guidance.',
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
-      link: '/trading-services',
+      icon: <PieChart size={40} />,
+      title: 'Mutual Funds',
+      description: 'Diversified investment options with expert fund selection and performance insights.',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/mutual-funds',
     },
     {
       icon: <Shield size={40} />,
@@ -38,6 +31,13 @@ const Home = () => {
       description: 'Comprehensive life and health insurance plans for financial security.',
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
       link: '/insurance',
+    },
+    {
+      icon: <CreditCard size={40} />,
+      title: 'Trading Services',
+      description: 'Real-time market access with advanced tools and expert guidance.',
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
+      link: '/trading-services',
     },
     {
       icon: <DollarSign size={40} />,

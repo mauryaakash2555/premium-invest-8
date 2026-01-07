@@ -46,6 +46,24 @@ const SERVICES = [
     link: '/mutual-funds',
   },
   {
+    key: 'insurance',
+    Icon: Shield,
+    homeTitle: 'Insurance',
+    servicesTitle: 'Insurance',
+    homeDescription: 'Insurance comparisons, documentation support, and claims-ready guidance.',
+    servicesDescription:
+      'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
+    features: [
+      'Life insurance policies',
+      'Health insurance plans',
+      'Term insurance coverage',
+      'Policy comparison and analysis',
+      'Claims assistance',
+    ],
+    image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
+    link: '/insurance',
+  },
+  {
     key: 'sip',
     Icon: Repeat,
     homeTitle: 'SIP',
@@ -80,24 +98,6 @@ const SERVICES = [
     ],
     image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
     link: '/trading-services',
-  },
-  {
-    key: 'insurance',
-    Icon: Shield,
-    homeTitle: 'Insurance',
-    servicesTitle: 'Insurance',
-    homeDescription: 'Insurance comparisons, documentation support, and claims-ready guidance.',
-    servicesDescription:
-      'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
-    features: [
-      'Life insurance policies',
-      'Health insurance plans',
-      'Term insurance coverage',
-      'Policy comparison and analysis',
-      'Claims assistance',
-    ],
-    image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
-    link: '/insurance',
   },
   {
     key: 'fixed-deposits',

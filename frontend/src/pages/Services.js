@@ -11,21 +11,6 @@ const Services = () => {
 
   const services = [
     {
-      icon: <PieChart size={50} />,
-      title: 'Mutual Funds',
-      description:
-        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of specialists empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
-      features: [
-        'Diversified fund selection',
-        'Performance tracking and analysis',
-        'Risk-adjusted returns',
-        'Regular portfolio rebalancing',
-        'Tax-efficient investing',
-      ],
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
-      link: '/mutual-funds',
-    },
-    {
       icon: <TrendingUp size={50} />,
       title: 'Portfolio Management Services (PMS)',
       description:
@@ -41,19 +26,19 @@ const Services = () => {
       link: '/portfolio-management',
     },
     {
-      icon: <CreditCard size={50} />,
-      title: 'Trading Services',
+      icon: <PieChart size={50} />,
+      title: 'Mutual Funds',
       description:
-        'Gain access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+        'Access a wide range of mutual fund schemes tailored to your risk appetite and financial goals. Our team of specialists empowers you to select optimal funds with comprehensive performance insights and regular portfolio reviews.',
       features: [
-        'Real-time market access',
-        'Advanced charting tools',
-        'Research and recommendations',
-        'Low brokerage rates',
-        'Expert trading support',
+        'Diversified fund selection',
+        'Performance tracking and analysis',
+        'Risk-adjusted returns',
+        'Regular portfolio rebalancing',
+        'Tax-efficient investing',
       ],
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
-      link: '/trading-services',
+      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      link: '/mutual-funds',
     },
     {
       icon: <Shield size={50} />,
@@ -69,6 +54,21 @@ const Services = () => {
       ],
       image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto=compress&fm=webp&q=75',
       link: '/insurance',
+    },
+    {
+      icon: <CreditCard size={50} />,
+      title: 'Trading Services',
+      description:
+        'Gain access to real-time market data, advanced trading tools, and elite guidance for equity, derivatives, and commodity trading. Our platform provides seamless execution and comprehensive market analysis.',
+      features: [
+        'Real-time market access',
+        'Advanced charting tools',
+        'Research and recommendations',
+        'Low brokerage rates',
+        'Expert trading support',
+      ],
+      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+      link: '/trading-services',
     },
     {
       icon: <DollarSign size={50} />,
