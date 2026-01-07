@@ -172,8 +172,13 @@ const Navigation = () => {
                 )}
               >
                 {link.label}
+                {/* Active page underline - always visible */}
                 {isActive && (
                   <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent animate-pulse" />
+                )}
+                {/* Hover underline - appears on hover for non-active links */}
+                {!isActive && (
+                  <span className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent transition-all duration-300 group-hover:w-full group-hover:left-0" />
                 )}
               </Link>
             );
