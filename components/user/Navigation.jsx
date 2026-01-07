@@ -134,9 +134,8 @@ const Navigation = () => {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out px-5 h-[70px] flex items-center",
-          isScrolled 
-            ? "bg-black/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
-            : "bg-transparent"
+          // Transparent header (no black bar)
+          "bg-transparent backdrop-blur-xl"
         )}
         style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
       >
@@ -150,9 +149,8 @@ const Navigation = () => {
     <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out h-[85px] flex items-center justify-center px-10",
-        isScrolled 
-          ? "ultra-luxury-glass shadow-[0_4px_30px_rgba(0,0,0,0.5)]" 
-          : "bg-transparent"
+        // Transparent nav (no black glass)
+        "bg-transparent backdrop-blur-xl"
       )}
       style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
     >

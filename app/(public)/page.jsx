@@ -284,7 +284,7 @@ export default function HomePage() {
         }}
       >
         <div className="section-container">
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h2
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
@@ -294,84 +294,117 @@ export default function HomePage() {
             >
               Why Choose BM Wealth?
             </h2>
+            <div
+              className="glass-effect"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '10px 14px',
+                borderRadius: '999px',
+                border: '1px solid rgba(214, 179, 106, 0.22)',
+                background:
+                  'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+              }}
+            >
+              <span style={{ color: 'rgba(255,255,255,0.86)', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                PMS Certification No.
+              </span>
+              <span style={{ color: '#FFFFFF', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em' }}>
+                2430447816
+              </span>
+            </div>
           </div>
 
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '40px',
+              gap: '22px',
             }}
           >
-            <div style={{ textAlign: 'center' }}>
+            <div
+              className="glass-effect"
+              style={{
+                textAlign: 'left',
+                padding: '26px',
+                border: '1px solid rgba(214, 179, 106, 0.16)',
+                background:
+                  'radial-gradient(900px 260px at 10% 0%, rgba(214, 179, 106, 0.10), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02))',
+              }}
+            >
+              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                PMS-First
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
+                Credential-led portfolio stewardship
+              </h3>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, marginBottom: '14px' }}>
+                We lead with Portfolio Management Services (PMS) discipline — structured decisions, documented reviews, and clear accountability.
+              </p>
               <div
                 style={{
-                  width: '80px',
-                  height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
-                  borderRadius: '50%',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 20px',
-                  color: '#DAA520',
+                  flexWrap: 'wrap',
+                  gap: '10px',
+                  marginTop: '8px',
                 }}
               >
-                <Shield size={40} />
+                <span
+                  style={{
+                    padding: '8px 10px',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(0,0,0,0.25)',
+                    color: 'rgba(255,255,255,0.85)',
+                    fontSize: '12px',
+                    letterSpacing: '0.08em',
+                  }}
+                >
+                  PMS Certification No. 2430447816
+                </span>
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Regulatory & Process
+            </div>
+
+            <div
+              className="glass-effect"
+              style={{
+                textAlign: 'left',
+                padding: '26px',
+                border: '1px solid rgba(255,255,255,0.10)',
+                background:
+                  'radial-gradient(760px 220px at 90% 10%, rgba(255,255,255,0.07), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+              }}
+            >
+              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                Execution
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
+                Implementation over opinions
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                AMFI registered. Clear, disclosure-led process.
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7 }}>
+                Decisions are only valuable when executed cleanly — we focus on follow-through, monitoring, and a real review cadence.
               </p>
             </div>
 
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 20px',
-                  color: '#DAA520',
-                }}
-              >
-                <TrendingUp size={40} />
+            <div
+              className="glass-effect"
+              style={{
+                textAlign: 'left',
+                padding: '26px',
+                border: '1px solid rgba(255,255,255,0.10)',
+                background:
+                  'radial-gradient(760px 220px at 10% 100%, rgba(214, 179, 106, 0.08), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+              }}
+            >
+              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                Planning
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Execution Discipline
+              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
+                Mumbai-fit wealth structuring
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Not slide decks — we focus on implementation and review cadence.
-              </p>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 20px',
-                  color: '#DAA520',
-                }}
-              >
-                <PieChart size={40} />
-              </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
-                Mumbai-Fit Planning
-              </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
-                Strategies tuned to Mumbai incomes, costs, and risk realities.
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7 }}>
+                Advice should reflect real incomes, real costs, and real risk — planning tailored to the Mumbai context.
               </p>
             </div>
           </div>

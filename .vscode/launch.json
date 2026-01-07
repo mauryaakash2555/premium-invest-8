@@ -4,6 +4,14 @@
     {
       "type": "chrome",
       "request": "launch",
+      "name": "Next.js: Launch Chrome (3000)",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "start-next-dev"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/frontend",

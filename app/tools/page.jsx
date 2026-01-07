@@ -166,7 +166,7 @@ export default function ToolsHubPage() {
               Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
             </p>
             <p className="mt-4 text-[11px] text-white/55">
-              AMFI Registered ARN 90008 | IRDAI 277925
+              PMS Certification 2430447816 | ARN 90008 | IRDAI 277925
             </p>
             <p className="mt-3 text-[11px] text-white/55">
               Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}

@@ -73,7 +73,17 @@
 				"cd /d \"${workspaceFolder}\" && npx.cmd next dev -p 3000"
 			],
 			"isBackground": true,
-			"problemMatcher": [],
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": {
+					"regexp": "^$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^\\s*(▲ Next\\.js|> next dev|next dev)\\b",
+					"endsPattern": "(Ready in|ready - started server|started server)"
+				}
+			},
 			"group": {
 				"kind": "build",
 				"isDefault": true

@@ -400,16 +400,14 @@ const Services = () => {
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
               }}>
-                AMFI Registered & IRDAI Licensed
+                PMS Certification
               </h3>
               <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                We hold official AMFI Registration (ARN 90008) for mutual fund distribution and IRDAI 
-                License (277925) for insurance advisory. This dual certification ensures you're working 
-                with qualified professionals who adhere to strict regulatory standards.
+                PMS Certification No. 2430447816.
+                We lead with a portfolio-first operating rhythm: documented decisions, review cadence, and clear accountability.
               </p>
               <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Our compliance with industry regulations means your investments are handled with the 
-                highest standards of transparency, ethics, and accountability.
+                Credential-led service helps keep the process disciplined and consistent across market cycles.
               </p>
             </div>
 
@@ -442,16 +440,14 @@ const Services = () => {
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
               }}>
-                Technology-Enabled Service
+                AMFI Registered & IRDAI Licensed
               </h3>
               <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Our digital platform provides 24/7 access to your portfolio, real-time performance tracking, 
-                and comprehensive wealth planning tools. Whether you're tracking SIP returns or analyzing 
-                tax optimization, everything is available at your fingertips.
+                We hold AMFI Registration (ARN 90008) for mutual fund distribution and an IRDAI license (277925) for insurance support.
+                This keeps the process disclosure-led and aligned with applicable regulations.
               </p>
               <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                We combine premium personal service with cutting-edge technology to deliver the best of 
-                both worlds—human expertise backed by powerful digital tools.
+                We aim to keep documentation, communication, and investor suitability standards clear and consistent.
               </p>
             </div>
 

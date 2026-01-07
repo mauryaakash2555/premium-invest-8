@@ -470,6 +470,7 @@ const MutualFunds = () => {
               We help structure a portfolio approach and implement it through clean product access and servicing support.
             </p>
             <ul style={{ margin: '0 0 18px 0', paddingLeft: '18px', color: BODY, lineHeight: '1.85', fontSize: '16px' }}>
+              <li>PMS Certification No. 2430447816</li>
               <li>AMFI-registered Mutual Fund Distributor</li>
               <li>IRDAI-licensed Insurance Intermediary</li>
             </ul>

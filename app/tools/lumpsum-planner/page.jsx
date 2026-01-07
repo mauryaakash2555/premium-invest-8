@@ -30,7 +30,7 @@ export default function LumpsumPlannerToolPage() {
                   <span className="text-white/25">•</span>
                   <span>BM Wealth Calculator</span>
                   <span className="text-white/25">•</span>
-                  <span className="text-white/45">ARN 90008 | IRDAI 277925</span>
+                  <span className="text-white/45">PMS 2430447816 | ARN 90008 | IRDAI 277925</span>
                 </>
               }
               title="Lumpsum Planner"
@@ -38,7 +38,7 @@ export default function LumpsumPlannerToolPage() {
             />
           }
           disclaimer={
-            "ARN 90008 | IRDAI 277925. For informational purposes; calculations depend on your inputs and prevailing rules. Please verify with official sources for final outcomes."
+            "PMS 2430447816 | ARN 90008 | IRDAI 277925. For informational purposes; calculations depend on your inputs and prevailing rules. Please verify with official sources for final outcomes."
           }
         >
           <div className="px-6 pb-6 lg:px-10 lg:pb-10">
