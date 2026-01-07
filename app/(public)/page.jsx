@@ -31,10 +31,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { TrendingUp, Shield, PieChart, CreditCard, DollarSign, Repeat, BookOpen } from 'lucide-react';
+import { TrendingUp, Shield, PieChart, BookOpen } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
+import { getServicesForHome } from '@/data/servicesCatalog';
 import PremiumMarketTicker from '@/components/user/PremiumMarketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 
@@ -71,50 +72,7 @@ export default function HomePage() {
     };
   }, []);
 
-  const services = [
-    {
-      icon: <PieChart size={40} />,
-      title: 'Mutual Funds',
-      description: 'Mutual fund selection support, execution, and disciplined review cadence.',
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
-      link: '/mutual-funds',
-    },
-    {
-      icon: <TrendingUp size={40} />,
-      title: 'Portfolio Management',
-      description: 'Portfolio planning, allocation frameworks, and periodic review.',
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
-      link: '/portfolio-management',
-    },
-    {
-      icon: <CreditCard size={40} />,
-      title: 'Trading Services',
-      description: 'Demat onboarding, platform selection support, and execution framework.',
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=600&h=400&fit=crop&auto=format&fm=webp&q=75',
-      link: '/trading-services',
-    },
-    {
-      icon: <Shield size={40} />,
-      title: 'Insurance',
-      description: 'Insurance comparisons, documentation support, and claims-ready guidance.',
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/insurance',
-    },
-    {
-      icon: <DollarSign size={40} />,
-      title: 'Fixed Deposits',
-      description: 'Fixed deposit comparisons across tenure, payout options, and liquidity.',
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/fixed-deposits',
-    },
-    {
-      icon: <Repeat size={40} />,
-      title: 'SIP',
-      description: 'Systematic Investment Plans for disciplined and goal-oriented investing.',
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/sip',
-    },
-  ];
+  const services = getServicesForHome();
 
   return (
     <div>

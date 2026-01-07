@@ -23,110 +23,20 @@
 
 'use client';
 
-import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import FAQSection from '@/components/shared/FAQSection';
+import { getServicesForServicesPage } from '@/data/servicesCatalog';
 
 const Services = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const services = [
-    {
-      icon: <PieChart size={50} />,
-      title: 'Mutual Funds',
-      description:
-        'Explore a wide range of mutual fund schemes aligned to your goals and risk comfort. We help you understand options using performance insights, costs, and portfolio check-ins so you can make informed decisions.',
-      features: [
-        'Diversified fund selection',
-        'Performance tracking and analysis',
-        'Risk-adjusted returns',
-        'Regular portfolio rebalancing',
-        'Tax-efficient investing',
-      ],
-      image: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
-      link: '/mutual-funds',
-    },
-    {
-      icon: <TrendingUp size={50} />,
-      title: 'Portfolio Management Services (PMS)',
-      description:
-        'Personalized wealth management strategies designed around your goals and risk profile. Our PMS offerings combine market research, active portfolio oversight, and disciplined processes to help you pursue long-term outcomes.',
-      features: [
-        'Customized investment strategies',
-        'Dedicated portfolio manager',
-        'Active fund management',
-        'Regular performance reviews',
-        'Direct equity investments',
-      ],
-      image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
-      link: '/portfolio-management',
-    },
-    {
-      icon: <CreditCard size={50} />,
-      title: 'Trading Services',
-      description:
-        'Access market data, trading tools, and resources for equity, derivatives, and commodities. We focus on platform support and market insights, while you stay in control of every trade.',
-      features: [
-        'Real-time market access',
-        'Advanced charting tools',
-        'Research insights and resources',
-        'Brokerage comparisons',
-        'Expert trading support',
-      ],
-      image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
-      link: '/trading-services',
-    },
-    {
-      icon: <Shield size={50} />,
-      title: 'Insurance',
-      description:
-        'Insurance solutions to protect you and your loved ones. From life insurance to health coverage, we help you compare options clearly so you can choose coverage that fits your needs.',
-      features: [
-        'Life insurance policies',
-        'Health insurance plans',
-        'Term insurance coverage',
-        'Policy comparison and analysis',
-        'Claims assistance',
-      ],
-      image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/insurance',
-    },
-    {
-      icon: <DollarSign size={50} />,
-      title: 'Fixed Deposits (FD)',
-      description:
-        'Seek predictable interest rates with our fixed deposit options. Choose from a variety of tenures and interest rates from premier banks and financial institutions to support your capital preservation goals.',
-      features: [
-        'Competitive interest rates',
-        'Flexible tenure options',
-        'Predictable interest rates',
-        'Bank and NBFC FDs',
-        'Premature withdrawal options',
-      ],
-      image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/fixed-deposits',
-    },
-    {
-      icon: <Repeat size={50} />,
-      title: 'Systematic Investment Plans (SIP)',
-      description:
-        'Accumulate wealth systematically through disciplined monthly investments. SIPs empower you to benefit from rupee cost averaging and the power of compounding to achieve your long-term financial goals.',
-      features: [
-        'Disciplined investing approach',
-        'Rupee cost averaging benefits',
-        'Flexible investment amounts',
-        'Auto-debit facility',
-        'Goal-based planning',
-      ],
-      image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
-      link: '/sip',
-    },
-  ];
+  const services = getServicesForServicesPage();
 
   const faqs = [
     {
