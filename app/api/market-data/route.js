@@ -54,6 +54,18 @@ import { Logger } from "@/lib/monitoring/logger";
 
 export const dynamic = "force-dynamic";
 
+// Handle OPTIONS for CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+
 // ════════════════════════════════════════════════════════════════════════════
 // API KEYS - Set in .env.local (see .env.example)
 // ════════════════════════════════════════════════════════════════════════════
@@ -748,6 +760,7 @@ export async function GET() {
     if (cached) {
       const res = NextResponse.json({ ...cached, cached: true });
       res.headers.set("Cache-Control", "no-store, max-age=0");
+      res.headers.set("Access-Control-Allow-Origin", "*");
       return res;
     }
 
@@ -758,6 +771,7 @@ export async function GET() {
       setCache(payload);
       const res = NextResponse.json(payload);
       res.headers.set("Cache-Control", "no-store, max-age=0");
+      res.headers.set("Access-Control-Allow-Origin", "*");
       return res;
     }
     
@@ -766,6 +780,7 @@ export async function GET() {
     setCache(payload);
     const res = NextResponse.json(payload);
     res.headers.set("Cache-Control", "no-store, max-age=0");
+    res.headers.set("Access-Control-Allow-Origin", "*");
     return res;
     
   } catch (e) {
@@ -773,6 +788,7 @@ export async function GET() {
     const fallbackItems = getFallbackData();
     const res = NextResponse.json({ ok: true, asOf: new Date().toISOString(), items: fallbackItems, source: "error_fallback" });
     res.headers.set("Cache-Control", "no-store, max-age=0");
+    res.headers.set("Access-Control-Allow-Origin", "*");
     return res;
   }
 }
