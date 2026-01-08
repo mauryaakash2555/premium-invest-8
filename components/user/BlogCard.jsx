@@ -25,7 +25,6 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import LaserBeam from '@/components/laser-beam';
 
 export default function BlogCard({ post, variant = 'default' }) {
   const cardRef = useRef(null);
@@ -58,51 +57,52 @@ export default function BlogCard({ post, variant = 'default' }) {
   const mobileAnimating = isMobile && isScrollAnimating;
 
   if (variant === 'homeMutualStyle') {
+    const fullBleedMobile = isMobile;
     const desktopHeroHeight = '400px';
     const desktopContentPadding = 'clamp(30px, 5vw, 50px)';
-    // Mobile sizing: large editorial card
-    const mobileCardHeight = 'clamp(480px, 70vh, 600px)';
-    const mobileContentPadding = '20px 18px 24px';
+    const mobileCardHeight = 'clamp(360px, 54vh, 450px)';
+    const mobileContentPadding = '18px 16px 22px';
 
     return (
       <Link href="/blog" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-        <LaserBeam color="rgba(214,179,106,0.95)" duration={2600} direction="clockwise" beamLength={0.22} glowIntensity={1} borderRadius={16}>
-          <div
-            ref={cardRef}
-            className={`blog-card-premium blog-card-premium--home-mutual slide-up${mobileAnimating ? ' mutual-premium-pulse' : ''}`}
-            onTouchStart={() => {
-              if (!isMobile) return;
-              setIsScrollAnimating(true);
-              window.setTimeout(() => setIsScrollAnimating(false), 1000);
-            }}
-            style={{
-              maxWidth: '800px',
-              width: '100%',
-              margin: '0 auto',
-              padding: 0,
-              cursor: 'pointer',
-              overflow: 'hidden',
-              position: 'relative',
-              borderRadius: '16px',
-              height: isMobile ? mobileCardHeight : undefined,
-            }}
-          >
-            {/* Editorial full-image background (covers entire card) */}
-            <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.image_url || post.image}
-                alt=""
-                className="blog-card-home-bg-img"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: isMobile ? '50% 30%' : '62% 42%',
-                  display: 'block',
-                }}
-              />
-            </div>
+        <div
+          ref={cardRef}
+          className={`blog-card-premium blog-card-premium--home-mutual slide-up${mobileAnimating ? ' mutual-premium-pulse' : ''}`}
+          onTouchStart={() => {
+            if (!isMobile) return;
+            setIsScrollAnimating(true);
+            window.setTimeout(() => setIsScrollAnimating(false), 1000);
+          }}
+          style={{
+            maxWidth: fullBleedMobile ? '100vw' : '900px',
+            width: fullBleedMobile ? '100vw' : '100%',
+            margin: fullBleedMobile ? 0 : '0 auto',
+            marginLeft: fullBleedMobile ? 'calc(50% - 50vw)' : undefined,
+            marginRight: fullBleedMobile ? 'calc(50% - 50vw)' : undefined,
+            padding: 0,
+            cursor: 'pointer',
+            overflow: 'hidden',
+            position: 'relative',
+            borderRadius: fullBleedMobile ? 0 : undefined,
+            height: fullBleedMobile ? mobileCardHeight : undefined,
+          }}
+        >
+          {/* Editorial full-image background (covers entire card) */}
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.image_url || post.image}
+              alt=""
+              className="blog-card-home-bg-img"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: fullBleedMobile ? '50% 30%' : '62% 42%',
+                display: 'block',
+              }}
+            />
+          </div>
 
           {/* Readability veil across whole card */}
           <div
@@ -117,7 +117,7 @@ export default function BlogCard({ post, variant = 'default' }) {
             }}
           />
 
-          {isMobile ? (
+          {fullBleedMobile ? (
             <div
               style={{
                 position: 'absolute',
@@ -126,21 +126,31 @@ export default function BlogCard({ post, variant = 'default' }) {
                 bottom: 0,
                 zIndex: 2,
                 padding: mobileContentPadding,
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.88) 100%)',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.68) 70%, rgba(0,0,0,0.86) 100%)',
               }}
             >
               <div
+                aria-hidden="true"
+                style={{
+                  height: 1,
+                  width: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(214,179,106,0.62), transparent)',
+                  marginBottom: 12,
+                  opacity: 0.9,
+                }}
+              />
+
+              <div
                 style={{
                   display: 'inline-block',
-                  padding: '4px 12px',
+                  padding: '6px 14px',
                   background: mobileAnimating ? 'rgba(255, 255, 255, 0.10)' : 'rgba(255, 255, 255, 0.06)',
-                  borderRadius: '4px',
-                  fontSize: '11px',
-                  color: 'rgba(255,255,255,0.75)',
-                  marginBottom: '12px',
+                  borderRadius: '20px',
+                  fontSize: '12.5px',
+                  color: 'rgba(255,255,255,0.78)',
+                  marginBottom: '14px',
                   fontWeight: 500,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
+                  border: '1px solid rgba(255,255,255,0.10)',
                   transition: 'all 0.5s ease',
                 }}
               >
@@ -149,13 +159,12 @@ export default function BlogCard({ post, variant = 'default' }) {
 
               <h3
                 style={{
-                  fontSize: 'clamp(18px, 4.8vw, 22px)',
+                  fontSize: 'clamp(20px, 5.4vw, 26px)',
                   color: '#FFFFFF',
-                  marginBottom: '8px',
-                  lineHeight: 1.3,
-                  fontWeight: 500,
+                  marginBottom: '10px',
+                  lineHeight: 1.22,
                   display: '-webkit-box',
-                  WebkitLineClamp: 2,
+                  WebkitLineClamp: 3,
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden',
                 }}
@@ -165,10 +174,10 @@ export default function BlogCard({ post, variant = 'default' }) {
 
               <p
                 style={{
-                  fontSize: 'clamp(13px, 3.5vw, 15px)',
-                  color: 'rgba(255,255,255,0.72)',
-                  lineHeight: 1.55,
-                  marginBottom: '12px',
+                  fontSize: 'clamp(14px, 3.9vw, 16px)',
+                  color: 'rgba(255,255,255,0.78)',
+                  lineHeight: 1.6,
+                  marginBottom: '14px',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
@@ -178,7 +187,7 @@ export default function BlogCard({ post, variant = 'default' }) {
                 {post.excerpt}
               </p>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255, 255, 255, 0.75)', fontSize: '13px', fontWeight: 500 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.75)', fontSize: '13.5px', fontWeight: 500 }}>
                 <span>Read the full article</span>
                 <ArrowRight size={16} />
               </div>
@@ -235,8 +244,7 @@ export default function BlogCard({ post, variant = 'default' }) {
               </div>
             </div>
           )}
-          </div>
-        </LaserBeam>
+        </div>
       </Link>
     );
   }

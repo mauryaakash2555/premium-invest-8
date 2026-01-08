@@ -63,18 +63,13 @@ export default function ServiceCard({ service, index = 0 }) {
   const imageBoxHeight = imageFit === 'contain' ? '240px' : '200px';
   const imageBoxPadding = typeof imagePresentation?.padding === 'number' ? `${imagePresentation.padding}px` : '0px';
   const isMutualFunds = service?.key === 'mutual-funds';
-  const isPortfolioManagement = service?.key === 'portfolio-management';
-  const isPremiumImageCard = isMutualFunds || isPortfolioManagement;
-  const premiumObjectPosition =
-    imagePresentation?.objectPosition || (isPortfolioManagement ? '50% 50%' : '62% 42%');
-  const premiumImageClassName = `mutual-bg-image${isPortfolioManagement ? ' mutual-bg-image--pms' : ''}`;
 
   return (
     <Link href={service.link} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div
         ref={cardRef}
-        className={`service-card slide-up${isPremiumImageCard ? ' service-card--mutual' : ''}${
-          isPremiumImageCard && mobileAnimating ? ' mutual-premium-pulse' : ''
+        className={`service-card slide-up${isMutualFunds ? ' service-card--mutual' : ''}${
+          isMutualFunds && mobileAnimating ? ' mutual-premium-pulse' : ''
         }`}
         onMouseOver={(e) => {
           // Desktop unchanged
@@ -99,37 +94,30 @@ export default function ServiceCard({ service, index = 0 }) {
           boxShadow: mobileAnimating ? '0 12px 40px rgba(198, 161, 91, 0.35)' : undefined,
           willChange: isMobile ? 'transform, box-shadow' : 'auto',
           position: 'relative',
-          minHeight: isPremiumImageCard && isMobile ? 'clamp(360px, 54vh, 450px)' : undefined,
+          minHeight: isMutualFunds && isMobile ? 'clamp(360px, 54vh, 450px)' : undefined,
         }}
       >
-        {isPremiumImageCard ? (
+        {isMutualFunds ? (
           <>
-            {/* Full-card image (Premium image cards) */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                zIndex: 0,
-                backgroundColor: isPortfolioManagement ? '#0a0a0a' : undefined,
-              }}
-            >
+            {/* Full-card image (Mutual Funds only) */}
+            <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
               <Image
                 src={service.image}
                 alt=""
                 fill
                 quality={typeof imagePresentation?.quality === 'number' ? imagePresentation.quality : 90}
-                className={premiumImageClassName}
+                className="mutual-bg-image"
                 style={{
-                  objectFit: isPortfolioManagement ? 'contain' : 'cover',
-                  objectPosition: premiumObjectPosition,
+                  objectFit: 'cover',
+                  // Shift slightly right + up and zoom a touch so no black edge shows.
+                  objectPosition: '62% 42%',
                 }}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority={index < 3}
               />
             </div>
 
-            {/* Mobile/scroll premium glow pulse (Premium image cards) */}
+            {/* Mobile/scroll premium glow pulse (Mutual Funds only) */}
             <div
               aria-hidden="true"
               style={{
@@ -156,7 +144,7 @@ export default function ServiceCard({ service, index = 0 }) {
               }}
             />
 
-            {/* Text on image (Premium image cards). Icon removed. */}
+            {/* Text on image (Mutual Funds only). Icon removed. */}
             <div style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <h3
                 style={{
