@@ -129,9 +129,14 @@ function setPrevPrices(items) {
  * This ensures percentage is NEVER missing or stuck at 0%
  */
 function autoCalculatePct(id, currentValue, sourcePct) {
-  // If source provided a valid percentage (not 0), use it
-  if (sourcePct && sourcePct !== 0) {
-    return roundTo2(sourcePct);
+  // If source provided a valid percentage (not 0), use it.
+  // (Some sources return strings like "-0.52%"; parse defensively.)
+  const parsedSourcePct = parseNumber(sourcePct);
+  if (parsedSourcePct != null) {
+    // Treat 0% (or near-0 after rounding) as invalid so the UI never looks "missing".
+    if (Math.abs(parsedSourcePct) >= 0.01 && Math.abs(parsedSourcePct) <= 10) {
+      return roundTo2(parsedSourcePct);
+    }
   }
   
   // Otherwise, calculate from previous price
@@ -141,22 +146,26 @@ function autoCalculatePct(id, currentValue, sourcePct) {
   if (prevPrice && prevPrice > 0 && currentValue > 0) {
     const calculatedPct = ((currentValue - prevPrice) / prevPrice) * 100;
     // Sanity check: if calculated % is too extreme (>10%), something is wrong
-    if (Math.abs(calculatedPct) <= 10) {
+    // Also avoid returning 0% / near-0% so the ticker never appears blank.
+    if (Math.abs(calculatedPct) <= 10 && Math.abs(calculatedPct) >= 0.01) {
       return roundTo2(calculatedPct);
     }
   }
   
   // Last resort: use fallback percentage
   const fallback = getFallbackData().find(f => f.id === id);
-  return fallback?.changePct || 0;
+  if (fallback && typeof fallback.changePct === "number" && fallback.changePct !== 0) {
+    return roundTo2(fallback.changePct);
+  }
+  return 0;
 }
 
 // Some metal sources occasionally return percentage in "basis" form (e.g. 52 instead of 0.52).
 // Metals are expected to be within ±10% daily movement in this system.
 function normalizeMetalSourcePct(pct) {
   if (pct == null) return pct;
-  const n = typeof pct === "number" ? pct : Number(pct);
-  if (!Number.isFinite(n)) return pct;
+  const n = parseNumber(pct);
+  if (n == null) return pct;
   const abs = Math.abs(n);
   if (abs > 10 && abs <= 100) return n / 100;
   return n;
