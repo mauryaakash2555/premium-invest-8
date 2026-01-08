@@ -28,6 +28,8 @@ const ACCENT = '#D6B36A';
 const TITLE = '#FFFFFF';
 const BODY = 'rgba(255,255,255,0.78)';
 const MUTED = 'rgba(255,255,255,0.62)';
+// Keep the About Us hero heading/subheading in its original gold tone
+const HERO_GOLD = '#C0A062';
 
 const About = () => {
   useEffect(() => {
@@ -35,7 +37,7 @@ const About = () => {
   }, []);
 
   return (
-    <div style={{ color: TITLE }}>
+    <div>
       
       {/* Hero Section */}
       <section
@@ -89,7 +91,7 @@ const About = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: TITLE,
+              color: HERO_GOLD,
             }}
           >
             About Us
@@ -97,7 +99,7 @@ const About = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: BODY,
+              color: HERO_GOLD,
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
