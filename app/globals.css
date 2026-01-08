@@ -844,18 +844,30 @@
     will-change: transform;
   }
 
+  /* PMS: keep image closer to 1:1 framing (and allow contain fit) */
+  .service-card.service-card--mutual .mutual-bg-image.mutual-bg-image--pms {
+    transform: scale(1);
+  }
   .service-card.service-card--mutual:hover .mutual-bg-image,
   .service-card.service-card--mutual:focus-visible .mutual-bg-image {
     transform: scale(1.12);
     filter: saturate(1.06) contrast(1.04);
   }
 
+  .service-card.service-card--mutual:hover .mutual-bg-image.mutual-bg-image--pms,
+  .service-card.service-card--mutual:focus-visible .mutual-bg-image.mutual-bg-image--pms {
+    transform: scale(1.01);
+  }
   .service-card.service-card--mutual:active .mutual-bg-image,
   .service-card.service-card--mutual.mutual-premium-pulse .mutual-bg-image {
     transform: scale(1.11);
     filter: saturate(1.05) contrast(1.03);
   }
 
+  .service-card.service-card--mutual:active .mutual-bg-image.mutual-bg-image--pms,
+  .service-card.service-card--mutual.mutual-premium-pulse .mutual-bg-image.mutual-bg-image--pms {
+    transform: scale(1.008);
+  }
   @media (prefers-reduced-motion: reduce) {
     .service-card.service-card--mutual {
       transition: none;
@@ -870,6 +882,10 @@
       transition: none;
       transform: scale(1.08);
       filter: none;
+    }
+
+    .service-card.service-card--mutual .mutual-bg-image.mutual-bg-image--pms {
+      transform: scale(1);
     }
   }
 
