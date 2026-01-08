@@ -25,6 +25,16 @@ const LUX_STYLES = `
     0% { transform: translateX(-120%); }
     100% { transform: translateX(120%); }
   }
+  @keyframes mf-glowbreath {
+    0%, 100% { box-shadow: 0 22px 70px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06); }
+    50% { box-shadow: 0 28px 80px rgba(0,0,0,0.55), 0 0 54px rgba(${ACCENT_RGB}, .14), inset 0 1px 0 rgba(255,255,255,0.08); }
+  }
+  @keyframes mf-sweep {
+    0% { transform: translateX(-140%); opacity: 0; }
+    12% { opacity: 1; }
+    55% { opacity: 1; }
+    100% { transform: translateX(140%); opacity: 0; }
+  }
   .mf-shell { background: #05070D; color: ${TITLE}; min-height: 100vh; }
   .mf-card { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid ${BORDER}; background: rgba(255,255,255,0.035); backdrop-filter: blur(14px);
     box-shadow: 0 22px 70px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
@@ -46,11 +56,83 @@ const LUX_STYLES = `
   .mf-cta:hover::after { opacity: 1; animation: mf-sheen 1.1s ease; }
   .mf-kpi { display:flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.10);
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); }
+
+  /* Mobile-first: simulate hover + add gentle motion so the page feels alive */
+  @media (hover: none), (pointer: coarse) {
+    .mf-hero { padding: 96px 0 56px 0 !important; margin-top: 64px !important; }
+    .mf-hero-inner { padding: 0 16px !important; }
+
+    .mf-card:active,
+    .mf-cta:active {
+      transform: translateY(-2px);
+      border-color: rgba(${ACCENT_RGB}, .40) !important;
+      box-shadow: 0 18px 55px rgba(${ACCENT_RGB}, .16);
+    }
+
+    .mf-card.mf-mobile-pulse {
+      transform: translateY(-3px);
+      border-color: rgba(${ACCENT_RGB}, .42);
+      animation: mf-glowbreath 2.6s ease-in-out 1;
+    }
+    .mf-card.mf-mobile-pulse::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+      transform: translateX(-140%);
+      animation: mf-sweep 1.15s ease 1;
+      opacity: 0;
+    }
+
+    .mf-cta.mf-mobile-pulse::after {
+      opacity: 1;
+      animation: mf-sheen 1.1s ease;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mf-card, .mf-cta { transition: none !important; }
+    .mf-card.mf-mobile-pulse { animation: none !important; transform: none !important; }
+    .mf-card.mf-mobile-pulse::after, .mf-cta.mf-mobile-pulse::after { animation: none !important; opacity: 0 !important; }
+  }
 `;
 
 const MutualFunds = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Mobile-only: add a light “hover-like” premium pulse as sections enter view.
+    // Keeps desktop behavior unchanged (desktop already has true hover).
+    const isMobileLike =
+      typeof window !== 'undefined' &&
+      (window.matchMedia?.('(hover: none)').matches || window.matchMedia?.('(pointer: coarse)').matches);
+
+    if (!isMobileLike) return;
+
+    const nodes = Array.from(document.querySelectorAll('.mf-card, .mf-cta'));
+    if (!nodes.length) return;
+
+    const seen = new WeakSet();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const el = e.target;
+          if (seen.has(el)) continue;
+          seen.add(el);
+
+          el.classList.add('mf-mobile-pulse');
+          window.setTimeout(() => {
+            el.classList.remove('mf-mobile-pulse');
+          }, 1800);
+        }
+      },
+      { threshold: 0.55, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    for (const n of nodes) io.observe(n);
+    return () => io.disconnect();
   }, []);
 
   const PAGE_PATH = '/mutual-funds';
@@ -125,7 +207,7 @@ const MutualFunds = () => {
       />
 
       {/* Hero (luxury, high-end spacing, no brown) */}
-      <section style={{ position: 'relative', padding: '120px 0 64px 0', marginTop: '80px', overflow: 'hidden' }}>
+      <section className="mf-hero" style={{ position: 'relative', padding: '120px 0 64px 0', marginTop: '80px', overflow: 'hidden' }}>
         <div
           aria-hidden="true"
           style={{
@@ -150,7 +232,7 @@ const MutualFunds = () => {
             maskImage: 'radial-gradient(circle at 50% 30%, black 0%, transparent 70%)',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="mf-hero-inner" style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <div className="mf-pill" style={{ margin: '0 auto 18px', width: 'fit-content' }}>
             <span className="mf-dot" aria-hidden="true" />
             Clarity-first investing • execution support
