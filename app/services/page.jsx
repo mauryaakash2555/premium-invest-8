@@ -30,6 +30,9 @@ import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import FAQSection from '@/components/shared/FAQSection';
 import { getServicesForServicesPage } from '@/data/servicesCatalog';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 const Services = () => {
   useEffect(() => {
@@ -87,6 +90,8 @@ const Services = () => {
           height: auto !important;
         }
       `}</style>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
       {/* Hero Section */}
       <section
@@ -159,6 +164,7 @@ const Services = () => {
         </div>
       </section>
 
+      <div className="bp-body">
       {/* Start Here */}
       <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
         <div className="glass-effect" style={{ padding: 'clamp(18px, 4vw, 28px)', maxWidth: '100%' }}>
@@ -628,6 +634,7 @@ const Services = () => {
           Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
         </p>
       </section>
+      </div>
     </div>
   );
 };

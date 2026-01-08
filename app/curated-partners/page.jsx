@@ -26,6 +26,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Shield, TrendingUp, Users, CheckCircle, Calendar, Sparkles, Award, Star } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 export default function CuratedPartners() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -36,6 +39,8 @@ export default function CuratedPartners() {
 
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
 
       {/* Hero Section */}
       <section
@@ -132,7 +137,7 @@ export default function CuratedPartners() {
       </section>
 
       {/* Partner Cards Section */}
-      <section style={{ padding: '40px 0 100px', width: '100%' }}>
+      <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
         
         {/* POSITION #1 - DIAMOND ADVISORY PARTNER (COMPETITIVE BIDDING) */}
         <MobileScrollBoost

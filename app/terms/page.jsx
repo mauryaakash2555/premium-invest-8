@@ -21,6 +21,9 @@
 
 import React from 'react';
 import { useEffect } from 'react';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 const TermsAndConditions = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,6 +34,7 @@ const TermsAndConditions = () => {
       
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>
+        <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
@@ -42,7 +46,7 @@ const TermsAndConditions = () => {
           }}>Terms and Conditions</h1>
           <p style={{ fontSize: '16px', color: '#999', marginBottom: '40px' }}>Last Updated: December 8, 2025</p>
           
-          <div>
+          <div className="bp-body">
             {/* Acceptance of Terms */}
             <section style={{ marginBottom: '40px' }}>
               <h2 style={{

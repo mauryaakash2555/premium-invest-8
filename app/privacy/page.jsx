@@ -21,6 +21,9 @@
 
 import React from 'react';
 import { useEffect } from 'react';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 const PrivacyPolicy = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,6 +34,7 @@ const PrivacyPolicy = () => {
       
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>
+        <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
@@ -42,7 +46,7 @@ const PrivacyPolicy = () => {
           }}>Privacy Policy</h1>
           <p style={{ fontSize: '16px', color: '#999', marginBottom: '40px' }}>Last Updated: December 8, 2025</p>
           
-          <div>
+          <div className="bp-body">
             {/* Introduction */}
             <section style={{ marginBottom: '40px' }}>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>

@@ -22,6 +22,9 @@
 
 import { FileText, Shield, Scale } from 'lucide-react';
 import { useEffect } from 'react';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 export default function RegulatoryCompliance() {
   useEffect(() => {
@@ -30,6 +33,7 @@ export default function RegulatoryCompliance() {
 
   return (
     <div className="min-h-screen bg-black text-white pt-32 pb-20 px-6 font-inter">
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-12">
           <Scale className="w-10 h-10 text-[#C0A062]" />
@@ -38,7 +42,7 @@ export default function RegulatoryCompliance() {
           </h1>
         </div>
 
-        <div className="space-y-12 opacity-90 leading-relaxed">
+        <div className="bp-body space-y-12 opacity-90 leading-relaxed">
           <section className="space-y-6">
             <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
               Our Commitment

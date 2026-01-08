@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
 
 /*
   LAYOUT-LOCKED: /tools hub page
@@ -76,6 +77,8 @@ function ToolCard({ title, subtitle, href, active }) {
 }
 
 export default function ToolsHubPage() {
+  const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: ".bp-body" });
+
   const faqs = [
     {
       question: "Are these tools free to use?",
@@ -115,6 +118,7 @@ export default function ToolsHubPage() {
   return (
     <>
       <BackRow />
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <script
         id="tools-faq-schema"
         type="application/ld+json"
@@ -131,51 +135,53 @@ export default function ToolsHubPage() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <ToolCard
-              active
-              title="Tax Optimization Intelligence — FY 2025–26"
-              subtitle="Old vs New regime • Zero-tax threshold • Execution-first"
-              href="/tools/tax-optimization"
-            />
-            <ToolCard
-              title="Mumbai Property vs SIP Analyzer"
-              href="/tools/property-vs-sip"
-              subtitle="Wealth gap • Opportunity cost • Premium report"
-              active
-            />
-            <ToolCard
-              title="Retirement Gap Stress Test"
-              href="/tools/retirement-gap"
-              active={false}
-            />
-            <ToolCard
-              title="Lumpsum Growth Planner"
-              href="/tools/lumpsum-planner"
-              active={false}
-            />
-            <ToolCard
-              title="Human Life Value Shield"
-              href="/tools/insurance-value"
-              active={false}
-            />
-          </div>
+          <div className="bp-body">
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <ToolCard
+                active
+                title="Tax Optimization Intelligence — FY 2025–26"
+                subtitle="Old vs New regime • Zero-tax threshold • Execution-first"
+                href="/tools/tax-optimization"
+              />
+              <ToolCard
+                title="Mumbai Property vs SIP Analyzer"
+                href="/tools/property-vs-sip"
+                subtitle="Wealth gap • Opportunity cost • Premium report"
+                active
+              />
+              <ToolCard
+                title="Retirement Gap Stress Test"
+                href="/tools/retirement-gap"
+                active={false}
+              />
+              <ToolCard
+                title="Lumpsum Growth Planner"
+                href="/tools/lumpsum-planner"
+                active={false}
+              />
+              <ToolCard
+                title="Human Life Value Shield"
+                href="/tools/insurance-value"
+                active={false}
+              />
+            </div>
 
-          <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-            <p className="text-sm text-white/75">
-              Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
-            </p>
-            <p className="mt-4 text-[11px] text-white/55">
-              PMS Certification 2430447816 | ARN 90008 | IRDAI 277925
-            </p>
-            <p className="mt-3 text-[11px] text-white/55">
-              Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}
-              <Link href="/services" className="underline underline-offset-4">Services</Link> ·{' '}
-              <Link href="/contact" className="underline underline-offset-4">Contact</Link>
-            </p>
-          </div>
+            <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+              <p className="text-sm text-white/75">
+                Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
+              </p>
+              <p className="mt-4 text-[11px] text-white/55">
+                PMS Certification 2430447816 | ARN 90008 | IRDAI 277925
+              </p>
+              <p className="mt-3 text-[11px] text-white/55">
+                Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}
+                <Link href="/services" className="underline underline-offset-4">Services</Link> ·{' '}
+                <Link href="/contact" className="underline underline-offset-4">Contact</Link>
+              </p>
+            </div>
 
-          <FAQSection faqs={faqs} />
+            <FAQSection faqs={faqs} />
+          </div>
         </div>
       </section>
     </>

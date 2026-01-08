@@ -19,6 +19,7 @@
 
 import products from "@/data/products.json";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
 
 const PATH = "/products";
 
@@ -31,8 +32,11 @@ export const metadata = {
 };
 
 export default function ProductsPage() {
+  const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: ".bp-body" });
+
   return (
     <div className="space-y-4">
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Offerings</p>
         <h1 className="text-3xl font-semibold text-white">Products</h1>
@@ -41,7 +45,7 @@ export default function ProductsPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="bp-body grid gap-4 md:grid-cols-2">
         {products.map((product) => (
           <article key={product.id} className="card p-4">
             <div className="flex items-center justify-between">

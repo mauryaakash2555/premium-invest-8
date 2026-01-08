@@ -20,7 +20,10 @@
 'use client';
 
 import { useEffect } from 'react';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 // COMPLETE COMPLIANCE PAGE - All Sections Included
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 export default function Compliance() {
   useEffect(() => {
@@ -29,6 +32,8 @@ export default function Compliance() {
 
   return (
     <>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
 
       {/* Hero Section */}
@@ -100,7 +105,7 @@ export default function Compliance() {
         </div>
       </section>
 
-      <div style={{
+      <div className="bp-body" style={{
         minHeight: '100vh',
         background: '#000000',
         paddingTop: '60px',

@@ -26,10 +26,13 @@ import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import axios from 'axios';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 // Render Backend API (permanent solution)
 // Use NEXT_PUBLIC_ prefix for client-side access in Next.js
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://bmwealth-backend.onrender.com';
 const API = `${BACKEND_URL}/api`;
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -197,6 +200,8 @@ const Contact = () => {
 
   return (
     <div>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
       {/* Hero Section */}
       <section
@@ -270,6 +275,7 @@ const Contact = () => {
         </div>
       </section>
 
+      <div className="bp-body">
       {/* Contact Form & Info */}
       <section className="section-container">
         <style>{`
@@ -783,6 +789,8 @@ const Contact = () => {
           </div>
         </div>
       </section>
+
+      </div>
     </div>
   );
 };

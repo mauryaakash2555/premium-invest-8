@@ -22,6 +22,9 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 const Careers = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,6 +32,8 @@ const Careers = () => {
 
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
 
       {/* Hero Section with Background */}
@@ -98,7 +103,7 @@ const Careers = () => {
         </div>
       </section>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+      <div className="bp-body" style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>

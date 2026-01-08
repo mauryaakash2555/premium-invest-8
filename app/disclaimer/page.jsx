@@ -23,6 +23,9 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 const Disclaimer = () => {
   useEffect(() => {
@@ -31,6 +34,8 @@ const Disclaimer = () => {
 
   return (
     <>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>
@@ -45,7 +50,7 @@ const Disclaimer = () => {
           }}>Disclaimer</h1>
           <p style={{ fontSize: '16px', color: '#999', marginBottom: '40px' }}>Last Updated: December 8, 2025</p>
           
-          <div>
+          <div className="bp-body">
             {/* Important Warning */}
             <div style={{
               background: 'rgba(218, 165, 32, 0.1)',

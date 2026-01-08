@@ -22,6 +22,8 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 const Sitemap = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,6 +60,8 @@ const Sitemap = () => {
 
   return (
     <div style={{ backgroundColor: '#000000', minHeight: '100vh', color: '#ffffff' }}>
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       
 
       <section style={{
@@ -90,7 +94,7 @@ const Sitemap = () => {
         </div>
       </section>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+      <div className="bp-body" style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
           

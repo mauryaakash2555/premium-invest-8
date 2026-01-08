@@ -27,6 +27,9 @@ import Link from 'next/link';
 import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import FAQSection from '@/components/shared/FAQSection';
+import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
 export default function Platforms() {
   useEffect(() => {
@@ -77,6 +80,8 @@ export default function Platforms() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
 
       {/* Hero Section */}
       <section
@@ -144,7 +149,7 @@ export default function Platforms() {
       </section>
 
       {/* Platform Cards Section */}
-      <section style={{ padding: '40px 0 100px', width: '100%' }}>
+      <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
         
         {/* POSITION #1 - DIAMOND PARTNER (COMPETITIVE BIDDING) */}
         <MobileScrollBoost className="platform-card diamond-bidding" holdMs={5000}>
