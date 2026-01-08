@@ -7,6 +7,7 @@ import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import { InsuranceCoverSnapshot } from '@/components/calculators/InsuranceCoverSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
+import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
 
 const ACCENT = '#D6B36A';
 const ACCENT_RGB = '214, 179, 106';
@@ -21,6 +22,8 @@ const LUX_STYLES = getServiceLuxuryStyles({ accentRgb: ACCENT_RGB, title: TITLE,
 const Insurance = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+    const cleanup = setupServiceMobilePulse();
+    return cleanup;
   }, []);
 
   const PAGE_PATH = '/insurance';
@@ -108,7 +111,7 @@ const Insurance = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
-      <section style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
+  <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
         <div
           aria-hidden="true"
           style={{
@@ -133,7 +136,7 @@ const Insurance = () => {
             maskImage: 'radial-gradient(circle at 50% 30%, black 0%, transparent 70%)',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="svc-hero-inner" style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{
             fontFamily: '"Playfair Display", serif',
             fontSize: 'clamp(40px, 5vw, 60px)',
