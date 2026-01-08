@@ -394,6 +394,15 @@ const Contact = () => {
                     Location
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
+                  <p style={{ fontSize: '16px', color: '#CCCCCC', marginTop: '6px' }}>
+                    Registered &amp; Operational Address:
+                    <br />
+                    66, Vinod Villa, 1st Floor, Office No. 108,
+                    <br />
+                    Cavel Cross Lane 3, Kalbadevi,
+                    <br />
+                    Mumbai, Maharashtra – 400002, India
+                  </p>
                 </div>
               </MobileScrollBoost>
 
