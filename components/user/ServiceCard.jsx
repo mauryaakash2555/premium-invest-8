@@ -64,7 +64,11 @@ export default function ServiceCard({ service, index = 0 }) {
   const imageBoxPadding = typeof imagePresentation?.padding === 'number' ? `${imagePresentation.padding}px` : '0px';
   const isMutualFunds = service?.key === 'mutual-funds';
   const isPortfolioManagement = service?.key === 'portfolio-management';
-  const isPremiumImageCard = isMutualFunds || isPortfolioManagement;
+  const isInsurance = service?.key === 'insurance';
+  const isTradingServices = service?.key === 'trading-services';
+  const isFixedDeposits = service?.key === 'fixed-deposits';
+  const isSip = service?.key === 'sip';
+  const isPremiumImageCard = isMutualFunds || isPortfolioManagement || isInsurance || isTradingServices || isFixedDeposits || isSip;
   const premiumObjectPosition = imagePresentation?.objectPosition || (isPortfolioManagement ? '50% 50%' : '62% 42%');
   const premiumImageClassName = `mutual-bg-image${isPortfolioManagement ? ' mutual-bg-image--pms' : ''}`;
 
@@ -110,7 +114,6 @@ export default function ServiceCard({ service, index = 0 }) {
                 position: 'absolute',
                 inset: 0,
                 zIndex: 0,
-                backgroundColor: isPortfolioManagement ? '#0a0a0a' : undefined,
               }}
             >
               <Image
@@ -120,7 +123,7 @@ export default function ServiceCard({ service, index = 0 }) {
                 quality={typeof imagePresentation?.quality === 'number' ? imagePresentation.quality : 90}
                 className={premiumImageClassName}
                 style={{
-                  objectFit: isPortfolioManagement ? 'contain' : 'cover',
+                  objectFit: 'cover',
                   objectPosition: premiumObjectPosition,
                 }}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

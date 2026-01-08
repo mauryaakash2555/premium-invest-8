@@ -1,0 +1,13 @@
+{
+  "created_at": "2025-12-30T16:15:26.418Z",
+  "stamp": "20251230-214526",
+  "targets": [
+    "components/AIChatFloat.jsx",
+    "components/AIChatFloat.module.css",
+    "components/WhatsAppFloat.jsx",
+    "components/ChatErrorBoundary.jsx",
+    "app/api/events/route.js",
+    "app/api/admin/summary/route.js",
+    "app/api/health/route.js"
+  ]
+}

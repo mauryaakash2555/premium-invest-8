@@ -101,7 +101,6 @@
 			"problemMatcher": [],
 			"group": "build"
 		},
-		
 		{
 			"label": "test-chat",
 			"type": "shell",
@@ -113,6 +112,17 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "remove-final-status-file",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && del /f /q .final_status.txt 2>nul"
+			],
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }

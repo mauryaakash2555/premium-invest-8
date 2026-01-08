@@ -1,11 +1,11 @@
 import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat } from 'lucide-react';
 
 // IMPORTANT:
-// Put the Mutual Funds photo at: public/services/mutual-funds.png
-// Then reference it via: /services/mutual-funds.png
-const MUTUAL_FUNDS_IMAGE = '/services/mutual-funds.png';
+// Put the Mutual Funds photo at: public/services/Mutual Funds.png
+// Then reference it via: /services/Mutual%20Funds.png
+const MUTUAL_FUNDS_IMAGE = '/services/Mutual%20Funds.png';
 // PMS image for Portfolio Management (Home card)
-const PMS_IMAGE = '/services/PMS.png';
+const PMS_IMAGE = '/services/Portfolio%20Management.png';
 
 const SERVICES = [
   {
@@ -65,7 +65,11 @@ const SERVICES = [
       'Policy comparison and analysis',
       'Claims assistance',
     ],
-    image: 'https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
+    image: '/services/Insurance.png',
+    imagePresentation: {
+      quality: 90,
+      objectPosition: '50% 50%',
+    },
     link: '/insurance',
   },
   {
@@ -83,7 +87,11 @@ const SERVICES = [
       'Auto-debit facility',
       'Goal-based planning',
     ],
-    image: 'https://images.pexels.com/photos/7948058/pexels-photo-7948058.jpeg?w=800&h=500&fit=crop&auto-compress&fm=webp&q=75',
+    image: '/services/SIP.png',
+    imagePresentation: {
+      quality: 90,
+      objectPosition: '50% 50%',
+    },
     link: '/sip',
   },
   {
@@ -101,7 +109,12 @@ const SERVICES = [
       'Brokerage comparisons',
       'Expert trading support',
     ],
-    image: 'https://images.unsplash.com/photo-1639825752750-5061ded5503b?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+    image: '/services/Trading%20Service.png',
+    imagePresentation: {
+      quality: 90,
+      // Lower the crop so any text near the bottom stays visible
+      objectPosition: '50% 65%',
+    },
     link: '/trading-services',
   },
   {
@@ -119,7 +132,11 @@ const SERVICES = [
       'Bank and NBFC FDs',
       'Premature withdrawal options',
     ],
-    image: 'https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?w=600&h=400&fit=crop&auto-compress&fm=webp&q=75',
+    image: '/services/FD.png',
+    imagePresentation: {
+      quality: 90,
+      objectPosition: '50% 50%',
+    },
     link: '/fixed-deposits',
   },
 ];

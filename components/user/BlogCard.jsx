@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { LaserBeam } from '@/components/LaserBeamCanvas';
 
 export default function BlogCard({ post, variant = 'default' }) {
   const cardRef = useRef(null);
@@ -57,36 +58,44 @@ export default function BlogCard({ post, variant = 'default' }) {
   const mobileAnimating = isMobile && isScrollAnimating;
 
   if (variant === 'homeMutualStyle') {
-    const fullBleedMobile = isMobile;
+    /**
+     * HOME BLOG CARD SIZING (document for future reference):
+     * -------------------------------------------------------
+     * DESKTOP: maxWidth 900px, height auto (content-driven)
+     * MOBILE:  height clamp(420px, 62vh, 520px), width 100% within container
+     * Border radius: 16px desktop, 12px mobile
+     */
     const desktopHeroHeight = '400px';
     const desktopContentPadding = 'clamp(30px, 5vw, 50px)';
-    const mobileCardHeight = 'clamp(360px, 54vh, 450px)';
-    const mobileContentPadding = '18px 16px 22px';
+    const mobileCardHeight = 'clamp(420px, 62vh, 520px)'; // BIGGER: was 360-450px
+    const mobileContentPadding = '22px 20px 28px';
 
     return (
-      <Link href="/blog" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-        <div
-          ref={cardRef}
-          className={`blog-card-premium blog-card-premium--home-mutual slide-up${mobileAnimating ? ' mutual-premium-pulse' : ''}`}
-          onTouchStart={() => {
-            if (!isMobile) return;
-            setIsScrollAnimating(true);
-            window.setTimeout(() => setIsScrollAnimating(false), 1000);
-          }}
-          style={{
-            maxWidth: fullBleedMobile ? '100vw' : '900px',
-            width: fullBleedMobile ? '100vw' : '100%',
-            margin: fullBleedMobile ? 0 : '0 auto',
-            marginLeft: fullBleedMobile ? 'calc(50% - 50vw)' : undefined,
-            marginRight: fullBleedMobile ? 'calc(50% - 50vw)' : undefined,
-            padding: 0,
-            cursor: 'pointer',
-            overflow: 'hidden',
-            position: 'relative',
-            borderRadius: fullBleedMobile ? 0 : undefined,
-            height: fullBleedMobile ? mobileCardHeight : undefined,
-          }}
+      <Link href="/blog" style={{ textDecoration: 'none', color: 'inherit', display: 'block', maxWidth: '900px', margin: '0 auto' }}>
+        <LaserBeam
+          width="100%"
+          height={isMobile ? mobileCardHeight : 'auto'}
+          color="#60a5fa"
+          borderRadius={isMobile ? 12 : 16}
+          duration={3.5}
+          glowIntensity={28}
+          beamLength={0.15}
+          borderWidth={1}
+          backgroundColor="transparent"
         >
+          <div
+            ref={cardRef}
+            style={{
+              width: '100%',
+              padding: 0,
+              cursor: 'pointer',
+              overflow: 'hidden',
+              position: 'relative',
+              borderRadius: isMobile ? '12px' : '16px',
+              height: '100%',
+              background: '#0a0a0a',
+            }}
+          >
           {/* Editorial full-image background (covers entire card) */}
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,7 +107,7 @@ export default function BlogCard({ post, variant = 'default' }) {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                objectPosition: fullBleedMobile ? '50% 30%' : '62% 42%',
+                objectPosition: isMobile ? '50% 30%' : '62% 42%',
                 display: 'block',
               }}
             />
@@ -117,7 +126,7 @@ export default function BlogCard({ post, variant = 'default' }) {
             }}
           />
 
-          {fullBleedMobile ? (
+          {isMobile ? (
             <div
               style={{
                 position: 'absolute',
@@ -126,32 +135,24 @@ export default function BlogCard({ post, variant = 'default' }) {
                 bottom: 0,
                 zIndex: 2,
                 padding: mobileContentPadding,
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.68) 70%, rgba(0,0,0,0.86) 100%)',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.72) 65%, rgba(0,0,0,0.92) 100%)',
               }}
             >
-              <div
-                aria-hidden="true"
-                style={{
-                  height: 1,
-                  width: '100%',
-                  background: 'linear-gradient(90deg, transparent, rgba(214,179,106,0.62), transparent)',
-                  marginBottom: 12,
-                  opacity: 0.9,
-                }}
-              />
-
+              {/* Category badge - premium glass style */}
               <div
                 style={{
                   display: 'inline-block',
-                  padding: '6px 14px',
-                  background: mobileAnimating ? 'rgba(255, 255, 255, 0.10)' : 'rgba(255, 255, 255, 0.06)',
-                  borderRadius: '20px',
-                  fontSize: '12.5px',
-                  color: 'rgba(255,255,255,0.78)',
-                  marginBottom: '14px',
-                  fontWeight: 500,
-                  border: '1px solid rgba(255,255,255,0.10)',
-                  transition: 'all 0.5s ease',
+                  padding: '8px 16px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '6px',
+                  fontSize: '11px',
+                  color: 'rgba(255,255,255,0.85)',
+                  marginBottom: '16px',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  border: '1px solid rgba(255,255,255,0.12)',
                 }}
               >
                 {post.category}
@@ -159,12 +160,14 @@ export default function BlogCard({ post, variant = 'default' }) {
 
               <h3
                 style={{
-                  fontSize: 'clamp(20px, 5.4vw, 26px)',
+                  fontSize: 'clamp(22px, 6vw, 28px)',
                   color: '#FFFFFF',
-                  marginBottom: '10px',
-                  lineHeight: 1.22,
+                  marginBottom: '12px',
+                  lineHeight: 1.18,
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
                   display: '-webkit-box',
-                  WebkitLineClamp: 3,
+                  WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden',
                 }}
@@ -174,10 +177,10 @@ export default function BlogCard({ post, variant = 'default' }) {
 
               <p
                 style={{
-                  fontSize: 'clamp(14px, 3.9vw, 16px)',
-                  color: 'rgba(255,255,255,0.78)',
-                  lineHeight: 1.6,
-                  marginBottom: '14px',
+                  fontSize: 'clamp(14px, 4vw, 16px)',
+                  color: 'rgba(255,255,255,0.72)',
+                  lineHeight: 1.55,
+                  marginBottom: '18px',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
@@ -187,7 +190,7 @@ export default function BlogCard({ post, variant = 'default' }) {
                 {post.excerpt}
               </p>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.75)', fontSize: '13.5px', fontWeight: 500 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', fontWeight: 500 }}>
                 <span>Read the full article</span>
                 <ArrowRight size={16} />
               </div>
@@ -245,6 +248,7 @@ export default function BlogCard({ post, variant = 'default' }) {
             </div>
           )}
         </div>
+        </LaserBeam>
       </Link>
     );
   }
