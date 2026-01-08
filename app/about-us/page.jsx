@@ -22,13 +22,20 @@
 
 import { Users, Award, Target, Heart } from 'lucide-react';
 import { useEffect } from 'react';
+
+// Text palette aligned to Mutual Funds service page
+const ACCENT = '#D6B36A';
+const TITLE = '#FFFFFF';
+const BODY = 'rgba(255,255,255,0.78)';
+const MUTED = 'rgba(255,255,255,0.62)';
+
 const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div>
+    <div style={{ color: TITLE }}>
       
       {/* Hero Section */}
       <section
@@ -82,7 +89,7 @@ const About = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: TITLE,
             }}
           >
             About Us
@@ -90,7 +97,7 @@ const About = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: BODY,
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -116,7 +123,7 @@ const About = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '24px',
-                color: '#DAA520',
+                color: TITLE,
               }}
             >
               Our Story
@@ -124,12 +131,12 @@ const About = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: '#CCCCCC',
+                color: BODY,
                 lineHeight: 1.8,
                 marginBottom: '20px',
               }}
             >
-              Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
+              Under the distinguished leadership of <strong style={{ color: TITLE }}>Brahmdeo Maurya</strong>, BM Wealth 
               has emerged as a trusted name in Mumbai's financial advisory landscape. Founded with a vision to democratize 
               sophisticated wealth management, we serve over 500 Mumbai investors ranging from young professionals taking 
               their first steps in SIP investing to established entrepreneurs managing multi-crore portfolios.
@@ -138,7 +145,7 @@ const About = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: '#CCCCCC',
+                color: BODY,
                 lineHeight: 1.8,
                 marginBottom: '20px',
               }}
@@ -149,7 +156,7 @@ const About = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: '#CCCCCC',
+                color: BODY,
                 lineHeight: 1.8,
                 marginBottom: '20px',
               }}
@@ -161,7 +168,7 @@ const About = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: '#CCCCCC',
+                color: BODY,
                 lineHeight: 1.8,
                 marginBottom: '20px',
               }}
@@ -172,7 +179,7 @@ const About = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: '#CCCCCC',
+                color: BODY,
                 lineHeight: 1.8,
               }}
             >
@@ -207,30 +214,30 @@ const About = () => {
             >
               BM
             </div>
-            <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '24px', color: TITLE, marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '16px' }}>
+            <p style={{ fontSize: '16px', color: MUTED, marginBottom: '16px' }}>
               Founder & Principal Advisor
             </p>
             <div style={{ 
               fontSize: '15px', 
-              color: '#B8B8B8', 
+              color: BODY, 
               lineHeight: '1.7',
               textAlign: 'left',
               maxWidth: '400px',
               margin: '0 auto'
             }}>
               <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>PMS Certification No.</strong><br/>
+                <strong style={{ color: TITLE }}>PMS Certification No.</strong><br/>
                 2430447816
               </p>
               <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>AMFI Registered Mutual Fund Distributor</strong><br/>
+                <strong style={{ color: TITLE }}>AMFI Registered Mutual Fund Distributor</strong><br/>
                 ARN 90008
               </p>
               <p style={{ marginBottom: '12px' }}>
-                <strong style={{ color: '#DAA520' }}>IRDAI Licensed Insurance Advisor</strong><br/>
+                <strong style={{ color: TITLE }}>IRDAI Licensed Insurance Advisor</strong><br/>
                 License No. 277925
               </p>
               <p style={{ marginBottom: '0' }}>
@@ -245,17 +252,17 @@ const About = () => {
               <div style={{ 
                 marginTop: '20px', 
                 paddingTop: '16px', 
-                borderTop: '1px solid rgba(218, 165, 32, 0.2)' 
+                borderTop: '1px solid rgba(214, 179, 106, 0.20)' 
               }}>
-                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px' }}>
-                  <strong style={{ color: '#C0A062' }}>Specializations:</strong>
+                <p style={{ fontSize: '14px', color: MUTED, marginBottom: '8px' }}>
+                  <strong style={{ color: TITLE }}>Specializations:</strong>
                 </p>
                 <ul style={{ 
                   listStyle: 'none', 
                   padding: 0, 
                   margin: 0,
                   fontSize: '14px',
-                  color: '#B8B8B8'
+                  color: MUTED
                 }}>
                   <li style={{ marginBottom: '4px' }}>• Retirement Planning & SIP Strategies</li>
                   <li style={{ marginBottom: '4px' }}>• Portfolio Diversification & Risk Management</li>
@@ -281,12 +288,12 @@ const About = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
+                color: TITLE,
               }}
-              className="golden-gradient"
             >
               Our Values
             </h2>
-            <p style={{ fontSize: '18px', color: '#C0A062' }}>
+            <p style={{ fontSize: '18px', color: BODY }}>
               The principles that guide everything we do
             </p>
           </div>
@@ -314,10 +321,10 @@ const About = () => {
               >
                 <Users size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: TITLE, marginBottom: '12px' }}>
                 Client-Centric
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: BODY, lineHeight: 1.6 }}>
                 Your financial goals are our top priority. We establish enduring relationships based
                 on confidence and transparency.
               </p>
@@ -339,10 +346,10 @@ const About = () => {
               >
                 <Award size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: TITLE, marginBottom: '12px' }}>
                 Exceptional Standards
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: BODY, lineHeight: 1.6 }}>
                 We maintain high standards in compliance, disclosure, and documentation.
               </p>
             </div>
@@ -363,10 +370,10 @@ const About = () => {
               >
                 <Target size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: TITLE, marginBottom: '12px' }}>
                 Education-Focused
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: BODY, lineHeight: 1.6 }}>
                 We focus on clarity: helping you understand choices, risks, and trade-offs before acting.
               </p>
             </div>
@@ -387,10 +394,10 @@ const About = () => {
               >
                 <Heart size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: TITLE, marginBottom: '12px' }}>
                 Integrity
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '16px', color: BODY, lineHeight: 1.6 }}>
                 Honesty and ethical conduct are at the core of every recommendation and
                 interaction with our clients.
               </p>
@@ -413,7 +420,7 @@ const About = () => {
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#DAA520',
+              color: TITLE,
             }}
           >
             PMS Certification 2430447816 | AMFI ARN 90008 | IRDAI 277925
@@ -421,7 +428,7 @@ const About = () => {
           <p
             style={{
               fontSize: '18px',
-              color: '#CCCCCC',
+              color: BODY,
               marginBottom: '20px',
               maxWidth: '700px',
               margin: '0 auto 20px',
