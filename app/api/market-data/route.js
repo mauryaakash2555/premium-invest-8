@@ -151,6 +151,17 @@ function autoCalculatePct(id, currentValue, sourcePct) {
   return fallback?.changePct || 0;
 }
 
+// Some metal sources occasionally return percentage in "basis" form (e.g. 52 instead of 0.52).
+// Metals are expected to be within ±10% daily movement in this system.
+function normalizeMetalSourcePct(pct) {
+  if (pct == null) return pct;
+  const n = typeof pct === "number" ? pct : Number(pct);
+  if (!Number.isFinite(n)) return pct;
+  const abs = Math.abs(n);
+  if (abs > 10 && abs <= 100) return n / 100;
+  return n;
+}
+
 // ════════════════════════════════════════════════════════════════════════════
 // FALLBACK DATA - Updated: 2026-01-07 10:30 AM IST (MCX FUTURES PRICES)
 // ════════════════════════════════════════════════════════════════════════════
@@ -734,7 +745,7 @@ async function fetchMarketDataFromAPIs() {
     // GOLD - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
     const gold = mc.gold || mcx.gold || mint.gold || gr.gold;
     if (gold) {
-      const goldPct = autoCalculatePct("GOLD", gold.value, gold.changePct);
+      const goldPct = autoCalculatePct("GOLD", gold.value, normalizeMetalSourcePct(gold.changePct));
       items.push({
         id: "GOLD", name: "MCX GOLD", kind: "metal", value: gold.value,
         changePct: goldPct, direction: getDirection(goldPct),
@@ -752,7 +763,7 @@ async function fetchMarketDataFromAPIs() {
       silver = null; // Force fallback
     }
     if (silver) {
-      const silverPct = autoCalculatePct("SILVER", silver.value, silver.changePct);
+      const silverPct = autoCalculatePct("SILVER", silver.value, normalizeMetalSourcePct(silver.changePct));
       items.push({
         id: "SILVER", name: "MCX SILVER", kind: "metal", value: silver.value,
         changePct: silverPct, direction: getDirection(silverPct),

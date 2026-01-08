@@ -94,7 +94,7 @@ export default function ServiceCard({ service, index = 0 }) {
           boxShadow: mobileAnimating ? '0 12px 40px rgba(198, 161, 91, 0.35)' : undefined,
           willChange: isMobile ? 'transform, box-shadow' : 'auto',
           position: 'relative',
-          minHeight: isMutualFunds && isMobile ? '460px' : undefined,
+          minHeight: isMutualFunds && isMobile ? 'clamp(360px, 54vh, 450px)' : undefined,
         }}
       >
         {isMutualFunds ? (
@@ -146,10 +146,42 @@ export default function ServiceCard({ service, index = 0 }) {
 
             {/* Text on image (Mutual Funds only). Icon removed. */}
             <div style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px', fontWeight: 600 }}>
+              <h3
+                style={{
+                  fontSize: isMobile ? '20px' : '22px',
+                  color: '#FFFFFF',
+                  marginBottom: '10px',
+                  fontWeight: 600,
+                  ...(isMobile
+                    ? {
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }
+                    : null),
+                }}
+              >
                 {service.title}
               </h3>
-              <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6, marginBottom: '16px' }}>{service.description}</p>
+              <p
+                style={{
+                  fontSize: isMobile ? '15px' : '16px',
+                  color: '#CCCCCC',
+                  lineHeight: 1.6,
+                  marginBottom: '16px',
+                  ...(isMobile
+                    ? {
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }
+                    : null),
+                }}
+              >
+                {service.description}
+              </p>
               <div
                 className="learn-more-arrow"
                 style={{

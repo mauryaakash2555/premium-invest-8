@@ -55,6 +55,8 @@ export function LuxuryMobileDock() {
   const [idleIndex, setIdleIndex] = useState(null);
   const [pressedIndex, setPressedIndex] = useState(null);
   const [menuIsScrolling, setMenuIsScrolling] = useState(false);
+  const [dockGlareKey, setDockGlareKey] = useState(0);
+  const [dockGlareVisible, setDockGlareVisible] = useState(false);
   const lastScrollYRef = useRef(0);
   const scrollRafRef = useRef(0);
   const scrollTimeoutRef = useRef(0);
@@ -62,6 +64,8 @@ export function LuxuryMobileDock() {
   const pressedTimeoutRef = useRef(0);
   const menuScrollRafRef = useRef(0);
   const menuScrollTimeoutRef = useRef(0);
+  const dockGlareTimeoutRef = useRef(0);
+  const lastDockGlareAtRef = useRef(0);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -157,6 +161,48 @@ export function LuxuryMobileDock() {
       setPressedIndex(null);
     }, 650);
   };
+
+  const triggerDockGlare = () => {
+    if (typeof window === "undefined") return;
+    if (dockGlareTimeoutRef.current) window.clearTimeout(dockGlareTimeoutRef.current);
+    lastDockGlareAtRef.current = Date.now();
+    setDockGlareKey((k) => k + 1);
+    setDockGlareVisible(true);
+    dockGlareTimeoutRef.current = window.setTimeout(() => setDockGlareVisible(false), 650);
+  };
+
+  // Premium idle effect: occasional full-dock glare sweep (pause → sweep → pause)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (hideDock) return;
+    if (isMenuOpen) return;
+    if (isReading) return;
+    if (isScrolling) return;
+
+    let cancelled = false;
+    let timer = 0;
+
+    const scheduleNext = () => {
+      if (cancelled) return;
+      // Premium feel: short, irregular pause between sweeps
+      const baseDelayMs = 4800 + Math.floor(Math.random() * 1400); // ~4.8s → ~6.2s
+      // Never sweep too frequently (esp. right after user interaction)
+      const minGapMs = 3800;
+      const elapsedMs = Date.now() - (lastDockGlareAtRef.current || 0);
+      const nextDelayMs = Math.max(baseDelayMs, minGapMs - elapsedMs);
+      timer = window.setTimeout(() => {
+        triggerDockGlare();
+        scheduleNext();
+      }, nextDelayMs);
+    };
+
+    scheduleNext();
+    return () => {
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+      timer = 0;
+    };
+  }, [hideDock, isMenuOpen, isReading, isScrolling]);
 
   // Idle "alive" animation (dock): gently cycles highlight across dock buttons.
   useEffect(() => {
@@ -271,13 +317,21 @@ export function LuxuryMobileDock() {
       >
         <div
           className={cn(
-            "luxury-dock-shell luxury-wave-container luxury-particles ultra-luxury-glass ambient-glow-pulse",
+            "luxury-dock-shell luxury-particles ambient-glow-pulse",
             // Removed shimmer sweep on the main dock; glare is handled per-button on hover/highlight.
-            "relative flex items-center gap-1 px-3 py-2 bg-[#000000] rounded-full", // Pitch black bg
+            "relative flex items-center gap-1 px-3 py-2 rounded-full backdrop-blur-xl bg-[#000000]", // Footer-matching deep black
             "border-[2.5px] border-[#C0A062]", // High-visibility thicker gold border
             "shadow-[0_0_40px_rgba(192,160,98,0.5),0_0_80px_rgba(192,160,98,0.3),inset_0_0_20px_rgba(192,160,98,0.2)]"
           )}
+          onMouseEnter={() => triggerDockGlare()}
+          onTouchStart={() => triggerDockGlare()}
         >
+          {dockGlareVisible && (
+            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+              <div key={dockGlareKey} className="lux-dock-glare lux-dock-glare--dock" />
+            </div>
+          )}
+
           {/* Floating Gold Dust Elements - Increased Density */}
           <div className="gold-particle top-1 left-[10%]" style={{ animationDelay: '0s', width: '2px', height: '2px' }} />
           <div className="gold-particle bottom-2 left-[25%]" style={{ animationDelay: '1.5s', width: '3px', height: '3px' }} />
@@ -304,8 +358,14 @@ export function LuxuryMobileDock() {
                 onClick={() => handleNavClick(item.href)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                onTouchStart={() => pulseHighlight(index)}
-                onPointerDown={() => pulseHighlight(index)}
+                onTouchStart={() => {
+                  triggerDockGlare();
+                  pulseHighlight(index);
+                }}
+                onPointerDown={() => {
+                  triggerDockGlare();
+                  pulseHighlight(index);
+                }}
                 className={cn(
                   "relative flex flex-col items-center justify-center px-4 py-1.5",
                   "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -315,12 +375,6 @@ export function LuxuryMobileDock() {
               >
                 {isHighlighted && (
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
-                )}
-
-                {(isHighlighted || hoveredIndex === index) && (
-                  <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-                    <div className="lux-dock-glare" />
-                  </div>
                 )}
 
                 <div
@@ -350,8 +404,14 @@ export function LuxuryMobileDock() {
             onClick={() => setIsMenuOpen(true)}
             onMouseEnter={() => setHoveredIndex(mainNavItems.length)}
             onMouseLeave={() => setHoveredIndex(null)}
-            onTouchStart={() => pulseHighlight(mainNavItems.length)}
-            onPointerDown={() => pulseHighlight(mainNavItems.length)}
+            onTouchStart={() => {
+              triggerDockGlare();
+              pulseHighlight(mainNavItems.length);
+            }}
+            onPointerDown={() => {
+              triggerDockGlare();
+              pulseHighlight(mainNavItems.length);
+            }}
             className={cn(
               "relative flex flex-col items-center justify-center px-4 py-1.5",
               "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
@@ -361,12 +421,6 @@ export function LuxuryMobileDock() {
           >
             {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#C0A062]/40 via-[#C0A062]/10 to-white/20 blur-xl animate-in fade-in duration-500 shadow-[0_0_25px_rgba(192,160,98,0.4)]" />
-            )}
-
-            {(hoveredIndex === mainNavItems.length || highlightIndex === mainNavItems.length) && (
-              <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-                <div className="lux-dock-glare" />
-              </div>
             )}
 
             <div

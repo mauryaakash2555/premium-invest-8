@@ -31,7 +31,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { TrendingUp, Shield, PieChart, BookOpen } from 'lucide-react';
+import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
@@ -239,15 +239,15 @@ export default function HomePage() {
             style={{
               fontSize: 'clamp(28px, 4vw, 48px)',
               marginBottom: '16px',
+              color: '#FFFFFF',
             }}
-            className="golden-gradient"
           >
             Our Services
           </h2>
           <p
             style={{
               fontSize: '18px',
-              color: '#C0A062',
+              color: 'rgba(255,255,255,0.78)',
               maxWidth: '700px',
               margin: '0 auto',
             }}
@@ -289,8 +289,8 @@ export default function HomePage() {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '16px',
+                color: '#FFFFFF',
               }}
-              className="golden-gradient"
             >
               Why Choose BM Wealth?
             </h2>
@@ -307,7 +307,7 @@ export default function HomePage() {
                   'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
               }}
             >
-              <span style={{ color: 'rgba(255,255,255,0.86)', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 PMS Certification No.
               </span>
               <span style={{ color: '#FFFFFF', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em' }}>
@@ -333,7 +333,7 @@ export default function HomePage() {
                   'radial-gradient(900px 260px at 10% 0%, rgba(214, 179, 106, 0.10), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02))',
               }}
             >
-              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+              <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
                 PMS-First
               </div>
               <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
@@ -354,7 +354,7 @@ export default function HomePage() {
                   'radial-gradient(760px 220px at 90% 10%, rgba(255,255,255,0.07), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
               }}
             >
-              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+              <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
                 Execution
               </div>
               <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
@@ -375,14 +375,14 @@ export default function HomePage() {
                   'radial-gradient(760px 220px at 10% 100%, rgba(214, 179, 106, 0.08), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
               }}
             >
-              <div style={{ color: 'rgba(255,255,255,0.78)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
+              <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '10px' }}>
                 Planning
               </div>
               <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>
-                Mumbai-fit wealth structuring
+                Tailored Solutions
               </h3>
               <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7 }}>
-                Advice should reflect real incomes, real costs, and real risk — planning tailored to the Mumbai context.
+                Personalized investment strategies aligned with your financial goals
               </p>
             </div>
           </div>
@@ -392,28 +392,19 @@ export default function HomePage() {
       {/* Latest Insights Section */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <div style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '12px', 
-            marginBottom: '16px',
-            color: '#DAA520'
-          }}>
-            <BookOpen size={32} />
-            <h2
-              style={{
-                fontSize: 'clamp(28px, 4vw, 48px)',
-                margin: 0,
-              }}
-              className="golden-gradient"
-            >
-              Latest Insights
-            </h2>
-          </div>
+          <h2
+            style={{
+              fontSize: 'clamp(28px, 4vw, 48px)',
+              marginBottom: '16px',
+              color: '#FFFFFF',
+            }}
+          >
+            Latest Insights
+          </h2>
           <p
             style={{
               fontSize: '18px',
-              color: '#C0A062',
+              color: 'rgba(255,255,255,0.78)',
               maxWidth: '700px',
               margin: '0 auto',
             }}
@@ -422,7 +413,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <BlogCard post={staticBlogPost} />
+        <BlogCard post={staticBlogPost} variant="homeMutualStyle" />
 
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
@@ -448,7 +439,7 @@ export default function HomePage() {
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '18px',
-              color: '#DAA520',
+              color: '#FFFFFF',
             }}
           >
             Private Consultation
@@ -456,7 +447,7 @@ export default function HomePage() {
           <p
             style={{
               fontSize: '17px',
-              color: '#CCCCCC',
+              color: 'rgba(255,255,255,0.78)',
               marginBottom: '32px',
               maxWidth: '600px',
               margin: '0 auto 30px',

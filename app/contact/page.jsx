@@ -357,6 +357,9 @@ const Contact = () => {
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
                     support@bmwealth.co.in
                   </p>
+                  <p style={{ fontSize: '16px', color: '#CCCCCC', marginTop: '6px' }}>
+                    mauryaakash2555@gmail.com
+                  </p>
                 </div>
               </MobileScrollBoost>
 

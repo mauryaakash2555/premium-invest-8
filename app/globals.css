@@ -361,7 +361,7 @@
 
   @keyframes lux-dock-glare-sweep {
     0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
-    15% { opacity: 0.75; }
+    12% { opacity: 1; }
     100% { transform: translateX(130%) skewX(-18deg); opacity: 0; }
   }
 
@@ -369,10 +369,20 @@
     position: absolute;
     inset: -2px;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
-    filter: blur(0px);
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.38) 50%, transparent 100%),
+      linear-gradient(90deg, transparent 0%, rgba(214,179,106,0.16) 50%, transparent 100%);
+    filter: blur(0.2px);
     transform: translateX(-130%) skewX(-18deg);
-    animation: lux-dock-glare-sweep 1.05s ease;
+    animation: lux-dock-glare-sweep 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .lux-dock-glare.lux-dock-glare--dock {
+    inset: -6px;
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.34) 50%, transparent 100%),
+      linear-gradient(90deg, transparent 0%, rgba(214,179,106,0.14) 50%, transparent 100%);
+    opacity: 0.95;
   }
 
   .secondary-button {
@@ -733,15 +743,16 @@
 
   /* Mutual Funds card: premium, subtler hover (only this card) */
   .service-card.service-card--mutual:hover {
-    transform: translateY(-8px) scale(1.01) !important;
-    border-color: rgba(255, 255, 255, 0.22) !important;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 26px rgba(255, 255, 255, 0.08) !important;
+    /* Match the default service-card hover (lift + scale + glow), while keeping Mutual shimmer overlays */
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(218, 165, 32, 0.6) !important;
+    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
   }
 
   .service-card.service-card--mutual:active {
     transform: translateY(-6px) scale(1.01) !important;
-    border-color: rgba(255, 255, 255, 0.26) !important;
-    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.55), 0 0 28px rgba(192, 160, 98, 0.16) !important;
+    border-color: rgba(218, 165, 32, 0.6) !important;
+    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
   }
 
   /* Mutual Funds card: luxury micro-interactions (ONLY this card)
@@ -754,6 +765,15 @@
       transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
       border-color 420ms ease,
       box-shadow 420ms ease;
+    /* Match baseline border of other service cards */
+    border-color: rgba(218, 165, 32, 0.2);
+  }
+
+  /* Mobile/touch: treat the pulse as a hover moment */
+  .service-card.service-card--mutual.mutual-premium-pulse {
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(218, 165, 32, 0.6) !important;
+    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
   }
 
   .service-card.service-card--mutual::after {
@@ -765,8 +785,8 @@
     opacity: 0.55;
     transition: opacity 420ms ease;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 28%, rgba(0, 0, 0, 0.0) 60%),
-      radial-gradient(60% 45% at 50% 78%, rgba(192, 160, 98, 0.10) 0%, rgba(0, 0, 0, 0) 65%);
+      linear-gradient(180deg, rgba(214, 179, 106, 0.10) 0%, rgba(214, 179, 106, 0.02) 28%, rgba(0, 0, 0, 0.0) 60%),
+      radial-gradient(60% 45% at 50% 78%, rgba(214, 179, 106, 0.12) 0%, rgba(0, 0, 0, 0) 65%);
   }
 
   .service-card.service-card--mutual:hover::after,
@@ -786,8 +806,8 @@
     background: linear-gradient(
       115deg,
       transparent 42%,
-      rgba(255, 255, 255, 0.10) 49%,
-      rgba(192, 160, 98, 0.12) 52%,
+      rgba(214, 179, 106, 0.10) 49%,
+      rgba(214, 179, 106, 0.14) 52%,
       transparent 60%
     );
     transform: translate3d(-35%, -35%, 0) rotate(10deg);
@@ -867,6 +887,97 @@
     transform: translateY(-12px) scale(1.02) !important;
     border-color: rgba(218, 165, 32, 0.6) !important;
     box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+  }
+
+  /* HOME: Blog card styled like Mutual Funds card (keep original size, subtle hover) */
+  .blog-card-premium.blog-card-premium--home-mutual {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(214, 179, 106, 0.55) !important;
+    border-radius: 20px !important;
+    transition:
+      transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 420ms ease,
+      box-shadow 420ms ease;
+  }
+
+  @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .blog-card-premium.blog-card-premium--home-mutual {
+      border-radius: 0 !important;
+    }
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual:hover {
+    /* Match the default blog-card hover (lift + scale + glow), while keeping Mutual shimmer overlays */
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(214, 179, 106, 0.86) !important;
+    box-shadow: 0 20px 60px rgba(214, 179, 106, 0.42), 0 0 30px rgba(214, 179, 106, 0.26) !important;
+  }
+
+  /* Mobile/touch: treat the pulse as a hover moment */
+  .blog-card-premium.blog-card-premium--home-mutual.mutual-premium-pulse {
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(214, 179, 106, 0.90) !important;
+    box-shadow: 0 20px 60px rgba(214, 179, 106, 0.42), 0 0 30px rgba(214, 179, 106, 0.26) !important;
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual:active {
+    transform: translateY(-6px) scale(1.01) !important;
+    border-color: rgba(214, 179, 106, 0.88) !important;
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.55), 0 0 28px rgba(214, 179, 106, 0.18) !important;
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.55;
+    transition: opacity 420ms ease;
+    background:
+      linear-gradient(180deg, rgba(214, 179, 106, 0.10) 0%, rgba(214, 179, 106, 0.02) 28%, rgba(0, 0, 0, 0.0) 60%),
+      radial-gradient(60% 45% at 50% 78%, rgba(214, 179, 106, 0.12) 0%, rgba(0, 0, 0, 0) 65%);
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual:hover::after,
+  .blog-card-premium.blog-card-premium--home-mutual:active::after,
+  .blog-card-premium.blog-card-premium--home-mutual:focus-within::after,
+  .blog-card-premium.blog-card-premium--home-mutual.mutual-premium-pulse::after {
+    opacity: 0.70;
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual::before {
+    content: "";
+    position: absolute;
+    inset: -45% -60%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 42%,
+      rgba(214, 179, 106, 0.10) 49%,
+      rgba(214, 179, 106, 0.14) 52%,
+      transparent 60%
+    );
+    transform: translate3d(-35%, -35%, 0) rotate(10deg);
+    filter: blur(0.2px);
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual:hover::before,
+  .blog-card-premium.blog-card-premium--home-mutual:focus-within::before,
+  .blog-card-premium.blog-card-premium--home-mutual:active::before,
+  .blog-card-premium.blog-card-premium--home-mutual.mutual-premium-pulse::before {
+    opacity: 1;
+    animation: mutual-card-shimmer 1.35s cubic-bezier(0.16, 1, 0.3, 1) 1;
+  }
+
+  .blog-card-premium.blog-card-premium--home-mutual .blog-card-home-bg-img {
+    transform: none !important;
+    transition: none !important;
+    filter: none !important;
+    will-change: auto !important;
   }
 
   .platform-card, .partner-card {

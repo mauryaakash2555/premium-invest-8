@@ -50,6 +50,11 @@ const RefundPolicy = () => {
                 This Refund Policy outlines the terms and conditions for refunds and cancellations 
                 across our various service offerings.
               </p>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                Digital Products / Tools: If you purchase a digital product, downloadable content, or access to an online tool,
+                the purchase is generally non-refundable once access is granted or the digital delivery has been completed.
+                If you face any access or delivery issue, please contact us and we will work to resolve it.
+              </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 Please read this policy carefully before making any payments or engaging our services.
               </p>
@@ -171,15 +176,15 @@ const RefundPolicy = () => {
               </p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: 0, color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  <strong style={{ color: '#E5E5E5' }}>Processing Time:</strong> 7-14 business days from the date of approval
+                  <strong style={{ color: '#E5E5E5' }}>Processing Time:</strong> 5–7 working days from the date of approval
                 </li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
                   <strong style={{ color: '#E5E5E5' }}>Refund Method:</strong> Refunds will be issued to the original payment method 
                   (bank account, credit card, UPI, etc.)
                 </li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  <strong style={{ color: '#E5E5E5' }}>Bank Processing:</strong> Additional 5-7 business days may be required for the 
-                  refund to reflect in your account, depending on your bank
+                  <strong style={{ color: '#E5E5E5' }}>Bank Processing:</strong> Additional time may be required for the refund to reflect
+                  in your account, depending on your bank/payment provider
                 </li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>
                   <strong style={{ color: '#E5E5E5' }}>Notification:</strong> You will receive an email confirmation once the refund 

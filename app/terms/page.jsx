@@ -100,8 +100,16 @@ const TermsAndConditions = () => {
                 lineHeight: '1.3'
               }}>3. Information & Risk</h2>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                Educational / Digital Tools Only: Any calculators, checklists, articles, examples, and other materials on this
+                website are provided for general informational and educational purposes. We do not execute investments,
+                place orders, or perform transactions on your behalf through this website.
+              </p>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
                 While we strive to provide accurate and helpful information, outcomes can vary and depend on markets,
                 product terms, and individual circumstances.
+              </p>
+              <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
+                No Guarantees: We do not guarantee any outcomes, performance, returns, or results.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', margin: 0 }}>
                 All investment decisions made by you are at your own risk and discretion. Mutual fund investments 
