@@ -6,11 +6,21 @@ export function useIsMobile() {
 
   useEffect(() => {
     const checkMobile = () => {
-      const isNarrow = window.innerWidth < 768;
+      const params = new URLSearchParams(window.location.search);
+      const forced = params.get('forceMobile') === '1' || params.get('mobile') === '1';
+
+      // Prefer the most accurate viewport width for embedded WebViews (e.g. VS Code Simple Browser).
+      const viewportWidth =
+        (window.visualViewport && typeof window.visualViewport.width === 'number' ? window.visualViewport.width : 0) ||
+        (document.documentElement && document.documentElement.clientWidth ? document.documentElement.clientWidth : 0) ||
+        window.innerWidth;
+
+      const isNarrow = viewportWidth < 768;
       const isTouch = window.matchMedia
         ? window.matchMedia('(hover: none), (pointer: coarse)').matches
         : false;
-      setIsMobile(isNarrow || isTouch);
+
+      setIsMobile(forced || isNarrow || isTouch);
     };
 
     checkMobile();

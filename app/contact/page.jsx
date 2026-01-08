@@ -215,9 +215,8 @@ const Contact = () => {
 
       <style>{`
         @keyframes bmContactSnowFall {
-          0% { transform: translate3d(0, -20px, 0); opacity: 0; }
-          10% { opacity: var(--o, 0.5); }
-          100% { transform: translate3d(0, 78vh, 0); opacity: 0; }
+          0% { transform: translateY(0); opacity: var(--o, 0.5); }
+          100% { transform: translateY(70vh); opacity: 0; }
         }
         @keyframes bmContactSnowSway {
           0% { transform: translate3d(0, 0, 0); }
@@ -226,28 +225,30 @@ const Contact = () => {
         }
         .bm-contact-snow {
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           pointer-events: none;
-          overflow: hidden;
-          z-index: 2;
+          overflow: visible;
+          z-index: 5;
         }
         .bm-contact-snowflake {
           position: absolute;
-          top: -24px;
+          top: 0;
           left: var(--x, 50%);
           animation: bmContactSnowFall var(--d, 14s) linear infinite;
           animation-delay: var(--delay, 0s);
           will-change: transform;
         }
         .bm-contact-snowflake-inner {
-          width: var(--size, 3px);
-          height: var(--size, 3px);
-          border-radius: 999px;
-          background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0) 72%);
-          filter: blur(var(--blur, 0.2px));
-          mix-blend-mode: screen;
+          display: block;
+          width: var(--size, 4px);
+          height: var(--size, 4px);
+          border-radius: 50%;
+          background: rgba(255,255,255,0.95);
+          box-shadow: 0 0 4px 1px rgba(255,255,255,0.5);
           animation: bmContactSnowSway var(--sd, 3.8s) ease-in-out infinite;
-          will-change: transform;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -255,7 +256,12 @@ const Contact = () => {
           .bm-contact-snowflake-inner {
             animation: none !important;
           }
-          .bm-contact-snow { opacity: 0.35; }
+          /* In reduced-motion, keep a static, scattered snow texture (not all flakes pinned at the top). */
+          .bm-contact-snowflake {
+            transform: translate3d(0, var(--y, 0vh), 0);
+            opacity: var(--o, 0.32);
+          }
+          .bm-contact-snow { opacity: 0.40; }
         }
       `}</style>
       
@@ -307,17 +313,18 @@ const Contact = () => {
           {(() => {
             const rand = mulberry32(20260108);
             const flakes = [];
-            for (let i = 0; i < 34; i += 1) {
+            for (let i = 0; i < 38; i += 1) {
               const x = 2 + rand() * 96;
-              const duration = 11 + rand() * 11; // seconds
+              const y = rand() * 60; // vh (used for reduced-motion static placement)
+              const duration = 10 + rand() * 10; // seconds
               const delay = -(rand() * duration);
-              const size = 2 + rand() * 4.5; // px
-              const opacity = 0.14 + rand() * 0.28;
-              const blur = 0.12 + rand() * 0.55;
+              const size = 2.5 + rand() * 5; // px - slightly larger
+              const opacity = 0.28 + rand() * 0.40; // higher opacity for visibility
+              const blur = 0.10 + rand() * 0.45;
               const sway = (rand() < 0.5 ? -1 : 1) * (6 + rand() * 18);
               const swayDuration = 3.2 + rand() * 3.4;
 
-              flakes.push({ x, duration, delay, size, opacity, blur, sway, swayDuration });
+              flakes.push({ x, y, duration, delay, size, opacity, blur, sway, swayDuration });
             }
             return flakes;
           })().map((flake, i) => (
@@ -326,6 +333,7 @@ const Contact = () => {
               className="bm-contact-snowflake"
               style={{
                 ['--x']: `${flake.x}%`,
+                ['--y']: `${flake.y}vh`,
                 ['--d']: `${flake.duration}s`,
                 ['--delay']: `${flake.delay}s`,
                 ['--size']: `${flake.size}px`,

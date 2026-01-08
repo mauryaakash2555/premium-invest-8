@@ -4,6 +4,8 @@ import { PieChart, TrendingUp, CreditCard, Shield, DollarSign, Repeat } from 'lu
 // Put the Mutual Funds photo at: public/services/mutual-funds.png
 // Then reference it via: /services/mutual-funds.png
 const MUTUAL_FUNDS_IMAGE = '/services/mutual-funds.png';
+// PMS image for Portfolio Management (Home card)
+const PMS_IMAGE = '/services/PMS.png';
 
 const SERVICES = [
   {
@@ -21,7 +23,10 @@ const SERVICES = [
       'Regular performance reviews',
       'Direct equity investments',
     ],
-    image: 'https://images.unsplash.com/photo-1745270917331-787c80129680?w=800&h=500&fit=crop&auto=format&fm=webp&q=75',
+    image: PMS_IMAGE,
+    imagePresentation: {
+      quality: 90,
+    },
     link: '/portfolio-management',
   },
   {

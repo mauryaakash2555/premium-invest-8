@@ -40,7 +40,7 @@ const RefundPolicy = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 48px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: '#C0A062',
             marginBottom: '12px',
             lineHeight: '1.2'
           }}>Refund Policy</h1>

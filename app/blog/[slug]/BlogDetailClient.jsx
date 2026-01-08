@@ -420,7 +420,7 @@ export default function BlogDetailClient({ slug }) {
       )}
 
       {/* Hero Image */}
-      {heroImage && (
+      {heroImage && !isMobile && (
         <div style={{
           width: '100%',
           maxWidth: '1000px',
@@ -760,6 +760,36 @@ export default function BlogDetailClient({ slug }) {
 
       {/* Embedded responsive styles */}
       <style jsx>{`
+        /* Prevent horizontal overflow on mobile from long URLs/tables/code blocks */
+        .blog-detail-page {
+          overflow-x: hidden;
+        }
+
+        .blog-detail-page .blog-html {
+          overflow-wrap: anywhere;
+          word-break: break-word;
+        }
+
+        .blog-detail-page .blog-html :global(img),
+        .blog-detail-page .blog-html :global(video),
+        .blog-detail-page .blog-html :global(iframe) {
+          max-width: 100% !important;
+          height: auto !important;
+        }
+
+        .blog-detail-page .blog-html :global(table) {
+          display: block;
+          max-width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .blog-detail-page .blog-html :global(pre) {
+          max-width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
         @media (max-width: 768px) {
           article {
             padding: 0 16px 60px 16px !important;

@@ -38,7 +38,7 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="card p-6">
+    <section className="card p-4 md:p-6">
       <div className="flex flex-col gap-2">
         <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Auth shell</p>
         <h1 className="text-2xl font-semibold text-white">Login</h1>

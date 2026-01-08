@@ -76,7 +76,7 @@ const Sitemap = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#DAA520',
+            color: '#FFFFFF',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
