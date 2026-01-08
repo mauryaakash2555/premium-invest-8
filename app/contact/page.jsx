@@ -34,6 +34,16 @@ const API = `${BACKEND_URL}/api`;
 
 const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return function () {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -202,6 +212,52 @@ const Contact = () => {
     <div>
 
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
+
+      <style>{`
+        @keyframes bmContactSnowFall {
+          0% { transform: translate3d(0, -20px, 0); opacity: 0; }
+          10% { opacity: var(--o, 0.5); }
+          100% { transform: translate3d(0, 78vh, 0); opacity: 0; }
+        }
+        @keyframes bmContactSnowSway {
+          0% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(var(--sway, 10px), 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        .bm-contact-snow {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          overflow: hidden;
+          z-index: 2;
+        }
+        .bm-contact-snowflake {
+          position: absolute;
+          top: -24px;
+          left: var(--x, 50%);
+          animation: bmContactSnowFall var(--d, 14s) linear infinite;
+          animation-delay: var(--delay, 0s);
+          will-change: transform;
+        }
+        .bm-contact-snowflake-inner {
+          width: var(--size, 3px);
+          height: var(--size, 3px);
+          border-radius: 999px;
+          background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0) 72%);
+          filter: blur(var(--blur, 0.2px));
+          mix-blend-mode: screen;
+          animation: bmContactSnowSway var(--sd, 3.8s) ease-in-out infinite;
+          will-change: transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .bm-contact-snowflake,
+          .bm-contact-snowflake-inner {
+            animation: none !important;
+          }
+          .bm-contact-snow { opacity: 0.35; }
+        }
+      `}</style>
       
       {/* Hero Section */}
       <section
@@ -231,6 +287,7 @@ const Contact = () => {
             backgroundPosition: 'center',
             opacity: 0.65,
             filter: 'brightness(1.1)',
+            zIndex: 0,
           }}
         />
         <div
@@ -241,10 +298,49 @@ const Contact = () => {
             right: 0,
             height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+            zIndex: 1,
           }}
         />
 
-        <div className="section-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+        {/* Snowfall Overlay (Contact hero only) */}
+        <div className="bm-contact-snow" aria-hidden="true">
+          {(() => {
+            const rand = mulberry32(20260108);
+            const flakes = [];
+            for (let i = 0; i < 34; i += 1) {
+              const x = 2 + rand() * 96;
+              const duration = 11 + rand() * 11; // seconds
+              const delay = -(rand() * duration);
+              const size = 2 + rand() * 4.5; // px
+              const opacity = 0.14 + rand() * 0.28;
+              const blur = 0.12 + rand() * 0.55;
+              const sway = (rand() < 0.5 ? -1 : 1) * (6 + rand() * 18);
+              const swayDuration = 3.2 + rand() * 3.4;
+
+              flakes.push({ x, duration, delay, size, opacity, blur, sway, swayDuration });
+            }
+            return flakes;
+          })().map((flake, i) => (
+            <span
+              key={i}
+              className="bm-contact-snowflake"
+              style={{
+                ['--x']: `${flake.x}%`,
+                ['--d']: `${flake.duration}s`,
+                ['--delay']: `${flake.delay}s`,
+                ['--size']: `${flake.size}px`,
+                ['--o']: `${flake.opacity}`,
+                ['--blur']: `${flake.blur}px`,
+                ['--sway']: `${flake.sway}px`,
+                ['--sd']: `${flake.swayDuration}s`,
+              }}
+            >
+              <span className="bm-contact-snowflake-inner" />
+            </span>
+          ))}
+        </div>
+
+        <div className="section-container" style={{ position: 'relative', zIndex: 3, textAlign: 'center' }}>
           <h1
             data-testid="contact-heading"
             style={{
@@ -285,6 +381,13 @@ const Contact = () => {
               gap: 40px !important;
             }
           }
+
+          /* Contact Information: tone down hover ONLY for Phone/Email/Location */
+          .contact-info-card.contact-info-card--subtle:hover {
+            transform: translateY(-3px) scale(1.01) !important;
+            border-color: rgba(218, 165, 32, 0.28) !important;
+            box-shadow: 0 8px 22px rgba(218, 165, 32, 0.18), 0 0 10px rgba(218, 165, 32, 0.08) !important;
+          }
         `}</style>
         <div
           className="contact-grid"
@@ -310,7 +413,7 @@ const Contact = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
               <MobileScrollBoost
                 holdMs={4500}
-                className="glass-effect contact-info-card"
+                className="glass-effect contact-info-card contact-info-card--subtle"
                 style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div
@@ -338,7 +441,7 @@ const Contact = () => {
 
               <MobileScrollBoost
                 holdMs={4500}
-                className="glass-effect contact-info-card"
+                className="glass-effect contact-info-card contact-info-card--subtle"
                 style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div
@@ -371,7 +474,7 @@ const Contact = () => {
 
               <MobileScrollBoost
                 holdMs={4500}
-                className="glass-effect contact-info-card"
+                className="glass-effect contact-info-card contact-info-card--subtle"
                 style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}
               >
                 <div

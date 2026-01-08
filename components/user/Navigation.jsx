@@ -42,7 +42,8 @@ const Navigation = () => {
     let lastY = 0;
     const handleScroll = () => {
       const y = window.scrollY;
-      setIsScrolled(y > 50);
+      // Glass should be hidden at the very top; re-appear after a small scroll.
+      setIsScrolled(y > 10);
       // Route-level auto-hide for /tools/*
       const onTools = pathname?.startsWith('/tools/');
       if (onTools) {
@@ -69,7 +70,7 @@ const Navigation = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [pathname]);
 
   const navLinks = [
     { path: '/', label: 'Home' },
@@ -134,8 +135,8 @@ const Navigation = () => {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out px-5 h-[70px] flex items-center",
-          // Transparent header (no black bar)
-          "bg-transparent backdrop-blur-xl"
+          // At top: no glass. After scroll: glass returns.
+          isScrolled ? "bg-black/30 backdrop-blur-xl" : "bg-transparent"
         )}
         style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
       >
@@ -149,8 +150,8 @@ const Navigation = () => {
     <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out h-[85px] flex items-center justify-center px-10",
-        // Transparent nav (no black glass)
-        "bg-transparent backdrop-blur-xl"
+        // At top: no glass. After scroll: glass returns.
+        isScrolled ? "bg-black/30 backdrop-blur-xl" : "bg-transparent"
       )}
       style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
     >
