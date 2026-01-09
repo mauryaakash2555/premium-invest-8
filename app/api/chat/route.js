@@ -1,3 +1,23 @@
+/**
+ * ⚠️⚠️⚠️ CRITICAL FILE - CHATBOT CORE LOGIC ⚠️⚠️⚠️
+ *
+ * This file handles ALL chatbot conversations.
+ * Breaking this = chatbot stops working = zero leads = revenue loss.
+ *
+ * BEFORE MODIFYING:
+ * 1) Read /docs/chatbot/CHATBOT_DONT_TOUCH.md
+ * 2) Run backup: node scripts/backup-chatbot.js
+ * 3) Run validation: node scripts/validate-chatbot.js
+ * 4) Test locally + staging, keep a rollback plan
+ *
+ * SAFE TO CHANGE: copy text (greetings), non-critical wording
+ * NEVER CHANGE casually: function logic, DB writes, rate limiting, AI routing
+ *
+ * Last modified: 2026-01-09
+ * Modified by: [name]
+ * Reason: [why]
+ */
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";

@@ -102,7 +102,12 @@ export default function ServiceCard({ service, index = 0 }) {
           boxShadow: mobileAnimating ? '0 12px 40px rgba(198, 161, 91, 0.35)' : undefined,
           willChange: isMobile ? 'transform, box-shadow' : 'auto',
           position: 'relative',
-          minHeight: isPremiumImageCard && isMobile ? 'clamp(360px, 54vh, 450px)' : undefined,
+          // Keep mobile exactly as-is; restore desktop height for premium image cards.
+          minHeight: isPremiumImageCard
+            ? isMobile
+              ? 'clamp(360px, 54vh, 450px)'
+              : '420px'
+            : undefined,
         }}
       >
         {isPremiumImageCard ? (

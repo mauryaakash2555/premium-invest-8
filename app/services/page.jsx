@@ -31,8 +31,10 @@ import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import FAQSection from '@/components/shared/FAQSection';
 import { getServicesForServicesPage } from '@/data/servicesCatalog';
 import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
+import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 
 const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
+const SERVICE_LUXURY_STYLES = getServiceLuxuryStyles({ accentRgb: '192, 160, 98' });
 
 const Services = () => {
   useEffect(() => {
@@ -65,7 +67,7 @@ const Services = () => {
   ];
 
   return (
-    <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+    <div className="svc-shell" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <style>{`
         /* Mobile-first responsive styles */
         .service-detail-grid {
@@ -89,9 +91,70 @@ const Services = () => {
           max-width: 100% !important;
           height: auto !important;
         }
+
+        @media (max-width: 640px) {
+          .services-section-pad {
+            padding: 56px 16px !important;
+          }
+          .services-cta-card {
+            padding: 28px 18px !important;
+          }
+        }
+
+        /* Technical-luxury page treatment (body only, no animation) */
+        .svc-tech {
+          position: relative;
+          isolation: isolate;
+        }
+        .svc-tech > * {
+          position: relative;
+          z-index: 1;
+        }
+        .svc-tech::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          opacity: 0.55;
+          background:
+            /* subtle blueprint grid */
+            repeating-linear-gradient(
+              0deg,
+              rgba(255,255,255,0.035) 0px,
+              rgba(255,255,255,0.035) 1px,
+              transparent 1px,
+              transparent 22px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              rgba(255,255,255,0.03) 0px,
+              rgba(255,255,255,0.03) 1px,
+              transparent 1px,
+              transparent 22px
+            );
+          mask-image: radial-gradient(1200px 520px at 50% 10%, rgba(0,0,0,0.75), transparent 70%);
+        }
+        .svc-tech::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          opacity: 0.9;
+          background:
+            radial-gradient(900px 420px at 20% 0%, rgba(192,160,98,0.08), transparent 60%),
+            radial-gradient(820px 420px at 85% 10%, rgba(255,255,255,0.06), transparent 65%),
+            radial-gradient(900px 520px at 50% 100%, rgba(0,0,0,0.55), transparent 60%);
+        }
+
+        @supports not (mask-image: radial-gradient(white, transparent)) {
+          .svc-tech::before { opacity: 0.35; }
+        }
       `}</style>
 
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
+      <style dangerouslySetInnerHTML={{ __html: SERVICE_LUXURY_STYLES }} />
       
       {/* Hero Section */}
       <section
@@ -164,14 +227,20 @@ const Services = () => {
         </div>
       </section>
 
-      <div className="bp-body">
+      <div className="bp-body svc-tech">
       {/* Start Here */}
       <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
-        <div className="glass-effect" style={{ padding: 'clamp(18px, 4vw, 28px)', maxWidth: '100%' }}>
+        <div
+          className="glass-effect svc-card"
+          style={{
+            padding: 'clamp(18px, 4vw, 28px)',
+            maxWidth: '100%',
+          }}
+        >
           <h2
             style={{
               fontSize: 'clamp(22px, 4vw, 30px)',
-              color: '#DAA520',
+              color: '#e5e5e5',
               margin: '0 0 12px 0',
               fontFamily: '"Playfair Display", serif',
               fontWeight: 600,
@@ -179,44 +248,57 @@ const Services = () => {
           >
             Start in 60 seconds
           </h2>
-          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#CCCCCC', lineHeight: 1.8 }}>
+          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#B8B8B8', lineHeight: 1.8 }}>
             If you want clarity before you act, explore our tools. If you want execution and documentation support,
             reach us on the contact page.
           </p>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '12px',
+              alignItems: 'stretch',
+            }}
+          >
             <Link
               href="/tools"
+              className="svc-cta"
               style={{
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                border: '1px solid rgba(218, 165, 32, 0.28)',
-                background: 'rgba(218, 165, 32, 0.12)',
-                color: '#DAA520',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
-              Explore Tools <span aria-hidden="true">→</span>
-            </Link>
-            <Link
-              href="/contact"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.14)',
-                background: 'rgba(255,255,255,0.04)',
+                justifyContent: 'space-between',
+                gap: '12px',
+                padding: '14px 16px',
+                borderRadius: '14px',
+                border: '1px solid rgba(192,160,98,0.20)',
+                background: 'rgba(255,255,255,0.03)',
                 color: '#e5e5e5',
                 fontWeight: 600,
                 textDecoration: 'none',
               }}
             >
-              Contact Us <span aria-hidden="true">→</span>
+              <span>Explore Tools</span>
+              <ArrowRight size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
+            </Link>
+            <Link
+              href="/contact"
+              className="svc-cta"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+                padding: '14px 16px',
+                borderRadius: '14px',
+                border: '1px solid rgba(255,255,255,0.14)',
+                background: 'rgba(255,255,255,0.03)',
+                color: '#e5e5e5',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              <span>Contact Us</span>
+              <ArrowRight size={18} style={{ color: '#B8B8B8', flexShrink: 0 }} />
             </Link>
           </div>
         </div>
@@ -229,7 +311,7 @@ const Services = () => {
             <MobileScrollBoost
               key={index}
               holdMs={6000}
-              className="glass-effect service-detail-grid"
+              className="glass-effect svc-card service-detail-grid"
               style={{
                 padding: 'clamp(20px, 5vw, 40px)',
                 display: 'grid',
@@ -253,6 +335,7 @@ const Services = () => {
                   maxHeight: 'clamp(200px, 40vw, 400px)',
                   objectFit: 'cover',
                   borderRadius: '12px',
+                  border: '1px solid rgba(255,255,255,0.08)',
                   display: 'block',
                   boxSizing: 'border-box',
                 }}
@@ -265,13 +348,10 @@ const Services = () => {
                 wordWrap: 'break-word',
                 overflowWrap: 'break-word'
               }}>
-                <div style={{ color: '#DAA520', marginBottom: '20px', fontSize: 'clamp(40px, 8vw, 50px)' }}>
-                  {service.icon}
-                </div>
                 <h2
                   style={{
                     fontSize: 'clamp(22px, 5vw, 36px)',
-                    color: '#DAA520',
+                    color: '#e5e5e5',
                     marginBottom: '16px',
                     lineHeight: 1.3,
                     wordWrap: 'break-word',
@@ -323,38 +403,31 @@ const Services = () => {
                         overflowWrap: 'break-word',
                       }}
                     >
-                      <ArrowRight size={16} style={{ color: '#DAA520', flexShrink: 0 }} />
+                      <ArrowRight size={16} style={{ color: '#C0A062', flexShrink: 0 }} />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 {service.link && (
-                  <Link href={service.link}
+                  <Link
+                    href={service.link}
+                    className="svc-cta"
                     style={{
-                      display: 'inline-block',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '10px',
                       marginTop: '20px',
-                      padding: '12px 32px',
-                      background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
-                      color: '#000000',
+                      padding: '12px 18px',
+                      background: 'rgba(255,255,255,0.04)',
+                      color: '#e5e5e5',
                       textDecoration: 'none',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
                       fontWeight: '600',
                       fontSize: 'clamp(14px, 3vw, 16px)',
-                      transition: 'all 0.3s ease',
-                      border: '2px solid transparent',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.borderColor = '#DAA520';
-                      e.currentTarget.style.color = '#DAA520';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background = 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)';
-                      e.currentTarget.style.borderColor = 'transparent';
-                      e.currentTarget.style.color = '#000000';
+                      border: '1px solid rgba(255,255,255,0.14)',
                     }}
                   >
-                    Learn More <ArrowRight size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '4px' }} />
+                    Learn More <ArrowRight size={16} style={{ color: '#C0A062' }} />
                   </Link>
                 )}
               </div>
@@ -366,13 +439,13 @@ const Services = () => {
       {/* Why Choose BM Wealth - NEW CONTENT SECTION */}
       <section style={{ 
         background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)', 
-        padding: '80px 20px' 
+        padding: 'clamp(56px, 8vw, 80px) 20px' 
       }}>
         <div className="section-container">
           <h2 style={{
             fontSize: 'clamp(32px, 5vw, 48px)',
             fontFamily: '"Playfair Display", serif',
-            color: '#DAA520',
+            color: '#e5e5e5',
             textAlign: 'center',
             marginBottom: '24px',
             fontWeight: '600'
@@ -398,10 +471,10 @@ const Services = () => {
             gap: '32px',
             marginBottom: '60px'
           }}>
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -417,10 +490,10 @@ const Services = () => {
               </p>
             </div>
 
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -438,10 +511,10 @@ const Services = () => {
               </p>
             </div>
 
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -457,10 +530,10 @@ const Services = () => {
               </p>
             </div>
 
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -478,10 +551,10 @@ const Services = () => {
               </p>
             </div>
 
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -499,10 +572,10 @@ const Services = () => {
               </p>
             </div>
 
-            <div className="glass-effect" style={{ padding: '32px', borderRadius: '12px' }}>
+            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
               <h3 style={{ 
                 fontSize: '22px', 
-                color: '#DAA520', 
+                color: '#C0A062', 
                 marginBottom: '16px',
                 fontFamily: '"Playfair Display", serif',
                 fontWeight: '600'
@@ -521,17 +594,11 @@ const Services = () => {
             </div>
           </div>
 
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)',
-            border: '1px solid rgba(218, 165, 32, 0.3)',
-            borderRadius: '12px',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
+          <div className="svc-card" style={{ borderRadius: '12px', padding: '40px', textAlign: 'center' }}>
             <h3 style={{
               fontSize: 'clamp(24px, 4vw, 32px)',
               fontFamily: '"Playfair Display", serif',
-              color: '#DAA520',
+              color: '#e5e5e5',
               marginBottom: '20px',
               fontWeight: '600'
             }}>
@@ -567,25 +634,27 @@ const Services = () => {
 
       {/* CTA Section */}
       <section
+        className="services-section-pad"
         style={{
           background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
-          padding: '80px 20px',
+          padding: 'clamp(56px, 8vw, 80px) 20px',
         }}
       >
         <div className="section-container">
           <div
-            className="glass-effect"
+            className="glass-effect svc-card services-cta-card"
             style={{
-              padding: '60px 40px',
+              padding: 'clamp(28px, 5vw, 60px) clamp(18px, 4vw, 40px)',
               textAlign: 'center',
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(255,255,255,0.10)',
             }}
           >
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '20px',
-                color: '#DAA520',
+                color: '#e5e5e5',
               }}
             >
               Explore services
@@ -613,13 +682,45 @@ const Services = () => {
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary"
                 data-testid="services-whatsapp-cta"
+                className="svc-cta"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '14px',
+                  border: '1px solid rgba(192,160,98,0.20)',
+                  background: 'rgba(255,255,255,0.03)',
+                  color: '#e5e5e5',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  minWidth: '220px',
+                }}
               >
-                Message on WhatsApp
+                Message on WhatsApp <ArrowRight size={18} style={{ color: '#C0A062' }} />
               </a>
-              <Link href="/contact" className="btn-secondary" data-testid="services-contact-cta">
-                Contact Us
+              <Link
+                href="/contact"
+                data-testid="services-contact-cta"
+                className="svc-cta"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '12px 18px',
+                  borderRadius: '14px',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'rgba(255,255,255,0.03)',
+                  color: '#e5e5e5',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  minWidth: '220px',
+                }}
+              >
+                Contact Us <ArrowRight size={18} style={{ color: '#B8B8B8' }} />
               </Link>
             </div>
           </div>

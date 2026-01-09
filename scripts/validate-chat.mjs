@@ -20,10 +20,10 @@
 ﻿import fs from "node:fs";
 
 const files = [
-  "components/AIChatFloat.jsx",
-  "components/AIChatFloat.module.css",
-  "components/WhatsAppFloat.jsx",
-  "components/ChatErrorBoundary.jsx",
+  "components/user/AIChatFloat.jsx",
+  "components/user/AIChatFloat.module.css",
+  "components/user/WhatsAppFloat.jsx",
+  "components/shared/ChatErrorBoundary.jsx",
 ];
 
 function fail(msg) {
@@ -35,7 +35,7 @@ for (const f of files) {
   if (!fs.existsSync(f)) fail(`missing file: ${f}`);
 }
 
-const chat = fs.readFileSync("components/AIChatFloat.jsx", "utf8");
+const chat = fs.readFileSync("components/user/AIChatFloat.jsx", "utf8");
 
 // Basic sanity checks
 if (!chat.includes("export default function AIChatFloat")) fail("AIChatFloat export missing");
@@ -70,9 +70,9 @@ try {
   fail(`AIChatFloat.jsx syntax/parse failed: ${e?.message || e}`);
 }
 
-const wa = fs.readFileSync("components/WhatsAppFloat.jsx", "utf8");
-if (!wa.includes("<AIChatFloat")) fail("WhatsAppFloat does not render AIChatFloat");
-if (!wa.includes("ChatErrorBoundary")) fail("WhatsAppFloat not wrapped in ChatErrorBoundary");
+const wa2 = fs.readFileSync("components/user/WhatsAppFloat.jsx", "utf8");
+if (!wa2.includes("<AIChatFloat")) fail("WhatsAppFloat does not render AIChatFloat");
+if (!wa2.includes("ChatErrorBoundary")) fail("WhatsAppFloat not wrapped in ChatErrorBoundary");
 
 console.log("OK chat validation passed");
 process.exit(0);

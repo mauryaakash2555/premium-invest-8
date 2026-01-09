@@ -1,4 +1,24 @@
 /**
+ * ⚠️⚠️⚠️ CRITICAL FILE - CHATBOT UI (PUBLIC + ADMIN) ⚠️⚠️⚠️
+ *
+ * This is the chat widget users see on bmwealth.co.in.
+ * Breaking this = users cannot chat = no leads.
+ *
+ * BEFORE MODIFYING:
+ * 1) Read /docs/chatbot/CHATBOT_DONT_TOUCH.md
+ * 2) Run backup: node scripts/backup-chatbot.js
+ * 3) Run validation: node scripts/validate-chatbot.js
+ * 4) Test desktop + mobile
+ *
+ * SAFE TO CHANGE: UI text, layout/styling
+ * NEVER CHANGE casually: lead capture steps, admin gating, request/response format to /api/chat
+ *
+ * Last modified: 2026-01-09
+ * Modified by: [name]
+ * Reason: [why]
+ */
+
+/**
  * FILE: components\user\AIChatFloat.jsx
  * PURPOSE: (auto-added) Explain what this file does.
  * CATEGORY: user
@@ -59,19 +79,49 @@ function todayISO() {
   return new Date().toISOString();
 }
 
+function istDayKey(date = new Date()) {
+  try {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(date);
+    const y = parts.find((p) => p.type === "year")?.value;
+    const m = parts.find((p) => p.type === "month")?.value;
+    const d = parts.find((p) => p.type === "day")?.value;
+    if (!y || !m || !d) return "";
+    return `${y}-${m}-${d}`;
+  } catch {
+    return "";
+  }
+}
+
 function dayGreeting() {
   try {
     if (!FEATURE_TIME_GREETINGS) return "Hello!";
-    const h = new Date().getHours();
-    // User-local time ranges:
+    // IMPORTANT: Always greet in India time (IST), not server timezone.
+    const now = new Date();
+    const hourPart = new Intl.DateTimeFormat("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      hour12: false,
+    })
+      .formatToParts(now)
+      .find((p) => p.type === "hour")?.value;
+
+    const h = Number.parseInt(String(hourPart || ""), 10);
+    if (!Number.isFinite(h)) return "Hello!";
+
+    // Required IST time ranges:
     // 5 AM - 12 PM: Good morning
     // 12 PM - 5 PM: Good afternoon
-    // 5 PM - 10 PM: Good evening
-    // 10 PM - 5 AM: Hello
+    // 5 PM - 9 PM: Good evening
+    // 9 PM - 5 AM: Good night
     if (h >= 5 && h < 12) return "Good morning!";
     if (h >= 12 && h < 17) return "Good afternoon!";
-    if (h >= 17 && h < 22) return "Good evening!";
-    return "Hello!";
+    if (h >= 17 && h < 21) return "Good evening!";
+    return "Good night!";
   } catch {
     return "Hello!";
   }
@@ -163,11 +213,15 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       if (!m || m.sender !== "bot") return false;
       const t = String(m.text || "").trim();
       if (!t) return false;
+      const tl = t.toLowerCase();
       if (t === "Exited family admin mode.") return true;
       if (t === "Exited admin mode.") return true;
       if (t === "Family code not recognized.") return true;
       if (t === "Super admin code not recognized.") return true;
+      // Older builds sometimes persisted status text into the public transcript.
+      // Strip any variants like: "Welcome. 🎛️ Opening control panel...".
       if (t === "Opening control panel...") return true;
+      if (tl.includes("opening control panel")) return true;
       if (t.includes("Viewing family dashboard")) return true;
       return false;
     } catch {
@@ -175,10 +229,39 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     }
   }
 
+  function refreshPersistedGreeting(list) {
+    try {
+      if (!Array.isArray(list) || !list.length) return list;
+      const idx = list.findIndex((m) => m && m.sender === "bot" && (m.id === "m0" || m.id === "b0"));
+      if (idx < 0) return list;
+
+      const m0 = list[idx];
+      const text = String(m0?.text || "");
+      if (!text) return list;
+
+      // Only rewrite the seeded first message (greeting + compliance + onboarding).
+      if (!text.includes(COMPLIANCE_TEXT)) return list;
+
+      const afterCompliance = text.split(COMPLIANCE_TEXT).slice(1).join(COMPLIANCE_TEXT);
+      const suffix = String(afterCompliance || "").replace(/^\s*\n\s*\n/, "\n\n");
+      const nextText = `${dayGreeting()}\n\n${COMPLIANCE_TEXT}${suffix ? `\n\n${suffix.trim()}` : ""}`.trim();
+
+      // Avoid unnecessary state churn if already correct.
+      if (nextText === text.trim()) return list;
+
+      const next = list.slice();
+      next[idx] = { ...m0, text: nextText };
+      return next;
+    } catch {
+      return list;
+    }
+  }
+
   function sanitizePublicTranscript(list) {
     if (!Array.isArray(list)) return list;
     const cleaned = list.filter((m) => !isLeakedAuthTranscriptMessage(m));
-    return cleaned.length ? cleaned : list;
+    const hydrated = refreshPersistedGreeting(cleaned.length ? cleaned : list);
+    return hydrated;
   }
 
   async function openSuperAdminControlPanel(res) {
@@ -348,9 +431,24 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
       const raw = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
       if (raw) {
         const s = JSON.parse(raw);
-        if (Array.isArray(s?.messages) && s.messages.length) setMessages(sanitizePublicTranscript(s.messages));
-        if (s?.leadId) setLeadId(s.leadId);
-        if (typeof s?.captureStep === "string") setCaptureStep(s.captureStep);
+        const storedDayKey = typeof s?.dayKey === "string" ? s.dayKey : "";
+        const todayKey = istDayKey(new Date());
+
+        // Auto-reset once per day (IST) so greetings/onboarding don't get stuck across refreshes.
+        if (storedDayKey && todayKey && storedDayKey !== todayKey) {
+          try {
+            window.localStorage.removeItem(key);
+          } catch {
+            // ignore
+          }
+          // Keep the freshly-initialized transcript/captureStep.
+          setLeadId(null);
+          setCaptureStep(() => (FEATURE_LEAD_CAPTURE ? "name" : "done"));
+        } else {
+          if (Array.isArray(s?.messages) && s.messages.length) setMessages(sanitizePublicTranscript(s.messages));
+          if (s?.leadId) setLeadId(s.leadId);
+          if (typeof s?.captureStep === "string") setCaptureStep(s.captureStep);
+        }
       }
     } catch {
       // ignore
@@ -366,7 +464,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   useEffect(() => {
     try {
       const key = "bmw_chat_state_v1";
-      const payload = JSON.stringify({ messages, leadId, captureStep });
+      const payload = JSON.stringify({ dayKey: istDayKey(new Date()), messages, leadId, captureStep });
       if (typeof window !== "undefined") window.localStorage.setItem(key, payload);
     } catch {
       // ignore
