@@ -24,14 +24,13 @@
 'use client';
 
 import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { useEffect } from 'react';
-import LazyImage from '@/components/user/LazyImage';
-import MobileScrollBoost from '@/components/user/MobileScrollBoost';
+import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import { getServicesForServicesPage } from '@/data/servicesCatalog';
 import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
+import ServicesShowcase from './ServicesShowcase';
 
 const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 const SERVICE_LUXURY_STYLES = getServiceLuxuryStyles({ accentRgb: '192, 160, 98' });
@@ -69,27 +68,9 @@ const Services = () => {
   return (
     <div className="svc-shell" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <style>{`
-        /* Mobile-first responsive styles */
-        .service-detail-grid {
-          grid-template-columns: 1fr !important;
-        }
-        
-        @media (min-width: 768px) {
-          .service-detail-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
-        }
-        
-        /* Prevent overflow */
-        .service-detail-grid * {
+        /* Prevent accidental horizontal overflow in Services page */
+        .svc-shell * {
           box-sizing: border-box;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-        }
-        
-        .service-detail-grid img {
-          max-width: 100% !important;
-          height: auto !important;
         }
 
         @media (max-width: 640px) {
@@ -305,136 +286,7 @@ const Services = () => {
       </section>
 
       {/* Services Detail */}
-      <section className="section-container">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 8vw, 80px)' }}>
-          {services.map((service, index) => (
-            <MobileScrollBoost
-              key={index}
-              holdMs={6000}
-              className="glass-effect svc-card service-detail-grid"
-              style={{
-                padding: 'clamp(20px, 5vw, 40px)',
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: 'clamp(24px, 5vw, 40px)',
-                alignItems: 'center',
-                maxWidth: '100%',
-                boxSizing: 'border-box',
-                overflow: 'hidden',
-                width: '100%',
-              }}
-              data-testid={`service-detail-${index}`}
-            >
-              {/* Image - Always first on mobile, responsive */}
-              <LazyImage
-                src={service.image}
-                alt={service.title}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: 'clamp(200px, 40vw, 400px)',
-                  objectFit: 'cover',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  display: 'block',
-                  boxSizing: 'border-box',
-                }}
-              />
-              
-              {/* Content */}
-              <div style={{ 
-                width: '100%',
-                boxSizing: 'border-box',
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word'
-              }}>
-                <h2
-                  style={{
-                    fontSize: 'clamp(22px, 5vw, 36px)',
-                    color: '#e5e5e5',
-                    marginBottom: '16px',
-                    lineHeight: 1.3,
-                    wordWrap: 'break-word',
-                    overflowWrap: 'break-word',
-                  }}
-                >
-                  {service.title}
-                </h2>
-                <p
-                  style={{
-                    fontSize: 'clamp(16px, 3.5vw, 18px)',
-                    color: '#CCCCCC',
-                    lineHeight: 1.8,
-                    marginBottom: '24px',
-                    wordWrap: 'break-word',
-                    overflowWrap: 'break-word',
-                  }}
-                >
-                  {service.description}
-                </p>
-                <h3
-                  style={{
-                    fontSize: 'clamp(18px, 4vw, 20px)',
-                    color: '#C0A062',
-                    marginBottom: '12px',
-                  }}
-                >
-                  Key Features:
-                </h3>
-                <ul
-                  style={{
-                    listStyle: 'none',
-                    padding: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px',
-                  }}
-                >
-                  {service.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      style={{
-                        fontSize: 'clamp(14px, 3vw, 16px)',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        wordWrap: 'break-word',
-                        overflowWrap: 'break-word',
-                      }}
-                    >
-                      <ArrowRight size={16} style={{ color: '#C0A062', flexShrink: 0 }} />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                {service.link && (
-                  <Link
-                    href={service.link}
-                    className="svc-cta"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      marginTop: '20px',
-                      padding: '12px 18px',
-                      background: 'rgba(255,255,255,0.04)',
-                      color: '#e5e5e5',
-                      textDecoration: 'none',
-                      borderRadius: '12px',
-                      fontWeight: '600',
-                      fontSize: 'clamp(14px, 3vw, 16px)',
-                      border: '1px solid rgba(255,255,255,0.14)',
-                    }}
-                  >
-                    Learn More <ArrowRight size={16} style={{ color: '#C0A062' }} />
-                  </Link>
-                )}
-              </div>
-            </MobileScrollBoost>
-          ))}
-        </div>
-      </section>
+      <ServicesShowcase services={services} />
 
       {/* Why Choose BM Wealth - NEW CONTENT SECTION */}
       <section style={{ 
