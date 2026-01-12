@@ -52,6 +52,10 @@ next-env.d.ts
 # Safety script backups (local)
 scripts/safety/backups/
 
+# Local lock snapshots (never commit)
+backup/locked_*/
+backup/live-intelligence-hero-LOCK_*/
+
 # Large binary tools
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**

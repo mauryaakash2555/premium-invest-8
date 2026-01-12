@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Footer from '@/components/user/Footer';
 
 const LASER_ASSET_VERSION = 'seamless-xfade-fade-2026-01-11';
 const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`; // LOCKED
@@ -13,7 +14,7 @@ export default function LiveIntelligenceHeroPage() {
   }, []);
 
   return (
-    <main style={{ width: '100%', margin: 0, padding: 0 }}>
+    <div style={{ width: '100%', margin: 0, padding: 0 }}>
       {/* LASER (LOCKED): fullscreen, no filters, no overlays, no masking */}
       <section
         aria-label="Live Intelligence Laser"
@@ -1225,6 +1226,11 @@ export default function LiveIntelligenceHeroPage() {
           </div>
         </div>
       </section>
-    </main>
+
+      {/* Footer: exact homepage footer component (route-scoped styling via .li-footer-wrapper) */}
+      <div className="li-footer-wrapper">
+        <Footer />
+      </div>
+    </div>
   );
 }
