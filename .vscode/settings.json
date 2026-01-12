@@ -1,0 +1,48 @@
+{
+  // Performance: prevent VS Code from constantly watching/indexing huge build/dependency folders.
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/.swc/**": true,
+    "**/.vercel/**": true,
+    "**/coverage/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/backup/**": true,
+    "**/.safety-backups/**": true,
+    "**/database_backup/**": true
+  },
+  "search.exclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/.swc/**": true,
+    "**/.vercel/**": true,
+    "**/coverage/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/backup/**": true,
+    "**/.safety-backups/**": true,
+    "**/database_backup/**": true
+  },
+  "files.exclude": {
+    "**/.next/**": true,
+    "**/.swc/**": true,
+    "**/.vercel/**": true,
+    "**/coverage/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
+  },
+
+  // Helps on larger JS/TS projects.
+  "typescript.tsserver.maxTsServerMemory": 4096,
+
+  // Optional: reduces background Git work on very large repos.
+  "git.autorefresh": false,
+  "chat.tools.terminal.autoApprove": {
+    "git add": true,
+    "git commit": true,
+    "git push": true
+  }
+}

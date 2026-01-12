@@ -16,6 +16,7 @@
 
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import AIChatFloat from '@/components/user/AIChatFloat';
 import ChatErrorBoundary from '@/components/shared/ChatErrorBoundary';
 
@@ -23,6 +24,9 @@ const WhatsAppFloat = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [open, setOpen] = useState(false);
   const whatsappHref = "https://wa.me/918850977259";
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/live-intelligence-hero')) return null;
 
   return (
     <div style={{ position: 'relative' }}>

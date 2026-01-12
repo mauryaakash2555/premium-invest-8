@@ -1,0 +1,86 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'C:\Users\admin\premium-invest-8\public\videos\laser-beam.unicorn.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf62.3.100
+  Duration: 00:00:10.00, start: 0.000000, bitrate: 11607 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1728x1080 [SAR 1:1 DAR 8:5], 11604 kb/s, 60 fps, 60 tbr, 15360 tbn (default)
+    Metadata:
+      handler_name    : MediabunnyVideoHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc62.11.100 libx264
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> wrapped_avframe (native))
+Press [q] to stop, [?] for help
+[Parsed_metadata_1 @ 0000017f2c96c800] frame:0    pts:0       pts_time:0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YMIN=17
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YLOW=22
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YAVG=56.099
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YHIGH=147
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YMAX=249
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UMIN=124
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.ULOW=131
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UAVG=144.021
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UHIGH=163
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UMAX=189
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VMIN=120
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VLOW=125
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VAVG=126.964
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VHIGH=128
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VMAX=132
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATMIN=0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATLOW=3
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATAVG=16.0304
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATHIGH=35
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATMAX=61
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.HUEMED=273
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.HUEAVG=271.271
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YDIF=0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UDIF=0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VDIF=0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YBITDEPTH=8
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UBITDEPTH=8
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VBITDEPTH=8
+Output #0, null, to 'pipe:':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf62.3.100
+  Stream #0:0(und): Video: wrapped_avframe, yuv420p(tv, bt709, progressive), 1728x1080 [SAR 1:1 DAR 8:5], q=2-31, 200 kb/s, 60 fps, 60 tbn (default)
+    Metadata:
+      encoder         : Lavc62.11.100 wrapped_avframe
+      handler_name    : MediabunnyVideoHandler
+      vendor_id       : [0][0][0][0]
+[Parsed_metadata_1 @ 0000017f2c96c800] frame:1    pts:256     pts_time:0.0166667
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YMIN=15
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YLOW=22
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YAVG=56.013
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YHIGH=146
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YMAX=245
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UMIN=122
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.ULOW=131
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UAVG=144.008
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UHIGH=163
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UMAX=184
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VMIN=120
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VLOW=125
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VAVG=126.966
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VHIGH=128
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VMAX=130
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATMIN=0
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATLOW=3
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATAVG=16.0168
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATHIGH=35
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.SATMAX=56
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.HUEMED=272
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.HUEAVG=271.257
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YDIF=0.757021
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UDIF=0.230255
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VDIF=0.0465728
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.YBITDEPTH=8
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.UBITDEPTH=8
+[Parsed_metadata_1 @ 0000017f2c96c800] lavfi.signalstats.VBITDEPTH=8
+[out#0/null @ 0000017f264a51c0] video:0KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=    1 fps=0.0 q=-0.0 Lsize=N/A time=00:00:00.01 bitrate=N/A speed=0.221x elapsed=0:00:00.07    

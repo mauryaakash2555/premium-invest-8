@@ -2,16 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function CookieConsent() {
   const [show, setShow] = useState(false);
+  const pathname = usePathname();
+  const hideOnLiveMood = pathname?.startsWith("/live-intelligence-hero");
 
   useEffect(() => {
+    if (hideOnLiveMood) {
+      setShow(false);
+      return;
+    }
     const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
       setTimeout(() => setShow(true), 2000);
     }
-  }, []);
+  }, [hideOnLiveMood]);
 
   const acceptCookies = () => {
     localStorage.setItem("cookieConsent", "accepted");
@@ -25,7 +32,7 @@ export default function CookieConsent() {
     setShow(false);
   };
 
-  if (!show) return null;
+  if (hideOnLiveMood || !show) return null;
 
   return (
     <div

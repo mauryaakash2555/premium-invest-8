@@ -1,0 +1,321 @@
+.stage {
+  position: relative;
+  overflow: hidden;
+  background: #090a0c;
+  min-height: 85vh;
+  height: 85vh;
+}
+
+@media (max-width: 768px) {
+  .stage {
+    min-height: 92vh;
+    height: 92vh;
+  }
+}
+
+/* subtle cursor-follow light (no orange) */
+.cursorSpotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    340px 220px at var(--cx, 50%) var(--cy, 35%),
+    rgba(210, 220, 255, 0.05) 0%,
+    rgba(150, 170, 255, 0.02) 40%,
+    transparent 75%
+  );
+  transition: background 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.laserVideo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  width: auto;
+  transform: translateX(-50%);
+  z-index: 3;
+  mix-blend-mode: lighten;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.topFade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(9, 10, 12, 0.92) 0%, rgba(9, 10, 12, 0.25) 55%, rgba(9, 10, 12, 0) 100%);
+}
+
+.bottomFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 340px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(9, 10, 12, 0) 0%, rgb(9, 10, 12) 50%);
+}
+
+.heroContent {
+  position: absolute;
+  top: 120px;
+  left: 0;
+  right: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .heroContent {
+    top: 88px;
+  }
+}
+
+.heroTitle {
+  font-size: clamp(34px, 4vw, 64px);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px 0;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.heroSubtitle {
+  font-size: clamp(14px, 1.35vw, 18px);
+  font-weight: 400;
+  line-height: 1.55;
+  margin: 0 0 26px 0;
+  color: rgba(255, 255, 255, 0.66);
+  max-width: 720px;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #000;
+  background: linear-gradient(180deg, #ffffff 0%, #e9e9e9 100%);
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-decoration: none;
+}
+
+/* Live Intelligence strip */
+.liveMoodContainer {
+  position: absolute;
+  top: 320px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  width: 100%;
+  max-width: 760px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .liveMoodContainer {
+    top: 290px;
+    padding: 0 16px;
+  }
+}
+
+.liveIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  background: #0a0a0c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #ef4444;
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+}
+
+.liveText {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.4px;
+  color: #ef4444;
+  text-transform: uppercase;
+}
+
+.modeLabel {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.panel {
+  width: 100%;
+  background: #0a0a0c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 18px 22px;
+  cursor: pointer;
+}
+
+.panel:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.headlineRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.headlineCategory {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(192, 160, 98, 0.95);
+  padding: 4px 10px;
+  background: rgba(192, 160, 98, 0.12);
+  border-radius: 5px;
+}
+
+.headlineText {
+  font-size: 14px;
+  font-weight: 420;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+  .headlineRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.expandedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.75);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.summaryIcon {
+  font-size: 14px;
+}
+
+.expandedHeadline {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.expandedHeadline:last-child {
+  border-bottom: none;
+}
+
+.expandHint {
+  margin-top: 10px;
+  font-size: 11px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.whatsappCtaWrap {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .whatsappCtaWrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.whatsappCopy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.whatsappBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none;
+  background: #000;
+  color: rgba(192, 160, 98, 0.95);
+  border: 1px solid rgba(192, 160, 98, 0.35);
+}

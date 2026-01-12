@@ -51,3 +51,8 @@ next-env.d.ts
 
 # Safety script backups (local)
 scripts/safety/backups/
+
+# Large binary tools
+.tools/ffmpeg.zip
+.tools/ffmpeg_extract/**
+

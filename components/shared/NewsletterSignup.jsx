@@ -83,7 +83,9 @@ export default function NewsletterSignup() {
           ) : status === "error" ? (
             <div className="mt-3 text-[11px] text-red-300/90">Unable to subscribe right now. Try again.</div>
           ) : (
-            <div className="mt-3 text-[11px] text-white/50">Unsubscribe anytime.</div>
+            <div className="mt-3 text-[11px] text-white/50" data-newsletter-unsub-note>
+              Unsubscribe anytime.
+            </div>
           )}
         </form>
       </div>

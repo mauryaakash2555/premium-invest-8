@@ -1,0 +1,525 @@
+/*
+ * FILE: HulyHero.module.css
+ * PURPOSE: Live Intelligence Hero - Huly.io visual parity
+ * 
+ * LAYER ORDER (from Master Spec §10):
+ * 1. Dark background (.stage)
+ * 2. Fog gradients (.fogLayer, .fogLayerBottom)
+ * 3. Laser/mask layer (.laserMask)
+ * 4. Glow layers (.glowCore, .glowMid, .glowDiffuse)
+ * 5. Hero video (.laserVideo) - mix-blend-mode: lighten
+ * 6. Glass UI panel (.glassPanel)
+ * 7. Text/CTA content
+ */
+
+/* ============================================================
+   LAYER 1: DARK BACKGROUND
+   Huly exact: bg-grey-1 = #090A0C
+   ============================================================ */
+.stage {
+  min-height: 100vh;
+  height: 1438px;
+  position: relative;
+  overflow: hidden;
+  background: #090a0c;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 1024px) {
+  .stage {
+    height: 1078px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stage {
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+/* ============================================================
+   LAYER 5: HERO VIDEO
+   mix-blend-mode: lighten for HDR illusion (§9)
+   The video contains all the laser/glow effects baked in
+   ============================================================ */
+.laserVideo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  width: auto;
+  transform: translateX(-50%);
+  z-index: 5;
+  mix-blend-mode: lighten;
+  object-fit: contain;
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   TOP/BOTTOM FADES
+   ============================================================ */
+.bottomFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 340px;
+  z-index: 20;
+  pointer-events: none;
+  background: linear-gradient(180deg, 
+    rgba(9, 10, 12, 0) 0%, 
+    rgb(9, 10, 12) 50%
+  );
+}
+
+.topFade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(180deg, 
+    rgba(9, 10, 12, 0.85) 0%, 
+    rgba(9, 10, 12, 0.3) 50%,
+    rgba(9, 10, 12, 0) 100%
+  );
+}
+
+/* ============================================================
+   LAYER 6-7: LIVE MOOD PANEL (Huly style - top positioned)
+   Content at top, laser as background visual
+   ============================================================ */
+.liveMoodContainer {
+  position: absolute;
+  top: 140px; /* Below nav */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .liveMoodContainer {
+    top: 100px;
+    max-width: 100%;
+    padding: 0 16px;
+  }
+}
+
+/* LIVE Indicator - small pill above panel */
+.liveIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+  background: rgba(10, 10, 12, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+}
+
+.liveText {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ef4444;
+  text-transform: uppercase;
+}
+
+.modeLabel {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Super Black Panel (Huly style) */
+.glassPanel {
+  position: relative;
+  width: 100%;
+  background: rgba(10, 10, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px 28px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.glassPanel:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(12, 12, 14, 0.9);
+}
+
+/* Headline Row (Collapsed) */
+.headlineRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headlineCategory {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c0a062;
+  padding: 4px 10px;
+  background: rgba(192, 160, 98, 0.12);
+  border-radius: 4px;
+}
+
+.headlineText {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .headlineRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .headlineText {
+    font-size: 14px;
+  }
+}
+
+/* Expanded Content */
+.expandedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 4px;
+}
+
+.summaryIcon {
+  font-size: 16px;
+}
+
+.expandedHeadline {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.expandedHeadline:last-child {
+  border-bottom: none;
+}
+
+.expandedHeadline .headlineCategory {
+  margin-top: 2px;
+}
+
+.expandedHeadline .headlineText {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Expand/Collapse Hint */
+.expandHint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin-top: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   AMBIENT GLOW (optional, from original)
+   ============================================================ */
+.ambientGlow {
+  position: absolute;
+  bottom: 0;
+  right: 9%;
+  height: 30.8%;
+  width: 57.4%;
+  border-radius: 50%;
+  z-index: 4;
+  pointer-events: none;
+  transform: scale(0.5, 0.6);
+  opacity: 0.4;
+  filter: blur(64px);
+  background: radial-gradient(circle, rgba(210, 208, 208, 0.5) 0%, transparent 100%);
+}
+
+/* ============================================================
+   HERO CONTENT — Text and CTA container
+   
+   From Huly DevTools:
+   - Text is centered, positioned above video
+   - z-30 to appear above video layer
+   ============================================================ */
+.heroContent {
+  position: absolute;
+  top: 184px; /* Huly exact: pt-[184px] */
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .heroContent {
+    top: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent {
+    top: 100px;
+  }
+}
+
+/* Hero Title — Gradient text */
+.heroTitle {
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  max-width: 900px;
+  margin: 0 0 24px 0;
+  
+  /* Optional: Add gradient effect like Huly */
+  /* background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; */
+}
+
+@media (max-width: 1024px) {
+  .heroTitle {
+    font-size: 56px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 32px;
+  }
+}
+
+/* Hero Subtitle */
+.heroSubtitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 0 40px 0;
+}
+
+@media (max-width: 768px) {
+  .heroSubtitle {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+}
+
+/* ============================================================
+   CTA BUTTONS — With glow orb effects
+   
+   From Huly DevTools - the button has layered glow orbs:
+   - Orb 1: radial-gradient(50% 50% at 50% 50%, 
+            #FFFFF5 3.5%, #FFAA81 26.5%, #FFDA9F 37.5%, 
+            rgba(255,170,129,0.50) 49%, rgba(210,106,58,0.00) 92.5%)
+   - Orb 2: radial-gradient(43.3% 44.23% at 50% 49.51%, 
+            #FFFFF7 29%, #FFFACD 48.5%, #F4D2BF 60.71%, 
+            rgba(214,211,210,0.00) 100%) with blur(5px)
+   ============================================================ */
+.ctaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 480px) {
+  .ctaRow {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Primary CTA Button */
+.ctaPrimary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  background: linear-gradient(180deg, #fff 0%, #e5e5e5 100%);
+  text-decoration: none;
+  overflow: visible;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1;
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(255, 170, 129, 0.3);
+}
+
+.ctaLabel {
+  position: relative;
+  z-index: 2;
+}
+
+/* Glow wrap container - positions glow orbs behind button */
+.ctaGlowWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Glow Orb 1 — Main orange/peach radial gradient */
+.ctaGlowOrb1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 121px;
+  height: 121px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #FFFFF5 3.5%,
+    #FFAA81 26.5%,
+    #FFDA9F 37.5%,
+    rgba(255, 170, 129, 0.50) 49%,
+    rgba(210, 106, 58, 0.00) 92.5%
+  );
+}
+
+/* Glow Orb 2 — Secondary warm gradient with blur */
+.ctaGlowOrb2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 204px;
+  height: 103px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  filter: blur(5px);
+  background: radial-gradient(
+    43.3% 44.23% at 50% 49.51%,
+    #FFFFF7 29%,
+    #FFFACD 48.5%,
+    #F4D2BF 60.71%,
+    rgba(214, 211, 210, 0.00) 100%
+  );
+}
+
+/* Secondary CTA Button */
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.ctaSecondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================
+   FEATURE PILLS — Small pill badges
+   ============================================================ */
+.pillsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 700px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
+}
+
+.pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+}

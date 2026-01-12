@@ -1,0 +1,700 @@
+/**
+ * 🔒 HULY-STYLE OVERLAY - LaserOverlay.module.css
+ * 
+ * LAYER ORDER (CRITICAL - DO NOT CHANGE):
+ * 1. darkBackdrop (z-index: 100) - deep onyx fade
+ * 2. fogLayer (z-index: 200) - atmosphere
+ * 3. laserContainer (z-index: 300) - LOCKED, center-aligned
+ * 4. panelContainer (z-index: 250) - UNDER laser, descends from top
+ * 5. closeButton (z-index: 400) - always accessible
+ * 
+ * LASER IS FROZEN - DO NOT MODIFY VIDEO STYLES
+ */
+
+/* ========================================
+   DEBUG TOGGLE BUTTON
+   ======================================== */
+.toggleButton {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #c0a062 0%, #8b7355 100%);
+  color: #000;
+  border: none;
+  padding: 14px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 20px rgba(192, 160, 98, 0.4),
+    0 0 30px rgba(192, 160, 98, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* ========================================
+   /live-intelligence-hero (Standalone page flow)
+   One sentence: Laser section, then panel, then footer.
+   No overlays, no fixed elements.
+   ======================================== */
+
+.liveMoodPage {
+  background: #07070a;
+  color: rgba(230, 240, 255, 0.9);
+}
+
+/* ========================================
+   LOCKED LAYOUT (per latest spec)
+   - No svh/dvh/lvh
+   - No negative margins
+   - Panel after laser (normal flow)
+   ======================================== */
+
+.heroWrapper {
+  background: #07070a;
+  color: rgba(230, 240, 255, 0.9);
+}
+
+.laserContainer {
+  height: 100vh;
+  min-height: unset;
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  background: #060607;
+}
+
+/* Smooth gradient to blend laser into panel */
+.laserContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 15vh;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(6, 6, 7, 0.6) 50%,
+    #060607 100%
+  );
+  z-index: 1;
+}
+
+.laserVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+
+  /* Keep video unmodified for sharpness */
+  filter: none;
+  mask: none;
+  mix-blend-mode: normal;
+}
+
+.panelWrapper {
+  position: relative;
+  margin-top: 0;
+  padding: 0 0 120px;
+  background: #060607;
+}
+
+.laserSection {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: unset;
+  overflow: hidden;
+  background: #07070a;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.laserSectionVideo {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  pointer-events: none;
+
+  /* CRITICAL: keep video unmodified for sharpness */
+  filter: none;
+  mask: none;
+  mix-blend-mode: normal;
+}
+
+.panelSection {
+  position: relative;
+  margin-top: 0;
+  padding: 48px 0 120px;
+  background: #060607;
+}
+
+.panelShell {
+  /* Narrower (60%) + slightly left-aligned */
+  width: min(60vw, 860px);
+  margin-left: clamp(16px, 5vw, 88px);
+  margin-right: auto;
+  padding: 26px 22px;
+  border-radius: 18px;
+  background: #0a0a0a; /* solid (no transparency tricks) */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.panelHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 6px 4px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 18px;
+}
+
+.panelTitle {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(220, 230, 255, 0.9);
+}
+
+.panelHint {
+  font-size: 12px;
+  color: rgba(200, 215, 255, 0.55);
+}
+
+.panelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.card {
+  border-radius: 14px;
+  padding: 18px;
+  background: rgba(60, 80, 150, 0.08);
+  border: 1px solid rgba(100, 130, 255, 0.12);
+}
+
+.cardTitle {
+  height: 12px;
+  width: 45%;
+  border-radius: 8px;
+  background: rgba(150, 175, 255, 0.18);
+  margin-bottom: 12px;
+}
+
+.cardLine {
+  height: 8px;
+  width: 100%;
+  border-radius: 6px;
+  background: rgba(120, 150, 255, 0.10);
+  margin-bottom: 8px;
+}
+
+.cardLineShort {
+  height: 8px;
+  width: 70%;
+  border-radius: 6px;
+  background: rgba(120, 150, 255, 0.08);
+}
+
+@media (max-width: 980px) {
+  .panelGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .panelShell {
+    width: calc(100vw - 24px);
+    margin: 0 12px;
+  }
+
+  .panelGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toggleButton:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 6px 30px rgba(192, 160, 98, 0.5),
+    0 0 50px rgba(192, 160, 98, 0.3);
+}
+
+/* ========================================
+   (overlayRoot removed - layers are now siblings)
+   ======================================== */
+
+/* ========================================
+   LAYER 1: BACKDROP (z-40)
+   Full viewport cinematic void
+   Completely hides homepage
+   ======================================== */
+.darkBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5000;
+  pointer-events: none;
+  /* Deep space with subtle animated nebula */
+  background: 
+    /* Ambient side glows that shift */
+    radial-gradient(ellipse 50% 80% at 10% 50%, rgba(60, 80, 160, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at 90% 50%, rgba(60, 80, 160, 0.08) 0%, transparent 60%),
+    /* Bottom ambient for panel area */
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(80, 100, 180, 0.12) 0%, transparent 50%),
+    /* Core vertical glow path */
+    radial-gradient(ellipse 20% 100% at 50% 50%, rgba(70, 90, 170, 0.06) 0%, transparent 70%),
+    /* Base */
+    radial-gradient(
+      120% 100% at 50% 100%,
+      rgba(100, 130, 255, 0.12) 0%,
+      rgba(25, 30, 50, 0.7) 40%,
+      #0A0A0C 70%
+    ),
+    #08090B;
+  
+  /* Subtle ambient animation */
+  animation: backdropShimmer 12s ease-in-out infinite;
+}
+
+
+@keyframes backdropShimmer {
+  0%, 100% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 50% 50%, 50% 100%, 0 0;
+  }
+  50% {
+    background-position: 5% 10%, 95% 10%, 50% 95%, 50% 50%, 50% 100%, 0 0;
+  }
+}
+
+/* ========================================
+   LAYER 2: FOG (z-45)
+   Atmospheric depth, light bloom
+   ======================================== */
+.fogLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5010;
+  pointer-events: none;
+  background: 
+    /* Light bloom at bottom */
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(100, 140, 255, 0.1) 0%, transparent 60%),
+    /* Subtle top glow */
+    radial-gradient(ellipse 60% 30% at 50% 0%, rgba(80, 100, 180, 0.08) 0%, transparent 50%),
+    /* Center vertical glow */
+    radial-gradient(ellipse 15% 100% at 50% 50%, rgba(120, 160, 255, 0.06) 0%, transparent 70%);
+}
+
+/* ========================================
+   LASER STAGE - FIXED BACKGROUND LAYER
+   NO filters, NO blend, NO masks, NO transforms
+   ======================================== */
+.laserStage {
+  position: fixed;
+  inset: 0; /* top/right/bottom/left all 0 */
+  width: 100vw;
+  height: 100vh;
+  z-index: 5020;
+  pointer-events: none;
+  overflow: visible; /* CRITICAL: Never clip the laser */
+}
+
+.laserVideo {
+  position: fixed;
+  top: -15vh; /* Shift UP from TOP only - 85% laser visible */
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  object-fit: cover;
+  object-position: center bottom; /* Bottom glow anchored - SACRED */
+
+  mask: none;
+  mix-blend-mode: normal;
+  
+  /* CRITICAL: Let clicks/scroll pass through to panel below */
+  pointer-events: none;
+
+  z-index: 5020; /* ABOVE panel - laser glow visible */
+}
+
+/* ========================================
+   LAYER 4: PANEL (z-48)
+   UNDER laser, descends from top
+   ======================================== */
+.panelContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5030; /* ABOVE laser (5020) - vessel must be visible */
+  display: flex;
+  justify-content: center;
+  padding-top: 120px;
+  pointer-events: none;
+}
+
+.panelGlass {
+  width: 90%;
+  max-width: 800px;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px 40px;
+  box-shadow: 
+    0 0 80px rgba(100, 120, 200, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Panel header */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px #ef4444; }
+  50% { opacity: 0.6; box-shadow: 0 0 4px #ef4444; }
+}
+
+/* Signal list */
+.signalList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.signalRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.signalRow:last-child {
+  border-bottom: none;
+}
+
+.signalCategory {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c0a062;
+  background: rgba(192, 160, 98, 0.1);
+  border: 1px solid rgba(192, 160, 98, 0.2);
+  border-radius: 4px;
+  min-width: 100px;
+  text-align: center;
+}
+
+.signalText {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ========================================
+   BOTTOM PANEL (z-5015)
+   UNDER laser - glow stays visible on top
+   Scrollable - laser has pointer-events: none
+   ======================================== */
+.bottomPanel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 85vh;
+  max-height: 85vh;
+  width: 90vw;
+  max-width: 1100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 5015; /* UNDER laser (5020) - never covers glow */
+  border-radius: 20px 20px 0 0;
+  pointer-events: auto;
+  overscroll-behavior: contain;
+  
+  /* Blue-tinted dark background - same universe as laser */
+  background: 
+    /* Top glow gradient - laser light bleeding in */
+    radial-gradient(ellipse 100% 40% at 50% 0%, rgba(100, 130, 255, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 25% at 50% 0%, rgba(140, 160, 255, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 15% at 50% 0%, rgba(180, 195, 255, 0.15) 0%, transparent 50%),
+    /* Base - deep space with blue tint */
+    linear-gradient(180deg, 
+      rgba(15, 18, 40, 0.95) 0%,
+      rgba(10, 12, 25, 0.98) 15%,
+      #08090c 40%
+    );
+  
+  /* Side glow + top breathing animation */
+  box-shadow: 
+    /* Top glow - breathing */
+    0 -15px 50px rgba(120, 145, 255, 0.25),
+    0 -8px 30px rgba(150, 170, 255, 0.2),
+    0 -3px 15px rgba(180, 195, 255, 0.15),
+    /* Side glows */
+    -40px 0 50px rgba(80, 110, 200, 0.12),
+    40px 0 50px rgba(80, 110, 200, 0.12),
+    /* Inner glow at top */
+    inset 0 2px 30px rgba(120, 150, 255, 0.1),
+    inset 0 1px 0 rgba(180, 200, 255, 0.25);
+  
+  /* Glowing borders */
+  border-top: 1px solid rgba(160, 180, 255, 0.4);
+  border-left: 1px solid rgba(100, 130, 255, 0.15);
+  border-right: 1px solid rgba(100, 130, 255, 0.15);
+  
+  /* Breathing animation */
+  animation: panelBreathe 4s ease-in-out infinite;
+}
+
+/* Breathing glow animation */
+@keyframes panelBreathe {
+  0%, 100% {
+    box-shadow: 
+      0 -15px 50px rgba(120, 145, 255, 0.25),
+      0 -8px 30px rgba(150, 170, 255, 0.2),
+      0 -3px 15px rgba(180, 195, 255, 0.15),
+      -40px 0 50px rgba(80, 110, 200, 0.12),
+      40px 0 50px rgba(80, 110, 200, 0.12),
+      inset 0 2px 30px rgba(120, 150, 255, 0.1),
+      inset 0 1px 0 rgba(180, 200, 255, 0.25);
+  }
+  50% {
+    box-shadow: 
+      0 -20px 60px rgba(130, 155, 255, 0.35),
+      0 -10px 40px rgba(160, 180, 255, 0.3),
+      0 -5px 20px rgba(190, 205, 255, 0.2),
+      -50px 0 60px rgba(90, 120, 210, 0.18),
+      50px 0 60px rgba(90, 120, 210, 0.18),
+      inset 0 3px 40px rgba(130, 160, 255, 0.15),
+      inset 0 1px 0 rgba(200, 215, 255, 0.35);
+  }
+}
+
+/* Top edge glow bar - extra connection effect */
+.bottomPanel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(140, 170, 255, 0.5) 20%,
+    rgba(200, 215, 255, 0.8) 50%,
+    rgba(140, 170, 255, 0.5) 80%,
+    transparent 100%
+  );
+  border-radius: 2px;
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.7; width: 60%; }
+  50% { opacity: 1; width: 70%; }
+}
+
+/* Floating particles effect */
+.bottomPanel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-image: 
+    radial-gradient(1px 1px at 20% 30%, rgba(180, 200, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 70%, rgba(160, 180, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 40%, rgba(200, 215, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 60%, rgba(170, 190, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 30% 50%, rgba(150, 175, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 20%, rgba(190, 205, 255, 0.4) 0%, transparent 100%);
+  pointer-events: none;
+  animation: particleFloat 8s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-10px); opacity: 1; }
+}
+
+/* ========================================
+   CLOSE BUTTON (z-60)
+   ======================================== */
+.closeButton {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 5030;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ========================================
+   MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .panelContainer {
+    padding-top: 100px;
+  }
+  
+  .panelGlass {
+    width: 95%;
+    padding: 24px 20px;
+    border-radius: 12px;
+  }
+  
+  .signalRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .signalCategory {
+    min-width: auto;
+    align-self: flex-start;
+  }
+  
+  .signalText {
+    font-size: 13px;
+  }
+  
+  .toggleButton {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 18px;
+    font-size: 11px;
+  }
+  
+  .closeButton {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ========================================
+   FINAL OVERRIDES (LIVE HERO)
+   Reason: legacy overlay styles in this file can override `.laserVideo`.
+   Keep MP4 sharp + fullscreen and panel visually attached.
+   ======================================== */
+
+.heroWrapper .laserContainer {
+  height: 100vh;
+  min-height: unset;
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  background: #060607;
+}
+
+.heroWrapper .laserContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 15vh;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(6, 6, 7, 0.6) 50%,
+    #060607 100%
+  );
+}
+
+.heroWrapper .laserVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  filter: none;
+  mask: none;
+  mix-blend-mode: normal;
+}
+
+.heroWrapper .panelWrapper {
+  position: relative;
+  margin-top: 0;
+  padding: 0 0 120px;
+  background: #060607;
+}

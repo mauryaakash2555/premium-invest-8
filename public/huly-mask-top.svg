@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1438" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="r" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#cfe0ff" stop-opacity="0.16"/>
+      <stop offset="0.55" stop-color="#7aa2ff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <!-- Soft orb / halo overlay (generic, non-copied) -->
+  <ellipse cx="980" cy="640" rx="760" ry="520" fill="url(#r)" filter="url(#blur)"/>
+</svg>

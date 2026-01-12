@@ -1892,3 +1892,202 @@ html {
   }
 }
 
+/* Hide mobile dock when laser overlay is active */
+body[data-laser-active="true"] [class*="LuxuryMobileDock"],
+body[data-laser-active="true"] [class*="MobileDock"],
+body[data-laser-active="true"] [class*="mobile-dock"] {
+  display: none !important;
+}
+
+/* Live Intelligence Hero: remove global chrome so hero is clean */
+body[data-laser-active="true"] .main-wrapper > nav,
+body[data-laser-active="true"] .main-wrapper > header {
+  display: none !important;
+}
+
+/* Live Intelligence Hero: footer stays (homepage footer), but match panel color on this page only */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-top: 0 !important;
+  background-color: #090A0C !important;
+}
+
+/* Footer has internal containers with explicit black backgrounds; override color only (keep animations) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer),
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="bg-[#000000]"],
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="bg-black"] {
+  background-color: #090A0C !important;
+}
+
+/* Live Intelligence Hero: footer accent recolor (route-scoped; NO structural changes) */
+body[data-laser-active="true"] {
+  /* Mirror the Live Intelligence panel text palette */
+  --li-panel-title: rgba(235, 242, 255, 0.94);
+  --li-panel-body: rgba(220, 230, 255, 0.70);
+  --li-panel-muted: rgba(220, 230, 255, 0.62);
+  --li-panel-accent: rgba(170, 198, 255, 0.65);
+  --li-panel-accent-strong: rgba(170, 198, 255, 0.82);
+
+  /* Shared footer variables used by Footer.jsx inline styles.
+     Keep them subtle (no loud accent) for HNI look. */
+  --li-footer-accent-1: rgba(235, 242, 255, 0.78);
+  --li-footer-accent-2: rgba(235, 242, 255, 0.58);
+  --li-footer-accent-3: rgba(245, 248, 255, 0.90);
+  --li-footer-accent-soft: rgba(235, 242, 255, 0.10);
+  --li-footer-accent-glow: rgba(235, 242, 255, 0.14);
+  --li-footer-accent-glow-strong: rgba(235, 242, 255, 0.20);
+}
+
+@keyframes li-ambient-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(75, 183, 255, 0.22),
+      0 0 46px rgba(75, 183, 255, 0.16),
+      inset 0 0 20px rgba(75, 183, 255, 0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(75, 183, 255, 0.30),
+      0 0 70px rgba(75, 183, 255, 0.22),
+      inset 0 0 30px rgba(75, 183, 255, 0.06);
+  }
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .ambient-glow-pulse {
+  animation-name: li-ambient-pulse !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-side-line::before {
+  background: var(--li-panel-accent) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-wave-container::after {
+  /* Remove the sweeping accent highlight on this page */
+  background: none !important;
+  opacity: 0 !important;
+}
+
+/* Live Intelligence Hero: disclaimer side-line (the visible yellow line) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line .side-line {
+  /* Premium + quiet: panel-white line with soft glow */
+  background-color: rgba(245, 250, 255, 0.34) !important;
+  box-shadow:
+    0 0 18px rgba(245, 250, 255, 0.18),
+    0 0 46px rgba(170, 198, 255, 0.10) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line:hover .side-line,
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line:active .side-line,
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line.is-scroll-active .side-line {
+  box-shadow:
+    0 0 22px rgba(245, 250, 255, 0.24),
+    0 0 60px rgba(170, 198, 255, 0.14) !important;
+}
+
+/* Live Intelligence Hero: remove newsletter microcopy inside footer */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [data-newsletter-unsub-note] {
+  display: none !important;
+}
+
+/* Keep disclaimer headings as "panel accent" (not plain white) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line h4 {
+  color: rgba(245, 248, 255, 0.80) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .ultra-luxury-glass {
+  border-top-color: rgba(170, 198, 255, 0.22) !important;
+  box-shadow:
+    0 -30px 120px rgba(60, 120, 255, 0.12),
+    0 -10px 40px rgba(0, 0, 0, 0.55) !important;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(120, 175, 255, 0.10) 0%, rgba(0, 0, 0, 0.00) 62%),
+    radial-gradient(70% 60% at 20% 10%, rgba(235, 250, 255, 0.06) 0%, rgba(0, 0, 0, 0.00) 60%),
+    linear-gradient(135deg, rgba(6, 8, 14, 0.92) 0%, rgba(0, 0, 0, 0.98) 100%) !important;
+  backdrop-filter: blur(26px) saturate(150%) !important;
+}
+
+/* Live Intelligence Hero: add a real "ultra" top wave bar (Footer.jsx uses this class but it was mostly opacity-only) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-wave-3s {
+  /* Remove the accent bar entirely (keep layout) */
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 0.0 !important;
+}
+
+/* Live Intelligence Hero: recolor the BM Wealth wordmark gradient to match the panel */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .gold-gradient-text {
+  /* BM Wealth wordmark: match panel (icy, premium) */
+  background: linear-gradient(
+    135deg,
+    rgba(245, 250, 255, 0.86) 0%,
+    rgba(235, 244, 255, 0.86) 25%,
+    rgba(255, 255, 255, 0.92) 50%,
+    rgba(235, 244, 255, 0.86) 75%,
+    rgba(245, 250, 255, 0.86) 100%
+  ) !important;
+  background-size: 220% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 18px rgba(245, 250, 255, 0.10)) !important;
+}
+
+/* Live Intelligence Hero: shift particles from gold → icy sparkle (keeps behavior/animations) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .gold-particle {
+  /* Dust particles: soft white (premium) */
+  background: rgba(235, 250, 255, 0.92) !important;
+  filter: blur(0.45px) !important;
+  box-shadow: 0 0 8px rgba(235, 250, 255, 0.40), 0 0 18px rgba(140, 190, 255, 0.12) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-particles::after {
+  /* Keep original particle texture (gold) */
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
+    radial-gradient(circle at 90% 20%, rgba(192, 160, 98, 0.10) 1px, transparent 1px) !important;
+}
+
+/* Catch the most visible hard-coded gold utility colors inside the footer (Tailwind arbitrary values) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="text-[#C0A062]"] {
+  color: var(--li-panel-title) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="text-[#D4B576]"] {
+  color: var(--li-panel-body) !important;
+}
+
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="border-[#C0A062]"] {
+  border-color: rgba(170, 198, 255, 0.18) !important;
+}
+
+/* Footer-only: drive newsletter/button accents off the panel palette (keeps dust particles gold) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) {
+  --color-matte-gold: rgba(170, 198, 255, 0.70);
+  --color-gold-glow: rgba(170, 198, 255, 0.18);
+}
+
+/* Target the most common gold gradients in footer wings/lines */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="via-[#C0A062]"] {
+  --tw-gradient-via: rgba(170, 198, 255, 0.52) !important;
+}
+
+/* Replace gold-tinted arbitrary drop-shadow utilities */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]"] {
+  /* Do NOT change the BM Wealth wordmark gradient; only soften the gold shadow */
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.10)) !important;
+}
+
+/* Replace gold-tinted arbitrary box-shadow utilities (footer container glow) */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"] {
+  box-shadow: 0 -30px 120px rgba(60, 120, 255, 0.10) !important;
+}
+
+/* Reduce remaining gold hover accents on legal micro-links and concierge hover */
+body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="hover:text-[#C0A062]"]:hover {
+  color: var(--li-panel-title) !important;
+}

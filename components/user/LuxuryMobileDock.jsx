@@ -74,7 +74,8 @@ export function LuxuryMobileDock() {
   const hideDock =
     pathname?.startsWith("/tools/tax-optimization") ||
     pathname?.startsWith("/tools/tax-leak-detector") ||
-    pathname?.startsWith("/tax-leak-detector");
+    pathname?.startsWith("/tax-leak-detector") ||
+    pathname?.startsWith("/live-intelligence-hero");
 
   // If we navigate into a route where the dock is hidden, force-close any open menu
   // and clear transient highlight state.

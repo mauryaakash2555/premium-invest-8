@@ -1,0 +1,19 @@
+ ⚠ Linting is disabled.
+   ▲ Next.js 15.1.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|javascript/auto|C:\Users\admin\premium-invest-8\node_modules\next\dist\build\webpack\loaders\next-flight-css-loader.js??ruleSet[1].rules[13].oneOf[5].use[0]!C:\Users\admin\premium-invest-8\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[13].oneOf[5].use[1]!C:\Users\admin\premium-invest-8\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[13].oneOf[5].use[2]!C:\Users\admin\premium-invest-8\app\(public)\live-intelligence-hero\IsolatedLiveMood.module.css|ssr': No serializer registered for CssSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> CssSyntaxError
+Failed to compile.
+
+./app/(public)/live-intelligence-hero/IsolatedLiveMood.module.css:1:1
+Syntax error: Selector ":root" is not pure (pure selectors must contain at least one local class or id)
+
+[1m[31m>[39m[22m[90m 1 | [39m[33m:[39mroot [33m{[39m
+ [90m   | [39m[1m[31m^[39m[22m
+ [90m 2 | [39m  --onyx[33m:[39m [35m#0a0a0a[39m[33m;[39m
+ [90m 3 | [39m  --surface[33m:[39m [36mrgba[39m[36m(255, 255, 255, 0.05)[39m[33m;[39m
+
+
+> Build failed because of webpack errors

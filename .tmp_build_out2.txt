@@ -1,0 +1,131 @@
+ ⚠ Linting is disabled.
+   ▲ Next.js 15.1.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/106) ...
+   Generating static pages (26/106) 
+   Generating static pages (52/106) 
+   Generating static pages (79/106) 
+ ✓ Generating static pages (106/106)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                        Size     First Load JS
+┌ ○ /                                              13 kB           220 kB
+├ ○ /_not-found                                    983 B           106 kB
+├ ○ /about                                         332 B           106 kB
+├ ○ /about-us                                      4.33 kB         110 kB
+├ ○ /admin-secret-akash                            16 kB           121 kB
+├ ○ /admin-secret-xyz                              283 B           106 kB
+├ ƒ /api/admin/affiliate-convert                   332 B           106 kB
+├ ƒ /api/admin/affiliate-fail                      332 B           106 kB
+├ ƒ /api/admin/affiliate-stats                     332 B           106 kB
+├ ƒ /api/admin/affiliate-update                    332 B           106 kB
+├ ƒ /api/admin/analytics                           332 B           106 kB
+├ ƒ /api/admin/daily-metrics                       332 B           106 kB
+├ ƒ /api/admin/deliverables                        332 B           106 kB
+├ ƒ /api/admin/deliverables/email                  332 B           106 kB
+├ ƒ /api/admin/deliverables/pdf                    332 B           106 kB
+├ ƒ /api/admin/deliverables/preview/email          332 B           106 kB
+├ ƒ /api/admin/deliverables/preview/pdf            332 B           106 kB
+├ ƒ /api/admin/email-preferences                   332 B           106 kB
+├ ƒ /api/admin/export                              332 B           106 kB
+├ ƒ /api/admin/family-stats                        332 B           106 kB
+├ ƒ /api/admin/family/login                        332 B           106 kB
+├ ƒ /api/admin/family/logout                       332 B           106 kB
+├ ƒ /api/admin/leads                               332 B           106 kB
+├ ƒ /api/admin/login                               332 B           106 kB
+├ ƒ /api/admin/logout                              332 B           106 kB
+├ ƒ /api/admin/revenue                             332 B           106 kB
+├ ƒ /api/admin/strategy                            332 B           106 kB
+├ ƒ /api/admin/summary                             332 B           106 kB
+├ ƒ /api/admin/test-email                          332 B           106 kB
+├ ƒ /api/admin/test-property-vs-sip-emails         332 B           106 kB
+├ ƒ /api/admin/verify                              332 B           106 kB
+├ ƒ /api/affiliate/click                           332 B           106 kB
+├ ƒ /api/blog                                      332 B           106 kB
+├ ƒ /api/bmwealth                                  332 B           106 kB
+├ ƒ /api/chat                                      332 B           106 kB
+├ ƒ /api/contact                                   332 B           106 kB
+├ ƒ /api/cron/daily-summary                        332 B           106 kB
+├ ƒ /api/cron/weekly-summary                       332 B           106 kB
+├ ƒ /api/cron/whatsapp-followups                   332 B           106 kB
+├ ƒ /api/email/click                               332 B           106 kB
+├ ƒ /api/email/open                                332 B           106 kB
+├ ƒ /api/events                                    332 B           106 kB
+├ ƒ /api/generate-pdf                              332 B           106 kB
+├ ƒ /api/health                                    332 B           106 kB
+├ ƒ /api/leads                                     332 B           106 kB
+├ ƒ /api/leads/capture                             332 B           106 kB
+├ ƒ /api/market-data                               332 B           106 kB
+├ ƒ /api/newsletter/subscribe                      332 B           106 kB
+├ ƒ /api/pdf/generate                              332 B           106 kB
+├ ƒ /api/property-vs-sip/email-summary             332 B           106 kB
+├ ƒ /api/razorpay/create-order                     332 B           106 kB
+├ ƒ /api/razorpay/verify                           332 B           106 kB
+├ ƒ /api/track                                     332 B           106 kB
+├ ƒ /api/whatsapp/webhook                          332 B           106 kB
+├ ○ /blog                                          6.68 kB         205 kB
+├ ● /blog/[slug]                                   8.56 kB         168 kB
+├   ├ /blog/47-lakh-investment-mistake-mumbai
+├   ├ /blog/retirement-shortfall-case-study
+├   ├ /blog/insurance-investment-mix-trap-31-lakh
+├   └ [+7 more paths]
+├ ○ /blueprint                                     176 B           109 kB
+├ ○ /careers                                       4.46 kB         113 kB
+├ ○ /compliance                                    4.1 kB          109 kB
+├ ○ /contact                                       32.7 kB         138 kB
+├ ○ /curated-partners                              7.41 kB         116 kB
+├ ○ /dashboard                                     332 B           106 kB
+├ ○ /disclaimer                                    4.75 kB         110 kB
+├ ○ /fixed-deposits                                6.09 kB         158 kB
+├ ○ /insurance                                     5.99 kB         158 kB
+├ ○ /legal-disclosures                             2.61 kB         108 kB
+├ ○ /live-intelligence-hero                        3.64 kB         148 kB
+├ ○ /login                                         944 B           110 kB
+├ ○ /mutual-funds                                  7.51 kB         160 kB
+├ ○ /payment-success                               1.99 kB         107 kB
+├ ○ /platforms                                     7.5 kB          155 kB
+├ ○ /portfolio-management                          5.97 kB         158 kB
+├ ○ /privacy                                       3.56 kB         109 kB
+├ ○ /privacy-policy                                332 B           106 kB
+├ ○ /products                                      332 B           106 kB
+├ ○ /refund                                        3.08 kB         108 kB
+├ ○ /refund-policy                                 332 B           106 kB
+├ ○ /regulatory-compliance                         2.41 kB         108 kB
+├ ○ /robots.txt                                    0 B                0 B
+├ ○ /services                                      14.7 kB         162 kB
+├ ○ /sip                                           6.07 kB         158 kB
+├ ○ /sip-calculator                                1.73 kB         111 kB
+├ ○ /sitemap                                       176 B           111 kB
+├ ○ /sitemap-page                                  177 B           111 kB
+├ ○ /sitemap.xml                                   0 B                0 B
+├ ○ /tax-leak-detector                             332 B           106 kB
+├ ○ /terms                                         3.86 kB         109 kB
+├ ○ /terms-and-conditions                          332 B           106 kB
+├ ○ /tools                                         3.22 kB         151 kB
+├ ○ /tools/insurance-value                         2.11 kB         116 kB
+├ ○ /tools/lumpsum-planner                         2.11 kB         116 kB
+├ ○ /tools/property-vs-sip                         10.8 kB         164 kB
+├ ○ /tools/retirement-gap                          2.11 kB         116 kB
+├ ○ /tools/tax-leak-detector                       332 B           106 kB
+├ ○ /tools/tax-optimization                        8.84 kB         162 kB
+├ ƒ /track/[platform]                              332 B           106 kB
+├ ○ /trading-services                              6.67 kB         159 kB
+└ ○ /v0-test                                       332 B           106 kB
++ First Load JS shared by all                      105 kB
+  ├ chunks/1517-7c27e752f5f706c3.js                50.4 kB
+  ├ chunks/4bd1b696-7aebe8a43735404f.js            52.9 kB
+  └ other shared chunks (total)                    1.98 kB
+
+
+ƒ Middleware                                       32.1 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

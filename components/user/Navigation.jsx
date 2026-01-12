@@ -122,7 +122,10 @@ const Navigation = () => {
 
   // Hide brand/navigation on pages that provide their own header.
   // (Prevents the fixed public navbar overlaying and blocking admin controls.)
-  const hideNav = pathname === '/sip-calculator' || pathname.startsWith('/admin-secret-akash');
+  const hideNav =
+    pathname === '/sip-calculator' ||
+    pathname.startsWith('/admin-secret-akash') ||
+    pathname?.startsWith('/live-intelligence-hero');
 
   if (hideNav) {
     // Render nothing on this route; page provides its own minimal header.
