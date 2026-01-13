@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+
+import { DUMMY_HEADLINES, sortByPriority } from '@/lib/live-intelligence/headlines';
 
 const LASER_ASSET_VERSION = 'seamless-xfade-fade-2026-01-11';
 const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`;
@@ -73,6 +75,23 @@ export default function LiveIntelligenceOverlay({
   const overlayRef = useRef(null);
   const footerObserverRef = useRef(null);
   const hasAutoOpenedRef = useRef(false);
+
+  const sortedHeadlines = useMemo(() => sortByPriority(DUMMY_HEADLINES), []);
+  const headlineLinkByCategory = useMemo(
+    () => ({
+      market: '/tools',
+      mutual_funds: '/mutual-funds',
+      sip: '/sip',
+      breaking: '/tools',
+      insurance: '/insurance',
+      fixed_income: '/fixed-deposits',
+      trading: '/trading-services',
+      pms: '/portfolio-management',
+      real_estate: '/tools',
+      forex_gold: '/tools',
+    }),
+    []
+  );
 
   // Mount check for portal
   useEffect(() => {
@@ -1221,7 +1240,7 @@ function LiveIntelligencePanel({ onClose }) {
             className="li-dash-card"
             style={{ 
               gridColumn: '1 / -1',
-              background: '#131722',
+              background: '#000000',
               border: '1px solid rgba(100, 180, 255, 0.10)',
               borderRadius: '16px',
               overflow: 'hidden',
@@ -1231,7 +1250,7 @@ function LiveIntelligencePanel({ onClose }) {
             <div style={{
               padding: '14px 20px',
               borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
-              background: '#131722',
+              background: '#000000',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -1340,6 +1359,167 @@ function LiveIntelligencePanel({ onClose }) {
                 title="Market Overview"
                 loading="lazy"
               />
+            </div>
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════════
+              HEADLINE FEED (Overlay) - ensure visible on production
+              ═══════════════════════════════════════════════════════════ */}
+          <div
+            className="li-dash-card"
+            style={{
+              gridColumn: '1 / -1',
+              background: 'rgba(10, 10, 12, 0.88)',
+              border: '1px solid rgba(100, 180, 255, 0.12)',
+              borderRadius: '16px',
+              padding: '16px 16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <h3 style={{ margin: 0, color: 'rgba(235, 242, 255, 0.94)', fontSize: '15px', fontWeight: 600 }}>
+                Headline Feed
+              </h3>
+              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                {sortedHeadlines.length} cards
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: '12px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '10px',
+              }}
+            >
+              {sortedHeadlines.slice(0, 12).map((h) => (
+                <a
+                  key={h.id}
+                  href={headlineLinkByCategory[h.category] || '/tools'}
+                  style={{
+                    display: 'block',
+                    textDecoration: 'none',
+                    padding: '14px 14px',
+                    borderRadius: '14px',
+                    background: 'rgba(0, 0, 0, 0.55)',
+                    border: '1px solid rgba(100, 150, 255, 0.12)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 150, 255, 0.12)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(100, 150, 255, 0.12)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{ color: 'rgba(245, 248, 255, 0.92)', fontSize: '13px', fontWeight: 600, lineHeight: 1.35 }}>
+                    {h.headline}
+                  </div>
+                  <div style={{ marginTop: '8px', color: 'rgba(180, 200, 230, 0.62)', fontSize: '11px', lineHeight: 1.35 }}>
+                    {h.whyItMatters}
+                  </div>
+                  {h.dataPoint ? (
+                    <div style={{ marginTop: '10px', color: 'rgba(170, 198, 255, 0.80)', fontSize: '11px', fontWeight: 600 }}>
+                      {h.dataPoint}
+                    </div>
+                  ) : null}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════════
+              QUICK ACCESS (Overlay)
+              ═══════════════════════════════════════════════════════════ */}
+          <div
+            className="li-dash-card"
+            style={{
+              gridColumn: '1 / -1',
+              background: 'rgba(10, 10, 12, 0.88)',
+              border: '1px solid rgba(100, 180, 255, 0.12)',
+              borderRadius: '16px',
+              padding: '16px 16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <h3 style={{ margin: 0, color: 'rgba(235, 242, 255, 0.94)', fontSize: '15px', fontWeight: 600 }}>
+                Quick Access
+              </h3>
+              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                Tap to open
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: '12px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                gap: '10px',
+              }}
+            >
+              {[
+                { title: 'Mutual Funds', icon: 'MF', desc: 'Explore funds', link: '/mutual-funds' },
+                { title: 'SIP', icon: 'SIP', desc: 'Start SIP', link: '/sip' },
+                { title: 'Portfolio Mgmt', icon: 'PMS', desc: 'PMS/AIF', link: '/portfolio-management' },
+                { title: 'Insurance', icon: 'INS', desc: 'Term/Health', link: '/insurance' },
+                { title: 'Trading', icon: 'TRD', desc: 'Demat/Trading', link: '/trading-services' },
+                { title: 'Fixed Deposits', icon: 'FD', desc: 'FD rates', link: '/fixed-deposits' },
+              ].map((service) => (
+                <a
+                  key={service.title}
+                  href={service.link}
+                  style={{
+                    display: 'block',
+                    textDecoration: 'none',
+                    padding: '14px 14px',
+                    borderRadius: '14px',
+                    background: 'rgba(0, 0, 0, 0.55)',
+                    border: '1px solid rgba(100, 150, 255, 0.12)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 150, 255, 0.12)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(100, 150, 255, 0.12)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '26px',
+                      minWidth: '42px',
+                      padding: '0 10px',
+                      borderRadius: '999px',
+                      background: 'rgba(100, 150, 255, 0.10)',
+                      border: '1px solid rgba(100, 150, 255, 0.18)',
+                      color: 'rgba(200, 225, 255, 0.92)',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                    }}
+                  >
+                    {service.icon}
+                  </div>
+                  <div style={{ marginTop: '8px', color: 'rgba(245, 248, 255, 0.92)', fontSize: '13px', fontWeight: 700 }}>
+                    {service.title}
+                  </div>
+                  <div style={{ marginTop: '4px', color: 'rgba(180, 200, 230, 0.62)', fontSize: '11px' }}>
+                    {service.desc}
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
