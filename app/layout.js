@@ -1,2 +1,8 @@
 export { metadata } from './metadata';
-export { default } from './layout.client';
+
+import RootLayoutClient from './layout.client';
+
+export default function RootLayout({ children }) {
+	const buildId = process.env.VERCEL_GIT_COMMIT_SHA || '';
+	return <RootLayoutClient buildId={buildId}>{children}</RootLayoutClient>;
+}

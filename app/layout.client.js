@@ -50,7 +50,9 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, buildId: buildIdProp }) {
+  // Used only for deploy verification/debugging (no visual output)
+  const buildId = buildIdProp || 'local';
   const pathname = usePathname();
   const isLaserPage = pathname === '/live-intelligence-hero';
   const isClientPortal = pathname === '/client-portal';
@@ -60,6 +62,9 @@ export default function RootLayout({ children }) {
   const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
   return (
     <html lang="en">
+      <head>
+        <meta name="x-ui-build" content={buildId} />
+      </head>
       <body
         className={`${playfair.variable} ${inter.variable}`}
         style={{
@@ -77,6 +82,7 @@ export default function RootLayout({ children }) {
         />
         <div
           className="main-wrapper"
+          data-ui-build={buildId}
           style={{
             overflowX: "hidden",
             maxWidth: "100%",
