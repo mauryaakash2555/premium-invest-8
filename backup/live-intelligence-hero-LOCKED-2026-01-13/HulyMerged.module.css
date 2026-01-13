@@ -1,0 +1,51 @@
+.page {
+  background: #000;
+  color: rgba(240, 245, 255, 0.92);
+}
+
+@property --hero-mask-x {
+  syntax: '<length>';
+  inherits: true;
+  syntax: '<length>';
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: rgba(235, 242, 255, 0.92);
+  border: 1px solid rgba(140, 150, 255, 0.22);
+  background: rgba(100, 100, 255, 0.12);
+}
+
+.headline {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 650;
+}
+
+.desc {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(220, 230, 255, 0.78);
+}
+
+.time {
+  margin-top: 10px;
+  font-size: 11px;
+  color: rgba(200, 210, 255, 0.55);
+}
+
+@media (max-width: 980px) {
+  .cardsWrap {
+    top: 96px;
+    width: min(720px, calc(100vw - 32px));
+  }
+}
+
+@media (max-width: 640px) {
+  .cardsWrap {
+    top: 84px;
+    width: calc(100vw - 24px);
+  }
+}

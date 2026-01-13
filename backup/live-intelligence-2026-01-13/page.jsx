@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LaserFooter from '@/components/user/LaserFooter';
 import ModeIndicator from './components/ModeIndicator';
 import NightSummary from './components/NightSummary';
 import HeadlineFeed from './components/HeadlineFeed';
 import StreakBadge from './components/StreakBadge';
-import DonutCalculator from './components/DonutCalculator';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 import { initEngagementTracking } from '@/lib/live-intelligence/analytics';
 
@@ -17,8 +16,6 @@ const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`; // LOCKED
 export default function LiveIntelligenceHeroPage() {
   const router = useRouter();
   const [modeConfig, setModeConfig] = useState(null);
-  const [showShareMenu, setShowShareMenu] = useState(false);
-  const shareMenuRef = useRef(null);
 
   // Hide the mobile dock on this page only (does not affect scroll)
   useEffect(() => {
@@ -40,57 +37,9 @@ export default function LiveIntelligenceHeroPage() {
     };
   }, []);
 
-  // Close share menu on outside click
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) {
-        setShowShareMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   // Close handler - navigate back home
   const handleClose = () => {
     router.push('/');
-  };
-
-  // Share handlers
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : 'https://bmwealth.in/live-intelligence-hero';
-  const shareText = 'Check out my Live Intelligence Dashboard at BM Wealth - Real-time portfolio insights!';
-
-  const handleShare = (platform) => {
-    const urls = {
-      whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
-      email: `mailto:?subject=${encodeURIComponent('My BM Wealth Portfolio Dashboard')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-      telegram: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
-      copy: null,
-    };
-
-    if (platform === 'copy') {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          alert('Link copied to clipboard!');
-        }).catch(() => {
-          // Fallback for clipboard API failure
-          prompt('Copy this link:', shareUrl);
-        });
-      } else {
-        // Fallback for browsers without clipboard API
-        prompt('Copy this link:', shareUrl);
-      }
-    } else if (urls[platform]) {
-      // Try window.open first, fallback to location.href for VS Code browser
-      const newWindow = window.open(urls[platform], '_blank', 'noopener,noreferrer');
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        // Popup blocked - use direct navigation
-        window.location.href = urls[platform];
-      }
-    }
-    setShowShareMenu(false);
   };
 
   // Get mode accent color (fallback to ice blue)
@@ -667,129 +616,6 @@ export default function LiveIntelligenceHeroPage() {
           }
 
           /* ═══════════════════════════════════════════════════════════
-             LUXURIOUS MODERN SCROLLBAR
-             ═══════════════════════════════════════════════════════════ */
-          
-          /* Custom scrollbar for all scrollable areas */
-          .li-table-wrapper::-webkit-scrollbar,
-          .li-holdings-scroll::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-          }
-
-          .li-table-wrapper::-webkit-scrollbar-track,
-          .li-holdings-scroll::-webkit-scrollbar-track {
-            background: rgba(20, 25, 35, 0.5);
-            border-radius: 10px;
-          }
-
-          .li-table-wrapper::-webkit-scrollbar-thumb,
-          .li-holdings-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(100, 160, 255, 0.35) 0%, rgba(140, 190, 255, 0.25) 100%);
-            border-radius: 10px;
-            border: 1px solid rgba(100, 160, 255, 0.15);
-          }
-
-          .li-table-wrapper::-webkit-scrollbar-thumb:hover,
-          .li-holdings-scroll::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, rgba(100, 160, 255, 0.55) 0%, rgba(140, 190, 255, 0.40) 100%);
-            box-shadow: 0 0 12px rgba(100, 160, 255, 0.3);
-          }
-
-          /* Firefox scrollbar */
-          .li-table-wrapper,
-          .li-holdings-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(100, 160, 255, 0.35) rgba(20, 25, 35, 0.5);
-          }
-
-          /* ═══════════════════════════════════════════════════════════
-             SHARE MENU DROPDOWN
-             ═══════════════════════════════════════════════════════════ */
-          
-          .li-share-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 8px;
-            min-width: 200px;
-            background: rgba(15, 18, 25, 0.98);
-            border: 1px solid rgba(100, 160, 255, 0.20);
-            border-radius: 14px;
-            padding: 8px;
-            box-shadow: 
-              0 12px 40px rgba(0, 0, 0, 0.50),
-              0 0 60px rgba(100, 160, 255, 0.08);
-            backdrop-filter: blur(20px);
-            z-index: 200;
-            animation: shareMenuSlide 0.2s ease-out;
-          }
-
-          @keyframes shareMenuSlide {
-            from {
-              opacity: 0;
-              transform: translateY(-8px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .li-share-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 12px 14px;
-            background: transparent;
-            border: none;
-            border-radius: 10px;
-            color: rgba(220, 230, 255, 0.85);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-          }
-
-          .li-share-item:hover {
-            background: rgba(100, 160, 255, 0.12);
-            color: rgba(255, 255, 255, 1);
-          }
-
-          .li-share-item-icon {
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-          }
-
-          /* ═══════════════════════════════════════════════════════════
-             BACK ARROW - Pure minimal, no background
-             ═══════════════════════════════════════════════════════════ */
-          
-          .li-back-arrow {
-            appearance: none;
-            border: none;
-            background: transparent;
-            color: rgba(180, 200, 230, 0.55);
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 22px;
-            font-weight: 300;
-            transition: all 0.2s ease;
-            font-family: system-ui, -apple-system, sans-serif;
-            line-height: 1;
-          }
-
-          .li-back-arrow:hover {
-            color: rgba(140, 190, 255, 0.95);
-            transform: translateX(-4px);
-          }
-
-          /* ═══════════════════════════════════════════════════════════
              RESPONSIVE STYLES
              ═══════════════════════════════════════════════════════════ */
           
@@ -1166,80 +992,68 @@ export default function LiveIntelligenceHeroPage() {
             </div>
 
             <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              {/* CLOSE BUTTON - Pure arrow, no background */}
+              {/* CLOSE BUTTON - Apple minimal, opposite to title */}
               <button
                 type="button"
                 onClick={handleClose}
                 aria-label="Go back to homepage"
                 title="Back to home"
-                className="li-back-arrow"
+                style={{
+                  appearance: 'none',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  background: 'rgba(10,10,12,0.60)',
+                  color: 'rgba(235,242,255,0.7)',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  fontWeight: 400,
+                  transition: 'all 0.25s ease',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.4)';
+                  e.currentTarget.style.background = 'rgba(130,160,255,0.12)';
+                  e.currentTarget.style.color = 'rgba(255,255,255,1)';
+                  e.currentTarget.style.transform = 'translateX(-2px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+                  e.currentTarget.style.background = 'rgba(10,10,12,0.60)';
+                  e.currentTarget.style.color = 'rgba(235,242,255,0.7)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
               >
                 ←
               </button>
-              {/* EXPORT/SHARE BUTTON with dropdown */}
-              <div ref={shareMenuRef} style={{ position: 'relative' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowShareMenu(!showShareMenu)}
-                  style={{
-                    appearance: 'none',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    background: 'rgba(10,10,12,0.70)',
-                    color: 'rgba(235,242,255,0.85)',
-                    padding: '10px 16px',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: 500,
-                    transition: 'all 0.25s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
-                    e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-                    e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
-                  }}
-                >
-                  <span>Share</span>
-                  <span style={{ fontSize: '10px', opacity: 0.7 }}>▼</span>
-                </button>
-
-                {/* Share dropdown menu */}
-                {showShareMenu && (
-                  <div className="li-share-menu">
-                    <button type="button" className="li-share-item" onClick={() => handleShare('whatsapp')}>
-                      <span className="li-share-item-icon">💬</span>
-                      <span>WhatsApp</span>
-                    </button>
-                    <button type="button" className="li-share-item" onClick={() => handleShare('email')}>
-                      <span className="li-share-item-icon">📧</span>
-                      <span>Email</span>
-                    </button>
-                    <button type="button" className="li-share-item" onClick={() => handleShare('twitter')}>
-                      <span className="li-share-item-icon">𝕏</span>
-                      <span>Twitter / X</span>
-                    </button>
-                    <button type="button" className="li-share-item" onClick={() => handleShare('linkedin')}>
-                      <span className="li-share-item-icon">💼</span>
-                      <span>LinkedIn</span>
-                    </button>
-                    <button type="button" className="li-share-item" onClick={() => handleShare('telegram')}>
-                      <span className="li-share-item-icon">✈️</span>
-                      <span>Telegram</span>
-                    </button>
-                    <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
-                    <button type="button" className="li-share-item" onClick={() => handleShare('copy')}>
-                      <span className="li-share-item-icon">📋</span>
-                      <span>Copy Link</span>
-                    </button>
-                  </div>
-                )}
-              </div>
+              <button
+                type="button"
+                style={{
+                  appearance: 'none',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(10,10,12,0.70)',
+                  color: 'rgba(235,242,255,0.85)',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  transition: 'all 0.25s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                  e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+                  e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
+                }}
+              >
+                Export
+              </button>
               <button
                 type="button"
                 style={{
@@ -1364,7 +1178,7 @@ export default function LiveIntelligenceHeroPage() {
                 </div>
               </div>
 
-              {/* Chart area with EPIC donut - LOCKED ANIMATIONS */}
+              {/* Chart area with EPIC donut */}
               <div
                 className="li-chart-area"
                 aria-hidden="true"
@@ -1421,9 +1235,6 @@ export default function LiveIntelligenceHeroPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Collapsible Calculator */}
-              <DonutCalculator />
             </div>
 
             {/* Right column - Live Signals */}
@@ -1435,9 +1246,9 @@ export default function LiveIntelligenceHeroPage() {
                 <div style={{
                   padding: '3px 10px',
                   borderRadius: '8px',
-                  background: 'rgba(100,160,255,0.12)',
-                  border: 'none',
-                  color: 'rgba(140,190,255,0.95)',
+                  background: 'rgba(255,180,140,0.12)',
+                  border: '1px solid rgba(255,180,140,0.25)',
+                  color: 'rgba(255,180,140,0.90)',
                   fontSize: '10px',
                   fontWeight: 600,
                   letterSpacing: '0.05em',
@@ -1451,8 +1262,8 @@ export default function LiveIntelligenceHeroPage() {
 
               <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { t: 'Rebalance opportunity', d: 'Equity drift +4.8% vs target', s: 'High', c: 'rgba(140,190,255,0.95)' },
-                  { t: 'Tax harvesting', d: 'Potential LTCG optimization', s: 'High', c: 'rgba(140,190,255,0.95)' },
+                  { t: 'Rebalance opportunity', d: 'Equity drift +4.8% vs target', s: 'High', c: 'rgba(255,180,140,0.90)' },
+                  { t: 'Tax harvesting', d: 'Potential LTCG optimization', s: 'High', c: 'rgba(255,180,140,0.90)' },
                   { t: 'SIP consistency', d: '3 SIPs processed successfully', s: 'Good', c: 'rgba(140,220,180,0.90)' },
                   { t: 'Cash buffer', d: '3.2 months covered', s: 'Good', c: 'rgba(140,220,180,0.90)' },
                 ].map((it) => (
@@ -1465,8 +1276,7 @@ export default function LiveIntelligenceHeroPage() {
                         fontWeight: 600,
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        background: it.c.includes('190,255') ? 'rgba(100,160,255,0.12)' : 'rgba(140,220,180,0.12)',
-                        border: 'none',
+                        background: `${it.c.replace('0.90', '0.12')}`,
                         letterSpacing: '0.04em',
                       }}>{it.s.toUpperCase()}</div>
                     </div>

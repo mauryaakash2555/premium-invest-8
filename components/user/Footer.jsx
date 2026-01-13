@@ -31,8 +31,6 @@ import Link from "next/link"
 import NewsletterSignup from "@/components/shared/NewsletterSignup"
 
 const Footer = () => {
-  const LI_ACCENT = "var(--li-footer-accent-2, #C0A062)"
-  const LI_ACCENT_SOFT = "var(--li-footer-accent-soft, rgba(192, 160, 98, 0.2))"
   const [hoveredLink, setHoveredLink] = useState(null)
   const [mounted, setMounted] = useState(false)
   const [isWHAHovered, setIsWHAHovered] = useState(false)
@@ -249,9 +247,7 @@ return (
             {/* Vault Column */}
             <div className="space-y-10">
               <h3 className="text-[14px] font-serif font-bold text-[#C0A062] uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start">
-                <span className="vault-diamond" aria-hidden="true">
-                  <Gem className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
-                </span>
+                <Gem className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -353,9 +349,9 @@ return (
                   (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                 )}
                 style={{ 
-                  borderColor: isWHAPremium ? '#25D366' : LI_ACCENT,
+                  borderColor: isWHAPremium ? '#25D366' : '#C0A062',
                   transform: isWHAPremium ? 'scale(1.08)' : 'scale(1)',
-                  boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : `0 0 30px ${LI_ACCENT_SOFT}`,
+                  boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
                   display: 'flex',
                   justifyContent: 'flex-start', // Always start from left
                 }}
@@ -385,7 +381,7 @@ return (
                   <div 
                     className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
-                      borderColor: isWHAPremium ? '#25D366' : "var(--li-footer-accent-glow, rgba(192, 160, 98, 0.3))",
+                      borderColor: isWHAPremium ? '#25D366' : 'rgba(192, 160, 98, 0.3)',
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
                     }}
                   >
@@ -480,7 +476,7 @@ return (
                 </span>
 
                 <span className="absolute pointer-events-none inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{
-                  boxShadow: "0 0 0 1px var(--li-footer-accent-glow, rgba(192,160,98,0.28)), 0 0 40px var(--li-footer-accent-soft, rgba(192,160,98,0.10))",
+                  boxShadow: "0 0 0 1px rgba(192,160,98,0.28), 0 0 40px rgba(192,160,98,0.10)",
                 }} />
               </div>
             </div>
@@ -523,7 +519,6 @@ return (
           </div>
         </div>
       </div>
-
     </footer>
   )
 }

@@ -1,145 +1,102 @@
 /**
- * FILE: components\user\MarketMoodStrip.jsx
- * PURPOSE: (auto-added) Explain what this file does.
- * CATEGORY: user
- *
- * DEPENDENCIES:
- * - framer-motion
- * - react
- *
- * USED BY:
- * - (search the repo for this filename)
- *
- * SIMPLE EXPLANATION:
- * This file is part of the app.
- * It helps one specific feature work correctly.
- *
- * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
+ * FILE: components/user/MarketMoodStrip.jsx
+ * PURPOSE: Live Intelligence rotating mood strip
+ * COLORS: Premium laser blue theme (NO gold/brown)
  */
 
-﻿'use client';
+'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { DUMMY_HEADLINES, sortByPriority, CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
-const moods = [
-  'Market Mood: Cautious optimism amid global cues.',
-  'Volatility persists; long-term discipline remains essential.',
-  'Institutional flows show steady accumulation in quality names.',
-  'Macroeconomic indicators signaling resilience in domestic markets.'
-];
+const COLORS = {
+  accent: 'rgba(100, 150, 255, 1)',
+  accentDim: 'rgba(100, 150, 255, 0.35)',
+  text: 'rgba(170, 198, 255, 0.85)',
+};
 
 export default function MarketMoodStrip({ onToggleRain }) {
   const [index, setMoodIndex] = useState(0);
+  const [headlines, setHeadlines] = useState([]);
+  const [modeConfig, setModeConfig] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setMoodIndex((prev) => (prev + 1) % moods.length);
-    }, 8000);
-    return () => clearInterval(timer);
+    const sorted = sortByPriority(DUMMY_HEADLINES);
+    setHeadlines(sorted.slice(0, 8));
+    setModeConfig(getCurrentModeConfig());
   }, []);
 
+  useEffect(() => {
+    if (headlines.length === 0) return;
+    const speed = (modeConfig && modeConfig.rotationSpeed) ? modeConfig.rotationSpeed : 8000;
+    const timer = setInterval(() => {
+      setMoodIndex((prev) => (prev + 1) % headlines.length);
+    }, speed);
+    return () => clearInterval(timer);
+  }, [headlines.length, modeConfig]);
+
+  const currentHeadline = headlines[index];
+  const category = currentHeadline ? CATEGORIES[currentHeadline.category] : null;
+  const icon = (category && category.icon) ? category.icon : '📡';
+  const displayText = currentHeadline 
+    ? icon + ' ' + currentHeadline.headline + ' — ' + currentHeadline.whyItMatters
+    : 'Loading market intelligence...';
+
+  const handleClick = () => {
+    if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
+      window.__openLiveIntelligence();
+    } else {
+      router.push('/live-intelligence-hero');
+    }
+  };
+
   return (
-    <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[#C0A062]/[0.10]'>
+    <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[rgba(100,150,255,0.10)]'>
       <div className='max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-start gap-3 h-5'>
         <div
           className='flex items-center gap-2 flex-shrink-0 z-10 pr-2 px-2 py-[2px] rounded-full bg-black/25 backdrop-blur-sm'
-          onClick={() => {
-            onToggleRain?.();
-          }}
+          onClick={() => onToggleRain && onToggleRain()}
           style={{ cursor: 'pointer' }}
         >
-          {/* subtle pulse dot (slow + premium, not flashy) */}
-          <span className='relative inline-flex h-2 w-2 bm-mood-dot'>
-            {/* ring pulse */}
-            <span
-              className='absolute inline-flex h-full w-full rounded-full bg-[#C0A062]/30 animate-ping'
-              style={{ animationDuration: '2.6s' }}
-              aria-hidden='true'
-            />
-            <span className='relative inline-flex rounded-full h-2 w-2 bg-[#C0A062] opacity-70' />
+          <span className='relative inline-flex h-2 w-2'>
+            <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: COLORS.accentDim }} />
+            <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: COLORS.accent }} />
           </span>
-          <span className='text-[8px] font-medium tracking-[1.6px] uppercase text-[#C0A062] opacity-55 whitespace-nowrap'>Live Mood</span>
+          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>Live Mood</span>
         </div>
         
-        {/* ultra-faint divider (premium, near-invisible) */}
-        <div className='h-full w-[1px] bg-[#C0A062]/[0.06] mx-2 flex-shrink-0 z-10 hidden md:block' />
+        <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />
 
         <div
           className='relative flex-1 overflow-hidden h-full flex items-center rounded-full bg-black/20 backdrop-blur-sm px-2'
           role='button'
           tabIndex={0}
-          onClick={() => {
-            // Open Live Intelligence overlay if available, otherwise navigate
-            if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
-              window.__openLiveIntelligence();
-            } else {
-              router.push('/live-intelligence-hero');
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
-                window.__openLiveIntelligence();
-              } else {
-                router.push('/live-intelligence-hero');
-              }
-            }
-          }}
+          onClick={handleClick}
           aria-label='Open Live Intelligence'
           style={{ cursor: 'pointer' }}
         >
-          {/* restore the slightly darker “old” mood fades */}
           <div className='absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent z-10' />
           <div className='absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-black/20 to-transparent z-10' />
           
           <AnimatePresence mode='wait'>
-            <motion.div
-              key={index}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className='whitespace-nowrap flex items-center'
-            >
+            <motion.div key={index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className='whitespace-nowrap flex items-center'>
               <motion.p
                 initial={{ x: '10%' }}
-                animate={{ 
-                  x: ['10%', '-100%'] 
-                }}
-                transition={{ 
-                  duration: 12, 
-                  repeat: Infinity, 
-                  ease: 'linear',
-                  repeatDelay: 1
-                }}
-              className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase text-white/70 m-0 pr-[50%]'
+                animate={{ x: ['10%', '-100%'] }}
+                transition={{ duration: 14, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
+                className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase m-0 pr-[50%]'
+                style={{ color: 'rgba(200, 215, 240, 0.75)' }}
               >
-                {moods[index]}
+                {displayText}
               </motion.p>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
-
-      {/* pseudo-element ring (requested) */}
-      <style jsx>{`
-        .bm-mood-dot::before {
-          content: '';
-          position: absolute;
-          inset: -3px;
-          border-radius: 999px;
-          border: 1px solid rgba(192, 160, 98, 0.35);
-          opacity: 0.9;
-          pointer-events: none;
-        }
-      `}</style>
     </div>
   );
 }
-
-

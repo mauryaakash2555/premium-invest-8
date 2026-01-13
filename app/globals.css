@@ -1,4 +1,6 @@
-﻿@import "tailwindcss";
+/* Route-scoped footer rules for Live Intelligence Hero are defined later in this file.
+   Temporary debug block removed. */
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -1428,6 +1430,13 @@ html {
   footer { opacity: 1 !important; }
 }
 
+/* DESKTOP: Ensure footer is always visible */
+footer {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 
 
 
@@ -1905,20 +1914,103 @@ body[data-laser-active="true"] .main-wrapper > header {
   display: none !important;
 }
 
-/* Live Intelligence Hero: footer stays (homepage footer), but match panel color on this page only */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) {
+/* Live Intelligence Hero: HIDE the global layout footer, use the page-embedded one instead */
+body[data-laser-active="true"] .main-wrapper > footer {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  z-index: -1 !important;
+}
+
+/* Live Intelligence Hero: footer stays (page-embedded footer), match panel color on this page only */
+body[data-laser-active="true"] .li-footer-wrapper,
+body[data-laser-active="true"] .li-footer-wrapper footer {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   margin-top: 0 !important;
   background-color: #090A0C !important;
+  color: #F5F8FF !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  overflow: visible !important;
+  width: 100% !important;
+  min-height: 400px !important;
+}
+
+/* Override footer's default mt-20 margin on this page */
+body[data-laser-active="true"] .li-footer-wrapper footer.mt-20,
+body[data-laser-active="true"] .li-footer-wrapper footer[class*="mt-"] {
+  margin-top: 0 !important;
+}
+
+/* Strong override: ensure the page-embedded footer is not clipped, transformed, or covered */
+body[data-laser-active="true"] .li-footer-wrapper > footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 2147483647 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #F5F8FF !important;
+  background: #090A0C !important;
+  transform: none !important;
+  clip-path: none !important;
+  filter: none !important;
+  pointer-events: auto !important;
+}
+
+/* Force text inside the custom footer to be visible (without breaking layouts) */
+body[data-laser-active="true"] .li-footer-wrapper footer * {
+  visibility: visible !important;
+}
+
+/* Ensure footer text/items are visible (do NOT override display — that breaks flex/grid) */
+body[data-laser-active="true"] .li-footer-wrapper,
+body[data-laser-active="true"] .li-footer-wrapper footer {
+  visibility: visible !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  -webkit-text-fill-color: unset !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+/* Make links and headings readable */
+body[data-laser-active="true"] .li-footer-wrapper footer a,
+body[data-laser-active="true"] .li-footer-wrapper footer h1,
+body[data-laser-active="true"] .li-footer-wrapper footer h2,
+body[data-laser-active="true"] .li-footer-wrapper footer h3,
+body[data-laser-active="true"] .li-footer-wrapper footer h4,
+body[data-laser-active="true"] .li-footer-wrapper footer h5,
+body[data-laser-active="true"] .li-footer-wrapper footer h6,
+body[data-laser-active="true"] .li-footer-wrapper footer p,
+body[data-laser-active="true"] .li-footer-wrapper footer span {
+  color: #F5F8FF !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Override any opacity classes */
+body[data-laser-active="true"] .li-footer-wrapper footer .opacity-30,
+body[data-laser-active="true"] .li-footer-wrapper footer .opacity-60,
+body[data-laser-active="true"] .li-footer-wrapper footer .opacity-80,
+body[data-laser-active="true"] .li-footer-wrapper footer .opacity-90 {
+  opacity: 1 !important;
 }
 
 /* Footer has internal containers with explicit black backgrounds; override color only (keep animations) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer),
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="bg-[#000000]"],
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="bg-black"] {
-  background-color: #090A0C !important;
+body[data-laser-active="true"] .li-footer-wrapper footer,
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="bg-[#000000]"],
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="bg-black"] {
+  /* background-color: #090A0C !important; */ /* Temporarily commented out for debug */
 }
 
 /* Live Intelligence Hero: footer accent recolor (route-scoped; NO structural changes) */
@@ -1929,15 +2021,73 @@ body[data-laser-active="true"] {
   --li-panel-muted: rgba(220, 230, 255, 0.62);
   --li-panel-accent: rgba(170, 198, 255, 0.65);
   --li-panel-accent-strong: rgba(170, 198, 255, 0.82);
-
-  /* Shared footer variables used by Footer.jsx inline styles.
-     Keep them subtle (no loud accent) for HNI look. */
   --li-footer-accent-1: rgba(235, 242, 255, 0.78);
   --li-footer-accent-2: rgba(235, 242, 255, 0.58);
   --li-footer-accent-3: rgba(245, 248, 255, 0.90);
   --li-footer-accent-soft: rgba(235, 242, 255, 0.10);
   --li-footer-accent-glow: rgba(235, 242, 255, 0.14);
   --li-footer-accent-glow-strong: rgba(235, 242, 255, 0.20);
+}
+
+/* ULTIMATE FIX: Force the li-footer-wrapper footer to be fully visible */
+body[data-laser-active="true"] .li-footer-wrapper {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 100 !important;
+  margin-top: 0 !important;
+  background: #090A0C !important;
+}
+
+body[data-laser-active="true"] .li-footer-wrapper footer {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 100 !important;
+  background: #000000 !important;
+  color: #F5F8FF !important;
+}
+
+/* Live Intelligence Hero: Vault icon diamond - static ice frost glow (no flying animation) */
+body[data-laser-active="true"] .li-footer-wrapper footer .vault-diamond {
+  position: relative;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+}
+
+body[data-laser-active="true"] .li-footer-wrapper footer .vault-diamond > svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 3px rgba(200, 230, 255, 0.70)) drop-shadow(0 0 8px rgba(170, 210, 255, 0.45));
+  color: rgba(235, 250, 255, 0.95);
+}
+
+/* Static ice frost sparkle at corner */
+body[data-laser-active="true"] .li-footer-wrapper footer .vault-diamond::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  right: -1px;
+  top: -1px;
+  z-index: 3;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(200, 230, 255, 0.60) 40%, transparent 70%);
+  box-shadow: 0 0 6px rgba(200, 230, 255, 0.80), 0 0 12px rgba(170, 210, 255, 0.50);
+  pointer-events: none;
+}
+
+/* Subtle halo glow behind diamond */
+body[data-laser-active="true"] .li-footer-wrapper footer .vault-diamond::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(180, 220, 255, 0.20) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 @keyframes li-ambient-pulse {
@@ -1956,22 +2106,22 @@ body[data-laser-active="true"] {
   }
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .ambient-glow-pulse {
+body[data-laser-active="true"] .li-footer-wrapper footer .ambient-glow-pulse {
   animation-name: li-ambient-pulse !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-side-line::before {
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-side-line::before {
   background: var(--li-panel-accent) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-wave-container::after {
+body[data-laser-active="true"] .li-footer-wrapper footer .luxury-wave-container::after {
   /* Remove the sweeping accent highlight on this page */
   background: none !important;
   opacity: 0 !important;
 }
 
 /* Live Intelligence Hero: disclaimer side-line (the visible yellow line) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line .side-line {
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-half-line .side-line {
   /* Premium + quiet: panel-white line with soft glow */
   background-color: rgba(245, 250, 255, 0.34) !important;
   box-shadow:
@@ -1979,25 +2129,25 @@ body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper fo
     0 0 46px rgba(170, 198, 255, 0.10) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line:hover .side-line,
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line:active .side-line,
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line.is-scroll-active .side-line {
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-half-line:hover .side-line,
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-half-line:active .side-line,
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-half-line.is-scroll-active .side-line {
   box-shadow:
     0 0 22px rgba(245, 250, 255, 0.24),
     0 0 60px rgba(170, 198, 255, 0.14) !important;
 }
 
 /* Live Intelligence Hero: remove newsletter microcopy inside footer */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [data-newsletter-unsub-note] {
+body[data-laser-active="true"] .li-footer-wrapper footer [data-newsletter-unsub-note] {
   display: none !important;
 }
 
 /* Keep disclaimer headings as "panel accent" (not plain white) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .premium-half-line h4 {
+body[data-laser-active="true"] .li-footer-wrapper footer .premium-half-line h4 {
   color: rgba(245, 248, 255, 0.80) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .ultra-luxury-glass {
+body[data-laser-active="true"] .li-footer-wrapper footer .ultra-luxury-glass {
   border-top-color: rgba(170, 198, 255, 0.22) !important;
   box-shadow:
     0 -30px 120px rgba(60, 120, 255, 0.12),
@@ -2007,18 +2157,31 @@ body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper fo
     radial-gradient(70% 60% at 20% 10%, rgba(235, 250, 255, 0.06) 0%, rgba(0, 0, 0, 0.00) 60%),
     linear-gradient(135deg, rgba(6, 8, 14, 0.92) 0%, rgba(0, 0, 0, 0.98) 100%) !important;
   backdrop-filter: blur(26px) saturate(150%) !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+  min-height: 500px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 /* Live Intelligence Hero: add a real "ultra" top wave bar (Footer.jsx uses this class but it was mostly opacity-only) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-wave-3s {
+/* NOTE: Only target the small top wave bar, NOT the main container! */
+body[data-laser-active="true"] .li-footer-wrapper footer > .luxury-wave-3s:first-child {
   /* Remove the accent bar entirely (keep layout) */
   background: transparent !important;
   box-shadow: none !important;
-  opacity: 0.0 !important;
+  opacity: 0 !important;
+}
+
+/* Ensure the main ultra-luxury-glass container stays visible */
+body[data-laser-active="true"] .li-footer-wrapper footer .ultra-luxury-glass.luxury-wave-3s {
+  opacity: 1 !important;
 }
 
 /* Live Intelligence Hero: recolor the BM Wealth wordmark gradient to match the panel */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .gold-gradient-text {
+body[data-laser-active="true"] .li-footer-wrapper footer .gold-gradient-text {
   /* BM Wealth wordmark: match panel (icy, premium) */
   background: linear-gradient(
     135deg,
@@ -2036,14 +2199,14 @@ body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper fo
 }
 
 /* Live Intelligence Hero: shift particles from gold → icy sparkle (keeps behavior/animations) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .gold-particle {
+body[data-laser-active="true"] .li-footer-wrapper footer .gold-particle {
   /* Dust particles: soft white (premium) */
   background: rgba(235, 250, 255, 0.92) !important;
   filter: blur(0.45px) !important;
   box-shadow: 0 0 8px rgba(235, 250, 255, 0.40), 0 0 18px rgba(140, 190, 255, 0.12) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) .luxury-particles::after {
+body[data-laser-active="true"] .li-footer-wrapper footer .luxury-particles::after {
   /* Keep original particle texture (gold) */
   background-image:
     radial-gradient(circle at 20% 30%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
@@ -2053,41 +2216,131 @@ body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper fo
 }
 
 /* Catch the most visible hard-coded gold utility colors inside the footer (Tailwind arbitrary values) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="text-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="text-[#C0A062]"] {
   color: var(--li-panel-title) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="text-[#D4B576]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="text-[#D4B576]"] {
   color: var(--li-panel-body) !important;
 }
 
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="border-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="border-[#C0A062]"] {
   border-color: rgba(170, 198, 255, 0.18) !important;
 }
 
 /* Footer-only: drive newsletter/button accents off the panel palette (keeps dust particles gold) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) {
+body[data-laser-active="true"] .li-footer-wrapper footer {
   --color-matte-gold: rgba(170, 198, 255, 0.70);
   --color-gold-glow: rgba(170, 198, 255, 0.18);
 }
 
 /* Target the most common gold gradients in footer wings/lines */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="via-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="via-[#C0A062]"] {
   --tw-gradient-via: rgba(170, 198, 255, 0.52) !important;
 }
 
 /* Replace gold-tinted arbitrary drop-shadow utilities */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]"] {
   /* Do NOT change the BM Wealth wordmark gradient; only soften the gold shadow */
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.10)) !important;
 }
 
 /* Replace gold-tinted arbitrary box-shadow utilities (footer container glow) */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"] {
   box-shadow: 0 -30px 120px rgba(60, 120, 255, 0.10) !important;
 }
 
 /* Reduce remaining gold hover accents on legal micro-links and concierge hover */
-body[data-laser-active="true"] :is(.main-wrapper > footer, .li-footer-wrapper footer) [class*="hover:text-[#C0A062]"]:hover {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="hover:text-[#C0A062]"]:hover {
   color: var(--li-panel-title) !important;
+}
+/* ==========================================================================
+   FOOTER DESKTOP FIX - FORCE VISIBILITY (24hr blocker fix)
+   ========================================================================== */
+@media (min-width: 768px) {
+  .li-footer-wrapper,
+  .li-footer-wrapper footer,
+  .li-footer-wrapper footer * {
+    display: revert !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure footer background is visible */
+  .li-footer-wrapper footer {
+    background: #000000 !important;
+    min-height: 600px !important;
+  }
+  
+  /* Make sure text is visible */
+  .li-footer-wrapper footer h2,
+  .li-footer-wrapper footer h3,
+  .li-footer-wrapper footer h4,
+  .li-footer-wrapper footer p,
+  .li-footer-wrapper footer a,
+  .li-footer-wrapper footer span,
+  .li-footer-wrapper footer div {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Preserve flex/grid layouts */
+  .li-footer-wrapper footer .flex {
+    display: flex !important;
+  }
+  .li-footer-wrapper footer .grid {
+    display: grid !important;
+  }
+}
+
+/* ==========================================================================
+   LASER PAGE FOOTER - ICY PREMIUM COLORS (Override gold)
+   Uses LaserFooter.jsx with inline styles - these CSS rules ensure they work
+   ========================================================================== */
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h2,
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h3,
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h4,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer h2,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer h3,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer h4,
+body[data-laser-active="true"] .laser-footer h2,
+body[data-laser-active="true"] .laser-footer h3,
+body[data-laser-active="true"] .laser-footer h4 {
+  color: rgba(235, 242, 255, 0.94) !important;
+  -webkit-text-fill-color: rgba(235, 242, 255, 0.94) !important;
+  background: none !important;
+}
+
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer p,
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer a,
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer span,
+body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer li,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer p,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer a,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer span,
+body[data-laser-active="true"] .li-footer-wrapper .laser-footer li,
+body[data-laser-active="true"] .laser-footer p,
+body[data-laser-active="true"] .laser-footer a,
+body[data-laser-active="true"] .laser-footer span,
+body[data-laser-active="true"] .laser-footer li {
+  color: rgba(220, 230, 255, 0.70) !important;
+  -webkit-text-fill-color: rgba(220, 230, 255, 0.70) !important;
+}
+
+/* Override any remaining gold in the laser footer - maximum specificity */
+@media (min-width: 768px) {
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h2,
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h3,
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer h4 {
+    color: rgba(235, 242, 255, 0.94) !important;
+    -webkit-text-fill-color: rgba(235, 242, 255, 0.94) !important;
+    background: none !important;
+  }
+  
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer p,
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer a,
+  body[data-laser-active="true"] .li-footer-wrapper footer.laser-footer span {
+    color: rgba(220, 230, 255, 0.70) !important;
+    -webkit-text-fill-color: rgba(220, 230, 255, 0.70) !important;
+  }
 }
