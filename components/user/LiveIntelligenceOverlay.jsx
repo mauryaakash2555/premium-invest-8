@@ -103,8 +103,10 @@ export default function LiveIntelligenceOverlay({
     if (isOpen || isAnimating) return;
     setIsAnimating(true);
     setIsOpen(true);
-    document.body.style.overflow = 'hidden';
-    document.body.setAttribute('data-laser-active', 'true');
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflow = 'hidden';
+      document.body.setAttribute('data-laser-active', 'true');
+    }
     
     // Animation complete
     setTimeout(() => setIsAnimating(false), 400);
@@ -118,13 +120,16 @@ export default function LiveIntelligenceOverlay({
     setTimeout(() => {
       setIsOpen(false);
       setIsAnimating(false);
-      document.body.style.overflow = '';
-      document.body.removeAttribute('data-laser-active');
+      if (typeof document !== 'undefined' && document.body) {
+        document.body.style.overflow = '';
+        document.body.removeAttribute('data-laser-active');
+      }
     }, 300);
   }, [isOpen, isAnimating]);
 
   // Expose open function globally for manual triggers
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     window.__openLiveIntelligence = openOverlay;
     return () => {
       delete window.__openLiveIntelligence;
@@ -134,6 +139,7 @@ export default function LiveIntelligenceOverlay({
   // Allow auto-open to work again after a full refresh.
   // SessionStorage persists across reloads, so we clear the auto-open flag on beforeunload.
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const clearAutoOpenFlag = () => {
       try {
         sessionStorage.removeItem(SESSION_KEY);
@@ -151,6 +157,11 @@ export default function LiveIntelligenceOverlay({
     let rafId = 0;
     let cancelled = false;
     let observer;
+
+    // Guard: some browsers/environments may not support this API.
+    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') {
+      return () => {};
+    }
     
     // Check if already auto-opened this session
     if (typeof sessionStorage !== 'undefined') {
@@ -199,6 +210,8 @@ export default function LiveIntelligenceOverlay({
   useEffect(() => {
     if (!isOpen) return;
 
+    if (typeof IntersectionObserver === 'undefined') return;
+
     const checkFooterVisibility = () => {
       const footerEl = overlayRef.current?.querySelector('[data-li-footer]');
       if (!footerEl) return;
@@ -232,6 +245,7 @@ export default function LiveIntelligenceOverlay({
       if (e.key === 'Escape') closeOverlay();
     };
     
+    if (typeof window === 'undefined') return;
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeOverlay]);
@@ -330,7 +344,9 @@ export default function LiveIntelligenceOverlay({
     </div>
   );
 
-  return createPortal(overlayContent, document.body);
+  const portalTarget = typeof document !== 'undefined' ? (document.body || document.documentElement) : null;
+  if (!portalTarget) return null;
+  return createPortal(overlayContent, portalTarget);
 }
 
 
