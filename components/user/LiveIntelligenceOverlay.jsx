@@ -11,7 +11,8 @@ const SESSION_KEY = 'li-overlay-auto-opened';
 
 /**
  * MarketStatusBadge - Shows NSE OPEN/CLOSED status
- * Uses warm gold colors to match home page palette
+ * ⚠️ NOTE: DO NOT CHANGE COLORS WITHOUT ASKING USER FIRST
+ * Uses icy blue colors to match laser page palette
  */
 const MarketStatusBadge = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,9 +43,9 @@ const MarketStatusBadge = () => {
       fontSize: '10px',
       fontWeight: 600,
       letterSpacing: '0.08em',
-      background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'rgba(192, 160, 98, 0.12)',
-      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(192, 160, 98, 0.25)'}`,
-      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(192, 160, 98, 0.95)',
+      background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'rgba(120, 150, 200, 0.12)',
+      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(120, 150, 200, 0.25)'}`,
+      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(120, 150, 200, 0.95)',
     }}>
       NSE {isOpen ? 'OPEN' : 'CLOSED'}
     </span>
@@ -1214,13 +1215,14 @@ function LiveIntelligencePanel({ onClose }) {
 
           {/* ═══════════════════════════════════════════════════════════
               LIVE TRADING CHART - TradingView Widget (SENSEX)
+              ⚠️ NOTE: DO NOT CHANGE COLORS WITHOUT ASKING USER FIRST
               ═══════════════════════════════════════════════════════════ */}
           <div 
             className="li-dash-card"
             style={{ 
               gridColumn: '1 / -1',
               background: '#131722',
-              border: '1px solid rgba(192, 160, 98, 0.15)',
+              border: '1px solid rgba(100, 180, 255, 0.10)',
               borderRadius: '16px',
               overflow: 'hidden',
               padding: 0,
@@ -1228,7 +1230,7 @@ function LiveIntelligencePanel({ onClose }) {
           >
             <div style={{
               padding: '14px 20px',
-              borderBottom: '1px solid rgba(192, 160, 98, 0.10)',
+              borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
               background: '#131722',
               display: 'flex',
               alignItems: 'center',
@@ -1252,12 +1254,12 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
               <span style={{
                 padding: '3px 8px',
-                background: 'rgba(192, 160, 98, 0.12)',
-                border: '1px solid rgba(192, 160, 98, 0.25)',
+                background: 'rgba(100, 180, 255, 0.12)',
+                border: '1px solid rgba(100, 180, 255, 0.25)',
                 borderRadius: '4px',
                 fontSize: '9px',
                 fontWeight: 600,
-                color: 'rgba(192, 160, 98, 0.95)',
+                color: 'rgba(140, 200, 255, 0.95)',
                 letterSpacing: '0.08em',
               }}>
                 TRADINGVIEW
@@ -1278,20 +1280,21 @@ function LiveIntelligencePanel({ onClose }) {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
             </div>
-            <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(192, 160, 98, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
+            <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (NIFTY, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
           </div>
 
           {/* ═══════════════════════════════════════════════════════════
               GLOBAL MARKETS - TradingView Market Overview Widget
+              ⚠️ NOTE: DO NOT CHANGE COLORS WITHOUT ASKING USER FIRST
               ═══════════════════════════════════════════════════════════ */}
           <div 
             className="li-dash-card"
             style={{ 
               gridColumn: '1 / -1',
               background: '#131722',
-              border: '1px solid rgba(192, 160, 98, 0.15)',
+              border: '1px solid rgba(100, 180, 255, 0.10)',
               borderRadius: '16px',
               overflow: 'hidden',
               padding: 0,
@@ -1299,7 +1302,7 @@ function LiveIntelligencePanel({ onClose }) {
           >
             <div style={{
               padding: '14px 20px',
-              borderBottom: '1px solid rgba(192, 160, 98, 0.10)',
+              borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
               background: '#131722',
               display: 'flex',
               alignItems: 'center',
