@@ -44,18 +44,18 @@ import {
   File,
   Send
 } from "lucide-react";
-import Footer from "@/components/user/Footer";
+import LaserFooter from "@/components/user/LaserFooter";
 
-// Service integration cards data
+// Service integration cards data - PREMIUM DARK STYLE (no colorful cards)
 const serviceIntegrations = [
   {
     id: "mutual-funds",
     title: "Mutual Funds",
     icon: TrendingUp,
     description: "Access 5000+ mutual fund schemes across all AMCs",
-    platforms: ["MF Central", "CAMS", "KFintech", "BSE StAR MF"],
-    color: "rgba(100, 200, 255, 0.15)",
-    borderColor: "rgba(100, 200, 255, 0.30)",
+    platforms: ["MF Central", "CAMS"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/mutual-funds"
   },
   {
@@ -64,8 +64,8 @@ const serviceIntegrations = [
     icon: Briefcase,
     description: "Professional portfolio management with SEBI-registered PMS",
     platforms: ["SEBI Registered PMS", "Customized Portfolios"],
-    color: "rgba(180, 140, 255, 0.15)",
-    borderColor: "rgba(180, 140, 255, 0.30)",
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/portfolio-management"
   },
   {
@@ -73,9 +73,9 @@ const serviceIntegrations = [
     title: "SIP Investments",
     icon: PiggyBank,
     description: "Systematic investment plans with auto-debit facility",
-    platforms: ["NACH Mandate", "E-Mandate", "UPI AutoPay"],
-    color: "rgba(100, 220, 180, 0.15)",
-    borderColor: "rgba(100, 220, 180, 0.30)",
+    platforms: ["NACH Mandate", "E-Mandate"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/sip"
   },
   {
@@ -83,9 +83,9 @@ const serviceIntegrations = [
     title: "Insurance",
     icon: Shield,
     description: "Life, health, and general insurance solutions",
-    platforms: ["Term Plans", "Health Insurance", "ULIP"],
-    color: "rgba(255, 180, 100, 0.15)",
-    borderColor: "rgba(255, 180, 100, 0.30)",
+    platforms: ["Term Plans", "Health Insurance"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/insurance"
   },
   {
@@ -93,9 +93,9 @@ const serviceIntegrations = [
     title: "LIC Policies",
     icon: Heart,
     description: "LIC policy management and premium tracking",
-    platforms: ["LIC Portal", "Premium Calculator", "Policy Status"],
-    color: "rgba(255, 130, 150, 0.15)",
-    borderColor: "rgba(255, 130, 150, 0.30)",
+    platforms: ["LIC Portal", "Premium Calculator"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/insurance"
   },
   {
@@ -103,9 +103,9 @@ const serviceIntegrations = [
     title: "Trading Services",
     icon: BarChart3,
     description: "Equity, derivatives, and commodity trading",
-    platforms: ["NSE", "BSE", "MCX", "NCDEX"],
-    color: "rgba(130, 200, 130, 0.15)",
-    borderColor: "rgba(130, 200, 130, 0.30)",
+    platforms: ["NSE", "BSE"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/trading-services"
   },
   {
@@ -113,9 +113,9 @@ const serviceIntegrations = [
     title: "Fixed Deposits",
     icon: Building2,
     description: "Corporate FDs with competitive interest rates",
-    platforms: ["Bank FDs", "Corporate FDs", "Tax-Saver FDs"],
-    color: "rgba(200, 180, 130, 0.15)",
-    borderColor: "rgba(200, 180, 130, 0.30)",
+    platforms: ["Bank FDs", "Corporate FDs"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/fixed-deposits"
   },
   {
@@ -123,9 +123,9 @@ const serviceIntegrations = [
     title: "SEBI Compliance",
     icon: Lock,
     description: "Regulatory compliance and documentation",
-    platforms: ["SEBI Guidelines", "KYC Compliance", "AML/CFT"],
-    color: "rgba(150, 150, 200, 0.15)",
-    borderColor: "rgba(150, 150, 200, 0.30)",
+    platforms: ["SEBI Guidelines", "KYC Compliance"],
+    color: "rgba(255, 255, 255, 0.02)",
+    borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/compliance"
   }
 ];
@@ -784,7 +784,7 @@ We are pleased to share your portfolio update..."
         </div>
       </section>
 
-      <Footer />
+      <LaserFooter />
 
       <style jsx>{`
         @keyframes pulse {

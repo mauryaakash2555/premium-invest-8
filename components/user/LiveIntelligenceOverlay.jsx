@@ -1327,7 +1327,7 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            <div style={{ height: '400px', width: '100%', background: '#131722' }}>
+            <div style={{ height: '400px', width: '100%', background: '#0D0D0D', position: 'relative' }}>
               <iframe
                 src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Futures%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Bonds%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22TVC%3AIN10Y%22%2C%22d%22%3A%22India%2010Y%22%7D%2C%7B%22s%22%3A%22TVC%3AUS10Y%22%2C%22d%22%3A%22US%2010Y%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
@@ -1335,7 +1335,7 @@ function LiveIntelligencePanel({ onClose }) {
                   height: '100%',
                   border: 'none',
                   display: 'block',
-                  backgroundColor: '#131722',
+                  backgroundColor: '#0D0D0D',
                 }}
                 title="Market Overview"
                 loading="lazy"
