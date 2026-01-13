@@ -624,30 +624,68 @@ export default function ServicesShowcase({ services }) {
           align-items: center;
           justify-content: center;
           gap: 10px;
-          padding: 12px 16px;
-          border-radius: 14px;
-          font-weight: 700;
+          padding: 14px 24px;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 13px;
           text-decoration: none;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: transparent;
-          color: rgba(245,245,245,0.96);
-          transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+          border: none;
+          background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 0%,
+            color-mix(in oklab, var(--color-matte-gold) 70%, white 30%) 50%,
+            color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 100%
+          );
+          background-size: 200% 200%;
+          color: var(--color-luxury-black);
+          box-shadow:
+            0 4px 15px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          animation: premium-cta-gradient 6s ease-in-out infinite;
+        }
+
+        .svc-btn::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          pointer-events: none;
+          animation: premium-cta-shimmer 2.8s linear infinite;
         }
 
         .svc-btn:hover {
-          transform: translateY(-1px);
-          border-color: rgba(201,162,77,0.38);
-          background: rgba(201,162,77,0.06);
+          transform: translateY(-2px) scale(1.02);
+          box-shadow:
+            0 8px 30px color-mix(in oklab, var(--color-matte-gold) 55%, transparent),
+            0 0 40px color-mix(in oklab, var(--color-matte-gold) 40%, transparent);
+          filter: brightness(1.08);
         }
 
         .svc-btn--primary {
-          border-color: rgba(201,162,77,0.38);
-          background: rgba(201,162,77,0.08);
+          /* Primary uses the gold gradient from above */
         }
 
         .svc-btn--ghost {
-          background: rgba(255,255,255,0.02);
+          background: transparent;
+          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 50%, transparent);
+          color: var(--color-matte-gold);
+          box-shadow: 0 0 15px color-mix(in oklab, var(--color-matte-gold) 18%, transparent);
+        }
+
+        .svc-btn--ghost::before {
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        }
+
+        .svc-btn--ghost:hover {
+          background: color-mix(in oklab, var(--color-matte-gold) 92%, white 8%);
+          color: var(--color-luxury-black);
         }
 
         @keyframes svcFadeUp {
