@@ -447,6 +447,17 @@ export default function LiveIntelligenceHeroPage() {
             50% { opacity: 1; transform: scale(1.15); }
           }
 
+          /* Trading Terminal animations */
+          @keyframes liTerminalGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; box-shadow: 0 0 40px rgba(100, 200, 255, 0.7), 0 0 80px rgba(100, 200, 255, 0.4); }
+          }
+
+          @keyframes liBarPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+          }
+
           /* Section divider with laser */
           .li-section-divider {
             position: relative;
@@ -1527,6 +1538,367 @@ export default function LiveIntelligenceHeroPage() {
                     <div style={{ color: 'rgba(220,230,255,0.85)', fontSize: '13px' }}>{row.v}</div>
                     <div style={{ color: row.dColor, fontSize: '13px', fontWeight: 500 }}>{row.d}</div>
                     <div style={{ color: row.pColor, fontSize: '13px', fontWeight: 500 }}>{row.p}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════════════════════
+                TRADING CHARTING TERMINAL - Ultra Luxurious
+                ═══════════════════════════════════════════════════════════ */}
+            <div 
+              className="li-dash-card li-trading-terminal" 
+              style={{ 
+                gridColumn: '1 / -1',
+                position: 'relative',
+                overflow: 'hidden',
+                background: 'linear-gradient(180deg, rgba(8, 12, 20, 0.98) 0%, rgba(5, 8, 15, 0.99) 100%)',
+                border: '1px solid rgba(100, 180, 255, 0.12)',
+                borderRadius: '24px',
+                padding: 0,
+              }}
+            >
+              {/* Premium glow effects */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: '20%',
+                width: '60%',
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.6), rgba(140, 220, 255, 0.8), rgba(100, 200, 255, 0.6), transparent)',
+                boxShadow: '0 0 30px rgba(100, 200, 255, 0.5), 0 0 60px rgba(100, 200, 255, 0.3)',
+                animation: 'liTerminalGlow 3s ease-in-out infinite',
+              }} />
+              
+              {/* Corner accents */}
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                width: '30px',
+                height: '30px',
+                borderTop: '2px solid rgba(100, 200, 255, 0.4)',
+                borderLeft: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRadius: '4px 0 0 0',
+              }} />
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                width: '30px',
+                height: '30px',
+                borderTop: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRight: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRadius: '0 4px 0 0',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '10px',
+                width: '30px',
+                height: '30px',
+                borderBottom: '2px solid rgba(100, 200, 255, 0.4)',
+                borderLeft: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRadius: '0 0 0 4px',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+                width: '30px',
+                height: '30px',
+                borderBottom: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRight: '2px solid rgba(100, 200, 255, 0.4)',
+                borderRadius: '0 0 4px 0',
+              }} />
+
+              {/* Terminal Header */}
+              <div style={{
+                padding: '20px 24px 16px',
+                borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '16px',
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '50%',
+                      background: 'rgba(100, 220, 180, 0.9)',
+                      boxShadow: '0 0 12px rgba(100, 220, 180, 0.7)',
+                      animation: 'liLivePulse 1.5s ease-in-out infinite',
+                    }} />
+                    <h3 style={{ 
+                      margin: 0, 
+                      color: 'rgba(220, 240, 255, 0.95)', 
+                      fontSize: '18px', 
+                      fontWeight: 600,
+                      letterSpacing: '0.02em',
+                      textShadow: '0 0 30px rgba(100, 200, 255, 0.3)',
+                    }}>
+                      Trading Charting Terminal
+                    </h3>
+                    <span style={{
+                      padding: '4px 10px',
+                      background: 'rgba(100, 200, 255, 0.12)',
+                      border: '1px solid rgba(100, 200, 255, 0.25)',
+                      borderRadius: '6px',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      color: 'rgba(140, 220, 255, 0.95)',
+                      letterSpacing: '0.08em',
+                    }}>
+                      LIVE
+                    </span>
+                  </div>
+                  <p style={{ margin: '6px 0 0', color: 'rgba(180, 200, 230, 0.55)', fontSize: '12px' }}>
+                    Professional-grade market analysis • Real-time data feeds
+                  </p>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {['NIFTY 50', 'SENSEX', 'BANKNIFTY'].map((idx, i) => (
+                    <button
+                      key={idx}
+                      style={{
+                        padding: '8px 14px',
+                        background: i === 0 ? 'rgba(100, 180, 255, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                        border: `1px solid ${i === 0 ? 'rgba(100, 180, 255, 0.35)' : 'rgba(255, 255, 255, 0.08)'}`,
+                        borderRadius: '8px',
+                        color: i === 0 ? 'rgba(140, 220, 255, 0.95)' : 'rgba(180, 200, 220, 0.65)',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        letterSpacing: '0.05em',
+                        cursor: 'pointer',
+                        transition: 'all 0.25s ease',
+                      }}
+                    >
+                      {idx}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Main Chart Area */}
+              <div style={{
+                padding: '20px 24px',
+                position: 'relative',
+                minHeight: '320px',
+                background: `
+                  radial-gradient(ellipse 80% 50% at 50% 0%, rgba(60, 140, 255, 0.08) 0%, transparent 50%),
+                  repeating-linear-gradient(90deg, rgba(100, 180, 255, 0.02) 0px, rgba(100, 180, 255, 0.02) 1px, transparent 1px, transparent 60px),
+                  repeating-linear-gradient(0deg, rgba(100, 180, 255, 0.015) 0px, rgba(100, 180, 255, 0.015) 1px, transparent 1px, transparent 40px)
+                `,
+              }}>
+                {/* Scanning line effect */}
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background: 'linear-gradient(90deg, transparent, rgba(100, 220, 255, 0.7), rgba(140, 240, 255, 0.9), rgba(100, 220, 255, 0.7), transparent)',
+                  boxShadow: '0 0 20px rgba(100, 220, 255, 0.5)',
+                  animation: 'liChartScan 5s ease-in-out infinite',
+                }} />
+
+                {/* Price indicator */}
+                <div style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '24px',
+                  textAlign: 'right',
+                }}>
+                  <div style={{ 
+                    fontSize: '32px', 
+                    fontWeight: 700, 
+                    color: 'rgba(100, 220, 180, 0.95)',
+                    fontFamily: 'system-ui, -apple-system, monospace',
+                    textShadow: '0 0 30px rgba(100, 220, 180, 0.4)',
+                    letterSpacing: '-0.02em',
+                  }}>
+                    24,857.30
+                  </div>
+                  <div style={{ 
+                    fontSize: '14px', 
+                    color: 'rgba(100, 220, 180, 0.85)',
+                    marginTop: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    gap: '8px',
+                  }}>
+                    <span>▲ 186.45</span>
+                    <span style={{ 
+                      padding: '2px 8px', 
+                      background: 'rgba(100, 220, 180, 0.15)', 
+                      borderRadius: '4px',
+                      fontWeight: 600,
+                    }}>+0.76%</span>
+                  </div>
+                </div>
+
+                {/* Simulated candlestick visualization */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  height: '200px',
+                  paddingTop: '60px',
+                }}>
+                  {[65, 72, 58, 80, 68, 75, 62, 85, 70, 78, 55, 88, 73, 82, 60, 90, 76, 84, 68, 92, 79, 86, 72, 95, 81].map((h, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: '8px',
+                        height: `${h}%`,
+                        background: i % 3 === 0 
+                          ? 'linear-gradient(180deg, rgba(255, 140, 140, 0.8) 0%, rgba(255, 100, 100, 0.6) 100%)'
+                          : 'linear-gradient(180deg, rgba(100, 220, 180, 0.9) 0%, rgba(80, 200, 160, 0.7) 100%)',
+                        borderRadius: '2px',
+                        boxShadow: i % 3 === 0 
+                          ? '0 0 8px rgba(255, 100, 100, 0.3)'
+                          : '0 0 8px rgba(100, 220, 180, 0.3)',
+                        transition: 'all 0.3s ease',
+                        animation: `liBarPulse ${2 + (i * 0.1)}s ease-in-out infinite`,
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Time axis */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: '16px',
+                  paddingTop: '12px',
+                  borderTop: '1px solid rgba(100, 180, 255, 0.08)',
+                }}>
+                  {['09:15', '10:30', '11:45', '13:00', '14:15', '15:30'].map((t) => (
+                    <span key={t} style={{ color: 'rgba(180, 200, 230, 0.45)', fontSize: '10px', fontFamily: 'monospace' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer Stats */}
+              <div style={{
+                padding: '16px 24px 20px',
+                borderTop: '1px solid rgba(100, 180, 255, 0.08)',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                gap: '16px',
+              }}>
+                {[
+                  { label: 'Day High', value: '24,912', color: 'rgba(100, 220, 180, 0.9)' },
+                  { label: 'Day Low', value: '24,698', color: 'rgba(255, 150, 150, 0.9)' },
+                  { label: 'Open', value: '24,750', color: 'rgba(180, 200, 230, 0.8)' },
+                  { label: 'Prev Close', value: '24,670', color: 'rgba(180, 200, 230, 0.8)' },
+                  { label: 'Volume', value: '18.2Cr', color: 'rgba(140, 180, 255, 0.9)' },
+                  { label: 'Turnover', value: '₹4,521Cr', color: 'rgba(140, 180, 255, 0.9)' },
+                ].map((stat) => (
+                  <div key={stat.label} style={{ textAlign: 'center' }}>
+                    <div style={{ color: 'rgba(180, 200, 230, 0.50)', fontSize: '10px', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                      {stat.label}
+                    </div>
+                    <div style={{ color: stat.color, fontSize: '16px', fontWeight: 600, fontFamily: 'system-ui, monospace' }}>
+                      {stat.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════════════════════
+                LIVE MARKET PULSE - Real-time market overview
+                ═══════════════════════════════════════════════════════════ */}
+            <div 
+              className="li-dash-card"
+              style={{ 
+                gridColumn: '1 / -1',
+                background: 'linear-gradient(135deg, rgba(10, 15, 25, 0.97) 0%, rgba(5, 8, 15, 0.99) 100%)',
+                border: '1px solid rgba(100, 180, 255, 0.10)',
+                borderRadius: '20px',
+              }}
+            >
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '20px',
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h3 style={{ margin: 0, color: 'rgba(230, 240, 255, 0.95)', fontSize: '16px', fontWeight: 600 }}>
+                      Live Market Pulse
+                    </h3>
+                    <div className="li-live-dot" />
+                    <span style={{
+                      padding: '3px 8px',
+                      background: 'rgba(100, 220, 180, 0.12)',
+                      border: '1px solid rgba(100, 220, 180, 0.25)',
+                      borderRadius: '4px',
+                      fontSize: '9px',
+                      fontWeight: 600,
+                      color: 'rgba(100, 220, 180, 0.95)',
+                      letterSpacing: '0.1em',
+                    }}>
+                      MARKET OPEN
+                    </span>
+                  </div>
+                  <p style={{ margin: '4px 0 0', color: 'rgba(180, 200, 230, 0.50)', fontSize: '12px' }}>
+                    Global indices • Sectors • Commodities
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+                {[
+                  { name: 'NIFTY 50', value: '24,857', change: '+0.76%', up: true },
+                  { name: 'SENSEX', value: '81,234', change: '+0.68%', up: true },
+                  { name: 'BANK NIFTY', value: '51,892', change: '+0.92%', up: true },
+                  { name: 'NIFTY IT', value: '42,156', change: '-0.34%', up: false },
+                  { name: 'MCX Gold', value: '₹78,450', change: '+0.28%', up: true },
+                  { name: 'USD/INR', value: '84.25', change: '-0.12%', up: false },
+                ].map((item) => (
+                  <div 
+                    key={item.name}
+                    style={{
+                      padding: '16px',
+                      background: 'rgba(0, 0, 0, 0.30)',
+                      border: '1px solid rgba(100, 180, 255, 0.08)',
+                      borderRadius: '12px',
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    <div style={{ color: 'rgba(180, 200, 230, 0.60)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.04em', marginBottom: '8px' }}>
+                      {item.name}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                      <span style={{ 
+                        color: 'rgba(240, 245, 255, 0.95)', 
+                        fontSize: '20px', 
+                        fontWeight: 700,
+                        fontFamily: 'system-ui, monospace',
+                      }}>
+                        {item.value}
+                      </span>
+                      <span style={{ 
+                        color: item.up ? 'rgba(100, 220, 180, 0.95)' : 'rgba(255, 150, 150, 0.95)',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px',
+                      }}>
+                        {item.up ? '▲' : '▼'} {item.change}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
