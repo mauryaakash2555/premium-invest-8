@@ -2370,3 +2370,12 @@ body[data-laser-active="true"] .laser-footer li {
     -webkit-text-fill-color: rgba(220, 230, 255, 0.70) !important;
   }
 }
+
+/* ==========================================================================
+   GLOBAL FOOTER VISIBILITY OVERRIDE (Requested)
+   ========================================================================== */
+footer {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
