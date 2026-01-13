@@ -615,48 +615,50 @@
     100% { transform: translate(200px, -400px) rotate(180deg); opacity: 0; }
   }
 
-  /* BM Wealth Legacy Styles Integration - DATABAHN MINIMAL GOLD STYLE */
+  /* BM Wealth Legacy Styles Integration - FULL RESTORATION */
   .btn-primary {
-    background: rgba(192, 160, 98, 0.12);
+    background: rgba(192, 160, 98, 0.15);
     color: #C0A062;
-    border: 1px solid rgba(192, 160, 98, 0.35);
+    border: 1px solid rgba(192, 160, 98, 0.4);
     padding: 14px 32px;
     font-size: 14px;
     font-weight: 500;
-    border-radius: 8px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
     text-decoration: none;
     display: inline-block;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
   }
 
   .btn-primary:hover {
-    background: rgba(192, 160, 98, 0.22);
-    border-color: rgba(192, 160, 98, 0.55);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(192, 160, 98, 0.15);
+    background: rgba(192, 160, 98, 0.25);
+    border-color: rgba(192, 160, 98, 0.7);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(192, 160, 98, 0.2);
   }
 
   .btn-secondary {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(192, 160, 98, 0.9);
+    border: 1px solid rgba(192, 160, 98, 0.3);
     padding: 12px 30px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
     text-decoration: none;
     display: inline-block;
+    backdrop-filter: blur(10px);
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(255, 255, 255, 0.35);
-    transform: translateY(-2px);
+    background: rgba(192, 160, 98, 0.12);
+    color: #C0A062;
+    border-color: rgba(192, 160, 98, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(192, 160, 98, 0.15);
   }
 
   .section-container {
@@ -699,24 +701,26 @@
   }
 
   .hero-section-responsive .btn-primary {
-    background: rgba(218, 165, 32, 0.85);
-    backdrop-filter: blur(10px);
-    color: #000000;
+    background: rgba(192, 160, 98, 0.18);
+    backdrop-filter: blur(12px);
+    color: #C0A062;
+    border: 1px solid rgba(192, 160, 98, 0.45);
     font-weight: 500;
     letter-spacing: 0.5px;
   }
 
   .hero-section-responsive .btn-primary:hover {
-    background: rgba(218, 165, 32, 0.95);
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(218, 165, 32, 0.5), 0 0 25px rgba(218, 165, 32, 0.4);
+    background: rgba(192, 160, 98, 0.28);
+    border-color: rgba(192, 160, 98, 0.7);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(192, 160, 98, 0.2);
   }
 
   .hero-section-responsive .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(218, 165, 32, 0.4);
-    color: #DAA520;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(192, 160, 98, 0.35);
+    color: rgba(192, 160, 98, 0.9);
     font-weight: 400;
     letter-spacing: 0.5px;
   }
@@ -1739,9 +1743,9 @@ footer {
       ) border-box;
 
   box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 16%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--color-matte-gold) 12%, transparent),
     0 10px 28px rgba(0, 0, 0, 0.55),
-    0 0 18px color-mix(in oklab, var(--color-matte-gold) 20%, transparent);
+    0 0 12px color-mix(in oklab, var(--color-matte-gold) 14%, transparent);
 
   animation: bm-rotate-angle 12s linear infinite;
   transition: box-shadow 180ms ease, transform 180ms ease;
