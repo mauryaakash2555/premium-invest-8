@@ -1599,7 +1599,7 @@ export default function LiveIntelligenceHeroPage() {
               {/* TradingView Advanced Chart Widget - Full feature with symbol search */}
               <div style={{ height: '500px', width: '100%', background: '#131722' }}>
                 <iframe
-                  src="https://www.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
+                  src="https://www.tradingview.com/widgetembed/?symbol=BSE%3ASENSEX&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
                   style={{
                     width: '100%',
                     height: '100%',
