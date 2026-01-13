@@ -53,6 +53,9 @@ const inter = Inter({
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const isLaserPage = pathname === '/live-intelligence-hero';
+  const isClientPortal = pathname === '/client-portal';
+  // Pages with their own custom footer - don't add global Footer
+  const hasCustomFooter = isLaserPage || isClientPortal;
 
   const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
   return (
@@ -85,8 +88,8 @@ export default function RootLayout({ children }) {
           <main style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}>
             {children}
           </main>
-          {/* Only render global Footer if not on laser page */}
-          {!isLaserPage && <Footer />}
+          {/* Only render global Footer if page doesn't have custom footer */}
+          {!hasCustomFooter && <Footer />}
         </div>
         <LuxuryMobileDock />
         <WhatsAppFloat />
