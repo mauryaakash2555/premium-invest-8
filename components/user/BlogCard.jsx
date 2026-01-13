@@ -77,9 +77,9 @@ export default function BlogCard({ post, variant = 'default' }) {
           height={isMobile ? mobileCardHeight : 'auto'}
           color="#60a5fa"
           borderRadius={isMobile ? 12 : 16}
-          duration={3.5}
-          glowIntensity={28}
-          beamLength={0.15}
+          duration={12}
+          glowIntensity={18}
+          beamLength={0.08}
           borderWidth={1}
           backgroundColor="transparent"
         >

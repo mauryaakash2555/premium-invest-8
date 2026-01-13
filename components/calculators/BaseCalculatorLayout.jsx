@@ -22,16 +22,16 @@ export function BaseCalculatorLayout({
   );
 
   return (
-    <div className="w-full flex justify-center calculator-backdrop-hover">
+    <div className="w-full flex justify-center items-center calculator-backdrop-hover px-4">
       {laserEnabled ? (
         <LaserBeam
           width="100%"
           height="auto"
           color={laserColor}
           borderRadius={12}
-          duration={6}
-          glowIntensity={18}
-          beamLength={0.10}
+          duration={12}
+          glowIntensity={14}
+          beamLength={0.06}
           borderWidth={0}
           backgroundColor="transparent"
         >
