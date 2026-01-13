@@ -243,38 +243,30 @@ const Services = () => {
           >
             <Link
               href="/tools"
-              className="svc-cta"
+              className="btn-primary"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px',
-                padding: '14px 16px',
-                borderRadius: '14px',
-                border: '1px solid rgba(192,160,98,0.20)',
-                background: 'rgba(255,255,255,0.03)',
-                color: '#e5e5e5',
-                fontWeight: 600,
+                justifyContent: 'center',
+                gap: '10px',
+                padding: '14px 28px',
+                borderRadius: '50px',
                 textDecoration: 'none',
               }}
             >
               <span>Explore Tools</span>
-              <ArrowRight size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
+              <ArrowRight size={18} style={{ flexShrink: 0 }} />
             </Link>
             <Link
               href="/contact"
-              className="svc-cta"
+              className="btn-secondary"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px',
-                padding: '14px 16px',
-                borderRadius: '14px',
-                border: '1px solid rgba(255,255,255,0.14)',
-                background: 'rgba(255,255,255,0.03)',
-                color: '#e5e5e5',
-                fontWeight: 600,
+                justifyContent: 'center',
+                gap: '10px',
+                padding: '14px 28px',
+                borderRadius: '50px',
                 textDecoration: 'none',
               }}
             >
@@ -535,44 +527,36 @@ const Services = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="services-whatsapp-cta"
-                className="svc-cta"
+                className="btn-primary"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '14px',
-                  border: '1px solid rgba(192,160,98,0.20)',
-                  background: 'rgba(255,255,255,0.03)',
-                  color: '#e5e5e5',
-                  fontWeight: 600,
+                  padding: '14px 28px',
+                  borderRadius: '50px',
                   textDecoration: 'none',
                   minWidth: '220px',
                 }}
               >
-                Message on WhatsApp <ArrowRight size={18} style={{ color: '#C0A062' }} />
+                Message on WhatsApp <ArrowRight size={18} />
               </a>
               <Link
                 href="/contact"
                 data-testid="services-contact-cta"
-                className="svc-cta"
+                className="btn-secondary"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '14px',
-                  border: '1px solid rgba(255,255,255,0.14)',
-                  background: 'rgba(255,255,255,0.03)',
-                  color: '#e5e5e5',
-                  fontWeight: 600,
+                  padding: '14px 28px',
+                  borderRadius: '50px',
                   textDecoration: 'none',
                   minWidth: '220px',
                 }}
               >
-                Contact Us <ArrowRight size={18} style={{ color: '#B8B8B8' }} />
+                Contact Us <ArrowRight size={18} />
               </Link>
             </div>
           </div>

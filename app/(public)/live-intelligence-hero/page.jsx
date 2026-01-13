@@ -1657,12 +1657,12 @@ export default function LiveIntelligenceHeroPage() {
                     return (
                       <span style={{
                         padding: '3px 10px',
-                        background: isMarketHours ? 'rgba(100, 220, 180, 0.12)' : 'rgba(255, 180, 100, 0.12)',
-                        border: `1px solid ${isMarketHours ? 'rgba(100, 220, 180, 0.30)' : 'rgba(255, 180, 100, 0.30)'}`,
+                        background: isMarketHours ? 'rgba(100, 220, 180, 0.12)' : 'rgba(120, 150, 200, 0.12)',
+                        border: `1px solid ${isMarketHours ? 'rgba(100, 220, 180, 0.30)' : 'rgba(120, 150, 200, 0.30)'}`,
                         borderRadius: '4px',
                         fontSize: '9px',
                         fontWeight: 600,
-                        color: isMarketHours ? 'rgba(100, 220, 180, 0.95)' : 'rgba(255, 200, 140, 0.95)',
+                        color: isMarketHours ? 'rgba(100, 220, 180, 0.95)' : 'rgba(160, 185, 220, 0.95)',
                         letterSpacing: '0.1em',
                       }}>
                         {isMarketHours ? 'NSE OPEN' : 'NSE CLOSED'}
