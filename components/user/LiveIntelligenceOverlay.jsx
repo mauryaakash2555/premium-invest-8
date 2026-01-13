@@ -76,23 +76,6 @@ export default function LiveIntelligenceOverlay({
   const footerObserverRef = useRef(null);
   const hasAutoOpenedRef = useRef(false);
 
-  const sortedHeadlines = useMemo(() => sortByPriority(DUMMY_HEADLINES), []);
-  const headlineLinkByCategory = useMemo(
-    () => ({
-      market: '/tools',
-      mutual_funds: '/mutual-funds',
-      sip: '/sip',
-      breaking: '/tools',
-      insurance: '/insurance',
-      fixed_income: '/fixed-deposits',
-      trading: '/trading-services',
-      pms: '/portfolio-management',
-      real_estate: '/tools',
-      forex_gold: '/tools',
-    }),
-    []
-  );
-
   // Mount check for portal
   useEffect(() => {
     setMounted(true);
@@ -354,6 +337,24 @@ export default function LiveIntelligenceOverlay({
  * Panel component with dashboard content and EPIC DONUT
  */
 function LiveIntelligencePanel({ onClose }) {
+  // Headlines data for Headline Feed section
+  const sortedHeadlines = useMemo(() => sortByPriority(DUMMY_HEADLINES), []);
+  const headlineLinkByCategory = useMemo(
+    () => ({
+      market: '/tools',
+      mutual_funds: '/mutual-funds',
+      sip: '/sip',
+      breaking: '/tools',
+      insurance: '/insurance',
+      fixed_income: '/fixed-deposits',
+      trading: '/trading-services',
+      pms: '/portfolio-management',
+      real_estate: '/tools',
+      forex_gold: '/tools',
+    }),
+    []
+  );
+
   const [portfolioValue] = useState(28.3);
   const [allocations, setAllocations] = useState({
     equity: 58,
