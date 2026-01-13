@@ -10,6 +10,48 @@ const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`;
 const SESSION_KEY = 'li-overlay-auto-opened';
 
 /**
+ * MarketStatusBadge - Shows NSE OPEN/CLOSED status
+ * Uses warm gold colors to match home page palette
+ */
+const MarketStatusBadge = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  useEffect(() => {
+    const checkMarketStatus = () => {
+      const now = new Date();
+      const istOffset = 5.5 * 60 * 60 * 1000;
+      const istTime = new Date(now.getTime() + (istOffset - now.getTimezoneOffset() * 60 * 1000));
+      const day = istTime.getDay();
+      const hours = istTime.getHours();
+      const minutes = istTime.getMinutes();
+      const totalMinutes = hours * 60 + minutes;
+      // NSE: Mon-Fri, 9:15 AM - 3:30 PM IST
+      const marketOpen = 9 * 60 + 15;
+      const marketClose = 15 * 60 + 30;
+      setIsOpen(day >= 1 && day <= 5 && totalMinutes >= marketOpen && totalMinutes <= marketClose);
+    };
+    checkMarketStatus();
+    const interval = setInterval(checkMarketStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <span style={{
+      padding: '4px 10px',
+      borderRadius: '6px',
+      fontSize: '10px',
+      fontWeight: 600,
+      letterSpacing: '0.08em',
+      background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'rgba(192, 160, 98, 0.12)',
+      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(192, 160, 98, 0.25)'}`,
+      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(192, 160, 98, 0.95)',
+    }}>
+      NSE {isOpen ? 'OPEN' : 'CLOSED'}
+    </span>
+  );
+};
+
+/**
  * LiveIntelligenceOverlay
  * 
  * Full-page overlay containing:
@@ -1167,6 +1209,134 @@ function LiveIntelligencePanel({ onClose }) {
                   <div style={{ color: row.pColor, fontSize: '13px', fontWeight: 500 }}>{row.p}</div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════════
+              LIVE TRADING CHART - TradingView Widget (SENSEX)
+              ═══════════════════════════════════════════════════════════ */}
+          <div 
+            className="li-dash-card"
+            style={{ 
+              gridColumn: '1 / -1',
+              background: '#131722',
+              border: '1px solid rgba(192, 160, 98, 0.15)',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              padding: 0,
+            }}
+          >
+            <div style={{
+              padding: '14px 20px',
+              borderBottom: '1px solid rgba(192, 160, 98, 0.10)',
+              background: '#131722',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                <h3 style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  color: 'rgba(235, 242, 255, 0.94)',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                  margin: 0,
+                }}>
+                  📈 Live Chart — SENSEX
+                </h3>
+                <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px', marginTop: '4px' }}>
+                  Real-time data • Powered by TradingView
+                </div>
+              </div>
+              <span style={{
+                padding: '3px 8px',
+                background: 'rgba(192, 160, 98, 0.12)',
+                border: '1px solid rgba(192, 160, 98, 0.25)',
+                borderRadius: '4px',
+                fontSize: '9px',
+                fontWeight: 600,
+                color: 'rgba(192, 160, 98, 0.95)',
+                letterSpacing: '0.08em',
+              }}>
+                TRADINGVIEW
+              </span>
+            </div>
+
+            <div style={{ height: '400px', width: '100%', background: '#131722' }}>
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?symbol=BSE%3ASENSEX&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                }}
+                title="Live Chart"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
+            <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(192, 160, 98, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
+              💡 Click the symbol name at top-left to search & change stocks (NIFTY, BANKNIFTY, RELIANCE, TCS, etc.)
+            </div>
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════════
+              GLOBAL MARKETS - TradingView Market Overview Widget
+              ═══════════════════════════════════════════════════════════ */}
+          <div 
+            className="li-dash-card"
+            style={{ 
+              gridColumn: '1 / -1',
+              background: '#131722',
+              border: '1px solid rgba(192, 160, 98, 0.15)',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              padding: 0,
+            }}
+          >
+            <div style={{
+              padding: '14px 20px',
+              borderBottom: '1px solid rgba(192, 160, 98, 0.10)',
+              background: '#131722',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <h3 style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  color: 'rgba(235, 242, 255, 0.94)',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                  margin: 0,
+                }}>
+                  🌍 Global Markets
+                </h3>
+                <MarketStatusBadge />
+              </div>
+              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                Real-time quotes • TradingView
+              </div>
+            </div>
+
+            <div style={{ height: '400px', width: '100%', background: '#131722' }}>
+              <iframe
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Futures%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Bonds%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22TVC%3AIN10Y%22%2C%22d%22%3A%22India%2010Y%22%7D%2C%7B%22s%22%3A%22TVC%3AUS10Y%22%2C%22d%22%3A%22US%2010Y%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                  backgroundColor: '#131722',
+                }}
+                title="Market Overview"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
