@@ -1552,7 +1552,7 @@ export default function LiveIntelligenceHeroPage() {
                 gridColumn: '1 / -1',
                 position: 'relative',
                 overflow: 'hidden',
-                background: '#131722',
+                background: '#000000',
                 border: '1px solid rgba(100, 180, 255, 0.15)',
                 borderRadius: '20px',
                 padding: 0,
@@ -1567,7 +1567,7 @@ export default function LiveIntelligenceHeroPage() {
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '12px',
-                background: '#131722',
+                background: '#000000',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <h3 style={{ 
@@ -1597,7 +1597,7 @@ export default function LiveIntelligenceHeroPage() {
               </div>
 
               {/* TradingView Advanced Chart Widget - Full feature with symbol search */}
-              <div style={{ height: '500px', width: '100%', background: '#131722' }}>
+              <div style={{ height: '500px', width: '100%', background: '#000000' }}>
                 <iframe
                   src="https://www.tradingview.com/widgetembed/?symbol=BSE%3ASENSEX&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
                   style={{
@@ -1611,7 +1611,7 @@ export default function LiveIntelligenceHeroPage() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
               </div>
-              <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
+              <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
                 💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
               </div>
             </div>
@@ -1623,7 +1623,7 @@ export default function LiveIntelligenceHeroPage() {
               className="li-dash-card"
               style={{ 
                 gridColumn: '1 / -1',
-                background: '#131722',
+                background: '#000000',
                 border: '1px solid rgba(100, 180, 255, 0.10)',
                 borderRadius: '16px',
                 overflow: 'hidden',
@@ -1634,7 +1634,7 @@ export default function LiveIntelligenceHeroPage() {
               <div style={{
                 padding: '14px 20px',
                 borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
-                background: '#131722',
+                background: '#000000',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -1695,6 +1695,134 @@ export default function LiveIntelligenceHeroPage() {
 
           {/* Headline Feed - Rotating financial news */}
           <HeadlineFeed />
+
+          {/* ═══════════════════════════════════════════════════════════
+              SERVICE QUICK ACCESS - Clickable cards linking to services
+              Premium icy blue style matching laser page design
+              ═══════════════════════════════════════════════════════════ */}
+          <div style={{ marginTop: '32px' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '16px',
+            }}>
+              <h3 style={{ 
+                margin: 0, 
+                color: 'rgba(230, 240, 255, 0.95)', 
+                fontSize: '17px', 
+                fontWeight: 600,
+                letterSpacing: '0.02em',
+              }}>
+                📂 Quick Access
+              </h3>
+              <span style={{ 
+                color: 'rgba(180, 200, 230, 0.50)', 
+                fontSize: '11px' 
+              }}>
+                Click to explore services
+              </span>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+              gap: '12px',
+            }}>
+              {[
+                { 
+                  title: 'Mutual Funds', 
+                  icon: '📊', 
+                  desc: '5000+ schemes',
+                  link: '/mutual-funds',
+                  accent: 'rgba(100, 180, 255, 0.15)',
+                },
+                { 
+                  title: 'SIP', 
+                  icon: '💰', 
+                  desc: 'Start from ₹500',
+                  link: '/sip',
+                  accent: 'rgba(100, 220, 180, 0.15)',
+                },
+                { 
+                  title: 'Portfolio Management', 
+                  icon: '💎', 
+                  desc: 'PMS & AIF',
+                  link: '/portfolio-management',
+                  accent: 'rgba(180, 120, 255, 0.15)',
+                },
+                { 
+                  title: 'Insurance', 
+                  icon: '🛡️', 
+                  desc: 'Term & Health',
+                  link: '/insurance',
+                  accent: 'rgba(255, 180, 100, 0.15)',
+                },
+                { 
+                  title: 'Trading Services', 
+                  icon: '📈', 
+                  desc: 'Demat & Trading',
+                  link: '/trading-services',
+                  accent: 'rgba(255, 100, 150, 0.15)',
+                },
+                { 
+                  title: 'Fixed Deposits', 
+                  icon: '🏦', 
+                  desc: 'Up to 9% p.a.',
+                  link: '/fixed-deposits',
+                  accent: 'rgba(200, 200, 100, 0.15)',
+                },
+              ].map((service) => (
+                <a
+                  key={service.title}
+                  href={service.link}
+                  style={{
+                    display: 'block',
+                    textDecoration: 'none',
+                    padding: '16px',
+                    background: 'rgba(15, 18, 25, 0.80)',
+                    border: '1px solid rgba(100, 150, 255, 0.12)',
+                    borderRadius: '12px',
+                    transition: 'all 0.25s ease',
+                    cursor: 'pointer',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
+                    e.currentTarget.style.background = service.accent;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 150, 255, 0.15)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(100, 150, 255, 0.12)';
+                    e.currentTarget.style.background = 'rgba(15, 18, 25, 0.80)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{ 
+                    fontSize: '24px', 
+                    marginBottom: '8px' 
+                  }}>
+                    {service.icon}
+                  </div>
+                  <div style={{ 
+                    color: 'rgba(230, 240, 255, 0.95)', 
+                    fontSize: '14px', 
+                    fontWeight: 600,
+                    marginBottom: '4px',
+                  }}>
+                    {service.title}
+                  </div>
+                  <div style={{ 
+                    color: 'rgba(180, 200, 230, 0.60)', 
+                    fontSize: '11px',
+                  }}>
+                    {service.desc}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
 
           {/* Night Summary Dashboard - Only shows 9PM-12AM */}
           <NightSummary />
