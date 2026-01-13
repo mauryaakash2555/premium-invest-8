@@ -1552,7 +1552,7 @@ export default function LiveIntelligenceHeroPage() {
                 gridColumn: '1 / -1',
                 position: 'relative',
                 overflow: 'hidden',
-                background: '#000000',
+                background: '#131722',
                 border: '1px solid rgba(100, 180, 255, 0.15)',
                 borderRadius: '20px',
                 padding: 0,
@@ -1567,7 +1567,7 @@ export default function LiveIntelligenceHeroPage() {
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '12px',
-                background: 'rgba(5, 8, 15, 0.95)',
+                background: '#131722',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <h3 style={{ 
@@ -1596,20 +1596,23 @@ export default function LiveIntelligenceHeroPage() {
                 </div>
               </div>
 
-              {/* TradingView Advanced Chart Widget */}
-              <div style={{ height: '480px', width: '100%', background: '#000' }}>
+              {/* TradingView Advanced Chart Widget - Full feature with symbol search */}
+              <div style={{ height: '500px', width: '100%', background: '#131722' }}>
                 <iframe
-                  src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=15&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=000000&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&showpopupbutton=1&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&showFloatingTicker=false&locale=in&utm_source=&utm_medium=widget&utm_campaign=chart&utm_term=NSE%3ANIFTY"
+                  src="https://www.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
                   style={{
                     width: '100%',
                     height: '100%',
                     border: 'none',
                     display: 'block',
                   }}
-                  title="NIFTY 50 Live Chart"
+                  title="Live Chart"
                   loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
+              </div>
+              <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
+                💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
               </div>
             </div>
 
@@ -1620,7 +1623,7 @@ export default function LiveIntelligenceHeroPage() {
               className="li-dash-card"
               style={{ 
                 gridColumn: '1 / -1',
-                background: '#000000',
+                background: '#131722',
                 border: '1px solid rgba(100, 180, 255, 0.10)',
                 borderRadius: '16px',
                 overflow: 'hidden',
@@ -1631,7 +1634,7 @@ export default function LiveIntelligenceHeroPage() {
               <div style={{
                 padding: '14px 20px',
                 borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
-                background: 'rgba(5, 8, 15, 0.95)',
+                background: '#131722',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -1672,15 +1675,16 @@ export default function LiveIntelligenceHeroPage() {
                 </div>
               </div>
 
-              {/* TradingView Market Overview Widget */}
-              <div style={{ height: '420px', width: '100%', background: '#000' }}>
+              {/* TradingView Market Overview Widget - Dark Theme */}
+              <div style={{ height: '420px', width: '100%', background: '#131722' }}>
                 <iframe
-                  src="https://s.tradingview.com/embed-widget/market-quotes/?locale=in&width=100%25&height=100%25&showSymbolLogo=true&isTransparent=true&colorTheme=dark&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%2C%22originalTitle%22%3A%22Indices%22%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%2C%22originalTitle%22%3A%22Commodities%22%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%2C%7B%22s%22%3A%22CRYPTOCAP%3ABTC%22%2C%22d%22%3A%22Bitcoin%22%7D%5D%2C%22originalTitle%22%3A%22Forex%22%7D%5D"
+                  src="https://s.tradingview.com/embed-widget/market-quotes/?locale=in&width=100%25&height=100%25&showSymbolLogo=true&isTransparent=false&colorTheme=dark&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%2C%22originalTitle%22%3A%22Indices%22%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%2C%22originalTitle%22%3A%22Commodities%22%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%2C%7B%22s%22%3A%22CRYPTOCAP%3ABTC%22%2C%22d%22%3A%22Bitcoin%22%7D%5D%2C%22originalTitle%22%3A%22Forex%22%7D%5D"
                   style={{
                     width: '100%',
                     height: '100%',
                     border: 'none',
                     display: 'block',
+                    backgroundColor: '#131722',
                   }}
                   title="Market Overview"
                   loading="lazy"
