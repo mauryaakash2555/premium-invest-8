@@ -4,6 +4,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
 import HeadlineFeed from '@/app/(public)/live-intelligence-hero/components/HeadlineFeed';
+import ModeIndicator from '@/app/(public)/live-intelligence-hero/components/ModeIndicator';
+import DonutCalculator from '@/app/(public)/live-intelligence-hero/components/DonutCalculator';
+import StreakBadge from '@/app/(public)/live-intelligence-hero/components/StreakBadge';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -326,6 +329,7 @@ export default function LiveIntelligenceOverlay({
  */
 function LiveIntelligencePanel({ onClose }) {
   const [portfolioValue] = useState(28.3);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
@@ -940,54 +944,266 @@ function LiveIntelligencePanel({ onClose }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Dashboard header (centered title, tiny Apple arrow on right) */}
-        <div style={{ position: 'relative', marginBottom: '8px', paddingRight: '28px' }}>
-          <div className="li-header-block" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+        {/* Dashboard header with navigation tabs and actions */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '8px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
                 Live Intelligence
               </h2>
-              <div className="li-live-dot" />
+              <ModeIndicator />
+              <StreakBadge showDetails={true} />
             </div>
-            <p className="li-header-subtitle" style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
+            <p style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
               Your financial command center — real-time portfolio insights and signals.
             </p>
+            {/* Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days */}
+            <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
+              <div style={{ display: 'flex', gap: '8px', minWidth: 'max-content' }}>
+                {[
+                  { key: 'pulse', label: 'Live Market Pulse', icon: '📡', active: true },
+                  { key: 'live', label: 'Live', icon: '🔴', active: false },
+                  { key: 'timings', label: 'Timings', icon: '🕐', active: false },
+                  { key: '2days', label: '2 Days', icon: '📊', active: false },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 14px',
+                      background: tab.active ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
+                      border: `1px solid ${tab.active ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                      borderRadius: '10px',
+                      color: tab.active ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onMouseOver={(e) => {
+                      if (!tab.active) {
+                        e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
+                        e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (!tab.active) {
+                        e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
+                        e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
+                      }
+                    }}
+                  >
+                    <span>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Tiny Apple minimal back arrow - NO BORDERS/BG, on RIGHT */}
-          <button
-            onClick={onClose}
-            aria-label="Close Live Intelligence"
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '4px',
-              color: 'rgba(255, 255, 255, 0.55)',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 1)')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.55)')}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {/* Action buttons - Back arrow, Share, Add Goal */}
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            {/* Back arrow */}
+            <button
+              onClick={onClose}
+              aria-label="Close Live Intelligence"
+              style={{
+                appearance: 'none',
+                border: 'none',
+                background: 'transparent',
+                color: 'rgba(180, 200, 230, 0.55)',
+                padding: '8px 12px',
+                cursor: 'pointer',
+                fontSize: '22px',
+                fontWeight: 300,
+                transition: 'all 0.2s ease',
+                lineHeight: 1,
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
+                e.currentTarget.style.transform = 'translateX(-4px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = 'rgba(180, 200, 230, 0.55)';
+                e.currentTarget.style.transform = 'translateX(0)';
+              }}
             >
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </button>
+              ←
+            </button>
+            {/* Share Button with Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                onClick={() => setShowShareMenu(!showShareMenu)}
+                style={{
+                  appearance: 'none',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(10,10,12,0.70)',
+                  color: 'rgba(235,242,255,0.85)',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  transition: 'all 0.25s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                  e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+                  e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
+                }}
+              >
+                <span>Share</span>
+                <span style={{ fontSize: '10px', opacity: 0.7 }}>▼</span>
+              </button>
+
+              {/* Share dropdown menu */}
+              {showShareMenu && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '8px',
+                  minWidth: '200px',
+                  background: 'rgba(15, 18, 25, 0.98)',
+                  border: '1px solid rgba(100, 160, 255, 0.20)',
+                  borderRadius: '14px',
+                  padding: '8px',
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(100, 160, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  zIndex: 200,
+                }}>
+                  {[
+                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp' },
+                    { key: 'email', icon: '📧', label: 'Email' },
+                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X' },
+                    { key: 'linkedin', icon: '💼', label: 'LinkedIn' },
+                    { key: 'telegram', icon: '✈️', label: 'Telegram' },
+                  ].map((item) => (
+                    <button
+                      key={item.key}
+                      type="button"
+                      onClick={() => {
+                        const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
+                        const shareText = 'Check out my Live Intelligence Dashboard at BM Wealth - Real-time portfolio insights!';
+                        const urls = {
+                          whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
+                          email: `mailto:?subject=${encodeURIComponent('My BM Wealth Portfolio Dashboard')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`,
+                          twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+                          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+                          telegram: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
+                        };
+                        window.open(urls[item.key], '_blank', 'noopener,noreferrer');
+                        setShowShareMenu(false);
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '10px',
+                        color: 'rgba(220, 230, 255, 0.85)',
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
+                        e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
+                      }}
+                    >
+                      <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
+                      if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(shareUrl).then(() => alert('Link copied!'));
+                      } else {
+                        prompt('Copy this link:', shareUrl);
+                      }
+                      setShowShareMenu(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '12px 14px',
+                      background: 'transparent',
+                      border: 'none',
+                      borderRadius: '10px',
+                      color: 'rgba(220, 230, 255, 0.85)',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
+                    }}
+                  >
+                    <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📋</span>
+                    <span>Copy Link</span>
+                  </button>
+                </div>
+              )}
+            </div>
+            {/* Add Goal Button */}
+            <button
+              type="button"
+              style={{
+                appearance: 'none',
+                border: '1px solid rgba(170,198,255,0.45)',
+                background: 'linear-gradient(180deg, rgba(130,160,255,0.18) 0%, rgba(10,10,12,0.65) 100%)',
+                color: 'rgba(245,248,255,0.95)',
+                padding: '10px 16px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+                boxShadow: '0 0 20px rgba(140,190,255,0.12)',
+                transition: 'all 0.25s ease',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.65)';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(140,190,255,0.20)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.45)';
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(140,190,255,0.12)';
+              }}
+            >
+              + Add Goal
+            </button>
+          </div>
         </div>
 
         {/* KPI row */}
@@ -1125,6 +1341,9 @@ function LiveIntelligencePanel({ onClose }) {
                 </div>
               ))}
             </div>
+
+            {/* Ultimate Calculator - 6 Services */}
+            <DonutCalculator />
           </div>
 
           {/* Right column - Live Signals */}
