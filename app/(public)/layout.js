@@ -29,35 +29,37 @@ export const metadata = {
       metadataBase: new URL("https://bmwealth.co.in"),
 };
 
-  // Structured Data for Organization and Financial Services
-  export const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "BM Wealth",
-    "url": "https://bmwealth.co.in",
-    "logo": "https://bmwealth.co.in/og-image.png",
-    "description": "Premium portfolio management (PMS) and wealth services across mutual funds, SIP, insurance, trading & demat",
-    "sameAs": [
-          "https://twitter.com/bmwealth",
-          "https://linkedin.com/company/bmwealth",
-          "https://facebook.com/bmwealth"
-        ],
-    "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Customer Service",
-          "telephone": "+91-XXXXXXXXXX",
-          "email": "support@bmwealth.co.in"
-    },
-    "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "IN",
-          "addressLocality": "Mumbai"
-    },
-    "offers": {
-          "@type": "AggregateOffer",
-          "priceCurrency": "INR",
-          "description": "Portfolio Management Services, Mutual Funds, SIP, Insurance, Trading, Demat"
-    }
+// Structured Data for Organization and Financial Services (JSON-LD)
+const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "BM Wealth",
+      url: "https://bmwealth.co.in",
+      logo: "https://bmwealth.co.in/og-image.png",
+      description:
+            "Premium portfolio management (PMS) and wealth services across mutual funds, SIP, insurance, trading & demat",
+      sameAs: [
+            "https://twitter.com/bmwealth",
+            "https://linkedin.com/company/bmwealth",
+            "https://facebook.com/bmwealth",
+      ],
+      contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "Customer Service",
+            telephone: "+91-XXXXXXXXXX",
+            email: "support@bmwealth.co.in",
+      },
+      address: {
+            "@type": "PostalAddress",
+            addressCountry: "IN",
+            addressLocality: "Mumbai",
+      },
+      offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "INR",
+            description:
+                  "Portfolio Management Services, Mutual Funds, SIP, Insurance, Trading, Demat",
+      },
 };
 
 // SEO Configuration for Canonical URLs and Verification
@@ -109,6 +111,11 @@ export const accessibilityConfig = {
 export default function Layout({ children }) {
     return (
             <>
+      <script
+            type="application/ld+json"
+            // JSON-LD must be a string
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 {children}
 </>
     );
