@@ -1278,7 +1278,7 @@ function LiveIntelligencePanel({ onClose }) {
 
             <div style={{ height: '500px', width: '100%', background: '#000000' }}>
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=D&symboledit=1&saveimage=1&toolbarbg=000000&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
+                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&studies=%5B%5D&locale=in&utm_source=&utm_medium=widget_new&utm_campaign=chart&utm_term=NSE%3ANIFTY"
                 style={{
                   width: '100%',
                   height: '100%',
