@@ -40,7 +40,7 @@ import { getServicesForHome } from '@/data/servicesCatalog';
 import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import LiveIntelligenceOverlay from '@/components/user/LiveIntelligenceOverlay';
-import Footer from '@/components/user/Footer';
+import LaserFooter from '@/components/user/LaserFooter';
 
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
@@ -94,7 +94,7 @@ export default function HomePage() {
           height: '85vh',
         }}
       >
-        {/* Background Image */}
+        {/* Background Image - ULTRA DARK */}
         <div
           style={{
             position: 'absolute',
@@ -106,20 +106,20 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            // restore darker, premium mood
-            opacity: 0.55,
-            filter: 'brightness(0.80) saturate(1.05)',
+            // MAXIMUM DARKNESS - premium black mood
+            opacity: 0.10,
+            filter: 'brightness(0.25) saturate(1.1) contrast(1.2)',
             zIndex: 2,
           }}
         />
 
-        {/* Animated Clouds + occasional lightning (rain off by default) */}
-        <AnimatedClouds enableRain={rainEnabled} />
+        {/* Animated Clouds (no lightning to prevent hero flicker) */}
+        <AnimatedClouds enableRain={rainEnabled} enableLightning={false} />
 
         {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
 
-        {/* Premium Gradient Overlay - Desktop & Mobile */}
+        {/* Premium Gradient Overlay - Desktop & Mobile - ULTRA DARK */}
         <div
           className="hero-gradient-overlay"
           style={{
@@ -128,7 +128,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: '100%',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.58) 100%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.78) 100%)',
             zIndex: 2,
           }}
         />
@@ -236,7 +236,7 @@ export default function HomePage() {
       {/* Live Intelligence Overlay - Full page overlay */}
       <LiveIntelligenceOverlay 
         liveMoodRef={liveMoodRef}
-        footerContent={<Footer />}
+        footerContent={<LaserFooter />}
       />
 
       {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
