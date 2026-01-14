@@ -94,7 +94,7 @@ export default function HomePage() {
           height: '85vh',
         }}
       >
-        {/* Background Image - ULTRA DARK */}
+        {/* Background Image - PREMIUM DARK */}
         <div
           style={{
             position: 'absolute',
@@ -106,10 +106,10 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            // MAXIMUM DARKNESS - premium black mood
-            opacity: 0.10,
-            filter: 'brightness(0.25) saturate(1.1) contrast(1.2)',
-            zIndex: 2,
+            // Premium dark mood - visible but not distracting
+            opacity: 0.35,
+            filter: 'brightness(0.40) saturate(1.1) contrast(1.2)',
+            zIndex: 1,
           }}
         />
 
