@@ -105,7 +105,6 @@ export const accessibilityConfig = {
       { lang: "ma", url: "https://bmwealth.co.in/mr/" }
         ]
 };
-})
 
 export default function Layout({ children }) {
     return (
