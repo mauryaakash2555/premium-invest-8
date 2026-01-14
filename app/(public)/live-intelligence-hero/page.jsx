@@ -1157,13 +1157,11 @@ export default function LiveIntelligenceHeroPage() {
         `}</style>
 
         <div
-          className="li-panel-shell"
+          className="li-panel-shell max-w-7xl mx-auto"
           style={{
             position: 'relative',
             zIndex: 2,
             padding: '14px 20px 48px',
-            maxWidth: '1240px',
-            margin: '0 auto',
             borderRadius: '24px',
             border: '1px solid rgba(255,255,255,0.08)',
           }}
@@ -1860,8 +1858,10 @@ export default function LiveIntelligenceHeroPage() {
         </div>
       </section>
 
-      {/* FOOTER - Exact same as client portal, no wrapper */}
-      <LaserFooter />
+      {/* FOOTER - Wrapped in li-footer-wrapper so globals.css shows it */}
+      <div className="li-footer-wrapper">
+        <LaserFooter />
+      </div>
     </main>
   );
 }
