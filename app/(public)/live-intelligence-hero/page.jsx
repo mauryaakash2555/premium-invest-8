@@ -1191,6 +1191,52 @@ export default function LiveIntelligenceHeroPage() {
               <p style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
                 Your financial command center — real-time portfolio insights and signals.
               </p>
+              {/* Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days */}
+              <div className="li-nav-tabs-scroll" style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
+                <div style={{ display: 'flex', gap: '8px', minWidth: 'max-content' }}>
+                  {[
+                    { key: 'pulse', label: 'Live Market Pulse', icon: '📡', active: true },
+                    { key: 'live', label: 'Live', icon: '🔴', active: false },
+                    { key: 'timings', label: 'Timings', icon: '🕐', active: false },
+                    { key: '2days', label: '2 Days', icon: '📊', active: false },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '8px 14px',
+                        background: tab.active ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
+                        border: `1px solid ${tab.active ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                        borderRadius: '10px',
+                        color: tab.active ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseOver={(e) => {
+                        if (!tab.active) {
+                          e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
+                          e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
+                        }
+                      }}
+                      onMouseOut={(e) => {
+                        if (!tab.active) {
+                          e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
+                          e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
+                        }
+                      }}
+                    >
+                      <span>{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -1690,16 +1736,17 @@ export default function LiveIntelligenceHeroPage() {
                 </div>
               </div>
 
-              {/* TradingView Market Overview Widget - Pure Black */}
+              {/* TradingView Market Overview Widget - Pure Black with black background */}
               <div style={{ height: '420px', width: '100%', background: '#000000' }}>
                 <iframe
-                  src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                  src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                   style={{
                     width: '100%',
                     height: '100%',
                     border: 'none',
                     display: 'block',
                     backgroundColor: '#000000',
+                    colorScheme: 'dark',
                   }}
                   title="Market Overview"
                   loading="lazy"

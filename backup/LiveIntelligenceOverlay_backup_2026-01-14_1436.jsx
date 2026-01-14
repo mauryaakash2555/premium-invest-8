@@ -5,6 +5,9 @@ import { createPortal } from 'react-dom';
 
 import HeadlineFeed from '@/app/(public)/live-intelligence-hero/components/HeadlineFeed';
 
+const LASER_ASSET_VERSION = 'seamless-xfade-fade-2026-01-11';
+const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`;
+
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
 
@@ -292,7 +295,40 @@ export default function LiveIntelligenceOverlay({
         }
       `}</style>
 
-      {/* PANEL SECTION - Laser video removed, panel starts at top */}
+      {/* LASER SECTION (LOCKED - NO OVERLAYS/BUTTONS) */}
+      <section
+        aria-label="Live Intelligence Laser"
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100vh',
+          overflow: 'hidden',
+          background: '#090A0C',
+        }}
+      >
+        <video
+          src={VIDEO_SRC}
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="auto"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center bottom',
+            pointerEvents: 'none',
+            filter: 'none',
+            transform: 'none',
+            opacity: 1,
+          }}
+        />
+      </section>
+
+      {/* PANEL SECTION */}
       <LiveIntelligencePanel onClose={closeOverlay} />
 
       {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
@@ -1249,14 +1285,8 @@ function LiveIntelligencePanel({ onClose }) {
                   color: 'rgba(220, 240, 255, 0.95)', 
                   fontSize: '16px', 
                   fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
                 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                  </svg>
-                  Live Chart — NIFTY 50
+                  📈 Live Chart — NIFTY 50
                 </h3>
                 <span style={{
                   padding: '3px 8px',
@@ -1327,16 +1357,8 @@ function LiveIntelligencePanel({ onClose }) {
                   color: 'rgba(230, 240, 255, 0.95)',
                   fontSize: '15px',
                   fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
                 }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                  </svg>
-                  Global Markets
+                  🌍 Global Markets
                 </h3>
                 <MarketStatusBadge />
               </div>
@@ -1356,7 +1378,7 @@ function LiveIntelligencePanel({ onClose }) {
               }}
             >
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -1392,14 +1414,8 @@ function LiveIntelligencePanel({ onClose }) {
                 fontSize: '17px', 
                 fontWeight: 600,
                 letterSpacing: '0.02em',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
               }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
-                  <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
-                </svg>
-                Quick Access
+                📂 Quick Access
               </h3>
               <span style={{ 
                 color: 'rgba(180, 200, 230, 0.50)', 
@@ -1414,58 +1430,13 @@ function LiveIntelligencePanel({ onClose }) {
               gap: '12px',
             }}>
               {[
-                { title: 'Mutual Funds', icon: 'chart-pie', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds' },
-                { title: 'SIP', icon: 'refresh-cw', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip' },
-                { title: 'Portfolio Management', icon: 'briefcase', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management' },
-                { title: 'Insurance', icon: 'shield-check', desc: 'Term & Health', link: '/api/pdf/service?service=insurance' },
-                { title: 'Trading Services', icon: 'trending-up', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services' },
-                { title: 'Fixed Deposits', icon: 'landmark', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits' },
-              ].map((service) => {
-                // Premium SVG icons (Lucide-inspired)
-                const iconMap = {
-                  'chart-pie': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
-                      <path d="M22 12A10 10 0 0 0 12 2v10z"/>
-                    </svg>
-                  ),
-                  'refresh-cw': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="23 4 23 10 17 10"/>
-                      <polyline points="1 20 1 14 7 14"/>
-                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                    </svg>
-                  ),
-                  'briefcase': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                    </svg>
-                  ),
-                  'shield-check': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                      <polyline points="9 12 11 14 15 10"/>
-                    </svg>
-                  ),
-                  'trending-up': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                      <polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                  ),
-                  'landmark': (
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="3" y1="22" x2="21" y2="22"/>
-                      <line x1="6" y1="18" x2="6" y2="11"/>
-                      <line x1="10" y1="18" x2="10" y2="11"/>
-                      <line x1="14" y1="18" x2="14" y2="11"/>
-                      <line x1="18" y1="18" x2="18" y2="11"/>
-                      <polygon points="12 2 20 7 4 7"/>
-                    </svg>
-                  ),
-                };
-                return (
+                { title: 'Mutual Funds', icon: '📊', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds' },
+                { title: 'SIP', icon: '💰', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip' },
+                { title: 'Portfolio Management', icon: '💎', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management' },
+                { title: 'Insurance', icon: '🛡️', desc: 'Term & Health', link: '/api/pdf/service?service=insurance' },
+                { title: 'Trading Services', icon: '📈', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services' },
+                { title: 'Fixed Deposits', icon: '🏦', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits' },
+              ].map((service) => (
                 <a
                   key={service.title}
                   href={service.link}
@@ -1494,12 +1465,8 @@ function LiveIntelligencePanel({ onClose }) {
                     e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.03)';
                   }}
                 >
-                  <div style={{ 
-                    marginBottom: '12px',
-                    color: 'rgba(140, 190, 255, 0.85)',
-                    filter: 'drop-shadow(0 0 8px rgba(140, 190, 255, 0.25))',
-                  }}>
-                    {iconMap[service.icon]}
+                  <div style={{ fontSize: '28px', marginBottom: '12px' }}>
+                    {service.icon}
                   </div>
                   <div style={{ 
                     color: 'rgba(235, 245, 255, 0.95)', 
@@ -1517,7 +1484,7 @@ function LiveIntelligencePanel({ onClose }) {
                     {service.desc}
                   </div>
                 </a>
-              );})}
+              ))}
             </div>
           </div>
         </div>
