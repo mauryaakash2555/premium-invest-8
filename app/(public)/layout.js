@@ -28,7 +28,7 @@ export const metadata = buildMetadata({
               apple: "/apple-touch-icon.png",
       },
       metadataBase: new URL("https://bmwealth.co.in")
-});
+})
 
 export default function Layout({ children }) {
     return (
