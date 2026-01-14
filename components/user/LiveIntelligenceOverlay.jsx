@@ -911,8 +911,8 @@ function LiveIntelligencePanel({ onClose }) {
           .li-panel-shell {
             padding: 14px 16px 72px !important;
           }
-          .li-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .li-dash-grid { grid-template-columns: 1fr !important; }
+          .li-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+          .li-dash-grid { grid-template-columns: minmax(0, 1fr) !important; }
         }
         
         @media (max-width: 768px) {
@@ -945,13 +945,12 @@ function LiveIntelligencePanel({ onClose }) {
       `}</style>
 
       <div
-        className="li-panel-shell"
+        className="li-panel-shell max-w-7xl mx-auto"
         style={{
           position: 'relative',
           zIndex: 2,
           padding: '14px 20px 48px',
-          maxWidth: '1240px',
-          margin: '0 auto',
+          overflowX: 'hidden',
         }}
       >
         {/* Dashboard header (centered title, tiny Apple arrow on right) */}
@@ -1005,7 +1004,7 @@ function LiveIntelligencePanel({ onClose }) {
         </div>
 
         {/* KPI row */}
-        <div className="li-kpi-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+        <div className="li-kpi-grid max-w-7xl mx-auto" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
           {[
             { label: 'Total Invested', value: '₹24.8L', hint: 'Across MF + PMS + FD', trend: null },
             { label: 'Current Value', value: `₹${portfolioValue.toFixed(1)}L`, hint: '+₹ 3.5L unrealized', trend: '+14.1%' },
@@ -1038,7 +1037,7 @@ function LiveIntelligencePanel({ onClose }) {
         <div className="li-section-divider" />
 
         {/* Main dashboard grid */}
-        <div className="li-dash-grid" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
+        <div className="li-dash-grid max-w-7xl mx-auto" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: '16px' }}>
           {/* Left column - Allocation Overview with EPIC DONUT */}
           <div className="li-dash-card li-allocation-card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
@@ -1100,7 +1099,7 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
 
             {/* Asset breakdown */}
-            <div className="li-asset-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+            <div className="li-asset-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '10px' }}>
               {[
                 { key: 'equity', k: 'Equity', c: 'rgba(100,160,255,0.90)' },
                 { key: 'debt', k: 'Debt', c: 'rgba(140,220,180,0.85)' },

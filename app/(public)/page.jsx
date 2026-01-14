@@ -94,7 +94,7 @@ export default function HomePage() {
           height: '85vh',
         }}
       >
-        {/* Background Image - PREMIUM VISIBLE */}
+        {/* Background Image - PREMIUM DARK */}
         <div
           style={{
             position: 'absolute',
@@ -106,7 +106,7 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            // Visible hero background
+            // Premium dark mood - visible but not distracting
             opacity: 0.60,
             filter: 'brightness(1.0) saturate(1.1) contrast(1.2)',
             zIndex: 1,
