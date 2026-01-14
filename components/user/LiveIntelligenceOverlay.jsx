@@ -1499,35 +1499,39 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         /* ═══════════════════════════════════════════════════════════
            ICON ANIMATIONS - Globe 3D spin, Chart wave
            ═══════════════════════════════════════════════════════════ */
-        
-        /* Globe icon - Earth-like horizontal spin (right-to-left) + shine/glow each full rotation */
+
+        /* Globe icon - 3D horizontal spin with glow burst on completion */
         .li-globe-icon {
-          animation: liGlobeSpinEarth 3.6s linear infinite;
+          animation: liGlobeSpin3D 4s linear infinite;
           transform-style: preserve-3d;
           transform-origin: 50% 50%;
           will-change: transform, filter;
         }
 
-        @keyframes liGlobeSpinEarth {
+        @keyframes liGlobeSpin3D {
           0% {
-            transform: perspective(700px) rotateX(10deg) rotateY(0deg);
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
+            transform: rotateY(0deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
           }
           70% {
-            transform: perspective(700px) rotateX(10deg) rotateY(-252deg);
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
+            transform: rotateY(252deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
           }
-          88% {
-            transform: perspective(700px) rotateX(10deg) rotateY(-318deg);
-            filter: drop-shadow(0 0 10px rgba(140, 200, 255, 0.7));
+          85% {
+            transform: rotateY(306deg);
+            filter: drop-shadow(0 0 8px rgba(140, 200, 255, 0.6));
           }
-          94% {
-            transform: perspective(700px) rotateX(10deg) rotateY(-338deg) scale(1.03);
-            filter: drop-shadow(0 0 18px rgba(170, 230, 255, 1)) drop-shadow(0 0 44px rgba(120, 210, 255, 0.9));
+          92% {
+            transform: rotateY(331deg);
+            filter: drop-shadow(0 0 20px rgba(140, 220, 255, 1)) drop-shadow(0 0 40px rgba(100, 200, 255, 0.8));
+          }
+          96% {
+            transform: rotateY(346deg);
+            filter: drop-shadow(0 0 30px rgba(180, 230, 255, 1)) drop-shadow(0 0 60px rgba(140, 210, 255, 0.9));
           }
           100% {
-            transform: perspective(700px) rotateX(10deg) rotateY(-360deg);
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
+            transform: rotateY(360deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
           }
         }
         
@@ -2183,8 +2187,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
 
             <ChartLoadingWrapper
-              src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
-              title="TradingView Chart"
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_nifty&symbol=NSE%3ANIFTY&interval=D&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&save_image=1&details=1&calendar=0&hotlist=0&locale=in"
+              title="NIFTY 50 Live Chart"
               height="500px"
             />
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
@@ -2241,11 +2245,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            {/* TradingView Market Overview Widget - with loading state */}
+            {/* TradingView Market Quotes Widget - with loading state */}
             <ChartLoadingWrapper
-              src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
-              title="Market Overview"
-              height="420px"
+              src="https://s.tradingview.com/embed-widget/market-quotes/?locale=in#%7B%22symbolsGroups%22%3A%5B%7B%22name%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22name%22%3A%22NSE%3ANIFTY%22%2C%22displayName%22%3A%22NIFTY%2050%22%7D%2C%7B%22name%22%3A%22BSE%3ASENSEX%22%2C%22displayName%22%3A%22SENSEX%22%7D%2C%7B%22name%22%3A%22NSE%3ABANKNIFTY%22%2C%22displayName%22%3A%22Bank%20NIFTY%22%7D%5D%7D%2C%7B%22name%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22name%22%3A%22TVC%3AGOLD%22%2C%22displayName%22%3A%22Gold%22%7D%2C%7B%22name%22%3A%22TVC%3ASILVER%22%2C%22displayName%22%3A%22Silver%22%7D%5D%7D%5D%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22dark%22%2C%22isTransparent%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%7D"
+              title="Global Markets Overview"
+              height="450px"
             />
           </div>
 
