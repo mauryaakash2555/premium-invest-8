@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
-import { DUMMY_HEADLINES, sortByPriority } from '@/lib/live-intelligence/headlines';
+import HeadlineFeed from '@/app/(public)/live-intelligence-hero/components/HeadlineFeed';
 
 const LASER_ASSET_VERSION = 'seamless-xfade-fade-2026-01-11';
 const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`;
@@ -40,14 +40,14 @@ const MarketStatusBadge = () => {
 
   return (
     <span style={{
-      padding: '4px 10px',
-      borderRadius: '6px',
-      fontSize: '10px',
+      padding: '3px 10px',
+      borderRadius: '4px',
+      fontSize: '9px',
       fontWeight: 600,
-      letterSpacing: '0.08em',
+      letterSpacing: '0.1em',
       background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'rgba(120, 150, 200, 0.12)',
-      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(120, 150, 200, 0.25)'}`,
-      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(120, 150, 200, 0.95)',
+      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(120, 150, 200, 0.30)'}`,
+      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(160, 185, 220, 0.95)',
     }}>
       NSE {isOpen ? 'OPEN' : 'CLOSED'}
     </span>
@@ -337,24 +337,6 @@ export default function LiveIntelligenceOverlay({
  * Panel component with dashboard content and EPIC DONUT
  */
 function LiveIntelligencePanel({ onClose }) {
-  // Headlines data for Headline Feed section
-  const sortedHeadlines = useMemo(() => sortByPriority(DUMMY_HEADLINES), []);
-  const headlineLinkByCategory = useMemo(
-    () => ({
-      market: '/tools',
-      mutual_funds: '/mutual-funds',
-      sip: '/sip',
-      breaking: '/tools',
-      insurance: '/insurance',
-      fixed_income: '/fixed-deposits',
-      trading: '/trading-services',
-      pms: '/portfolio-management',
-      real_estate: '/tools',
-      forex_gold: '/tools',
-    }),
-    []
-  );
-
   const [portfolioValue] = useState(28.3);
   const [allocations, setAllocations] = useState({
     equity: 58,
@@ -1265,44 +1247,43 @@ function LiveIntelligencePanel({ onClose }) {
             }}
           >
             <div style={{
-              padding: '14px 20px',
-              borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
-              background: '#000000',
+              padding: '16px 20px',
+              borderBottom: '1px solid rgba(100, 180, 255, 0.10)',
               display: 'flex',
-              alignItems: 'center',
               justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+              background: '#000000',
             }}>
-              <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h3 style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  color: 'rgba(235, 242, 255, 0.94)',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  margin: 0,
+                  margin: 0, 
+                  color: 'rgba(220, 240, 255, 0.95)', 
+                  fontSize: '16px', 
+                  fontWeight: 600,
                 }}>
-                  📈 Live Chart — SENSEX
+                  📈 Live Chart — NIFTY 50
                 </h3>
-                <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px', marginTop: '4px' }}>
-                  Real-time data • Powered by TradingView
-                </div>
+                <span style={{
+                  padding: '3px 8px',
+                  background: 'rgba(100, 180, 255, 0.12)',
+                  border: '1px solid rgba(100, 180, 255, 0.25)',
+                  borderRadius: '4px',
+                  fontSize: '9px',
+                  fontWeight: 600,
+                  color: 'rgba(140, 200, 255, 0.95)',
+                  letterSpacing: '0.08em',
+                }}>
+                  TRADINGVIEW
+                </span>
               </div>
-              <span style={{
-                padding: '3px 8px',
-                background: 'rgba(100, 180, 255, 0.12)',
-                border: '1px solid rgba(100, 180, 255, 0.25)',
-                borderRadius: '4px',
-                fontSize: '9px',
-                fontWeight: 600,
-                color: 'rgba(140, 200, 255, 0.95)',
-                letterSpacing: '0.08em',
-              }}>
-                TRADINGVIEW
-              </span>
+              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                Real-time data • Powered by TradingView
+              </div>
             </div>
 
-            <div style={{ height: '400px', width: '100%', background: '#131722' }}>
+            <div style={{ height: '500px', width: '100%', background: '#000000' }}>
               <iframe
                 src="https://www.tradingview.com/widgetembed/?symbol=BSE%3ASENSEX&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
                 style={{
@@ -1316,8 +1297,8 @@ function LiveIntelligencePanel({ onClose }) {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
             </div>
-            <div style={{ padding: '8px 16px', background: '#131722', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
-              💡 Click the symbol name at top-left to search & change stocks (NIFTY, BANKNIFTY, RELIANCE, TCS, etc.)
+            <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
+              💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
           </div>
 
@@ -1343,29 +1324,28 @@ function LiveIntelligencePanel({ onClose }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '10px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h3 style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  color: 'rgba(235, 242, 255, 0.94)',
-                  fontSize: '16px',
-                  fontWeight: 500,
                   margin: 0,
+                  color: 'rgba(230, 240, 255, 0.95)',
+                  fontSize: '15px',
+                  fontWeight: 600,
                 }}>
                   🌍 Global Markets
                 </h3>
                 <MarketStatusBadge />
               </div>
-              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+              <div style={{ color: 'rgba(180, 200, 230, 0.50)', fontSize: '10px' }}>
                 Real-time quotes • TradingView
               </div>
             </div>
 
-            <div style={{ height: '400px', width: '100%', background: '#000000', position: 'relative' }}>
+            <div style={{ height: '420px', width: '100%', background: '#000000' }}>
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Futures%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Bonds%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22TVC%3AIN10Y%22%2C%22d%22%3A%22India%2010Y%22%7D%2C%7B%22s%22%3A%22TVC%3AUS10Y%22%2C%22d%22%3A%22US%2010Y%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -1379,80 +1359,13 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════
-              HEADLINE FEED (Overlay) - ensure visible on production
-              ═══════════════════════════════════════════════════════════ */}
-          <div
-            className="li-dash-card"
-            style={{
-              gridColumn: '1 / -1',
-              background: 'rgba(10, 10, 12, 0.88)',
-              border: '1px solid rgba(100, 180, 255, 0.12)',
-              borderRadius: '16px',
-              padding: '16px 16px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-              <h3 style={{ margin: 0, color: 'rgba(235, 242, 255, 0.94)', fontSize: '15px', fontWeight: 600 }}>
-                Headline Feed
-              </h3>
-              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
-                {sortedHeadlines.length} cards
-              </div>
-            </div>
-
-            <div
-              style={{
-                marginTop: '12px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '10px',
-              }}
-            >
-              {sortedHeadlines.slice(0, 12).map((h) => (
-                <a
-                  key={h.id}
-                  href={headlineLinkByCategory[h.category] || '/tools'}
-                  style={{
-                    display: 'block',
-                    textDecoration: 'none',
-                    padding: '14px 14px',
-                    borderRadius: '14px',
-                    background: 'rgba(0, 0, 0, 0.55)',
-                    border: '1px solid rgba(100, 150, 255, 0.12)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 150, 255, 0.12)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(100, 150, 255, 0.12)';
-                    e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <div style={{ color: 'rgba(245, 248, 255, 0.92)', fontSize: '13px', fontWeight: 600, lineHeight: 1.35 }}>
-                    {h.headline}
-                  </div>
-                  <div style={{ marginTop: '8px', color: 'rgba(180, 200, 230, 0.62)', fontSize: '11px', lineHeight: 1.35 }}>
-                    {h.whyItMatters}
-                  </div>
-                  {h.dataPoint ? (
-                    <div style={{ marginTop: '10px', color: 'rgba(170, 198, 255, 0.80)', fontSize: '11px', fontWeight: 600 }}>
-                      {h.dataPoint}
-                    </div>
-                  ) : null}
-                </a>
-              ))}
-            </div>
-          </div>
+          {/* Headline Feed - same component/styles as the laser hero page */}
+          <HeadlineFeed />
 
           {/* ═══════════════════════════════════════════════════════════
               QUICK ACCESS (Overlay) - Pixel-perfect match with laser page
               ═══════════════════════════════════════════════════════════ */}
-          <div style={{ marginTop: '24px' }}>
+          <div style={{ marginTop: '32px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
