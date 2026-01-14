@@ -1,6 +1,5 @@
-import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata = buildMetadata({
+export const metadata = {
   title:
     "BM Wealth | Portfolio Management (PMS), Mutual Funds, SIP",
   description:
