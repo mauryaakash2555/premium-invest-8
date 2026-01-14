@@ -1365,7 +1365,7 @@ function LiveIntelligencePanel({ onClose }) {
           {/* ═══════════════════════════════════════════════════════════
               QUICK ACCESS (Overlay) - Pixel-perfect match with laser page
               ═══════════════════════════════════════════════════════════ */}
-          <div style={{ marginTop: '32px' }}>
+          <div style={{ marginTop: '32px', gridColumn: '1 / -1' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
