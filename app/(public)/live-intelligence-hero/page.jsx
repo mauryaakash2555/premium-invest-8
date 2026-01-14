@@ -719,15 +719,15 @@ export default function LiveIntelligenceHeroPage() {
              ═══════════════════════════════════════════════════════════ */
           
           .li-kpi-grid {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
           }
 
           .li-dash-grid {
-            grid-template-columns: 1.4fr 1fr;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
           }
 
           .li-asset-grid {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
           }
 
           /* ═══════════════════════════════════════════════════════════
@@ -1164,6 +1164,9 @@ export default function LiveIntelligenceHeroPage() {
             padding: '14px 20px 48px',
             borderRadius: '24px',
             border: '1px solid rgba(255,255,255,0.08)',
+            overflowX: 'hidden',
+            width: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {/* Dashboard header */}
