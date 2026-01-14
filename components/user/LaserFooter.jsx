@@ -189,7 +189,7 @@ const LaserNewsletterSignup = () => {
   )
 }
 
-const LaserFooter = () => {
+const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) => {
   const [hoveredLink, setHoveredLink] = useState(null)
   const [mounted, setMounted] = useState(false)
   const [isWHAHovered, setIsWHAHovered] = useState(false)
@@ -333,6 +333,19 @@ const LaserFooter = () => {
 
   if (!mounted) return null;
 
+  const handleInternalLinkClick = (e, href, label) => {
+    if (!inLiveOverlay) return;
+    if (label === 'Home' && typeof onHomeClick === 'function') {
+      e.preventDefault();
+      e.stopPropagation();
+      onHomeClick();
+      return;
+    }
+    if (typeof onNavigate === 'function' && typeof href === 'string' && href.startsWith('/')) {
+      onNavigate();
+    }
+  }
+
   const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered
 
   // Deterministic particle positions for SSR
@@ -341,6 +354,7 @@ const LaserFooter = () => {
       const x = Math.sin(n * 9301 + 49297) * 233280
       return Math.abs(x - Math.floor(x))
     }
+
     return {
       top: Math.floor(seeded(i + 1) * 95),
       left: Math.floor(seeded(i + 11) * 95),
@@ -495,6 +509,7 @@ const LaserFooter = () => {
                       href={link.href}
                       className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium laser-footer-link"
                       style={{ color: COLORS.body }}
+                      onClick={(e) => handleInternalLinkClick(e, link.href, link.label)}
                       onMouseEnter={(e) => e.target.style.color = COLORS.title}
                       onMouseLeave={(e) => e.target.style.color = COLORS.body}
                     >
@@ -521,6 +536,7 @@ const LaserFooter = () => {
                       href={link.href}
                       className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium"
                       style={{ color: COLORS.body }}
+                      onClick={(e) => handleInternalLinkClick(e, link.href, link.label)}
                       onMouseEnter={(e) => e.target.style.color = COLORS.title}
                       onMouseLeave={(e) => e.target.style.color = COLORS.body}
                     >
