@@ -87,7 +87,16 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="li-category-modal-header">
+                <div
+                  className="li-category-modal-header"
+                  style={{
+                    position: 'sticky',
+                    top: 0,
+                    backgroundColor: '#000',
+                    zIndex: 10,
+                    padding: '1.5rem',
+                  }}
+                >
                   <div className="li-category-modal-title">Categories</div>
                   <button
                     type="button"

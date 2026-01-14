@@ -13,7 +13,14 @@ export function middleware(request) {
 
   // API: security headers (Phase 5)
   if (request.nextUrl.pathname.startsWith('/api')) {
-    response.headers.set('X-Frame-Options', 'DENY');
+    // PDFs are intentionally embedded in same-origin iframes (Live Intelligence PDF modal).
+    // Keep a strict default, but allow framing for the public PDF endpoints.
+    if (request.nextUrl.pathname.startsWith('/api/pdf')) {
+      // Intentionally omit X-Frame-Options so the PDF can render inside iframes
+      // (some webviews/dev browsers don't behave as strict same-origin).
+    } else {
+      response.headers.set('X-Frame-Options', 'DENY');
+    }
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
     response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');

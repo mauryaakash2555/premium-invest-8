@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, cloneElement, isValidElement } from 'react';
 import { createPortal } from 'react-dom';
 
-import HeadlineFeed from '@/app/(public)/live-intelligence-hero/components/HeadlineFeed';
-import ModeIndicator from '@/app/(public)/live-intelligence-hero/components/ModeIndicator';
-import DonutCalculator from '@/app/(public)/live-intelligence-hero/components/DonutCalculator';
-import StreakBadge from '@/app/(public)/live-intelligence-hero/components/StreakBadge';
+import HeadlineFeed from '@/components/live-intelligence/HeadlineFeed';
+import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
+import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
+import StreakBadge from '@/components/live-intelligence/StreakBadge';
+import NightSummary from '@/components/live-intelligence/NightSummary';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -54,6 +55,45 @@ const MarketStatusBadge = () => {
   );
 };
 
+const TradingViewEmbed = ({ scriptSrc, options, className, style }) => {
+  const containerRef = useRef(null);
+  const optionsJson = useMemo(() => JSON.stringify(options ?? {}), [options]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    el.innerHTML = '';
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = scriptSrc;
+    script.innerHTML = optionsJson;
+
+    el.appendChild(script);
+
+    return () => {
+      if (containerRef.current) containerRef.current.innerHTML = '';
+    };
+  }, [scriptSrc, optionsJson]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={className}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        background: '#131722',
+        overflow: 'hidden',
+        ...style,
+      }}
+    />
+  );
+};
+
 /**
  * LiveIntelligenceOverlay
  * 
@@ -78,6 +118,17 @@ export default function LiveIntelligenceOverlay({
   // Mount check for portal
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Safety cleanup: ensure we never leave the page scroll-locked
+  // if the overlay component unmounts while open.
+  useEffect(() => {
+    return () => {
+      if (typeof document !== 'undefined' && document.body) {
+        document.body.style.overflow = '';
+        document.body.removeAttribute('data-laser-active');
+      }
+    };
   }, []);
 
   // Open the overlay
@@ -108,6 +159,17 @@ export default function LiveIntelligenceOverlay({
       }
     }, 300);
   }, [isOpen, isAnimating]);
+
+  const handleFooterHome = useCallback(() => {
+    // "Home" inside overlay should return to the real homepage content:
+    // close overlay and restore underlying page scroll.
+    closeOverlay();
+    if (typeof window !== 'undefined') {
+      window.setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      }, 340);
+    }
+  }, [closeOverlay]);
 
   // Expose open function globally for manual triggers
   useEffect(() => {
@@ -206,6 +268,14 @@ export default function LiveIntelligenceOverlay({
 
   if (!mounted) return null;
 
+  const footerWithHandlers = isValidElement(footerContent)
+    ? cloneElement(footerContent, {
+        inLiveOverlay: true,
+        onHomeClick: handleFooterHome,
+        onNavigate: closeOverlay,
+      })
+    : footerContent;
+
   const overlayContent = (
     <div
       ref={overlayRef}
@@ -245,6 +315,12 @@ export default function LiveIntelligenceOverlay({
         }
         .li-number-input {
           -moz-appearance: textfield;
+          border-bottom: 1px solid rgba(170, 198, 255, 0.18) !important;
+          padding-bottom: 2px !important;
+        }
+        .li-number-input:focus {
+          border-bottom-color: rgba(170, 198, 255, 0.55) !important;
+          box-shadow: 0 10px 22px rgba(100, 160, 255, 0.12);
         }
         
         /* Ensure footer inside overlay has normal styling */
@@ -275,12 +351,15 @@ export default function LiveIntelligenceOverlay({
         .li-global-markets-widget {
           background: #000000 !important;
         }
+        .li-tv-widget,
+        .li-tv-widget iframe,
+        .li-tv-widget > div,
+        .li-global-markets-widget,
         .li-global-markets-widget iframe {
-          background: #000000 !important;
-          filter: none !important;
+          background: #131722 !important;
         }
         .li-global-markets-widget * {
-          background-color: #000000 !important;
+          background-color: transparent;
         }
 
         /* Category filter - allow full width scroll */
@@ -292,6 +371,45 @@ export default function LiveIntelligenceOverlay({
           flex-wrap: nowrap !important;
           overflow-x: auto !important;
           padding-right: 20px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ICON STYLES - Clean premium look without spinning
+           ═══════════════════════════════════════════════════════════ */
+
+        /* Global Markets Icon - Static with subtle glow */
+        .li-globe-icon {
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
+        }
+
+        /* Live Chart Icon - Static with glow */
+        .li-chart-icon {
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
+        }
+
+        /* Live Signals Icon - Static with glow */
+        .li-signals-icon {
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
+        }
+
+        /* Live dot animation - subtle pulse only */
+        .li-live-dot {
+          width: 8px;
+          height: 8px;
+          background: rgba(140, 220, 180, 0.9);
+          border-radius: 50%;
+          animation: liveDotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes liveDotPulse {
+          0%, 100% { 
+            opacity: 0.5; 
+            box-shadow: 0 0 0 0 rgba(140, 220, 180, 0.4); 
+          }
+          50% { 
+            opacity: 1; 
+            box-shadow: 0 0 0 6px rgba(140, 220, 180, 0); 
+          }
         }
       `}</style>
 
@@ -313,7 +431,7 @@ export default function LiveIntelligenceOverlay({
           background: '#090A0C',
         }}
       >
-        {footerContent}
+        {footerWithHandlers}
       </div>
     </div>
   );
@@ -329,13 +447,129 @@ export default function LiveIntelligenceOverlay({
  */
 function LiveIntelligencePanel({ onClose }) {
   const [portfolioValue] = useState(28.3);
+  const [totalInvested] = useState(24.8);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
     gold: 8,
     cash: 10,
   });
+
+  useEffect(() => {
+    if (!showPdfModal) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowPdfModal(false);
+        setPdfUrl(null);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showPdfModal]);
+
+  const kpi = useMemo(() => {
+    const currentValue = portfolioValue;
+    const invested = totalInvested;
+    const unrealized = currentValue - invested;
+    const totalReturnPct = invested > 0 ? (unrealized / invested) * 100 : 0;
+
+    const equityPct = Number(allocations?.equity) || 0;
+    const riskScore = equityPct >= 70 ? 'High' : equityPct >= 40 ? 'Moderate' : 'Low';
+
+    const xirr = totalReturnPct;
+
+    return [
+      {
+        label: 'Total Invested',
+        value: `₹${invested.toFixed(1)}L`,
+        hint: 'Across MF + PMS + FD',
+        trend: null,
+      },
+      {
+        label: 'Current Value',
+        value: `₹${currentValue.toFixed(1)}L`,
+        hint: `${unrealized >= 0 ? '+' : '−'}₹ ${Math.abs(unrealized).toFixed(1)}L unrealized`,
+        trend: `${totalReturnPct >= 0 ? '+' : ''}${totalReturnPct.toFixed(1)}%`,
+      },
+      {
+        label: 'XIRR',
+        value: `${xirr.toFixed(1)}%`,
+        hint: 'Last 12 months (est.)',
+        trend: null,
+      },
+      {
+        label: 'Risk Score',
+        value: riskScore,
+        hint: `Equity ${equityPct}% allocation`,
+        trend: null,
+      },
+    ];
+  }, [allocations?.equity, portfolioValue, totalInvested]);
+
+  const tvChartOptions = useMemo(
+    () => ({
+      autosize: true,
+      symbol: 'NSE:NIFTY',
+      interval: 'D',
+      timezone: 'Asia/Kolkata',
+      theme: 'dark',
+      style: '1',
+      locale: 'in',
+      withdateranges: true,
+      hide_side_toolbar: false,
+      allow_symbol_change: true,
+      save_image: true,
+      details: true,
+      calendar: false,
+      support_host: 'https://www.tradingview.com',
+    }),
+    []
+  );
+
+  const tvMarketsOptions = useMemo(
+    () => ({
+      colorTheme: 'dark',
+      dateRange: '12M',
+      showChart: true,
+      isTransparent: false,
+      showSymbolLogo: true,
+      showFloatingTooltip: false,
+      width: '100%',
+      height: '100%',
+      locale: 'in',
+      tabs: [
+        {
+          title: 'Indices',
+          symbols: [
+            { s: 'NSE:NIFTY', d: 'NIFTY 50' },
+            { s: 'NSE:BANKNIFTY', d: 'Bank NIFTY' },
+            { s: 'BSE:SENSEX', d: 'SENSEX' },
+            { s: 'OANDA:NAS100USD', d: 'Nasdaq 100' },
+            { s: 'OANDA:SPX500USD', d: 'S&P 500' },
+          ],
+        },
+        {
+          title: 'Commodities',
+          symbols: [
+            { s: 'TVC:GOLD', d: 'Gold' },
+            { s: 'TVC:SILVER', d: 'Silver' },
+            { s: 'NYMEX:CL1!', d: 'Crude Oil' },
+          ],
+        },
+        {
+          title: 'Forex',
+          symbols: [
+            { s: 'OANDA:USDINR', d: 'USD/INR' },
+            { s: 'OANDA:EURUSD', d: 'EUR/USD' },
+          ],
+        },
+      ],
+    }),
+    []
+  );
 
   const handleAllocationChange = (key, raw) => {
     const next = String(raw ?? '').replace(/[^0-9]/g, '');
@@ -608,7 +842,7 @@ function LiveIntelligencePanel({ onClose }) {
           margin: 8px 0;
         }
 
-        /* Chart area scan-box (matches original live-intelligence-hero) */
+        /* Chart area scan-box */
         .li-chart-area {
           position: relative;
           border-radius: 14px;
@@ -655,7 +889,7 @@ function LiveIntelligencePanel({ onClose }) {
           background: linear-gradient(90deg, rgba(170, 198, 255, 0.00) 0%, rgba(170, 198, 255, 0.20) 20%, rgba(170, 198, 255, 0.20) 80%, rgba(170, 198, 255, 0.00) 100%);
         }
 
-        /* Scanning highlight (matches original live-intelligence-hero) */
+        /* Scanning highlight */
         .li-section-divider::after {
           content: "";
           position: absolute;
@@ -844,6 +1078,8 @@ function LiveIntelligencePanel({ onClose }) {
           flex-direction: column;
           gap: 3px;
           text-align: center;
+          /* Premium circular border */
+          border: 2px solid rgba(100, 160, 255, 0.25);
         }
 
         .li-donut-value {
@@ -855,6 +1091,12 @@ function LiveIntelligencePanel({ onClose }) {
           text-shadow: 0 0 20px rgba(100, 160, 255, 0.30);
           font-variant-numeric: tabular-nums;
           font-feature-settings: "tnum" 1, "lnum" 1;
+          /* Circle ring around value */
+          padding: 10px 14px;
+          border: 2px solid rgba(100, 160, 255, 0.35);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(100, 160, 255, 0.08) 0%, transparent 70%);
+          box-shadow: 0 0 15px rgba(100, 160, 255, 0.15), inset 0 0 10px rgba(100, 160, 255, 0.05);
         }
 
         .li-donut-label {
@@ -932,41 +1174,55 @@ function LiveIntelligencePanel({ onClose }) {
             margin-left: 0 !important;
             margin-right: 0 !important;
           }
+
+          /* Mobile scroll fix - ensure all content is visible and scrollable */
+          .li-dash-grid {
+            overflow: visible !important;
+            min-height: auto !important;
+          }
+          .li-dash-card {
+            overflow: visible !important;
+            max-width: 100% !important;
+          }
+          /* TradingView iframe responsive on mobile */
+          .li-dash-card iframe {
+            max-width: 100% !important;
+            min-height: 280px !important;
+          }
         }
 
         /* ═══════════════════════════════════════════════════════════
-           ICON ANIMATIONS - Globe horizontal rotation with glow, Chart wave
+           ICON ANIMATIONS - Globe 3D spin, Chart wave
            ═══════════════════════════════════════════════════════════ */
         
-        /* Globe icon - HORIZONTAL rotation (left to right) with periodic glow burst */
+        /* Globe icon - Earth-like horizontal spin (right-to-left) + shine/glow each full rotation */
         .li-globe-icon {
-          animation: liGlobeRotateX 8s linear infinite;
+          animation: liGlobeSpinEarth 3.6s linear infinite;
+          transform-style: preserve-3d;
+          transform-origin: 50% 50%;
+          will-change: transform, filter;
         }
-        
-        @keyframes liGlobeRotateX {
-          0% { 
-            transform: rotateY(0deg); 
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+
+        @keyframes liGlobeSpinEarth {
+          0% {
+            transform: perspective(700px) rotateX(10deg) rotateY(0deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
-          50% { 
-            transform: rotateY(180deg); 
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          70% {
+            transform: perspective(700px) rotateX(10deg) rotateY(-252deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
-          85% { 
-            transform: rotateY(324deg); 
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          88% {
+            transform: perspective(700px) rotateX(10deg) rotateY(-318deg);
+            filter: drop-shadow(0 0 10px rgba(140, 200, 255, 0.7));
           }
-          90% { 
-            transform: rotateY(342deg); 
-            filter: drop-shadow(0 0 20px rgba(140, 220, 255, 1)) drop-shadow(0 0 40px rgba(100, 200, 255, 0.8));
+          94% {
+            transform: perspective(700px) rotateX(10deg) rotateY(-338deg) scale(1.03);
+            filter: drop-shadow(0 0 18px rgba(170, 230, 255, 1)) drop-shadow(0 0 44px rgba(120, 210, 255, 0.9));
           }
-          95% { 
-            transform: rotateY(351deg); 
-            filter: drop-shadow(0 0 30px rgba(180, 230, 255, 1)) drop-shadow(0 0 60px rgba(140, 210, 255, 0.9));
-          }
-          100% { 
-            transform: rotateY(360deg); 
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          100% {
+            transform: perspective(700px) rotateX(10deg) rotateY(-360deg);
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
         }
         
@@ -1009,12 +1265,6 @@ function LiveIntelligencePanel({ onClose }) {
             filter: drop-shadow(0 0 12px rgba(140, 220, 255, 0.8));
             transform: scale(1.05);
           }
-        }
-
-        /* Chart bar animation for live chart */
-        @keyframes chartBar {
-          0%, 100% { opacity: 0.7; }
-          50% { opacity: 1; }
         }
       `}</style>
 
@@ -1291,24 +1541,13 @@ function LiveIntelligencePanel({ onClose }) {
 
         {/* KPI row */}
         <div className="li-kpi-grid max-w-7xl mx-auto" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
-          {[
-            { label: 'Total Invested', value: '₹24.8L', hint: 'Across MF + PMS + FD', trend: null },
-            { label: 'Current Value', value: `₹${portfolioValue.toFixed(1)}L`, hint: '+₹ 3.5L unrealized', trend: '+14.1%' },
-            { label: 'XIRR', value: '14.2%', hint: 'Last 12 months', trend: '+2.1%' },
-            { label: 'Risk Score', value: 'Moderate', hint: 'Aligned to goals', trend: null },
-          ].map((card) => (
+          {kpi.map((card) => (
             <div key={card.label} className="li-kpi-card">
               <div className="li-kpi-top">
                 <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
                   {card.label}
                 </div>
-                {card.trend ? (
-                  <div className="li-kpi-trend-pill">{card.trend}</div>
-                ) : (
-                  <div className="li-kpi-trend-pill is-placeholder" aria-hidden="true">
-                    +00.0%
-                  </div>
-                )}
+                {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
               </div>
               <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
                 {card.value}
@@ -1404,9 +1643,11 @@ function LiveIntelligencePanel({ onClose }) {
                       type="text"
                       value={String(allocations[item.key])}
                       onChange={(e) => handleAllocationChange(item.key, e.target.value)}
+                      onFocus={(e) => e.currentTarget.select()}
                       aria-label={`${item.k} allocation percent`}
                       style={{
                         width: '44px',
+                        cursor: 'text',
                         background: 'transparent',
                         border: 'none',
                         outline: 'none',
@@ -1438,9 +1679,9 @@ function LiveIntelligencePanel({ onClose }) {
               <div style={{
                 padding: '3px 10px',
                 borderRadius: '8px',
-                background: 'rgba(255,180,140,0.12)',
-                border: '1px solid rgba(255,180,140,0.25)',
-                color: 'rgba(255,180,140,0.90)',
+                background: 'rgba(100,160,255,0.12)',
+                border: 'none',
+                color: 'rgba(140,190,255,0.95)',
                 fontSize: '10px',
                 fontWeight: 600,
                 letterSpacing: '0.05em',
@@ -1454,8 +1695,8 @@ function LiveIntelligencePanel({ onClose }) {
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
-                { t: 'Rebalance opportunity', d: 'Equity drift +4.8% vs target', s: 'High', c: 'rgba(255,180,140,0.90)' },
-                { t: 'Tax harvesting', d: 'Potential LTCG optimization', s: 'High', c: 'rgba(255,180,140,0.90)' },
+                { t: 'Rebalance opportunity', d: 'Equity drift +4.8% vs target', s: 'High', c: 'rgba(140,190,255,0.95)' },
+                { t: 'Tax harvesting', d: 'Potential LTCG optimization', s: 'High', c: 'rgba(140,190,255,0.95)' },
                 { t: 'SIP consistency', d: '3 SIPs processed successfully', s: 'Good', c: 'rgba(140,220,180,0.90)' },
                 { t: 'Cash buffer', d: '3.2 months covered', s: 'Good', c: 'rgba(140,220,180,0.90)' },
               ].map((it) => (
@@ -1468,7 +1709,8 @@ function LiveIntelligencePanel({ onClose }) {
                       fontWeight: 600,
                       padding: '2px 8px',
                       borderRadius: '6px',
-                      background: `${it.c.replace('0.90', '0.12')}`,
+                      background: it.c.includes('190,255') ? 'rgba(100,160,255,0.12)' : 'rgba(140,220,180,0.12)',
+                      border: 'none',
                       letterSpacing: '0.04em',
                     }}>{it.s.toUpperCase()}</div>
                   </div>
@@ -1578,86 +1820,16 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            <div style={{ height: '450px', width: '100%', background: '#0d0d0d', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
-              {/* TradingView Chart - Using Investing.com widget as alternative */}
-              <div style={{ 
-                width: '100%', 
-                height: '100%', 
-                position: 'relative',
-                background: 'linear-gradient(180deg, rgba(20, 25, 35, 1) 0%, rgba(10, 12, 16, 1) 100%)',
-              }}>
-                {/* Chart placeholder with live-looking animation */}
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: '20px',
-                }}>
-                  {/* Symbol header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <span style={{ color: 'rgba(100, 180, 255, 0.95)', fontSize: '18px', fontWeight: 700 }}>NIFTY 50</span>
-                    <span style={{ color: 'rgba(140, 220, 180, 0.95)', fontSize: '16px', fontWeight: 600 }}>23,450.65</span>
-                    <span style={{ color: 'rgba(140, 220, 180, 0.90)', fontSize: '13px' }}>+0.42%</span>
-                  </div>
-                  {/* Mini chart visual */}
-                  <div style={{ 
-                    flex: 1, 
-                    display: 'flex', 
-                    alignItems: 'flex-end', 
-                    gap: '2px',
-                    paddingBottom: '40px',
-                  }}>
-                    {Array.from({ length: 60 }).map((_, i) => {
-                      const h = 30 + Math.sin(i * 0.3) * 20 + Math.random() * 30;
-                      return (
-                        <div 
-                          key={i} 
-                          style={{ 
-                            flex: 1,
-                            height: `${h}%`,
-                            background: h > 50 
-                              ? 'linear-gradient(180deg, rgba(100, 180, 255, 0.8) 0%, rgba(100, 180, 255, 0.2) 100%)'
-                              : 'linear-gradient(180deg, rgba(100, 180, 255, 0.6) 0%, rgba(100, 180, 255, 0.1) 100%)',
-                            borderRadius: '2px 2px 0 0',
-                            animation: `chartBar ${2 + Math.random()}s ease-in-out infinite`,
-                            animationDelay: `${i * 0.05}s`,
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                  {/* Time labels */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(150, 180, 220, 0.5)', fontSize: '10px' }}>
-                    <span>9:15</span>
-                    <span>11:00</span>
-                    <span>13:00</span>
-                    <span>15:30</span>
-                  </div>
-                </div>
-                {/* Link to full chart */}
-                <a 
-                  href="https://www.tradingview.com/chart/?symbol=NSE:NIFTY" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{
-                    position: 'absolute',
-                    bottom: '16px',
-                    right: '16px',
-                    padding: '8px 16px',
-                    background: 'rgba(100, 180, 255, 0.15)',
-                    border: '1px solid rgba(100, 180, 255, 0.30)',
-                    borderRadius: '8px',
-                    color: 'rgba(140, 200, 255, 0.95)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  Open Full Chart →
-                </a>
-              </div>
+            <div style={{ height: '500px', width: '100%', background: '#000000' }}>
+              {/* TradingView Advanced Chart - Direct iframe for reliability */}
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
+                style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
+                frameBorder="0"
+                allowtransparency="true"
+                scrolling="no"
+                title="TradingView Chart"
+              />
             </div>
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
@@ -1713,84 +1885,32 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            {/* CUSTOM GLOBAL MARKETS DISPLAY - No TradingView iframes */}
-            <div 
-              style={{ 
-                width: '100%', 
-                background: '#0d0d0d',
-                padding: '16px',
-              }}
-            >
-              {/* Market Cards Grid */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '12px',
-              }}>
-                {[
-                  { name: 'NIFTY 50', value: '23,450.65', change: '+0.42%', positive: true },
-                  { name: 'SENSEX', value: '77,182.30', change: '+0.38%', positive: true },
-                  { name: 'Bank NIFTY', value: '49,856.20', change: '-0.15%', positive: false },
-                  { name: 'Gold (MCX)', value: '₹76,450', change: '+0.22%', positive: true },
-                  { name: 'Silver', value: '₹89,200', change: '+0.45%', positive: true },
-                  { name: 'USD/INR', value: '83.42', change: '+0.08%', positive: true },
-                  { name: 'Crude Oil', value: '$78.50', change: '-0.65%', positive: false },
-                  { name: 'NIFTY IT', value: '38,420.10', change: '+1.12%', positive: true },
-                ].map((item, i) => (
-                  <div 
-                    key={item.name} 
-                    style={{ 
-                      background: 'linear-gradient(180deg, rgba(25, 30, 40, 0.95) 0%, rgba(15, 18, 24, 0.98) 100%)',
-                      border: '1px solid rgba(100, 180, 255, 0.12)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      transition: 'all 0.25s ease',
-                      cursor: 'pointer',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.30)';
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.12)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div style={{ color: 'rgba(180, 200, 230, 0.65)', fontSize: '11px', marginBottom: '8px', fontWeight: 500 }}>
-                      {item.name}
-                    </div>
-                    <div style={{ color: 'rgba(240, 245, 255, 0.95)', fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>
-                      {item.value}
-                    </div>
-                    <div style={{ 
-                      color: item.positive ? 'rgba(100, 220, 160, 0.95)' : 'rgba(255, 140, 140, 0.95)', 
-                      fontSize: '13px', 
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}>
-                      <span>{item.positive ? '▲' : '▼'}</span>
-                      <span>{item.change}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Footer note */}
-              <div style={{ 
-                marginTop: '12px', 
-                textAlign: 'center', 
-                color: 'rgba(150, 180, 220, 0.45)', 
-                fontSize: '10px' 
-              }}>
-                Data refreshes every 5 minutes • Click any card for detailed view
-              </div>
+            {/* TradingView Market Overview Widget - Pure Black with black background */}
+            <div style={{ height: '420px', width: '100%', background: '#000000' }}>
+              <iframe
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                  backgroundColor: '#000000',
+                  colorScheme: 'dark',
+                }}
+                title="Market Overview"
+                loading="lazy"
+              />
             </div>
           </div>
 
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
           <div style={{ gridColumn: '1 / -1' }}>
             <HeadlineFeed />
+          </div>
+
+          {/* Night section (only visible in night_summary mode) */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <NightSummary />
           </div>
 
           {/* ═══════════════════════════════════════════════════════════
@@ -1889,6 +2009,12 @@ function LiveIntelligencePanel({ onClose }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="li-qa-card"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setPdfUrl(e.currentTarget.href);
+                    setShowPdfModal(true);
+                  }}
                   style={{
                     display: 'block',
                     textDecoration: 'none',
@@ -1937,6 +2063,100 @@ function LiveIntelligencePanel({ onClose }) {
               );})}
             </div>
           </div>
+
+          {showPdfModal && pdfUrl && typeof document !== 'undefined' && document.body
+            ? createPortal(
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="PDF viewer"
+                  style={{
+                    position: 'fixed',
+                    top: '0',
+                    left: '0',
+                    width: '100vw',
+                    height: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                    backdropFilter: 'blur(8px)',
+                    zIndex: 99999,
+                    padding: '16px',
+                  }}
+                  onClick={() => {
+                    setShowPdfModal(false);
+                    setPdfUrl(null);
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '90vw',
+                      maxWidth: '1400px',
+                      height: '90vh',
+                      backgroundColor: '#0a0a12',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(170, 198, 255, 0.15)',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      type="button"
+                      aria-label="Close PDF"
+                      onClick={() => {
+                        setShowPdfModal(false);
+                        setPdfUrl(null);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        zIndex: 10,
+                        color: 'rgba(230, 240, 255, 0.9)',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        border: '1px solid rgba(170, 198, 255, 0.2)',
+                        borderRadius: '10px',
+                        width: '44px',
+                        height: '44px',
+                        cursor: 'pointer',
+                        fontSize: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
+                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
+                      }}
+                    >
+                      ✕
+                    </button>
+
+                    <iframe
+                      src={pdfUrl}
+                      title="PDF Viewer"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        border: 'none',
+                        borderRadius: '16px',
+                        display: 'block',
+                      }}
+                    />
+                  </div>
+                </div>,
+                document.body
+              )
+            : null}
         </div>
       </div>
     </section>

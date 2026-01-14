@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 export default function CookieConsent() {
   const [show, setShow] = useState(false);
   const pathname = usePathname();
-  const hideOnLiveMood = pathname?.startsWith("/live-intelligence-hero");
+  const hideOnLiveMood = false;
 
   useEffect(() => {
     if (hideOnLiveMood) {
