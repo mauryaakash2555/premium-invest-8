@@ -1299,7 +1299,7 @@ export default function LiveIntelligenceHeroPage() {
 
           {/* KPI row */}
           <div
-            className="li-kpi-grid"
+            className="li-kpi-grid max-w-7xl mx-auto"
             style={{
               marginTop: '16px',
               display: 'grid',
@@ -1364,7 +1364,7 @@ export default function LiveIntelligenceHeroPage() {
 
           {/* Main dashboard grid - 2 column layout */}
           <div
-            className="li-dash-grid"
+            className="li-dash-grid max-w-7xl mx-auto"
             style={{
               display: 'grid',
               gap: '16px',
@@ -1715,7 +1715,7 @@ export default function LiveIntelligenceHeroPage() {
               SERVICE QUICK ACCESS - Clickable cards linking to services
               Premium icy blue style matching laser page design
               ═══════════════════════════════════════════════════════════ */}
-          <div style={{ marginTop: '32px' }}>
+          <div className="max-w-7xl mx-auto" style={{ marginTop: '32px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -1862,7 +1862,7 @@ export default function LiveIntelligenceHeroPage() {
       </section>
 
       {/* FOOTER - Wrapped in li-footer-wrapper so globals.css shows it */}
-      <div className="li-footer-wrapper">
+      <div className="li-footer-wrapper sticky bottom-0 z-50">
         <LaserFooter />
       </div>
     </main>
