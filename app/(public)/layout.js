@@ -9,5 +9,25 @@ export const metadata = buildMetadata({
 });
 
 export default function Layout({ children }) {
-  return children;
-}
+    return (
+            <>
+    {/* DEBUG MARKER v3 - Testing if Vercel deploys on main page */}
+        <div style={{
+                position: 'fixed',
+                top: '10px',
+                right: '10px',
+                background: '#ff0000',
+                color: '#ffffff',
+                padding: '15px 25px',
+                zIndex: 999999,
+                fontWeight: 'bold',
+                fontSize: '16px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 20px rgba(255,0,0,0.5)',
+    }}>
+          🔴 BUILD: JAN-14-V3
+            </div>
+{children}
+</>
+    );
+        }
