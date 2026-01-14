@@ -204,15 +204,21 @@ export default function HeadlineFeed() {
           align-items: stretch;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
           .li-headline-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 900px) {
           .li-headline-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .li-headline-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
           }
         }
 

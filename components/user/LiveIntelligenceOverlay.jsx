@@ -270,6 +270,29 @@ export default function LiveIntelligenceOverlay({
             grid-template-columns: repeat(6, minmax(0, 1fr));
           }
         }
+
+        /* FORCE Global Markets TradingView widget to black */
+        .li-global-markets-widget {
+          background: #000000 !important;
+        }
+        .li-global-markets-widget iframe {
+          background: #000000 !important;
+          filter: none !important;
+        }
+        .li-global-markets-widget * {
+          background-color: #000000 !important;
+        }
+
+        /* Category filter - allow full width scroll */
+        .li-category-filter {
+          overflow-x: auto !important;
+          max-width: 100%;
+        }
+        .li-category-scroll {
+          flex-wrap: nowrap !important;
+          overflow-x: auto !important;
+          padding-right: 20px;
+        }
       `}</style>
 
       {/* LASER SECTION (LOCKED - NO OVERLAYS/BUTTONS) */}
@@ -1304,10 +1327,10 @@ function LiveIntelligencePanel({ onClose }) {
 
           {/* ═══════════════════════════════════════════════════════════
               GLOBAL MARKETS - TradingView Market Overview Widget
-              ⚠️ NOTE: DO NOT CHANGE COLORS WITHOUT ASKING USER FIRST
+              ⚠️ NOTE: FORCED BLACK BACKGROUND - DO NOT CHANGE
               ═══════════════════════════════════════════════════════════ */}
           <div 
-            className="li-dash-card"
+            className="li-dash-card li-global-markets-widget"
             style={{ 
               gridColumn: '1 / -1',
               background: '#000000',
@@ -1343,14 +1366,24 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            <div style={{ height: '420px', width: '100%', background: '#000000' }}>
+            {/* TRIPLE BLACK PROTECTION - wrapper + inline + CSS class */}
+            <div 
+              className="li-global-markets-widget"
+              style={{ 
+                height: '420px', 
+                width: '100%', 
+                background: '#000000',
+                backgroundColor: '#000000',
+              }}
+            >
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: 'none',
                   display: 'block',
+                  background: '#000000',
                   backgroundColor: '#000000',
                 }}
                 title="Market Overview"
