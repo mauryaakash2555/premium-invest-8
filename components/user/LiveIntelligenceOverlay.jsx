@@ -1308,12 +1308,13 @@ function LiveIntelligencePanel({ onClose }) {
 
             <div style={{ height: '500px', width: '100%', background: '#000000' }}>
               <iframe
-                src="https://www.tradingview.com/widgetembed/?symbol=BSE%3ASENSEX&interval=15&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
+                src="https://www.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=D&symboledit=1&saveimage=1&toolbarbg=000000&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&details=1&hotlist=1&calendar=0&locale=in"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: 'none',
                   display: 'block',
+                  background: '#000000',
                 }}
                 title="Live Chart"
                 loading="lazy"
@@ -1392,8 +1393,10 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
           </div>
 
-          {/* Headline Feed - same component/styles as the laser hero page */}
-          <HeadlineFeed />
+          {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <HeadlineFeed />
+          </div>
 
           {/* ═══════════════════════════════════════════════════════════
               QUICK ACCESS (Overlay) - Pixel-perfect match with laser page
