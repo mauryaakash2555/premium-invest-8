@@ -228,8 +228,6 @@ export default function HeadlineCard({ headline, isActive = false }) {
           margin-bottom: 14px;
           flex: 1;
         }
-          margin-bottom: 14px;
-        }
 
         .li-headline-title {
           margin: 0 0 8px;

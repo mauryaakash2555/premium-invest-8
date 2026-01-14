@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CATEGORIES, CATEGORY_GROUPS, BM_WEALTH_SERVICES, MARKET_CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { BM_WEALTH_SERVICES, MARKET_CATEGORIES } from '@/lib/live-intelligence/headlines';
 
 /**
  * CategoryFilter - Horizontal scrollable category tabs
@@ -12,22 +12,15 @@ import { CATEGORIES, CATEGORY_GROUPS, BM_WEALTH_SERVICES, MARKET_CATEGORIES } fr
  */
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [showAll, setShowAll] = useState(false);
-  const scrollContainerRef = useRef(null);
-  
+
   // Main tabs: All + Services (priority) + a few markets
   const serviceTabs = Object.values(BM_WEALTH_SERVICES);
-  const quickMarketTabs = ['ipo', 'market', 'regulatory'].map(k => MARKET_CATEGORIES[k]).filter(Boolean);
-  
+  const quickMarketTabs = ['ipo', 'market', 'regulatory'].map((key) => MARKET_CATEGORIES[key]).filter(Boolean);
+
   const mainTabs = [
     { key: 'all', label: 'All', icon: '✨' },
     ...serviceTabs,
     ...quickMarketTabs,
-  ];
-  
-  // Full category list for modal
-  const allCategories = [
-    { key: 'all', label: 'All', icon: '✨' },
-    ...Object.values(CATEGORIES),
   ];
 
   return (
