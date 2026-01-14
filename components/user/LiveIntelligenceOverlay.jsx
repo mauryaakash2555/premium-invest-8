@@ -1345,7 +1345,7 @@ function LiveIntelligencePanel({ onClose }) {
 
             <div style={{ height: '420px', width: '100%', background: '#000000' }}>
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -1394,56 +1394,56 @@ function LiveIntelligencePanel({ onClose }) {
               gap: '12px',
             }}>
               {[
-                { title: 'Mutual Funds', icon: '📊', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds', accent: 'rgba(100, 180, 255, 0.15)' },
-                { title: 'SIP', icon: '💰', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip', accent: 'rgba(100, 220, 180, 0.15)' },
-                { title: 'Portfolio Management', icon: '💎', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management', accent: 'rgba(180, 120, 255, 0.15)' },
-                { title: 'Insurance', icon: '🛡️', desc: 'Term & Health', link: '/api/pdf/service?service=insurance', accent: 'rgba(255, 180, 100, 0.15)' },
-                { title: 'Trading Services', icon: '📈', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services', accent: 'rgba(255, 100, 150, 0.15)' },
-                { title: 'Fixed Deposits', icon: '🏦', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits', accent: 'rgba(200, 200, 100, 0.15)' },
+                { title: 'Mutual Funds', icon: '📊', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds' },
+                { title: 'SIP', icon: '💰', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip' },
+                { title: 'Portfolio Management', icon: '💎', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management' },
+                { title: 'Insurance', icon: '🛡️', desc: 'Term & Health', link: '/api/pdf/service?service=insurance' },
+                { title: 'Trading Services', icon: '📈', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services' },
+                { title: 'Fixed Deposits', icon: '🏦', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits' },
               ].map((service) => (
                 <a
                   key={service.title}
                   href={service.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-accent={service.accent}
+                  className="li-qa-card"
                   style={{
                     display: 'block',
                     textDecoration: 'none',
-                    padding: '16px',
-                    background: 'rgba(15, 18, 25, 0.80)',
-                    border: '1px solid rgba(100, 150, 255, 0.12)',
-                    borderRadius: '12px',
-                    transition: 'all 0.25s ease',
+                    padding: '20px',
+                    background: 'linear-gradient(180deg, rgba(18, 22, 30, 0.96) 0%, rgba(10, 10, 12, 0.98) 100%)',
+                    border: '1px solid rgba(170, 198, 255, 0.10)',
+                    borderRadius: '16px',
+                    transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
                     cursor: 'pointer',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
-                    e.currentTarget.style.background = e.currentTarget.dataset.accent;
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(100, 150, 255, 0.15)';
+                    e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.25)';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(140, 190, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(100, 150, 255, 0.12)';
-                    e.currentTarget.style.background = 'rgba(15, 18, 25, 0.80)';
+                    e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.10)';
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.03)';
                   }}
                 >
-                  <div style={{ fontSize: '24px', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '28px', marginBottom: '12px' }}>
                     {service.icon}
                   </div>
                   <div style={{ 
-                    color: 'rgba(230, 240, 255, 0.95)', 
-                    fontSize: '14px', 
+                    color: 'rgba(235, 245, 255, 0.95)', 
+                    fontSize: '15px', 
                     fontWeight: 600,
-                    marginBottom: '4px',
+                    marginBottom: '6px',
+                    letterSpacing: '-0.01em',
                   }}>
                     {service.title}
                   </div>
                   <div style={{ 
-                    color: 'rgba(180, 200, 230, 0.60)', 
-                    fontSize: '11px',
+                    color: 'rgba(170, 198, 255, 0.60)', 
+                    fontSize: '12px',
                   }}>
                     {service.desc}
                   </div>
