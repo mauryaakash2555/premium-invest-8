@@ -1258,10 +1258,11 @@ function LiveIntelligencePanel({ onClose }) {
               background: '#000000',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div className="li-qa-grid" style={{
-                  display: 'grid',
-                  gap: '12px',
-                }}>
+                <h3 style={{ 
+                  margin: 0, 
+                  color: 'rgba(220, 240, 255, 0.95)', 
+                  fontSize: '16px', 
+                  fontWeight: 600,
                 }}>
                   📈 Live Chart — NIFTY 50
                 </h3>
@@ -1389,9 +1390,8 @@ function LiveIntelligencePanel({ onClose }) {
               </span>
             </div>
 
-            <div style={{
+            <div className="li-qa-grid" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
               gap: '12px',
             }}>
               {[
