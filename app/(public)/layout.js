@@ -28,6 +28,7 @@ export const metadata = buildMetadata({
               apple: "/apple-touch-icon.png",
       },
       metadataBase: new URL("https://bmwealth.co.in")
+};
 
   // Structured Data for Organization and Financial Services
   export const structuredData = {
