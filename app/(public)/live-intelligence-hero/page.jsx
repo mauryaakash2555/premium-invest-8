@@ -715,6 +715,22 @@ export default function LiveIntelligenceHeroPage() {
           }
 
           /* ═══════════════════════════════════════════════════════════
+             BASE GRID LAYOUTS (desktop defaults)
+             ═══════════════════════════════════════════════════════════ */
+          
+          .li-kpi-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+
+          .li-dash-grid {
+            grid-template-columns: 1.4fr 1fr;
+          }
+
+          .li-asset-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+
+          /* ═══════════════════════════════════════════════════════════
              SHARE MENU DROPDOWN
              ═══════════════════════════════════════════════════════════ */
           
@@ -1286,7 +1302,6 @@ export default function LiveIntelligenceHeroPage() {
             style={{
               marginTop: '16px',
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
               gap: '14px',
             }}
           >
@@ -1351,7 +1366,6 @@ export default function LiveIntelligenceHeroPage() {
             className="li-dash-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: '1.4fr 1fr',
               gap: '16px',
             }}
           >
@@ -1416,7 +1430,7 @@ export default function LiveIntelligenceHeroPage() {
               </div>
 
               {/* Asset breakdown */}
-              <div className="li-asset-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+              <div className="li-asset-grid" style={{ marginTop: '16px', display: 'grid', gap: '10px' }}>
                 {[
                   { k: 'Equity', v: '58%', c: 'rgba(100,160,255,0.90)' },
                   { k: 'Debt', v: '24%', c: 'rgba(140,220,180,0.85)' },

@@ -21,7 +21,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-export default function AnimatedClouds({ enableRain = false }) {
+export default function AnimatedClouds({ enableRain = false, enableLightning = true }) {
   const [lightning, setLightning] = useState(false);
   const [showRain, setShowRain] = useState(false);
   const [rainSeed, setRainSeed] = useState(0);
@@ -33,8 +33,9 @@ export default function AnimatedClouds({ enableRain = false }) {
     rainOffTimer: null,
   });
 
-  // Random lightning every 8â€“18 seconds (first strike 3â€“8s)
+  // Random lightning every 8–18 seconds (first strike 3–8s) - ONLY if enabled
   useEffect(() => {
+    if (!enableLightning) return;
     let cancelled = false;
 
     const scheduleLightning = () => {
@@ -57,7 +58,7 @@ export default function AnimatedClouds({ enableRain = false }) {
       if (timersRef.current.lightningTimer) clearTimeout(timersRef.current.lightningTimer);
       if (timersRef.current.lightningOffTimer) clearTimeout(timersRef.current.lightningOffTimer);
     };
-  }, []);
+  }, [enableLightning]);
 
   // Rain toggle: when enabled, rain starts immediately and stays until disabled
   useEffect(() => {
