@@ -60,3 +60,7 @@ backup/live-intelligence-hero-LOCK_*/
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
 
+
+# git worktrees (local)
+/.worktrees/
+
