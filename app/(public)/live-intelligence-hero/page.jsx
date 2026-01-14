@@ -1860,22 +1860,8 @@ export default function LiveIntelligenceHeroPage() {
         </div>
       </section>
 
-      {/* FOOTER: LaserFooter with panel's premium icy style */}
-      <div 
-        className="li-footer-wrapper"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1,
-          position: 'relative',
-          zIndex: 100,
-          width: '100%',
-          marginTop: 0,
-          background: '#090A0C',
-        }}
-      >
-        <LaserFooter />
-      </div>
+      {/* FOOTER - Exact same as client portal, no wrapper */}
+      <LaserFooter />
     </main>
   );
 }
