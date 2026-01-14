@@ -935,33 +935,34 @@ function LiveIntelligencePanel({ onClose }) {
         }
 
         /* ═══════════════════════════════════════════════════════════
-           ICON ANIMATIONS - Globe horizontal rotation with glow, Chart wave
+           ICON ANIMATIONS - Globe 3D spin, Chart wave
            ═══════════════════════════════════════════════════════════ */
         
-        /* Globe icon - HORIZONTAL rotation (left to right) with periodic glow burst */
+        /* Globe icon - 3D horizontal spin with glow burst on completion */
         .li-globe-icon {
-          animation: liGlobeRotateX 8s linear infinite;
+          animation: liGlobeSpin3D 4s linear infinite;
+          transform-style: preserve-3d;
         }
         
-        @keyframes liGlobeRotateX {
+        @keyframes liGlobeSpin3D {
           0% { 
             transform: rotateY(0deg); 
             filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
           }
-          50% { 
-            transform: rotateY(180deg); 
+          70% { 
+            transform: rotateY(252deg); 
             filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
           }
           85% { 
-            transform: rotateY(324deg); 
-            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+            transform: rotateY(306deg); 
+            filter: drop-shadow(0 0 8px rgba(140, 200, 255, 0.6));
           }
-          90% { 
-            transform: rotateY(342deg); 
+          92% { 
+            transform: rotateY(331deg); 
             filter: drop-shadow(0 0 20px rgba(140, 220, 255, 1)) drop-shadow(0 0 40px rgba(100, 200, 255, 0.8));
           }
-          95% { 
-            transform: rotateY(351deg); 
+          96% { 
+            transform: rotateY(346deg); 
             filter: drop-shadow(0 0 30px rgba(180, 230, 255, 1)) drop-shadow(0 0 60px rgba(140, 210, 255, 0.9));
           }
           100% { 
@@ -1009,12 +1010,6 @@ function LiveIntelligencePanel({ onClose }) {
             filter: drop-shadow(0 0 12px rgba(140, 220, 255, 0.8));
             transform: scale(1.05);
           }
-        }
-
-        /* Chart bar animation for live chart */
-        @keyframes chartBar {
-          0%, 100% { opacity: 0.7; }
-          50% { opacity: 1; }
         }
       `}</style>
 
@@ -1578,86 +1573,21 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            <div style={{ height: '450px', width: '100%', background: '#0d0d0d', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
-              {/* TradingView Chart - Using Investing.com widget as alternative */}
-              <div style={{ 
-                width: '100%', 
-                height: '100%', 
-                position: 'relative',
-                background: 'linear-gradient(180deg, rgba(20, 25, 35, 1) 0%, rgba(10, 12, 16, 1) 100%)',
-              }}>
-                {/* Chart placeholder with live-looking animation */}
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: '20px',
-                }}>
-                  {/* Symbol header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <span style={{ color: 'rgba(100, 180, 255, 0.95)', fontSize: '18px', fontWeight: 700 }}>NIFTY 50</span>
-                    <span style={{ color: 'rgba(140, 220, 180, 0.95)', fontSize: '16px', fontWeight: 600 }}>23,450.65</span>
-                    <span style={{ color: 'rgba(140, 220, 180, 0.90)', fontSize: '13px' }}>+0.42%</span>
-                  </div>
-                  {/* Mini chart visual */}
-                  <div style={{ 
-                    flex: 1, 
-                    display: 'flex', 
-                    alignItems: 'flex-end', 
-                    gap: '2px',
-                    paddingBottom: '40px',
-                  }}>
-                    {Array.from({ length: 60 }).map((_, i) => {
-                      const h = 30 + Math.sin(i * 0.3) * 20 + Math.random() * 30;
-                      return (
-                        <div 
-                          key={i} 
-                          style={{ 
-                            flex: 1,
-                            height: `${h}%`,
-                            background: h > 50 
-                              ? 'linear-gradient(180deg, rgba(100, 180, 255, 0.8) 0%, rgba(100, 180, 255, 0.2) 100%)'
-                              : 'linear-gradient(180deg, rgba(100, 180, 255, 0.6) 0%, rgba(100, 180, 255, 0.1) 100%)',
-                            borderRadius: '2px 2px 0 0',
-                            animation: `chartBar ${2 + Math.random()}s ease-in-out infinite`,
-                            animationDelay: `${i * 0.05}s`,
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                  {/* Time labels */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(150, 180, 220, 0.5)', fontSize: '10px' }}>
-                    <span>9:15</span>
-                    <span>11:00</span>
-                    <span>13:00</span>
-                    <span>15:30</span>
-                  </div>
-                </div>
-                {/* Link to full chart */}
-                <a 
-                  href="https://www.tradingview.com/chart/?symbol=NSE:NIFTY" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{
-                    position: 'absolute',
-                    bottom: '16px',
-                    right: '16px',
-                    padding: '8px 16px',
-                    background: 'rgba(100, 180, 255, 0.15)',
-                    border: '1px solid rgba(100, 180, 255, 0.30)',
-                    borderRadius: '8px',
-                    color: 'rgba(140, 200, 255, 0.95)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  Open Full Chart →
-                </a>
-              </div>
+            <div style={{ height: '500px', width: '100%', background: '#131722' }}>
+              {/* TradingView Advanced Chart Widget - Using Symbol Overview Embed */}
+              <iframe
+                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_nifty&symbol=NSE%3ANIFTY&interval=D&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&save_image=1&details=1&calendar=0&hotlist=0&locale=in"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                }}
+                title="NIFTY 50 Live Chart"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
@@ -1713,78 +1643,29 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            {/* CUSTOM GLOBAL MARKETS DISPLAY - No TradingView iframes */}
+            {/* TradingView Market Quotes Widget - Proper Embed for Dark Background */}
             <div 
               style={{ 
                 width: '100%', 
-                background: '#0d0d0d',
-                padding: '16px',
+                height: '450px',
+                background: '#131722',
+                overflow: 'hidden',
               }}
             >
-              {/* Market Cards Grid */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '12px',
-              }}>
-                {[
-                  { name: 'NIFTY 50', value: '23,450.65', change: '+0.42%', positive: true },
-                  { name: 'SENSEX', value: '77,182.30', change: '+0.38%', positive: true },
-                  { name: 'Bank NIFTY', value: '49,856.20', change: '-0.15%', positive: false },
-                  { name: 'Gold (MCX)', value: '₹76,450', change: '+0.22%', positive: true },
-                  { name: 'Silver', value: '₹89,200', change: '+0.45%', positive: true },
-                  { name: 'USD/INR', value: '83.42', change: '+0.08%', positive: true },
-                  { name: 'Crude Oil', value: '$78.50', change: '-0.65%', positive: false },
-                  { name: 'NIFTY IT', value: '38,420.10', change: '+1.12%', positive: true },
-                ].map((item, i) => (
-                  <div 
-                    key={item.name} 
-                    style={{ 
-                      background: 'linear-gradient(180deg, rgba(25, 30, 40, 0.95) 0%, rgba(15, 18, 24, 0.98) 100%)',
-                      border: '1px solid rgba(100, 180, 255, 0.12)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      transition: 'all 0.25s ease',
-                      cursor: 'pointer',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.30)';
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.12)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div style={{ color: 'rgba(180, 200, 230, 0.65)', fontSize: '11px', marginBottom: '8px', fontWeight: 500 }}>
-                      {item.name}
-                    </div>
-                    <div style={{ color: 'rgba(240, 245, 255, 0.95)', fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>
-                      {item.value}
-                    </div>
-                    <div style={{ 
-                      color: item.positive ? 'rgba(100, 220, 160, 0.95)' : 'rgba(255, 140, 140, 0.95)', 
-                      fontSize: '13px', 
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}>
-                      <span>{item.positive ? '▲' : '▼'}</span>
-                      <span>{item.change}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Footer note */}
-              <div style={{ 
-                marginTop: '12px', 
-                textAlign: 'center', 
-                color: 'rgba(150, 180, 220, 0.45)', 
-                fontSize: '10px' 
-              }}>
-                Data refreshes every 5 minutes • Click any card for detailed view
-              </div>
+              <iframe
+                src="https://s.tradingview.com/embed-widget/market-quotes/?locale=in#%7B%22symbolsGroups%22%3A%5B%7B%22name%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22name%22%3A%22NSE%3ANIFTY%22%2C%22displayName%22%3A%22NIFTY%2050%22%7D%2C%7B%22name%22%3A%22BSE%3ASENSEX%22%2C%22displayName%22%3A%22SENSEX%22%7D%2C%7B%22name%22%3A%22NSE%3ABANKNIFTY%22%2C%22displayName%22%3A%22Bank%20NIFTY%22%7D%5D%7D%2C%7B%22name%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22name%22%3A%22TVC%3AGOLD%22%2C%22displayName%22%3A%22Gold%22%7D%2C%7B%22name%22%3A%22TVC%3ASILVER%22%2C%22displayName%22%3A%22Silver%22%7D%5D%7D%5D%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22dark%22%2C%22isTransparent%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%7D"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                  background: '#131722',
+                }}
+                title="Global Markets Overview"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
           </div>
 
