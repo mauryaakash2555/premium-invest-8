@@ -1724,9 +1724,8 @@ export default function LiveIntelligenceHeroPage() {
               </span>
             </div>
 
-            <div style={{
+            <div className="li-qa-grid" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
               gap: '12px',
             }}>
               {[
@@ -1822,6 +1821,22 @@ export default function LiveIntelligenceHeroPage() {
                 </a>
               ))}
             </div>
+
+            <style jsx>{`
+              .li-qa-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+              }
+              @media (min-width: 640px) {
+                .li-qa-grid {
+                  grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+              }
+              @media (min-width: 1024px) {
+                .li-qa-grid {
+                  grid-template-columns: repeat(6, minmax(0, 1fr));
+                }
+              }
+            `}</style>
           </div>
 
           {/* Night Summary Dashboard - Only shows 9PM-12AM */}

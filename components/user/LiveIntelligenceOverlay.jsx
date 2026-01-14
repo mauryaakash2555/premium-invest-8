@@ -73,7 +73,6 @@ export default function LiveIntelligenceOverlay({
   const [isAnimating, setIsAnimating] = useState(false);
   const [mounted, setMounted] = useState(false);
   const overlayRef = useRef(null);
-  const footerObserverRef = useRef(null);
   const hasAutoOpenedRef = useRef(false);
 
   // Mount check for portal
@@ -189,36 +188,8 @@ export default function LiveIntelligenceOverlay({
     };
   }, [liveMoodRef, openOverlay, isOpen]);
 
-  // Close when footer is 75% visible
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (typeof IntersectionObserver === 'undefined') return;
-
-    const checkFooterVisibility = () => {
-      const footerEl = overlayRef.current?.querySelector('[data-li-footer]');
-      if (!footerEl) return;
-
-      footerObserverRef.current = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.intersectionRatio >= 0.75) {
-            closeOverlay();
-          }
-        },
-        { threshold: 0.75 }
-      );
-
-      footerObserverRef.current.observe(footerEl);
-    };
-
-    // Small delay to let DOM render
-    const timer = setTimeout(checkFooterVisibility, 100);
-    
-    return () => {
-      clearTimeout(timer);
-      footerObserverRef.current?.disconnect();
-    };
-  }, [isOpen, closeOverlay]);
+  // NOTE: We intentionally do NOT auto-close when footer becomes visible.
+  // Users want to view and use the full LaserFooter (client-portal version).
 
   // ESC key to close
   useEffect(() => {
@@ -282,6 +253,23 @@ export default function LiveIntelligenceOverlay({
           visibility: visible !important;
           opacity: 1 !important;
         }
+
+        /* Quick Access grid - responsive (match laser page intent) */
+        .li-qa-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+        @media (min-width: 640px) {
+          .li-qa-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+        @media (min-width: 1024px) {
+          .li-qa-grid {
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+          }
+        }
       `}</style>
 
       {/* LASER SECTION (LOCKED - NO OVERLAYS/BUTTONS) */}
@@ -321,7 +309,20 @@ export default function LiveIntelligenceOverlay({
       <LiveIntelligencePanel onClose={closeOverlay} />
 
       {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
-      <div data-li-footer className="li-footer-wrapper">
+      <div
+        data-li-footer
+        className="li-footer-wrapper"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1,
+          position: 'relative',
+          zIndex: 100,
+          width: '100%',
+          marginTop: 0,
+          background: '#090A0C',
+        }}
+      >
         {footerContent}
       </div>
     </div>
@@ -1257,11 +1258,10 @@ function LiveIntelligencePanel({ onClose }) {
               background: '#000000',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h3 style={{ 
-                  margin: 0, 
-                  color: 'rgba(220, 240, 255, 0.95)', 
-                  fontSize: '16px', 
-                  fontWeight: 600,
+                <div className="li-qa-grid" style={{
+                  display: 'grid',
+                  gap: '12px',
+                }}>
                 }}>
                   📈 Live Chart — NIFTY 50
                 </h3>
