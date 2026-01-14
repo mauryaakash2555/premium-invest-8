@@ -101,6 +101,21 @@ export default function LiveIntelligenceHeroPage() {
   return (
     <main style={{ width: '100%', margin: 0, padding: 0, overflowX: 'hidden' }}>
 
+      {/* DEBUG MARKER - Remove after confirming deployment works */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        background: 'red',
+        color: 'white',
+        padding: '10px 20px',
+        zIndex: 99999,
+        fontWeight: 'bold',
+        fontSize: '14px',
+      }}>
+        BUILD: 2025-01-14-v2
+      </div>
+
       {/* LASER (LOCKED): fullscreen, no filters, no overlays, no masking */}
       <section
         aria-label="Live Intelligence Laser"
