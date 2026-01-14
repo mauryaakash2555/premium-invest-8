@@ -106,7 +106,7 @@ export default function HomePage() {
               'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            // More visible background
+            // Visible hero background
             opacity: 0.60,
             filter: 'brightness(1.0) saturate(1.1) contrast(1.2)',
             zIndex: 1,
@@ -266,7 +266,6 @@ export default function HomePage() {
         </div>
 
         <div
-          className="max-w-7xl mx-auto"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -327,7 +326,6 @@ export default function HomePage() {
           </div>
 
           <div
-            className="max-w-7xl mx-auto"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',

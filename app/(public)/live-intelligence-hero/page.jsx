@@ -1035,12 +1035,12 @@ export default function LiveIntelligenceHeroPage() {
 
             /* Dashboard grid - single column on mobile */
             .li-dash-grid {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: minmax(0, 1fr) !important;
             }
 
             /* KPI grid - 2 columns on mobile */
             .li-kpi-grid {
-              grid-template-columns: repeat(2, 1fr) !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
             /* KPI cards smaller */
