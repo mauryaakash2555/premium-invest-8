@@ -933,6 +933,83 @@ function LiveIntelligencePanel({ onClose }) {
             margin-right: 0 !important;
           }
         }
+
+        /* ═══════════════════════════════════════════════════════════
+           ICON ANIMATIONS - Globe rotation with glow, Chart wave
+           ═══════════════════════════════════════════════════════════ */
+        
+        /* Globe icon - slow rotation with periodic glow burst */
+        .li-globe-icon {
+          animation: liGlobeRotate 8s linear infinite;
+        }
+        
+        @keyframes liGlobeRotate {
+          0% { 
+            transform: rotate(0deg); 
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          }
+          50% { 
+            transform: rotate(180deg); 
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          }
+          85% { 
+            transform: rotate(324deg); 
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          }
+          90% { 
+            transform: rotate(342deg); 
+            filter: drop-shadow(0 0 20px rgba(140, 220, 255, 1)) drop-shadow(0 0 40px rgba(100, 200, 255, 0.8));
+          }
+          95% { 
+            transform: rotate(351deg); 
+            filter: drop-shadow(0 0 30px rgba(180, 230, 255, 1)) drop-shadow(0 0 60px rgba(140, 210, 255, 0.9));
+          }
+          100% { 
+            transform: rotate(360deg); 
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+          }
+        }
+        
+        /* Chart icon - subtle wave/pulse animation */
+        .li-chart-icon {
+          animation: liChartWave 2.5s ease-in-out infinite;
+          transform-origin: center center;
+        }
+        
+        @keyframes liChartWave {
+          0%, 100% { 
+            transform: scaleY(1) translateY(0);
+            filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
+          }
+          25% { 
+            transform: scaleY(1.05) translateY(-1px);
+            filter: drop-shadow(0 0 8px rgba(140, 190, 255, 0.6));
+          }
+          50% { 
+            transform: scaleY(0.95) translateY(1px);
+            filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
+          }
+          75% { 
+            transform: scaleY(1.02) translateY(-0.5px);
+            filter: drop-shadow(0 0 10px rgba(140, 190, 255, 0.7));
+          }
+        }
+
+        /* Calculator icon animation */
+        .li-calc-icon {
+          animation: liCalcPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes liCalcPulse {
+          0%, 100% { 
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
+            transform: scale(1);
+          }
+          50% { 
+            filter: drop-shadow(0 0 12px rgba(140, 220, 255, 0.8));
+            transform: scale(1.05);
+          }
+        }
       `}</style>
 
       <div
@@ -1472,7 +1549,7 @@ function LiveIntelligencePanel({ onClose }) {
                   alignItems: 'center',
                   gap: '8px',
                 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
+                  <svg className="li-chart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                   </svg>
                   Live Chart — NIFTY 50
@@ -1497,7 +1574,7 @@ function LiveIntelligencePanel({ onClose }) {
 
             <div style={{ height: '500px', width: '100%', background: '#000000' }}>
               <iframe
-                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&studies=%5B%5D&locale=in&utm_source=&utm_medium=widget_new&utm_campaign=chart&utm_term=NSE%3ANIFTY"
+                src="https://www.tradingview.com/chart/?symbol=NSE:NIFTY&theme=dark&style=1&timezone=Asia/Kolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&save_image=1&locale=in&hide_top_toolbar=0"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -1508,6 +1585,7 @@ function LiveIntelligencePanel({ onClose }) {
                 title="Live Chart"
                 loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
               />
             </div>
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
@@ -1550,7 +1628,7 @@ function LiveIntelligencePanel({ onClose }) {
                   alignItems: 'center',
                   gap: '8px',
                 }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
+                  <svg className="li-globe-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="2" y1="12" x2="22" y2="12"/>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -1564,29 +1642,52 @@ function LiveIntelligencePanel({ onClose }) {
               </div>
             </div>
 
-            {/* TRIPLE BLACK PROTECTION - wrapper + inline + CSS class */}
+            {/* BLACK BACKGROUND ENFORCED - Using Ticker Tape + Symbol Overview */}
             <div 
-              className="li-global-markets-widget"
               style={{ 
-                height: '420px', 
                 width: '100%', 
-                background: '#000000',
-                backgroundColor: '#000000',
+                background: '#131722',
+                padding: '0',
               }}
             >
-              <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  display: 'block',
-                  background: '#000000',
-                  backgroundColor: '#000000',
-                }}
-                title="Market Overview"
-                loading="lazy"
-              />
+              {/* Ticker Tape - Real-time scrolling prices */}
+              <div style={{ width: '100%', height: '46px', background: '#131722' }}>
+                <iframe
+                  src="https://s.tradingview.com/embed-widget/ticker-tape/?symbols=%5B%7B%22proName%22%3A%22NSE%3ANIFTY%22%2C%22title%22%3A%22NIFTY%2050%22%7D%2C%7B%22proName%22%3A%22BSE%3ASENSEX%22%2C%22title%22%3A%22SENSEX%22%7D%2C%7B%22proName%22%3A%22NSE%3ABANKNIFTY%22%2C%22title%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22proName%22%3A%22MCX%3AGOLD1!%22%2C%22title%22%3A%22Gold%22%7D%2C%7B%22proName%22%3A%22FX_IDC%3AUSDINR%22%2C%22title%22%3A%22USD%2FINR%22%7D%2C%7B%22proName%22%3A%22NASDAQ%3AAAPL%22%2C%22title%22%3A%22Apple%22%7D%2C%7B%22proName%22%3A%22NASDAQ%3AGOOGL%22%2C%22title%22%3A%22Google%22%7D%5D&showSymbolLogo=true&colorTheme=dark&isTransparent=false&displayMode=adaptive&locale=in"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    display: 'block',
+                  }}
+                  title="Ticker Tape"
+                  loading="lazy"
+                />
+              </div>
+              {/* Market Overview Grid */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(4, 1fr)', 
+                gap: '1px', 
+                background: 'rgba(100, 180, 255, 0.08)',
+                padding: '1px',
+              }}>
+                {[
+                  { symbol: 'NSE:NIFTY', name: 'NIFTY 50' },
+                  { symbol: 'BSE:SENSEX', name: 'SENSEX' },
+                  { symbol: 'NSE:BANKNIFTY', name: 'Bank NIFTY' },
+                  { symbol: 'MCX:GOLD1!', name: 'Gold' },
+                ].map((item) => (
+                  <div key={item.symbol} style={{ background: '#131722', padding: '12px' }}>
+                    <iframe
+                      src={`https://s.tradingview.com/embed-widget/single-quote/?symbol=${encodeURIComponent(item.symbol)}&width=100%25&colorTheme=dark&isTransparent=false&locale=in`}
+                      style={{ width: '100%', height: '60px', border: 'none' }}
+                      title={item.name}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

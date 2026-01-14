@@ -157,7 +157,18 @@ export default function DonutCalculator({ onResultChange }) {
     <div className="calc-wrap">
       {/* Toggle Header */}
       <button type="button" className="calc-toggle" onClick={() => setIsOpen(!isOpen)}>
-        <span className="calc-toggle-icon">🧮</span>
+        <span className="calc-toggle-icon li-calc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 200, 255, 0.95)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="10" y2="10"/>
+            <line x1="14" y1="10" x2="16" y2="10"/>
+            <line x1="8" y1="14" x2="10" y2="14"/>
+            <line x1="14" y1="14" x2="16" y2="14"/>
+            <line x1="8" y1="18" x2="10" y2="18"/>
+            <line x1="14" y1="18" x2="16" y2="18"/>
+          </svg>
+        </span>
         <span className="calc-toggle-text">Ultimate Calculator</span>
         <span className="calc-toggle-badge">6 Services</span>
         <span className={`calc-toggle-arrow ${isOpen ? 'open' : ''}`}>▼</span>
@@ -433,7 +444,28 @@ export default function DonutCalculator({ onResultChange }) {
           background: rgba(100, 180, 255, 0.06);
         }
 
-        .calc-toggle-icon { font-size: 18px; }
+        .calc-toggle-icon { 
+          font-size: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .calc-toggle-icon svg {
+          filter: drop-shadow(0 0 4px rgba(140, 200, 255, 0.4));
+          animation: calcIconPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes calcIconPulse {
+          0%, 100% { 
+            filter: drop-shadow(0 0 4px rgba(140, 200, 255, 0.4));
+            transform: scale(1);
+          }
+          50% { 
+            filter: drop-shadow(0 0 12px rgba(140, 220, 255, 0.8));
+            transform: scale(1.08);
+          }
+        }
 
         .calc-toggle-text {
           flex: 1;
