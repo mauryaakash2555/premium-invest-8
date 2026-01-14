@@ -5,7 +5,7 @@ export const metadata = buildMetadata({
     "BM Wealth | Portfolio Management (PMS), Mutual Funds, SIP",
   description:
     "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
-  path: "/",,
+  path: "/",
       robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
       authors: [{ name: "BM Wealth" }],
       creator: "BM Wealth",
