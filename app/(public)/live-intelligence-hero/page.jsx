@@ -99,7 +99,7 @@ export default function LiveIntelligenceHeroPage() {
   const glowColor = modeConfig?.glowColor || 'rgba(170, 198, 255, 0.4)';
 
   return (
-    <main style={{ width: '100%', margin: 0, padding: 0 }}>
+    <main style={{ width: '100%', margin: 0, padding: 0, overflowX: 'hidden' }}>
 
       {/* LASER (LOCKED): fullscreen, no filters, no overlays, no masking */}
       <section
