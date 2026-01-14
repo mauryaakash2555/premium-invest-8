@@ -64,6 +64,8 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
     <html lang="en">
       <head>
         <meta name="x-ui-build" content={buildId} />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#090A0C" />
       </head>
       <body
         className={`${playfair.variable} ${inter.variable}`}

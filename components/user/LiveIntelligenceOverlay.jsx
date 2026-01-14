@@ -1395,16 +1395,18 @@ function LiveIntelligencePanel({ onClose }) {
               gap: '12px',
             }}>
               {[
-                { title: 'Mutual Funds', icon: '📊', desc: '5000+ schemes', link: '/mutual-funds', accent: 'rgba(100, 180, 255, 0.15)' },
-                { title: 'SIP', icon: '💰', desc: 'Start from ₹500', link: '/sip', accent: 'rgba(100, 220, 180, 0.15)' },
-                { title: 'Portfolio Management', icon: '💎', desc: 'PMS & AIF', link: '/portfolio-management', accent: 'rgba(180, 120, 255, 0.15)' },
-                { title: 'Insurance', icon: '🛡️', desc: 'Term & Health', link: '/insurance', accent: 'rgba(255, 180, 100, 0.15)' },
-                { title: 'Trading Services', icon: '📈', desc: 'Demat & Trading', link: '/trading-services', accent: 'rgba(255, 100, 150, 0.15)' },
-                { title: 'Fixed Deposits', icon: '🏦', desc: 'Up to 9% p.a.', link: '/fixed-deposits', accent: 'rgba(200, 200, 100, 0.15)' },
+                { title: 'Mutual Funds', icon: '📊', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds', accent: 'rgba(100, 180, 255, 0.15)' },
+                { title: 'SIP', icon: '💰', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip', accent: 'rgba(100, 220, 180, 0.15)' },
+                { title: 'Portfolio Management', icon: '💎', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management', accent: 'rgba(180, 120, 255, 0.15)' },
+                { title: 'Insurance', icon: '🛡️', desc: 'Term & Health', link: '/api/pdf/service?service=insurance', accent: 'rgba(255, 180, 100, 0.15)' },
+                { title: 'Trading Services', icon: '📈', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services', accent: 'rgba(255, 100, 150, 0.15)' },
+                { title: 'Fixed Deposits', icon: '🏦', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits', accent: 'rgba(200, 200, 100, 0.15)' },
               ].map((service) => (
                 <a
                   key={service.title}
                   href={service.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   data-accent={service.accent}
                   style={{
                     display: 'block',
