@@ -172,17 +172,18 @@ function normalizeMetalSourcePct(pct) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// FALLBACK DATA - Updated: 2026-01-07 10:30 AM IST (MCX FUTURES PRICES)
+// FALLBACK DATA - Updated: 2026-01-15 06:00 PM IST (MCX FUTURES PRICES)
+// IMPORTANT: Update these values periodically as markets change!
 // ════════════════════════════════════════════════════════════════════════════
 function getFallbackData() {
   return [
-    { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 26133, changePct: -0.24, direction: "down", currency: "INR" },
-    { id: "SENSEX", name: "SENSEX", kind: "index", value: 84880, changePct: -0.17, direction: "down", currency: "INR" },
-    { id: "GOLD", name: "MCX GOLD", kind: "metal", value: 138357, changePct: -0.52, direction: "down", currency: "INR" },  // MCX FUTURES per 10g
-    { id: "SILVER", name: "MCX SILVER", kind: "metal", value: 255052, changePct: -1.45, direction: "down", currency: "INR" },  // MCX FUTURES per kg
-    { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: 5077, changePct: -2.55, direction: "down", currency: "INR" },  // MCX per barrel
-    { id: "BTC", name: "BITCOIN", kind: "crypto", value: 92605, changePct: -1.25, direction: "down", currency: "USD" },
-    { id: "USDINR", name: "USD/INR", kind: "fx", value: 85.75, changePct: 0.05, direction: "up", currency: "INR" },
+    { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 25666, changePct: -0.26, direction: "down", currency: "INR" },  // Google Finance Jan 15
+    { id: "SENSEX", name: "SENSEX", kind: "index", value: 83383, changePct: -0.29, direction: "down", currency: "INR" },  // Google Finance Jan 15
+    { id: "GOLD", name: "MCX GOLD", kind: "metal", value: 143017, changePct: 0.52, direction: "up", currency: "INR" },  // MCX FUTURES per 10g (record high ~1.43 lakh)
+    { id: "SILVER", name: "MCX SILVER", kind: "metal", value: 283725, changePct: 1.45, direction: "up", currency: "INR" },  // MCX FUTURES per kg (record high ~2.84 lakh)
+    { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: 5350, changePct: -0.30, direction: "down", currency: "INR" },  // MCX per barrel (~$61 WTI)
+    { id: "BTC", name: "BITCOIN", kind: "crypto", value: 96500, changePct: 1.25, direction: "up", currency: "USD" },  // ~$96,500 Jan 15
+    { id: "USDINR", name: "USD/INR", kind: "fx", value: 86.55, changePct: 0.12, direction: "up", currency: "INR" },  // ~86.55 Jan 15
   ];
 }
 

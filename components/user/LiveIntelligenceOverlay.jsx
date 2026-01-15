@@ -376,15 +376,46 @@ export default function LiveIntelligenceOverlay({
           background-color: transparent;
         }
 
-        /* Category filter - allow full width scroll */
+        /* Category filter - premium scroll */
         .li-category-filter {
           overflow-x: auto !important;
           max-width: 100%;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-category-filter::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-category-filter::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-category-filter::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-category-filter::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
         .li-category-scroll {
           flex-wrap: nowrap !important;
           overflow-x: auto !important;
           padding-right: 20px;
+          padding-bottom: 6px;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-category-scroll::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-category-scroll::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-category-scroll::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-category-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
 
         /* ═══════════════════════════════════════════════════════════
@@ -466,6 +497,7 @@ function LiveIntelligencePanel({ onClose }) {
   const shareMenuRef = useRef(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
@@ -514,8 +546,25 @@ function LiveIntelligencePanel({ onClose }) {
 
   useEffect(() => {
     if (!showPdfModal) return;
+    
+    // Save current scroll position of both overlay and window
+    const overlayEl = overlayRef.current;
+    const savedOverlayScrollTop = overlayEl?.scrollTop || 0;
+    const savedWindowScrollY = window.scrollY || 0;
+    
     const prevOverflow = document?.body?.style?.overflow;
     if (document?.body?.style) document.body.style.overflow = 'hidden';
+    
+    // Prevent overlay from scrolling while PDF is open
+    if (overlayEl) {
+      overlayEl.style.overflow = 'hidden';
+    }
+    
+    // Immediately restore scroll positions (prevent flash to top)
+    requestAnimationFrame(() => {
+      if (overlayEl) overlayEl.scrollTop = savedOverlayScrollTop;
+      window.scrollTo(0, savedWindowScrollY);
+    });
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
         setShowPdfModal(false);
@@ -523,9 +572,20 @@ function LiveIntelligencePanel({ onClose }) {
       }
     };
     window.addEventListener('keydown', onKeyDown);
+    
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       if (document?.body?.style) document.body.style.overflow = prevOverflow || '';
+      
+      // Restore overlay scroll position and overflow
+      if (overlayEl) {
+        overlayEl.style.overflow = '';
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          overlayEl.scrollTop = savedOverlayScrollTop;
+          window.scrollTo(0, savedWindowScrollY);
+        });
+      }
     };
   }, [showPdfModal]);
 
@@ -878,6 +938,11 @@ function LiveIntelligencePanel({ onClose }) {
           padding: 24px;
         }
 
+        /* Ensure donut effects (glow, orbit) are never clipped */
+        .li-allocation-card {
+          overflow: visible !important;
+        }
+
         .li-live-dot {
           width: 6px;
           height: 6px;
@@ -1002,6 +1067,21 @@ function LiveIntelligencePanel({ onClose }) {
 
         .li-table-wrapper {
           overflow-x: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-table-wrapper::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-table-wrapper::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-table-wrapper::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-table-wrapper::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
 
         .li-table-header {
@@ -1143,19 +1223,13 @@ function LiveIntelligencePanel({ onClose }) {
 
         .li-donut-value {
           color: rgba(245, 248, 255, 0.98);
-          font-size: 22px;
+          font-size: 18px;
           font-weight: 700;
           letter-spacing: -0.02em;
           line-height: 1.05;
           text-shadow: 0 0 20px rgba(100, 160, 255, 0.30);
           font-variant-numeric: tabular-nums;
           font-feature-settings: "tnum" 1, "lnum" 1;
-          /* Circle ring around value */
-          padding: 10px 14px;
-          border: 2px solid rgba(100, 160, 255, 0.35);
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(100, 160, 255, 0.08) 0%, transparent 70%);
-          box-shadow: 0 0 15px rgba(100, 160, 255, 0.15), inset 0 0 10px rgba(100, 160, 255, 0.05);
         }
 
         .li-donut-label {
@@ -1336,15 +1410,54 @@ function LiveIntelligencePanel({ onClose }) {
           overflowX: 'hidden',
         }}
       >
+        {/* Sticky Back Button - Minimal Apple-style */}
+        <button
+          onClick={onClose}
+          aria-label="Back to home"
+          className="li-sticky-back-btn"
+          style={{
+            position: 'fixed',
+            top: '14px',
+            right: '14px',
+            zIndex: 9999,
+            width: '28px',
+            height: '28px',
+            borderRadius: '8px',
+            border: 'none',
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(12px)',
+            color: 'rgba(200, 215, 240, 0.65)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '14px',
+            fontWeight: 400,
+            transition: 'all 0.15s ease',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+            e.currentTarget.style.color = 'rgba(220, 230, 255, 0.9)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+            e.currentTarget.style.color = 'rgba(200, 215, 240, 0.65)';
+          }}
+        >
+          ✕
+        </button>
+
         {/* Dashboard header with navigation tabs and actions */}
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '8px' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', width: '100%' }}>
+              <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', flexShrink: 0 }}>
                 Live Intelligence
               </h2>
               <ModeIndicator />
-              <StreakBadge showDetails={true} />
+              <div style={{ flexShrink: 0 }}>
+                <StreakBadge showDetails={true} />
+              </div>
             </div>
             <p style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
               Your financial command center — real-time portfolio insights and signals.
@@ -1353,23 +1466,26 @@ function LiveIntelligencePanel({ onClose }) {
             <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
               <div style={{ display: 'flex', gap: '8px', minWidth: 'max-content' }}>
                 {[
-                  { key: 'pulse', label: 'Live Market Pulse', icon: '📡', active: true },
-                  { key: 'live', label: 'Live', icon: '🔴', active: false },
-                  { key: 'timings', label: 'Timings', icon: '🕐', active: false },
-                  { key: '2days', label: '2 Days', icon: '📊', active: false },
-                ].map((tab) => (
+                  { key: 'pulse', label: 'Live Market Pulse', icon: '📡' },
+                  { key: 'live', label: 'Live', icon: '🔴' },
+                  { key: 'timings', label: 'Timings', icon: '🕐' },
+                  { key: '2days', label: '2 Days', icon: '📊' },
+                ].map((tab) => {
+                  const isActive = activeTab === tab.key;
+                  return (
                   <button
                     key={tab.key}
                     type="button"
+                    onClick={() => setActiveTab(tab.key)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 14px',
-                      background: tab.active ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
-                      border: `1px solid ${tab.active ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                      background: isActive ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
+                      border: `1px solid ${isActive ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
                       borderRadius: '10px',
-                      color: tab.active ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
+                      color: isActive ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
                       fontSize: '12px',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -1377,13 +1493,13 @@ function LiveIntelligencePanel({ onClose }) {
                       whiteSpace: 'nowrap',
                     }}
                     onMouseOver={(e) => {
-                      if (!tab.active) {
+                      if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
                         e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
                       }
                     }}
                     onMouseOut={(e) => {
-                      if (!tab.active) {
+                      if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
                         e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
                       }
@@ -1392,40 +1508,13 @@ function LiveIntelligencePanel({ onClose }) {
                     <span>{tab.icon}</span>
                     <span>{tab.label}</span>
                   </button>
-                ))}
+                );})}
               </div>
             </div>
           </div>
 
-          {/* Action buttons - Back arrow, Share, Add Goal */}
+          {/* Action buttons - Share only (Back button is now sticky top-right) */}
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            {/* Back arrow */}
-            <button
-              onClick={onClose}
-              aria-label="Close Live Intelligence"
-              style={{
-                appearance: 'none',
-                border: 'none',
-                background: 'transparent',
-                color: 'rgba(180, 200, 230, 0.55)',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '22px',
-                fontWeight: 300,
-                transition: 'all 0.2s ease',
-                lineHeight: 1,
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
-                e.currentTarget.style.transform = 'translateX(-4px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.color = 'rgba(180, 200, 230, 0.55)';
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
-            >
-              ←
-            </button>
             {/* Share Button with Dropdown */}
             <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button
@@ -2151,19 +2240,20 @@ function LiveIntelligencePanel({ onClose }) {
                 aria-label="PDF viewer"
                 style={{
                   position: 'fixed',
-                  inset: 0,
-                  width: '100%',
-                  height: '100dvh',
-                  minHeight: '100vh',
-                  display: 'grid',
-                  placeItems: 'center',
-                  overflow: 'auto',
-                  WebkitOverflowScrolling: 'touch',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: '100vw',
+                  height: '100vh',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
                   backgroundColor: 'rgba(0, 0, 0, 0.95)',
                   backdropFilter: 'blur(8px)',
                   zIndex: 99999,
-                  padding:
-                    'max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))',
+                  padding: '16px',
                   boxSizing: 'border-box',
                 }}
                 onClick={() => {
@@ -2245,3 +2335,6 @@ function LiveIntelligencePanel({ onClose }) {
     </section>
   );
 }
+
+// Export the panel for use in standalone page
+export { LiveIntelligencePanel };

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 /**
  * DonutCalculator - Ultimate All-Services Calculator
  * 
- * ALL 6 SERVICES:
+ * ALL 21 SERVICES:
  * 1. SIP Calculator
  * 2. Lumpsum Calculator
  * 3. Goal Planning
@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
  * - Donut changes when numbers change
  */
 
-// All 6 service calculators
+// All 21 service calculators
 const CALC_MODES = {
   sip: { key: 'sip', label: 'SIP', icon: '📈', desc: 'Monthly investment growth' },
   lumpsum: { key: 'lumpsum', label: 'Lumpsum', icon: '💰', desc: 'One-time investment' },
@@ -29,6 +29,28 @@ const CALC_MODES = {
   retire: { key: 'retire', label: 'Retire', icon: '🏖️', desc: 'Retirement corpus' },
   fd: { key: 'fd', label: 'FD', icon: '🏦', desc: 'Fixed deposit returns' },
   insurance: { key: 'insurance', label: 'Insurance', icon: '🛡️', desc: 'Life cover calculator' },
+  ppf: { key: 'ppf', label: 'PPF', icon: '🏛️', desc: 'Public Provident Fund' },
+  epf: { key: 'epf', label: 'EPF', icon: '👷', desc: 'Employee PF returns' },
+  nps: { key: 'nps', label: 'NPS', icon: '🧓', desc: 'National Pension Scheme' },
+  elss: { key: 'elss', label: 'ELSS', icon: '💎', desc: 'Tax saving mutual funds' },
+  emi: { key: 'emi', label: 'EMI', icon: '🏠', desc: 'Loan EMI calculator' },
+  swp: { key: 'swp', label: 'SWP', icon: '💸', desc: 'Systematic Withdrawal' },
+  stepup: { key: 'stepup', label: 'Step-Up', icon: '📊', desc: 'Step-up SIP growth' },
+  cagr: { key: 'cagr', label: 'CAGR', icon: '📉', desc: 'Compound Annual Growth' },
+  inflation: { key: 'inflation', label: 'Inflation', icon: '🔥', desc: 'Inflation adjusted value' },
+  gratuity: { key: 'gratuity', label: 'Gratuity', icon: '🎁', desc: 'Gratuity calculator' },
+  hra: { key: 'hra', label: 'HRA', icon: '🏢', desc: 'HRA exemption' },
+  tax: { key: 'tax', label: 'Tax', icon: '📋', desc: 'Income tax calculator' },
+  rd: { key: 'rd', label: 'RD', icon: '📅', desc: 'Recurring deposit' },
+  ssy: { key: 'ssy', label: 'SSY', icon: '👧', desc: 'Sukanya Samriddhi Yojana' },
+  wealth: { key: 'wealth', label: 'Wealth', icon: '💵', desc: 'Wealth growth planner' },
+  // 6 more to make 27 total
+  mf: { key: 'mf', label: 'MF Returns', icon: '📊', desc: 'Mutual fund returns' },
+  childPlan: { key: 'childPlan', label: 'Child', icon: '👶', desc: 'Child education plan' },
+  marriage: { key: 'marriage', label: 'Marriage', icon: '💍', desc: 'Marriage fund planner' },
+  car: { key: 'car', label: 'Car Loan', icon: '🚗', desc: 'Car loan EMI' },
+  home: { key: 'home', label: 'Home Loan', icon: '🏡', desc: 'Home loan EMI' },
+  gold: { key: 'gold', label: 'Gold', icon: '🪙', desc: 'Gold investment returns' },
 };
 
 // Format to Indian currency
@@ -98,6 +120,220 @@ const calcInsurance = (age, income, liabilities, dependents) => {
   };
 };
 
+// PPF Calculator (7.1% annual, 15 years typical)
+const calcPPF = (m, y = 15, r = 7.1) => {
+  const n = y, rate = r / 100;
+  const inv = m * 12 * n;
+  let fv = 0;
+  for (let i = 0; i < n; i++) {
+    fv = (fv + m * 12) * (1 + rate);
+  }
+  return { invested: inv, futureValue: fv, returns: fv - inv, cagr: r, years: y };
+};
+
+// EPF Calculator
+const calcEPF = (basicSalary, y = 25, r = 8.15) => {
+  const monthly = basicSalary * 0.24; // 12% employee + 12% employer
+  const n = y * 12, rate = r / 100 / 12;
+  const inv = monthly * n;
+  const fv = monthly * ((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate);
+  return { invested: inv, futureValue: fv, returns: fv - inv, cagr: r, years: y };
+};
+
+// NPS Calculator
+const calcNPS = (m, y, r = 10) => calcSIP(m, y, r);
+
+// ELSS Calculator (3yr lock-in, equity returns)
+const calcELSS = (m, y = 3, r = 12) => calcSIP(m, y, r);
+
+// EMI Calculator
+const calcEMI = (p, y, r) => {
+  const n = y * 12, rate = r / 100 / 12;
+  const emi = p * rate * Math.pow(1 + rate, n) / (Math.pow(1 + rate, n) - 1);
+  const totalPaid = emi * n;
+  return { emi: Math.round(emi), totalPaid, interestPaid: totalPaid - p, principal: p, years: y };
+};
+
+// SWP Calculator
+const calcSWP = (corpus, monthly, r = 8) => {
+  const rate = r / 100 / 12;
+  const months = Math.log(corpus * rate / (corpus * rate - monthly)) / Math.log(1 + rate);
+  const years = Math.max(0, months / 12);
+  return { corpus, monthlyWithdrawal: monthly, yearsLast: years.toFixed(1), cagr: r };
+};
+
+// Step-up SIP Calculator
+const calcStepUp = (m, y, r = 12, stepUp = 10) => {
+  const rate = r / 100 / 12;
+  let fv = 0, inv = 0, currentSIP = m;
+  for (let yr = 0; yr < y; yr++) {
+    for (let mn = 0; mn < 12; mn++) {
+      inv += currentSIP;
+      fv = (fv + currentSIP) * (1 + rate);
+    }
+    currentSIP = currentSIP * (1 + stepUp / 100);
+  }
+  return { invested: inv, futureValue: fv, returns: fv - inv, cagr: r, years: y };
+};
+
+// CAGR Calculator
+const calcCAGR = (initial, final, y) => {
+  const cagr = (Math.pow(final / initial, 1 / y) - 1) * 100;
+  return { initial, final, years: y, cagr: cagr.toFixed(2) };
+};
+
+// Inflation Calculator
+const calcInflation = (amount, y, inflationRate = 6) => {
+  const futureValue = amount * Math.pow(1 + inflationRate / 100, y);
+  const realValue = amount / Math.pow(1 + inflationRate / 100, y);
+  return { currentValue: amount, futureValue, realValue, years: y, rate: inflationRate };
+};
+
+// Gratuity Calculator
+const calcGratuity = (basicSalary, y) => {
+  const gratuity = (basicSalary * 15 * y) / 26;
+  return { basicSalary, years: y, gratuity: Math.round(gratuity) };
+};
+
+// HRA Calculator
+const calcHRA = (hra, basic, rent, metro = true) => {
+  const exemption1 = hra;
+  const exemption2 = basic * (metro ? 0.5 : 0.4);
+  const exemption3 = rent - (basic * 0.1);
+  const hraExemption = Math.max(0, Math.min(exemption1, exemption2, exemption3));
+  return { hra, basic, rent, hraExemption: Math.round(hraExemption), taxable: hra - hraExemption };
+};
+
+// Tax Calculator (simplified)
+const calcTax = (income) => {
+  let tax = 0;
+  if (income > 1500000) tax += (income - 1500000) * 0.30 + 187500;
+  else if (income > 1200000) tax += (income - 1200000) * 0.20 + 127500;
+  else if (income > 900000) tax += (income - 900000) * 0.15 + 82500;
+  else if (income > 600000) tax += (income - 600000) * 0.10 + 37500;
+  else if (income > 300000) tax += (income - 300000) * 0.05 + 12500;
+  else if (income > 250000) tax += (income - 250000) * 0.05;
+  return { income, tax: Math.round(tax), netIncome: income - tax, effectiveRate: ((tax / income) * 100).toFixed(1) };
+};
+
+// RD Calculator
+const calcRD = (m, y, r = 6.5) => {
+  const n = y * 12, rate = r / 100 / 12;
+  const inv = m * n;
+  const fv = m * ((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate);
+  return { invested: inv, futureValue: fv, returns: fv - inv, cagr: r, years: y };
+};
+
+// SSY (Sukanya Samriddhi Yojana)
+const calcSSY = (m, y = 15, r = 8.2) => calcPPF(m, y, r);
+
+// Wealth Growth Planner (generic)
+const calcWealth = (initial, monthly, y, r = 12) => {
+  const rate = r / 100 / 12;
+  const n = y * 12;
+  const fvLumpsum = initial * Math.pow(1 + r / 100, y);
+  const fvSIP = monthly * ((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate);
+  const totalFV = fvLumpsum + fvSIP;
+  const inv = initial + (monthly * n);
+  return { invested: inv, futureValue: totalFV, returns: totalFV - inv, cagr: r, years: y };
+};
+
+// MF Returns Calculator (with expense ratio adjustment)
+const calcMF = (m, y, r = 12, expenseRatio = 1.5) => {
+  const effectiveReturn = r - expenseRatio;
+  const rate = effectiveReturn / 100 / 12;
+  const n = y * 12;
+  const inv = m * n;
+  const fv = m * ((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate);
+  return { invested: inv, futureValue: fv, returns: fv - inv, cagr: effectiveReturn.toFixed(1), years: y, expenseRatio };
+};
+
+// Child Education Plan Calculator
+const calcChildPlan = (currentAge, targetAge, targetAmt, inflationRate = 6, returnRate = 12) => {
+  const years = targetAge - currentAge;
+  const inflatedTarget = targetAmt * Math.pow(1 + inflationRate / 100, years);
+  const rate = returnRate / 100 / 12;
+  const n = years * 12;
+  const monthlyNeeded = inflatedTarget / (((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate));
+  return { 
+    targetAmount: targetAmt, 
+    inflatedTarget, 
+    monthlySIP: Math.round(monthlyNeeded), 
+    years, 
+    invested: monthlyNeeded * n,
+    futureValue: inflatedTarget,
+    returns: inflatedTarget - (monthlyNeeded * n)
+  };
+};
+
+// Marriage Fund Calculator
+const calcMarriage = (years, targetAmt, inflationRate = 7) => {
+  const inflatedTarget = targetAmt * Math.pow(1 + inflationRate / 100, years);
+  const rate = 12 / 100 / 12;
+  const n = years * 12;
+  const monthlyNeeded = inflatedTarget / (((Math.pow(1 + rate, n) - 1) / rate) * (1 + rate));
+  return { 
+    targetAmount: targetAmt, 
+    inflatedTarget, 
+    monthlySIP: Math.round(monthlyNeeded), 
+    years,
+    invested: monthlyNeeded * n,
+    futureValue: inflatedTarget,
+    returns: inflatedTarget - (monthlyNeeded * n)
+  };
+};
+
+// Car Loan EMI Calculator (with processing fee & insurance)
+const calcCarLoan = (carPrice, downPayment, y, r = 9, processingFee = 1) => {
+  const loanAmt = carPrice - downPayment;
+  const processing = loanAmt * processingFee / 100;
+  const n = y * 12, rate = r / 100 / 12;
+  const emi = loanAmt * rate * Math.pow(1 + rate, n) / (Math.pow(1 + rate, n) - 1);
+  const totalPaid = emi * n + processing;
+  return { 
+    loanAmount: loanAmt, 
+    emi: Math.round(emi), 
+    totalPaid, 
+    interestPaid: totalPaid - loanAmt, 
+    processingFee: processing,
+    years: y 
+  };
+};
+
+// Home Loan EMI Calculator (with stamp duty & registration)
+const calcHomeLoan = (propertyPrice, downPayment, y, r = 8.5, stampDuty = 7) => {
+  const loanAmt = propertyPrice - downPayment;
+  const stampDutyAmt = propertyPrice * stampDuty / 100;
+  const n = y * 12, rate = r / 100 / 12;
+  const emi = loanAmt * rate * Math.pow(1 + rate, n) / (Math.pow(1 + rate, n) - 1);
+  const totalPaid = emi * n;
+  return { 
+    loanAmount: loanAmt, 
+    emi: Math.round(emi), 
+    totalPaid, 
+    interestPaid: totalPaid - loanAmt,
+    stampDuty: stampDutyAmt,
+    totalCost: totalPaid + stampDutyAmt + downPayment,
+    years: y 
+  };
+};
+
+// Gold Investment Calculator (with making charges)
+const calcGold = (weight, currentPrice, y, growthRate = 8, makingCharges = 15) => {
+  const purchaseCost = weight * currentPrice * (1 + makingCharges / 100);
+  const futurePrice = currentPrice * Math.pow(1 + growthRate / 100, y);
+  const resaleValue = weight * futurePrice * 0.98; // 2% resale loss
+  return { 
+    purchaseCost, 
+    futureValue: resaleValue, 
+    returns: resaleValue - purchaseCost,
+    invested: purchaseCost,
+    weight,
+    futurePrice: Math.round(futurePrice),
+    years: y 
+  };
+};
+
 export default function DonutCalculator({ onResultChange }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -133,6 +369,110 @@ export default function DonutCalculator({ onResultChange }) {
   const [insIncome, setInsIncome] = useState(100000);
   const [insLiabilities, setInsLiabilities] = useState(2000000);
   const [insDependents, setInsDependents] = useState(2);
+  
+  // PPF inputs
+  const [ppfAmt, setPpfAmt] = useState(12500);
+  const [ppfYrs, setPpfYrs] = useState(15);
+  
+  // EPF inputs
+  const [epfBasic, setEpfBasic] = useState(50000);
+  const [epfYrs, setEpfYrs] = useState(25);
+  
+  // NPS inputs
+  const [npsAmt, setNpsAmt] = useState(5000);
+  const [npsYrs, setNpsYrs] = useState(25);
+  const [npsRate, setNpsRate] = useState(10);
+  
+  // ELSS inputs
+  const [elssAmt, setElssAmt] = useState(12500);
+  const [elssYrs, setElssYrs] = useState(5);
+  const [elssRate, setElssRate] = useState(12);
+  
+  // EMI inputs
+  const [emiPrincipal, setEmiPrincipal] = useState(1000000);
+  const [emiYrs, setEmiYrs] = useState(5);
+  const [emiRate, setEmiRate] = useState(10);
+  
+  // SWP inputs
+  const [swpCorpus, setSwpCorpus] = useState(5000000);
+  const [swpMonthly, setSwpMonthly] = useState(30000);
+  const [swpRate, setSwpRate] = useState(8);
+  
+  // Step-up SIP inputs
+  const [stepAmt, setStepAmt] = useState(10000);
+  const [stepYrs, setStepYrs] = useState(10);
+  const [stepRate, setStepRate] = useState(12);
+  const [stepUp, setStepUp] = useState(10);
+  
+  // CAGR inputs
+  const [cagrInitial, setCagrInitial] = useState(100000);
+  const [cagrFinal, setCagrFinal] = useState(200000);
+  const [cagrYrs, setCagrYrs] = useState(5);
+  
+  // Inflation inputs
+  const [infAmt, setInfAmt] = useState(100000);
+  const [infYrs, setInfYrs] = useState(10);
+  const [infRate, setInfRate] = useState(6);
+  
+  // Gratuity inputs
+  const [gratBasic, setGratBasic] = useState(50000);
+  const [gratYrs, setGratYrs] = useState(15);
+  
+  // HRA inputs
+  const [hraAmt, setHraAmt] = useState(20000);
+  const [hraBasic, setHraBasic] = useState(40000);
+  const [hraRent, setHraRent] = useState(15000);
+  const [hraMetro, setHraMetro] = useState(true);
+  
+  // Tax inputs
+  const [taxIncome, setTaxIncome] = useState(1200000);
+  
+  // RD inputs
+  const [rdAmt, setRdAmt] = useState(5000);
+  const [rdYrs, setRdYrs] = useState(5);
+  const [rdRate, setRdRate] = useState(6.5);
+  
+  // SSY inputs
+  const [ssyAmt, setSsyAmt] = useState(12500);
+  const [ssyYrs, setSsyYrs] = useState(15);
+  
+  // Wealth inputs
+  const [wealthInitial, setWealthInitial] = useState(500000);
+  const [wealthMonthly, setWealthMonthly] = useState(10000);
+  const [wealthYrs, setWealthYrs] = useState(10);
+  const [wealthRate, setWealthRate] = useState(12);
+  
+  // MF inputs
+  const [mfAmt, setMfAmt] = useState(10000);
+  const [mfYrs, setMfYrs] = useState(10);
+  const [mfRate, setMfRate] = useState(12);
+  const [mfExpense, setMfExpense] = useState(1.5);
+  
+  // Child Plan inputs
+  const [childAge, setChildAge] = useState(5);
+  const [childTargetAge, setChildTargetAge] = useState(18);
+  const [childAmt, setChildAmt] = useState(2500000);
+  
+  // Marriage inputs
+  const [marriageYrs, setMarriageYrs] = useState(10);
+  const [marriageAmt, setMarriageAmt] = useState(2500000);
+  
+  // Car Loan inputs
+  const [carPrice, setCarPrice] = useState(1000000);
+  const [carDown, setCarDown] = useState(200000);
+  const [carYrs, setCarYrs] = useState(5);
+  const [carRate, setCarRate] = useState(9);
+  
+  // Home Loan inputs
+  const [homePrice, setHomePrice] = useState(7500000);
+  const [homeDown, setHomeDown] = useState(1500000);
+  const [homeYrs, setHomeYrs] = useState(20);
+  const [homeRate, setHomeRate] = useState(8.5);
+  
+  // Gold inputs
+  const [goldWeight, setGoldWeight] = useState(10);
+  const [goldPrice, setGoldPrice] = useState(6500);
+  const [goldYrs, setGoldYrs] = useState(5);
 
   const result = useMemo(() => {
     switch (mode) {
@@ -142,9 +482,38 @@ export default function DonutCalculator({ onResultChange }) {
       case 'retire': return calcRetire(retExp, currAge, retAge);
       case 'fd': return calcFD(fdAmt, fdYrs, fdRate);
       case 'insurance': return calcInsurance(insAge, insIncome, insLiabilities, insDependents);
+      case 'ppf': return calcPPF(ppfAmt, ppfYrs);
+      case 'epf': return calcEPF(epfBasic, epfYrs);
+      case 'nps': return calcNPS(npsAmt, npsYrs, npsRate);
+      case 'elss': return calcELSS(elssAmt, elssYrs, elssRate);
+      case 'emi': return calcEMI(emiPrincipal, emiYrs, emiRate);
+      case 'swp': return calcSWP(swpCorpus, swpMonthly, swpRate);
+      case 'stepup': return calcStepUp(stepAmt, stepYrs, stepRate, stepUp);
+      case 'cagr': return calcCAGR(cagrInitial, cagrFinal, cagrYrs);
+      case 'inflation': return calcInflation(infAmt, infYrs, infRate);
+      case 'gratuity': return calcGratuity(gratBasic, gratYrs);
+      case 'hra': return calcHRA(hraAmt, hraBasic, hraRent, hraMetro);
+      case 'tax': return calcTax(taxIncome);
+      case 'rd': return calcRD(rdAmt, rdYrs, rdRate);
+      case 'ssy': return calcSSY(ssyAmt, ssyYrs);
+      case 'wealth': return calcWealth(wealthInitial, wealthMonthly, wealthYrs, wealthRate);
+      case 'mf': return calcMF(mfAmt, mfYrs, mfRate, mfExpense);
+      case 'childPlan': return calcChildPlan(childAge, childTargetAge, childAmt);
+      case 'marriage': return calcMarriage(marriageYrs, marriageAmt);
+      case 'car': return calcCarLoan(carPrice, carDown, carYrs, carRate);
+      case 'home': return calcHomeLoan(homePrice, homeDown, homeYrs, homeRate);
+      case 'gold': return calcGold(goldWeight, goldPrice, goldYrs);
       default: return calcSIP(10000, 10, 12);
     }
-  }, [mode, sipAmt, sipYrs, sipRate, lumpAmt, lumpYrs, lumpRate, goalAmt, goalYrs, goalRate, retExp, currAge, retAge, fdAmt, fdYrs, fdRate, insAge, insIncome, insLiabilities, insDependents]);
+  }, [mode, sipAmt, sipYrs, sipRate, lumpAmt, lumpYrs, lumpRate, goalAmt, goalYrs, goalRate, 
+      retExp, currAge, retAge, fdAmt, fdYrs, fdRate, insAge, insIncome, insLiabilities, insDependents,
+      ppfAmt, ppfYrs, epfBasic, epfYrs, npsAmt, npsYrs, npsRate, elssAmt, elssYrs, elssRate,
+      emiPrincipal, emiYrs, emiRate, swpCorpus, swpMonthly, swpRate, stepAmt, stepYrs, stepRate, stepUp,
+      cagrInitial, cagrFinal, cagrYrs, infAmt, infYrs, infRate, gratBasic, gratYrs,
+      hraAmt, hraBasic, hraRent, hraMetro, taxIncome, rdAmt, rdYrs, rdRate, ssyAmt, ssyYrs,
+      wealthInitial, wealthMonthly, wealthYrs, wealthRate, mfAmt, mfYrs, mfRate, mfExpense,
+      childAge, childTargetAge, childAmt, marriageYrs, marriageAmt, carPrice, carDown, carYrs, carRate,
+      homePrice, homeDown, homeYrs, homeRate, goldWeight, goldPrice, goldYrs]);
 
   // Handle input changes (no arrows)
   const handleNumericInput = (setter, min = 0, max = Infinity) => (e) => {
@@ -170,7 +539,7 @@ export default function DonutCalculator({ onResultChange }) {
           </svg>
         </span>
         <span className="calc-toggle-text">Ultimate Calculator</span>
-        <span className="calc-toggle-badge">6 Services</span>
+        <span className="calc-toggle-badge">27 Calcs</span>
         <span className={`calc-toggle-arrow ${isOpen ? 'open' : ''}`}>▼</span>
       </button>
 
@@ -359,36 +728,509 @@ export default function DonutCalculator({ onResultChange }) {
                 </div>
               </>
             )}
+            
+            {mode === 'ppf' && (
+              <>
+                <div className="calc-field">
+                  <label>Yearly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={ppfAmt * 12} onChange={(e) => setPpfAmt(Math.round(parseFloat(e.target.value.replace(/[^\d]/g, '')) / 12) || 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={ppfYrs} onChange={handleNumericInput(setPpfYrs, 15, 50)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'epf' && (
+              <>
+                <div className="calc-field">
+                  <label>Basic Salary</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={epfBasic} onChange={handleNumericInput(setEpfBasic, 10000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={epfYrs} onChange={handleNumericInput(setEpfYrs, 1, 35)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'nps' && (
+              <>
+                <div className="calc-field">
+                  <label>Monthly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={npsAmt} onChange={handleNumericInput(setNpsAmt, 500)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={npsYrs} onChange={handleNumericInput(setNpsYrs, 1, 40)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Return</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={npsRate} onChange={handleNumericInput(setNpsRate, 6, 14)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'elss' && (
+              <>
+                <div className="calc-field">
+                  <label>Monthly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={elssAmt} onChange={handleNumericInput(setElssAmt, 500)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={elssYrs} onChange={handleNumericInput(setElssYrs, 3, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Return</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={elssRate} onChange={handleNumericInput(setElssRate, 6, 20)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'emi' && (
+              <>
+                <div className="calc-field">
+                  <label>Loan Amt</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={emiPrincipal} onChange={handleNumericInput(setEmiPrincipal, 10000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Tenure</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={emiYrs} onChange={handleNumericInput(setEmiYrs, 1, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Rate</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={emiRate} onChange={handleNumericInput(setEmiRate, 5, 20)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'swp' && (
+              <>
+                <div className="calc-field">
+                  <label>Corpus</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={swpCorpus} onChange={handleNumericInput(setSwpCorpus, 100000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Withdraw/mo</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={swpMonthly} onChange={handleNumericInput(setSwpMonthly, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Return</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={swpRate} onChange={handleNumericInput(setSwpRate, 4, 15)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'stepup' && (
+              <>
+                <div className="calc-field">
+                  <label>Start SIP</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={stepAmt} onChange={handleNumericInput(setStepAmt, 500)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={stepYrs} onChange={handleNumericInput(setStepYrs, 1, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Step-up</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={stepUp} onChange={handleNumericInput(setStepUp, 0, 50)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'cagr' && (
+              <>
+                <div className="calc-field">
+                  <label>Initial</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={cagrInitial} onChange={handleNumericInput(setCagrInitial, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Final</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={cagrFinal} onChange={handleNumericInput(setCagrFinal, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={cagrYrs} onChange={handleNumericInput(setCagrYrs, 1, 50)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'inflation' && (
+              <>
+                <div className="calc-field">
+                  <label>Amount</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={infAmt} onChange={handleNumericInput(setInfAmt, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={infYrs} onChange={handleNumericInput(setInfYrs, 1, 50)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Inflation</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={infRate} onChange={handleNumericInput(setInfRate, 1, 15)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'gratuity' && (
+              <>
+                <div className="calc-field">
+                  <label>Basic Salary</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={gratBasic} onChange={handleNumericInput(setGratBasic, 5000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Service Yrs</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={gratYrs} onChange={handleNumericInput(setGratYrs, 5, 50)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'hra' && (
+              <>
+                <div className="calc-field">
+                  <label>HRA Rcvd</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={hraAmt} onChange={handleNumericInput(setHraAmt, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Basic</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={hraBasic} onChange={handleNumericInput(setHraBasic, 5000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Rent Paid</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={hraRent} onChange={handleNumericInput(setHraRent, 0)} />
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'tax' && (
+              <>
+                <div className="calc-field">
+                  <label>Annual Income</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={taxIncome} onChange={handleNumericInput(setTaxIncome, 100000)} />
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'rd' && (
+              <>
+                <div className="calc-field">
+                  <label>Monthly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={rdAmt} onChange={handleNumericInput(setRdAmt, 100)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Tenure</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={rdYrs} onChange={handleNumericInput(setRdYrs, 1, 10)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Rate</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={rdRate} onChange={handleNumericInput(setRdRate, 3, 10)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'ssy' && (
+              <>
+                <div className="calc-field">
+                  <label>Yearly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={ssyAmt * 12} onChange={(e) => setSsyAmt(Math.round(parseFloat(e.target.value.replace(/[^\d]/g, '')) / 12) || 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={ssyYrs} onChange={handleNumericInput(setSsyYrs, 15, 21)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'wealth' && (
+              <>
+                <div className="calc-field">
+                  <label>Initial</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={wealthInitial} onChange={handleNumericInput(setWealthInitial, 0)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Monthly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={wealthMonthly} onChange={handleNumericInput(setWealthMonthly, 500)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={wealthYrs} onChange={handleNumericInput(setWealthYrs, 1, 40)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'mf' && (
+              <>
+                <div className="calc-field">
+                  <label>Monthly</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={mfAmt} onChange={handleNumericInput(setMfAmt, 500)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={mfYrs} onChange={handleNumericInput(setMfYrs, 1, 40)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Expense</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="decimal" value={mfExpense} onChange={handleNumericInput(setMfExpense, 0.1, 3)} />
+                    <span className="calc-input-suffix">%</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'childPlan' && (
+              <>
+                <div className="calc-field">
+                  <label>Child Age</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={childAge} onChange={handleNumericInput(setChildAge, 0, 15)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Target Age</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={childTargetAge} onChange={handleNumericInput(setChildTargetAge, 16, 25)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Target Amt</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={childAmt} onChange={handleNumericInput(setChildAmt, 100000)} />
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'marriage' && (
+              <>
+                <div className="calc-field">
+                  <label>In Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={marriageYrs} onChange={handleNumericInput(setMarriageYrs, 1, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Target Amt</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={marriageAmt} onChange={handleNumericInput(setMarriageAmt, 100000)} />
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'car' && (
+              <>
+                <div className="calc-field">
+                  <label>Car Price</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={carPrice} onChange={handleNumericInput(setCarPrice, 100000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Down Pay</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={carDown} onChange={handleNumericInput(setCarDown, 0)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Tenure</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={carYrs} onChange={handleNumericInput(setCarYrs, 1, 7)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'home' && (
+              <>
+                <div className="calc-field">
+                  <label>Property</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={homePrice} onChange={handleNumericInput(setHomePrice, 1000000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Down Pay</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={homeDown} onChange={handleNumericInput(setHomeDown, 0)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Tenure</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={homeYrs} onChange={handleNumericInput(setHomeYrs, 5, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
+            
+            {mode === 'gold' && (
+              <>
+                <div className="calc-field">
+                  <label>Weight (g)</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={goldWeight} onChange={handleNumericInput(setGoldWeight, 1)} />
+                    <span className="calc-input-suffix">g</span>
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Price/g</label>
+                  <div className="calc-input-wrap">
+                    <span className="calc-input-prefix">₹</span>
+                    <input type="text" inputMode="numeric" value={goldPrice} onChange={handleNumericInput(setGoldPrice, 1000)} />
+                  </div>
+                </div>
+                <div className="calc-field">
+                  <label>Hold Years</label>
+                  <div className="calc-input-wrap">
+                    <input type="text" inputMode="numeric" value={goldYrs} onChange={handleNumericInput(setGoldYrs, 1, 30)} />
+                    <span className="calc-input-suffix">yrs</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Results - varies by mode */}
           <div className="calc-results">
-            {mode !== 'insurance' ? (
-              <>
-                <div className="calc-result">
-                  <span className="calc-result-label">
-                    {mode === 'goal' || mode === 'retire' ? 'SIP Needed' : 'Invested'}
-                  </span>
-                  <span className="calc-result-value">
-                    {mode === 'goal' || mode === 'retire' 
-                      ? fmt(result.monthlySIP) + '/mo' 
-                      : fmt(result.invested)}
-                  </span>
-                </div>
-                <div className="calc-result highlight">
-                  <span className="calc-result-label">
-                    {mode === 'fd' ? 'Maturity' : 'Future Value'}
-                  </span>
-                  <span className="calc-result-value">{fmt(result.futureValue)}</span>
-                </div>
-                <div className="calc-result">
-                  <span className="calc-result-label">
-                    {mode === 'fd' ? 'Interest' : 'Returns'}
-                  </span>
-                  <span className="calc-result-value gain">{fmt(result.returns)}</span>
-                </div>
-              </>
-            ) : (
+            {/* Insurance mode */}
+            {mode === 'insurance' && (
               <>
                 <div className="calc-result highlight">
                   <span className="calc-result-label">Cover Needed</span>
@@ -401,6 +1243,170 @@ export default function DonutCalculator({ onResultChange }) {
                 <div className="calc-result">
                   <span className="calc-result-label">Monthly</span>
                   <span className="calc-result-value">{fmt(result.monthlyPremium)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* EMI-based modes */}
+            {(mode === 'emi' || mode === 'car' || mode === 'home') && (
+              <>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">Monthly EMI</span>
+                  <span className="calc-result-value">{fmt(result.emi)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Total Paid</span>
+                  <span className="calc-result-value">{fmt(result.totalPaid)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Interest</span>
+                  <span className="calc-result-value loss">{fmt(result.interestPaid)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* SWP mode */}
+            {mode === 'swp' && (
+              <>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">Monthly</span>
+                  <span className="calc-result-value">{fmt(result.monthlyWithdrawal)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Corpus</span>
+                  <span className="calc-result-value">{fmt(result.corpus)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Lasts</span>
+                  <span className="calc-result-value gain">{result.yearsLast} yrs</span>
+                </div>
+              </>
+            )}
+            
+            {/* CAGR mode */}
+            {mode === 'cagr' && (
+              <>
+                <div className="calc-result">
+                  <span className="calc-result-label">Initial</span>
+                  <span className="calc-result-value">{fmt(result.initial)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Final</span>
+                  <span className="calc-result-value">{fmt(result.final)}</span>
+                </div>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">CAGR</span>
+                  <span className="calc-result-value gain">{result.cagr}%</span>
+                </div>
+              </>
+            )}
+            
+            {/* Inflation mode */}
+            {mode === 'inflation' && (
+              <>
+                <div className="calc-result">
+                  <span className="calc-result-label">Today</span>
+                  <span className="calc-result-value">{fmt(result.currentValue)}</span>
+                </div>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">Future Cost</span>
+                  <span className="calc-result-value loss">{fmt(result.futureValue)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Real Value</span>
+                  <span className="calc-result-value">{fmt(result.realValue)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* Gratuity mode */}
+            {mode === 'gratuity' && (
+              <>
+                <div className="calc-result">
+                  <span className="calc-result-label">Basic Salary</span>
+                  <span className="calc-result-value">{fmt(result.basicSalary)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Years</span>
+                  <span className="calc-result-value">{result.years} yrs</span>
+                </div>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">Gratuity</span>
+                  <span className="calc-result-value gain">{fmt(result.gratuity)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* HRA mode */}
+            {mode === 'hra' && (
+              <>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">HRA Exempt</span>
+                  <span className="calc-result-value gain">{fmt(result.hraExemption)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Taxable HRA</span>
+                  <span className="calc-result-value loss">{fmt(result.taxable)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* Tax mode */}
+            {mode === 'tax' && (
+              <>
+                <div className="calc-result">
+                  <span className="calc-result-label">Income</span>
+                  <span className="calc-result-value">{fmt(result.income)}</span>
+                </div>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">Tax</span>
+                  <span className="calc-result-value loss">{fmt(result.tax)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Effective Rate</span>
+                  <span className="calc-result-value">{result.effectiveRate}%</span>
+                </div>
+              </>
+            )}
+            
+            {/* Goal-based modes (need monthly SIP) */}
+            {(mode === 'goal' || mode === 'retire' || mode === 'childPlan' || mode === 'marriage') && (
+              <>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">SIP Needed</span>
+                  <span className="calc-result-value">{fmt(result.monthlySIP)}/mo</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Target</span>
+                  <span className="calc-result-value">{fmt(result.futureValue || result.inflatedTarget)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">Invested</span>
+                  <span className="calc-result-value">{fmt(result.invested)}</span>
+                </div>
+              </>
+            )}
+            
+            {/* Standard investment modes (invested, future value, returns) */}
+            {['sip', 'lumpsum', 'fd', 'ppf', 'epf', 'nps', 'elss', 'stepup', 'rd', 'ssy', 'wealth', 'mf', 'gold'].includes(mode) && (
+              <>
+                <div className="calc-result">
+                  <span className="calc-result-label">
+                    {mode === 'gold' ? 'Purchase Cost' : 'Invested'}
+                  </span>
+                  <span className="calc-result-value">{fmt(result.invested || result.purchaseCost)}</span>
+                </div>
+                <div className="calc-result highlight">
+                  <span className="calc-result-label">
+                    {mode === 'fd' || mode === 'rd' ? 'Maturity' : 'Future Value'}
+                  </span>
+                  <span className="calc-result-value">{fmt(result.futureValue)}</span>
+                </div>
+                <div className="calc-result">
+                  <span className="calc-result-label">
+                    {mode === 'fd' || mode === 'rd' ? 'Interest' : 'Returns'}
+                  </span>
+                  <span className="calc-result-value gain">{fmt(result.returns)}</span>
                 </div>
               </>
             )}
@@ -506,18 +1512,33 @@ export default function DonutCalculator({ onResultChange }) {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Scrollable tabs container */
+        /* Scrollable tabs container - Premium Scroll */
         .calc-tabs-scroll {
           overflow-x: auto;
           overflow-y: hidden;
           margin: 0 -16px;
-          padding: 0 16px;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
+          padding: 0 16px 8px 16px;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.35) rgba(0, 0, 0, 0);
+          -ms-overflow-style: auto;
         }
 
         .calc-tabs-scroll::-webkit-scrollbar {
-          display: none;
+          height: 6px;
+        }
+        
+        .calc-tabs-scroll::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+          border-radius: 3px;
+        }
+        
+        .calc-tabs-scroll::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.25);
+          border-radius: 3px;
+        }
+        
+        .calc-tabs-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.40);
         }
 
         .calc-tabs {

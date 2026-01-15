@@ -47,7 +47,16 @@ async function processWithGroq(item) {
         messages: [
           {
             role: 'system',
-            content: `You are a financial news classifier. Your ONLY job is to:
+            content: `You are a financial news classifier for a NON-SEBI registered platform.
+
+🔒 LEGAL COMPLIANCE (CRITICAL - NON-NEGOTIABLE):
+We are NOT SEBI registered. You MUST NEVER generate:
+- Buy/Sell/Hold recommendations
+- "Should invest", "consider buying"
+- Future predictions: "will go up", "expected to rise", "target price"
+- Any investment advice whatsoever
+
+Your ONLY job is to:
 1. Classify the category (market_update, policy_change, economic_indicator, corporate_action, global_market, commodity, currency, regulatory)
 2. Assess urgency (critical, high, medium, low)
 3. Extract relevant tags
@@ -109,13 +118,28 @@ async function processWithGemini(item, groqResult) {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a financial educator. Generate EXACTLY these 4 blocks for the following news item.
+              text: `You are a financial educator for BM Wealth, a NON-SEBI registered platform in India.
+
+🔒 CRITICAL LEGAL COMPLIANCE (VIOLATION = LEGAL TROUBLE):
+We are NOT a SEBI registered investment advisor. You MUST NEVER generate:
+❌ "Buy", "Sell", "Hold", "Invest", "Avoid"
+❌ "Should", "recommend", "suggest", "consider"
+❌ "Will go up", "expected to rise", "likely to fall"
+❌ "Target price", "forecast", "prediction"
+❌ ANY future tense about market movements or returns
+❌ ANY investment advice or recommendations
+
+✅ ALLOWED (EDUCATIONAL ONLY):
+✅ Past tense: "happened", "occurred", "moved", "changed"
+✅ Present tense facts: "is trading at", "stands at"
+✅ Educational explanations of concepts and mechanisms
+✅ Historical context and factual data
+✅ Persona identification (who may find this relevant)
 
 RULES:
-- NO advice, NO recommendations, NO "should" statements
-- NO future tense (no "will", "could", "might", "may")
 - FACTUAL and EDUCATIONAL only
 - Each block must be 1-3 sentences
+- If unsure, be MORE conservative
 
 NEWS: ${item.block_what_happened}
 SOURCE: ${item.source_name}
@@ -187,13 +211,28 @@ async function sanitizeWithClaude(item) {
         max_tokens: 500,
         messages: [{
           role: 'user',
-          content: `Sanitize this financial content for compliance. Remove any:
-- Investment advice or recommendations
-- Future tense predictions
-- "Buy", "sell", "invest" language
-- Emotional or sensational language
+          content: `🔒 CRITICAL: Sanitize this financial content for SEBI compliance.
 
-ONLY rewrite if needed. If already compliant, return unchanged.
+BM Wealth is NOT a SEBI registered investment advisor. Any non-compliant content could cause LEGAL TROUBLE.
+
+❌ MUST REMOVE/REWRITE (AUTO-REJECT TRIGGERS):
+- "Buy", "Sell", "Hold", "Invest", "Avoid" (any form)
+- "Should", "recommend", "suggest", "consider investing"
+- "Will go up", "expected to rise", "likely to fall", "target price"
+- "Forecast", "prediction", "outlook is positive/negative"
+- ANY future tense about returns or market direction
+- ANY investment advice or recommendations
+
+✅ ALLOWED (KEEP UNCHANGED):
+- Past tense facts: "rose", "fell", "announced", "changed"
+- Present tense facts: "is trading at", "currently stands at"
+- Educational explanations of mechanisms and concepts
+- Historical data and context
+
+INSTRUCTIONS:
+1. If content is compliant → return unchanged, is_compliant: true
+2. If content can be rewritten to be compliant → rewrite it, changes_made: true
+3. If content CANNOT be made compliant (pure advice) → set should_drop: true
 
 Content to check:
 What happened: ${item.block_what_happened}
@@ -201,10 +240,11 @@ Why it matters: ${item.block_why_it_matters}
 
 Return JSON:
 {
-  "what_happened": "sanitized text",
-  "why_it_matters": "sanitized text",
+  "what_happened": "sanitized or original text",
+  "why_it_matters": "sanitized or original text",
   "is_compliant": true/false,
-  "changes_made": true/false
+  "changes_made": true/false,
+  "should_drop": true/false (set true ONLY if content cannot be made compliant)
 }`
         }],
       }),

@@ -93,6 +93,7 @@ export default function StreakBadge({ showDetails = false }) {
           display: inline-flex;
           flex-direction: column;
           align-items: flex-end;
+          min-width: max-content;
         }
 
         .li-streak-main {
@@ -105,6 +106,8 @@ export default function StreakBadge({ showDetails = false }) {
           border-radius: 100px;
           cursor: pointer;
           transition: all 0.3s ease;
+          white-space: nowrap;
+          min-width: max-content;
         }
 
         .li-streak-main:hover {
@@ -117,6 +120,7 @@ export default function StreakBadge({ showDetails = false }) {
 
         .li-streak-fire {
           font-size: 14px;
+          flex-shrink: 0;
         }
 
         .li-streak-count {
@@ -124,6 +128,7 @@ export default function StreakBadge({ showDetails = false }) {
           font-weight: 700;
           color: rgba(140, 190, 255, 0.95);
           font-variant-numeric: tabular-nums;
+          flex-shrink: 0;
         }
 
         .li-streak-label {
@@ -131,6 +136,7 @@ export default function StreakBadge({ showDetails = false }) {
           color: rgba(180, 200, 230, 0.7);
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          flex-shrink: 0;
         }
 
         .li-streak-milestone {
