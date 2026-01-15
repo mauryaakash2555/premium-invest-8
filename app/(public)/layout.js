@@ -63,7 +63,7 @@ const structuredData = {
 };
 
 // SEO Configuration for Canonical URLs and Verification
-export const seoConfig = {
+const seoConfig = {
     canonical: "https://bmwealth.co.in",
     language: "en-IN",
     googleSiteVerification: "add-your-google-verification-code",
@@ -79,7 +79,7 @@ export const seoConfig = {
 };
 
 // Accessibility and Social Media Configuration
-export const accessibilityConfig = {
+const accessibilityConfig = {
     lang: "en",
     direction: "ltr",
     // ARIA and Accessibility
