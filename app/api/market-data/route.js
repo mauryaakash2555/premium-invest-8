@@ -687,6 +687,12 @@ async function fetchMarketDataFromAPIs() {
   const items = [];
   const fallback = getFallbackData();
   const fallbackMap = new Map(fallback.map(item => [item.id, item]));
+
+  const fallbackItem = (id) => {
+    const f = fallbackMap.get(id);
+    if (!f) return null;
+    return { ...f, source: "fallback", live: false };
+  };
   
   try {
     // PARALLEL FETCH ALL SOURCES
@@ -720,12 +726,26 @@ async function fetchMarketDataFromAPIs() {
     // NIFTY 50 - 3 sources
     const niftyGoogle = google.find(x => x.id === "NIFTY50");
     const nifty = niftyGoogle || nse || mc.nifty || fallbackMap.get("NIFTY50");
-    if (nifty) items.push({ ...nifty, live: !!(niftyGoogle || nse || mc.nifty) });
+    if (nifty) {
+      const isLive = !!(niftyGoogle || nse || mc.nifty);
+      items.push({
+        ...nifty,
+        source: nifty.source || (isLive ? undefined : "fallback"),
+        live: isLive,
+      });
+    }
     
     // SENSEX - 3 sources
     const sensexGoogle = google.find(x => x.id === "SENSEX");
     const sensex = sensexGoogle || bse || mc.sensex || fallbackMap.get("SENSEX");
-    if (sensex) items.push({ ...sensex, live: !!(sensexGoogle || bse || mc.sensex) });
+    if (sensex) {
+      const isLive = !!(sensexGoogle || bse || mc.sensex);
+      items.push({
+        ...sensex,
+        source: sensex.source || (isLive ? undefined : "fallback"),
+        live: isLive,
+      });
+    }
     
     // USD/INR - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
     const usdVal = gUsd?.value || av.usdInr?.value || exr?.value || fallbackMap.get("USDINR").value;
@@ -748,7 +768,8 @@ async function fetchMarketDataFromAPIs() {
         currency: "USD", source: btc.source, live: true,
       });
     } else {
-      items.push(fallbackMap.get("BTC"));
+      const f = fallbackItem("BTC");
+      if (f) items.push(f);
     }
     
     // GOLD - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
@@ -761,7 +782,8 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: gold.source, live: true,
       });
     } else {
-      items.push(fallbackMap.get("GOLD"));
+      const f = fallbackItem("GOLD");
+      if (f) items.push(f);
     }
     
     // SILVER - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
@@ -779,7 +801,8 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: silver.source, live: true,
       });
     } else {
-      items.push(fallbackMap.get("SILVER"));
+      const f = fallbackItem("SILVER");
+      if (f) items.push(f);
     }
     
     // CRUDE OIL - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
@@ -792,7 +815,8 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: crude.source, live: true,
       });
     } else {
-      items.push(fallbackMap.get("CRUDEOIL"));
+      const f = fallbackItem("CRUDEOIL");
+      if (f) items.push(f);
     }
     
     // Save current prices for future % calculation
@@ -830,7 +854,7 @@ export async function GET() {
       return res;
     }
     
-    const fallbackItems = getFallbackData();
+    const fallbackItems = getFallbackData().map((item) => ({ ...item, source: "fallback", live: false }));
     const payload = { ok: true, asOf: new Date().toISOString(), items: fallbackItems, source: "fallback" };
     setCache(payload);
     const res = NextResponse.json(payload);
@@ -840,7 +864,7 @@ export async function GET() {
     
   } catch (e) {
     Logger.error("api_error", { error: String(e?.message || e) });
-    const fallbackItems = getFallbackData();
+    const fallbackItems = getFallbackData().map((item) => ({ ...item, source: "fallback", live: false }));
     const res = NextResponse.json({ ok: true, asOf: new Date().toISOString(), items: fallbackItems, source: "error_fallback" });
     res.headers.set("Cache-Control", "no-store, max-age=0");
     res.headers.set("Access-Control-Allow-Origin", "*");
