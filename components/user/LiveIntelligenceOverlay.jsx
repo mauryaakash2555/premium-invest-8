@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo, cloneElement, isValidElement } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 
 import HeadlineFeed from '@/components/live-intelligence/HeadlineFeed';
 import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
@@ -458,8 +459,9 @@ export default function LiveIntelligenceOverlay({
 
 /**
  * Panel component with dashboard content and EPIC DONUT
+ * Exported for use in both overlay and /live-intelligence page
  */
-function LiveIntelligencePanel({ onClose }) {
+export function LiveIntelligencePanel({ onClose, isPageMode = false }) {
   const [portfolioValue] = useState(28.3);
   const [totalInvested] = useState(24.8);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -1397,35 +1399,75 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
           </div>
 
-          {/* Action buttons - Back arrow, Share, Add Goal */}
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            {/* Back arrow */}
-            <button
-              onClick={onClose}
-              aria-label="Close Live Intelligence"
-              style={{
-                appearance: 'none',
-                border: 'none',
-                background: 'transparent',
-                color: 'rgba(180, 200, 230, 0.55)',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '22px',
-                fontWeight: 300,
-                transition: 'all 0.2s ease',
-                lineHeight: 1,
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
-                e.currentTarget.style.transform = 'translateX(-4px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.color = 'rgba(180, 200, 230, 0.55)';
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
-            >
-              ←
-            </button>
+          {/* Action buttons - Back arrow, Open Full, Share, Add Goal */}
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            {/* Back arrow - only shown in overlay mode */}
+            {!isPageMode && onClose && (
+              <button
+                onClick={onClose}
+                aria-label="Close Live Intelligence"
+                style={{
+                  appearance: 'none',
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'rgba(180, 200, 230, 0.55)',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  fontSize: '22px',
+                  fontWeight: 300,
+                  transition: 'all 0.2s ease',
+                  lineHeight: 1,
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
+                  e.currentTarget.style.transform = 'translateX(-4px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = 'rgba(180, 200, 230, 0.55)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
+              >
+                ←
+              </button>
+            )}
+            
+            {/* Open Full Intelligence CTA - only in overlay mode */}
+            {!isPageMode && (
+              <Link
+                href="/live-intelligence"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '10px 18px',
+                  background: 'linear-gradient(135deg, rgba(100, 160, 255, 0.20) 0%, rgba(140, 100, 255, 0.15) 100%)',
+                  border: '1px solid rgba(140, 190, 255, 0.35)',
+                  borderRadius: '10px',
+                  color: 'rgba(200, 230, 255, 0.95)',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  textDecoration: 'none',
+                  boxShadow: '0 0 20px rgba(140, 190, 255, 0.15)',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(140, 190, 255, 0.55)';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 160, 255, 0.30) 0%, rgba(140, 100, 255, 0.25) 100%)';
+                  e.currentTarget.style.boxShadow = '0 0 30px rgba(140, 190, 255, 0.25)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(140, 190, 255, 0.35)';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 160, 255, 0.20) 0%, rgba(140, 100, 255, 0.15) 100%)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(140, 190, 255, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <span>Open Full Intelligence</span>
+                <span style={{ fontSize: '14px' }}>→</span>
+              </Link>
+            )}
             {/* Share Button with Dropdown */}
             <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button

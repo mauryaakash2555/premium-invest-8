@@ -77,7 +77,7 @@ const Navigation = () => {
     { path: '/about-us', label: 'About Us' },
     { path: '/services', label: 'Services' },
     { path: '/tools', label: 'Tools' },
-    { path: '/tools/tax-optimization', label: 'Tax Intelligence' },
+    { path: '/live-intelligence', label: 'Live Intelligence' },
     { path: '/client-portal', label: 'Client Portal' },
     { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
