@@ -1,0 +1,302 @@
+/**
+ * Live Intelligence Public Feed API
+ * 
+ * Returns filtered, sorted headlines for the frontend display
+ * - Filters out expired headlines (valid_until check)
+ * - Enforces category balance (max 2 consecutive from same category)
+ * - Sorts by priority score
+ * 
+ * @file app/api/live-intelligence/feed/route.js
+ */
+
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+function getSupabase() {
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+  return createClient(supabaseUrl, supabaseKey);
+}
+
+export const dynamic = 'force-dynamic';
+
+// Urgency level weights for priority calculation
+const URGENCY_WEIGHTS = {
+  BREAKING: 100,
+  MARKET_MOVE: 80,
+  REGULATORY: 70,
+  OPPORTUNITY: 60,
+  HIGH: 50,
+  MEDIUM: 40,
+  REGULAR: 30,
+  LOW: 20,
+  ROUTINE: 10,
+};
+
+// Category priority weights
+const CATEGORY_WEIGHTS = {
+  market_update: 10,
+  market_move: 10,
+  regulatory: 8,
+  opportunity: 7,
+  rbi: 6,
+  sebi: 6,
+  portfolio_tip: 5,
+  tax_insight: 4,
+  global: 3,
+};
+
+/**
+ * Calculate priority score for a headline
+ * Priority = (Urgency × 3) + (Recency × 2) + (Category_Weight × 1)
+ */
+function calculatePriority(headline) {
+  const now = Date.now();
+  
+  // Urgency component
+  const urgency = URGENCY_WEIGHTS[headline.urgency?.toUpperCase()] || 30;
+  
+  // Recency component (higher = more recent, max 60 for items < 1 hour old)
+  const timestamp = new Date(headline.created_at || headline.timestamp);
+  const ageMinutes = (now - timestamp.getTime()) / 60000;
+  const recency = Math.max(0, 60 - ageMinutes);
+  
+  // Category weight component
+  const categoryWeight = CATEGORY_WEIGHTS[headline.category] || 5;
+  
+  return (urgency * 3) + (recency * 2) + categoryWeight;
+}
+
+/**
+ * Filter out expired headlines
+ * A headline is expired if valid_until is set and in the past
+ */
+function filterExpired(headlines) {
+  const now = new Date();
+  return headlines.filter(h => {
+    if (!h.valid_until) return true; // No expiry = always valid
+    const expiryDate = new Date(h.valid_until);
+    return expiryDate > now;
+  });
+}
+
+/**
+ * Enforce category balance in rotation
+ * Max 2 consecutive headlines from the same category
+ */
+function enforceCategoryBalance(headlines) {
+  if (headlines.length <= 2) return headlines;
+  
+  const result = [];
+  const remaining = [...headlines];
+  
+  while (remaining.length > 0) {
+    // Get the last two categories in result
+    const lastCats = result.slice(-2).map(h => h.category);
+    
+    // Find the first headline that doesn't continue the streak
+    let foundIndex = -1;
+    
+    if (lastCats.length >= 2 && lastCats[0] === lastCats[1]) {
+      // We have 2 consecutive same-category items, force a different one
+      foundIndex = remaining.findIndex(h => h.category !== lastCats[0]);
+    }
+    
+    if (foundIndex === -1) {
+      // No streak issue or no different category available, take the first one
+      foundIndex = 0;
+    }
+    
+    // Move the item from remaining to result
+    result.push(remaining.splice(foundIndex, 1)[0]);
+  }
+  
+  return result;
+}
+
+/**
+ * GET - Fetch headlines for frontend display
+ */
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category') || 'all';
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50);
+    
+    const supabase = getSupabase();
+    
+    // If no database, return fallback data
+    if (!supabase) {
+      const fallbackHeadlines = getFallbackHeadlines(category);
+      return NextResponse.json({
+        ok: true,
+        headlines: fallbackHeadlines,
+        source: 'fallback',
+        count: fallbackHeadlines.length,
+      });
+    }
+    
+    // Fetch from intelligence_items (auto-generated from RSS)
+    let autoQuery = supabase
+      .from('intelligence_items')
+      .select('*')
+      .eq('status', 'processed')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    
+    // Fetch from live_intelligence_headlines (admin-created)
+    let adminQuery = supabase
+      .from('live_intelligence_headlines')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    
+    // Apply category filter if specified
+    if (category && category !== 'all') {
+      autoQuery = autoQuery.eq('category', category);
+      adminQuery = adminQuery.eq('category', category);
+    }
+    
+    const [autoResult, adminResult] = await Promise.all([
+      autoQuery,
+      adminQuery,
+    ]);
+    
+    // Combine headlines
+    const combined = [
+      ...(autoResult.data || []).map(item => ({
+        id: item.id,
+        category: item.category || 'market_update',
+        icon: getCategoryIcon(item.category),
+        headline: item.block_what_happened,
+        whyItMatters: item.block_why_it_matters,
+        dataPoint: item.block_where_fits,
+        urgency: item.urgency || 'REGULAR',
+        timestamp: item.created_at,
+        created_at: item.created_at,
+        source: item.source_name,
+        valid_until: item.valid_until,
+        type: 'auto',
+      })),
+      ...(adminResult.data || []).map(item => ({
+        id: item.id,
+        category: item.category || 'market_update',
+        icon: getCategoryIcon(item.category),
+        headline: item.headline,
+        whyItMatters: item.why_it_matters,
+        dataPoint: item.data_point,
+        urgency: item.urgency || 'REGULAR',
+        timestamp: item.created_at,
+        created_at: item.created_at,
+        source: item.source,
+        valid_until: item.valid_until,
+        type: 'admin',
+      })),
+    ];
+    
+    // Step 1: Filter expired headlines
+    const notExpired = filterExpired(combined);
+    
+    // Step 2: Sort by priority
+    const sorted = notExpired.sort((a, b) => {
+      return calculatePriority(b) - calculatePriority(a);
+    });
+    
+    // Step 3: Enforce category balance
+    const balanced = enforceCategoryBalance(sorted);
+    
+    // Step 4: Apply limit
+    const final = balanced.slice(0, limit);
+    
+    return NextResponse.json({
+      ok: true,
+      headlines: final,
+      source: 'database',
+      count: final.length,
+      stats: {
+        total_fetched: combined.length,
+        expired_filtered: combined.length - notExpired.length,
+        reordered_for_balance: true,
+      },
+    });
+  } catch (error) {
+    console.error('Live Intelligence feed error:', error);
+    
+    // Return fallback on error
+    const fallback = getFallbackHeadlines('all');
+    return NextResponse.json({
+      ok: true,
+      headlines: fallback,
+      source: 'fallback',
+      count: fallback.length,
+      error: error.message,
+    });
+  }
+}
+
+/**
+ * Get category icon
+ */
+function getCategoryIcon(category) {
+  const icons = {
+    market_update: '📊',
+    market_move: '📈',
+    regulatory: '⚖️',
+    opportunity: '💎',
+    rbi: '🏦',
+    sebi: '📋',
+    portfolio_tip: '💡',
+    tax_insight: '💰',
+    global: '🌐',
+  };
+  return icons[category] || '📰';
+}
+
+/**
+ * Fallback headlines when database is unavailable
+ */
+function getFallbackHeadlines(category) {
+  const headlines = [
+    {
+      id: 'fallback-1',
+      category: 'market_update',
+      icon: '📊',
+      headline: 'Markets are live — tracking real-time movements',
+      whyItMatters: 'Stay updated with live market data during trading hours',
+      urgency: 'REGULAR',
+      timestamp: new Date().toISOString(),
+      dataPoint: 'Live data',
+      source: 'BMWealth',
+    },
+    {
+      id: 'fallback-2',
+      category: 'portfolio_tip',
+      icon: '💡',
+      headline: 'Pro tip: Review your portfolio quarterly',
+      whyItMatters: 'Regular reviews help maintain optimal asset allocation',
+      urgency: 'REGULAR',
+      timestamp: new Date().toISOString(),
+      dataPoint: 'Best practice',
+      source: 'BMWealth',
+    },
+    {
+      id: 'fallback-3',
+      category: 'tax_insight',
+      icon: '💰',
+      headline: 'Tax planning works best when started early',
+      whyItMatters: 'Early planning maximizes deductions and minimizes tax liability',
+      urgency: 'REGULAR',
+      timestamp: new Date().toISOString(),
+      dataPoint: 'Tax tip',
+      source: 'BMWealth',
+    },
+  ];
+  
+  if (category === 'all') return headlines;
+  return headlines.filter(h => h.category === category);
+}

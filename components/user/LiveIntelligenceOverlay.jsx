@@ -1588,14 +1588,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            left: '14px',
+            left: '20px',
+            top: '20px',
             zIndex: 10002,
             width: '28px',
             height: '28px',
             borderRadius: '6px',
             border: 'none',
             background: 'transparent',
-            color: 'rgba(140, 190, 255, 0.60)',
+            color: 'rgba(255, 255, 255, 0.50)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -1605,12 +1606,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             transition: 'all 0.15s ease',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+            e.currentTarget.style.color = 'rgba(255, 255, 255, 1.0)';
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.60)';
+            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.50)';
           }}
         >
           ←

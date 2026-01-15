@@ -75,7 +75,7 @@ export default function HeadlineCard({ headline, isActive = false }) {
   return (
     <>
       <div 
-        className={`li-headline-card ${isActive ? 'active' : ''}`}
+        className={`li-headline-card ${isActive ? 'active' : ''} ${urgency?.key === 'BREAKING' ? 'breaking-news' : ''}`}
         onClick={() => setShowModal(true)}
         role="button"
         tabIndex={0}
@@ -144,6 +144,38 @@ export default function HeadlineCard({ headline, isActive = false }) {
           transform: translateY(-2px);
         }
 
+        /* 🔴 BREAKING NEWS - Red pulse glow effect */
+        .li-headline-card.breaking-news {
+          border-color: rgba(255, 80, 80, 0.5);
+          animation: breakingNewsGlow 1.5s ease-in-out infinite;
+        }
+
+        .li-headline-card.breaking-news:hover,
+        .li-headline-card.breaking-news.active {
+          border-color: rgba(255, 80, 80, 0.7);
+          box-shadow:
+            0 4px 24px rgba(0, 0, 0, 0.4),
+            0 0 40px rgba(255, 80, 80, 0.5),
+            0 0 80px rgba(255, 80, 80, 0.3),
+            inset 0 0 20px rgba(255, 80, 80, 0.05);
+        }
+
+        @keyframes breakingNewsGlow {
+          0%, 100% {
+            box-shadow:
+              0 4px 20px rgba(0, 0, 0, 0.3),
+              0 0 30px rgba(255, 80, 80, 0.3),
+              0 0 60px rgba(255, 80, 80, 0.15);
+          }
+          50% {
+            box-shadow:
+              0 4px 24px rgba(0, 0, 0, 0.4),
+              0 0 50px rgba(255, 80, 80, 0.5),
+              0 0 100px rgba(255, 80, 80, 0.25),
+              inset 0 0 30px rgba(255, 80, 80, 0.08);
+          }
+        }
+
         .li-headline-header {
           display: flex;
           align-items: center;
@@ -184,8 +216,25 @@ export default function HeadlineCard({ headline, isActive = false }) {
           color: var(--urgency-color);
         }
 
+        /* 🔴 Breaking urgency badge - enhanced red pulse */
         .li-headline-urgency.breaking {
-          animation: urgencyPulse 1.5s ease-in-out infinite;
+          background: rgba(255, 80, 80, 0.25);
+          color: rgba(255, 100, 100, 1);
+          animation: breakingBadgePulse 1s ease-in-out infinite;
+          box-shadow: 0 0 8px rgba(255, 80, 80, 0.4);
+        }
+
+        @keyframes breakingBadgePulse {
+          0%, 100% { 
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 8px rgba(255, 80, 80, 0.4);
+          }
+          50% { 
+            opacity: 0.9;
+            transform: scale(1.05);
+            box-shadow: 0 0 16px rgba(255, 80, 80, 0.6);
+          }
         }
 
         @keyframes urgencyPulse {

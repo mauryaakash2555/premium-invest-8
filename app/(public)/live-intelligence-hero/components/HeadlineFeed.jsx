@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HeadlineCard from './HeadlineCard';
 import { 
-  getHeadlinesByCategory, 
+  getHeadlinesByCategory,
+  fetchHeadlinesFromAPI,
   sortByPriority, 
   getRotationSpeed,
   DUMMY_HEADLINES 
@@ -16,8 +17,9 @@ import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
  * 
  * Features:
  * - Auto-rotation based on urgency level
- * - Category filtering
+ * - Category filtering with expiry enforcement
  * - Priority-based sorting
+ * - Category balance (max 2 consecutive from same category)
  * - Mode-based rotation speed override
  */
 export default function HeadlineFeed() {
@@ -26,13 +28,45 @@ export default function HeadlineFeed() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [mode, setMode] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Load and filter headlines
+  // Load headlines from API (with fallback to dummy data)
   useEffect(() => {
-    const filtered = getHeadlinesByCategory(selectedCategory);
-    const sorted = sortByPriority(filtered);
-    setHeadlines(sorted);
-    setActiveIndex(0);
+    let cancelled = false;
+    
+    async function loadHeadlines() {
+      setIsLoading(true);
+      try {
+        // Try to fetch from API (includes expiry + category balance)
+        const data = await fetchHeadlinesFromAPI(selectedCategory);
+        if (!cancelled) {
+          // Sort by priority if API returned unsorted data
+          const sorted = sortByPriority(data.length > 0 ? data : getHeadlinesByCategory(selectedCategory));
+          setHeadlines(sorted);
+          setActiveIndex(0);
+        }
+      } catch (error) {
+        // Fallback to local dummy data
+        if (!cancelled) {
+          const filtered = getHeadlinesByCategory(selectedCategory);
+          const sorted = sortByPriority(filtered);
+          setHeadlines(sorted);
+          setActiveIndex(0);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+    
+    loadHeadlines();
+    
+    // Refresh every 5 minutes to get new headlines
+    const refreshInterval = setInterval(loadHeadlines, 5 * 60 * 1000);
+    
+    return () => {
+      cancelled = true;
+      clearInterval(refreshInterval);
+    };
   }, [selectedCategory]);
 
   // Get current mode for rotation speed
@@ -79,6 +113,25 @@ export default function HeadlineFeed() {
     // Resume after 15 seconds of inactivity
     setTimeout(() => setIsPaused(false), 15000);
   }, []);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="li-headline-feed">
+        <CategoryFilter 
+          selectedCategory={selectedCategory} 
+          onCategoryChange={handleCategoryChange} 
+        />
+        <div style={{ 
+          padding: '40px 20px', 
+          textAlign: 'center', 
+          color: 'rgba(200, 215, 240, 0.5)' 
+        }}>
+          Loading intelligence...
+        </div>
+      </div>
+    );
+  }
 
   if (headlines.length === 0) {
     return (

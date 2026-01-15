@@ -8,6 +8,7 @@ import { AffiliateTracking } from '@/components/admin/AffiliateTracking';
 import { EmailPreferences } from '@/components/admin/EmailPreferences';
 import { DailyKpisPanel } from '@/components/admin/DailyKpisPanel';
 import { DeliverablesView } from '@/components/admin/DeliverablesView';
+import { LiveIntelligenceAdmin } from '@/components/admin/LiveIntelligenceAdmin';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -253,6 +254,7 @@ export function SuperAdminDashboard({ onLogout }) {
         <button className={tab === 'overview' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('overview')}>Overview</button>
         <button className={tab === 'leads' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('leads')}>Leads</button>
         <button className={tab === 'deliverables' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('deliverables')}>Deliverables</button>
+        <button className={tab === 'live-intel' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('live-intel')}>Live Intelligence</button>
         <button className={tab === 'analytics' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('analytics'); if (!analytics) void loadAnalytics(); }}>Analytics</button>
         <button className={tab === 'system' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('system')}>System</button>
       </nav>
@@ -378,6 +380,7 @@ export function SuperAdminDashboard({ onLogout }) {
 
         {tab === 'leads' ? <LeadsList summary={summary} /> : null}
         {tab === 'deliverables' ? <DeliverablesView /> : null}
+        {tab === 'live-intel' ? <LiveIntelligenceAdmin /> : null}
         {tab === 'analytics' ? <AnalyticsView analytics={analytics} /> : null}
 
         {tab === 'system' ? (
