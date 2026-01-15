@@ -17,8 +17,6 @@
 /.next/
 /out/
 
-# git worktrees (local)
-/.worktrees/
 
 # production
 /build
@@ -61,4 +59,8 @@ backup/locked_*/
 # Large binary tools
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
+
+
+# git worktrees (local)
+/.worktrees/
 
