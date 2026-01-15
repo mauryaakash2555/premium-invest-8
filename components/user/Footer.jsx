@@ -163,7 +163,6 @@ const navigationLinks = {
       { label: "Contact", href: "/contact" },
     ],
     resources: [
-      { label: "Live Intelligence", href: "/live-intelligence" },
       { label: "Tools", href: "/tools" },
       { label: "Investment Platforms", href: "/platforms" },
       { label: "Curated Partners", href: "/curated-partners" },
