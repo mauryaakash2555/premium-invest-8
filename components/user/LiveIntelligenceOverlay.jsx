@@ -2072,10 +2072,11 @@ function LiveIntelligencePanel({ onClose }) {
                   aria-label="PDF viewer"
                   style={{
                     position: 'fixed',
-                    top: '0',
-                    left: '0',
-                    width: '100vw',
-                    height: '100vh',
+                    inset: 0,
+                    width: '100%',
+                    // Use dynamic viewport units when available (mobile address bar safe)
+                    height: '100dvh',
+                    minHeight: '100vh',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -2083,7 +2084,7 @@ function LiveIntelligencePanel({ onClose }) {
                     backgroundColor: 'rgba(0, 0, 0, 0.95)',
                     backdropFilter: 'blur(8px)',
                     zIndex: 99999,
-                    padding: '16px',
+                    padding: 'max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))',
                   }}
                   onClick={() => {
                     setShowPdfModal(false);
@@ -2093,9 +2094,10 @@ function LiveIntelligencePanel({ onClose }) {
                   <div
                     style={{
                       position: 'relative',
-                      width: '90vw',
+                      width: 'min(90vw, 1400px)',
                       maxWidth: '1400px',
-                      height: '90vh',
+                      height: 'min(90vh, calc(100dvh - 32px))',
+                      maxHeight: 'calc(100dvh - 32px)',
                       backgroundColor: '#0a0a12',
                       borderRadius: '16px',
                       overflow: 'hidden',
