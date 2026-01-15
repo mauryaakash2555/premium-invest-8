@@ -544,31 +544,45 @@ function LiveIntelligencePanel({ onClose }) {
     };
   }, [showShareMenu]);
 
+  // Store scroll position in ref to persist across re-renders
+  const savedScrollRef = useRef({ overlay: 0, window: 0 });
+
+  // Handle PDF modal open/close with proper scroll position preservation
+  const handlePdfOpen = useCallback((url) => {
+    // Save scroll positions BEFORE opening modal
+    savedScrollRef.current.overlay = overlayRef.current?.scrollTop || 0;
+    savedScrollRef.current.window = window.scrollY || 0;
+    setPdfUrl(url);
+    setShowPdfModal(true);
+  }, []);
+
+  const handlePdfClose = useCallback(() => {
+    setShowPdfModal(false);
+    setPdfUrl(null);
+    // Restore scroll positions AFTER closing modal
+    requestAnimationFrame(() => {
+      if (overlayRef.current) {
+        overlayRef.current.scrollTop = savedScrollRef.current.overlay;
+      }
+      window.scrollTo(0, savedScrollRef.current.window);
+    });
+  }, []);
+
   useEffect(() => {
     if (!showPdfModal) return;
     
-    // Save current scroll position of both overlay and window
-    const overlayEl = overlayRef.current;
-    const savedOverlayScrollTop = overlayEl?.scrollTop || 0;
-    const savedWindowScrollY = window.scrollY || 0;
-    
+    // Lock body scroll while PDF is open
     const prevOverflow = document?.body?.style?.overflow;
     if (document?.body?.style) document.body.style.overflow = 'hidden';
     
-    // Prevent overlay from scrolling while PDF is open
-    if (overlayEl) {
-      overlayEl.style.overflow = 'hidden';
+    // Lock overlay scroll while PDF is open
+    if (overlayRef.current) {
+      overlayRef.current.style.overflow = 'hidden';
     }
     
-    // Immediately restore scroll positions (prevent flash to top)
-    requestAnimationFrame(() => {
-      if (overlayEl) overlayEl.scrollTop = savedOverlayScrollTop;
-      window.scrollTo(0, savedWindowScrollY);
-    });
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
-        setShowPdfModal(false);
-        setPdfUrl(null);
+        handlePdfClose();
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -577,17 +591,12 @@ function LiveIntelligencePanel({ onClose }) {
       window.removeEventListener('keydown', onKeyDown);
       if (document?.body?.style) document.body.style.overflow = prevOverflow || '';
       
-      // Restore overlay scroll position and overflow
-      if (overlayEl) {
-        overlayEl.style.overflow = '';
-        // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
-          overlayEl.scrollTop = savedOverlayScrollTop;
-          window.scrollTo(0, savedWindowScrollY);
-        });
+      // Restore overlay overflow
+      if (overlayRef.current) {
+        overlayRef.current.style.overflow = '';
       }
     };
-  }, [showPdfModal]);
+  }, [showPdfModal, handlePdfClose]);
 
   const kpi = useMemo(() => {
     const currentValue = portfolioValue;
@@ -1293,9 +1302,10 @@ function LiveIntelligencePanel({ onClose }) {
           .li-donut-container { width: 150px; height: 150px; }
           .li-kpi-card { padding: 14px; }
           .li-kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-          .li-panel-shell { padding: 12px 12px 60px !important; }
+          .li-panel-shell { padding: 12px 12px 60px !important; padding-top: 44px !important; }
           .li-dash-card { padding: 16px !important; }
           .li-asset-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+          .li-sticky-back-btn { top: 8px !important; right: 8px !important; }
 
           /* Mobile-only: header subtitle aligns left (desktop stays centered) */
           .li-header-block {
@@ -1410,42 +1420,42 @@ function LiveIntelligencePanel({ onClose }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Back Button - Minimal Apple-style */}
-        <button
-          onClick={onClose}
-          aria-label="Back to home"
+        {/* Sticky Arrow Link - Minimal, points to /live-intelligence */}
+        <a
+          href="/live-intelligence"
+          aria-label="Open full Live Intelligence page"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
             top: '14px',
             right: '14px',
             zIndex: 9999,
-            width: '28px',
-            height: '28px',
-            borderRadius: '8px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
             border: 'none',
-            background: 'rgba(255, 255, 255, 0.08)',
-            backdropFilter: 'blur(12px)',
-            color: 'rgba(200, 215, 240, 0.65)',
+            background: 'transparent',
+            color: 'rgba(140, 190, 255, 0.50)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '14px',
-            fontWeight: 400,
+            fontSize: '16px',
+            fontWeight: 300,
+            textDecoration: 'none',
             transition: 'all 0.15s ease',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-            e.currentTarget.style.color = 'rgba(220, 230, 255, 0.9)';
+            e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.90)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-            e.currentTarget.style.color = 'rgba(200, 215, 240, 0.65)';
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.50)';
           }}
         >
-          ✕
-        </button>
+          ↗
+        </a>
 
         {/* Dashboard header with navigation tabs and actions */}
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '8px' }}>
@@ -2076,16 +2086,18 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
 
             {/* TradingView Market Overview Widget - Pure Black with black background */}
-            <div style={{ height: '420px', width: '100%', background: '#000000' }}>
+            <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
+              <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: 'none',
                   display: 'block',
-                  backgroundColor: '#000000',
-                  colorScheme: 'dark',
+                  background: 'transparent',
+                  position: 'relative',
+                  zIndex: 1,
                 }}
                 title="Market Overview"
                 loading="lazy"
@@ -2200,15 +2212,13 @@ function LiveIntelligencePanel({ onClose }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setPdfUrl(e.currentTarget.href);
-                    setShowPdfModal(true);
+                    handlePdfOpen(e.currentTarget.href);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       e.stopPropagation();
-                      setPdfUrl(e.currentTarget.href);
-                      setShowPdfModal(true);
+                      handlePdfOpen(e.currentTarget.href);
                     }
                   }}
                   style={{
@@ -2286,10 +2296,7 @@ function LiveIntelligencePanel({ onClose }) {
                   padding: '16px',
                   boxSizing: 'border-box',
                 }}
-                onClick={() => {
-                  setShowPdfModal(false);
-                  setPdfUrl(null);
-                }}
+                onClick={handlePdfClose}
               >
                 <div
                   style={{
@@ -2310,10 +2317,7 @@ function LiveIntelligencePanel({ onClose }) {
                   <button
                     type="button"
                     aria-label="Close PDF"
-                    onClick={() => {
-                      setShowPdfModal(false);
-                      setPdfUrl(null);
-                    }}
+                    onClick={handlePdfClose}
                     style={{
                       position: 'absolute',
                       top: '12px',
