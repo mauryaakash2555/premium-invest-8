@@ -1472,7 +1472,13 @@ function LiveIntelligencePanel({ onClose }) {
 
               {/* Share dropdown menu */}
               {showShareMenu && (
-                <div style={{
+                <div
+                  onMouseDown={(e) => {
+                    // Prevent document-level outside-click handlers from closing
+                    // the menu before the anchor default navigation runs.
+                    e.stopPropagation();
+                  }}
+                  style={{
                   position: 'absolute',
                   top: '100%',
                   right: 0,
@@ -1498,7 +1504,6 @@ function LiveIntelligencePanel({ onClose }) {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setShowShareMenu(false)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
