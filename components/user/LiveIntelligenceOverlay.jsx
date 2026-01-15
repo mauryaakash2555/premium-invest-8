@@ -110,6 +110,142 @@ const TradingViewEmbed = ({ scriptSrc, options, className, style }) => {
 };
 
 /**
+ * ChartLoadingWrapper - Shows loading state with timeout for TradingView iframes
+ * Displays spinner while loading, then shows error state if timeout (15s) exceeded
+ */
+const ChartLoadingWrapper = ({ src, title, height = '500px', style = {} }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    // Reset states on retry or src change
+    setIsLoading(true);
+    setHasError(false);
+
+    // 15 second timeout for loading
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setHasError(true);
+        setIsLoading(false);
+      }
+    }, 15000);
+
+    return () => clearTimeout(timeout);
+  }, [src, retryCount]);
+
+  const handleLoad = useCallback(() => {
+    setIsLoading(false);
+    setHasError(false);
+  }, []);
+
+  const handleRetry = useCallback(() => {
+    setRetryCount(c => c + 1);
+  }, []);
+
+  return (
+    <div style={{ height, width: '100%', background: '#000000', position: 'relative', ...style }}>
+      {/* Loading spinner overlay */}
+      {isLoading && !hasError && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#000000',
+          zIndex: 2,
+          gap: '16px',
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            border: '2px solid rgba(100, 180, 255, 0.15)',
+            borderTopColor: 'rgba(100, 180, 255, 0.8)',
+            borderRadius: '50%',
+            animation: 'li-chart-spin 1s linear infinite',
+          }} />
+          <div style={{ color: 'rgba(180, 200, 230, 0.6)', fontSize: '12px' }}>
+            Loading chart...
+          </div>
+          <style>{`
+            @keyframes li-chart-spin {
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      )}
+
+      {/* Error state with retry */}
+      {hasError && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#000000',
+          zIndex: 2,
+          gap: '12px',
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 180, 100, 0.7)" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div style={{ color: 'rgba(180, 200, 230, 0.7)', fontSize: '13px', textAlign: 'center' }}>
+            Chart is taking longer than expected
+          </div>
+          <button
+            onClick={handleRetry}
+            style={{
+              padding: '8px 20px',
+              background: 'rgba(100, 180, 255, 0.12)',
+              border: '1px solid rgba(100, 180, 255, 0.3)',
+              borderRadius: '6px',
+              color: 'rgba(140, 200, 255, 0.95)',
+              fontSize: '12px',
+              fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(100, 180, 255, 0.2)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(100, 180, 255, 0.12)'}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* Iframe - always rendered for proper loading */}
+      <iframe
+        ref={iframeRef}
+        key={retryCount}
+        src={src}
+        onLoad={handleLoad}
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          display: 'block',
+          backgroundColor: '#000000',
+          opacity: isLoading || hasError ? 0 : 1,
+          transition: 'opacity 0.3s ease',
+        }}
+        frameBorder="0"
+        allowtransparency="true"
+        scrolling="no"
+        title={title}
+        loading="lazy"
+      />
+    </div>
+  );
+};
+
+/**
  * LiveIntelligenceOverlay
  * 
  * Full-page overlay containing:
@@ -301,7 +437,7 @@ export default function LiveIntelligenceOverlay({
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 9999,
+        zIndex: 10001,
         background: '#090A0C',
         overflowY: 'auto',
         overflowX: 'hidden',
@@ -1453,7 +1589,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           style={{
             position: 'fixed',
             left: '14px',
-            zIndex: 9999,
+            zIndex: 10002,
             width: '28px',
             height: '28px',
             borderRadius: '6px',
@@ -2045,17 +2181,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            <div style={{ height: '500px', width: '100%', background: '#000000' }}>
-              {/* TradingView Advanced Chart - Direct iframe for reliability */}
-              <iframe
-                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
-                style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
-                frameBorder="0"
-                allowtransparency="true"
-                scrolling="no"
-                title="TradingView Chart"
-              />
-            </div>
+            <ChartLoadingWrapper
+              src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
+              title="TradingView Chart"
+              height="500px"
+            />
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
@@ -2110,24 +2240,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            {/* TradingView Market Overview Widget - Pure Black with black background */}
-            <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
-              <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  display: 'block',
-                  background: 'transparent',
-                  position: 'relative',
-                  zIndex: 1,
-                }}
-                title="Market Overview"
-                loading="lazy"
-              />
-            </div>
+            {/* TradingView Market Overview Widget - with loading state */}
+            <ChartLoadingWrapper
+              src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+              title="Market Overview"
+              height="420px"
+            />
           </div>
 
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
