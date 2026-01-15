@@ -14,15 +14,29 @@ import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
  * - Trigger breaking news
  */
 
+// Comprehensive categories matching frontend CategoryFilter
 const CATEGORIES = [
-  { key: 'market_update', label: 'Market Update', icon: '📈' },
-  { key: 'policy_change', label: 'Policy Change', icon: '🏛️' },
-  { key: 'economic_indicator', label: 'Economic Indicator', icon: '📊' },
-  { key: 'corporate_action', label: 'Corporate Action', icon: '🏢' },
-  { key: 'global_market', label: 'Global Market', icon: '🌍' },
-  { key: 'commodity', label: 'Commodity', icon: '🥇' },
-  { key: 'currency', label: 'Currency', icon: '💱' },
-  { key: 'regulatory', label: 'Regulatory', icon: '⚖️' },
+  // BM Wealth Services (priority)
+  { key: 'bonds', label: 'Bonds & CMS', icon: '📜', group: 'services' },
+  { key: 'mutual_funds', label: 'Mutual Funds', icon: '📊', group: 'services' },
+  { key: 'sip', label: 'SIP', icon: '📅', group: 'services' },
+  { key: 'insurance', label: 'Insurance', icon: '🛡️', group: 'services' },
+  { key: 'pms_aif', label: 'PMS & AIF', icon: '💼', group: 'services' },
+  { key: 'trading', label: 'Trading', icon: '📉', group: 'services' },
+  // Market Categories
+  { key: 'breaking', label: 'Breaking News', icon: '🔴', group: 'markets' },
+  { key: 'ipo', label: 'IPO', icon: '🚀', group: 'markets' },
+  { key: 'market', label: 'Market Update', icon: '📈', group: 'markets' },
+  { key: 'corporate', label: 'Corporate Actions', icon: '🏢', group: 'markets' },
+  { key: 'results', label: 'Quarterly Results', icon: '📋', group: 'markets' },
+  { key: 'regulatory', label: 'Regulatory', icon: '⚖️', group: 'markets' },
+  { key: 'global', label: 'Global Markets', icon: '🌍', group: 'markets' },
+  { key: 'sectors', label: 'Sectors', icon: '🏭', group: 'markets' },
+  { key: 'economy', label: 'Economic Data', icon: '📉', group: 'markets' },
+  { key: 'insider', label: 'Insider/Bulk Deals', icon: '👔', group: 'markets' },
+  { key: 'fixed_income', label: 'Fixed Deposits', icon: '🏦', group: 'markets' },
+  { key: 'forex_gold', label: 'Forex & Gold', icon: '🥇', group: 'markets' },
+  { key: 'real_estate', label: 'Real Estate', icon: '🏠', group: 'markets' },
 ];
 
 const URGENCY_LEVELS = [

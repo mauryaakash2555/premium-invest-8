@@ -2,17 +2,30 @@
 
 import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { CATEGORIES, CATEGORY_GROUPS, BM_WEALTH_SERVICES, MARKET_CATEGORIES } from '@/lib/live-intelligence/headlines';
 
 /**
  * CategoryFilter - Horizontal scrollable category tabs
  * 
- * Filters headlines by category. "All" is selected by default.
+ * Shows services first, then market categories.
+ * "All" is selected by default.
  */
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [showAll, setShowAll] = useState(false);
   const scrollContainerRef = useRef(null);
-  const categories = [
+  
+  // Main tabs: All + Services (priority) + a few markets
+  const serviceTabs = Object.values(BM_WEALTH_SERVICES);
+  const quickMarketTabs = ['ipo', 'market', 'regulatory'].map(k => MARKET_CATEGORIES[k]).filter(Boolean);
+  
+  const mainTabs = [
+    { key: 'all', label: 'All', icon: '✨' },
+    ...serviceTabs,
+    ...quickMarketTabs,
+  ];
+  
+  // Full category list for modal
+  const allCategories = [
     { key: 'all', label: 'All', icon: '✨' },
     ...Object.values(CATEGORIES),
   ];
@@ -35,7 +48,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
             <span className="li-category-label">More</span>
           </button>
 
-          {categories.map((cat) => (
+          {mainTabs.map((cat) => (
             <button
               key={cat.key}
               type="button"
@@ -111,7 +124,39 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
                 </div>
 
                 <div className="li-category-modal-list">
-                  {categories.map((cat) => (
+                  {/* All Option */}
+                  <button
+                    type="button"
+                    className={`li-category-modal-row ${selectedCategory === 'all' ? 'active' : ''}`}
+                    onClick={() => {
+                      onCategoryChange('all');
+                      setShowAll(false);
+                    }}
+                  >
+                    <span className="li-category-modal-icon">✨</span>
+                    <span className="li-category-modal-label">All Categories</span>
+                  </button>
+                  
+                  {/* Services Section */}
+                  <div className="li-category-group-label">BM Wealth Services</div>
+                  {Object.values(BM_WEALTH_SERVICES).map((cat) => (
+                    <button
+                      key={cat.key}
+                      type="button"
+                      className={`li-category-modal-row ${selectedCategory === cat.key ? 'active' : ''}`}
+                      onClick={() => {
+                        onCategoryChange(cat.key);
+                        setShowAll(false);
+                      }}
+                    >
+                      <span className="li-category-modal-icon">{cat.icon}</span>
+                      <span className="li-category-modal-label">{cat.label}</span>
+                    </button>
+                  ))}
+                  
+                  {/* Markets Section */}
+                  <div className="li-category-group-label">Market Intelligence</div>
+                  {Object.values(MARKET_CATEGORIES).map((cat) => (
                     <button
                       key={cat.key}
                       type="button"
@@ -316,6 +361,20 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
           font-size: 13px;
           font-weight: 600;
           letter-spacing: 0.02em;
+        }
+        
+        .li-category-group-label {
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: rgba(170, 198, 255, 0.6);
+          padding: 16px 12px 8px;
+          margin-top: 4px;
+        }
+        
+        .li-category-group-label:first-of-type {
+          margin-top: 0;
         }
       `}</style>
     </>
