@@ -296,6 +296,15 @@ export default function LiveIntelligenceOverlay({
         visibility: isOpen || isAnimating ? 'visible' : 'hidden',
       }}
     >
+      {/* Hide body scroll when overlay is open */}
+      {isOpen && (
+        <style>{`
+          html, body {
+            overflow: hidden !important;
+            height: 100% !important;
+          }
+        `}</style>
+      )}
       {/* Global styles for overlay */}
       <style>{`
         /* Show scrollbar (users want visible scroll feedback) */
@@ -550,35 +559,48 @@ function LiveIntelligencePanel({ onClose }) {
   // Handle PDF modal open/close with proper scroll position preservation
   const handlePdfOpen = useCallback((url) => {
     // Save scroll positions BEFORE opening modal
-    savedScrollRef.current.overlay = overlayRef.current?.scrollTop || 0;
+    const overlayEl = overlayRef.current;
+    savedScrollRef.current.overlay = overlayEl?.scrollTop || 0;
     savedScrollRef.current.window = window.scrollY || 0;
+    
+    // Lock overlay scroll immediately
+    if (overlayEl) {
+      overlayEl.style.overflow = 'hidden';
+      overlayEl.style.position = 'fixed';
+      overlayEl.style.top = `-${savedScrollRef.current.overlay}px`;
+      overlayEl.style.width = '100%';
+    }
+    
     setPdfUrl(url);
     setShowPdfModal(true);
   }, []);
 
   const handlePdfClose = useCallback(() => {
+    const overlayEl = overlayRef.current;
+    
+    // Restore overlay styles before closing
+    if (overlayEl) {
+      overlayEl.style.overflow = '';
+      overlayEl.style.position = '';
+      overlayEl.style.top = '';
+      overlayEl.style.width = '';
+    }
+    
     setShowPdfModal(false);
     setPdfUrl(null);
-    // Restore scroll positions AFTER closing modal
+    
+    // Restore scroll positions AFTER closing modal - double RAF for safety
     requestAnimationFrame(() => {
-      if (overlayRef.current) {
-        overlayRef.current.scrollTop = savedScrollRef.current.overlay;
-      }
-      window.scrollTo(0, savedScrollRef.current.window);
+      requestAnimationFrame(() => {
+        if (overlayEl) {
+          overlayEl.scrollTop = savedScrollRef.current.overlay;
+        }
+      });
     });
   }, []);
 
   useEffect(() => {
     if (!showPdfModal) return;
-    
-    // Lock body scroll while PDF is open
-    const prevOverflow = document?.body?.style?.overflow;
-    if (document?.body?.style) document.body.style.overflow = 'hidden';
-    
-    // Lock overlay scroll while PDF is open
-    if (overlayRef.current) {
-      overlayRef.current.style.overflow = 'hidden';
-    }
     
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -589,12 +611,6 @@ function LiveIntelligencePanel({ onClose }) {
     
     return () => {
       window.removeEventListener('keydown', onKeyDown);
-      if (document?.body?.style) document.body.style.overflow = prevOverflow || '';
-      
-      // Restore overlay overflow
-      if (overlayRef.current) {
-        overlayRef.current.style.overflow = '';
-      }
     };
   }, [showPdfModal, handlePdfClose]);
 
@@ -1302,10 +1318,10 @@ function LiveIntelligencePanel({ onClose }) {
           .li-donut-container { width: 150px; height: 150px; }
           .li-kpi-card { padding: 14px; }
           .li-kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-          .li-panel-shell { padding: 12px 12px 60px !important; padding-top: 44px !important; }
+          .li-panel-shell { padding: 50px 12px 60px 12px !important; }
           .li-dash-card { padding: 16px !important; }
           .li-asset-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
-          .li-sticky-back-btn { top: 8px !important; right: 8px !important; }
+          .li-sticky-back-btn { top: 12px !important; left: 12px !important; }
 
           /* Mobile-only: header subtitle aligns left (desktop stays centered) */
           .li-header-block {
@@ -1420,42 +1436,41 @@ function LiveIntelligencePanel({ onClose }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Arrow Link - Minimal, points to /live-intelligence */}
-        <a
-          href="/live-intelligence"
-          aria-label="Open full Live Intelligence page"
+        {/* Sticky Arrow - Minimal, goes to home page */}
+        <button
+          onClick={onClose}
+          aria-label="Back to home"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
             top: '14px',
-            right: '14px',
+            left: '14px',
             zIndex: 9999,
-            width: '24px',
-            height: '24px',
+            width: '28px',
+            height: '28px',
             borderRadius: '6px',
             border: 'none',
             background: 'transparent',
-            color: 'rgba(140, 190, 255, 0.50)',
+            color: 'rgba(140, 190, 255, 0.60)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '16px',
+            fontSize: '18px',
             fontWeight: 300,
-            textDecoration: 'none',
             transition: 'all 0.15s ease',
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.90)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.50)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.60)';
           }}
         >
-          ↗
-        </a>
+          ←
+        </button>
 
         {/* Dashboard header with navigation tabs and actions */}
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '8px' }}>
