@@ -1509,6 +1509,36 @@ function LiveIntelligencePanel({ onClose }) {
                     <span>{tab.label}</span>
                   </button>
                 );})}
+                {/* Open Full Intelligence CTA - Links to dedicated page */}
+                <a
+                  href="/live-intelligence"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 14px',
+                    background: 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)',
+                    border: '1px solid rgba(140, 220, 180, 0.25)',
+                    borderRadius: '10px',
+                    color: 'rgba(140, 220, 180, 0.95)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.20) 0%, rgba(140, 220, 180, 0.15) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.40)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.25)';
+                  }}
+                >
+                  <span>Open Full Intelligence</span>
+                  <span style={{ fontSize: '10px' }}>→</span>
+                </a>
               </div>
             </div>
           </div>

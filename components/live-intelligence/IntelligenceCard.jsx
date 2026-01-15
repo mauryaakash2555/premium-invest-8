@@ -163,6 +163,38 @@ export default function IntelligenceCard({ item, isExpanded = false }) {
         }}>
           {item.block_where_fits}
         </p>
+        {/* Affiliate CTA - subtle explore link (monetization hook) */}
+        {item.category && (
+          <a
+            href={`/products?related=${item.category}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              marginTop: '8px',
+              padding: '4px 10px',
+              background: 'rgba(100, 160, 255, 0.06)',
+              border: '1px solid rgba(100, 160, 255, 0.12)',
+              borderRadius: '6px',
+              color: 'rgba(140, 190, 255, 0.70)',
+              fontSize: '11px',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(100, 160, 255, 0.10)';
+              e.currentTarget.style.color = 'rgba(160, 200, 255, 0.90)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(100, 160, 255, 0.06)';
+              e.currentTarget.style.color = 'rgba(140, 190, 255, 0.70)';
+            }}
+          >
+            <span>Explore platforms</span>
+            <span style={{ fontSize: '9px' }}>→</span>
+          </a>
+        )}
       </div>
 
       {/* Block 4: Who Should Care */}
