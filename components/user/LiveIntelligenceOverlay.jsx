@@ -449,6 +449,7 @@ function LiveIntelligencePanel({ onClose }) {
   const [portfolioValue] = useState(28.3);
   const [totalInvested] = useState(24.8);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const shareMenuRef = useRef(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [allocations, setAllocations] = useState({
@@ -458,8 +459,49 @@ function LiveIntelligencePanel({ onClose }) {
     cash: 10,
   });
 
+  const shareUrl = useMemo(() => {
+    if (typeof window === 'undefined') return 'https://bmwealth.co.in';
+    return window.location.href || 'https://bmwealth.co.in';
+  }, []);
+
+  const shareText = useMemo(
+    () => 'Check out BM Wealth Live Intelligence — real-time portfolio insights and market signals.',
+    []
+  );
+
+  const shareLinks = useMemo(() => {
+    const url = encodeURIComponent(shareUrl);
+    const text = encodeURIComponent(shareText);
+    return {
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
+      email: `mailto:?subject=${encodeURIComponent('BM Wealth Live Intelligence')}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+      telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+    };
+  }, [shareText, shareUrl]);
+
+  useEffect(() => {
+    if (!showShareMenu) return;
+    const onDocMouseDown = (e) => {
+      if (!shareMenuRef.current) return;
+      if (!shareMenuRef.current.contains(e.target)) setShowShareMenu(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setShowShareMenu(false);
+    };
+    document.addEventListener('mousedown', onDocMouseDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onDocMouseDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [showShareMenu]);
+
   useEffect(() => {
     if (!showPdfModal) return;
+    const prevOverflow = document?.body?.style?.overflow;
+    if (document?.body?.style) document.body.style.overflow = 'hidden';
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
         setShowPdfModal(false);
@@ -467,7 +509,10 @@ function LiveIntelligencePanel({ onClose }) {
       }
     };
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      if (document?.body?.style) document.body.style.overflow = prevOverflow || '';
+    };
   }, [showPdfModal]);
 
   const kpi = useMemo(() => {
@@ -1368,10 +1413,21 @@ function LiveIntelligencePanel({ onClose }) {
               ←
             </button>
             {/* Share Button with Dropdown */}
-            <div style={{ position: 'relative' }}>
+            <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button
                 type="button"
-                onClick={() => setShowShareMenu(!showShareMenu)}
+                onClick={() => {
+                  // Prefer native share when available (most reliable on mobile).
+                  if (typeof navigator !== 'undefined' && navigator.share) {
+                    navigator
+                      .share({ title: 'BM Wealth Live Intelligence', text: shareText, url: shareUrl })
+                      .catch(() => {
+                        setShowShareMenu((v) => !v);
+                      });
+                    return;
+                  }
+                  setShowShareMenu((v) => !v);
+                }}
                 style={{
                   appearance: 'none',
                   border: '1px solid rgba(255,255,255,0.12)',
@@ -1417,28 +1473,18 @@ function LiveIntelligencePanel({ onClose }) {
                   zIndex: 200,
                 }}>
                   {[
-                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp' },
-                    { key: 'email', icon: '📧', label: 'Email' },
-                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X' },
-                    { key: 'linkedin', icon: '💼', label: 'LinkedIn' },
-                    { key: 'telegram', icon: '✈️', label: 'Telegram' },
+                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp', href: shareLinks.whatsapp },
+                    { key: 'email', icon: '📧', label: 'Email', href: shareLinks.email },
+                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X', href: shareLinks.twitter },
+                    { key: 'linkedin', icon: '💼', label: 'LinkedIn', href: shareLinks.linkedin },
+                    { key: 'telegram', icon: '✈️', label: 'Telegram', href: shareLinks.telegram },
                   ].map((item) => (
-                    <button
+                    <a
                       key={item.key}
-                      type="button"
-                      onClick={() => {
-                        const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
-                        const shareText = 'Check out my Live Intelligence Dashboard at BM Wealth - Real-time portfolio insights!';
-                        const urls = {
-                          whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
-                          email: `mailto:?subject=${encodeURIComponent('My BM Wealth Portfolio Dashboard')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`,
-                          twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
-                          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-                          telegram: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
-                        };
-                        window.open(urls[item.key], '_blank', 'noopener,noreferrer');
-                        setShowShareMenu(false);
-                      }}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowShareMenu(false)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1453,6 +1499,7 @@ function LiveIntelligencePanel({ onClose }) {
                         fontWeight: 500,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
+                        textDecoration: 'none',
                       }}
                       onMouseOver={(e) => {
                         e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
@@ -1465,17 +1512,22 @@ function LiveIntelligencePanel({ onClose }) {
                     >
                       <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>{item.icon}</span>
                       <span>{item.label}</span>
-                    </button>
+                    </a>
                   ))}
                   <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
                   <button
                     type="button"
                     onClick={() => {
-                      const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
-                      if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(shareUrl).then(() => alert('Link copied!'));
+                      const toCopy = shareUrl;
+                      const doFallback = () => {
+                        prompt('Copy this link:', toCopy);
+                      };
+                      if (typeof navigator === 'undefined') {
+                        doFallback();
+                      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(toCopy).then(() => alert('Link copied!')).catch(doFallback);
                       } else {
-                        prompt('Copy this link:', shareUrl);
+                        doFallback();
                       }
                       setShowShareMenu(false);
                     }}
@@ -2006,14 +2058,20 @@ function LiveIntelligencePanel({ onClose }) {
                 <a
                   key={service.title}
                   href={service.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="li-qa-card"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setPdfUrl(e.currentTarget.href);
                     setShowPdfModal(true);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setPdfUrl(e.currentTarget.href);
+                      setShowPdfModal(true);
+                    }
                   }}
                   style={{
                     display: 'block',
@@ -2064,101 +2122,104 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
           </div>
 
-          {showPdfModal && pdfUrl && typeof document !== 'undefined' && document.body
-            ? createPortal(
+          {(() => {
+            const pdfPortalTarget = typeof document !== 'undefined' ? (document.body || document.documentElement) : null;
+            if (!showPdfModal || !pdfUrl || !pdfPortalTarget) return null;
+            return createPortal(
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-label="PDF viewer"
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                  backdropFilter: 'blur(8px)',
+                  zIndex: 99999,
+                  padding: '16px',
+                }}
+                onClick={() => {
+                  setShowPdfModal(false);
+                  setPdfUrl(null);
+                }}
+              >
                 <div
-                  role="dialog"
-                  aria-modal="true"
-                  aria-label="PDF viewer"
                   style={{
-                    position: 'fixed',
-                    inset: 0,
-                    width: '100%',
-                    // Use dynamic viewport units when available (mobile address bar safe)
-                    height: '100dvh',
-                    minHeight: '100vh',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    position: 'relative',
+                    width: 'min(90vw, 1400px)',
+                    maxWidth: '1400px',
+                    height: 'min(90vh, calc(100dvh - 32px))',
+                    maxHeight: 'calc(100dvh - 32px)',
+                    margin: 'auto',
+                    backgroundColor: '#0a0a12',
+                    borderRadius: '16px',
                     overflow: 'hidden',
-                    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                    backdropFilter: 'blur(8px)',
-                    zIndex: 99999,
-                    padding: 'max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))',
+                    border: '1px solid rgba(170, 198, 255, 0.15)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
                   }}
-                  onClick={() => {
-                    setShowPdfModal(false);
-                    setPdfUrl(null);
-                  }}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: 'min(90vw, 1400px)',
-                      maxWidth: '1400px',
-                      height: 'min(90vh, calc(100dvh - 32px))',
-                      maxHeight: 'calc(100dvh - 32px)',
-                      backgroundColor: '#0a0a12',
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      border: '1px solid rgba(170, 198, 255, 0.15)',
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
+                  <button
+                    type="button"
+                    aria-label="Close PDF"
+                    onClick={() => {
+                      setShowPdfModal(false);
+                      setPdfUrl(null);
                     }}
-                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      zIndex: 10,
+                      color: 'rgba(230, 240, 255, 0.9)',
+                      background: 'rgba(0, 0, 0, 0.7)',
+                      border: '1px solid rgba(170, 198, 255, 0.2)',
+                      borderRadius: '10px',
+                      width: '44px',
+                      height: '44px',
+                      cursor: 'pointer',
+                      fontSize: '20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
+                    }}
                   >
-                    <button
-                      type="button"
-                      aria-label="Close PDF"
-                      onClick={() => {
-                        setShowPdfModal(false);
-                        setPdfUrl(null);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        zIndex: 10,
-                        color: 'rgba(230, 240, 255, 0.9)',
-                        background: 'rgba(0, 0, 0, 0.7)',
-                        border: '1px solid rgba(170, 198, 255, 0.2)',
-                        borderRadius: '10px',
-                        width: '44px',
-                        height: '44px',
-                        cursor: 'pointer',
-                        fontSize: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
-                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
-                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
-                      }}
-                    >
-                      ✕
-                    </button>
+                    ✕
+                  </button>
 
-                    <iframe
-                      src={pdfUrl}
-                      title="PDF Viewer"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        border: 'none',
-                        borderRadius: '16px',
-                        display: 'block',
-                      }}
-                    />
-                  </div>
-                </div>,
-                document.body
-              )
-            : null}
+                  <iframe
+                    src={pdfUrl}
+                    title="PDF Viewer"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '16px',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              </div>,
+              pdfPortalTarget
+            );
+          })()}
         </div>
       </div>
     </section>
