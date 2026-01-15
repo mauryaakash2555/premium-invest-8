@@ -115,6 +115,7 @@ export async function GET(request) {
     const activeSources = sources?.length ? sources : [
       { name: 'Moneycontrol Markets', feed_url: 'https://www.moneycontrol.com/rss/marketreports.xml', category: 'market_update' },
       { name: 'Economic Times Markets', feed_url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', category: 'market_update' },
+      { name: 'LiveMint Markets', feed_url: 'https://www.livemint.com/rss/markets', category: 'market_update' },
     ];
 
     const results = {

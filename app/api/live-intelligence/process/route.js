@@ -461,9 +461,65 @@ export async function POST(request) {
   }
 }
 
-// GET: Fetch published intelligence items
+// GET: Fetch published items OR trigger processing (for Vercel Cron)
 export async function GET(request) {
   try {
+    // Check if this is a cron request (has authorization header)
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+    
+    // If cron request, trigger processing
+    if (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+      // Process all pending items (same as POST with processAll)
+      const { data: itemsToProcess } = await supabase
+        .from('intelligence_items')
+        .select('*')
+        .eq('status', 'pending')
+        .eq('processed_by_gemini', false)
+        .order('created_at', { ascending: true })
+        .limit(20);
+      
+      if (!itemsToProcess?.length) {
+        return NextResponse.json({ success: true, message: 'No items to process', processed: 0, cron: true });
+      }
+      
+      const results = { processed: 0, published: 0, dropped: 0, errors: [] };
+      
+      for (const item of itemsToProcess) {
+        try {
+          const groqResult = await processWithGroq(item);
+          if (groqResult.isDuplicate) { results.dropped++; continue; }
+          
+          const geminiResult = await processWithGemini(item, groqResult);
+          const finalContent = await checkCompliance(item, geminiResult);
+          
+          if (!finalContent) { results.dropped++; continue; }
+          
+          await supabase
+            .from('intelligence_items')
+            .update({
+              ...finalContent,
+              category: groqResult.category,
+              urgency: groqResult.urgency,
+              tags: groqResult.tags,
+              status: 'published',
+              processed_by_groq: true,
+              processed_by_gemini: true,
+              published_at: new Date().toISOString(),
+            })
+            .eq('id', item.id);
+          
+          results.processed++;
+          results.published++;
+        } catch (err) {
+          results.errors.push(err.message);
+        }
+      }
+      
+      return NextResponse.json({ success: true, ...results, cron: true });
+    }
+    
+    // Regular GET: fetch published items
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '20', 10);

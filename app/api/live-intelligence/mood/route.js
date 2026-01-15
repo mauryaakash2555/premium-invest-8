@@ -219,10 +219,42 @@ export async function POST(request) {
   }
 }
 
-// GET: Fetch current active mood
-export async function GET() {
+// GET: Fetch current active mood OR generate new (for Vercel Cron)
+export async function GET(request) {
   try {
-    // Try to get active mood from database
+    // Check if this is a cron request
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+    
+    // If cron request, always generate fresh mood
+    if (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+      const marketData = await getMarketContext();
+      const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
+      
+      // Deactivate old moods
+      await supabase
+        .from('live_mood')
+        .update({ is_active: false })
+        .eq('is_active', true);
+      
+      // Insert new mood
+      const { data: newMood } = await supabase
+        .from('live_mood')
+        .insert({
+          mood_text,
+          mood_type,
+          generated_by: 'gemini',
+          context_data: marketData,
+          is_active: true,
+          valid_until: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+        })
+        .select()
+        .single();
+      
+      return NextResponse.json({ success: true, mood: newMood || { mood_text, mood_type }, cron: true });
+    }
+    
+    // Regular GET: fetch active mood from database
     const { data, error } = await supabase
       .from('live_mood')
       .select('*')
