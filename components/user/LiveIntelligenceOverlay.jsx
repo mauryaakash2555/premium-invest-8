@@ -298,13 +298,27 @@ export default function LiveIntelligenceOverlay({
     >
       {/* Global styles for overlay */}
       <style>{`
-        /* Hide scrollbar but keep scrolling */
-        .li-overlay::-webkit-scrollbar {
-          display: none;
-        }
+        /* Show scrollbar (users want visible scroll feedback) */
         .li-overlay {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          -ms-overflow-style: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.35) rgba(0, 0, 0, 0);
+        }
+        .li-overlay::-webkit-scrollbar {
+          width: 10px;
+        }
+        .li-overlay::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-overlay::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 10px;
+          border: 2px solid rgba(0, 0, 0, 0);
+          background-clip: padding-box;
+        }
+        .li-overlay::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.32);
+          background-clip: padding-box;
         }
 
         /* Hide number input spinners (desktop browsers) */
