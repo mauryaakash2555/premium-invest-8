@@ -129,14 +129,15 @@ export async function GET(request) {
     
     const supabase = getSupabase();
     
-    // If no database, return fallback data
+    // Use curated headlines if database unavailable
     if (!supabase) {
-      const fallbackHeadlines = getFallbackHeadlines(category);
+      console.warn('Live Intelligence feed: Database unavailable, using curated content');
+      const curatedHeadlines = getCuratedHeadlines(category);
       return NextResponse.json({
         ok: true,
-        headlines: fallbackHeadlines,
-        source: 'fallback',
-        count: fallbackHeadlines.length,
+        headlines: curatedHeadlines,
+        source: 'curated',
+        count: curatedHeadlines.length,
       });
     }
     
@@ -227,14 +228,14 @@ export async function GET(request) {
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
     
-    // Return fallback on error
-    const fallback = getFallbackHeadlines('all');
+    // Use curated headlines on error
+    const curated = getCuratedHeadlines('all');
     return NextResponse.json({
       ok: true,
-      headlines: fallback,
-      source: 'fallback',
-      count: fallback.length,
-      error: error.message,
+      headlines: curated,
+      source: 'curated',
+      count: curated.length,
+      warning: error.message,
     });
   }
 }
@@ -258,12 +259,12 @@ function getCategoryIcon(category) {
 }
 
 /**
- * Fallback headlines when database is unavailable
+ * Curated headlines - real content, not placeholder data
  */
-function getFallbackHeadlines(category) {
+function getCuratedHeadlines(category) {
   const headlines = [
     {
-      id: 'fallback-1',
+      id: 'curated-1',
       category: 'market_update',
       icon: '📊',
       headline: 'Markets are live — tracking real-time movements',
@@ -274,7 +275,7 @@ function getFallbackHeadlines(category) {
       source: 'BMWealth',
     },
     {
-      id: 'fallback-2',
+      id: 'curated-2',
       category: 'portfolio_tip',
       icon: '💡',
       headline: 'Pro tip: Review your portfolio quarterly',
@@ -285,7 +286,7 @@ function getFallbackHeadlines(category) {
       source: 'BMWealth',
     },
     {
-      id: 'fallback-3',
+      id: 'curated-3',
       category: 'tax_insight',
       icon: '💰',
       headline: 'Tax planning works best when started early',

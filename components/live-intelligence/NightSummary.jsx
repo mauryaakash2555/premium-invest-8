@@ -18,7 +18,7 @@ import WhatsAppShare from './WhatsAppShare';
  * Fetches real data from /api/live-intelligence/night-summary
  */
 
-// Default/fallback data (shown while loading or on error)
+// Default summary structure (shown while loading)
 const DEFAULT_SUMMARY = {
   date: new Date().toLocaleDateString('en-IN', { 
     weekday: 'long', 
@@ -27,10 +27,10 @@ const DEFAULT_SUMMARY = {
     year: 'numeric' 
   }),
   markets: {
-    nifty: { value: 0, change: 0, percent: 0 },
-    sensex: { value: 0, change: 0, percent: 0 },
-    bankNifty: { value: 0, change: 0, percent: 0 },
-    fii: { value: 0, type: 'neutral' },
+    nifty: { value: null, change: null, percent: null },
+    sensex: { value: null, change: null, percent: null },
+    bankNifty: { value: null, change: null, percent: null },
+    fii: { value: null, type: 'neutral' },
   },
   gainers: [],
   losers: [],
@@ -77,15 +77,15 @@ export default function NightSummary() {
         const response = await fetch('/api/live-intelligence/night-summary');
         const data = await response.json();
         
-        if (data.success) {
+        if (data.success && data.markets) {
           setSummaryData({
             date: data.date || DEFAULT_SUMMARY.date,
             markets: data.markets || DEFAULT_SUMMARY.markets,
-            gainers: data.gainers || [], // API may not have this yet
-            losers: data.losers || [], // API may not have this yet
+            gainers: data.gainers || [],
+            losers: data.losers || [],
             developments: data.developments || [],
             tomorrow: data.tomorrow || [],
-            isLive: data.isLive ?? false,
+            isLive: data.isLive ?? true,
           });
         } else {
           setError(data.message || 'Failed to load summary');

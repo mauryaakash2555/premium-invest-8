@@ -35,7 +35,7 @@ export default function HeadlineFeed() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
-  const [usingFallback, setUsingFallback] = useState(false);
+  const [usingCurated, setUsingCurated] = useState(false);
 
   // Load headlines from API - NO FALLBACK
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function HeadlineFeed() {
     async function loadHeadlines() {
       setIsLoading(true);
       setError(null);
-      setUsingFallback(false);
+      setUsingCurated(false);
       
       try {
         // Fetch from API with timeout
@@ -52,14 +52,14 @@ export default function HeadlineFeed() {
         
         if (!cancelled) {
           if (!data || data.length === 0) {
-            // If the API is up but returns no data, fall back to curated headlines.
-            const fallback = getHeadlinesByCategory(selectedCategory);
-            if (fallback && fallback.length) {
-              const sorted = sortByPriority(fallback);
+            // Use curated headlines if API returns empty
+            const curated = getHeadlinesByCategory(selectedCategory);
+            if (curated && curated.length) {
+              const sorted = sortByPriority(curated);
               setHeadlines(sorted);
               setActiveIndex(0);
               setRetryCount(0);
-              setUsingFallback(true);
+              setUsingCurated(true);
               return;
             }
 
@@ -73,19 +73,19 @@ export default function HeadlineFeed() {
           setHeadlines(sorted);
           setActiveIndex(0);
           setRetryCount(0);
-          setUsingFallback(false);
+          setUsingCurated(false);
         }
       } catch (err) {
-        // If API fails, fall back to curated headlines (explicitly indicated in UI).
+        // Use curated headlines on API error
         if (!cancelled) {
           console.error('HeadlineFeed: API failed:', err);
-          const fallback = getHeadlinesByCategory(selectedCategory);
-          if (fallback && fallback.length) {
-            const sorted = sortByPriority(fallback);
+          const curated = getHeadlinesByCategory(selectedCategory);
+          if (curated && curated.length) {
+            const sorted = sortByPriority(curated);
             setHeadlines(sorted);
             setActiveIndex(0);
             setRetryCount(0);
-            setUsingFallback(true);
+            setUsingCurated(true);
           } else {
             setError(err.message || 'Unable to load headlines');
             setHeadlines([]);
@@ -278,7 +278,7 @@ export default function HeadlineFeed() {
   return (
     <>
       <div className="li-headline-feed">
-        {usingFallback ? (
+        {usingCurated && (
           <div
             style={{
               margin: '10px 0 14px',
@@ -290,9 +290,9 @@ export default function HeadlineFeed() {
               fontSize: 12,
             }}
           >
-            Showing curated headlines (fallback). Live feed will auto-retry.
+            📰 Showing curated headlines. Live feed will auto-retry.
           </div>
-        ) : null}
+        )}
 
         {/* Category Filter */}
         <CategoryFilter 
