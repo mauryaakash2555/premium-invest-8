@@ -155,7 +155,15 @@ export async function GET(request) {
       });
     }
     
-    // Fetch from intelligence_items (auto-generated from RSS)
+    // Fetch from headlines table (cron-populated from RSS feeds)
+    let headlinesQuery = supabase
+      .from('headlines')
+      .select('*')
+      .eq('is_sebi_safe', true)
+      .order('published_at', { ascending: false })
+      .limit(limit);
+    
+    // Fetch from intelligence_items (legacy auto-generated from RSS)
     let autoQuery = supabase
       .from('intelligence_items')
       .select('*')
@@ -173,17 +181,46 @@ export async function GET(request) {
     
     // Apply category filter if specified
     if (category && category !== 'all') {
+      headlinesQuery = headlinesQuery.eq('category', category);
       autoQuery = autoQuery.eq('category', category);
       adminQuery = adminQuery.eq('category', category);
     }
     
-    const [autoResult, adminResult] = await Promise.all([
-      autoQuery,
-      adminQuery,
+    // Execute queries with error handling
+    const safeQuery = async (query) => {
+      try {
+        const result = await query;
+        return result;
+      } catch (e) {
+        return { data: [], error: e };
+      }
+    };
+    
+    const [headlinesResult, autoResult, adminResult] = await Promise.all([
+      safeQuery(headlinesQuery),
+      safeQuery(autoQuery),
+      safeQuery(adminQuery),
     ]);
     
-    // Combine headlines
+    // Combine headlines from all sources
     const combined = [
+      // Headlines table (main source - cron-populated)
+      ...(headlinesResult.data || []).map(item => ({
+        id: item.id,
+        category: item.category || 'market_update',
+        icon: getCategoryIcon(item.category),
+        headline: item.title,
+        whyItMatters: item.why_it_matters || item.summary,
+        dataPoint: item.data_point || '',
+        urgency: item.urgency || 'REGULAR',
+        timestamp: item.published_at || item.created_at,
+        created_at: item.created_at,
+        source: item.source,
+        valid_until: item.valid_until,
+        type: 'headlines',
+        url: item.url,
+      })),
+      // Intelligence items (legacy)
       ...(autoResult.data || []).map(item => ({
         id: item.id,
         category: item.category || 'market_update',

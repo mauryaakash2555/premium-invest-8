@@ -737,16 +737,17 @@ export default function NightSummary() {
         /* Counter */
         .li-ns-counter {
           position: absolute;
-          top: 24px;
-          right: 24px;
-          font-size: 12px;
+          top: 28px;
+          right: 80px;
+          font-size: 11px;
           color: rgba(180, 195, 230, 0.7);
           font-variant-numeric: tabular-nums;
           white-space: nowrap;
-          background: rgba(20, 25, 40, 0.8);
+          background: rgba(20, 25, 40, 0.9);
           padding: 4px 10px;
           border-radius: 6px;
-          border: 1px solid rgba(100, 140, 220, 0.2);
+          border: 1px solid rgba(100, 140, 220, 0.25);
+          z-index: 10;
         }
 
         /* Mobile Responsive */
