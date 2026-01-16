@@ -79,17 +79,31 @@ export default function HeadlineCard({ headline, isActive = false }) {
       if (e.key === 'Escape') setShowModal(false);
     };
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    
+    // Lock body scroll when modal is open
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [showModal]);
+
+  const handleCardClick = (e) => {
+    // Prevent any scroll behavior from parent containers
+    e.stopPropagation();
+    setShowModal(true);
+  };
 
   return (
     <>
       <div 
         className={`li-headline-card ${isActive ? 'active' : ''}`}
-        onClick={() => setShowModal(true)}
+        onClick={handleCardClick}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && setShowModal(true)}
+        onKeyDown={(e) => e.key === 'Enter' && handleCardClick(e)}
         style={{
           '--urgency-color': urgency?.color || 'rgba(170, 198, 255, 1)',
           '--urgency-dim': urgency?.colorDim || 'rgba(170, 198, 255, 0.25)',
@@ -195,7 +209,7 @@ export default function HeadlineCard({ headline, isActive = false }) {
         }
 
         .li-headline-urgency.breaking {
-          animation: urgencyPulse 1.5s ease-in-out infinite;
+          animation: urgencyPulse 1.5s ease-in-out 3;
         }
 
         @keyframes urgencyPulse {

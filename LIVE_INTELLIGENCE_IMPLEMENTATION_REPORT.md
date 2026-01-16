@@ -34,7 +34,7 @@ Located in `app/(public)/live-intelligence-hero/components/`:
 | `HeadlineCard.jsx` | 525 | Individual headline display with modal |
 | `CategoryFilter.jsx` | 315 | Horizontal scrollable category tabs |
 | `NightSummary.jsx` | 401 | Special 9PM-12AM dashboard layout |
-| `DonutCalculator.jsx` | 1,743 | 27-service calculator with premium donut UI |
+| `DonutCalculator.jsx` | 1,743 | Multi-service calculator with premium donut UI |
 | `WhatsAppShare.jsx` | 371 | Share to WhatsApp + opt-in for updates |
 
 ### 1.3 UI Components - Overlay Version (Re-exports)
@@ -229,7 +229,7 @@ const marketClose = 15 * 60 + 30; // 3:30 PM
 4. WhatsApp Share + Opt-in
 
 ### 4.7 DonutCalculator Component (1,743 lines)
-**All 27 Service Calculators:**
+**All-in-One Service Calculators:**
 ```
 SIP, Lumpsum, Goal, Retire, FD, Insurance, PPF, EPF, NPS, ELSS,
 EMI, SWP, Step-Up, CAGR, Inflation, Gratuity, HRA, Tax, RD, SSY,
@@ -635,7 +635,7 @@ We are NOT SEBI registered. You MUST NEVER generate:
 
 The Live Intelligence / Live Mood system is a **fully implemented, production-ready** feature with:
 - ✅ 2 functional entry points (page + overlay)
-- ✅ 27 calculator services
+- ✅ Calculator services library
 - ✅ 6 time-based modes with auto-switching
 - ✅ AI-powered headline processing (3-stage pipeline)
 - ✅ Premium laser blue visual design

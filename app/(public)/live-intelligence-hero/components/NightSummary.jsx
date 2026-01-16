@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getCurrentModeConfig, getISTTime } from '@/lib/live-intelligence/modes';
 import WhatsAppShare from './WhatsAppShare';
 
@@ -9,40 +9,55 @@ import WhatsAppShare from './WhatsAppShare';
  * 
  * Shows: Markets recap, Key developments, Tomorrow's watch
  * Only renders when mode is 'night_summary'
+ * 
+ * NOW FETCHES FROM LIVE API - NO MORE DUMMY DATA
  */
-
-// Dummy data for demonstration (will be replaced with real data later)
-const DUMMY_SUMMARY = {
-  date: new Date().toLocaleDateString('en-IN', { 
-    weekday: 'long', 
-    month: 'long', 
-    day: 'numeric', 
-    year: 'numeric' 
-  }),
-  markets: {
-    nifty: { value: 24987, change: 127, percent: 0.51 },
-    sensex: { value: 82450, change: 412, percent: 0.50 },
-    bankNifty: { value: 52340, change: 940, percent: 1.83 },
-    fii: { value: 2847, type: 'buyers' },
-  },
-  developments: [
-    { icon: '🏦', text: 'RBI signals potential rate cut in next policy meet' },
-    { icon: '📈', text: 'SIP inflows hit all-time high of ₹21,000 Cr in December' },
-    { icon: '📊', text: 'Q3 results season begins tomorrow with TCS, Infy' },
-    { icon: '💹', text: 'IT sector leads gains, up 2.3% on strong guidance' },
-  ],
-  tomorrow: [
-    { time: '09:15', text: 'TCS Q3 results (after market)' },
-    { time: '09:15', text: 'Infosys Q3 results (after market)' },
-    { time: '19:00', text: 'US CPI inflation data release' },
-    { time: 'All day', text: 'Watch FII trend continuation' },
-  ],
-};
 
 export default function NightSummary() {
   const [mode, setMode] = useState(null);
   const [time, setTime] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [summary, setSummary] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  // Fetch summary from API
+  const fetchSummary = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/live-intelligence/night-summary', {
+        signal: AbortSignal.timeout(10000),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to load summary');
+      }
+      
+      setSummary(data);
+      setRetryCount(0);
+    } catch (err) {
+      console.error('Night summary fetch failed:', err);
+      setError(err.message || 'Unable to load market summary');
+      
+      // Auto-retry after 5 minutes (up to 3 times)
+      if (retryCount < 3) {
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+        }, 5 * 60 * 1000);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [retryCount]);
 
   useEffect(() => {
     const checkMode = () => {
@@ -57,24 +72,101 @@ export default function NightSummary() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch summary when visible
+  useEffect(() => {
+    if (isVisible) {
+      fetchSummary();
+    }
+  }, [isVisible, fetchSummary]);
+
   // Only show in night_summary mode (9PM - 12AM)
   if (!isVisible || !mode) return null;
 
-  const formatNumber = (num) => num.toLocaleString('en-IN');
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="li-night-summary" style={{ textAlign: 'center', padding: '60px 20px' }}>
+        <div style={{ fontSize: '32px', marginBottom: '16px' }}>🌙</div>
+        <div style={{ color: 'rgba(200, 215, 240, 0.7)' }}>Loading market summary...</div>
+        <style jsx>{nightSummaryStyles}</style>
+      </div>
+    );
+  }
+
+  // Show error state - NO FALLBACK TO DUMMY DATA
+  if (error || !summary) {
+    return (
+      <div className="li-night-summary li-ns-error">
+        <div className="li-ns-error-content">
+          <span style={{ fontSize: '32px', marginBottom: '16px', display: 'block' }}>⚠️</span>
+          <h3 style={{ color: 'rgba(255, 180, 180, 0.9)', margin: '0 0 12px' }}>Unable to Load Summary</h3>
+          <p style={{ color: 'rgba(200, 215, 240, 0.6)', margin: '0 0 20px', fontSize: '14px' }}>
+            {error || 'Market data is temporarily unavailable.'}
+          </p>
+          <button
+            onClick={fetchSummary}
+            style={{
+              background: 'rgba(100, 140, 220, 0.2)',
+              border: '1px solid rgba(100, 140, 220, 0.4)',
+              color: 'rgba(200, 220, 255, 0.9)',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            Retry Now
+          </button>
+          {retryCount > 0 && (
+            <p style={{ color: 'rgba(200, 215, 240, 0.4)', margin: '12px 0 0', fontSize: '12px' }}>
+              Auto-retrying in 5 minutes... (Attempt {retryCount}/3)
+            </p>
+          )}
+        </div>
+        <style jsx>{nightSummaryStyles}</style>
+      </div>
+    );
+  }
+
+  const formatNumber = (num) => num?.toLocaleString('en-IN') || '0';
   const formatChange = (change, percent) => {
     const sign = change >= 0 ? '+' : '';
-    return `${sign}${formatNumber(change)} (${sign}${percent.toFixed(2)}%)`;
+    return `${sign}${formatNumber(change)} (${sign}${(percent || 0).toFixed(2)}%)`;
   };
+
+  // Use live data from API
+  const markets = summary.markets || {};
+  const developments = summary.developments || [];
+  const tomorrow = summary.tomorrow || [];
 
   return (
     <>
       <div className="li-night-summary">
+        {/* Live data indicator */}
+        {summary.isLive && (
+          <div style={{ 
+            position: 'absolute', 
+            top: '12px', 
+            right: '12px', 
+            background: 'rgba(100, 200, 150, 0.15)',
+            border: '1px solid rgba(100, 200, 150, 0.3)',
+            padding: '4px 10px',
+            borderRadius: '4px',
+            fontSize: '10px',
+            color: 'rgba(100, 200, 150, 0.9)',
+            fontWeight: 600,
+            letterSpacing: '0.05em',
+          }}>
+            ● LIVE
+          </div>
+        )}
+
         {/* Header */}
         <div className="li-ns-header">
           <span className="li-ns-icon">🌙</span>
           <div className="li-ns-title-block">
             <h3 className="li-ns-title">What You Missed Today</h3>
-            <p className="li-ns-date">{DUMMY_SUMMARY.date}</p>
+            <p className="li-ns-date">{summary.date}</p>
           </div>
           <span className="li-ns-time">{time} IST</span>
         </div>
@@ -89,30 +181,30 @@ export default function NightSummary() {
             <div className="li-ns-market-grid">
               <div className="li-ns-market-item">
                 <span className="li-ns-market-label">NIFTY 50</span>
-                <span className="li-ns-market-value">{formatNumber(DUMMY_SUMMARY.markets.nifty.value)}</span>
-                <span className={`li-ns-market-change ${DUMMY_SUMMARY.markets.nifty.change >= 0 ? 'positive' : 'negative'}`}>
-                  {formatChange(DUMMY_SUMMARY.markets.nifty.change, DUMMY_SUMMARY.markets.nifty.percent)}
+                <span className="li-ns-market-value">{formatNumber(markets.nifty?.value)}</span>
+                <span className={`li-ns-market-change ${(markets.nifty?.change || 0) >= 0 ? 'positive' : 'negative'}`}>
+                  {formatChange(markets.nifty?.change, markets.nifty?.percent)}
                 </span>
               </div>
               <div className="li-ns-market-item">
                 <span className="li-ns-market-label">SENSEX</span>
-                <span className="li-ns-market-value">{formatNumber(DUMMY_SUMMARY.markets.sensex.value)}</span>
-                <span className={`li-ns-market-change ${DUMMY_SUMMARY.markets.sensex.change >= 0 ? 'positive' : 'negative'}`}>
-                  {formatChange(DUMMY_SUMMARY.markets.sensex.change, DUMMY_SUMMARY.markets.sensex.percent)}
+                <span className="li-ns-market-value">{formatNumber(markets.sensex?.value)}</span>
+                <span className={`li-ns-market-change ${(markets.sensex?.change || 0) >= 0 ? 'positive' : 'negative'}`}>
+                  {formatChange(markets.sensex?.change, markets.sensex?.percent)}
                 </span>
               </div>
               <div className="li-ns-market-item">
                 <span className="li-ns-market-label">BANK NIFTY</span>
-                <span className="li-ns-market-value">{formatNumber(DUMMY_SUMMARY.markets.bankNifty.value)}</span>
-                <span className={`li-ns-market-change ${DUMMY_SUMMARY.markets.bankNifty.change >= 0 ? 'positive' : 'negative'}`}>
-                  {formatChange(DUMMY_SUMMARY.markets.bankNifty.change, DUMMY_SUMMARY.markets.bankNifty.percent)}
+                <span className="li-ns-market-value">{formatNumber(markets.bankNifty?.value)}</span>
+                <span className={`li-ns-market-change ${(markets.bankNifty?.change || 0) >= 0 ? 'positive' : 'negative'}`}>
+                  {formatChange(markets.bankNifty?.change, markets.bankNifty?.percent)}
                 </span>
               </div>
               <div className="li-ns-market-item li-ns-fii">
                 <span className="li-ns-market-label">FII</span>
-                <span className="li-ns-market-value">₹{formatNumber(DUMMY_SUMMARY.markets.fii.value)} Cr</span>
-                <span className={`li-ns-market-change ${DUMMY_SUMMARY.markets.fii.type === 'buyers' ? 'positive' : 'negative'}`}>
-                  Net {DUMMY_SUMMARY.markets.fii.type}
+                <span className="li-ns-market-value">₹{formatNumber(markets.fii?.value)} Cr</span>
+                <span className={`li-ns-market-change ${markets.fii?.type === 'buyers' ? 'positive' : 'negative'}`}>
+                  Net {markets.fii?.type || 'neutral'}
                 </span>
               </div>
             </div>
@@ -123,14 +215,20 @@ export default function NightSummary() {
             <h4 className="li-ns-card-title">
               <span>⚡</span> Key Developments
             </h4>
-            <ul className="li-ns-list">
-              {DUMMY_SUMMARY.developments.map((item, i) => (
-                <li key={i} className="li-ns-list-item">
-                  <span className="li-ns-list-icon">{item.icon}</span>
-                  <span className="li-ns-list-text">{item.text}</span>
-                </li>
-              ))}
-            </ul>
+            {developments.length > 0 ? (
+              <ul className="li-ns-list">
+                {developments.map((item, i) => (
+                  <li key={i} className="li-ns-list-item">
+                    <span className="li-ns-list-icon">{item.icon}</span>
+                    <span className="li-ns-list-text">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p style={{ color: 'rgba(200, 215, 240, 0.5)', fontSize: '14px', margin: '16px 0' }}>
+                No major developments today
+              </p>
+            )}
           </div>
 
           {/* Tomorrow's Watch Card */}
@@ -138,43 +236,49 @@ export default function NightSummary() {
             <h4 className="li-ns-card-title">
               <span>🔮</span> Tomorrow's Watch
             </h4>
-            <ul className="li-ns-list">
-              {DUMMY_SUMMARY.tomorrow.map((item, i) => (
-                <li key={i} className="li-ns-list-item li-ns-tomorrow-item">
-                  <span className="li-ns-time-badge">{item.time}</span>
-                  <span className="li-ns-list-text">{item.text}</span>
-                </li>
-              ))}
-            </ul>
+            {tomorrow.length > 0 ? (
+              <ul className="li-ns-list">
+                {tomorrow.map((item, i) => (
+                  <li key={i} className="li-ns-list-item li-ns-tomorrow-item">
+                    <span className="li-ns-time-badge">{item.time}</span>
+                    <span className="li-ns-list-text">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p style={{ color: 'rgba(200, 215, 240, 0.5)', fontSize: '14px', margin: '16px 0' }}>
+                No events scheduled for tomorrow
+              </p>
+            )}
           </div>
         </div>
 
         {/* WhatsApp Share + Opt-in */}
         <WhatsAppShare 
           summary={{
-            title: `What You Missed Today - ${DUMMY_SUMMARY.date}`,
+            title: `What You Missed Today - ${summary.date}`,
             marketSummary: {
               nifty: {
-                close: formatNumber(DUMMY_SUMMARY.markets.nifty.value),
-                change: DUMMY_SUMMARY.markets.nifty.change > 0 ? `+${DUMMY_SUMMARY.markets.nifty.change}` : DUMMY_SUMMARY.markets.nifty.change,
-                changePercent: `${DUMMY_SUMMARY.markets.nifty.percent > 0 ? '+' : ''}${DUMMY_SUMMARY.markets.nifty.percent}%`,
+                close: formatNumber(markets.nifty?.value),
+                change: (markets.nifty?.change || 0) > 0 ? `+${markets.nifty?.change}` : String(markets.nifty?.change || 0),
+                changePercent: `${(markets.nifty?.percent || 0) > 0 ? '+' : ''}${markets.nifty?.percent || 0}%`,
               },
               sensex: {
-                close: formatNumber(DUMMY_SUMMARY.markets.sensex.value),
-                change: DUMMY_SUMMARY.markets.sensex.change > 0 ? `+${DUMMY_SUMMARY.markets.sensex.change}` : DUMMY_SUMMARY.markets.sensex.change,
-                changePercent: `${DUMMY_SUMMARY.markets.sensex.percent > 0 ? '+' : ''}${DUMMY_SUMMARY.markets.sensex.percent}%`,
+                close: formatNumber(markets.sensex?.value),
+                change: (markets.sensex?.change || 0) > 0 ? `+${markets.sensex?.change}` : String(markets.sensex?.change || 0),
+                changePercent: `${(markets.sensex?.percent || 0) > 0 ? '+' : ''}${markets.sensex?.percent || 0}%`,
               },
-              trend: DUMMY_SUMMARY.markets.nifty.change > 0 ? 'bullish' : 'bearish',
+              trend: (markets.nifty?.change || 0) > 0 ? 'bullish' : 'bearish',
             },
-            topHeadlines: DUMMY_SUMMARY.developments.map(d => ({
+            topHeadlines: developments.map(d => ({
               headline: d.text,
               impact: 'Notable',
             })),
             keyTakeaways: [
-              `Markets ${DUMMY_SUMMARY.markets.nifty.change > 0 ? 'rallied' : 'declined'} with FII as net ${DUMMY_SUMMARY.markets.fii.type}`,
-              'Q3 earnings season begins tomorrow',
+              `Markets ${(markets.nifty?.change || 0) > 0 ? 'rallied' : 'declined'} with FII as net ${markets.fii?.type || 'neutral'}`,
+              tomorrow.length > 0 ? `Key event: ${tomorrow[0]?.text}` : 'No major events tomorrow',
             ],
-            tomorrowWatch: DUMMY_SUMMARY.tomorrow.map(t => ({
+            tomorrowWatch: tomorrow.map(t => ({
               event: t.text,
               time: t.time,
             })),

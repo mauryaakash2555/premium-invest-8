@@ -144,10 +144,15 @@ export default function HeadlineCard({ headline, isActive = false }) {
           transform: translateY(-2px);
         }
 
-        /* 🔴 BREAKING NEWS - Red pulse glow effect */
+        /* 🔴 BREAKING NEWS - Red pulse glow effect (3x only) */
         .li-headline-card.breaking-news {
           border-color: rgba(255, 80, 80, 0.5);
-          animation: breakingNewsGlow 1.5s ease-in-out infinite;
+          animation: breakingNewsGlow 1.5s ease-in-out 3;
+          /* Final state after 3 pulses */
+          box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.3),
+            0 0 30px rgba(255, 80, 80, 0.3),
+            0 0 60px rgba(255, 80, 80, 0.15);
         }
 
         .li-headline-card.breaking-news:hover,
@@ -216,11 +221,11 @@ export default function HeadlineCard({ headline, isActive = false }) {
           color: var(--urgency-color);
         }
 
-        /* 🔴 Breaking urgency badge - enhanced red pulse */
+        /* 🔴 Breaking urgency badge - enhanced red pulse (3x only) */
         .li-headline-urgency.breaking {
           background: rgba(255, 80, 80, 0.25);
           color: rgba(255, 100, 100, 1);
-          animation: breakingBadgePulse 1s ease-in-out infinite;
+          animation: breakingBadgePulse 1s ease-in-out 3;
           box-shadow: 0 0 8px rgba(255, 80, 80, 0.4);
         }
 

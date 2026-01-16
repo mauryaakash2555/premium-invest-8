@@ -6,12 +6,13 @@ import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
+import { LaserBeam } from "@/components/LaserBeamCanvas";
 
 /*
   LAYOUT-LOCKED: /tools hub page
   Spec:
-  - Hero + exactly 5 cards
-  - Only Tax tool is active
+  - Hero + exactly 6 cards (updated with All-in-One Calculator)
+  - Tax tool and Property vs SIP are active
   - Others show "Coming Soon" and appear disabled
   Edit only with explicit instruction.
 */
@@ -23,10 +24,25 @@ export const metadata = buildMetadata({
   path: "/tools",
 });
 
-function ToolCard({ title, subtitle, href, active }) {
+function ToolCard({ title, subtitle, href, active, laser = false }) {
   const content = (
-    <Card className="border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow">
-      <CardContent className="p-5">
+    <Card className="border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative overflow-hidden rounded-xl">
+      {laser ? (
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <LaserBeam
+            width="100%"
+            height="100%"
+            color="#c0a062"
+            borderRadius={12}
+            duration={10}
+            glowIntensity={14}
+            beamLength={0.09}
+            borderWidth={0}
+            backgroundColor="transparent"
+          />
+        </div>
+      ) : null}
+      <CardContent className="p-5 relative z-10">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-base font-semibold gold-gradient-text truncate">
@@ -163,6 +179,13 @@ export default function ToolsHubPage() {
                 title="Human Life Value Shield"
                 href="/tools/insurance-value"
                 active={false}
+              />
+              <ToolCard
+                active
+                title="All in One Financial Calculator"
+                subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
+                href="/tools/all-calculators"
+                laser
               />
             </div>
 

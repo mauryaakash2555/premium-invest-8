@@ -25,6 +25,10 @@
     {
       "path": "/api/live-intelligence/mood",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/check-expiry",
+      "schedule": "0 * * * *"
     }
   ]
 }

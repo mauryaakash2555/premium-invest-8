@@ -5,6 +5,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════════════
+   TRADINGVIEW WIDGET FIXES
+   Hide copyright popups, fix loading states
+   ═══════════════════════════════════════════════════════════════ */
+.tradingview-widget-copyright {
+  display: none !important;
+}
+
+.tradingview-widget-container iframe {
+  pointer-events: auto !important;
+}
+
+/* Hide TradingView popup overlays */
+.tv-dialog,
+.tv-dialog__modal-wrap,
+[class*="popup-"] {
+  display: none !important;
+}
+
+/* Ensure charts load with proper background */
+.tradingview-widget-container {
+  background: #131722 !important;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

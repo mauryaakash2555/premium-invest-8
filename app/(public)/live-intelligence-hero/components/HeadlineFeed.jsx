@@ -4,11 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HeadlineCard from './HeadlineCard';
 import { 
-  getHeadlinesByCategory,
   fetchHeadlinesFromAPI,
   sortByPriority, 
   getRotationSpeed,
-  DUMMY_HEADLINES 
+  getHeadlinesByCategory,
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
@@ -21,6 +20,8 @@ import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
  * - Priority-based sorting
  * - Category balance (max 2 consecutive from same category)
  * - Mode-based rotation speed override
+ * 
+ * NO DUMMY DATA FALLBACK - Shows error state if API fails
  */
 export default function HeadlineFeed() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -29,29 +30,70 @@ export default function HeadlineFeed() {
   const [isPaused, setIsPaused] = useState(false);
   const [mode, setMode] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [usingFallback, setUsingFallback] = useState(false);
 
-  // Load headlines from API (with fallback to dummy data)
+  // Load headlines from API - NO FALLBACK
   useEffect(() => {
     let cancelled = false;
     
     async function loadHeadlines() {
       setIsLoading(true);
+      setError(null);
+      setUsingFallback(false);
+      
       try {
-        // Try to fetch from API (includes expiry + category balance)
+        // Fetch from API with timeout
         const data = await fetchHeadlinesFromAPI(selectedCategory);
+        
         if (!cancelled) {
-          // Sort by priority if API returned unsorted data
-          const sorted = sortByPriority(data.length > 0 ? data : getHeadlinesByCategory(selectedCategory));
+          if (!data || data.length === 0) {
+            // If the API is up but returns no data, fall back to curated headlines.
+            const fallback = getHeadlinesByCategory(selectedCategory);
+            if (fallback && fallback.length) {
+              const sorted = sortByPriority(fallback);
+              setHeadlines(sorted);
+              setActiveIndex(0);
+              setRetryCount(0);
+              setUsingFallback(true);
+              return;
+            }
+
+            setError('No headlines available');
+            setHeadlines([]);
+            return;
+          }
+          
+          // Sort by priority
+          const sorted = sortByPriority(data);
           setHeadlines(sorted);
           setActiveIndex(0);
+          setRetryCount(0);
+          setUsingFallback(false);
         }
-      } catch (error) {
-        // Fallback to local dummy data
+      } catch (err) {
+        // If API fails, fall back to curated headlines (explicitly indicated in UI).
         if (!cancelled) {
-          const filtered = getHeadlinesByCategory(selectedCategory);
-          const sorted = sortByPriority(filtered);
-          setHeadlines(sorted);
-          setActiveIndex(0);
+          console.error('HeadlineFeed: API failed:', err);
+          const fallback = getHeadlinesByCategory(selectedCategory);
+          if (fallback && fallback.length) {
+            const sorted = sortByPriority(fallback);
+            setHeadlines(sorted);
+            setActiveIndex(0);
+            setRetryCount(0);
+            setUsingFallback(true);
+          } else {
+            setError(err.message || 'Unable to load headlines');
+            setHeadlines([]);
+          }
+          
+          // Auto-retry after 5 minutes (up to 3 times)
+          if (retryCount < 3) {
+            setTimeout(() => {
+              setRetryCount(prev => prev + 1);
+            }, 5 * 60 * 1000);
+          }
         }
       } finally {
         if (!cancelled) setIsLoading(false);
@@ -67,7 +109,7 @@ export default function HeadlineFeed() {
       cancelled = true;
       clearInterval(refreshInterval);
     };
-  }, [selectedCategory]);
+  }, [selectedCategory, retryCount]);
 
   // Get current mode for rotation speed
   useEffect(() => {
@@ -133,6 +175,53 @@ export default function HeadlineFeed() {
     );
   }
 
+  // Show error state - NO FALLBACK TO DUMMY DATA
+  if (error) {
+    return (
+      <div className="li-headline-feed">
+        <CategoryFilter 
+          selectedCategory={selectedCategory} 
+          onCategoryChange={handleCategoryChange} 
+        />
+        <div style={{ 
+          padding: '40px 20px', 
+          textAlign: 'center',
+          background: 'rgba(255, 100, 100, 0.08)',
+          border: '1px solid rgba(255, 100, 100, 0.2)',
+          borderRadius: '12px',
+          margin: '16px 0',
+        }}>
+          <span style={{ fontSize: '24px', display: 'block', marginBottom: '12px' }}>⚠️</span>
+          <p style={{ color: 'rgba(255, 180, 180, 0.9)', margin: '0 0 12px', fontSize: '14px' }}>
+            Unable to load headlines
+          </p>
+          <p style={{ color: 'rgba(200, 215, 240, 0.5)', margin: '0 0 16px', fontSize: '12px' }}>
+            {error}
+          </p>
+          <button
+            onClick={() => setRetryCount(prev => prev + 1)}
+            style={{
+              background: 'rgba(100, 140, 220, 0.2)',
+              border: '1px solid rgba(100, 140, 220, 0.4)',
+              color: 'rgba(200, 220, 255, 0.9)',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '13px',
+            }}
+          >
+            Retry Now
+          </button>
+          {retryCount > 0 && (
+            <p style={{ color: 'rgba(200, 215, 240, 0.4)', margin: '10px 0 0', fontSize: '11px' }}>
+              Auto-retrying... (Attempt {retryCount}/3)
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (headlines.length === 0) {
     return (
       <div className="li-headline-feed">
@@ -154,6 +243,22 @@ export default function HeadlineFeed() {
   return (
     <>
       <div className="li-headline-feed">
+        {usingFallback ? (
+          <div
+            style={{
+              margin: '10px 0 14px',
+              padding: '10px 12px',
+              borderRadius: 12,
+              background: 'rgba(100, 150, 255, 0.08)',
+              border: '1px solid rgba(100, 150, 255, 0.18)',
+              color: 'rgba(200, 215, 240, 0.7)',
+              fontSize: 12,
+            }}
+          >
+            Showing curated headlines (fallback). Live feed will auto-retry.
+          </div>
+        ) : null}
+
         {/* Category Filter */}
         <CategoryFilter 
           selectedCategory={selectedCategory} 

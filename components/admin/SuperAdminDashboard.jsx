@@ -9,6 +9,8 @@ import { EmailPreferences } from '@/components/admin/EmailPreferences';
 import { DailyKpisPanel } from '@/components/admin/DailyKpisPanel';
 import { DeliverablesView } from '@/components/admin/DeliverablesView';
 import { LiveIntelligenceAdmin } from '@/components/admin/LiveIntelligenceAdmin';
+import { AioTrackerView } from '@/components/admin/AioTrackerView';
+import { AiProvidersPanel } from '@/components/admin/AiProvidersPanel';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -55,6 +57,8 @@ export function SuperAdminDashboard({ onLogout }) {
   const [tab, setTab] = useState('overview');
   const [summary, setSummary] = useState(null);
   const [analytics, setAnalytics] = useState(null);
+  const [aioTracker, setAioTracker] = useState(null);
+  const [aioDays, setAioDays] = useState(30);
   const [strategy, setStrategy] = useState(null);
   const [strategyBusy, setStrategyBusy] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -186,6 +190,18 @@ export function SuperAdminDashboard({ onLogout }) {
     }
   }
 
+  async function loadAioTracker(days = aioDays) {
+    setBusy(true);
+    try {
+      const { r, j } = await fetchAdminJSON(`/api/admin/aio-tracker?days=${encodeURIComponent(String(days))}`);
+      setAioTracker(r.ok && j?.ok ? j : null);
+    } catch {
+      setAioTracker(null);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function loadStrategy(force = false) {
     setStrategyBusy(true);
     try {
@@ -256,6 +272,7 @@ export function SuperAdminDashboard({ onLogout }) {
         <button className={tab === 'deliverables' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('deliverables')}>Deliverables</button>
         <button className={tab === 'live-intel' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('live-intel')}>Live Intelligence</button>
         <button className={tab === 'analytics' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('analytics'); if (!analytics) void loadAnalytics(); }}>Analytics</button>
+        <button className={tab === 'aio-tracker' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('aio-tracker'); if (!aioTracker) void loadAioTracker(); }}>AIO Tracker</button>
         <button className={tab === 'system' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('system')}>System</button>
       </nav>
 
@@ -383,6 +400,35 @@ export function SuperAdminDashboard({ onLogout }) {
         {tab === 'live-intel' ? <LiveIntelligenceAdmin /> : null}
         {tab === 'analytics' ? <AnalyticsView analytics={analytics} /> : null}
 
+        {tab === 'aio-tracker' ? (
+          <div className="sa-panel">
+            <div className="sa-panelHead">
+              <div className="sa-panelTitle">AIO TRACKER</div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ opacity: 0.7, fontSize: 12 }}>Window</div>
+                {[7, 30, 90].map((d) => (
+                  <button
+                    key={d}
+                    className="sa-miniBtn"
+                    onClick={() => {
+                      setAioDays(d);
+                      void loadAioTracker(d);
+                    }}
+                    style={aioDays === d ? { borderColor: 'rgba(192,160,98,0.55)' } : undefined}
+                  >
+                    {d}d
+                  </button>
+                ))}
+                <button className="sa-miniBtn" onClick={() => void loadAioTracker(aioDays)}>
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            <AioTrackerView data={aioTracker} />
+          </div>
+        ) : null}
+
         {tab === 'system' ? (
           <div className="sa-panel">
             <div className="sa-panelHead">
@@ -397,15 +443,7 @@ export function SuperAdminDashboard({ onLogout }) {
               <p className="sa-line">Most Asked: &quot;{smartCache?.most_asked?.question || 'N/A'}&quot; ({Number(smartCache?.most_asked?.count) || 0} times)</p>
             </section>
 
-            <section className="sa-block">
-              <h3 className="sa-panelTitle">AI Usage (Today)</h3>
-              <p className="sa-line">Calls: Gemini {summary?.today?.ai_provider_counts?.gemini ?? 0} · Groq {summary?.today?.ai_provider_counts?.groq ?? 0} · Claude {summary?.today?.ai_provider_counts?.anthropic ?? 0} · Rule {summary?.today?.ai_provider_counts?.rule ?? 0}</p>
-              <p className="sa-line">Tokens used (app-tracked): {Number(summary?.today?.ai_tokens_today ?? 0).toLocaleString('en-IN')}</p>
-              <p className="sa-line">Tokens by provider: Gemini {Number(summary?.today?.ai_tokens_by_provider?.gemini ?? 0).toLocaleString('en-IN')} · Groq {Number(summary?.today?.ai_tokens_by_provider?.groq ?? 0).toLocaleString('en-IN')} · Claude {Number(summary?.today?.ai_tokens_by_provider?.anthropic ?? 0).toLocaleString('en-IN')}</p>
-              <p className="sa-line">Daily call limits (config): Gemini {summary?.today?.ai_daily_limits?.gemini ?? '—'} · Groq {summary?.today?.ai_daily_limits?.groq ?? '—'} · Claude {summary?.today?.ai_daily_limits?.anthropic ?? '—'}</p>
-              <p className="sa-line">Remaining calls today: Gemini {summary?.today?.ai_daily_limits?.gemini ? Math.max(0, Number(summary?.today?.ai_daily_limits?.gemini) - Number(summary?.today?.ai_provider_counts?.gemini ?? 0)) : '—'} · Groq {summary?.today?.ai_daily_limits?.groq ? Math.max(0, Number(summary?.today?.ai_daily_limits?.groq) - Number(summary?.today?.ai_provider_counts?.groq ?? 0)) : '—'} · Claude {summary?.today?.ai_daily_limits?.anthropic ? Math.max(0, Number(summary?.today?.ai_daily_limits?.anthropic) - Number(summary?.today?.ai_provider_counts?.anthropic ?? 0)) : '—'}</p>
-              <p className="sa-muted">Note: Provider billing/credits remaining requires separate provider billing APIs + keys; this view is real usage tracked by this app.</p>
-            </section>
+            <AiProvidersPanel summary={summary} />
 
             <AffiliateTracking />
             <EmailPreferences />
