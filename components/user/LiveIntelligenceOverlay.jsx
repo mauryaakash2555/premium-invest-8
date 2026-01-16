@@ -23,6 +23,7 @@ import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
 import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import NightSummary from '@/components/live-intelligence/NightSummary';
+import AllInOneCalculator from '@/components/tools/AllInOneCalculator';
 
 // New feature imports for voice, theme, gamification, personalization
 import { BadgeDisplay } from '@/components/live-intelligence/BadgeDisplay';
@@ -2275,6 +2276,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
           <div style={{ gridColumn: '1 / -1' }}>
             <HeadlineFeed />
+          </div>
+
+          {/* All-in-One Financial Calculator */}
+          <div style={{ gridColumn: '1 / -1', marginTop: '24px' }}>
+            <AllInOneCalculator />
           </div>
 
           {/* Night section (only visible in night_summary mode) */}

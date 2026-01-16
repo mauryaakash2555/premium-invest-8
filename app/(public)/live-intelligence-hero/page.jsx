@@ -9,6 +9,7 @@ import NightSummary from './components/NightSummary';
 import HeadlineFeed from './components/HeadlineFeed';
 import StreakBadge from './components/StreakBadge';
 import DonutCalculator from './components/DonutCalculator';
+import AllInOneCalculator from '@/components/tools/AllInOneCalculator';
 import BadgeDisplay from '@/components/live-intelligence/BadgeDisplay';
 import AchievementPopup from '@/components/live-intelligence/AchievementPopup';
 import FeedToggle from '@/components/live-intelligence/FeedToggle';
@@ -1875,6 +1876,11 @@ export default function LiveIntelligenceHeroPage() {
 
           {/* Headline Feed - Rotating financial news */}
           <HeadlineFeed />
+
+          {/* All-in-One Financial Calculator */}
+          <div className="max-w-7xl mx-auto" style={{ marginTop: '32px' }}>
+            <AllInOneCalculator />
+          </div>
 
           {/* ═══════════════════════════════════════════════════════════
               SERVICE QUICK ACCESS - Clickable cards linking to services
