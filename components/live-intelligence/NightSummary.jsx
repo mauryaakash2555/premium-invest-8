@@ -98,17 +98,21 @@ export default function NightSummary() {
           setSummaryData({
             date: data.date || DEFAULT_SUMMARY.date,
             markets: data.markets || DEFAULT_SUMMARY.markets,
-            gainers: data.gainers || [],
-            losers: data.losers || [],
-            developments: data.developments || [],
-            tomorrow: data.tomorrow || [],
+            gainers: data.gainers?.length > 0 ? data.gainers : DEFAULT_SUMMARY.gainers,
+            losers: data.losers?.length > 0 ? data.losers : DEFAULT_SUMMARY.losers,
+            developments: data.developments?.length > 0 ? data.developments : DEFAULT_SUMMARY.developments,
+            tomorrow: data.tomorrow?.length > 0 ? data.tomorrow : DEFAULT_SUMMARY.tomorrow,
             isLive: data.isLive ?? true,
           });
         } else {
+          // API failed - use DEFAULT_SUMMARY
+          setSummaryData(DEFAULT_SUMMARY);
           setError(data.message || 'Failed to load summary');
         }
       } catch (err) {
         console.error('Failed to fetch night summary:', err);
+        // On error - use DEFAULT_SUMMARY
+        setSummaryData(DEFAULT_SUMMARY);
         setError('Unable to load market summary');
       } finally {
         setIsLoading(false);
