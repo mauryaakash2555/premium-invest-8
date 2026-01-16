@@ -6,9 +6,9 @@ import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
-  title: "All in One Financial Calculator | 27+ Free Calculators | BM Wealth",
+  title: "All-in-One Financial Calculator | SIP, Tax, EMI, NPS – BM Wealth",
   description:
-    "Free all-in-one financial calculator with 27+ tools: SIP, Lumpsum, EMI, Tax, PPF, NPS, ELSS, Retirement, Goal Planning, Insurance, and more. Instant results with educational interpretations.",
+    "Free financial calculators for SIP, tax, EMI, PPF, NPS, retirement and wealth planning. Educational tools by BM Wealth.",
   path: "/tools/all-calculators",
   keywords: "financial calculator, SIP calculator, tax calculator, EMI calculator, retirement calculator, goal planning, mutual fund calculator, investment tools, free calculator India",
 });

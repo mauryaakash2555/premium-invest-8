@@ -152,8 +152,9 @@ export default function NightSummary() {
   // Only show in night_summary mode (9PM - 12AM)
   if (!isVisible || !mode) return null;
 
-  const formatNumber = (num) => num.toLocaleString('en-IN');
+  const formatNumber = (num) => num != null ? num.toLocaleString('en-IN') : '--';
   const formatChange = (change, percent) => {
+    if (change == null || percent == null) return '--';
     const sign = change >= 0 ? '+' : '';
     return `${sign}${formatNumber(change)} (${sign}${percent.toFixed(2)}%)`;
   };

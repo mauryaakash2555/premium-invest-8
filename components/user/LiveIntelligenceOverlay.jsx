@@ -24,8 +24,106 @@ import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 
+// New feature imports for voice, theme, gamification, personalization
+import { BadgeDisplay } from '@/components/live-intelligence/BadgeDisplay';
+import { AchievementPopup } from '@/components/live-intelligence/AchievementPopup';
+import { FeedToggle } from '@/components/live-intelligence/FeedToggle';
+// Theme toggle removed - we follow the main system theme
+import { getVoiceReader } from '@/lib/live-intelligence/voice';
+import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
+import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
+import Link from 'next/link';
+
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
+
+/**
+ * VoiceControl - Button to read headlines aloud
+ */
+const VoiceControl = ({ headline, summary, className = '' }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [rate, setRate] = useState(1.0);
+  
+  useEffect(() => {
+    const reader = getVoiceReader();
+    if (reader?.isSupported()) {
+      setIsEnabled(true);
+    }
+  }, []);
+  
+  const handleToggle = useCallback(() => {
+    const reader = getVoiceReader();
+    if (!reader) return;
+    
+    if (isPlaying) {
+      reader.stop();
+      setIsPlaying(false);
+    } else {
+      reader.setRate(rate);
+      if (headline) {
+        reader.readHeadline(headline);
+      } else if (summary) {
+        reader.readSummary(summary);
+      }
+      setIsPlaying(true);
+    }
+  }, [isPlaying, headline, summary, rate]);
+  
+  // Listen for speech end
+  useEffect(() => {
+    if (!isPlaying) return;
+    
+    const checkInterval = setInterval(() => {
+      const reader = getVoiceReader();
+      if (reader && !reader.isPlaying) {
+        setIsPlaying(false);
+      }
+    }, 500);
+    
+    return () => clearInterval(checkInterval);
+  }, [isPlaying]);
+  
+  // Keyboard shortcut (Space to play/pause)
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (e.code === 'Space' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        handleToggle();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [handleToggle]);
+  
+  if (!isEnabled) return null;
+  
+  return (
+    <button
+      onClick={handleToggle}
+      className={className}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '6px 12px',
+        borderRadius: '8px',
+        border: 'none',
+        background: isPlaying ? 'rgba(100, 255, 150, 0.15)' : 'rgba(170, 198, 255, 0.10)',
+        color: isPlaying ? 'rgba(100, 255, 150, 0.95)' : 'rgba(170, 198, 255, 0.80)',
+        fontSize: '13px',
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+      }}
+      title={isPlaying ? 'Stop reading (Space)' : 'Read aloud (Space)'}
+    >
+      <span>{isPlaying ? '⏸️' : '🔊'}</span>
+      <span className="hidden sm:inline">{isPlaying ? 'Stop' : 'Listen'}</span>
+    </button>
+  );
+};
 
 /**
  * MarketStatusBadge - Shows NSE OPEN/CLOSED status
@@ -110,142 +208,6 @@ const TradingViewEmbed = ({ scriptSrc, options, className, style }) => {
 };
 
 /**
- * ChartLoadingWrapper - Shows loading state with timeout for TradingView iframes
- * Displays spinner while loading, then shows error state if timeout (15s) exceeded
- */
-const ChartLoadingWrapper = ({ src, title, height = '500px', style = {} }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const iframeRef = useRef(null);
-
-  useEffect(() => {
-    // Reset states on retry or src change
-    setIsLoading(true);
-    setHasError(false);
-
-    // 15 second timeout for loading
-    const timeout = setTimeout(() => {
-      if (isLoading) {
-        setHasError(true);
-        setIsLoading(false);
-      }
-    }, 15000);
-
-    return () => clearTimeout(timeout);
-  }, [src, retryCount]);
-
-  const handleLoad = useCallback(() => {
-    setIsLoading(false);
-    setHasError(false);
-  }, []);
-
-  const handleRetry = useCallback(() => {
-    setRetryCount(c => c + 1);
-  }, []);
-
-  return (
-    <div style={{ height, width: '100%', background: '#000000', position: 'relative', ...style }}>
-      {/* Loading spinner overlay */}
-      {isLoading && !hasError && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#000000',
-          zIndex: 2,
-          gap: '16px',
-        }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            border: '2px solid rgba(100, 180, 255, 0.15)',
-            borderTopColor: 'rgba(100, 180, 255, 0.8)',
-            borderRadius: '50%',
-            animation: 'li-chart-spin 1s linear infinite',
-          }} />
-          <div style={{ color: 'rgba(180, 200, 230, 0.6)', fontSize: '12px' }}>
-            Loading chart...
-          </div>
-          <style>{`
-            @keyframes li-chart-spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
-      )}
-
-      {/* Error state with retry */}
-      {hasError && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#000000',
-          zIndex: 2,
-          gap: '12px',
-        }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 180, 100, 0.7)" strokeWidth="1.5">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <div style={{ color: 'rgba(180, 200, 230, 0.7)', fontSize: '13px', textAlign: 'center' }}>
-            Chart is taking longer than expected
-          </div>
-          <button
-            onClick={handleRetry}
-            style={{
-              padding: '8px 20px',
-              background: 'rgba(100, 180, 255, 0.12)',
-              border: '1px solid rgba(100, 180, 255, 0.3)',
-              borderRadius: '6px',
-              color: 'rgba(140, 200, 255, 0.95)',
-              fontSize: '12px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(100, 180, 255, 0.2)'}
-            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(100, 180, 255, 0.12)'}
-          >
-            Retry
-          </button>
-        </div>
-      )}
-
-      {/* Iframe - always rendered for proper loading */}
-      <iframe
-        ref={iframeRef}
-        key={retryCount}
-        src={src}
-        onLoad={handleLoad}
-        style={{
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          display: 'block',
-          backgroundColor: '#000000',
-          opacity: isLoading || hasError ? 0 : 1,
-          transition: 'opacity 0.3s ease',
-        }}
-        frameBorder="0"
-        allowtransparency="true"
-        scrolling="no"
-        title={title}
-        loading="lazy"
-      />
-    </div>
-  );
-};
-
-/**
  * LiveIntelligenceOverlay
  * 
  * Full-page overlay containing:
@@ -292,14 +254,6 @@ export default function LiveIntelligenceOverlay({
       document.body.setAttribute('data-laser-active', 'true');
     }
     
-    // Track panel opens for engagement (localStorage persists across sessions)
-    try {
-      const currentCount = parseInt(localStorage.getItem('li_panel_opens') || '0', 10);
-      localStorage.setItem('li_panel_opens', String(currentCount + 1));
-    } catch (e) {
-      // Ignore storage errors
-    }
-    
     // Animation complete
     setTimeout(() => setIsAnimating(false), 400);
   }, [isOpen, isAnimating]);
@@ -334,20 +288,8 @@ export default function LiveIntelligenceOverlay({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     window.__openLiveIntelligence = openOverlay;
-    
-    // Task 4.3: Debug function to reset all tracking (for testing)
-    window.resetLiveIntelTracking = function() {
-      localStorage.removeItem('li_panel_opens');
-      localStorage.removeItem('li_panel_open_times');
-      sessionStorage.removeItem('li_paused_headlines');
-      localStorage.removeItem('li_whatsapp_first_shown');
-      sessionStorage.removeItem('li_session_id');
-      console.log('✅ Live Intelligence tracking reset complete');
-    };
-    
     return () => {
       delete window.__openLiveIntelligence;
-      delete window.resetLiveIntelTracking;
     };
   }, [openOverlay]);
 
@@ -457,7 +399,7 @@ export default function LiveIntelligenceOverlay({
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 10001,
+        zIndex: 9999,
         background: '#090A0C',
         overflowY: 'auto',
         overflowX: 'hidden',
@@ -646,49 +588,13 @@ export default function LiveIntelligenceOverlay({
             box-shadow: 0 0 0 6px rgba(140, 220, 180, 0); 
           }
         }
-
-        /* ═══════════════════════════════════════════════════════════
-           ICON STYLES - Clean premium look without spinning
-           ═══════════════════════════════════════════════════════════ */
-
-        /* Global Markets Icon - Static with subtle glow */
-        .li-globe-icon {
-          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
-        }
-
-        /* Live Chart Icon - Static with glow */
-        .li-chart-icon {
-          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
-        }
-
-        /* Live Signals Icon - Static with glow */
-        .li-signals-icon {
-          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
-        }
-
-        /* Live dot animation - subtle pulse only */
-        .li-live-dot {
-          width: 8px;
-          height: 8px;
-          background: rgba(140, 220, 180, 0.9);
-          border-radius: 50%;
-          animation: liveDotPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes liveDotPulse {
-          0%, 100% { 
-            opacity: 0.5; 
-            box-shadow: 0 0 0 0 rgba(140, 220, 180, 0.4); 
-          }
-          50% { 
-            opacity: 1; 
-            box-shadow: 0 0 0 6px rgba(140, 220, 180, 0); 
-          }
-        }
       `}</style>
 
       {/* PANEL SECTION - Laser video removed, panel starts at top */}
       <LiveIntelligencePanel onClose={closeOverlay} scrollContainerRef={overlayRef} />
+      
+      {/* Achievement Popup - Shows when badge is unlocked */}
+      <AchievementPopup />
 
       {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
       <div
@@ -727,53 +633,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
-  const [showWhatsAppCta, setShowWhatsAppCta] = useState(false);
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
     gold: 8,
     cash: 10,
   });
-
-  // Smart WhatsApp CTA - appears based on engagement
-  const shouldShowWhatsApp = useCallback(() => {
-    if (typeof window === 'undefined') return false;
-    
-    // Check if night_summary mode (9PM-12AM IST)
-    const now = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const istTime = new Date(now.getTime() + (istOffset - now.getTimezoneOffset() * 60 * 1000));
-    const hours = istTime.getHours();
-    const isNightSummary = hours >= 21 || hours < 0; // 9PM-12AM
-    if (isNightSummary) return true;
-    
-    // Check panel opens count
-    try {
-      const panelOpens = parseInt(localStorage.getItem('li_panel_opens') || '0', 10);
-      if (panelOpens >= 2) return true;
-    } catch (e) {}
-    
-    // Check paused headlines count
-    try {
-      const pausedHeadlines = JSON.parse(sessionStorage.getItem('li_paused_headlines') || '[]');
-      if (pausedHeadlines.length >= 3) return true;
-    } catch (e) {}
-    
-    return false;
-  }, []);
-
-  // Check WhatsApp CTA visibility on mount and periodically
-  useEffect(() => {
-    // Initial check
-    setShowWhatsAppCta(shouldShowWhatsApp());
-    
-    // Re-check every 5 seconds (in case paused headlines accumulate)
-    const interval = setInterval(() => {
-      setShowWhatsAppCta(shouldShowWhatsApp());
-    }, 5000);
-    
-    return () => clearInterval(interval);
-  }, [shouldShowWhatsApp]);
 
   const shareUrl = useMemo(() => {
     if (typeof window === 'undefined') return 'https://bmwealth.co.in';
@@ -1475,7 +1340,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
         .li-donut-value {
           color: rgba(245, 248, 255, 0.98);
-          font-size: 17px;
+          font-size: 18px;
           font-weight: 700;
           letter-spacing: -0.02em;
           line-height: 1.05;
@@ -1594,21 +1459,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             max-width: 100% !important;
             min-height: 280px !important;
           }
-
-          /* Mobile scroll fix - ensure all content is visible and scrollable */
-          .li-dash-grid {
-            overflow: visible !important;
-            min-height: auto !important;
-          }
-          .li-dash-card {
-            overflow: visible !important;
-            max-width: 100% !important;
-          }
-          /* TradingView iframe responsive on mobile */
-          .li-dash-card iframe {
-            max-width: 100% !important;
-            min-height: 280px !important;
-          }
         }
 
         /* ═══════════════════════════════════════════════════════════
@@ -1686,22 +1536,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             transform: scale(1.05);
           }
         }
-
-        /* WhatsApp CTA fade-in animation */
-        @keyframes liWhatsAppFadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(8px) scale(0.95);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        .li-whatsapp-cta {
-          animation: liWhatsAppFadeIn 0.5s ease-out;
-        }
       `}</style>
 
       <div
@@ -1719,15 +1553,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            left: '20px',
-            top: '20px',
-            zIndex: 10002,
+            left: '14px',
+            zIndex: 9999,
             width: '28px',
             height: '28px',
             borderRadius: '6px',
             border: 'none',
             background: 'transparent',
-            color: 'rgba(255, 255, 255, 0.50)',
+            color: 'rgba(140, 190, 255, 0.60)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -1737,12 +1570,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             transition: 'all 0.15s ease',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 1.0)';
+            e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.50)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.60)';
           }}
         >
           ←
@@ -1750,15 +1583,24 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
         <div className="li-header-section" style={{ marginBottom: '8px' }}>
-          {/* Row 1: Title only */}
-          <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-            Live Intelligence
-          </h2>
+          {/* Row 1: Title + Feature Controls (top-right) */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+              Live Intelligence
+            </h2>
+            
+            {/* Feature Controls: Voice, Badges */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <VoiceControl />
+              <BadgeDisplay />
+            </div>
+          </div>
           
           {/* Row 2: Mode indicator + Streak badge */}
           <div className="li-header-badges" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '10px' }}>
             <ModeIndicator />
             <StreakBadge showDetails={true} />
+            <FeedToggle />
           </div>
           
           {/* Row 3: Subtitle */}
@@ -2029,49 +1871,38 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             >
               + Add Goal
             </button>
-
-            {/* Smart WhatsApp CTA - appears based on engagement */}
-            {showWhatsAppCta && (
-              <a
-                href="https://wa.me/919876543210?text=Hi%2C%20I%27m%20interested%20in%20BM%20Wealth%20services"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="li-whatsapp-cta"
-                style={{
-                  appearance: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  border: '1px solid rgba(37, 211, 102, 0.50)',
-                  background: 'linear-gradient(180deg, rgba(37, 211, 102, 0.20) 0%, rgba(37, 211, 102, 0.08) 100%)',
-                  color: 'rgba(37, 211, 102, 0.95)',
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  boxShadow: '0 0 20px rgba(37, 211, 102, 0.15)',
-                  transition: 'all 0.25s ease',
-                  animation: 'liWhatsAppFadeIn 0.5s ease-out',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.70)';
-                  e.currentTarget.style.boxShadow = '0 0 30px rgba(37, 211, 102, 0.25)';
-                  e.currentTarget.style.background = 'linear-gradient(180deg, rgba(37, 211, 102, 0.28) 0%, rgba(37, 211, 102, 0.12) 100%)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(37, 211, 102, 0.50)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(37, 211, 102, 0.15)';
-                  e.currentTarget.style.background = 'linear-gradient(180deg, rgba(37, 211, 102, 0.20) 0%, rgba(37, 211, 102, 0.08) 100%)';
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                <span>Connect with Advisor</span>
-              </a>
-            )}
+            
+            {/* Archive Link */}
+            <Link
+              href="/archive"
+              style={{
+                appearance: 'none',
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(10,10,12,0.70)',
+                color: 'rgba(235,242,255,0.85)',
+                padding: '10px 16px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+                transition: 'all 0.25s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                textDecoration: 'none',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+                e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
+              }}
+            >
+              <span>📚</span>
+              <span>View Archive</span>
+            </Link>
           </div>
         </div>
 
@@ -2356,11 +2187,17 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            <ChartLoadingWrapper
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_nifty&symbol=NSE%3ANIFTY&interval=D&symboledit=1&saveimage=1&toolbarbg=131722&theme=dark&style=1&timezone=Asia%2FKolkata&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=1&save_image=1&details=1&calendar=0&hotlist=0&locale=in"
-              title="NIFTY 50 Live Chart"
-              height="500px"
-            />
+            <div style={{ height: '500px', width: '100%', background: '#000000' }}>
+              {/* TradingView Advanced Chart - Direct iframe for reliability */}
+              <iframe
+                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
+                style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
+                frameBorder="0"
+                allowtransparency="true"
+                scrolling="no"
+                title="TradingView Chart"
+              />
+            </div>
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
@@ -2415,12 +2252,24 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            {/* TradingView Market Overview Widget - with loading state */}
-            <ChartLoadingWrapper
-              src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
-              title="Global Markets Overview"
-              height="420px"
-            />
+            {/* TradingView Market Overview Widget - Pure Black with black background */}
+            <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
+              <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
+              <iframe
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  display: 'block',
+                  background: 'transparent',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+                title="Market Overview"
+                loading="lazy"
+              />
+            </div>
           </div>
 
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
@@ -2471,12 +2320,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               gap: '12px',
             }}>
               {[
-                { title: 'Mutual Funds', icon: 'chart-pie', desc: '5000+ schemes', link: '/mutual-funds' },
-                { title: 'SIP', icon: 'refresh-cw', desc: 'Start from ₹500', link: '/sip' },
-                { title: 'Portfolio Management', icon: 'briefcase', desc: 'PMS & AIF', link: '/portfolio-management' },
-                { title: 'Insurance', icon: 'shield-check', desc: 'Term & Health', link: '/insurance' },
-                { title: 'Trading Services', icon: 'trending-up', desc: 'Demat & Trading', link: '/trading-services' },
-                { title: 'Fixed Deposits', icon: 'landmark', desc: 'Up to 9% p.a.', link: '/fixed-deposits' },
+                { title: 'Mutual Funds', icon: 'chart-pie', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds' },
+                { title: 'SIP', icon: 'refresh-cw', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip' },
+                { title: 'Portfolio Management', icon: 'briefcase', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management' },
+                { title: 'Insurance', icon: 'shield-check', desc: 'Term & Health', link: '/api/pdf/service?service=insurance' },
+                { title: 'Trading Services', icon: 'trending-up', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services' },
+                { title: 'Fixed Deposits', icon: 'landmark', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits' },
               ].map((service) => {
                 // Premium SVG icons (Lucide-inspired)
                 const iconMap = {
@@ -2527,6 +2376,18 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   key={service.title}
                   href={service.link}
                   className="li-qa-card"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handlePdfOpen(e.currentTarget.href);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handlePdfOpen(e.currentTarget.href);
+                    }
+                  }}
                   style={{
                     display: 'block',
                     textDecoration: 'none',

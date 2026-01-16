@@ -33,6 +33,10 @@
     {
       "path": "/api/live-intelligence/night-summary",
       "schedule": "30 15 * * *"
+    },
+    {
+      "path": "/api/cron/headlines",
+      "schedule": "*/30 * * * *"
     }
   ]
 }

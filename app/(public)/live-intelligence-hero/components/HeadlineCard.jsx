@@ -1,7 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
+import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
+import { getVoiceReader } from '@/lib/live-intelligence/voice';
+import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 
 // Detailed explanations for headlines - educational content
 const HEADLINE_DETAILS = {
@@ -68,18 +72,46 @@ const getHeadlineDetails = (headline) => {
  */
 export default function HeadlineCard({ headline, isActive = false }) {
   const [showModal, setShowModal] = useState(false);
+  const [portalContainer, setPortalContainer] = useState(null);
   const category = CATEGORIES[headline.category];
   const urgency = URGENCY_LEVELS[headline.urgency];
   const details = getHeadlineDetails(headline);
+
+  // Create portal container on mount (client-side only)
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      setPortalContainer(document.body);
+    }
+  }, []);
+
+  // Handle headline click - track read and show modal
+  const handleClick = useCallback(() => {
+    // Track the read for gamification
+    const tracker = getGamificationTracker();
+    tracker.recordHeadlineRead(headline.category);
+    
+    // Track for personalization
+    const personalization = getPersonalizationEngine();
+    personalization.recordInteraction(headline.category, 'read');
+    
+    setShowModal(true);
+  }, [headline.category]);
+
+  // Handle voice read
+  const handleVoiceRead = useCallback((e) => {
+    e.stopPropagation();
+    const reader = getVoiceReader();
+    reader.readHeadline(headline.headline, headline.whyItMatters);
+  }, [headline.headline, headline.whyItMatters]);
 
   return (
     <>
       <div 
         className={`li-headline-card ${isActive ? 'active' : ''} ${urgency?.key === 'BREAKING' ? 'breaking-news' : ''}`}
-        onClick={() => setShowModal(true)}
+        onClick={handleClick}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && setShowModal(true)}
+        onKeyDown={(e) => e.key === 'Enter' && handleClick()}
         style={{
           '--urgency-color': urgency?.color || 'rgba(170, 198, 255, 1)',
           '--urgency-dim': urgency?.colorDim || 'rgba(170, 198, 255, 0.25)',
@@ -87,7 +119,7 @@ export default function HeadlineCard({ headline, isActive = false }) {
           cursor: 'pointer',
         }}
       >
-        {/* Header: Category + Urgency + Time */}
+        {/* Header: Category + Urgency + Time + Voice */}
         <div className="li-headline-header">
           <div className="li-headline-category">
             <span className="li-headline-cat-icon">{category?.icon}</span>
@@ -103,6 +135,17 @@ export default function HeadlineCard({ headline, isActive = false }) {
           <span className="li-headline-time">
             {formatRelativeTime(headline.timestamp)}
           </span>
+          
+          {/* Voice read button */}
+          <button
+            type="button"
+            onClick={handleVoiceRead}
+            className="li-headline-voice-btn"
+            title="Read aloud"
+            aria-label="Read this headline aloud"
+          >
+            🔊
+          </button>
         </div>
 
         {/* Main Content */}
@@ -142,6 +185,25 @@ export default function HeadlineCard({ headline, isActive = false }) {
             0 4px 24px rgba(0, 0, 0, 0.4),
             0 0 40px var(--urgency-glow);
           transform: translateY(-2px);
+        }
+        
+        .li-headline-voice-btn {
+          appearance: none;
+          border: none;
+          background: rgba(100, 180, 255, 0.08);
+          color: rgba(170, 198, 255, 0.75);
+          padding: 4px 8px;
+          border-radius: 6px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-left: auto;
+        }
+        
+        .li-headline-voice-btn:hover {
+          background: rgba(100, 180, 255, 0.18);
+          color: rgba(170, 198, 255, 1);
+          transform: scale(1.05);
         }
 
         /* 🔴 BREAKING NEWS - Red pulse glow effect (3x only) */
@@ -502,76 +564,238 @@ export default function HeadlineCard({ headline, isActive = false }) {
         }
       `}</style>
 
-      {/* Detailed Modal */}
-      {showModal && (
+      {/* Detailed Modal - Rendered via Portal to escape overlay scroll context */}
+      {showModal && portalContainer && createPortal(
         <div 
           className="li-headline-modal-overlay"
-          onClick={(e) => e.target === e.currentTarget && setShowModal(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (e.target === e.currentTarget) setShowModal(false);
+          }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(8, 12, 20, 0.92)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            zIndex: 99999,
+            animation: 'liModalFadeIn 0.25s ease-out',
+          }}
         >
-          <div className="li-headline-modal">
+          <style>{`
+            @keyframes liModalFadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes liModalSlideUp {
+              from { opacity: 0; transform: translateY(20px) scale(0.98); }
+              to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+          `}</style>
+          <div 
+            className="li-headline-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '560px',
+              maxHeight: '85vh',
+              overflowY: 'auto',
+              background: 'linear-gradient(165deg, rgba(25, 35, 55, 0.98) 0%, rgba(15, 22, 38, 0.98) 100%)',
+              border: '1px solid rgba(100, 160, 255, 0.20)',
+              borderRadius: '20px',
+              padding: '28px',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(100, 160, 255, 0.15)',
+              animation: 'liModalSlideUp 0.3s ease-out',
+            }}
+          >
             <button 
               className="li-modal-close"
-              onClick={() => setShowModal(false)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowModal(false);
+              }}
               aria-label="Close"
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                width: '32px',
+                height: '32px',
+                border: 'none',
+                borderRadius: '8px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: 'rgba(200, 215, 240, 0.7)',
+                fontSize: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
             >
               ✕
             </button>
 
-            <div className="li-modal-header">
-              <div className="li-modal-category">
+            <div className="li-modal-header" style={{ marginBottom: '20px' }}>
+              <div className="li-modal-category" style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '12px',
+              }}>
                 <span>{category?.icon}</span>
                 <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(140, 190, 255, 0.90)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   {category?.label}
                 </span>
               </div>
-              <h3 className="li-modal-title">{headline.headline}</h3>
+              <h3 className="li-modal-title" style={{
+                margin: 0,
+                fontSize: '20px',
+                fontWeight: 600,
+                color: 'rgba(235, 242, 255, 0.98)',
+                lineHeight: 1.4,
+              }}>{headline.headline}</h3>
             </div>
 
-            <div className="li-modal-section">
-              <h4 className="li-modal-section-title">
+            <div className="li-modal-section" style={{ marginBottom: '20px' }}>
+              <h4 className="li-modal-section-title" style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                margin: '0 0 10px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'rgba(140, 190, 255, 0.90)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}>
                 <span>📰</span> What Happened
               </h4>
-              <p className="li-modal-section-content">{details.whatHappened}</p>
+              <p className="li-modal-section-content" style={{
+                fontSize: '14px',
+                color: 'rgba(200, 215, 240, 0.85)',
+                lineHeight: 1.65,
+                whiteSpace: 'pre-line',
+                margin: 0,
+              }}>{details.whatHappened}</p>
             </div>
 
-            <div className="li-modal-section">
-              <h4 className="li-modal-section-title">
+            <div className="li-modal-section" style={{ marginBottom: '20px' }}>
+              <h4 className="li-modal-section-title" style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                margin: '0 0 10px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'rgba(140, 190, 255, 0.90)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}>
                 <span>🔍</span> Why It Happened
               </h4>
-              <p className="li-modal-section-content">{details.whyItHappened}</p>
+              <p className="li-modal-section-content" style={{
+                fontSize: '14px',
+                color: 'rgba(200, 215, 240, 0.85)',
+                lineHeight: 1.65,
+                whiteSpace: 'pre-line',
+                margin: 0,
+              }}>{details.whyItHappened}</p>
             </div>
 
-            <div className="li-modal-section">
-              <div className="li-modal-benefits">
-                <h4 className="li-modal-section-title" style={{ color: 'rgba(140, 220, 180, 0.95)' }}>
+            <div className="li-modal-section" style={{ marginBottom: '20px' }}>
+              <div className="li-modal-benefits" style={{
+                background: 'rgba(140, 220, 180, 0.06)',
+                border: '1px solid rgba(140, 220, 180, 0.15)',
+                borderRadius: '12px',
+                padding: '16px',
+              }}>
+                <h4 className="li-modal-section-title" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  margin: '0 0 10px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'rgba(140, 220, 180, 0.95)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}>
                   <span>✅</span> How It Benefits You
                 </h4>
-                <p className="li-modal-section-content">{details.howItBenefits}</p>
+                <p className="li-modal-section-content" style={{
+                  fontSize: '14px',
+                  color: 'rgba(200, 215, 240, 0.85)',
+                  lineHeight: 1.65,
+                  whiteSpace: 'pre-line',
+                  margin: 0,
+                }}>{details.howItBenefits}</p>
               </div>
             </div>
 
-            <div className="li-modal-section">
-              <div className="li-modal-tip">
-                <h4 className="li-modal-section-title">
-                  <span className="li-modal-tip-icon">💡</span> Expert Tip
+            <div className="li-modal-section" style={{ marginBottom: '20px' }}>
+              <div className="li-modal-tip" style={{
+                background: 'linear-gradient(135deg, rgba(100, 160, 255, 0.10) 0%, rgba(140, 190, 255, 0.05) 100%)',
+                border: '1px solid rgba(100, 160, 255, 0.20)',
+                borderRadius: '12px',
+                padding: '16px',
+              }}>
+                <h4 className="li-modal-section-title" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  margin: '0 0 10px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'rgba(140, 190, 255, 0.90)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}>
+                  <span style={{ fontSize: '20px', marginRight: '8px' }}>💡</span> Expert Tip
                 </h4>
-                <p className="li-modal-section-content">{details.expertTip}</p>
+                <p className="li-modal-section-content" style={{
+                  fontSize: '14px',
+                  color: 'rgba(200, 215, 240, 0.85)',
+                  lineHeight: 1.65,
+                  whiteSpace: 'pre-line',
+                  margin: 0,
+                }}>{details.expertTip}</p>
               </div>
             </div>
 
             {headline.dataPoint && (
-              <div className="li-modal-data">
+              <div className="li-modal-data" style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '16px',
+                padding: '12px 16px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                borderRadius: '10px',
+                marginTop: '16px',
+              }}>
                 <div>
                   <div style={{ fontSize: '10px', color: 'rgba(200, 215, 240, 0.55)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>
                     Key Data
                   </div>
-                  <div className="li-modal-data-value">{headline.dataPoint}</div>
+                  <div className="li-modal-data-value" style={{
+                    fontSize: '18px',
+                    fontWeight: 700,
+                    color: urgency?.color || 'rgba(170, 198, 255, 1)',
+                    fontVariantNumeric: 'tabular-nums',
+                  }}>{headline.dataPoint}</div>
                 </div>
-                <div className="li-modal-data-source">Source: {headline.source}</div>
+                <div className="li-modal-data-source" style={{
+                  fontSize: '11px',
+                  color: 'rgba(180, 195, 230, 0.55)',
+                }}>Source: {headline.source}</div>
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        portalContainer
       )}
     </>
   );

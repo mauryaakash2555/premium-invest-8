@@ -1,18 +1,90 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import LaserFooter from '@/components/user/LaserFooter';
 import ModeIndicator from './components/ModeIndicator';
 import NightSummary from './components/NightSummary';
 import HeadlineFeed from './components/HeadlineFeed';
 import StreakBadge from './components/StreakBadge';
 import DonutCalculator from './components/DonutCalculator';
+import BadgeDisplay from '@/components/live-intelligence/BadgeDisplay';
+import AchievementPopup from '@/components/live-intelligence/AchievementPopup';
+import FeedToggle from '@/components/live-intelligence/FeedToggle';
+import { ThemeToggle, useTheme } from '@/lib/live-intelligence/theme';
+import { getVoiceReader } from '@/lib/live-intelligence/voice';
+import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
+import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 import { initEngagementTracking } from '@/lib/live-intelligence/analytics';
 
 const LASER_ASSET_VERSION = 'seamless-xfade-fade-2026-01-11';
 const VIDEO_SRC = `/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`; // LOCKED
+
+// Voice control component for reading headlines aloud
+function VoiceControl() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
+  const [rate, setRate] = useState(1);
+
+  const handleToggle = useCallback(() => {
+    const reader = getVoiceReader();
+    if (isPlaying) {
+      reader.stop();
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+      // Voice will be used when user clicks on a headline
+    }
+  }, [isPlaying]);
+
+  // Keyboard shortcut: Space to toggle voice
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        handleToggle();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleToggle]);
+
+  return (
+    <button
+      type="button"
+      onClick={handleToggle}
+      title={isPlaying ? 'Stop reading (Space)' : 'Read aloud (Space)'}
+      style={{
+        appearance: 'none',
+        border: '1px solid rgba(255,255,255,0.12)',
+        background: isPlaying ? 'rgba(100, 180, 255, 0.15)' : 'rgba(10,10,12,0.70)',
+        color: isPlaying ? 'rgba(140, 210, 255, 0.95)' : 'rgba(235,242,255,0.85)',
+        padding: '8px 12px',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: 500,
+        transition: 'all 0.25s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+        e.currentTarget.style.background = isPlaying ? 'rgba(100, 180, 255, 0.20)' : 'rgba(130,160,255,0.10)';
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+        e.currentTarget.style.background = isPlaying ? 'rgba(100, 180, 255, 0.15)' : 'rgba(10,10,12,0.70)';
+      }}
+    >
+      <span>{isPlaying ? '🔊' : '🔈'}</span>
+      <span style={{ fontSize: '12px' }}>{isPlaying ? 'On' : 'Off'}</span>
+    </button>
+  );
+}
 
 export default function LiveIntelligenceHeroPage() {
   const router = useRouter();
@@ -1181,13 +1253,27 @@ export default function LiveIntelligenceHeroPage() {
             }}
           >
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              {/* Row 1: Title + Feature Controls */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                 <h2 className="li-header-title" style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
                   Live Intelligence
                 </h2>
+                
+                {/* Feature Controls: Voice, Theme, Badges */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <VoiceControl />
+                  <ThemeToggle className="p-2 rounded-lg hover:bg-white/10 transition-all" />
+                  <BadgeDisplay />
+                </div>
+              </div>
+              
+              {/* Row 2: Mode indicator + Streak badge + FeedToggle */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '10px' }}>
                 <ModeIndicator />
                 <StreakBadge showDetails={true} />
+                <FeedToggle />
               </div>
+              
               <p style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
                 Your financial command center — real-time portfolio insights and signals.
               </p>
@@ -1340,6 +1426,38 @@ export default function LiveIntelligenceHeroPage() {
               >
                 + Add Goal
               </button>
+              
+              {/* Archive Link */}
+              <Link
+                href="/archive"
+                style={{
+                  appearance: 'none',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(10,10,12,0.70)',
+                  color: 'rgba(235,242,255,0.85)',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  transition: 'all 0.25s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  textDecoration: 'none',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                  e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+                  e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
+                }}
+              >
+                <span>📚</span>
+                <span>View Archive</span>
+              </Link>
             </div>
           </div>
 
@@ -1905,8 +2023,70 @@ export default function LiveIntelligenceHeroPage() {
 
           {/* Night Summary Dashboard - Only shows 9PM-12AM */}
           <NightSummary />
+
+          {/* SEO Indexable Text Block - For Google, minimal visibility */}
+          <div style={{ 
+            marginTop: '48px', 
+            padding: '24px',
+            background: 'rgba(15, 20, 30, 0.4)',
+            borderRadius: '12px',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <h2 style={{ 
+              fontSize: '18px', 
+              fontWeight: 600, 
+              color: 'rgba(200, 215, 240, 0.85)',
+              marginBottom: '12px',
+            }}>
+              What is Live Market Intelligence?
+            </h2>
+            <p style={{ 
+              fontSize: '14px', 
+              color: 'rgba(180, 195, 230, 0.65)',
+              lineHeight: 1.6,
+              margin: 0,
+            }}>
+              Live Market Intelligence is an educational dashboard that aggregates market data, portfolio metrics, signals, and financial news into one structured view. This page is designed for awareness and understanding of market movements, asset allocation, and financial context. It does not provide investment advice or recommendations.
+            </p>
+          </div>
         </div>
       </section>
+
+      {/* JSON-LD Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Live Market Intelligence Dashboard",
+            "applicationCategory": "EducationalApplication",
+            "description": "Real-time market intelligence, portfolio insights, signals and financial context. Educational, SEBI-safe dashboard by BM Wealth.",
+            "url": "https://bmwealth.in/live-intelligence-hero",
+            "provider": {
+              "@type": "Organization",
+              "name": "BM Wealth",
+              "url": "https://bmwealth.in"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "INR"
+            },
+            "operatingSystem": "Web Browser",
+            "featureList": [
+              "Real-time market data aggregation",
+              "Portfolio metrics visualization",
+              "Financial news feed",
+              "Market movement tracking",
+              "Educational market context"
+            ]
+          })
+        }}
+      />
+
+      {/* Achievement Popup - Shows when badges are unlocked */}
+      <AchievementPopup />
 
       {/* FOOTER - Wrapped in li-footer-wrapper so globals.css shows it */}
       <div className="li-footer-wrapper sticky bottom-0 z-50">

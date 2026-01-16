@@ -73,14 +73,28 @@ function calculatePriority(headline) {
 
 /**
  * Filter out expired headlines
- * A headline is expired if valid_until is set and in the past
+ * A headline is expired if:
+ * 1. valid_until is set and in the past
+ * 2. OR it's older than 24 hours (to prevent stale data)
  */
 function filterExpired(headlines) {
   const now = new Date();
+  const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+  
   return headlines.filter(h => {
-    if (!h.valid_until) return true; // No expiry = always valid
-    const expiryDate = new Date(h.valid_until);
-    return expiryDate > now;
+    // Check valid_until expiry
+    if (h.valid_until) {
+      const expiryDate = new Date(h.valid_until);
+      if (expiryDate <= now) return false;
+    }
+    
+    // Check freshness - headlines older than 24 hours are stale
+    if (h.created_at) {
+      const createdAt = new Date(h.created_at);
+      if (createdAt < oneDayAgo) return false;
+    }
+    
+    return true;
   });
 }
 
@@ -200,8 +214,14 @@ export async function GET(request) {
       })),
     ];
     
-    // Step 1: Filter expired headlines
+    // Step 1: Filter expired headlines (includes 24hr freshness check)
     const notExpired = filterExpired(combined);
+    const staleCount = combined.length - notExpired.length;
+    
+    // If ALL headlines are stale (older than 24h), show a warning
+    if (notExpired.length === 0 && combined.length > 0) {
+      console.warn('[Live Intelligence] All headlines are stale (older than 24h). Database needs fresh content.');
+    }
     
     // Step 2: Sort by priority
     const sorted = notExpired.sort((a, b) => {
@@ -214,6 +234,25 @@ export async function GET(request) {
     // Step 4: Apply limit
     const final = balanced.slice(0, limit);
     
+    // If no headlines available, fallback to curated content
+    if (final.length === 0) {
+      console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
+      const curatedHeadlines = getCuratedHeadlines(category);
+      return NextResponse.json({
+        ok: true,
+        headlines: curatedHeadlines,
+        source: 'curated',
+        count: curatedHeadlines.length,
+        stats: {
+          total_fetched: combined.length,
+          stale_filtered: staleCount,
+          fresh_remaining: 0,
+          returned: curatedHeadlines.length,
+          warning: 'No fresh headlines in database - showing curated content',
+        },
+      });
+    }
+    
     return NextResponse.json({
       ok: true,
       headlines: final,
@@ -221,8 +260,10 @@ export async function GET(request) {
       count: final.length,
       stats: {
         total_fetched: combined.length,
-        expired_filtered: combined.length - notExpired.length,
-        reordered_for_balance: true,
+        stale_filtered: staleCount,
+        fresh_remaining: notExpired.length,
+        returned: final.length,
+        warning: staleCount > 0 ? `${staleCount} headlines filtered (expired or older than 24h)` : null,
       },
     });
   } catch (error) {
