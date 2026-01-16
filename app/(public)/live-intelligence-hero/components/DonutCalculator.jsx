@@ -539,7 +539,6 @@ export default function DonutCalculator({ onResultChange }) {
           </svg>
         </span>
         <span className="calc-toggle-text">Ultimate Calculator</span>
-        <span className="calc-toggle-badge">27 Calcs</span>
         <span className={`calc-toggle-arrow ${isOpen ? 'open' : ''}`}>▼</span>
       </button>
 
