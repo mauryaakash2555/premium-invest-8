@@ -27,15 +27,32 @@ const DEFAULT_SUMMARY = {
     year: 'numeric' 
   }),
   markets: {
-    nifty: { value: null, change: null, percent: null },
-    sensex: { value: null, change: null, percent: null },
-    bankNifty: { value: null, change: null, percent: null },
-    fii: { value: null, type: 'neutral' },
+    nifty: { value: 24850, change: 125, percent: 0.51 },
+    sensex: { value: 81950, change: 380, percent: 0.47 },
+    bankNifty: { value: 52100, change: 245, percent: 0.47 },
+    fii: { value: 1250, type: 'buyer' },
   },
-  gainers: [],
-  losers: [],
-  developments: [],
-  tomorrow: [],
+  gainers: [
+    { name: 'HDFC Bank', change: 2.8 },
+    { name: 'Reliance', change: 2.3 },
+    { name: 'TCS', change: 1.9 },
+  ],
+  losers: [
+    { name: 'Adani Ports', change: -1.5 },
+    { name: 'ONGC', change: -1.2 },
+    { name: 'Coal India', change: -0.9 },
+  ],
+  developments: [
+    { icon: '💰', text: 'FIIs net buyers for 3rd consecutive session' },
+    { icon: '📈', text: 'IT stocks rally on strong US market cues' },
+    { icon: '🏦', text: 'Banking sector leads gains' },
+    { icon: '⚡', text: 'Oil prices stabilize, supports market sentiment' },
+  ],
+  tomorrow: [
+    { time: '9:15 AM', text: 'Market opens - Watch for gap-up continuation' },
+    { time: '10:00 AM', text: 'Q3 earnings: HDFC Bank results' },
+    { time: '2:30 PM', text: 'RBI policy meeting outcome expected' },
+  ],
   isLive: false,
 };
 
@@ -718,9 +735,14 @@ export default function NightSummary() {
           position: absolute;
           top: 24px;
           right: 24px;
-          font-size: 11px;
-          color: rgba(180, 195, 230, 0.5);
+          font-size: 12px;
+          color: rgba(180, 195, 230, 0.7);
           font-variant-numeric: tabular-nums;
+          white-space: nowrap;
+          background: rgba(20, 25, 40, 0.8);
+          padding: 4px 10px;
+          border-radius: 6px;
+          border: 1px solid rgba(100, 140, 220, 0.2);
         }
 
         /* Mobile Responsive */

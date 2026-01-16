@@ -2190,7 +2190,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <div style={{ height: '500px', width: '100%', background: '#000000' }}>
               {/* TradingView Advanced Chart - Direct iframe for reliability */}
               <iframe
-                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata"
+                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1"
                 style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
                 frameBorder="0"
                 allowtransparency="true"
