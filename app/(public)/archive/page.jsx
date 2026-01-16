@@ -34,7 +34,7 @@ const dateRanges = [
 ];
 
 export default function ArchivePage() {
-  const { theme, mounted } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,6 +44,11 @@ export default function ArchivePage() {
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
+  
+  // Handle hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const fetchArchive = useCallback(async (reset = false) => {
     setLoading(true);
