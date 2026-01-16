@@ -82,11 +82,23 @@ export default function HeadlineCard({ headline, isActive = false }) {
     
     // Lock body scroll when modal is open
     const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    const scrollY = window.scrollY;
+    
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
     
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = originalOverflow;
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.width = originalWidth;
+      window.scrollTo(0, scrollY);
     };
   }, [showModal]);
 
@@ -99,7 +111,7 @@ export default function HeadlineCard({ headline, isActive = false }) {
   return (
     <>
       <div 
-        className={`li-headline-card ${isActive ? 'active' : ''}`}
+        className={`li-headline-card ${isActive ? 'active' : ''} ${headline.urgency === 'BREAKING' ? 'breaking' : ''}`}
         onClick={handleCardClick}
         role="button"
         tabIndex={0}
@@ -166,6 +178,27 @@ export default function HeadlineCard({ headline, isActive = false }) {
             0 4px 24px rgba(0, 0, 0, 0.4),
             0 0 40px var(--urgency-glow);
           transform: translateY(-2px);
+        }
+
+        /* Breaking News Red Pulse Glow */
+        .li-headline-card.breaking {
+          border-color: rgba(255, 80, 80, 0.35);
+          animation: breakingPulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes breakingPulseGlow {
+          0%, 100% {
+            box-shadow:
+              0 4px 24px rgba(0, 0, 0, 0.4),
+              0 0 30px rgba(255, 80, 80, 0.4),
+              inset 0 0 20px rgba(255, 80, 80, 0.05);
+          }
+          50% {
+            box-shadow:
+              0 4px 30px rgba(0, 0, 0, 0.5),
+              0 0 50px rgba(255, 80, 80, 0.7),
+              inset 0 0 30px rgba(255, 80, 80, 0.08);
+          }
         }
 
         .li-headline-header {

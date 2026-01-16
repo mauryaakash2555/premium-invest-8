@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
+import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import { SipGoalSnapshot } from '@/components/calculators/SipGoalSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
@@ -114,6 +115,10 @@ const SIPServices = () => {
 
       {/* Hero */}
       <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
+        {/* Back to Live Intelligence */}
+        <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
+          <BackToLiveIntelligence />
+        </div>
         <div
           aria-hidden="true"
           style={{

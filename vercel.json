@@ -29,6 +29,10 @@
     {
       "path": "/api/cron/check-expiry",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/live-intelligence/night-summary",
+      "schedule": "30 15 * * *"
     }
   ]
 }

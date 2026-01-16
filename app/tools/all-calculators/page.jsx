@@ -6,10 +6,11 @@ import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
-  title: "All in One Financial Calculator | BM Wealth Tools",
+  title: "All in One Financial Calculator | 27+ Free Calculators | BM Wealth",
   description:
-    "Free all-in-one financial calculator: SIP, Lumpsum, EMI, Tax, PPF, NPS, Goal Planning, Retirement, and 19 more calculators in one place.",
+    "Free all-in-one financial calculator with 27+ tools: SIP, Lumpsum, EMI, Tax, PPF, NPS, ELSS, Retirement, Goal Planning, Insurance, and more. Instant results with educational interpretations.",
   path: "/tools/all-calculators",
+  keywords: "financial calculator, SIP calculator, tax calculator, EMI calculator, retirement calculator, goal planning, mutual fund calculator, investment tools, free calculator India",
 });
 
 export default function AllCalculatorsPage() {
@@ -53,7 +54,7 @@ export default function AllCalculatorsPage() {
 
   return (
     <>
-      <BackRow />
+      <BackRow href="/tools" label="← Back to Tools" />
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <script
         id="all-calc-faq-schema"

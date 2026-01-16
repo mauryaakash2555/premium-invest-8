@@ -83,6 +83,187 @@ const base64UrlDecode = (b64url) => {
 };
 
 // ════════════════════════════════════════════════════════════════
+// INTERPRETATIONS - Educational, no advice, no future tense
+// ════════════════════════════════════════════════════════════════
+const getInterpretation = (calcKey, result, inputs) => {
+  if (!result || result.error) return null;
+  
+  const interpretations = {
+    sip: () => ({
+      text: `A monthly SIP of ${fmt(inputs?.monthlyInvestment || 0)} over ${inputs?.years || 0} years, assuming ${inputs?.rateMid || 12}% annual returns, compounds to a projected corpus. The difference between invested capital and projected value represents the power of compounding over time.`,
+      decisionGap: result?.futureValueMid && result?.invested 
+        ? `Compounding gain: ${fmt(result.futureValueMid - result.invested)} (${((result.futureValueMid - result.invested) / result.invested * 100).toFixed(1)}% of invested)`
+        : null,
+    }),
+    wealth: () => ({
+      text: `Based on the current corpus of ${fmt(result?.current || 0)} and a ${result?.years || 0}-year horizon, the projection shows potential growth under PMS-style management. Management fees and performance fees are factored into the net returns shown.`,
+      decisionGap: result?.projectedValue && result?.current
+        ? `Projected wealth gap: ${fmt(result.projectedValue - result.current)} over ${result?.years || 0} years`
+        : null,
+    }),
+    mfReturns: () => ({
+      text: `The investment of ${fmt(result?.invested || 0)} has grown to ${fmt(result?.current || 0)}, reflecting a CAGR of ${Number(result?.cagrPercent || 0).toFixed(2)}%. After accounting for exit load and estimated tax, the post-tax value is ${fmt(result?.postTaxValue || 0)}.`,
+      decisionGap: result?.postTaxValue && result?.invested
+        ? `Net gain after tax: ${fmt(result.postTaxValue - result.invested)}`
+        : null,
+    }),
+    insurance: () => ({
+      text: `Based on annual expenses, liabilities, and financial goals, the estimated life cover requirement is ${fmt(result?.totalCover || 0)}. This accounts for income replacement, debt coverage, child education, and emergency buffers.`,
+      decisionGap: result?.totalCover
+        ? `Coverage needed: ${fmt(result.totalCover)} (${result?.coverageMultiple?.toFixed(1) || 0}x annual income)`
+        : null,
+    }),
+    lic: () => ({
+      text: `The LIC policy with sum assured ${fmt(result?.sumAssured || 0)} and annual premium ${fmt(result?.annualPremium || 0)} projects a maturity value of approximately ${fmt(result?.maturityValue || 0)}. The internal rate of return (IRR) indicates the effective annual yield.`,
+      decisionGap: result?.irrPercent
+        ? `Effective IRR: ${Number(result.irrPercent || 0).toFixed(2)}% p.a.`
+        : null,
+    }),
+    lumpsum: () => ({
+      text: `A one-time investment of ${fmt(result?.principal || 0)} at ${result?.rate || 0}% annual return over ${result?.years || 0} years grows through compound interest. The final value depends on the holding period and return assumptions.`,
+      decisionGap: result?.futureValue && result?.principal
+        ? `Total growth: ${fmt(result.futureValue - result.principal)} (${((result.futureValue - result.principal) / result.principal * 100).toFixed(1)}%)`
+        : null,
+    }),
+    goal: () => ({
+      text: `To accumulate ${fmt(result?.targetAmount || 0)} in ${result?.years || 0} years, the required monthly investment is calculated based on expected returns. This assumes consistent contributions and no withdrawals.`,
+      decisionGap: result?.monthlyRequired
+        ? `Monthly commitment needed: ${fmt(result.monthlyRequired)}`
+        : null,
+    }),
+    retire: () => ({
+      text: `Based on current age, retirement age, and expected monthly expenses, the retirement corpus required is estimated. This factors in inflation and post-retirement returns to sustain the withdrawal period.`,
+      decisionGap: result?.corpusRequired
+        ? `Retirement corpus gap: ${fmt(result.corpusRequired)}`
+        : null,
+    }),
+    fd: () => ({
+      text: `A fixed deposit of ${fmt(result?.principal || 0)} at ${result?.rate || 0}% interest rate for ${result?.years || 0} years earns guaranteed returns. Interest payout depends on compounding frequency.`,
+      decisionGap: result?.maturityAmount && result?.principal
+        ? `Interest earned: ${fmt(result.maturityAmount - result.principal)}`
+        : null,
+    }),
+    ppf: () => ({
+      text: `Annual PPF contributions of ${fmt(inputs?.yearly || 0)} over ${inputs?.years || 0} years at the current rate of 7.1% p.a. accumulate with compound interest. PPF offers EEE tax benefits under Section 80C.`,
+      decisionGap: result?.maturityValue && result?.totalInvested
+        ? `Tax-free interest earned: ${fmt(result.maturityValue - result.totalInvested)}`
+        : null,
+    }),
+    epf: () => ({
+      text: `With a basic salary of ${fmt(inputs?.basicSalary || 0)} and combined employer-employee contribution, the EPF corpus grows at 8.25% p.a. This is a mandatory retirement savings vehicle for salaried employees.`,
+      decisionGap: result?.maturityValue
+        ? `Projected EPF corpus: ${fmt(result.maturityValue)}`
+        : null,
+    }),
+    nps: () => ({
+      text: `Monthly NPS contribution of ${fmt(inputs?.monthly || 0)} over ${inputs?.years || 0} years at expected ${inputs?.rate || 0}% returns builds a retirement corpus. 60% is accessible at retirement, 40% converts to annuity.`,
+      decisionGap: result?.totalCorpus
+        ? `Projected NPS corpus: ${fmt(result.totalCorpus)}`
+        : null,
+    }),
+    elss: () => ({
+      text: `ELSS SIP of ${fmt(inputs?.monthly || 0)} qualifies for 80C deduction up to ₹1.5L annually. The 3-year lock-in period is the shortest among 80C instruments. Returns are market-linked.`,
+      decisionGap: result?.futureValue && result?.totalInvested
+        ? `Projected gain: ${fmt(result.futureValue - result.totalInvested)}`
+        : null,
+    }),
+    emi: () => ({
+      text: `A loan of ${fmt(result?.principal || 0)} at ${result?.rate || 0}% interest for ${result?.years || 0} years results in a fixed monthly EMI. The total interest paid over the loan tenure is a key cost factor.`,
+      decisionGap: result?.totalInterest
+        ? `Total interest cost: ${fmt(result.totalInterest)}`
+        : null,
+    }),
+    swp: () => ({
+      text: `Withdrawing ${fmt(inputs?.withdrawal || 0)} monthly from a corpus of ${fmt(inputs?.corpus || 0)} while earning ${inputs?.rate || 0}% returns determines corpus longevity. The balance shown is after the specified withdrawal period.`,
+      decisionGap: result?.remainingCorpus !== undefined
+        ? `Remaining after ${inputs?.years || 0} years: ${fmt(result.remainingCorpus)}`
+        : null,
+    }),
+    stepup: () => ({
+      text: `Starting with ${fmt(inputs?.initial || 0)} monthly and increasing by ${inputs?.stepUp || 0}% annually, the step-up SIP accelerates wealth accumulation compared to flat SIP contributions.`,
+      decisionGap: result?.futureValue && result?.totalInvested
+        ? `Extra gain vs flat SIP: ~${fmt((result.futureValue - result.totalInvested) * 0.15)} (approx)`
+        : null,
+    }),
+    cagr: () => ({
+      text: `The investment grew from ${fmt(result?.initial || 0)} to ${fmt(result?.final || 0)} over ${result?.years || 0} years. CAGR represents the smoothed annual growth rate assuming reinvestment.`,
+      decisionGap: result?.cagr
+        ? `Compound annual growth rate: ${result.cagr}%`
+        : null,
+    }),
+    inflation: () => ({
+      text: `At ${result?.inflationRate || 0}% annual inflation, the purchasing power of ${fmt(inputs?.current || 0)} erodes over time. The future value shows what today's amount would need to be to maintain purchasing power.`,
+      decisionGap: result?.futureValue && inputs?.current
+        ? `Inflation impact: ${fmt(result.futureValue - inputs.current)} more needed in ${inputs?.years || 0} years`
+        : null,
+    }),
+    gratuity: () => ({
+      text: `Gratuity is calculated as (Basic × 15 × Years of Service) ÷ 26 for employees covered under the Payment of Gratuity Act. Maximum tax-free gratuity is ₹20 lakh.`,
+      decisionGap: result?.gratuityAmount
+        ? `Gratuity entitlement: ${fmt(result.gratuityAmount)}`
+        : null,
+    }),
+    hra: () => ({
+      text: `HRA exemption is the minimum of: actual HRA received, 50%/40% of basic (metro/non-metro), or rent paid minus 10% of basic. The taxable portion is HRA received minus exemption.`,
+      decisionGap: result?.exemption
+        ? `Tax-exempt HRA: ${fmt(result.exemption)} | Taxable: ${fmt(result.taxable)}`
+        : null,
+    }),
+    tax: () => ({
+      text: `Based on gross income of ${fmt(result?.gross || 0)} and applicable deductions, the taxable income under ${String(result?.regime || 'new').toUpperCase()} regime is ${fmt(result?.taxableIncome || 0)}. The effective tax rate indicates overall tax efficiency.`,
+      decisionGap: result?.taxLiability
+        ? `Total tax liability: ${fmt(result.taxLiability)} (${Number(result?.effectiveRatePercent || 0).toFixed(2)}% effective rate)`
+        : null,
+    }),
+    rd: () => ({
+      text: `Monthly RD deposits of ${fmt(inputs?.monthly || 0)} at ${inputs?.rate || 0}% interest compound quarterly to give the maturity amount. RD is a low-risk savings instrument.`,
+      decisionGap: result?.maturityAmount && result?.totalDeposits
+        ? `Interest earned: ${fmt(result.maturityAmount - result.totalDeposits)}`
+        : null,
+    }),
+    ssy: () => ({
+      text: `Sukanya Samriddhi Yojana contributions at current 8.2% rate accumulate until the girl child turns 21. Deposits are allowed until age 15. The scheme offers EEE tax benefits.`,
+      decisionGap: result?.maturityValue && result?.totalInvested
+        ? `Tax-free maturity: ${fmt(result.maturityValue)}`
+        : null,
+    }),
+    childPlan: () => ({
+      text: `Planning for child's education requires estimating future costs with inflation. The corpus needed depends on current age, education start age, and expected annual education cost.`,
+      decisionGap: result?.corpusRequired
+        ? `Education fund target: ${fmt(result.corpusRequired)}`
+        : null,
+    }),
+    marriage: () => ({
+      text: `Marriage fund planning accounts for inflation in wedding costs. Starting early allows smaller monthly contributions to reach the target corpus.`,
+      decisionGap: result?.corpusRequired
+        ? `Marriage fund target: ${fmt(result.corpusRequired)}`
+        : null,
+    }),
+    carLoan: () => ({
+      text: `Car loan EMI calculation shows the monthly payment for the loan amount at the specified interest rate and tenure. Total cost includes principal plus interest.`,
+      decisionGap: result?.totalInterest
+        ? `Total interest paid: ${fmt(result.totalInterest)}`
+        : null,
+    }),
+    homeLoan: () => ({
+      text: `Home loan EMI is calculated using standard reducing balance method. Over longer tenures, total interest paid can exceed the principal amount borrowed.`,
+      decisionGap: result?.totalInterest
+        ? `Total interest cost: ${fmt(result.totalInterest)} over ${inputs?.years || 0} years`
+        : null,
+    }),
+    gold: () => ({
+      text: `Gold investment returns depend on holding period and gold price appreciation. Sovereign Gold Bonds (SGBs) offer additional 2.5% interest and tax-free capital gains at maturity.`,
+      decisionGap: result?.futureValue && result?.invested
+        ? `Projected value: ${fmt(result.futureValue)}`
+        : null,
+    }),
+  };
+
+  const fn = interpretations[calcKey];
+  return fn ? fn() : null;
+};
+
+// ════════════════════════════════════════════════════════════════
 // CALCULATION FUNCTIONS
 // ════════════════════════════════════════════════════════════════
 
@@ -1226,6 +1407,133 @@ export default function AllInOneCalculator() {
     setInputs(prev => ({ ...prev, [key]: value }));
   }, []);
 
+  // PDF Export Function
+  const handleExportPDF = useCallback(async () => {
+    if (!result || result.error) return;
+    
+    trackEvent('calculator_export_pdf', {
+      calculator_type: 'aio',
+      calc: selectedCalc,
+    });
+
+    const interpretation = getInterpretation(selectedCalc, result, inputs);
+    const timestamp = new Date().toLocaleString('en-IN', { 
+      dateStyle: 'medium', 
+      timeStyle: 'short',
+      timeZone: 'Asia/Kolkata'
+    });
+
+    // Build input display
+    const inputDisplay = config
+      .filter(c => c.type !== 'section')
+      .map(c => {
+        const val = inputs[c.key];
+        const formatted = c.type === 'number' 
+          ? (c.prefix || '') + Number(val || 0).toLocaleString('en-IN') + (c.suffix ? ' ' + c.suffix : '')
+          : String(val || '');
+        return `${c.label}: ${formatted}`;
+      })
+      .join('\n');
+
+    // Build result display
+    const resultDisplay = Object.entries(result)
+      .filter(([k, v]) => !k.startsWith('__') && !Array.isArray(v) && typeof v !== 'object')
+      .map(([k, v]) => {
+        const label = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+        const formatted = typeof v === 'number' 
+          ? (k.toLowerCase().includes('rate') || k.toLowerCase().includes('percent') || k.toLowerCase().includes('cagr')
+              ? v.toFixed(2) + '%'
+              : fmt(v))
+          : String(v);
+        return `${label}: ${formatted}`;
+      })
+      .join('\n');
+
+    // Create PDF content as HTML
+    const pdfContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${calc?.label || 'Calculator'} - BM Wealth</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; background: #fff; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0a062; padding-bottom: 20px; margin-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; color: #c0a062; }
+    .timestamp { font-size: 12px; color: #666; }
+    h1 { font-size: 22px; color: #1a1a1a; margin-bottom: 8px; }
+    h2 { font-size: 16px; color: #c0a062; margin: 24px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+    .section { background: #f9f9f9; padding: 16px; border-radius: 8px; margin-bottom: 16px; white-space: pre-line; }
+    .interpretation { background: #fef9e7; border-left: 4px solid #c0a062; padding: 16px; margin: 20px 0; }
+    .decision-gap { background: #e8f4f8; border-left: 4px solid #3498db; padding: 12px 16px; margin: 16px 0; font-weight: 600; }
+    .disclaimer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 11px; color: #666; }
+    .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
+    .footer a { color: #c0a062; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="logo">👑 BM Wealth</div>
+      <div style="font-size: 12px; color: #666;">ARN 90008 | IRDAI 277925</div>
+    </div>
+    <div class="timestamp">Generated: ${timestamp}</div>
+  </div>
+  
+  <h1>${calc?.icon || ''} ${calc?.label || 'Calculator'}</h1>
+  <p style="color: #666; margin-bottom: 20px;">${calc?.desc || ''}</p>
+  
+  <h2>Your Inputs</h2>
+  <div class="section">${inputDisplay}</div>
+  
+  <h2>Results</h2>
+  <div class="section">${resultDisplay}</div>
+  
+  ${interpretation ? `
+  <h2>Interpretation</h2>
+  <div class="interpretation">${interpretation.text}</div>
+  ${interpretation.decisionGap ? `<div class="decision-gap">📊 ${interpretation.decisionGap}</div>` : ''}
+  ` : ''}
+  
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This calculator is for educational and illustrative purposes only. Results depend on the inputs provided and assumptions used. 
+    Market-linked investments are subject to market risks. Past performance is not indicative of future results. 
+    Please consult a qualified financial advisor before making investment decisions. BM Wealth does not provide personalized advice through this tool.
+    <br><br>
+    <strong>Regulatory:</strong> AMFI ARN-90008 | IRDAI CA0650 | SEBI RIA (Application pending)
+  </div>
+  
+  <div class="footer">
+    <p>BM Wealth • Mumbai</p>
+    <p><a href="https://bmwealth.in">bmwealth.in</a> • +91 88509 77259</p>
+  </div>
+</body>
+</html>`;
+
+    // Open print dialog
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(pdfContent);
+      printWindow.document.close();
+      setTimeout(() => {
+        printWindow.print();
+      }, 250);
+    }
+  }, [result, selectedCalc, calc, config, inputs]);
+
+  // WhatsApp CTA for soft review
+  const handleReviewCTA = useCallback(() => {
+    trackEvent('calculator_review_cta', {
+      calculator_type: 'aio',
+      calc: selectedCalc,
+    });
+    
+    const message = `Hi BM Wealth, I used the ${calc?.label || 'calculator'} on your website and would like to discuss my results. Can you help me understand my options?`;
+    const phone = '918850977259';
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  }, [selectedCalc, calc]);
+
   const handleCalculate = useCallback(() => {
     trackEvent('calculator_calculate', {
       calculator_type: 'aio',
@@ -1472,10 +1780,12 @@ export default function AllInOneCalculator() {
     const title = meta.title;
     const text = meta.text;
     if (!url || typeof window === 'undefined') return;
-    const message = `${title}
+    // Format message with clear structure and clickable URL
+    const message = `*${title}*
 
 ${text}
-${url}`;
+
+👉 Open calculator: ${url}`;
     trackEvent('calculator_share', {
       calculator_type: 'aio',
       calc: selectedCalc,
@@ -2039,7 +2349,15 @@ ${url}`;
           </div>
         ) : (
           <div className="aio-results-grid premium-scroll">
-            {Object.entries(result).map(([key, value]) => (
+            {Object.entries(result)
+              .filter(([key, value]) => {
+                // Skip internal keys, objects, and arrays that need special rendering
+                if (key.startsWith('__')) return false;
+                if (Array.isArray(value)) return false;
+                if (typeof value === 'object' && value !== null) return false;
+                return true;
+              })
+              .map(([key, value]) => (
               <div key={key} className="aio-result-item">
                 <span className="aio-result-label">
                   {key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase())}
@@ -2053,21 +2371,49 @@ ${url}`;
                         }
                         return fmt(value);
                       })()
-                    : value}
+                    : String(value)}
                 </span>
               </div>
             ))}
+            {/* Render comparison table if present */}
+            {result.comparison && Array.isArray(result.comparison) && result.comparison.length > 0 && (
+              <div className="aio-result-item" style={{ gridColumn: '1 / -1' }}>
+                <span className="aio-result-label" style={{ marginBottom: '8px', display: 'block' }}>Comparison</span>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <th style={{ textAlign: 'left', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>Type</th>
+                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>Value</th>
+                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>CAGR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.comparison.map((item, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <td style={{ padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{item.type}</td>
+                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{fmt(item.value)}</td>
+                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{item.cagr}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         );
 
         const canShare = !!result && !result.error;
+        const interpretation = canShare ? getInterpretation(selectedCalc, result, inputs) : null;
         const resultsShell = (
-          <div className="aio-resultsPanel" ref={resultsPanelRef} tabIndex={-1}>
+          <div className="aio-resultsPanel premium-scroll" ref={resultsPanelRef} tabIndex={-1}>
             <div className="aio-resultsHeader">
               <h4 className="aio-results-title">Results</h4>
               <div className="aio-resultsActions">
                 {canShare ? (
                   <>
+                    <button type="button" className="aio-secondary" onClick={handleExportPDF}>
+                      Export PDF
+                    </button>
                     <button type="button" className="aio-secondary" onClick={handleShareNative}>
                       Share
                     </button>
@@ -2114,6 +2460,42 @@ ${url}`;
               </div>
             ) : null}
             {resultsBody}
+
+            {/* Interpretation Block - Educational Only */}
+            {interpretation && interpretation.text && (
+              <div className="aio-interpretation">
+                <div className="aio-interpretation-header">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                  </svg>
+                  <span>Understanding Your Result</span>
+                </div>
+                <p className="aio-interpretation-text">{interpretation.text}</p>
+                {interpretation.decisionGap && (
+                  <div className="aio-decision-gap">
+                    <span className="aio-decision-gap-label">Key Gap:</span>
+                    <span className="aio-decision-gap-value">{interpretation.decisionGap}</span>
+                  </div>
+                )}
+                <p className="aio-interpretation-disclaimer">
+                  This is educational information only, not financial advice.
+                </p>
+              </div>
+            )}
+
+            {/* Soft CTA - Review by BM Wealth */}
+            {canShare && (
+              <div className="aio-review-cta">
+                <button type="button" className="aio-review-btn" onClick={handleReviewCTA}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  <span>Get this reviewed by BM Wealth</span>
+                </button>
+                <p className="aio-review-note">Free consultation • No obligation</p>
+              </div>
+            )}
           </div>
         );
 
@@ -2181,7 +2563,7 @@ ${url}`;
                 onClick={() => setMobileResultsOpen(false)}
               >
                 <div
-                  className="aio-sheet"
+                  className="aio-sheet premium-scroll"
                   role="dialog"
                   aria-modal="true"
                   onClick={(e) => e.stopPropagation()}
@@ -2305,6 +2687,115 @@ ${url}`;
           margin-top: 10px;
           font-size: 12px;
           color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* Interpretation Block */
+        .aio-interpretation {
+          margin-top: 16px;
+          padding: 14px 16px;
+          border-radius: 12px;
+          border: 1px solid rgba(192, 160, 98, 0.18);
+          background: rgba(192, 160, 98, 0.04);
+        }
+
+        .aio-interpretation-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          font-weight: 700;
+          color: rgba(192, 160, 98, 0.95);
+          margin-bottom: 10px;
+        }
+
+        .aio-interpretation-header svg {
+          flex-shrink: 0;
+          color: rgba(192, 160, 98, 0.8);
+        }
+
+        .aio-interpretation-text {
+          margin: 0 0 12px 0;
+          font-size: 13px;
+          line-height: 1.55;
+          color: rgba(255, 255, 255, 0.82);
+        }
+
+        .aio-decision-gap {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          background: rgba(0, 0, 0, 0.18);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 12px;
+        }
+
+        .aio-decision-gap-label {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: rgba(192, 160, 98, 0.85);
+          flex-shrink: 0;
+        }
+
+        .aio-decision-gap-value {
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.95);
+        }
+
+        .aio-interpretation-disclaimer {
+          margin: 0;
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.45);
+          font-style: italic;
+        }
+
+        /* Soft CTA - Review by BM Wealth */
+        .aio-review-cta {
+          margin-top: 14px;
+          padding: 14px;
+          border-radius: 12px;
+          border: 1px solid rgba(37, 211, 102, 0.2);
+          background: rgba(37, 211, 102, 0.05);
+          text-align: center;
+        }
+
+        .aio-review-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 20px;
+          border-radius: 8px;
+          border: none;
+          background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+          color: #fff;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+        }
+
+        .aio-review-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+        }
+
+        .aio-review-btn:active {
+          transform: translateY(0);
+        }
+
+        .aio-review-btn svg {
+          flex-shrink: 0;
+        }
+
+        .aio-review-note {
+          margin: 8px 0 0;
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.55);
         }
 
         .aio-empty {
@@ -3085,11 +3576,127 @@ ${url}`;
         }
 
         @media (max-width: 640px) {
+          .aio-calc {
+            padding: 16px;
+            border-radius: 16px;
+            margin: 0 8px;
+          }
           .aio-switcher {
             padding: 14px;
           }
           .aio-nativeSelect {
             display: block;
+          }
+          .aio-header {
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+          }
+          .aio-icon {
+            font-size: 28px;
+          }
+          .aio-title {
+            font-size: 18px;
+          }
+          .aio-inputs {
+            gap: 14px;
+          }
+          .aio-pills {
+            gap: 6px;
+            padding: 2px 0 8px;
+          }
+          .aio-pill {
+            padding: 8px 10px;
+            font-size: 12px;
+          }
+          .aio-input-wrapper {
+            padding: 10px 12px;
+          }
+          .aio-input {
+            font-size: 15px;
+          }
+          .aio-button {
+            padding: 14px 16px;
+            font-size: 14px;
+          }
+          .aio-result-item {
+            padding: 12px 14px;
+          }
+          .aio-result-label {
+            font-size: 12px;
+          }
+          .aio-result-value {
+            font-size: 14px;
+          }
+          .aio-interpretation {
+            padding: 12px 14px;
+          }
+          .aio-interpretation-text {
+            font-size: 12px;
+          }
+          .aio-decision-gap {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 10px 12px;
+          }
+          .aio-review-cta {
+            padding: 12px;
+          }
+          .aio-review-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 12px 16px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .aio-calc {
+            padding: 14px;
+            margin: 0 4px;
+            border-radius: 14px;
+          }
+          .aio-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
+          .aio-title {
+            font-size: 16px;
+          }
+          .aio-desc {
+            font-size: 12px;
+          }
+          .aio-switcher {
+            padding: 12px;
+            border-radius: 12px;
+          }
+          .aio-pills {
+            margin-bottom: 8px;
+          }
+        }
+
+        /* Ultra-premium mobile sheet */
+        @media (max-width: 768px) {
+          .aio-sheet {
+            border-radius: 24px 24px 0 0;
+            padding: 20px;
+            max-height: 90vh;
+          }
+          .aio-sheetTop {
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(192, 160, 98, 0.15);
+            margin-bottom: 16px;
+          }
+          .aio-sheetTitle {
+            font-size: 14px;
+          }
+          .aio-sheetClose {
+            padding: 10px 14px;
+            border-radius: 10px;
+          }
+          .aio-results-grid {
+            gap: 10px;
           }
         }
       `}</style>

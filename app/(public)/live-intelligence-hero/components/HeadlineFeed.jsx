@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HeadlineCard from './HeadlineCard';
 import { 
@@ -8,8 +8,10 @@ import {
   sortByPriority, 
   getRotationSpeed,
   getHeadlinesByCategory,
+  selectNextWithBalance,
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
+import { startPauseDetection, stopPauseDetection } from '@/lib/live-intelligence/analytics';
 
 /**
  * HeadlineFeed - Rotating headlines with category filter
@@ -28,6 +30,7 @@ export default function HeadlineFeed() {
   const [headlines, setHeadlines] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const categoryHistoryRef = useRef([]); // Track last 2 categories for balance
   const [mode, setMode] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -120,7 +123,21 @@ export default function HeadlineFeed() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-rotation
+  // Pause detection - fires event if headline visible > 12 seconds
+  useEffect(() => {
+    if (headlines.length === 0) return;
+    
+    const currentHeadline = headlines[activeIndex];
+    if (currentHeadline) {
+      startPauseDetection(currentHeadline);
+    }
+    
+    return () => {
+      stopPauseDetection();
+    };
+  }, [activeIndex, headlines]);
+
+  // Auto-rotation with category balance
   useEffect(() => {
     if (isPaused || headlines.length === 0) return;
 
@@ -131,7 +148,25 @@ export default function HeadlineFeed() {
     const speed = Math.min(baseSpeed, modeSpeed);
 
     const timer = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % headlines.length);
+      // Get remaining headlines after current (wrap around)
+      const remainingHeadlines = [
+        ...headlines.slice(activeIndex + 1),
+        ...headlines.slice(0, activeIndex),
+      ];
+      
+      // Select next with category balance
+      const { headline: nextHeadline, newHistory } = selectNextWithBalance(
+        remainingHeadlines,
+        categoryHistoryRef.current
+      );
+      
+      if (nextHeadline) {
+        const nextIndex = headlines.findIndex(h => h.id === nextHeadline.id || h.headline === nextHeadline.headline);
+        categoryHistoryRef.current = newHistory;
+        setActiveIndex(nextIndex >= 0 ? nextIndex : (activeIndex + 1) % headlines.length);
+      } else {
+        setActiveIndex((prev) => (prev + 1) % headlines.length);
+      }
     }, speed);
 
     return () => clearTimeout(timer);

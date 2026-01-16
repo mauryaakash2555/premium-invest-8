@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import FAQSection from '@/components/shared/FAQSection';
+import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { FdMaturitySnapshot } from '@/components/calculators/FdMaturitySnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
@@ -126,6 +127,10 @@ const FixedDeposits = () => {
       />
 
   <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
+        {/* Back to Live Intelligence */}
+        <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
+          <BackToLiveIntelligence />
+        </div>
         <div
           aria-hidden="true"
           style={{

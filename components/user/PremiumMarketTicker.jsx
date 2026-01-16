@@ -216,19 +216,19 @@ function normalizeApi(json) {
     .filter((x) => x.id && x.value != null);
 }
 
-// Requested: FALLBACK_DATA (if API fails)
-const FALLBACK_DATA = [
-  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 24857, change: 127, changePercent: 0.52, changePct: 0.52, direction: "up", currency: "INR" },
-  { id: "SENSEX", name: "SENSEX", kind: "index", value: 82365, change: 445, changePercent: 0.54, changePct: 0.54, direction: "up", currency: "INR" },
-  { id: "USDINR", name: "USD/INR", kind: "fx", value: 84.32, change: 0.08, changePercent: 0.09, changePct: 0.09, direction: "up", currency: "INR" },
-  { id: "GOLD", name: "GOLD", kind: "metal", value: 7245, change: 12, changePercent: 0.17, changePct: 0.17, direction: "up", currency: "INR" },
+// NO FALLBACK/DUMMY DATA - Show loading state if API fails
+const LOADING_STATE = [
+  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
+  { id: "SENSEX", name: "SENSEX", kind: "index", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
+  { id: "USDINR", name: "USD/INR", kind: "fx", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
+  { id: "GOLD", name: "GOLD", kind: "metal", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
 ];
 
 export default function PremiumMarketTicker({ className }) {
-  // Show numbers immediately on first paint (SSR + hydration) while live data loads.
-  const [data, setData] = useState(FALLBACK_DATA);
+  // Show loading state on first paint while live data loads - NO DUMMY DATA
+  const [data, setData] = useState(LOADING_STATE);
   const [asOf, setAsOf] = useState(null);
-  const lastDataRef = useRef(FALLBACK_DATA);
+  const lastDataRef = useRef(null);
 
   const placeholderItems = useMemo(
     () => [
@@ -265,14 +265,12 @@ export default function PremiumMarketTicker({ className }) {
   useEffect(() => {
     let stop = false;
 
-    function applyFallback(reason, detail) {
+    // NO FALLBACK DATA - Just log errors, keep loading state until real data arrives
+    function handleFetchError(reason, detail) {
       if (stop) return;
-      // Only apply fallback if we don't already have last-known values.
-      if (Array.isArray(lastDataRef.current) && lastDataRef.current.length) return;
-      console.warn("Ticker fetch failed (fallback used):", reason, detail ?? "");
-      lastDataRef.current = FALLBACK_DATA;
-      setData(FALLBACK_DATA);
-      setAsOf(null);
+      console.error("Ticker fetch failed:", reason, detail ?? "");
+      // Keep last known data if available, otherwise stay in loading state
+      // Do NOT use any dummy/fallback data
     }
 
     async function fetchNow() {
@@ -281,13 +279,13 @@ export default function PremiumMarketTicker({ className }) {
         const j = await r.json().catch(() => null);
 
         if (!r.ok || !j?.ok) {
-          applyFallback("bad_response", { status: r.status, ok: r.ok, bodyOk: Boolean(j?.ok) });
+          handleFetchError("bad_response", { status: r.status, ok: r.ok, bodyOk: Boolean(j?.ok) });
           return;
         }
 
         const next = normalizeApi(j);
         if (!next.length) {
-          applyFallback("empty_items", j);
+          handleFetchError("empty_items", j);
           return;
         }
 
@@ -318,7 +316,7 @@ export default function PremiumMarketTicker({ className }) {
         setAsOf(String(j.asOf || ""));
       } catch (err) {
         console.error("Ticker fetch failed:", err);
-        applyFallback("fetch_failed", String(err?.message || err));
+        handleFetchError("fetch_failed", String(err?.message || err));
       }
     }
 
@@ -412,8 +410,9 @@ export default function PremiumMarketTicker({ className }) {
             const isDown = dir === "down";
 
             const isPlaceholder = Boolean(item.placeholder);
-            const valueText = isPlaceholder ? "—" : fmtValue(item);
-            const changeText = isPlaceholder ? "—" : fmtPct(item.changePct);
+            const isLoading = Boolean(item.isLoading);
+            const valueText = isPlaceholder || isLoading ? "—" : fmtValue(item);
+            const changeText = isPlaceholder || isLoading ? "—" : fmtPct(item.changePct);
 
             // Keep SENSEX palette exactly as-is (your current look): label/value neutral, delta red/green only.
             const isSensex = item.id === "SENSEX";
