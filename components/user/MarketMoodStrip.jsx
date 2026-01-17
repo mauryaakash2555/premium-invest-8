@@ -50,7 +50,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
     if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
       window.__openLiveIntelligence();
     } else {
-      router.push('/live-intelligence-hero');
+      router.push('/live-intelligence');
     }
   };
 
