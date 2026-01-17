@@ -114,6 +114,17 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
 
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#090A0C" />
+        
+        {/* Critical CSS for above-fold content (improves FCP) */}
+        <style dangerouslySetInnerHTML={{__html: `
+          html,body{margin:0;padding:0;background:#000;color:#fff;font-family:var(--font-inter),system-ui,sans-serif}
+          .hero-gradient{min-height:85vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+          nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:85px;display:flex;align-items:center}
+          .gold-gradient-text{background:linear-gradient(135deg,#D6B36A 0%,#F0D78C 50%,#C0A062 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+          @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+          .animate-pulse{animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite}
+          @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        `}} />
       </head>
       <body
         className={`${playfair.variable} ${inter.variable}`}
