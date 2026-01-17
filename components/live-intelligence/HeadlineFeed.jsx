@@ -7,7 +7,7 @@ import {
   getHeadlinesByCategory, 
   sortByPriority, 
   getRotationSpeed,
-  DUMMY_HEADLINES 
+  CURATED_HEADLINES 
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
@@ -15,10 +15,12 @@ import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
  * HeadlineFeed - Rotating headlines with category filter
  * 
  * Features:
+ * - LIVE DATA: Fetches from /api/live-intelligence/feed
  * - Auto-rotation based on urgency level
  * - Category filtering
  * - Priority-based sorting
  * - Mode-based rotation speed override
+ * - Falls back to curated headlines if API fails
  */
 export default function HeadlineFeed() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -26,14 +28,51 @@ export default function HeadlineFeed() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [mode, setMode] = useState(null);
+  const [isLive, setIsLive] = useState(false);
 
-  // Load and filter headlines
+  // Fetch live headlines from API
+  const fetchLiveHeadlines = useCallback(async (category) => {
+    try {
+      const url = category === 'all' 
+        ? '/api/live-intelligence/feed?limit=20'
+        : `/api/live-intelligence/feed?category=${category}&limit=20`;
+      
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Feed API failed');
+      
+      const data = await res.json();
+      if (data.ok && data.headlines && data.headlines.length > 0) {
+        setHeadlines(data.headlines);
+        setIsLive(data.source === 'database');
+        setActiveIndex(0);
+        return true;
+      }
+    } catch (err) {
+      console.warn('[HeadlineFeed] Live feed unavailable:', err.message);
+    }
+    return false;
+  }, []);
+
+  // Load headlines - try live first, then fallback to curated
   useEffect(() => {
-    const filtered = getHeadlinesByCategory(selectedCategory);
-    const sorted = sortByPriority(filtered);
-    setHeadlines(sorted);
-    setActiveIndex(0);
-  }, [selectedCategory]);
+    fetchLiveHeadlines(selectedCategory).then((success) => {
+      if (!success) {
+        // Fallback to curated headlines
+        const filtered = getHeadlinesByCategory(selectedCategory);
+        const sorted = sortByPriority(filtered);
+        setHeadlines(sorted);
+        setActiveIndex(0);
+        setIsLive(false);
+      }
+    });
+    
+    // Refresh live headlines every 3 minutes
+    const refreshInterval = setInterval(() => {
+      fetchLiveHeadlines(selectedCategory);
+    }, 3 * 60 * 1000);
+    
+    return () => clearInterval(refreshInterval);
+  }, [selectedCategory, fetchLiveHeadlines]);
 
   // Get current mode for rotation speed
   useEffect(() => {

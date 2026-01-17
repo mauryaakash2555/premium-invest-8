@@ -44,7 +44,7 @@ const CALC_MODES = {
   rd: { key: 'rd', label: 'RD', icon: '📅', desc: 'Recurring deposit' },
   ssy: { key: 'ssy', label: 'SSY', icon: '👧', desc: 'Sukanya Samriddhi Yojana' },
   wealth: { key: 'wealth', label: 'Wealth', icon: '💵', desc: 'Wealth growth planner' },
-  // 6 more to make 27 total
+  // Additional calculators
   mf: { key: 'mf', label: 'MF Returns', icon: '📊', desc: 'Mutual fund returns' },
   childPlan: { key: 'childPlan', label: 'Child', icon: '👶', desc: 'Child education plan' },
   marriage: { key: 'marriage', label: 'Marriage', icon: '💍', desc: 'Marriage fund planner' },
@@ -539,7 +539,6 @@ export default function DonutCalculator({ onResultChange }) {
           </svg>
         </span>
         <span className="calc-toggle-text">Ultimate Calculator</span>
-        <span className="calc-toggle-badge">27 Calcs</span>
         <span className={`calc-toggle-arrow ${isOpen ? 'open' : ''}`}>▼</span>
       </button>
 

@@ -293,21 +293,9 @@ export default function LiveIntelligenceOverlay({
     };
   }, [openOverlay]);
 
-  // Allow auto-open to work again after a full refresh.
-  // SessionStorage persists across reloads, so we clear the auto-open flag on beforeunload.
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const clearAutoOpenFlag = () => {
-      try {
-        sessionStorage.removeItem(SESSION_KEY);
-      } catch {
-        // ignore
-      }
-    };
-
-    window.addEventListener('beforeunload', clearAutoOpenFlag);
-    return () => window.removeEventListener('beforeunload', clearAutoOpenFlag);
-  }, []);
+  // Session-based auto-open: Only triggers ONCE per browser session.
+  // The flag persists in sessionStorage until the browser/tab is closed.
+  // DO NOT clear on beforeunload - that defeats the purpose of session-based triggering.
 
   // Auto-open when scrolling past LIVE MOOD (once per session)
   useEffect(() => {
@@ -2046,9 +2034,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{
                 padding: '3px 10px',
                 borderRadius: '8px',
-                background: 'rgba(255,200,100,0.12)',
+                background: 'rgba(100,160,255,0.12)',
                 border: 'none',
-                color: 'rgba(255,200,100,0.95)',
+                color: 'rgba(140,190,255,0.95)',
                 fontSize: '10px',
                 fontWeight: 600,
                 letterSpacing: '0.05em',
@@ -2091,9 +2079,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <div style={{
                     padding: '3px 10px',
                     borderRadius: '8px',
-                    background: 'rgba(255,200,100,0.12)',
+                    background: 'rgba(100,160,255,0.12)',
                     border: 'none',
-                    color: 'rgba(255,200,100,0.95)',
+                    color: 'rgba(140,190,255,0.95)',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.05em',
