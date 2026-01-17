@@ -230,7 +230,12 @@ export function TaxCalculator() {
     }
 
     setLeadOpen(false);
-    window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
+    const checkoutUrl = typeof orderJson?.checkout_url === "string" && orderJson.checkout_url.trim() ? orderJson.checkout_url.trim() : "";
+    if (checkoutUrl) {
+      window.location.assign(checkoutUrl);
+    } else {
+      window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
+    }
   }
 
   useEffect(() => {

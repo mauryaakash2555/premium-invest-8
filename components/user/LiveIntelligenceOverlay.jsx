@@ -24,6 +24,7 @@ import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
+import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -757,12 +758,24 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
+  const [breakingHeadline, setBreakingHeadline] = useState(null); // For breaking news click
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
     gold: 8,
     cash: 10,
   });
+
+  // Handle breaking news headline click - scroll to feed and highlight
+  const handleBreakingClick = useCallback((headline) => {
+    // For now, just scroll to the headline feed section
+    // Could expand to show a modal or highlight specific headline
+    const feedSection = document.querySelector('[data-headline-feed]');
+    if (feedSection) {
+      feedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setBreakingHeadline(headline);
+  }, []);
 
   const shareUrl = useMemo(() => {
     if (typeof window === 'undefined') return 'https://bmwealth.co.in';
@@ -1870,7 +1883,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
           
           {/* Row 5: Action buttons - Share & Add Goal */}
-          <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap' }}>
+          <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap', overflowX: 'auto', paddingBottom: '4px', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
             {/* Share Button with Dropdown */}
             <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button
@@ -2085,6 +2098,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <span>View Archive</span>
             </Link>
           </div>
+        </div>
+
+        {/* Market Mood Indicator - Global sentiment at the top */}
+        <div className="max-w-7xl mx-auto" style={{ marginTop: '16px' }}>
+          <MarketMoodIndicator />
         </div>
 
         {/* KPI row */}

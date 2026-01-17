@@ -202,7 +202,7 @@ export function PropertyVsSipCalculator() {
           propertyFutureValue: formatted.values.propertyFutureValue,
           sipFutureValue: formatted.values.sipFutureValue,
           wealthGap: formatted.values.wealthGap,
-          gapCr,
+          gapCr: gapCrAbs,
         },
       }),
     });
@@ -249,7 +249,7 @@ export function PropertyVsSipCalculator() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         amount: 399,
-        productName: `Property vs SIP Premium Report (₹${gapCr}Cr opportunity)`,
+        productName: `Property vs SIP Premium Report (₹${gapCrAbs}Cr opportunity)`,
         customerName: payload?.name || "",
         customerEmail: payload?.email || "",
         customerPhone: payload?.phone || "",
@@ -264,7 +264,12 @@ export function PropertyVsSipCalculator() {
     }
 
     setLeadOpen(false);
-    window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
+    const checkoutUrl = typeof orderJson?.checkout_url === "string" && orderJson.checkout_url.trim() ? orderJson.checkout_url.trim() : "";
+    if (checkoutUrl) {
+      window.location.assign(checkoutUrl);
+    } else {
+      window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
+    }
   }
 
   useEffect(() => {

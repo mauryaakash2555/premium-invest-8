@@ -11,6 +11,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import HeadlineCard from '@/components/live-intelligence/HeadlineCard';
 
 // Category definitions
 const categories = [
@@ -174,34 +175,38 @@ export default function ArchivePage() {
         }}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 
-                className="text-2xl md:text-3xl font-bold"
-                style={{ color: 'var(--li-text, rgba(235,242,255,0.94))' }}
-              >
-                📚 Intelligence Archive
-              </h1>
-              <p 
-                className="text-sm mt-1"
-                style={{ color: 'var(--li-text-muted, rgba(220,230,255,0.62))' }}
-              >
-                {total > 0 ? `Search through ${total} historical headlines` : 'Search historical headlines'}
-              </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-4">
+              <Link href="/" className="shrink-0">
+                <img src="/logo.webp" alt="BM Wealth" className="w-10 h-10 md:w-12 md:h-12" />
+              </Link>
+              <div>
+                <h1 
+                  className="text-xl md:text-2xl font-bold"
+                  style={{ color: 'var(--li-text, rgba(235,242,255,0.94))' }}
+                >
+                  Intelligence Archive
+                </h1>
+                <p 
+                  className="text-sm mt-1"
+                  style={{ color: 'var(--li-text-muted, rgba(220,230,255,0.62))' }}
+                >
+                  {total > 0 ? `Search through ${total} historical headlines` : 'Search historical headlines'}
+                </p>
+              </div>
             </div>
             
-            <div className="flex items-center gap-3">
-              <Link
-                href="/live-intelligence"
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                style={{ 
-                  background: 'rgba(100, 160, 255, 0.10)',
-                  color: 'rgba(235, 242, 255, 0.94)'
-                }}
-              >
-                ← Back to Live
-              </Link>
-            </div>
+            <Link
+              href="/live-intelligence"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 shrink-0"
+              style={{ 
+                background: 'rgba(100, 160, 255, 0.10)',
+                border: '1px solid rgba(100, 160, 255, 0.2)',
+                color: 'rgba(140, 190, 255, 0.94)'
+              }}
+            >
+              ← Back to Live
+            </Link>
           </div>
         </div>
       </div>
@@ -361,66 +366,23 @@ export default function ArchivePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className="rounded-xl p-5 md:p-6 transition-all hover:scale-[1.01]"
-                style={{ 
-                  background: 'var(--li-card-bg, rgba(20,30,50,0.50))',
-                  border: '1px solid var(--li-border, rgba(170,198,255,0.15))'
-                }}
               >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{getCategoryIcon(headline.category)}</span>
-                    <span 
-                      className="text-xs font-medium px-2 py-1 rounded"
-                      style={{ background: 'var(--li-button-bg, rgba(170,198,255,0.10))' }}
-                    >
-                      {getCategoryLabel(headline.category)}
-                    </span>
-                    {headline.urgency && headline.urgency !== 'REGULAR' && (
-                      <span 
-                        className="text-xs font-bold px-2 py-1 rounded"
-                        style={{ 
-                          background: headline.urgency === 'BREAKING' ? 'rgba(255,100,100,0.2)' : 'rgba(255,200,100,0.2)',
-                          color: headline.urgency === 'BREAKING' ? 'rgb(255,150,150)' : 'rgb(255,200,100)'
-                        }}
-                      >
-                        {headline.urgency}
-                      </span>
-                    )}
-                  </div>
-                  <span 
-                    className="text-xs whitespace-nowrap"
-                    style={{ color: 'var(--li-text-dim, rgba(200,215,240,0.45))' }}
-                  >
-                    {formatDate(headline.published_at || headline.created_at)}
-                  </span>
-                </div>
-                
-                <h3 
-                  className="text-lg font-bold mb-2"
-                  style={{ color: 'var(--li-text, rgba(235,242,255,0.94))' }}
-                >
-                  {headline.headline}
-                </h3>
-                
-                {headline.summary && (
-                  <p 
-                    className="text-sm mb-3"
-                    style={{ color: 'var(--li-text-muted, rgba(220,230,255,0.62))' }}
-                  >
-                    {headline.summary}
-                  </p>
-                )}
-                
-                {headline.source && (
-                  <div 
-                    className="flex items-center gap-2 text-xs"
-                    style={{ color: 'var(--li-text-dim, rgba(200,215,240,0.45))' }}
-                  >
-                    <span>Source:</span>
-                    <span className="font-medium">{headline.source}</span>
-                  </div>
-                )}
+                <HeadlineCard 
+                  mode="archive"
+                  headline={{
+                    id: headline.id,
+                    headline: headline.headline,
+                    whyItMatters: headline.summary,
+                    dataPoint: headline.data_point,
+                    category: headline.category,
+                    urgency: headline.urgency,
+                    source: headline.source,
+                    published_at: headline.published_at,
+                    created_at: headline.created_at,
+                    cta_button: headline.cta_button,
+                    sourceUrl: headline.cta_button?.link,
+                  }}
+                />
               </motion.div>
             ))}
           </div>

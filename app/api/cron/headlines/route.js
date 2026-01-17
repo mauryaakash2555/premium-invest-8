@@ -94,28 +94,43 @@ function isSebiCompliant(text) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RSS FEED SOURCES - Add more sources here!
+// RSS FEED SOURCES - Diverse sources for balanced coverage
 // ─────────────────────────────────────────────────────────────────────────────
 const RSS_SOURCES = [
-  // Moneycontrol
-  { name: 'Moneycontrol Markets', url: 'https://www.moneycontrol.com/rss/marketreports.xml', category: 'market_update' },
-  { name: 'Moneycontrol Business', url: 'https://www.moneycontrol.com/rss/business.xml', category: 'market_update' },
-  { name: 'Moneycontrol News', url: 'https://www.moneycontrol.com/rss/latestnews.xml', category: 'market_update' },
+  // ═══ Moneycontrol - Major financial portal ═══
+  { name: 'Moneycontrol', url: 'https://www.moneycontrol.com/rss/marketreports.xml', category: 'market_update' },
+  { name: 'Moneycontrol', url: 'https://www.moneycontrol.com/rss/business.xml', category: 'market_update' },
+  { name: 'Moneycontrol', url: 'https://www.moneycontrol.com/rss/latestnews.xml', category: 'market_update' },
   
-  // Economic Times
-  { name: 'ET Markets', url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', category: 'market_update' },
-  { name: 'ET Economy', url: 'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms', category: 'market_update' },
-  { name: 'ET Industry', url: 'https://economictimes.indiatimes.com/industry/rssfeeds/13352306.cms', category: 'market_update' },
+  // ═══ Economic Times - Largest business daily ═══
+  { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', category: 'market_update' },
+  { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms', category: 'market_update' },
+  { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/industry/rssfeeds/13352306.cms', category: 'market_update' },
+  { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/wealth/rssfeeds/2688008.cms', category: 'market_update' },
   
-  // LiveMint
-  { name: 'Mint Markets', url: 'https://www.livemint.com/rss/markets', category: 'market_update' },
-  { name: 'Mint Money', url: 'https://www.livemint.com/rss/money', category: 'market_update' },
+  // ═══ LiveMint - Business news from HT ═══
+  { name: 'Mint', url: 'https://www.livemint.com/rss/markets', category: 'market_update' },
+  { name: 'Mint', url: 'https://www.livemint.com/rss/money', category: 'market_update' },
+  { name: 'Mint', url: 'https://www.livemint.com/rss/companies', category: 'market_update' },
   
-  // Business Standard
-  { name: 'BS Markets', url: 'https://www.business-standard.com/rss/markets-106.rss', category: 'market_update' },
+  // ═══ Business Standard - Premium business news ═══
+  { name: 'Business Standard', url: 'https://www.business-standard.com/rss/markets-106.rss', category: 'market_update' },
+  { name: 'Business Standard', url: 'https://www.business-standard.com/rss/finance-102.rss', category: 'market_update' },
+  { name: 'Business Standard', url: 'https://www.business-standard.com/rss/economy-102.rss', category: 'market_update' },
   
-  // NDTV Profit
+  // ═══ Financial Express - Business news ═══
+  { name: 'Financial Express', url: 'https://www.financialexpress.com/feed/', category: 'market_update' },
+  
+  // ═══ NDTV Profit - Business channel ═══
   { name: 'NDTV Profit', url: 'https://feeds.feedburner.com/ndtvprofit-latest', category: 'market_update' },
+  
+  // ═══ Zeebiz - Zee Business ═══
+  { name: 'Zee Business', url: 'https://www.zeebiz.com/rss/top-stories.xml', category: 'market_update' },
+  
+  // ═══ Reuters India - International wire service ═══
+  { name: 'Reuters India', url: 'https://www.reuters.com/rssFeed/INBusinessNews', category: 'global' },
+  
+  // ═══ Bloomberg Quint (Now NDTV Profit) - Already covered above ═══
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────

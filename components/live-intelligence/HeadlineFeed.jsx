@@ -206,7 +206,7 @@ export default function HeadlineFeed() {
 
   return (
     <>
-      <div className="li-headline-feed">
+      <div className="li-headline-feed" data-headline-feed>
         {/* Category Filter */}
         <CategoryFilter 
           selectedCategory={selectedCategory} 

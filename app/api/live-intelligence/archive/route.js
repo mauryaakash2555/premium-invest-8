@@ -3,6 +3,7 @@
  * @file app/api/live-intelligence/archive/route.js
  * 
  * Fetches historical headlines with search, filter, and pagination
+ * Uses the 'headlines' table (same as feed API)
  */
 
 import { NextResponse } from 'next/server';
@@ -57,74 +58,100 @@ export async function GET(request) {
         break;
     }
     
-    // Build query for intelligence_items
-    let query = supabase
-      .from('intelligence_items')
-      .select('id, category, urgency, block_what_happened, block_why_it_matters, block_where_fits, source_name, created_at, published_at, status')
+    // Safe query wrapper
+    const safeQuery = async (query) => {
+      try {
+        const result = await query;
+        return result;
+      } catch (e) {
+        console.error('Query error:', e.message);
+        return { data: [], error: e };
+      }
+    };
+    
+    // Query headlines table (cron-populated from RSS)
+    let headlinesQuery = supabase
+      .from('headlines')
+      .select('*')
+      .order('published_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+    
+    // Query live_intelligence_headlines table (admin-created)
+    let adminQuery = supabase
+      .from('live_intelligence_headlines')
+      .select('*')
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
     
     // Apply category filter
     if (category && category !== 'all') {
-      query = query.eq('category', category);
+      headlinesQuery = headlinesQuery.eq('category', category);
+      adminQuery = adminQuery.eq('category', category);
     }
     
     // Apply date filter
     if (dateFilter) {
-      query = query.gte('created_at', dateFilter.toISOString());
+      headlinesQuery = headlinesQuery.gte('published_at', dateFilter.toISOString());
+      adminQuery = adminQuery.gte('created_at', dateFilter.toISOString());
     }
     
-    // Apply search filter (using ilike for case-insensitive search)
+    // Apply search filter
     if (search) {
-      query = query.or(`block_what_happened.ilike.%${search}%,block_why_it_matters.ilike.%${search}%,block_where_fits.ilike.%${search}%`);
+      headlinesQuery = headlinesQuery.or(`headline.ilike.%${search}%,why_it_matters.ilike.%${search}%,source.ilike.%${search}%`);
+      adminQuery = adminQuery.or(`headline.ilike.%${search}%,why_it_matters.ilike.%${search}%,source.ilike.%${search}%`);
     }
     
-    const { data, error, count } = await query;
+    // Execute both queries
+    const [headlinesResult, adminResult] = await Promise.all([
+      safeQuery(headlinesQuery),
+      safeQuery(adminQuery),
+    ]);
     
-    if (error) {
-      console.error('Archive query error:', error);
-      throw error;
-    }
+    // Combine and deduplicate by headline text
+    const allData = [...(headlinesResult.data || []), ...(adminResult.data || [])];
+    const seen = new Set();
+    const uniqueData = allData.filter(item => {
+      const key = (item.headline || item.block_what_happened || '').toLowerCase().trim();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     
-    // Map data to consistent format
-    const headlines = (data || []).map(item => ({
+    // Sort by date
+    uniqueData.sort((a, b) => {
+      const dateA = new Date(a.published_at || a.created_at);
+      const dateB = new Date(b.published_at || b.created_at);
+      return dateB - dateA;
+    });
+    
+    // Apply limit
+    const limitedData = uniqueData.slice(0, limit);
+    
+    // Map data to consistent format (use snake_case from database)
+    const headlines = limitedData.map(item => ({
       id: item.id,
-      headline: item.block_what_happened,
-      summary: item.block_why_it_matters,
-      data_point: item.block_where_fits,
+      headline: item.headline || item.block_what_happened,
+      summary: item.why_it_matters || item.block_why_it_matters || item.whyItMatters,
+      data_point: item.data_point || item.block_where_fits || item.dataPoint,
       category: item.category || 'market_update',
       urgency: item.urgency || 'REGULAR',
-      source: item.source_name || 'Unknown',
+      source: item.source || 'Unknown',
       published_at: item.published_at || item.created_at,
       created_at: item.created_at,
-      status: item.status
+      valid_until: item.valid_until
     }));
     
-    // Get total count for pagination
-    let totalQuery = supabase
-      .from('intelligence_items')
-      .select('id', { count: 'exact', head: true });
-    
-    if (category && category !== 'all') {
-      totalQuery = totalQuery.eq('category', category);
-    }
-    if (dateFilter) {
-      totalQuery = totalQuery.gte('created_at', dateFilter.toISOString());
-    }
-    if (search) {
-      totalQuery = totalQuery.or(`block_what_happened.ilike.%${search}%,block_why_it_matters.ilike.%${search}%`);
-    }
-    
-    const { count: totalCount } = await totalQuery;
+    // Total is from unique combined data
+    const total = uniqueData.length;
     
     return NextResponse.json({
       success: true,
       headlines,
       count: headlines.length,
-      total: totalCount || headlines.length,
+      total: total,
       offset,
       limit,
-      hasMore: offset + headlines.length < (totalCount || 0)
+      hasMore: offset + headlines.length < total
     });
     
   } catch (error) {

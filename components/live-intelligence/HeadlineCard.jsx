@@ -181,11 +181,38 @@ const generateDynamicDetails = (headline) => {
   const category = CATEGORIES[headline.category];
   const categoryLabel = category?.label || 'Market Update';
   
+  // Generate meaningful market mood based on urgency
+  const moodByUrgency = {
+    'BREAKING': 'Markets reacting to breaking news - volatility expected',
+    'URGENT': 'Important development - investors taking note',
+    'REGULAR': 'Market digesting new information',
+  };
+  
+  // Generate meaningful key takeaway based on category
+  const keyTakeaways = {
+    'rbi': 'Monitor any changes to repo rates and their impact on loan EMIs',
+    'sebi': 'Stay updated on regulatory changes affecting your investments',
+    'tax_insight': 'Review tax implications for your portfolio',
+    'mutual_funds': 'Track NAV changes and fund performance',
+    'fixed_income': 'Compare FD rates across banks before investing',
+    'insurance': 'Review your coverage and premium payments',
+    'forex_gold': 'Consider portfolio diversification with commodities',
+    'ipo': 'Assess risk before applying to new issues',
+    'global': 'Understand how global events affect Indian markets',
+    'market_move': 'Avoid panic selling - stick to your investment plan',
+    'regulatory': 'Ensure your investments comply with new regulations',
+    'corporate': 'Check if this affects any stocks in your portfolio',
+    'market_update': 'Review affected sectors in your portfolio',
+  };
+  
+  const keyTakeaway = keyTakeaways[headline.category] || 'Review affected sectors in your portfolio';
+  
   return {
     whatHappened: headline.headline,
-    whyItHappened: headline.whyItMatters || `This ${categoryLabel.toLowerCase()} development could influence related investments and market sentiment.`,
-    howItBenefits: `• Understand how ${categoryLabel.toLowerCase()} news affects your portfolio\n• Stay ahead with timely market insights\n• Make informed decisions based on current events\n• ${headline.dataPoint ? `Key data: ${headline.dataPoint}` : 'Track developments as they unfold'}`,
-    expertTip: `For personalized advice on ${categoryLabel.toLowerCase()} investments, consult with your BM Wealth advisor.`,
+    whyItMatters: headline.whyItMatters || `This ${categoryLabel.toLowerCase()} development affects investor sentiment and may influence market dynamics.`,
+    marketMood: moodByUrgency[headline.urgency] || 'Neutral - Processing new information',
+    howItBenefits: `• For equity investors: Monitor sector-specific impacts\n• For debt investors: Watch for rate implications\n• For SIP investors: Continue disciplined investing\n• Key takeaway: ${keyTakeaway}`,
+    expertTip: `Review how this ${categoryLabel.toLowerCase()} news affects your specific holdings. Consider consulting your advisor for portfolio adjustments.`,
   };
 };
 
@@ -195,7 +222,7 @@ const getHeadlineDetails = (headline) => {
   if (headline.block_what_happened && headline.block_what_happened !== 'Processing...') {
     return {
       whatHappened: headline.block_what_happened || headline.headline,
-      whyItHappened: headline.block_why_it_matters || headline.whyItMatters || 'Market and economic factors contributed to this development.',
+      whyItMatters: headline.block_why_it_matters || headline.whyItMatters || 'Market and economic factors contributed to this development.',
       howItBenefits: headline.block_where_fits || headline.block_who_cares || '• Stay informed about market movements\n• Make better investment decisions\n• Understand the broader economic picture',
       expertTip: headline.expert_tip || 'Monitor developments and consult your financial advisor for personalized guidance.',
     };
@@ -205,7 +232,7 @@ const getHeadlineDetails = (headline) => {
   if (headline.what_happened || headline.why_it_matters) {
     return {
       whatHappened: headline.what_happened || headline.headline,
-      whyItHappened: headline.why_it_matters || headline.whyItMatters || 'Multiple factors contributed to this development.',
+      whyItMatters: headline.why_it_matters || headline.whyItMatters || 'Multiple factors contributed to this development.',
       howItBenefits: headline.how_it_benefits || headline.where_fits || '• Relevant for your investment decisions\n• Keep track of market dynamics\n• Adjust strategy as needed',
       expertTip: headline.expert_tip || 'Stay informed and review your portfolio periodically.',
     };
@@ -226,17 +253,80 @@ const getHeadlineDetails = (headline) => {
 
 /**
  * HeadlineCard - Displays a single headline with category, urgency, and CTA
- * Now CLICKABLE with detailed educational modal
+ * CLICKABLE with AI-powered detailed educational modal
+ * 
+ * Props:
+ * - headline: The headline data object
+ * - isActive: Whether the card is currently active/highlighted
+ * - onSaveChange: Callback when save status changes
+ * - mode: 'live' (default) opens modal, 'archive' opens source URL
  */
-export default function HeadlineCard({ headline, isActive = false, onSaveChange }) {
+export default function HeadlineCard({ headline, isActive = false, onSaveChange, mode = 'live' }) {
   const [showModal, setShowModal] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [longPressTimer, setLongPressTimer] = useState(null);
+  const [aiContent, setAiContent] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const touchStartY = useRef(0);
   const category = CATEGORIES[headline.category];
   const urgency = URGENCY_LEVELS[headline.urgency];
-  const details = getHeadlineDetails(headline);
   const ctaConfig = CTA_BUTTONS[headline.category];
+
+  // Fetch AI content when modal opens
+  useEffect(() => {
+    if (!showModal || aiContent) return;
+    
+    // Check if headline already has AI content from database
+    if (headline.block_what_happened && headline.block_what_happened !== 'Processing...') {
+      setAiContent({
+        whatHappened: headline.block_what_happened,
+        whyItMatters: headline.block_why_it_matters || headline.whyItMatters || 'This development impacts related investments.',
+        howItBenefits: headline.block_where_fits || '• Stay informed about market developments\n• Monitor related sectors',
+        expertTip: headline.expert_tip || 'Consult your financial advisor for personalized guidance.',
+      });
+      return;
+    }
+    
+    // Fetch AI-generated content
+    setAiLoading(true);
+    fetch('/api/live-intelligence/explain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        headline: headline.headline,
+        category: headline.category,
+        whyItMatters: headline.whyItMatters,
+        dataPoint: headline.dataPoint,
+        source: headline.source,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.ok && data.content) {
+          setAiContent(data.content);
+        } else {
+          // Fallback to dynamic generation
+          setAiContent(generateDynamicDetails(headline));
+        }
+      })
+      .catch(() => {
+        setAiContent(generateDynamicDetails(headline));
+      })
+      .finally(() => setAiLoading(false));
+  }, [showModal, aiContent, headline]);
+
+  // Reset AI content when headline changes
+  useEffect(() => {
+    setAiContent(null);
+  }, [headline.id]);
+
+  // Get display content (AI or fallback)
+  const details = aiContent || generateDynamicDetails(headline);
+
+  // Check if saved on mount
+  useEffect(() => {
+    setIsSaved(savedHeadlines.isSaved(headline.id));
+  }, [headline.id]);
 
   // Check if saved on mount
   useEffect(() => {
@@ -320,6 +410,17 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
   const handleCardClick = (e) => {
     // Prevent any scroll behavior from parent containers
     e.stopPropagation();
+    
+    // In archive mode, open source URL directly
+    if (mode === 'archive') {
+      const sourceUrl = headline.cta_button?.link || headline.sourceUrl || headline.link;
+      if (sourceUrl) {
+        window.open(sourceUrl, '_blank', 'noopener,noreferrer');
+        return;
+      }
+    }
+    
+    // Default: open the AI explanation modal
     setShowModal(true);
   };
 
@@ -349,11 +450,19 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
       >
         {/* Header: Prominent Category Badge + Urgency + Time + Save */}
         <div className="li-headline-header">
+          {/* BREAKING Badge - prominent red for breaking news */}
+          {(headline.urgency === 'BREAKING' || headline.urgency === 'IMPORTANT') && (
+            <span className="li-breaking-badge">
+              <span className="li-breaking-dot" />
+              BREAKING
+            </span>
+          )}
+          
           <div className={`li-cat-badge cat-${headline.category}`}>
             {getCategoryShortCode(headline.category)}
           </div>
           
-          {urgency?.key !== 'REGULAR' && (
+          {urgency?.key !== 'REGULAR' && urgency?.key !== 'BREAKING' && urgency?.key !== 'IMPORTANT' && (
             <span className={`li-headline-urgency ${urgency?.key?.toLowerCase()}`}>
               {urgency?.label}
             </span>
@@ -430,6 +539,42 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
         .li-headline-card.breaking {
           border-color: rgba(255, 80, 80, 0.35);
           animation: breakingPulseGlow 2s ease-in-out infinite;
+        }
+
+        /* BREAKING BADGE - Prominent red badge */
+        .li-breaking-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 10px;
+          background: linear-gradient(135deg, rgba(220, 40, 40, 0.95) 0%, rgba(180, 30, 30, 0.95) 100%);
+          border: 1px solid rgba(255, 100, 100, 0.5);
+          border-radius: 4px;
+          color: #fff;
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          box-shadow: 0 2px 8px rgba(255, 60, 60, 0.4);
+          animation: breakingBadgePulse 1.5s ease-in-out infinite;
+        }
+
+        .li-breaking-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #fff;
+          animation: breakingDotPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes breakingBadgePulse {
+          0%, 100% { opacity: 1; box-shadow: 0 2px 8px rgba(255, 60, 60, 0.4); }
+          50% { opacity: 0.9; box-shadow: 0 2px 16px rgba(255, 60, 60, 0.6); }
+        }
+
+        @keyframes breakingDotPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(0.8); }
         }
 
         @keyframes breakingPulseGlow {
@@ -834,6 +979,20 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
             font-size: 18px;
           }
         }
+
+        @keyframes li-spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .li-ai-spinner {
+          width: 40px;
+          height: 40px;
+          border: 3px solid rgba(100, 160, 255, 0.2);
+          border-top: 3px solid rgba(100, 160, 255, 0.9);
+          border-radius: 50%;
+          animation: li-spin 1s linear infinite;
+        }
       `}</style>
 
       {/* Detailed Modal */}
@@ -856,54 +1015,118 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
                 </button>
 
                 <div className="li-modal-header">
-                  <div className="li-modal-category">
-                    <span>{category?.icon}</span>
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        color: 'rgba(140, 190, 255, 0.90)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {category?.label}
+                  {/* Top bar: Category + Source + Date */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '12px',
+                  }}>
+                    <div className="li-modal-category">
+                      <span>{category?.icon}</span>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: 'rgba(140, 190, 255, 0.90)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        {category?.label}
+                      </span>
+                    </div>
+                    <span style={{
+                      fontSize: '11px',
+                      color: 'rgba(180, 195, 220, 0.55)',
+                    }}>
+                      {headline.source} • {formatRelativeTime(headline.published_at || headline.created_at)}
                     </span>
                   </div>
-                  <h3 className="li-modal-title">{headline.headline}</h3>
+                  {/* Headline - no logo here, clean title */}
+                  <h3 className="li-modal-title" style={{ marginTop: 0 }}>{headline.headline}</h3>
                 </div>
 
-                <div className="li-modal-section">
-                  <h4 className="li-modal-section-title">
-                    <span>📰</span> What Happened
-                  </h4>
-                  <p className="li-modal-section-content">{details.whatHappened}</p>
-                </div>
-
-                <div className="li-modal-section">
-                  <h4 className="li-modal-section-title">
-                    <span>🔍</span> Why It Happened
-                  </h4>
-                  <p className="li-modal-section-content">{details.whyItHappened}</p>
-                </div>
-
-                <div className="li-modal-section">
-                  <div className="li-modal-benefits">
-                    <h4 className="li-modal-section-title" style={{ color: 'rgba(140, 220, 180, 0.95)' }}>
-                      <span>✅</span> How It Benefits You
-                    </h4>
-                    <p className="li-modal-section-content">{details.howItBenefits}</p>
+                {/* AI Loading State */}
+                {aiLoading && (
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '40px 20px',
+                    gap: '16px',
+                  }}>
+                    <div className="li-ai-spinner" />
+                    <p style={{
+                      color: 'rgba(140, 180, 255, 0.8)',
+                      fontSize: '14px',
+                      margin: 0,
+                    }}>Generating AI insights...</p>
                   </div>
-                </div>
+                )}
 
-                <div className="li-modal-section">
-                  <div className="li-modal-tip">
-                    <h4 className="li-modal-section-title">
-                      <span className="li-modal-tip-icon">💡</span> Expert Tip
-                    </h4>
-                    <p className="li-modal-section-content">{details.expertTip}</p>
-                  </div>
-                </div>
+                {/* Content - shown when not loading */}
+                {!aiLoading && (
+                  <>
+                    <div className="li-modal-section">
+                      <h4 className="li-modal-section-title">
+                        <span>📰</span> What Happened
+                      </h4>
+                      <p className="li-modal-section-content">{details.whatHappened}</p>
+                    </div>
+
+                    <div className="li-modal-section">
+                      <h4 className="li-modal-section-title">
+                        <span>🔍</span> Why It Matters
+                      </h4>
+                      <p className="li-modal-section-content">{details.whyItMatters || details.whyItHappened}</p>
+                    </div>
+
+                    <div className="li-modal-section">
+                      <div className="li-modal-benefits">
+                        <h4 className="li-modal-section-title" style={{ color: 'rgba(140, 220, 180, 0.95)' }}>
+                          <span>💰</span> How It Affects You
+                        </h4>
+                        <p className="li-modal-section-content" style={{ whiteSpace: 'pre-line' }}>{details.howItBenefits}</p>
+                      </div>
+                    </div>
+
+                    <div className="li-modal-section">
+                      <div className="li-modal-tip">
+                        <h4 className="li-modal-section-title">
+                          <span className="li-modal-tip-icon">💡</span> Expert View
+                        </h4>
+                        <p className="li-modal-section-content">{details.expertTip}</p>
+                      </div>
+                    </div>
+
+                    {/* View Archive Link */}
+                    <div style={{
+                      marginTop: '12px',
+                      textAlign: 'center',
+                    }}>
+                      <a 
+                        href="/archive"
+                        style={{
+                          color: 'rgba(140, 180, 255, 0.8)',
+                          fontSize: '13px',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowModal(false);
+                          window.location.href = '/archive';
+                        }}
+                      >
+                        📂 View Intelligence Archive →
+                      </a>
+                    </div>
+                  </>
+                )}
 
                 {headline.dataPoint && (
                   <div className="li-modal-data">

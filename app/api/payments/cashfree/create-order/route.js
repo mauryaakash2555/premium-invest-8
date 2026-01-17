@@ -14,6 +14,13 @@ function getCashfreeBaseUrl() {
   return getCashfreeEnv() === "PROD" ? "https://api.cashfree.com" : "https://sandbox.cashfree.com";
 }
 
+function getCashfreeCheckoutBaseUrl() {
+  // Cashfree hosted checkout base
+  // PROD: https://payments.cashfree.com
+  // TEST: https://payments-test.cashfree.com
+  return getCashfreeEnv() === "PROD" ? "https://payments.cashfree.com" : "https://payments-test.cashfree.com";
+}
+
 function getAppId() {
   return String(process.env.CASHFREE_APP_ID || "").trim();
 }
@@ -120,7 +127,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "missing_payment_session_id" }, { status: 502 });
     }
 
-    return NextResponse.json({ payment_session_id: paymentSessionId, order_id: returnedOrderId });
+    const checkoutUrl = `${getCashfreeCheckoutBaseUrl()}/checkout?payment_session_id=${encodeURIComponent(paymentSessionId)}`;
+    return NextResponse.json({ payment_session_id: paymentSessionId, order_id: returnedOrderId, checkout_url: checkoutUrl });
   } catch {
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }

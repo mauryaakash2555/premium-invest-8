@@ -54,7 +54,7 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
   // Used only for deploy verification/debugging (no visual output)
   const buildId = buildIdProp || 'local';
   const pathname = usePathname();
-  const isLaserPage = pathname === '/live-intelligence-hero';
+  const isLaserPage = pathname === '/live-intelligence';
   const isClientPortal = pathname === '/client-portal';
   // Pages with their own custom footer - don't add global Footer
   const hasCustomFooter = isLaserPage || isClientPortal;
