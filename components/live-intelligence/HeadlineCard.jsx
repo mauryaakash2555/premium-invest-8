@@ -5,6 +5,40 @@ import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
 
 // ═══════════════════════════════════════════════════════════
+// CATEGORY SHORT CODES - Clean text labels, no emojis
+// User-friendly abbreviations for quick category recognition
+// ═══════════════════════════════════════════════════════════
+const CATEGORY_SHORT_CODES = {
+  mutual_funds: 'MF',
+  insurance: 'INS',
+  sip: 'SIP',
+  bonds: 'BOND',
+  pms_aif: 'PMS',
+  trading: 'TRADE',
+  fixed_income: 'FD',
+  ipo: 'IPO',
+  market: 'MKT',
+  regulatory: 'REG',
+  global: 'GLOBAL',
+  sectors: 'SECT',
+  economy: 'ECON',
+  breaking: 'ALERT',
+  corporate: 'CORP',
+  results: 'RSLT',
+  insider: 'DEAL',
+  forex_gold: 'FX',
+  real_estate: 'REALTY',
+  rbi: 'RBI',
+  sebi: 'SEBI',
+  tax_insight: 'TAX',
+  market_update: 'MKT',
+};
+
+const getCategoryShortCode = (categoryKey) => {
+  return CATEGORY_SHORT_CODES[categoryKey] || categoryKey?.toUpperCase()?.slice(0, 4) || 'NEWS';
+};
+
+// ═══════════════════════════════════════════════════════════
 // CTA BUTTONS BY CATEGORY - Opens WhatsApp or service page
 // ═══════════════════════════════════════════════════════════
 const CTA_BUTTONS = {
@@ -297,11 +331,10 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           cursor: 'pointer',
         }}
       >
-        {/* Header: Category + Urgency + Time + Save */}
+        {/* Header: Prominent Category Badge + Urgency + Time + Save */}
         <div className="li-headline-header">
-          <div className="li-headline-category">
-            <span className="li-headline-cat-icon">{category?.icon}</span>
-            <span className="li-headline-cat-label">{category?.label}</span>
+          <div className={`li-cat-badge cat-${headline.category}`}>
+            {getCategoryShortCode(headline.category)}
           </div>
           
           {urgency?.key !== 'REGULAR' && (
@@ -314,14 +347,14 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
             {formatRelativeTime(headline.timestamp)}
           </span>
           
-          {/* Save/Bookmark Button */}
+          {/* Save/Bookmark Button - clean icon */}
           <button
             className={`li-headline-save ${isSaved ? 'saved' : ''}`}
             onClick={handleSave}
             aria-label={isSaved ? 'Remove from saved' : 'Save for later'}
             title={isSaved ? 'Saved! Click to remove' : 'Save for later'}
           >
-            {isSaved ? '🔖' : '📑'}
+            {isSaved ? '★' : '☆'}
           </button>
         </div>
 
@@ -393,25 +426,64 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           flex-wrap: wrap;
         }
 
-        .li-headline-category {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 4px 10px 4px 6px;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 6px;
-        }
-
-        .li-headline-cat-icon {
-          font-size: 14px;
-        }
-
-        .li-headline-cat-label {
-          font-size: 11px;
-          font-weight: 600;
-          color: rgba(180, 195, 230, 0.7);
+        /* PROMINENT CATEGORY BADGE - Clean text, no emoji */
+        .li-cat-badge {
+          font-size: 10px;
+          font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
+          letter-spacing: 0.1em;
+          padding: 5px 10px;
+          border-radius: 4px;
+          background: rgba(100, 160, 255, 0.12);
+          border: 1px solid rgba(100, 160, 255, 0.25);
+          color: rgba(140, 190, 255, 0.95);
+        }
+        
+        /* Category-specific colors for easy recognition */
+        .li-cat-badge.cat-mutual_funds { 
+          background: rgba(100, 180, 140, 0.12); 
+          border-color: rgba(100, 180, 140, 0.3); 
+          color: rgba(140, 210, 170, 0.95); 
+        }
+        .li-cat-badge.cat-sip { 
+          background: rgba(80, 160, 220, 0.12); 
+          border-color: rgba(80, 160, 220, 0.3); 
+          color: rgba(120, 190, 255, 0.95); 
+        }
+        .li-cat-badge.cat-insurance { 
+          background: rgba(220, 150, 80, 0.12); 
+          border-color: rgba(220, 150, 80, 0.3); 
+          color: rgba(240, 180, 120, 0.95); 
+        }
+        .li-cat-badge.cat-pms_aif { 
+          background: rgba(180, 120, 220, 0.12); 
+          border-color: rgba(180, 120, 220, 0.3); 
+          color: rgba(200, 160, 240, 0.95); 
+        }
+        .li-cat-badge.cat-bonds { 
+          background: rgba(160, 140, 100, 0.12); 
+          border-color: rgba(160, 140, 100, 0.3); 
+          color: rgba(200, 180, 140, 0.95); 
+        }
+        .li-cat-badge.cat-fixed_income { 
+          background: rgba(140, 160, 180, 0.12); 
+          border-color: rgba(140, 160, 180, 0.3); 
+          color: rgba(180, 200, 220, 0.95); 
+        }
+        .li-cat-badge.cat-ipo { 
+          background: rgba(255, 140, 100, 0.12); 
+          border-color: rgba(255, 140, 100, 0.3); 
+          color: rgba(255, 170, 140, 0.95); 
+        }
+        .li-cat-badge.cat-breaking { 
+          background: rgba(255, 80, 80, 0.12); 
+          border-color: rgba(255, 80, 80, 0.4); 
+          color: rgba(255, 120, 120, 0.95);
+          animation: breakingBadge 1.5s ease-in-out 3;
+        }
+        @keyframes breakingBadge {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
         }
 
         .li-headline-urgency {
@@ -441,25 +513,28 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           font-variant-numeric: tabular-nums;
         }
 
-        /* Save/Bookmark Button */
+        /* Save/Bookmark Button - clean star icon */
         .li-headline-save {
           background: none;
           border: none;
-          padding: 4px 6px;
+          padding: 4px 8px;
           cursor: pointer;
-          font-size: 14px;
-          opacity: 0.5;
+          font-size: 16px;
+          color: rgba(180, 195, 230, 0.4);
+          opacity: 0.7;
           transition: all 0.2s ease;
           border-radius: 4px;
         }
 
         .li-headline-save:hover {
           opacity: 1;
+          color: rgba(100, 160, 255, 0.9);
           background: rgba(100, 160, 255, 0.15);
         }
 
         .li-headline-save.saved {
           opacity: 1;
+          color: rgba(255, 200, 80, 0.95);
         }
 
         /* Saved card indicator */
