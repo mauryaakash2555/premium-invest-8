@@ -1,12 +1,12 @@
 /**
  * RSS Ingest API Route
  * 
- * ROLE: Server-side RSS fetching ONLY
- * ALLOWED: Fetch raw headlines
+ * ROLE: Server-side RSS fetching with AI relevance filtering
+ * ALLOWED: Fetch raw headlines, filter for relevance
  * FORBIDDEN: ❌ Interpretation, ❌ Opinions
  * 
  * This is part of the fully automated pipeline:
- * RSS → Groq → Gemini → Claude → Supabase → UI
+ * RSS → Gemini (relevance filter) → Supabase → Groq → Gemini → Claude → UI
  */
 
 import { NextResponse } from 'next/server';
@@ -39,6 +39,88 @@ function parseRSSItem(item) {
 // Generate hash for deduplication
 function generateHash(url, title) {
   return crypto.createHash('sha256').update(`${url}|${title}`).digest('hex').substring(0, 32);
+}
+
+// AI Relevance Filtering - Score headlines for relevance to Indian retail investors
+async function filterRelevantHeadlines(rawHeadlines) {
+  const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
+  
+  if (!geminiApiKey || rawHeadlines.length === 0) {
+    console.log('[Ingest] No API key or no headlines, returning all');
+    return rawHeadlines;
+  }
+
+  // Create scoring prompt
+  const headlinesList = rawHeadlines
+    .slice(0, 30) // Limit to 30 for API efficiency
+    .map((h, i) => `${i + 1}. ${h.title}`)
+    .join('\n');
+
+  const prompt = `You are a financial news relevance filter for Indian retail investors.
+
+Score each headline 0-10 for relevance to mutual fund, SIP, insurance, bonds, PMS, or trading investors in India:
+- 10 = Critical (RBI policy changes, market crashes, major SEBI regulations, budget announcements)
+- 8-9 = High (FII/DII flows, major sector news, economic data releases, large IPOs)
+- 6-7 = Medium (individual stock news, mutual fund NFOs, insurance launches)
+- 4-5 = Low (minor corporate news, small company updates)
+- 0-3 = Irrelevant (celebrity news, sports, entertainment, politics unrelated to markets)
+
+ONLY return headlines with score ≥ 6 (filter out low relevance junk).
+
+Headlines:
+${headlinesList}
+
+Return ONLY valid JSON array with no other text:
+[{"index": 1, "score": 8}, {"index": 2, "score": 6}, ...]
+
+Important: Return ONLY the JSON array. No markdown, no explanations.`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 1000,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error('[Ingest] Gemini API error:', response.status);
+      return rawHeadlines.slice(0, 15); // Return first 15 as fallback
+    }
+
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    // Extract JSON array from response
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) {
+      console.error('[Ingest] No valid JSON in Gemini response');
+      return rawHeadlines.slice(0, 15);
+    }
+
+    const scores = JSON.parse(jsonMatch[0]);
+
+    // Filter: Keep only score >= 6
+    const filtered = rawHeadlines.filter((h, i) => {
+      if (i >= 30) return false; // Skip items beyond what we scored
+      const scoreEntry = scores.find((s) => s.index === i + 1);
+      return scoreEntry && scoreEntry.score >= 6;
+    });
+
+    console.log(`[Ingest] Filtered ${rawHeadlines.length} → ${filtered.length} relevant headlines`);
+    return filtered;
+  } catch (error) {
+    console.error('[Ingest] Relevance filtering error:', error);
+    return rawHeadlines.slice(0, 15); // Fallback on error
+  }
 }
 
 // Fetch and parse RSS feed
@@ -120,66 +202,89 @@ export async function GET(request) {
 
     const results = {
       fetched: 0,
+      filtered: 0,
       newItems: 0,
       duplicates: 0,
       errors: [],
     };
 
+    // Collect all raw headlines from all sources
+    let allItems = [];
     for (const source of activeSources) {
       try {
         const items = await fetchRSSFeed(source.feed_url);
         results.fetched += items.length;
+        
+        // Tag each item with its source
+        allItems = allItems.concat(items.map(item => ({
+          ...item,
+          sourceName: source.name,
+          sourceCategory: source.category,
+          sourceId: source.id,
+        })));
+        
+      } catch (sourceError) {
+        results.errors.push(`${source.name}: ${sourceError.message}`);
+      }
+    }
 
-        for (const item of items) {
-          if (!item.title || !item.link) continue;
+    // Filter for relevance using AI (only keep score >= 6)
+    const relevantItems = await filterRelevantHeadlines(allItems);
+    results.filtered = relevantItems.length;
 
-          const sourceHash = generateHash(item.link, item.title);
+    // Now insert only the relevant items
+    for (const item of relevantItems) {
+      if (!item.title || !item.link) continue;
 
-          // Check for duplicates
-          const { data: existing } = await supabase
-            .from('intelligence_items')
-            .select('id')
-            .eq('source_hash', sourceHash)
-            .single();
+      const sourceHash = generateHash(item.link, item.title);
 
-          if (existing) {
-            results.duplicates++;
-            continue;
-          }
+      // Check for duplicates
+      const { data: existing } = await supabase
+        .from('intelligence_items')
+        .select('id')
+        .eq('source_hash', sourceHash)
+        .single();
 
-          // Insert raw item (pending AI processing)
-          const { error: insertError } = await supabase
-            .from('intelligence_items')
-            .insert({
-              source_name: source.name,
-              source_url: item.link,
-              source_hash: sourceHash,
-              category: source.category,
-              urgency: 'low', // Will be updated by Groq
-              
-              // Placeholder blocks (will be filled by Gemini)
-              block_what_happened: item.title,
-              block_why_it_matters: 'Processing...',
-              block_where_fits: 'Processing...',
-              block_who_cares: 'Processing...',
-              block_signals: [],
-              block_source_timestamp: `Source: ${source.name} | ${new Date(item.pubDate).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
-              
-              status: 'pending',
-              processed_by_groq: false,
-              processed_by_gemini: false,
-            });
+      if (existing) {
+        results.duplicates++;
+        continue;
+      }
 
-          if (insertError) {
-            if (!insertError.message?.includes('duplicate')) {
-              results.errors.push(`Insert error: ${insertError.message}`);
-            }
-          } else {
-            results.newItems++;
-          }
+      // Insert raw item (pending AI processing)
+      const { error: insertError } = await supabase
+        .from('intelligence_items')
+        .insert({
+          source_name: item.sourceName,
+          source_url: item.link,
+          source_hash: sourceHash,
+          category: item.sourceCategory,
+          urgency: 'low', // Will be updated by Groq
+          
+          // Placeholder blocks (will be filled by Gemini)
+          block_what_happened: item.title,
+          block_why_it_matters: 'Processing...',
+          block_where_fits: 'Processing...',
+          block_who_cares: 'Processing...',
+          block_signals: [],
+          block_source_timestamp: `Source: ${item.sourceName} | ${new Date(item.pubDate).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
+          
+          status: 'pending',
+          processed_by_groq: false,
+          processed_by_gemini: false,
+        });
+
+      if (insertError) {
+        if (!insertError.message?.includes('duplicate')) {
+          results.errors.push(`Insert error: ${insertError.message}`);
         }
+      } else {
+        results.newItems++;
+      }
+    }
 
-        // Update last polled timestamp
+    // Update last polled timestamps for all sources
+    for (const source of activeSources) {
+      if (source.id) {
         await supabase
           .from('rss_sources')
           .update({ 
@@ -188,20 +293,6 @@ export async function GET(request) {
             last_error: null,
           })
           .eq('id', source.id);
-
-      } catch (sourceError) {
-        results.errors.push(`${source.name}: ${sourceError.message}`);
-        
-        // Update error count
-        if (source.id) {
-          await supabase
-            .from('rss_sources')
-            .update({ 
-              error_count: (source.error_count || 0) + 1,
-              last_error: sourceError.message,
-            })
-            .eq('id', source.id);
-        }
       }
     }
 

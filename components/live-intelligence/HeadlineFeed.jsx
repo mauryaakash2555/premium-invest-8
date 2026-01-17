@@ -11,6 +11,29 @@ import {
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
+// Sort headlines with BREAKING first, then by urgency priority
+const sortHeadlinesWithBreakingFirst = (headlines) => {
+  const urgencyOrder = { BREAKING: 0, IMPORTANT: 1, PREMIUM: 2, REGULAR: 3, EDUCATIONAL: 4 };
+  
+  return [...headlines].sort((a, b) => {
+    // Breaking news always first
+    const aIsBreaking = a.urgency === 'BREAKING' || a.category === 'breaking';
+    const bIsBreaking = b.urgency === 'BREAKING' || b.category === 'breaking';
+    
+    if (aIsBreaking && !bIsBreaking) return -1;
+    if (!aIsBreaking && bIsBreaking) return 1;
+    
+    // Then sort by urgency level
+    const aOrder = urgencyOrder[a.urgency] ?? 3;
+    const bOrder = urgencyOrder[b.urgency] ?? 3;
+    
+    if (aOrder !== bOrder) return aOrder - bOrder;
+    
+    // Then by timestamp (newest first)
+    return new Date(b.timestamp || b.created_at || 0) - new Date(a.timestamp || a.created_at || 0);
+  });
+};
+
 /**
  * HeadlineFeed - Rotating headlines with category filter
  * 
@@ -42,7 +65,9 @@ export default function HeadlineFeed() {
       
       const data = await res.json();
       if (data.ok && data.headlines && data.headlines.length > 0) {
-        setHeadlines(data.headlines);
+        // Sort: Breaking news first, then by urgency/priority
+        const sorted = sortHeadlinesWithBreakingFirst(data.headlines);
+        setHeadlines(sorted);
         setIsLive(data.source === 'database');
         setActiveIndex(0);
         return true;
@@ -127,11 +152,24 @@ export default function HeadlineFeed() {
           onCategoryChange={handleCategoryChange} 
         />
         <div style={{ 
-          padding: '40px 20px', 
+          padding: '48px 20px', 
           textAlign: 'center', 
-          color: 'rgba(200, 215, 240, 0.5)' 
         }}>
-          No headlines in this category
+          <div style={{ fontSize: '32px', marginBottom: '16px', opacity: 0.8 }}>📡</div>
+          <div style={{ 
+            fontSize: '16px', 
+            fontWeight: 600, 
+            color: 'rgba(200, 215, 240, 0.7)',
+            marginBottom: '8px'
+          }}>
+            Fetching Live Intelligence...
+          </div>
+          <div style={{ 
+            fontSize: '13px', 
+            color: 'rgba(180, 195, 230, 0.5)'
+          }}>
+            {isLive ? 'Connected to live feed' : 'News is being scraped. Check back in a few minutes.'}
+          </div>
         </div>
       </div>
     );

@@ -141,8 +141,29 @@ const HEADLINE_DETAILS = {
   },
 };
 
-// Get detailed info for a headline
+// Get detailed info for a headline - prioritize AI-generated content from database
 const getHeadlineDetails = (headline) => {
+  // First check if headline has AI-generated content from database
+  if (headline.block_what_happened && headline.block_what_happened !== 'Processing...') {
+    return {
+      whatHappened: headline.block_what_happened || headline.headline,
+      whyItHappened: headline.block_why_it_matters || headline.whyItMatters || 'Market and economic factors contributed to this development.',
+      howItBenefits: headline.block_where_fits || headline.block_who_cares || '• Stay informed about market movements\n• Make better investment decisions\n• Understand the broader economic picture',
+      expertTip: headline.expert_tip || 'Monitor developments and consult your financial advisor for personalized guidance.',
+    };
+  }
+  
+  // Also check alternate field names from live API
+  if (headline.what_happened || headline.why_it_matters) {
+    return {
+      whatHappened: headline.what_happened || headline.headline,
+      whyItHappened: headline.why_it_matters || headline.whyItMatters || 'Multiple factors contributed to this development.',
+      howItBenefits: headline.how_it_benefits || headline.where_fits || '• Relevant for your investment decisions\n• Keep track of market dynamics\n• Adjust strategy as needed',
+      expertTip: headline.expert_tip || 'Stay informed and review your portfolio periodically.',
+    };
+  }
+  
+  // Fallback to curated headline details
   const headlineText = headline.headline.toLowerCase();
   
   for (const [key, details] of Object.entries(HEADLINE_DETAILS)) {

@@ -16,15 +16,15 @@
     },
     {
       "path": "/api/live-intelligence/ingest",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 1,7,14 * * *"
     },
     {
       "path": "/api/live-intelligence/process",
-      "schedule": "*/15 * * * *"
+      "schedule": "30 1,7,14 * * *"
     },
     {
       "path": "/api/live-intelligence/mood",
-      "schedule": "*/5 * * * *"
+      "schedule": "45 1,7,14 * * *"
     },
     {
       "path": "/api/cron/check-expiry",
@@ -33,10 +33,6 @@
     {
       "path": "/api/live-intelligence/night-summary",
       "schedule": "30 15 * * *"
-    },
-    {
-      "path": "/api/cron/headlines",
-      "schedule": "*/30 * * * *"
     }
   ]
 }
