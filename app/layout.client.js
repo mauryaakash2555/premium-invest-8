@@ -84,10 +84,27 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Register Service Worker for caching (improves repeat visits)
+  useEffect(() => {
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker.register('/sw.js').catch((err) => {
+        console.warn('[SW] Registration failed:', err);
+      });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <head>
         <meta name="x-ui-build" content={buildId} />
+
+        {/* Preload LCP hero image (critical for PageSpeed) */}
+        <link
+          rel="preload"
+          as="image"
+          href="https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75"
+          fetchPriority="high"
+        />
 
         {/* Preconnect hints for third-party resources (perf: saves ~300ms LCP) */}
         <link rel="preconnect" href="https://www.tradingview.com" />

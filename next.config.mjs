@@ -1,3 +1,9 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
@@ -20,10 +26,13 @@ const nextConfig = {
   // Performance: tree-shake heavy packages
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    // optimizeCss: true, // Disabled: requires stable critters integration
   },
   // Performance: remove console in production
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: {
+      exclude: ['error', 'warn'], // Keep error/warn for debugging
+    },
   },
   // Caching headers
   async headers() {
@@ -67,4 +76,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
