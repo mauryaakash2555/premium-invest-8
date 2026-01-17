@@ -654,17 +654,124 @@ const calculations = {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // INSURER DATA WITH CSR (Claim Settlement Ratio) + BUY NOW URLS
+    // INSURER DATA WITH CSR (Claim Settlement Ratio) + BUY NOW URLS + FEATURES
+    // Comprehensive data matching Policybazaar, InsuranceDekho, HDFC, ICICI
     // ═══════════════════════════════════════════════════════════════
     const insurerData = [
-      { name: 'LIC', logo: '🏛️', csr: 98.62, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.15, solvency: 185.92, buyUrl: 'https://licindia.in/buy-online', color: '#1a237e' },
-      { name: 'HDFC Life', logo: '🏦', csr: 99.07, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.0, solvency: 187.00, buyUrl: 'https://www.hdfclife.com/term-insurance-plans/click-2-protect-super', color: '#004c8c' },
-      { name: 'ICICI Prudential', logo: '🔵', csr: 97.90, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.98, solvency: 212.70, buyUrl: 'https://www.iciciprulife.com/term-insurance/iprotect-smart.html', color: '#f57c00' },
-      { name: 'Max Life', logo: '🔴', csr: 99.51, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.02, solvency: 194.00, buyUrl: 'https://www.maxlifeinsurance.com/term-insurance-plans/smart-secure-plus', color: '#c62828' },
-      { name: 'SBI Life', logo: '🟢', csr: 95.03, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.05, solvency: 211.00, buyUrl: 'https://www.sbilife.co.in/en/term-insurance/eterm', color: '#2e7d32' },
-      { name: 'Tata AIA', logo: '🟡', csr: 98.54, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.95, solvency: 220.00, buyUrl: 'https://www.tataaia.com/online-term-plan/sampoorna-raksha-supreme', color: '#1565c0' },
-      { name: 'Bajaj Allianz', logo: '🔷', csr: 98.02, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.97, solvency: 584.00, buyUrl: 'https://www.bajajallianzlife.com/life-insurance-plans/term-insurance/etouch.html', color: '#0277bd' },
-      { name: 'Kotak Life', logo: '🟠', csr: 98.89, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.03, solvency: 239.00, buyUrl: 'https://www.kotaklife.com/online-plans/term-insurance/e-term-plan', color: '#ef6c00' },
+      { 
+        name: 'LIC', logo: '🏛️', csr: 98.62, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.15, solvency: 185.92, 
+        buyUrl: 'https://licindia.in/buy-online', color: '#1a237e',
+        planName: 'Tech Term', maxAge: 65, maxCoverAge: 80, maxSumAssured: 'Unlimited',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: false, monthlyPayout: true, jointLife: false,
+          gracePeriod: 30, freeReview: 15, premiumHoliday: false, immediatePayout: false,
+          onlineDiscount: 0, premiumDelay: false, healthBenefits: false, 
+        }
+      },
+      { 
+        name: 'HDFC Life', logo: '🏦', csr: 99.07, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.0, solvency: 187.00, 
+        buyUrl: 'https://www.hdfclife.com/term-insurance-plans/click-2-protect-super', color: '#004c8c',
+        planName: 'Click 2 Protect Supreme', maxAge: 65, maxCoverAge: 85, maxSumAssured: 'Unlimited',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: true, monthlyPayout: true, jointLife: true,
+          gracePeriod: 30, freeReview: 30, premiumHoliday: true, immediatePayout: true,
+          onlineDiscount: 15, premiumDelay: true, healthBenefits: true,
+          highlight: 'Free health benefits up to ₹63,000/year',
+        }
+      },
+      { 
+        name: 'ICICI Prudential', logo: '🔵', csr: 97.90, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.98, solvency: 212.70, 
+        buyUrl: 'https://www.iciciprulife.com/term-insurance/iprotect-smart.html', color: '#f57c00',
+        planName: 'iProtect Smart Plus', maxAge: 65, maxCoverAge: 99, maxSumAssured: '20 Cr',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: true, monthlyPayout: true, jointLife: true,
+          gracePeriod: 30, freeReview: 15, premiumHoliday: true, immediatePayout: true,
+          onlineDiscount: 15, premiumDelay: true, healthBenefits: false,
+          highlight: '₹3 Lakh immediate payout on claim',
+        }
+      },
+      { 
+        name: 'Max Life', logo: '🔴', csr: 99.51, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.02, solvency: 194.00, 
+        buyUrl: 'https://www.maxlifeinsurance.com/term-insurance-plans/smart-secure-plus', color: '#c62828',
+        planName: 'Smart Secure Plus', maxAge: 60, maxCoverAge: 85, maxSumAssured: '25 Cr',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: true, monthlyPayout: true, jointLife: false,
+          gracePeriod: 30, freeReview: 15, premiumHoliday: false, immediatePayout: false,
+          onlineDiscount: 10, premiumDelay: false, healthBenefits: true,
+          highlight: 'Highest CSR (99.51%) in industry',
+        }
+      },
+      { 
+        name: 'SBI Life', logo: '🟢', csr: 95.03, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.05, solvency: 211.00, 
+        buyUrl: 'https://www.sbilife.co.in/en/term-insurance/eterm', color: '#2e7d32',
+        planName: 'Smart Shield Plus', maxAge: 65, maxCoverAge: 79, maxSumAssured: 'Unlimited',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: false, monthlyPayout: true, jointLife: false,
+          gracePeriod: 30, freeReview: 15, premiumHoliday: false, immediatePayout: false,
+          onlineDiscount: 15, premiumDelay: false, healthBenefits: false,
+          highlight: 'Backed by SBI, trusted by millions',
+        }
+      },
+      { 
+        name: 'Tata AIA', logo: '🟡', csr: 98.54, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.95, solvency: 220.00, 
+        buyUrl: 'https://www.tataaia.com/online-term-plan/sampoorna-raksha-supreme', color: '#1565c0',
+        planName: 'Sampoorna Raksha Promise', maxAge: 65, maxCoverAge: 100, maxSumAssured: 'Unlimited',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: true, monthlyPayout: true, jointLife: true,
+          gracePeriod: 30, freeReview: 30, premiumHoliday: true, immediatePayout: true,
+          onlineDiscount: 15, premiumDelay: true, healthBenefits: true,
+          highlight: '₹3 Lakh immediate payout, 100 years cover',
+        }
+      },
+      { 
+        name: 'Bajaj Allianz', logo: '🔷', csr: 98.02, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.97, solvency: 584.00, 
+        buyUrl: 'https://www.bajajallianzlife.com/life-insurance-plans/term-insurance/etouch.html', color: '#0277bd',
+        planName: 'eTouch II', maxAge: 65, maxCoverAge: 85, maxSumAssured: 'Unlimited',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: true, increasingCover: false, monthlyPayout: true, jointLife: false,
+          gracePeriod: 30, freeReview: 30, premiumHoliday: false, immediatePayout: true,
+          onlineDiscount: 15, premiumDelay: true, healthBenefits: true,
+          highlight: 'Free health benefits up to ₹31,000/year',
+        }
+      },
+      { 
+        name: 'Kotak Life', logo: '🟠', csr: 98.89, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.03, solvency: 239.00, 
+        buyUrl: 'https://www.kotaklife.com/online-plans/term-insurance/e-term-plan', color: '#ef6c00',
+        planName: 'e-Term', maxAge: 65, maxCoverAge: 75, maxSumAssured: '5 Cr',
+        features: {
+          terminalIllness: true, waiverOfPremium: true, accidentalDeath: true, criticalIllness: true,
+          returnOfPremium: false, increasingCover: false, monthlyPayout: true, jointLife: false,
+          gracePeriod: 30, freeReview: 15, premiumHoliday: false, immediatePayout: false,
+          onlineDiscount: 0, premiumDelay: false, healthBenefits: false,
+          highlight: 'Simple, affordable term plan',
+        }
+      },
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // POLICY FEATURE COMPARISON MATRIX (Competitor Advantage)
+    // Shows features BM Wealth has that competitors may not
+    // ═══════════════════════════════════════════════════════════════
+    const policyFeatures = [
+      { feature: 'Terminal Illness Early Payout', desc: '100% payout on terminal illness diagnosis', key: 'terminalIllness' },
+      { feature: 'Waiver of Premium', desc: 'Future premiums waived on disability', key: 'waiverOfPremium' },
+      { feature: 'Accidental Death Benefit', desc: 'Additional sum on accidental death', key: 'accidentalDeath' },
+      { feature: 'Critical Illness Rider', desc: 'Lump sum on critical illness diagnosis', key: 'criticalIllness' },
+      { feature: 'Return of Premium', desc: 'Get all premiums back if you survive', key: 'returnOfPremium' },
+      { feature: 'Increasing Cover', desc: 'Sum assured increases annually (5-10%)', key: 'increasingCover' },
+      { feature: 'Monthly Payout Option', desc: 'Death benefit as monthly income', key: 'monthlyPayout' },
+      { feature: 'Joint Life Cover', desc: 'Cover for spouse in same policy', key: 'jointLife' },
+      { feature: 'Premium Holiday', desc: 'Skip premiums for up to 12 months', key: 'premiumHoliday' },
+      { feature: 'Immediate Payout', desc: '₹2-3 Lakh immediate on claim intimation', key: 'immediatePayout' },
+      { feature: 'Premium Delay Benefit', desc: 'Defer premium for 12 months', key: 'premiumDelay' },
+      { feature: 'Free Health Benefits', desc: 'OPD, tele-consultation, health checkups', key: 'healthBenefits' },
     ];
 
     // Base pricing per crore (industry standard 2025)
@@ -1228,7 +1335,80 @@ const calculations = {
           ...q,
           buyUrl: insurerData.find(i => i.name === q.name)?.buyUrl || null,
           color: insurerData.find(i => i.name === q.name)?.color || '#333',
+          planName: insurerData.find(i => i.name === q.name)?.planName || '',
+          maxCoverAge: insurerData.find(i => i.name === q.name)?.maxCoverAge || 80,
+          features: insurerData.find(i => i.name === q.name)?.features || {},
+          highlight: insurerData.find(i => i.name === q.name)?.features?.highlight || '',
         })),
+        
+        // Policy Feature Comparison Matrix
+        policyFeatureComparison: policyFeatures.map(pf => ({
+          feature: pf.feature,
+          description: pf.desc,
+          insurerSupport: insurerData.map(ins => ({
+            name: ins.name,
+            supported: ins.features?.[pf.key] || false,
+          })),
+          totalSupported: insurerData.filter(ins => ins.features?.[pf.key]).length,
+        })),
+        
+        // Nominee Planning Guide
+        nomineePlanning: {
+          title: 'Nominee Planning Checklist',
+          description: 'Critical steps for ensuring smooth claim settlement',
+          steps: [
+            { step: 1, action: 'Choose Primary Nominee', detail: 'Spouse or major child (18+) recommended. Minor nominee requires appointee.' },
+            { step: 2, action: 'Add Secondary Nominees', detail: 'Up to 3 contingent nominees if primary is unavailable. Specify share %.' },
+            { step: 3, action: 'Update Nomination Regularly', detail: 'Review after marriage, divorce, birth, or death in family.' },
+            { step: 4, action: 'Inform Nominees', detail: 'Share policy number, insurer name, and helpline. Keep copies accessible.' },
+            { step: 5, action: 'Document Requirements', detail: 'Nominees need: Death certificate, policy document, ID proof, bank details.' },
+          ],
+          importantNotes: [
+            '⚠️ Nomination is NOT the same as inheritance - a valid Will takes precedence',
+            '💡 Married Women: Name policy under MWP Act (Section 6) for absolute protection',
+            '📋 Keep original policy in safe place; inform 2+ family members',
+            '🔐 Register policy on DigiLocker for digital access by family',
+            '📞 Save insurer\'s claim helpline in family\'s phones',
+          ],
+          claimProcess: [
+            { step: 1, action: 'Intimate Claim', timeline: 'Within 24-72 hours of death' },
+            { step: 2, action: 'Submit Documents', timeline: 'Within 30 days' },
+            { step: 3, action: 'Insurer Investigation', timeline: '30-90 days' },
+            { step: 4, action: 'Claim Settlement', timeline: 'Within 30 days of approval' },
+          ],
+          documentsRequired: [
+            'Original Policy Document',
+            'Death Certificate (registered)',
+            'Claimant\'s ID Proof (Aadhaar/PAN)',
+            'Claimant\'s Bank Details',
+            'Claim Form (from insurer)',
+            'Medical Records (if hospitalized)',
+            'FIR (if accidental death)',
+            'Post-mortem Report (if applicable)',
+          ],
+        },
+        
+        // What competitors don't have that we do (Competitive Advantage)
+        competitiveAdvantage: {
+          title: 'BM Wealth Exclusive Features',
+          advantages: [
+            { feature: 'HLV Calculator', desc: 'Industry-standard Human Life Value formula with present value discounting' },
+            { feature: 'BMI Premium Impact', desc: 'See exactly how your health affects premium loading' },
+            { feature: '8 Insurer Comparison', desc: 'Compare CSR, solvency, premiums across 8 major insurers simultaneously' },
+            { feature: 'Premium Factor Transparency', desc: 'See each factor (age, smoker, occupation, BMI) that affects your premium' },
+            { feature: 'ULIP Maturity Projections', desc: '3-scenario (8%/10%/12%) maturity projections with XIRR' },
+            { feature: 'Rider Cost Calculator', desc: 'Individual cost breakdown for each rider option' },
+            { feature: 'Tax Benefit Calculator', desc: 'Real-time 80C/80D savings with effective premium' },
+            { feature: 'Payout Structure Options', desc: 'Lumpsum vs Monthly vs Hybrid payout comparison' },
+            { feature: 'PDF Quote Download', desc: 'Professional branded quote for offline review' },
+            { feature: 'Nominee Planning Guide', desc: 'Complete claim process guidance for family' },
+          ],
+          missingInCompetitors: [
+            { competitor: 'Policybazaar', missing: 'Detailed HLV formula, Premium factor breakdown, ULIP 3-scenario projection' },
+            { competitor: 'InsuranceDekho', missing: 'Rider cost calculator, BMI impact display, Coverage breakdown chart' },
+            { competitor: 'Coverfox', missing: 'Multi-insurer feature comparison, Nominee planning, PDF export' },
+          ],
+        },
         
         // Top insurers with CSR
         topInsurers: insurerData.map(i => `${i.name} (CSR: ${i.csr}%)`),
@@ -3488,6 +3668,219 @@ ${text}
                       {ins}
                     </span>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Policy Feature Comparison Table - COMPETITIVE ADVANTAGE */}
+            {Array.isArray(result.policyFeatureComparison) && result.policyFeatureComparison.length > 0 && (
+              <div className="aio-tableWrap" style={{ marginTop: '24px' }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>🏆</span> Policy Feature Comparison (What BM Wealth Shows, Others Don't)
+                </div>
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="aio-taxTable" style={{ minWidth: '800px' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ minWidth: '180px' }}>Feature</th>
+                        {result.insurerQuotesWithLinks?.slice(0, 6).map((ins, idx) => (
+                          <th key={idx} className="center" style={{ fontSize: '11px', padding: '8px 4px', minWidth: '70px' }}>
+                            {ins.logo} {ins.name.split(' ')[0]}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.policyFeatureComparison.slice(0, 12).map((pf, idx) => (
+                        <tr key={idx}>
+                          <td>
+                            <div style={{ fontSize: '12px', fontWeight: '500' }}>{pf.feature}</div>
+                            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{pf.description}</div>
+                          </td>
+                          {pf.insurerSupport?.slice(0, 6).map((ins, iIdx) => (
+                            <td key={iIdx} className="center">
+                              {ins.supported ? 
+                                <span style={{ color: '#27ae60', fontSize: '14px' }}>✓</span> : 
+                                <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '12px' }}>—</span>
+                              }
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginTop: '8px', textAlign: 'center' }}>
+                  ✓ = Feature available • Data based on published policy documents 2025
+                </div>
+              </div>
+            )}
+
+            {/* Nominee Planning Section */}
+            {result.nomineePlanning && (
+              <div className="aio-section" style={{ 
+                background: 'linear-gradient(135deg, rgba(52,152,219,0.1), rgba(155,89,182,0.1))', 
+                padding: '20px', 
+                borderRadius: '12px', 
+                marginTop: '24px',
+                border: '1px solid rgba(52,152,219,0.2)'
+              }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                  <span>👥</span> {result.nomineePlanning.title}
+                </div>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '16px' }}>
+                  {result.nomineePlanning.description}
+                </p>
+
+                {/* Nomination Steps */}
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ fontSize: '12px', color: '#3498db', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
+                  <div style={{ display: 'grid', gap: '8px' }}>
+                    {result.nomineePlanning.steps.map((s, idx) => (
+                      <div key={idx} style={{ 
+                        display: 'flex', 
+                        gap: '12px', 
+                        padding: '10px', 
+                        background: 'rgba(255,255,255,0.03)', 
+                        borderRadius: '6px',
+                        borderLeft: '3px solid #3498db'
+                      }}>
+                        <div style={{ 
+                          width: '24px', 
+                          height: '24px', 
+                          background: '#3498db', 
+                          borderRadius: '50%', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center',
+                          fontSize: '12px',
+                          fontWeight: '700',
+                          flexShrink: 0
+                        }}>
+                          {s.step}
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: '600' }}>{s.action}</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{s.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Important Notes */}
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ fontSize: '12px', color: '#e67e22', fontWeight: '600', marginBottom: '10px' }}>⚠️ Important Notes</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {result.nomineePlanning.importantNotes.map((note, idx) => (
+                      <div key={idx} style={{ 
+                        fontSize: '12px', 
+                        padding: '8px 12px',
+                        background: 'rgba(230,126,34,0.1)',
+                        borderRadius: '6px'
+                      }}>
+                        {note}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Claim Process Timeline */}
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ fontSize: '12px', color: '#27ae60', fontWeight: '600', marginBottom: '10px' }}>📅 Claim Process Timeline</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {result.nomineePlanning.claimProcess.map((cp, idx) => (
+                      <div key={idx} style={{ 
+                        flex: '1 1 150px',
+                        padding: '12px', 
+                        background: 'rgba(39,174,96,0.1)', 
+                        borderRadius: '8px',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{ 
+                          width: '28px', 
+                          height: '28px', 
+                          background: '#27ae60', 
+                          borderRadius: '50%', 
+                          margin: '0 auto 8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: '700'
+                        }}>
+                          {cp.step}
+                        </div>
+                        <div style={{ fontSize: '12px', fontWeight: '600' }}>{cp.action}</div>
+                        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>{cp.timeline}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Documents Required */}
+                <div>
+                  <div style={{ fontSize: '12px', color: '#9b59b6', fontWeight: '600', marginBottom: '10px' }}>📄 Documents Required for Claim</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {result.nomineePlanning.documentsRequired.map((doc, idx) => (
+                      <span key={idx} style={{ 
+                        padding: '6px 12px', 
+                        background: 'rgba(155,89,182,0.15)', 
+                        borderRadius: '20px',
+                        fontSize: '11px'
+                      }}>
+                        {doc}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Competitive Advantage Section */}
+            {result.competitiveAdvantage && (
+              <div className="aio-section" style={{ 
+                background: 'linear-gradient(135deg, rgba(192,160,98,0.15), rgba(192,160,98,0.05))', 
+                padding: '20px', 
+                borderRadius: '12px', 
+                marginTop: '24px',
+                border: '2px solid rgba(192,160,98,0.3)'
+              }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#c0a062' }}>
+                  <span>⭐</span> {result.competitiveAdvantage.title}
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+                  {result.competitiveAdvantage.advantages.map((adv, idx) => (
+                    <div key={idx} style={{ 
+                      padding: '12px', 
+                      background: 'rgba(255,255,255,0.03)', 
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #c0a062'
+                    }}>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#c0a062' }}>{adv.feature}</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{adv.desc}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ 
+                  padding: '16px', 
+                  background: 'rgba(39,174,96,0.1)', 
+                  borderRadius: '8px',
+                  border: '1px solid rgba(39,174,96,0.2)'
+                }}>
+                  <div style={{ fontSize: '12px', color: '#27ae60', fontWeight: '600', marginBottom: '10px' }}>
+                    🎯 What Our Calculator Has That Competitors Don't
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {result.competitiveAdvantage.missingInCompetitors?.map((item, idx) => (
+                      <div key={idx} style={{ fontSize: '12px' }}>
+                        <span style={{ fontWeight: '600', color: '#e74c3c' }}>{item.competitor}:</span>{' '}
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Missing {item.missing}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
