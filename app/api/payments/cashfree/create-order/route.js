@@ -56,8 +56,21 @@ export async function POST(req) {
   try {
     const appId = getAppId();
     const secretKey = getSecretKey();
+    const env = getCashfreeEnv();
+    
     if (!appId || !secretKey) {
+      console.error("[Cashfree] Missing credentials. CASHFREE_APP_ID or CASHFREE_SECRET_KEY not set.");
       return NextResponse.json({ error: "cashfree_not_configured" }, { status: 500 });
+    }
+    
+    // Log environment for debugging (no secrets)
+    console.log(`[Cashfree] Environment: ${env || "TEST (default)"}, AppID prefix: ${appId.slice(0, 8)}...`);
+    
+    // Warn if credentials don't match environment pattern
+    const looksLikeTestKey = appId.toLowerCase().includes("test") || appId.startsWith("TEST");
+    const looksLikeProdEnv = env === "PROD";
+    if (looksLikeTestKey && looksLikeProdEnv) {
+      console.warn("[Cashfree] WARNING: CASHFREE_ENV=PROD but APP_ID looks like a test key. This will cause 404 errors!");
     }
 
     const body = await req.json().catch(() => ({}));
@@ -111,7 +124,12 @@ export async function POST(req) {
     });
 
     const cfJson = await cfRes.json().catch(() => null);
+    
+    // Log Cashfree response for debugging
+    console.log(`[Cashfree] Order API response: status=${cfRes.status}, has_session=${!!cfJson?.payment_session_id}`);
+    
     if (!cfRes.ok) {
+      console.error(`[Cashfree] Order creation failed:`, cfJson);
       return NextResponse.json(
         {
           error: cfJson?.message || cfJson?.error || "cashfree_order_create_failed",
