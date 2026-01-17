@@ -52,6 +52,7 @@ export default function HeadlineFeed() {
   const [isPaused, setIsPaused] = useState(false);
   const [mode, setMode] = useState(null);
   const [isLive, setIsLive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch live headlines from API
   const fetchLiveHeadlines = useCallback(async (category) => {
@@ -80,7 +81,11 @@ export default function HeadlineFeed() {
 
   // Load headlines - try live first, then fallback to curated
   useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+
     fetchLiveHeadlines(selectedCategory).then((success) => {
+      if (cancelled) return;
       if (!success) {
         // Fallback to curated headlines
         const filtered = getHeadlinesByCategory(selectedCategory);
@@ -89,6 +94,7 @@ export default function HeadlineFeed() {
         setActiveIndex(0);
         setIsLive(false);
       }
+      setIsLoading(false);
     });
     
     // Refresh live headlines every 3 minutes
@@ -96,7 +102,10 @@ export default function HeadlineFeed() {
       fetchLiveHeadlines(selectedCategory);
     }, 3 * 60 * 1000);
     
-    return () => clearInterval(refreshInterval);
+    return () => {
+      cancelled = true;
+      clearInterval(refreshInterval);
+    };
   }, [selectedCategory, fetchLiveHeadlines]);
 
   // Get current mode for rotation speed
@@ -162,14 +171,34 @@ export default function HeadlineFeed() {
             color: 'rgba(200, 215, 240, 0.7)',
             marginBottom: '8px'
           }}>
-            Fetching Live Intelligence...
+            {isLoading ? 'Updating Live Intelligence…' : 'No updates yet'}
           </div>
           <div style={{ 
             fontSize: '13px', 
             color: 'rgba(180, 195, 230, 0.5)'
           }}>
-            {isLive ? 'Connected to live feed' : 'News is being scraped. Check back in a few minutes.'}
+            {isLoading
+              ? (isLive ? 'Connected. Loading the latest headlines…' : 'Preparing today\'s brief…')
+              : 'Try another category or refresh in a moment.'}
           </div>
+
+          <button
+            type="button"
+            onClick={() => fetchLiveHeadlines(selectedCategory)}
+            style={{
+              marginTop: '16px',
+              padding: '10px 14px',
+              borderRadius: '10px',
+              border: '1px solid rgba(100, 160, 255, 0.22)',
+              background: 'rgba(100, 160, 255, 0.10)',
+              color: 'rgba(140, 190, 255, 0.9)',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Refresh
+          </button>
         </div>
       </div>
     );

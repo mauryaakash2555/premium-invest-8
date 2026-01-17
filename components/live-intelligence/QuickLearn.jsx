@@ -90,32 +90,75 @@ const QUICK_LEARN_LESSONS = [
   },
 ];
 
-const getTodaysLesson = () => {
+const getDayKey = () => new Date().toISOString().slice(0, 10);
+
+const getDailyLessonSet = (count = 3) => {
   const dayOfYear = Math.floor(
     (new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
   );
-  return QUICK_LEARN_LESSONS[dayOfYear % QUICK_LEARN_LESSONS.length];
+
+  const total = QUICK_LEARN_LESSONS.length;
+  const picked = [];
+  const used = new Set();
+
+  // Deterministic, no duplicates
+  for (let i = 0; i < Math.min(count, total); i++) {
+    const idx = (dayOfYear + i * 3) % total;
+    if (!used.has(idx)) {
+      used.add(idx);
+      picked.push(QUICK_LEARN_LESSONS[idx]);
+    }
+  }
+
+  // If collisions (small arrays), fill sequentially
+  let cursor = dayOfYear % total;
+  while (picked.length < Math.min(count, total)) {
+    if (!used.has(cursor)) {
+      used.add(cursor);
+      picked.push(QUICK_LEARN_LESSONS[cursor]);
+    }
+    cursor = (cursor + 1) % total;
+  }
+
+  return picked;
 };
 
 /**
  * QuickLearn - Clean laser blue theme matching overlay
  */
 export default function QuickLearn() {
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [lesson, setLesson] = useState(null);
-  const [completed, setCompleted] = useState(false);
+  const [lessons, setLessons] = useState([]);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [revealed, setRevealed] = useState({});
+  const [completed, setCompleted] = useState({});
 
   useEffect(() => {
-    setLesson(getTodaysLesson());
-    const today = new Date().toDateString();
-    const lastCompleted = localStorage.getItem('li_quicklearn_completed');
-    if (lastCompleted === today) {
-      setCompleted(true);
-      setShowAnswer(true);
-    }
+    const daily = getDailyLessonSet(3);
+    setLessons(daily);
+
+    const dayKey = getDayKey();
+    const stored = JSON.parse(localStorage.getItem('li_quicklearn_state') || '{}');
+    const todayState = stored[dayKey] || { revealed: {}, completed: {}, activeIdx: 0 };
+
+    setRevealed(todayState.revealed || {});
+    setCompleted(todayState.completed || {});
+    setActiveIdx(typeof todayState.activeIdx === 'number' ? todayState.activeIdx : 0);
   }, []);
 
-  if (!lesson) return null;
+  useEffect(() => {
+    if (!lessons.length) return;
+    const dayKey = getDayKey();
+    const stored = JSON.parse(localStorage.getItem('li_quicklearn_state') || '{}');
+    stored[dayKey] = { revealed, completed, activeIdx };
+    localStorage.setItem('li_quicklearn_state', JSON.stringify(stored));
+  }, [revealed, completed, activeIdx, lessons.length]);
+
+  if (!lessons.length) return null;
+
+  const lesson = lessons[Math.min(activeIdx, lessons.length - 1)];
+  const doneCount = lessons.reduce((acc, _, i) => acc + (completed[i] ? 1 : 0), 0);
+  const isAllDone = doneCount === lessons.length;
+  const isRevealed = !!revealed[activeIdx];
 
   return (
     <>
@@ -125,11 +168,18 @@ export default function QuickLearn() {
           <span className="ql-cat">{lesson.category}</span>
         </div>
 
+        <div className="ql-meta">
+          <div className="ql-progress">
+            <div className="ql-progress-bar" style={{ width: `${Math.round((doneCount / lessons.length) * 100)}%` }} />
+          </div>
+          <div className="ql-count">{doneCount}/{lessons.length} done</div>
+        </div>
+
         <div className="ql-topic">{lesson.topic}</div>
         <div className="ql-question">{lesson.question}</div>
 
-        {!showAnswer ? (
-          <button className="ql-btn" onClick={() => setShowAnswer(true)}>
+        {!isRevealed ? (
+          <button className="ql-btn" onClick={() => setRevealed((p) => ({ ...p, [activeIdx]: true }))}>
             Show Answer
           </button>
         ) : (
@@ -142,21 +192,53 @@ export default function QuickLearn() {
               <span className="ql-label">Did you know?</span>
               {lesson.fact}
             </div>
-            {!completed ? (
-              <button className="ql-done" onClick={() => {
-                setCompleted(true);
-                localStorage.setItem('li_quicklearn_completed', new Date().toDateString());
-              }}>
+
+            {!completed[activeIdx] ? (
+              <button
+                className="ql-done"
+                onClick={() => {
+                  setCompleted((p) => ({ ...p, [activeIdx]: true }));
+                  // Auto-advance if possible
+                  const next = Math.min(activeIdx + 1, lessons.length - 1);
+                  if (next !== activeIdx) setActiveIdx(next);
+                }}
+              >
                 Got it!
               </button>
             ) : (
-              <div className="ql-completed">Completed for today</div>
+              <div className="ql-completed">Done</div>
             )}
           </div>
         )}
 
+        <div className="ql-nav">
+          <button
+            type="button"
+            className="ql-nav-btn"
+            onClick={() => setActiveIdx((p) => Math.max(0, p - 1))}
+            disabled={activeIdx === 0}
+          >
+            Prev
+          </button>
+          <div className="ql-nav-mid">
+            Q {activeIdx + 1} / {lessons.length}
+          </div>
+          <button
+            type="button"
+            className="ql-nav-btn"
+            onClick={() => setActiveIdx((p) => Math.min(lessons.length - 1, p + 1))}
+            disabled={activeIdx === lessons.length - 1}
+          >
+            Next
+          </button>
+        </div>
+
+        {isAllDone && (
+          <div className="ql-all-done">All done for today</div>
+        )}
+
         <div className="ql-footer">
-          Lesson {QUICK_LEARN_LESSONS.findIndex(l => l.id === lesson.id) + 1}/{QUICK_LEARN_LESSONS.length}
+          {getDayKey()} · Daily set rotates automatically
         </div>
       </div>
 
@@ -173,6 +255,32 @@ export default function QuickLearn() {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 12px;
+        }
+        .ql-meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+        .ql-progress {
+          flex: 1;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(100, 160, 255, 0.08);
+          border: 1px solid rgba(100, 160, 255, 0.12);
+          overflow: hidden;
+        }
+        .ql-progress-bar {
+          height: 100%;
+          background: rgba(100, 160, 255, 0.35);
+          border-right: 1px solid rgba(100, 160, 255, 0.25);
+        }
+        .ql-count {
+          font-size: 10px;
+          color: rgba(180, 195, 230, 0.45);
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
         }
         .ql-badge {
           font-size: 10px;
@@ -275,6 +383,43 @@ export default function QuickLearn() {
           font-size: 11px;
           color: rgba(140, 200, 170, 0.65);
           padding: 6px;
+        }
+        .ql-nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin-top: 12px;
+        }
+        .ql-nav-btn {
+          padding: 8px 10px;
+          border-radius: 8px;
+          border: 1px solid rgba(100, 160, 255, 0.18);
+          background: rgba(100, 160, 255, 0.06);
+          color: rgba(180, 205, 235, 0.8);
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          min-width: 74px;
+        }
+        .ql-nav-btn:disabled {
+          opacity: 0.35;
+          cursor: not-allowed;
+        }
+        .ql-nav-mid {
+          font-size: 11px;
+          color: rgba(180, 195, 230, 0.45);
+          font-variant-numeric: tabular-nums;
+        }
+        .ql-all-done {
+          margin-top: 10px;
+          text-align: center;
+          font-size: 12px;
+          color: rgba(140, 210, 170, 0.85);
+          padding: 8px;
+          border-radius: 8px;
+          border: 1px solid rgba(100, 180, 140, 0.18);
+          background: rgba(100, 180, 140, 0.06);
         }
         .ql-footer {
           text-align: right;

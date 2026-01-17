@@ -370,7 +370,20 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
             <span className="li-headline-data">{headline.dataPoint}</span>
           )}
           <span className="li-headline-source">Source: {headline.source}</span>
-          <span className="li-headline-cta">Tap to read more →</span>
+          {ctaConfig ? (
+            <button
+              type="button"
+              className="li-headline-action"
+              onClick={(e) => {
+                e.stopPropagation();
+                ctaConfig.action();
+              }}
+            >
+              {ctaConfig.text} →
+            </button>
+          ) : (
+            <span className="li-headline-cta">Tap to read more →</span>
+          )}
         </div>
       </div>
 
@@ -461,9 +474,9 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           color: rgba(200, 160, 240, 0.95); 
         }
         .li-cat-badge.cat-bonds { 
-          background: rgba(160, 140, 100, 0.12); 
-          border-color: rgba(160, 140, 100, 0.3); 
-          color: rgba(200, 180, 140, 0.95); 
+          background: rgba(120, 170, 255, 0.10);
+          border-color: rgba(120, 170, 255, 0.28);
+          color: rgba(170, 215, 255, 0.95);
         }
         .li-cat-badge.cat-fixed_income { 
           background: rgba(140, 160, 180, 0.12); 
@@ -570,6 +583,25 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           gap: 12px;
           padding-top: 12px;
           border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .li-headline-action {
+          border: 1px solid rgba(100, 160, 255, 0.22);
+          background: rgba(100, 160, 255, 0.10);
+          color: rgba(140, 190, 255, 0.9);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          border-radius: 10px;
+          padding: 8px 10px;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+
+        .li-headline-action:hover {
+          background: rgba(100, 160, 255, 0.16);
+          border-color: rgba(100, 160, 255, 0.30);
         }
 
         .li-headline-data {
