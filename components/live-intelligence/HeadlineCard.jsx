@@ -782,13 +782,37 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
                 )}
 
                 {/* Action Buttons */}
-                <div className="li-modal-actions">
+                <div className="li-modal-actions" style={{
+                  display: 'flex',
+                  gap: '12px',
+                  marginTop: '20px',
+                  paddingTop: '16px',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  flexWrap: 'wrap',
+                }}>
                   {/* Save Button */}
                   <button
                     className={`li-modal-action-btn li-modal-save-btn ${isSaved ? 'saved' : ''}`}
                     onClick={handleSave}
+                    style={{
+                      flex: 1,
+                      minWidth: '140px',
+                      padding: '12px 16px',
+                      borderRadius: '10px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      border: `1px solid ${isSaved ? 'rgba(100, 160, 255, 0.5)' : 'rgba(100, 160, 255, 0.25)'}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      background: isSaved ? 'rgba(100, 160, 255, 0.25)' : 'rgba(100, 160, 255, 0.15)',
+                      color: 'rgba(140, 190, 255, 0.95)',
+                    }}
                   >
-                    {isSaved ? '🔖 Saved' : '📑 Save for Later'}
+                    {isSaved ? '🔖 Saved' : '📑 Save'}
                   </button>
                   
                   {/* CTA Button based on category */}
@@ -799,72 +823,28 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
                         ctaConfig.action();
                         setShowModal(false);
                       }}
+                      style={{
+                        flex: 1,
+                        minWidth: '140px',
+                        padding: '12px 16px',
+                        borderRadius: '10px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        border: '1px solid rgba(100, 160, 255, 0.4)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        background: 'linear-gradient(135deg, rgba(100, 160, 255, 0.3) 0%, rgba(80, 140, 220, 0.3) 100%)',
+                        color: 'rgba(200, 220, 255, 0.95)',
+                      }}
                     >
-                      {ctaConfig.icon} {ctaConfig.text}
+                      <span style={{ fontSize: '14px' }}>{ctaConfig.icon}</span> {ctaConfig.text}
                     </button>
                   )}
                 </div>
-
-                {/* Modal Action Styles */}
-                <style jsx>{`
-                  .li-modal-actions {
-                    display: flex;
-                    gap: 12px;
-                    margin-top: 20px;
-                    padding-top: 16px;
-                    border-top: 1px solid rgba(255, 255, 255, 0.08);
-                  }
-
-                  .li-modal-action-btn {
-                    flex: 1;
-                    padding: 12px 16px;
-                    border-radius: 10px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    border: 1px solid transparent;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                  }
-
-                  .li-modal-save-btn {
-                    background: rgba(100, 160, 255, 0.15);
-                    color: rgba(140, 190, 255, 0.95);
-                    border-color: rgba(100, 160, 255, 0.25);
-                  }
-
-                  .li-modal-save-btn:hover {
-                    background: rgba(100, 160, 255, 0.25);
-                    border-color: rgba(100, 160, 255, 0.4);
-                  }
-
-                  .li-modal-save-btn.saved {
-                    background: rgba(100, 160, 255, 0.25);
-                    border-color: rgba(100, 160, 255, 0.5);
-                  }
-
-                  .li-modal-cta-btn {
-                    background: linear-gradient(135deg, rgba(100, 160, 255, 0.3) 0%, rgba(80, 140, 220, 0.3) 100%);
-                    color: rgba(200, 220, 255, 0.95);
-                    border-color: rgba(100, 160, 255, 0.4);
-                  }
-
-                  .li-modal-cta-btn:hover {
-                    background: linear-gradient(135deg, rgba(100, 160, 255, 0.45) 0%, rgba(80, 140, 220, 0.45) 100%);
-                    border-color: rgba(100, 160, 255, 0.6);
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(100, 160, 255, 0.2);
-                  }
-
-                  @media (max-width: 480px) {
-                    .li-modal-actions {
-                      flex-direction: column;
-                    }
-                  }
-                `}</style>
               </div>
             </div>,
             document.body

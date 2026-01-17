@@ -53,21 +53,45 @@ export function AchievementPopup() {
             damping: 20, 
             stiffness: 300 
           }}
-          className="fixed top-20 left-1/2 -translate-x-1/2 z-[10004] max-w-sm w-full mx-4"
+          style={{
+            position: 'fixed',
+            top: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10004,
+            maxWidth: '360px',
+            width: 'calc(100% - 32px)',
+          }}
           onClick={handleDismiss}
         >
           {/* Glow effect */}
           <div 
-            className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} opacity-20 blur-xl rounded-2xl`}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(135deg, rgba(100, 160, 255, 0.3) 0%, rgba(180, 120, 220, 0.2) 100%)',
+              opacity: 0.4,
+              filter: 'blur(20px)',
+              borderRadius: '16px',
+            }}
           />
           
           {/* Main card */}
           <div 
-            className={`relative bg-gradient-to-br from-[rgba(20,30,50,0.95)] to-[rgba(30,40,60,0.95)] backdrop-blur-xl rounded-2xl p-6 border-2 ${colors.border} shadow-2xl cursor-pointer`}
+            style={{
+              position: 'relative',
+              background: 'linear-gradient(180deg, rgba(20, 30, 50, 0.98) 0%, rgba(12, 16, 28, 0.99) 100%)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid rgba(100, 160, 255, 0.25)',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(100, 160, 255, 0.1)',
+              cursor: 'pointer',
+            }}
           >
             {/* Confetti animation */}
-            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-              {[...Array(12)].map((_, i) => (
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '16px', pointerEvents: 'none' }}>
+              {[...Array(8)].map((_, i) => (
                 <motion.div
                   key={i}
                   initial={{ 
@@ -87,35 +111,20 @@ export function AchievementPopup() {
                     delay: i * 0.05,
                     ease: 'easeOut'
                   }}
-                  className="absolute w-2 h-2 rounded-full"
-                  style={{ 
-                    background: i % 3 === 0 ? '#FFD700' : i % 3 === 1 ? '#FFA500' : '#FF6B6B'
+                  style={{
+                    position: 'absolute',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: i % 3 === 0 ? 'rgba(100, 180, 255, 0.8)' : i % 3 === 1 ? 'rgba(180, 120, 220, 0.8)' : 'rgba(100, 200, 150, 0.8)',
                   }}
                 />
               ))}
             </div>
             
             {/* Content */}
-            <div className="relative text-center">
-              {/* Stars */}
-              <motion.div
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="absolute -top-2 -right-2 text-2xl"
-              >
-                ✨
-              </motion.div>
-              <motion.div
-                initial={{ rotate: 0 }}
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-                className="absolute -top-1 -left-1 text-xl"
-              >
-                ⭐
-              </motion.div>
-              
-              {/* Badge Icon */}
+            <div style={{ position: 'relative', textAlign: 'center' }}>
+              {/* Badge Icon - smaller size */}
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -124,7 +133,7 @@ export function AchievementPopup() {
                   damping: 10, 
                   delay: 0.2 
                 }}
-                className="text-6xl mb-3"
+                style={{ fontSize: '32px', marginBottom: '12px' }}
               >
                 {achievement.badge?.icon}
               </motion.div>
@@ -134,9 +143,16 @@ export function AchievementPopup() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className={`text-sm uppercase font-bold tracking-wider mb-1 ${colors.text}`}
+                style={{
+                  fontSize: '11px',
+                  textTransform: 'uppercase',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  marginBottom: '6px',
+                  color: 'rgba(140, 190, 255, 0.95)',
+                }}
               >
-                🎉 Achievement Unlocked!
+                ✨ Achievement Unlocked
               </motion.div>
               
               {/* Badge Name */}
@@ -144,7 +160,12 @@ export function AchievementPopup() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-xl font-bold text-white mb-1"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  color: 'rgba(235, 242, 255, 0.95)',
+                  marginBottom: '8px',
+                }}
               >
                 {achievement.badge?.name}
               </motion.div>
@@ -154,7 +175,17 @@ export function AchievementPopup() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 }}
-                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${colors.bg} ${colors.text} mb-2`}
+                style={{
+                  display: 'inline-block',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  background: 'rgba(100, 160, 255, 0.15)',
+                  color: 'rgba(140, 190, 255, 0.95)',
+                  border: '1px solid rgba(100, 160, 255, 0.25)',
+                  marginBottom: '8px',
+                }}
               >
                 {achievement.level?.tier?.toUpperCase()}
               </motion.div>
@@ -164,7 +195,10 @@ export function AchievementPopup() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="text-sm text-white/70"
+                style={{
+                  fontSize: '13px',
+                  color: 'rgba(200, 215, 240, 0.7)',
+                }}
               >
                 {achievement.level?.reward}
               </motion.div>
@@ -174,9 +208,13 @@ export function AchievementPopup() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 transition={{ delay: 1 }}
-                className="text-xs text-white/40 mt-4"
+                style={{
+                  fontSize: '11px',
+                  color: 'rgba(200, 215, 240, 0.4)',
+                  marginTop: '16px',
+                }}
               >
-                Click to dismiss
+                Tap to dismiss
               </motion.div>
             </div>
           </div>
