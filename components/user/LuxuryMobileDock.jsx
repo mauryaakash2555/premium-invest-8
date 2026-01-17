@@ -306,9 +306,21 @@ export function LuxuryMobileDock() {
 
   if (hideDock) return null;
 
+  // Desktop detection - hide dock completely on screens >= 1024px
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  // Don't render anything on desktop
+  if (isDesktop) return null;
+
   return (
     <>
-      {/* Main Dock - ULTRA LUXURY EDITION */}
+      {/* Main Dock - ULTRA LUXURY EDITION - Mobile Only */}
       <nav
         className={cn(
           "fixed bottom-3 left-1/2 -translate-x-1/2 z-[9999] lg:hidden",
@@ -317,6 +329,7 @@ export function LuxuryMobileDock() {
           scrolled ? "scale-90" : "scale-100",
           isReading ? "opacity-0 pointer-events-none scale-75 translate-y-10 blur-sm" : "opacity-100 pointer-events-auto scale-100 translate-y-0 blur-0"
         )}
+        style={{ display: isDesktop ? 'none' : undefined }}
       >
         <div
           className={cn(
