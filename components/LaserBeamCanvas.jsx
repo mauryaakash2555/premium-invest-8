@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * LaserBeam - Canvas-based animated laser beam border effect
@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
  * 
  * Props:
  * - width/height: Container dimensions (number or string)
- * - duration: Animation cycle in seconds (default: 4)
+ * - duration: Animation cycle in seconds (default: 6 - slower for calmer effect)
  * - color: Laser color as hex (default: "#00ff88" green, use "#3b82f6" for blue)
  * - borderRadius: Corner radius in px (default: 12)
  * - active: Whether animation runs (default: true)
@@ -24,7 +24,7 @@ import { useEffect, useRef } from "react";
 export function LaserBeam({
   width = 400,
   height = 300,
-  duration = 4,
+  duration = 6, // Increased from 4 to 6 for calmer animation
   color = "#00ff88",
   borderRadius = 12,
   active = true,
@@ -38,19 +38,45 @@ export function LaserBeam({
   className = "",
 }) {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const animationRef = useRef(0);
   const startTimeRef = useRef(0);
+  const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
+
+  // Handle resize to prevent animation breaking
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateDimensions = () => {
+      const rect = container.getBoundingClientRect();
+      setDimensions({ w: rect.width, h: rect.height });
+    };
+
+    updateDimensions();
+
+    // Use ResizeObserver for reliable resize detection
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Set canvas size with device pixel ratio for sharp rendering
     const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
+    
+    // Prevent zero-dimension canvas
+    if (rect.width < 1 || rect.height < 1) return;
+    
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
@@ -60,10 +86,13 @@ export function LaserBeam({
     const r = Math.min(borderRadius, Math.min(w, h) / 2);
 
     // Calculate the perimeter of the rounded rectangle
-    const straightWidth = w - 2 * r;
-    const straightHeight = h - 2 * r;
+    const straightWidth = Math.max(0, w - 2 * r);
+    const straightHeight = Math.max(0, h - 2 * r);
     const cornerLength = (Math.PI * r) / 2;
     const perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength;
+    
+    // Prevent division by zero
+    if (perimeter < 1) return;
 
     // Get point on rounded rectangle path given progress (0-1)
     const getPointOnPath = (progress) => {
@@ -200,10 +229,11 @@ export function LaserBeam({
     return () => {
       cancelAnimationFrame(animationRef.current);
     };
-  }, [active, beamLength, borderRadius, borderWidth, color, delay, direction, duration, glowIntensity]);
+  }, [active, beamLength, borderRadius, borderWidth, color, delay, direction, duration, glowIntensity, dimensions]);
 
   return (
     <div
+      ref={containerRef}
       className={className}
       style={{
         position: 'relative',
