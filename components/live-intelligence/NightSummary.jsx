@@ -57,18 +57,20 @@ export default function NightSummary() {
     return () => clearInterval(interval);
   }, []);
 
-  // Only show in night_summary mode (9PM - 12AM)
-  if (!isVisible || !mode) return null;
-
   const formatNumber = (num) => num.toLocaleString('en-IN');
   const formatChange = (change, percent) => {
     const sign = change >= 0 ? '+' : '';
     return `${sign}${formatNumber(change)} (${sign}${percent.toFixed(2)}%)`;
   };
 
+  // Always render wrapper to preserve hook order (style jsx uses hooks internally)
+  // Only show in night_summary mode (9PM - 12AM)
+  const shouldShow = isVisible && mode;
+
   return (
     <>
-      <div className="li-night-summary">
+      {shouldShow && (
+        <div className="li-night-summary">
         {/* Header */}
         <div className="li-ns-header">
           <span className="li-ns-icon">🌙</span>
@@ -182,7 +184,8 @@ export default function NightSummary() {
           type="night"
           showOptIn={true}
         />
-      </div>
+        </div>
+      )}
 
       <style jsx>{`
         .li-night-summary {
