@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
+import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { FundCostComparator } from '@/components/calculators/FundCostComparator';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
@@ -180,6 +181,27 @@ const MutualFunds = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Mutual Funds',
+    description,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
+    areaServed: { '@type': 'Country', name: 'IN' },
+    serviceType: 'Mutual Funds',
+    url: pageUrl,
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
   const divider = {
     height: 1,
     background: `linear-gradient(90deg, rgba(${ACCENT_RGB},0), rgba(${ACCENT_RGB},0.35), rgba(255,255,255,0.10), rgba(${ACCENT_RGB},0.35), rgba(${ACCENT_RGB},0))`,
@@ -205,9 +227,23 @@ const MutualFunds = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      <script
+        id="mutual-funds-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        id="mutual-funds-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* Hero (luxury, high-end spacing, no brown) */}
       <section className="mf-hero" style={{ position: 'relative', padding: '120px 0 64px 0', marginTop: '80px', overflow: 'hidden' }}>
+        {/* Back to Live Intelligence */}
+        <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
+          <BackToLiveIntelligence />
+        </div>
         <div
           aria-hidden="true"
           style={{

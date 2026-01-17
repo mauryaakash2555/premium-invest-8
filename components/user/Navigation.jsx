@@ -78,6 +78,7 @@ const Navigation = () => {
     { path: '/services', label: 'Services' },
     { path: '/tools', label: 'Tools' },
     { path: '/tools/tax-optimization', label: 'Tax Intelligence' },
+    { path: '/live-intelligence', label: 'Live Intel' },
     { path: '/client-portal', label: 'Client Portal' },
     { path: '/curated-partners', label: 'Curated Partners' },
     { path: '/blog', label: 'Blog' },
@@ -124,8 +125,9 @@ const Navigation = () => {
   // (Prevents the fixed public navbar overlaying and blocking admin controls.)
   const hideNav =
     pathname === '/sip-calculator' ||
+    pathname === '/archive' ||
     pathname.startsWith('/admin-secret-akash') ||
-    pathname?.startsWith('/live-intelligence-hero');
+    pathname?.startsWith('/live-intelligence');
 
   if (hideNav) {
     // Render nothing on this route; page provides its own minimal header.

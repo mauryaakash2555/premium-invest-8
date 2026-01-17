@@ -20,7 +20,8 @@ export default function LumpsumPlannerToolPage() {
     <>
       <BackRow href="/tools" label="← Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
-        <BaseCalculatorLayout
+        <div className="max-w-6xl mx-auto">
+          <BaseCalculatorLayout
           header={
             <CalculatorHeader
               meta={
@@ -48,6 +49,7 @@ export default function LumpsumPlannerToolPage() {
             </div>
           </div>
         </BaseCalculatorLayout>
+        </div>
       </section>
     </>
   );

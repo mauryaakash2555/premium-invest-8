@@ -88,7 +88,9 @@ export default function PropertyVsSipToolPage() {
     <>
       <BackRow href="/tools" label="← Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
-        <PropertyVsSipCalculator />
+        <div className="max-w-6xl mx-auto">
+          <PropertyVsSipCalculator />
+        </div>
       </section>
 
       <section className="px-6 lg:px-10 pb-6">

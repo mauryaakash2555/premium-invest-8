@@ -26,7 +26,7 @@ const WhatsAppFloat = () => {
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/live-intelligence-hero')) return null;
+  if (pathname?.startsWith('/live-intelligence')) return null;
 
   return (
     <div style={{ position: 'relative' }}>

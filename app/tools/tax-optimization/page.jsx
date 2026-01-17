@@ -202,7 +202,7 @@ export default function TaxOptimizationToolPage() {
       />
       {/* Calculator Section (separate from hero) */}
       <section id="tools-tax-optimization" className="scroll-mt-24 px-6 lg:px-10 py-14 lg:py-20">
-        <div className="w-full">
+        <div className="w-full max-w-6xl mx-auto">
           <TaxCalculator />
         </div>
       </section>

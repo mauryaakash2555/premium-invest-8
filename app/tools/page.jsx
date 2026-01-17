@@ -6,12 +6,13 @@ import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
+import { LaserBeam } from "@/components/LaserBeamCanvas";
 
 /*
   LAYOUT-LOCKED: /tools hub page
   Spec:
-  - Hero + exactly 5 cards
-  - Only Tax tool is active
+  - Hero + exactly 6 cards (updated with All-in-One Calculator)
+  - Tax tool and Property vs SIP are active
   - Others show "Coming Soon" and appear disabled
   Edit only with explicit instruction.
 */
@@ -23,18 +24,35 @@ export const metadata = buildMetadata({
   path: "/tools",
 });
 
-function ToolCard({ title, subtitle, href, active }) {
+function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
   const content = (
-    <Card className="border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow">
-      <CardContent className="p-5">
-        <div className="flex items-start justify-between gap-4">
+    <Card className={`border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative rounded-xl h-full ${className}`} style={{ overflow: 'visible' }}>
+      {laser ? (
+        <div className="absolute -inset-[2px] pointer-events-none z-20" aria-hidden="true" style={{ borderRadius: '14px' }}>
+          <LaserBeam
+            width="100%"
+            height="100%"
+            color="#c0a062"
+            borderRadius={14}
+            duration={14}
+            glowIntensity={12}
+            beamLength={0.12}
+            borderWidth={0}
+            backgroundColor="transparent"
+          />
+        </div>
+      ) : null}
+      <CardContent className="p-5 relative z-10 flex flex-col h-full min-h-[140px]">
+        <div className="flex items-start justify-between gap-4 flex-1">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold gold-gradient-text truncate">
+            <h2 className="text-base font-semibold gold-gradient-text">
               {title}
             </h2>
             {subtitle ? (
-              <p className="mt-1 text-sm text-white/70">{subtitle}</p>
-            ) : null}
+              <p className="mt-1 text-sm text-white/70 line-clamp-2">{subtitle}</p>
+            ) : (
+              <p className="mt-1 text-sm text-white/40 italic">Details coming soon</p>
+            )}
           </div>
           {!active ? (
             <Badge className="shrink-0 bg-white/10 text-white/80 border border-white/10">
@@ -43,7 +61,7 @@ function ToolCard({ title, subtitle, href, active }) {
           ) : null}
         </div>
 
-        <div className="mt-5">
+        <div className="mt-auto pt-4">
           {active ? (
             <Link href={href} className="inline-flex">
               <Button className="calculator-premium-cta">
@@ -67,7 +85,7 @@ function ToolCard({ title, subtitle, href, active }) {
   // Coming Soon pages (still no logic exposed).
   if (!active && href && href !== "#") {
     return (
-      <Link href={href} className="block" aria-label={title}>
+      <Link href={href} className="block h-full" aria-label={title}>
         {content}
       </Link>
     );
@@ -163,6 +181,19 @@ export default function ToolsHubPage() {
                 title="Human Life Value Shield"
                 href="/tools/insurance-value"
                 active={false}
+              />
+              <ToolCard
+                active
+                title="All in One Financial Calculator"
+                subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
+                href="/tools/all-calculators"
+                laser
+              />
+              <ToolCard
+                active
+                title="Free ITR Filing Help"
+                subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
+                href="/tools/itr-filing-help"
               />
             </div>
 

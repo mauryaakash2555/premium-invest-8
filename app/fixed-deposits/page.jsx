@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import FAQSection from '@/components/shared/FAQSection';
+import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { FdMaturitySnapshot } from '@/components/calculators/FdMaturitySnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
@@ -53,6 +54,17 @@ const FixedDeposits = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Fixed Deposits',
+    description,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
+    areaServed: { '@type': 'Country', name: 'IN' },
+    serviceType: 'Fixed Deposits',
+    url: pageUrl,
+  };
+
   const faqs = [
     {
       question: 'Are fixed deposits risk-free?',
@@ -85,6 +97,16 @@ const FixedDeposits = () => {
         'We can help explain issuer options, tenure/payout choices, documentation flow, and maturity tracking. This is informational support; final terms depend on the issuing institution.',
     },
   ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
 
   const step = {
     width: 34,
@@ -125,7 +147,22 @@ const FixedDeposits = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
+      <script
+        id="fixed-deposits-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        id="fixed-deposits-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
   <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
+        {/* Back to Live Intelligence */}
+        <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
+          <BackToLiveIntelligence />
+        </div>
         <div
           aria-hidden="true"
           style={{

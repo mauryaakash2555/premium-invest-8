@@ -164,6 +164,7 @@ const navigationLinks = {
     ],
     resources: [
       { label: "Tools", href: "/tools" },
+      { label: "Live Intelligence", href: "/live-intelligence" },
       { label: "Investment Platforms", href: "/platforms" },
       { label: "Curated Partners", href: "/curated-partners" },
       { label: "Careers", href: "/careers" },

@@ -1,0 +1,70 @@
+{
+  "success": true,
+  "headlines": [
+    {
+      "id": "cb00ac2b-9066-4553-b06e-6897cf4ebda1",
+      "headline": "India Revamps Tax Regime In 2025, New Act Comes Into Effect From April 1",
+      "summary": "India overhauled its tax regime in 2025 with sharp cuts in Goods and Services Tax (GST) rates and a higher income tax exemption limit, with the spotlight now turning to customs duty rationalisation and procedural simplification in the coming Budget.",
+      "data_point": "NDTV Profit",
+      "category": "tax_insight",
+      "urgency": "REGULAR",
+      "source": "NDTV Profit",
+      "published_at": "2026-01-17T11:31:26.571897+05:30",
+      "created_at": "2026-01-17T11:31:26.571897+05:30",
+      "valid_until": "2026-01-18T11:31:26.452+05:30"
+    },
+    {
+      "id": "5ca37ade-e275-4aa7-872b-03bb5f14ee81",
+      "headline": "Capital Gains Hurting Your Wallet? Use This Trick To Shrink Your Tax Bill",
+      "summary": "Do note, capital losses cant be used to offset income from salary, rent, business, or interest.",
+      "data_point": "NDTV Profit",
+      "category": "tax_insight",
+      "urgency": "REGULAR",
+      "source": "NDTV Profit",
+      "published_at": "2026-01-17T11:31:26.350456+05:30",
+      "created_at": "2026-01-17T11:31:26.350456+05:30",
+      "valid_until": "2026-01-18T11:31:26.221+05:30"
+    },
+    {
+      "id": "f958e4d0-02fd-4c3c-9985-10b33a748741",
+      "headline": "Why Rajeev Thakkar Is Calling Parag Parikh's Large Cap Fund 'Dal Chawal'",
+      "summary": "According to Thakkar, large caps are currently an *under-owned and undervalued category*.",
+      "data_point": "NDTV Profit",
+      "category": "market_update",
+      "urgency": "REGULAR",
+      "source": "NDTV Profit",
+      "published_at": "2026-01-17T11:31:26.127539+05:30",
+      "created_at": "2026-01-17T11:31:26.127539+05:30",
+      "valid_until": "2026-01-18T11:31:25.999+05:30"
+    },
+    {
+      "id": "dc0fb895-2b75-4cd6-a4c2-90c653b6eab6",
+      "headline": "Zepto Files Confidential IPO Papers With SEBI, Eyes Rs 11,000 Crore Via Issue",
+      "summary": "Zepto has filed preliminary papers with markets regulator Sebi to raise Rs 11,000 crore through its initial public offering using a confidential route, people familiar with the development said.",
+      "data_point": "NDTV Profit",
+      "category": "sebi",
+      "urgency": "IMPORTANT",
+      "source": "NDTV Profit",
+      "published_at": "2026-01-17T11:31:25.902201+05:30",
+      "created_at": "2026-01-17T11:31:25.902201+05:30",
+      "valid_until": "2026-01-18T11:31:25.77+05:30"
+    },
+    {
+      "id": "ed25cedc-55ca-4ab7-a807-ce4e727eb85b",
+      "headline": "All About Warren Buffett, The Oracle Of Omaha Retiring After 60 Years",
+      "summary": "Warren Buffett, the \"Oracle of Omaha,\" retires on December 31 as chief executive officer of Berkshire Hathaway. He will continue as chairman. Greg Abel will formally take over as CEO on Thursday, January 1.",
+      "data_point": "NDTV Profit",
+      "category": "market_update",
+      "urgency": "REGULAR",
+      "source": "NDTV Profit",
+      "published_at": "2026-01-17T11:31:25.672658+05:30",
+      "created_at": "2026-01-17T11:31:25.672658+05:30",
+      "valid_until": "2026-01-18T11:31:25.547+05:30"
+    }
+  ],
+  "count": 5,
+  "total": 5,
+  "offset": 0,
+  "limit": 5,
+  "hasMore": false
+}

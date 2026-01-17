@@ -25,10 +25,11 @@ If you need to run scripts manually:
 
 ## 💳 RAZORPAY (TEST MODE) REQUIRED ENV VARS
 
-If the UI shows "razorpay_not_configured", set these (do NOT commit real values):
+Payments use Cashfree (server-side only). Ensure these exist in your local environment (do NOT commit real values):
 
-- RAZORPAY_KEY_ID
-- RAZORPAY_KEY_SECRET
+- CASHFREE_APP_ID
+- CASHFREE_SECRET_KEY
+- CASHFREE_ENV (PROD or TEST)
 
 See premium-invest-8/.env.example for placeholders.
 

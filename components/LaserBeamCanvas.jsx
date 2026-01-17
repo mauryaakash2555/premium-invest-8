@@ -50,10 +50,26 @@ export function LaserBeam({
 
     // Set canvas size with device pixel ratio for sharp rendering
     const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+    
+    // Function to setup canvas dimensions
+    const setupCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return null;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform before scaling
+      ctx.scale(dpr, dpr);
+      return rect;
+    };
+    
+    let rect = setupCanvas();
+    if (!rect) {
+      // Retry after a short delay if element not ready
+      const retryTimeout = setTimeout(() => {
+        rect = setupCanvas();
+      }, 100);
+      return () => clearTimeout(retryTimeout);
+    }
 
     const w = rect.width;
     const h = rect.height;
@@ -195,10 +211,26 @@ export function LaserBeam({
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    // Small delay before starting animation to ensure layout is complete
+    const startTimeout = setTimeout(() => {
+      animationRef.current = requestAnimationFrame(animate);
+    }, 50);
+
+    // Handle resize to prevent breaking
+    const handleResize = () => {
+      cancelAnimationFrame(animationRef.current);
+      const newRect = setupCanvas();
+      if (newRect) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
 
     return () => {
+      clearTimeout(startTimeout);
       cancelAnimationFrame(animationRef.current);
+      window.removeEventListener('resize', handleResize);
     };
   }, [active, beamLength, borderRadius, borderWidth, color, delay, direction, duration, glowIntensity]);
 

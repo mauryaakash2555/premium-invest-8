@@ -113,8 +113,8 @@ export default function HomePage() {
           }}
         />
 
-        {/* Animated Clouds (no lightning to prevent hero flicker) */}
-        <AnimatedClouds enableRain={rainEnabled} enableLightning={false} />
+        {/* Animated Clouds with lightning effect */}
+        <AnimatedClouds enableRain={rainEnabled} enableLightning={true} />
 
         {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
