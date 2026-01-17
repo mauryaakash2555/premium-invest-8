@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function PaymentFailedPage() {
   return (
     <main className="min-h-[70vh] px-6 py-10">
@@ -8,12 +10,12 @@ export default function PaymentFailedPage() {
         </p>
 
         <div className="mt-6 flex gap-3">
-          <a className="rounded-md bg-[color:var(--color-matte-gold)] px-4 py-2 text-sm font-semibold text-black" href="/">
+          <Link className="rounded-md bg-[color:var(--color-matte-gold)] px-4 py-2 text-sm font-semibold text-black" href="/">
             Back to Home
-          </a>
-          <a className="rounded-md border border-white/10 px-4 py-2 text-sm font-semibold" href="/contact">
+          </Link>
+          <Link className="rounded-md border border-white/10 px-4 py-2 text-sm font-semibold" href="/contact">
             Contact Support
-          </a>
+          </Link>
         </div>
       </div>
     </main>
