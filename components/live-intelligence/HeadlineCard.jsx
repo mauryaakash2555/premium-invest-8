@@ -5,15 +5,21 @@ import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
 
 // ═══════════════════════════════════════════════════════════
-// CATEGORY SHORT CODES - Clean text labels, no emojis
-// User-friendly abbreviations for quick category recognition
+// ⚠️ COLOR BAN: NO TAN, GOLD, ORANGE, BROWN in Live Intelligence
+// Allowed: Laser blue (100,160,255), cyan (80,180,200), purple (180,120,220),
+//          green (100,180,140), red for breaking (255,80,80)
+// BANNED: Any rgba with (200-255, 140-180, 60-120) combos = tan/gold/orange
+// ═══════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════
+// CATEGORY SHORT CODES - Clean text labels with symbols
 // ═══════════════════════════════════════════════════════════
 const CATEGORY_SHORT_CODES = {
   mutual_funds: 'MF',
   insurance: 'INS',
   sip: 'SIP',
   bonds: 'BOND',
-  pms_aif: 'PMS',
+  pms_aif: '◆ PMS',
   trading: 'TRADE',
   fixed_income: 'FD',
   ipo: 'IPO',
@@ -167,12 +173,20 @@ const HEADLINE_DETAILS = {
     howItBenefits: '• Higher risk-free returns for conservative investors\n• Senior citizens get extra 0.50% over regular rates\n• Good for emergency fund parking\n• Tax-saving FDs offer 7.25% with 80C benefit',
     expertTip: 'Ladder your FDs — don\'t put everything in one tenure. This balances liquidity with higher rates.',
   },
-  'default': {
-    whatHappened: 'This is a significant financial development that impacts investors and the broader market.',
-    whyItHappened: 'Multiple economic and market factors contributed to this development, reflecting ongoing trends in the financial ecosystem.',
-    howItBenefits: '• Stay informed about market movements\n• Make better investment decisions\n• Understand the broader economic picture\n• Align your portfolio with market conditions',
-    expertTip: 'Always consult with your financial advisor before making significant investment decisions based on news.',
-  },
+  'default': null, // No generic fallback - use headline data directly
+};
+
+// Generate dynamic details from headline data when AI content not available
+const generateDynamicDetails = (headline) => {
+  const category = CATEGORIES[headline.category];
+  const categoryLabel = category?.label || 'Market Update';
+  
+  return {
+    whatHappened: headline.headline,
+    whyItHappened: headline.whyItMatters || `This ${categoryLabel.toLowerCase()} development could influence related investments and market sentiment.`,
+    howItBenefits: `• Understand how ${categoryLabel.toLowerCase()} news affects your portfolio\n• Stay ahead with timely market insights\n• Make informed decisions based on current events\n• ${headline.dataPoint ? `Key data: ${headline.dataPoint}` : 'Track developments as they unfold'}`,
+    expertTip: `For personalized advice on ${categoryLabel.toLowerCase()} investments, consult with your BM Wealth advisor.`,
+  };
 };
 
 // Get detailed info for a headline - prioritize AI-generated content from database
@@ -201,11 +215,13 @@ const getHeadlineDetails = (headline) => {
   const headlineText = headline.headline.toLowerCase();
   
   for (const [key, details] of Object.entries(HEADLINE_DETAILS)) {
-    if (key !== 'default' && headlineText.includes(key.toLowerCase())) {
+    if (key !== 'default' && details && headlineText.includes(key.toLowerCase())) {
       return details;
     }
   }
-  return HEADLINE_DETAILS.default;
+  
+  // No generic fallback - generate dynamic content from headline data
+  return generateDynamicDetails(headline);
 };
 
 /**
@@ -464,9 +480,9 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange 
           color: rgba(120, 190, 255, 0.95); 
         }
         .li-cat-badge.cat-insurance { 
-          background: rgba(220, 150, 80, 0.12); 
-          border-color: rgba(220, 150, 80, 0.3); 
-          color: rgba(240, 180, 120, 0.95); 
+          background: rgba(80, 180, 200, 0.12); 
+          border-color: rgba(80, 180, 200, 0.3); 
+          color: rgba(120, 210, 230, 0.95); 
         }
         .li-cat-badge.cat-pms_aif { 
           background: rgba(180, 120, 220, 0.12); 

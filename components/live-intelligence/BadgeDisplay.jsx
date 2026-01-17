@@ -270,7 +270,7 @@ export function BadgeDisplay({ className = '' }) {
                     <div style={{ fontSize: '10px', color: 'rgba(200, 215, 240, 0.55)' }}>Badges</div>
                   </div>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(255, 160, 80, 1)' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(140, 200, 255, 1)' }}>
                       {stats.currentStreak}
                     </div>
                     <div style={{ fontSize: '10px', color: 'rgba(200, 215, 240, 0.55)' }}>Streak</div>
