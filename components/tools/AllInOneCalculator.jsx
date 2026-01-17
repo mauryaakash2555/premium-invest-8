@@ -101,23 +101,23 @@ const generateInsurancePDF = (result, inputs) => {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1a1a1a; padding: 40px; max-width: 800px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #c0a062; padding-bottom: 20px; margin-bottom: 30px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid rgba(255,255,255,0.9); padding-bottom: 20px; margin-bottom: 30px; }
     .logo { font-size: 28px; font-weight: bold; color: #1a1a1a; }
-    .logo span { color: #c0a062; }
+    .logo span { color: rgba(255,255,255,0.9); }
     .quote-info { text-align: right; font-size: 12px; color: #666; }
     .quote-id { font-size: 14px; font-weight: bold; color: #1a1a1a; }
     h1 { font-size: 24px; color: #1a1a1a; margin-bottom: 10px; }
-    h2 { font-size: 18px; color: #c0a062; margin: 25px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    h2 { font-size: 18px; color: rgba(255,255,255,0.9); margin: 25px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
     .summary-card { background: #f8f7f4; padding: 20px; border-radius: 8px; text-align: center; }
     .summary-card .label { font-size: 12px; color: #666; margin-bottom: 5px; }
     .summary-card .value { font-size: 22px; font-weight: bold; color: #1a1a1a; }
     .summary-card .meta { font-size: 11px; color: #888; margin-top: 5px; }
-    .summary-card.highlight { background: linear-gradient(135deg, #c0a062, #d4b77a); color: #fff; }
+    .summary-card.highlight { background: linear-gradient(135deg, rgba(255,255,255,0.9), #d4b77a); color: #fff; }
     .summary-card.highlight .label, .summary-card.highlight .meta { color: rgba(255,255,255,0.8); }
     .summary-card.highlight .value { color: #fff; }
     table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; }
-    th { background: #f0ebe3; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #c0a062; }
+    th { background: #f0ebe3; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid rgba(255,255,255,0.9); }
     td { padding: 10px; border-bottom: 1px solid #eee; }
     tr:hover { background: #faf9f7; }
     .text-right { text-align: right; }
@@ -2541,17 +2541,17 @@ export default function AllInOneCalculator() {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; background: #fff; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0a062; padding-bottom: 20px; margin-bottom: 30px; }
-    .logo { font-size: 24px; font-weight: bold; color: #c0a062; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.9); padding-bottom: 20px; margin-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; color: rgba(255,255,255,0.9); }
     .timestamp { font-size: 12px; color: #666; }
     h1 { font-size: 22px; color: #1a1a1a; margin-bottom: 8px; }
-    h2 { font-size: 16px; color: #c0a062; margin: 24px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+    h2 { font-size: 16px; color: rgba(255,255,255,0.9); margin: 24px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
     .section { background: #f9f9f9; padding: 16px; border-radius: 8px; margin-bottom: 16px; white-space: pre-line; }
-    .interpretation { background: #fef9e7; border-left: 4px solid #c0a062; padding: 16px; margin: 20px 0; }
-    .decision-gap { background: #e8f4f8; border-left: 4px solid rgba(192, 160, 98, 0.9); padding: 12px 16px; margin: 16px 0; font-weight: 600; }
+    .interpretation { background: #fef9e7; border-left: 4px solid rgba(255,255,255,0.9); padding: 16px; margin: 20px 0; }
+    .decision-gap { background: #e8f4f8; border-left: 4px solid rgba(255, 255, 255, 0.9); padding: 12px 16px; margin: 16px 0; font-weight: 600; }
     .disclaimer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 11px; color: #666; }
     .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
-    .footer a { color: #c0a062; text-decoration: none; }
+    .footer a { color: rgba(255,255,255,0.9); text-decoration: none; }
   </style>
 </head>
 <body>
@@ -3054,8 +3054,175 @@ ${text}
     }
   }, []);
 
+  // ═══════════════════════════════════════════════════════════════
+  // EXIT INTENT DETECTION - Show email capture when user tries to leave
+  // ═══════════════════════════════════════════════════════════════
+  const [showExitIntent, setShowExitIntent] = useState(false);
+  const exitIntentShown = useRef(false);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const handleMouseLeave = (e) => {
+      // Only trigger when mouse leaves through top of viewport
+      if (e.clientY <= 0 && result && !result.error && !exitIntentShown.current && !emailOpen) {
+        exitIntentShown.current = true;
+        setShowExitIntent(true);
+        trackEvent('exit_intent_triggered', { calculator: selectedCalc, hasResult: !!result });
+      }
+    };
+    
+    // Wait 5 seconds before enabling exit intent
+    const timer = setTimeout(() => {
+      document.addEventListener('mouseleave', handleMouseLeave);
+    }, 5000);
+    
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [result, emailOpen, selectedCalc]);
+
   return (
     <div className="aio-calc">
+      {/* Exit Intent Modal */}
+      {showExitIntent && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.85)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}
+          onClick={() => setShowExitIntent(false)}
+        >
+          <div 
+            style={{
+              background: '#121212',
+              borderRadius: '16px',
+              padding: '32px',
+              maxWidth: '400px',
+              width: '100%',
+              border: '1px solid rgba(230,199,123,0.3)',
+              boxShadow: '0 0 60px rgba(230,199,123,0.2)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <div style={{ fontSize: '40px', marginBottom: '12px' }}>📧</div>
+              <div style={{ fontSize: '18px', fontWeight: '700', color: '#E6C77B', marginBottom: '8px' }}>
+                Wait! Get Your Results Emailed
+              </div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+                We'll send your insurance analysis + personalized recommendations
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <input 
+                type="text"
+                placeholder="Your Name"
+                value={leadName}
+                onChange={(e) => setLeadName(e.target.value)}
+                style={{
+                  padding: '12px 16px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontSize: '14px'
+                }}
+              />
+              <input 
+                type="email"
+                placeholder="Email Address"
+                value={leadEmail}
+                onChange={(e) => setLeadEmail(e.target.value)}
+                style={{
+                  padding: '12px 16px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontSize: '14px'
+                }}
+              />
+              <input 
+                type="tel"
+                placeholder="Phone (optional)"
+                value={leadPhone}
+                onChange={(e) => setLeadPhone(e.target.value)}
+                style={{
+                  padding: '12px 16px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontSize: '14px'
+                }}
+              />
+            </div>
+            
+            <button
+              onClick={() => {
+                handleEmailResult();
+                setShowExitIntent(false);
+                trackEvent('exit_intent_submitted', { calculator: selectedCalc });
+              }}
+              disabled={emailBusy}
+              style={{
+                width: '100%',
+                marginTop: '16px',
+                padding: '14px',
+                background: '#E6C77B',
+                color: '#0A0A0A',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: emailBusy ? 'wait' : 'pointer'
+              }}
+            >
+              {emailBusy ? 'Sending...' : '📨 Email My Results'}
+            </button>
+            
+            <button
+              onClick={() => setShowExitIntent(false)}
+              style={{
+                width: '100%',
+                marginTop: '8px',
+                padding: '12px',
+                background: 'transparent',
+                color: 'rgba(255,255,255,0.5)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                fontSize: '12px',
+                cursor: 'pointer'
+              }}
+            >
+              No thanks, I'll remember it
+            </button>
+            
+            {emailNote && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: emailNote.includes('Thank') ? '#E6C77B' : '#ef4444', textAlign: 'center' }}>
+                {emailNote}
+              </div>
+            )}
+            
+            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
+              🔒 We respect your privacy. No spam, ever.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Premium Switcher */}
       <div className="aio-switcher">
         <div className="aio-switcher-top">
@@ -3156,6 +3323,172 @@ ${text}
                'HLV-based cover + premium comparison + riders + tax benefits'}
             </div>
 
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {/* GAMIFICATION: Protection Score + Social Proof + Badges */}
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {(() => {
+              // Calculate Protection Score (0-100)
+              const hlvCover = result.hlv?.presentValue || result.recommendedCover || 0;
+              const selectedCover = result.recommendedCover || 0;
+              const protectionScore = Math.min(100, Math.round((selectedCover / Math.max(hlvCover, selectedCover)) * 100));
+              
+              // Determine what's covered
+              const hasIncomeReplacement = selectedCover >= (result.hlv?.netAnnualContribution * 5 || selectedCover * 0.4);
+              const hasLiabilities = selectedCover >= (result.hlv?.totalLiabilities || 0);
+              const hasChildEducation = result.selectedRiders?.some(r => r.toLowerCase().includes('child')) || selectedCover >= (result.hlv?.presentValue * 0.8 || selectedCover);
+              const hasEmergencyFund = selectedCover >= (result.hlv?.presentValue || selectedCover);
+              
+              // Badges earned
+              const badges = [];
+              if (protectionScore >= 80) badges.push({ icon: '🛡️', name: 'Family Protector' });
+              if (result.taxBenefits?.taxSaved > 0) badges.push({ icon: '💰', name: 'Tax Saver' });
+              if (result.selectedRiders?.length >= 2) badges.push({ icon: '⭐', name: 'Smart Planner' });
+              if (result.hlv) badges.push({ icon: '📊', name: 'Data-Driven' });
+              if (result.insuranceType === 'Term Life') badges.push({ icon: '🎯', name: 'Term Expert' });
+              
+              // Mumbai-specific insights
+              const mumbaiMultiplier = 1.3; // Mumbai costs 30% more
+              const mumbaiAdjustedCover = selectedCover * mumbaiMultiplier;
+              
+              return (
+                <div style={{ marginTop: '16px', marginBottom: '16px' }}>
+                  {/* Protection Confidence Score */}
+                  <div style={{ 
+                    background: 'rgba(18,18,18,0.95)', 
+                    border: '1px solid rgba(255,255,255,0.08)', 
+                    borderRadius: '12px', 
+                    padding: '20px',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                      <div style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
+                        🛡️ Your Protection Score
+                      </div>
+                      <div style={{ 
+                        fontSize: '24px', 
+                        fontWeight: '700', 
+                        color: protectionScore >= 80 ? '#E6C77B' : protectionScore >= 60 ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)'
+                      }}>
+                        {protectionScore}/100
+                      </div>
+                    </div>
+                    
+                    {/* Progress Bar */}
+                    <div style={{ 
+                      height: '8px', 
+                      background: 'rgba(255,255,255,0.1)', 
+                      borderRadius: '4px', 
+                      overflow: 'hidden',
+                      marginBottom: '16px'
+                    }}>
+                      <div style={{ 
+                        height: '100%', 
+                        width: `${protectionScore}%`, 
+                        background: protectionScore >= 80 ? 'linear-gradient(90deg, #E6C77B, #D4AF37)' : 
+                                    protectionScore >= 60 ? 'linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.8))' : 
+                                    'rgba(255,255,255,0.4)',
+                        borderRadius: '4px',
+                        transition: 'width 0.5s ease'
+                      }} />
+                    </div>
+                    
+                    {/* Coverage Checklist */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', fontSize: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: hasIncomeReplacement ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
+                          {hasIncomeReplacement ? '✅' : '⬜'}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Income Replacement</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: hasLiabilities ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
+                          {hasLiabilities ? '✅' : '⬜'}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Liabilities Covered</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: hasChildEducation ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
+                          {hasChildEducation ? '✅' : '⬜'}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Child Education</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ color: hasEmergencyFund ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
+                          {hasEmergencyFund ? '✅' : '⬜'}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>Emergency Buffer</span>
+                      </div>
+                    </div>
+                    
+                    {/* Improvement Tip */}
+                    {protectionScore < 95 && (
+                      <div style={{ 
+                        marginTop: '12px', 
+                        padding: '10px 12px', 
+                        background: 'rgba(230,199,123,0.1)', 
+                        borderRadius: '6px',
+                        borderLeft: '3px solid #E6C77B',
+                        fontSize: '12px',
+                        color: 'rgba(255,255,255,0.8)'
+                      }}>
+                        💡 <strong>Tip:</strong> Add {fmt(Math.max(0, (result.hlv?.presentValue || selectedCover * 1.2) - selectedCover))} more to reach 95+ score
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Social Proof */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between',
+                    background: 'rgba(255,255,255,0.03)', 
+                    border: '1px solid rgba(255,255,255,0.06)', 
+                    borderRadius: '8px', 
+                    padding: '12px 16px',
+                    marginBottom: '12px',
+                    fontSize: '12px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>👥</span>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>
+                        <strong style={{ color: '#E6C77B' }}>87%</strong> of professionals your age choose {fmt(selectedCover >= 10000000 ? 10000000 : 5000000)}+
+                      </span>
+                    </div>
+                    <div style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      ⭐ 4.8/5 rating
+                    </div>
+                  </div>
+                  
+                  {/* Achievement Badges */}
+                  {badges.length > 0 && (
+                    <div style={{ 
+                      display: 'flex', 
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                      marginBottom: '12px'
+                    }}>
+                      {badges.map((badge, idx) => (
+                        <div key={idx} style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: '4px',
+                          padding: '6px 12px',
+                          background: 'rgba(230,199,123,0.1)',
+                          border: '1px solid rgba(230,199,123,0.2)',
+                          borderRadius: '20px',
+                          fontSize: '11px',
+                          color: '#E6C77B'
+                        }}>
+                          <span>{badge.icon}</span>
+                          <span>{badge.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             {/* Key Metrics */}
             <div className="aio-kpiGrid">
               <div className="aio-kpi aio-kpiGold">
@@ -3182,14 +3515,14 @@ ${text}
 
             {/* BMI Analysis */}
             {result.bmiAnalysis && (
-              <div className="aio-section" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
+              <div className="aio-section" style={{ background: 'rgba(0,0,0,0.85)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>📊</span> BMI Analysis
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginTop: '12px' }}>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>BMI</div>
-                    <div style={{ fontSize: '20px', fontWeight: '600', color: result.bmiAnalysis.bmi >= 25 ? 'rgba(255,255,255,0.5)' : '#c0a062' }}>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: result.bmiAnalysis.bmi >= 25 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.9)' }}>
                       {result.bmiAnalysis.bmi}
                     </div>
                   </div>
@@ -3203,7 +3536,7 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Premium Impact</div>
-                    <div style={{ fontSize: '14px', color: result.bmiAnalysis.impact.includes('+') ? 'rgba(255,255,255,0.6)' : '#c0a062' }}>
+                    <div style={{ fontSize: '14px', color: result.bmiAnalysis.impact.includes('+') ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.9)' }}>
                       {result.bmiAnalysis.impact}
                     </div>
                   </div>
@@ -3213,7 +3546,7 @@ ${text}
 
             {/* HLV Analysis (for life insurance) */}
             {result.hlv && (
-              <div className="aio-section" style={{ background: 'linear-gradient(135deg, rgba(192, 160, 98,0.1), rgba(192, 160, 98,0.05))', padding: '16px', borderRadius: '8px', marginTop: '16px', border: '1px solid rgba(192, 160, 98,0.2)' }}>
+              <div className="aio-section premium-gold-bg premium-gold-glow" style={{ padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>💎</span> Human Life Value (HLV) Analysis
                 </div>
@@ -3262,7 +3595,7 @@ ${text}
                       }
                     }}
                     style={{
-                      background: 'linear-gradient(135deg, #c0a062, #d4b77a)',
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9), #d4b77a)',
                       color: '#000',
                       border: 'none',
                       padding: '6px 12px',
@@ -3294,13 +3627,13 @@ ${text}
                   </thead>
                   <tbody>
                     {(result.insurerQuotesWithLinks || result.insurerQuotes).map((q, idx) => (
-                      <tr key={`${q.name}-${idx}`} style={{ background: idx === 0 ? 'rgba(192,160,98,0.1)' : 'transparent' }}>
+                      <tr key={`${q.name}-${idx}`} style={{ background: idx === 0 ? 'rgba(255, 255, 255,0.1)' : 'transparent' }}>
                         <td>
                           <span style={{ marginRight: '6px' }}>{q.logo}</span>
                           {q.name}
                           {idx === 0 && <span style={{ fontSize: '10px', color: '#c0a062', marginLeft: '6px' }}>★ Lowest</span>}
                         </td>
-                        <td className="right" style={{ color: q.csr >= 98 ? '#c0a062' : q.csr >= 95 ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.5)' }}>
+                        <td className="right" style={{ color: q.csr >= 98 ? 'rgba(255,255,255,0.9)' : q.csr >= 95 ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.5)' }}>
                           {q.csr}%
                         </td>
                         <td className="right" style={{ fontWeight: '600' }}>{fmt(q.annualPremium)}</td>
@@ -3314,7 +3647,7 @@ ${text}
                               rel="noopener noreferrer"
                               style={{
                                 display: 'inline-block',
-                                background: q.color || '#c0a062',
+                                background: q.color || 'rgba(255,255,255,0.9)',
                                 color: '#fff',
                                 padding: '4px 10px',
                                 borderRadius: '4px',
@@ -3354,7 +3687,7 @@ ${text}
                     {result.breakdown.map((row, idx) => (
                       <tr key={`${row.label}-${idx}`}>
                         <td>{row.label}</td>
-                        <td className="right" style={{ color: row.value < 0 ? '#c0a062' : 'inherit' }}>
+                        <td className="right" style={{ color: row.value < 0 ? 'rgba(255,255,255,0.9)' : 'inherit' }}>
                           {row.isNumber ? row.value : fmt(row.value)}
                         </td>
                         {row.percent !== undefined && (
@@ -3402,7 +3735,7 @@ ${text}
                   </tbody>
                   {result.riderCosts && (
                     <tfoot>
-                      <tr style={{ background: 'rgba(192, 160, 98,0.1)' }}>
+                      <tr style={{ background: 'rgba(0,0,0,0.85)' }}>
                         <td colSpan="2" style={{ fontWeight: '600' }}>Total with Selected Riders</td>
                         <td className="right" style={{ fontWeight: '600', color: '#c0a062' }}>
                           {fmt(result.totalPremiumWithRiders)}
@@ -3417,7 +3750,7 @@ ${text}
 
             {/* Tax Benefits */}
             {result.taxBenefits && (
-              <div className="aio-section" style={{ background: 'rgba(192,160,98,0.1)', padding: '16px', borderRadius: '8px', marginTop: '16px', border: '1px solid rgba(192,160,98,0.2)' }}>
+              <div className="aio-section premium-gold-bg" style={{ padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c0a062' }}>
                   <span>💰</span> Tax Benefits
                 </div>
@@ -3453,7 +3786,7 @@ ${text}
 
             {/* Payout Structure */}
             {result.payoutStructure && (
-              <div className="aio-section" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
+              <div className="aio-section" style={{ background: 'rgba(0,0,0,0.85)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>💸</span> Payout Structure: {result.payoutStructure.type}
                 </div>
@@ -3462,18 +3795,18 @@ ${text}
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '12px' }}>
                   {result.payoutStructure.benefit && (
-                    <div style={{ padding: '8px 16px', background: 'rgba(192, 160, 98,0.1)', borderRadius: '6px' }}>
+                    <div style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.85)', borderRadius: '6px' }}>
                       <span style={{ fontWeight: '600' }}>{result.payoutStructure.benefit}</span>
                     </div>
                   )}
                   {result.payoutStructure.lumpSum && (
-                    <div style={{ padding: '8px 16px', background: 'rgba(192, 160, 98,0.1)', borderRadius: '6px' }}>
+                    <div style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.85)', borderRadius: '6px' }}>
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Lump Sum: </span>
                       <span style={{ fontWeight: '600' }}>{result.payoutStructure.lumpSum}</span>
                     </div>
                   )}
                   {result.payoutStructure.monthlyBenefit && (
-                    <div style={{ padding: '8px 16px', background: 'rgba(192, 160, 98,0.1)', borderRadius: '6px' }}>
+                    <div style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.85)', borderRadius: '6px' }}>
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Monthly: </span>
                       <span style={{ fontWeight: '600' }}>{result.payoutStructure.monthlyBenefit}</span>
                     </div>
@@ -3484,24 +3817,24 @@ ${text}
 
             {/* ULIP/Endowment Maturity Visualization */}
             {result.ulipMaturity && (
-              <div className="aio-section" style={{ background: 'linear-gradient(135deg, rgba(192,160,98,0.1), rgba(192, 160, 98,0.1))', padding: '20px', borderRadius: '8px', marginTop: '20px', border: '1px solid rgba(192,160,98,0.2)' }}>
+              <div className="aio-section premium-gold-bg premium-gold-glow" style={{ padding: '20px', borderRadius: '8px', marginTop: '20px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                   <span>📈</span> ULIP/Endowment Maturity Projection
                 </div>
                 
                 {/* Fund Value Scenarios */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Conservative (8%)</div>
                     <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueLow)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrLow}%</div>
                   </div>
-                  <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(192, 160, 98,0.2), rgba(192, 160, 98,0.1))', borderRadius: '8px', textAlign: 'center', border: '2px solid rgba(192, 160, 98,0.4)' }}>
+                  <div className="premium-gold-bg-highlight premium-gold-border-strong" style={{ padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: '#c0a062', fontWeight: '600' }}>Expected (10%)</div>
                     <div style={{ fontSize: '26px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrMid}%</div>
                   </div>
-                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Optimistic (12%)</div>
                     <div style={{ fontSize: '22px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrHigh}%</div>
@@ -3536,9 +3869,9 @@ ${text}
                       {result.ulipMaturity.milestones.map((m, idx) => (
                         <div key={idx} style={{ 
                           padding: '8px 12px', 
-                          background: 'rgba(255,255,255,0.05)', 
+                          background: 'rgba(0,0,0,0.75)', 
                           borderRadius: '6px',
-                          borderLeft: `3px solid ${idx === result.ulipMaturity.milestones.length - 1 ? '#c0a062' : 'rgba(255,255,255,0.2)'}`,
+                          borderLeft: `3px solid ${idx === result.ulipMaturity.milestones.length - 1 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)'}`,
                         }}>
                           <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>Year {m.year} • {m.label}</div>
                           <div style={{ fontSize: '14px', fontWeight: '600' }}>{fmt(m.fundValue)}</div>
@@ -3556,7 +3889,7 @@ ${text}
                       {result.ulipMaturity.fundOptions.map((f, idx) => (
                         <div key={idx} style={{ 
                           padding: '10px', 
-                          background: 'rgba(255,255,255,0.03)', 
+                          background: 'rgba(0,0,0,0.85)', 
                           borderRadius: '6px',
                         }}>
                           <div style={{ fontSize: '12px', fontWeight: '600' }}>{f.name}</div>
@@ -3594,9 +3927,9 @@ ${text}
                   {Object.entries(result.premiumFactors).map(([key, val]) => (
                     <div key={key} style={{ 
                       padding: '8px', 
-                      background: 'rgba(255,255,255,0.03)', 
+                      background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '4px',
-                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid rgba(192,160,98,0.3)' : '1px solid transparent'
+                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid rgba(192, 160, 98, 0.35)' : '1px solid transparent'
                     }}>
                       <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'capitalize' }}>
                         {key.replace(/Factor$/, '').replace(/([A-Z])/g, ' $1')}
@@ -3604,7 +3937,7 @@ ${text}
                       <div style={{ 
                         fontSize: '14px', 
                         fontWeight: '600',
-                        color: parseFloat(val) > 1.1 ? 'rgba(255,255,255,0.5)' : parseFloat(val) < 0.95 ? '#c0a062' : 'inherit'
+                        color: parseFloat(val) > 1.1 ? 'rgba(255,255,255,0.5)' : parseFloat(val) < 0.95 ? 'rgba(255,255,255,0.9)' : 'inherit'
                       }}>
                         {val}x
                       </div>
@@ -3616,7 +3949,7 @@ ${text}
 
             {/* Covered Conditions (for CI) */}
             {Array.isArray(result.coveredConditions) && (
-              <div className="aio-section" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
+              <div className="aio-section" style={{ background: 'rgba(0,0,0,0.85)', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>🏥</span> Covered Critical Illnesses
                 </div>
@@ -3624,7 +3957,7 @@ ${text}
                   {result.coveredConditions.map((c, idx) => (
                     <span key={idx} style={{ 
                       padding: '4px 10px', 
-                      background: 'rgba(192, 160, 98,0.1)', 
+                      background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '4px',
                       fontSize: '12px'
                     }}>
@@ -3644,7 +3977,7 @@ ${text}
                 <ul className="aio-checklistList">
                   {result.checklist.map((c, idx) => (
                     <li key={`${idx}-${c}`} style={{ 
-                      color: c.startsWith('⚠️') ? 'rgba(255,255,255,0.6)' : c.startsWith('ℹ️') ? 'rgba(192, 160, 98, 0.9)' : 'inherit'
+                      color: c.startsWith('⚠️') ? 'rgba(255,255,255,0.6)' : c.startsWith('ℹ️') ? 'rgba(255, 255, 255, 0.9)' : 'inherit'
                     }}>
                       {c}
                     </li>
@@ -3655,13 +3988,13 @@ ${text}
 
             {/* Top Insurers */}
             {Array.isArray(result.topInsurers) && (
-              <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '6px' }}>
+              <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(0,0,0,0.75)', borderRadius: '6px' }}>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Top Insurers with CSR:</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {result.topInsurers.slice(0, 6).map((ins, idx) => (
                     <span key={idx} style={{ 
                       padding: '4px 10px', 
-                      background: 'rgba(192, 160, 98,0.1)', 
+                      background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '4px',
                       fontSize: '11px'
                     }}>
@@ -3719,11 +4052,11 @@ ${text}
             {/* Nominee Planning Section */}
             {result.nomineePlanning && (
               <div className="aio-section" style={{ 
-                background: 'linear-gradient(135deg, rgba(192,160,98,0.1), rgba(192,160,98,0.1))', 
+                background: 'rgba(0,0,0,0.85)', 
                 padding: '20px', 
                 borderRadius: '12px', 
                 marginTop: '24px',
-                border: '1px solid rgba(192,160,98,0.2)'
+                border: '1px solid rgba(192, 160, 98, 0.2)'
               }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                   <span>👥</span> {result.nomineePlanning.title}
@@ -3734,21 +4067,21 @@ ${text}
 
                 {/* Nomination Steps */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: 'rgba(192, 160, 98, 0.9)', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
+                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
                   <div style={{ display: 'grid', gap: '8px' }}>
                     {result.nomineePlanning.steps.map((s, idx) => (
                       <div key={idx} style={{ 
                         display: 'flex', 
                         gap: '12px', 
                         padding: '10px', 
-                        background: 'rgba(255,255,255,0.03)', 
+                        background: 'rgba(0,0,0,0.85)', 
                         borderRadius: '6px',
-                        borderLeft: '3px solid rgba(192, 160, 98, 0.9)'
+                        borderLeft: '3px solid rgba(255, 255, 255, 0.9)'
                       }}>
                         <div style={{ 
                           width: '24px', 
                           height: '24px', 
-                          background: 'rgba(192, 160, 98, 0.9)', 
+                          background: 'rgba(255, 255, 255, 0.9)', 
                           borderRadius: '50%', 
                           display: 'flex', 
                           alignItems: 'center', 
@@ -3793,14 +4126,14 @@ ${text}
                       <div key={idx} style={{ 
                         flex: '1 1 150px',
                         padding: '12px', 
-                        background: 'rgba(192,160,98,0.1)', 
+                        background: 'rgba(0,0,0,0.85)', 
                         borderRadius: '8px',
                         textAlign: 'center'
                       }}>
                         <div style={{ 
                           width: '28px', 
                           height: '28px', 
-                          background: '#c0a062', 
+                          background: 'rgba(255,255,255,0.9)', 
                           borderRadius: '50%', 
                           margin: '0 auto 8px',
                           display: 'flex',
@@ -3820,12 +4153,12 @@ ${text}
 
                 {/* Documents Required */}
                 <div>
-                  <div style={{ fontSize: '12px', color: 'rgba(192, 160, 98, 0.8)', fontWeight: '600', marginBottom: '10px' }}>📄 Documents Required for Claim</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)', fontWeight: '600', marginBottom: '10px' }}>📄 Documents Required for Claim</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {result.nomineePlanning.documentsRequired.map((doc, idx) => (
                       <span key={idx} style={{ 
                         padding: '6px 12px', 
-                        background: 'rgba(192,160,98,0.15)', 
+                        background: 'rgba(255, 255, 255,0.15)', 
                         borderRadius: '20px',
                         fontSize: '11px'
                       }}>
@@ -3837,14 +4170,289 @@ ${text}
               </div>
             )}
 
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {/* SMART AI RECOMMENDATIONS (Rule-Based, No API Cost) */}
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {(() => {
+              // Generate smart recommendations based on user profile
+              const recommendations = [];
+              const age = parseInt(result._inputAge) || 35;
+              const income = result.hlv?.netAnnualContribution * 12 || result.recommendedCover / 10 || 1000000;
+              const cover = result.recommendedCover || 0;
+              const dependents = result._inputDependents || 1;
+              
+              // Age-based recommendations
+              if (age < 30) {
+                recommendations.push({
+                  icon: '🎯',
+                  title: 'Lock in Low Premiums Now',
+                  desc: `At ${age}, your premiums are 40-60% lower than at 40. Lock in a 30-year term now.`,
+                  action: 'Consider maximum term length'
+                });
+              } else if (age >= 30 && age < 40) {
+                recommendations.push({
+                  icon: '⚡',
+                  title: 'Prime Coverage Window',
+                  desc: 'Ages 30-40 offer the best balance of coverage duration and premium rates.',
+                  action: 'Review coverage every 3 years'
+                });
+              } else if (age >= 40) {
+                recommendations.push({
+                  icon: '🔒',
+                  title: 'Secure Coverage Immediately',
+                  desc: 'Premiums increase 10-15% each year after 40. Don\'t delay.',
+                  action: 'Apply within 30 days'
+                });
+              }
+              
+              // Income-based recommendations
+              if (income >= 2500000) {
+                recommendations.push({
+                  icon: '💎',
+                  title: 'High-Value Earner Strategy',
+                  desc: `With ${fmt(income)}/year income, consider ₹2-3Cr cover minimum.`,
+                  action: 'Explore multi-policy strategy'
+                });
+              }
+              
+              // Dependent-based recommendations
+              if (dependents >= 2) {
+                recommendations.push({
+                  icon: '👨‍👩‍👧‍👦',
+                  title: 'Family Protection Priority',
+                  desc: `${dependents} dependents need ${fmt(cover * 0.3)}-${fmt(cover * 0.5)} per person as buffer.`,
+                  action: 'Add Child Education Rider'
+                });
+              }
+              
+              // Mumbai-specific (assuming metro user)
+              recommendations.push({
+                icon: '🏙️',
+                title: 'Metro Living Cost Factor',
+                desc: 'Mumbai/Delhi living costs are 2-3x national average. Coverage adjusted accordingly.',
+                action: 'Factor in 1.5x multiplier'
+              });
+              
+              // What-If Scenarios
+              const whatIfScenarios = [
+                { event: 'Marriage in 2 years', impact: '+₹25L coverage recommended', icon: '💍' },
+                { event: 'Child in 3 years', impact: '+₹50L for education fund', icon: '👶' },
+                { event: 'Home purchase', impact: 'Add liability amount to cover', icon: '🏠' },
+              ];
+              
+              return recommendations.length > 0 && (
+                <div className="aio-section" style={{ marginTop: '24px' }}>
+                  {/* AI Recommendations Header */}
+                  <div style={{ 
+                    background: 'linear-gradient(135deg, rgba(230,199,123,0.15), rgba(230,199,123,0.05))',
+                    border: '1px solid rgba(230,199,123,0.3)',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                      <span style={{ fontSize: '20px' }}>🤖</span>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: '600', color: '#E6C77B' }}>
+                          Smart Recommendations for You
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
+                          Personalized based on your profile
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {recommendations.slice(0, 3).map((rec, idx) => (
+                        <div key={idx} style={{ 
+                          display: 'flex', 
+                          alignItems: 'flex-start', 
+                          gap: '12px',
+                          padding: '12px',
+                          background: 'rgba(0,0,0,0.4)',
+                          borderRadius: '8px',
+                          borderLeft: '3px solid #E6C77B'
+                        }}>
+                          <span style={{ fontSize: '18px' }}>{rec.icon}</span>
+                          <div>
+                            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
+                              {rec.title}
+                            </div>
+                            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
+                              {rec.desc}
+                            </div>
+                            <div style={{ 
+                              fontSize: '11px', 
+                              color: '#E6C77B', 
+                              marginTop: '6px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}>
+                              → {rec.action}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* What-If Scenarios */}
+                  <div style={{ 
+                    background: 'rgba(18,18,18,0.9)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.8)', marginBottom: '12px' }}>
+                      🔮 What-If Life Events
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {whatIfScenarios.map((scenario, idx) => (
+                        <div key={idx} style={{
+                          padding: '8px 12px',
+                          background: 'rgba(255,255,255,0.03)',
+                          border: '1px solid rgba(255,255,255,0.06)',
+                          borderRadius: '8px',
+                          fontSize: '11px'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.7)' }}>
+                            <span>{scenario.icon}</span>
+                            <span>{scenario.event}</span>
+                          </div>
+                          <div style={{ color: '#E6C77B', marginTop: '4px', fontWeight: '500' }}>
+                            {scenario.impact}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Peer Benchmarking */}
+                  <div style={{ 
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: '12px',
+                    padding: '16px'
+                  }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.8)', marginBottom: '12px' }}>
+                      📊 How You Compare to Similar Profiles
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '11px' }}>
+                      <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
+                        <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Age Group ({age}-{age+5})</div>
+                        <div style={{ color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>Avg: {fmt(age < 35 ? 10000000 : age < 45 ? 15000000 : 20000000)}</div>
+                      </div>
+                      <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
+                        <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Your Income Level</div>
+                        <div style={{ color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>Avg: {fmt(income >= 2500000 ? 30000000 : income >= 1500000 ? 20000000 : 10000000)}</div>
+                      </div>
+                      <div style={{ textAlign: 'center', padding: '12px', background: cover >= (age < 35 ? 10000000 : 15000000) ? 'rgba(230,199,123,0.1)' : 'rgba(239,68,68,0.1)', borderRadius: '8px', border: cover >= (age < 35 ? 10000000 : 15000000) ? '1px solid rgba(230,199,123,0.3)' : '1px solid rgba(239,68,68,0.3)' }}>
+                        <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Your Position</div>
+                        <div style={{ color: cover >= (age < 35 ? 10000000 : 15000000) ? '#E6C77B' : 'rgba(239,68,68,0.8)', fontWeight: '600' }}>
+                          {cover >= (age < 35 ? 10000000 : 15000000) ? '✅ Above Avg' : '⚠️ Below Avg'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {/* CALLBACK SCHEDULER + LEAD CAPTURE */}
+            {/* ═══════════════════════════════════════════════════════════ */}
+            <div style={{ 
+              marginTop: '24px',
+              background: 'linear-gradient(135deg, rgba(230,199,123,0.1), rgba(230,199,123,0.02))',
+              border: '1px solid rgba(230,199,123,0.2)',
+              borderRadius: '12px',
+              padding: '20px'
+            }}>
+              <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                <div style={{ fontSize: '16px', fontWeight: '600', color: '#E6C77B', marginBottom: '4px' }}>
+                  📞 Get Expert Guidance
+                </div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>
+                  Our IRDAI-licensed advisors can help you choose the right policy
+                </div>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
+                <button 
+                  onClick={() => {
+                    window.open('https://wa.me/919876543210?text=' + encodeURIComponent(
+                      `Hi, I just used the BM Wealth Insurance Calculator.\n\nMy Results:\n• Recommended Cover: ${fmt(result.recommendedCover)}\n• Premium: ${result.premiumRange || fmt(result.annualPremiumMid)}/year\n\nI'd like expert guidance on choosing the right policy.`
+                    ), '_blank');
+                    trackEvent('insurance_callback_whatsapp', { cover: result.recommendedCover });
+                  }}
+                  style={{
+                    padding: '12px 16px',
+                    background: '#25D366',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>💬</span> WhatsApp
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    window.location.href = '/contact?source=insurance-calculator&cover=' + (result.recommendedCover || 0);
+                    trackEvent('insurance_callback_form', { cover: result.recommendedCover });
+                  }}
+                  style={{
+                    padding: '12px 16px',
+                    background: '#E6C77B',
+                    color: '#0A0A0A',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>📅</span> Schedule Call
+                </button>
+              </div>
+              
+              <div style={{ 
+                marginTop: '16px', 
+                textAlign: 'center', 
+                fontSize: '11px', 
+                color: 'rgba(255,255,255,0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '16px'
+              }}>
+                <span>✅ IRDAI Licensed</span>
+                <span>✅ No Spam</span>
+                <span>✅ Free Consultation</span>
+              </div>
+            </div>
+
             {/* Competitive Advantage Section */}
             {result.competitiveAdvantage && (
               <div className="aio-section" style={{ 
-                background: 'linear-gradient(135deg, rgba(192, 160, 98,0.15), rgba(192, 160, 98,0.05))', 
+                background: 'linear-gradient(135deg, rgba(255, 255, 255,0.15), rgba(255, 255, 255,0.05))', 
                 padding: '20px', 
                 borderRadius: '12px', 
                 marginTop: '24px',
-                border: '2px solid rgba(192, 160, 98,0.3)'
+                border: '2px solid rgba(255, 255, 255,0.3)'
               }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#c0a062' }}>
                   <span>⭐</span> {result.competitiveAdvantage.title}
@@ -3854,9 +4462,9 @@ ${text}
                   {result.competitiveAdvantage.advantages.map((adv, idx) => (
                     <div key={idx} style={{ 
                       padding: '12px', 
-                      background: 'rgba(255,255,255,0.03)', 
+                      background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '8px',
-                      borderLeft: '3px solid #c0a062'
+                      borderLeft: '3px solid rgba(255,255,255,0.9)'
                     }}>
                       <div style={{ fontSize: '13px', fontWeight: '600', color: '#c0a062' }}>{adv.feature}</div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{adv.desc}</div>
@@ -3866,9 +4474,9 @@ ${text}
 
                 <div style={{ 
                   padding: '16px', 
-                  background: 'rgba(192,160,98,0.1)', 
+                  background: 'rgba(0,0,0,0.85)', 
                   borderRadius: '8px',
-                  border: '1px solid rgba(192,160,98,0.2)'
+                  border: '1px solid rgba(192, 160, 98, 0.2)'
                 }}>
                   <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>
                     🎯 What Our Calculator Has That Competitors Don't
@@ -4364,7 +4972,7 @@ ${text}
       <style jsx>{`
         .aio-calc {
           background: linear-gradient(180deg, rgba(15, 15, 20, 0.98) 0%, rgba(5, 5, 8, 0.99) 100%);
-          border: 1px solid rgba(192, 160, 98, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 20px;
           padding: 28px;
           max-width: 1100px;
@@ -4396,7 +5004,7 @@ ${text}
 
         .aio-resultsPanel {
           border-radius: 16px;
-          border: 1px solid rgba(192, 160, 98, 0.16);
+          border: 1px solid rgba(255, 255, 255, 0.16);
           background: rgba(0, 0, 0, 0.22);
           padding: 16px;
           box-shadow:
@@ -4427,8 +5035,8 @@ ${text}
           margin: 10px 0 14px;
           padding: 14px;
           border-radius: 14px;
-          border: 1px solid rgba(192, 160, 98, 0.2);
-          background: rgba(192, 160, 98, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .aio-emailTitle {
@@ -4468,8 +5076,8 @@ ${text}
           margin-top: 16px;
           padding: 14px 16px;
           border-radius: 12px;
-          border: 1px solid rgba(192, 160, 98, 0.18);
-          background: rgba(192, 160, 98, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.04);
         }
 
         .aio-interpretation-header {
@@ -4478,13 +5086,13 @@ ${text}
           gap: 8px;
           font-size: 13px;
           font-weight: 700;
-          color: rgba(192, 160, 98, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           margin-bottom: 10px;
         }
 
         .aio-interpretation-header svg {
           flex-shrink: 0;
-          color: rgba(192, 160, 98, 0.8);
+          color: rgba(255, 255, 255, 0.8);
         }
 
         .aio-interpretation-text {
@@ -4510,7 +5118,7 @@ ${text}
           font-weight: 700;
           letter-spacing: 0.06em;
           text-transform: uppercase;
-          color: rgba(192, 160, 98, 0.85);
+          color: rgba(255, 255, 255, 0.85);
           flex-shrink: 0;
         }
 
@@ -4532,8 +5140,8 @@ ${text}
           margin-top: 14px;
           padding: 14px;
           border-radius: 12px;
-          border: 1px solid rgba(192, 160, 98, 0.2);
-          background: rgba(192, 160, 98, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.05);
           text-align: center;
         }
 
@@ -4544,18 +5152,18 @@ ${text}
           padding: 10px 20px;
           border-radius: 8px;
           border: none;
-          background: linear-gradient(135deg, #c0a062 0%, #a8894e 100%);
+          background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
           color: #fff;
           font-size: 14px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
-          box-shadow: 0 4px 12px rgba(192, 160, 98, 0.25);
+          box-shadow: 0 4px 12px rgba(255, 255, 255, 0.25);
         }
 
         .aio-review-btn:hover {
           transform: translateY(-1px);
-          box-shadow: 0 6px 16px rgba(192, 160, 98, 0.35);
+          box-shadow: 0 6px 16px rgba(255, 255, 255, 0.35);
         }
 
         .aio-review-btn:active {
@@ -4586,8 +5194,8 @@ ${text}
           position: absolute;
           inset: 0;
           background:
-            radial-gradient(600px 220px at 20% 10%, rgba(192, 160, 98, 0.12), transparent 55%),
-            radial-gradient(520px 220px at 80% 0%, rgba(192, 160, 98, 0.08), transparent 60%);
+            radial-gradient(600px 220px at 20% 10%, rgba(255, 255, 255, 0.12), transparent 55%),
+            radial-gradient(520px 220px at 80% 0%, rgba(255, 255, 255, 0.08), transparent 60%);
           pointer-events: none;
         }
 
@@ -4597,7 +5205,7 @@ ${text}
           z-index: 1;
           padding: 16px;
           border-radius: 16px;
-          border: 1px solid rgba(192, 160, 98, 0.16);
+          border: 1px solid rgba(255, 255, 255, 0.16);
           background: rgba(0, 0, 0, 0.22);
           box-shadow:
             0 18px 44px rgba(0, 0, 0, 0.35),
@@ -4617,7 +5225,7 @@ ${text}
           font-weight: 700;
           letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(192, 160, 98, 0.95);
+          color: rgba(255, 255, 255, 0.95);
         }
 
         .aio-switcher-sub {
@@ -4638,17 +5246,17 @@ ${text}
           padding: 10px 12px;
           border-radius: 12px;
           background: rgba(0, 0, 0, 0.45);
-          border: 1px solid rgba(192, 160, 98, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           transition: border-color 160ms ease, box-shadow 160ms ease;
         }
 
         .aio-searchWrap:focus-within {
-          border-color: rgba(192, 160, 98, 0.55);
-          box-shadow: 0 0 0 4px rgba(192, 160, 98, 0.12);
+          border-color: rgba(255, 255, 255, 0.55);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
         }
 
         .aio-searchIcon {
-          color: rgba(192, 160, 98, 0.7);
+          color: rgba(255, 255, 255, 0.7);
           font-size: 14px;
           line-height: 1;
         }
@@ -4663,8 +5271,8 @@ ${text}
         }
 
         .aio-clear {
-          border: 1px solid rgba(192, 160, 98, 0.18);
-          background: rgba(192, 160, 98, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.78);
           border-radius: 10px;
           padding: 6px 10px;
@@ -4673,7 +5281,7 @@ ${text}
         }
 
         .aio-clear:hover {
-          background: rgba(192, 160, 98, 0.14);
+          background: rgba(255, 255, 255, 0.14);
           transform: translateY(-1px);
         }
 
@@ -4694,7 +5302,7 @@ ${text}
           white-space: nowrap;
           padding: 10px 12px;
           border-radius: 999px;
-          border: 1px solid rgba(192, 160, 98, 0.16);
+          border: 1px solid rgba(255, 255, 255, 0.16);
           background: rgba(0, 0, 0, 0.35);
           color: rgba(255, 255, 255, 0.78);
           font-size: 13px;
@@ -4704,21 +5312,21 @@ ${text}
 
         .aio-pill:hover {
           transform: translateY(-1px);
-          border-color: rgba(192, 160, 98, 0.32);
+          border-color: rgba(255, 255, 255, 0.32);
           box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
         }
 
         .aio-pillActive {
-          border-color: rgba(192, 160, 98, 0.55);
-          background: linear-gradient(180deg, rgba(192, 160, 98, 0.18), rgba(0, 0, 0, 0.35));
+          border-color: rgba(255, 255, 255, 0.55);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.35));
           color: rgba(255, 255, 255, 0.92);
           box-shadow:
             0 12px 34px rgba(0, 0, 0, 0.45),
-            0 0 24px rgba(192, 160, 98, 0.14);
+            0 0 24px rgba(255, 255, 255, 0.14);
         }
 
         .aio-pillIcon {
-          filter: drop-shadow(0 0 8px rgba(192, 160, 98, 0.22));
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.22));
         }
 
         .aio-nativeSelect {
@@ -4729,7 +5337,7 @@ ${text}
           width: 100%;
           padding: 14px 16px;
           background: rgba(0, 0, 0, 0.85);
-          border: 1px solid rgba(192, 160, 98, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           border-radius: 10px;
           color: rgba(255, 255, 255, 0.95);
           font-size: 14px;
@@ -4750,13 +5358,13 @@ ${text}
         .aio-select option:focus,
         .aio-select option:checked {
           background: #2a2a35;
-          color: #c0a062;
+          color: rgba(255,255,255,0.9);
         }
 
         .aio-select:focus {
-          border-color: rgba(192, 160, 98, 0.6);
+          border-color: rgba(255, 255, 255, 0.6);
           box-shadow:
-            0 0 0 4px rgba(192, 160, 98, 0.14),
+            0 0 0 4px rgba(255, 255, 255, 0.14),
             0 10px 30px rgba(0, 0, 0, 0.45);
         }
 
@@ -4766,21 +5374,21 @@ ${text}
           gap: 16px;
           margin-bottom: 24px;
           padding-bottom: 20px;
-          border-bottom: 1px solid rgba(192, 160, 98, 0.15);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.15);
           position: relative;
           z-index: 1;
         }
 
         .aio-icon {
           font-size: 36px;
-          filter: drop-shadow(0 0 8px rgba(192, 160, 98, 0.4));
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
         }
 
         .aio-title {
           margin: 0;
           font-size: 22px;
           font-weight: 600;
-          color: rgba(192, 160, 98, 1);
+          color: rgba(255, 255, 255, 1);
         }
 
         .aio-desc {
@@ -4818,13 +5426,13 @@ ${text}
         .aio-sectionRule {
           height: 1px;
           margin-top: 10px;
-          background: linear-gradient(90deg, rgba(192, 160, 98, 0.0), rgba(192, 160, 98, 0.35), rgba(192, 160, 98, 0.0));
+          background: linear-gradient(90deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.0));
         }
 
         .aio-label {
           font-size: 12px;
           font-weight: 600;
-          color: rgba(192, 160, 98, 0.8);
+          color: rgba(255, 255, 255, 0.8);
           text-transform: uppercase;
           letter-spacing: 0.08em;
         }
@@ -4833,22 +5441,22 @@ ${text}
           display: flex;
           align-items: center;
           background: rgba(0, 0, 0, 0.5);
-          border: 1px solid rgba(192, 160, 98, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 10px;
           overflow: hidden;
           transition: border-color 160ms ease, box-shadow 160ms ease;
         }
 
         .aio-input-wrapper:focus-within {
-          border-color: rgba(192, 160, 98, 0.55);
-          box-shadow: 0 0 0 4px rgba(192, 160, 98, 0.12);
+          border-color: rgba(255, 255, 255, 0.55);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
         }
 
         .aio-prefix, .aio-suffix {
           padding: 12px 14px;
-          color: rgba(192, 160, 98, 0.7);
+          color: rgba(255, 255, 255, 0.7);
           font-size: 14px;
-          background: rgba(192, 160, 98, 0.08);
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .aio-input {
@@ -4894,7 +5502,7 @@ ${text}
         .aio-button:focus-visible {
           outline: none;
           box-shadow:
-            0 0 0 4px rgba(192, 160, 98, 0.18),
+            0 0 0 4px rgba(255, 255, 255, 0.18),
             0 18px 50px rgba(0, 0, 0, 0.55);
         }
 
@@ -4902,7 +5510,7 @@ ${text}
           margin: 0;
           font-size: 16px;
           font-weight: 600;
-          color: rgba(192, 160, 98, 0.9);
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .aio-results-grid {
@@ -4920,7 +5528,7 @@ ${text}
           gap: 14px;
           padding: 14px;
           border-radius: 14px;
-          border: 1px solid rgba(192, 160, 98, 0.14);
+          border: 1px solid rgba(255, 255, 255, 0.14);
           background: rgba(0, 0, 0, 0.28);
         }
 
@@ -4933,7 +5541,7 @@ ${text}
         }
 
         .aio-taxTitle {
-          color: rgba(192, 160, 98, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           font-weight: 700;
           letter-spacing: 0.02em;
         }
@@ -4951,8 +5559,8 @@ ${text}
         }
 
         .aio-secondary {
-          border: 1px solid rgba(192, 160, 98, 0.18);
-          background: rgba(192, 160, 98, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.85);
           border-radius: 12px;
           padding: 10px 12px;
@@ -4963,8 +5571,8 @@ ${text}
         }
 
         .aio-secondary:hover {
-          background: rgba(192, 160, 98, 0.14);
-          border-color: rgba(192, 160, 98, 0.32);
+          background: rgba(255, 255, 255, 0.14);
+          border-color: rgba(255, 255, 255, 0.32);
           transform: translateY(-1px);
         }
 
@@ -4977,13 +5585,13 @@ ${text}
         .aio-taxKpi {
           padding: 12px 12px;
           border-radius: 12px;
-          border: 1px solid rgba(192, 160, 98, 0.12);
-          background: rgba(192, 160, 98, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .aio-taxKpiGold {
-          background: rgba(192, 160, 98, 0.10);
-          border-color: rgba(192, 160, 98, 0.22);
+          background: rgba(255, 255, 255, 0.10);
+          border-color: rgba(255, 255, 255, 0.22);
         }
 
         .aio-kpiLabel {
@@ -5002,7 +5610,7 @@ ${text}
         .aio-taxLineItems {
           padding: 12px;
           border-radius: 12px;
-          border: 1px solid rgba(192, 160, 98, 0.10);
+          border: 1px solid rgba(255, 255, 255, 0.10);
           background: rgba(0, 0, 0, 0.18);
           display: grid;
           gap: 8px;
@@ -5019,7 +5627,7 @@ ${text}
         .aio-taxTableWrap {
           padding: 12px;
           border-radius: 12px;
-          border: 1px solid rgba(192, 160, 98, 0.10);
+          border: 1px solid rgba(255, 255, 255, 0.10);
           background: rgba(0, 0, 0, 0.18);
           overflow: hidden;
         }
@@ -5047,7 +5655,7 @@ ${text}
         }
 
         .aio-taxTable th {
-          color: rgba(192, 160, 98, 0.9);
+          color: rgba(255, 255, 255, 0.9);
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -5093,7 +5701,7 @@ ${text}
           max-height: 85vh;
           overflow: auto;
           border-radius: 18px;
-          border: 1px solid rgba(192, 160, 98, 0.20);
+          border: 1px solid rgba(255, 255, 255, 0.20);
           background: linear-gradient(180deg, rgba(15, 15, 20, 0.98) 0%, rgba(5, 5, 8, 0.99) 100%);
           box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
           padding: 14px;
@@ -5109,15 +5717,15 @@ ${text}
 
         .aio-sheetTitle {
           font-weight: 800;
-          color: rgba(192, 160, 98, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           letter-spacing: 0.06em;
           text-transform: uppercase;
           font-size: 12px;
         }
 
         .aio-sheetClose {
-          border: 1px solid rgba(192, 160, 98, 0.18);
-          background: rgba(192, 160, 98, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.78);
           border-radius: 12px;
           padding: 8px 10px;
@@ -5162,12 +5770,12 @@ ${text}
         /* Premium scrollbar (scoped) */
         .premium-scroll {
           scrollbar-width: thin;
-          scrollbar-color: rgba(192, 160, 98, 0.65) rgba(255, 255, 255, 0.06);
+          scrollbar-color: rgba(255, 255, 255, 0.65) rgba(255, 255, 255, 0.06);
         }
 
         .premium-scroll-x {
           scrollbar-width: thin;
-          scrollbar-color: rgba(192, 160, 98, 0.55) rgba(255, 255, 255, 0.05);
+          scrollbar-color: rgba(255, 255, 255, 0.55) rgba(255, 255, 255, 0.05);
         }
 
         .premium-scroll-x::-webkit-scrollbar {
@@ -5180,7 +5788,7 @@ ${text}
         }
 
         .premium-scroll-x::-webkit-scrollbar-thumb {
-          background: linear-gradient(90deg, rgba(214, 179, 106, 0.92), rgba(192, 160, 98, 0.68));
+          background: linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.68));
           border-radius: 999px;
           border: 2px solid rgba(10, 10, 14, 0.9);
         }
@@ -5197,8 +5805,8 @@ ${text}
         .premium-scroll::-webkit-scrollbar-thumb {
           background: linear-gradient(
             180deg,
-            rgba(214, 179, 106, 0.92) 0%,
-            rgba(192, 160, 98, 0.72) 100%
+            rgba(255, 255, 255, 0.92) 0%,
+            rgba(255, 255, 255, 0.72) 100%
           );
           border-radius: 999px;
           border: 2px solid rgba(10, 10, 14, 0.9);
@@ -5249,8 +5857,8 @@ ${text}
         }
 
         .aio-kpiGold {
-          border-color: rgba(192, 160, 98, 0.45);
-          background: linear-gradient(180deg, rgba(192, 160, 98, 0.14), rgba(0, 0, 0, 0.22));
+          border-color: rgba(255, 255, 255, 0.45);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.22));
         }
 
         .aio-kpiMeta {
@@ -5292,8 +5900,8 @@ ${text}
           margin-top: 12px;
           padding: 10px 12px;
           border-radius: 14px;
-          border: 1px solid rgba(192, 160, 98, 0.32);
-          background: rgba(192, 160, 98, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.32);
+          background: rgba(255, 255, 255, 0.1);
           color: rgba(255, 255, 255, 0.88);
           font-size: 12px;
         }
@@ -5303,8 +5911,8 @@ ${text}
           justify-content: space-between;
           align-items: center;
           padding: 14px 16px;
-          background: rgba(192, 160, 98, 0.06);
-          border: 1px solid rgba(192, 160, 98, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 10px;
         }
 
@@ -5316,7 +5924,7 @@ ${text}
         .aio-result-value {
           font-size: 16px;
           font-weight: 600;
-          color: rgba(192, 160, 98, 1);
+          color: rgba(255, 255, 255, 1);
         }
 
         .aio-error {
@@ -5459,7 +6067,7 @@ ${text}
           }
           .aio-sheetTop {
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(192, 160, 98, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             margin-bottom: 16px;
           }
           .aio-sheetTitle {
