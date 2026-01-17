@@ -216,6 +216,9 @@ export function TaxCalculator() {
       body: JSON.stringify({
         amount: 299,
         productName: `Tax Optimization Blueprint (Save ${formatINR(savings)})`,
+        customerName: payload?.name || "",
+        customerEmail: payload?.email || "",
+        customerPhone: payload?.phone || "",
       }),
     });
     const orderJson = await orderRes.json().catch(() => null);

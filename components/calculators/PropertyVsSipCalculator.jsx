@@ -250,6 +250,9 @@ export function PropertyVsSipCalculator() {
       body: JSON.stringify({
         amount: 399,
         productName: `Property vs SIP Premium Report (₹${gapCr}Cr opportunity)`,
+        customerName: payload?.name || "",
+        customerEmail: payload?.email || "",
+        customerPhone: payload?.phone || "",
       }),
     });
     const orderJson = await orderRes.json().catch(() => null);
