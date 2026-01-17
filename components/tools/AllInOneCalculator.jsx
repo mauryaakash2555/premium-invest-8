@@ -101,23 +101,23 @@ const generateInsurancePDF = (result, inputs) => {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1a1a1a; padding: 40px; max-width: 800px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid rgba(235, 242, 255, 0.9); padding-bottom: 20px; margin-bottom: 30px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid rgba(255,255,255,0.9); padding-bottom: 20px; margin-bottom: 30px; }
     .logo { font-size: 28px; font-weight: bold; color: #1a1a1a; }
-    .logo span { color: rgba(235, 242, 255, 0.9); }
+    .logo span { color: rgba(255,255,255,0.9); }
     .quote-info { text-align: right; font-size: 12px; color: #666; }
     .quote-id { font-size: 14px; font-weight: bold; color: #1a1a1a; }
     h1 { font-size: 24px; color: #1a1a1a; margin-bottom: 10px; }
-    h2 { font-size: 18px; color: rgba(235, 242, 255, 0.9); margin: 25px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    h2 { font-size: 18px; color: rgba(255,255,255,0.9); margin: 25px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
     .summary-card { background: #f8f7f4; padding: 20px; border-radius: 8px; text-align: center; }
     .summary-card .label { font-size: 12px; color: #666; margin-bottom: 5px; }
     .summary-card .value { font-size: 22px; font-weight: bold; color: #1a1a1a; }
     .summary-card .meta { font-size: 11px; color: #888; margin-top: 5px; }
-    .summary-card.highlight { background: linear-gradient(135deg, rgba(235, 242, 255, 0.9), #d4b77a); color: #fff; }
-    .summary-card.highlight .label, .summary-card.highlight .meta { color: rgba(235, 242, 255, 0.8); }
+    .summary-card.highlight { background: linear-gradient(135deg, rgba(255,255,255,0.9), #d4b77a); color: #fff; }
+    .summary-card.highlight .label, .summary-card.highlight .meta { color: rgba(255,255,255,0.8); }
     .summary-card.highlight .value { color: #fff; }
     table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; }
-    th { background: #f0ebe3; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid rgba(235, 242, 255, 0.9); }
+    th { background: #f0ebe3; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid rgba(255,255,255,0.9); }
     td { padding: 10px; border-bottom: 1px solid #eee; }
     tr:hover { background: #faf9f7; }
     .text-right { text-align: right; }
@@ -2541,17 +2541,17 @@ export default function AllInOneCalculator() {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; background: #fff; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(235, 242, 255, 0.9); padding-bottom: 20px; margin-bottom: 30px; }
-    .logo { font-size: 24px; font-weight: bold; color: rgba(235, 242, 255, 0.9); }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.9); padding-bottom: 20px; margin-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; color: rgba(255,255,255,0.9); }
     .timestamp { font-size: 12px; color: #666; }
     h1 { font-size: 22px; color: #1a1a1a; margin-bottom: 8px; }
-    h2 { font-size: 16px; color: rgba(235, 242, 255, 0.9); margin: 24px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+    h2 { font-size: 16px; color: rgba(255,255,255,0.9); margin: 24px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
     .section { background: #f9f9f9; padding: 16px; border-radius: 8px; margin-bottom: 16px; white-space: pre-line; }
-    .interpretation { background: #fef9e7; border-left: 4px solid rgba(235, 242, 255, 0.9); padding: 16px; margin: 20px 0; }
-    .decision-gap { background: #e8f4f8; border-left: 4px solid rgba(235, 242, 255, 0.9); padding: 12px 16px; margin: 16px 0; font-weight: 600; }
+    .interpretation { background: #fef9e7; border-left: 4px solid rgba(255,255,255,0.9); padding: 16px; margin: 20px 0; }
+    .decision-gap { background: #e8f4f8; border-left: 4px solid rgba(255, 255, 255, 0.9); padding: 12px 16px; margin: 16px 0; font-weight: 600; }
     .disclaimer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-size: 11px; color: #666; }
     .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
-    .footer a { color: rgba(235, 242, 255, 0.9); text-decoration: none; }
+    .footer a { color: rgba(255,255,255,0.9); text-decoration: none; }
   </style>
 </head>
 <body>
@@ -3105,22 +3105,22 @@ ${text}
         >
           <div 
             style={{
-              background: '#090A0C',
+              background: '#121212',
               borderRadius: '16px',
               padding: '32px',
               maxWidth: '400px',
               width: '100%',
-              border: '1px solid rgba(170, 198, 255,0.3)',
-              boxShadow: '0 0 60px rgba(170, 198, 255,0.2)'
+              border: '1px solid rgba(230,199,123,0.3)',
+              boxShadow: '0 0 60px rgba(230,199,123,0.2)'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>📧</div>
-              <div style={{ fontSize: '18px', fontWeight: '700', color: 'rgba(170, 198, 255, 0.95)', marginBottom: '8px' }}>
+              <div style={{ fontSize: '18px', fontWeight: '700', color: '#E6C77B', marginBottom: '8px' }}>
                 Wait! Get Your Results Emailed
               </div>
-              <div style={{ fontSize: '13px', color: 'rgba(235, 242, 255, 0.6)' }}>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
                 We'll send your insurance analysis + personalized recommendations
               </div>
             </div>
@@ -3133,8 +3133,8 @@ ${text}
                 onChange={(e) => setLeadName(e.target.value)}
                 style={{
                   padding: '12px 16px',
-                  background: 'rgba(170, 198, 255, 0.05)',
-                  border: '1px solid rgba(170, 198, 255, 0.1)',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '8px',
                   color: 'white',
                   fontSize: '14px'
@@ -3147,8 +3147,8 @@ ${text}
                 onChange={(e) => setLeadEmail(e.target.value)}
                 style={{
                   padding: '12px 16px',
-                  background: 'rgba(170, 198, 255, 0.05)',
-                  border: '1px solid rgba(170, 198, 255, 0.1)',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '8px',
                   color: 'white',
                   fontSize: '14px'
@@ -3161,8 +3161,8 @@ ${text}
                 onChange={(e) => setLeadPhone(e.target.value)}
                 style={{
                   padding: '12px 16px',
-                  background: 'rgba(170, 198, 255, 0.05)',
-                  border: '1px solid rgba(170, 198, 255, 0.1)',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '8px',
                   color: 'white',
                   fontSize: '14px'
@@ -3181,7 +3181,7 @@ ${text}
                 width: '100%',
                 marginTop: '16px',
                 padding: '14px',
-                background: 'rgba(170, 198, 255, 0.95)',
+                background: '#E6C77B',
                 color: '#0A0A0A',
                 border: 'none',
                 borderRadius: '8px',
@@ -3201,7 +3201,7 @@ ${text}
                 padding: '12px',
                 background: 'transparent',
                 color: 'rgba(255,255,255,0.5)',
-                border: '1px solid rgba(170, 198, 255, 0.1)',
+                border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '8px',
                 fontSize: '12px',
                 cursor: 'pointer'
@@ -3211,12 +3211,12 @@ ${text}
             </button>
             
             {emailNote && (
-              <div style={{ marginTop: '8px', fontSize: '12px', color: emailNote.includes('Thank') ? 'rgba(170, 198, 255, 0.95)' : '#ef4444', textAlign: 'center' }}>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: emailNote.includes('Thank') ? '#E6C77B' : '#ef4444', textAlign: 'center' }}>
                 {emailNote}
               </div>
             )}
             
-            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '10px', color: 'rgba(170, 198, 255, 0.3)' }}>
+            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
               🔒 We respect your privacy. No spam, ever.
             </div>
           </div>
@@ -3354,20 +3354,20 @@ ${text}
                 <div style={{ marginTop: '16px', marginBottom: '16px' }}>
                   {/* Protection Confidence Score */}
                   <div style={{ 
-                    background: 'rgba(9, 10, 12,0.95)', 
-                    border: '1px solid rgba(170, 198, 255, 0.08)', 
+                    background: 'rgba(18,18,18,0.95)', 
+                    border: '1px solid rgba(255,255,255,0.08)', 
                     borderRadius: '12px', 
                     padding: '20px',
                     marginBottom: '12px'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                      <div style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(235, 242, 255, 0.9)' }}>
+                      <div style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
                         🛡️ Your Protection Score
                       </div>
                       <div style={{ 
                         fontSize: '24px', 
                         fontWeight: '700', 
-                        color: protectionScore >= 80 ? 'rgba(170, 198, 255, 0.95)' : protectionScore >= 60 ? 'rgba(235, 242, 255, 0.8)' : 'rgba(255,255,255,0.5)'
+                        color: protectionScore >= 80 ? '#E6C77B' : protectionScore >= 60 ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)'
                       }}>
                         {protectionScore}/100
                       </div>
@@ -3376,7 +3376,7 @@ ${text}
                     {/* Progress Bar */}
                     <div style={{ 
                       height: '8px', 
-                      background: 'rgba(170, 198, 255, 0.1)', 
+                      background: 'rgba(255,255,255,0.1)', 
                       borderRadius: '4px', 
                       overflow: 'hidden',
                       marginBottom: '16px'
@@ -3384,8 +3384,8 @@ ${text}
                       <div style={{ 
                         height: '100%', 
                         width: `${protectionScore}%`, 
-                        background: protectionScore >= 80 ? 'linear-gradient(90deg, rgba(170, 198, 255, 0.95), rgba(100, 220, 180, 0.95))' : 
-                                    protectionScore >= 60 ? 'linear-gradient(90deg, rgba(235, 242, 255, 0.6), rgba(235, 242, 255, 0.8))' : 
+                        background: protectionScore >= 80 ? 'linear-gradient(90deg, #E6C77B, #D4AF37)' : 
+                                    protectionScore >= 60 ? 'linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.8))' : 
                                     'rgba(255,255,255,0.4)',
                         borderRadius: '4px',
                         transition: 'width 0.5s ease'
@@ -3395,25 +3395,25 @@ ${text}
                     {/* Coverage Checklist */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', fontSize: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: hasIncomeReplacement ? 'rgba(170, 198, 255, 0.95)' : 'rgba(170, 198, 255, 0.3)' }}>
+                        <span style={{ color: hasIncomeReplacement ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
                           {hasIncomeReplacement ? '✅' : '⬜'}
                         </span>
                         <span style={{ color: 'rgba(255,255,255,0.7)' }}>Income Replacement</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: hasLiabilities ? 'rgba(170, 198, 255, 0.95)' : 'rgba(170, 198, 255, 0.3)' }}>
+                        <span style={{ color: hasLiabilities ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
                           {hasLiabilities ? '✅' : '⬜'}
                         </span>
                         <span style={{ color: 'rgba(255,255,255,0.7)' }}>Liabilities Covered</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: hasChildEducation ? 'rgba(170, 198, 255, 0.95)' : 'rgba(170, 198, 255, 0.3)' }}>
+                        <span style={{ color: hasChildEducation ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
                           {hasChildEducation ? '✅' : '⬜'}
                         </span>
                         <span style={{ color: 'rgba(255,255,255,0.7)' }}>Child Education</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: hasEmergencyFund ? 'rgba(170, 198, 255, 0.95)' : 'rgba(170, 198, 255, 0.3)' }}>
+                        <span style={{ color: hasEmergencyFund ? '#E6C77B' : 'rgba(255,255,255,0.3)' }}>
                           {hasEmergencyFund ? '✅' : '⬜'}
                         </span>
                         <span style={{ color: 'rgba(255,255,255,0.7)' }}>Emergency Buffer</span>
@@ -3425,11 +3425,11 @@ ${text}
                       <div style={{ 
                         marginTop: '12px', 
                         padding: '10px 12px', 
-                        background: 'rgba(170, 198, 255,0.1)', 
+                        background: 'rgba(230,199,123,0.1)', 
                         borderRadius: '6px',
-                        borderLeft: '3px solid rgba(170, 198, 255, 0.95)',
+                        borderLeft: '3px solid #E6C77B',
                         fontSize: '12px',
-                        color: 'rgba(235, 242, 255, 0.8)'
+                        color: 'rgba(255,255,255,0.8)'
                       }}>
                         💡 <strong>Tip:</strong> Add {fmt(Math.max(0, (result.hlv?.presentValue || selectedCover * 1.2) - selectedCover))} more to reach 95+ score
                       </div>
@@ -3451,7 +3451,7 @@ ${text}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ fontSize: '16px' }}>👥</span>
                       <span style={{ color: 'rgba(255,255,255,0.7)' }}>
-                        <strong style={{ color: 'rgba(170, 198, 255, 0.95)' }}>87%</strong> of professionals your age choose {fmt(selectedCover >= 10000000 ? 10000000 : 5000000)}+
+                        <strong style={{ color: '#E6C77B' }}>87%</strong> of professionals your age choose {fmt(selectedCover >= 10000000 ? 10000000 : 5000000)}+
                       </span>
                     </div>
                     <div style={{ color: 'rgba(255,255,255,0.5)' }}>
@@ -3473,11 +3473,11 @@ ${text}
                           alignItems: 'center', 
                           gap: '4px',
                           padding: '6px 12px',
-                          background: 'rgba(170, 198, 255,0.1)',
-                          border: '1px solid rgba(170, 198, 255,0.2)',
+                          background: 'rgba(230,199,123,0.1)',
+                          border: '1px solid rgba(230,199,123,0.2)',
                           borderRadius: '20px',
                           fontSize: '11px',
-                          color: 'rgba(170, 198, 255, 0.95)'
+                          color: '#E6C77B'
                         }}>
                           <span>{badge.icon}</span>
                           <span>{badge.name}</span>
@@ -3522,7 +3522,7 @@ ${text}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginTop: '12px' }}>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>BMI</div>
-                    <div style={{ fontSize: '20px', fontWeight: '600', color: result.bmiAnalysis.bmi >= 25 ? 'rgba(255,255,255,0.5)' : 'rgba(235, 242, 255, 0.9)' }}>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: result.bmiAnalysis.bmi >= 25 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.9)' }}>
                       {result.bmiAnalysis.bmi}
                     </div>
                   </div>
@@ -3536,7 +3536,7 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Premium Impact</div>
-                    <div style={{ fontSize: '14px', color: result.bmiAnalysis.impact.includes('+') ? 'rgba(235, 242, 255, 0.6)' : 'rgba(235, 242, 255, 0.9)' }}>
+                    <div style={{ fontSize: '14px', color: result.bmiAnalysis.impact.includes('+') ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.9)' }}>
                       {result.bmiAnalysis.impact}
                     </div>
                   </div>
@@ -3568,7 +3568,7 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Present Value (discounted)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{fmt(result.hlv.presentValue)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.hlv.presentValue)}</div>
                   </div>
                 </div>
               </div>
@@ -3595,7 +3595,7 @@ ${text}
                       }
                     }}
                     style={{
-                      background: 'linear-gradient(135deg, rgba(235, 242, 255, 0.9), #d4b77a)',
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9), #d4b77a)',
                       color: '#000',
                       border: 'none',
                       padding: '6px 12px',
@@ -3627,13 +3627,13 @@ ${text}
                   </thead>
                   <tbody>
                     {(result.insurerQuotesWithLinks || result.insurerQuotes).map((q, idx) => (
-                      <tr key={`${q.name}-${idx}`} style={{ background: idx === 0 ? 'rgba(170, 198, 255, 0.1)' : 'transparent' }}>
+                      <tr key={`${q.name}-${idx}`} style={{ background: idx === 0 ? 'rgba(255, 255, 255,0.1)' : 'transparent' }}>
                         <td>
                           <span style={{ marginRight: '6px' }}>{q.logo}</span>
                           {q.name}
-                          {idx === 0 && <span style={{ fontSize: '10px', color: 'rgba(170, 198, 255, 0.9)', marginLeft: '6px' }}>★ Lowest</span>}
+                          {idx === 0 && <span style={{ fontSize: '10px', color: '#c0a062', marginLeft: '6px' }}>★ Lowest</span>}
                         </td>
-                        <td className="right" style={{ color: q.csr >= 98 ? 'rgba(235, 242, 255, 0.9)' : q.csr >= 95 ? 'rgba(235, 242, 255, 0.6)' : 'rgba(255,255,255,0.5)' }}>
+                        <td className="right" style={{ color: q.csr >= 98 ? 'rgba(255,255,255,0.9)' : q.csr >= 95 ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.5)' }}>
                           {q.csr}%
                         </td>
                         <td className="right" style={{ fontWeight: '600' }}>{fmt(q.annualPremium)}</td>
@@ -3647,7 +3647,7 @@ ${text}
                               rel="noopener noreferrer"
                               style={{
                                 display: 'inline-block',
-                                background: q.color || 'rgba(235, 242, 255, 0.9)',
+                                background: q.color || 'rgba(255,255,255,0.9)',
                                 color: '#fff',
                                 padding: '4px 10px',
                                 borderRadius: '4px',
@@ -3687,7 +3687,7 @@ ${text}
                     {result.breakdown.map((row, idx) => (
                       <tr key={`${row.label}-${idx}`}>
                         <td>{row.label}</td>
-                        <td className="right" style={{ color: row.value < 0 ? 'rgba(235, 242, 255, 0.9)' : 'inherit' }}>
+                        <td className="right" style={{ color: row.value < 0 ? 'rgba(255,255,255,0.9)' : 'inherit' }}>
                           {row.isNumber ? row.value : fmt(row.value)}
                         </td>
                         {row.percent !== undefined && (
@@ -3726,7 +3726,7 @@ ${text}
                         <td className="right">{fmt(r.cost)}</td>
                         <td className="right">
                           {r.selected ? 
-                            <span style={{ color: 'rgba(170, 198, 255, 0.9)' }}>✓ Selected</span> : 
+                            <span style={{ color: '#c0a062' }}>✓ Selected</span> : 
                             <span style={{ color: 'rgba(255,255,255,0.4)' }}>Optional</span>
                           }
                         </td>
@@ -3737,7 +3737,7 @@ ${text}
                     <tfoot>
                       <tr style={{ background: 'rgba(0,0,0,0.85)' }}>
                         <td colSpan="2" style={{ fontWeight: '600' }}>Total with Selected Riders</td>
-                        <td className="right" style={{ fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>
+                        <td className="right" style={{ fontWeight: '600', color: '#c0a062' }}>
                           {fmt(result.totalPremiumWithRiders)}
                         </td>
                         <td></td>
@@ -3751,7 +3751,7 @@ ${text}
             {/* Tax Benefits */}
             {result.taxBenefits && (
               <div className="aio-section premium-gold-bg" style={{ padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
-                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(170, 198, 255, 0.9)' }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c0a062' }}>
                   <span>💰</span> Tax Benefits
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginTop: '12px' }}>
@@ -3769,11 +3769,11 @@ ${text}
                   )}
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Tax Saved (30% slab)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{fmt(result.taxBenefits.taxSaved)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.taxBenefits.taxSaved)}</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Effective Premium</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{fmt(result.taxBenefits.effectivePremium)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.taxBenefits.effectivePremium)}</div>
                   </div>
                 </div>
                 {result.taxBenefits.note && (
@@ -3790,7 +3790,7 @@ ${text}
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>💸</span> Payout Structure: {result.payoutStructure.type}
                 </div>
-                <div style={{ fontSize: '13px', color: 'rgba(235, 242, 255, 0.6)', marginTop: '8px' }}>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>
                   {result.payoutStructure.description}
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '12px' }}>
@@ -3826,17 +3826,17 @@ ${text}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '20px' }}>
                   <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Conservative (8%)</div>
-                    <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(235, 242, 255, 0.6)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueLow)}</div>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueLow)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrLow}%</div>
                   </div>
                   <div className="premium-gold-bg-highlight premium-gold-border-strong" style={{ padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '11px', color: 'rgba(170, 198, 255, 0.9)', fontWeight: '600' }}>Expected (10%)</div>
-                    <div style={{ fontSize: '26px', fontWeight: '700', color: 'rgba(170, 198, 255, 0.9)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
-                    <div style={{ fontSize: '11px', color: 'rgba(235, 242, 255, 0.6)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrMid}%</div>
+                    <div style={{ fontSize: '11px', color: '#c0a062', fontWeight: '600' }}>Expected (10%)</div>
+                    <div style={{ fontSize: '26px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrMid}%</div>
                   </div>
                   <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Optimistic (12%)</div>
-                    <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(170, 198, 255, 0.9)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrHigh}%</div>
                   </div>
                 </div>
@@ -3849,11 +3849,11 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Multiple</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{result.ulipMaturity.wealthMultiple}x</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{result.ulipMaturity.wealthMultiple}x</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Gain (Mid)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{fmt(result.ulipMaturity.wealthGainMid)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.ulipMaturity.wealthGainMid)}</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>PPT / Term</div>
@@ -3864,14 +3864,14 @@ ${text}
                 {/* Milestones */}
                 {Array.isArray(result.ulipMaturity.milestones) && (
                   <div style={{ marginTop: '16px' }}>
-                    <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.6)', marginBottom: '10px' }}>📍 Key Milestones</div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '10px' }}>📍 Key Milestones</div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {result.ulipMaturity.milestones.map((m, idx) => (
                         <div key={idx} style={{ 
                           padding: '8px 12px', 
                           background: 'rgba(0,0,0,0.75)', 
                           borderRadius: '6px',
-                          borderLeft: `3px solid ${idx === result.ulipMaturity.milestones.length - 1 ? 'rgba(235, 242, 255, 0.9)' : 'rgba(170, 198, 255, 0.2)'}`,
+                          borderLeft: `3px solid ${idx === result.ulipMaturity.milestones.length - 1 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)'}`,
                         }}>
                           <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>Year {m.year} • {m.label}</div>
                           <div style={{ fontSize: '14px', fontWeight: '600' }}>{fmt(m.fundValue)}</div>
@@ -3884,7 +3884,7 @@ ${text}
                 {/* Fund Options */}
                 {Array.isArray(result.ulipMaturity.fundOptions) && (
                   <div style={{ marginTop: '16px' }}>
-                    <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.6)', marginBottom: '10px' }}>🎯 Fund Allocation Options</div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '10px' }}>🎯 Fund Allocation Options</div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px' }}>
                       {result.ulipMaturity.fundOptions.map((f, idx) => (
                         <div key={idx} style={{ 
@@ -3929,7 +3929,7 @@ ${text}
                       padding: '8px', 
                       background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '4px',
-                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid rgba(170, 198, 255, 0.35)' : '1px solid transparent'
+                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid rgba(192, 160, 98, 0.35)' : '1px solid transparent'
                     }}>
                       <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'capitalize' }}>
                         {key.replace(/Factor$/, '').replace(/([A-Z])/g, ' $1')}
@@ -3937,7 +3937,7 @@ ${text}
                       <div style={{ 
                         fontSize: '14px', 
                         fontWeight: '600',
-                        color: parseFloat(val) > 1.1 ? 'rgba(255,255,255,0.5)' : parseFloat(val) < 0.95 ? 'rgba(235, 242, 255, 0.9)' : 'inherit'
+                        color: parseFloat(val) > 1.1 ? 'rgba(255,255,255,0.5)' : parseFloat(val) < 0.95 ? 'rgba(255,255,255,0.9)' : 'inherit'
                       }}>
                         {val}x
                       </div>
@@ -3977,7 +3977,7 @@ ${text}
                 <ul className="aio-checklistList">
                   {result.checklist.map((c, idx) => (
                     <li key={`${idx}-${c}`} style={{ 
-                      color: c.startsWith('⚠️') ? 'rgba(235, 242, 255, 0.6)' : c.startsWith('ℹ️') ? 'rgba(235, 242, 255, 0.9)' : 'inherit'
+                      color: c.startsWith('⚠️') ? 'rgba(255,255,255,0.6)' : c.startsWith('ℹ️') ? 'rgba(255, 255, 255, 0.9)' : 'inherit'
                     }}>
                       {c}
                     </li>
@@ -4033,8 +4033,8 @@ ${text}
                           {pf.insurerSupport?.slice(0, 6).map((ins, iIdx) => (
                             <td key={iIdx} className="center">
                               {ins.supported ? 
-                                <span style={{ color: 'rgba(170, 198, 255, 0.9)', fontSize: '14px' }}>✓</span> : 
-                                <span style={{ color: 'rgba(170, 198, 255, 0.2)', fontSize: '12px' }}>—</span>
+                                <span style={{ color: '#c0a062', fontSize: '14px' }}>✓</span> : 
+                                <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '12px' }}>—</span>
                               }
                             </td>
                           ))}
@@ -4056,18 +4056,18 @@ ${text}
                 padding: '20px', 
                 borderRadius: '12px', 
                 marginTop: '24px',
-                border: '1px solid rgba(170, 198, 255, 0.2)'
+                border: '1px solid rgba(192, 160, 98, 0.2)'
               }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                   <span>👥</span> {result.nomineePlanning.title}
                 </div>
-                <p style={{ fontSize: '13px', color: 'rgba(235, 242, 255, 0.6)', marginBottom: '16px' }}>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
                   {result.nomineePlanning.description}
                 </p>
 
                 {/* Nomination Steps */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: 'rgba(170, 198, 255, 0.9)', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
+                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
                   <div style={{ display: 'grid', gap: '8px' }}>
                     {result.nomineePlanning.steps.map((s, idx) => (
                       <div key={idx} style={{ 
@@ -4076,12 +4076,12 @@ ${text}
                         padding: '10px', 
                         background: 'rgba(0,0,0,0.85)', 
                         borderRadius: '6px',
-                        borderLeft: '3px solid rgba(235, 242, 255, 0.9)'
+                        borderLeft: '3px solid rgba(255, 255, 255, 0.9)'
                       }}>
                         <div style={{ 
                           width: '24px', 
                           height: '24px', 
-                          background: 'rgba(235, 242, 255, 0.9)', 
+                          background: 'rgba(255, 255, 255, 0.9)', 
                           borderRadius: '50%', 
                           display: 'flex', 
                           alignItems: 'center', 
@@ -4094,7 +4094,7 @@ ${text}
                         </div>
                         <div>
                           <div style={{ fontSize: '13px', fontWeight: '600' }}>{s.action}</div>
-                          <div style={{ fontSize: '11px', color: 'rgba(235, 242, 255, 0.6)' }}>{s.detail}</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{s.detail}</div>
                         </div>
                       </div>
                     ))}
@@ -4103,13 +4103,13 @@ ${text}
 
                 {/* Important Notes */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.6)', fontWeight: '600', marginBottom: '10px' }}>⚠️ Important Notes</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: '600', marginBottom: '10px' }}>⚠️ Important Notes</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     {result.nomineePlanning.importantNotes.map((note, idx) => (
                       <div key={idx} style={{ 
                         fontSize: '12px', 
                         padding: '8px 12px',
-                        background: 'rgba(170, 198, 255, 0.1)',
+                        background: 'rgba(255,255,255,0.1)',
                         borderRadius: '6px'
                       }}>
                         {note}
@@ -4120,7 +4120,7 @@ ${text}
 
                 {/* Claim Process Timeline */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: 'rgba(170, 198, 255, 0.9)', fontWeight: '600', marginBottom: '10px' }}>📅 Claim Process Timeline</div>
+                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>📅 Claim Process Timeline</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {result.nomineePlanning.claimProcess.map((cp, idx) => (
                       <div key={idx} style={{ 
@@ -4133,7 +4133,7 @@ ${text}
                         <div style={{ 
                           width: '28px', 
                           height: '28px', 
-                          background: 'rgba(235, 242, 255, 0.9)', 
+                          background: 'rgba(255,255,255,0.9)', 
                           borderRadius: '50%', 
                           margin: '0 auto 8px',
                           display: 'flex',
@@ -4153,12 +4153,12 @@ ${text}
 
                 {/* Documents Required */}
                 <div>
-                  <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.8)', fontWeight: '600', marginBottom: '10px' }}>📄 Documents Required for Claim</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)', fontWeight: '600', marginBottom: '10px' }}>📄 Documents Required for Claim</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {result.nomineePlanning.documentsRequired.map((doc, idx) => (
                       <span key={idx} style={{ 
                         padding: '6px 12px', 
-                        background: 'rgba(170, 198, 255, 0.15)', 
+                        background: 'rgba(255, 255, 255,0.15)', 
                         borderRadius: '20px',
                         fontSize: '11px'
                       }}>
@@ -4244,8 +4244,8 @@ ${text}
                 <div className="aio-section" style={{ marginTop: '24px' }}>
                   {/* AI Recommendations Header */}
                   <div style={{ 
-                    background: 'linear-gradient(135deg, rgba(170, 198, 255,0.15), rgba(170, 198, 255,0.05))',
-                    border: '1px solid rgba(170, 198, 255,0.3)',
+                    background: 'linear-gradient(135deg, rgba(230,199,123,0.15), rgba(230,199,123,0.05))',
+                    border: '1px solid rgba(230,199,123,0.3)',
                     borderRadius: '12px',
                     padding: '20px',
                     marginBottom: '16px'
@@ -4253,7 +4253,7 @@ ${text}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                       <span style={{ fontSize: '20px' }}>🤖</span>
                       <div>
-                        <div style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.95)' }}>
+                        <div style={{ fontSize: '14px', fontWeight: '600', color: '#E6C77B' }}>
                           Smart Recommendations for You
                         </div>
                         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
@@ -4271,19 +4271,19 @@ ${text}
                           padding: '12px',
                           background: 'rgba(0,0,0,0.4)',
                           borderRadius: '8px',
-                          borderLeft: '3px solid rgba(170, 198, 255, 0.95)'
+                          borderLeft: '3px solid #E6C77B'
                         }}>
                           <span style={{ fontSize: '18px' }}>{rec.icon}</span>
                           <div>
-                            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(235, 242, 255, 0.9)' }}>
+                            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
                               {rec.title}
                             </div>
-                            <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.6)', marginTop: '4px' }}>
+                            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
                               {rec.desc}
                             </div>
                             <div style={{ 
                               fontSize: '11px', 
-                              color: 'rgba(170, 198, 255, 0.95)', 
+                              color: '#E6C77B', 
                               marginTop: '6px',
                               display: 'flex',
                               alignItems: 'center',
@@ -4299,13 +4299,13 @@ ${text}
                   
                   {/* What-If Scenarios */}
                   <div style={{ 
-                    background: 'rgba(9, 10, 12,0.9)',
-                    border: '1px solid rgba(170, 198, 255, 0.08)',
+                    background: 'rgba(18,18,18,0.9)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: '12px',
                     padding: '16px',
                     marginBottom: '16px'
                   }}>
-                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(235, 242, 255, 0.8)', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.8)', marginBottom: '12px' }}>
                       🔮 What-If Life Events
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -4321,7 +4321,7 @@ ${text}
                             <span>{scenario.icon}</span>
                             <span>{scenario.event}</span>
                           </div>
-                          <div style={{ color: 'rgba(170, 198, 255, 0.95)', marginTop: '4px', fontWeight: '500' }}>
+                          <div style={{ color: '#E6C77B', marginTop: '4px', fontWeight: '500' }}>
                             {scenario.impact}
                           </div>
                         </div>
@@ -4336,21 +4336,21 @@ ${text}
                     borderRadius: '12px',
                     padding: '16px'
                   }}>
-                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(235, 242, 255, 0.8)', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.8)', marginBottom: '12px' }}>
                       📊 How You Compare to Similar Profiles
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '11px' }}>
                       <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
                         <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Age Group ({age}-{age+5})</div>
-                        <div style={{ color: 'rgba(235, 242, 255, 0.9)', fontWeight: '600' }}>Avg: {fmt(age < 35 ? 10000000 : age < 45 ? 15000000 : 20000000)}</div>
+                        <div style={{ color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>Avg: {fmt(age < 35 ? 10000000 : age < 45 ? 15000000 : 20000000)}</div>
                       </div>
                       <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px' }}>
                         <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Your Income Level</div>
-                        <div style={{ color: 'rgba(235, 242, 255, 0.9)', fontWeight: '600' }}>Avg: {fmt(income >= 2500000 ? 30000000 : income >= 1500000 ? 20000000 : 10000000)}</div>
+                        <div style={{ color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>Avg: {fmt(income >= 2500000 ? 30000000 : income >= 1500000 ? 20000000 : 10000000)}</div>
                       </div>
-                      <div style={{ textAlign: 'center', padding: '12px', background: cover >= (age < 35 ? 10000000 : 15000000) ? 'rgba(170, 198, 255,0.1)' : 'rgba(239,68,68,0.1)', borderRadius: '8px', border: cover >= (age < 35 ? 10000000 : 15000000) ? '1px solid rgba(170, 198, 255,0.3)' : '1px solid rgba(239,68,68,0.3)' }}>
+                      <div style={{ textAlign: 'center', padding: '12px', background: cover >= (age < 35 ? 10000000 : 15000000) ? 'rgba(230,199,123,0.1)' : 'rgba(239,68,68,0.1)', borderRadius: '8px', border: cover >= (age < 35 ? 10000000 : 15000000) ? '1px solid rgba(230,199,123,0.3)' : '1px solid rgba(239,68,68,0.3)' }}>
                         <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>Your Position</div>
-                        <div style={{ color: cover >= (age < 35 ? 10000000 : 15000000) ? 'rgba(170, 198, 255, 0.95)' : 'rgba(239,68,68,0.8)', fontWeight: '600' }}>
+                        <div style={{ color: cover >= (age < 35 ? 10000000 : 15000000) ? '#E6C77B' : 'rgba(239,68,68,0.8)', fontWeight: '600' }}>
                           {cover >= (age < 35 ? 10000000 : 15000000) ? '✅ Above Avg' : '⚠️ Below Avg'}
                         </div>
                       </div>
@@ -4365,16 +4365,16 @@ ${text}
             {/* ═══════════════════════════════════════════════════════════ */}
             <div style={{ 
               marginTop: '24px',
-              background: 'linear-gradient(135deg, rgba(170, 198, 255,0.1), rgba(170, 198, 255,0.02))',
-              border: '1px solid rgba(170, 198, 255,0.2)',
+              background: 'linear-gradient(135deg, rgba(230,199,123,0.1), rgba(230,199,123,0.02))',
+              border: '1px solid rgba(230,199,123,0.2)',
               borderRadius: '12px',
               padding: '20px'
             }}>
               <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-                <div style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.95)', marginBottom: '4px' }}>
+                <div style={{ fontSize: '16px', fontWeight: '600', color: '#E6C77B', marginBottom: '4px' }}>
                   📞 Get Expert Guidance
                 </div>
-                <div style={{ fontSize: '12px', color: 'rgba(235, 242, 255, 0.6)' }}>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>
                   Our IRDAI-licensed advisors can help you choose the right policy
                 </div>
               </div>
@@ -4412,7 +4412,7 @@ ${text}
                   }}
                   style={{
                     padding: '12px 16px',
-                    background: 'rgba(170, 198, 255, 0.95)',
+                    background: '#E6C77B',
                     color: '#0A0A0A',
                     border: 'none',
                     borderRadius: '8px',
@@ -4448,13 +4448,13 @@ ${text}
             {/* Competitive Advantage Section */}
             {result.competitiveAdvantage && (
               <div className="aio-section" style={{ 
-                background: 'linear-gradient(135deg, rgba(170, 198, 255, 0.15), rgba(170, 198, 255, 0.05))', 
+                background: 'linear-gradient(135deg, rgba(255, 255, 255,0.15), rgba(255, 255, 255,0.05))', 
                 padding: '20px', 
                 borderRadius: '12px', 
                 marginTop: '24px',
-                border: '2px solid rgba(170, 198, 255, 0.3)'
+                border: '2px solid rgba(255, 255, 255,0.3)'
               }}>
-                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: 'rgba(170, 198, 255, 0.9)' }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#c0a062' }}>
                   <span>⭐</span> {result.competitiveAdvantage.title}
                 </div>
                 
@@ -4464,10 +4464,10 @@ ${text}
                       padding: '12px', 
                       background: 'rgba(0,0,0,0.85)', 
                       borderRadius: '8px',
-                      borderLeft: '3px solid rgba(235, 242, 255, 0.9)'
+                      borderLeft: '3px solid rgba(255,255,255,0.9)'
                     }}>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(170, 198, 255, 0.9)' }}>{adv.feature}</div>
-                      <div style={{ fontSize: '11px', color: 'rgba(235, 242, 255, 0.6)', marginTop: '4px' }}>{adv.desc}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#c0a062' }}>{adv.feature}</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{adv.desc}</div>
                     </div>
                   ))}
                 </div>
@@ -4476,16 +4476,16 @@ ${text}
                   padding: '16px', 
                   background: 'rgba(0,0,0,0.85)', 
                   borderRadius: '8px',
-                  border: '1px solid rgba(170, 198, 255, 0.2)'
+                  border: '1px solid rgba(192, 160, 98, 0.2)'
                 }}>
-                  <div style={{ fontSize: '12px', color: 'rgba(170, 198, 255, 0.9)', fontWeight: '600', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>
                     🎯 What Our Calculator Has That Competitors Don't
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {result.competitiveAdvantage.missingInCompetitors?.map((item, idx) => (
                       <div key={idx} style={{ fontSize: '12px' }}>
                         <span style={{ fontWeight: '600', color: 'rgba(255,255,255,0.5)' }}>{item.competitor}:</span>{' '}
-                        <span style={{ color: 'rgba(235, 242, 255, 0.6)' }}>Missing {item.missing}</span>
+                        <span style={{ color: 'rgba(255,255,255,0.6)' }}>Missing {item.missing}</span>
                       </div>
                     ))}
                   </div>
@@ -4763,18 +4763,18 @@ ${text}
                 <span className="aio-result-label" style={{ marginBottom: '8px', display: 'block' }}>Comparison</span>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(170, 198, 255, 0.1)' }}>
-                      <th style={{ textAlign: 'left', padding: '6px 8px', color: 'rgba(235, 242, 255, 0.6)' }}>Type</th>
-                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(235, 242, 255, 0.6)' }}>Value</th>
-                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(235, 242, 255, 0.6)' }}>CAGR</th>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <th style={{ textAlign: 'left', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>Type</th>
+                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>Value</th>
+                      <th style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>CAGR</th>
                     </tr>
                   </thead>
                   <tbody>
                     {result.comparison.map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: '1px solid rgba(170, 198, 255, 0.05)' }}>
-                        <td style={{ padding: '6px 8px', color: 'rgba(235, 242, 255, 0.85)' }}>{item.type}</td>
-                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(235, 242, 255, 0.85)' }}>{fmt(item.value)}</td>
-                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(235, 242, 255, 0.85)' }}>{item.cagr}%</td>
+                      <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <td style={{ padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{item.type}</td>
+                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{fmt(item.value)}</td>
+                        <td style={{ textAlign: 'right', padding: '6px 8px', color: 'rgba(255,255,255,0.85)' }}>{item.cagr}%</td>
                       </tr>
                     ))}
                   </tbody>
@@ -4970,28 +4970,25 @@ ${text}
       })()}
 
       <style jsx>{`
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* LIVE INTELLIGENCE THEME - Icy Blue Palette */
-        /* ═══════════════════════════════════════════════════════════════ */
         .aio-calc {
-          background: #090A0C;
-          border: 1px solid rgba(170, 198, 255, 0.15);
+          background: linear-gradient(180deg, rgba(15, 15, 20, 0.98) 0%, rgba(5, 5, 8, 0.99) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 20px;
           padding: 28px;
-          max-width: 1400px;
+          max-width: 1100px;
           margin: 0 auto;
           position: relative;
           overflow: hidden;
           box-shadow:
             0 20px 60px rgba(0, 0, 0, 0.55),
-            inset 0 1px 0 rgba(170, 198, 255, 0.08);
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
           animation: aio-fade-up 420ms ease-out both;
         }
 
         .aio-main {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 24px;
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: 18px;
           position: relative;
           z-index: 1;
         }
@@ -5007,12 +5004,12 @@ ${text}
 
         .aio-resultsPanel {
           border-radius: 16px;
-          border: 1px solid rgba(170, 198, 255, 0.12);
-          background: rgba(13, 17, 23, 0.95);
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          background: rgba(0, 0, 0, 0.22);
           padding: 16px;
           box-shadow:
             0 18px 44px rgba(0, 0, 0, 0.35),
-            inset 0 1px 0 rgba(170, 198, 255, 0.06);
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px);
           position: sticky;
           top: 14px;
@@ -5038,13 +5035,13 @@ ${text}
           margin: 10px 0 14px;
           padding: 14px;
           border-radius: 14px;
-          border: 1px solid rgba(170, 198, 255, 0.15);
-          background: rgba(170, 198, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .aio-emailTitle {
           font-weight: 900;
-          color: rgba(235, 242, 255, 0.92);
+          color: rgba(255, 255, 255, 0.92);
           margin-bottom: 10px;
         }
 
@@ -5071,7 +5068,7 @@ ${text}
         .aio-emailNote {
           margin-top: 10px;
           font-size: 12px;
-          color: rgba(235, 242, 255, 0.75);
+          color: rgba(255, 255, 255, 0.75);
         }
 
         /* Interpretation Block */
@@ -5079,8 +5076,8 @@ ${text}
           margin-top: 16px;
           padding: 14px 16px;
           border-radius: 12px;
-          border: 1px solid rgba(170, 198, 255, 0.18);
-          background: rgba(170, 198, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.04);
         }
 
         .aio-interpretation-header {
@@ -5089,20 +5086,20 @@ ${text}
           gap: 8px;
           font-size: 13px;
           font-weight: 700;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           margin-bottom: 10px;
         }
 
         .aio-interpretation-header svg {
           flex-shrink: 0;
-          color: rgba(235, 242, 255, 0.8);
+          color: rgba(255, 255, 255, 0.8);
         }
 
         .aio-interpretation-text {
           margin: 0 0 12px 0;
           font-size: 13px;
           line-height: 1.55;
-          color: rgba(235, 242, 255, 0.82);
+          color: rgba(255, 255, 255, 0.82);
         }
 
         .aio-decision-gap {
@@ -5112,7 +5109,7 @@ ${text}
           padding: 10px 12px;
           border-radius: 8px;
           background: rgba(0, 0, 0, 0.18);
-          border: 1px solid rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           margin-bottom: 12px;
         }
 
@@ -5121,20 +5118,20 @@ ${text}
           font-weight: 700;
           letter-spacing: 0.06em;
           text-transform: uppercase;
-          color: rgba(235, 242, 255, 0.85);
+          color: rgba(255, 255, 255, 0.85);
           flex-shrink: 0;
         }
 
         .aio-decision-gap-value {
           font-size: 13px;
           font-weight: 600;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
         }
 
         .aio-interpretation-disclaimer {
           margin: 0;
           font-size: 11px;
-          color: rgba(235, 242, 255, 0.45);
+          color: rgba(255, 255, 255, 0.45);
           font-style: italic;
         }
 
@@ -5143,8 +5140,8 @@ ${text}
           margin-top: 14px;
           padding: 14px;
           border-radius: 12px;
-          border: 1px solid rgba(170, 198, 255, 0.2);
-          background: rgba(170, 198, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.05);
           text-align: center;
         }
 
@@ -5155,7 +5152,7 @@ ${text}
           padding: 10px 20px;
           border-radius: 8px;
           border: none;
-          background: linear-gradient(135deg, rgba(235, 242, 255, 0.9) 0%, rgba(255,255,255,0.7) 100%);
+          background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
           color: #fff;
           font-size: 14px;
           font-weight: 600;
@@ -5186,7 +5183,7 @@ ${text}
         .aio-empty {
           padding: 14px;
           border-radius: 12px;
-          border: 1px solid rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           background: rgba(0, 0, 0, 0.18);
           color: rgba(255, 255, 255, 0.65);
           font-size: 13px;
@@ -5198,7 +5195,7 @@ ${text}
           inset: 0;
           background:
             radial-gradient(600px 220px at 20% 10%, rgba(255, 255, 255, 0.12), transparent 55%),
-            radial-gradient(520px 220px at 80% 0%, rgba(170, 198, 255, 0.08), transparent 60%);
+            radial-gradient(520px 220px at 80% 0%, rgba(255, 255, 255, 0.08), transparent 60%);
           pointer-events: none;
         }
 
@@ -5212,7 +5209,7 @@ ${text}
           background: rgba(0, 0, 0, 0.22);
           box-shadow:
             0 18px 44px rgba(0, 0, 0, 0.35),
-            inset 0 1px 0 rgba(170, 198, 255, 0.05);
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px);
         }
 
@@ -5228,7 +5225,7 @@ ${text}
           font-weight: 700;
           letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
         }
 
         .aio-switcher-sub {
@@ -5249,7 +5246,7 @@ ${text}
           padding: 10px 12px;
           border-radius: 12px;
           background: rgba(0, 0, 0, 0.45);
-          border: 1px solid rgba(170, 198, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           transition: border-color 160ms ease, box-shadow 160ms ease;
         }
 
@@ -5274,8 +5271,8 @@ ${text}
         }
 
         .aio-clear {
-          border: 1px solid rgba(170, 198, 255, 0.18);
-          background: rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.78);
           border-radius: 10px;
           padding: 6px 10px;
@@ -5284,7 +5281,7 @@ ${text}
         }
 
         .aio-clear:hover {
-          background: rgba(170, 198, 255, 0.14);
+          background: rgba(255, 255, 255, 0.14);
           transform: translateY(-1px);
         }
 
@@ -5321,11 +5318,11 @@ ${text}
 
         .aio-pillActive {
           border-color: rgba(255, 255, 255, 0.55);
-          background: linear-gradient(180deg, rgba(170, 198, 255, 0.18), rgba(0, 0, 0, 0.35));
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.35));
           color: rgba(255, 255, 255, 0.92);
           box-shadow:
             0 12px 34px rgba(0, 0, 0, 0.45),
-            0 0 24px rgba(170, 198, 255, 0.14);
+            0 0 24px rgba(255, 255, 255, 0.14);
         }
 
         .aio-pillIcon {
@@ -5340,9 +5337,9 @@ ${text}
           width: 100%;
           padding: 14px 16px;
           background: rgba(0, 0, 0, 0.85);
-          border: 1px solid rgba(170, 198, 255, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           border-radius: 10px;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           font-size: 14px;
           cursor: pointer;
           outline: none;
@@ -5361,13 +5358,13 @@ ${text}
         .aio-select option:focus,
         .aio-select option:checked {
           background: #2a2a35;
-          color: rgba(235, 242, 255, 0.9);
+          color: rgba(255,255,255,0.9);
         }
 
         .aio-select:focus {
-          border-color: rgba(235, 242, 255, 0.6);
+          border-color: rgba(255, 255, 255, 0.6);
           box-shadow:
-            0 0 0 4px rgba(170, 198, 255, 0.14),
+            0 0 0 4px rgba(255, 255, 255, 0.14),
             0 10px 30px rgba(0, 0, 0, 0.45);
         }
 
@@ -5377,7 +5374,7 @@ ${text}
           gap: 16px;
           margin-bottom: 24px;
           padding-bottom: 20px;
-          border-bottom: 1px solid rgba(170, 198, 255, 0.15);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.15);
           position: relative;
           z-index: 1;
         }
@@ -5435,7 +5432,7 @@ ${text}
         .aio-label {
           font-size: 12px;
           font-weight: 600;
-          color: rgba(235, 242, 255, 0.8);
+          color: rgba(255, 255, 255, 0.8);
           text-transform: uppercase;
           letter-spacing: 0.08em;
         }
@@ -5459,7 +5456,7 @@ ${text}
           padding: 12px 14px;
           color: rgba(255, 255, 255, 0.7);
           font-size: 14px;
-          background: rgba(170, 198, 255, 0.08);
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .aio-input {
@@ -5467,7 +5464,7 @@ ${text}
           padding: 12px 14px;
           background: transparent;
           border: none;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           font-size: 16px;
           outline: none;
           -moz-appearance: textfield;
@@ -5505,7 +5502,7 @@ ${text}
         .aio-button:focus-visible {
           outline: none;
           box-shadow:
-            0 0 0 4px rgba(170, 198, 255, 0.18),
+            0 0 0 4px rgba(255, 255, 255, 0.18),
             0 18px 50px rgba(0, 0, 0, 0.55);
         }
 
@@ -5513,7 +5510,7 @@ ${text}
           margin: 0;
           font-size: 16px;
           font-weight: 600;
-          color: rgba(235, 242, 255, 0.9);
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .aio-results-grid {
@@ -5531,7 +5528,7 @@ ${text}
           gap: 14px;
           padding: 14px;
           border-radius: 14px;
-          border: 1px solid rgba(170, 198, 255, 0.14);
+          border: 1px solid rgba(255, 255, 255, 0.14);
           background: rgba(0, 0, 0, 0.28);
         }
 
@@ -5544,7 +5541,7 @@ ${text}
         }
 
         .aio-taxTitle {
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           font-weight: 700;
           letter-spacing: 0.02em;
         }
@@ -5562,9 +5559,9 @@ ${text}
         }
 
         .aio-secondary {
-          border: 1px solid rgba(170, 198, 255, 0.18);
-          background: rgba(170, 198, 255, 0.08);
-          color: rgba(235, 242, 255, 0.85);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.85);
           border-radius: 12px;
           padding: 10px 12px;
           cursor: pointer;
@@ -5574,7 +5571,7 @@ ${text}
         }
 
         .aio-secondary:hover {
-          background: rgba(170, 198, 255, 0.14);
+          background: rgba(255, 255, 255, 0.14);
           border-color: rgba(255, 255, 255, 0.32);
           transform: translateY(-1px);
         }
@@ -5589,7 +5586,7 @@ ${text}
           padding: 12px 12px;
           border-radius: 12px;
           border: 1px solid rgba(255, 255, 255, 0.12);
-          background: rgba(170, 198, 255, 0.05);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .aio-taxKpiGold {
@@ -5658,7 +5655,7 @@ ${text}
         }
 
         .aio-taxTable th {
-          color: rgba(235, 242, 255, 0.9);
+          color: rgba(255, 255, 255, 0.9);
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -5720,15 +5717,15 @@ ${text}
 
         .aio-sheetTitle {
           font-weight: 800;
-          color: rgba(235, 242, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95);
           letter-spacing: 0.06em;
           text-transform: uppercase;
           font-size: 12px;
         }
 
         .aio-sheetClose {
-          border: 1px solid rgba(170, 198, 255, 0.18);
-          background: rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.78);
           border-radius: 12px;
           padding: 8px 10px;
@@ -5778,7 +5775,7 @@ ${text}
 
         .premium-scroll-x {
           scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.55) rgba(170, 198, 255, 0.05);
+          scrollbar-color: rgba(255, 255, 255, 0.55) rgba(255, 255, 255, 0.05);
         }
 
         .premium-scroll-x::-webkit-scrollbar {
@@ -5786,7 +5783,7 @@ ${text}
         }
 
         .premium-scroll-x::-webkit-scrollbar-track {
-          background: rgba(170, 198, 255, 0.05);
+          background: rgba(255, 255, 255, 0.05);
           border-radius: 999px;
         }
 
@@ -5822,7 +5819,7 @@ ${text}
 
         .aio-panel {
           background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 16px;
           padding: 14px;
         }
@@ -5853,21 +5850,21 @@ ${text}
         }
 
         .aio-kpi {
-          background: rgba(13, 17, 23, 0.8);
-          border: 1px solid rgba(170, 198, 255, 0.12);
+          background: rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 14px;
           padding: 12px;
         }
 
         .aio-kpiGold {
-          border-color: rgba(170, 198, 255, 0.35);
-          background: linear-gradient(180deg, rgba(170, 198, 255, 0.12), rgba(13, 17, 23, 0.9));
+          border-color: rgba(255, 255, 255, 0.45);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.22));
         }
 
         .aio-kpiMeta {
           margin-top: 6px;
           font-size: 12px;
-          color: rgba(170, 198, 255, 0.65);
+          color: rgba(255, 255, 255, 0.65);
         }
 
         .aio-tableWrap {
@@ -5877,21 +5874,21 @@ ${text}
         .aio-tableTitle {
           margin: 10px 2px 8px;
           font-weight: 700;
-          color: rgba(235, 242, 255, 0.86);
+          color: rgba(255, 255, 255, 0.86);
         }
 
         .aio-checklist {
           margin-top: 12px;
           padding: 12px;
           border-radius: 14px;
-          border: 1px solid rgba(170, 198, 255, 0.1);
-          background: rgba(13, 17, 23, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(0, 0, 0, 0.22);
         }
 
         .aio-checklistList {
           margin: 8px 0 0;
           padding-left: 18px;
-          color: rgba(235, 242, 255, 0.85);
+          color: rgba(255, 255, 255, 0.85);
         }
 
         .aio-checklistList li {
@@ -5903,9 +5900,9 @@ ${text}
           margin-top: 12px;
           padding: 10px 12px;
           border-radius: 14px;
-          border: 1px solid rgba(170, 198, 255, 0.25);
-          background: rgba(170, 198, 255, 0.08);
-          color: rgba(235, 242, 255, 0.88);
+          border: 1px solid rgba(255, 255, 255, 0.32);
+          background: rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.88);
           font-size: 12px;
         }
 
@@ -5914,14 +5911,14 @@ ${text}
           justify-content: space-between;
           align-items: center;
           padding: 14px 16px;
-          background: rgba(170, 198, 255, 0.05);
-          border: 1px solid rgba(170, 198, 255, 0.1);
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 10px;
         }
 
         .aio-result-label {
           font-size: 13px;
-          color: rgba(235, 242, 255, 0.6);
+          color: rgba(255, 255, 255, 0.6);
         }
 
         .aio-result-value {
@@ -6070,7 +6067,7 @@ ${text}
           }
           .aio-sheetTop {
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(170, 198, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             margin-bottom: 16px;
           }
           .aio-sheetTitle {

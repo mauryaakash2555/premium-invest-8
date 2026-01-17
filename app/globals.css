@@ -479,29 +479,29 @@
     transform: translateY(-1px);
   }
 
-  /* Premium Icy Blue CTA - reusable (Live Intelligence theme) */
-  /* CLEAN LUXURY BUTTON - Icy blue, no gradient, subtle glow */
+  /* Premium Gold CTA - reusable (same as calculator CTA glow) */
+  /* CLEAN LUXURY BUTTON - Flat gold, no gradient, subtle glow */
   .calculator-premium-cta {
-    background: rgba(170, 198, 255, 0.95) !important;
-    color: #090A0C !important;
+    background: #E6C77B !important;
+    color: #0A0A0A !important;
     border: none !important;
     border-radius: 10px !important;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 18px rgba(170, 198, 255, 0.35);
+    box-shadow: 0 0 18px rgba(230,199,123,0.25);
     transition: all 0.3s ease;
     font-weight: 600 !important;
   }
 
   .calculator-premium-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 28px rgba(170, 198, 255, 0.5);
-    filter: brightness(1.08);
+    box-shadow: 0 0 28px rgba(230,199,123,0.4);
+    filter: brightness(1.05);
   }
 
   .calculator-premium-cta:active {
     transform: translateY(0);
-    box-shadow: 0 0 12px rgba(170, 198, 255, 0.3);
+    box-shadow: 0 0 12px rgba(230,199,123,0.2);
   }
 
   .calculator-premium-cta::before {
@@ -534,31 +534,31 @@
     }
   }
 
-  /* ICY BLUE UTILITY CLASSES - Live Intelligence theme */
+  /* CLEAN LUXURY UTILITY CLASSES - Minimal gold, dark backgrounds */
   .premium-gold-text {
-    color: rgba(170, 198, 255, 0.95) !important;
+    color: #E6C77B !important;
   }
 
   .premium-gold-border {
-    border: 1px solid rgba(170, 198, 255, 0.12) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
   }
 
   .premium-gold-border-strong {
-    border: 1px solid rgba(170, 198, 255, 0.3) !important;
+    border: 1px solid rgba(230,199,123,0.3) !important;
   }
 
   .premium-gold-bg {
     background: rgba(18,18,18,0.8) !important;
-    border: 1px solid rgba(170, 198, 255, 0.08) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
   }
 
   .premium-gold-bg-highlight {
     background: rgba(18,18,18,0.95) !important;
-    border: 1px solid rgba(170, 198, 255, 0.2) !important;
+    border: 1px solid rgba(230,199,123,0.2) !important;
   }
 
   .premium-gold-accent {
-    border-left: 2px solid rgba(170, 198, 255, 0.9) !important;
+    border-left: 2px solid #E6C77B !important;
   }
 
   .premium-gold-glow {
@@ -566,12 +566,12 @@
   }
 
   .premium-gold-table-header {
-    background: rgba(170, 198, 255, 0.05) !important;
-    border-bottom: 1px solid rgba(170, 198, 255, 0.1) !important;
+    background: rgba(255,255,255,0.03) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
   }
 
   .premium-gold-table-row-highlight {
-    background: rgba(170, 198, 255, 0.03) !important;
+    background: rgba(255,255,255,0.02) !important;
   }
 
   @keyframes premium-cta-gradient {
