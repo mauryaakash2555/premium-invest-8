@@ -265,11 +265,11 @@ export function PropertyVsSipCalculator() {
 
     setLeadOpen(false);
     const checkoutUrl = typeof orderJson?.checkout_url === "string" && orderJson.checkout_url.trim() ? orderJson.checkout_url.trim() : "";
-    if (checkoutUrl) {
-      window.location.assign(checkoutUrl);
-    } else {
-      window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
+    if (!checkoutUrl) {
+      track("payment_failed", { stage: "missing_checkout_url" });
+      throw new Error("Payment gateway URL not received. Please try again.");
     }
+    window.location.assign(checkoutUrl);
   }
 
   useEffect(() => {
