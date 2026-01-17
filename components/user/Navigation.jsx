@@ -51,6 +51,9 @@ const Navigation = () => {
     // Prevent hydration mismatch: set mounted after initial render
     setMounted(true);
     
+    // Set initial mobile state IMMEDIATELY (not throttled) to prevent mobile nav on desktop
+    setIsMobile(window.innerWidth < 1024);
+    
     let lastY = 0;
     const handleScroll = throttle(() => {
       const y = window.scrollY;
@@ -73,7 +76,6 @@ const Navigation = () => {
       setIsMobile(window.innerWidth < 1024);
     }, 150);
     
-    handleResize();
     handleScroll();
     
     // Use passive listeners for better scroll performance
