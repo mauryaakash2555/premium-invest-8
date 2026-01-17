@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 // ═══════════════════════════════════════════════════════════
 // QUICK LEARN - 30-second micro lessons on financial concepts
@@ -92,6 +92,22 @@ const QUICK_LEARN_LESSONS = [
 
 const getDayKey = () => new Date().toISOString().slice(0, 10);
 
+const addDays = (isoDayKey, days) => {
+  const d = new Date(`${isoDayKey}T00:00:00.000Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+const computeStreak = (doneDaysSet, todayKey) => {
+  let streak = 0;
+  let cursor = todayKey;
+  while (doneDaysSet.has(cursor)) {
+    streak += 1;
+    cursor = addDays(cursor, -1);
+  }
+  return streak;
+};
+
 const getDailyLessonSet = (count = 3) => {
   const dayOfYear = Math.floor(
     (new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
@@ -127,31 +143,45 @@ const getDailyLessonSet = (count = 3) => {
  * QuickLearn - Clean laser blue theme matching overlay
  */
 export default function QuickLearn() {
+  const dayKey = useMemo(() => getDayKey(), []);
   const [lessons, setLessons] = useState([]);
   const [activeIdx, setActiveIdx] = useState(0);
   const [revealed, setRevealed] = useState({});
   const [completed, setCompleted] = useState({});
+  const [xp, setXp] = useState(0);
+  const [toast, setToast] = useState('');
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => {
     const daily = getDailyLessonSet(3);
     setLessons(daily);
 
-    const dayKey = getDayKey();
     const stored = JSON.parse(localStorage.getItem('li_quicklearn_state') || '{}');
     const todayState = stored[dayKey] || { revealed: {}, completed: {}, activeIdx: 0 };
 
     setRevealed(todayState.revealed || {});
     setCompleted(todayState.completed || {});
     setActiveIdx(typeof todayState.activeIdx === 'number' ? todayState.activeIdx : 0);
+
+    const storedXp = parseInt(localStorage.getItem('li_quicklearn_xp') || '0', 10);
+    setXp(Number.isFinite(storedXp) ? storedXp : 0);
+
+    const doneDays = new Set(JSON.parse(localStorage.getItem('li_quicklearn_days_done') || '[]'));
+    setStreak(computeStreak(doneDays, dayKey));
   }, []);
 
   useEffect(() => {
     if (!lessons.length) return;
-    const dayKey = getDayKey();
     const stored = JSON.parse(localStorage.getItem('li_quicklearn_state') || '{}');
     stored[dayKey] = { revealed, completed, activeIdx };
     localStorage.setItem('li_quicklearn_state', JSON.stringify(stored));
   }, [revealed, completed, activeIdx, lessons.length]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(''), 1600);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   if (!lessons.length) return null;
 
@@ -172,7 +202,7 @@ export default function QuickLearn() {
           <div className="ql-progress">
             <div className="ql-progress-bar" style={{ width: `${Math.round((doneCount / lessons.length) * 100)}%` }} />
           </div>
-          <div className="ql-count">{doneCount}/{lessons.length} done</div>
+          <div className="ql-count">{doneCount}/{lessons.length} · {xp} XP · {streak}d</div>
         </div>
 
         <div className="ql-topic">{lesson.topic}</div>
@@ -198,6 +228,20 @@ export default function QuickLearn() {
                 className="ql-done"
                 onClick={() => {
                   setCompleted((p) => ({ ...p, [activeIdx]: true }));
+
+                  const nextXp = xp + 10;
+                  setXp(nextXp);
+                  localStorage.setItem('li_quicklearn_xp', String(nextXp));
+                  setToast('+10 XP');
+
+                  const nextDoneCount = doneCount + 1;
+                  if (nextDoneCount >= lessons.length) {
+                    const doneDays = new Set(JSON.parse(localStorage.getItem('li_quicklearn_days_done') || '[]'));
+                    doneDays.add(dayKey);
+                    localStorage.setItem('li_quicklearn_days_done', JSON.stringify(Array.from(doneDays)));
+                    setStreak(computeStreak(doneDays, dayKey));
+                  }
+
                   // Auto-advance if possible
                   const next = Math.min(activeIdx + 1, lessons.length - 1);
                   if (next !== activeIdx) setActiveIdx(next);
@@ -209,6 +253,10 @@ export default function QuickLearn() {
               <div className="ql-completed">Done</div>
             )}
           </div>
+        )}
+
+        {toast && (
+          <div className="ql-toast" role="status" aria-live="polite">{toast}</div>
         )}
 
         <div className="ql-nav">
@@ -281,6 +329,16 @@ export default function QuickLearn() {
           color: rgba(180, 195, 230, 0.45);
           text-transform: uppercase;
           letter-spacing: 0.04em;
+        }
+        .ql-toast {
+          margin-top: 10px;
+          padding: 8px 10px;
+          border-radius: 10px;
+          border: 1px solid rgba(100, 160, 255, 0.16);
+          background: rgba(100, 160, 255, 0.08);
+          color: rgba(235, 242, 255, 0.86);
+          font-size: 12px;
+          width: fit-content;
         }
         .ql-badge {
           font-size: 10px;

@@ -25,6 +25,7 @@
 
 'use client';
 
+import { useEffect } from 'react';
 import { Playfair_Display, Inter } from "next/font/google";
 import { usePathname } from 'next/navigation';
 import "./globals.css";
@@ -42,12 +43,14 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
 });
 
 export default function RootLayout({ children, buildId: buildIdProp }) {
@@ -60,27 +63,38 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
   const hasCustomFooter = isLaserPage || isClientPortal;
 
   const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
+
+  // Defer GTM loading by 3 seconds for better LCP
+  useEffect(() => {
+    if (!GA4_MEASUREMENT_ID) return;
+    const timer = setTimeout(() => {
+      // Load gtag.js
+      const script = document.createElement('script');
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+      script.async = true;
+      document.head.appendChild(script);
+      // Initialize gtag
+      script.onload = () => {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', GA4_MEASUREMENT_ID);
+      };
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <html lang="en">
       <head>
         <meta name="x-ui-build" content={buildId} />
 
-  {/* Google Analytics */}
-  {GA4_MEASUREMENT_ID && (
-            <>
-              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`} />
-              <script
-                dangerouslySetInnerHTML={{
-                                __html: `
-                                                window.dataLayer = window.dataLayer || [];
-                                                                function gtag(){dataLayer.push(arguments);}
-                                                                                gtag('js', new Date());
-                                                                                                gtag('config', '${GA4_MEASUREMENT_ID}');
-                                                                                                              `,
-                }}
-            />
-              </>
-                    )}
+        {/* Preconnect hints for third-party resources (perf: saves ~300ms LCP) */}
+        <link rel="preconnect" href="https://www.tradingview.com" />
+        <link rel="preconnect" href="https://s.tradingview.com" />
+        <link rel="preconnect" href="https://www.tradingview-widget.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#090A0C" />
       </head>

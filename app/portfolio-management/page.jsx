@@ -79,6 +79,27 @@ const PortfolioManagement = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Portfolio Management',
+    description,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
+    areaServed: { '@type': 'Country', name: 'IN' },
+    serviceType: 'Portfolio Management',
+    url: pageUrl,
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -116,6 +137,16 @@ const PortfolioManagement = () => {
         id="portfolio-management-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="portfolio-management-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        id="portfolio-management-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}

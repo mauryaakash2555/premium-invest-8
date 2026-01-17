@@ -204,13 +204,13 @@ export default function LiveIntelligenceHero() {
     }
   };
 
-  // Rotation (no scrolling): fade → replace → fade (~6–8s)
+  // Rotation (no scrolling): fade → replace → fade (~10s for readability)
   useEffect(() => {
     if (!items.length) return;
 
     const interval = setInterval(() => {
       setActiveIdx((prev) => (prev + 1) % items.length);
-    }, 7000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [items.length]);

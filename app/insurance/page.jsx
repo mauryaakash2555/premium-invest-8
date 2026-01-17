@@ -72,6 +72,27 @@ const Insurance = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Insurance',
+    description,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
+    areaServed: { '@type': 'Country', name: 'IN' },
+    serviceType: 'Insurance',
+    url: pageUrl,
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -110,6 +131,16 @@ const Insurance = () => {
         id="insurance-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="insurance-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        id="insurance-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
   <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>

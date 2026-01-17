@@ -77,6 +77,27 @@ const TradingServices = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Trading & Demat',
+    description,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
+    areaServed: { '@type': 'Country', name: 'IN' },
+    serviceType: 'Trading & Demat',
+    url: pageUrl,
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -114,6 +135,16 @@ const TradingServices = () => {
         id="trading-services-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="trading-services-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        id="trading-services-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}
