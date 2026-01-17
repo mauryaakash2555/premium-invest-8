@@ -83,6 +83,199 @@ const base64UrlDecode = (b64url) => {
 };
 
 // ════════════════════════════════════════════════════════════════
+// PDF QUOTE GENERATOR
+// ════════════════════════════════════════════════════════════════
+const generateInsurancePDF = (result, inputs) => {
+  if (!result || result.__type !== 'insurance') return null;
+  
+  const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  const quoteId = `BM-${Date.now().toString(36).toUpperCase()}`;
+  
+  // Build HTML content for PDF
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Insurance Quote - ${quoteId}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1a1a1a; padding: 40px; max-width: 800px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #c0a062; padding-bottom: 20px; margin-bottom: 30px; }
+    .logo { font-size: 28px; font-weight: bold; color: #1a1a1a; }
+    .logo span { color: #c0a062; }
+    .quote-info { text-align: right; font-size: 12px; color: #666; }
+    .quote-id { font-size: 14px; font-weight: bold; color: #1a1a1a; }
+    h1 { font-size: 24px; color: #1a1a1a; margin-bottom: 10px; }
+    h2 { font-size: 18px; color: #c0a062; margin: 25px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
+    .summary-card { background: #f8f7f4; padding: 20px; border-radius: 8px; text-align: center; }
+    .summary-card .label { font-size: 12px; color: #666; margin-bottom: 5px; }
+    .summary-card .value { font-size: 22px; font-weight: bold; color: #1a1a1a; }
+    .summary-card .meta { font-size: 11px; color: #888; margin-top: 5px; }
+    .summary-card.highlight { background: linear-gradient(135deg, #c0a062, #d4b77a); color: #fff; }
+    .summary-card.highlight .label, .summary-card.highlight .meta { color: rgba(255,255,255,0.8); }
+    .summary-card.highlight .value { color: #fff; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; }
+    th { background: #f0ebe3; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #c0a062; }
+    td { padding: 10px; border-bottom: 1px solid #eee; }
+    tr:hover { background: #faf9f7; }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+    .tag-green { background: #e8f5e9; color: #2e7d32; }
+    .tag-gold { background: #fff8e1; color: #f57c00; }
+    .disclaimer { margin-top: 40px; padding: 20px; background: #f5f5f5; border-radius: 8px; font-size: 11px; color: #666; }
+    .footer { margin-top: 30px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
+    @media print { body { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">BM <span>Wealth</span></div>
+    <div class="quote-info">
+      <div class="quote-id">Quote: ${quoteId}</div>
+      <div>Generated: ${today}</div>
+      <div>Valid for 30 days</div>
+    </div>
+  </div>
+  
+  <h1>${result.insuranceType} Insurance Quote</h1>
+  <p style="color: #666; margin-bottom: 20px;">Personalized coverage recommendation based on your profile</p>
+  
+  <div class="summary-grid">
+    <div class="summary-card highlight">
+      <div class="label">Recommended Cover</div>
+      <div class="value">${fmt(result.recommendedCover)}</div>
+      <div class="meta">${result.coverageMultiple || ''}x annual income</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Premium Range</div>
+      <div class="value">${result.premiumRange || fmt(result.annualPremiumMid)}</div>
+      <div class="meta">Annual (varies by insurer)</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Monthly Equivalent</div>
+      <div class="value">${fmt(result.monthlyPremiumMid)}</div>
+      <div class="meta">Approx. EMI</div>
+    </div>
+  </div>
+  
+  ${result.hlv ? `
+  <h2>Human Life Value (HLV) Analysis</h2>
+  <table>
+    <tr><td>Net Annual Contribution</td><td class="text-right">${fmt(result.hlv.netAnnualContribution)}</td></tr>
+    <tr><td>Years to Retirement</td><td class="text-right">${result.hlv.yearsToRetire} years</td></tr>
+    <tr><td>Basic HLV</td><td class="text-right">${fmt(result.hlv.basicHLV)}</td></tr>
+    <tr><td><strong>Present Value (Discounted)</strong></td><td class="text-right"><strong>${fmt(result.hlv.presentValue)}</strong></td></tr>
+  </table>
+  ` : ''}
+  
+  ${result.bmiAnalysis ? `
+  <h2>Health Profile</h2>
+  <table>
+    <tr><td>BMI</td><td class="text-right">${result.bmiAnalysis.bmi} (${result.bmiAnalysis.category})</td></tr>
+    <tr><td>Height / Weight</td><td class="text-right">${result.bmiAnalysis.heightCm}cm / ${result.bmiAnalysis.weightKg}kg</td></tr>
+    <tr><td>Premium Impact</td><td class="text-right">${result.bmiAnalysis.impact}</td></tr>
+  </table>
+  ` : ''}
+  
+  ${Array.isArray(result.insurerQuotes) ? `
+  <h2>Premium Comparison by Insurer</h2>
+  <table>
+    <thead>
+      <tr><th>Insurer</th><th class="text-center">CSR</th><th class="text-right">Annual Premium</th><th class="text-right">Monthly</th></tr>
+    </thead>
+    <tbody>
+      ${result.insurerQuotes.map((q, idx) => `
+        <tr>
+          <td>${q.logo} ${q.name} ${idx === 0 ? '<span class="tag tag-green">Lowest</span>' : ''}</td>
+          <td class="text-center">${q.csr}%</td>
+          <td class="text-right">${fmt(q.annualPremium)}</td>
+          <td class="text-right">${fmt(q.monthlyPremium)}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>
+  ` : ''}
+  
+  ${Array.isArray(result.breakdown) ? `
+  <h2>Coverage Components</h2>
+  <table>
+    <thead><tr><th>Component</th><th class="text-right">Amount</th><th class="text-right">%</th></tr></thead>
+    <tbody>
+      ${result.breakdown.map(b => `
+        <tr><td>${b.label}</td><td class="text-right">${fmt(b.value)}</td><td class="text-right">${b.percent > 0 ? b.percent + '%' : '-'}</td></tr>
+      `).join('')}
+    </tbody>
+  </table>
+  ` : ''}
+  
+  ${Array.isArray(result.riders) && result.riders.length > 0 ? `
+  <h2>Selected Riders</h2>
+  <table>
+    <thead><tr><th>Rider</th><th>Benefit</th><th class="text-right">Cost/Year</th></tr></thead>
+    <tbody>
+      ${result.riders.filter(r => r.selected).map(r => `
+        <tr><td>${r.name}</td><td>${r.benefit}</td><td class="text-right">${fmt(r.cost)}</td></tr>
+      `).join('')}
+    </tbody>
+  </table>
+  ` : ''}
+  
+  ${result.taxBenefits ? `
+  <h2>Tax Benefits</h2>
+  <table>
+    <tr><td>80C Deduction</td><td class="text-right">${fmt(result.taxBenefits.deduction80C)}</td></tr>
+    <tr><td>Tax Saved (30% slab)</td><td class="text-right">${fmt(result.taxBenefits.taxSaved)}</td></tr>
+    <tr><td><strong>Effective Premium</strong></td><td class="text-right"><strong>${fmt(result.taxBenefits.effectivePremium)}</strong></td></tr>
+  </table>
+  ` : ''}
+  
+  ${result.ulipMaturity ? `
+  <h2>ULIP Maturity Projection</h2>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Conservative (8%)</div>
+      <div class="value">${fmt(result.ulipMaturity.fundValueLow)}</div>
+      <div class="meta">IRR: ${result.ulipMaturity.irrLow}%</div>
+    </div>
+    <div class="summary-card highlight">
+      <div class="label">Expected (10%)</div>
+      <div class="value">${fmt(result.ulipMaturity.fundValueMid)}</div>
+      <div class="meta">IRR: ${result.ulipMaturity.irrMid}%</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Optimistic (12%)</div>
+      <div class="value">${fmt(result.ulipMaturity.fundValueHigh)}</div>
+      <div class="meta">IRR: ${result.ulipMaturity.irrHigh}%</div>
+    </div>
+  </div>
+  <table>
+    <tr><td>Total Premium Paid</td><td class="text-right">${fmt(result.ulipMaturity.totalPremiumPaid)}</td></tr>
+    <tr><td>Wealth Multiple (Mid)</td><td class="text-right">${result.ulipMaturity.wealthMultiple}x</td></tr>
+    <tr><td>Wealth Gain (Mid)</td><td class="text-right">${fmt(result.ulipMaturity.wealthGainMid)}</td></tr>
+  </table>
+  ` : ''}
+  
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This is an indicative quote for informational purposes only. Actual premiums depend on insurer underwriting, medical tests, and policy terms. 
+    Claim Settlement Ratio (CSR) data from IRDAI 2024-25. BM Wealth does not guarantee coverage or premium amounts. 
+    Please consult with a licensed insurance advisor before making any decisions.
+  </div>
+  
+  <div class="footer">
+    <p>Generated by BM Wealth Insurance Calculator | www.bmwealth.co.in</p>
+    <p>For personalized advice, contact us at support@bmwealth.co.in</p>
+  </div>
+</body>
+</html>
+  `.trim();
+  
+  return htmlContent;
+};
+
+// ════════════════════════════════════════════════════════════════
 // INTERPRETATIONS - Educational, no advice, no future tense
 // ════════════════════════════════════════════════════════════════
 const getInterpretation = (calcKey, result, inputs) => {
@@ -461,17 +654,17 @@ const calculations = {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // INSURER DATA WITH CSR (Claim Settlement Ratio)
+    // INSURER DATA WITH CSR (Claim Settlement Ratio) + BUY NOW URLS
     // ═══════════════════════════════════════════════════════════════
     const insurerData = [
-      { name: 'LIC', logo: '🏛️', csr: 98.62, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.15, solvency: 185.92 },
-      { name: 'HDFC Life', logo: '🏦', csr: 99.07, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.0, solvency: 187.00 },
-      { name: 'ICICI Prudential', logo: '🔵', csr: 97.90, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.98, solvency: 212.70 },
-      { name: 'Max Life', logo: '🔴', csr: 99.51, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.02, solvency: 194.00 },
-      { name: 'SBI Life', logo: '🟢', csr: 95.03, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.05, solvency: 211.00 },
-      { name: 'Tata AIA', logo: '🟡', csr: 98.54, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.95, solvency: 220.00 },
-      { name: 'Bajaj Allianz', logo: '🔷', csr: 98.02, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.97, solvency: 584.00 },
-      { name: 'Kotak Life', logo: '🟠', csr: 98.89, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.03, solvency: 239.00 },
+      { name: 'LIC', logo: '🏛️', csr: 98.62, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.15, solvency: 185.92, buyUrl: 'https://licindia.in/buy-online', color: '#1a237e' },
+      { name: 'HDFC Life', logo: '🏦', csr: 99.07, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.0, solvency: 187.00, buyUrl: 'https://www.hdfclife.com/term-insurance-plans/click-2-protect-super', color: '#004c8c' },
+      { name: 'ICICI Prudential', logo: '🔵', csr: 97.90, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.98, solvency: 212.70, buyUrl: 'https://www.iciciprulife.com/term-insurance/iprotect-smart.html', color: '#f57c00' },
+      { name: 'Max Life', logo: '🔴', csr: 99.51, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.02, solvency: 194.00, buyUrl: 'https://www.maxlifeinsurance.com/term-insurance-plans/smart-secure-plus', color: '#c62828' },
+      { name: 'SBI Life', logo: '🟢', csr: 95.03, rating: 'AAA', minCover: 500000, basePremiumFactor: 1.05, solvency: 211.00, buyUrl: 'https://www.sbilife.co.in/en/term-insurance/eterm', color: '#2e7d32' },
+      { name: 'Tata AIA', logo: '🟡', csr: 98.54, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.95, solvency: 220.00, buyUrl: 'https://www.tataaia.com/online-term-plan/sampoorna-raksha-supreme', color: '#1565c0' },
+      { name: 'Bajaj Allianz', logo: '🔷', csr: 98.02, rating: 'AAA', minCover: 1000000, basePremiumFactor: 0.97, solvency: 584.00, buyUrl: 'https://www.bajajallianzlife.com/life-insurance-plans/term-insurance/etouch.html', color: '#0277bd' },
+      { name: 'Kotak Life', logo: '🟠', csr: 98.89, rating: 'AAA', minCover: 1000000, basePremiumFactor: 1.03, solvency: 239.00, buyUrl: 'https://www.kotaklife.com/online-plans/term-insurance/e-term-plan', color: '#ef6c00' },
     ];
 
     // Base pricing per crore (industry standard 2025)
@@ -804,6 +997,126 @@ const calculations = {
       const lifeExpectancy = gender === 'male' ? 72 : 75;
       const postRetirementYears = lifeExpectancy - ra;
 
+      // ═══════════════════════════════════════════════════════════════
+      // ULIP / ENDOWMENT MATURITY CALCULATIONS
+      // ═══════════════════════════════════════════════════════════════
+      let ulipMaturity = null;
+      let maturityProjection = [];
+      
+      if (type === 'ulip' || type === 'wholelife') {
+        const premiumPerYear = Math.round(avgPremium);
+        const policyYears = Math.min(term, 30);
+        const premiumPayingTerm = Math.min(term, 15); // PPT typically 10-15 years
+        
+        // ULIP charges (industry standard)
+        const premiumAllocationCharge = 0.05; // 5% of premium
+        const fundManagementCharge = 0.0135; // 1.35% per annum
+        const policyAdminCharge = 500; // ₹500/month = ₹6000/year
+        const mortalityCharge = avgPremium * 0.02; // ~2% mortality deduction
+        
+        // Fund return scenarios
+        const fundReturns = { low: 0.08, mid: 0.10, high: 0.12 };
+        
+        // Calculate year-by-year fund value
+        const calculateULIPFund = (returnRate) => {
+          let fundValue = 0;
+          const yearlyData = [];
+          
+          for (let year = 1; year <= policyYears; year++) {
+            // Premium allocation (only during PPT)
+            const premiumThisYear = year <= premiumPayingTerm ? premiumPerYear : 0;
+            const allocatedPremium = premiumThisYear * (1 - premiumAllocationCharge);
+            
+            // Add to fund
+            fundValue += allocatedPremium;
+            
+            // Deduct charges
+            fundValue -= policyAdminCharge;
+            fundValue -= mortalityCharge;
+            
+            // Apply fund returns
+            fundValue = fundValue * (1 + returnRate - fundManagementCharge);
+            fundValue = Math.max(0, fundValue);
+            
+            yearlyData.push({
+              year,
+              age: a + year,
+              premiumPaid: premiumThisYear,
+              fundValue: Math.round(fundValue),
+              cumulativePremium: Math.round(premiumPerYear * Math.min(year, premiumPayingTerm)),
+            });
+          }
+          
+          return { fundValue: Math.round(fundValue), yearlyData };
+        };
+        
+        const lowScenario = calculateULIPFund(fundReturns.low);
+        const midScenario = calculateULIPFund(fundReturns.mid);
+        const highScenario = calculateULIPFund(fundReturns.high);
+        
+        const totalPremiumPaid = premiumPerYear * premiumPayingTerm;
+        
+        // XIRR-like return calculation
+        const calculateIRR = (finalValue, annualPayment, years) => {
+          const totalInvested = annualPayment * Math.min(years, premiumPayingTerm);
+          if (totalInvested <= 0 || finalValue <= 0) return 0;
+          // Approximate IRR using CAGR formula for regular payments
+          const avgYears = (years + 1) / 2; // average holding period
+          const irr = Math.pow(finalValue / totalInvested, 1 / avgYears) - 1;
+          return Math.max(0, irr * 100);
+        };
+        
+        ulipMaturity = {
+          policyTerm: policyYears,
+          premiumPayingTerm,
+          annualPremium: premiumPerYear,
+          totalPremiumPaid,
+          
+          // Fund values at maturity
+          fundValueLow: lowScenario.fundValue,
+          fundValueMid: midScenario.fundValue,
+          fundValueHigh: highScenario.fundValue,
+          
+          // Returns
+          irrLow: calculateIRR(lowScenario.fundValue, premiumPerYear, policyYears).toFixed(1),
+          irrMid: calculateIRR(midScenario.fundValue, premiumPerYear, policyYears).toFixed(1),
+          irrHigh: calculateIRR(highScenario.fundValue, premiumPerYear, policyYears).toFixed(1),
+          
+          // Wealth gain
+          wealthGainMid: midScenario.fundValue - totalPremiumPaid,
+          wealthMultiple: (midScenario.fundValue / totalPremiumPaid).toFixed(2),
+          
+          // Fund options (typical ULIP)
+          fundOptions: [
+            { name: 'Equity Fund', allocation: 80, expectedReturn: '10-14%', risk: 'High' },
+            { name: 'Balanced Fund', allocation: 60, expectedReturn: '8-11%', risk: 'Medium' },
+            { name: 'Debt Fund', allocation: 20, expectedReturn: '6-8%', risk: 'Low' },
+            { name: 'Money Market', allocation: 10, expectedReturn: '4-6%', risk: 'Very Low' },
+          ],
+          
+          // Charges breakdown
+          charges: {
+            premiumAllocation: `${(premiumAllocationCharge * 100).toFixed(0)}%`,
+            fundManagement: `${(fundManagementCharge * 100).toFixed(2)}% p.a.`,
+            policyAdmin: `₹${policyAdminCharge}/year`,
+            mortality: `~₹${Math.round(mortalityCharge)}/year`,
+          },
+          
+          // Key milestones
+          milestones: [
+            { year: 5, label: 'Lock-in Ends', fundValue: midScenario.yearlyData[4]?.fundValue || 0 },
+            { year: 10, label: 'Mid-Term', fundValue: midScenario.yearlyData[9]?.fundValue || 0 },
+            { year: premiumPayingTerm, label: 'PPT Ends', fundValue: midScenario.yearlyData[premiumPayingTerm - 1]?.fundValue || 0 },
+            { year: policyYears, label: 'Maturity', fundValue: midScenario.fundValue },
+          ].filter(m => m.year <= policyYears),
+        };
+        
+        // Store projection for chart
+        maturityProjection = midScenario.yearlyData.filter((_, idx) => 
+          idx === 0 || idx === 4 || idx === 9 || idx === 14 || idx === 19 || idx === midScenario.yearlyData.length - 1
+        );
+      }
+
       result = {
         __type: 'insurance',
         insuranceType: type === 'term' ? 'Term Life' : type === 'wholelife' ? 'Whole Life' : 'ULIP',
@@ -905,6 +1218,17 @@ const calculations = {
           postRetirementYears,
           retirementAge: ra,
         },
+        
+        // ULIP/Endowment Maturity (if applicable)
+        ulipMaturity,
+        maturityProjection,
+        
+        // Insurer data with buy links
+        insurerQuotesWithLinks: insurerQuotes.map(q => ({
+          ...q,
+          buyUrl: insurerData.find(i => i.name === q.name)?.buyUrl || null,
+          color: insurerData.find(i => i.name === q.name)?.color || '#333',
+        })),
         
         // Top insurers with CSR
         topInsurers: insurerData.map(i => `${i.name} (CSR: ${i.csr}%)`),
@@ -2737,14 +3061,45 @@ ${text}
               </div>
             )}
 
-            {/* Insurer Comparison Table */}
-            {Array.isArray(result.insurerQuotes) && result.insurerQuotes.length > 0 && (
+            {/* Insurer Comparison Table with Buy Now */}
+            {Array.isArray(result.insurerQuotesWithLinks || result.insurerQuotes) && (result.insurerQuotesWithLinks || result.insurerQuotes).length > 0 && (
               <div className="aio-tableWrap" style={{ marginTop: '20px' }}>
-                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>📋</span> Premium Comparison by Insurer
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'space-between' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>📋</span> Premium Comparison by Insurer
+                  </span>
+                  <button
+                    onClick={() => {
+                      const html = generateInsurancePDF(result, inputs);
+                      if (!html) return;
+                      const blob = new Blob([html], { type: 'text/html' });
+                      const url = URL.createObjectURL(blob);
+                      const win = window.open(url, '_blank');
+                      if (win) {
+                        win.onload = () => {
+                          setTimeout(() => win.print(), 500);
+                        };
+                      }
+                    }}
+                    style={{
+                      background: 'linear-gradient(135deg, #c0a062, #d4b77a)',
+                      color: '#000',
+                      border: 'none',
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    📄 Download Quote
+                  </button>
                 </div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginBottom: '12px' }}>
-                  Sorted by premium (lowest first) • CSR = Claim Settlement Ratio
+                  Sorted by premium (lowest first) • CSR = Claim Settlement Ratio • Click "Buy" to visit insurer website
                 </div>
                 <table className="aio-taxTable">
                   <thead>
@@ -2753,13 +3108,12 @@ ${text}
                       <th className="right">CSR</th>
                       <th className="right">Annual</th>
                       <th className="right">Monthly</th>
-                      {result.insurerQuotes[0]?.premiumPerLakh && <th className="right">Per ₹1L</th>}
-                      {result.insurerQuotes[0]?.conditions && <th className="right">Conditions</th>}
-                      {result.insurerQuotes[0]?.networkHospitals && <th className="right">Network</th>}
+                      {(result.insurerQuotesWithLinks || result.insurerQuotes)[0]?.premiumPerLakh && <th className="right">Per ₹1L</th>}
+                      <th className="right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {result.insurerQuotes.map((q, idx) => (
+                    {(result.insurerQuotesWithLinks || result.insurerQuotes).map((q, idx) => (
                       <tr key={`${q.name}-${idx}`} style={{ background: idx === 0 ? 'rgba(39,174,96,0.1)' : 'transparent' }}>
                         <td>
                           <span style={{ marginRight: '6px' }}>{q.logo}</span>
@@ -2772,8 +3126,29 @@ ${text}
                         <td className="right" style={{ fontWeight: '600' }}>{fmt(q.annualPremium)}</td>
                         <td className="right">{fmt(q.monthlyPremium)}</td>
                         {q.premiumPerLakh !== undefined && <td className="right">₹{q.premiumPerLakh}</td>}
-                        {q.conditions !== undefined && <td className="right">{q.conditions}</td>}
-                        {q.networkHospitals !== undefined && <td className="right">{(q.networkHospitals / 1000).toFixed(0)}K</td>}
+                        <td className="right">
+                          {q.buyUrl ? (
+                            <a
+                              href={q.buyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'inline-block',
+                                background: q.color || '#c0a062',
+                                color: '#fff',
+                                padding: '4px 10px',
+                                borderRadius: '4px',
+                                fontSize: '11px',
+                                fontWeight: '600',
+                                textDecoration: 'none',
+                              }}
+                            >
+                              Buy Now →
+                            </a>
+                          ) : (
+                            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>—</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -2924,6 +3299,108 @@ ${text}
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* ULIP/Endowment Maturity Visualization */}
+            {result.ulipMaturity && (
+              <div className="aio-section" style={{ background: 'linear-gradient(135deg, rgba(46,125,50,0.1), rgba(192,160,98,0.1))', padding: '20px', borderRadius: '8px', marginTop: '20px', border: '1px solid rgba(46,125,50,0.2)' }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                  <span>📈</span> ULIP/Endowment Maturity Projection
+                </div>
+                
+                {/* Fund Value Scenarios */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Conservative (8%)</div>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#f39c12', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueLow)}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrLow}%</div>
+                  </div>
+                  <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(192,160,98,0.2), rgba(192,160,98,0.1))', borderRadius: '8px', textAlign: 'center', border: '2px solid rgba(192,160,98,0.4)' }}>
+                    <div style={{ fontSize: '11px', color: '#c0a062', fontWeight: '600' }}>Expected (10%)</div>
+                    <div style={{ fontSize: '26px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrMid}%</div>
+                  </div>
+                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Optimistic (12%)</div>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#27ae60', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrHigh}%</div>
+                  </div>
+                </div>
+
+                {/* Key Metrics */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginBottom: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Total Premium</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600' }}>{fmt(result.ulipMaturity.totalPremiumPaid)}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Multiple</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#27ae60' }}>{result.ulipMaturity.wealthMultiple}x</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Gain (Mid)</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.ulipMaturity.wealthGainMid)}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>PPT / Term</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600' }}>{result.ulipMaturity.premiumPayingTerm}y / {result.ulipMaturity.policyTerm}y</div>
+                  </div>
+                </div>
+
+                {/* Milestones */}
+                {Array.isArray(result.ulipMaturity.milestones) && (
+                  <div style={{ marginTop: '16px' }}>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '10px' }}>📍 Key Milestones</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {result.ulipMaturity.milestones.map((m, idx) => (
+                        <div key={idx} style={{ 
+                          padding: '8px 12px', 
+                          background: 'rgba(255,255,255,0.05)', 
+                          borderRadius: '6px',
+                          borderLeft: `3px solid ${idx === result.ulipMaturity.milestones.length - 1 ? '#c0a062' : 'rgba(255,255,255,0.2)'}`,
+                        }}>
+                          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>Year {m.year} • {m.label}</div>
+                          <div style={{ fontSize: '14px', fontWeight: '600' }}>{fmt(m.fundValue)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Fund Options */}
+                {Array.isArray(result.ulipMaturity.fundOptions) && (
+                  <div style={{ marginTop: '16px' }}>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '10px' }}>🎯 Fund Allocation Options</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px' }}>
+                      {result.ulipMaturity.fundOptions.map((f, idx) => (
+                        <div key={idx} style={{ 
+                          padding: '10px', 
+                          background: 'rgba(255,255,255,0.03)', 
+                          borderRadius: '6px',
+                        }}>
+                          <div style={{ fontSize: '12px', fontWeight: '600' }}>{f.name}</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>
+                            Returns: {f.expectedReturn} • Risk: {f.risk}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Charges Breakdown */}
+                {result.ulipMaturity.charges && (
+                  <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(231,76,60,0.1)', borderRadius: '6px', border: '1px solid rgba(231,76,60,0.2)' }}>
+                    <div style={{ fontSize: '12px', color: '#e74c3c', marginBottom: '8px' }}>⚠️ ULIP Charges (Deducted from Fund)</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '12px' }}>
+                      <span>Premium Allocation: {result.ulipMaturity.charges.premiumAllocation}</span>
+                      <span>Fund Management: {result.ulipMaturity.charges.fundManagement}</span>
+                      <span>Policy Admin: {result.ulipMaturity.charges.policyAdmin}</span>
+                      <span>Mortality: {result.ulipMaturity.charges.mortality}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
