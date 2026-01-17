@@ -18,52 +18,10 @@ import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { useCalculatorTracking } from "@/lib/hooks/useCalculatorTracking";
 import { compareRegimesFY2526, formatINR } from "@/lib/tax-formulas";
 
-const RAZORPAY_SDK_SRC = "https://checkout.razorpay.com/v1/checkout.js";
-let razorpaySdkPromise = null;
-
-function loadRazorpaySdk() {
-  if (typeof window === "undefined") return Promise.resolve(false);
-  if (window.Razorpay) return Promise.resolve(true);
-  if (razorpaySdkPromise) return razorpaySdkPromise;
-
-  razorpaySdkPromise = new Promise((resolve) => {
-    try {
-      const existing = document.querySelector(`script[src="${RAZORPAY_SDK_SRC}"]`);
-      if (existing) {
-        existing.addEventListener("load", () => resolve(Boolean(window.Razorpay)), { once: true });
-        existing.addEventListener("error", () => resolve(false), { once: true });
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = RAZORPAY_SDK_SRC;
-      script.async = true;
-      script.onload = () => resolve(Boolean(window.Razorpay));
-      script.onerror = () => resolve(false);
-      document.head.appendChild(script);
-    } catch {
-      resolve(false);
-    }
-  });
-
-  return razorpaySdkPromise;
-}
-
 function clamp(n, min, max) {
   const x = Number(n);
   if (!Number.isFinite(x)) return min;
   return Math.min(max, Math.max(min, x));
-}
-
-function downloadBlob(filename, blob) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
 function formatLakhs(valueInINR) {
@@ -252,133 +210,24 @@ export function TaxCalculator() {
     setStatusNote("Starting payment...");
     track("payment_start", { leadId: leadIdRef.current || undefined });
 
-    const orderRes = await fetch("/api/razorpay/create-order", {
+    const orderRes = await fetch("/api/payments/cashfree/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amountPaise: 29900, leadId, receiptPrefix: "tax" }),
+      body: JSON.stringify({
+        amount: 299,
+        productName: `Tax Optimization Blueprint (Save ${formatINR(savings)})`,
+      }),
     });
     const orderJson = await orderRes.json().catch(() => null);
-    if (!orderRes.ok || !orderJson?.ok) {
+    if (!orderRes.ok || !orderJson?.payment_session_id) {
       track("payment_failed", { stage: "create_order" });
-      if (orderJson?.error === "razorpay_not_configured") {
-        throw new Error(
-          "Razorpay is not configured yet. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET (Test Mode keys) on the server, then retry."
-        );
-      }
       const msg = typeof orderJson?.error === "string" ? orderJson.error.trim() : "";
-      if (msg === "razorpay_request_failed") {
-        throw new Error("Payment provider is temporarily unreachable. Please try again.");
-      }
-      if (msg === "server_error") {
-        throw new Error("Payment server error. Please retry in a moment.");
-      }
-      if (msg) throw new Error(`Payment could not be started: ${msg}`);
+      if (msg) throw new Error(msg);
       throw new Error("Payment could not be started. Please try again.");
     }
 
-    if (!orderJson?.keyId || !orderJson?.orderId) {
-      track("payment_failed", { stage: "create_order_invalid" });
-      throw new Error("Payment server returned an invalid response. Please try again.");
-    }
-
-    const sdkOk = await loadRazorpaySdk();
-    if (!sdkOk) {
-      track("payment_failed", { stage: "sdk_load_failed" });
-      throw new Error("Payment system could not be loaded. Please disable blockers or try again.");
-    }
-
-    const options = {
-      key: orderJson.keyId,
-      amount: orderJson.amount,
-      currency: orderJson.currency || "INR",
-      name: "BM Wealth",
-      description: `Tax Optimization - Save ${formatINR(savings)}`,
-      order_id: orderJson.orderId,
-      notes: {
-        annual_salary: String(inputs?.annualSalary ?? ""),
-        savings: String(savings ?? ""),
-        winner: String(winner ?? ""),
-      },
-      prefill: {
-        name: payload?.name || "",
-        email: payload?.email || "",
-        contact: payload?.phone || "",
-      },
-      theme: { color: "#C0A062" },
-      modal: {
-        ondismiss: () => {
-          track("payment_cancelled");
-          setStatusNote("Payment cancelled. You can try again anytime.");
-        },
-      },
-      handler: async (response) => {
-        try {
-          const verifyRes = await fetch("/api/razorpay/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...response,
-              leadId: leadIdRef.current || null,
-              lead: payload,
-              inputs,
-            }),
-          });
-          const verifyJson = await verifyRes.json().catch(() => null);
-          if (!verifyRes.ok || !verifyJson?.ok) {
-            track("payment_failed", { stage: "verify" });
-            setStatusNote("Payment verification failed. Please contact support.");
-            return;
-          }
-
-          const emailStatus = String(verifyJson?.emailStatus || "").trim();
-          if (emailStatus && emailStatus !== "sent") {
-            if (emailStatus === "not_configured") {
-              setStatusNote("Payment successful, but email delivery is not configured yet. Downloading your PDF now.");
-            } else if (emailStatus === "failed") {
-              setStatusNote("Payment successful, but we could not email your PDF. Downloading it now.");
-            }
-          }
-
-          track("payment_success", { leadId: leadIdRef.current || undefined });
-          track("purchase", { leadId: leadIdRef.current || undefined, product: "tax_optimization_blueprint", amount: 299, currency: "INR" });
-          if (emailStatus === "sent") {
-            setStatusNote("Payment successful. Email sent. Preparing your PDF...");
-          } else {
-            setStatusNote("Payment successful. Preparing your PDF...");
-          }
-          try {
-            localStorage.setItem("tax_premium_bought", "1");
-            purchaseRef.current = true;
-          } catch {}
-
-          const pdfRes = await fetch("/api/pdf/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lead: payload, inputs }),
-          });
-          if (!pdfRes.ok) {
-            setStatusNote("Payment successful, but PDF generation failed. We'll email it shortly.");
-            return;
-          }
-          const blob = await pdfRes.blob();
-          downloadBlob("BM-Wealth-Tax-Optimization-Roadmap-FY2025-26.pdf", blob);
-          track("pdf_downloaded");
-          setStatusNote("Downloaded. Please also check your email.");
-        } catch {
-          track("payment_failed", { stage: "post_payment" });
-          setStatusNote("Payment was received but processing failed. We'll email you shortly.");
-        }
-      },
-    };
-
-    const rz = new window.Razorpay(options);
-    rz.on("payment.failed", () => {
-      track("payment_failed", { stage: "payment_failed" });
-      setStatusNote("Payment failed. Please try again.");
-    });
-
     setLeadOpen(false);
-    rz.open();
+    window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
   }
 
   useEffect(() => {

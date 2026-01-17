@@ -29,7 +29,7 @@ export async function POST(req) {
       if (!downloadToken || !tokenPayload) {
         return NextResponse.json({ ok: false, error: "missing_download_token" }, { status: 401 });
       }
-      const tokenSecret = String(process.env.PDF_DOWNLOAD_TOKEN_SECRET || process.env.RAZORPAY_KEY_SECRET || "").trim();
+      const tokenSecret = String(process.env.PDF_DOWNLOAD_TOKEN_SECRET || "").trim();
       if (!tokenSecret) {
         return NextResponse.json({ ok: false, error: "token_secret_missing" }, { status: 500 });
       }

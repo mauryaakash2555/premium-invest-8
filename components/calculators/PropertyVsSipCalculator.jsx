@@ -21,40 +21,8 @@ import { formatINR } from "@/lib/tax-formulas";
 import {
   computeMumbaiPropertyVsSip,
   formatMumbaiPropertyVsSipResults,
-  buildMumbaiPropertyVsSipPdfPayload,
   MUMBAI_PROPERTY_VS_SIP_ASSUMPTIONS,
 } from "@/lib/property-vs-sip";
-
-const RAZORPAY_SDK_SRC = "https://checkout.razorpay.com/v1/checkout.js";
-let razorpaySdkPromise = null;
-
-function loadRazorpaySdk() {
-  if (typeof window === "undefined") return Promise.resolve(false);
-  if (window.Razorpay) return Promise.resolve(true);
-  if (razorpaySdkPromise) return razorpaySdkPromise;
-
-  razorpaySdkPromise = new Promise((resolve) => {
-    try {
-      const existing = document.querySelector(`script[src="${RAZORPAY_SDK_SRC}"]`);
-      if (existing) {
-        existing.addEventListener("load", () => resolve(Boolean(window.Razorpay)), { once: true });
-        existing.addEventListener("error", () => resolve(false), { once: true });
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = RAZORPAY_SDK_SRC;
-      script.async = true;
-      script.onload = () => resolve(Boolean(window.Razorpay));
-      script.onerror = () => resolve(false);
-      document.head.appendChild(script);
-    } catch {
-      resolve(false);
-    }
-  });
-
-  return razorpaySdkPromise;
-}
 
 function clamp(n, min, max) {
   const x = Number(n);
@@ -68,16 +36,6 @@ function parseNumericInput(raw) {
   return Number.isFinite(n) ? n : 0;
 }
 
-function downloadBlob(filename, blob) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-}
 
 function formatCroreNumber(valueInINR) {
   const n = Number(valueInINR);
@@ -105,11 +63,6 @@ function formatLakhs(valueInINR) {
   const l = n / 100_000;
   const s = l.toFixed(l >= 10 ? 0 : 1);
   return `${s.replace(/\.0$/, "")}L`;
-}
-
-function digitsOnlyPhone(v) {
-  const digits = String(v || "").replace(/\D+/g, "");
-  return digits.length >= 10 ? digits.slice(-10) : digits;
 }
 
 function useCountUp(value, durationMs, key) {
@@ -291,144 +244,24 @@ export function PropertyVsSipCalculator() {
     setStatusNote("Starting payment...");
     track("payment_start", { leadId: leadIdRef.current || undefined });
 
-    const orderRes = await fetch("/api/razorpay/create-order", {
+    const orderRes = await fetch("/api/payments/cashfree/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amountPaise: 39900, leadId, receiptPrefix: "pvs" }),
+      body: JSON.stringify({
+        amount: 399,
+        productName: `Property vs SIP Premium Report (₹${gapCr}Cr opportunity)`,
+      }),
     });
     const orderJson = await orderRes.json().catch(() => null);
-    if (!orderRes.ok || !orderJson?.ok) {
+    if (!orderRes.ok || !orderJson?.payment_session_id) {
       track("payment_failed", { stage: "create_order" });
-      if (orderJson?.error === "razorpay_not_configured") {
-        throw new Error(
-          "Razorpay is not configured yet. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET (Test Mode keys) on the server, then retry."
-        );
-      }
       const msg = typeof orderJson?.error === "string" ? orderJson.error.trim() : "";
-      if (msg === "razorpay_request_failed") {
-        throw new Error("Payment provider is temporarily unreachable. Please try again.");
-      }
-      if (msg === "server_error") {
-        throw new Error("Payment server error. Please retry in a moment.");
-      }
-      if (msg) throw new Error(`Payment could not be started: ${msg}`);
+      if (msg) throw new Error(msg);
       throw new Error("Payment could not be started. Please try again.");
     }
 
-    if (!orderJson?.keyId || !orderJson?.orderId) {
-      track("payment_failed", { stage: "create_order_invalid" });
-      throw new Error("Payment server returned an invalid response. Please try again.");
-    }
-
-    const sdkOk = await loadRazorpaySdk();
-    if (!sdkOk) {
-      track("payment_failed", { stage: "sdk_load_failed" });
-      throw new Error("Payment system could not be loaded. Please disable blockers or try again.");
-    }
-
-    const computedInputs = model?.inputs || draftInputs;
-    const pdfPayload = buildMumbaiPropertyVsSipPdfPayload({ lead: payload, model });
-
-    const options = {
-      key: orderJson.keyId,
-      amount: orderJson.amount,
-      currency: orderJson.currency || "INR",
-      name: "BM Wealth",
-      description: `Property Analysis - ₹${gapCr}Cr Opportunity`,
-      order_id: orderJson.orderId,
-      notes: {
-        property_value: String(computedInputs?.propertyPrice ?? ""),
-        sip_amount: String(computedInputs?.monthlySip ?? ""),
-        timeline_years: String(computedInputs?.years ?? ""),
-        wealth_gap_inr: String(Number(model?.wealthGap || 0)),
-      },
-      prefill: {
-        name: payload?.name || "",
-        email: payload?.email || "",
-        contact: digitsOnlyPhone(payload?.phone) || "",
-      },
-      theme: { color: "#C0A062" },
-      modal: {
-        ondismiss: () => {
-          track("payment_cancelled");
-          setStatusNote("Payment cancelled. You can try again anytime.");
-        },
-      },
-      handler: async (response) => {
-        try {
-          const verifyRes = await fetch("/api/razorpay/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...response,
-              leadId: leadIdRef.current || null,
-              lead: payload,
-              inputs: computedInputs,
-              pdfPayload,
-            }),
-          });
-          const verifyJson = await verifyRes.json().catch(() => null);
-          if (!verifyRes.ok || !verifyJson?.ok) {
-            track("payment_failed", { stage: "verify" });
-            setStatusNote("Payment verification failed. Please contact support.");
-            return;
-          }
-
-          const emailStatus = String(verifyJson?.emailStatus || "").trim();
-          if (emailStatus && emailStatus !== "sent") {
-            if (emailStatus === "not_configured") {
-              setStatusNote("Payment successful, but email delivery is not configured yet. Downloading your PDF now.");
-            } else if (emailStatus === "failed") {
-              setStatusNote("Payment successful, but we could not email your PDF. Downloading it now.");
-            }
-          }
-
-          const downloadToken = verifyJson?.downloadToken;
-          const tokenPayload = verifyJson?.tokenPayload;
-
-          track("payment_success", { leadId: leadIdRef.current || undefined });
-          track("purchase", { leadId: leadIdRef.current || undefined, product: "mumbai_property_vs_sip_report", amount: 399, currency: "INR" });
-          if (emailStatus === "sent") {
-            setStatusNote("Payment successful. Email sent. Preparing your PDF...");
-          } else {
-            setStatusNote("Payment successful. Preparing your PDF...");
-          }
-          try {
-            localStorage.setItem("pvs_premium_bought", "1");
-            purchaseRef.current = true;
-          } catch {}
-
-          try {
-            const qs = new URLSearchParams();
-            if (downloadToken) qs.set("downloadToken", String(downloadToken));
-            if (tokenPayload) qs.set("tokenPayload", String(tokenPayload));
-            if (leadIdRef.current) qs.set("leadId", String(leadIdRef.current));
-            qs.set("filename", String(pdfPayload?.meta?.filename || "Mumbai-Property-vs-SIP-Wealth-Gap-Report.pdf"));
-            if (emailStatus) qs.set("emailStatus", String(emailStatus));
-            if (payload?.name) qs.set("name", String(payload.name));
-            if (payload?.email) qs.set("email", String(payload.email));
-            if (gapCr) qs.set("gap", String(gapCr));
-            window.location.assign(`/payment-success?${qs.toString()}`);
-            return;
-          } catch {
-            setStatusNote("Payment successful. Please check your email for the PDF.");
-          }
-        } catch {
-          track("payment_failed", { stage: "post_payment" });
-          setStatusNote("Payment was received but processing failed. We'll email you shortly.");
-        }
-      },
-    };
-
-    const rz = new window.Razorpay(options);
-    rz.on("payment.failed", () => {
-      track("payment_failed", { stage: "payment_failed" });
-      setStatusNote("Payment failed. Please try again.");
-    });
-
-    // Close the lead modal before opening Razorpay.
     setLeadOpen(false);
-    rz.open();
+    window.location.assign(`https://payments.cashfree.com/checkout?payment_session_id=${encodeURIComponent(orderJson.payment_session_id)}`);
   }
 
   useEffect(() => {

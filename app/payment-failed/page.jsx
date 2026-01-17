@@ -1,10 +1,10 @@
-export default function PaymentSuccessPage() {
+export default function PaymentFailedPage() {
   return (
     <main className="min-h-[70vh] px-6 py-10">
       <div className="mx-auto max-w-2xl">
-        <h1 className="text-2xl font-semibold">Payment Successful</h1>
+        <h1 className="text-2xl font-semibold">Payment Failed</h1>
         <p className="mt-3 text-sm opacity-80">
-          Thanks — your payment is complete. You can close this page now.
+          Your payment was not completed. Please try again.
         </p>
 
         <div className="mt-6 flex gap-3">
