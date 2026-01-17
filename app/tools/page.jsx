@@ -24,26 +24,26 @@ export const metadata = buildMetadata({
   path: "/tools",
 });
 
-function ToolCard({ title, subtitle, href, active, laser = false }) {
+function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
   const content = (
-    <Card className="border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative overflow-hidden rounded-xl h-full">
+    <Card className={`border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative overflow-hidden rounded-xl ${className}`}>
       {laser ? (
-        <div className="absolute inset-0 pointer-events-none z-10" aria-hidden="true">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{ borderRadius: '12px' }}>
           <LaserBeam
             width="100%"
             height="100%"
             color="#c0a062"
             borderRadius={12}
-            duration={16}
+            duration={14}
             glowIntensity={12}
-            beamLength={0.08}
+            beamLength={0.12}
             borderWidth={0}
             backgroundColor="transparent"
           />
         </div>
       ) : null}
-      <CardContent className="p-5 relative z-20 h-full flex flex-col">
-        <div className="flex items-start justify-between gap-4 flex-1">
+      <CardContent className="p-5 relative z-10">
+        <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-base font-semibold gold-gradient-text truncate">
               {title}
@@ -186,6 +186,7 @@ export default function ToolsHubPage() {
                 subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
                 href="/tools/all-calculators"
                 laser
+                className="min-h-[130px]"
               />
             </div>
 
