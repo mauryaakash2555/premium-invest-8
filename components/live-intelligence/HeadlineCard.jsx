@@ -1,8 +1,98 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
+
+// ═══════════════════════════════════════════════════════════
+// CTA BUTTONS BY CATEGORY - Opens WhatsApp or service page
+// ═══════════════════════════════════════════════════════════
+const CTA_BUTTONS = {
+  mutual_funds: {
+    text: 'Explore Funds',
+    icon: '📊',
+    action: () => window.open('/services/mutual-funds', '_blank'),
+  },
+  insurance: {
+    text: 'Get Quote',
+    icon: '🛡️',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%20saw%20an%20insurance%20update%20on%20BM%20Wealth.%20I%27d%20like%20to%20get%20a%20quote.', '_blank'),
+  },
+  fixed_income: {
+    text: 'Compare Rates',
+    icon: '🏦',
+    action: () => window.open('/tools/fd-calculator', '_blank'),
+  },
+  bonds: {
+    text: 'Learn More',
+    icon: '📜',
+    action: () => window.open('/services/fixed-deposits', '_blank'),
+  },
+  sip: {
+    text: 'Start SIP',
+    icon: '📈',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%20want%20to%20start%20a%20SIP.%20Please%20guide%20me.', '_blank'),
+  },
+  tax_insight: {
+    text: 'Tax Consult',
+    icon: '💰',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%20need%20tax%20planning%20help.', '_blank'),
+  },
+  rbi: {
+    text: 'Impact Analysis',
+    icon: '🏛️',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%20want%20to%20understand%20how%20RBI%20policy%20affects%20my%20investments.', '_blank'),
+  },
+  sebi: {
+    text: 'Learn More',
+    icon: '📋',
+    action: () => window.open('/regulatory-compliance', '_blank'),
+  },
+  ipo: {
+    text: 'IPO Details',
+    icon: '🎯',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%27m%20interested%20in%20IPO%20investing.%20Please%20share%20details.', '_blank'),
+  },
+  market_update: {
+    text: 'Get Advice',
+    icon: '📊',
+    action: () => window.open('https://wa.me/918850977259?text=Hi%2C%20I%20saw%20a%20market%20update%20and%20want%20to%20discuss%20my%20portfolio.', '_blank'),
+  },
+};
+
+// ═══════════════════════════════════════════════════════════
+// SAVE FOR LATER - localStorage system
+// ═══════════════════════════════════════════════════════════
+const savedHeadlines = {
+  save: (headline) => {
+    if (typeof localStorage === 'undefined') return;
+    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+    // Store headline with timestamp
+    const entry = { ...headline, savedAt: new Date().toISOString() };
+    if (!saved.find(h => h.id === headline.id)) {
+      saved.unshift(entry);
+      localStorage.setItem('li_saved_headlines', JSON.stringify(saved.slice(0, 50))); // Max 50
+    }
+  },
+  unsave: (headlineId) => {
+    if (typeof localStorage === 'undefined') return;
+    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+    const filtered = saved.filter(h => h.id !== headlineId);
+    localStorage.setItem('li_saved_headlines', JSON.stringify(filtered));
+  },
+  isSaved: (headlineId) => {
+    if (typeof localStorage === 'undefined') return false;
+    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+    return saved.some(h => h.id === headlineId);
+  },
+  getAll: () => {
+    if (typeof localStorage === 'undefined') return [];
+    return JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+  },
+};
+
+// Export for use in overlay
+export { savedHeadlines };
 
 // Detailed explanations for headlines - educational content
 const HEADLINE_DETAILS = {
@@ -67,11 +157,65 @@ const getHeadlineDetails = (headline) => {
  * HeadlineCard - Displays a single headline with category, urgency, and CTA
  * Now CLICKABLE with detailed educational modal
  */
-export default function HeadlineCard({ headline, isActive = false }) {
+export default function HeadlineCard({ headline, isActive = false, onSaveChange }) {
   const [showModal, setShowModal] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [longPressTimer, setLongPressTimer] = useState(null);
+  const touchStartY = useRef(0);
   const category = CATEGORIES[headline.category];
   const urgency = URGENCY_LEVELS[headline.urgency];
   const details = getHeadlineDetails(headline);
+  const ctaConfig = CTA_BUTTONS[headline.category];
+
+  // Check if saved on mount
+  useEffect(() => {
+    setIsSaved(savedHeadlines.isSaved(headline.id));
+  }, [headline.id]);
+
+  // Toggle save status
+  const handleSave = useCallback((e) => {
+    e?.stopPropagation();
+    if (isSaved) {
+      savedHeadlines.unsave(headline.id);
+      setIsSaved(false);
+    } else {
+      savedHeadlines.save(headline);
+      setIsSaved(true);
+    }
+    onSaveChange?.();
+  }, [isSaved, headline, onSaveChange]);
+
+  // Mobile gestures: Long press to save
+  const handleTouchStart = useCallback((e) => {
+    touchStartY.current = e.touches[0].clientY;
+    const timer = setTimeout(() => {
+      handleSave();
+      // Haptic feedback if available
+      if (navigator.vibrate) navigator.vibrate(50);
+    }, 800);
+    setLongPressTimer(timer);
+  }, [handleSave]);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+    // Swipe up gesture to open modal
+    const touchEndY = e.changedTouches[0].clientY;
+    const swipeDistance = touchStartY.current - touchEndY;
+    if (swipeDistance > 80) {
+      setShowModal(true);
+    }
+  }, [longPressTimer]);
+
+  const handleTouchMove = useCallback(() => {
+    // Cancel long press if user moves finger
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  }, [longPressTimer]);
 
   useEffect(() => {
     if (!showModal) return;
@@ -111,11 +255,20 @@ export default function HeadlineCard({ headline, isActive = false }) {
   return (
     <>
       <div 
-        className={`li-headline-card ${isActive ? 'active' : ''} ${headline.urgency === 'BREAKING' ? 'breaking' : ''}`}
+        className={`li-headline-card ${isActive ? 'active' : ''} ${headline.urgency === 'BREAKING' ? 'breaking' : ''} ${isSaved ? 'saved' : ''}`}
         onClick={handleCardClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && handleCardClick(e)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') handleCardClick(e);
+          if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            handleSave(e);
+          }
+        }}
         style={{
           '--urgency-color': urgency?.color || 'rgba(170, 198, 255, 1)',
           '--urgency-dim': urgency?.colorDim || 'rgba(170, 198, 255, 0.25)',
@@ -123,7 +276,7 @@ export default function HeadlineCard({ headline, isActive = false }) {
           cursor: 'pointer',
         }}
       >
-        {/* Header: Category + Urgency + Time */}
+        {/* Header: Category + Urgency + Time + Save */}
         <div className="li-headline-header">
           <div className="li-headline-category">
             <span className="li-headline-cat-icon">{category?.icon}</span>
@@ -139,6 +292,16 @@ export default function HeadlineCard({ headline, isActive = false }) {
           <span className="li-headline-time">
             {formatRelativeTime(headline.timestamp)}
           </span>
+          
+          {/* Save/Bookmark Button */}
+          <button
+            className={`li-headline-save ${isSaved ? 'saved' : ''}`}
+            onClick={handleSave}
+            aria-label={isSaved ? 'Remove from saved' : 'Save for later'}
+            title={isSaved ? 'Saved! Click to remove' : 'Save for later'}
+          >
+            {isSaved ? '🔖' : '📑'}
+          </button>
         </div>
 
         {/* Main Content */}
@@ -255,6 +418,32 @@ export default function HeadlineCard({ headline, isActive = false }) {
           font-size: 11px;
           color: rgba(180, 195, 230, 0.5);
           font-variant-numeric: tabular-nums;
+        }
+
+        /* Save/Bookmark Button */
+        .li-headline-save {
+          background: none;
+          border: none;
+          padding: 4px 6px;
+          cursor: pointer;
+          font-size: 14px;
+          opacity: 0.5;
+          transition: all 0.2s ease;
+          border-radius: 4px;
+        }
+
+        .li-headline-save:hover {
+          opacity: 1;
+          background: rgba(100, 160, 255, 0.15);
+        }
+
+        .li-headline-save.saved {
+          opacity: 1;
+        }
+
+        /* Saved card indicator */
+        .li-headline-card.saved {
+          border-left: 3px solid rgba(100, 160, 255, 0.6);
         }
 
         .li-headline-body {
@@ -591,6 +780,91 @@ export default function HeadlineCard({ headline, isActive = false }) {
                     <div className="li-modal-data-source">Source: {headline.source}</div>
                   </div>
                 )}
+
+                {/* Action Buttons */}
+                <div className="li-modal-actions">
+                  {/* Save Button */}
+                  <button
+                    className={`li-modal-action-btn li-modal-save-btn ${isSaved ? 'saved' : ''}`}
+                    onClick={handleSave}
+                  >
+                    {isSaved ? '🔖 Saved' : '📑 Save for Later'}
+                  </button>
+                  
+                  {/* CTA Button based on category */}
+                  {ctaConfig && (
+                    <button
+                      className="li-modal-action-btn li-modal-cta-btn"
+                      onClick={() => {
+                        ctaConfig.action();
+                        setShowModal(false);
+                      }}
+                    >
+                      {ctaConfig.icon} {ctaConfig.text}
+                    </button>
+                  )}
+                </div>
+
+                {/* Modal Action Styles */}
+                <style jsx>{`
+                  .li-modal-actions {
+                    display: flex;
+                    gap: 12px;
+                    margin-top: 20px;
+                    padding-top: 16px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.08);
+                  }
+
+                  .li-modal-action-btn {
+                    flex: 1;
+                    padding: 12px 16px;
+                    border-radius: 10px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    border: 1px solid transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                  }
+
+                  .li-modal-save-btn {
+                    background: rgba(100, 160, 255, 0.15);
+                    color: rgba(140, 190, 255, 0.95);
+                    border-color: rgba(100, 160, 255, 0.25);
+                  }
+
+                  .li-modal-save-btn:hover {
+                    background: rgba(100, 160, 255, 0.25);
+                    border-color: rgba(100, 160, 255, 0.4);
+                  }
+
+                  .li-modal-save-btn.saved {
+                    background: rgba(100, 160, 255, 0.25);
+                    border-color: rgba(100, 160, 255, 0.5);
+                  }
+
+                  .li-modal-cta-btn {
+                    background: linear-gradient(135deg, rgba(100, 160, 255, 0.3) 0%, rgba(80, 140, 220, 0.3) 100%);
+                    color: rgba(200, 220, 255, 0.95);
+                    border-color: rgba(100, 160, 255, 0.4);
+                  }
+
+                  .li-modal-cta-btn:hover {
+                    background: linear-gradient(135deg, rgba(100, 160, 255, 0.45) 0%, rgba(80, 140, 220, 0.45) 100%);
+                    border-color: rgba(100, 160, 255, 0.6);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(100, 160, 255, 0.2);
+                  }
+
+                  @media (max-width: 480px) {
+                    .li-modal-actions {
+                      flex-direction: column;
+                    }
+                  }
+                `}</style>
               </div>
             </div>,
             document.body

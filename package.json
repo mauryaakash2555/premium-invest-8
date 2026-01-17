@@ -40,6 +40,7 @@
     "next": "15.1.9",
     "nodemailer": "^6.9.8",
     "openai": "^4.73.1",
+    "qrcode": "^1.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^9.1.0",

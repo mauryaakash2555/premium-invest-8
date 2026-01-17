@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCurrentModeConfig, getISTTime } from '@/lib/live-intelligence/modes';
+import { downloadDailySummaryPDF } from '@/lib/live-intelligence/pdfGenerator';
 import WhatsAppShare from './WhatsAppShare';
 
 /**
@@ -302,6 +303,24 @@ export default function NightSummary() {
   );
 
   // Slide 5: Share Summary
+  const [isDownloading, setIsDownloading] = useState(false);
+  
+  const handlePdfDownload = useCallback(async () => {
+    setIsDownloading(true);
+    try {
+      await downloadDailySummaryPDF({
+        summary: summaryData,
+        headlines: summaryData.developments.map(d => ({
+          headline: d.text,
+          whyItMatters: '',
+        })),
+      });
+    } catch (err) {
+      console.error('PDF download error:', err);
+    }
+    setIsDownloading(false);
+  }, [summaryData]);
+  
   const ShareSlide = () => (
     <div className="li-ns-slide li-ns-share-slide">
       <div className="li-ns-slide-header">
@@ -311,6 +330,34 @@ export default function NightSummary() {
       <p className="li-ns-share-desc">
         Get your daily market summary directly on WhatsApp every evening at 9 PM.
       </p>
+      
+      {/* PDF Download Button */}
+      <button
+        onClick={handlePdfDownload}
+        disabled={isDownloading}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%',
+          padding: '12px 16px',
+          marginBottom: '16px',
+          background: 'linear-gradient(135deg, rgba(100, 160, 255, 0.2) 0%, rgba(80, 140, 220, 0.2) 100%)',
+          border: '1px solid rgba(100, 160, 255, 0.3)',
+          borderRadius: '10px',
+          color: 'rgba(140, 190, 255, 0.95)',
+          fontSize: '14px',
+          fontWeight: 600,
+          cursor: isDownloading ? 'wait' : 'pointer',
+          transition: 'all 0.2s ease',
+          opacity: isDownloading ? 0.7 : 1,
+        }}
+      >
+        <span>📄</span>
+        {isDownloading ? 'Generating PDF...' : 'Download PDF Summary'}
+      </button>
+      
       <WhatsAppShare 
         summary={{
           title: `What You Missed Today - ${summaryData.date}`,

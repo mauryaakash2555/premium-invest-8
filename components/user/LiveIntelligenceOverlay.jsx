@@ -23,6 +23,8 @@ import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
 import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import NightSummary from '@/components/live-intelligence/NightSummary';
+import QuickLearn from '@/components/live-intelligence/QuickLearn';
+import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
 import { BadgeDisplay } from '@/components/live-intelligence/BadgeDisplay';
@@ -609,6 +611,140 @@ export default function LiveIntelligenceOverlay({
   return createPortal(overlayContent, portalTarget);
 }
 
+/**
+ * SavedHeadlinesSection - Shows bookmarked headlines from localStorage
+ */
+function SavedHeadlinesSection() {
+  const [saved, setSaved] = useState([]);
+
+  useEffect(() => {
+    setSaved(savedHeadlines.getAll());
+  }, []);
+
+  const handleRemove = (headlineId) => {
+    savedHeadlines.unsave(headlineId);
+    setSaved(savedHeadlines.getAll());
+  };
+
+  if (saved.length === 0) {
+    return (
+      <div style={{
+        padding: '32px',
+        textAlign: 'center',
+        background: 'rgba(20, 25, 35, 0.6)',
+        borderRadius: '16px',
+        border: '1px solid rgba(100, 160, 255, 0.1)',
+      }}>
+        <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔖</div>
+        <h4 style={{
+          margin: '0 0 8px',
+          color: 'rgba(200, 215, 240, 0.85)',
+          fontSize: '16px',
+          fontWeight: 600,
+        }}>
+          No Saved Headlines
+        </h4>
+        <p style={{
+          margin: 0,
+          color: 'rgba(180, 195, 230, 0.6)',
+          fontSize: '14px',
+        }}>
+          Tap the 📑 icon on any headline to save it for later
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h3 style={{
+        margin: '0 0 16px',
+        color: 'rgba(230, 240, 255, 0.95)',
+        fontSize: '17px',
+        fontWeight: 600,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+      }}>
+        <span>🔖</span> Saved Headlines
+        <span style={{
+          marginLeft: 'auto',
+          fontSize: '12px',
+          color: 'rgba(180, 195, 230, 0.6)',
+        }}>
+          {saved.length} saved
+        </span>
+      </h3>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {saved.map((headline) => (
+          <div
+            key={headline.id}
+            style={{
+              background: 'linear-gradient(180deg, rgba(20, 25, 35, 0.90) 0%, rgba(12, 14, 20, 0.95) 100%)',
+              border: '1px solid rgba(100, 160, 255, 0.15)',
+              borderRadius: '12px',
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <h4 style={{
+                margin: 0,
+                fontSize: '15px',
+                fontWeight: 600,
+                color: 'rgba(235, 242, 255, 0.95)',
+                flex: 1,
+                lineHeight: 1.4,
+              }}>
+                {headline.headline}
+              </h4>
+              <button
+                onClick={() => handleRemove(headline.id)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255, 100, 100, 0.7)',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  padding: '4px 8px',
+                  marginLeft: '12px',
+                }}
+                title="Remove from saved"
+              >
+                ✕
+              </button>
+            </div>
+            <p style={{
+              margin: 0,
+              fontSize: '13px',
+              color: 'rgba(200, 215, 240, 0.65)',
+              lineHeight: 1.5,
+            }}>
+              {headline.whyItMatters}
+            </p>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: '11px',
+              color: 'rgba(180, 195, 230, 0.5)',
+              marginTop: '4px',
+            }}>
+              <span>{headline.source}</span>
+              <span>
+                Saved {new Date(headline.savedAt).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 /**
  * Panel component with dashboard content and EPIC DONUT
@@ -630,7 +766,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   const shareUrl = useMemo(() => {
     if (typeof window === 'undefined') return 'https://bmwealth.co.in';
-    return window.location.href || 'https://bmwealth.co.in';
+    const baseUrl = window.location.origin || 'https://bmwealth.co.in';
+    return baseUrl;
   }, []);
 
   const shareText = useMemo(
@@ -638,15 +775,27 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     []
   );
 
+  // ═══════════════════════════════════════════════════════════
+  // UTM TRACKING - All share links include tracking parameters
+  // ═══════════════════════════════════════════════════════════
   const shareLinks = useMemo(() => {
-    const url = encodeURIComponent(shareUrl);
-    const text = encodeURIComponent(shareText);
+    const addUtm = (url, medium) => {
+      const utmParams = `?utm_source=live_intelligence&utm_medium=${medium}&utm_campaign=share`;
+      return `${url}${utmParams}`;
+    };
+    
+    const urlWithWhatsapp = addUtm(shareUrl, 'whatsapp');
+    const urlWithEmail = addUtm(shareUrl, 'email');
+    const urlWithTwitter = addUtm(shareUrl, 'twitter');
+    const urlWithLinkedin = addUtm(shareUrl, 'linkedin');
+    const urlWithTelegram = addUtm(shareUrl, 'telegram');
+    
     return {
-      whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
-      email: `mailto:?subject=${encodeURIComponent('BM Wealth Live Intelligence')}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
-      twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-      telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${urlWithWhatsapp}`)}`,
+      email: `mailto:?subject=${encodeURIComponent('BM Wealth Live Intelligence')}&body=${encodeURIComponent(`${shareText}\n\n${urlWithEmail}`)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(urlWithTwitter)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(urlWithLinkedin)}`,
+      telegram: `https://t.me/share/url?url=${encodeURIComponent(urlWithTelegram)}&text=${encodeURIComponent(shareText)}`,
     };
   }, [shareText, shareUrl]);
 
@@ -666,6 +815,49 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [showShareMenu]);
+
+  // Tab order for keyboard navigation
+  const tabOrder = ['pulse', 'live', 'timings', '2days', 'saved'];
+
+  // ═══════════════════════════════════════════════════════════
+  // KEYBOARD SHORTCUTS for navigation
+  // ═══════════════════════════════════════════════════════════
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't intercept if user is typing
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      
+      // Arrow Left/Right - Navigate tabs
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const currentIndex = tabOrder.indexOf(activeTab);
+        if (e.key === 'ArrowLeft') {
+          const newIndex = currentIndex > 0 ? currentIndex - 1 : tabOrder.length - 1;
+          setActiveTab(tabOrder[newIndex]);
+        } else {
+          const newIndex = currentIndex < tabOrder.length - 1 ? currentIndex + 1 : 0;
+          setActiveTab(tabOrder[newIndex]);
+        }
+      }
+      
+      // Ctrl+S or Cmd+S - Open share menu
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        setShowShareMenu(prev => !prev);
+      }
+      
+      // Number keys 1-4 for quick tab switch
+      if (e.key >= '1' && e.key <= '4' && !e.ctrlKey && !e.metaKey) {
+        const index = parseInt(e.key) - 1;
+        if (tabOrder[index]) {
+          setActiveTab(tabOrder[index]);
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, setActiveTab, setShowShareMenu]);
 
   // Store scroll position in ref to persist across re-renders
   const savedScrollRef = useRef({ container: 0, window: 0 });
@@ -1596,7 +1788,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             Your financial command center — real-time portfolio insights and signals.
           </p>
           
-          {/* Row 4: Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days */}
+          {/* Row 4: Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days, Saved */}
           <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
@@ -1604,6 +1796,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 { key: 'live', label: 'Live', icon: '🔴' },
                 { key: 'timings', label: 'Timings', icon: '🕐' },
                 { key: '2days', label: '2 Days', icon: '📊' },
+                { key: 'saved', label: 'Saved', icon: '🔖' },
               ].map((tab) => {
                 const isActive = activeTab === tab.key;
                 return (
@@ -2274,6 +2467,18 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div style={{ gridColumn: '1 / -1' }}>
             <HeadlineFeed />
           </div>
+
+          {/* QuickLearn - 30 second daily micro-lessons */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <QuickLearn />
+          </div>
+
+          {/* Saved Headlines Section */}
+          {activeTab === 'saved' && (
+            <div style={{ gridColumn: '1 / -1', marginTop: '16px' }}>
+              <SavedHeadlinesSection />
+            </div>
+          )}
 
           {/* Night section (only visible in night_summary mode) */}
           <div style={{ gridColumn: '1 / -1' }}>
