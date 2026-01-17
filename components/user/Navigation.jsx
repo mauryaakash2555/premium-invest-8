@@ -24,9 +24,21 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { cn } from '@/lib/utils';
+
+// Throttle utility for scroll performance
+function throttle(fn, wait) {
+  let lastTime = 0;
+  return function(...args) {
+    const now = Date.now();
+    if (now - lastTime >= wait) {
+      lastTime = now;
+      fn.apply(this, args);
+    }
+  };
+}
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,7 +52,7 @@ const Navigation = () => {
     setMounted(true);
     
     let lastY = 0;
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       const y = window.scrollY;
       // Glass should be hidden at the very top; re-appear after a small scroll.
       setIsScrolled(y > 10);
@@ -55,17 +67,18 @@ const Navigation = () => {
         setShowNav(true);
       }
       lastY = y;
-    };
+    }, 100); // Throttle to 100ms for smooth performance
     
-    const handleResize = () => {
+    const handleResize = throttle(() => {
       setIsMobile(window.innerWidth < 1024);
-    };
+    }, 150);
     
     handleResize();
     handleScroll();
     
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
+    // Use passive listeners for better scroll performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
@@ -184,6 +197,7 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 href={link.path}
+                prefetch={true}
                 className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
               >
                 {link.label}

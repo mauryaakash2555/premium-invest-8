@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
 
@@ -66,8 +66,9 @@ const getHeadlineDetails = (headline) => {
 /**
  * HeadlineCard - Displays a single headline with category, urgency, and CTA
  * Now CLICKABLE with detailed educational modal
+ * Memoized to prevent unnecessary re-renders in lists
  */
-export default function HeadlineCard({ headline, isActive = false }) {
+const HeadlineCard = memo(function HeadlineCard({ headline, isActive = false }) {
   const [showModal, setShowModal] = useState(false);
   const category = CATEGORIES[headline.category];
   const urgency = URGENCY_LEVELS[headline.urgency];
@@ -553,4 +554,6 @@ export default function HeadlineCard({ headline, isActive = false }) {
         : null}
     </>
   );
-}
+});
+
+export default HeadlineCard;
