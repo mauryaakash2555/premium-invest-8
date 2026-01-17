@@ -64,6 +64,23 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
     <html lang="en">
       <head>
         <meta name="x-ui-build" content={buildId} />
+
+  {/* Google Analytics */}
+  {GA4_MEASUREMENT_ID && (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`} />
+              <script
+                dangerouslySetInnerHTML={{
+                                __html: `
+                                                window.dataLayer = window.dataLayer || [];
+                                                                function gtag(){dataLayer.push(arguments);}
+                                                                                gtag('js', new Date());
+                                                                                                gtag('config', '${GA4_MEASUREMENT_ID}');
+                                                                                                              `,
+                }}
+            />
+              </>
+                    )}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#090A0C" />
       </head>
