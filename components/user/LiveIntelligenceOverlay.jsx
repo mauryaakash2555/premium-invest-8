@@ -2046,14 +2046,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{
                 padding: '3px 10px',
                 borderRadius: '8px',
-                background: 'rgba(100,160,255,0.12)',
+                background: 'rgba(255,200,100,0.12)',
                 border: 'none',
-                color: 'rgba(140,190,255,0.95)',
+                color: 'rgba(255,200,100,0.95)',
                 fontSize: '10px',
                 fontWeight: 600,
                 letterSpacing: '0.05em',
               }}>
-                4 NEW
+                COMING SOON
               </div>
             </div>
             <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
@@ -2061,29 +2061,22 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                { t: 'Rebalance opportunity', d: 'Equity drift +4.8% vs target', s: 'High', c: 'rgba(140,190,255,0.95)' },
-                { t: 'Tax harvesting', d: 'Potential LTCG optimization', s: 'High', c: 'rgba(140,190,255,0.95)' },
-                { t: 'SIP consistency', d: '3 SIPs processed successfully', s: 'Good', c: 'rgba(140,220,180,0.90)' },
-                { t: 'Cash buffer', d: '3.2 months covered', s: 'Good', c: 'rgba(140,220,180,0.90)' },
-              ].map((it) => (
-                <div key={it.t} className="li-signal-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ color: 'rgba(245,248,255,0.94)', fontSize: '13px', fontWeight: 500 }}>{it.t}</div>
-                    <div style={{ 
-                      color: it.c, 
-                      fontSize: '10px', 
-                      fontWeight: 600,
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      background: it.c.includes('190,255') ? 'rgba(100,160,255,0.12)' : 'rgba(140,220,180,0.12)',
-                      border: 'none',
-                      letterSpacing: '0.04em',
-                    }}>{it.s.toUpperCase()}</div>
-                  </div>
-                  <div style={{ marginTop: '6px', color: 'rgba(200,215,240,0.60)', fontSize: '12px', lineHeight: 1.4 }}>{it.d}</div>
+              {/* Coming Soon Placeholder */}
+              <div style={{
+                padding: '24px',
+                borderRadius: '12px',
+                background: 'rgba(100,160,255,0.04)',
+                border: '1px dashed rgba(100,160,255,0.15)',
+                textAlign: 'center',
+              }}>
+                <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔔</div>
+                <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
+                  Personalized Alerts
                 </div>
-              ))}
+                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5 }}>
+                  Connect your portfolio to receive<br/>rebalancing, tax, and SIP alerts
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2095,7 +2088,18 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
                     Holdings
                   </div>
-                  <div className="li-live-dot" />
+                  <div style={{
+                    padding: '3px 10px',
+                    borderRadius: '8px',
+                    background: 'rgba(255,200,100,0.12)',
+                    border: 'none',
+                    color: 'rgba(255,200,100,0.95)',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.05em',
+                  }}>
+                    COMING SOON
+                  </div>
                 </div>
                 <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
                   Real-time portfolio positions
@@ -2103,29 +2107,35 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            {/* Table */}
-            <div className="li-table-wrapper" style={{ borderRadius: '14px', border: '1px solid rgba(170,198,255,0.10)' }}>
-              <div className="li-table-header" style={{ gridTemplateColumns: '2.5fr 1fr 1fr 1fr' }}>
-                {['Instrument', 'Value', '1D Change', 'Total P/L'].map((h) => (
-                  <div key={h} style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', letterSpacing: '0.10em', textTransform: 'uppercase', fontWeight: 500 }}>{h}</div>
-                ))}
+            {/* Coming Soon Placeholder */}
+            <div style={{
+              padding: '32px',
+              borderRadius: '14px',
+              background: 'rgba(100,160,255,0.04)',
+              border: '1px dashed rgba(100,160,255,0.15)',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>📊</div>
+              <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '14px', fontWeight: 500, marginBottom: '8px' }}>
+                Portfolio Tracking
               </div>
-
-              {[
-                { n: 'Nifty 50 Index Fund', v: '₹ 6.4L', d: '+0.42%', p: '+₹ 1.1L', dColor: 'rgba(140,220,180,0.90)', pColor: 'rgba(140,220,180,0.90)' },
-                { n: 'Flexi Cap Fund', v: '₹ 4.9L', d: '+0.18%', p: '+₹ 0.8L', dColor: 'rgba(140,220,180,0.90)', pColor: 'rgba(140,220,180,0.90)' },
-                { n: 'Corporate Bond Fund', v: '₹ 3.1L', d: '+0.05%', p: '+₹ 0.2L', dColor: 'rgba(140,220,180,0.90)', pColor: 'rgba(140,220,180,0.90)' },
-                { n: 'SGB / Gold', v: '₹ 2.2L', d: '-0.12%', p: '+₹ 0.3L', dColor: 'rgba(255,180,140,0.90)', pColor: 'rgba(140,220,180,0.90)' },
-                { n: 'Fixed Deposits', v: '₹ 3.7L', d: '—', p: '+₹ 0.2L', dColor: 'rgba(200,215,240,0.45)', pColor: 'rgba(140,220,180,0.90)' },
-                { n: 'Cash / Liquid', v: '₹ 1.8L', d: '—', p: '—', dColor: 'rgba(200,215,240,0.45)', pColor: 'rgba(200,215,240,0.45)' },
-              ].map((row) => (
-                <div key={row.n} className="li-table-row" style={{ gridTemplateColumns: '2.5fr 1fr 1fr 1fr' }}>
-                  <div style={{ color: 'rgba(245,248,255,0.92)', fontSize: '13px', fontWeight: 450 }}>{row.n}</div>
-                  <div style={{ color: 'rgba(220,230,255,0.85)', fontSize: '13px' }}>{row.v}</div>
-                  <div style={{ color: row.dColor, fontSize: '13px', fontWeight: 500 }}>{row.d}</div>
-                  <div style={{ color: row.pColor, fontSize: '13px', fontWeight: 500 }}>{row.p}</div>
-                </div>
-              ))}
+              <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '12px', lineHeight: 1.5, maxWidth: '400px', margin: '0 auto' }}>
+                Link your demat account or manually add your investments to see real-time holdings, P&L, and performance analytics
+              </div>
+              <div style={{ 
+                marginTop: '16px', 
+                display: 'inline-flex', 
+                padding: '8px 20px',
+                borderRadius: '8px',
+                background: 'rgba(100,160,255,0.10)',
+                border: '1px solid rgba(100,160,255,0.20)',
+                color: 'rgba(140,190,255,0.95)',
+                fontSize: '12px',
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}>
+                Contact Us to Get Started
+              </div>
             </div>
           </div>
 

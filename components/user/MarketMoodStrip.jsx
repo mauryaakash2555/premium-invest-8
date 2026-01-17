@@ -2,12 +2,14 @@
  * FILE: components/user/MarketMoodStrip.jsx
  * PURPOSE: Live Intelligence rotating mood strip
  * COLORS: Premium laser blue theme (NO gold/brown)
+ * 
+ * LIVE DATA: Fetches headlines from /api/live-intelligence/feed
  */
 
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { CURATED_HEADLINES, sortByPriority, CATEGORIES } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
@@ -18,17 +20,72 @@ const COLORS = {
   text: 'rgba(170, 198, 255, 0.85)',
 };
 
+// Category icons for live headlines
+const CATEGORY_ICONS = {
+  market_update: '📊',
+  market_move: '📈',
+  regulatory: '⚖️',
+  opportunity: '💎',
+  rbi: '🏦',
+  sebi: '📋',
+  portfolio_tip: '💡',
+  tax_insight: '💰',
+  global: '🌐',
+  insurance: '🛡️',
+  mutual_funds: '💰',
+  bonds: '📜',
+  sip: '📊',
+  breaking: '🔴',
+  ipo: '🎯',
+};
+
 export default function MarketMoodStrip({ onToggleRain }) {
   const [index, setMoodIndex] = useState(0);
   const [headlines, setHeadlines] = useState([]);
   const [modeConfig, setModeConfig] = useState(null);
+  const [isLive, setIsLive] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const sorted = sortByPriority(CURATED_HEADLINES);
-    setHeadlines(sorted.slice(0, 8));
-    setModeConfig(getCurrentModeConfig());
+  // Fetch live headlines from API
+  const fetchLiveHeadlines = useCallback(async () => {
+    try {
+      const res = await fetch('/api/live-intelligence/feed?limit=10', { 
+        cache: 'no-store',
+        next: { revalidate: 0 }
+      });
+      if (!res.ok) throw new Error('Feed API failed');
+      const data = await res.json();
+      
+      if (data.ok && data.headlines && data.headlines.length > 0) {
+        setHeadlines(data.headlines);
+        setIsLive(data.source === 'database');
+        return true;
+      }
+    } catch (err) {
+      console.warn('[MarketMoodStrip] Live feed unavailable, using curated:', err.message);
+    }
+    return false;
   }, []);
+
+  useEffect(() => {
+    // Try to fetch live headlines first
+    fetchLiveHeadlines().then((success) => {
+      if (!success) {
+        // Fallback to curated headlines
+        const sorted = sortByPriority(CURATED_HEADLINES);
+        setHeadlines(sorted.slice(0, 8));
+      }
+    });
+    
+    setModeConfig(getCurrentModeConfig());
+    
+    // Refresh live headlines every 5 minutes
+    const refreshInterval = setInterval(() => {
+      fetchLiveHeadlines();
+    }, 5 * 60 * 1000);
+    
+    return () => clearInterval(refreshInterval);
+  }, [fetchLiveHeadlines]);
 
   useEffect(() => {
     if (headlines.length === 0) return;
@@ -40,10 +97,13 @@ export default function MarketMoodStrip({ onToggleRain }) {
   }, [headlines.length, modeConfig]);
 
   const currentHeadline = headlines[index];
-  const category = currentHeadline ? CATEGORIES[currentHeadline.category] : null;
-  const icon = (category && category.icon) ? category.icon : '📡';
+  // Support both live API format and curated format
+  const category = currentHeadline ? (CATEGORIES[currentHeadline.category] || { icon: CATEGORY_ICONS[currentHeadline.category] }) : null;
+  const icon = currentHeadline?.icon || (category && category.icon) ? (currentHeadline?.icon || category?.icon) : '📡';
+  const headlineText = currentHeadline?.headline || currentHeadline?.title || '';
+  const whyText = currentHeadline?.whyItMatters || currentHeadline?.summary || '';
   const displayText = currentHeadline 
-    ? icon + ' ' + currentHeadline.headline + ' — ' + currentHeadline.whyItMatters
+    ? icon + ' ' + headlineText + (whyText ? ' — ' + whyText : '')
     : 'Loading market intelligence...';
 
   const handleClick = () => {
@@ -63,10 +123,10 @@ export default function MarketMoodStrip({ onToggleRain }) {
           style={{ cursor: 'pointer' }}
         >
           <span className='relative inline-flex h-2 w-2'>
-            <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: COLORS.accentDim }} />
-            <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: COLORS.accent }} />
+            <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 220, 150, 0.35)' : COLORS.accentDim }} />
+            <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 220, 150, 1)' : COLORS.accent }} />
           </span>
-          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>Live Mood</span>
+          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>{isLive ? 'Live' : 'Live Mood'}</span>
         </div>
         
         <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />
