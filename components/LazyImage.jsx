@@ -1,9 +1,8 @@
 ﻿'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 
-export default function LazyImage({ src, alt, className, style, priority = false, width, height, fill = true, ...props }) {
+export default function LazyImage({ src, alt, className, style, priority = false, ...props }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -29,22 +28,24 @@ export default function LazyImage({ src, alt, className, style, priority = false
       
       {/* Actual Image */}
       {!hasError && (
-        <Image
+        <img
           src={src}
-          alt={alt || ''}
+          alt={alt}
           className={className}
-          fill={fill && !width && !height}
-          width={!fill || width ? (width || 400) : undefined}
-          height={!fill || height ? (height || 300) : undefined}
           style={{
+            width: '100%',
+            height: '100%',
             objectFit: 'cover',
             opacity: isLoaded ? 1 : 0,
             transition: 'opacity 0.5s ease-in-out',
+            display: 'block',
+            position: 'relative',
             zIndex: 2,
           }}
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
-          priority={priority}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : 'auto'}
           {...props}
         />
       )}

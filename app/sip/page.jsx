@@ -74,27 +74,6 @@ const SIPServices = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'SIP',
-    description,
-    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
-    areaServed: { '@type': 'Country', name: 'IN' },
-    serviceType: 'SIP',
-    url: pageUrl,
-  };
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: { '@type': 'Answer', text: f.answer },
-    })),
-  };
-
   const step = {
     width: 34,
     height: 34,
@@ -132,16 +111,6 @@ const SIPServices = () => {
         id="sip-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        id="sip-service-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <script
-        id="sip-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero */}

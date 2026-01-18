@@ -181,27 +181,6 @@ const MutualFunds = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'Mutual Funds',
-    description,
-    provider: { '@type': 'Organization', name: SITE_NAME, url: baseUrl },
-    areaServed: { '@type': 'Country', name: 'IN' },
-    serviceType: 'Mutual Funds',
-    url: pageUrl,
-  };
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: { '@type': 'Answer', text: f.answer },
-    })),
-  };
-
   const divider = {
     height: 1,
     background: `linear-gradient(90deg, rgba(${ACCENT_RGB},0), rgba(${ACCENT_RGB},0.35), rgba(255,255,255,0.10), rgba(${ACCENT_RGB},0.35), rgba(${ACCENT_RGB},0))`,
@@ -226,16 +205,6 @@ const MutualFunds = () => {
         id="mutual-funds-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        id="mutual-funds-service-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <script
-        id="mutual-funds-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Hero (luxury, high-end spacing, no brown) */}

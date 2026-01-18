@@ -28,32 +28,19 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-// Throttle utility for scroll performance
-function throttle(fn, wait) {
-  let lastTime = 0;
-  return function(...args) {
-    const now = Date.now();
-    if (now - lastTime >= wait) {
-      lastTime = now;
-      fn.apply(this, args);
-    }
-  };
-}
-
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [showNav, setShowNav] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    // Set initial mobile state IMMEDIATELY (not throttled) to prevent mobile nav on desktop
+    // Prevent hydration mismatch: set mounted after initial render
+    setMounted(true);
+    
     let lastY = 0;
-    const handleScroll = throttle(() => {
+    const handleScroll = () => {
       const y = window.scrollY;
       // Glass should be hidden at the very top; re-appear after a small scroll.
       setIsScrolled(y > 10);
@@ -68,14 +55,20 @@ const Navigation = () => {
         setShowNav(true);
       }
       lastY = y;
-    }, 100); // Throttle to 100ms for smooth performance
-
+    };
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    handleResize();
     handleScroll();
-
-    // Use passive listeners for better scroll performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, [pathname]);
 
@@ -141,8 +134,23 @@ const Navigation = () => {
     return null;
   }
 
-  const toggleMobileMenu = () => setMobileMenuOpen((open) => !open);
+  // Prevent hydration mismatch: render desktop version on server, then switch after mount
+  if (mounted && isMobile) {
+    return (
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-[1000] transition-transform duration-300 ease-in-out px-5 h-[70px] flex items-center",
+          // At top: no glass. After scroll: glass returns.
+          isScrolled ? "bg-black/30 backdrop-blur-xl" : "bg-transparent"
+        )}
+        style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
+      >
+        <Logo size={38} fontSize="19px" />
+      </header>
+    );
+  }
 
+  // Desktop Navigation
   return (
     <nav
       className={cn(
@@ -154,7 +162,7 @@ const Navigation = () => {
     >
       <div className="w-full max-w-[1600px] flex justify-between items-center">
         <Logo size={48} fontSize="24px" />
-        <div className="hidden lg:flex gap-10 items-center">
+        <div className="flex gap-10 items-center">
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
             return isActive ? (
@@ -176,7 +184,6 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 href={link.path}
-                prefetch={true}
                 className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
               >
                 {link.label}
@@ -188,54 +195,7 @@ const Navigation = () => {
             );
           })}
         </div>
-
-        <button
-          type="button"
-          onClick={toggleMobileMenu}
-          className="lg:hidden inline-flex items-center justify-center h-11 w-11 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white"
-          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileMenuOpen}
-        >
-          {mobileMenuOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 7H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M4 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          )}
-        </button>
       </div>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[990] bg-black/85 backdrop-blur-xl pt-[95px] px-6 lg:hidden">
-          <div className="max-w-[520px] mx-auto flex flex-col gap-2">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.path;
-              return (
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  prefetch={true}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    'py-4 px-4 rounded-2xl border transition-colors',
-                    isActive
-                      ? 'border-[#C0A062]/40 bg-[#C0A062]/10 text-[#C0A062]'
-                      : 'border-white/10 bg-white/5 text-white hover:bg-white/10'
-                  )}
-                >
-                  <span className="text-[14px] font-semibold uppercase tracking-[2.5px]">{link.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

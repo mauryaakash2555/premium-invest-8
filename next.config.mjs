@@ -1,9 +1,3 @@
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
@@ -18,26 +12,14 @@ const nextConfig = {
         hostname: 'images.pexels.com',
       },
     ],
-    // Performance: prefer WebP, optimize device sizes
-    formats: ['image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  // Performance: tree-shake heavy packages
+  // Disable static generation for blog pages to ensure fresh content
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
-    // optimizeCss: true, // Disabled: requires stable critters integration
+    // Force dynamic rendering
   },
-  // Performance: remove console in production
-  compiler: {
-    removeConsole: {
-      exclude: ['error', 'warn'], // Keep error/warn for debugging
-    },
-  },
-  // Caching headers
+  // Disable all caching for blog routes
   async headers() {
     return [
-      // Disable caching for blog routes (fresh content)
       {
         source: '/blog/:path*',
         headers: [
@@ -55,25 +37,8 @@ const nextConfig = {
           },
         ],
       },
-      // Long-term caching for static assets (1 year, immutable)
-      {
-        source: '/:all*(svg|jpg|jpeg|png|webp|woff|woff2|ico)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
     ];
-  },
-  // Webpack performance optimizations
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.optimization.usedExports = true;
-    }
-    return config;
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

@@ -26,14 +26,14 @@ export const metadata = buildMetadata({
 
 function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
   const content = (
-    <Card className={`border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative rounded-xl h-full ${className}`} style={{ overflow: 'visible' }}>
+    <Card className={`border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative overflow-hidden rounded-xl ${className}`}>
       {laser ? (
-        <div className="absolute -inset-[2px] pointer-events-none z-20" aria-hidden="true" style={{ borderRadius: '14px' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{ borderRadius: '12px' }}>
           <LaserBeam
             width="100%"
             height="100%"
             color="#c0a062"
-            borderRadius={14}
+            borderRadius={12}
             duration={14}
             glowIntensity={12}
             beamLength={0.12}
@@ -42,17 +42,15 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
           />
         </div>
       ) : null}
-      <CardContent className="p-5 relative z-10 flex flex-col h-full min-h-[140px]">
-        <div className="flex items-start justify-between gap-4 flex-1">
+      <CardContent className="p-5 relative z-10">
+        <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold gold-gradient-text">
+            <h2 className="text-base font-semibold gold-gradient-text truncate">
               {title}
             </h2>
             {subtitle ? (
-              <p className="mt-1 text-sm text-white/70 line-clamp-2">{subtitle}</p>
-            ) : (
-              <p className="mt-1 text-sm text-white/40 italic">Details coming soon</p>
-            )}
+              <p className="mt-1 text-sm text-white/70">{subtitle}</p>
+            ) : null}
           </div>
           {!active ? (
             <Badge className="shrink-0 bg-white/10 text-white/80 border border-white/10">
@@ -61,7 +59,7 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
           ) : null}
         </div>
 
-        <div className="mt-auto pt-4">
+        <div className="mt-5">
           {active ? (
             <Link href={href} className="inline-flex">
               <Button className="calculator-premium-cta">
@@ -85,7 +83,7 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
   // Coming Soon pages (still no logic exposed).
   if (!active && href && href !== "#") {
     return (
-      <Link href={href} className="block h-full" aria-label={title}>
+      <Link href={href} className="block" aria-label={title}>
         {content}
       </Link>
     );
@@ -188,12 +186,7 @@ export default function ToolsHubPage() {
                 subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
                 href="/tools/all-calculators"
                 laser
-              />
-              <ToolCard
-                active
-                title="Free ITR Filing Help"
-                subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
-                href="/tools/itr-filing-help"
+                className="min-h-[130px]"
               />
             </div>
 

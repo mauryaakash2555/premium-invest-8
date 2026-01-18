@@ -119,12 +119,8 @@ export async function GET(request) {
     
     // Sort by date
     uniqueData.sort((a, b) => {
-      const toMs = (v) => {
-        const t = Date.parse(v);
-        return Number.isFinite(t) ? t : 0;
-      };
-      const dateA = toMs(a.published_at || a.created_at);
-      const dateB = toMs(b.published_at || b.created_at);
+      const dateA = new Date(a.published_at || a.created_at);
+      const dateB = new Date(b.published_at || b.created_at);
       return dateB - dateA;
     });
     

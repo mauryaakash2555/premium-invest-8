@@ -26,9 +26,7 @@ const WhatsAppFloat = () => {
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
 
-  // Hide on live-intelligence page (must be after all hooks)
-  const hiddenOnPage = pathname?.startsWith('/live-intelligence');
-  if (hiddenOnPage) return null;
+  if (pathname?.startsWith('/live-intelligence')) return null;
 
   return (
     <div style={{ position: 'relative' }}>

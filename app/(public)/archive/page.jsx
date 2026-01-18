@@ -11,7 +11,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import HeadlineCard from '@/components/live-intelligence/HeadlineCard';
 
 // Category definitions
@@ -145,9 +144,7 @@ export default function ArchivePage() {
   
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return '';
-    return d.toLocaleDateString('en-IN', {
+    return new Date(dateStr).toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -181,7 +178,7 @@ export default function ArchivePage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
               <Link href="/" className="shrink-0">
-                <Image src="/logo.webp" alt="BM Wealth" width={48} height={48} className="w-10 h-10 md:w-12 md:h-12" />
+                <img src="/logo.webp" alt="BM Wealth" className="w-10 h-10 md:w-12 md:h-12" />
               </Link>
               <div>
                 <h1 

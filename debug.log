@@ -1,0 +1,17 @@
+   Γû▓ Next.js 15.1.9
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.31.177:3000
+   - Environments: .env.local
+
+ Γ£ô Starting...
+2026-01-18T07:30:23.195Z next:router-server:filesystem nextDataRoutes Set(0) {}
+2026-01-18T07:30:23.195Z next:router-server:filesystem dynamicRoutes []
+2026-01-18T07:30:23.195Z next:router-server:filesystem pageFiles Set(0) {}
+2026-01-18T07:30:23.196Z next:router-server:filesystem appFiles Set(0) {}
+2026-01-18T07:30:23.897Z next:jsconfig-paths-plugin tsconfig.json or jsconfig.json paths: { '@/*': [ './*' ] }
+2026-01-18T07:30:23.897Z next:jsconfig-paths-plugin resolved baseUrl: { baseUrl: 'C:\\Users\\admin\\premium-invest-8', isImplicit: false }
+2026-01-18T07:30:23.903Z next:jsconfig-paths-plugin tsconfig.json or jsconfig.json paths: { '@/*': [ './*' ] }
+2026-01-18T07:30:23.903Z next:jsconfig-paths-plugin resolved baseUrl: { baseUrl: 'C:\\Users\\admin\\premium-invest-8', isImplicit: false }
+2026-01-18T07:30:23.918Z next:jsconfig-paths-plugin tsconfig.json or jsconfig.json paths: { '@/*': [ './*' ] }
+2026-01-18T07:30:23.918Z next:jsconfig-paths-plugin resolved baseUrl: { baseUrl: 'C:\\Users\\admin\\premium-invest-8', isImplicit: false }
+2026-01-18T07:31:06.183Z next:start-server start-server process cleanup

@@ -89,7 +89,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
 
   useEffect(() => {
     if (headlines.length === 0) return;
-    const speed = (modeConfig && modeConfig.rotationSpeed) ? modeConfig.rotationSpeed : 12000;
+    const speed = (modeConfig && modeConfig.rotationSpeed) ? modeConfig.rotationSpeed : 8000;
     const timer = setInterval(() => {
       setMoodIndex((prev) => (prev + 1) % headlines.length);
     }, speed);
@@ -115,7 +115,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
   };
 
   return (
-    <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[rgba(100,150,255,0.10)]' style={{ minHeight: '28px' }}>
+    <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[rgba(100,150,255,0.10)]'>
       <div className='max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-start gap-3 h-5'>
         <div
           className='flex items-center gap-2 flex-shrink-0 z-10 pr-2 px-2 py-[2px] rounded-full bg-black/25 backdrop-blur-sm'
@@ -123,8 +123,8 @@ export default function MarketMoodStrip({ onToggleRain }) {
           style={{ cursor: 'pointer' }}
         >
           <span className='relative inline-flex h-2 w-2'>
-            <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 160, 255, 0.35)' : COLORS.accentDim }} />
-            <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 160, 255, 1)' : COLORS.accent }} />
+            <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 220, 150, 0.35)' : COLORS.accentDim }} />
+            <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 220, 150, 1)' : COLORS.accent }} />
           </span>
           <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>{isLive ? 'Live' : 'Live Mood'}</span>
         </div>
@@ -147,7 +147,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
               <motion.p
                 initial={{ x: '10%' }}
                 animate={{ x: ['10%', '-100%'] }}
-                transition={{ duration: 22, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
+                transition={{ duration: 14, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
                 className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase m-0 pr-[50%]'
                 style={{ color: 'rgba(200, 215, 240, 0.75)' }}
               >
