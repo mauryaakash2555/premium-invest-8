@@ -85,6 +85,56 @@
   .lg\:flex-row {
     flex-direction: row !important;
   }
+  .lg\:justify-start {
+    justify-content: flex-start !important;
+  }
+  .lg\:px-24 {
+    padding-left: 6rem !important;
+    padding-right: 6rem !important;
+  }
+  .lg\:px-16 {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
+  .lg\:mx-0 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .lg\:mb-0 {
+    margin-bottom: 0 !important;
+  }
+  .lg\:mt-0 {
+    margin-top: 0 !important;
+  }
+  .lg\:w-1\/2 {
+    width: 50% !important;
+  }
+  .lg\:w-1\/3 {
+    width: 33.333333% !important;
+  }
+  .lg\:w-2\/3 {
+    width: 66.666667% !important;
+  }
+  .lg\:text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+  .lg\:text-2xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  .lg\:text-3xl {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+  .lg\:text-4xl {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+  }
+  .lg\:text-5xl {
+    font-size: 3rem !important;
+    line-height: 1 !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
