@@ -380,8 +380,9 @@ async function fetchFromMoneyControl() {
     }
   } catch (e) { Logger.warn("mc_indices_failed", { error: String(e?.message) }); }
   
-  // MCX Commodities
+  // MCX Commodities - Try multiple endpoints
   try {
+    // First try: MCX API endpoint
     const res = await fetchWithTimeout("https://priceapi.moneycontrol.com/pricefeed/commodity/mcx", {
       headers: { ...SCRAPE_HEADERS, "Accept": "application/json", "Origin": "https://www.moneycontrol.com" }
     }, 5000);
@@ -397,7 +398,7 @@ async function fetchFromMoneyControl() {
           if (symbol.includes("GOLD") && price > 70000 && price < 200000) {
             results.gold = { value: Math.round(price), changePct: roundTo2(changePct || 0), source: "moneycontrol" };
           }
-          if (symbol.includes("SILVER") && price > 80000 && price < 350000) {
+          if (symbol.includes("SILVER") && price > 200000 && price < 350000) {
             results.silver = { value: Math.round(price), changePct: roundTo2(changePct || 0), source: "moneycontrol" };
           }
           if (symbol.includes("CRUDE") && price > 4000 && price < 12000) {
@@ -406,54 +407,178 @@ async function fetchFromMoneyControl() {
         }
       }
     }
-  } catch (e) { Logger.warn("mc_mcx_failed", { error: String(e?.message) }); }
+  } catch (e) { Logger.warn("mc_mcx_api_failed", { error: String(e?.message) }); }
+  
+  // Second try: Alternative MoneyControl commodity feed
+  if (!results.gold || !results.silver || !results.crude) {
+    try {
+      const res2 = await fetchWithTimeout("https://www.moneycontrol.com/commodity/", { headers: SCRAPE_HEADERS }, 5000);
+      if (res2.ok) {
+        const html = await res2.text();
+        
+        // Gold pattern
+        if (!results.gold) {
+          const goldPattern = /Gold.*?₹\s*([0-9,]+).*?([+-]?[0-9.]+)%/gi;
+          const match = goldPattern.exec(html);
+          if (match) {
+            const price = parseNumber(match[1]);
+            const pct = parseNumber(match[2]);
+            if (price > 70000 && price < 200000) {
+              results.gold = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "moneycontrol_web" };
+            }
+          }
+        }
+        
+        // Silver pattern
+        if (!results.silver) {
+          const silverPattern = /Silver.*?₹\s*([0-9,]+).*?([+-]?[0-9.]+)%/gi;
+          const match = silverPattern.exec(html);
+          if (match) {
+            const price = parseNumber(match[1]);
+            const pct = parseNumber(match[2]);
+            if (price > 200000 && price < 350000) {
+              results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "moneycontrol_web" };
+            }
+          }
+        }
+        
+        // Crude pattern
+        if (!results.crude) {
+          const crudePattern = /Crude.*?₹\s*([0-9,]+).*?([+-]?[0-9.]+)%/gi;
+          const match = crudePattern.exec(html);
+          if (match) {
+            const price = parseNumber(match[1]);
+            const pct = parseNumber(match[2]);
+            if (price > 4000 && price < 12000) {
+              results.crude = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "moneycontrol_web" };
+            }
+          }
+        }
+      }
+    } catch (e) { Logger.warn("mc_web_failed", { error: String(e?.message) }); }
+  }
   
   return results;
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// SOURCE 5: MCX OFFICIAL - BACKUP
+// SOURCE 5: MCX OFFICIAL - BACKUP (MULTIPLE SCRAPING PATTERNS)
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchFromMCXOfficial() {
   const results = { gold: null, silver: null, crude: null };
   
   try {
-    const res = await fetchWithTimeout("https://www.mcxindia.com/", { headers: SCRAPE_HEADERS }, 6000);
+    // Try MCX API endpoint first
+    const apiRes = await fetchWithTimeout("https://www.mcxindia.com/backpage.aspx/GetTopGainerLoserData", {
+      method: "POST",
+      headers: { 
+        ...SCRAPE_HEADERS, 
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Origin": "https://www.mcxindia.com",
+        "Referer": "https://www.mcxindia.com/"
+      },
+      body: JSON.stringify({})
+    }, 5000);
     
-    if (res.ok) {
-      const html = await res.text();
+    if (apiRes.ok) {
+      const data = await apiRes.json();
+      const items = data?.d || data?.data || [];
       
-      // Gold
-      const goldMatch = html.match(/GOLD[\s\S]*?([0-9,]+\.[0-9]{2})[\s\S]*?([+-]?[0-9.]+)\s*%/i);
-      if (goldMatch) {
-        const price = parseNumber(goldMatch[1]);
-        const pct = parseNumber(goldMatch[2]);
-        if (price > 70000 && price < 200000) {
-          results.gold = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
-        }
-      }
-      
-      // Silver
-      const silverMatch = html.match(/SILVER[\s\S]*?([0-9,]+\.[0-9]{2})[\s\S]*?([+-]?[0-9.]+)\s*%/i);
-      if (silverMatch) {
-        const price = parseNumber(silverMatch[1]);
-        const pct = parseNumber(silverMatch[2]);
-        if (price > 80000 && price < 350000) {
-          results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
-        }
-      }
-      
-      // Crude
-      const crudeMatch = html.match(/CRUDE[\s\S]*?([0-9,]+\.[0-9]{2})[\s\S]*?([+-]?[0-9.]+)\s*%/i);
-      if (crudeMatch) {
-        const price = parseNumber(crudeMatch[1]);
-        const pct = parseNumber(crudeMatch[2]);
-        if (price > 4000 && price < 12000) {
-          results.crude = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
+      if (Array.isArray(items)) {
+        for (const item of items) {
+          const symbol = (item.Symbol || item.symbol || "").toUpperCase();
+          const price = parseNumber(item.LTP || item.ltp || item.LastPrice);
+          const pct = parseNumber(item.PercChange || item.PerChange || item.pChange);
+          
+          if (symbol.includes("GOLD") && price > 70000 && price < 200000) {
+            results.gold = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx_api" };
+          }
+          if (symbol.includes("SILVER") && price > 200000 && price < 350000) {
+            results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx_api" };
+          }
+          if (symbol.includes("CRUDE") && price > 4000 && price < 12000) {
+            results.crude = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx_api" };
+          }
         }
       }
     }
-  } catch (e) { Logger.warn("mcx_failed", { error: String(e?.message) }); }
+  } catch (e) { Logger.warn("mcx_api_failed", { error: String(e?.message) }); }
+  
+  // If API failed, try scraping homepage
+  if (!results.gold || !results.silver || !results.crude) {
+    try {
+      const res = await fetchWithTimeout("https://www.mcxindia.com/", { headers: SCRAPE_HEADERS }, 6000);
+      
+      if (res.ok) {
+        const html = await res.text();
+        
+        // Multiple regex patterns for better success rate
+        const patterns = {
+          gold: [
+            /GOLD[^0-9]*?([0-9,]+\.[0-9]{1,2})[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /GOLD[^₹]*?₹?\s*([0-9,]+)[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /"Symbol"\s*:\s*"GOLD[^"]*"[^}]*"LTP"\s*:\s*([0-9.]+)[^}]*"PercChange"\s*:\s*([+-]?[0-9.]+)/gi
+          ],
+          silver: [
+            /SILVER[^0-9]*?([0-9,]+\.[0-9]{1,2})[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /SILVER[^₹]*?₹?\s*([0-9,]+)[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /"Symbol"\s*:\s*"SILVER[^"]*"[^}]*"LTP"\s*:\s*([0-9.]+)[^}]*"PercChange"\s*:\s*([+-]?[0-9.]+)/gi
+          ],
+          crude: [
+            /CRUDE[^0-9]*?([0-9,]+\.[0-9]{1,2})[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /CRUDE[^₹]*?₹?\s*([0-9,]+)[^0-9]*?([+-]?[0-9.]+)%/gi,
+            /"Symbol"\s*:\s*"CRUDE[^"]*"[^}]*"LTP"\s*:\s*([0-9.]+)[^}]*"PercChange"\s*:\s*([+-]?[0-9.]+)/gi
+          ]
+        };
+        
+        // Gold
+        if (!results.gold) {
+          for (const pattern of patterns.gold) {
+            const match = pattern.exec(html);
+            if (match) {
+              const price = parseNumber(match[1]);
+              const pct = parseNumber(match[2]);
+              if (price > 70000 && price < 200000) {
+                results.gold = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
+                break;
+              }
+            }
+          }
+        }
+        
+        // Silver
+        if (!results.silver) {
+          for (const pattern of patterns.silver) {
+            const match = pattern.exec(html);
+            if (match) {
+              const price = parseNumber(match[1]);
+              const pct = parseNumber(match[2]);
+              if (price > 200000 && price < 350000) {
+                results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
+                break;
+              }
+            }
+          }
+        }
+        
+        // Crude
+        if (!results.crude) {
+          for (const pattern of patterns.crude) {
+            const match = pattern.exec(html);
+            if (match) {
+              const price = parseNumber(match[1]);
+              const pct = parseNumber(match[2]);
+              if (price > 4000 && price < 12000) {
+                results.crude = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
+                break;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) { Logger.warn("mcx_scrape_failed", { error: String(e?.message) }); }
+  }
   
   return results;
 }
@@ -760,6 +885,7 @@ async function fetchMarketDataFromAPIs() {
     });
     
     // BITCOIN - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
+    // ALWAYS SHOW - display "Updating..." when no live data
     const btc = cg || binance || (av.btc ? { value: av.btc.value, changePct: 0, source: "alphavantage" } : null);
     if (btc) {
       const btcPct = autoCalculatePct("BTC", btc.value, btc.changePct);
@@ -769,11 +895,17 @@ async function fetchMarketDataFromAPIs() {
         currency: "USD", source: btc.source, live: true,
       });
     } else {
-      const f = fallbackItem("BTC");
-      if (f) items.push(f);
+      // Show updating indicator when no live data
+      items.push({
+        id: "BTC", name: "BITCOIN", kind: "crypto", value: "---",
+        changePct: 0, direction: "neutral",
+        currency: "USD", source: "updating", live: false,
+        updating: true, // Flag for UI to show grayed out style
+      });
     }
     
     // GOLD - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
+    // ALWAYS SHOW - display "Updating..." when no live data
     const gold = mc.gold || mcx.gold || mint.gold || gr.gold;
     if (gold) {
       const goldPct = autoCalculatePct("GOLD", gold.value, normalizeMetalSourcePct(gold.changePct));
@@ -783,16 +915,22 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: gold.source, live: true,
       });
     } else {
-      const f = fallbackItem("GOLD");
-      if (f) items.push(f);
+      // Show updating indicator when no live data
+      items.push({
+        id: "GOLD", name: "MCX GOLD", kind: "metal", value: "---",
+        changePct: 0, direction: "neutral",
+        currency: "INR", source: "updating", live: false,
+        updating: true, // Flag for UI to show grayed out style
+      });
     }
     
     // SILVER - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
+    // ALWAYS SHOW - display "Updating..." when no live data
     let silver = mc.silver || mcx.silver || mint.silver || gr.silver;
     // Sanity check: Silver per KG should always be much higher than Gold per 10g
     if (silver && silver.value < 200000) {
       Logger.warn("silver_invalid_value", { value: silver.value, source: silver.source });
-      silver = null; // Force fallback
+      silver = null; // Reject invalid data
     }
     if (silver) {
       const silverPct = autoCalculatePct("SILVER", silver.value, normalizeMetalSourcePct(silver.changePct));
@@ -802,11 +940,17 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: silver.source, live: true,
       });
     } else {
-      const f = fallbackItem("SILVER");
-      if (f) items.push(f);
+      // Show updating indicator when no live data
+      items.push({
+        id: "SILVER", name: "MCX SILVER", kind: "metal", value: "---",
+        changePct: 0, direction: "neutral",
+        currency: "INR", source: "updating", live: false,
+        updating: true, // Flag for UI to show grayed out style
+      });
     }
     
     // CRUDE OIL - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
+    // ALWAYS SHOW - display "Updating..." when no live data
     const crude = mc.crude || mcx.crude || mint.crude;
     if (crude) {
       const crudePct = autoCalculatePct("CRUDEOIL", crude.value, crude.changePct);
@@ -816,8 +960,13 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: crude.source, live: true,
       });
     } else {
-      const f = fallbackItem("CRUDEOIL");
-      if (f) items.push(f);
+      // Show updating indicator when no live data
+      items.push({
+        id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: "---",
+        changePct: 0, direction: "neutral",
+        currency: "INR", source: "updating", live: false,
+        updating: true, // Flag for UI to show grayed out style
+      });
     }
     
     // Save current prices for future % calculation

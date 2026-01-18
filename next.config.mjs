@@ -22,9 +22,17 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
-  // Experimental optimizations
+  // Performance optimizations
   experimental: {
-    // Enable optimizations
+    optimizePackageImports: ['lucide-react', '@heroicons/react', 'framer-motion'],
+  },
+  // Enable SWC minification for better performance
+  swcMinify: true,
+  // Reduce JavaScript bundle sizes
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{member}}',
+    },
   },
   // Disable all caching for blog routes but enable for static assets
   async headers() {
