@@ -58,6 +58,7 @@ export function LuxuryMobileDock() {
   const [menuIsScrolling, setMenuIsScrolling] = useState(false);
   const [dockGlareKey, setDockGlareKey] = useState(0);
   const [dockGlareVisible, setDockGlareVisible] = useState(false);
+  // Desktop detection - must be declared with other useState hooks (React hooks rules)
   const [isDesktop, setIsDesktop] = useState(false);
   const lastScrollYRef = useRef(0);
   const scrollRafRef = useRef(0);
@@ -71,6 +72,14 @@ export function LuxuryMobileDock() {
   const pathname = usePathname();
   const router = useRouter();
 
+  // Desktop detection effect - runs early, must be before any conditional returns
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
   // Keep the calculator screen clean (no dock overlay)
   // IMPORTANT: Do NOT return early before hooks below (breaks hook ordering).
   const hideDock =
@@ -78,14 +87,6 @@ export function LuxuryMobileDock() {
     pathname?.startsWith("/tools/tax-leak-detector") ||
     pathname?.startsWith("/tax-leak-detector") ||
     pathname?.startsWith("/live-intelligence");
-
-  // Desktop detection - hide dock completely on screens >= 1024px
-  useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
-    checkDesktop();
-    window.addEventListener('resize', checkDesktop);
-    return () => window.removeEventListener('resize', checkDesktop);
-  }, []);
 
   // If we navigate into a route where the dock is hidden, force-close any open menu
   // and clear transient highlight state.
@@ -327,6 +328,7 @@ export function LuxuryMobileDock() {
           scrolled ? "scale-90" : "scale-100",
           isReading ? "opacity-0 pointer-events-none scale-75 translate-y-10 blur-sm" : "opacity-100 pointer-events-auto scale-100 translate-y-0 blur-0"
         )}
+        style={{ display: isDesktop ? 'none' : undefined }}
       >
         <div
           className={cn(
