@@ -188,6 +188,12 @@ export default function ToolsHubPage() {
                 laser
                 className="min-h-[130px]"
               />
+              <ToolCard
+                active
+                title="Free ITR Filing Help"
+                subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
+                href="/tools/itr-filing-help"
+              />
             </div>
 
             <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
