@@ -9,23 +9,30 @@ const CACHE_NAME = 'bmwealth-v1';
 const STATIC_CACHE = 'bmwealth-static-v1';
 const DYNAMIC_CACHE = 'bmwealth-dynamic-v1';
 
-// Critical assets to cache on install
+// Critical assets to cache on install (only assets that definitely exist)
 const STATIC_ASSETS = [
   '/',
-  '/manifest.json',
-  '/media/logo.svg',
-  '/media/bm-wealth-logo.png',
 ];
 
-// Install event - cache static assets
+// Install event - cache static assets with error handling
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => {
+      .then(async (cache) => {
         console.log('[SW] Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+        // Cache each asset individually to prevent one failure from breaking all
+        for (const asset of STATIC_ASSETS) {
+          try {
+            await cache.add(asset);
+          } catch (err) {
+            console.warn('[SW] Failed to cache:', asset, err);
+          }
+        }
       })
       .then(() => self.skipWaiting())
+      .catch((err) => {
+        console.warn('[SW] Install failed:', err);
+      })
   );
 });
 
