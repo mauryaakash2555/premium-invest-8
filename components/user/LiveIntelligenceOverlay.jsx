@@ -282,7 +282,10 @@ export default function LiveIntelligenceOverlay({
       className={`li-overlay ${isOpen ? 'li-overlay-open' : ''} ${isAnimating && !isOpen ? 'li-overlay-closing' : ''}`}
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 'env(safe-area-inset-top, 0px)',
+        left: 0,
+        right: 0,
+        bottom: 0,
         zIndex: 9999,
         background: '#090A0C',
         overflowY: 'auto',
@@ -296,15 +299,45 @@ export default function LiveIntelligenceOverlay({
         visibility: isOpen || isAnimating ? 'visible' : 'hidden',
       }}
     >
+      {/* Hide body scroll when overlay is open */}
+      {isOpen && (
+        <style>{`
+          html, body {
+            overflow: hidden !important;
+            height: 100% !important;
+          }
+          /* Safe area fix for mobile browsers - CSS fallback */
+          .li-overlay {
+            top: env(safe-area-inset-top, 0px) !important;
+          }
+          .li-page-wrapper {
+            padding-top: env(safe-area-inset-top, 0px) !important;
+          }
+        `}</style>
+      )}
       {/* Global styles for overlay */}
       <style>{`
-        /* Hide scrollbar but keep scrolling */
-        .li-overlay::-webkit-scrollbar {
-          display: none;
-        }
+        /* Show scrollbar (users want visible scroll feedback) */
         .li-overlay {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          -ms-overflow-style: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.35) rgba(0, 0, 0, 0);
+        }
+        .li-overlay::-webkit-scrollbar {
+          width: 10px;
+        }
+        .li-overlay::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-overlay::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 10px;
+          border: 2px solid rgba(0, 0, 0, 0);
+          background-clip: padding-box;
+        }
+        .li-overlay::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.32);
+          background-clip: padding-box;
         }
 
         /* Hide number input spinners (desktop browsers) */
@@ -362,15 +395,46 @@ export default function LiveIntelligenceOverlay({
           background-color: transparent;
         }
 
-        /* Category filter - allow full width scroll */
+        /* Category filter - premium scroll */
         .li-category-filter {
           overflow-x: auto !important;
           max-width: 100%;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-category-filter::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-category-filter::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-category-filter::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-category-filter::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
         .li-category-scroll {
           flex-wrap: nowrap !important;
           overflow-x: auto !important;
           padding-right: 20px;
+          padding-bottom: 6px;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-category-scroll::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-category-scroll::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-category-scroll::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-category-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
 
         /* ═══════════════════════════════════════════════════════════
@@ -414,7 +478,7 @@ export default function LiveIntelligenceOverlay({
       `}</style>
 
       {/* PANEL SECTION - Laser video removed, panel starts at top */}
-      <LiveIntelligencePanel onClose={closeOverlay} />
+      <LiveIntelligencePanel onClose={closeOverlay} scrollContainerRef={overlayRef} />
 
       {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
       <div
@@ -445,12 +509,14 @@ export default function LiveIntelligenceOverlay({
 /**
  * Panel component with dashboard content and EPIC DONUT
  */
-function LiveIntelligencePanel({ onClose }) {
+function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [portfolioValue] = useState(28.3);
   const [totalInvested] = useState(24.8);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const shareMenuRef = useRef(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
   const [allocations, setAllocations] = useState({
     equity: 58,
     debt: 24,
@@ -458,17 +524,71 @@ function LiveIntelligencePanel({ onClose }) {
     cash: 10,
   });
 
+  const shareUrl = useMemo(() => {
+    if (typeof window === 'undefined') return 'https://bmwealth.co.in';
+    return window.location.href || 'https://bmwealth.co.in';
+  }, []);
+
+  const shareText = useMemo(
+    () => 'Check out BM Wealth Live Intelligence — real-time portfolio insights and market signals.',
+    []
+  );
+
+  const shareLinks = useMemo(() => {
+    const url = encodeURIComponent(shareUrl);
+    const text = encodeURIComponent(shareText);
+    return {
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
+      email: `mailto:?subject=${encodeURIComponent('BM Wealth Live Intelligence')}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+      telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+    };
+  }, [shareText, shareUrl]);
+
+  useEffect(() => {
+    if (!showShareMenu) return;
+    const onDocMouseDown = (e) => {
+      if (!shareMenuRef.current) return;
+      if (!shareMenuRef.current.contains(e.target)) setShowShareMenu(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setShowShareMenu(false);
+    };
+    document.addEventListener('mousedown', onDocMouseDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onDocMouseDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [showShareMenu]);
+
+  // Store scroll position in ref to persist across re-renders
+  const savedScrollRef = useRef({ container: 0, window: 0 });
+
+  // ⚠️ PROTECTED CODE - DO NOT MODIFY ⚠️
+  // PDF modal handlers - Keep simple! Do NOT manipulate body.overflow or scrollTop
+  // Any overflow/scroll manipulation causes the page to jump to top
+  const handlePdfOpen = useCallback((url) => {
+    setPdfUrl(url);
+    setShowPdfModal(true);
+  }, []);
+
+  // ⚠️ PROTECTED CODE - DO NOT MODIFY ⚠️
+  const handlePdfClose = useCallback(() => {
+    setShowPdfModal(false);
+    setPdfUrl(null);
+  }, []);
+
+  // ESC key to close PDF modal
   useEffect(() => {
     if (!showPdfModal) return;
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setShowPdfModal(false);
-        setPdfUrl(null);
-      }
+      if (e.key === 'Escape') handlePdfClose();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [showPdfModal]);
+  }, [showPdfModal, handlePdfClose]);
 
   const kpi = useMemo(() => {
     const currentValue = portfolioValue;
@@ -819,6 +939,11 @@ function LiveIntelligencePanel({ onClose }) {
           padding: 24px;
         }
 
+        /* Ensure donut effects (glow, orbit) are never clipped */
+        .li-allocation-card {
+          overflow: visible !important;
+        }
+
         .li-live-dot {
           width: 6px;
           height: 6px;
@@ -943,6 +1068,21 @@ function LiveIntelligencePanel({ onClose }) {
 
         .li-table-wrapper {
           overflow-x: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
+        }
+        .li-table-wrapper::-webkit-scrollbar {
+          height: 5px;
+        }
+        .li-table-wrapper::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0);
+        }
+        .li-table-wrapper::-webkit-scrollbar-thumb {
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
+        }
+        .li-table-wrapper::-webkit-scrollbar-thumb:hover {
+          background: rgba(170, 198, 255, 0.35);
         }
 
         .li-table-header {
@@ -1084,19 +1224,13 @@ function LiveIntelligencePanel({ onClose }) {
 
         .li-donut-value {
           color: rgba(245, 248, 255, 0.98);
-          font-size: 22px;
+          font-size: 18px;
           font-weight: 700;
           letter-spacing: -0.02em;
           line-height: 1.05;
           text-shadow: 0 0 20px rgba(100, 160, 255, 0.30);
           font-variant-numeric: tabular-nums;
           font-feature-settings: "tnum" 1, "lnum" 1;
-          /* Circle ring around value */
-          padding: 10px 14px;
-          border: 2px solid rgba(100, 160, 255, 0.35);
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(100, 160, 255, 0.08) 0%, transparent 70%);
-          box-shadow: 0 0 15px rgba(100, 160, 255, 0.15), inset 0 0 10px rgba(100, 160, 255, 0.05);
         }
 
         .li-donut-label {
@@ -1140,9 +1274,19 @@ function LiveIntelligencePanel({ onClose }) {
            RESPONSIVE STYLES
            ═══════════════════════════════════════════════════════════ */
         
+        /* Base padding - desktop */
+        .li-panel-shell {
+          padding: max(60px, calc(60px + env(safe-area-inset-top, 0px))) 20px 48px 20px;
+        }
+
+        /* Sticky back button - MUST respect safe-area on all devices */
+        .li-sticky-back-btn {
+          top: max(18px, calc(18px + env(safe-area-inset-top, 0px))) !important;
+        }
+        
         @media (max-width: 900px) {
           .li-panel-shell {
-            padding: 14px 16px 72px !important;
+            padding: max(70px, calc(70px + env(safe-area-inset-top, 0px))) 16px 72px 16px !important;
           }
           .li-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
           .li-dash-grid { grid-template-columns: minmax(0, 1fr) !important; }
@@ -1160,19 +1304,29 @@ function LiveIntelligencePanel({ onClose }) {
           .li-donut-container { width: 150px; height: 150px; }
           .li-kpi-card { padding: 14px; }
           .li-kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-          .li-panel-shell { padding: 12px 12px 60px !important; }
+          .li-panel-shell { padding: 50px 12px 60px 12px !important; }
           .li-dash-card { padding: 16px !important; }
           .li-asset-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+          .li-sticky-back-btn { top: 14px !important; left: 12px !important; }
 
-          /* Mobile-only: header subtitle aligns left (desktop stays centered) */
-          .li-header-block {
-            align-items: flex-start !important;
-            text-align: left !important;
+          /* MOBILE HEADER - Stack everything vertically with proper spacing */
+          .li-header-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-left: 0 !important;
           }
-          .li-header-subtitle {
-            text-align: left !important;
+          .li-header-section h2 {
+            font-size: 22px !important;
             margin-left: 0 !important;
-            margin-right: 0 !important;
+          }
+          .li-header-badges {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+          }
+          .li-header-actions {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
           }
 
           /* Mobile scroll fix - ensure all content is visible and scrollable */
@@ -1273,44 +1427,86 @@ function LiveIntelligencePanel({ onClose }) {
         style={{
           position: 'relative',
           zIndex: 2,
-          padding: '14px 20px 48px',
           overflowX: 'hidden',
         }}
       >
-        {/* Dashboard header with navigation tabs and actions */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '8px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                Live Intelligence
-              </h2>
-              <ModeIndicator />
-              <StreakBadge showDetails={true} />
-            </div>
-            <p style={{ margin: '8px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
-              Your financial command center — real-time portfolio insights and signals.
-            </p>
-            {/* Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days */}
-            <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
-              <div style={{ display: 'flex', gap: '8px', minWidth: 'max-content' }}>
-                {[
-                  { key: 'pulse', label: 'Live Market Pulse', icon: '📡', active: true },
-                  { key: 'live', label: 'Live', icon: '🔴', active: false },
-                  { key: 'timings', label: 'Timings', icon: '🕐', active: false },
-                  { key: '2days', label: '2 Days', icon: '📊', active: false },
-                ].map((tab) => (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    style={{
-                      display: 'flex',
+        {/* Sticky Arrow - Minimal, goes to home page */}
+        <button
+          onClick={onClose}
+          aria-label="Back to home"
+          className="li-sticky-back-btn"
+          style={{
+            position: 'fixed',
+            left: '14px',
+            zIndex: 9999,
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
+            border: 'none',
+            background: 'transparent',
+            color: 'rgba(140, 190, 255, 0.60)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '18px',
+            fontWeight: 300,
+            transition: 'all 0.15s ease',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.60)';
+          }}
+        >
+          ←
+        </button>
+
+        {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
+        <div className="li-header-section" style={{ marginBottom: '8px' }}>
+          {/* Row 1: Title only */}
+          <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+            Live Intelligence
+          </h2>
+          
+          {/* Row 2: Mode indicator + Streak badge */}
+          <div className="li-header-badges" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '10px' }}>
+            <ModeIndicator />
+            <StreakBadge showDetails={true} />
+          </div>
+          
+          {/* Row 3: Subtitle */}
+          <p style={{ margin: '10px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
+            Your financial command center — real-time portfolio insights and signals.
+          </p>
+          
+          {/* Row 4: Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days */}
+          <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {[
+                { key: 'pulse', label: 'Live Market Pulse', icon: '📡' },
+                { key: 'live', label: 'Live', icon: '🔴' },
+                { key: 'timings', label: 'Timings', icon: '🕐' },
+                { key: '2days', label: '2 Days', icon: '📊' },
+              ].map((tab) => {
+                const isActive = activeTab === tab.key;
+                return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key)}
+                  style={{
+                    display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 14px',
-                      background: tab.active ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
-                      border: `1px solid ${tab.active ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                      background: isActive ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
+                      border: `1px solid ${isActive ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
                       borderRadius: '10px',
-                      color: tab.active ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
+                      color: isActive ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
                       fontSize: '12px',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -1318,13 +1514,13 @@ function LiveIntelligencePanel({ onClose }) {
                       whiteSpace: 'nowrap',
                     }}
                     onMouseOver={(e) => {
-                      if (!tab.active) {
+                      if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
                         e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
                       }
                     }}
                     onMouseOut={(e) => {
-                      if (!tab.active) {
+                      if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
                         e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
                       }
@@ -1333,45 +1529,58 @@ function LiveIntelligencePanel({ onClose }) {
                     <span>{tab.icon}</span>
                     <span>{tab.label}</span>
                   </button>
-                ))}
+                );})}
+                {/* Open Full Intelligence CTA - Links to dedicated page */}
+                <a
+                  href="/live-intelligence"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 14px',
+                    background: 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)',
+                    border: '1px solid rgba(140, 220, 180, 0.25)',
+                    borderRadius: '10px',
+                    color: 'rgba(140, 220, 180, 0.95)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.20) 0%, rgba(140, 220, 180, 0.15) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.40)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.25)';
+                  }}
+                >
+                  <span>Open Full Intelligence</span>
+                  <span style={{ fontSize: '10px' }}>→</span>
+                </a>
               </div>
             </div>
-          </div>
-
-          {/* Action buttons - Back arrow, Share, Add Goal */}
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            {/* Back arrow */}
-            <button
-              onClick={onClose}
-              aria-label="Close Live Intelligence"
-              style={{
-                appearance: 'none',
-                border: 'none',
-                background: 'transparent',
-                color: 'rgba(180, 200, 230, 0.55)',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '22px',
-                fontWeight: 300,
-                transition: 'all 0.2s ease',
-                lineHeight: 1,
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
-                e.currentTarget.style.transform = 'translateX(-4px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.color = 'rgba(180, 200, 230, 0.55)';
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
-            >
-              ←
-            </button>
+          
+          {/* Row 5: Action buttons - Share & Add Goal */}
+          <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap' }}>
             {/* Share Button with Dropdown */}
-            <div style={{ position: 'relative' }}>
+            <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button
                 type="button"
-                onClick={() => setShowShareMenu(!showShareMenu)}
+                onClick={() => {
+                  // Prefer native share when available (most reliable on mobile).
+                  if (typeof navigator !== 'undefined' && navigator.share) {
+                    navigator
+                      .share({ title: 'BM Wealth Live Intelligence', text: shareText, url: shareUrl })
+                      .catch(() => {
+                        setShowShareMenu((v) => !v);
+                      });
+                    return;
+                  }
+                  setShowShareMenu((v) => !v);
+                }}
                 style={{
                   appearance: 'none',
                   border: '1px solid rgba(255,255,255,0.12)',
@@ -1402,7 +1611,13 @@ function LiveIntelligencePanel({ onClose }) {
 
               {/* Share dropdown menu */}
               {showShareMenu && (
-                <div style={{
+                <div
+                  onMouseDown={(e) => {
+                    // Prevent document-level outside-click handlers from closing
+                    // the menu before the anchor default navigation runs.
+                    e.stopPropagation();
+                  }}
+                  style={{
                   position: 'absolute',
                   top: '100%',
                   right: 0,
@@ -1417,28 +1632,17 @@ function LiveIntelligencePanel({ onClose }) {
                   zIndex: 200,
                 }}>
                   {[
-                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp' },
-                    { key: 'email', icon: '📧', label: 'Email' },
-                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X' },
-                    { key: 'linkedin', icon: '💼', label: 'LinkedIn' },
-                    { key: 'telegram', icon: '✈️', label: 'Telegram' },
+                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp', href: shareLinks.whatsapp },
+                    { key: 'email', icon: '📧', label: 'Email', href: shareLinks.email },
+                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X', href: shareLinks.twitter },
+                    { key: 'linkedin', icon: '💼', label: 'LinkedIn', href: shareLinks.linkedin },
+                    { key: 'telegram', icon: '✈️', label: 'Telegram', href: shareLinks.telegram },
                   ].map((item) => (
-                    <button
+                    <a
                       key={item.key}
-                      type="button"
-                      onClick={() => {
-                        const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
-                        const shareText = 'Check out my Live Intelligence Dashboard at BM Wealth - Real-time portfolio insights!';
-                        const urls = {
-                          whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
-                          email: `mailto:?subject=${encodeURIComponent('My BM Wealth Portfolio Dashboard')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`,
-                          twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
-                          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-                          telegram: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
-                        };
-                        window.open(urls[item.key], '_blank', 'noopener,noreferrer');
-                        setShowShareMenu(false);
-                      }}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1453,6 +1657,7 @@ function LiveIntelligencePanel({ onClose }) {
                         fontWeight: 500,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
+                        textDecoration: 'none',
                       }}
                       onMouseOver={(e) => {
                         e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
@@ -1465,17 +1670,22 @@ function LiveIntelligencePanel({ onClose }) {
                     >
                       <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>{item.icon}</span>
                       <span>{item.label}</span>
-                    </button>
+                    </a>
                   ))}
                   <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
                   <button
                     type="button"
                     onClick={() => {
-                      const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bmwealth.in';
-                      if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(shareUrl).then(() => alert('Link copied!'));
+                      const toCopy = shareUrl;
+                      const doFallback = () => {
+                        prompt('Copy this link:', toCopy);
+                      };
+                      if (typeof navigator === 'undefined') {
+                        doFallback();
+                      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(toCopy).then(() => alert('Link copied!')).catch(doFallback);
                       } else {
-                        prompt('Copy this link:', shareUrl);
+                        doFallback();
                       }
                       setShowShareMenu(false);
                     }}
@@ -1886,16 +2096,18 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
 
             {/* TradingView Market Overview Widget - Pure Black with black background */}
-            <div style={{ height: '420px', width: '100%', background: '#000000' }}>
+            <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
+              <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
               <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=false&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&backgroundColor=000000&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
+                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: 'none',
                   display: 'block',
-                  backgroundColor: '#000000',
-                  colorScheme: 'dark',
+                  background: 'transparent',
+                  position: 'relative',
+                  zIndex: 1,
                 }}
                 title="Market Overview"
                 loading="lazy"
@@ -2006,14 +2218,18 @@ function LiveIntelligencePanel({ onClose }) {
                 <a
                   key={service.title}
                   href={service.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="li-qa-card"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setPdfUrl(e.currentTarget.href);
-                    setShowPdfModal(true);
+                    handlePdfOpen(e.currentTarget.href);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handlePdfOpen(e.currentTarget.href);
+                    }
                   }}
                   style={{
                     display: 'block',
@@ -2064,101 +2280,102 @@ function LiveIntelligencePanel({ onClose }) {
             </div>
           </div>
 
-          {showPdfModal && pdfUrl && typeof document !== 'undefined' && document.body
-            ? createPortal(
+          {(() => {
+            const pdfPortalTarget = typeof document !== 'undefined' ? (document.body || document.documentElement) : null;
+            if (!showPdfModal || !pdfUrl || !pdfPortalTarget) return null;
+            return createPortal(
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-label="PDF viewer"
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  width: '100vw',
+                  height: '100vh',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                  backdropFilter: 'blur(8px)',
+                  zIndex: 999999,
+                  padding: '16px',
+                  boxSizing: 'border-box',
+                }}
+                onClick={handlePdfClose}
+              >
                 <div
-                  role="dialog"
-                  aria-modal="true"
-                  aria-label="PDF viewer"
                   style={{
-                    position: 'fixed',
-                    top: '0',
-                    left: '0',
-                    width: '100vw',
-                    height: '100vh',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    position: 'relative',
+                    width: 'min(90vw, 1400px)',
+                    maxWidth: '1400px',
+                    height: 'min(90vh, calc(100dvh - 32px))',
+                    maxHeight: 'calc(100dvh - 32px)',
+                    margin: 'auto',
+                    backgroundColor: '#0a0a12',
+                    borderRadius: '16px',
                     overflow: 'hidden',
-                    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                    backdropFilter: 'blur(8px)',
-                    zIndex: 99999,
-                    padding: '16px',
+                    border: '1px solid rgba(170, 198, 255, 0.15)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
                   }}
-                  onClick={() => {
-                    setShowPdfModal(false);
-                    setPdfUrl(null);
-                  }}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <div
+                  <button
+                    type="button"
+                    aria-label="Close PDF"
+                    onClick={handlePdfClose}
                     style={{
-                      position: 'relative',
-                      width: '90vw',
-                      maxWidth: '1400px',
-                      height: '90vh',
-                      backgroundColor: '#0a0a12',
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      border: '1px solid rgba(170, 198, 255, 0.15)',
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      zIndex: 10,
+                      color: 'rgba(230, 240, 255, 0.9)',
+                      background: 'rgba(0, 0, 0, 0.7)',
+                      border: '1px solid rgba(170, 198, 255, 0.2)',
+                      borderRadius: '10px',
+                      width: '44px',
+                      height: '44px',
+                      cursor: 'pointer',
+                      fontSize: '20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease',
                     }}
-                    onClick={(e) => e.stopPropagation()}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
+                    }}
                   >
-                    <button
-                      type="button"
-                      aria-label="Close PDF"
-                      onClick={() => {
-                        setShowPdfModal(false);
-                        setPdfUrl(null);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        zIndex: 10,
-                        color: 'rgba(230, 240, 255, 0.9)',
-                        background: 'rgba(0, 0, 0, 0.7)',
-                        border: '1px solid rgba(170, 198, 255, 0.2)',
-                        borderRadius: '10px',
-                        width: '44px',
-                        height: '44px',
-                        cursor: 'pointer',
-                        fontSize: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
-                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
-                        e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
-                      }}
-                    >
-                      ✕
-                    </button>
+                    ✕
+                  </button>
 
-                    <iframe
-                      src={pdfUrl}
-                      title="PDF Viewer"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        border: 'none',
-                        borderRadius: '16px',
-                        display: 'block',
-                      }}
-                    />
-                  </div>
-                </div>,
-                document.body
-              )
-            : null}
+                  <iframe
+                    src={pdfUrl}
+                    title="PDF Viewer"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '16px',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              </div>,
+              pdfPortalTarget
+            );
+          })()}
         </div>
       </div>
     </section>
   );
 }
+
+// Export the panel for use in standalone page
+export { LiveIntelligencePanel };

@@ -1,9 +1,91 @@
 /* Route-scoped footer rules for Live Intelligence Hero are defined later in this file.
    Temporary debug block removed. */
 @import "tailwindcss";
+
+/* Tailwind v4: Explicitly tell Tailwind where to scan for classes */
+@source "../components";
+@source "../app";
+@source "../features";
+@source "../lib";
+
+/* Safelist lg: responsive classes that are being stripped */
+@source inline("{lg:,}hidden");
+@source inline("{lg:,}flex");
+@source inline("{lg:,}block");
+@source inline("{lg:,md:,}grid-cols-{1,2,3,4}");
+
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════
+   CRITICAL FIX: lg: responsive utilities not being generated
+   This is a manual fallback for Tailwind v4 class detection issues
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .lg\:hidden {
+    display: none !important;
+  }
+  .lg\:flex {
+    display: flex !important;
+  }
+  .lg\:block {
+    display: block !important;
+  }
+  .lg\:inline-flex {
+    display: inline-flex !important;
+  }
+  .lg\:grid {
+    display: grid !important;
+  }
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .lg\:gap-8 {
+    gap: 2rem !important;
+  }
+  .lg\:gap-12 {
+    gap: 3rem !important;
+  }
+  .lg\:px-8 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+  .lg\:py-8 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  .lg\:text-left {
+    text-align: left !important;
+  }
+  .lg\:text-right {
+    text-align: right !important;
+  }
+  .lg\:w-auto {
+    width: auto !important;
+  }
+  .lg\:max-w-none {
+    max-width: none !important;
+  }
+  .lg\:space-y-0 > * + * {
+    margin-top: 0 !important;
+  }
+  .lg\:justify-between {
+    justify-content: space-between !important;
+  }
+  .lg\:items-center {
+    align-items: center !important;
+  }
+  .lg\:flex-row {
+    flex-direction: row !important;
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    TRADINGVIEW WIDGET FIXES
