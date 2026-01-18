@@ -36,6 +36,7 @@ import { getVoiceReader } from '@/lib/live-intelligence/voice';
 import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
 import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import Link from 'next/link';
+import LazyTradingView from '@/components/shared/LazyTradingView';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -976,8 +977,21 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             { s: 'NSE:NIFTY', d: 'NIFTY 50' },
             { s: 'NSE:BANKNIFTY', d: 'Bank NIFTY' },
             { s: 'BSE:SENSEX', d: 'SENSEX' },
-            { s: 'OANDA:NAS100USD', d: 'Nasdaq 100' },
+            { s: 'NSE:NIFTYIT', d: 'NIFTY IT' },
+            { s: 'NSE:NIFTYFIN', d: 'NIFTY FIN' },
+            { s: 'NSE:NIFTYMIDCAP50', d: 'NIFTY MIDCAP 50' },
+          ],
+        },
+        {
+          title: 'Global',
+          symbols: [
             { s: 'OANDA:SPX500USD', d: 'S&P 500' },
+            { s: 'OANDA:NAS100USD', d: 'Nasdaq 100' },
+            { s: 'OANDA:US30USD', d: 'Dow 30' },
+            { s: 'OANDA:DE30EUR', d: 'DAX 40' },
+            { s: 'OANDA:UK100GBP', d: 'FTSE 100' },
+            { s: 'OANDA:JP225USD', d: 'Nikkei 225' },
+            { s: 'OANDA:HK33HKD', d: 'Hang Seng' },
           ],
         },
         {
@@ -986,19 +1000,47 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             { s: 'TVC:GOLD', d: 'Gold' },
             { s: 'TVC:SILVER', d: 'Silver' },
             { s: 'NYMEX:CL1!', d: 'Crude Oil' },
+            { s: 'TVC:DXY', d: 'US Dollar Index' },
           ],
         },
         {
           title: 'Forex',
           symbols: [
-            { s: 'OANDA:USDINR', d: 'USD/INR' },
-            { s: 'OANDA:EURUSD', d: 'EUR/USD' },
+            { s: 'FX_IDC:USDINR', d: 'USD/INR' },
+            { s: 'FX:EURUSD', d: 'EUR/USD' },
+            { s: 'FX:USDJPY', d: 'USD/JPY' },
+            { s: 'FX:GBPUSD', d: 'GBP/USD' },
+          ],
+        },
+        {
+          title: 'Crypto',
+          symbols: [
+            { s: 'BINANCE:BTCUSDT', d: 'BTC' },
+            { s: 'BINANCE:ETHUSDT', d: 'ETH' },
           ],
         },
       ],
     }),
     []
   );
+
+  const tvMarketsSrc = useMemo(() => {
+    try {
+      const tabsEncoded = encodeURIComponent(JSON.stringify(tvMarketsOptions.tabs));
+      return `https://s.tradingview.com/embed-widget/market-overview/?colorTheme=${tvMarketsOptions.colorTheme}` +
+        `&dateRange=${tvMarketsOptions.dateRange}` +
+        `&showChart=${tvMarketsOptions.showChart ? 'true' : 'false'}` +
+        `&locale=${tvMarketsOptions.locale}` +
+        `&largeChartUrl=` +
+        `&isTransparent=true` +
+        `&showSymbolLogo=${tvMarketsOptions.showSymbolLogo ? 'true' : 'false'}` +
+        `&showFloatingTooltip=${tvMarketsOptions.showFloatingTooltip ? 'true' : 'false'}` +
+        `&width=100%25&height=100%25` +
+        `&tabs=${tabsEncoded}`;
+    } catch {
+      return 'https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25';
+    }
+  }, [tvMarketsOptions]);
 
   const handleAllocationChange = (key, raw) => {
     const next = String(raw ?? '').replace(/[^0-9]/g, '');
@@ -1888,18 +1930,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <div ref={shareMenuRef} style={{ position: 'relative' }}>
               <button
                 type="button"
-                onClick={() => {
-                  // Prefer native share when available (most reliable on mobile).
-                  if (typeof navigator !== 'undefined' && navigator.share) {
-                    navigator
-                      .share({ title: 'BM Wealth Live Intelligence', text: shareText, url: shareUrl })
-                      .catch(() => {
-                        setShowShareMenu((v) => !v);
-                      });
-                    return;
-                  }
-                  setShowShareMenu((v) => !v);
-                }}
+                onClick={() => setShowShareMenu((v) => !v)}
                 style={{
                   appearance: 'none',
                   border: '1px solid rgba(255,255,255,0.12)',
@@ -1950,6 +1981,52 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   backdropFilter: 'blur(20px)',
                   zIndex: 200,
                 }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof navigator !== 'undefined' && navigator.share) {
+                        navigator
+                          .share({ title: 'BM Wealth Live Intelligence', text: shareText, url: shareUrl })
+                          .catch(() => {});
+                      }
+                      setShowShareMenu(false);
+                    }}
+                    disabled={!(typeof navigator !== 'undefined' && navigator.share)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '12px 14px',
+                      background: 'transparent',
+                      border: 'none',
+                      borderRadius: '10px',
+                      color: (typeof navigator !== 'undefined' && navigator.share)
+                        ? 'rgba(220, 230, 255, 0.85)'
+                        : 'rgba(220, 230, 255, 0.40)',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: (typeof navigator !== 'undefined' && navigator.share) ? 'pointer' : 'not-allowed',
+                      transition: 'all 0.2s ease',
+                      textDecoration: 'none',
+                      textAlign: 'left',
+                    }}
+                    onMouseOver={(e) => {
+                      if (!(typeof navigator !== 'undefined' && navigator.share)) return;
+                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = (typeof navigator !== 'undefined' && navigator.share)
+                        ? 'rgba(220, 230, 255, 0.85)'
+                        : 'rgba(220, 230, 255, 0.40)';
+                    }}
+                  >
+                    <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📲</span>
+                    <span>System Share</span>
+                  </button>
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
                   {[
                     { key: 'whatsapp', icon: '💬', label: 'WhatsApp', href: shareLinks.whatsapp },
                     { key: 'email', icon: '📧', label: 'Email', href: shareLinks.email },
@@ -2270,10 +2347,51 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               }}>
                 <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔔</div>
                 <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
-                  Personalized Alerts
+                  Live Signals / Personalized Alerts
                 </div>
-                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5 }}>
-                  Connect your portfolio to receive<br/>rebalancing, tax, and SIP alerts
+                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5, maxWidth: '320px', margin: '0 auto' }}>
+                  Coming soon. Until then, join the waitlist or connect your portfolio for early access.
+                </div>
+
+                <div style={{ marginTop: '14px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <a
+                    href="/client-portal"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '9px 14px',
+                      borderRadius: '10px',
+                      background: 'rgba(100,160,255,0.12)',
+                      border: '1px solid rgba(100,160,255,0.22)',
+                      color: 'rgba(235,242,255,0.90)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Connect Portfolio
+                    <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
+                  </a>
+                  <a
+                    href="/contact?subject=Live%20Signals%20Waitlist"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '9px 14px',
+                      borderRadius: '10px',
+                      background: 'rgba(10,10,12,0.55)',
+                      border: '1px solid rgba(170,198,255,0.18)',
+                      color: 'rgba(200,215,240,0.85)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Join Waitlist
+                    <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -2321,19 +2439,45 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '12px', lineHeight: 1.5, maxWidth: '400px', margin: '0 auto' }}>
                 Link your demat account or manually add your investments to see real-time holdings, P&L, and performance analytics
               </div>
-              <div style={{ 
-                marginTop: '16px', 
-                display: 'inline-flex', 
-                padding: '8px 20px',
-                borderRadius: '8px',
-                background: 'rgba(100,160,255,0.10)',
-                border: '1px solid rgba(100,160,255,0.20)',
-                color: 'rgba(140,190,255,0.95)',
-                fontSize: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}>
-                Contact Us to Get Started
+              <div style={{ marginTop: '16px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <a
+                  href="/client-portal"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '9px 14px',
+                    borderRadius: '10px',
+                    background: 'rgba(100,160,255,0.12)',
+                    border: '1px solid rgba(100,160,255,0.22)',
+                    color: 'rgba(235,242,255,0.90)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Connect Portfolio
+                  <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
+                </a>
+                <a
+                  href="/contact?subject=Holdings%20%2F%20Portfolio%20Tracking%20Waitlist"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '9px 14px',
+                    borderRadius: '10px',
+                    background: 'rgba(10,10,12,0.55)',
+                    border: '1px solid rgba(170,198,255,0.18)',
+                    color: 'rgba(200,215,240,0.85)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Join Waitlist
+                  <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
+                </a>
               </div>
             </div>
           </div>
@@ -2396,17 +2540,19 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            <div style={{ height: '500px', width: '100%', background: '#000000' }}>
-              {/* TradingView Advanced Chart - Direct iframe for reliability */}
-              <iframe
-                src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1"
-                style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
-                frameBorder="0"
-                allowtransparency="true"
-                scrolling="no"
-                title="TradingView Chart"
-              />
-            </div>
+            <LazyTradingView minHeight={500}>
+              <div style={{ height: '500px', width: '100%', background: '#000000' }}>
+                {/* TradingView Advanced Chart - Direct iframe for reliability */}
+                <iframe
+                  src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1"
+                  style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
+                  frameBorder="0"
+                  allowtransparency="true"
+                  scrolling="no"
+                  title="TradingView Chart"
+                />
+              </div>
+            </LazyTradingView>
             <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
@@ -2462,23 +2608,25 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
 
             {/* TradingView Market Overview Widget - Pure Black with black background */}
-            <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
-              <iframe
-                src="https://s.tradingview.com/embed-widget/market-overview/?colorTheme=dark&dateRange=12M&showChart=true&locale=in&largeChartUrl=&isTransparent=true&showSymbolLogo=true&showFloatingTooltip=false&width=100%25&height=100%25&tabs=%5B%7B%22title%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NSE%3ANIFTY%22%2C%22d%22%3A%22NIFTY%2050%22%7D%2C%7B%22s%22%3A%22BSE%3ASENSEX%22%2C%22d%22%3A%22SENSEX%22%7D%2C%7B%22s%22%3A%22NSE%3ABANKNIFTY%22%2C%22d%22%3A%22Bank%20NIFTY%22%7D%2C%7B%22s%22%3A%22NSE%3ANIFTYIT%22%2C%22d%22%3A%22NIFTY%20IT%22%7D%5D%7D%2C%7B%22title%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MCX%3AGOLD1!%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22MCX%3ASILVER1!%22%2C%22d%22%3A%22Silver%22%7D%2C%7B%22s%22%3A%22MCX%3ACRUDEOIL1!%22%2C%22d%22%3A%22Crude%20Oil%22%7D%5D%7D%2C%7B%22title%22%3A%22Forex%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX_IDC%3AUSDINR%22%2C%22d%22%3A%22USD%2FINR%22%7D%2C%7B%22s%22%3A%22FX%3AEURUSD%22%2C%22d%22%3A%22EUR%2FUSD%22%7D%5D%7D%5D"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  display: 'block',
-                  background: 'transparent',
-                  position: 'relative',
-                  zIndex: 1,
-                }}
-                title="Market Overview"
-                loading="lazy"
-              />
-            </div>
+            <LazyTradingView minHeight={420}>
+              <div style={{ height: '420px', width: '100%', background: '#000000', position: 'relative' }}>
+                <div style={{ position: 'absolute', inset: 0, background: '#000000', zIndex: 0 }} />
+                <iframe
+                  src={tvMarketsSrc}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    display: 'block',
+                    background: 'transparent',
+                    position: 'relative',
+                    zIndex: 1,
+                  }}
+                  title="Market Overview"
+                  loading="lazy"
+                />
+              </div>
+            </LazyTradingView>
           </div>
 
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
@@ -2541,12 +2689,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               gap: '12px',
             }}>
               {[
-                { title: 'Mutual Funds', icon: 'chart-pie', desc: '5000+ schemes', link: '/api/pdf/service?service=mutual-funds' },
-                { title: 'SIP', icon: 'refresh-cw', desc: 'Start from ₹500', link: '/api/pdf/service?service=sip' },
-                { title: 'Portfolio Management', icon: 'briefcase', desc: 'PMS & AIF', link: '/api/pdf/service?service=portfolio-management' },
-                { title: 'Insurance', icon: 'shield-check', desc: 'Term & Health', link: '/api/pdf/service?service=insurance' },
-                { title: 'Trading Services', icon: 'trending-up', desc: 'Demat & Trading', link: '/api/pdf/service?service=trading-services' },
-                { title: 'Fixed Deposits', icon: 'landmark', desc: 'Up to 9% p.a.', link: '/api/pdf/service?service=fixed-deposits' },
+                { title: 'Mutual Funds', icon: 'chart-pie', desc: '5000+ schemes', link: '/mutual-funds' },
+                { title: 'SIP', icon: 'refresh-cw', desc: 'Start from ₹500', link: '/sip' },
+                { title: 'Portfolio Management', icon: 'briefcase', desc: 'PMS & AIF', link: '/portfolio-management' },
+                { title: 'Insurance', icon: 'shield-check', desc: 'Term & Health', link: '/insurance' },
+                { title: 'Trading Services', icon: 'trending-up', desc: 'Demat & Trading', link: '/trading-services' },
+                { title: 'Fixed Deposits', icon: 'landmark', desc: 'Up to 9% p.a.', link: '/fixed-deposits' },
               ].map((service) => {
                 // Premium SVG icons (Lucide-inspired)
                 const iconMap = {
@@ -2598,15 +2746,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   href={service.link}
                   className="li-qa-card"
                   onClick={(e) => {
-                    e.preventDefault();
                     e.stopPropagation();
-                    handlePdfOpen(e.currentTarget.href);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
                       e.stopPropagation();
-                      handlePdfOpen(e.currentTarget.href);
                     }
                   }}
                   style={{

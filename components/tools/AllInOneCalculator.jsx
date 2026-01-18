@@ -16,11 +16,11 @@ import { trackEvent } from '@/lib/analytics';
 // Order: PMS/Wealth first, then MF, SIP, Insurance 4th
 const CALCULATORS = {
   wealth: { key: 'wealth', label: 'PMS / Wealth', icon: '🏆', desc: 'Portfolio Management & wealth planning' },
-  mfReturns: { key: 'mfReturns', label: 'Mutual Fund', icon: '📊', desc: 'Returns + exit load + tax estimate' },
-  sip: { key: 'sip', label: 'SIP', icon: '📈', desc: 'SIP growth + step-up + range projections' },
+  mfReturns: { key: 'mfReturns', label: 'Mutual Fund', icon: '📊', desc: 'XIRR • Exit load • LTCG/STCG • Post-tax returns' },
+  sip: { key: 'sip', label: 'SIP', icon: '📈', desc: 'Step-up • Multi-scenario • Goal mapping • XIRR' },
   insurance: { key: 'insurance', label: 'Insurance', icon: '🛡️', desc: 'Term, health, critical illness coverage' },
 
-  lic: { key: 'lic', label: 'LIC', icon: '🧾', desc: 'Endowment maturity + bonus + IRR estimate' },
+  lic: { key: 'lic', label: 'LIC', icon: '🧾', desc: 'Endowment • ULIP • Term • IRR • Surrender • Comparison' },
   lumpsum: { key: 'lumpsum', label: 'Lumpsum', icon: '💰', desc: 'One-time investment' },
   goal: { key: 'goal', label: 'Goal Planning', icon: '🎯', desc: 'Target amount planning' },
   retire: { key: 'retire', label: 'Retirement', icon: '🏖️', desc: 'Retirement corpus' },
@@ -36,7 +36,7 @@ const CALCULATORS = {
   inflation: { key: 'inflation', label: 'Inflation', icon: '🔥', desc: 'Inflation adjusted value' },
   gratuity: { key: 'gratuity', label: 'Gratuity', icon: '🎁', desc: 'Gratuity calculator' },
   hra: { key: 'hra', label: 'HRA', icon: '🏢', desc: 'HRA exemption' },
-  tax: { key: 'tax', label: 'Income Tax', icon: '📋', desc: 'Tax liability' },
+  tax: { key: 'tax', label: 'Income Tax', icon: '📋', desc: 'FY 2025-26 • Old vs New regime • All deductions • Surcharge • Tax-saving tips' },
   rd: { key: 'rd', label: 'RD', icon: '📅', desc: 'Recurring deposit' },
   ssy: { key: 'ssy', label: 'SSY', icon: '👧', desc: 'Sukanya Samriddhi Yojana' },
   childPlan: { key: 'childPlan', label: 'Child Education', icon: '👶', desc: 'Child education plan' },
@@ -461,9 +461,15 @@ const getInterpretation = (calcKey, result, inputs) => {
 // ════════════════════════════════════════════════════════════════
 
 const calculations = {
-  sip: (monthly, years, rateMid, stepUpPercent = 0, rateLow = 10, rateHigh = 14) => {
+  sip: (monthly, years, rateMid, stepUpPercent = 0, rateLow = 10, rateHigh = 14, goalAmount = 0, inflationRate = 6) => {
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ENHANCED SIP CALCULATOR
+    // Step-up SIP • Multi-scenario projections • Goal mapping • Inflation adjustment
+    // ═══════════════════════════════════════════════════════════════════════════
     const months = Math.max(1, Math.round((years || 0) * 12));
     const stepUp = Math.max(0, stepUpPercent || 0) / 100;
+    const inflation = Math.max(0, inflationRate || 0) / 100;
+    const goal = Math.max(0, goalAmount || 0);
 
     const simulate = (annualRate) => {
       const r = Math.max(-0.99, (annualRate || 0) / 100) / 12;
@@ -471,13 +477,24 @@ const calculations = {
       let invested = 0;
       let mSip = Math.max(0, monthly || 0);
       const schedule = [];
+      const yearlyData = [];
 
       for (let m = 1; m <= months; m++) {
         value = (value + mSip) * (1 + r);
         invested += mSip;
+        
         if (m % 12 === 0) {
+          const yearNum = m / 12;
+          yearlyData.push({
+            year: yearNum,
+            totalInvested: invested,
+            endValue: value,
+            monthlySIP: mSip,
+            gains: value - invested,
+            gainsPercent: invested > 0 ? ((value - invested) / invested) * 100 : 0,
+          });
           schedule.push({
-            year: m / 12,
+            year: yearNum,
             totalInvested: invested,
             endValue: value,
             monthlySIP: mSip,
@@ -486,13 +503,14 @@ const calculations = {
         }
       }
 
-      return { invested, value, schedule };
+      return { invested, value, schedule, yearlyData };
     };
 
     const low = simulate(rateLow);
     const mid = simulate(rateMid);
     const high = simulate(rateHigh);
 
+    // Detailed schedule with all scenarios
     const schedule = mid.schedule.map((row, idx) => ({
       year: row.year,
       monthlySIP: row.monthlySIP,
@@ -502,6 +520,44 @@ const calculations = {
       endValueHigh: high.schedule[idx]?.endValue ?? high.value,
     }));
 
+    // Goal analysis
+    let goalAchievementYear = null;
+    let sipNeededForGoal = 0;
+    if (goal > 0) {
+      // Find when goal is achieved in mid scenario
+      for (const row of mid.yearlyData) {
+        if (row.endValue >= goal) {
+          goalAchievementYear = row.year;
+          break;
+        }
+      }
+      // Calculate SIP needed for goal
+      const r = (rateMid || 12) / 100 / 12;
+      const n = months;
+      sipNeededForGoal = goal * r / ((Math.pow(1 + r, n) - 1) * (1 + r));
+    }
+
+    // Inflation-adjusted future value
+    const inflationAdjustedValue = mid.value / Math.pow(1 + inflation, years);
+
+    // XIRR approximation for step-up SIP
+    const totalReturns = mid.value - mid.invested;
+    const avgInvestmentPeriod = years / 2; // Approximate
+    const approximateXIRR = mid.invested > 0 
+      ? (Math.pow(mid.value / mid.invested, 1 / avgInvestmentPeriod) - 1) * 100 
+      : 0;
+
+    // Wealth gain multiplier
+    const wealthMultiplier = mid.invested > 0 ? mid.value / mid.invested : 0;
+
+    // Monthly SIP progression for step-up
+    const sipProgression = [];
+    let currentSip = monthly;
+    for (let yr = 1; yr <= years; yr++) {
+      sipProgression.push({ year: yr, sip: Math.round(currentSip) });
+      currentSip *= (1 + stepUp);
+    }
+
     return {
       __type: 'sip',
       years,
@@ -509,14 +565,33 @@ const calculations = {
       rateLow,
       rateMid,
       rateHigh,
+      initialSIP: monthly,
+      finalSIP: Math.round(monthly * Math.pow(1 + stepUp, years - 1)),
       invested: mid.invested,
+      // Multi-scenario values
       futureValueLow: low.value,
       futureValueMid: mid.value,
       futureValueHigh: high.value,
       returnsLow: low.value - low.invested,
       returnsMid: mid.value - mid.invested,
       returnsHigh: high.value - high.invested,
+      // Returns metrics
+      absoluteReturnPercent: mid.invested > 0 ? ((mid.value - mid.invested) / mid.invested) * 100 : 0,
+      approximateXIRR,
+      wealthMultiplier,
+      // Inflation adjusted
+      inflationRate,
+      inflationAdjustedValue,
+      realReturns: inflationAdjustedValue - mid.invested,
+      // Goal analysis
+      goalAmount: goal,
+      goalAchievementYear,
+      sipNeededForGoal: Math.ceil(sipNeededForGoal),
+      goalShortfall: goal > 0 && mid.value < goal ? goal - mid.value : 0,
+      goalSurplus: goal > 0 && mid.value >= goal ? mid.value - goal : 0,
+      // Schedules
       schedule,
+      sipProgression,
     };
   },
 
@@ -1698,6 +1773,10 @@ const calculations = {
   },
 
   tax: (
+    // ═══════════════════════════════════════════════════════════════════════════
+    // COMPREHENSIVE TAX CALCULATOR - FY 2025-26 (AY 2026-27)
+    // Budget 2025 updated slabs, surcharge, marginal relief, ALL deductions
+    // ═══════════════════════════════════════════════════════════════════════════
     grossIncome,
     otherIncome,
     age,
@@ -1710,49 +1789,117 @@ const calculations = {
     deduction80G,
     homeLoanInterest24b,
     employerNps80ccd2,
-    hraExemption
+    hraExemption,
+    // Extended inputs
+    ltcExemption = 0,
+    professionalTax = 0,
+    deduction80TTA = 0,
+    deduction80DD = 0,
+    deduction80DDB = 0,
+    deduction80U = 0,
+    deduction80GG = 0,
+    deduction80EEA = 0,
+    deduction80EEB = 0,
+    stcgEquity = 0,
+    stcgOther = 0,
+    ltcgEquity = 0,
+    ltcgOther = 0,
+    dividendIncome = 0,
+    interestIncome = 0,
+    rentalIncome = 0,
+    tdsAlreadyPaid = 0,
+    advanceTaxPaid = 0
   ) => {
-    // NOTE: This is an estimate model; rates/slabs can change by FY.
-    const incStd = includeStandardDeduction === 'true' || includeStandardDeduction === true;
-    const gross = Math.max(0, (grossIncome || 0) + (otherIncome || 0));
-    const ageNum = Math.max(0, age || 0);
-
-    const standardDeduction = incStd ? 50000 : 0;
-
-    // HRA exemption is allowed only in old regime.
-    const hraAllowed = regime === 'old' ? Math.max(0, hraExemption || 0) : 0;
-
-    // Deductions (caps applied where applicable)
-    const d80C = Math.max(0, Math.min(150000, deduction80C || 0));
-    const d80CCD1B = Math.max(0, Math.min(50000, deduction80CCD1B || 0));
-    const d80D = Math.max(0, deduction80D || 0);
-    const d80E = Math.max(0, deduction80E || 0);
-    const d80G = Math.max(0, deduction80G || 0);
-    const d24b = Math.max(0, Math.min(200000, homeLoanInterest24b || 0));
-    const d80ccd2 = Math.max(0, employerNps80ccd2 || 0);
-
-    let deductions = 0;
-    if (regime === 'old') {
-      deductions = standardDeduction + hraAllowed + d80C + d80CCD1B + d80D + d80E + d80G + d24b + d80ccd2;
-    } else {
-      // New regime (estimate): standard deduction + employer NPS 80CCD(2)
-      deductions = standardDeduction + d80ccd2;
-    }
-
-    const taxableIncome = Math.max(0, gross - deductions);
-
+    // ─────────────────────────────────────────────────────────────────────────
+    // Helper functions
+    // ─────────────────────────────────────────────────────────────────────────
+    const num = (v) => Math.max(0, Number(v) || 0);
+    const cap = (v, max) => Math.min(num(v), max);
     const inr = (n) => `₹${Math.round(Math.max(0, n || 0)).toLocaleString('en-IN')}`;
     const slabLabel = (from, to) => {
       if (!isFinite(to)) return `Above ${inr(from)}`;
       if (from <= 0) return `Up to ${inr(to)}`;
       return `${inr(from)} – ${inr(to)}`;
     };
+    
+    const incStd = includeStandardDeduction === 'true' || includeStandardDeduction === true;
+    const ageNum = num(age);
+    const isSenior = ageNum >= 60 && ageNum < 80;
+    const isSuperSenior = ageNum >= 80;
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // Income Calculation
+    // ─────────────────────────────────────────────────────────────────────────
+    const salaryIncome = num(grossIncome);
+    const otherSources = num(otherIncome) + num(interestIncome) + num(dividendIncome);
+    const rental = num(rentalIncome);
+    const rentalDeduction = rental > 0 ? rental * 0.30 : 0; // 30% standard deduction on rental
+    const netRentalIncome = rental - rentalDeduction;
+    
+    // Capital gains (special rates, computed separately)
+    const stcgEq = num(stcgEquity);  // 20% (FY 2025-26)
+    const stcgOth = num(stcgOther);  // Slab rate
+    const ltcgEq = num(ltcgEquity);  // 12.5% above ₹1.25L
+    const ltcgOth = num(ltcgOther);  // 12.5%
+    
+    // Regular income (taxed at slab rates)
+    const regularIncome = salaryIncome + otherSources + netRentalIncome + stcgOth;
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Deductions (Old Regime only, except standard deduction and 80CCD2)
+    // ─────────────────────────────────────────────────────────────────────────
+    // FY 2025-26: Standard deduction is ₹75,000 in new regime, ₹50,000 in old
+    const stdDeduction = incStd ? (regime === 'new' ? 75000 : 50000) : 0;
+    const profTax = cap(professionalTax, 2500); // Max ₹2,500
+    
+    // 80C group (max ₹1.5L combined with 80CCC and 80CCD(1))
+    const d80C = cap(deduction80C, 150000);
+    const d80CCD1B = cap(deduction80CCD1B, 50000); // Additional NPS
+    const d80CCD2 = num(employerNps80ccd2); // Employer NPS (no cap for govt 14%, pvt 10%)
+    
+    // Health insurance 80D
+    const d80DBase = num(deduction80D);
+    const d80DLimit = isSuperSenior || isSenior ? 50000 : 25000;
+    const d80D = Math.min(d80DBase, 100000); // Self + parents max
+    
+    // Other 80 series
+    const d80E = num(deduction80E); // Education loan - no limit
+    const d80G = num(deduction80G); // Donations - varies
+    const d80TTA = cap(deduction80TTA, isSuperSenior || isSenior ? 0 : 10000); // ₹10K (below 60)
+    const d80TTB = isSuperSenior || isSenior ? cap(deduction80TTA, 50000) : 0; // ₹50K (60+)
+    const d80DD = cap(deduction80DD, 125000); // Dependent disability
+    const d80DDB = cap(deduction80DDB, isSuperSenior || isSenior ? 100000 : 40000);
+    const d80U = cap(deduction80U, 125000); // Self disability
+    const d80GG = cap(deduction80GG, 60000); // Rent without HRA (₹5000/month)
+    const d80EEA = cap(deduction80EEA, 150000); // Affordable housing
+    const d80EEB = cap(deduction80EEB, 150000); // EV loan interest
+    
+    // House property
+    const hra = regime === 'old' ? num(hraExemption) : 0;
+    const ltc = regime === 'old' ? num(ltcExemption) : 0;
+    const d24b = cap(homeLoanInterest24b, 200000); // Home loan interest
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Total deductions by regime
+    // ─────────────────────────────────────────────────────────────────────────
+    let deductionsOld = stdDeduction + profTax + hra + ltc + 
+      d80C + d80CCD1B + d80CCD2 + d80D + d80E + d80G + 
+      d80TTA + d80TTB + d80DD + d80DDB + d80U + d80GG + d80EEA + d80EEB + d24b;
+    
+    // New regime: only standard deduction + employer NPS + family pension
+    let deductionsNew = stdDeduction + d80CCD2;
+    
+    const deductions = regime === 'old' ? deductionsOld : deductionsNew;
+    const taxableIncome = Math.max(0, regularIncome - deductions);
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Slab-wise tax computation
+    // ─────────────────────────────────────────────────────────────────────────
     const computeSlabBreakdown = (ti, slabDefs) => {
       const x = Math.max(0, ti || 0);
       const slabs = [];
       let total = 0;
-
+      
       for (const s of slabDefs) {
         const upper = isFinite(s.to) ? Math.min(x, s.to) : x;
         const amt = Math.max(0, upper - s.from);
@@ -1766,59 +1913,212 @@ const calculations = {
         });
         total += tax;
       }
-
       return { totalTax: total, slabs };
     };
 
+    // Old regime slabs (age-based exemption)
     const slabTaxOld = (ti) => {
-      // Old regime: age-based basic exemption
-      const basicExemption = ageNum >= 80 ? 500000 : ageNum >= 60 ? 300000 : 250000;
+      const exempt = isSuperSenior ? 500000 : isSenior ? 300000 : 250000;
       return computeSlabBreakdown(ti, [
-        { from: 0, to: basicExemption, rate: 0.0 },
-        { from: basicExemption, to: basicExemption + 250000, rate: 0.05 },
-        { from: basicExemption + 250000, to: basicExemption + 750000, rate: 0.20 },
-        { from: basicExemption + 750000, to: Infinity, rate: 0.30 },
+        { from: 0, to: exempt, rate: 0.0 },
+        { from: exempt, to: 500000, rate: 0.05 },
+        { from: 500000, to: 1000000, rate: 0.20 },
+        { from: 1000000, to: Infinity, rate: 0.30 },
       ]);
     };
 
+    // NEW REGIME FY 2025-26 (BUDGET 2025 SLABS)
     const slabTaxNew = (ti) => {
-      // New regime FY 2024-25 style slabs (estimate)
       return computeSlabBreakdown(ti, [
-        { from: 0, to: 300000, rate: 0.0 },
-        { from: 300000, to: 600000, rate: 0.05 },
-        { from: 600000, to: 900000, rate: 0.10 },
-        { from: 900000, to: 1200000, rate: 0.15 },
-        { from: 1200000, to: 1500000, rate: 0.20 },
-        { from: 1500000, to: Infinity, rate: 0.30 },
+        { from: 0, to: 400000, rate: 0.0 },       // 0-4L: Nil
+        { from: 400000, to: 800000, rate: 0.05 },  // 4-8L: 5%
+        { from: 800000, to: 1200000, rate: 0.10 }, // 8-12L: 10%
+        { from: 1200000, to: 1600000, rate: 0.15 }, // 12-16L: 15%
+        { from: 1600000, to: 2000000, rate: 0.20 }, // 16-20L: 20%
+        { from: 2000000, to: 2400000, rate: 0.25 }, // 20-24L: 25%
+        { from: 2400000, to: Infinity, rate: 0.30 }, // Above 24L: 30%
       ]);
     };
 
     const slabCalc = regime === 'old' ? slabTaxOld(taxableIncome) : slabTaxNew(taxableIncome);
-    const taxBeforeRebate = slabCalc.totalTax;
+    let taxOnRegularIncome = slabCalc.totalTax;
     const slabBreakdown = slabCalc.slabs;
 
-    // Rebate 87A (estimate): old up to 5L, new up to 7L
-    const rebateThreshold = regime === 'old' ? 500000 : 700000;
-    const rebate = taxableIncome <= rebateThreshold ? taxBeforeRebate : 0;
-    const taxAfterRebate = Math.max(0, taxBeforeRebate - rebate);
+    // ─────────────────────────────────────────────────────────────────────────
+    // Special rate taxes (Capital Gains)
+    // ─────────────────────────────────────────────────────────────────────────
+    // STCG Equity: 20% (FY 2025-26 rate)
+    const taxSTCGEquity = stcgEq * 0.20;
+    
+    // LTCG Equity: 12.5% on gains above ₹1.25 lakh
+    const ltcgEqExempt = 125000;
+    const taxLTCGEquity = Math.max(0, ltcgEq - ltcgEqExempt) * 0.125;
+    
+    // LTCG Other: 12.5% (no indexation from FY 2024-25)
+    const taxLTCGOther = ltcgOth * 0.125;
+    
+    const capitalGainsTax = taxSTCGEquity + taxLTCGEquity + taxLTCGOther;
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Rebate u/s 87A (FY 2025-26)
+    // ─────────────────────────────────────────────────────────────────────────
+    // Old: Up to ₹5L taxable → max rebate ₹12,500
+    // New: Up to ₹12L taxable → max rebate ₹60,000 (BUDGET 2025)
+    const rebateThreshold = regime === 'old' ? 500000 : 1200000;
+    const maxRebate = regime === 'old' ? 12500 : 60000;
+    const rebate = taxableIncome <= rebateThreshold ? Math.min(taxOnRegularIncome, maxRebate) : 0;
+    const taxAfterRebate = Math.max(0, taxOnRegularIncome - rebate);
 
-    const cess = taxAfterRebate * 0.04;
-    const totalTax = taxAfterRebate + cess;
-    const effectiveRatePercent = gross > 0 ? (totalTax / gross) * 100 : 0;
+    // Total tax before surcharge (includes CG tax - no rebate on CG)
+    const totalTaxBeforeSurcharge = taxAfterRebate + capitalGainsTax;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Surcharge (on total income including CG)
+    // ─────────────────────────────────────────────────────────────────────────
+    const totalIncome = regularIncome + stcgEq + ltcgEq + ltcgOth;
+    let surchargeRate = 0;
+    if (totalIncome > 50000000) {
+      surchargeRate = regime === 'new' ? 0.25 : 0.37; // New regime capped at 25%
+    } else if (totalIncome > 20000000) {
+      surchargeRate = 0.25;
+    } else if (totalIncome > 10000000) {
+      surchargeRate = 0.15;
+    } else if (totalIncome > 5000000) {
+      surchargeRate = 0.10;
+    }
+    const surcharge = totalTaxBeforeSurcharge * surchargeRate;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Marginal relief (if income slightly exceeds surcharge threshold)
+    // ─────────────────────────────────────────────────────────────────────────
+    let marginalRelief = 0;
+    const surchargeThresholds = [5000000, 10000000, 20000000, 50000000];
+    for (const threshold of surchargeThresholds) {
+      if (totalIncome > threshold && totalIncome <= threshold + 100000) {
+        const excessIncome = totalIncome - threshold;
+        const taxAtThreshold = totalTaxBeforeSurcharge * (1 + (surchargeRate - 0.05 >= 0 ? surchargeRate - 0.05 : 0));
+        const taxWithSurcharge = totalTaxBeforeSurcharge + surcharge;
+        if (taxWithSurcharge - taxAtThreshold > excessIncome) {
+          marginalRelief = taxWithSurcharge - taxAtThreshold - excessIncome;
+        }
+        break;
+      }
+    }
+    const netSurcharge = Math.max(0, surcharge - marginalRelief);
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Health & Education Cess (4%)
+    // ─────────────────────────────────────────────────────────────────────────
+    const taxBeforeCess = totalTaxBeforeSurcharge + netSurcharge;
+    const cess = taxBeforeCess * 0.04;
+    const totalTax = taxBeforeCess + cess;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TDS / Advance Tax adjustments
+    // ─────────────────────────────────────────────────────────────────────────
+    const tds = num(tdsAlreadyPaid);
+    const advTax = num(advanceTaxPaid);
+    const netTaxPayable = Math.max(0, totalTax - tds - advTax);
+    const refundDue = Math.max(0, tds + advTax - totalTax);
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Effective rate & monthly estimate
+    // ─────────────────────────────────────────────────────────────────────────
+    const effectiveRatePercent = totalIncome > 0 ? (totalTax / totalIncome) * 100 : 0;
+    const monthlyTax = totalTax / 12;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Regime Comparison (calculate both)
+    // ─────────────────────────────────────────────────────────────────────────
+    const calcOther = regime === 'old' 
+      ? slabTaxNew(Math.max(0, regularIncome - deductionsNew))
+      : slabTaxOld(Math.max(0, regularIncome - deductionsOld));
+    
+    const otherTaxableIncome = regime === 'old' 
+      ? Math.max(0, regularIncome - deductionsNew)
+      : Math.max(0, regularIncome - deductionsOld);
+    
+    const otherRebateThreshold = regime === 'old' ? 1200000 : 500000;
+    const otherMaxRebate = regime === 'old' ? 60000 : 12500;
+    const otherRebate = otherTaxableIncome <= otherRebateThreshold 
+      ? Math.min(calcOther.totalTax, otherMaxRebate) : 0;
+    const otherTaxAfterRebate = Math.max(0, calcOther.totalTax - otherRebate);
+    const otherTotalTax = (otherTaxAfterRebate + capitalGainsTax) * 1.04; // Approx with cess
+    
+    const regimeComparison = {
+      currentRegime: regime,
+      currentTax: totalTax,
+      otherRegime: regime === 'old' ? 'new' : 'old',
+      otherTax: otherTotalTax,
+      savings: Math.abs(totalTax - otherTotalTax),
+      betterRegime: totalTax <= otherTotalTax ? regime : (regime === 'old' ? 'new' : 'old'),
+    };
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Tax-saving suggestions
+    // ─────────────────────────────────────────────────────────────────────────
+    const suggestions = [];
+    if (regime === 'old') {
+      if (d80C < 150000) {
+        suggestions.push({ section: '80C', potential: 150000 - d80C, tip: 'Invest in PPF/ELSS/LIC to claim full ₹1.5L' });
+      }
+      if (d80CCD1B < 50000) {
+        suggestions.push({ section: '80CCD(1B)', potential: 50000 - d80CCD1B, tip: 'Invest ₹50K in NPS for additional deduction' });
+      }
+      if (d80D < 50000) {
+        suggestions.push({ section: '80D', potential: 50000 - d80D, tip: 'Get health insurance for self & parents' });
+      }
+    } else {
+      if (deductionsOld > deductionsNew + 100000) {
+        suggestions.push({ section: 'Regime', potential: 0, tip: 'Consider Old Regime - you have significant deductions' });
+      }
+    }
 
     return {
-      grossIncome: gross,
+      __type: 'tax',
+      // Summary
+      grossIncome: totalIncome,
+      salaryIncome,
+      otherSources,
+      rentalIncome: rental,
+      rentalDeduction,
+      capitalGains: stcgEq + stcgOth + ltcgEq + ltcgOth,
       deductions,
+      deductionsOld,
+      deductionsNew,
       taxableIncome,
-      taxBeforeRebate,
+      // Tax breakdown
+      taxOnRegularIncome,
+      taxSTCGEquity,
+      taxLTCGEquity,
+      taxLTCGOther,
+      capitalGainsTax,
+      taxBeforeRebate: taxOnRegularIncome + capitalGainsTax,
       rebate87A: rebate,
-      taxAfterRebate,
+      rebateEligible: taxableIncome <= rebateThreshold,
+      taxAfterRebate: totalTaxBeforeSurcharge,
+      surchargeRate: surchargeRate * 100,
+      surcharge: netSurcharge,
+      marginalRelief,
       cess4Percent: cess,
+      totalTax,
+      // Adjustments
+      tdsDeducted: tds,
+      advanceTaxPaid: advTax,
+      netTaxPayable,
+      refundDue,
+      // Metrics
       taxLiability: totalTax,
-      monthlyTax: totalTax / 12,
+      monthlyTax,
       effectiveRatePercent,
       regime,
       slabBreakdown,
+      // Comparison
+      regimeComparison,
+      suggestions,
+      // Meta
+      financialYear: 'FY 2025-26',
+      assessmentYear: 'AY 2026-27',
     };
   },
 
@@ -1908,53 +2208,97 @@ const calculations = {
     fundType = 'equity',
     expenseRatio = 1.5,
     taxSlabPercent = 30,
-    exitLoadPercent = 0
+    exitLoadPercent = 0,
+    // New enhanced inputs
+    purchaseDate = '',
+    saleDate = '',
+    dividendReceived = 0,
+    switchAmount = 0
   ) => {
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ENHANCED MUTUAL FUND CALCULATOR - FY 2025-26 Rates
+    // STCG Equity: 20% | LTCG Equity: 12.5% (above ₹1.25L)
+    // Debt: Slab rate (no indexation from FY 2023-24)
+    // ═══════════════════════════════════════════════════════════════════════════
     const inv = Math.max(0, invested || 0);
     const cur = Math.max(0, current || 0);
     const y = Math.max(0.1, years || 0);
-    const gain = cur - inv;
+    const div = Math.max(0, dividendReceived || 0);
+    const switchAmt = Math.max(0, switchAmount || 0);
+    
+    // Total returns including dividends
+    const gain = (cur + div) - inv;
     const absoluteReturnPercent = inv > 0 ? (gain / inv) * 100 : 0;
-    const cagr = inv > 0 ? (Math.pow(cur / inv, 1 / y) - 1) : 0;
+    const cagr = inv > 0 ? (Math.pow((cur + div) / inv, 1 / y) - 1) : 0;
     const cagrPercent = cagr * 100;
 
+    // Exit load calculation
     const exitLoad = Math.max(0, exitLoadPercent || 0) / 100;
+    const exitLoadAmount = cur * exitLoad;
     const proceedsAfterExitLoad = cur * (1 - exitLoad);
 
+    // Capital gains (excluding dividends - they're taxed separately)
     const taxableGain = Math.max(0, proceedsAfterExitLoad - inv);
     const slab = Math.min(50, Math.max(0, taxSlabPercent || 0)) / 100;
 
     let taxType = 'N/A';
     let tax = 0;
+    let taxBreakdown = [];
     const ft = String(fundType || '').toLowerCase();
-    const isEquity = ft === 'equity' || ft === 'hybrid-equity';
+    const isEquity = ft === 'equity' || ft === 'hybrid-equity' || ft === 'elss';
 
     if (taxableGain > 0) {
       if (isEquity) {
         if (y >= 1) {
-          taxType = 'Equity LTCG (est)';
-          const exemption = 100000;
-          tax = Math.max(0, taxableGain - exemption) * 0.10;
+          // LTCG on Equity - FY 2025-26: 12.5% above ₹1.25L exemption
+          taxType = 'Equity LTCG';
+          const exemption = 125000; // Increased from 1L to 1.25L
+          const taxableAfterExemption = Math.max(0, taxableGain - exemption);
+          tax = taxableAfterExemption * 0.125; // 12.5% from FY 2024-25
+          taxBreakdown = [
+            { label: 'Total LTCG', amount: taxableGain },
+            { label: 'Less: Exemption (₹1.25L)', amount: Math.min(taxableGain, exemption) },
+            { label: 'Taxable LTCG', amount: taxableAfterExemption },
+            { label: 'Tax @ 12.5%', amount: tax },
+          ];
         } else {
-          taxType = 'Equity STCG (est)';
-          tax = taxableGain * 0.15;
+          // STCG on Equity - FY 2025-26: 20%
+          taxType = 'Equity STCG';
+          tax = taxableGain * 0.20;
+          taxBreakdown = [
+            { label: 'STCG', amount: taxableGain },
+            { label: 'Tax @ 20%', amount: tax },
+          ];
         }
       } else {
-        if (y >= 3) {
-          taxType = 'Debt LTCG (est)';
-          tax = taxableGain * 0.20;
-        } else {
-          taxType = 'Debt STCG (est)';
-          tax = taxableGain * slab;
-        }
+        // Debt funds - taxed at slab rate (no LTCG benefit from FY 2023-24)
+        taxType = y >= 3 ? 'Debt (Slab)' : 'Debt STCG';
+        tax = taxableGain * slab;
+        taxBreakdown = [
+          { label: 'Capital Gain', amount: taxableGain },
+          { label: `Tax @ ${(slab * 100).toFixed(0)}% slab`, amount: tax },
+        ];
       }
     }
 
-    const postTaxValue = Math.max(0, proceedsAfterExitLoad - tax);
+    // Dividend taxation (FY 2020-21 onwards - taxed in hands of investor)
+    const dividendTax = div * slab;
+
+    // Final calculations
+    const totalTax = tax + dividendTax;
+    const postTaxValue = Math.max(0, proceedsAfterExitLoad + div - totalTax);
     const postTaxCagr = inv > 0 ? (Math.pow(postTaxValue / inv, 1 / y) - 1) : 0;
 
+    // Expense ratio impact
     const er = Math.min(5, Math.max(0, expenseRatio || 0)) / 100;
     const feeDragApprox = inv > 0 ? inv * (Math.pow(1 + (cagr + er), y) - Math.pow(1 + cagr, y)) : 0;
+
+    // Opportunity cost (what if invested in index fund @ 0.1% TER?)
+    const indexFundGrowth = inv * Math.pow(1 + cagr + (er - 0.001), y);
+    const opportunityCost = indexFundGrowth - cur;
+
+    // XIRR approximation (for better return calculation)
+    const xirr = cagrPercent; // Simplified, same as CAGR for lumpsum
 
     return {
       __type: 'mf',
@@ -1964,15 +2308,30 @@ const calculations = {
       fundType,
       absoluteReturnPercent,
       cagrPercent,
+      xirr,
+      // Pre-tax
+      totalGain: gain,
+      dividendReceived: div,
+      exitLoadAmount,
       proceedsAfterExitLoad,
+      // Tax
       taxType,
-      estimatedTax: tax,
+      capitalGainsTax: tax,
+      dividendTax,
+      totalTax,
+      taxBreakdown,
+      // Post-tax
       postTaxValue,
       postTaxCagrPercent: postTaxCagr * 100,
+      postTaxAbsoluteReturn: postTaxValue - inv,
+      postTaxAbsoluteReturnPercent: inv > 0 ? ((postTaxValue - inv) / inv) * 100 : 0,
+      // Costs
       expenseRatioPercent: expenseRatio,
       feeDragApprox,
-      note:
-        'Tax is an estimate and can differ based on fund category, holding period, and rules for the current FY.',
+      opportunityCost: opportunityCost > 0 ? opportunityCost : 0,
+      // Meta
+      financialYear: 'FY 2025-26',
+      note: `Tax rates: STCG Equity 20%, LTCG Equity 12.5% (above ₹1.25L). Debt funds taxed at slab rate. Dividends taxed at slab rate.`,
     };
   },
 
@@ -1984,64 +2343,172 @@ const calculations = {
     annualPremium,
     bonusRatePerThousand = 40,
     finalAdditionalBonus = 0,
-    yearsPaid = 5
+    yearsPaid = 5,
+    // New enhanced inputs
+    policyType = 'endowment',
+    loyaltyAddition = 0,
+    riderPremium = 0
   ) => {
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ENHANCED LIC CALCULATOR
+    // Endowment • Whole Life • ULIP • Term • IRR • Surrender • MF Comparison
+    // ═══════════════════════════════════════════════════════════════════════════
     const sa = Math.max(0, sumAssured || 0);
     const term = Math.max(1, Math.round(policyTermYears || 0));
     const ppt = Math.max(1, Math.min(term, Math.round(premiumPayingYears || term)));
     const prem = Math.max(0, annualPremium || 0);
+    const rider = Math.max(0, riderPremium || 0);
+    const totalPrem = prem + rider;
     const bonusRate = Math.max(0, bonusRatePerThousand || 0);
     const fab = Math.max(0, finalAdditionalBonus || 0);
+    const loyalty = Math.max(0, loyaltyAddition || 0);
     const paid = Math.max(0, Math.min(term, Math.round(yearsPaid || 0)));
+    const pt = String(policyType || 'endowment').toLowerCase();
 
-    const bonusAmount = (sa / 1000) * bonusRate * term;
-    const maturityValue = sa + bonusAmount + fab;
-    const totalPremiums = prem * ppt;
+    // Bonus calculation based on policy type
+    let bonusAmount = 0;
+    let maturityValue = 0;
+    let deathBenefit = 0;
 
+    if (pt === 'endowment' || pt === 'whole-life') {
+      // Simple reversionary bonus
+      bonusAmount = (sa / 1000) * bonusRate * term;
+      maturityValue = sa + bonusAmount + fab + loyalty;
+      deathBenefit = sa + ((sa / 1000) * bonusRate * paid); // Bonus accrued till date
+    } else if (pt === 'ulip') {
+      // ULIP - assume 8% growth on invested portion (after charges)
+      const investedPortion = prem * 0.85 * ppt; // 15% charges assumed
+      const ulipGrowth = investedPortion * Math.pow(1.08, term);
+      maturityValue = ulipGrowth;
+      deathBenefit = Math.max(sa, maturityValue);
+      bonusAmount = 0;
+    } else if (pt === 'term') {
+      // Term insurance - no maturity value
+      maturityValue = 0;
+      deathBenefit = sa;
+      bonusAmount = 0;
+    } else if (pt === 'money-back') {
+      // Money-back - 15% at 5th, 10th, 15th year + 40% at maturity
+      const survivalBenefits = sa * 0.15 * 3; // 45% as survival benefits
+      bonusAmount = (sa / 1000) * bonusRate * term;
+      maturityValue = (sa * 0.55) + bonusAmount + fab; // Remaining 55% + bonuses
+      deathBenefit = sa + bonusAmount;
+    }
+
+    const totalPremiums = totalPrem * ppt;
+
+    // IRR Calculation using Newton-Raphson
     const cashflows = [];
-    for (let i = 0; i < ppt; i++) cashflows.push(-prem);
+    for (let i = 0; i < ppt; i++) cashflows.push(-totalPrem);
     while (cashflows.length < term) cashflows.push(0);
     cashflows.push(maturityValue);
 
     const npv = (rate) => cashflows.reduce((acc, cf, i) => acc + cf / Math.pow(1 + rate, i + 1), 0);
     const dNpv = (rate) => cashflows.reduce((acc, cf, i) => acc - ((i + 1) * cf) / Math.pow(1 + rate, i + 2), 0);
 
-    let irr = 0.08;
-    for (let iter = 0; iter < 40; iter++) {
+    let irr = 0.06;
+    for (let iter = 0; iter < 50; iter++) {
       const f = npv(irr);
       const df = dNpv(irr);
       if (!isFinite(f) || !isFinite(df) || Math.abs(df) < 1e-9) break;
       const next = irr - f / df;
       if (!isFinite(next)) break;
-      if (Math.abs(next - irr) < 1e-7) {
+      if (Math.abs(next - irr) < 1e-8) {
         irr = next;
         break;
       }
       irr = Math.max(-0.9, Math.min(2.0, next));
     }
 
+    // Surrender value calculation (more accurate)
     let surrenderEstimate = 0;
-    if (paid >= 2) {
-      surrenderEstimate = 0.30 * prem * Math.max(0, paid - 1);
+    let guaranteedSurrenderValue = 0;
+    let specialSurrenderValue = 0;
+    if (paid >= 3 && pt !== 'term') {
+      // Guaranteed Surrender Value: 30% of premiums paid (excluding 1st year)
+      guaranteedSurrenderValue = 0.30 * prem * Math.max(0, paid - 1);
+      // Special Surrender Value: Based on paid-up value
+      const paidUpValue = sa * (paid / ppt);
+      const accruedBonus = (sa / 1000) * bonusRate * paid;
+      specialSurrenderValue = (paidUpValue + accruedBonus) * (0.5 + (paid / term) * 0.4); // 50-90% based on tenure
+      surrenderEstimate = Math.max(guaranteedSurrenderValue, specialSurrenderValue);
+    }
+
+    // Paid-up value
+    const paidUpValue = sa * (paid / ppt);
+    const reducedPaidUp = paid >= 3 ? paidUpValue + (sa / 1000) * bonusRate * paid : 0;
+
+    // Comparison with Mutual Fund (12% assumed return)
+    const mfReturn = 0.12;
+    let mfValue = 0;
+    for (let i = 0; i < ppt; i++) {
+      mfValue = (mfValue + totalPrem) * (1 + mfReturn);
+    }
+    for (let i = ppt; i < term; i++) {
+      mfValue *= (1 + mfReturn);
+    }
+    const opportunityCost = mfValue - maturityValue;
+    const mfSuperiorBy = maturityValue > 0 ? ((mfValue - maturityValue) / maturityValue) * 100 : 0;
+
+    // Tax benefits
+    const taxBenefit80C = Math.min(prem, 150000) * 0.30; // Assuming 30% slab
+    const totalTaxBenefitOverTerm = taxBenefit80C * ppt;
+    const taxFreeMaturity = maturityValue; // Assuming conditions met
+
+    // Cost of insurance (for term comparison)
+    let costOfInsurance = 0;
+    if (pt === 'endowment' || pt === 'ulip') {
+      // Mortality charge approximation
+      costOfInsurance = (sa / 1000) * (age / 100) * term;
     }
 
     return {
       __type: 'lic',
+      policyType: pt,
       age,
       sumAssured: sa,
       policyTermYears: term,
       premiumPayingYears: ppt,
       annualPremium: prem,
+      riderPremium: rider,
+      totalAnnualPremium: totalPrem,
       totalPremiums,
+      // Bonus & Benefits
       bonusRatePerThousand: bonusRate,
       bonusAmount,
       finalAdditionalBonus: fab,
+      loyaltyAddition: loyalty,
+      // Values
       maturityValue,
+      deathBenefit,
       irrPercent: irr * 100,
+      // Surrender
       yearsPaid: paid,
+      canSurrender: paid >= 3 && pt !== 'term',
+      guaranteedSurrenderValue,
+      specialSurrenderValue,
       surrenderEstimate,
+      // Paid-up
+      paidUpValue: reducedPaidUp,
+      // MF Comparison
+      mfEquivalentValue: mfValue,
+      opportunityCost: opportunityCost > 0 ? opportunityCost : 0,
+      mfSuperiorByPercent: mfSuperiorBy > 0 ? mfSuperiorBy : 0,
+      // Tax
+      annualTaxBenefit80C: taxBenefit80C,
+      totalTaxBenefitOverTerm,
+      effectiveIRRWithTax: (irr + (taxBenefit80C / totalPrem / term)) * 100,
+      // Analysis
+      costOfInsurance,
+      insuranceComponent: pt === 'term' ? totalPremiums : costOfInsurance,
+      investmentComponent: pt === 'term' ? 0 : totalPremiums - costOfInsurance,
       note:
-        'LIC maturity and surrender values vary by policy type, bonus declarations, and LIC terms. This is an estimate model.',
+        pt === 'term' 
+          ? 'Term insurance provides pure protection with no maturity benefit. Best for income replacement.'
+          : `LIC ${pt} provides guaranteed returns with life cover. IRR is typically 4-6%. Consider separating insurance and investment for better returns.`,
+      recommendation: irr * 100 < 6 
+        ? '💡 Consider: Term Insurance + Mutual Fund SIP may give better overall returns'
+        : 'This policy has reasonable IRR. Continue if you value guaranteed returns.',
     };
   },
 
@@ -2091,14 +2558,19 @@ const calculations = {
 
 const inputConfigs = {
   sip: [
-    { key: '_sip_s0', label: 'SIP Setup', type: 'section' },
-    { key: 'monthly', label: 'Monthly SIP', type: 'number', default: 15000, prefix: '₹' },
-    { key: 'years', label: 'Time Period', type: 'number', default: 10, suffix: 'years' },
-    { key: 'stepUpPercent', label: 'Annual Step-Up (optional)', type: 'number', default: 10, suffix: '%' },
-    { key: '_sip_s1', label: 'Return Assumptions (range)', type: 'section' },
-    { key: 'rateMid', label: 'Expected Return (mid)', type: 'number', default: 12, suffix: '%' },
-    { key: 'rateLow', label: 'Conservative Return (low)', type: 'number', default: 10, suffix: '%' },
-    { key: 'rateHigh', label: 'Optimistic Return (high)', type: 'number', default: 14, suffix: '%' },
+    { key: '_sip_s0', label: '📈 SIP Setup', type: 'section' },
+    { key: 'monthly', label: 'Monthly SIP Amount', type: 'number', default: 15000, prefix: '₹' },
+    { key: 'years', label: 'Investment Period', type: 'number', default: 10, suffix: 'years' },
+    { key: 'stepUpPercent', label: 'Annual Step-Up %', type: 'number', default: 10, suffix: '%' },
+    
+    { key: '_sip_s1', label: '🎯 Goal Mapping (Optional)', type: 'section' },
+    { key: 'goalAmount', label: 'Target Corpus', type: 'number', default: 0, prefix: '₹' },
+    { key: 'inflationRate', label: 'Inflation Rate', type: 'number', default: 6, suffix: '%' },
+    
+    { key: '_sip_s2', label: '📊 Return Scenarios', type: 'section' },
+    { key: 'rateMid', label: 'Expected Return (Base)', type: 'number', default: 12, suffix: '%' },
+    { key: 'rateLow', label: 'Conservative (Bear)', type: 'number', default: 8, suffix: '%' },
+    { key: 'rateHigh', label: 'Optimistic (Bull)', type: 'number', default: 15, suffix: '%' },
   ],
   lumpsum: [
     { key: 'principal', label: 'Investment Amount', type: 'number', default: 100000, prefix: '₹' },
@@ -2335,32 +2807,65 @@ const inputConfigs = {
     ]},
   ],
   tax: [
-    { key: '_tax_s0', label: 'Income', type: 'section' },
-    { key: 'grossIncome', label: 'Salary / Gross Income (Annual)', type: 'number', default: 1200000, prefix: '₹' },
-    { key: 'otherIncome', label: 'Other Income (Interest/Rent/etc)', type: 'number', default: 0, prefix: '₹' },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // COMPREHENSIVE TAX CALCULATOR INPUTS - FY 2025-26
+    // ═══════════════════════════════════════════════════════════════════════════
+    { key: '_tax_s0', label: '📋 Basic Details', type: 'section' },
     { key: 'age', label: 'Age', type: 'number', default: 30, suffix: 'years' },
     { key: 'regime', label: 'Tax Regime', type: 'select', default: 'new', options: [
-      { value: 'new', label: 'New Regime' },
-      { value: 'old', label: 'Old Regime' },
+      { value: 'new', label: 'New Regime (FY 2025-26 Budget rates)' },
+      { value: 'old', label: 'Old Regime (with deductions)' },
     ]},
-    { key: 'includeStandardDeduction', label: 'Standard Deduction (₹50,000)', type: 'select', default: 'true', options: [
-      { value: 'true', label: 'Include' },
+    { key: 'includeStandardDeduction', label: 'Standard Deduction', type: 'select', default: 'true', options: [
+      { value: 'true', label: 'Include (₹75K new / ₹50K old)' },
       { value: 'false', label: 'Exclude' },
     ]},
 
-    { key: '_tax_s1', label: 'Deductions (Old Regime)', type: 'section' },
-    { key: 'deduction80C', label: '80C (Max ₹1,50,000)', type: 'number', default: 150000, prefix: '₹' },
-    { key: 'deduction80CCD1B', label: '80CCD(1B) NPS (Max ₹50,000)', type: 'number', default: 0, prefix: '₹' },
-    { key: 'deduction80D', label: '80D (Health Insurance)', type: 'number', default: 0, prefix: '₹' },
-    { key: 'deduction80E', label: '80E (Education Loan Interest)', type: 'number', default: 0, prefix: '₹' },
-    { key: 'deduction80G', label: '80G (Donations - estimate)', type: 'number', default: 0, prefix: '₹' },
-    { key: 'homeLoanInterest24b', label: 'Home Loan Interest 24(b) (Max ₹2,00,000)', type: 'number', default: 0, prefix: '₹' },
+    { key: '_tax_income', label: '💰 Income from Salary', type: 'section' },
+    { key: 'grossIncome', label: 'Gross Salary (Annual)', type: 'number', default: 1500000, prefix: '₹' },
+    { key: 'professionalTax', label: 'Professional Tax Deducted', type: 'number', default: 2500, prefix: '₹' },
 
-    { key: '_tax_s2', label: 'New Regime Allowed', type: 'section' },
-    { key: 'employerNps80ccd2', label: 'Employer NPS 80CCD(2) (if any)', type: 'number', default: 0, prefix: '₹' },
+    { key: '_tax_other', label: '📈 Other Income Sources', type: 'section' },
+    { key: 'otherIncome', label: 'Other Income (Freelance/Business)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'interestIncome', label: 'Interest Income (FD/RD/Savings)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'dividendIncome', label: 'Dividend Income', type: 'number', default: 0, prefix: '₹' },
+    { key: 'rentalIncome', label: 'Rental Income (Annual)', type: 'number', default: 0, prefix: '₹' },
 
-    { key: '_tax_s3', label: 'HRA (Old Regime)', type: 'section' },
-    { key: 'hraExemption', label: 'HRA Exemption (from HRA calculator)', type: 'number', default: 0, prefix: '₹' },
+    { key: '_tax_cg', label: '📊 Capital Gains', type: 'section' },
+    { key: 'stcgEquity', label: 'STCG - Equity/MF (taxed @ 20%)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'stcgOther', label: 'STCG - Other (taxed at slab)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'ltcgEquity', label: 'LTCG - Equity/MF (12.5% above ₹1.25L)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'ltcgOther', label: 'LTCG - Property/Other (12.5%)', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_80c', label: '🏛️ Section 80C (Max ₹1.5L)', type: 'section' },
+    { key: 'deduction80C', label: '80C Total (PPF/ELSS/LIC/EPF/Tuition)', type: 'number', default: 150000, prefix: '₹' },
+    { key: 'deduction80CCD1B', label: '80CCD(1B) NPS - Additional (Max ₹50K)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'employerNps80ccd2', label: '80CCD(2) Employer NPS Contribution', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_health', label: '🏥 Health & Disability (Section 80D/DD/DDB/U)', type: 'section' },
+    { key: 'deduction80D', label: '80D Health Insurance (Self+Parents)', type: 'number', default: 25000, prefix: '₹' },
+    { key: 'deduction80DD', label: '80DD Disabled Dependent (Max ₹1.25L)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80DDB', label: '80DDB Medical Treatment', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80U', label: '80U Self Disability (Max ₹1.25L)', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_loans', label: '🏠 Loans & Interest', type: 'section' },
+    { key: 'homeLoanInterest24b', label: 'Home Loan Interest 24(b) (Max ₹2L)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80E', label: '80E Education Loan Interest', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80EEA', label: '80EEA Affordable Housing Int. (Max ₹1.5L)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80EEB', label: '80EEB EV Loan Interest (Max ₹1.5L)', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_other_ded', label: '📑 Other Deductions', type: 'section' },
+    { key: 'deduction80TTA', label: '80TTA/TTB Savings Interest (₹10K/<60 or ₹50K/60+)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80G', label: '80G Donations', type: 'number', default: 0, prefix: '₹' },
+    { key: 'deduction80GG', label: '80GG Rent (No HRA, Max ₹60K/year)', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_exempt', label: '🎯 Exemptions (Old Regime)', type: 'section' },
+    { key: 'hraExemption', label: 'HRA Exemption (use HRA calculator)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'ltcExemption', label: 'LTA Exemption Claimed', type: 'number', default: 0, prefix: '₹' },
+
+    { key: '_tax_prepaid', label: '💳 Taxes Already Paid', type: 'section' },
+    { key: 'tdsAlreadyPaid', label: 'TDS Deducted (Form 16/26AS)', type: 'number', default: 0, prefix: '₹' },
+    { key: 'advanceTaxPaid', label: 'Advance Tax Paid', type: 'number', default: 0, prefix: '₹' },
   ],
   rd: [
     { key: 'monthly', label: 'Monthly Deposit', type: 'number', default: 10000, prefix: '₹' },
@@ -2383,35 +2888,54 @@ const inputConfigs = {
     { key: 'hurdleRate', label: 'Hurdle Rate', type: 'number', default: 10, suffix: '%' },
   ],
   mfReturns: [
-    { key: '_mf_s0', label: 'Fund & Holding', type: 'section' },
+    { key: '_mf_s0', label: '📊 Fund Details', type: 'section' },
     { key: 'fundType', label: 'Fund Type', type: 'select', default: 'equity', options: [
-      { value: 'equity', label: 'Equity' },
-      { value: 'debt', label: 'Debt' },
-      { value: 'hybrid-equity', label: 'Hybrid (Equity-oriented)' },
+      { value: 'equity', label: 'Equity Fund' },
+      { value: 'elss', label: 'ELSS (Tax Saver)' },
+      { value: 'debt', label: 'Debt Fund' },
+      { value: 'hybrid-equity', label: 'Hybrid (Equity 65%+)' },
       { value: 'hybrid-debt', label: 'Hybrid (Debt-oriented)' },
+      { value: 'liquid', label: 'Liquid Fund' },
+      { value: 'index', label: 'Index Fund' },
     ]},
     { key: 'years', label: 'Holding Period', type: 'number', default: 3, suffix: 'years' },
-    { key: '_mf_s1', label: 'Values', type: 'section' },
+    
+    { key: '_mf_s1', label: '💰 Investment Values', type: 'section' },
     { key: 'invested', label: 'Amount Invested', type: 'number', default: 500000, prefix: '₹' },
     { key: 'current', label: 'Current Value', type: 'number', default: 750000, prefix: '₹' },
-    { key: '_mf_s2', label: 'Loads & Tax Assumptions', type: 'section' },
-    { key: 'exitLoadPercent', label: 'Exit Load (if any)', type: 'number', default: 0, suffix: '%' },
-    { key: 'taxSlabPercent', label: 'Your Tax Slab (for debt STCG)', type: 'number', default: 30, suffix: '%' },
-    { key: 'expenseRatio', label: 'Expense Ratio (reference)', type: 'number', default: 1.5, suffix: '%' },
+    { key: 'dividendReceived', label: 'Dividends Received (if any)', type: 'number', default: 0, prefix: '₹' },
+    
+    { key: '_mf_s2', label: '📑 Costs & Tax', type: 'section' },
+    { key: 'exitLoadPercent', label: 'Exit Load', type: 'number', default: 0, suffix: '%' },
+    { key: 'expenseRatio', label: 'Expense Ratio (TER)', type: 'number', default: 1.5, suffix: '%' },
+    { key: 'taxSlabPercent', label: 'Your Income Tax Slab', type: 'number', default: 30, suffix: '%' },
   ],
 
   lic: [
-    { key: '_lic_s0', label: 'Policy', type: 'section' },
-    { key: 'age', label: 'Age', type: 'number', default: 30, suffix: 'years' },
+    { key: '_lic_s0', label: '📋 Policy Type', type: 'section' },
+    { key: 'policyType', label: 'Policy Type', type: 'select', default: 'endowment', options: [
+      { value: 'endowment', label: 'Endowment Plan' },
+      { value: 'whole-life', label: 'Whole Life Plan' },
+      { value: 'money-back', label: 'Money Back Plan' },
+      { value: 'ulip', label: 'ULIP' },
+      { value: 'term', label: 'Term Insurance' },
+    ]},
+    { key: 'age', label: 'Age at Entry', type: 'number', default: 30, suffix: 'years' },
+    
+    { key: '_lic_s1', label: '💰 Sum Assured & Term', type: 'section' },
     { key: 'sumAssured', label: 'Sum Assured', type: 'number', default: 1000000, prefix: '₹' },
     { key: 'policyTermYears', label: 'Policy Term', type: 'number', default: 20, suffix: 'years' },
     { key: 'premiumPayingYears', label: 'Premium Paying Term', type: 'number', default: 15, suffix: 'years' },
-    { key: '_lic_s1', label: 'Premium & Bonus (estimate)', type: 'section' },
+    
+    { key: '_lic_s2', label: '📊 Premium & Bonus', type: 'section' },
     { key: 'annualPremium', label: 'Annual Premium', type: 'number', default: 60000, prefix: '₹' },
+    { key: 'riderPremium', label: 'Rider Premium (if any)', type: 'number', default: 0, prefix: '₹' },
     { key: 'bonusRatePerThousand', label: 'Bonus Rate per ₹1000 SA', type: 'number', default: 40 },
+    { key: 'loyaltyAddition', label: 'Loyalty Addition (if any)', type: 'number', default: 0, prefix: '₹' },
     { key: 'finalAdditionalBonus', label: 'Final Additional Bonus', type: 'number', default: 0, prefix: '₹' },
-    { key: '_lic_s2', label: 'Surrender Snapshot (optional)', type: 'section' },
-    { key: 'yearsPaid', label: 'Years Premium Paid So Far', type: 'number', default: 5, suffix: 'years' },
+    
+    { key: '_lic_s3', label: '🔄 Surrender Analysis', type: 'section' },
+    { key: 'yearsPaid', label: 'Years Premium Paid', type: 'number', default: 5, suffix: 'years' },
   ],
   childPlan: [
     { key: 'childAge', label: 'Child\'s Age', type: 'number', default: 5, suffix: 'years' },
@@ -4640,8 +5164,8 @@ ${text}
           <div className="aio-tax premium-scroll">
             <div className="aio-taxHeader">
               <div>
-                <div className="aio-taxTitle">Income Tax Summary</div>
-                <div className="aio-taxSub">Downloadable-style breakdown (estimate)</div>
+                <div className="aio-taxTitle">Income Tax Summary — {result.financialYear || 'FY 2025-26'}</div>
+                <div className="aio-taxSub">Comprehensive breakdown with Budget 2025 rates</div>
               </div>
               <div className="aio-taxActions">
                 <button type="button" className="aio-secondary" onClick={handleCopyTaxSummary}>
@@ -4653,10 +5177,48 @@ ${text}
               </div>
             </div>
 
-            <div className="aio-taxGrid">
+            {/* Regime Comparison Banner */}
+            {result.regimeComparison ? (
+              <div className="aio-regimeCompare" style={{ 
+                background: 'linear-gradient(135deg, rgba(192,160,98,0.15), rgba(192,160,98,0.05))',
+                border: '1px solid rgba(192,160,98,0.3)',
+                borderRadius: '12px',
+                padding: '16px 20px',
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>REGIME COMPARISON</div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#c0a062' }}>
+                    {result.regimeComparison.betterRegime === result.regime 
+                      ? `✓ ${String(result.regime).toUpperCase()} Regime is optimal for you`
+                      : `💡 ${String(result.regimeComparison.otherRegime).toUpperCase()} Regime could save you ${fmt(result.regimeComparison.savings)}`
+                    }
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '20px', fontSize: '13px' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px' }}>{String(result.regime).toUpperCase()}</div>
+                    <div style={{ fontWeight: '600', color: result.regimeComparison.betterRegime === result.regime ? '#4ade80' : '#fff' }}>{fmt(result.regimeComparison.currentTax)}</div>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px' }}>{String(result.regimeComparison.otherRegime).toUpperCase()}</div>
+                    <div style={{ fontWeight: '600', color: result.regimeComparison.betterRegime !== result.regime ? '#4ade80' : '#fff' }}>{fmt(result.regimeComparison.otherTax)}</div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {/* Key Metrics Grid */}
+            <div className="aio-taxGrid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
               <div className="aio-taxKpi">
                 <div className="aio-kpiLabel">Regime</div>
                 <div className="aio-kpiValue">{String(result.regime || '').toUpperCase()}</div>
+                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{result.assessmentYear}</div>
               </div>
               <div className="aio-taxKpi">
                 <div className="aio-kpiLabel">Gross Income</div>
@@ -4665,17 +5227,26 @@ ${text}
               <div className="aio-taxKpi">
                 <div className="aio-kpiLabel">Deductions</div>
                 <div className="aio-kpiValue">{fmt(result.deductions)}</div>
+                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>
+                  Old: {fmt(result.deductionsOld)} • New: {fmt(result.deductionsNew)}
+                </div>
               </div>
               <div className="aio-taxKpi">
                 <div className="aio-kpiLabel">Taxable Income</div>
                 <div className="aio-kpiValue">{fmt(result.taxableIncome)}</div>
               </div>
               <div className="aio-taxKpi aio-taxKpiGold">
-                <div className="aio-kpiLabel">Tax Liability</div>
-                <div className="aio-kpiValue">{fmt(result.taxLiability)}</div>
+                <div className="aio-kpiLabel">Total Tax</div>
+                <div className="aio-kpiValue">{fmt(result.totalTax)}</div>
               </div>
               <div className="aio-taxKpi">
-                <div className="aio-kpiLabel">Monthly (Estimate)</div>
+                <div className="aio-kpiLabel">Net Payable</div>
+                <div className="aio-kpiValue" style={{ color: result.refundDue > 0 ? '#4ade80' : '#fff' }}>
+                  {result.refundDue > 0 ? `Refund: ${fmt(result.refundDue)}` : fmt(result.netTaxPayable)}
+                </div>
+              </div>
+              <div className="aio-taxKpi">
+                <div className="aio-kpiLabel">Monthly Tax</div>
                 <div className="aio-kpiValue">{fmt(result.monthlyTax)}</div>
               </div>
               <div className="aio-taxKpi">
@@ -4684,33 +5255,94 @@ ${text}
               </div>
             </div>
 
-            <div className="aio-taxLineItems">
+            {/* Tax Breakdown */}
+            <div className="aio-taxLineItems" style={{ marginTop: '20px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#c0a062', marginBottom: '12px' }}>TAX COMPUTATION</div>
+              <div className="aio-taxLine">
+                <span>Tax on Regular Income (Slab)</span>
+                <span>{fmt(result.taxOnRegularIncome)}</span>
+              </div>
+              {result.capitalGainsTax > 0 ? (
+                <>
+                  <div className="aio-taxLine" style={{ paddingLeft: '12px', color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>
+                    <span>↳ STCG Equity @ 20%</span>
+                    <span>{fmt(result.taxSTCGEquity)}</span>
+                  </div>
+                  <div className="aio-taxLine" style={{ paddingLeft: '12px', color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>
+                    <span>↳ LTCG Equity @ 12.5%</span>
+                    <span>{fmt(result.taxLTCGEquity)}</span>
+                  </div>
+                  <div className="aio-taxLine" style={{ paddingLeft: '12px', color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>
+                    <span>↳ LTCG Other @ 12.5%</span>
+                    <span>{fmt(result.taxLTCGOther)}</span>
+                  </div>
+                  <div className="aio-taxLine">
+                    <span>Capital Gains Tax</span>
+                    <span>{fmt(result.capitalGainsTax)}</span>
+                  </div>
+                </>
+              ) : null}
               <div className="aio-taxLine">
                 <span>Tax (before rebate)</span>
                 <span>{fmt(result.taxBeforeRebate)}</span>
               </div>
-              <div className="aio-taxLine">
-                <span>Rebate 87A</span>
+              <div className="aio-taxLine" style={{ color: result.rebate87A > 0 ? '#4ade80' : 'rgba(255,255,255,0.5)' }}>
+                <span>Rebate u/s 87A {result.rebateEligible ? '(Eligible)' : '(N/A)'}</span>
                 <span>-{fmt(result.rebate87A)}</span>
               </div>
               <div className="aio-taxLine">
                 <span>Tax (after rebate)</span>
                 <span>{fmt(result.taxAfterRebate)}</span>
               </div>
+              {result.surchargeRate > 0 ? (
+                <>
+                  <div className="aio-taxLine">
+                    <span>Surcharge @ {result.surchargeRate}%</span>
+                    <span>{fmt(result.surcharge)}</span>
+                  </div>
+                  {result.marginalRelief > 0 ? (
+                    <div className="aio-taxLine" style={{ color: '#4ade80' }}>
+                      <span>Marginal Relief</span>
+                      <span>-{fmt(result.marginalRelief)}</span>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
               <div className="aio-taxLine">
-                <span>Cess (4%)</span>
+                <span>Health & Education Cess (4%)</span>
                 <span>{fmt(result.cess4Percent)}</span>
               </div>
+              <div className="aio-taxLine" style={{ fontWeight: '600', color: '#c0a062', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px', marginTop: '8px' }}>
+                <span>TOTAL TAX LIABILITY</span>
+                <span>{fmt(result.totalTax)}</span>
+              </div>
+              {(result.tdsDeducted > 0 || result.advanceTaxPaid > 0) ? (
+                <>
+                  <div className="aio-taxLine" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                    <span>Less: TDS Deducted</span>
+                    <span>-{fmt(result.tdsDeducted)}</span>
+                  </div>
+                  <div className="aio-taxLine" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                    <span>Less: Advance Tax Paid</span>
+                    <span>-{fmt(result.advanceTaxPaid)}</span>
+                  </div>
+                  <div className="aio-taxLine" style={{ fontWeight: '600', color: result.refundDue > 0 ? '#4ade80' : '#fff' }}>
+                    <span>{result.refundDue > 0 ? 'REFUND DUE' : 'NET TAX PAYABLE'}</span>
+                    <span>{result.refundDue > 0 ? fmt(result.refundDue) : fmt(result.netTaxPayable)}</span>
+                  </div>
+                </>
+              ) : null}
             </div>
 
-            {Array.isArray(result.slabBreakdown) ? (
-              <div className="aio-taxTableWrap">
-                <div className="aio-taxTableTitle">Slab-wise Breakdown</div>
+            {/* Slab-wise Breakdown */}
+            {Array.isArray(result.slabBreakdown) && result.slabBreakdown.length > 0 ? (
+              <div className="aio-taxTableWrap" style={{ marginTop: '24px' }}>
+                <div className="aio-taxTableTitle">Slab-wise Breakdown ({String(result.regime).toUpperCase()} Regime)</div>
                 <table className="aio-taxTable">
                   <thead>
                     <tr>
-                      <th>Slab</th>
-                      <th className="right">Amount</th>
+                      <th>Income Slab</th>
+                      <th className="right">Taxable Amount</th>
                       <th className="right">Rate</th>
                       <th className="right">Tax</th>
                     </tr>
@@ -4720,7 +5352,7 @@ ${text}
                       <tr key={`${s.label}-${idx}`}>
                         <td>{s.label}</td>
                         <td className="right">{fmt(s.amount)}</td>
-                        <td className="right">{Number(s.ratePercent).toFixed(2)}%</td>
+                        <td className="right">{Number(s.ratePercent).toFixed(0)}%</td>
                         <td className="right">{fmt(s.tax)}</td>
                       </tr>
                     ))}
@@ -4728,6 +5360,25 @@ ${text}
                 </table>
               </div>
             ) : null}
+
+            {/* Tax-Saving Suggestions */}
+            {Array.isArray(result.suggestions) && result.suggestions.length > 0 ? (
+              <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: '10px' }}>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: '#4ade80', marginBottom: '12px' }}>💡 TAX-SAVING SUGGESTIONS</div>
+                {result.suggestions.map((s, idx) => (
+                  <div key={idx} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', marginBottom: '8px', display: 'flex', gap: '8px' }}>
+                    <span style={{ color: '#c0a062', fontWeight: '600', minWidth: '90px' }}>{s.section}</span>
+                    <span>{s.tip}</span>
+                    {s.potential > 0 ? <span style={{ color: '#4ade80', marginLeft: 'auto' }}>Save up to {fmt(s.potential * 0.3)}</span> : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            {/* Disclaimer */}
+            <div style={{ marginTop: '20px', fontSize: '11px', color: 'rgba(255,255,255,0.4)', lineHeight: '1.5' }}>
+              * This is an educational estimate based on FY 2025-26 Budget rates. Actual tax may vary based on specific circumstances. Consult a tax professional for personalized advice.
+            </div>
           </div>
         ) : (
           <div className="aio-results-grid premium-scroll">
