@@ -260,6 +260,8 @@ export default function MarketTicker({ className }) {
         for (const item of next) {
           const p = prevMap.get(item.id);
           if (!p) continue;
+          // Skip flash detection for "Updating..." items
+          if (item.value === "---" || p.value === "---") continue;
           const changed = Math.abs(item.value - p.value) > 1e-9 || item.direction !== p.direction;
           if (changed) flashes[item.id] = Date.now();
         }
