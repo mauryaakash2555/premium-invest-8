@@ -58,6 +58,9 @@ function formatNumber(num, maximumFractionDigits) {
 }
 
 function fmtValue(item) {
+  // Handle "Updating..." indicator
+  if (item?.value === "---" || item?.updating) return "Updating...";
+  
   const v = toFiniteNumber(item?.value);
   if (v == null) return "—";
   if (item.kind === "fx") return formatNumber(v, 2);
@@ -164,7 +167,9 @@ function normalizeApi(json) {
   const items = Array.isArray(json?.items) ? json.items : [];
   return items
     .map((x) => {
-      const value = toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close);
+      // Handle "Updating..." items (value is "---")
+      const rawValue = x.value ?? x.last ?? x.price ?? x.close;
+      const value = rawValue === "---" ? rawValue : toFiniteNumber(rawValue);
       const changePct = inferChangePct(x, value);
       return {
         id: String(x.id || ""),
@@ -174,9 +179,10 @@ function normalizeApi(json) {
         changePct,
         direction: inferDirection(x, changePct),
         currency: String(x.currency || ""),
+        updating: !!x.updating, // Flag for styling
       };
     })
-    .filter((x) => x.id && x.value != null);
+    .filter((x) => x.id); // Keep all items with IDs (including updating ones)
 }
 
 // Fallback data when API fails
@@ -379,6 +385,7 @@ export default function MarketTicker({ className }) {
                   flash ? styles.itemFlash : "",
                   isUp ? styles.up : "",
                   isDown ? styles.down : "",
+                  item.updating ? styles.itemUpdating : "", // Add updating style
                 ].join(" ")}
                 data-id={item.id}
               >

@@ -103,6 +103,25 @@
   color: rgba(255, 255, 255, 0.55);
 }
 
+/* Updating state styles - grayed out appearance */
+.itemUpdating {
+  opacity: 0.5;
+}
+
+.itemUpdating .name {
+  color: rgba(192, 160, 98, 0.4);
+}
+
+.itemUpdating .value {
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.itemUpdating .change {
+  color: rgba(255, 255, 255, 0.3);
+}
+
 .dot {
   width: 3px;
   height: 3px;
