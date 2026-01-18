@@ -12,12 +12,21 @@ const nextConfig = {
         hostname: 'images.pexels.com',
       },
     ],
+    // Image optimization settings for faster loading
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days cache
   },
-  // Disable static generation for blog pages to ensure fresh content
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  // Experimental optimizations
   experimental: {
-    // Force dynamic rendering
+    // Enable optimizations
   },
-  // Disable all caching for blog routes
+  // Disable all caching for blog routes but enable for static assets
   async headers() {
     return [
       {
@@ -34,6 +43,26 @@ const nextConfig = {
           {
             key: 'Vercel-CDN-Cache-Control',
             value: 'no-store',
+          },
+        ],
+      },
+      {
+        // Cache static assets for 1 year
+        source: '/:path*.(ico|jpg|jpeg|png|gif|webp|avif|svg|woff|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Cache JS/CSS for 1 year (they're content-hashed)
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },

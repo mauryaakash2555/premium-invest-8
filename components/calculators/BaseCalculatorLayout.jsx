@@ -29,9 +29,9 @@ export function BaseCalculatorLayout({
           height="auto"
           color={laserColor}
           borderRadius={12}
-          duration={12}
-          glowIntensity={14}
-          beamLength={0.08}
+          duration={20}
+          glowIntensity={10}
+          beamLength={0.06}
           borderWidth={0}
           backgroundColor="transparent"
         >

@@ -2039,6 +2039,64 @@ footer {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE CALCULATOR OPTIMIZATIONS
+   Touch-friendly inputs, larger targets, better spacing
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Larger touch targets for sliders */
+  .calculator-container [role="slider"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better input spacing on mobile */
+  .calculator-inner {
+    padding: 16px;
+  }
+  
+  /* Calculator inputs more touch-friendly */
+  .calculator-container input[type="text"],
+  .calculator-container input[type="number"],
+  .calculator-container select {
+    min-height: 48px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    padding: 12px 14px;
+    -webkit-appearance: none;
+  }
+  
+  /* Larger buttons on mobile */
+  .calculator-premium-cta {
+    min-height: 48px;
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+  
+  /* Better grid spacing on mobile */
+  .calculator-container .grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  .calculator-container {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .calculator-inner {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  
+  /* Single column on very small screens */
+  .calculator-container .lg\\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Hide mobile dock when laser overlay is active */
 body[data-laser-active="true"] [class*="LuxuryMobileDock"],
 body[data-laser-active="true"] [class*="MobileDock"],

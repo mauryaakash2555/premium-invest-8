@@ -1,153 +1,158 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 /**
  * LaserBeam - Canvas-based animated laser beam border effect
- * Ported from V0 (Huly.io style) - handles complex path tracing math
+ * 
+ * FIXED VERSION:
+ * - Uses ResizeObserver to detect container size changes (not just window resize)
+ * - Properly handles dynamic height containers (like collapsible calculators)
+ * - Smoother, calmer animation with longer duration
+ * - Better trail rendering for cleaner visuals
  * 
  * Props:
- * - width/height: Container dimensions (number or string)
- * - duration: Animation cycle in seconds (default: 4)
- * - color: Laser color as hex (default: "#00ff88" green, use "#3b82f6" for blue)
+ * - width/height: Container dimensions (number or string like "100%", "auto")
+ * - duration: Animation cycle in seconds (default: 18 for calm effect)
+ * - color: Laser color as hex (default: "#c0a062" gold)
  * - borderRadius: Corner radius in px (default: 12)
  * - active: Whether animation runs (default: true)
- * - glowIntensity: Glow blur radius in px (default: 20)
- * - beamLength: Trail length as % of perimeter 0-1 (default: 0.15)
+ * - glowIntensity: Glow blur radius in px (default: 12)
+ * - beamLength: Trail length as % of perimeter 0-1 (default: 0.10)
  * - direction: "clockwise" or "counterclockwise"
  * - delay: Seconds before animation starts
- * - borderWidth: Border thickness in px (default: 1)
+ * - borderWidth: Border thickness in px (default: 0)
  * - backgroundColor: Background color (default: "transparent")
  * - children: Content inside the container
  * - className: Additional CSS classes
  */
 export function LaserBeam({
-  width = 400,
-  height = 300,
-  duration = 4,
-  color = "#00ff88",
+  width = "100%",
+  height = "auto",
+  duration = 18, // Slower, calmer animation
+  color = "#c0a062",
   borderRadius = 12,
   active = true,
-  glowIntensity = 20,
-  beamLength = 0.15,
+  glowIntensity = 12,
+  beamLength = 0.10, // Shorter trail for cleaner look
   direction = "clockwise",
   delay = 0,
-  borderWidth = 1,
+  borderWidth = 0,
   backgroundColor = "transparent",
   children,
   className = "",
 }) {
+  const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const animationRef = useRef(0);
   const startTimeRef = useRef(0);
+  const dimensionsRef = useRef({ w: 0, h: 0, r: 0, perimeter: 0 });
+  const [isReady, setIsReady] = useState(false);
+
+  // Function to get point on rounded rectangle path given progress (0-1)
+  const getPointOnPath = useCallback((progress, dims) => {
+    const { w, h, r, straightWidth, straightHeight, cornerLength, perimeter } = dims;
+    if (perimeter === 0) return { x: 0, y: 0 };
+    
+    const adjustedProgress = direction === "counterclockwise" ? 1 - progress : progress;
+    let distance = adjustedProgress * perimeter;
+
+    // Top edge (left to right)
+    if (distance < straightWidth) {
+      return { x: r + distance, y: 0 };
+    }
+    distance -= straightWidth;
+
+    // Top-right corner
+    if (distance < cornerLength) {
+      const angle = -Math.PI / 2 + (distance / cornerLength) * (Math.PI / 2);
+      return {
+        x: w - r + Math.cos(angle) * r,
+        y: r + Math.sin(angle) * r,
+      };
+    }
+    distance -= cornerLength;
+
+    // Right edge (top to bottom)
+    if (distance < straightHeight) {
+      return { x: w, y: r + distance };
+    }
+    distance -= straightHeight;
+
+    // Bottom-right corner
+    if (distance < cornerLength) {
+      const angle = 0 + (distance / cornerLength) * (Math.PI / 2);
+      return {
+        x: w - r + Math.cos(angle) * r,
+        y: h - r + Math.sin(angle) * r,
+      };
+    }
+    distance -= cornerLength;
+
+    // Bottom edge (right to left)
+    if (distance < straightWidth) {
+      return { x: w - r - distance, y: h };
+    }
+    distance -= straightWidth;
+
+    // Bottom-left corner
+    if (distance < cornerLength) {
+      const angle = Math.PI / 2 + (distance / cornerLength) * (Math.PI / 2);
+      return {
+        x: r + Math.cos(angle) * r,
+        y: h - r + Math.sin(angle) * r,
+      };
+    }
+    distance -= cornerLength;
+
+    // Left edge (bottom to top)
+    if (distance < straightHeight) {
+      return { x: 0, y: h - r - distance };
+    }
+    distance -= straightHeight;
+
+    // Top-left corner
+    const angle = Math.PI + (distance / cornerLength) * (Math.PI / 2);
+    return {
+      x: r + Math.cos(angle) * r,
+      y: r + Math.sin(angle) * r,
+    };
+  }, [direction]);
 
   useEffect(() => {
+    const container = containerRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!container || !canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas size with device pixel ratio for sharp rendering
     const dpr = window.devicePixelRatio || 1;
-    
-    // Function to setup canvas dimensions
+
+    // Setup canvas dimensions based on container
     const setupCanvas = () => {
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return null;
+      const rect = container.getBoundingClientRect();
+      if (rect.width < 10 || rect.height < 10) return false;
+
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform before scaling
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-      return rect;
-    };
-    
-    let rect = setupCanvas();
-    if (!rect) {
-      // Retry after a short delay if element not ready
-      const retryTimeout = setTimeout(() => {
-        rect = setupCanvas();
-      }, 100);
-      return () => clearTimeout(retryTimeout);
-    }
 
-    const w = rect.width;
-    const h = rect.height;
-    const r = Math.min(borderRadius, Math.min(w, h) / 2);
+      const w = rect.width;
+      const h = rect.height;
+      const r = Math.min(borderRadius, Math.min(w, h) / 2);
 
-    // Calculate the perimeter of the rounded rectangle
-    const straightWidth = w - 2 * r;
-    const straightHeight = h - 2 * r;
-    const cornerLength = (Math.PI * r) / 2;
-    const perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength;
+      const straightWidth = Math.max(0, w - 2 * r);
+      const straightHeight = Math.max(0, h - 2 * r);
+      const cornerLength = (Math.PI * r) / 2;
+      const perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength;
 
-    // Get point on rounded rectangle path given progress (0-1)
-    const getPointOnPath = (progress) => {
-      const adjustedProgress = direction === "counterclockwise" ? 1 - progress : progress;
-      let distance = adjustedProgress * perimeter;
-
-      // Top edge (left to right)
-      if (distance < straightWidth) {
-        return { x: r + distance, y: 0 };
-      }
-      distance -= straightWidth;
-
-      // Top-right corner
-      if (distance < cornerLength) {
-        const angle = -Math.PI / 2 + (distance / cornerLength) * (Math.PI / 2);
-        return {
-          x: w - r + Math.cos(angle) * r,
-          y: r + Math.sin(angle) * r,
-        };
-      }
-      distance -= cornerLength;
-
-      // Right edge (top to bottom)
-      if (distance < straightHeight) {
-        return { x: w, y: r + distance };
-      }
-      distance -= straightHeight;
-
-      // Bottom-right corner
-      if (distance < cornerLength) {
-        const angle = 0 + (distance / cornerLength) * (Math.PI / 2);
-        return {
-          x: w - r + Math.cos(angle) * r,
-          y: h - r + Math.sin(angle) * r,
-        };
-      }
-      distance -= cornerLength;
-
-      // Bottom edge (right to left)
-      if (distance < straightWidth) {
-        return { x: w - r - distance, y: h };
-      }
-      distance -= straightWidth;
-
-      // Bottom-left corner
-      if (distance < cornerLength) {
-        const angle = Math.PI / 2 + (distance / cornerLength) * (Math.PI / 2);
-        return {
-          x: r + Math.cos(angle) * r,
-          y: h - r + Math.sin(angle) * r,
-        };
-      }
-      distance -= cornerLength;
-
-      // Left edge (bottom to top)
-      if (distance < straightHeight) {
-        return { x: 0, y: h - r - distance };
-      }
-      distance -= straightHeight;
-
-      // Top-left corner
-      const angle = Math.PI + (distance / cornerLength) * (Math.PI / 2);
-      return {
-        x: r + Math.cos(angle) * r,
-        y: r + Math.sin(angle) * r,
-      };
+      dimensionsRef.current = { w, h, r, straightWidth, straightHeight, cornerLength, perimeter };
+      return true;
     };
 
+    // Animation function
     const animate = (timestamp) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
 
@@ -158,7 +163,13 @@ export function LaserBeam({
         return;
       }
 
-      ctx.clearRect(0, 0, w, h);
+      const dims = dimensionsRef.current;
+      if (dims.perimeter === 0) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      ctx.clearRect(0, 0, dims.w, dims.h);
 
       if (!active) {
         animationRef.current = requestAnimationFrame(animate);
@@ -167,34 +178,35 @@ export function LaserBeam({
 
       const progress = (elapsed % duration) / duration;
 
-      // Draw the laser beam trail
-      const steps = 100;
+      // Draw the laser beam trail with smoother gradient
+      const steps = 60; // Reduced for performance
       const beamLengthActual = beamLength;
 
       for (let i = 0; i < steps; i++) {
         const t = i / steps;
         const pointProgress = (progress - t * beamLengthActual + 1) % 1;
-        const point = getPointOnPath(pointProgress);
+        const point = getPointOnPath(pointProgress, dims);
 
-        // Opacity fades from head (bright) to tail (transparent)
-        const opacity = Math.pow(1 - t, 2);
+        // Smoother opacity fade using easeOutQuad
+        const opacity = Math.pow(1 - t, 1.5) * 0.8;
 
         ctx.beginPath();
-        ctx.arc(point.x, point.y, borderWidth + 1, 0, Math.PI * 2);
-        ctx.fillStyle = `${color}${Math.floor(opacity * 255)
-          .toString(16)
-          .padStart(2, "0")}`;
+        ctx.arc(point.x, point.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `${color}${Math.floor(opacity * 255).toString(16).padStart(2, "0")}`;
         ctx.fill();
       }
 
       // Draw the bright head of the beam
-      const headPoint = getPointOnPath(progress);
+      const headPoint = getPointOnPath(progress, dims);
 
-      // Outer glow
-      const gradient = ctx.createRadialGradient(headPoint.x, headPoint.y, 0, headPoint.x, headPoint.y, glowIntensity);
-      gradient.addColorStop(0, `${color}ff`);
-      gradient.addColorStop(0.3, `${color}88`);
-      gradient.addColorStop(0.6, `${color}33`);
+      // Outer glow - softer
+      const gradient = ctx.createRadialGradient(
+        headPoint.x, headPoint.y, 0,
+        headPoint.x, headPoint.y, glowIntensity
+      );
+      gradient.addColorStop(0, `${color}cc`);
+      gradient.addColorStop(0.4, `${color}66`);
+      gradient.addColorStop(0.7, `${color}22`);
       gradient.addColorStop(1, `${color}00`);
 
       ctx.beginPath();
@@ -202,40 +214,49 @@ export function LaserBeam({
       ctx.fillStyle = gradient;
       ctx.fill();
 
-      // Bright core
+      // Bright core - smaller
       ctx.beginPath();
-      ctx.arc(headPoint.x, headPoint.y, borderWidth + 2, 0, Math.PI * 2);
+      ctx.arc(headPoint.x, headPoint.y, 2, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    // Small delay before starting animation to ensure layout is complete
-    const startTimeout = setTimeout(() => {
-      animationRef.current = requestAnimationFrame(animate);
-    }, 50);
+    // Use ResizeObserver to detect container size changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === container) {
+          cancelAnimationFrame(animationRef.current);
+          startTimeRef.current = 0; // Reset animation timing
+          if (setupCanvas()) {
+            setIsReady(true);
+            animationRef.current = requestAnimationFrame(animate);
+          }
+        }
+      }
+    });
 
-    // Handle resize to prevent breaking
-    const handleResize = () => {
-      cancelAnimationFrame(animationRef.current);
-      const newRect = setupCanvas();
-      if (newRect) {
+    // Initial setup with delay to ensure layout is complete
+    const initTimeout = setTimeout(() => {
+      if (setupCanvas()) {
+        setIsReady(true);
         animationRef.current = requestAnimationFrame(animate);
       }
-    };
-    
-    window.addEventListener('resize', handleResize);
+    }, 100);
+
+    resizeObserver.observe(container);
 
     return () => {
-      clearTimeout(startTimeout);
+      clearTimeout(initTimeout);
       cancelAnimationFrame(animationRef.current);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
     };
-  }, [active, beamLength, borderRadius, borderWidth, color, delay, direction, duration, glowIntensity]);
+  }, [active, beamLength, borderRadius, color, delay, direction, duration, glowIntensity, getPointOnPath]);
 
   return (
     <div
+      ref={containerRef}
       className={className}
       style={{
         position: 'relative',
@@ -243,7 +264,6 @@ export function LaserBeam({
         height,
         borderRadius,
         backgroundColor,
-        border: borderWidth > 0 ? `${borderWidth}px solid rgba(255,255,255,0.1)` : 'none',
         overflow: 'visible',
       }}
     >
@@ -258,6 +278,8 @@ export function LaserBeam({
           borderRadius,
           pointerEvents: 'none',
           zIndex: 20,
+          opacity: isReady ? 1 : 0,
+          transition: 'opacity 0.3s ease',
         }}
       />
       {children && (
