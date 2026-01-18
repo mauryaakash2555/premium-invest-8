@@ -1,13 +1,14 @@
 /**
  * BM Wealth Service Worker
+ * Last Updated: 2026-01-18 - Cache bust for Vercel rebuild
  * 
  * Caches critical assets for faster repeat visits.
  * Uses stale-while-revalidate strategy for best performance.
  */
 
-const CACHE_NAME = 'bmwealth-v1';
-const STATIC_CACHE = 'bmwealth-static-v1';
-const DYNAMIC_CACHE = 'bmwealth-dynamic-v1';
+const CACHE_NAME = 'bmwealth-v2';
+const STATIC_CACHE = 'bmwealth-static-v2';
+const DYNAMIC_CACHE = 'bmwealth-dynamic-v2';
 
 // Critical assets to cache on install (only assets that definitely exist)
 const STATIC_ASSETS = [
@@ -38,11 +39,12 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
+  const currentCaches = [STATIC_CACHE, DYNAMIC_CACHE];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
+          .filter((name) => !currentCaches.includes(name))
           .map((name) => {
             console.log('[SW] Removing old cache:', name);
             return caches.delete(name);
