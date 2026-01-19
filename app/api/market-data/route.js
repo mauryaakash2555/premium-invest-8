@@ -187,6 +187,21 @@ function getFallbackData() {
   ];
 }
 
+function makeUpdatingItem({ id, name, kind, currency }) {
+  return {
+    id,
+    name,
+    kind,
+    value: "---",
+    changePct: 0,
+    direction: "neutral",
+    currency,
+    source: "updating",
+    live: false,
+    updating: true,
+  };
+}
+
 // ════════════════════════════════════════════════════════════════════════════
 // UTILITIES
 // ════════════════════════════════════════════════════════════════════════════
@@ -200,6 +215,178 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
   } catch (e) {
     clearTimeout(timeout);
     throw e;
+  }
+}
+
+async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 5000) {
+  const res = await fetchWithTimeout(url, options, timeoutMs);
+  const text = await res.text();
+  if (!res.ok) return { res, json: null, text };
+  try {
+    return { res, json: JSON.parse(text), text };
+  } catch (e) {
+    const head = String(text || "").slice(0, 160).replace(/\s+/g, " ");
+    throw new Error(`json_parse_failed status=${res.status} url=${url} head=${head}`);
+  }
+}
+
+async function fetchJsonWithRetry(url, options = {}, timeoutMs = 5000, retries = 1) {
+  let lastErr;
+  let currentTimeout = timeoutMs;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fetchJsonWithTimeout(url, options, currentTimeout);
+    } catch (e) {
+      lastErr = e;
+      currentTimeout = Math.round(currentTimeout * 1.7);
+    }
+  }
+  throw lastErr;
+}
+
+function getUpdatingFallbackItems() {
+  return [
+    makeUpdatingItem({ id: "NIFTY50", name: "NIFTY 50", kind: "index", currency: "INR" }),
+    makeUpdatingItem({ id: "SENSEX", name: "SENSEX", kind: "index", currency: "INR" }),
+    makeUpdatingItem({ id: "USDINR", name: "USD/INR", kind: "fx", currency: "INR" }),
+    makeUpdatingItem({ id: "BTC", name: "BITCOIN", kind: "crypto", currency: "USD" }),
+    makeUpdatingItem({ id: "GOLD", name: "MCX GOLD", kind: "metal", currency: "INR" }),
+    makeUpdatingItem({ id: "SILVER", name: "MCX SILVER", kind: "metal", currency: "INR" }),
+    makeUpdatingItem({ id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", currency: "INR" }),
+  ];
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SOURCE: METALS.LIVE (spot XAU/XAG) - FREE (best-effort)
+// Returns USD per troy ounce. We convert to INR using USD/INR.
+// Gold displayed as INR per 10g. Silver displayed as INR per kg.
+// ════════════════════════════════════════════════════════════════════════════
+async function fetchFromMetalsLive(usdInr) {
+  try {
+    if (!usdInr || !Number.isFinite(usdInr) || usdInr <= 0) return null;
+    const { res, json } = await fetchJsonWithRetry(
+      "https://api.metals.live/v1/spot",
+      { headers: { ...SCRAPE_HEADERS, "Accept": "application/json" } },
+      7000,
+      1
+    );
+    if (!res.ok || !json) return null;
+
+    const payload = Array.isArray(json)
+      ? (json.find((x) => x && typeof x === "object" && !Array.isArray(x)) || null)
+      : json;
+
+    const goldUsdOz = parseNumber(payload?.gold ?? payload?.xau ?? payload?.XAU);
+    const silverUsdOz = parseNumber(payload?.silver ?? payload?.xag ?? payload?.XAG);
+
+    const OUNCE_TO_GRAM = 31.1034768;
+    const out = {};
+
+    if (goldUsdOz && goldUsdOz > 1000 && goldUsdOz < 10000) {
+      const inrPer10g = (goldUsdOz * (10 / OUNCE_TO_GRAM)) * usdInr;
+      if (Number.isFinite(inrPer10g) && inrPer10g > 1000) {
+        out.gold = { value: Math.round(inrPer10g), changePct: null, source: "metals_live" };
+      }
+    }
+
+    if (silverUsdOz && silverUsdOz > 5 && silverUsdOz < 500) {
+      const inrPerKg = (silverUsdOz * (1000 / OUNCE_TO_GRAM)) * usdInr;
+      if (Number.isFinite(inrPerKg) && inrPerKg > 1000) {
+        out.silver = { value: Math.round(inrPerKg), changePct: null, source: "metals_live" };
+      }
+    }
+
+    return out;
+  } catch (e) {
+    Logger.warn("metals_live_failed", { error: String(e?.message) });
+    return null;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SOURCE: ALPHAVANTAGE WTI (daily) - FREE tier (best-effort)
+// Returns USD per barrel. We convert to INR using USD/INR.
+// ════════════════════════════════════════════════════════════════════════════
+async function fetchCrudeFromAlphaVantageWTI(usdInr) {
+  try {
+    if (!usdInr || !Number.isFinite(usdInr) || usdInr <= 0) return null;
+    const url = `https://www.alphavantage.co/query?function=WTI&interval=daily&apikey=${encodeURIComponent(ALPHA_VANTAGE_KEY)}`;
+    const { res, json } = await fetchJsonWithRetry(url, { headers: { ...SCRAPE_HEADERS, "Accept": "application/json" } }, 9000, 1);
+    if (!res.ok || !json) return null;
+
+    const latest = Array.isArray(json?.data) ? json.data[0] : null;
+    const wtiUsd = parseNumber(latest?.value);
+    if (!wtiUsd || wtiUsd < 10 || wtiUsd > 300) return null;
+
+    const inrPerBarrel = wtiUsd * usdInr;
+    if (!Number.isFinite(inrPerBarrel) || inrPerBarrel <= 0) return null;
+
+    return { value: Math.round(inrPerBarrel), changePct: null, source: "alphavantage_wti" };
+  } catch (e) {
+    Logger.warn("av_wti_failed", { error: String(e?.message) });
+    return null;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SOURCE: STOOQ CSV (XAUUSD/XAGUSD/CL.F) - FREE (best-effort)
+// Provides USD quotes without an API key. We convert to INR using USD/INR.
+// Gold displayed as INR per 10g. Silver displayed as INR per kg.
+// Crude displayed as INR per barrel.
+// ════════════════════════════════════════════════════════════════════════════
+async function fetchStooqClose(symbol) {
+  const url = `https://stooq.com/q/l/?s=${encodeURIComponent(symbol)}&f=sd2t2ohlcv&h&e=csv`;
+  const res = await fetchWithTimeout(url, { headers: { ...SCRAPE_HEADERS, "Accept": "text/csv,*/*" } }, 7000);
+  if (!res.ok) return null;
+  const text = await res.text();
+  const lines = String(text || "").trim().split(/\r?\n/);
+  if (lines.length < 2) return null;
+  const header = lines[0].split(",").map((s) => s.trim().toLowerCase());
+  const row = lines[1].split(",").map((s) => s.trim());
+  const closeIdx = header.indexOf("close");
+  if (closeIdx < 0 || closeIdx >= row.length) return null;
+  const close = parseNumber(row[closeIdx]);
+  return close && close > 0 ? close : null;
+}
+
+async function fetchFromStooq(usdInr) {
+  try {
+    if (!usdInr || !Number.isFinite(usdInr) || usdInr <= 0) return null;
+
+    const [xauUsdOz, xagUsdOz, crudeUsdBbl] = await Promise.all([
+      fetchStooqClose("xauusd"),
+      fetchStooqClose("xagusd"),
+      fetchStooqClose("cl.f"),
+    ]);
+
+    const OUNCE_TO_GRAM = 31.1034768;
+    const out = {};
+
+    if (xauUsdOz && xauUsdOz > 500 && xauUsdOz < 20000) {
+      const inrPer10g = (xauUsdOz * (10 / OUNCE_TO_GRAM)) * usdInr;
+      if (Number.isFinite(inrPer10g) && inrPer10g > 1000) {
+        out.gold = { value: Math.round(inrPer10g), changePct: null, source: "stooq" };
+      }
+    }
+
+    if (xagUsdOz && xagUsdOz > 1 && xagUsdOz < 1000) {
+      const inrPerKg = (xagUsdOz * (1000 / OUNCE_TO_GRAM)) * usdInr;
+      if (Number.isFinite(inrPerKg) && inrPerKg > 1000) {
+        out.silver = { value: Math.round(inrPerKg), changePct: null, source: "stooq" };
+      }
+    }
+
+    if (crudeUsdBbl && crudeUsdBbl > 5 && crudeUsdBbl < 500) {
+      const inrPerBbl = crudeUsdBbl * usdInr;
+      if (Number.isFinite(inrPerBbl) && inrPerBbl > 100) {
+        out.crude = { value: Math.round(inrPerBbl), changePct: null, source: "stooq" };
+      }
+    }
+
+    return out;
+  } catch (e) {
+    Logger.warn("stooq_failed", { error: String(e?.message) });
+    return null;
   }
 }
 
@@ -357,12 +544,14 @@ async function fetchFromMoneyControl() {
   
   // Indices
   try {
-    const res = await fetchWithTimeout("https://priceapi.moneycontrol.com/pricefeed/notap498/inidicesin498", {
-      headers: { ...SCRAPE_HEADERS, "Accept": "application/json", "Origin": "https://www.moneycontrol.com" }
-    }, 5000);
-    
-    if (res.ok) {
-      const data = await res.json();
+    const { res, json: data } = await fetchJsonWithRetry(
+      "https://priceapi.moneycontrol.com/pricefeed/notap498/inidicesin498",
+      { headers: { ...SCRAPE_HEADERS, "Accept": "application/json", "Origin": "https://www.moneycontrol.com" } },
+      9000,
+      1
+    );
+
+    if (res.ok && data) {
       if (Array.isArray(data?.data)) {
         for (const item of data.data) {
           const name = (item.indexName || item.name || "").toUpperCase();
@@ -383,12 +572,14 @@ async function fetchFromMoneyControl() {
   // MCX Commodities - Try multiple endpoints
   try {
     // First try: MCX API endpoint
-    const res = await fetchWithTimeout("https://priceapi.moneycontrol.com/pricefeed/commodity/mcx", {
-      headers: { ...SCRAPE_HEADERS, "Accept": "application/json", "Origin": "https://www.moneycontrol.com" }
-    }, 5000);
-    
-    if (res.ok) {
-      const data = await res.json();
+    const { res, json: data } = await fetchJsonWithRetry(
+      "https://priceapi.moneycontrol.com/pricefeed/commodity/mcx",
+      { headers: { ...SCRAPE_HEADERS, "Accept": "application/json", "Origin": "https://www.moneycontrol.com" } },
+      11000,
+      1
+    );
+
+    if (res.ok && data) {
       if (Array.isArray(data?.data)) {
         for (const item of data.data) {
           const symbol = (item.symbol || item.name || "").toUpperCase();
@@ -737,15 +928,17 @@ async function fetchFromAlphaVantage() {
 // SOURCE 11: EXCHANGERATE-API (USD/INR) - FREE 1500/month
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchFromExchangeRateAPI() {
-  if (!EXCHANGE_RATE_KEY) return null;
-  
   try {
-    const res = await fetchWithTimeout(`https://v6.exchangerate-api.com/v6/${EXCHANGE_RATE_KEY}/latest/USD`, {}, 5000);
+    const url = EXCHANGE_RATE_KEY
+      ? `https://v6.exchangerate-api.com/v6/${EXCHANGE_RATE_KEY}/latest/USD`
+      : "https://open.er-api.com/v6/latest/USD";
+
+    const res = await fetchWithTimeout(url, { headers: { ...SCRAPE_HEADERS, "Accept": "application/json" } }, 5000);
     if (res.ok) {
       const data = await res.json();
-      const rate = parseNumber(data?.conversion_rates?.INR);
+      const rate = parseNumber(data?.conversion_rates?.INR ?? data?.rates?.INR);
       if (rate && rate > 70 && rate < 100) {
-        return { value: roundTo2(rate), source: "exchangerate-api" };
+        return { value: roundTo2(rate), source: EXCHANGE_RATE_KEY ? "exchangerate-api" : "open-er-api" };
       }
     }
   } catch (e) { Logger.warn("exr_failed", { error: String(e?.message) }); }
@@ -811,14 +1004,7 @@ async function fetchUsdInrFromGoogle() {
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchMarketDataFromAPIs() {
   const items = [];
-  const fallback = getFallbackData();
-  const fallbackMap = new Map(fallback.map(item => [item.id, item]));
-
-  const fallbackItem = (id) => {
-    const f = fallbackMap.get(id);
-    if (!f) return null;
-    return { ...f, source: "fallback", live: false };
-  };
+  // NOTE: No dummy price fallbacks. If live sources fail, show updating placeholders.
   
   try {
     // PARALLEL FETCH ALL SOURCES
@@ -848,41 +1034,37 @@ async function fetchMarketDataFromAPIs() {
     const av = get(alphaVantageData) || {};
     const exr = get(exchangeRateData);
     const gUsd = get(googleUsdData);
+
+    const usdInrLiveVal = gUsd?.value || av.usdInr?.value || exr?.value || null;
+    const metalsLive = await fetchFromMetalsLive(usdInrLiveVal);
+    const avWti = await fetchCrudeFromAlphaVantageWTI(usdInrLiveVal);
+    const stooq = await fetchFromStooq(usdInrLiveVal);
     
     // NIFTY 50 - 3 sources
     const niftyGoogle = google.find(x => x.id === "NIFTY50");
-    const nifty = niftyGoogle || nse || mc.nifty || fallbackMap.get("NIFTY50");
-    if (nifty) {
-      const isLive = !!(niftyGoogle || nse || mc.nifty);
-      items.push({
-        ...nifty,
-        source: nifty.source || (isLive ? undefined : "fallback"),
-        live: isLive,
-      });
-    }
+    const nifty = niftyGoogle || nse || mc.nifty;
+    if (nifty) items.push({ ...nifty, source: nifty.source || "live", live: true });
+    else items.push(makeUpdatingItem({ id: "NIFTY50", name: "NIFTY 50", kind: "index", currency: "INR" }));
     
     // SENSEX - 3 sources
     const sensexGoogle = google.find(x => x.id === "SENSEX");
-    const sensex = sensexGoogle || bse || mc.sensex || fallbackMap.get("SENSEX");
-    if (sensex) {
-      const isLive = !!(sensexGoogle || bse || mc.sensex);
-      items.push({
-        ...sensex,
-        source: sensex.source || (isLive ? undefined : "fallback"),
-        live: isLive,
-      });
-    }
+    const sensex = sensexGoogle || bse || mc.sensex;
+    if (sensex) items.push({ ...sensex, source: sensex.source || "live", live: true });
+    else items.push(makeUpdatingItem({ id: "SENSEX", name: "SENSEX", kind: "index", currency: "INR" }));
     
     // USD/INR - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
-    const usdVal = gUsd?.value || av.usdInr?.value || exr?.value || fallbackMap.get("USDINR").value;
-    const usdSourcePct = gUsd?.changePct ?? av.usdInr?.changePct ?? null;
-    const usdPct = autoCalculatePct("USDINR", usdVal, usdSourcePct);
-    items.push({
-      id: "USDINR", name: "USD/INR", kind: "fx", value: usdVal,
-      changePct: usdPct, direction: getDirection(usdPct), currency: "INR",
-      source: gUsd ? "google" : av.usdInr ? "alphavantage" : exr ? "exchangerate" : "fallback",
-      live: !!(gUsd || av.usdInr || exr),
-    });
+    if (usdInrLiveVal != null) {
+      const usdSourcePct = gUsd?.changePct ?? av.usdInr?.changePct ?? null;
+      const usdPct = autoCalculatePct("USDINR", usdInrLiveVal, usdSourcePct);
+      items.push({
+        id: "USDINR", name: "USD/INR", kind: "fx", value: usdInrLiveVal,
+        changePct: usdPct, direction: getDirection(usdPct), currency: "INR",
+        source: gUsd ? "google" : av.usdInr ? "alphavantage" : "exchangerate",
+        live: true,
+      });
+    } else {
+      items.push(makeUpdatingItem({ id: "USDINR", name: "USD/INR", kind: "fx", currency: "INR" }));
+    }
     
     // BITCOIN - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
     // ALWAYS SHOW - display "Updating..." when no live data
@@ -895,18 +1077,12 @@ async function fetchMarketDataFromAPIs() {
         currency: "USD", source: btc.source, live: true,
       });
     } else {
-      // Show updating indicator when no live data
-      items.push({
-        id: "BTC", name: "BITCOIN", kind: "crypto", value: "---",
-        changePct: 0, direction: "neutral",
-        currency: "USD", source: "updating", live: false,
-        updating: true, // Flag for UI to show grayed out style
-      });
+      items.push(makeUpdatingItem({ id: "BTC", name: "BITCOIN", kind: "crypto", currency: "USD" }));
     }
     
     // GOLD - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
     // ALWAYS SHOW - display "Updating..." when no live data
-    const gold = mc.gold || mcx.gold || mint.gold || gr.gold;
+    const gold = mc.gold || mcx.gold || mint.gold || gr.gold || metalsLive?.gold || stooq?.gold;
     if (gold) {
       const goldPct = autoCalculatePct("GOLD", gold.value, normalizeMetalSourcePct(gold.changePct));
       items.push({
@@ -915,18 +1091,12 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: gold.source, live: true,
       });
     } else {
-      // Show updating indicator when no live data
-      items.push({
-        id: "GOLD", name: "MCX GOLD", kind: "metal", value: "---",
-        changePct: 0, direction: "neutral",
-        currency: "INR", source: "updating", live: false,
-        updating: true, // Flag for UI to show grayed out style
-      });
+      items.push(makeUpdatingItem({ id: "GOLD", name: "MCX GOLD", kind: "metal", currency: "INR" }));
     }
     
     // SILVER - 4 sources (AUTO-CALCULATE % if source doesn't provide it)
     // ALWAYS SHOW - display "Updating..." when no live data
-    let silver = mc.silver || mcx.silver || mint.silver || gr.silver;
+    let silver = mc.silver || mcx.silver || mint.silver || gr.silver || metalsLive?.silver || stooq?.silver;
     // Sanity check: Silver per KG should always be much higher than Gold per 10g
     if (silver && silver.value < 200000) {
       Logger.warn("silver_invalid_value", { value: silver.value, source: silver.source });
@@ -940,18 +1110,12 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: silver.source, live: true,
       });
     } else {
-      // Show updating indicator when no live data
-      items.push({
-        id: "SILVER", name: "MCX SILVER", kind: "metal", value: "---",
-        changePct: 0, direction: "neutral",
-        currency: "INR", source: "updating", live: false,
-        updating: true, // Flag for UI to show grayed out style
-      });
+      items.push(makeUpdatingItem({ id: "SILVER", name: "MCX SILVER", kind: "metal", currency: "INR" }));
     }
     
     // CRUDE OIL - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
     // ALWAYS SHOW - display "Updating..." when no live data
-    const crude = mc.crude || mcx.crude || mint.crude;
+    const crude = mc.crude || mcx.crude || mint.crude || stooq?.crude || avWti;
     if (crude) {
       const crudePct = autoCalculatePct("CRUDEOIL", crude.value, crude.changePct);
       items.push({
@@ -960,13 +1124,7 @@ async function fetchMarketDataFromAPIs() {
         currency: "INR", source: crude.source, live: true,
       });
     } else {
-      // Show updating indicator when no live data
-      items.push({
-        id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: "---",
-        changePct: 0, direction: "neutral",
-        currency: "INR", source: "updating", live: false,
-        updating: true, // Flag for UI to show grayed out style
-      });
+      items.push(makeUpdatingItem({ id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", currency: "INR" }));
     }
     
     // Save current prices for future % calculation
@@ -983,9 +1141,12 @@ async function fetchMarketDataFromAPIs() {
 // ════════════════════════════════════════════════════════════════════════════
 // API HANDLER
 // ════════════════════════════════════════════════════════════════════════════
-export async function GET() {
+export async function GET(req) {
   try {
-    const cached = getCache();
+    const url = req?.url ? new URL(req.url) : null;
+    const bypassCache = url?.searchParams?.get("nocache") === "1";
+
+    const cached = bypassCache ? null : getCache();
     if (cached) {
       const res = NextResponse.json({ ...cached, cached: true });
       res.headers.set("Cache-Control", "no-store, max-age=0");
@@ -1003,9 +1164,9 @@ export async function GET() {
       res.headers.set("Access-Control-Allow-Origin", "*");
       return res;
     }
-    
-    const fallbackItems = getFallbackData().map((item) => ({ ...item, source: "fallback", live: false }));
-    const payload = { ok: true, asOf: new Date().toISOString(), items: fallbackItems, source: "fallback" };
+
+    const updatingItems = getUpdatingFallbackItems();
+    const payload = { ok: true, asOf: new Date().toISOString(), items: updatingItems, source: "updating" };
     setCache(payload);
     const res = NextResponse.json(payload);
     res.headers.set("Cache-Control", "no-store, max-age=0");
@@ -1014,8 +1175,8 @@ export async function GET() {
     
   } catch (e) {
     Logger.error("api_error", { error: String(e?.message || e) });
-    const fallbackItems = getFallbackData().map((item) => ({ ...item, source: "fallback", live: false }));
-    const res = NextResponse.json({ ok: true, asOf: new Date().toISOString(), items: fallbackItems, source: "error_fallback" });
+    const updatingItems = getUpdatingFallbackItems();
+    const res = NextResponse.json({ ok: true, asOf: new Date().toISOString(), items: updatingItems, source: "error_updating" });
     res.headers.set("Cache-Control", "no-store, max-age=0");
     res.headers.set("Access-Control-Allow-Origin", "*");
     return res;

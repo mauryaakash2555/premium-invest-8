@@ -166,36 +166,7 @@ export default function ITRFilingHelpPage() {
                 </div>
               </section>
 
-              {/* Section 3: What this tool does NOT do */}
-              <section>
-                <h2 className="text-xl font-semibold text-white mb-4">What this tool does NOT do</h2>
-                <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6">
-                  <ul className="space-y-2 text-sm text-white/70">
-                    <li className="flex items-start gap-2">
-                      <span className="text-white/40">✗</span>
-                      <span>Does <strong className="text-white/90">not file</strong> your income tax return</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-white/40">✗</span>
-                      <span>Does <strong className="text-white/90">not connect</strong> to the income tax portal or any government system</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-white/40">✗</span>
-                      <span>Does <strong className="text-white/90">not provide</strong> tax advice or CA services</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-white/40">✗</span>
-                      <span>Does <strong className="text-white/90">not store</strong> your documents or data permanently</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-white/40">✗</span>
-                      <span>Does <strong className="text-white/90">not guarantee</strong> accuracy of OCR extraction</span>
-                    </li>
-                  </ul>
-                </div>
-              </section>
-
-              {/* Section 4: Who should use this */}
+              {/* Section 3: Who should use this */}
               <section>
                 <h2 className="text-xl font-semibold text-white mb-4">Who can use this tool</h2>
                 <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6">

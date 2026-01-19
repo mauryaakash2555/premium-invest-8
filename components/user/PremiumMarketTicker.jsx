@@ -54,6 +54,9 @@ function formatNumber(num, maximumFractionDigits) {
 }
 
 function fmtValue(item) {
+  // Show an explicit updating indicator when live values are unavailable
+  if (item?.value === "---" || item?.updating || item?.isLoading) return "Updating...";
+
   const v = toFiniteNumber(item?.value);
   if (v == null) return "—";
   // Keep values numeric-only (no currency prefix) to avoid any CSS/spacing issues.
@@ -66,6 +69,42 @@ function fmtPct(p) {
   if (n == null) return "—";
   const sign = n > 0 ? "+" : n < 0 ? "" : "";
   return `${sign}${n.toFixed(2)}%`;
+}
+
+function ensureRequiredItems(items) {
+  const list = Array.isArray(items) ? items : [];
+  const byId = new Map(list.map((x) => [x.id, x]));
+
+  const required = [
+    { id: "NIFTY50", name: "NIFTY 50", kind: "index", currency: "INR" },
+    { id: "SENSEX", name: "SENSEX", kind: "index", currency: "INR" },
+    { id: "USDINR", name: "USD/INR", kind: "fx", currency: "INR" },
+    { id: "BTC", name: "BITCOIN", kind: "crypto", currency: "USD" },
+    { id: "GOLD", name: "MCX GOLD", kind: "metal", currency: "INR" },
+    { id: "SILVER", name: "MCX SILVER", kind: "metal", currency: "INR" },
+    { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", currency: "INR" },
+  ];
+
+  const padded = required.map((r) => {
+    const existing = byId.get(r.id);
+    if (existing) return existing;
+    return {
+      ...r,
+      value: "---",
+      changePct: null,
+      direction: "flat",
+      updating: true,
+      isLoading: true,
+    };
+  });
+
+  for (const item of list) {
+    if (!item?.id) continue;
+    if (required.some((r) => r.id === item.id)) continue;
+    padded.push(item);
+  }
+
+  return padded;
 }
 
 function IconIndex({ tone = "up" }) {
@@ -198,9 +237,10 @@ function inferDirection(x, changePct) {
 
 function normalizeApi(json) {
   const items = Array.isArray(json?.items) ? json.items : [];
-  return items
+  const normalized = items
     .map((x) => {
-      const value = toFiniteNumber(x.value ?? x.last ?? x.price ?? x.close);
+      const rawValue = x.value ?? x.last ?? x.price ?? x.close;
+      const value = rawValue === "---" ? rawValue : toFiniteNumber(rawValue);
       const changePct = inferChangePct(x, value);
       return {
         id: String(x.id || ""),
@@ -210,23 +250,28 @@ function normalizeApi(json) {
         changePct,
         direction: inferDirection(x, changePct),
         currency: String(x.currency || ""),
+        updating: rawValue === "---" ? true : !!x.updating,
       };
     })
-    // Keep items even if changePct is missing; we still want prices to show.
-    .filter((x) => x.id && x.value != null);
+    .filter((x) => x.id);
+
+  return ensureRequiredItems(normalized);
 }
 
 // NO FALLBACK/DUMMY DATA - Show loading state if API fails
 const LOADING_STATE = [
-  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
-  { id: "SENSEX", name: "SENSEX", kind: "index", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
-  { id: "USDINR", name: "USD/INR", kind: "fx", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
-  { id: "GOLD", name: "GOLD", kind: "metal", value: null, change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true },
+  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
+  { id: "SENSEX", name: "SENSEX", kind: "index", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
+  { id: "USDINR", name: "USD/INR", kind: "fx", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
+  { id: "BTC", name: "BITCOIN", kind: "crypto", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "USD", isLoading: true, updating: true },
+  { id: "GOLD", name: "MCX GOLD", kind: "metal", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
+  { id: "SILVER", name: "MCX SILVER", kind: "metal", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
+  { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: "---", change: null, changePercent: null, changePct: null, direction: "flat", currency: "INR", isLoading: true, updating: true },
 ];
 
 export default function PremiumMarketTicker({ className }) {
   // Show loading state on first paint while live data loads - NO DUMMY DATA
-  const [data, setData] = useState(LOADING_STATE);
+  const [data, setData] = useState(ensureRequiredItems(LOADING_STATE));
   const [asOf, setAsOf] = useState(null);
   const lastDataRef = useRef(null);
 
@@ -258,7 +303,7 @@ export default function PremiumMarketTicker({ className }) {
   const paused = pausedHover || pausedTap;
 
   const doubled = useMemo(() => {
-    const base = data.length ? data : placeholderItems;
+    const base = ensureRequiredItems(data.length ? data : placeholderItems);
     return base.length ? [...base, ...base] : [];
   }, [data, placeholderItems]);
 
@@ -275,7 +320,7 @@ export default function PremiumMarketTicker({ className }) {
 
     async function fetchNow() {
       try {
-        const r = await fetch("/api/market-data", { cache: "no-store" });
+        const r = await fetch("/api/market-data?nocache=1", { cache: "no-store" });
         const j = await r.json().catch(() => null);
 
         if (!r.ok || !j?.ok) {
@@ -289,14 +334,24 @@ export default function PremiumMarketTicker({ className }) {
           return;
         }
 
+        const nextEnsured = ensureRequiredItems(next);
+
         // detect changes for micro-highlight
         const prev = lastDataRef.current;
-        const prevMap = new Map(prev.map((p) => [p.id, p]));
+        const prevList = Array.isArray(prev) && prev.length ? prev : ensureRequiredItems([]);
+        const prevMap = new Map(prevList.map((p) => [p.id, p]));
         const flashes = {};
-        for (const item of next) {
+        for (const item of nextEnsured) {
           const p = prevMap.get(item.id);
           if (!p) continue;
-          const changed = Math.abs(item.value - p.value) > 1e-9 || item.direction !== p.direction;
+
+          // Skip flash math for updating/placeholder values
+          if (item?.value === "---" || p?.value === "---") continue;
+          const itemNum = toFiniteNumber(item.value);
+          const prevNum = toFiniteNumber(p.value);
+          if (itemNum == null || prevNum == null) continue;
+
+          const changed = Math.abs(itemNum - prevNum) > 1e-9 || item.direction !== p.direction;
           if (changed) flashes[item.id] = Date.now();
         }
         if (Object.keys(flashes).length) {
@@ -311,8 +366,8 @@ export default function PremiumMarketTicker({ className }) {
           }, 700);
         }
 
-        lastDataRef.current = next;
-        setData(next);
+        lastDataRef.current = nextEnsured;
+        setData(nextEnsured);
         setAsOf(String(j.asOf || ""));
       } catch (err) {
         console.error("Ticker fetch failed:", err);
@@ -410,9 +465,9 @@ export default function PremiumMarketTicker({ className }) {
             const isDown = dir === "down";
 
             const isPlaceholder = Boolean(item.placeholder);
-            const isLoading = Boolean(item.isLoading);
-            const valueText = isPlaceholder || isLoading ? "—" : fmtValue(item);
-            const changeText = isPlaceholder || isLoading ? "—" : fmtPct(item.changePct);
+            const isUpdating = Boolean(item.updating || item.value === "---" || item.isLoading);
+            const valueText = isPlaceholder ? "—" : fmtValue(item);
+            const changeText = isPlaceholder || isUpdating ? "—" : fmtPct(item.changePct);
 
             // Keep SENSEX palette exactly as-is (your current look): label/value neutral, delta red/green only.
             const isSensex = item.id === "SENSEX";
@@ -422,10 +477,11 @@ export default function PremiumMarketTicker({ className }) {
                 key={`${item.id}-${idx}`}
                 className={[
                   styles.item,
-                  flash ? styles.itemFlash : "",
-                  isUp ? styles.up : "",
-                  isDown ? styles.down : "",
-                ].join(" ")}
+                  flash && styles.itemFlash,
+                  isUp && styles.up,
+                  isDown && styles.down,
+                  isUpdating && styles.itemUpdating,
+                ].filter(Boolean).join(" ")}
                 data-id={item.id}
               >
                 <div className={styles.iconWrap}>{getIcon(item)}</div>
@@ -442,9 +498,6 @@ export default function PremiumMarketTicker({ className }) {
         </div>
       </div>
 
-      <div className={styles.metaBadge} aria-hidden="true">
-        Indicative • Delayed
-      </div>
     </div>
   );
 }

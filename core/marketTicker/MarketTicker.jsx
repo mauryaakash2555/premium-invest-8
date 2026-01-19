@@ -74,6 +74,42 @@ function fmtPct(p) {
   return `${sign}${n.toFixed(2)}%`;
 }
 
+function ensureRequiredItems(items) {
+  const list = Array.isArray(items) ? items : [];
+  const byId = new Map(list.map((x) => [x.id, x]));
+
+  const required = [
+    { id: "NIFTY50", name: "NIFTY 50", kind: "index", currency: "INR" },
+    { id: "SENSEX", name: "SENSEX", kind: "index", currency: "INR" },
+    { id: "USDINR", name: "USD/INR", kind: "fx", currency: "INR" },
+    { id: "BTC", name: "BITCOIN", kind: "crypto", currency: "USD" },
+    { id: "GOLD", name: "MCX GOLD", kind: "metal", currency: "INR" },
+    { id: "SILVER", name: "MCX SILVER", kind: "metal", currency: "INR" },
+    { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", currency: "INR" },
+  ];
+
+  const padded = required.map((r) => {
+    const existing = byId.get(r.id);
+    if (existing) return existing;
+    return {
+      ...r,
+      value: "---",
+      changePct: null,
+      direction: "flat",
+      updating: true,
+    };
+  });
+
+  // Append any extra items not in the required list
+  for (const item of list) {
+    if (!item?.id) continue;
+    if (byId.has(item.id) && required.some((r) => r.id === item.id)) continue;
+    padded.push(item);
+  }
+
+  return padded;
+}
+
 // ============ INTERNAL ICONS (no external deps) ============
 
 function IconIndex({ tone = "up" }) {
@@ -165,7 +201,7 @@ function inferDirection(x, changePct) {
 
 function normalizeApi(json) {
   const items = Array.isArray(json?.items) ? json.items : [];
-  return items
+  const normalized = items
     .map((x) => {
       // Handle "Updating..." items (value is "---")
       const rawValue = x.value ?? x.last ?? x.price ?? x.close;
@@ -179,19 +215,17 @@ function normalizeApi(json) {
         changePct,
         direction: inferDirection(x, changePct),
         currency: String(x.currency || ""),
-        updating: !!x.updating, // Flag for styling
+        updating: rawValue === "---" ? true : !!x.updating, // Flag for styling
       };
     })
     .filter((x) => x.id); // Keep all items with IDs (including updating ones)
+
+  return ensureRequiredItems(normalized);
 }
 
 // Fallback data when API fails
-const FALLBACK_DATA = [
-  { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 24857, changePct: 0.52, direction: "up", currency: "INR" },
-  { id: "SENSEX", name: "SENSEX", kind: "index", value: 82365, changePct: 0.54, direction: "up", currency: "INR" },
-  { id: "USDINR", name: "USD/INR", kind: "fx", value: 84.32, changePct: 0.09, direction: "up", currency: "INR" },
-  { id: "GOLD", name: "GOLD", kind: "metal", value: 7245, changePct: 0.17, direction: "up", currency: "INR" },
-];
+// NOTE: No dummy prices — show "Updating..." until live data arrives.
+const FALLBACK_DATA = ensureRequiredItems([]);
 
 // ============ MAIN COMPONENT ============
 
@@ -221,10 +255,14 @@ export default function MarketTicker({ className }) {
     { id: "GOLD", name: "GOLD", kind: "metal", direction: "flat", placeholder: true },
   ], []);
 
+  // Always enforce required instruments at render-time as well.
+  // This protects against any transient state where only a subset is present.
+  const displayData = useMemo(() => ensureRequiredItems(data), [data]);
+
   const doubled = useMemo(() => {
-    const base = data.length ? data : placeholderItems;
+    const base = displayData.length ? displayData : placeholderItems;
     return base.length ? [...base, ...base] : [];
-  }, [data, placeholderItems]);
+  }, [displayData, placeholderItems]);
 
   // Data fetching
   useEffect(() => {
@@ -239,7 +277,7 @@ export default function MarketTicker({ className }) {
 
     async function fetchNow() {
       try {
-        const r = await fetch("/api/market-data", { cache: "no-store" });
+        const r = await fetch("/api/market-data?nocache=1", { cache: "no-store" });
         const j = await r.json().catch(() => null);
 
         if (!r.ok || !j?.ok) {
@@ -376,19 +414,20 @@ export default function MarketTicker({ className }) {
             const isUp = dir === "up";
             const isDown = dir === "down";
             const isPlaceholder = Boolean(item.placeholder);
+            const isUpdating = Boolean(item.updating || item.value === "---");
             const valueText = isPlaceholder ? "—" : fmtValue(item);
-            const changeText = isPlaceholder ? "—" : fmtPct(item.changePct);
+            const changeText = isPlaceholder || isUpdating ? "—" : fmtPct(item.changePct);
 
             return (
               <div
                 key={`${item.id}-${idx}`}
                 className={[
                   styles.item,
-                  flash ? styles.itemFlash : "",
-                  isUp ? styles.up : "",
-                  isDown ? styles.down : "",
-                  item.updating ? styles.itemUpdating : "", // Add updating style
-                ].join(" ")}
+                  flash && styles.itemFlash,
+                  isUp && styles.up,
+                  isDown && styles.down,
+                  isUpdating && styles.itemUpdating,
+                ].filter(Boolean).join(" ")}
                 data-id={item.id}
               >
                 <div className={styles.iconWrap}>{getIcon(item)}</div>
@@ -404,9 +443,6 @@ export default function MarketTicker({ className }) {
         </div>
       </div>
 
-      <div className={styles.metaBadge} aria-hidden="true">
-        Indicative • Delayed
-      </div>
     </div>
   );
 }

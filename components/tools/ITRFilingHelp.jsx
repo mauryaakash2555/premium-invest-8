@@ -771,12 +771,62 @@ export default function ITRFilingHelp() {
     setError(null);
     
     try {
-      // Dynamic import of PDF.js
-      const pdfjsLib = await import('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-      
-      // Dynamic import of Tesseract.js
-      const Tesseract = (await import('tesseract.js')).default;
+      // Dynamic import of PDF.js (explicit ESM entry). In dev, a stale client can
+      // occasionally request a non-existent chunk after restarts; retry once.
+      const loadPdfJs = async () => {
+        try {
+          return await import('pdfjs-dist/build/pdf.mjs');
+        } catch (err) {
+          const message = err?.message || '';
+          const isChunkLoad = err?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
+          if (!isChunkLoad) throw err;
+          await new Promise((r) => setTimeout(r, 300));
+          return await import('pdfjs-dist/build/pdf.mjs');
+        }
+      };
+
+      const pdfjsLib = await loadPdfJs();
+      const pdfJsVersion = pdfjsLib?.version || pdfjsLib?.default?.version;
+      if (pdfjsLib?.GlobalWorkerOptions) {
+        const v = pdfJsVersion || '4.10.38';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${v}/pdf.worker.min.mjs`;
+      }
+      setPdfJsLoaded(true);
+
+      // Load Tesseract in-browser via CDN to avoid bundler resolution issues.
+      // (Next dev can otherwise emit a runtime "Cannot find module 'tesseract.js'".)
+      const loadTesseract = async () => {
+        if (typeof window === 'undefined') {
+          throw new Error('Tesseract can only be loaded in the browser');
+        }
+        if (window.Tesseract) return window.Tesseract;
+
+        const src = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+        await new Promise((resolve, reject) => {
+          const existing = document.querySelector('script[data-tesseract="1"]');
+          if (existing) {
+            existing.addEventListener('load', resolve, { once: true });
+            existing.addEventListener('error', reject, { once: true });
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          script.defer = true;
+          script.dataset.tesseract = '1';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+
+        if (!window.Tesseract) {
+          throw new Error('Tesseract failed to initialize');
+        }
+        return window.Tesseract;
+      };
+
+      const Tesseract = await loadTesseract();
+      setTesseractLoaded(true);
       
       // Read PDF file
       const arrayBuffer = await file.arrayBuffer();
@@ -856,9 +906,15 @@ export default function ITRFilingHelp() {
       setEditableData(extracted);
       setStep(STEPS.REVIEW);
       
-    } catch (err) {
-      console.error('Processing error:', err);
-      setError(`Error processing document: ${err.message}. Please try a different file.`);
+    } catch (error) {
+      console.error('Document processing error:', error);
+      const message = error?.message || '';
+      const isChunkLoad = error?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
+      if (isChunkLoad) {
+        setError('PDF engine failed to load (dev-server chunk mismatch). Please hard refresh (Ctrl+F5) and try again.');
+      } else {
+        setError('Error processing document. Please try again with a different PDF.');
+      }
       setStep(STEPS.UPLOAD);
     } finally {
       setProcessing(false);
@@ -960,7 +1016,7 @@ export default function ITRFilingHelp() {
             
             {/* File Upload Area */}
             <div className="space-y-4">
-              <label className="block">
+              <div className="block">
                 <div 
                   className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors
                     ${file 
@@ -1005,7 +1061,7 @@ export default function ITRFilingHelp() {
                     </div>
                   )}
                 </div>
-              </label>
+              </div>
               
               {/* Supported Documents Info */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1437,14 +1493,6 @@ export default function ITRFilingHelp() {
               </a>
             </div>
             
-            {/* Disclaimer - Subtle footer style */}
-            <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-              <p className="text-xs text-white/50 leading-relaxed">
-                This tool provides an educational estimate only. Extracted values may be inaccurate due to document quality. 
-                Please review all figures before use. BM Wealth does not file returns and is not responsible for submissions. 
-                For accurate tax filing, consult a qualified Chartered Accountant or use the official Income Tax portal.
-              </p>
-            </div>
           </div>
         )}
       </div>
