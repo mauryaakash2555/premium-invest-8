@@ -1,0 +1,8 @@
+ok=True source=live count=7
+NIFTY50=25517 live=True updating= source=google
+SENSEX=82961 live=True updating= source=google
+USDINR=90.83 live=True updating= source=google
+BTC=92588 live=True updating= source=coingecko
+GOLD=136390 live=True updating= source=stooq
+SILVER=300000 live=True updating= source=livemint
+CRUDEOIL=5393 live=True updating= source=stooq

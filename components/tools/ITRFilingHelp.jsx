@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Upload, FileText, AlertTriangle, CheckCircle, Edit3, Calculator, Download, Trash2, Loader2, Info, XCircle } from 'lucide-react';
 
 /**
@@ -73,15 +73,83 @@ const detectDocumentType = (text) => {
   return 'unknown';
 };
 
+const normalizeForAnchorSearch = (text) =>
+  String(text || '')
+    .replace(/\u00A0/g, ' ')
+    .replace(/[\t\r]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ ]{2,}/g, ' ')
+    .trim();
+
+const parseFirstNumber = (raw) => {
+  if (!raw) return null;
+  const cleaned = String(raw)
+    .replace(/₹/g, '')
+    .replace(/,/g, '')
+    .replace(/\s/g, '');
+  const m = cleaned.match(/\d+(?:\.\d+)?/);
+  if (!m) return null;
+  const n = Number(m[0]);
+  return Number.isFinite(n) ? n : null;
+};
+
+const parseIntSafe = (raw) => {
+  if (raw == null) return null;
+  const cleaned = String(raw).replace(/,/g, '').trim();
+  if (!cleaned) return null;
+  const n = parseInt(cleaned, 10);
+  return Number.isFinite(n) ? n : null;
+};
+
+// Anchor-based extraction: finds a number near any of the anchor phrases.
+// Useful when OCR introduces spacing/line breaks.
+const extractNumberNearAnchors = (text, anchors, opts = {}) => {
+  const {
+    windowChars = 140,
+    min = 0,
+    max = 2_00_00_00_000, // 200 Cr sanity upper bound
+    pick = 'max', // 'first' | 'max'
+  } = opts;
+
+  const hay = normalizeForAnchorSearch(text).toLowerCase();
+  const anchorList = (Array.isArray(anchors) ? anchors : [anchors]).filter(Boolean);
+  if (!hay || anchorList.length === 0) return null;
+
+  const candidates = [];
+  for (const anchor of anchorList) {
+    const a = String(anchor).toLowerCase();
+    let idx = 0;
+    while (idx >= 0) {
+      idx = hay.indexOf(a, idx);
+      if (idx < 0) break;
+      const start = idx + a.length;
+      const slice = hay.slice(start, start + windowChars);
+      const numberMatch = slice.match(/(?:₹\s*)?\d[\d,\s]*(?:\.\d+)?/);
+      const val = parseFirstNumber(numberMatch?.[0]);
+      if (val != null && val >= min && val <= max) candidates.push(val);
+      idx = start;
+    }
+  }
+
+  if (candidates.length === 0) return null;
+  if (pick === 'first') return Math.round(candidates[0]);
+  return Math.round(Math.max(...candidates));
+};
+
 // Extract values from Form 16
 const extractForm16Data = (text) => {
   const data = {
-    grossSalary: 0,
-    exemptions: 0,
-    deduction80C: 0,
-    deduction80D: 0,
+    grossSalary: null,
+    exemptions: null,
+    deduction80C: null,
+    deduction80D: null,
+    deduction80DSelfFamily: null,
+    deduction80DParents: null,
+    selfFamilySenior: false,
+    parentsSenior: false,
     standardDeduction: 0,
-    tdsDeducted: 0,
+    tdsDeducted: null,
+    totalTaxAsPerDoc: null,
     netTaxableIncome: 0,
   };
   
@@ -113,7 +181,6 @@ const extractForm16Data = (text) => {
       /standard\s*deduction[^\d]*?([\d,]+)/i,
     ],
     exemptions: [
-      /exemption[^\d]*?([\d,]+)/i,
       /hra\s*exemption[^\d]*?([\d,]+)/i,
       /house\s*rent\s*allowance[^\d]*?([\d,]+)/i,
     ],
@@ -123,11 +190,54 @@ const extractForm16Data = (text) => {
     for (const pattern of patternList) {
       const match = text.match(pattern);
       if (match) {
-        data[field] = parseInt(match[1].replace(/,/g, ''), 10) || 0;
+        data[field] = parseIntSafe(match[1]);
         break;
       }
     }
   }
+
+  // Anchor-based refinements (more resilient for OCR + varied layouts)
+  const grossSalary = extractNumberNearAnchors(text, [
+    'gross salary',
+    'income from salary',
+    'total salary',
+    'salary as per provisions',
+    'gross total salary',
+  ]);
+  if (grossSalary != null) data.grossSalary = grossSalary;
+
+  // Exemptions are highly error-prone with OCR; keep anchors narrow to avoid false positives.
+  // If we can't find a strong HRA/Section 10 style anchor, leave empty for the user to review.
+  const hraOrExemption = extractNumberNearAnchors(
+    text,
+    ['hra exemption', 'house rent allowance', 'section 10', 'u/s 10', '10(13a)'],
+    { windowChars: 90, pick: 'first' }
+  );
+  if (hraOrExemption != null) data.exemptions = hraOrExemption;
+
+  const d80c = extractNumberNearAnchors(text, ['80c', 'section 80c', 'u/s 80c', 'chapter vi-a', 'chapter vi a'], {
+    max: 150000,
+    pick: 'max',
+  });
+  if (d80c != null) data.deduction80C = d80c;
+
+  const d80d = extractNumberNearAnchors(text, ['80d', 'section 80d', 'u/s 80d', 'medical insurance'], {
+    max: 100000,
+    pick: 'max',
+  });
+  if (d80d != null) {
+    data.deduction80D = d80d;
+    data.deduction80DSelfFamily = d80d;
+  }
+
+  // TDS: prefer explicit "Total Tax Deducted" anchor.
+  const tdsExact = extractNumberNearAnchors(text, ['total tax deducted', 'total tax deducted at source'], { pick: 'first' });
+  const tdsFallback = extractNumberNearAnchors(text, ['tds', 'tax deducted', 'tax deducted at source'], { pick: 'max' });
+  if (tdsExact != null || tdsFallback != null) data.tdsDeducted = (tdsExact ?? tdsFallback);
+
+  // "Total Tax" reference only (do not auto-apply)
+  const totalTaxRef = extractNumberNearAnchors(text, ['total tax', 'total tax payable', 'tax on total income'], { max: 5_00_00_000 });
+  if (totalTaxRef != null) data.totalTaxAsPerDoc = totalTaxRef;
   
   return data;
 };
@@ -135,10 +245,10 @@ const extractForm16Data = (text) => {
 // Extract values from AIS
 const extractAISData = (text) => {
   const data = {
-    interestIncome: 0,
-    dividendIncome: 0,
-    capitalGains: 0,
-    tdsEntries: 0,
+    interestIncome: null,
+    dividendIncome: null,
+    capitalGains: null,
+    tdsEntries: null,
     otherIncome: 0,
   };
   
@@ -167,7 +277,7 @@ const extractAISData = (text) => {
     for (const pattern of patternList) {
       const match = text.match(pattern);
       if (match) {
-        data[field] = parseInt(match[1].replace(/,/g, ''), 10) || 0;
+        data[field] = parseIntSafe(match[1]);
         break;
       }
     }
@@ -179,8 +289,8 @@ const extractAISData = (text) => {
 // Extract values from Bank Interest Statement
 const extractBankInterestData = (text) => {
   const data = {
-    totalInterest: 0,
-    tdsOnInterest: 0,
+    totalInterest: null,
+    tdsOnInterest: null,
   };
   
   const patterns = {
@@ -201,7 +311,7 @@ const extractBankInterestData = (text) => {
     for (const pattern of patternList) {
       const match = text.match(pattern);
       if (match) {
-        data[field] = parseInt(match[1].replace(/,/g, ''), 10) || 0;
+        data[field] = parseIntSafe(match[1]);
         break;
       }
     }
@@ -212,6 +322,10 @@ const extractBankInterestData = (text) => {
 
 // Tax calculation (FY 2025-26 slabs)
 const calculateTax = (data, regime = 'new') => {
+  const num = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
   const {
     grossSalary = 0,
     interestIncome = 0,
@@ -219,10 +333,14 @@ const calculateTax = (data, regime = 'new') => {
     otherIncome = 0,
     deduction80C = 0,
     deduction80D = 0,
+    deduction80DSelfFamily,
+    deduction80DParents,
+    selfFamilySenior,
+    parentsSenior,
     exemptions = 0,
   } = data;
-  
-  const totalIncome = grossSalary + interestIncome + dividendIncome + otherIncome;
+
+  const totalIncome = num(grossSalary) + num(interestIncome) + num(dividendIncome) + num(otherIncome);
   
   let taxableIncome = totalIncome;
   let deductionsApplied = {};
@@ -230,9 +348,20 @@ const calculateTax = (data, regime = 'new') => {
   if (regime === 'old') {
     // Old regime: standard deduction + 80C + 80D + exemptions
     const stdDed = Math.min(50000, totalIncome);
-    const d80c = Math.min(deduction80C, 150000);
-    const d80d = Math.min(deduction80D, 100000);
-    const exempt = exemptions;
+    const d80c = Math.min(num(deduction80C), 150000);
+    // 80D cap rules (simplified but rule-based):
+    // - Self/Family: 25k (or 50k if senior)
+    // - Parents: 25k (or 50k if senior)
+    // - Combined max: 100k
+    const selfCap = selfFamilySenior ? 50000 : 25000;
+    const parentsCap = parentsSenior ? 50000 : 25000;
+    const selfVal =
+      deduction80DSelfFamily != null ? num(deduction80DSelfFamily) : num(deduction80D);
+    const parentsVal = deduction80DParents != null ? num(deduction80DParents) : 0;
+    const d80dSelf = Math.min(selfVal, selfCap);
+    const d80dPar = Math.min(parentsVal, parentsCap);
+    const d80d = Math.min(d80dSelf + d80dPar, 100000);
+    const exempt = num(exemptions);
     
     taxableIncome = Math.max(0, totalIncome - stdDed - d80c - d80d - exempt);
     deductionsApplied = {
@@ -259,12 +388,12 @@ const calculateTax = (data, regime = 'new') => {
   if (regime === 'new') {
     // New regime slabs FY 2025-26
     const slabs = [
-      { from: 0, to: 400000, rate: 0 },
-      { from: 400000, to: 800000, rate: 0.05 },
-      { from: 800000, to: 1200000, rate: 0.10 },
-      { from: 1200000, to: 1600000, rate: 0.15 },
-      { from: 1600000, to: 2000000, rate: 0.20 },
-      { from: 2000000, to: Infinity, rate: 0.30 },
+      { from: 0, to: 300000, rate: 0 },
+      { from: 300000, to: 600000, rate: 0.05 },
+      { from: 600000, to: 900000, rate: 0.10 },
+      { from: 900000, to: 1200000, rate: 0.15 },
+      { from: 1200000, to: 1500000, rate: 0.20 },
+      { from: 1500000, to: Infinity, rate: 0.30 },
     ];
     
     let remaining = taxableIncome;
@@ -289,9 +418,9 @@ const calculateTax = (data, regime = 'new') => {
       lastLimit = slab.to;
     }
     
-    // Rebate u/s 87A: if taxable income <= 12L, rebate up to 60,000
-    if (taxableIncome <= 1200000) {
-      tax = Math.max(0, tax - Math.min(60000, tax));
+    // Rebate u/s 87A (commonly applied threshold for new regime)
+    if (taxableIncome <= 700000) {
+      tax = Math.max(0, tax - Math.min(25000, tax));
     }
   } else {
     // Old regime slabs FY 2025-26
@@ -365,123 +494,109 @@ const calculateTax = (data, regime = 'new') => {
   };
 };
 
-// Generate educational summary PDF (4-page structure)
+// Generate educational summary PDF (4-page locked structure)
 const generateSummaryPDF = async (data, result, documentType) => {
   const { jsPDF } = await import('jspdf');
   const doc = new jsPDF();
-  
+
   const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   const time = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-  
-  // Helper function
+
+  const FOOTER_TEXT =
+    'This is an estimate generated for educational purposes. Not a filing document. Consult a qualified professional before submission.';
+
+  const addFooter = () => {
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    const lines = doc.splitTextToSize(FOOTER_TEXT, 170);
+    doc.text(lines, 20, 290);
+  };
+
   const addRow = (label, value, y, indent = 0) => {
     doc.text(label, 20 + indent, y);
     doc.text(formatINR(value), 170, y, { align: 'right' });
     return y + 7;
   };
-  
-  // ═══════════════════════════════════════════════════════════════
-  // PAGE 1 — COVER
-  // ═══════════════════════════════════════════════════════════════
-  doc.setFillColor(26, 26, 26);
-  doc.rect(0, 0, 210, 297, 'F');
-  
-  // Logo area
-  doc.setTextColor(192, 160, 98);
-  doc.setFontSize(36);
-  doc.text('BM Wealth', 105, 100, { align: 'center' });
-  
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(24);
-  doc.text('Income Tax Estimation Summary', 105, 130, { align: 'center' });
-  
-  doc.setFontSize(12);
-  doc.setTextColor(180, 180, 180);
-  doc.text(`Generated: ${today} at ${time}`, 105, 160, { align: 'center' });
-  doc.text('BM Wealth Free ITR Estimation Tool', 105, 175, { align: 'center' });
-  
-  doc.setFontSize(10);
-  doc.setTextColor(120, 120, 120);
-  doc.text('Educational Estimate • Not for Official Filing', 105, 250, { align: 'center' });
-  
-  // ═══════════════════════════════════════════════════════════════
-  // PAGE 2 — USER INPUT SUMMARY
-  // ═══════════════════════════════════════════════════════════════
-  doc.addPage();
-  
-  // Header
-  doc.setFillColor(26, 26, 26);
-  doc.rect(0, 0, 210, 35, 'F');
-  doc.setTextColor(192, 160, 98);
-  doc.setFontSize(18);
-  doc.text('BM Wealth', 20, 22);
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(10);
-  doc.text('Income Tax Estimation Summary', 20, 30);
-  
-  let y = 50;
-  
-  // Document Type
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.text('Document Used', 20, y);
-  y += 10;
-  
+
+  const fyLabel = 'FY 2025–26';
+  const ayLabel = 'AY 2026–27';
   const docTypeLabels = {
     form16: 'Form 16 (Salary Certificate)',
     ais: 'Annual Information Statement (AIS)',
     bankInterest: 'Bank Interest Statement',
   };
-  
-  doc.setFontSize(11);
-  doc.setTextColor(80, 80, 80);
-  doc.text(docTypeLabels[documentType] || 'Not specified', 20, y);
-  y += 15;
-  
-  // User Reviewed Values
+
+  // PAGE 1 — SUMMARY
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.text('User-Reviewed Values', 20, y);
-  y += 10;
-  
+  doc.setFontSize(18);
+  doc.text('Income Tax Estimation Summary', 20, 25);
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`Generated: ${today} ${time}`, 20, 33);
+  doc.text(`Regime: ${result.regime === 'new' ? 'New' : 'Old'} | ${fyLabel} (${ayLabel})`, 20, 40);
+  doc.text(`Document: ${docTypeLabels[documentType] || 'Not specified'}`, 20, 47);
+  doc.setDrawColor(220, 220, 220);
+  doc.line(20, 55, 190, 55);
+
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Estimated outcome', 20, 70);
+  doc.setFontSize(22);
+  doc.setTextColor(34, 34, 34);
+  doc.text(formatINR(result.refundDue > 0 ? result.refundDue : result.taxDue), 20, 85);
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text(result.refundDue > 0 ? 'Estimated Refund' : 'Estimated Tax Due', 20, 92);
   doc.setFontSize(10);
   doc.setTextColor(60, 60, 60);
-  doc.text('(Values confirmed by user before calculation)', 20, y);
-  y += 12;
-  
-  // Income table
+  doc.text('Extraction status: Assisted (Review required)', 20, 110);
+  addFooter();
+
+  // PAGE 2 — INCOME BREAKDOWN
+  doc.addPage();
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.text('Income Breakdown', 20, 22);
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text('User-reviewed values', 20, 30);
+
+  let y = 45;
   doc.setFillColor(245, 245, 245);
-  doc.rect(15, y - 5, 180, 8, 'F');
+  doc.rect(15, y - 6, 180, 9, 'F');
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(10);
   doc.text('Income Sources', 20, y);
-  y += 10;
-  
+  y += 12;
   doc.setTextColor(60, 60, 60);
-  if (data.grossSalary) y = addRow('Gross Salary', data.grossSalary, y, 5);
-  if (data.interestIncome || data.totalInterest) y = addRow('Interest Income', data.interestIncome || data.totalInterest || 0, y, 5);
-  if (data.dividendIncome) y = addRow('Dividend Income', data.dividendIncome, y, 5);
+  if (data.grossSalary != null) y = addRow('Salary (Gross)', data.grossSalary, y, 5);
+  if (data.interestIncome != null || data.totalInterest != null) y = addRow('Interest', (data.interestIncome ?? data.totalInterest ?? 0), y, 5);
+  if (data.dividendIncome != null) y = addRow('Dividends', data.dividendIncome, y, 5);
   if (data.otherIncome) y = addRow('Other Income', data.otherIncome, y, 5);
-  
   y += 5;
-  doc.setLineWidth(0.5);
-  doc.setDrawColor(192, 160, 98);
+  doc.setDrawColor(220, 220, 220);
   doc.line(20, y, 190, y);
-  y += 8;
-  
+  y += 10;
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
-  y = addRow('Total Income', result.totalIncome, y);
-  
-  y += 10;
-  
-  // Deductions
-  doc.setFillColor(245, 245, 245);
-  doc.rect(15, y - 5, 180, 8, 'F');
+  y = addRow('Gross Total Income', result.totalIncome, y);
+  addFooter();
+
+  // PAGE 3 — DEDUCTIONS
+  doc.addPage();
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.text('Deductions', 20, 22);
   doc.setFontSize(10);
-  doc.text('Deductions', 20, y);
-  y += 10;
-  
+  doc.setTextColor(80, 80, 80);
+  doc.text(`Regime: ${result.regime === 'new' ? 'New' : 'Old'}`, 20, 30);
+  y = 45;
+  doc.setFillColor(245, 245, 245);
+  doc.rect(15, y - 6, 180, 9, 'F');
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  doc.text('Applied Deductions', 20, y);
+  y += 12;
   doc.setTextColor(60, 60, 60);
   if (result.deductionsApplied.standardDeduction) y = addRow('Standard Deduction', result.deductionsApplied.standardDeduction, y, 5);
   if (result.regime === 'old') {
@@ -489,212 +604,50 @@ const generateSummaryPDF = async (data, result, documentType) => {
     if (result.deductionsApplied.section80D) y = addRow('Section 80D', result.deductionsApplied.section80D, y, 5);
     if (result.deductionsApplied.exemptions) y = addRow('Exemptions (HRA, etc.)', result.deductionsApplied.exemptions, y, 5);
   }
-  
   y += 5;
+  doc.setDrawColor(220, 220, 220);
   doc.line(20, y, 190, y);
-  y += 8;
+  y += 10;
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
   y = addRow('Total Deductions', result.deductionsApplied.total || 0, y);
-  
-  y += 10;
-  
-  // TDS
-  doc.setFillColor(245, 245, 245);
-  doc.rect(15, y - 5, 180, 8, 'F');
-  doc.setFontSize(10);
-  doc.text('TDS Already Paid', 20, y);
-  y += 10;
-  
-  doc.setTextColor(60, 60, 60);
-  if (data.tdsDeducted) y = addRow('TDS on Salary', data.tdsDeducted, y, 5);
-  if (data.tdsOnInterest) y = addRow('TDS on Interest', data.tdsOnInterest, y, 5);
-  if (data.tdsEntries) y = addRow('TDS from AIS', data.tdsEntries, y, 5);
-  
-  y += 5;
-  doc.line(20, y, 190, y);
-  y += 8;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
-  y = addRow('Total TDS', result.tdsAlreadyPaid, y);
-  
-  // ═══════════════════════════════════════════════════════════════
-  // PAGE 3 — TAX ESTIMATION
-  // ═══════════════════════════════════════════════════════════════
+  addFooter();
+
+  // PAGE 4 — TAX COMPUTATION
   doc.addPage();
-  
-  // Header
-  doc.setFillColor(26, 26, 26);
-  doc.rect(0, 0, 210, 35, 'F');
-  doc.setTextColor(192, 160, 98);
-  doc.setFontSize(18);
-  doc.text('BM Wealth', 20, 22);
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(10);
-  doc.text('Tax Estimation', 20, 30);
-  
-  y = 50;
-  
-  // Regime info
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(14);
-  doc.text(`Tax Calculation (${result.regime === 'new' ? 'New' : 'Old'} Regime - FY 2025-26)`, 20, y);
-  y += 15;
-  
-  // Summary boxes
-  doc.setFillColor(248, 248, 248);
-  doc.roundedRect(15, y, 85, 35, 3, 3, 'F');
-  doc.roundedRect(110, y, 85, 35, 3, 3, 'F');
-  
-  doc.setFontSize(9);
-  doc.setTextColor(100, 100, 100);
-  doc.text('Taxable Income', 57.5, y + 12, { align: 'center' });
-  doc.text('Estimated Tax', 152.5, y + 12, { align: 'center' });
-  
-  doc.setFontSize(14);
-  doc.setTextColor(0, 0, 0);
-  doc.text(formatINR(result.taxableIncome), 57.5, y + 26, { align: 'center' });
-  doc.text(formatINR(result.totalTax), 152.5, y + 26, { align: 'center' });
-  
-  y += 50;
-  
-  // Calculation breakdown
-  doc.setFontSize(12);
-  doc.text('Calculation Breakdown', 20, y);
-  y += 12;
-  
+  doc.text('Tax Computation', 20, 22);
   doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`${fyLabel} (${ayLabel})`, 20, 30);
+  y = 45;
   doc.setTextColor(60, 60, 60);
-  y = addRow('Total Income', result.totalIncome, y);
-  y = addRow('Less: Deductions', result.deductionsApplied.total || 0, y);
-  
-  doc.setDrawColor(200, 200, 200);
-  doc.line(20, y, 190, y);
-  y += 8;
-  doc.setTextColor(0, 0, 0);
-  y = addRow('Taxable Income', result.taxableIncome, y);
-  y += 5;
-  
-  doc.setTextColor(60, 60, 60);
-  y = addRow('Tax on Slabs', result.taxBeforeCess, y);
+  y = addRow('Tax before cess', result.taxBeforeCess, y);
   if (result.surcharge > 0) y = addRow('Surcharge', result.surcharge, y);
   y = addRow('Health & Education Cess (4%)', result.cess, y);
-  
+  doc.setDrawColor(220, 220, 220);
   doc.line(20, y, 190, y);
-  y += 8;
+  y += 10;
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
   y = addRow('Total Estimated Tax', result.totalTax, y);
-  y += 5;
-  
+  y += 6;
   doc.setFontSize(10);
-  doc.setTextColor(34, 139, 34);
-  y = addRow('Less: TDS Already Paid', result.tdsAlreadyPaid, y);
-  
-  y += 5;
-  doc.setLineWidth(1);
-  doc.setDrawColor(192, 160, 98);
+  doc.setTextColor(60, 60, 60);
+  y = addRow('TDS Already Paid', result.tdsAlreadyPaid, y);
+  doc.setDrawColor(220, 220, 220);
   doc.line(20, y, 190, y);
   y += 10;
-  
-  // Final result
-  if (result.refundDue > 0) {
-    doc.setFillColor(232, 245, 233);
-    doc.roundedRect(15, y, 180, 25, 3, 3, 'F');
-    doc.setTextColor(34, 139, 34);
-    doc.setFontSize(12);
-    doc.text('ESTIMATED REFUND', 25, y + 10);
-    doc.setFontSize(16);
-    doc.text(formatINR(result.refundDue), 180, y + 16, { align: 'right' });
-  } else {
-    doc.setFillColor(255, 248, 225);
-    doc.roundedRect(15, y, 180, 25, 3, 3, 'F');
-    doc.setTextColor(192, 160, 98);
-    doc.setFontSize(12);
-    doc.text('ESTIMATED TAX PAYABLE', 25, y + 10);
-    doc.setFontSize(16);
-    doc.text(formatINR(result.taxDue), 180, y + 16, { align: 'right' });
-  }
-  
-  y += 40;
-  
-  // Indicative notice
-  doc.setFillColor(240, 240, 240);
-  doc.roundedRect(15, y, 180, 20, 3, 3, 'F');
-  doc.setTextColor(100, 100, 100);
-  doc.setFontSize(9);
-  doc.text('This is an indicative estimate only. Actual tax may vary.', 105, y + 12, { align: 'center' });
-  
-  // ═══════════════════════════════════════════════════════════════
-  // PAGE 4 — DISCLAIMERS
-  // ═══════════════════════════════════════════════════════════════
-  doc.addPage();
-  
-  // Header
-  doc.setFillColor(26, 26, 26);
-  doc.rect(0, 0, 210, 35, 'F');
-  doc.setTextColor(192, 160, 98);
-  doc.setFontSize(18);
-  doc.text('BM Wealth', 20, 22);
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(10);
-  doc.text('Important Information', 20, 30);
-  
-  y = 55;
-  
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.text('Disclaimer', 20, y);
-  y += 15;
-  
-  doc.setFontSize(10);
-  doc.setTextColor(60, 60, 60);
-  
-  const disclaimerText = [
-    'This document is an educational estimate generated using OCR and user-reviewed inputs.',
-    '',
-    'It does not constitute tax advice, filing, or official computation.',
-    '',
-    'BM Wealth is not a Chartered Accountant firm and does not file returns.',
-    '',
-    'Please consult a qualified professional before submission.',
-    '',
-    'The accuracy of extracted values depends on document quality. Users must review',
-    'and verify all figures. BM Wealth is not responsible for any errors or omissions.',
-  ];
-  
-  disclaimerText.forEach(line => {
-    doc.text(line, 20, y);
-    y += 6;
-  });
-  
-  y += 20;
-  
-  // Contact
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
-  doc.text('Contact BM Wealth', 20, y);
-  y += 12;
-  
-  doc.setFontSize(10);
-  doc.setTextColor(60, 60, 60);
-  doc.text('Website: www.bmwealth.in', 20, y);
-  y += 7;
-  doc.text('Email: info@bmwealth.in', 20, y);
-  
-  // Footer
-  doc.setFillColor(26, 26, 26);
-  doc.rect(0, 260, 210, 37, 'F');
-  
-  doc.setTextColor(192, 160, 98);
-  doc.setFontSize(10);
-  doc.text('BM Wealth', 105, 272, { align: 'center' });
-  
-  doc.setTextColor(150, 150, 150);
-  doc.setFontSize(8);
-  doc.text('PMS Certification 2430447816 | ARN 90008 | IRDAI 277925', 105, 280, { align: 'center' });
-  doc.text('www.bmwealth.in', 105, 287, { align: 'center' });
-  
+  if (result.refundDue > 0) {
+    y = addRow('Net Refund (estimate)', result.refundDue, y);
+  } else {
+    y = addRow('Net Payable (estimate)', result.taxDue, y);
+  }
+  addFooter();
+
   return doc;
 };
 
@@ -712,11 +665,17 @@ export default function ITRFilingHelp() {
   const [documentType, setDocumentType] = useState(null);
   const [extractedData, setExtractedData] = useState({});
   const [editableData, setEditableData] = useState({});
+  const [baselineData, setBaselineData] = useState({});
+  const [editedFields, setEditedFields] = useState(() => new Set());
+  const [reviewConfirmed, setReviewConfirmed] = useState(false);
   const [regime, setRegime] = useState('new');
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState(0);
+  const [extractionMethod, setExtractionMethod] = useState(null); // 'selectable-text' | 'ocr' | 'mixed'
+  const [ocrConfidence, setOcrConfidence] = useState(null); // 0..1 when OCR used
+  const [processingStage, setProcessingStage] = useState(null); // 'detecting' | 'text' | 'ocr'
   const fileInputRef = useRef(null);
   const [tesseractLoaded, setTesseractLoaded] = useState(false);
   const [pdfJsLoaded, setPdfJsLoaded] = useState(false);
@@ -759,7 +718,26 @@ export default function ITRFilingHelp() {
     }
     
     setFile(selectedFile);
+    setReviewConfirmed(false);
+    setExtractionMethod(null);
+    setOcrConfidence(null);
+    setProcessingStage(null);
   }, []);
+
+  const buildCalculationInput = useCallback((data) => {
+    const base = { ...(data || {}) };
+    // If Bank Interest, include interest into interestIncome for calculation.
+    if (documentType === 'bankInterest') {
+      const totalInterest = Number(base.totalInterest || 0);
+      base.interestIncome = Number(base.interestIncome || 0) + (Number.isFinite(totalInterest) ? totalInterest : 0);
+    }
+    return base;
+  }, [documentType]);
+
+  const liveResult = useMemo(() => {
+    if (!editableData || Object.keys(editableData).length === 0) return null;
+    return calculateTax(buildCalculationInput(editableData), regime);
+  }, [editableData, regime, buildCalculationInput]);
   
   // Process PDF with OCR
   const processDocument = useCallback(async () => {
@@ -769,102 +747,119 @@ export default function ITRFilingHelp() {
     setProcessing(true);
     setOcrProgress(0);
     setError(null);
+    setExtractionMethod(null);
+    setOcrConfidence(null);
+    setProcessingStage('detecting');
     
     try {
-      // Dynamic import of PDF.js (explicit ESM entry). In dev, a stale client can
-      // occasionally request a non-existent chunk after restarts; retry once.
-      const loadPdfJs = async () => {
-        try {
-          return await import('pdfjs-dist/build/pdf.mjs');
-        } catch (err) {
-          const message = err?.message || '';
-          const isChunkLoad = err?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
-          if (!isChunkLoad) throw err;
-          await new Promise((r) => setTimeout(r, 300));
-          return await import('pdfjs-dist/build/pdf.mjs');
-        }
-      };
-
-      const pdfjsLib = await loadPdfJs();
-      const pdfJsVersion = pdfjsLib?.version || pdfjsLib?.default?.version;
-      if (pdfjsLib?.GlobalWorkerOptions) {
-        const v = pdfJsVersion || '4.10.38';
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${v}/pdf.worker.min.mjs`;
-      }
-      setPdfJsLoaded(true);
-
-      // Load Tesseract in-browser via CDN to avoid bundler resolution issues.
-      // (Next dev can otherwise emit a runtime "Cannot find module 'tesseract.js'".)
-      const loadTesseract = async () => {
-        if (typeof window === 'undefined') {
-          throw new Error('Tesseract can only be loaded in the browser');
-        }
-        if (window.Tesseract) return window.Tesseract;
-
-        const src = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
-        await new Promise((resolve, reject) => {
-          const existing = document.querySelector('script[data-tesseract="1"]');
-          if (existing) {
-            existing.addEventListener('load', resolve, { once: true });
-            existing.addEventListener('error', reject, { once: true });
-            return;
-          }
-          const script = document.createElement('script');
-          script.src = src;
-          script.async = true;
-          script.defer = true;
-          script.dataset.tesseract = '1';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
-
-        if (!window.Tesseract) {
-          throw new Error('Tesseract failed to initialize');
-        }
-        return window.Tesseract;
-      };
-
-      const Tesseract = await loadTesseract();
-      setTesseractLoaded(true);
-      
       // Read PDF file
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      
+
       let fullText = '';
-      const totalPages = pdf.numPages;
-      
-      // Process each page
-      for (let pageNum = 1; pageNum <= Math.min(totalPages, 5); pageNum++) { // Limit to 5 pages
-        const page = await pdf.getPage(pageNum);
-        
-        // Try to extract text directly first (for text-based PDFs)
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        
-        if (pageText.trim().length > 100) {
-          // PDF has extractable text
-          fullText += pageText + '\n';
-        } else {
-          // PDF is image-based, use OCR
+      let usedText = false;
+      let usedOcr = false;
+      let ocrConfidenceSum = 0;
+      let ocrConfidenceCount = 0;
+
+      // 1) Selectable-text-first extraction using server-side pdfplumber.
+      // Strict: we do NOT fall back to client-side text extraction.
+      let serverResult;
+      const resp = await fetch('/api/itr/extract-text', {
+        method: 'POST',
+        headers: { 'content-type': 'application/pdf' },
+        body: arrayBuffer,
+      });
+      if (!resp.ok) {
+        const payload = await resp.json().catch(() => ({}));
+        throw new Error(payload?.message || 'Text extractor unavailable. Please try again later.');
+      }
+      serverResult = await resp.json();
+
+      if (serverResult?.hasSelectableText) {
+        setProcessingStage('text');
+        usedText = true;
+        fullText = (serverResult.pages || []).map((p) => p.text).join('\n\n').trim();
+        setOcrProgress(100);
+      } else {
+        // Dynamic import of PDF.js (explicit ESM entry). In dev, a stale client can
+        // occasionally request a non-existent chunk after restarts; retry once.
+        const loadPdfJs = async () => {
+          try {
+            return await import('pdfjs-dist/build/pdf.mjs');
+          } catch (err) {
+            const message = err?.message || '';
+            const isChunkLoad = err?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
+            if (!isChunkLoad) throw err;
+            await new Promise((r) => setTimeout(r, 300));
+            return await import('pdfjs-dist/build/pdf.mjs');
+          }
+        };
+
+        const pdfjsLib = await loadPdfJs();
+        const pdfJsVersion = pdfjsLib?.version || pdfjsLib?.default?.version;
+        if (pdfjsLib?.GlobalWorkerOptions) {
+          const v = pdfJsVersion || '4.10.38';
+          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${v}/pdf.worker.min.mjs`;
+        }
+        setPdfJsLoaded(true);
+
+        // Load Tesseract in-browser via CDN to avoid bundler resolution issues.
+        // (Next dev can otherwise emit a runtime "Cannot find module 'tesseract.js'".)
+        const loadTesseract = async () => {
+          if (typeof window === 'undefined') {
+            throw new Error('Tesseract can only be loaded in the browser');
+          }
+          if (window.Tesseract) return window.Tesseract;
+
+          const src = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+          await new Promise((resolve, reject) => {
+            const existing = document.querySelector('script[data-tesseract="1"]');
+            if (existing) {
+              existing.addEventListener('load', resolve, { once: true });
+              existing.addEventListener('error', reject, { once: true });
+              return;
+            }
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.defer = true;
+            script.dataset.tesseract = '1';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+
+          if (!window.Tesseract) {
+            throw new Error('Tesseract failed to initialize');
+          }
+          return window.Tesseract;
+        };
+
+        const Tesseract = await loadTesseract();
+        setTesseractLoaded(true);
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const totalPages = pdf.numPages;
+        const pageLimit = Math.min(totalPages, 5);
+
+        setProcessingStage('ocr');
+        for (let pageNum = 1; pageNum <= pageLimit; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+
+          usedOcr = true;
           const scale = 2.0;
           const viewport = page.getViewport({ scale });
-          
+
           const canvas = document.createElement('canvas');
           const context = canvas.getContext('2d');
           canvas.height = viewport.height;
           canvas.width = viewport.width;
-          
-          await page.render({
-            canvasContext: context,
-            viewport: viewport,
-          }).promise;
-          
+
+          await page.render({ canvasContext: context, viewport }).promise;
           const imageData = canvas.toDataURL('image/png');
-          
-          // OCR with Tesseract
+
           const { data } = await Tesseract.recognize(imageData, 'eng', {
+            tessedit_pageseg_mode: 3,
+            preserve_interword_spaces: '1',
             logger: (m) => {
               if (m.status === 'recognizing text') {
                 const pageProgress = ((pageNum - 1) / totalPages + m.progress / totalPages) * 100;
@@ -872,11 +867,26 @@ export default function ITRFilingHelp() {
               }
             },
           });
-          
-          fullText += data.text + '\n';
+
+          const confidencePct = Number(data?.confidence);
+          if (Number.isFinite(confidencePct)) {
+            ocrConfidenceSum += confidencePct;
+            ocrConfidenceCount += 1;
+          }
+
+          fullText += (data?.text || '') + '\n';
+          setOcrProgress(Math.round((pageNum / totalPages) * 100));
         }
-        
-        setOcrProgress(Math.round((pageNum / totalPages) * 100));
+      }
+
+      if (serverResult?.method === 'pdfplumber') {
+        setExtractionMethod('selectable-text');
+      } else if (usedText && usedOcr) setExtractionMethod('mixed');
+      else if (usedText) setExtractionMethod('selectable-text');
+      else if (usedOcr) setExtractionMethod('ocr');
+
+      if (usedOcr && ocrConfidenceCount > 0) {
+        setOcrConfidence(Math.max(0, Math.min(1, (ocrConfidenceSum / ocrConfidenceCount) / 100)));
       }
       
       // Detect document type
@@ -904,6 +914,9 @@ export default function ITRFilingHelp() {
       
       setExtractedData(extracted);
       setEditableData(extracted);
+      setBaselineData(extracted);
+      setEditedFields(new Set());
+      setReviewConfirmed(false);
       setStep(STEPS.REVIEW);
       
     } catch (error) {
@@ -918,21 +931,36 @@ export default function ITRFilingHelp() {
       setStep(STEPS.UPLOAD);
     } finally {
       setProcessing(false);
+      setProcessingStage(null);
     }
   }, [file]);
   
   // Handle field edit
   const handleFieldChange = useCallback((field, value) => {
-    const numValue = value === '' ? 0 : parseInt(value.replace(/,/g, ''), 10) || 0;
-    setEditableData(prev => ({ ...prev, [field]: numValue }));
+    const raw = String(value ?? '').trim();
+    const parsed = raw === '' ? null : parseInt(raw.replace(/,/g, ''), 10);
+    const nextValue = raw === '' ? null : (Number.isFinite(parsed) ? parsed : null);
+    setEditableData(prev => ({ ...prev, [field]: nextValue }));
+    setEditedFields((prev) => {
+      const next = new Set(prev);
+      next.add(field);
+      return next;
+    });
+    setReviewConfirmed(false);
   }, []);
   
-  // Calculate tax estimate
-  const handleCalculate = useCallback(() => {
-    const taxResult = calculateTax(editableData, regime);
-    setResult(taxResult);
+  const handleProceedToResult = useCallback(() => {
+    if (!reviewConfirmed) {
+      setError('Please confirm you have reviewed the extracted values before proceeding.');
+      return;
+    }
+    if (!liveResult) {
+      setError('Nothing to calculate yet. Please upload a document and review values.');
+      return;
+    }
+    setResult(liveResult);
     setStep(STEPS.RESULT);
-  }, [editableData, regime]);
+  }, [reviewConfirmed, liveResult]);
   
   // Download PDF summary
   const handleDownloadPDF = useCallback(async () => {
@@ -954,9 +982,15 @@ export default function ITRFilingHelp() {
     setDocumentType(null);
     setExtractedData({});
     setEditableData({});
+    setBaselineData({});
+    setEditedFields(new Set());
+    setReviewConfirmed(false);
     setResult(null);
     setError(null);
     setOcrProgress(0);
+    setExtractionMethod(null);
+    setOcrConfidence(null);
+    setProcessingStage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -1099,7 +1133,11 @@ export default function ITRFilingHelp() {
             <div>
               <p className="text-lg text-white font-medium">Processing Document...</p>
               <p className="text-sm text-white/60 mt-2">
-                Extracting text using OCR (Tesseract.js - Free & Local)
+                {processingStage === 'text'
+                  ? 'Extracting selectable text (server-assisted)'
+                  : processingStage === 'ocr'
+                    ? 'Extracting text using OCR (Tesseract.js - Free & Local)'
+                    : 'Detecting best extraction method...'}
               </p>
             </div>
             
@@ -1131,6 +1169,9 @@ export default function ITRFilingHelp() {
                   Detected: {documentTypeLabels[documentType] || 'Document'}
                 </span>
               </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15">
+                <span className="text-sm text-white/80">Extraction status: Assisted (Review required)</span>
+              </div>
               <button
                 onClick={handleReset}
                 className="text-xs text-white/50 hover:text-white/70 underline"
@@ -1138,14 +1179,74 @@ export default function ITRFilingHelp() {
                 Upload different document
               </button>
             </div>
+
+            {(extractionMethod || typeof ocrConfidence === 'number') && (
+              <div className="p-3 rounded-lg border border-white/10 bg-white/5">
+                <p className="text-xs text-white/70">
+                  <span className="text-white/60">Method:</span>{' '}
+                  {extractionMethod === 'selectable-text'
+                    ? 'Selectable text'
+                    : extractionMethod === 'ocr'
+                      ? 'OCR'
+                      : extractionMethod === 'mixed'
+                        ? 'Mixed (text + OCR)'
+                        : 'Unknown'}
+                  {typeof ocrConfidence === 'number' && (
+                    <>
+                      {' '}<span className="text-white/40">•</span>{' '}
+                      <span className="text-white/60">OCR confidence:</span>{' '}
+                      {Math.round(ocrConfidence * 100)}%
+                    </>
+                  )}
+                </p>
+                {typeof ocrConfidence === 'number' && (
+                  <p className="text-xs text-white/50 mt-2">
+                    <Info className="w-3 h-3 inline mr-1" />
+                    OCR confidence is an estimate. This tool is educational only — review and edit all values before proceeding.
+                  </p>
+                )}
+                {typeof ocrConfidence === 'number' && ocrConfidence < 0.6 && (
+                  <p className="text-xs text-amber-200 mt-2">
+                    <Info className="w-3 h-3 inline mr-1" />
+                    OCR confidence is below 60%. Please verify every value carefully or upload a clearer PDF.
+                  </p>
+                )}
+              </div>
+            )}
             
             {/* Review Notice */}
             <div className="p-3 rounded-lg border border-white/10 bg-white/5">
               <p className="text-xs text-white/60">
                 <Info className="w-3 h-3 inline mr-1" />
-                OCR extraction may vary in accuracy. Review and edit values as needed.
+                If the PDF contains selectable text, it is extracted using server-side parsing (pdfplumber). Otherwise OCR is used. Review and edit values as needed.
               </p>
             </div>
+
+            {/* Live preview (recalculates on edit) */}
+            {liveResult && (
+              <div className="p-4 rounded-xl border border-white/10 bg-white/5">
+                <p className="text-xs text-white/50 uppercase tracking-wider">Live estimate preview</p>
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
+                    <p className="text-xs text-white/50">Total Income</p>
+                    <p className="text-lg text-white mt-1">{formatINR(liveResult.totalIncome)}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
+                    <p className="text-xs text-white/50">Taxable Income</p>
+                    <p className="text-lg text-white mt-1">{formatINR(liveResult.taxableIncome)}</p>
+                  </div>
+                  <div className={`p-3 rounded-lg border text-center ${liveResult.refundDue > 0 ? 'bg-green-900/20 border-green-500/30' : 'bg-[#c0a062]/10 border-[#c0a062]/30'}`}>
+                    <p className="text-xs text-white/50">{liveResult.refundDue > 0 ? 'Estimated Refund' : 'Estimated Tax Due'}</p>
+                    <p className={`text-lg mt-1 ${liveResult.refundDue > 0 ? 'text-green-400' : 'text-[#c0a062]'}`}>
+                      {formatINR(liveResult.refundDue > 0 ? liveResult.refundDue : liveResult.taxDue)}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-white/40 mt-3">
+                  Updates automatically as you edit. Values are not auto-submitted or filed.
+                </p>
+              </div>
+            )}
             
             {/* Editable Form */}
             <div className="space-y-4">
@@ -1163,12 +1264,14 @@ export default function ITRFilingHelp() {
                       value={editableData.grossSalary}
                       onChange={(v) => handleFieldChange('grossSalary', v)}
                       extracted={extractedData.grossSalary}
+                      edited={editedFields.has('grossSalary') || editableData.grossSalary !== baselineData.grossSalary}
                     />
                     <EditableField
                       label="Exemptions (HRA, etc.)"
                       value={editableData.exemptions}
                       onChange={(v) => handleFieldChange('exemptions', v)}
                       extracted={extractedData.exemptions}
+                      edited={editedFields.has('exemptions') || editableData.exemptions !== baselineData.exemptions}
                     />
                     <EditableField
                       label="Deduction 80C"
@@ -1176,20 +1279,89 @@ export default function ITRFilingHelp() {
                       onChange={(v) => handleFieldChange('deduction80C', v)}
                       extracted={extractedData.deduction80C}
                       max={150000}
+                      edited={editedFields.has('deduction80C') || editableData.deduction80C !== baselineData.deduction80C}
                     />
-                    <EditableField
-                      label="Deduction 80D"
-                      value={editableData.deduction80D}
-                      onChange={(v) => handleFieldChange('deduction80D', v)}
-                      extracted={extractedData.deduction80D}
-                      max={100000}
-                    />
+                    <div className="sm:col-span-2 p-3 rounded-xl border border-white/10 bg-white/5">
+                      <p className="text-sm text-white/80 font-medium">Section 80D (Medical insurance) — review required</p>
+                      <p className="text-xs text-white/50 mt-1">
+                        Caps are applied automatically (25k/50k for self/family and parents based on senior status).
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <EditableField
+                          label="80D Self/Family"
+                          value={editableData.deduction80DSelfFamily ?? editableData.deduction80D ?? null}
+                          onChange={(v) => handleFieldChange('deduction80DSelfFamily', v)}
+                          extracted={extractedData.deduction80DSelfFamily ?? extractedData.deduction80D}
+                          max={50000}
+                          edited={
+                            editedFields.has('deduction80DSelfFamily') ||
+                            (editableData.deduction80DSelfFamily ?? null) !== (baselineData.deduction80DSelfFamily ?? null)
+                          }
+                        />
+                        <EditableField
+                          label="80D Parents"
+                          value={editableData.deduction80DParents ?? null}
+                          onChange={(v) => handleFieldChange('deduction80DParents', v)}
+                          extracted={extractedData.deduction80DParents}
+                          max={50000}
+                          edited={
+                            editedFields.has('deduction80DParents') ||
+                            (editableData.deduction80DParents ?? null) !== (baselineData.deduction80DParents ?? null)
+                          }
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                        <label className="flex items-start gap-2 text-xs text-white/70">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(editableData.selfFamilySenior)}
+                            onChange={(e) => {
+                              setEditableData((prev) => ({ ...prev, selfFamilySenior: e.target.checked }));
+                              setEditedFields((prev) => {
+                                const next = new Set(prev);
+                                next.add('selfFamilySenior');
+                                return next;
+                              });
+                              setReviewConfirmed(false);
+                            }}
+                            className="mt-0.5"
+                          />
+                          Self/Family is senior citizen (60+)
+                        </label>
+                        <label className="flex items-start gap-2 text-xs text-white/70">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(editableData.parentsSenior)}
+                            onChange={(e) => {
+                              setEditableData((prev) => ({ ...prev, parentsSenior: e.target.checked }));
+                              setEditedFields((prev) => {
+                                const next = new Set(prev);
+                                next.add('parentsSenior');
+                                return next;
+                              });
+                              setReviewConfirmed(false);
+                            }}
+                            className="mt-0.5"
+                          />
+                          Parents are senior citizens (60+)
+                        </label>
+                      </div>
+                    </div>
                     <EditableField
                       label="TDS Deducted"
                       value={editableData.tdsDeducted}
                       onChange={(v) => handleFieldChange('tdsDeducted', v)}
                       extracted={extractedData.tdsDeducted}
+                      edited={editedFields.has('tdsDeducted') || editableData.tdsDeducted !== baselineData.tdsDeducted}
                     />
+                    {typeof extractedData.totalTaxAsPerDoc === 'number' && extractedData.totalTaxAsPerDoc > 0 && (
+                      <div className="sm:col-span-2 p-3 rounded-lg bg-white/5 border border-white/10">
+                        <p className="text-xs text-white/60">
+                          <Info className="w-3 h-3 inline mr-1" />
+                          Document mentions total tax: {formatINR(extractedData.totalTaxAsPerDoc)} (reference only)
+                        </p>
+                      </div>
+                    )}
                   </>
                 )}
                 
@@ -1201,12 +1373,14 @@ export default function ITRFilingHelp() {
                       value={editableData.interestIncome}
                       onChange={(v) => handleFieldChange('interestIncome', v)}
                       extracted={extractedData.interestIncome}
+                      edited={editedFields.has('interestIncome') || editableData.interestIncome !== baselineData.interestIncome}
                     />
                     <EditableField
                       label="Dividend Income"
                       value={editableData.dividendIncome}
                       onChange={(v) => handleFieldChange('dividendIncome', v)}
                       extracted={extractedData.dividendIncome}
+                      edited={editedFields.has('dividendIncome') || editableData.dividendIncome !== baselineData.dividendIncome}
                     />
                     <EditableField
                       label="Capital Gains (Display Only)"
@@ -1214,12 +1388,14 @@ export default function ITRFilingHelp() {
                       onChange={(v) => handleFieldChange('capitalGains', v)}
                       extracted={extractedData.capitalGains}
                       hint="Not included in basic calculation"
+                      edited={editedFields.has('capitalGains') || editableData.capitalGains !== baselineData.capitalGains}
                     />
                     <EditableField
                       label="TDS Entries"
                       value={editableData.tdsEntries}
                       onChange={(v) => handleFieldChange('tdsEntries', v)}
                       extracted={extractedData.tdsEntries}
+                      edited={editedFields.has('tdsEntries') || editableData.tdsEntries !== baselineData.tdsEntries}
                     />
                   </>
                 )}
@@ -1232,12 +1408,14 @@ export default function ITRFilingHelp() {
                       value={editableData.totalInterest}
                       onChange={(v) => handleFieldChange('totalInterest', v)}
                       extracted={extractedData.totalInterest}
+                      edited={editedFields.has('totalInterest') || editableData.totalInterest !== baselineData.totalInterest}
                     />
                     <EditableField
                       label="TDS on Interest"
                       value={editableData.tdsOnInterest}
                       onChange={(v) => handleFieldChange('tdsOnInterest', v)}
                       extracted={extractedData.tdsOnInterest}
+                      edited={editedFields.has('tdsOnInterest') || editableData.tdsOnInterest !== baselineData.tdsOnInterest}
                     />
                   </>
                 )}
@@ -1247,23 +1425,25 @@ export default function ITRFilingHelp() {
                   <>
                     <EditableField
                       label="Gross Salary (if any)"
-                      value={editableData.grossSalary || 0}
+                      value={editableData.grossSalary ?? null}
                       onChange={(v) => handleFieldChange('grossSalary', v)}
                       hint="Add if you have salary income"
+                      edited={editedFields.has('grossSalary') || (editableData.grossSalary ?? null) !== (baselineData.grossSalary ?? null)}
                     />
                     <EditableField
                       label="Deduction 80C (if any)"
-                      value={editableData.deduction80C || 0}
+                      value={editableData.deduction80C ?? null}
                       onChange={(v) => handleFieldChange('deduction80C', v)}
                       max={150000}
                       hint="For Old Regime only"
+                      edited={editedFields.has('deduction80C') || (editableData.deduction80C ?? null) !== (baselineData.deduction80C ?? null)}
                     />
                   </>
                 )}
               </div>
               
               {/* Map bank interest to interestIncome for calculation */}
-              {documentType === 'bankInterest' && editableData.totalInterest > 0 && (
+              {documentType === 'bankInterest' && Number(editableData.totalInterest || 0) > 0 && (
                 <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                   <p className="text-xs text-white/60">
                     <Info className="w-3 h-3 inline mr-1" />
@@ -1299,23 +1479,30 @@ export default function ITRFilingHelp() {
                 </button>
               </div>
             </div>
+
+            {/* Review confirmation gate */}
+            <div className="p-4 rounded-xl border border-white/10 bg-white/5">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={reviewConfirmed}
+                  onChange={(e) => setReviewConfirmed(e.target.checked)}
+                  className="mt-1"
+                />
+                <span className="text-sm text-white/70">
+                  I have reviewed these values and understand this tool only provides an estimate (it does not file/submit anything).
+                </span>
+              </label>
+            </div>
             
-            {/* Calculate Button */}
+            {/* Proceed Button (Result screen) */}
             <button
-              onClick={() => {
-                // Map totalInterest to interestIncome for calculation
-                if (documentType === 'bankInterest' && editableData.totalInterest) {
-                  setEditableData(prev => ({
-                    ...prev,
-                    interestIncome: (prev.interestIncome || 0) + (prev.totalInterest || 0),
-                  }));
-                }
-                handleCalculate();
-              }}
-              className="w-full py-4 rounded-xl font-semibold text-white calculator-premium-cta flex items-center justify-center gap-2"
+              onClick={handleProceedToResult}
+              disabled={!reviewConfirmed}
+              className="w-full py-4 rounded-xl font-semibold text-white calculator-premium-cta flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Calculator className="w-5 h-5" />
-              Calculate Estimated Tax
+              Continue to Result
             </button>
           </div>
         )}
@@ -1501,9 +1688,13 @@ export default function ITRFilingHelp() {
 }
 
 // Editable Field Component
-function EditableField({ label, value, onChange, extracted, max, hint }) {
+function EditableField({ label, value, onChange, extracted, edited, max, hint }) {
   const [isFocused, setIsFocused] = useState(false);
-  const wasEdited = value !== extracted && extracted !== undefined;
+  const wasEdited = Boolean(edited ?? (extracted !== undefined && value !== extracted));
+  const numericValue = typeof value === 'number' && Number.isFinite(value) ? value : null;
+  const displayValue = isFocused
+    ? (numericValue == null ? '' : String(numericValue))
+    : (numericValue == null ? '' : numericValue.toLocaleString('en-IN'));
   
   return (
     <div className="space-y-1.5">
@@ -1515,7 +1706,7 @@ function EditableField({ label, value, onChange, extracted, max, hint }) {
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">₹</span>
         <input
           type="text"
-          value={isFocused ? value : (value || 0).toLocaleString('en-IN')}
+          value={displayValue}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -1529,7 +1720,7 @@ function EditableField({ label, value, onChange, extracted, max, hint }) {
           </span>
         )}
       </div>
-      {extracted !== undefined && extracted > 0 && (
+      {typeof extracted === 'number' && extracted > 0 && (
         <p className="text-xs text-white/40">
           OCR extracted: {formatINR(extracted)}
           {wasEdited && ' (edited)'}

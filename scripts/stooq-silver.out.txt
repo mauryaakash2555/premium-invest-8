@@ -1,0 +1,4 @@
+status=200 len=96
+Symbol,Date,Time,Open,High,Low,Close,Volume
+SI.F,2026-01-19,06:11:25,9101.5,9435,9096,9319.5,
+

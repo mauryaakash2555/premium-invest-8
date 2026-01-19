@@ -40,7 +40,7 @@ async function fetchMarketData() {
 
     const data = await response.json();
     
-    // Parse market data
+    // Parse market data - API returns { items: [...] } with value/changePct fields
     const markets = {
       nifty: { value: 0, change: 0, percent: 0 },
       sensex: { value: 0, change: 0, percent: 0 },
@@ -48,27 +48,25 @@ async function fetchMarketData() {
       fii: { value: 0, type: 'buyers' },
     };
 
-    if (data.data && Array.isArray(data.data)) {
-      for (const item of data.data) {
+    // Support both legacy 'data' and new 'items' response format
+    const items = data.items || data.data || [];
+    if (Array.isArray(items)) {
+      for (const item of items) {
         const name = item.name?.toLowerCase() || '';
-        if (name.includes('nifty 50') || name === 'nifty') {
-          markets.nifty = {
-            value: parseFloat(item.price) || 0,
-            change: parseFloat(item.change) || 0,
-            percent: parseFloat(item.changePercent) || 0,
-          };
-        } else if (name.includes('sensex')) {
-          markets.sensex = {
-            value: parseFloat(item.price) || 0,
-            change: parseFloat(item.change) || 0,
-            percent: parseFloat(item.changePercent) || 0,
-          };
-        } else if (name.includes('bank nifty') || name.includes('banknifty')) {
-          markets.bankNifty = {
-            value: parseFloat(item.price) || 0,
-            change: parseFloat(item.change) || 0,
-            percent: parseFloat(item.changePercent) || 0,
-          };
+        const id = item.id?.toLowerCase() || '';
+        // Get value from either 'value' or 'price' field
+        const value = parseFloat(item.value ?? item.price) || 0;
+        // Get percent from either 'changePct' or 'changePercent' field
+        const percent = parseFloat(item.changePct ?? item.changePercent) || 0;
+        // Estimate change from value and percent if not provided
+        const change = parseFloat(item.change) || (value * percent / 100);
+        
+        if (name.includes('nifty 50') || id === 'nifty50' || name === 'nifty') {
+          markets.nifty = { value, change, percent };
+        } else if (name.includes('sensex') || id === 'sensex') {
+          markets.sensex = { value, change, percent };
+        } else if (name.includes('bank nifty') || name.includes('banknifty') || id === 'banknifty') {
+          markets.bankNifty = { value, change, percent };
         }
       }
     }

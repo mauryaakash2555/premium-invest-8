@@ -228,6 +228,47 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* Internal links */}
+      <section className="section-container" style={{ paddingTop: '26px', paddingBottom: '10px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '12px',
+          }}
+        >
+          <Link
+            href="/live-intelligence"
+            style={{
+              padding: '10px 16px',
+              borderRadius: '999px',
+              border: '1px solid rgba(170, 198, 255, 0.35)',
+              background: 'rgba(170, 198, 255, 0.08)',
+              color: 'rgba(235, 242, 255, 0.92)',
+              textDecoration: 'none',
+              fontSize: '14px',
+            }}
+          >
+            Explore Live Intelligence
+          </Link>
+          <Link
+            href="/tools"
+            style={{
+              padding: '10px 16px',
+              borderRadius: '999px',
+              border: '1px solid rgba(218, 165, 32, 0.35)',
+              background: 'rgba(218, 165, 32, 0.08)',
+              color: 'rgba(235, 242, 255, 0.92)',
+              textDecoration: 'none',
+              fontSize: '14px',
+            }}
+          >
+            Browse Tools
+          </Link>
+        </div>
+      </section>
+
       {/* Category Filter */}
       {categories.length > 1 && (
         <section className="section-container" style={{ paddingTop: '40px', paddingBottom: '20px' }}>

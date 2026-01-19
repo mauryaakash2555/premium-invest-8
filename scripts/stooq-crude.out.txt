@@ -1,0 +1,4 @@
+status=200 len=96
+Symbol,Date,Time,Open,High,Low,Close,Volume
+CL.F,2026-01-19,06:10:07,58.98,59.56,58.86,59.41,
+

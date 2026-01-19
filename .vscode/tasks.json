@@ -123,6 +123,189 @@
 			],
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "curl-head-mp4",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"curl -I -L --max-time 30 https://fuselabcreative.com/wp-content/uploads/2025/12/managing-stadium-events.mp4"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "write-mp4-headers",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && pwsh -NoProfile -ExecutionPolicy Bypass -Command \"$u='https://fuselabcreative.com/wp-content/uploads/2025/12/managing-stadium-events.mp4'; try { $r=Invoke-WebRequest -Uri $u -Method Head -MaximumRedirection 5 -TimeoutSec 30; $lines=@(); $lines += ('StatusCode: ' + $r.StatusCode); $lines += ('FinalUri: ' + $r.BaseResponse.ResponseUri); foreach ($h in $r.Headers.Keys) { $lines += ($h + ': ' + $r.Headers[$h]) }; $lines | Set-Content -Encoding UTF8 .tmp_mp4_headers.txt } catch { ('ERROR: ' + $_.Exception.Message) | Set-Content -Encoding UTF8 .tmp_mp4_headers.txt }\""
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "run-mp4-headers-script",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\get-mp4-headers.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "run-mp4-headers-script-2",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && pwsh -NoProfile -ExecutionPolicy Bypass -File \".tools\\get-mp4-headers.ps1\""
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "write-test-file",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && echo hi>.tmp_test.txt"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "where-pwsh",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && where pwsh > .tmp_where_pwsh.txt 2>&1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "run-mp4-headers-script-log",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && pwsh -NoProfile -ExecutionPolicy Bypass -File \".tools\\get-mp4-headers.ps1\" > .tmp_mp4_headers_runlog.txt 2>&1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "where-ffmpeg",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && where ffmpeg > .tmp_where_ffmpeg.txt 2>&1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "curl-headers-to-file",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && curl -sI -L --max-time 30 \"https://fuselabcreative.com/wp-content/uploads/2025/12/managing-stadium-events.mp4\" > .tmp_curl_headers.txt 2>&1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "download-ffmpeg-portable",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && if not exist .tools mkdir .tools && if not exist .tools\\ffmpeg mkdir .tools\\ffmpeg && curl -L --max-time 120 -o .tools\\ffmpeg\\ffmpeg-release-essentials.zip https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "extract-ffmpeg-portable",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$zip='.tools/ffmpeg/ffmpeg-release-essentials.zip'; $dest='.tools/ffmpeg'; if (Test-Path $dest) { } ; Expand-Archive -Force -Path $zip -DestinationPath $dest; Get-ChildItem -Path $dest -Directory | Select-Object -First 5 | Format-Table Name"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "download-mp4",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && curl -L --max-time 120 -o .tmp_managing-stadium-events.mp4 https://fuselabcreative.com/wp-content/uploads/2025/12/managing-stadium-events.mp4"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "ffprobe-video",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && .tools\\ffmpeg\\bin\\ffprobe.exe -v error -show_entries format=duration,size -show_streams -of json .tmp_managing-stadium-events.mp4 > .tmp_ffprobe.json"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "extract-sampled-frames",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && if not exist .tmp_frames mkdir .tmp_frames && .tools\\ffmpeg\\bin\\ffmpeg.exe -hide_banner -loglevel error -i .tmp_managing-stadium-events.mp4 -vf \"fps=1/2,scale=320:-1\" -frames:v 12 .tmp_frames\\frame_%02d.png"
+			],
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }

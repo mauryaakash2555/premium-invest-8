@@ -11,6 +11,7 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { CURATED_HEADLINES, getHeadlinesByCategory } from '@/lib/live-intelligence/headlines';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -337,45 +338,22 @@ function getCategoryIcon(category) {
 }
 
 /**
- * Curated headlines - real content, not placeholder data
+ * Curated headlines - use rich content from lib/live-intelligence/headlines.js
+ * These are real, factual, SEBI-safe headlines (not placeholder data)
  */
 function getCuratedHeadlines(category) {
-  const headlines = [
-    {
-      id: 'curated-1',
-      category: 'market_update',
-      icon: '📊',
-      headline: 'Markets are live — tracking real-time movements',
-      whyItMatters: 'Stay updated with live market data during trading hours',
-      urgency: 'REGULAR',
-      timestamp: new Date().toISOString(),
-      dataPoint: 'Live data',
-      source: 'BMWealth',
-    },
-    {
-      id: 'curated-2',
-      category: 'portfolio_tip',
-      icon: '💡',
-      headline: 'Pro tip: Review your portfolio quarterly',
-      whyItMatters: 'Regular reviews help maintain optimal asset allocation',
-      urgency: 'REGULAR',
-      timestamp: new Date().toISOString(),
-      dataPoint: 'Best practice',
-      source: 'BMWealth',
-    },
-    {
-      id: 'curated-3',
-      category: 'tax_insight',
-      icon: '💰',
-      headline: 'Tax planning works best when started early',
-      whyItMatters: 'Early planning maximizes deductions and minimizes tax liability',
-      urgency: 'REGULAR',
-      timestamp: new Date().toISOString(),
-      dataPoint: 'Tax tip',
-      source: 'BMWealth',
-    },
-  ];
+  // Use the comprehensive curated headlines from lib
+  let headlines = CURATED_HEADLINES.map(h => ({
+    ...h,
+    // Ensure fresh timestamp for curated items
+    timestamp: h.timestamp || new Date().toISOString(),
+    icon: h.icon || getCategoryIcon(h.category),
+  }));
   
-  if (category === 'all') return headlines;
-  return headlines.filter(h => h.category === category);
+  if (category && category !== 'all') {
+    headlines = headlines.filter(h => h.category === category);
+  }
+  
+  // Return first 20 headlines, sorted by priority
+  return headlines.slice(0, 20);
 }

@@ -1,0 +1,4 @@
+status=200 len=106
+Symbol,Date,Time,Open,High,Low,Close,Volume
+XAUUSD,2026-01-19,06:12:32,4634.7,4691.03,4582.265,4670.05,
+

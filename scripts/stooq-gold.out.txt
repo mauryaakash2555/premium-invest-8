@@ -1,0 +1,4 @@
+status=200 len=100
+Symbol,Date,Time,Open,High,Low,Close,Volume
+GC.F,2026-01-19,06:11:03,4636,4697.71,4632.9,4675.35,
+

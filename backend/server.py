@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -11,6 +11,8 @@ import uuid
 from datetime import datetime, timezone
 import requests
 import asyncio
+import base64
+import io
 
 # Configure logging
 logging.basicConfig(
@@ -31,6 +33,63 @@ app = FastAPI()
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+
+@api_router.post("/itr/extract-text")
+async def itr_extract_text(request: Request):
+    """Extract selectable text from a PDF using pdfplumber.
+
+    Accepts either:
+    - application/pdf body (raw bytes)
+    - JSON {"base64": "..."}
+
+    Returns:
+    - { method, totalPages, pages[{pageNumber,text}], hasSelectableText }
+
+    Notes:
+    - No document bytes/text are stored.
+    - Intended for server-side text extraction only.
+    """
+
+    content_type = (request.headers.get("content-type") or "").lower()
+    pdf_bytes: bytes
+
+    if "application/pdf" in content_type:
+        pdf_bytes = await request.body()
+    else:
+        body = await request.json()
+        b64 = body.get("base64") if isinstance(body, dict) else None
+        if not b64:
+            raise HTTPException(status_code=400, detail="Missing base64 PDF data")
+        pdf_bytes = base64.b64decode(str(b64))
+
+    try:
+        import pdfplumber  # type: ignore
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"pdfplumber not available: {e}")
+
+    try:
+        pages = []
+        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            total_pages = len(pdf.pages)
+            page_limit = min(total_pages, 10)
+            for i in range(page_limit):
+                page = pdf.pages[i]
+                text = page.extract_text() or ""
+                text = "\n".join([line.rstrip() for line in text.splitlines()]).strip()
+                pages.append({"pageNumber": i + 1, "text": text})
+
+        all_text = "\n\n".join([p.get("text", "") for p in pages]).strip()
+        has_selectable_text = len("".join(all_text.split())) >= 80
+
+        return {
+            "method": "pdfplumber",
+            "totalPages": total_pages,
+            "pages": pages,
+            "hasSelectableText": has_selectable_text,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to extract PDF text: {e}")
 
 
 # Define Models

@@ -1,9 +1,10 @@
-import ITRFilingHelp from '@/components/tools/ITRFilingHelp';
 import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
 import Link from "next/link";
+
+import ITRFilingHelpClient from "./ITRFilingHelpClient";
 
 export const metadata = buildMetadata({
   title: "Free ITR Filing Help – Estimate Income Tax Online | BM Wealth",
@@ -25,7 +26,7 @@ export default function ITRFilingHelpPage() {
     {
       question: "Is my data stored or shared?",
       answer:
-        "No. Uploaded documents are processed in your browser and deleted immediately after extraction. We do not store, save, or share your documents or data.",
+        "We do not store, save, or share your documents. For selectable-text PDFs, the file may be sent to our server briefly for text extraction (pdfplumber) and processed transiently. For scanned/image PDFs, OCR runs in your browser. In all cases, you must review and verify values.",
     },
     {
       question: "How accurate is the OCR extraction?",
@@ -85,7 +86,8 @@ export default function ITRFilingHelpPage() {
       price: "0",
       priceCurrency: "INR",
     },
-    description: "Free educational tool to estimate income tax using Form 16, AIS, or bank interest statements. OCR-based extraction with user review.",
+    description:
+      "Free educational tool to estimate income tax using Form 16, AIS, or bank interest statements. Selectable-text PDFs are extracted via server-side text parsing; scanned PDFs use OCR. All values require user review.",
     provider: {
       "@type": "Organization",
       name: "BM Wealth",
@@ -121,7 +123,7 @@ export default function ITRFilingHelpPage() {
 
           <div className="bp-body">
             {/* The Calculator Tool */}
-            <ITRFilingHelp />
+            <ITRFilingHelpClient />
 
             {/* Static Content Sections for SEO */}
             <div className="mt-16 space-y-12">

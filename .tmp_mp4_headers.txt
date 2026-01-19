@@ -1,0 +1,20 @@
+StatusCode: 200
+FinalUri: 
+ContentType: video/mp4
+ContentLength: 6162376
+Accept-Ranges: bytes
+Access-Control-Allow-Methods: GET, HEAD
+Access-Control-Allow-Origin: *
+Alt-Svc: h3=":443"
+Cache-Control: max-age=31536000
+Connection: keep-alive
+Content-Length: 6162376
+Content-Type: video/mp4
+Date: Mon, 19 Jan 2026 12:23:13 GMT
+ETag: "69458415-5e07c8"
+Expires: Tue, 19 Jan 2027 12:23:13 GMT
+Last-Modified: Fri, 19 Dec 2025 16:57:57 GMT
+Server: nginx
+Server-Timing: a8c-cdn, dc;desc=bom, cache;desc=BYPASS;dur=229.0
+Strict-Transport-Security: max-age=31536000
+X-ac: 3.bom _atomic_dca BYPASS
