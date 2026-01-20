@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -38,12 +39,12 @@ export default function NewsletterSignup() {
       <div className="relative z-10 flex flex-col items-center justify-between gap-6 md:flex-row md:items-center">
         <div className="text-center md:text-left">
           <div className="inline-flex items-center gap-3">
-            <span className="h-[1px] w-10 bg-[color:color-mix(in_oklab,var(--color-matte-gold)_35%,transparent)]" aria-hidden />
+            <span className="h-[1px] w-10 bg-[oklch(0.78_0.08_65_/_0.35)]" aria-hidden />
             <div className="text-[10px] uppercase tracking-[0.55em] text-white/55">Private Note</div>
-            <span className="h-[1px] w-10 bg-[color:color-mix(in_oklab,var(--color-matte-gold)_35%,transparent)]" aria-hidden />
+            <span className="h-[1px] w-10 bg-[oklch(0.78_0.08_65_/_0.35)]" aria-hidden />
           </div>
 
-          <h3 className="mt-3 text-2xl md:text-[34px] font-serif text-[color:var(--color-matte-gold)] m-0 tracking-[0.02em]">
+          <h3 className="mt-3 text-2xl md:text-[34px] font-serif m-0 tracking-[0.02em] drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.20)]" style={{ color: 'oklch(0.95 0.01 85 / 0.88)' }}>
             BM Wealth Dispatch
           </h3>
           <p className="mt-2 text-sm md:text-[13px] text-white/70 m-0 max-w-xl tracking-wide">
@@ -70,11 +71,27 @@ export default function NewsletterSignup() {
               disabled={status === "loading"}
               className={
                 status === "loading"
-                  ? "bm-btn bm-btn-primary rounded-xl px-7 py-3 text-sm opacity-70 cursor-not-allowed"
-                  : "bm-btn bm-btn-primary rounded-xl px-7 py-3 text-sm"
+                  ? "group relative overflow-hidden rounded-xl px-7 py-3 opacity-70 cursor-not-allowed"
+                  : "group relative overflow-hidden rounded-xl px-7 py-3"
               }
+              style={{
+                backgroundColor: 'oklch(0.06 0.005 280)',
+                border: '1px solid oklch(0.78 0.08 65 / 0.35)',
+                boxShadow: '0 0 0 1px oklch(0.78 0.08 65 / 0.10), 0 18px 60px rgba(0, 0, 0, 0.55)',
+              }}
             >
-              {status === "loading" ? "Subscribing..." : "Subscribe"}
+              <span
+                className="relative z-10 flex items-center justify-center gap-5 text-[10px] tracking-[0.25em] uppercase font-semibold transition-colors duration-700 group-hover:text-black"
+                style={{ color: 'oklch(0.95 0.01 85 / 0.92)' }}
+              >
+                {status === "loading" ? "Subscribing..." : "Subscribe"}
+                <ArrowRight className="h-4 w-4 transition-transform duration-700 group-hover:translate-x-2" />
+              </span>
+              <span
+                aria-hidden
+                className="absolute inset-0 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-700"
+                style={{ backgroundColor: 'oklch(0.78 0.08 65)' }}
+              />
             </button>
           </div>
 

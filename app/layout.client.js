@@ -26,6 +26,7 @@
 'use client';
 
 import { Playfair_Display, Inter } from "next/font/google";
+import { useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
@@ -58,6 +59,46 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
   const isClientPortal = pathname === '/client-portal';
   // Pages with their own custom footer - don't add global Footer
   const hasCustomFooter = isLaserPage || isClientPortal;
+
+  useEffect(() => {
+    // Opt-in reset for stale SW/caches that can cause hydration mismatches.
+    // Visit any page with `?resetSW=1` (or `?reset-sw=1`) once.
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    const shouldReset =
+      params.get('resetSW') === '1' ||
+      params.get('reset-sw') === '1' ||
+      params.has('resetSW') ||
+      params.has('reset-sw');
+
+    if (!shouldReset) return;
+
+    const run = async () => {
+      try {
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map((r) => r.unregister()));
+        }
+
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((k) => caches.delete(k)));
+        }
+      } catch (e) {
+        // Swallow errors; this is a best-effort dev recovery path.
+        console.warn('[resetSW] failed', e);
+      } finally {
+        params.delete('resetSW');
+        params.delete('reset-sw');
+        url.search = params.toString();
+        window.location.replace(url.toString());
+      }
+    };
+
+    run();
+  }, []);
 
   const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
   return (

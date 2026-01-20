@@ -17,10 +17,12 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
 
 // Groq API for classification
 async function processWithGroq(item) {
@@ -334,6 +336,14 @@ function getDefaultSignals(category, urgency) {
 // Main processing endpoint
 export async function POST(request) {
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 503 }
+      );
+    }
+
     const { itemId, processAll } = await request.json().catch(() => ({}));
 
     let itemsToProcess = [];
@@ -464,6 +474,14 @@ export async function POST(request) {
 // GET: Fetch published items OR trigger processing (for Vercel Cron)
 export async function GET(request) {
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 503 }
+      );
+    }
+
     // Check if this is a cron request (has authorization header)
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;

@@ -58,6 +58,17 @@ scripts/safety/backups/
 # Local lock snapshots (never commit)
 backup/locked_*/
 
+# Local safety backups (never commit)
+.safety-backups/
+
+# Local temp artifacts (never commit)
+.tmp*
+.tmp*/
+
+# Playwright artifacts (never commit)
+playwright-report/
+test-results/
+
 # Large binary tools
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**

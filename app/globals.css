@@ -315,7 +315,14 @@
   }
 
   .gold-gradient-text {
-    background: linear-gradient(135deg, #c0a062 0%, #d4b576 25%, #f0e6d2 50%, #d4b576 75%, #c0a062 100%);
+    background: linear-gradient(
+      135deg,
+      oklch(0.78 0.08 65) 0%,
+      color-mix(in oklab, oklch(0.78 0.08 65) 70%, white 30%) 25%,
+      color-mix(in oklab, oklch(0.78 0.08 65) 40%, white 60%) 50%,
+      color-mix(in oklab, oklch(0.78 0.08 65) 70%, white 30%) 75%,
+      oklch(0.78 0.08 65) 100%
+    );
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -708,12 +715,12 @@
     position: absolute;
     width: 3px;
     height: 3px;
-    background: #C0A062;
+    background: oklch(0.78 0.08 65);
     border-radius: 50%;
     filter: blur(0.5px);
     pointer-events: none;
     animation: goldDustDynamic 5s infinite ease-in-out;
-    box-shadow: 0 0 8px rgba(192, 160, 98, 1), 0 0 15px rgba(192, 160, 98, 0.6);
+    box-shadow: 0 0 8px oklch(0.78 0.08 65 / 0.95), 0 0 18px oklch(0.78 0.08 65 / 0.55);
     opacity: 0;
     z-index: 20;
   }
@@ -731,7 +738,7 @@
     transform: translateY(-50%);
     width: 2px;
     height: 0;
-    background: #C0A062;
+    background: oklch(0.78 0.08 65);
     transition: height 0.3s ease;
   }
 
@@ -1424,18 +1431,27 @@ footer .whatsapp-card:hover {
 .premium-half-line .side-line {
   width: 1.5px; /* Slimmed down */
   height: 24px;
-  background-color: #C0A062; /* Matched color */
+  background: linear-gradient(
+    180deg,
+    oklch(0.78 0.08 65 / 0.18) 0%,
+    oklch(0.78 0.08 65 / 0.95) 50%,
+    oklch(0.78 0.08 65 / 0.18) 100%
+  );
   flex-shrink: 0;
   transition: all 0.7s ease-in-out;
   margin-top: 4px;
-  box-shadow: 0 0 15px rgba(192, 160, 98, 0.4); /* Subtle glow */
+  box-shadow:
+    0 0 10px oklch(0.78 0.08 65 / 0.35),
+    0 0 22px oklch(0.78 0.08 65 / 0.18); /* Stronger glow */
 }
 
 .premium-half-line:hover .side-line,
 .premium-half-line:active .side-line,
 .premium-half-line.is-scroll-active .side-line {
   height: 64px;
-  box-shadow: 0 0 15px rgba(192, 160, 98, 0.4); /* Subtle glow */
+  box-shadow:
+    0 0 12px oklch(0.78 0.08 65 / 0.45),
+    0 0 28px oklch(0.78 0.08 65 / 0.22);
 }
 
 /* Mobile: Force hardware acceleration */

@@ -13,11 +13,12 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
 
 // RSS parsing helper
 function parseRSSItem(item) {
@@ -172,6 +173,8 @@ async function fetchRSSFeed(feedUrl) {
 
 export async function GET(request) {
   try {
+    const supabase = getSupabase();
+
     // Optional: restrict to cron/internal calls
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
@@ -183,15 +186,19 @@ export async function GET(request) {
       }
     }
 
-    // Get active RSS sources
-    const { data: sources, error: sourcesError } = await supabase
-      .from('rss_sources')
-      .select('*')
-      .eq('is_active', true);
-
-    if (sourcesError) {
-      console.error('Failed to fetch RSS sources:', sourcesError);
-      // Use default sources as fallback
+    // Get active RSS sources (fallback if Supabase not configured)
+    let sources = null;
+    let sourcesError = null;
+    if (supabase) {
+      const res = await supabase
+        .from('rss_sources')
+        .select('*')
+        .eq('is_active', true);
+      sources = res.data;
+      sourcesError = res.error;
+      if (sourcesError) {
+        console.error('Failed to fetch RSS sources:', sourcesError);
+      }
     }
 
     const activeSources = sources?.length ? sources : [
@@ -314,6 +321,14 @@ export async function GET(request) {
 // POST: Trigger AI processing for pending items
 export async function POST(request) {
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 503 }
+      );
+    }
+
     // Get pending items
     const { data: pendingItems, error } = await supabase
       .from('intelligence_items')

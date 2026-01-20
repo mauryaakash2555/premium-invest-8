@@ -171,6 +171,26 @@ export default function NightSummary() {
     }
   }, [nextSlide, prevSlide]);
 
+  // Slide 5: Share Summary
+  // Must be declared before any early return to keep hook order stable.
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handlePdfDownload = useCallback(async () => {
+    setIsDownloading(true);
+    try {
+      await downloadDailySummaryPDF({
+        summary: summaryData,
+        headlines: summaryData.developments.map((d) => ({
+          headline: d.text,
+          whyItMatters: '',
+        })),
+      });
+    } catch (err) {
+      console.error('PDF download error:', err);
+    }
+    setIsDownloading(false);
+  }, [summaryData]);
+
   // Only show in night_summary mode (9PM - 12AM)
   if (!isVisible || !mode) return null;
 
@@ -302,25 +322,6 @@ export default function NightSummary() {
     </div>
   );
 
-  // Slide 5: Share Summary
-  const [isDownloading, setIsDownloading] = useState(false);
-  
-  const handlePdfDownload = useCallback(async () => {
-    setIsDownloading(true);
-    try {
-      await downloadDailySummaryPDF({
-        summary: summaryData,
-        headlines: summaryData.developments.map(d => ({
-          headline: d.text,
-          whyItMatters: '',
-        })),
-      });
-    } catch (err) {
-      console.error('PDF download error:', err);
-    }
-    setIsDownloading(false);
-  }, [summaryData]);
-  
   const ShareSlide = () => (
     <div className="li-ns-slide li-ns-share-slide">
       <div className="li-ns-slide-header">

@@ -16,10 +16,12 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
 
 // Fetch current market context
 async function getMarketContext() {
@@ -160,6 +162,20 @@ export async function POST(request) {
     // Generate mood text
     const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
 
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json({
+        success: true,
+        mood: {
+          mood_text,
+          mood_type,
+          generated_at: new Date().toISOString(),
+        },
+        stored: false,
+        warning: 'Supabase not configured',
+      });
+    }
+
     // Deactivate previous active moods
     await supabase
       .from('live_mood')
@@ -222,6 +238,8 @@ export async function POST(request) {
 // GET: Fetch current active mood OR generate new (for Vercel Cron)
 export async function GET(request) {
   try {
+    const supabase = getSupabase();
+
     // Check if this is a cron request
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
@@ -230,6 +248,16 @@ export async function GET(request) {
     if (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) {
       const marketData = await getMarketContext();
       const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
+
+      if (!supabase) {
+        return NextResponse.json({
+          success: true,
+          mood: { mood_text, mood_type, generated_at: new Date().toISOString() },
+          cron: true,
+          stored: false,
+          warning: 'Supabase not configured',
+        });
+      }
       
       // Deactivate old moods
       await supabase
@@ -254,23 +282,25 @@ export async function GET(request) {
       return NextResponse.json({ success: true, mood: newMood || { mood_text, mood_type }, cron: true });
     }
     
-    // Regular GET: fetch active mood from database
-    const { data, error } = await supabase
-      .from('live_mood')
-      .select('*')
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
+    // Regular GET: fetch active mood from database (if Supabase configured)
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('live_mood')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
 
-    if (data && !error) {
-      // Check if mood is still valid
-      if (data.valid_until && new Date(data.valid_until) > new Date()) {
-        return NextResponse.json({
-          success: true,
-          mood: data,
-          source: 'database',
-        });
+      if (data && !error) {
+        // Check if mood is still valid
+        if (data.valid_until && new Date(data.valid_until) > new Date()) {
+          return NextResponse.json({
+            success: true,
+            mood: data,
+            source: 'database',
+          });
+        }
       }
     }
 

@@ -188,12 +188,12 @@ const navigationLinks = {
 return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
       {/* ULTRA LUXURY WAVE TOP */}
-      <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90" />
+  <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90 bg-gradient-to-r from-transparent via-[oklch(0.78_0.08_65)] to-transparent shadow-[0_0_22px_oklch(0.78_0.08_65_/_0.35)]" />
 
       <div className={cn(
         "ultra-luxury-glass luxury-particles ambient-glow-pulse luxury-wave-3s", 
-        "bg-[#000000] rounded-t-[64px] border-t-[3px] border-[#C0A062]/70",
-        "shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"
+        "bg-[#000000] rounded-t-[64px] border-t-[3px] border-[oklch(0.78_0.08_65_/_0.70)]",
+        "shadow-[0_-30px_120px_oklch(0.78_0.08_65_/_0.25)]"
       )}>
         
         {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
@@ -216,27 +216,27 @@ return (
         <div className="relative pt-24 pb-16 px-6 flex flex-col items-center z-20">
           <div className="flex items-center gap-12 mb-10 group cursor-default">
             {/* Turbo Shimmering Wings (Left) */}
-            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-r from-transparent via-[#C0A062] to-transparent overflow-hidden">
+            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-r from-transparent via-[oklch(0.78_0.08_65)] to-transparent overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
             </div>
             
             <div className="flex flex-col items-center">
-              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
+              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_oklch(0.78_0.08_65_/_0.30)]">
                 BM Wealth
               </h2>
-              <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[#C0A062] to-transparent mt-2 opacity-80" />
+              <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[oklch(0.78_0.08_65)] to-transparent mt-2 opacity-80" />
             </div>
 
             {/* Turbo Shimmering Wings (Right) */}
-            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-l from-transparent via-[#C0A062] to-transparent overflow-hidden">
+            <div className="hidden lg:block relative w-40 h-[2px] bg-gradient-to-l from-transparent via-[oklch(0.78_0.08_65)] to-transparent overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white to-transparent animate-linearSweep duration-[1.2s]" />
             </div>
           </div>
 
-          <p className="text-[13px] tracking-[5px] text-[#D4B576] font-bold uppercase mb-4 m-0 text-center">
+          <p className="text-[13px] tracking-[5px] font-bold uppercase mb-4 m-0 text-center drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
             Distinguished Wealth Architecture
           </p>
-          <p className="text-sm text-gray-400 font-light italic max-w-xl text-center leading-relaxed m-0 opacity-80 border-x border-[#C0A062]/20 px-8">
+          <p className="text-sm font-light italic max-w-xl text-center leading-relaxed m-0 opacity-80 border-x px-8" style={{ color: 'oklch(0.95 0.01 85 / 0.60)', borderColor: 'oklch(0.78 0.08 65 / 0.20)' }}>
             Empowering Mumbai's elite investors with bespoke wealth strategies and unwavering integrity.
           </p>
         </div>
@@ -247,8 +247,16 @@ return (
             
             {/* Vault Column */}
             <div className="space-y-10">
-              <h3 className="text-[14px] font-serif font-bold text-[#C0A062] uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start">
-                <Gem className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
+              <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                <Gem
+                  className="w-5 h-5 drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.75)]"
+                  strokeWidth={1.5}
+                  style={{
+                    color: 'oklch(0.78 0.08 65)',
+                    filter:
+                      'drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.70)) drop-shadow(0 0 22px oklch(0.78 0.08 65 / 0.28))',
+                  }}
+                />
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -256,7 +264,8 @@ return (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[15px] text-gray-400 transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line"
+                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                      style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                     >
                       {link.label}
                     </Link>
@@ -267,8 +276,8 @@ return (
 
             {/* Intelligence Column */}
             <div className="space-y-10">
-              <h3 className="text-[14px] font-serif font-bold text-[#C0A062] uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start">
-                <Info className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
+              <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                <Info className="w-5 h-5" strokeWidth={1.5} style={{ color: 'oklch(0.78 0.08 65)' }} />
                 Intelligence
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -276,7 +285,8 @@ return (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[15px] text-gray-400 transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line"
+                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                      style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                     >
                       {link.label}
                     </Link>
@@ -287,8 +297,8 @@ return (
 
             {/* Charter Column */}
             <div className="space-y-10">
-              <h3 className="text-[14px] font-serif font-bold text-[#C0A062] uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start">
-                <Crown className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
+              <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                <Crown className="w-5 h-5" strokeWidth={1.5} style={{ color: 'oklch(0.78 0.08 65)' }} />
                 Charter
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -296,7 +306,8 @@ return (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[14px] md:text-[15px] text-gray-400 transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line"
+                      className="text-[14px] md:text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                      style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                     >
                       {link.label}
                     </Link>
@@ -307,26 +318,27 @@ return (
 
             {/* Concierge Column - COMPLETE WITH LABELS & SPACE */}
             <div className="space-y-10">
-              <h3 className="text-[14px] font-serif font-bold text-[#C0A062] uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start">
-                <MessageCircle className="w-5 h-5 text-[#C0A062]" strokeWidth={1.5} />
+              <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                <MessageCircle className="w-5 h-5" strokeWidth={1.5} style={{ color: 'oklch(0.78 0.08 65)' }} />
                 Concierge
               </h3>
-              <div className="space-y-8 text-[15px] text-gray-300 text-center lg:text-left font-semibold">
+              <div className="space-y-8 text-[15px] text-center lg:text-left font-semibold" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>
                 <div className="space-y-2">
-                  <p className="text-[10px] text-[#C0A062] uppercase tracking-[2px] m-0">Phone</p>
-                  <p className="m-0 transition-all hover:text-[#C0A062] cursor-pointer text-base md:text-lg tracking-wider">+91 8850977259</p>
+                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Phone</p>
+                  <p className="m-0 transition-all cursor-pointer text-base md:text-lg tracking-wider hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>+91 8850977259</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] text-[#C0A062] uppercase tracking-[2px] m-0">Email</p>
-                  <p className="m-0 transition-all hover:text-[#C0A062] cursor-pointer tracking-wide break-all">support@bmwealth.co.in</p>
+                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Email</p>
+                  <p className="m-0 transition-all cursor-pointer tracking-wide break-all hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>support@bmwealth.co.in</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] text-[#C0A062] uppercase tracking-[2px] m-0">Location</p>
+                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Location</p>
                   <a 
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="m-0 flex items-center gap-2 text-[#C0A062] hover:text-white transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start"
+                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start hover:text-[oklch(0.78_0.08_65)] hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.55)]"
+                    style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}
                   >
                     <MapPin className="w-4 h-4 transition-transform group-hover:scale-125" />
                     Mumbai, Maharashtra
@@ -350,9 +362,9 @@ return (
                   (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                 )}
                 style={{ 
-                  borderColor: isWHAPremium ? '#25D366' : '#C0A062',
+                  borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65)',
                   transform: isWHAPremium ? 'scale(1.08)' : 'scale(1)',
-                  boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px rgba(192, 160, 98, 0.2)',
+                  boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px oklch(0.78 0.08 65 / 0.22)',
                   display: 'flex',
                   justifyContent: 'flex-start', // Always start from left
                 }}
@@ -382,7 +394,7 @@ return (
                   <div 
                     className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
-                      borderColor: isWHAPremium ? '#25D366' : 'rgba(192, 160, 98, 0.3)',
+                      borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
                     }}
                   >
@@ -408,7 +420,7 @@ return (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
                       <p className={cn(
                         "text-[9px] md:text-[10px] m-0 uppercase tracking-[3px] md:tracking-[4px] font-black transition-colors duration-500",
-                        isWHAPremium ? "text-white" : "text-[#C0A062]"
+                        isWHAPremium ? "text-white" : "text-[oklch(0.78_0.08_65)]"
                       )}>
                         Concierge
                       </p>
@@ -421,7 +433,7 @@ return (
         </div>
 
         {/* INTERACTIVE HALF-TO-FULL SIDE LINE DISCLAIMERS */}
-        <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[#C0A062]/15 relative z-20">
+        <div className="max-w-[1400px] mx-auto px-10 md:px-16 py-12 border-t border-[oklch(0.78_0.08_65_/_0.45)] relative z-20">
           
           {/* Newsletter Signup */}
           <div className="mb-16">
@@ -432,8 +444,8 @@ return (
             <div ref={sebiRef} className={cn("premium-half-line group", sebiActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setSebiActive(true); setTimeout(() => setSebiActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Market Risk Disclosure</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Market Risk Disclosure</h4>
+                <p className="text-[13px] leading-relaxed font-light m-0 transition-all group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
               </div>
@@ -442,8 +454,8 @@ return (
             <div ref={noticeRef} className={cn("premium-half-line group", noticeActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setNoticeActive(true); setTimeout(() => setNoticeActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold text-[#C0A062] uppercase tracking-[0.3em] m-0 transition-colors group-hover:text-white">Investment Notice</h4>
-                <p className="text-[13px] text-gray-500 leading-relaxed font-light m-0 transition-colors group-hover:text-gray-300">
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Investment Notice</h4>
+                <p className="text-[13px] leading-relaxed font-light m-0 transition-all group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
                   Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. BM Wealth acts as a distributor, not a manufacturer.
                 </p>
               </div>
@@ -452,66 +464,66 @@ return (
         </div>
 
         {/* Final Copyright & Active Compliance Badge */}
-        <div className="relative pt-12 pb-20 px-8 flex flex-col items-center border-t border-[#C0A062]/10 z-20">
+        <div className="relative pt-12 pb-20 px-8 flex flex-col items-center border-t border-[oklch(0.78_0.08_65_/_0.10)] z-20">
           <div className="relative z-10 flex flex-col items-center space-y-10">
             <div className="inline-flex items-center justify-center">
-              <div className="group inline-flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 backdrop-blur-2xl shadow-[0_0_30px_rgba(0,0,0,0.55)]">
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase text-white/70">
+              <div className="group inline-flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 backdrop-blur-2xl shadow-[0_0_30px_rgba(0,0,0,0.55)] hover:shadow-[0_0_40px_oklch(0.78_0.08_65_/_0.2)] transition-shadow duration-500">
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: 'oklch(0.95 0.01 85 / 0.70)' }}>
                   Regulatory IDs
                 </span>
-                <span className="text-white/25">•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
                   PMS 2430447816
                 </span>
-                <span className="text-white/25">•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
                   IRDAI 277925
                 </span>
-                <span className="text-white/25">•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase text-[#C0A062]">
+                <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
                   AMFI ARN 90008
                 </span>
-                <span className="text-white/25">•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase text-white/70">
+                <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: 'oklch(0.95 0.01 85 / 0.70)' }}>
                   Wealth Distribution
                 </span>
 
                 <span className="absolute pointer-events-none inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{
-                  boxShadow: "0 0 0 1px rgba(192,160,98,0.28), 0 0 40px rgba(192,160,98,0.10)",
+                  boxShadow: "0 0 0 1px oklch(0.78 0.08 65 / 0.28), 0 0 40px oklch(0.78 0.08 65 / 0.15)",
                 }} />
               </div>
             </div>
 
             <div className="flex flex-col items-center space-y-3">
-              <p className="text-[12px] text-gray-400 font-light tracking-[0.4em] uppercase m-0 opacity-60">
+              <p className="text-[12px] font-light tracking-[0.4em] uppercase m-0 opacity-60" style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}>
                 © 2025 BM Wealth. All rights reserved.
               </p>
-              <p className="text-[10px] text-[#C0A062] font-bold tracking-[0.2em] uppercase m-0 opacity-60">
+              <p className="text-[10px] font-bold tracking-[0.2em] uppercase m-0 opacity-60 drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
                 Crafted for Mumbai's Distinguished Investors
               </p>
               
               {/* SOPHISTICATED MARKET DYNAMICS NOTICE */}
-              <p className="text-[11px] text-gray-500 italic font-light mt-4 text-center max-w-2xl opacity-80">
+              <p className="text-[11px] italic font-light mt-4 text-center max-w-2xl opacity-80" style={{ color: 'oklch(0.55 0.01 85)' }}>
                 Investment products are subject to market dynamics. Carefully review all documentation before commitment.
               </p>
 
-              <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">Market data displayed is indicative and may be delayed. This information is provided for general awareness only and does not constitute investment advice.</p>
+              <p className="text-[10px] font-light italic mt-3 text-center max-w-3xl opacity-60" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>Market data displayed is indicative and may be delayed. This information is provided for general awareness only and does not constitute investment advice.</p>
 
-              <p className="text-[10px] text-[#666] font-light italic mt-3 text-center max-w-3xl opacity-60">
+              <p className="text-[10px] font-light italic mt-3 text-center max-w-3xl opacity-60" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>
                 This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. PMS 2430447816 | ARN 90008 | Consult your advisor before investing.
               </p>
 
               {/* LEGAL MICRO-TEXT FOR AUDITORS */}
               <div className="flex flex-col items-center mt-6 space-y-2 opacity-30 hover:opacity-100 transition-opacity duration-500">
-                <p className="text-[8px] text-[#666] tracking-[0.5px] m-0">
+                <p className="text-[8px] tracking-[0.5px] m-0" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>
                   PMS 2430447816 | AMFI ARN-90008 | IRDAI-277925 | Distribution remuneration as per industry standards
                 </p>
                 <div className="flex gap-4">
-                  <Link href="/legal-disclosures" className="text-[8px] text-[#666] hover:text-[#C0A062] no-underline">
+                  <Link href="/legal-disclosures" className="text-[8px] no-underline hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>
                     Legal Disclosures
                   </Link>
-                  <span className="text-[8px] text-[#666]">|</span>
-                  <Link href="/regulatory-compliance" className="text-[8px] text-[#666] hover:text-[#C0A062] no-underline">
+                  <span className="text-[8px]" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>|</span>
+                  <Link href="/regulatory-compliance" className="text-[8px] no-underline hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.55 0.01 85 / 0.70)' }}>
                     Regulatory Compliance
                   </Link>
                 </div>

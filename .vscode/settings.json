@@ -12,7 +12,11 @@
     "**/build/**": true,
     "**/backup/**": true,
     "**/.safety-backups/**": true,
-    "**/database_backup/**": true
+    "**/database_backup/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/.tmp*/**": true,
+    "**/.turbo/**": true
   },
   "search.exclude": {
     "**/node_modules/**": true,
@@ -24,7 +28,11 @@
     "**/build/**": true,
     "**/backup/**": true,
     "**/.safety-backups/**": true,
-    "**/database_backup/**": true
+    "**/database_backup/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/.tmp*/**": true,
+    "**/.turbo/**": true
   },
   "files.exclude": {
     "**/.next/**": true,
@@ -32,7 +40,13 @@
     "**/.vercel/**": true,
     "**/coverage/**": true,
     "**/dist/**": true,
-    "**/build/**": true
+    "**/build/**": true,
+    "**/backup/**": true,
+    "**/.safety-backups/**": true,
+    "**/database_backup/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/.tmp*/**": true
   },
 
   // Helps on larger JS/TS projects.
@@ -40,6 +54,13 @@
 
   // Optional: reduces background Git work on very large repos.
   "git.autorefresh": false,
+  "git.autofetch": false,
+  "git.untrackedChanges": "hidden",
+  "git.decorations.enabled": false,
+  "scm.diffDecorations": "none",
+
+  // Reduce background TypeScript downloads/work.
+  "typescript.disableAutomaticTypeAcquisition": true,
   "chat.tools.terminal.autoApprove": {
     "git add": true,
     "git commit": true,

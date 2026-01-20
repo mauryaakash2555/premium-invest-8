@@ -230,6 +230,7 @@ const FALLBACK_DATA = ensureRequiredItems([]);
 // ============ MAIN COMPONENT ============
 
 export default function MarketTicker({ className }) {
+  const [mounted, setMounted] = useState(false);
   const [data, setData] = useState(FALLBACK_DATA);
   const lastDataRef = useRef(FALLBACK_DATA);
   const [flashById, setFlashById] = useState({});
@@ -247,6 +248,11 @@ export default function MarketTicker({ className }) {
   const resumeKickRef = useRef(0);
 
   const paused = pausedHover || pausedTap;
+
+  // Prevent hydration mismatch - only show dynamic data after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const placeholderItems = useMemo(() => [
     { id: "SENSEX", name: "SENSEX", kind: "index", direction: "flat", placeholder: true },
@@ -423,18 +429,19 @@ export default function MarketTicker({ className }) {
                 key={`${item.id}-${idx}`}
                 className={[
                   styles.item,
-                  flash && styles.itemFlash,
-                  isUp && styles.up,
-                  isDown && styles.down,
-                  isUpdating && styles.itemUpdating,
+                  mounted && flash && styles.itemFlash,
+                  mounted && isUp && styles.up,
+                  mounted && isDown && styles.down,
+                  mounted && isUpdating && styles.itemUpdating,
                 ].filter(Boolean).join(" ")}
                 data-id={item.id}
+                suppressHydrationWarning
               >
                 <div className={styles.iconWrap}>{getIcon(item)}</div>
                 <div className={styles.name}>{item.name}</div>
-                <div className={styles.value}>{valueText}</div>
-                <div className={[styles.change, isUp ? styles.changeUp : isDown ? styles.changeDown : styles.changeFlat].join(" ")}>
-                  {changeText}
+                <div className={styles.value} suppressHydrationWarning>{mounted ? valueText : "—"}</div>
+                <div className={[styles.change, mounted && isUp ? styles.changeUp : mounted && isDown ? styles.changeDown : styles.changeFlat].join(" ")} suppressHydrationWarning>
+                  {mounted ? changeText : "—"}
                 </div>
                 <div className={styles.dot} aria-hidden="true" />
               </div>

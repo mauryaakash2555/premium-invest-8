@@ -26,8 +26,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@heroicons/react', 'framer-motion'],
   },
-  // Enable SWC minification for better performance
-  swcMinify: true,
   // Reduce JavaScript bundle sizes
   modularizeImports: {
     'lucide-react': {
