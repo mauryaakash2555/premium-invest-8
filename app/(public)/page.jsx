@@ -63,9 +63,11 @@ const GoldenHorizonSweep = () => (
 export default function HomePage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [rainEnabled, setRainEnabled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const liveMoodRef = useRef(null);
 
   useEffect(() => {
+    setMounted(true);
     window.scrollTo(0, 0);
 
     const handleMouseMove = (e) => {
@@ -114,8 +116,8 @@ export default function HomePage() {
           }}
         />
 
-        {/* Animated Clouds with lightning effect */}
-        <AnimatedClouds enableRain={rainEnabled} enableLightning={true} />
+        {/* Animated Clouds with lightning effect (client-only to avoid hydration mismatch) */}
+        {mounted ? <AnimatedClouds enableRain={rainEnabled} enableLightning={true} /> : null}
 
         {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
