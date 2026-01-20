@@ -47,10 +47,11 @@ function normalizeBlogHtmlForPremium(html) {
   if (typeof html !== 'string') return html;
   // Convert "bright yellow" accents into premium matte gold across blog HTML.
   return html
-    .replace(/#DAA520/gi, '#C0A062')
-    .replace(/#B8860B/gi, '#C0A062')
-    .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(192, 160, 98,')
-    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(192, 160, 98,')
+    .replace(/#DAA520/gi, 'var(--lux-accent)')
+    .replace(/#B8860B/gi, 'var(--lux-accent)')
+    // Keep rgba form for inline styles that expect rgba(...), but align to the same accent family.
+    .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(201, 162, 77,')
+    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(201, 162, 77,')
     // Content is already live; rename label everywhere consistently.
     .replace(/Coming Next:/gi, 'Next Read:')
     .replace(/Coming Next/gi, 'Next Read');
@@ -273,7 +274,7 @@ export default function BlogDetailClient({ slug }) {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        <div style={{ color: '#C0A062', fontSize: '18px' }}>Loading...</div>
+        <div style={{ color: 'var(--lux-accent)', fontSize: '18px' }}>Loading...</div>
       </div>
     );
   }
@@ -292,7 +293,7 @@ export default function BlogDetailClient({ slug }) {
         <h1 style={{ color: '#fff', fontSize: '48px', marginBottom: '16px' }}>404</h1>
         <p style={{ color: '#999', fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
         <Link href="/blog" style={{
-          color: '#C0A062',
+          color: 'var(--lux-accent)',
           textDecoration: 'none',
           display: 'flex',
           alignItems: 'center',
@@ -329,8 +330,9 @@ export default function BlogDetailClient({ slug }) {
               style={{
                 height: '100%',
                 width: `${Math.round(readProgress * 100)}%`,
-                background: 'linear-gradient(90deg, rgba(192,160,98,0.10), rgba(192,160,98,0.95), rgba(255,255,255,0.18))',
-                boxShadow: '0 0 22px rgba(192,160,98,0.55)',
+                background:
+                  'linear-gradient(90deg, color-mix(in oklab, var(--lux-accent) 10%, transparent), color-mix(in oklab, var(--lux-accent) 55%, transparent), rgba(255,255,255,0.14))',
+                boxShadow: '0 0 18px color-mix(in oklab, var(--lux-accent) 35%, transparent)',
                 transition: 'width 90ms linear',
               }}
             />
@@ -434,7 +436,7 @@ export default function BlogDetailClient({ slug }) {
             style={{
               position: 'absolute',
               inset: 0,
-              borderRadius: '12px',
+              borderRadius: 0,
               pointerEvents: 'none',
               background:
                 'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 60%, rgba(10,10,10,0.82) 100%)',
@@ -450,7 +452,7 @@ export default function BlogDetailClient({ slug }) {
               maxHeight: '400px',
               aspectRatio: '16/9',
               objectFit: 'cover',
-              borderRadius: '12px',
+              borderRadius: 0,
               filter: 'brightness(0.4) saturate(0.9) contrast(1.1)',
               opacity: 0.8
             }}
@@ -468,7 +470,7 @@ export default function BlogDetailClient({ slug }) {
       }}>
         {/* Back Link */}
         <Link href="/blog" style={{
-          color: '#C0A062',
+          color: 'var(--lux-accent)',
           textDecoration: 'none',
           display: 'inline-flex',
           alignItems: 'center',
@@ -484,10 +486,10 @@ export default function BlogDetailClient({ slug }) {
         {post.category && (
           <div style={{
             display: 'inline-block',
-            backgroundColor: 'rgba(192, 160, 98, 0.16)',
-            color: '#C0A062',
+            backgroundColor: 'color-mix(in oklab, var(--lux-accent) 14%, transparent)',
+            color: 'var(--lux-accent)',
             padding: '6px 12px',
-            borderRadius: '20px',
+            borderRadius: 0,
             fontSize: '12px',
             fontWeight: '500',
             marginBottom: '16px'
@@ -501,7 +503,7 @@ export default function BlogDetailClient({ slug }) {
           fontFamily: '"Playfair Display", Georgia, serif',
           fontSize: 'clamp(28px, 5vw, 42px)',
           fontWeight: '600',
-          color: '#C0A062',
+          color: 'var(--lux-accent)',
           lineHeight: '1.2',
           marginBottom: '24px'
         }}>
@@ -554,7 +556,7 @@ export default function BlogDetailClient({ slug }) {
             fontStyle: 'italic',
             marginBottom: '40px',
             paddingLeft: '20px',
-            borderLeft: '3px solid rgba(192, 160, 98, 0.7)'
+            borderLeft: '3px solid color-mix(in oklab, var(--lux-accent) 55%, transparent)'
           }}>
             {post.excerpt}
           </p>
@@ -573,16 +575,17 @@ export default function BlogDetailClient({ slug }) {
 
         {/* Free Tools CTA */}
         <div style={{
-          background: 'linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%)',
-          border: '1px solid rgba(218, 165, 32, 0.3)',
-          borderRadius: '12px',
+          background:
+            'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+          border: '1px solid color-mix(in oklab, var(--lux-accent) 26%, transparent)',
+          borderRadius: 0,
           padding: '32px',
           margin: '40px 0',
           textAlign: 'center'
         }}>
           <h3 style={{
             fontSize: '24px',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             marginBottom: '16px',
             fontFamily: '"Playfair Display", serif'
           }}>
@@ -607,10 +610,11 @@ export default function BlogDetailClient({ slug }) {
               style={{
                 display: 'inline-block',
                 padding: '12px 24px',
-                background: 'linear-gradient(135deg, #C0A062 0%, #B8860B 100%)',
+                background:
+                  'linear-gradient(135deg, var(--lux-accent) 0%, color-mix(in oklab, var(--lux-accent) 60%, white) 100%)',
                 color: '#000',
                 textDecoration: 'none',
-                borderRadius: '6px',
+                borderRadius: 0,
                 fontWeight: '600',
                 fontSize: '15px'
               }}
@@ -623,12 +627,12 @@ export default function BlogDetailClient({ slug }) {
                 display: 'inline-block',
                 padding: '12px 24px',
                 background: 'transparent',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 textDecoration: 'none',
-                borderRadius: '6px',
+                borderRadius: 0,
                 fontWeight: '600',
                 fontSize: '15px',
-                border: '1px solid #C0A062'
+                border: '1px solid var(--lux-accent)'
               }}
             >
               View All Tools →
@@ -640,13 +644,13 @@ export default function BlogDetailClient({ slug }) {
         <div style={{
           background: 'rgba(0,0,0,0.35)',
           border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '12px',
+          borderRadius: 0,
           padding: '28px',
           margin: '0 0 40px 0'
         }}>
           <h3 style={{
             fontSize: '20px',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             marginBottom: '14px',
             fontFamily: '"Playfair Display", serif'
           }}>
@@ -660,9 +664,9 @@ export default function BlogDetailClient({ slug }) {
             <Link href="/mutual-funds" style={{
               display: 'inline-block',
               padding: '10px 14px',
-              borderRadius: '999px',
-              backgroundColor: 'rgba(192, 160, 98, 0.12)',
-              border: '1px solid rgba(192, 160, 98, 0.25)',
+              borderRadius: 0,
+              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               color: '#e5e5e5',
               textDecoration: 'none',
               fontSize: '14px'
@@ -670,9 +674,9 @@ export default function BlogDetailClient({ slug }) {
             <Link href="/sip" style={{
               display: 'inline-block',
               padding: '10px 14px',
-              borderRadius: '999px',
-              backgroundColor: 'rgba(192, 160, 98, 0.12)',
-              border: '1px solid rgba(192, 160, 98, 0.25)',
+              borderRadius: 0,
+              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               color: '#e5e5e5',
               textDecoration: 'none',
               fontSize: '14px'
@@ -680,9 +684,9 @@ export default function BlogDetailClient({ slug }) {
             <Link href="/insurance" style={{
               display: 'inline-block',
               padding: '10px 14px',
-              borderRadius: '999px',
-              backgroundColor: 'rgba(192, 160, 98, 0.12)',
-              border: '1px solid rgba(192, 160, 98, 0.25)',
+              borderRadius: 0,
+              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               color: '#e5e5e5',
               textDecoration: 'none',
               fontSize: '14px'
@@ -690,9 +694,9 @@ export default function BlogDetailClient({ slug }) {
             <Link href="/tools" style={{
               display: 'inline-block',
               padding: '10px 14px',
-              borderRadius: '999px',
-              backgroundColor: 'rgba(192, 160, 98, 0.12)',
-              border: '1px solid rgba(192, 160, 98, 0.25)',
+              borderRadius: 0,
+              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               color: '#e5e5e5',
               textDecoration: 'none',
               fontSize: '14px'
@@ -700,9 +704,9 @@ export default function BlogDetailClient({ slug }) {
             <Link href="/contact" style={{
               display: 'inline-block',
               padding: '10px 14px',
-              borderRadius: '999px',
-              backgroundColor: 'rgba(192, 160, 98, 0.12)',
-              border: '1px solid rgba(192, 160, 98, 0.25)',
+              borderRadius: 0,
+              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               color: '#e5e5e5',
               textDecoration: 'none',
               fontSize: '14px'
@@ -727,7 +731,7 @@ export default function BlogDetailClient({ slug }) {
                   backgroundColor: 'rgba(255,255,255,0.05)',
                   color: '#999',
                   padding: '6px 14px',
-                  borderRadius: '20px',
+                  borderRadius: 0,
                   fontSize: '13px'
                 }}>
                   {tag}
@@ -743,10 +747,10 @@ export default function BlogDetailClient({ slug }) {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            backgroundColor: '#C0A062',
+            backgroundColor: 'var(--lux-accent)',
             color: '#0a0a0a',
             padding: '14px 32px',
-            borderRadius: '30px',
+            borderRadius: 0,
             textDecoration: 'none',
             fontWeight: '600',
             fontSize: '15px',
@@ -799,7 +803,7 @@ export default function BlogDetailClient({ slug }) {
           article :global(h2[style*="Playfair Display"]),
           article :global(h3[style*="Playfair Display"]),
           article :global(h4[style*="Playfair Display"]) {
-            color: #C0A062 !important;
+            color: var(--lux-accent) !important;
           }
 
           /* Mobile reading typography polish (safe: only inside blog detail page) */
@@ -825,7 +829,7 @@ export default function BlogDetailClient({ slug }) {
         .blog-detail-page .blog-html :global(h2),
         .blog-detail-page .blog-html :global(h3),
         .blog-detail-page .blog-html :global(h4) {
-          color: #C0A062 !important;
+          color: var(--lux-accent) !important;
         }
       `}</style>
     </div>

@@ -18,8 +18,8 @@ export function LoadingSpinner({ label = "Loading..." }) {
           width: 16,
           height: 16,
           borderRadius: 999,
-          border: '2px solid rgba(192,160,98,0.25)',
-          borderTopColor: 'rgba(192,160,98,0.95)',
+          border: '2px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+          borderTopColor: 'var(--lux-accent)',
           animation: 'bm_spin 0.9s linear infinite',
         }}
       />

@@ -13,8 +13,8 @@ export function Input({ value, onChange, placeholder = "", type = "text", disabl
       placeholder={placeholder}
       disabled={disabled}
       className={[
-        "w-full rounded-xl border border-[rgba(255,255,255,0.10)] bg-[rgba(0,0,0,0.25)] px-3 py-2 text-sm",
-        "outline-none focus:border-[rgba(192,160,98,0.65)]",
+        "w-full rounded-none border border-[rgba(255,255,255,0.10)] bg-[rgba(0,0,0,0.25)] px-3 py-2 text-sm",
+        "outline-none focus:border-[color-mix(in_oklab,var(--lux-accent)_40%,rgba(255,255,255,0.12))]",
         "disabled:opacity-50",
         className,
       ].join(" ")}

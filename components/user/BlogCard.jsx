@@ -266,11 +266,21 @@ export default function BlogCard({ post, variant = 'default' }) {
         maxWidth: '900px',
         margin: '0 auto',
         padding: 0,
-        border: isMobile ? (mobileAnimating ? '2px solid rgba(198, 161, 91, 0.8)' : '2px solid rgba(198, 161, 91, 0.2)') : undefined,
-        boxShadow: isMobile ? (mobileAnimating ? '0 0 30px rgba(198, 161, 91, 0.6)' : '0 0 0 rgba(198, 161, 91, 0)') : undefined,
+        background: 'rgba(255,255,255,0.03)',
+        border: isMobile
+          ? (mobileAnimating
+            ? '1px solid color-mix(in oklab, var(--lux-accent) 38%, rgba(255,255,255,0.10))'
+            : '1px solid rgba(255,255,255,0.10)')
+          : '1px solid rgba(255,255,255,0.10)',
+        boxShadow: isMobile
+          ? (mobileAnimating
+            ? '0 22px 90px rgba(0,0,0,0.70)'
+            : '0 12px 45px rgba(0,0,0,0.45)')
+          : '0 12px 45px rgba(0,0,0,0.45)',
         transition: isMobile ? 'all 0.5s ease' : undefined,
         cursor: 'pointer',
         overflow: 'hidden',
+        borderRadius: 0,
         willChange: isMobile ? 'border, box-shadow' : 'auto',
       }}
     >
@@ -299,10 +309,15 @@ export default function BlogCard({ post, variant = 'default' }) {
               style={{
                 display: 'inline-block',
                 padding: '6px 16px',
-                background: isMobile ? (mobileAnimating ? 'rgba(192, 160, 98, 0.3)' : 'rgba(192, 160, 98, 0.15)') : 'rgba(192, 160, 98, 0.1)',
-                borderRadius: '20px',
+                background: isMobile
+                  ? (mobileAnimating
+                    ? 'color-mix(in oklab, var(--lux-accent) 18%, transparent)'
+                    : 'rgba(255,255,255,0.03)')
+                  : 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                borderRadius: 0,
                 fontSize: '14px',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 fontWeight: 500,
                 transition: isMobile ? 'all 0.5s ease' : undefined,
@@ -311,7 +326,7 @@ export default function BlogCard({ post, variant = 'default' }) {
               {post.category}
             </div>
 
-            <h3 style={{ fontSize: 'clamp(24px, 4vw, 32px)', color: '#C0A062', marginBottom: '16px', lineHeight: 1.3 }}>
+            <h3 style={{ fontSize: 'clamp(24px, 4vw, 32px)', color: 'var(--lux-accent)', marginBottom: '16px', lineHeight: 1.3 }}>
               {post.title}
             </h3>
 
@@ -319,7 +334,7 @@ export default function BlogCard({ post, variant = 'default' }) {
               {post.excerpt}
             </p>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#C0A062', fontSize: '16px', fontWeight: 500 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--lux-accent)', fontSize: '16px', fontWeight: 500 }}>
               <span>Read the full article</span>
               <span aria-hidden="true">→</span>
             </div>

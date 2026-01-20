@@ -4070,7 +4070,16 @@ ${text}
 
             {/* HLV Analysis (for life insurance) */}
             {result.hlv && (
-              <div className="aio-section premium-gold-bg premium-gold-glow" style={{ padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
+              <div
+                className="aio-section"
+                style={{
+                  padding: '16px',
+                  borderRadius: '0px',
+                  marginTop: '16px',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.10)',
+                }}
+              >
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span>💎</span> Human Life Value (HLV) Analysis
                 </div>
@@ -4092,7 +4101,7 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Present Value (discounted)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.hlv.presentValue)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--lux-accent)' }}>{fmt(result.hlv.presentValue)}</div>
                   </div>
                 </div>
               </div>
@@ -4119,11 +4128,11 @@ ${text}
                       }
                     }}
                     style={{
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9), #d4b77a)',
-                      color: '#000',
-                      border: 'none',
+                      background: 'rgba(255,255,255,0.04)',
+                      color: 'var(--lux-accent)',
+                      border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.10))',
                       padding: '6px 12px',
-                      borderRadius: '6px',
+                      borderRadius: '0px',
                       fontSize: '12px',
                       fontWeight: '600',
                       cursor: 'pointer',
@@ -4155,7 +4164,7 @@ ${text}
                         <td>
                           <span style={{ marginRight: '6px' }}>{q.logo}</span>
                           {q.name}
-                          {idx === 0 && <span style={{ fontSize: '10px', color: '#c0a062', marginLeft: '6px' }}>★ Lowest</span>}
+                          {idx === 0 && <span style={{ fontSize: '10px', color: 'var(--lux-accent)', marginLeft: '6px' }}>★ Lowest</span>}
                         </td>
                         <td className="right" style={{ color: q.csr >= 98 ? 'rgba(255,255,255,0.9)' : q.csr >= 95 ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.5)' }}>
                           {q.csr}%
@@ -4174,7 +4183,7 @@ ${text}
                                 background: q.color || 'rgba(255,255,255,0.9)',
                                 color: '#fff',
                                 padding: '4px 10px',
-                                borderRadius: '4px',
+                                borderRadius: '0px',
                                 fontSize: '11px',
                                 fontWeight: '600',
                                 textDecoration: 'none',
@@ -4250,7 +4259,7 @@ ${text}
                         <td className="right">{fmt(r.cost)}</td>
                         <td className="right">
                           {r.selected ? 
-                            <span style={{ color: '#c0a062' }}>✓ Selected</span> : 
+                            <span style={{ color: 'var(--lux-accent)' }}>✓ Selected</span> : 
                             <span style={{ color: 'rgba(255,255,255,0.4)' }}>Optional</span>
                           }
                         </td>
@@ -4261,7 +4270,7 @@ ${text}
                     <tfoot>
                       <tr style={{ background: 'rgba(0,0,0,0.85)' }}>
                         <td colSpan="2" style={{ fontWeight: '600' }}>Total with Selected Riders</td>
-                        <td className="right" style={{ fontWeight: '600', color: '#c0a062' }}>
+                        <td className="right" style={{ fontWeight: '600', color: 'var(--lux-accent)' }}>
                           {fmt(result.totalPremiumWithRiders)}
                         </td>
                         <td></td>
@@ -4274,8 +4283,17 @@ ${text}
 
             {/* Tax Benefits */}
             {result.taxBenefits && (
-              <div className="aio-section premium-gold-bg" style={{ padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
-                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c0a062' }}>
+              <div
+                className="aio-section"
+                style={{
+                  padding: '16px',
+                  borderRadius: '0px',
+                  marginTop: '16px',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.10)',
+                }}
+              >
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--lux-accent)' }}>
                   <span>💰</span> Tax Benefits
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginTop: '12px' }}>
@@ -4293,11 +4311,11 @@ ${text}
                   )}
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Tax Saved (30% slab)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.taxBenefits.taxSaved)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--lux-accent)' }}>{fmt(result.taxBenefits.taxSaved)}</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Effective Premium</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.taxBenefits.effectivePremium)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--lux-accent)' }}>{fmt(result.taxBenefits.effectivePremium)}</div>
                   </div>
                 </div>
                 {result.taxBenefits.note && (
@@ -4341,26 +4359,26 @@ ${text}
 
             {/* ULIP/Endowment Maturity Visualization */}
             {result.ulipMaturity && (
-              <div className="aio-section premium-gold-bg premium-gold-glow" style={{ padding: '20px', borderRadius: '8px', marginTop: '20px' }}>
+              <div className="aio-section" style={{ padding: '20px', borderRadius: '0px', marginTop: '20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.10)' }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                   <span>📈</span> ULIP/Endowment Maturity Projection
                 </div>
                 
                 {/* Fund Value Scenarios */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '0px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Conservative (8%)</div>
                     <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueLow)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrLow}%</div>
                   </div>
-                  <div className="premium-gold-bg-highlight premium-gold-border-strong" style={{ padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '11px', color: '#c0a062', fontWeight: '600' }}>Expected (10%)</div>
-                    <div style={{ fontSize: '26px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
+                  <div style={{ padding: '16px', borderRadius: '0px', textAlign: 'center', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--lux-accent)', fontWeight: '600' }}>Expected (10%)</div>
+                    <div style={{ fontSize: '26px', fontWeight: '700', color: 'var(--lux-accent)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueMid)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrMid}%</div>
                   </div>
-                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ padding: '16px', background: 'rgba(0,0,0,0.75)', borderRadius: '0px', textAlign: 'center' }}>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Optimistic (12%)</div>
-                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#c0a062', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: 'var(--lux-accent)', marginTop: '4px' }}>{fmt(result.ulipMaturity.fundValueHigh)}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>IRR: {result.ulipMaturity.irrHigh}%</div>
                   </div>
                 </div>
@@ -4373,11 +4391,11 @@ ${text}
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Multiple</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{result.ulipMaturity.wealthMultiple}x</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--lux-accent)' }}>{result.ulipMaturity.wealthMultiple}x</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Wealth Gain (Mid)</div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#c0a062' }}>{fmt(result.ulipMaturity.wealthGainMid)}</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--lux-accent)' }}>{fmt(result.ulipMaturity.wealthGainMid)}</div>
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>PPT / Term</div>
@@ -4452,8 +4470,8 @@ ${text}
                     <div key={key} style={{ 
                       padding: '8px', 
                       background: 'rgba(0,0,0,0.85)', 
-                      borderRadius: '4px',
-                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid rgba(192, 160, 98, 0.35)' : '1px solid transparent'
+                      borderRadius: '0px',
+                      border: parseFloat(val) > 1.1 ? '1px solid rgba(239,68,68,0.3)' : parseFloat(val) < 0.95 ? '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)' : '1px solid transparent'
                     }}>
                       <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'capitalize' }}>
                         {key.replace(/Factor$/, '').replace(/([A-Z])/g, ' $1')}
@@ -4557,7 +4575,7 @@ ${text}
                           {pf.insurerSupport?.slice(0, 6).map((ins, iIdx) => (
                             <td key={iIdx} className="center">
                               {ins.supported ? 
-                                <span style={{ color: '#c0a062', fontSize: '14px' }}>✓</span> : 
+                                <span style={{ color: 'var(--lux-accent)', fontSize: '14px' }}>✓</span> : 
                                 <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '12px' }}>—</span>
                               }
                             </td>
@@ -4578,9 +4596,9 @@ ${text}
               <div className="aio-section" style={{ 
                 background: 'rgba(0,0,0,0.85)', 
                 padding: '20px', 
-                borderRadius: '12px', 
+                borderRadius: '0px', 
                 marginTop: '24px',
-                border: '1px solid rgba(192, 160, 98, 0.2)'
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.10))'
               }}>
                 <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                   <span>👥</span> {result.nomineePlanning.title}
@@ -4591,7 +4609,7 @@ ${text}
 
                 {/* Nomination Steps */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
+                  <div style={{ fontSize: '12px', color: 'var(--lux-accent)', fontWeight: '600', marginBottom: '10px' }}>📋 Steps to Set Up Nomination</div>
                   <div style={{ display: 'grid', gap: '8px' }}>
                     {result.nomineePlanning.steps.map((s, idx) => (
                       <div key={idx} style={{ 
@@ -4599,7 +4617,7 @@ ${text}
                         gap: '12px', 
                         padding: '10px', 
                         background: 'rgba(0,0,0,0.85)', 
-                        borderRadius: '6px',
+                        borderRadius: '0px',
                         borderLeft: '3px solid rgba(255, 255, 255, 0.9)'
                       }}>
                         <div style={{ 
@@ -4634,7 +4652,7 @@ ${text}
                         fontSize: '12px', 
                         padding: '8px 12px',
                         background: 'rgba(255,255,255,0.1)',
-                        borderRadius: '6px'
+                        borderRadius: '0px'
                       }}>
                         {note}
                       </div>
@@ -4644,14 +4662,14 @@ ${text}
 
                 {/* Claim Process Timeline */}
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>📅 Claim Process Timeline</div>
+                  <div style={{ fontSize: '12px', color: 'var(--lux-accent)', fontWeight: '600', marginBottom: '10px' }}>📅 Claim Process Timeline</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {result.nomineePlanning.claimProcess.map((cp, idx) => (
                       <div key={idx} style={{ 
                         flex: '1 1 150px',
                         padding: '12px', 
                         background: 'rgba(0,0,0,0.85)', 
-                        borderRadius: '8px',
+                        borderRadius: '0px',
                         textAlign: 'center'
                       }}>
                         <div style={{ 
@@ -4974,11 +4992,11 @@ ${text}
               <div className="aio-section" style={{ 
                 background: 'linear-gradient(135deg, rgba(255, 255, 255,0.15), rgba(255, 255, 255,0.05))', 
                 padding: '20px', 
-                borderRadius: '12px', 
+                borderRadius: '0px', 
                 marginTop: '24px',
                 border: '2px solid rgba(255, 255, 255,0.3)'
               }}>
-                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#c0a062' }}>
+                <div className="aio-tableTitle" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: 'var(--lux-accent)' }}>
                   <span>⭐</span> {result.competitiveAdvantage.title}
                 </div>
                 
@@ -4987,10 +5005,10 @@ ${text}
                     <div key={idx} style={{ 
                       padding: '12px', 
                       background: 'rgba(0,0,0,0.85)', 
-                      borderRadius: '8px',
+                      borderRadius: '0px',
                       borderLeft: '3px solid rgba(255,255,255,0.9)'
                     }}>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#c0a062' }}>{adv.feature}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--lux-accent)' }}>{adv.feature}</div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{adv.desc}</div>
                     </div>
                   ))}
@@ -4999,10 +5017,10 @@ ${text}
                 <div style={{ 
                   padding: '16px', 
                   background: 'rgba(0,0,0,0.85)', 
-                  borderRadius: '8px',
-                  border: '1px solid rgba(192, 160, 98, 0.2)'
+                  borderRadius: '0px',
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.10))'
                 }}>
-                  <div style={{ fontSize: '12px', color: '#c0a062', fontWeight: '600', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--lux-accent)', fontWeight: '600', marginBottom: '10px' }}>
                     🎯 What Our Calculator Has That Competitors Don't
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -5180,9 +5198,9 @@ ${text}
             {/* Regime Comparison Banner */}
             {result.regimeComparison ? (
               <div className="aio-regimeCompare" style={{ 
-                background: 'linear-gradient(135deg, rgba(192,160,98,0.15), rgba(192,160,98,0.05))',
-                border: '1px solid rgba(192,160,98,0.3)',
-                borderRadius: '12px',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                borderRadius: '0px',
                 padding: '16px 20px',
                 marginBottom: '20px',
                 display: 'flex',
@@ -5193,7 +5211,7 @@ ${text}
               }}>
                 <div>
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>REGIME COMPARISON</div>
-                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#c0a062' }}>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--lux-accent)' }}>
                     {result.regimeComparison.betterRegime === result.regime 
                       ? `✓ ${String(result.regime).toUpperCase()} Regime is optimal for you`
                       : `💡 ${String(result.regimeComparison.otherRegime).toUpperCase()} Regime could save you ${fmt(result.regimeComparison.savings)}`
@@ -5257,7 +5275,7 @@ ${text}
 
             {/* Tax Breakdown */}
             <div className="aio-taxLineItems" style={{ marginTop: '20px' }}>
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#c0a062', marginBottom: '12px' }}>TAX COMPUTATION</div>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--lux-accent)', marginBottom: '12px' }}>TAX COMPUTATION</div>
               <div className="aio-taxLine">
                 <span>Tax on Regular Income (Slab)</span>
                 <span>{fmt(result.taxOnRegularIncome)}</span>
@@ -5312,7 +5330,7 @@ ${text}
                 <span>Health & Education Cess (4%)</span>
                 <span>{fmt(result.cess4Percent)}</span>
               </div>
-              <div className="aio-taxLine" style={{ fontWeight: '600', color: '#c0a062', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px', marginTop: '8px' }}>
+              <div className="aio-taxLine" style={{ fontWeight: '600', color: 'var(--lux-accent)', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px', marginTop: '8px' }}>
                 <span>TOTAL TAX LIABILITY</span>
                 <span>{fmt(result.totalTax)}</span>
               </div>
@@ -5363,11 +5381,11 @@ ${text}
 
             {/* Tax-Saving Suggestions */}
             {Array.isArray(result.suggestions) && result.suggestions.length > 0 ? (
-              <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: '10px' }}>
+              <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: '0px' }}>
                 <div style={{ fontSize: '12px', fontWeight: '600', color: '#4ade80', marginBottom: '12px' }}>💡 TAX-SAVING SUGGESTIONS</div>
                 {result.suggestions.map((s, idx) => (
                   <div key={idx} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', marginBottom: '8px', display: 'flex', gap: '8px' }}>
-                    <span style={{ color: '#c0a062', fontWeight: '600', minWidth: '90px' }}>{s.section}</span>
+                    <span style={{ color: 'var(--lux-accent)', fontWeight: '600', minWidth: '90px' }}>{s.section}</span>
                     <span>{s.tip}</span>
                     {s.potential > 0 ? <span style={{ color: '#4ade80', marginLeft: 'auto' }}>Save up to {fmt(s.potential * 0.3)}</span> : null}
                   </div>

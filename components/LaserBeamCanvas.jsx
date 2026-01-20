@@ -30,7 +30,7 @@ export function LaserBeam({
   width = "100%",
   height = "auto",
   duration = 18, // Slower, calmer animation
-  color = "#c0a062",
+  color = "#C9A24D",
   borderRadius = 12,
   active = true,
   glowIntensity = 12,

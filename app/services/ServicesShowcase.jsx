@@ -23,7 +23,7 @@ function LuxuryServiceIcon({ serviceKey, title = '' }) {
     xmlns: 'http://www.w3.org/2000/svg',
   };
 
-  const stroke = '#C9A24D';
+  const stroke = 'var(--lux-accent)';
   const strokeWidth = 1.25;
   const lineProps = {
     stroke,
@@ -319,11 +319,11 @@ export default function ServicesShowcase({ services }) {
       <style>{`
         /* ===== Services Showcase (scoped to Services page) ===== */
         .svc-showcase {
-          --black-main: #0B0B0C;
-          --black-card: #0E0E10;
-          --white-main: #EDEDED;
-          --white-muted: #B9B9B9;
-          --gold-accent: #C9A24D;
+          --black-main: oklch(0.06 0.005 280);
+          --black-card: oklch(0.10 0.005 280);
+          --white-main: oklch(0.95 0.01 85);
+          --white-muted: oklch(0.95 0.01 85 / 0.72);
+          --gold-accent: var(--lux-accent);
 
           position: relative;
           padding: clamp(56px, 8vw, 88px) 0;
@@ -339,9 +339,8 @@ export default function ServicesShowcase({ services }) {
           pointer-events: none;
           z-index: 0;
           background:
-            radial-gradient(1000px 520px at 18% 0%, rgba(201, 162, 77, 0.10), transparent 60%),
-            radial-gradient(900px 520px at 88% 10%, rgba(255,255,255,0.05), transparent 65%),
-            radial-gradient(1100px 680px at 50% 100%, rgba(0,0,0,0.75), transparent 62%);
+            radial-gradient(900px 520px at 88% 10%, color-mix(in oklab, var(--white-main) 5%, transparent), transparent 65%),
+            radial-gradient(1100px 680px at 50% 100%, rgba(0,0,0,0.78), transparent 62%);
           opacity: 1;
         }
 
@@ -359,34 +358,37 @@ export default function ServicesShowcase({ services }) {
         .svc-showcase__badge {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 14px;
-          border-radius: 999px;
-          border: 1px solid rgba(192,160,98,0.22);
-          background: rgba(255,255,255,0.03);
-          color: var(--white-main);
-          letter-spacing: 0.14em;
+          gap: 12px;
+          padding: 12px 16px;
+          border-radius: 0;
+          border: 1px solid color-mix(in oklab, var(--gold-accent) 26%, transparent);
+          background: oklch(0.95 0.01 85 / 0.03);
+          color: var(--gold-accent);
+          letter-spacing: 0.4em;
           text-transform: uppercase;
-          font-size: 12px;
-          font-weight: 650;
+          font-size: 10px;
+          font-weight: 600;
         }
 
         .svc-showcase__title {
-          margin: 16px 0 10px;
-          font-size: clamp(28px, 4.8vw, 52px);
-          line-height: 1.08;
+          margin: 20px 0 12px;
+          font-size: clamp(32px, 5vw, 56px);
+          line-height: 1.05;
           font-family: "Playfair Display", serif;
-          font-weight: 600;
+          font-weight: 300;
+          letter-spacing: -0.02em;
           color: var(--white-main);
-          text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+          text-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
         .svc-showcase__subtitle {
           margin: 0 auto;
-          max-width: 860px;
-          font-size: clamp(15px, 2.4vw, 18px);
-          line-height: 1.75;
-          color: var(--white-muted);
+          max-width: 700px;
+          font-size: clamp(15px, 2vw, 17px);
+          line-height: 1.9;
+          font-weight: 300;
+          letter-spacing: 0.01em;
+          color: oklch(0.95 0.01 85 / 0.55);
         }
 
         .svc-showcase__grid {
@@ -400,18 +402,19 @@ export default function ServicesShowcase({ services }) {
           position: sticky;
           top: 110px;
           align-self: start;
-          padding: 18px;
-          border-radius: 18px;
-          border: 1px solid rgba(255,255,255,0.08);
-          background: rgba(255,255,255,0.02);
-          box-shadow: 0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
-          backdrop-filter: blur(10px);
+          padding: 20px;
+          border-radius: 0;
+          border: 1px solid oklch(0.95 0.01 85 / 0.08);
+          background: linear-gradient(135deg, oklch(0.95 0.01 85 / 0.03), oklch(0.95 0.01 85 / 0.01));
+          box-shadow: 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 oklch(0.95 0.01 85 / 0.04);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
         }
 
         .svc-rail__label {
           font-size: 12px;
           letter-spacing: 0.24em;
-          color: rgba(201,162,77,0.92);
+          color: color-mix(in oklab, var(--gold-accent) 92%, var(--white-main));
           margin-bottom: 14px;
         }
 
@@ -422,7 +425,7 @@ export default function ServicesShowcase({ services }) {
           gap: 10px;
           align-items: center;
           padding: 12px 10px;
-          border-radius: 14px;
+          border-radius: 0;
           border: 1px solid transparent;
           background: transparent;
           color: rgba(237,237,237,0.88);
@@ -438,14 +441,14 @@ export default function ServicesShowcase({ services }) {
         }
 
         .svc-rail__item.is-active {
-          background: rgba(201,162,77,0.08);
-          border-color: rgba(201,162,77,0.26);
+          background: rgba(255,255,255,0.04);
+          border-color: color-mix(in oklab, var(--gold-accent) 28%, transparent);
           color: rgba(255,255,255,0.96);
         }
 
         .svc-rail__index {
           font-variant-numeric: tabular-nums;
-          color: rgba(201,162,77,0.95);
+          color: color-mix(in oklab, var(--gold-accent) 95%, var(--white-main));
           font-weight: 700;
           letter-spacing: 0.08em;
         }
@@ -464,8 +467,8 @@ export default function ServicesShowcase({ services }) {
         }
 
         .svc-rail__item.is-active .svc-rail__dot {
-          background: rgba(201,162,77,0.95);
-          box-shadow: 0 0 0 6px rgba(201,162,77,0.12);
+          background: color-mix(in oklab, var(--gold-accent) 95%, var(--white-main));
+          box-shadow: 0 0 0 6px color-mix(in oklab, var(--gold-accent) 12%, transparent);
         }
 
         .svc-rail__hint {
@@ -485,10 +488,12 @@ export default function ServicesShowcase({ services }) {
           --mx: 0.5;
           --my: 0.5;
           position: relative;
-          border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.08);
-          background: var(--black-card);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.04);
+          border-radius: 0;
+          border: 1px solid oklch(0.95 0.01 85 / 0.08);
+          background: linear-gradient(135deg, oklch(0.95 0.01 85 / 0.03), oklch(0.95 0.01 85 / 0.01));
+          box-shadow: 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 oklch(0.95 0.01 85 / 0.04);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           overflow: hidden;
           transform: translateZ(0);
         }
@@ -498,14 +503,18 @@ export default function ServicesShowcase({ services }) {
           position: absolute;
           inset: -2px;
           background:
-            radial-gradient(520px 240px at calc(var(--mx) * 100%) calc(var(--my) * 100%), rgba(201,162,77,0.14), transparent 55%),
+            radial-gradient(
+              520px 240px at calc(var(--mx) * 100%) calc(var(--my) * 100%),
+              color-mix(in oklab, var(--gold-accent) 8%, transparent),
+              transparent 55%
+            ),
             linear-gradient(135deg, rgba(255,255,255,0.035), transparent 40%);
           opacity: 1;
           pointer-events: none;
         }
 
         .svc-panel.is-active {
-          border-color: rgba(201,162,77,0.22);
+          border-color: color-mix(in oklab, var(--gold-accent) 22%, transparent);
         }
 
         .svc-panel__frame {
@@ -545,20 +554,21 @@ export default function ServicesShowcase({ services }) {
         .svc-panel__kicker {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.10);
-          background: rgba(0,0,0,0.20);
-          color: rgba(237,237,237,0.92);
-          font-size: 12px;
-          letter-spacing: 0.08em;
+          gap: 12px;
+          padding: 10px 14px;
+          border-radius: 0;
+          border: 1px solid oklch(0.95 0.01 85 / 0.10);
+          background: oklch(0.95 0.01 85 / 0.03);
+          color: oklch(0.95 0.01 85 / 0.75);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.25em;
           text-transform: uppercase;
         }
 
         .svc-panel__kickerIndex {
-          color: rgba(201,162,77,0.95);
-          font-weight: 800;
+          color: oklch(0.78 0.08 65);
+          font-weight: 700;
           font-variant-numeric: tabular-nums;
         }
 
@@ -571,29 +581,33 @@ export default function ServicesShowcase({ services }) {
 
 
         .svc-panel__icon {
-          width: 44px;
-          height: 44px;
+          width: 48px;
+          height: 48px;
           display: grid;
           place-items: center;
-          border-radius: 14px;
-          border: 1px solid rgba(201,162,77,0.24);
-          background: rgba(0,0,0,0.18);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+          border-radius: 0;
+          border: 1px solid oklch(0.78 0.08 65 / 0.25);
+          background: oklch(0.95 0.01 85 / 0.03);
+          box-shadow: inset 0 1px 0 oklch(0.95 0.01 85 / 0.04);
         }
 
         .svc-panel__title {
           margin: 0;
-          font-size: clamp(22px, 3.4vw, 38px);
-          line-height: 1.15;
+          font-size: clamp(24px, 3.5vw, 40px);
+          line-height: 1.1;
           font-family: "Playfair Display", serif;
+          font-weight: 300;
+          letter-spacing: -0.02em;
           color: var(--white-main);
         }
 
         .svc-panel__desc {
           margin: 0;
-          font-size: clamp(14px, 2.3vw, 17px);
-          line-height: 1.8;
-          color: var(--white-muted);
+          font-size: clamp(14px, 2vw, 16px);
+          line-height: 1.9;
+          font-weight: 300;
+          letter-spacing: 0.01em;
+          color: oklch(0.95 0.01 85 / 0.55);
         }
 
         .svc-panel__chips {
@@ -603,12 +617,15 @@ export default function ServicesShowcase({ services }) {
         }
 
         .svc-chip {
-          padding: 10px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.08);
-          background: rgba(255,255,255,0.02);
-          color: rgba(237,237,237,0.92);
-          font-size: 13px;
+          padding: 10px 14px;
+          border-radius: 0;
+          border: 1px solid oklch(0.95 0.01 85 / 0.08);
+          background: oklch(0.95 0.01 85 / 0.03);
+          color: oklch(0.95 0.01 85 / 0.75);
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
           line-height: 1;
         }
 
@@ -620,52 +637,73 @@ export default function ServicesShowcase({ services }) {
         }
 
         .svc-btn {
+          position: relative;
+          overflow: hidden;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
-          padding: 14px 24px;
-          border-radius: 50px;
+          gap: 12px;
+          padding: 16px 28px;
+          font-family: 'Inter', system-ui, sans-serif;
           font-weight: 600;
-          font-size: 13px;
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
           text-decoration: none;
           border: none;
-          background: linear-gradient(
-            135deg,
-            color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 0%,
-            color-mix(in oklab, var(--color-matte-gold) 70%, white 30%) 50%,
-            color-mix(in oklab, var(--color-matte-gold) 85%, white 15%) 100%
-          );
-          background-size: 200% 200%;
-          color: var(--color-luxury-black);
-          box-shadow:
-            0 4px 15px rgba(0, 0, 0, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-          transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+          border-radius: 0;
+          background: oklch(0.95 0.01 85);
+          color: var(--black-main);
           cursor: pointer;
+          transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Defensive: prevent inherited/child utility classes from making CTA text/icons invisible */
+        .svc-btn,
+        .svc-btn * {
+          color: inherit !important;
+        }
+
+        .svc-btn svg {
+          stroke: currentColor !important;
+          fill: none;
+        }
+
+        /* Some global utilities can force white text; lock primary CTA to dark text on light background */
+        .svc-btn--primary {
+          color: var(--black-main) !important;
+          -webkit-text-fill-color: currentColor;
+        }
+
+        .svc-btn > * {
           position: relative;
-          overflow: hidden;
-          animation: premium-cta-gradient 6s ease-in-out infinite;
+          z-index: 2;
         }
 
         .svc-btn::before {
-          content: "";
+          content: '';
           position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-          pointer-events: none;
-          animation: premium-cta-shimmer 2.8s linear infinite;
+          inset: 0;
+          background: var(--gold-accent);
+          transform: translateX(-101%);
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: 1;
         }
 
         .svc-btn:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow:
-            0 8px 30px color-mix(in oklab, var(--color-matte-gold) 55%, transparent),
-            0 0 40px color-mix(in oklab, var(--color-matte-gold) 40%, transparent);
-          filter: brightness(1.08);
+          color: oklch(0.06 0.005 280);
+        }
+
+        .svc-btn:hover::before {
+          transform: translateX(0);
+        }
+
+        .svc-btn:hover svg {
+          transform: translateX(4px);
+        }
+
+        .svc-btn svg {
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .svc-btn--primary {
@@ -673,19 +711,18 @@ export default function ServicesShowcase({ services }) {
         }
 
         .svc-btn--ghost {
-          background: transparent;
-          border: 2px solid color-mix(in oklab, var(--color-matte-gold) 50%, transparent);
-          color: var(--color-matte-gold);
-          box-shadow: 0 0 15px color-mix(in oklab, var(--color-matte-gold) 18%, transparent);
+          background: oklch(0.95 0.01 85 / 0.04);
+          border: 1px solid oklch(0.95 0.01 85 / 0.12);
+          color: oklch(0.95 0.01 85 / 0.85);
         }
 
         .svc-btn--ghost::before {
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+          background: var(--gold-accent);
         }
 
         .svc-btn--ghost:hover {
-          background: color-mix(in oklab, var(--color-matte-gold) 92%, white 8%);
-          color: var(--color-luxury-black);
+          color: oklch(0.06 0.005 280);
+          border-color: oklch(0.78 0.08 65);
         }
 
         @keyframes svcFadeUp {
@@ -741,7 +778,7 @@ export default function ServicesShowcase({ services }) {
           .svc-panel__mediaOverlay {
             background:
               linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.74) 88%),
-              radial-gradient(800px 300px at 50% 0%, rgba(192,160,98,0.10), transparent 60%);
+              radial-gradient(800px 300px at 50% 0%, color-mix(in oklab, var(--gold-accent) 10%, transparent), transparent 60%);
           }
         }
 

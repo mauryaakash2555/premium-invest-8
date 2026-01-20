@@ -61,7 +61,7 @@ const Navigation = () => {
           zIndex: 999,
           background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-          borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.1)' : 'none',
+          borderBottom: isScrolled ? '1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.06))' : 'none',
           transition: 'all 0.3s ease',
         }}
       >
@@ -74,7 +74,7 @@ const Navigation = () => {
               height={40}
               style={{ objectFit: 'contain' }}
             />
-            <span style={{ fontSize: '28px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
+            <span style={{ fontSize: '28px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, var(--lux-accent), color-mix(in oklab, var(--lux-accent) 70%, white))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>
               BM Wealth
             </span>
           </Link>
@@ -84,7 +84,7 @@ const Navigation = () => {
                 key={link.path}
                 href={link.path}
                 style={{
-                  color: pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  color: pathname === link.path ? 'var(--lux-accent)' : '#FFFFFF',
                   textDecoration: 'none',
                   fontSize: '14px',
                   fontWeight: 500,
@@ -111,7 +111,7 @@ const Navigation = () => {
           zIndex: 999,
           background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'rgba(0, 0, 0, 0.85)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(218, 165, 32, 0.2)',
+          borderBottom: '1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.06))',
           padding: '12px 20px',
           transition: 'all 0.3s ease',
         }}
@@ -124,7 +124,7 @@ const Navigation = () => {
             height={36}
             style={{ objectFit: 'contain' }}
           />
-          <span style={{ fontSize: '20px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, #DAA520, #B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
+          <span style={{ fontSize: '20px', fontFamily: "'Playfair Display', serif", fontWeight: 700, background: 'linear-gradient(135deg, var(--lux-accent), color-mix(in oklab, var(--lux-accent) 70%, white))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>
             BM Wealth
           </span>
         </Link>
@@ -141,7 +141,7 @@ const Navigation = () => {
           zIndex: 9999,
           background: 'rgba(0, 0, 0, 0.95)',
           backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+          borderTop: '1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.06))',
           padding: '12px 0',
           paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
         }}
@@ -158,7 +158,7 @@ const Navigation = () => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   textDecoration: 'none',
-                  color: isActive ? '#DAA520' : '#888',
+                  color: isActive ? 'var(--lux-accent)' : '#9aa3ad',
                   fontSize: '10px',
                   fontWeight: isActive ? 600 : 400,
                   transition: 'color 0.2s ease',

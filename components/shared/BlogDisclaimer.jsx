@@ -7,8 +7,8 @@ export default function BlogDisclaimer() {
     <div
       style={{
         background: "linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%)",
-        border: "1px solid rgba(218, 165, 32, 0.25)",
-        borderRadius: "8px",
+        border: "1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.08))",
+        borderRadius: "0px",
         padding: "24px",
         margin: "40px 0",
         display: "flex",
@@ -19,7 +19,7 @@ export default function BlogDisclaimer() {
       <Info
         size={22}
         style={{
-          color: "#DAA520",
+          color: "var(--lux-accent)",
           flexShrink: 0,
           marginTop: "2px",
         }}
@@ -27,7 +27,7 @@ export default function BlogDisclaimer() {
       <div>
         <h4
           style={{
-            color: "#DAA520",
+            color: "var(--lux-accent)",
             fontSize: "16px",
             fontWeight: "600",
             marginBottom: "10px",

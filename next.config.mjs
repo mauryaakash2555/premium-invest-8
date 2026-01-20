@@ -34,6 +34,8 @@ const nextConfig = {
   },
   // Disable all caching for blog routes but enable for static assets
   async headers() {
+    const isProd = process.env.NODE_ENV === 'production';
+
     return [
       {
         source: '/blog/:path*',
@@ -53,22 +55,24 @@ const nextConfig = {
         ],
       },
       {
-        // Cache static assets for 1 year
+        // Cache static assets for 1 year (production only)
         source: '/:path*.(ico|jpg|jpeg|png|gif|webp|avif|svg|woff|woff2)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: isProd ? 'public, max-age=31536000, immutable' : 'no-store',
           },
         ],
       },
       {
-        // Cache JS/CSS for 1 year (they're content-hashed)
+        // Cache JS/CSS for 1 year (they're content-hashed) — but NEVER in dev.
+        // In dev, some URLs are not content-hashed (or can change between rebuilds),
+        // so "immutable" can cause stale client bundles and hydration mismatches.
         source: '/_next/static/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: isProd ? 'public, max-age=31536000, immutable' : 'no-store',
           },
         ],
       },

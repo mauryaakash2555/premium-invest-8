@@ -32,8 +32,31 @@ import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import ServicesShowcase from './ServicesShowcase';
 
-const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
-const SERVICE_LUXURY_STYLES = getServiceLuxuryStyles({ accentRgb: '192, 160, 98' });
+const LUX = {
+  background: 'oklch(0.06 0.005 280)',
+  foreground: 'oklch(0.95 0.01 85)',
+  foreground80: 'oklch(0.95 0.01 85 / 0.80)',
+  foreground60: 'oklch(0.95 0.01 85 / 0.60)',
+  foreground40: 'oklch(0.95 0.01 85 / 0.40)',
+  foreground10: 'oklch(0.95 0.01 85 / 0.10)',
+  foreground05: 'oklch(0.95 0.01 85 / 0.05)',
+  card: 'oklch(0.10 0.005 280)',
+  accent: 'oklch(0.78 0.08 65)',
+};
+
+const BODY_TEXT_STYLES = getBodyTextPaletteStyles({
+  scopeSelector: '.bp-body',
+  title: LUX.foreground,
+  body: LUX.foreground60,
+  muted: LUX.foreground40,
+});
+
+const SERVICE_LUXURY_STYLES = getServiceLuxuryStyles({
+  accentColor: LUX.accent,
+  title: LUX.foreground,
+  border: LUX.foreground10,
+  shellBg: LUX.background,
+});
 
 const Services = () => {
   useEffect(() => {
@@ -66,7 +89,25 @@ const Services = () => {
   ];
 
   return (
-    <div className="svc-shell" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+    <div
+      className="svc-shell"
+      style={{
+        overflowX: 'hidden',
+        width: '100%',
+        maxWidth: '100vw',
+        background: LUX.background,
+        color: LUX.foreground,
+        ['--lux-background']: LUX.background,
+        ['--lux-foreground']: LUX.foreground,
+        ['--lux-foreground-80']: LUX.foreground80,
+        ['--lux-foreground-60']: LUX.foreground60,
+        ['--lux-foreground-40']: LUX.foreground40,
+        ['--lux-foreground-10']: LUX.foreground10,
+        ['--lux-foreground-05']: LUX.foreground05,
+        ['--lux-card']: LUX.card,
+        ['--lux-accent']: LUX.accent,
+      }}
+    >
       <style>{`
         /* Prevent accidental horizontal overflow in Services page */
         .svc-shell * {
@@ -124,15 +165,170 @@ const Services = () => {
           pointer-events: none;
           opacity: 0.9;
           background:
-            radial-gradient(900px 420px at 20% 0%, rgba(192,160,98,0.08), transparent 60%),
-            radial-gradient(820px 420px at 85% 10%, rgba(255,255,255,0.06), transparent 65%),
+            radial-gradient(820px 420px at 85% 10%, oklch(0.95 0.01 85 / 0.06), transparent 65%),
             radial-gradient(900px 520px at 50% 100%, rgba(0,0,0,0.55), transparent 60%);
         }
 
         @supports not (mask-image: radial-gradient(white, transparent)) {
           .svc-tech::before { opacity: 0.35; }
         }
+
+        /* Grain texture overlay */
+        .svc-grain {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          pointer-events: none;
+          opacity: 0.025;
+          mix-blend-mode: overlay;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Luxury glassmorphism cards */
+        .lux-glass {
+          background: linear-gradient(135deg, oklch(0.95 0.01 85 / 0.03), oklch(0.95 0.01 85 / 0.01));
+          border: 1px solid oklch(0.95 0.01 85 / 0.08);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-radius: 0;
+          box-shadow: 0 24px 64px rgba(0,0,0,0.5), inset 0 1px 0 oklch(0.95 0.01 85 / 0.05);
+        }
+
+        /* Luxury CTA - Primary (solid with hover fill) */
+        .lux-cta-primary {
+          position: relative;
+          overflow: hidden;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 16px 32px;
+          background: oklch(0.95 0.01 85);
+          color: oklch(0.06 0.005 280);
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          text-decoration: none;
+          border: none;
+          border-radius: 0;
+          cursor: pointer;
+          transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Ensure CTA content is always visible (prevents accidental inherited white-on-white) */
+        .lux-cta-primary > span,
+        .lux-cta-primary > svg {
+          color: oklch(0.06 0.005 280);
+        }
+
+        .lux-cta-ghost > span,
+        .lux-cta-ghost > svg {
+          color: oklch(0.95 0.01 85 / 0.88);
+        }
+        .lux-cta-primary > span,
+        .lux-cta-primary > svg {
+          position: relative;
+          z-index: 2;
+        }
+        .lux-cta-primary::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: oklch(0.78 0.08 65);
+          transform: translateX(-101%);
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: 1;
+        }
+        .lux-cta-primary:hover {
+          color: oklch(0.06 0.005 280);
+        }
+        .lux-cta-primary:hover::before {
+          transform: translateX(0);
+        }
+        .lux-cta-primary:hover svg {
+          transform: translateX(4px);
+        }
+        .lux-cta-primary svg {
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Luxury CTA - Ghost (border only) */
+        .lux-cta-ghost {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 16px 32px;
+          background: oklch(0.95 0.01 85 / 0.04);
+          color: oklch(0.95 0.01 85 / 0.85);
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          text-decoration: none;
+          border: 1px solid oklch(0.95 0.01 85 / 0.12);
+          border-radius: 0;
+          cursor: pointer;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lux-cta-ghost:hover {
+          background: oklch(0.78 0.08 65);
+          border-color: oklch(0.78 0.08 65);
+          color: oklch(0.06 0.005 280);
+        }
+        .lux-cta-ghost svg {
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lux-cta-ghost:hover svg {
+          transform: translateX(4px);
+        }
+
+        /* Luxury labels */
+        .lux-label {
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.4em;
+          text-transform: uppercase;
+          color: oklch(0.78 0.08 65);
+        }
+
+        /* Luxury headline */
+        .lux-headline {
+          font-family: 'Playfair Display', serif;
+          font-weight: 300;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+          color: oklch(0.95 0.01 85);
+        }
+
+        /* Luxury body text */
+        .lux-body {
+          font-family: 'Inter', system-ui, sans-serif;
+          font-weight: 300;
+          line-height: 1.9;
+          letter-spacing: 0.01em;
+          color: oklch(0.95 0.01 85 / 0.55);
+        }
+
+        /* Horizontal animated line */
+        .lux-line {
+          height: 1px;
+          background: linear-gradient(90deg, oklch(0.78 0.08 65), oklch(0.78 0.08 65 / 0));
+        }
+
+        /* Section divider */
+        .lux-divider {
+          height: 1px;
+          background: oklch(0.95 0.01 85 / 0.06);
+        }
       `}</style>
+
+      {/* Grain texture overlay */}
+      <div className="svc-grain" aria-hidden="true" />
 
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <style dangerouslySetInnerHTML={{ __html: SERVICE_LUXURY_STYLES }} />
@@ -189,7 +385,7 @@ const Services = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: LUX.accent,
             }}
           >
             Our Services
@@ -197,7 +393,7 @@ const Services = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: LUX.foreground60,
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -210,68 +406,26 @@ const Services = () => {
 
       <div className="bp-body svc-tech">
       {/* Start Here */}
-      <section className="section-container" style={{ marginTop: 'clamp(24px, 5vw, 40px)' }}>
-        <div
-          className="glass-effect svc-card"
-          style={{
-            padding: 'clamp(18px, 4vw, 28px)',
-            maxWidth: '100%',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 'clamp(22px, 4vw, 30px)',
-              color: '#e5e5e5',
-              margin: '0 0 12px 0',
-              fontFamily: '"Playfair Display", serif',
-              fontWeight: 600,
-            }}
-          >
-            Start in 60 seconds
+      <section className="section-container" style={{ marginTop: 'clamp(40px, 6vw, 64px)' }}>
+        <div className="lux-glass" style={{ padding: 'clamp(32px, 5vw, 48px)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+            <span className="lux-label">Quick Start</span>
+            <div className="lux-line" style={{ width: '64px' }} />
+          </div>
+          <h2 className="lux-headline" style={{ fontSize: 'clamp(28px, 4vw, 40px)', marginBottom: '16px' }}>
+            Begin in 60 seconds
           </h2>
-          <p style={{ margin: '0 0 16px 0', fontSize: 'clamp(14px, 2.5vw, 16px)', color: '#B8B8B8', lineHeight: 1.8 }}>
-            If you want clarity before you act, explore our tools. If you want execution and documentation support,
-            reach us on the contact page.
+          <p className="lux-body" style={{ fontSize: 'clamp(15px, 2vw, 17px)', maxWidth: '700px', marginBottom: '32px' }}>
+            Explore our tools for clarity before you act. For execution and documentation support, reach us directly.
           </p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '12px',
-              alignItems: 'stretch',
-            }}
-          >
-            <Link
-              href="/tools"
-              className="btn-primary"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '14px 28px',
-                borderRadius: '50px',
-                textDecoration: 'none',
-              }}
-            >
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            <Link href="/tools" className="lux-cta-primary">
               <span>Explore Tools</span>
-              <ArrowRight size={18} style={{ flexShrink: 0 }} />
+              <ArrowRight size={16} />
             </Link>
-            <Link
-              href="/contact"
-              className="btn-secondary"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '14px 28px',
-                borderRadius: '50px',
-                textDecoration: 'none',
-              }}
-            >
+            <Link href="/contact" className="lux-cta-ghost">
               <span>Contact Us</span>
-              <ArrowRight size={18} style={{ color: '#B8B8B8', flexShrink: 0 }} />
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -282,14 +436,14 @@ const Services = () => {
 
       {/* Why Choose BM Wealth - NEW CONTENT SECTION */}
       <section style={{ 
-        background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)', 
+        background: 'linear-gradient(180deg, var(--lux-background) 0%, color-mix(in oklab, var(--lux-background) 70%, black 30%) 100%)', 
         padding: 'clamp(56px, 8vw, 80px) 20px' 
       }}>
         <div className="section-container">
           <h2 style={{
             fontSize: 'clamp(32px, 5vw, 48px)',
             fontFamily: '"Playfair Display", serif',
-            color: '#e5e5e5',
+            color: 'var(--lux-foreground-80)',
             textAlign: 'center',
             marginBottom: '24px',
             fontWeight: '600'
@@ -298,7 +452,7 @@ const Services = () => {
           </h2>
           <p style={{
             fontSize: 'clamp(16px, 2.5vw, 18px)',
-            color: '#B8B8B8',
+            color: 'var(--lux-foreground-60)',
             textAlign: 'center',
             maxWidth: '900px',
             margin: '0 auto 60px',
@@ -311,166 +465,100 @@ const Services = () => {
           
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '32px',
-            marginBottom: '60px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '24px',
+            marginBottom: '64px'
           }}>
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                PMS Certification
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Certification</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                PMS Certified
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                PMS Certification No. 2430447816.
-                We lead with a portfolio-first operating rhythm: documented decisions, review cadence, and clear accountability.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                PMS Certification No. 2430447816. Portfolio-first operating rhythm with documented decisions, review cadence, and clear accountability.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Credential-led service helps keep the process disciplined and consistent across market cycles.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                Credential-led service keeps the process disciplined across market cycles.
               </p>
             </div>
 
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Mumbai-Focused Expertise
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Local Expertise</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                Mumbai-Focused
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Based in Mumbai's financial district, we understand the unique challenges and opportunities 
-                facing Mumbai professionals, entrepreneurs, and families. From property vs. SIP decisions 
-                to tax optimization strategies, our advice is tailored to Mumbai's economic reality.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                Based in Mumbai's financial district. We understand property vs. SIP decisions, tax optimization, and strategies tailored to Mumbai's economic reality.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                We help clients navigate Mumbai's high cost of living, real estate dynamics, and career 
-                progression patterns to build wealth strategies that actually work in this city.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                Navigate Mumbai's high cost of living and real estate dynamics with confidence.
               </p>
             </div>
 
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                AMFI Registered & IRDAI Licensed
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Regulatory</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                AMFI & IRDAI Licensed
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                We hold AMFI Registration (ARN 90008) for mutual fund distribution and an IRDAI license (277925) for insurance support.
-                This keeps the process disclosure-led and aligned with applicable regulations.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                AMFI Registration (ARN 90008) for mutual funds. IRDAI license (277925) for insurance. Disclosure-led and regulation-aligned.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                We aim to keep documentation, communication, and investor suitability standards clear and consistent.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                Documentation, communication, and suitability standards kept clear and consistent.
               </p>
             </div>
 
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Holistic Wealth Planning
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Philosophy</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                Holistic Planning
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                We don't just sell products—we architect comprehensive wealth solutions. Our approach 
-                integrates mutual funds, insurance, SIPs, portfolio management, and tax planning into a 
-                cohesive strategy aligned with your life goals.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                We architect comprehensive wealth solutions—mutual funds, insurance, SIPs, portfolio management, and tax planning unified with your life goals.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                From your first SIP to retirement planning to legacy wealth transfer, we're your partners 
-                at every stage of your financial journey.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                From your first SIP to legacy wealth transfer—partners at every stage.
               </p>
             </div>
 
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Transparent, Fee-Based Model
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Transparency</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                Fee-Based Model
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                No hidden charges, no commission bias. We earn through transparent distributor commissions 
-                from fund houses (as permitted by AMFI) and clearly disclosed advisory fees. You always 
-                know exactly what you're paying for.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                No hidden charges. Transparent distributor commissions from fund houses (AMFI-permitted) and clearly disclosed advisory fees.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Our recommendations are based on your best interests, not commission maximization. We 
-                prioritize Direct Plans where beneficial and Regular Plans where appropriate.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                Recommendations based on your interests, not commission maximization.
               </p>
             </div>
 
-            <div className="glass-effect svc-card" style={{ padding: '32px', borderRadius: '12px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                color: '#C0A062', 
-                marginBottom: '16px',
-                fontFamily: '"Playfair Display", serif',
-                fontWeight: '600'
-              }}>
-                Track Record & Client Trust
+            <div className="lux-glass" style={{ padding: 'clamp(28px, 4vw, 40px)' }}>
+              <div className="lux-label" style={{ marginBottom: '16px' }}>Track Record</div>
+              <h3 className="lux-headline" style={{ fontSize: 'clamp(22px, 3vw, 28px)', marginBottom: '16px' }}>
+                Client Trust
               </h3>
-              <p style={{ fontSize: '16px', color: '#d0d0d0', lineHeight: '1.7', marginBottom: '12px' }}>
-                Trusted by 500+ Mumbai investors including young professionals, entrepreneurs, corporate 
-                executives, and high-net-worth families. Our client retention rate exceeds 85%, reflecting 
-                the quality of service and results we deliver.
+              <p className="lux-body" style={{ fontSize: '15px', marginBottom: '12px' }}>
+                Trusted by 500+ Mumbai investors. Professionals, entrepreneurs, executives, and HNW families. 85%+ retention rate.
               </p>
-              <p style={{ fontSize: '15px', color: '#B8B8B8', lineHeight: '1.6' }}>
-                Many of our clients have been with us for 5+ years, trusting us through market cycles, 
-                career changes, and major life events.
+              <p style={{ fontSize: '14px', color: 'oklch(0.95 0.01 85 / 0.40)', lineHeight: '1.7' }}>
+                Many clients 5+ years with us through market cycles and life events.
               </p>
             </div>
           </div>
 
-          <div className="svc-card" style={{ borderRadius: '12px', padding: '40px', textAlign: 'center' }}>
-            <h3 style={{
-              fontSize: 'clamp(24px, 4vw, 32px)',
-              fontFamily: '"Playfair Display", serif',
-              color: '#e5e5e5',
-              marginBottom: '20px',
-              fontWeight: '600'
-            }}>
-              Our Investment Philosophy
+          <div className="lux-glass" style={{ padding: 'clamp(40px, 6vw, 64px)', textAlign: 'center' }}>
+            <div className="lux-label" style={{ marginBottom: '20px' }}>Our Approach</div>
+            <h3 className="lux-headline" style={{ fontSize: 'clamp(28px, 4vw, 40px)', marginBottom: '24px' }}>
+              Investment Philosophy
             </h3>
-            <p style={{
-              fontSize: 'clamp(15px, 2.5vw, 17px)',
-              color: '#d0d0d0',
-              lineHeight: '1.8',
-              maxWidth: '900px',
-              margin: '0 auto 24px'
-            }}>
-              We believe wealth creation is a marathon, not a sprint. Our philosophy centers on disciplined 
-              SIP investing, asset allocation based on life stages, tax-efficient structuring, and regular 
-              portfolio rebalancing. We focus on sustainable, long-term wealth building rather than chasing 
-              market fads or promising unrealistic returns.
+            <div className="lux-line" style={{ width: '80px', margin: '0 auto 32px' }} />
+            <p className="lux-body" style={{ fontSize: 'clamp(15px, 2vw, 17px)', maxWidth: '800px', margin: '0 auto 24px' }}>
+              Wealth creation is a marathon. Disciplined SIP investing, life-stage asset allocation, tax-efficient structuring, and regular rebalancing. We focus on sustainable, long-term building—not market fads or unrealistic promises.
             </p>
-            <p style={{
-              fontSize: 'clamp(15px, 2.5vw, 17px)',
-              color: '#d0d0d0',
-              lineHeight: '1.8',
-              maxWidth: '900px',
-              margin: '0 auto'
-            }}>
-              Every client's situation is unique. A ₹25,000/month SIP strategy for a 28-year-old IT 
-              professional in Andheri looks different from a ₹2 lakh/month portfolio for a 45-year-old 
-              business owner in South Mumbai. We customize everything based on your income, expenses, 
-              risk tolerance, time horizon, and life goals.
+            <p className="lux-body" style={{ fontSize: 'clamp(15px, 2vw, 17px)', maxWidth: '800px', margin: '0 auto' }}>
+              Every situation is unique. A ₹25,000/month SIP for a 28-year-old IT professional looks different from a ₹2 lakh/month portfolio for a 45-year-old business owner. We customize based on income, expenses, risk tolerance, time horizon, and life goals.
             </p>
           </div>
         </div>
@@ -480,83 +568,34 @@ const Services = () => {
       <section
         className="services-section-pad"
         style={{
-          background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)',
-          padding: 'clamp(56px, 8vw, 80px) 20px',
+          background: LUX.background,
+          padding: 'clamp(64px, 10vw, 100px) 20px',
         }}
       >
         <div className="section-container">
-          <div
-            className="glass-effect svc-card services-cta-card"
-            style={{
-              padding: 'clamp(28px, 5vw, 60px) clamp(18px, 4vw, 40px)',
-              textAlign: 'center',
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.10)',
-            }}
-          >
-            <h2
-              style={{
-                fontSize: 'clamp(24px, 3vw, 40px)',
-                marginBottom: '20px',
-                color: '#e5e5e5',
-              }}
-            >
-              Explore services
+          <div className="lux-glass" style={{ padding: 'clamp(48px, 7vw, 80px)', textAlign: 'center' }}>
+            <div className="lux-label" style={{ marginBottom: '20px' }}>Ready to Start</div>
+            <h2 className="lux-headline" style={{ fontSize: 'clamp(32px, 5vw, 52px)', marginBottom: '20px' }}>
+              Begin Your Journey
             </h2>
-            <p
-              style={{
-                fontSize: '18px',
-                color: '#CCCCCC',
-                marginBottom: '30px',
-                maxWidth: '600px',
-                margin: '0 auto 30px',
-              }}
-            >
-              Explore our services and tools. For execution and documentation support, reach us via WhatsApp or the contact page.
+            <div className="lux-line" style={{ width: '80px', margin: '0 auto 28px' }} />
+            <p className="lux-body" style={{ fontSize: 'clamp(15px, 2vw, 18px)', maxWidth: '600px', margin: '0 auto 40px' }}>
+              For execution and documentation support, reach us via WhatsApp or the contact page.
             </p>
-            <div
-              style={{
-                display: 'flex',
-                gap: '20px',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-              }}
-            >
+            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a
                 href="https://wa.me/918850977259"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="services-whatsapp-cta"
-                className="btn-primary"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  padding: '14px 28px',
-                  borderRadius: '50px',
-                  textDecoration: 'none',
-                  minWidth: '220px',
-                }}
+                className="lux-cta-primary"
               >
-                Message on WhatsApp <ArrowRight size={18} />
+                <span>Message on WhatsApp</span>
+                <ArrowRight size={16} />
               </a>
-              <Link
-                href="/contact"
-                data-testid="services-contact-cta"
-                className="btn-secondary"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  padding: '14px 28px',
-                  borderRadius: '50px',
-                  textDecoration: 'none',
-                  minWidth: '220px',
-                }}
-              >
-                Contact Us <ArrowRight size={18} />
+              <Link href="/contact" data-testid="services-contact-cta" className="lux-cta-ghost">
+                <span>Contact Us</span>
+                <ArrowRight size={16} />
               </Link>
             </div>
           </div>
@@ -566,8 +605,9 @@ const Services = () => {
       <FAQSection title="Questions People Quietly Ask" faqs={faqs} />
 
       {/* Risk & Disclosure */}
-      <section className="section-container">
-        <p style={{ fontSize: '12px', lineHeight: '1.6', color: '#9a9a9a', margin: 0 }}>
+      <section className="section-container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
+        <div className="lux-divider" style={{ marginBottom: '24px' }} />
+        <p style={{ fontSize: '11px', lineHeight: '1.7', color: 'oklch(0.95 0.01 85 / 0.35)', letterSpacing: '0.04em', margin: 0 }}>
           Investments are subject to market risks. Read all related documents carefully and consider your own situation before acting.
         </p>
       </section>

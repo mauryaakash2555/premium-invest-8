@@ -849,10 +849,13 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                 This is an educational calculator. Not investment advice. Mutual funds are subject to market risks. PMS 2430447816 | ARN 90008 | Consult your advisor before investing.
               </p>
 
-              {/* Legal Micro-Text */}
+              {/* Legal Micro-Text - Premium subtle compliance */}
               <div className="flex flex-col items-center mt-6 space-y-2 opacity-30 hover:opacity-100 transition-opacity duration-500">
                 <p className="text-[8px] tracking-[0.5px] m-0" style={{ color: COLORS.muted }}>
                   PMS 2430447816 | AMFI ARN-90008 | IRDAI-277925 | Distribution remuneration as per industry standards
+                </p>
+                <p className="text-[7px] tracking-[0.3px] m-0 max-w-md text-center" style={{ color: 'rgba(180, 200, 230, 0.35)' }}>
+                  Educational content only · Not SEBI registered advisory · Past performance ≠ future results
                 </p>
                 <div className="flex gap-4">
                   <Link 

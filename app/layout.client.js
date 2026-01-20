@@ -26,7 +26,6 @@
 'use client';
 
 import { Playfair_Display, Inter } from "next/font/google";
-import { useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
@@ -60,51 +59,117 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
   // Pages with their own custom footer - don't add global Footer
   const hasCustomFooter = isLaserPage || isClientPortal;
 
-  useEffect(() => {
-    // Opt-in reset for stale SW/caches that can cause hydration mismatches.
-    // Visit any page with `?resetSW=1` (or `?reset-sw=1`) once.
-    if (typeof window === 'undefined') return;
-
-    const url = new URL(window.location.href);
-    const params = url.searchParams;
-    const shouldReset =
-      params.get('resetSW') === '1' ||
-      params.get('reset-sw') === '1' ||
-      params.has('resetSW') ||
-      params.has('reset-sw');
-
-    if (!shouldReset) return;
-
-    const run = async () => {
-      try {
-        if ('serviceWorker' in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map((r) => r.unregister()));
-        }
-
-        if ('caches' in window) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map((k) => caches.delete(k)));
-        }
-      } catch (e) {
-        // Swallow errors; this is a best-effort dev recovery path.
-        console.warn('[resetSW] failed', e);
-      } finally {
-        params.delete('resetSW');
-        params.delete('reset-sw');
-        url.search = params.toString();
-        window.location.replace(url.toString());
-      }
-    };
-
-    run();
-  }, []);
-
   const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
   return (
     <html lang="en">
       <head>
         <meta name="x-ui-build" content={buildId} />
+
+        {/*
+          Pre-hydration SW/cache reset.
+          Fixes hydration mismatches when a stale service worker serves old JS bundles
+          while the server HTML is new (common on localhost/127 after past PWAs).
+
+          - Auto-runs once per tab on localhost/127.0.0.1
+          - Can be forced on any origin via ?resetSW=1 or ?reset-sw=1
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(() => {
+  try {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+
+    // One-time loop guard that does not rely on storage (some browsers/extensions block it).
+    const doneParam = '__swResetDone';
+    if (params.get(doneParam) === '1') {
+      params.delete(doneParam);
+      url.search = params.toString();
+      try {
+        window.history.replaceState(null, '', url.toString());
+      } catch {}
+      return;
+    }
+
+    // Detect deploy changes (works on live environments).
+    // If a stale SW/cache is serving old JS bundles, this prevents hydration mismatches.
+    let buildMeta = '';
+    try {
+      const el = document.querySelector('meta[name="x-ui-build"]');
+      buildMeta = (el && el.getAttribute('content')) || '';
+    } catch {}
+
+    let buildChanged = false;
+    let prevBuild = '';
+    try {
+      if (buildMeta && window.localStorage) {
+        const buildKey = '__bmw_ui_build_v1';
+        prevBuild = localStorage.getItem(buildKey) || '';
+        if (prevBuild && prevBuild !== buildMeta) buildChanged = true;
+        localStorage.setItem(buildKey, buildMeta);
+      }
+    } catch {}
+
+    let hasController = false;
+    try {
+      hasController = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+    } catch {}
+
+    const firstSeenBuildWithSW = !!buildMeta && !prevBuild && hasController;
+
+    const force =
+      params.get('resetSW') === '1' ||
+      params.get('reset-sw') === '1' ||
+      params.has('resetSW') ||
+      params.has('reset-sw');
+
+    const isLocalHost =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if (!force && !isLocalHost && !buildChanged && !firstSeenBuildWithSW) return;
+
+    // Avoid reload loops.
+    const flagKey = '__bmw_sw_reset_done_v2:' + (buildMeta || 'no-build');
+    if (!force && window.sessionStorage && sessionStorage.getItem(flagKey) === '1') return;
+    if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
+
+    const tasks = [];
+    if ('serviceWorker' in navigator) {
+      tasks.push(
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+          .catch(() => {})
+      );
+    }
+
+    if ('caches' in window) {
+      tasks.push(
+        caches
+          .keys()
+          .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+          .catch(() => {})
+      );
+    }
+
+    if (!tasks.length) return;
+
+    Promise.all(tasks).finally(() => {
+      params.delete('resetSW');
+      params.delete('reset-sw');
+      params.set(doneParam, '1');
+      url.search = params.toString();
+      window.location.replace(url.toString());
+    });
+  } catch {
+    // ignore
+  }
+})();
+            `,
+          }}
+        />
 
   {/* Google Analytics */}
   {GA4_MEASUREMENT_ID && (

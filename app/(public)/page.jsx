@@ -31,7 +31,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -42,8 +41,8 @@ import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import LiveIntelligenceOverlay from '@/components/user/LiveIntelligenceOverlay';
 import LaserFooter from '@/components/user/LaserFooter';
-const HeroContent = dynamic(() => import('@/components/home/HeroContent'), { ssr: false });
-const AnimatedClouds = dynamic(() => import('@/components/user/AnimatedClouds'), { ssr: false });
+import HeroContent from '@/components/home/HeroContent';
+import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
 
@@ -56,7 +55,7 @@ const GoldenHorizonSweep = () => (
     animate={{ x: '100%' }}
     transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
   >
-    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[#C0A062]/10 to-transparent blur-[120px]" />
+    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[#C0A062]/6 to-transparent blur-[120px]" />
   </motion.div>
 );
 
@@ -89,7 +88,7 @@ export default function HomePage() {
         style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           position: 'relative',
           overflow: 'hidden',
           minHeight: '85vh',
@@ -143,6 +142,8 @@ export default function HomePage() {
             position: 'relative',
             zIndex: 3,
             paddingTop: 'clamp(20px, 7vh, 180px)',
+            width: '100%',
+            paddingLeft: 'clamp(32px, 4vw, 100px)',
           }}
         >
           <HeroContent />

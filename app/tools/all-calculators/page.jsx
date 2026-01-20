@@ -75,7 +75,7 @@ export default function AllCalculatorsPage() {
           <div className="bp-body">
             <AllInOneCalculator />
 
-            <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+            <div className="mt-10 rounded-none border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <h3 className="text-sm font-semibold text-white/90 mb-2">All Calculators Included</h3>
               <p className="text-xs text-white/60 leading-relaxed">
                 SIP • Lumpsum • Goal Planning • Retirement • FD • Insurance • PPF • EPF • NPS • ELSS • EMI • SWP • Step-Up SIP • CAGR • Inflation • Gratuity • HRA • Income Tax • RD • SSY • Wealth Growth • MF Returns • Child Education • Marriage Fund • Car Loan • Home Loan • Gold Investment

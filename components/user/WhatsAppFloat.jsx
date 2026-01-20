@@ -50,13 +50,14 @@ const WhatsAppFloat = () => {
             // Lower tooltip to match button position
             bottom: 'calc(140px + env(safe-area-inset-bottom))',
             right: '20px',
-            background: '#25D366',
-            color: '#FFFFFF',
+            background: 'rgba(7, 7, 8, 0.74)',
+            color: 'rgba(255, 255, 255, 0.92)',
             padding: '8px 16px',
-            borderRadius: '8px',
+            borderRadius: '0px',
+            border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10))',
             fontSize: '14px',
             whiteSpace: 'nowrap',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0 18px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06) inset',
             zIndex: 999,
             fontWeight: '500',
             pointerEvents: 'none',
@@ -73,7 +74,7 @@ const WhatsAppFloat = () => {
               height: '0',
               borderLeft: '6px solid transparent',
               borderRight: '6px solid transparent',
-              borderTop: '6px solid #25D366',
+              borderTop: '6px solid rgba(7, 7, 8, 0.74)',
             }}
           />
         </div>

@@ -38,9 +38,9 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
       <h2
         style={{
           fontSize: 'clamp(28px, 4vw, 36px)',
-          color: '#DAA520',
+          color: 'var(--lux-accent)',
           marginBottom: '30px',
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Cormorant Garamond', serif",
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
@@ -61,31 +61,31 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
             key={post.slug}
             onClick={() => router.push(`/blog/${post.slug}`)}
             style={{
-              background: 'rgba(192, 160, 98, 0.05)',
-              border: '1px solid rgba(192, 160, 98, 0.2)',
-              borderRadius: '12px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.10)',
+              borderRadius: '0px',
               padding: '24px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(192, 160, 98, 0.1)';
-              e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10))';
               e.currentTarget.style.transform = 'translateY(-4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(192, 160, 98, 0.05)';
-              e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.2)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.10)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             <div
               style={{
                 display: 'inline-block',
-                background: 'rgba(218, 165, 32, 0.1)',
-                color: '#DAA520',
+                background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+                color: 'var(--lux-accent)',
                 padding: '6px 12px',
-                borderRadius: '6px',
+                borderRadius: '0px',
                 fontSize: '12px',
                 fontWeight: '600',
                 marginBottom: '16px',
@@ -96,7 +96,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
             <h3
               style={{
                 fontSize: '18px',
-                color: '#DAA520',
+                color: 'rgba(255, 255, 255, 0.92)',
                 marginBottom: '12px',
                 lineHeight: 1.4,
                 fontWeight: '600',
@@ -120,7 +120,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingTop: '16px',
-                borderTop: '1px solid rgba(192, 160, 98, 0.1)',
+                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
               }}
             >
               {post.read_time && (
@@ -143,7 +143,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
                   alignItems: 'center',
                   gap: '6px',
                   fontSize: '14px',
-                  color: '#C0A062',
+                  color: 'var(--lux-accent)',
                   fontWeight: '600',
                 }}
               >

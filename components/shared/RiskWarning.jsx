@@ -27,9 +27,9 @@ export default function RiskWarning({ type = "general" }) {
   return (
     <div
       style={{
-        background: "linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(184, 134, 11, 0.08) 100%)",
-        border: "1px solid rgba(218, 165, 32, 0.3)",
-        borderRadius: "8px",
+        background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)",
+        border: "1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.08))",
+        borderRadius: "0px",
         padding: "16px",
         margin: "24px 0",
         display: "flex",
@@ -40,7 +40,7 @@ export default function RiskWarning({ type = "general" }) {
       <AlertTriangle
         size={24}
         style={{
-          color: "#DAA520",
+          color: "var(--lux-accent)",
           flexShrink: 0,
           marginTop: "2px",
         }}
@@ -48,7 +48,7 @@ export default function RiskWarning({ type = "general" }) {
       <div>
         <h3
           style={{
-            color: "#DAA520",
+            color: "var(--lux-accent)",
             fontSize: "16px",
             fontWeight: "600",
             marginBottom: "8px",

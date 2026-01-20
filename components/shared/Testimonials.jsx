@@ -33,7 +33,7 @@ export default function Testimonials() {
   return (
     <section
       style={{
-        background: "linear-gradient(180deg, #000000 0%, #0a0a0a 100%)",
+        background: "linear-gradient(180deg, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.985) 100%)",
         padding: "80px 20px",
       }}
     >
@@ -42,8 +42,8 @@ export default function Testimonials() {
           <h2
             style={{
               fontSize: "clamp(32px, 5vw, 48px)",
-              fontFamily: '"Playfair Display", serif',
-              color: "#DAA520",
+              fontFamily: '"Cormorant Garamond", serif',
+              color: "var(--lux-accent)",
               marginBottom: "16px",
               fontWeight: "600",
             }}
@@ -74,21 +74,21 @@ export default function Testimonials() {
             <div
               key={index}
               style={{
-                background: "linear-gradient(135deg, rgba(218, 165, 32, 0.05) 0%, rgba(184, 134, 11, 0.05) 100%)",
-                border: "1px solid rgba(218, 165, 32, 0.2)",
-                borderRadius: "16px",
+                background: "linear-gradient(135deg, rgba(255,255,255,0.035) 0%, rgba(0,0,0,0.12) 100%)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                borderRadius: "0px",
                 padding: "32px",
                 position: "relative",
                 transition: "all 0.3s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-8px)";
-                e.currentTarget.style.borderColor = "rgba(218, 165, 32, 0.4)";
-                e.currentTarget.style.boxShadow = "0 20px 40px rgba(218, 165, 32, 0.1)";
+                e.currentTarget.style.borderColor = "color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.10))";
+                e.currentTarget.style.boxShadow = "0 26px 70px rgba(0,0,0,0.55), 0 0 36px color-mix(in oklab, var(--lux-accent) 12%, transparent)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "rgba(218, 165, 32, 0.2)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
@@ -98,7 +98,7 @@ export default function Testimonials() {
                   position: "absolute",
                   top: "20px",
                   right: "20px",
-                  color: "rgba(218, 165, 32, 0.2)",
+                  color: "color-mix(in oklab, var(--lux-accent) 18%, transparent)",
                 }}
               />
 
@@ -108,7 +108,7 @@ export default function Testimonials() {
                     <Star
                       key={i}
                       size={18}
-                      style={{ fill: "#DAA520", color: "#DAA520" }}
+                      style={{ fill: "var(--lux-accent)", color: "var(--lux-accent)" }}
                     />
                   ))}
                 </div>
@@ -129,13 +129,13 @@ export default function Testimonials() {
               <div
                 style={{
                   paddingTop: "20px",
-                  borderTop: "1px solid rgba(218, 165, 32, 0.2)",
+                  borderTop: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
                 <h4
                   style={{
                     fontSize: "17px",
-                    color: "#DAA520",
+                    color: "rgba(255,255,255,0.92)",
                     marginBottom: "4px",
                     fontWeight: "600",
                   }}
@@ -161,9 +161,9 @@ export default function Testimonials() {
             textAlign: "center",
             marginTop: "48px",
             padding: "24px",
-            background: "rgba(218, 165, 32, 0.05)",
-            borderRadius: "12px",
-            border: "1px solid rgba(218, 165, 32, 0.2)",
+            background: "rgba(255,255,255,0.03)",
+            borderRadius: "0px",
+            border: "1px solid rgba(255,255,255,0.10)",
           }}
         >
           <p
@@ -174,7 +174,7 @@ export default function Testimonials() {
               lineHeight: "1.7",
             }}
           >
-            <strong style={{ color: "#DAA520" }}>Client Success:</strong> Average portfolio CAGR of 12-14% over 5+ years | 
+            <strong style={{ color: "var(--lux-accent)" }}>Client Success:</strong> Average portfolio CAGR of 12-14% over 5+ years | 
             85%+ client retention rate | Serving Mumbai investors since inception
           </p>
         </div>

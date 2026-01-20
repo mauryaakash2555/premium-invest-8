@@ -188,7 +188,7 @@ const navigationLinks = {
 return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
       {/* ULTRA LUXURY WAVE TOP */}
-  <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90 bg-gradient-to-r from-transparent via-[oklch(0.78_0.08_65)] to-transparent shadow-[0_0_22px_oklch(0.78_0.08_65_/_0.35)]" />
+  <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90 bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent shadow-[0_0_22px_color-mix(in_oklab,var(--lux-accent)_35%,transparent)]" />
 
       <div className={cn(
         "ultra-luxury-glass luxury-particles ambient-glow-pulse luxury-wave-3s", 
@@ -221,10 +221,10 @@ return (
             </div>
             
             <div className="flex flex-col items-center">
-              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_oklch(0.78_0.08_65_/_0.30)]">
+              <h2 className="gold-gradient-text font-serif text-4xl md:text-6xl font-bold tracking-[6px] uppercase leading-none m-0 filter drop-shadow-[0_0_20px_color-mix(in_oklab,var(--lux-accent)_30%,transparent)]">
                 BM Wealth
               </h2>
-              <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[oklch(0.78_0.08_65)] to-transparent mt-2 opacity-80" />
+                <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent mt-2 opacity-80" />
             </div>
 
             {/* Turbo Shimmering Wings (Right) */}
@@ -233,7 +233,7 @@ return (
             </div>
           </div>
 
-          <p className="text-[13px] tracking-[5px] font-bold uppercase mb-4 m-0 text-center drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
+          <p className="text-[13px] tracking-[5px] font-bold uppercase mb-4 m-0 text-center text-[color:var(--lux-accent)] drop-shadow-[0_0_10px_color-mix(in_oklab,var(--lux-accent)_40%,transparent)]">
             Distinguished Wealth Architecture
           </p>
           <p className="text-sm font-light italic max-w-xl text-center leading-relaxed m-0 opacity-80 border-x px-8" style={{ color: 'oklch(0.95 0.01 85 / 0.60)', borderColor: 'oklch(0.78 0.08 65 / 0.20)' }}>

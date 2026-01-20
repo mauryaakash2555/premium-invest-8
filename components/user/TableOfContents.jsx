@@ -87,21 +87,23 @@ const TableOfContents = ({ content }) => {
   return (
     <div
       style={{
-        background: 'rgba(192, 160, 98, 0.05)',
-        border: '1px solid rgba(192, 160, 98, 0.2)',
-        borderRadius: '12px',
-        padding: '30px',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid rgba(255, 255, 255, 0.10)',
+        borderRadius: '0px',
+        padding: '26px',
         marginBottom: '40px',
       }}
     >
       <h3
         style={{
           fontSize: '22px',
-          color: '#DAA520',
+          color: 'var(--lux-accent)',
           marginBottom: '20px',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
+          fontFamily: "'Cormorant Garamond', serif",
+          letterSpacing: '0.02em',
         }}
       >
         <span style={{ fontSize: '24px' }}>📖</span>
@@ -115,22 +117,22 @@ const TableOfContents = ({ content }) => {
               style={{
                 background: 'none',
                 border: 'none',
-                color: activeId === heading.id ? '#DAA520' : '#C0A062',
+                color: activeId === heading.id ? 'var(--lux-accent)' : 'rgba(255, 255, 255, 0.70)',
                 fontSize: '16px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 padding: '8px 12px',
-                borderRadius: '6px',
+                borderRadius: '0px',
                 transition: 'all 0.3s ease',
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
                 fontWeight: activeId === heading.id ? '600' : '400',
-                background: activeId === heading.id ? 'rgba(218, 165, 32, 0.1)' : 'transparent',
+                background: activeId === heading.id ? 'color-mix(in oklab, var(--lux-accent) 10%, transparent)' : 'transparent',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(218, 165, 32, 0.1)';
+                e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 10%, transparent)';
                 e.currentTarget.style.paddingLeft = '16px';
               }}
               onMouseLeave={(e) => {
@@ -140,7 +142,7 @@ const TableOfContents = ({ content }) => {
                 e.currentTarget.style.paddingLeft = '12px';
               }}
             >
-              <span style={{ color: '#DAA520', fontSize: '18px' }}>→</span>
+              <span style={{ color: 'var(--lux-accent)', fontSize: '18px' }}>→</span>
               {heading.text}
             </button>
           </li>

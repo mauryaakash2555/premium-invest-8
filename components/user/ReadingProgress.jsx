@@ -45,16 +45,16 @@ const ReadingProgress = () => {
         width: '100%',
         height: '4px',
         zIndex: 9999,
-        background: 'rgba(0, 0, 0, 0.1)',
+        background: 'rgba(255, 255, 255, 0.06)',
       }}
     >
       <div
         style={{
           height: '100%',
           width: `${progress}%`,
-          background: 'linear-gradient(90deg, #C0A062 0%, #DAA520 100%)',
+          background: 'linear-gradient(90deg, color-mix(in oklab, var(--lux-accent) 70%, white) 0%, var(--lux-accent) 100%)',
           transition: 'width 0.1s ease-out',
-          boxShadow: '0 0 10px rgba(218, 165, 32, 0.5)',
+          boxShadow: '0 0 18px color-mix(in oklab, var(--lux-accent) 26%, transparent)',
         }}
       />
     </div>

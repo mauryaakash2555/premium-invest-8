@@ -174,19 +174,19 @@ export default function ITRFilingHelpPage() {
                 <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6">
                   <ul className="space-y-2 text-sm text-white/70">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#c0a062]">✓</span>
+                      <span className="text-[var(--lux-accent)]">✓</span>
                       <span>Salaried individuals who want a quick estimate before filing</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#c0a062]">✓</span>
+                      <span className="text-[var(--lux-accent)]">✓</span>
                       <span>Taxpayers comparing Old vs New regime impact</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#c0a062]">✓</span>
+                      <span className="text-[var(--lux-accent)]">✓</span>
                       <span>Anyone wanting to understand their approximate tax liability</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#c0a062]">✓</span>
+                      <span className="text-[var(--lux-accent)]">✓</span>
                       <span>Users who want to extract data from PDFs without manual entry</span>
                     </li>
                   </ul>

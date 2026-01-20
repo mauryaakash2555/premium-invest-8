@@ -209,7 +209,7 @@ export default function BlogPage() {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             Financial Insights
@@ -217,7 +217,7 @@ export default function BlogPage() {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'color-mix(in oklab, var(--lux-accent) 70%, rgba(235,242,255,0.92))',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -242,7 +242,7 @@ export default function BlogPage() {
             href="/live-intelligence"
             style={{
               padding: '10px 16px',
-              borderRadius: '999px',
+              borderRadius: 0,
               border: '1px solid rgba(170, 198, 255, 0.35)',
               background: 'rgba(170, 198, 255, 0.08)',
               color: 'rgba(235, 242, 255, 0.92)',
@@ -256,9 +256,9 @@ export default function BlogPage() {
             href="/tools"
             style={{
               padding: '10px 16px',
-              borderRadius: '999px',
-              border: '1px solid rgba(218, 165, 32, 0.35)',
-              background: 'rgba(218, 165, 32, 0.08)',
+              borderRadius: 0,
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 45%, transparent)',
+              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
               color: 'rgba(235, 242, 255, 0.92)',
               textDecoration: 'none',
               fontSize: '14px',
@@ -282,10 +282,10 @@ export default function BlogPage() {
               onClick={() => setSelectedCategory(null)}
               style={{
                 padding: '8px 20px',
-                borderRadius: '20px',
-                border: '1px solid rgba(218, 165, 32, 0.3)',
-                background: selectedCategory === null ? 'rgba(218, 165, 32, 0.2)' : 'transparent',
-                color: selectedCategory === null ? '#C0A062' : '#888',
+                borderRadius: 0,
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
+                background: selectedCategory === null ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
+                color: selectedCategory === null ? 'var(--lux-accent)' : '#888',
                 cursor: 'pointer',
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
@@ -299,10 +299,10 @@ export default function BlogPage() {
                 onClick={() => handleCategoryClick(category)}
                 style={{
                   padding: '8px 20px',
-                  borderRadius: '20px',
-                  border: '1px solid rgba(218, 165, 32, 0.3)',
-                  background: selectedCategory === category ? 'rgba(218, 165, 32, 0.2)' : 'transparent',
-                  color: selectedCategory === category ? '#C0A062' : '#888',
+                  borderRadius: 0,
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
+                  background: selectedCategory === category ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
+                  color: selectedCategory === category ? 'var(--lux-accent)' : '#888',
                   cursor: 'pointer',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
@@ -346,16 +346,16 @@ export default function BlogPage() {
               {[1, 2, 3].map((i) => (
                 <div key={i} style={{
                   background: '#000000',
-                  borderRadius: '16px',
+                  borderRadius: 0,
                   padding: '20px',
-                  border: '1px solid rgba(218, 165, 32, 0.2)',
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 24%, transparent)',
                   overflow: 'hidden'
                 }}>
-                  <div className="skeleton-shimmer" style={{ height: '200px', borderRadius: '12px', marginBottom: '20px' }} />
-                  <div className="skeleton-shimmer" style={{ height: '20px', width: '120px', borderRadius: '6px', marginBottom: '16px' }} />
-                  <div className="skeleton-shimmer" style={{ height: '28px', width: '90%', borderRadius: '6px', marginBottom: '12px' }} />
-                  <div className="skeleton-shimmer" style={{ height: '16px', width: '100%', borderRadius: '6px', marginBottom: '8px' }} />
-                  <div className="skeleton-shimmer" style={{ height: '16px', width: '80%', borderRadius: '6px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '200px', borderRadius: 0, marginBottom: '20px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '20px', width: '120px', borderRadius: 0, marginBottom: '16px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '28px', width: '90%', borderRadius: 0, marginBottom: '12px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '16px', width: '100%', borderRadius: 0, marginBottom: '8px' }} />
+                  <div className="skeleton-shimmer" style={{ height: '16px', width: '80%', borderRadius: 0 }} />
                 </div>
               ))}
             </div>
@@ -401,7 +401,8 @@ export default function BlogPage() {
                       style={{
                         width: '100%',
                         height: '200px',
-                        background: 'linear-gradient(135deg, #C0A062 0%, #D4B576 100%)',
+                        background:
+                          'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
                       }}
                     />
                   )}
@@ -446,10 +447,10 @@ export default function BlogPage() {
                         style={{
                           display: 'inline-block',
                           padding: '4px 12px',
-                        background: 'rgba(192, 160, 98, 0.10)',
-                          borderRadius: '20px',
+                          background: 'color-mix(in oklab, var(--lux-accent) 12%, transparent)',
+                          borderRadius: 0,
                           fontSize: '12px',
-                          color: '#C0A062',
+                          color: 'var(--lux-accent)',
                           marginBottom: '12px',
                         }}
                       >
@@ -460,7 +461,7 @@ export default function BlogPage() {
                     <h2
                       style={{
                         fontSize: '20px',
-                        color: '#C0A062',
+                        color: 'var(--lux-accent)',
                         marginBottom: '12px',
                         lineHeight: 1.3,
                         fontFamily: '"Playfair Display", serif',
@@ -490,7 +491,7 @@ export default function BlogPage() {
                       justifyContent: 'space-between',
                     }}>
                       <span style={{
-                        color: '#C0A062',
+                        color: 'var(--lux-accent)',
                         fontSize: '14px',
                         fontWeight: 500,
                       }}>
@@ -515,9 +516,9 @@ export default function BlogPage() {
 
       <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '60px' }}>
         <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'center' }}>
-          Explore: <Link href="/tools" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tools</Link> ·{' '}
-          <Link href="/tools/tax-optimization" style={{ color: '#C0A062', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
-          <Link href="/services" style={{ color: '#C0A062', textDecoration: 'underline' }}>Services</Link>
+          Explore: <Link href="/tools" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tools</Link> ·{' '}
+          <Link href="/tools/tax-optimization" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
+          <Link href="/services" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Services</Link>
         </p>
       </section>
 

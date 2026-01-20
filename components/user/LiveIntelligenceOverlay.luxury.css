@@ -1,0 +1,647 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * ULTRA LUXURY THEME OVERRIDES FOR LIVE INTELLIGENCE OVERLAY
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * 
+ * DESIGN SYSTEM (from user's reference):
+ * - Background: oklch(0.06 0.005 280) - deep midnight with blue undertone
+ * - Foreground: oklch(0.95 0.01 85) - warm champagne ivory  
+ * - Accent: oklch(0.78 0.08 65) - refined low-saturation gold
+ * - Typography: Cormorant Garamond (serif) for headlines, Inter/Jakarta (sans) for body
+ * - Animation ease: cubic-bezier(0.16, 1, 0.3, 1)
+ * 
+ * ⚠️ DONUT UI IS COMPLETELY UNTOUCHED - all .li-donut-* classes are excluded
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
+
+/* Import luxury serif font */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES - LUXURY PALETTE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel],
+.li-overlay {
+  /* Core palette - FULL BLACK like about page */
+  --li-bg: #000000;
+  --li-bg-card: rgba(10, 10, 10, 0.95);
+  --li-bg-elevated: rgba(15, 15, 15, 0.95);
+  
+  /* Text hierarchy (warm champagne ivory) */
+  --li-text-primary: oklch(0.95 0.01 85);
+  --li-text-secondary: oklch(0.75 0.01 85);
+  --li-text-muted: oklch(0.55 0.01 85);
+  
+  /* Accent (refined gold - LOW saturation) */
+  --li-accent: oklch(0.78 0.08 65);
+  --li-accent-soft: oklch(0.78 0.04 65 / 0.40);
+  --li-accent-glow: oklch(0.78 0.08 65 / 0.25);
+  
+  /* Borders */
+  --li-border-subtle: oklch(0.95 0.01 85 / 0.08);
+  --li-border-medium: oklch(0.95 0.01 85 / 0.14);
+  --li-border-accent: oklch(0.78 0.08 65 / 0.30);
+  
+  /* Shadows */
+  --li-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --li-shadow-elevated: 0 16px 64px rgba(0, 0, 0, 0.55);
+  
+  /* Animation */
+  --li-ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PANEL BACKGROUND - FULL BLACK like about page
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] {
+  background: #000000 !important;
+}
+
+.li-overlay {
+  background: #000000 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY - Luxury serif headlines, refined body text
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] h2,
+.li-overlay h2 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  color: var(--li-text-primary) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em !important;
+}
+
+[data-li-panel] h3,
+.li-overlay h3 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  color: var(--li-text-primary) !important;
+  font-weight: 500 !important;
+}
+
+[data-li-panel] h4,
+.li-overlay h4 {
+  color: var(--li-text-primary) !important;
+  font-weight: 600 !important;
+}
+
+[data-li-panel] p,
+.li-overlay p {
+  color: var(--li-text-secondary) !important;
+  line-height: 1.8 !important;
+}
+
+/* Labels - wide tracking, uppercase */
+[data-li-panel] .li-kpi-label,
+.li-overlay .li-kpi-label {
+  font-size: 10px !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+  color: var(--li-text-muted) !important;
+  font-weight: 500 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARDS - Glass morphism with warm tones
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-kpi-card {
+  background: linear-gradient(
+    180deg,
+    oklch(0.11 0.005 280 / 0.95) 0%,
+    oklch(0.07 0.004 280 / 0.98) 100%
+  ) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+  box-shadow: var(--li-shadow-soft) !important;
+  transition: all 0.5s var(--li-ease-luxury) !important;
+}
+
+.li-kpi-card:hover {
+  border-color: var(--li-border-accent) !important;
+  box-shadow: var(--li-shadow-elevated), 0 0 40px var(--li-accent-glow) !important;
+  transform: translateY(-3px) !important;
+}
+
+.li-dash-card {
+  background: linear-gradient(
+    180deg,
+    oklch(0.10 0.005 280 / 0.92) 0%,
+    oklch(0.06 0.004 280 / 0.96) 100%
+  ) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+  box-shadow: var(--li-shadow-soft) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KPI VALUES - Warm ivory numbers
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-kpi-value {
+  color: var(--li-text-primary) !important;
+  text-shadow: 0 0 30px var(--li-accent-glow) !important;
+}
+
+.li-kpi-hint {
+  color: var(--li-text-muted) !important;
+}
+
+/* Trend pills - refined gold accent */
+.li-kpi-trend-pill {
+  background: var(--li-accent-soft) !important;
+  color: var(--li-accent) !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BUTTONS & TABS - Premium hover states
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] button,
+.li-overlay button {
+  transition: all 0.4s var(--li-ease-luxury) !important;
+}
+
+/* Navigation tabs */
+[data-li-panel] button[type="button"]:not(.li-sticky-back-btn) {
+  background: oklch(0.95 0.01 85 / 0.04) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  color: var(--li-text-secondary) !important;
+  border-radius: 0 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+}
+
+[data-li-panel] button[type="button"]:not(.li-sticky-back-btn):hover {
+  background: var(--li-accent) !important;
+  border-color: var(--li-accent) !important;
+  color: oklch(0.06 0.005 280) !important;
+  box-shadow: 0 12px 40px var(--li-accent-glow) !important;
+}
+
+/* Back button */
+.li-sticky-back-btn {
+  color: var(--li-accent) !important;
+  border-radius: 0 !important;
+}
+
+.li-sticky-back-btn:hover {
+  background: var(--li-accent-soft) !important;
+  color: var(--li-accent) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LASER BEAMS - Transform from icy blue to warm gold
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-beam::before {
+  background: linear-gradient(
+    180deg,
+    oklch(0.78 0.08 65 / 0) 0%,
+    oklch(0.85 0.06 65 / 0.45) 30%,
+    oklch(0.95 0.03 85 / 0.85) 50%,
+    oklch(0.85 0.06 65 / 0.45) 70%,
+    oklch(0.78 0.08 65 / 0) 100%
+  ) !important;
+  box-shadow:
+    0 0 8px oklch(0.78 0.08 65 / 0.55),
+    0 0 20px oklch(0.78 0.08 65 / 0.35),
+    0 0 40px oklch(0.78 0.08 65 / 0.20) !important;
+}
+
+.li-beam::after {
+  background: linear-gradient(
+    180deg,
+    oklch(0.78 0.08 65 / 0.12) 0%,
+    oklch(0.78 0.08 65 / 0.06) 30%,
+    oklch(0.78 0.08 65 / 0.03) 60%,
+    oklch(0.78 0.08 65 / 0) 100%
+  ) !important;
+}
+
+.li-beam-center::before {
+  box-shadow:
+    0 0 12px oklch(0.78 0.08 65 / 0.65),
+    0 0 28px oklch(0.78 0.08 65 / 0.45),
+    0 0 56px oklch(0.78 0.08 65 / 0.25) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DIVIDERS & LINES - Elegant gold gradients
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-section-divider::before {
+  background: linear-gradient(
+    90deg,
+    oklch(0.78 0.08 65 / 0) 0%,
+    oklch(0.78 0.08 65 / 0.20) 20%,
+    oklch(0.78 0.08 65 / 0.20) 80%,
+    oklch(0.78 0.08 65 / 0) 100%
+  ) !important;
+}
+
+.li-section-divider::after {
+  background: linear-gradient(
+    90deg,
+    oklch(0.78 0.08 65 / 0) 0%,
+    oklch(0.95 0.03 85 / 0.70) 50%,
+    oklch(0.78 0.08 65 / 0) 100%
+  ) !important;
+  box-shadow: 0 0 12px oklch(0.78 0.08 65 / 0.50) !important;
+}
+
+/* Chart area scan line */
+.li-chart-area::after {
+  background: linear-gradient(
+    90deg,
+    oklch(0.78 0.08 65 / 0) 0%,
+    oklch(0.95 0.03 85 / 0.50) 50%,
+    oklch(0.78 0.08 65 / 0) 100%
+  ) !important;
+  box-shadow: 0 0 20px oklch(0.78 0.08 65 / 0.40) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLLBARS - Luxury gold
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-overlay::-webkit-scrollbar-thumb {
+  background: oklch(0.78 0.08 65 / 0.22) !important;
+}
+
+.li-overlay::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.78 0.08 65 / 0.35) !important;
+}
+
+.li-overlay {
+  scrollbar-color: oklch(0.78 0.08 65 / 0.35) transparent !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   STAT PILLS & SIGNAL CARDS - Warm palette
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-stat-pill {
+  background: oklch(0.06 0.005 280 / 0.50) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+}
+
+.li-stat-pill:hover {
+  border-color: var(--li-border-accent) !important;
+  background: oklch(0.78 0.08 65 / 0.08) !important;
+}
+
+.li-signal-card {
+  background: oklch(0.06 0.005 280 / 0.40) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+}
+
+.li-signal-card:hover {
+  border-color: var(--li-border-accent) !important;
+  background: oklch(0.10 0.006 280 / 0.60) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LIVE DOT - Keep functional but warm it up
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-live-dot {
+  background: var(--li-accent) !important;
+  box-shadow: 0 0 8px var(--li-accent-glow) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ICON GLOWS - Warm gold instead of icy blue
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-globe-icon,
+.li-chart-icon,
+.li-signals-icon,
+.li-calc-icon {
+  filter: drop-shadow(0 0 6px oklch(0.78 0.08 65 / 0.40)) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MARKET STATUS BADGE - Refined
+   ═══════════════════════════════════════════════════════════════════════════════ */
+/* Keep functional colors for OPEN/CLOSED but refine borders */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CHART AREA - Premium dark with subtle grid
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-chart-area {
+  border: 1px solid var(--li-border-medium) !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(55% 85% at 50% 0%, oklch(0.78 0.08 65 / 0.08) 0%, transparent 65%),
+    linear-gradient(180deg, oklch(0.95 0.01 85 / 0.03) 0%, transparent 50%),
+    repeating-linear-gradient(90deg, oklch(0.95 0.01 85 / 0.015) 0px, oklch(0.95 0.01 85 / 0.015) 1px, transparent 2px, transparent 40px),
+    repeating-linear-gradient(0deg, oklch(0.95 0.01 85 / 0.01) 0px, oklch(0.95 0.01 85 / 0.01) 1px, transparent 2px, transparent 40px) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TABLE STYLES - Warm tones
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-table-header {
+  background: oklch(0.95 0.01 85 / 0.03) !important;
+  border-bottom: 1px solid oklch(0.95 0.01 85 / 0.06) !important;
+}
+
+.li-table-row {
+  border-bottom: 1px solid oklch(0.95 0.01 85 / 0.04) !important;
+}
+
+.li-table-row:hover {
+  background: oklch(0.78 0.08 65 / 0.04) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SAVED HEADLINES - Warm styling
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] .saved-headline-card {
+  background: linear-gradient(
+    180deg,
+    oklch(0.10 0.005 280 / 0.90) 0%,
+    oklch(0.06 0.004 280 / 0.95) 100%
+  ) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   QUICK ACCESS LINKS - Premium hover
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-qa-grid a {
+  background: oklch(0.95 0.01 85 / 0.03) !important;
+  border: 1px solid var(--li-border-subtle) !important;
+  border-radius: 0 !important;
+  color: var(--li-text-secondary) !important;
+  transition: all 0.5s var(--li-ease-luxury) !important;
+}
+
+.li-qa-grid a:hover {
+  background: var(--li-accent) !important;
+  border-color: var(--li-accent) !important;
+  color: oklch(0.06 0.005 280) !important;
+  box-shadow: 0 12px 40px var(--li-accent-glow) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HEADER SECTION - Luxury spacing
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.li-header-section h2 {
+  font-size: clamp(32px, 5vw, 48px) !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.03em !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMATION REFINEMENTS - Slower, more elegant
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes liBeamPulse {
+  0% { top: -100px; opacity: 0; }
+  5% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { top: calc(100% + 100px); opacity: 0; }
+}
+
+/* Slower, more majestic animations */
+.li-beam-center { --beam-duration: 4s !important; }
+.li-beam-l1, .li-beam-r1 { --beam-duration: 5s !important; }
+.li-beam-l2, .li-beam-r2 { --beam-duration: 6s !important; }
+.li-beam-l3, .li-beam-r3 { --beam-duration: 7s !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TOP FADE - Warm gradient
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] > div[aria-hidden="true"]:first-child {
+  background:
+    linear-gradient(180deg, oklch(0.02 0.003 280 / 0.72) 0%, transparent 78%),
+    radial-gradient(78% 170% at 50% 0%, oklch(0.78 0.08 65 / 0.08) 0%, transparent 66%),
+    radial-gradient(40% 120% at 50% 0%, oklch(0.95 0.01 85 / 0.04) 0%, transparent 60%) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   VOICE CONTROL - Premium styling
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] button[title*="reading"],
+[data-li-panel] button[title*="Read"] {
+  background: oklch(0.78 0.08 65 / 0.10) !important;
+  color: var(--li-accent) !important;
+  border-radius: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SHARE MENU - Luxury dropdown
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-li-panel] [style*="backdrop-filter"] {
+  background: oklch(0.08 0.005 280 / 0.98) !important;
+  border: 1px solid var(--li-border-medium) !important;
+  border-radius: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   COMPLETE ICY BLUE OVERRIDE - ALL REMAINING BLUE ELEMENTS
+   ⚠️ DONUT UI COLORS ARE EXCLUDED - They use specific segment colors
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Navigation tabs - override all blue backgrounds and colors */
+[data-li-panel] button:not(.li-donut-btn) {
+  border-radius: 0 !important;
+}
+
+/* Tab buttons with blue styling */
+[data-li-panel] [style*="rgba(100, 180, 255"],
+[data-li-panel] [style*="rgba(100, 160, 255"],
+[data-li-panel] [style*="rgba(140, 190, 255"],
+[data-li-panel] [style*="rgba(140, 210, 255"],
+[data-li-panel] [style*="rgba(150, 180, 220"],
+[data-li-panel] [style*="rgba(180, 210, 255"],
+[data-li-panel] [style*="rgba(170, 198, 255"],
+[data-li-panel] [style*="rgba(170, 230, 255"],
+[data-li-panel] [style*="rgba(120, 210, 255"],
+[data-li-panel] [style*="rgba(130, 160, 255"],
+[data-li-panel] [style*="rgba(140, 200, 255"],
+[data-li-panel] [style*="rgba(140, 220, 255"] {
+  filter: hue-rotate(180deg) saturate(0.3) !important;
+}
+
+/* Override table hover states */
+.li-table-row:hover {
+  background: oklch(0.78 0.08 65 / 0.06) !important;
+}
+
+/* Saved headline cards */
+[data-li-panel] .saved-headline-card,
+.li-page-wrapper .saved-headline-card {
+  background: rgba(0, 0, 0, 0.60) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+  border-radius: 0 !important;
+}
+
+/* Override scrollbar in all sub-areas */
+[data-li-panel] *::-webkit-scrollbar-thumb,
+.li-overlay *::-webkit-scrollbar-thumb {
+  background: oklch(0.78 0.08 65 / 0.25) !important;
+}
+
+[data-li-panel] *::-webkit-scrollbar-thumb:hover,
+.li-overlay *::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.78 0.08 65 / 0.40) !important;
+}
+
+/* Override loading spinners - gold instead of blue */
+[data-li-panel] [style*="borderTopColor"],
+.li-overlay [style*="borderTopColor"] {
+  border-color: oklch(0.95 0.01 85 / 0.15) !important;
+  border-top-color: oklch(0.78 0.08 65 / 0.80) !important;
+}
+
+/* Quick Access cards */
+.li-qa-grid > * {
+  background: rgba(0, 0, 0, 0.40) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.08) !important;
+  border-radius: 0 !important;
+}
+
+.li-qa-grid > *:hover {
+  background: oklch(0.78 0.08 65 / 0.12) !important;
+  border-color: oklch(0.78 0.08 65 / 0.30) !important;
+}
+
+/* Override all filter drop-shadows for icons (except donut) */
+[data-li-panel] svg:not(.li-donut-icon) {
+  filter: drop-shadow(0 0 6px oklch(0.78 0.08 65 / 0.40)) !important;
+}
+
+/* Mode indicator, streak badge overrides */
+[data-li-panel] .li-header-badges > * {
+  border-radius: 0 !important;
+}
+
+/* Category filter buttons */
+[data-li-panel] .li-category-filter button,
+[data-li-panel] .li-category-scroll button {
+  border-radius: 0 !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Progress bars */
+[data-li-panel] [role="progressbar"],
+[data-li-panel] .progress-bar {
+  background: oklch(0.78 0.08 65 / 0.80) !important;
+}
+
+/* 30S LEARN section */
+[data-li-panel] .li-quicklearn-card,
+.li-overlay .li-quicklearn-card {
+  background: rgba(0, 0, 0, 0.50) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+  border-radius: 0 !important;
+}
+
+/* Show Answer button */
+[data-li-panel] button:not(.li-donut-btn):hover {
+  border-color: oklch(0.78 0.08 65 / 0.40) !important;
+}
+
+/* PREV/NEXT navigation */
+[data-li-panel] .li-quicklearn-nav button {
+  border-radius: 0 !important;
+  border-color: oklch(0.95 0.01 85 / 0.15) !important;
+}
+
+[data-li-panel] .li-quicklearn-nav button:hover {
+  background: oklch(0.78 0.08 65 / 0.15) !important;
+  border-color: oklch(0.78 0.08 65 / 0.40) !important;
+}
+
+/* Intelligence cards/feed */
+[data-li-panel] .li-intelligence-card,
+.li-overlay .li-intelligence-card {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+  border-radius: 0 !important;
+}
+
+[data-li-panel] .li-intelligence-card:hover {
+  border-color: oklch(0.78 0.08 65 / 0.30) !important;
+}
+
+/* Market mood indicator */
+[data-li-panel] .li-market-mood {
+  border-radius: 0 !important;
+}
+
+/* Night summary cards */
+[data-li-panel] .li-night-summary,
+.li-overlay .li-night-summary {
+  background: rgba(0, 0, 0, 0.50) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+  border-radius: 0 !important;
+}
+
+/* WhatsApp share styling */
+[data-li-panel] .li-whatsapp-share {
+  border-radius: 0 !important;
+  border-color: oklch(0.95 0.01 85 / 0.15) !important;
+}
+
+/* Badge display */
+[data-li-panel] .li-badge-display {
+  border-radius: 0 !important;
+}
+
+/* Headline cards */
+[data-li-panel] .li-headline-card,
+.li-overlay .li-headline-card {
+  background: rgba(0, 0, 0, 0.40) !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+  border-radius: 0 !important;
+}
+
+[data-li-panel] .li-headline-card:hover {
+  border-color: oklch(0.78 0.08 65 / 0.30) !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
+/* TradingView widget containers */
+[data-li-panel] .li-tv-widget,
+.li-overlay .li-tv-widget {
+  border-radius: 0 !important;
+  border: 1px solid oklch(0.95 0.01 85 / 0.10) !important;
+}
+
+/* Override any remaining blue text colors */
+[data-li-panel] [style*="color: rgba(140, 190, 255"] {
+  color: oklch(0.78 0.08 65 / 0.90) !important;
+}
+
+[data-li-panel] [style*="color: rgba(170, 198, 255"] {
+  color: oklch(0.75 0.01 85 / 0.70) !important;
+}
+
+[data-li-panel] [style*="color: rgba(100, 160, 255"]:not(.li-donut-legend *) {
+  color: oklch(0.78 0.08 65 / 0.90) !important;
+}
+
+/* Override blue border colors */
+[data-li-panel] [style*="border"][style*="rgba(170, 198, 255"],
+[data-li-panel] [style*="border"][style*="rgba(100, 160, 255"],
+[data-li-panel] [style*="border"][style*="rgba(140, 190, 255"] {
+  border-color: oklch(0.95 0.01 85 / 0.12) !important;
+}
+
+/* Override blue box-shadows */
+[data-li-panel] [style*="box-shadow"][style*="rgba(100, 160, 255"],
+[data-li-panel] [style*="box-shadow"][style*="rgba(140, 190, 255"],
+[data-li-panel] [style*="box-shadow"][style*="rgba(170, 198, 255"] {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Global fallback - any remaining blue backgrounds */
+[data-li-panel] [style*="background"][style*="rgba(100, 180, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit),
+[data-li-panel] [style*="background"][style*="rgba(100, 160, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit),
+[data-li-panel] [style*="background"][style*="rgba(140, 190, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit),
+[data-li-panel] [style*="background"][style*="rgba(170, 198, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit) {
+  background: oklch(0.78 0.08 65 / 0.12) !important;
+}

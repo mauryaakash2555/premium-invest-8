@@ -223,7 +223,7 @@ export default function ClientPortalPage() {
 
           {/* Hero Content */}
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(100,150,255,0.08)] border border-[rgba(100,150,255,0.15)] mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[rgba(100,150,255,0.08)] border border-[rgba(100,150,255,0.15)] mb-6">
               <div className="w-2 h-2 rounded-full bg-[#64B5F6] animate-pulse" />
               <span className="text-sm text-[rgba(200,220,255,0.8)] tracking-wide">Secure Client Access</span>
             </div>
@@ -239,7 +239,7 @@ export default function ClientPortalPage() {
             >
               Your Wealth,{" "}
               <span style={{ 
-                background: "linear-gradient(135deg, var(--color-matte-gold) 0%, #D4B576 100%)",
+                background: "linear-gradient(135deg, var(--lux-accent) 0%, color-mix(in oklab, var(--lux-accent) 60%, white) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent"
               }}>
@@ -255,13 +255,13 @@ export default function ClientPortalPage() {
             <div className="flex flex-wrap gap-4">
               <a 
                 href="#portal"
-                className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full"
+                className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-none"
               >
                 Access Portal <ArrowRight size={18} />
               </a>
               <Link 
                 href="/contact"
-                className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-full"
+                className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-none"
               >
                 Contact Support
               </Link>
@@ -278,7 +278,7 @@ export default function ClientPortalPage() {
             ].map((stat, i) => (
               <div 
                 key={i}
-                className="text-center p-4 rounded-xl"
+                className="text-center p-4 rounded-none"
                 style={{
                   background: "rgba(255,255,255,0.02)",
                   border: "1px solid rgba(255,255,255,0.06)"
@@ -297,7 +297,7 @@ export default function ClientPortalPage() {
         <div className="max-w-7xl mx-auto">
           {/* Tab Navigation */}
           <div 
-            className="flex flex-wrap gap-2 p-2 rounded-2xl mb-10"
+            className="flex flex-wrap gap-2 p-2 rounded-none mb-10"
             style={{
               background: "rgba(255,255,255,0.02)",
               border: "1px solid rgba(255,255,255,0.06)"
@@ -308,7 +308,7 @@ export default function ClientPortalPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all duration-300
+                  flex items-center gap-2 px-5 py-3 rounded-none font-medium transition-all duration-300
                   ${activeTab === tab.id 
                     ? "bg-[rgba(100,150,255,0.12)] text-white border border-[rgba(100,150,255,0.25)]" 
                     : "text-gray-400 hover:text-gray-200 hover:bg-[rgba(255,255,255,0.03)]"
@@ -340,14 +340,14 @@ export default function ClientPortalPage() {
                     <Link
                       key={service.id}
                       href={service.link}
-                      className="group relative p-6 rounded-2xl transition-all duration-300 hover:translate-y-[-4px]"
+                      className="group relative p-6 rounded-none transition-all duration-300 hover:translate-y-[-4px]"
                       style={{
                         background: service.color,
                         border: `1px solid ${service.borderColor}`,
                       }}
                     >
                       <div 
-                        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        className="absolute inset-0 rounded-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
                           background: `radial-gradient(circle at 50% 0%, ${service.borderColor}, transparent 70%)`
                         }}
@@ -355,7 +355,7 @@ export default function ClientPortalPage() {
                       
                       <div className="relative">
                         <div 
-                          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                          className="w-12 h-12 rounded-none flex items-center justify-center mb-4"
                           style={{ background: service.borderColor }}
                         >
                           <service.icon size={24} className="text-white" />
@@ -368,7 +368,7 @@ export default function ClientPortalPage() {
                           {service.platforms.slice(0, 2).map((platform, i) => (
                             <span 
                               key={i}
-                              className="text-xs px-2 py-1 rounded-md"
+                              className="text-xs px-2 py-1 rounded-none"
                               style={{ 
                                 background: "rgba(255,255,255,0.08)",
                                 color: "rgba(255,255,255,0.7)"
@@ -393,7 +393,7 @@ export default function ClientPortalPage() {
             {activeTab === "ekyc" && (
               <div className="max-w-3xl mx-auto">
                 <div className="mb-8 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(100,220,180,0.08)] border border-[rgba(100,220,180,0.20)] mb-4">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[rgba(100,220,180,0.08)] border border-[rgba(100,220,180,0.20)] mb-4">
                     <Unlock size={16} className="text-[#64DCA8]" />
                     <span className="text-sm text-[rgba(100,220,180,0.9)]">Registration Open</span>
                   </div>
@@ -407,7 +407,7 @@ export default function ClientPortalPage() {
 
                 <form 
                   onSubmit={handleEkycSubmit}
-                  className="p-8 rounded-2xl space-y-6"
+                  className="p-8 rounded-none space-y-6"
                   style={{
                     background: "rgba(255,255,255,0.02)",
                     border: "1px solid rgba(255,255,255,0.08)"
@@ -421,7 +421,7 @@ export default function ClientPortalPage() {
                         required
                         value={ekycFormData.fullName}
                         onChange={(e) => setEkycFormData({...ekycFormData, fullName: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                         placeholder="Enter your full name"
                       />
                     </div>
@@ -432,7 +432,7 @@ export default function ClientPortalPage() {
                         required
                         value={ekycFormData.email}
                         onChange={(e) => setEkycFormData({...ekycFormData, email: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                         placeholder="your@email.com"
                       />
                     </div>
@@ -443,7 +443,7 @@ export default function ClientPortalPage() {
                         required
                         value={ekycFormData.phone}
                         onChange={(e) => setEkycFormData({...ekycFormData, phone: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                         placeholder="+91 XXXXX XXXXX"
                       />
                     </div>
@@ -454,7 +454,7 @@ export default function ClientPortalPage() {
                         required
                         value={ekycFormData.dob}
                         onChange={(e) => setEkycFormData({...ekycFormData, dob: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                       />
                     </div>
                     <div>
@@ -465,7 +465,7 @@ export default function ClientPortalPage() {
                         maxLength={10}
                         value={ekycFormData.pan}
                         onChange={(e) => setEkycFormData({...ekycFormData, pan: e.target.value.toUpperCase()})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] uppercase"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] uppercase"
                         placeholder="ABCDE1234F"
                       />
                     </div>
@@ -476,7 +476,7 @@ export default function ClientPortalPage() {
                         maxLength={4}
                         value={ekycFormData.aadhaar}
                         onChange={(e) => setEkycFormData({...ekycFormData, aadhaar: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                         placeholder="XXXX"
                       />
                     </div>
@@ -488,12 +488,12 @@ export default function ClientPortalPage() {
                       rows={3}
                       value={ekycFormData.address}
                       onChange={(e) => setEkycFormData({...ekycFormData, address: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
+                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
                       placeholder="Enter your complete address"
                     />
                   </div>
 
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-[rgba(100,150,255,0.05)] border border-[rgba(100,150,255,0.10)]">
+                  <div className="flex items-start gap-3 p-4 rounded-none bg-[rgba(100,150,255,0.05)] border border-[rgba(100,150,255,0.10)]">
                     <Shield size={20} className="text-[#64B5F6] flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-gray-400">
                       Your data is encrypted and stored securely in compliance with SEBI regulations. 
@@ -503,7 +503,7 @@ export default function ClientPortalPage() {
 
                   <button
                     type="submit"
-                    className="btn-primary w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2"
+                    className="btn-primary w-full py-4 rounded-none font-semibold flex items-center justify-center gap-2"
                   >
                     Submit eKYC Registration <ArrowRight size={18} />
                   </button>
@@ -517,7 +517,7 @@ export default function ClientPortalPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Upload Section */}
                   <div 
-                    className="p-6 rounded-2xl"
+                    className="p-6 rounded-none"
                     style={{
                       background: "rgba(255,255,255,0.02)",
                       border: "1px solid rgba(255,255,255,0.08)"
@@ -530,7 +530,7 @@ export default function ClientPortalPage() {
 
                     <div 
                       onClick={() => fileInputRef.current?.click()}
-                      className="border-2 border-dashed border-[rgba(100,150,255,0.25)] rounded-xl p-10 text-center cursor-pointer hover:border-[rgba(100,150,255,0.45)] hover:bg-[rgba(100,150,255,0.03)] transition-all"
+                      className="border-2 border-dashed border-[rgba(100,150,255,0.25)] rounded-none p-10 text-center cursor-pointer hover:border-[rgba(100,150,255,0.45)] hover:bg-[rgba(100,150,255,0.03)] transition-all"
                     >
                       <CloudUpload size={48} className="mx-auto mb-4 text-[#64B5F6]" />
                       <p className="text-white mb-2">Drop files here or click to upload</p>
@@ -550,7 +550,7 @@ export default function ClientPortalPage() {
                       {supportedFileTypes.map((type, i) => (
                         <div 
                           key={i}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg"
+                          className="flex items-center gap-2 px-3 py-2 rounded-none"
                           style={{ background: "rgba(255,255,255,0.04)" }}
                         >
                           <type.icon size={16} style={{ color: type.color }} />
@@ -562,7 +562,7 @@ export default function ClientPortalPage() {
 
                   {/* Uploaded Files List */}
                   <div 
-                    className="p-6 rounded-2xl"
+                    className="p-6 rounded-none"
                     style={{
                       background: "rgba(255,255,255,0.02)",
                       border: "1px solid rgba(255,255,255,0.08)"
@@ -583,7 +583,7 @@ export default function ClientPortalPage() {
                         {uploadedFiles.map((file, i) => (
                           <div 
                             key={i}
-                            className="flex items-center justify-between p-4 rounded-xl"
+                            className="flex items-center justify-between p-4 rounded-none"
                             style={{ background: "rgba(255,255,255,0.03)" }}
                           >
                             <div className="flex items-center gap-3">
@@ -603,14 +603,14 @@ export default function ClientPortalPage() {
 
                 {/* WhatsApp Share */}
                 <div 
-                  className="p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6"
+                  className="p-6 rounded-none flex flex-col md:flex-row items-center justify-between gap-6"
                   style={{
                     background: "linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(37, 211, 102, 0.02) 100%)",
                     border: "1px solid rgba(37, 211, 102, 0.20)"
                   }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[rgba(37,211,102,0.15)] flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-none bg-[rgba(37,211,102,0.15)] flex items-center justify-center">
                       <MessageCircle size={28} className="text-[#25D366]" />
                     </div>
                     <div>
@@ -622,7 +622,7 @@ export default function ClientPortalPage() {
                     href="https://wa.me/918850977259"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 rounded-xl bg-[#25D366] text-white font-semibold flex items-center gap-2 hover:bg-[#20BD5A] transition-colors"
+                    className="px-6 py-3 rounded-none bg-[#25D366] text-white font-semibold flex items-center gap-2 hover:bg-[#20BD5A] transition-colors"
                   >
                     <MessageCircle size={18} />
                     Open WhatsApp
@@ -645,7 +645,7 @@ export default function ClientPortalPage() {
 
                 <form 
                   onSubmit={handleAutomationSubmit}
-                  className="p-8 rounded-2xl space-y-6"
+                  className="p-8 rounded-none space-y-6"
                   style={{
                     background: "rgba(255,255,255,0.02)",
                     border: "1px solid rgba(255,255,255,0.08)"
@@ -659,7 +659,7 @@ export default function ClientPortalPage() {
                         required
                         value={automationEmail.clientEmail}
                         onChange={(e) => setAutomationEmail({...automationEmail, clientEmail: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                         placeholder="client@email.com"
                       />
                     </div>
@@ -670,7 +670,7 @@ export default function ClientPortalPage() {
                         required
                         value={automationEmail.scheduleDate}
                         onChange={(e) => setAutomationEmail({...automationEmail, scheduleDate: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                       />
                     </div>
                   </div>
@@ -682,7 +682,7 @@ export default function ClientPortalPage() {
                       required
                       value={automationEmail.subject}
                       onChange={(e) => setAutomationEmail({...automationEmail, subject: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
+                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
                       placeholder="Investment Update - January 2026"
                     />
                   </div>
@@ -694,14 +694,14 @@ export default function ClientPortalPage() {
                       required
                       value={automationEmail.message}
                       onChange={(e) => setAutomationEmail({...automationEmail, message: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
+                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
                       placeholder="Dear Client,
 
 We are pleased to share your portfolio update..."
                     />
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 rounded-xl bg-[rgba(100,220,180,0.05)] border border-[rgba(100,220,180,0.15)]">
+                  <div className="flex items-center gap-3 p-4 rounded-none bg-[rgba(100,220,180,0.05)] border border-[rgba(100,220,180,0.15)]">
                     <Clock size={20} className="text-[#64DCA8] flex-shrink-0" />
                     <p className="text-sm text-gray-400">
                       Emails will be sent automatically at the scheduled time. You can manage all scheduled emails from your dashboard.
@@ -710,7 +710,7 @@ We are pleased to share your portfolio update..."
 
                   <button
                     type="submit"
-                    className="btn-primary w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2"
+                    className="btn-primary w-full py-4 rounded-none font-semibold flex items-center justify-center gap-2"
                   >
                     <Send size={18} />
                     Schedule Email
@@ -726,7 +726,7 @@ We are pleased to share your portfolio update..."
                   ].map((action, i) => (
                     <button
                       key={i}
-                      className="p-4 rounded-xl text-left hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+                      className="p-4 rounded-none text-left hover:bg-[rgba(255,255,255,0.04)] transition-colors"
                       style={{
                         background: "rgba(255,255,255,0.02)",
                         border: "1px solid rgba(255,255,255,0.06)"
@@ -767,13 +767,13 @@ We are pleased to share your portfolio update..."
             ].map((feature, i) => (
               <div 
                 key={i}
-                className="p-6 rounded-2xl"
+                className="p-6 rounded-none"
                 style={{
                   background: "rgba(255,255,255,0.02)",
                   border: "1px solid rgba(255,255,255,0.06)"
                 }}
               >
-                <div className="w-12 h-12 rounded-xl bg-[rgba(100,150,255,0.10)] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-none bg-[rgba(100,150,255,0.10)] flex items-center justify-center mb-4">
                   <feature.icon size={24} className="text-[#64B5F6]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>

@@ -8,7 +8,7 @@
   align-items: flex-end;
   justify-content: flex-end;
   padding: 18px;
-  background: radial-gradient(1200px 900px at 70% 80%, rgba(192, 160, 98, 0.08), transparent 55%),
+  background: radial-gradient(1200px 900px at 70% 80%, color-mix(in oklab, var(--lux-accent) 10%, transparent), transparent 55%),
     radial-gradient(900px 700px at 20% 20%, rgba(255, 255, 255, 0.035), transparent 60%),
     rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
@@ -30,7 +30,7 @@
   pointer-events: auto;
   width: min(460px, calc(100vw - 24px));
   height: min(720px, 82vh);
-  border-radius: 26px;
+  border-radius: 0;
   overflow: hidden;
   
   display: flex;
@@ -47,7 +47,7 @@ transform-style: preserve-3d;
   box-shadow:
     0 40px 140px rgba(0, 0, 0, 0.85),
     0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 0 0 1px rgba(192, 160, 98, 0.18);
+    0 0 0 1px color-mix(in oklab, var(--lux-accent) 12%, transparent);
 
   animation: panelIn 560ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -57,12 +57,12 @@ transform-style: preserve-3d;
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 26px;
+  border-radius: 0;
   padding: 1px;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.16),
-    rgba(192, 160, 98, 0.28),
+    color-mix(in oklab, var(--lux-accent) 18%, transparent),
     rgba(255, 255, 255, 0.08)
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -78,7 +78,7 @@ transform-style: preserve-3d;
   inset: 0;
   background-image:
     radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.06) 0.5px, transparent 1px),
-    radial-gradient(circle at 80% 70%, rgba(192, 160, 98, 0.08) 0.5px, transparent 1px);
+    radial-gradient(circle at 80% 70%, color-mix(in oklab, var(--lux-accent) 18%, transparent) 0.5px, transparent 1px);
   background-size: 34px 34px;
   opacity: 0.15;
   mix-blend-mode: overlay;
@@ -93,7 +93,7 @@ transform-style: preserve-3d;
     120deg,
     transparent 0%,
     rgba(255, 255, 255, 0.02) 42%,
-    rgba(192, 160, 98, 0.10) 50%,
+    color-mix(in oklab, var(--lux-accent) 16%, transparent) 50%,
     rgba(255, 255, 255, 0.02) 58%,
     transparent 100%
   );
@@ -110,8 +110,8 @@ transform-style: preserve-3d;
   display: flex;
   gap: 14px;
   align-items: flex-start;
-  border-bottom: 1px solid rgba(192, 160, 98, 0.14);
-  background: linear-gradient(180deg, rgba(192, 160, 98, 0.08), rgba(0, 0, 0, 0));
+  border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 14%, rgba(255, 255, 255, 0.06));
+  background: linear-gradient(180deg, color-mix(in oklab, var(--lux-accent) 10%, transparent), rgba(0, 0, 0, 0));
 }
 
 .brand {
@@ -124,10 +124,10 @@ transform-style: preserve-3d;
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(192, 160, 98, 0.32);
-  background: rgba(192, 160, 98, 0.10);
-  color: rgba(192, 160, 98, 0.95);
+  border-radius: 0;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 30%, rgba(255, 255, 255, 0.10));
+  background: color-mix(in oklab, var(--lux-accent) 10%, transparent);
+  color: var(--lux-accent);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -153,7 +153,7 @@ transform-style: preserve-3d;
 .adminTableWrap {
   margin-top: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border-radius: 0;
   overflow: auto;
   background: rgba(0, 0, 0, 0.20);
 }
@@ -169,7 +169,7 @@ transform-style: preserve-3d;
 
 .exportSelect {
   height: 34px;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 0 10px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(0, 0, 0, 0.28);
@@ -181,11 +181,11 @@ transform-style: preserve-3d;
 
 .exportBtn {
   height: 34px;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 0 12px;
-  border: 1px solid rgba(192, 160, 98, 0.55);
-  background: rgba(192, 160, 98, 0.10);
-  color: rgba(192, 160, 98, 0.95);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 28%, rgba(255, 255, 255, 0.10));
+  background: color-mix(in oklab, var(--lux-accent) 10%, transparent);
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.10em;
   text-transform: uppercase;
@@ -226,7 +226,7 @@ transform-style: preserve-3d;
 .statCard {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.22);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 12px;
 }
 
@@ -234,7 +234,7 @@ transform-style: preserve-3d;
   grid-column: 1 / -1;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.22);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 12px;
 }
 
@@ -250,7 +250,7 @@ transform-style: preserve-3d;
   margin-top: 8px;
   font-size: 22px;
   font-weight: 900;
-  color: rgba(192, 160, 98, 0.95);
+  color: var(--lux-accent);
 }
 
 .statSub {
@@ -322,11 +322,11 @@ transform-style: preserve-3d;
 }
 
 .adminTable tbody tr:hover {
-  background: rgba(192, 160, 98, 0.06);
+  background: color-mix(in oklab, var(--lux-accent) 8%, transparent);
 }
 
 .adminRowActive {
-  background: rgba(192, 160, 98, 0.10) !important;
+  background: color-mix(in oklab, var(--lux-accent) 12%, transparent) !important;
 }
 
 .rowHot {
@@ -346,7 +346,7 @@ transform-style: preserve-3d;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 5px 8px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(0, 0, 0, 0.25);
   color: rgba(255, 255, 255, 0.80);
@@ -373,7 +373,7 @@ transform-style: preserve-3d;
 
 .modalCard {
   width: min(420px, 100%);
-  border-radius: 18px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(7, 7, 8, 0.82);
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75);
@@ -385,7 +385,7 @@ transform-style: preserve-3d;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-size: 12px;
-  color: rgba(192, 160, 98, 0.95);
+  color: var(--lux-accent);
 }
 
 .modalSub {
@@ -407,7 +407,7 @@ transform-style: preserve-3d;
   margin-top: 6px;
   width: 100%;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(0, 0, 0, 0.35);
@@ -419,7 +419,7 @@ transform-style: preserve-3d;
 .modalTextarea {
   margin-top: 6px;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(0, 0, 0, 0.35);
@@ -445,7 +445,7 @@ transform-style: preserve-3d;
 .modalBtn {
   height: 38px;
   padding: 0 14px;
-  border-radius: 12px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.03);
   color: rgba(255, 255, 255, 0.85);
@@ -459,10 +459,10 @@ transform-style: preserve-3d;
 .modalBtnPrimary {
   height: 38px;
   padding: 0 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(192, 160, 98, 0.55);
-  background: rgba(192, 160, 98, 0.14);
-  color: rgba(192, 160, 98, 0.95);
+  border-radius: 0;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 32%, rgba(255, 255, 255, 0.10));
+  background: color-mix(in oklab, var(--lux-accent) 12%, transparent);
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -484,7 +484,7 @@ transform-style: preserve-3d;
 .actionBtn {
   width: 44px;
   height: 44px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
   background: rgba(255, 255, 255, 0.03);
   color: rgba(255, 255, 255, 0.8);
@@ -505,7 +505,7 @@ transform-style: preserve-3d;
 .closeBtn {
   width: 44px;
   height: 44px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.02);
   color: rgba(255, 255, 255, 0.85);
@@ -518,7 +518,7 @@ transform-style: preserve-3d;
 .closeBtn:hover {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(192, 160, 98, 0.28);
+  border-color: color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
 }
 
 .closeX {
@@ -536,14 +536,14 @@ transform-style: preserve-3d;
   justify-content: center;
   height: 44px;
   padding: 0 16px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(37, 211, 102, 0.95), rgba(18, 140, 126, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #0b0b0b;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 32%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  box-shadow: 0 16px 40px rgba(37, 211, 102, 0.25);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.60);
   text-decoration: none;
 }
 
@@ -554,10 +554,10 @@ transform-style: preserve-3d;
   justify-content: center;
   height: 40px;
   padding: 0 14px;
-  border-radius: 14px;
-  background: rgba(192, 160, 98, 0.12);
-  border: 1px solid rgba(192, 160, 98, 0.45);
-  color: rgba(192, 160, 98, 0.95);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.10em;
   text-transform: uppercase;
@@ -567,7 +567,10 @@ transform-style: preserve-3d;
 
 .consultCta:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
+  background: var(--lux-accent);
+  border-color: var(--lux-accent);
+  color: oklch(0.06 0.005 280);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
 }
 
 .platformOptions {
@@ -594,10 +597,10 @@ transform-style: preserve-3d;
   justify-content: center;
   height: 38px;
   padding: 0 12px;
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(192, 160, 98, 0.35);
-  color: rgba(192, 160, 98, 0.95);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -607,7 +610,10 @@ transform-style: preserve-3d;
 
 .platformBtn:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
+  background: var(--lux-accent);
+  border-color: var(--lux-accent);
+  color: oklch(0.06 0.005 280);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
 }
 
 .suggestionsWrap {
@@ -635,10 +641,10 @@ transform-style: preserve-3d;
   justify-content: center;
   min-height: 38px;
   padding: 8px 12px;
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(192, 160, 98, 0.35);
-  color: rgba(192, 160, 98, 0.95);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.02em;
   font-size: 12px;
@@ -647,25 +653,28 @@ transform-style: preserve-3d;
 
 .suggestionBtn:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
+  background: var(--lux-accent);
+  border-color: var(--lux-accent);
+  color: oklch(0.06 0.005 280);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
 }
 
 .pitchCard {
   margin-top: 10px;
   padding: 12px;
-  border-radius: 16px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);
 }
 
 .pitchUrgent {
-  border-color: rgba(192, 160, 98, 0.55);
-  background: rgba(192, 160, 98, 0.06);
+  border-color: color-mix(in oklab, var(--lux-accent) 30%, rgba(255, 255, 255, 0.10));
+  background: color-mix(in oklab, var(--lux-accent) 8%, transparent);
 }
 
 .pitchHigh {
-  border-color: rgba(192, 160, 98, 0.45);
-  background: rgba(192, 160, 98, 0.05);
+  border-color: color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
+  background: color-mix(in oklab, var(--lux-accent) 6%, transparent);
 }
 
 .pitchMedium {
@@ -691,7 +700,7 @@ transform-style: preserve-3d;
 }
 
 .pitchContent :global(strong) {
-  color: rgba(192, 160, 98, 0.95);
+  color: var(--lux-accent);
 }
 
 .pitchContent :global(ul) {
@@ -703,10 +712,10 @@ transform-style: preserve-3d;
   margin-top: 10px;
   width: 100%;
   height: 38px;
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(192, 160, 98, 0.35);
-  color: rgba(192, 160, 98, 0.95);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -716,18 +725,24 @@ transform-style: preserve-3d;
 
 .pitchCta:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
+  background: var(--lux-accent);
+  border-color: var(--lux-accent);
+  color: oklch(0.06 0.005 280);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
 }
 
 .humanCta:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
+  background: var(--lux-accent);
+  border-color: var(--lux-accent);
+  color: oklch(0.06 0.005 280);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
 }
 
 .actionBtn:hover {
   transform: translateY(-2px);
-  background: rgba(192, 160, 98, 0.12);
-  border-color: rgba(192, 160, 98, 0.35);
+  background: color-mix(in oklab, var(--lux-accent) 10%, transparent);
+  border-color: color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
 }
 
 .body {
@@ -752,7 +767,7 @@ padding: 18px;
 .bubble {
   max-width: 88%;
   padding: 12px 14px;
-  border-radius: 18px;
+  border-radius: 0;
   font-size: 14px;
   line-height: 1.55;
   letter-spacing: 0.01em;
@@ -763,20 +778,20 @@ padding: 18px;
 
 .bubbleUser {
   align-self: flex-end;
-  border-color: rgba(192, 160, 98, 0.32);
-  background: linear-gradient(135deg, rgba(192, 160, 98, 0.16), rgba(255, 255, 255, 0.02));
+  border-color: color-mix(in oklab, var(--lux-accent) 20%, rgba(255, 255, 255, 0.10));
+  background: linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 12%, transparent), rgba(255, 255, 255, 0.02));
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
 }
 
 .bubbleBot {
   align-self: flex-start;
-  border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 0;
 }
 
 .statusNote {
   margin: 10px 18px 0;
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: 0;
   font-size: 12px;
   line-height: 1.4;
   letter-spacing: 0.01em;
@@ -786,8 +801,8 @@ padding: 18px;
 }
 
 .statusNoteInfo {
-  border-color: rgba(192, 160, 98, 0.22);
-  color: rgba(192, 160, 98, 0.92);
+  border-color: color-mix(in oklab, var(--lux-accent) 18%, rgba(255, 255, 255, 0.10));
+  color: var(--lux-accent);
 }
 
 .statusNoteError {
@@ -809,7 +824,7 @@ padding: 18px;
 .input {
   flex: 1;
   height: 50px;
-  border-radius: 16px;
+  border-radius: 0;
   padding: 0 14px;
   outline: none;
   border: 1px solid rgba(255, 255, 255, 0.10);
@@ -819,17 +834,17 @@ padding: 18px;
 }
 
 .input:focus {
-  border-color: rgba(192, 160, 98, 0.52);
-  box-shadow: 0 0 0 6px rgba(192, 160, 98, 0.10);
+  border-color: color-mix(in oklab, var(--lux-accent) 28%, rgba(255, 255, 255, 0.10));
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--lux-accent) 10%, transparent);
   background: rgba(255, 255, 255, 0.05);
 }
 
 .send {
   width: 92px;
   height: 50px;
-  border-radius: 16px;
-  border: 1px solid rgba(192, 160, 98, 0.35);
-  background: linear-gradient(135deg, rgba(192, 160, 98, 0.92), rgba(255, 255, 255, 0.10));
+  border-radius: 0;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 24%, rgba(255, 255, 255, 0.10));
+  background: linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 75%, white 25%), color-mix(in oklab, var(--lux-accent) 55%, black 45%));
   color: rgba(0, 0, 0, 0.92);
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -845,7 +860,7 @@ padding: 18px;
 
 .send:hover:not(:disabled) {
   transform: translateY(-2px);
-  filter: drop-shadow(0 18px 28px rgba(192, 160, 98, 0.26));
+  filter: drop-shadow(0 18px 28px color-mix(in oklab, var(--lux-accent) 14%, transparent));
 }
 
 .typing {
@@ -858,7 +873,7 @@ padding: 18px;
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(192, 160, 98, 0.95);
+  background: var(--lux-accent);
   animation: dot 1.2s infinite ease-in-out;
   opacity: 0.35;
 }
@@ -873,34 +888,34 @@ padding: 18px;
   z-index: 999;
   width: 62px;
   height: 62px;
-  border-radius: 999px;
-  border: 1px solid rgba(192, 160, 98, 0.40);
+  border-radius: 0;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10));
   background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12), transparent 55%),
-    linear-gradient(135deg, rgba(192, 160, 98, 0.55), rgba(0, 0, 0, 0.55));
+    linear-gradient(135deg, rgba(7, 7, 8, 0.72), rgba(0, 0, 0, 0.55));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
     0 18px 70px rgba(0, 0, 0, 0.72),
     0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-    0 0 34px rgba(192, 160, 98, 0.18);
+    0 0 34px color-mix(in oklab, var(--lux-accent) 12%, transparent);
   cursor: pointer;
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
 
 .launcher:hover {
   transform: translateY(-3px) scale(1.04);
-  border-color: rgba(192, 160, 98, 0.62);
+  border-color: color-mix(in oklab, var(--lux-accent) 30%, rgba(255, 255, 255, 0.10));
   box-shadow:
     0 22px 90px rgba(0, 0, 0, 0.78),
     0 0 0 1px rgba(255, 255, 255, 0.10) inset,
-    0 0 46px rgba(192, 160, 98, 0.24);
+    0 0 46px color-mix(in oklab, var(--lux-accent) 16%, transparent);
 }
 
 .launcherPulse {
   position: absolute;
   inset: -10px;
-  border-radius: 999px;
-  border: 1px solid rgba(192, 160, 98, 0.32);
+  border-radius: 0;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);
   opacity: 0.0;
   animation: pulse 2.8s infinite ease-in-out;
   pointer-events: none;
@@ -909,7 +924,7 @@ padding: 18px;
 .launcherInner {
   width: 100%;
   height: 100%;
-  border-radius: 999px;
+  border-radius: 0;
   display: grid;
   place-items: center;
 }
@@ -961,13 +976,13 @@ padding: 18px;
   background: transparent;
 }
 .body::-webkit-scrollbar-thumb {
-  background: rgba(192, 160, 98, 0.28);
+  background: color-mix(in oklab, var(--lux-accent) 16%, transparent);
   border-radius: 999px;
   border: 3px solid transparent;
   background-clip: content-box;
 }
 .body::-webkit-scrollbar-thumb:hover {
-  background: rgba(192, 160, 98, 0.40);
+  background: color-mix(in oklab, var(--lux-accent) 24%, transparent);
   border: 3px solid transparent;
   background-clip: content-box;
 }

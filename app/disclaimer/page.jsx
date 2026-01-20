@@ -44,7 +44,7 @@ const Disclaimer = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 48px)',
             fontWeight: '700',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             marginBottom: '12px',
             lineHeight: '1.2'
           }}>Disclaimer</h1>
@@ -53,22 +53,22 @@ const Disclaimer = () => {
           <div className="bp-body">
             {/* Important Warning */}
             <div style={{
-              background: 'rgba(218, 165, 32, 0.1)',
-              borderLeft: '4px solid #DAA520',
+              background: 'rgba(255, 255, 255, 0.035)',
+              borderLeft: '4px solid var(--lux-accent)',
               padding: '24px',
               marginBottom: '40px',
               display: 'flex',
               alignItems: 'flex-start',
               gap: '16px',
-              borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              borderRadius: '0px',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)'
             }}>
-              <AlertTriangle style={{ color: '#DAA520', flexShrink: 0, marginTop: '4px' }} size={24} />
+              <AlertTriangle style={{ color: 'var(--lux-accent)', flexShrink: 0, marginTop: '4px' }} size={24} />
               <div>
                 <h2 style={{
                   fontSize: '20px',
                   fontWeight: '700',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                   marginBottom: '12px'
                 }}>Investment Risk Warning</h2>
                 <p style={{
@@ -100,7 +100,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>1. Investment Disclaimer</h2>
@@ -134,7 +134,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>2. Market Risks</h2>
@@ -176,7 +176,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>3. Not Financial Advice</h2>
@@ -204,7 +204,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>4. Professional Consultation Required</h2>
@@ -227,7 +227,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>5. Insurance Products Disclaimer</h2>
@@ -256,7 +256,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>6. Regulatory Status</h2>
@@ -264,11 +264,11 @@ const Disclaimer = () => {
                 BM Wealth operates under the following regulatory framework:
               </p>
               <div style={{
-                background: 'rgba(218, 165, 32, 0.05)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 padding: '24px',
-                borderRadius: '8px',
+                borderRadius: '0px',
                 marginBottom: '20px',
-                border: '1px solid rgba(218, 165, 32, 0.2)'
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)'
               }}>
                 <ul style={{ listStyleType: 'disc', paddingLeft: '24px', margin: 0, color: '#B8B8B8' }}>
                   <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '16px' }}>
@@ -294,7 +294,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>7. Limitation of Liability</h2>
@@ -321,7 +321,7 @@ const Disclaimer = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>8. Contact Us</h2>
@@ -329,10 +329,10 @@ const Disclaimer = () => {
                 For any questions or clarifications regarding this disclaimer:
               </p>
               <div style={{
-                background: 'rgba(218, 165, 32, 0.05)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 padding: '24px',
-                borderRadius: '8px',
-                border: '1px solid rgba(218, 165, 32, 0.2)'
+                borderRadius: '0px',
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)'
               }}>
                 <p style={{ fontSize: '16px', color: '#E5E5E5', marginBottom: '12px' }}><strong>BM Wealth</strong></p>
                 <p style={{ fontSize: '16px', color: '#B8B8B8', marginBottom: '12px' }}>Proprietor: Brahmdeo Maurya</p>
@@ -346,15 +346,15 @@ const Disclaimer = () => {
 
             {/* License Information */}
             <section style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'rgba(255, 255, 255, 0.03)',
               padding: '24px',
-              borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              borderRadius: '0px',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)'
             }}>
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>Regulatory Licenses</h3>
               <p style={{ fontSize: '14px', color: '#B8B8B8', marginBottom: '8px' }}>

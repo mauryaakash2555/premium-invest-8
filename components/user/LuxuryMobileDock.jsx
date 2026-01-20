@@ -40,7 +40,6 @@ const allNavItems = [
   { label: "Services", icon: <Briefcase className="w-6 h-6" strokeWidth={1} />, href: "/services" },
   { label: "Platforms", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/platforms" },
   { label: "Tools", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools" },
-  { label: "Tax Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools/tax-optimization" },
   { label: "Live Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/live-intelligence" },
   { label: "Curated Partners", icon: <Users className="w-6 h-6" strokeWidth={1} />, href: "/curated-partners" },
   { label: "Blog", icon: <BookOpen className="w-6 h-6" strokeWidth={1} />, href: "/blog" },

@@ -26,14 +26,14 @@ export const metadata = buildMetadata({
 
 function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
   const content = (
-    <Card className={`border border-white/10 ultra-luxury-glass gold-grain-texture premium-hover-glow relative overflow-hidden rounded-xl ${className}`}>
+    <Card className={`border border-white/10 ultra-luxury-glass premium-hover-glow relative overflow-hidden rounded-none h-full ${className}`}>
       {laser ? (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{ borderRadius: '12px' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{ borderRadius: 0 }}>
           <LaserBeam
             width="100%"
             height="100%"
-            color="#c0a062"
-            borderRadius={12}
+            color="#C9A24D"
+            borderRadius={0}
             duration={20}
             glowIntensity={10}
             beamLength={0.08}
@@ -42,24 +42,18 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
           />
         </div>
       ) : null}
-      <CardContent className="p-5 relative z-10">
-        <div className="flex items-start justify-between gap-4">
+      <CardContent className="p-5 relative z-10 flex flex-col h-full">
+        <div className="flex items-start justify-between gap-4 flex-1">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold gold-gradient-text truncate">
-              {title}
-            </h2>
-            {subtitle ? (
-              <p className="mt-1 text-sm text-white/70">{subtitle}</p>
-            ) : null}
+            <h2 className="text-base font-semibold gold-gradient-text truncate">{title}</h2>
+            {subtitle ? <p className="mt-1 text-sm text-white/70">{subtitle}</p> : null}
           </div>
           {!active ? (
-            <Badge className="shrink-0 bg-white/10 text-white/80 border border-white/10">
-              Coming Soon
-            </Badge>
+            <Badge className="shrink-0 bg-white/10 text-white/80 border border-white/10">Coming Soon</Badge>
           ) : null}
         </div>
 
-        <div className="mt-5">
+        <div className="mt-5 mt-auto">
           {active ? (
             <Link href={href} className="inline-flex">
               <Button className="calculator-premium-cta">
@@ -152,7 +146,7 @@ export default function ToolsHubPage() {
           </div>
 
           <div className="bp-body">
-            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr">
               <ToolCard
                 active
                 title="Tax Optimization Intelligence — FY 2025–26"
@@ -196,7 +190,7 @@ export default function ToolsHubPage() {
               />
             </div>
 
-            <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+            <div className="mt-10 rounded-none border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <p className="text-sm text-white/75">
                 Each tool is built using real regulatory rules, Mumbai-specific assumptions, and BM Wealth’s internal advisory frameworks. Tools are released individually after audit-level validation.
               </p>

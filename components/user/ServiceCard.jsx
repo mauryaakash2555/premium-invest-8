@@ -147,9 +147,9 @@ export default function ServiceCard({ service, index = 0 }) {
                 opacity: isMobile ? (mobileAnimating ? 1 : 0) : 0,
                 transition: 'opacity 320ms ease',
                 background:
-                  'radial-gradient(70% 55% at 50% 75%, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 60%), radial-gradient(45% 35% at 35% 30%, rgba(192,160,98,0.18) 0%, rgba(0,0,0,0) 62%)',
+                  'radial-gradient(70% 55% at 50% 75%, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 60%), radial-gradient(45% 35% at 35% 30%, color-mix(in oklab, var(--lux-accent) 12%, transparent) 0%, rgba(0,0,0,0) 62%)',
                 boxShadow:
-                  'inset 0 0 0 1px rgba(255,255,255,0.16), 0 22px 70px rgba(0,0,0,0.55), 0 0 26px rgba(192,160,98,0.16)',
+                  'inset 0 0 0 1px rgba(255,255,255,0.16), 0 22px 70px rgba(0,0,0,0.55), 0 0 26px color-mix(in oklab, var(--lux-accent) 10%, transparent)',
               }}
             />
             {/* Minimal readability veil (keeps text exactly the same; does not change global colors) */}
