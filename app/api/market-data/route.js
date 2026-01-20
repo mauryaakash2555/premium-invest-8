@@ -541,6 +541,8 @@ async function fetchFromBSE() {
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchFromMoneyControl() {
   const results = { nifty: null, sensex: null, gold: null, silver: null, crude: null };
+  const SILVER_MIN = 50_000;
+  const SILVER_MAX = 350_000;
   
   // Indices
   try {
@@ -589,7 +591,7 @@ async function fetchFromMoneyControl() {
           if (symbol.includes("GOLD") && price > 70000 && price < 200000) {
             results.gold = { value: Math.round(price), changePct: roundTo2(changePct || 0), source: "moneycontrol" };
           }
-          if (symbol.includes("SILVER") && price > 200000 && price < 350000) {
+          if (symbol.includes("SILVER") && price > SILVER_MIN && price < SILVER_MAX) {
             results.silver = { value: Math.round(price), changePct: roundTo2(changePct || 0), source: "moneycontrol" };
           }
           if (symbol.includes("CRUDE") && price > 4000 && price < 12000) {
@@ -627,7 +629,7 @@ async function fetchFromMoneyControl() {
           if (match) {
             const price = parseNumber(match[1]);
             const pct = parseNumber(match[2]);
-            if (price > 200000 && price < 350000) {
+            if (price > SILVER_MIN && price < SILVER_MAX) {
               results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "moneycontrol_web" };
             }
           }
@@ -657,6 +659,8 @@ async function fetchFromMoneyControl() {
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchFromMCXOfficial() {
   const results = { gold: null, silver: null, crude: null };
+  const SILVER_MIN = 50_000;
+  const SILVER_MAX = 350_000;
   
   try {
     // Try MCX API endpoint first
@@ -685,7 +689,7 @@ async function fetchFromMCXOfficial() {
           if (symbol.includes("GOLD") && price > 70000 && price < 200000) {
             results.gold = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx_api" };
           }
-          if (symbol.includes("SILVER") && price > 200000 && price < 350000) {
+          if (symbol.includes("SILVER") && price > SILVER_MIN && price < SILVER_MAX) {
             results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx_api" };
           }
           if (symbol.includes("CRUDE") && price > 4000 && price < 12000) {
@@ -745,7 +749,7 @@ async function fetchFromMCXOfficial() {
             if (match) {
               const price = parseNumber(match[1]);
               const pct = parseNumber(match[2]);
-              if (price > 200000 && price < 350000) {
+              if (price > SILVER_MIN && price < SILVER_MAX) {
                 results.silver = { value: Math.round(price), changePct: roundTo2(pct || 0), source: "mcx" };
                 break;
               }
@@ -779,42 +783,77 @@ async function fetchFromMCXOfficial() {
 // ════════════════════════════════════════════════════════════════════════════
 async function fetchFromLiveMint() {
   const results = { gold: null, silver: null, crude: null };
-  
+
+  function parseNextDataCommodityDetails(html) {
+    // LiveMint market-stats pages embed a full Next.js payload containing live prices.
+    const m = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/i);
+    if (!m) return null;
+    try {
+      const data = JSON.parse(m[1]);
+      const details = data?.props?.pageProps?.commodityDetails;
+      if (!details) return null;
+      const value = parseNumber(details?.last_traded_price);
+      const changePct = parseNumber(details?.per_change);
+      const product = String(details?.product || "").toUpperCase();
+      if (value == null) return null;
+      return { value: Math.round(value), changePct: roundTo2(changePct || 0), product };
+    } catch {
+      return null;
+    }
+  }
+
+  const urls = {
+    gold: "https://www.livemint.com/market/market-stats/commodity-mcx-gold-price",
+    silver: "https://www.livemint.com/market/market-stats/commodity-mcx-silver-price",
+    crude: "https://www.livemint.com/market/market-stats/commodity-mcx-crudeoil-price",
+  };
+
   try {
-    const res = await fetchWithTimeout("https://www.livemint.com/market/commodities", { headers: SCRAPE_HEADERS }, 5000);
-    
-    if (res.ok) {
+    const fetchOne = async (key, url) => {
+      const res = await fetchWithTimeout(
+        url,
+        { headers: { ...SCRAPE_HEADERS, Referer: "https://www.livemint.com/" } },
+        6000
+      );
       const html = await res.text();
-      
-      // Gold
-      const goldMatch = html.match(/Gold[^₹<]*₹\s*([0-9,]+)/i);
-      if (goldMatch) {
-        const price = parseNumber(goldMatch[1]);
-        if (price > 70000 && price < 200000) {
-          results.gold = { value: Math.round(price), changePct: 0, source: "livemint" };
+      return { key, ok: res.ok, status: res.status, html };
+    };
+
+    const settled = await Promise.allSettled(Object.entries(urls).map(([k, u]) => fetchOne(k, u)));
+    for (const r of settled) {
+      if (r.status !== "fulfilled") continue;
+      const { key, ok, status, html } = r.value;
+      if (!ok) {
+        Logger.warn("livemint_http_failed", { key, status });
+        continue;
+      }
+
+      const parsed = parseNextDataCommodityDetails(html);
+      if (!parsed || !parsed.value) continue;
+
+      if (key === "gold") {
+        if (parsed.value > 70_000 && parsed.value < 200_000) {
+          results.gold = { value: parsed.value, changePct: parsed.changePct, source: "livemint" };
         }
       }
-      
-      // Silver
-      const silverMatch = html.match(/Silver[^₹<]*₹\s*([0-9,]+)/i);
-      if (silverMatch) {
-        const price = parseNumber(silverMatch[1]);
-        if (price > 80000 && price < 350000) {
-          results.silver = { value: Math.round(price), changePct: 0, source: "livemint" };
+
+      if (key === "silver") {
+        // Silver on LiveMint is MCX FUTURES per kg (often 2L+). Reject spot-like values.
+        if (parsed.value > 50_000 && parsed.value < 350_000) {
+          results.silver = { value: parsed.value, changePct: parsed.changePct, source: "livemint" };
         }
       }
-      
-      // Crude
-      const crudeMatch = html.match(/Crude[^₹<]*₹\s*([0-9,]+)/i);
-      if (crudeMatch) {
-        const price = parseNumber(crudeMatch[1]);
-        if (price > 4000 && price < 12000) {
-          results.crude = { value: Math.round(price), changePct: 0, source: "livemint" };
+
+      if (key === "crude") {
+        if (parsed.value > 4_000 && parsed.value < 12_000) {
+          results.crude = { value: parsed.value, changePct: parsed.changePct, source: "livemint" };
         }
       }
     }
-  } catch (e) { Logger.warn("livemint_failed", { error: String(e?.message) }); }
-  
+  } catch (e) {
+    Logger.warn("livemint_failed", { error: String(e?.message) });
+  }
+
   return results;
 }
 
@@ -1098,7 +1137,7 @@ async function fetchMarketDataFromAPIs() {
     // ALWAYS SHOW - display "Updating..." when no live data
     let silver = mc.silver || mcx.silver || mint.silver || gr.silver || metalsLive?.silver || stooq?.silver;
     // Sanity check: Silver per KG should always be much higher than Gold per 10g
-    if (silver && silver.value < 200000) {
+    if (silver && silver.value < 50000) {
       Logger.warn("silver_invalid_value", { value: silver.value, source: silver.source });
       silver = null; // Reject invalid data
     }
