@@ -31,6 +31,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -41,8 +42,8 @@ import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import LiveIntelligenceOverlay from '@/components/user/LiveIntelligenceOverlay';
 import LaserFooter from '@/components/user/LaserFooter';
-
-import AnimatedClouds from '@/components/user/AnimatedClouds';
+const HeroContent = dynamic(() => import('@/components/home/HeroContent'), { ssr: false });
+const AnimatedClouds = dynamic(() => import('@/components/user/AnimatedClouds'), { ssr: false });
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
 
@@ -136,90 +137,13 @@ export default function HomePage() {
         <div
           className="section-container fade-in hero-content-responsive"
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
             position: 'relative',
             zIndex: 3,
             paddingTop: 'clamp(20px, 7vh, 180px)',
           }}
         >
-          {/* 7. Gold-Leaf Typography Kept */}
-          <motion.h1
-            className="hero-subtitle-responsive"
-            style={{
-              fontSize: 'clamp(18px, 2.1vw, 28px)',
-              color: '#C0A062',
-              marginBottom: '24px',
-              fontWeight: 300,
-              letterSpacing: '2.2px',
-              opacity: 0.95,
-              textShadow: '0 3px 12px rgba(0,0,0,0.4)',
-              fontFamily: '"Playfair Display", serif',
-              backgroundImage: `linear-gradient(135deg, #C0A062 ${mousePos.x - 20}%, #FFF ${mousePos.x}%, #C0A062 ${mousePos.x + 20}%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% auto',
-            }}
-          >
-            BM WEALTH - DISTINGUISHED WEALTH ARCHITECTURE
-          </motion.h1>
-          <p
-            className="hero-description-responsive"
-            style={{
-              fontSize: 'clamp(13px, 1.5vw, 16px)',
-              color: '#C0A062',
-              marginBottom: '60px',
-              maxWidth: '800px',
-              margin: '0 auto 60px',
-              lineHeight: 1.5,
-              fontWeight: 300,
-              letterSpacing: '0.5px',
-              opacity: 0.85,
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            }}
-          >
-            Empowering Mumbai's elite investors with bespoke wealth strategies
-          </p>
-
-          {/* Mobile-only minimal CTA (keeps background fully visible) */}
-          <div
-            className="md:hidden flex justify-center"
-            style={{
-              margin: '0 auto 48px',
-              padding: '0 16px',
-            }}
-          >
-            <Link
-              href="/tools"
-              className="mobile-cta-lux"
-              style={{
-                fontSize: '11px',
-                lineHeight: 1.2,
-                textDecoration: 'none',
-                letterSpacing: '0.9px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Access Your Complimentary Wealth Blueprint
-            </Link>
-          </div>
-
-          <div
-            className="hero-cta-buttons-responsive hide-cta-on-mobile"
-            style={{
-              display: 'flex',
-              gap: '20px',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginBottom: '60px',
-            }}
-          >
-            <Link href="/tools" className="btn-primary">
-              Access Your Complimentary Wealth Blueprint
-            </Link>
-            <Link href="/services" className="btn-secondary">
-              Explore Services {"\u2192"}
-            </Link>
-          </div>
+          <HeroContent />
         </div>
 
         {/* LIVE MOOD (restored) - sits just above ticker */}
