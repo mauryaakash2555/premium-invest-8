@@ -14,7 +14,7 @@ export default function StoreTermsPage() {
       <div className="rounded-none border border-white/10 bg-white/5 p-6 text-sm leading-relaxed text-white/70 space-y-4">
         <p>
           All products sold on this store are digital and educational in nature.
-          Content is provided for informational and educational purposes only and should not be considered financial advice.
+          Content is provided for informational and educational purposes only and should not be considered advice of any kind.
         </p>
         <p>No promises: We do not promise outcomes, performance, or results.</p>
         <p>Delivery is digital only. No physical goods are shipped.</p>

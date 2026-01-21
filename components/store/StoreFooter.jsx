@@ -15,7 +15,7 @@ export default function StoreFooter() {
           <div className="max-w-md">
             <p className="text-sm font-semibold tracking-[0.25em] uppercase text-white">BM Digital Store</p>
             <p className="mt-3 text-sm text-white/70 leading-relaxed">
-              Digital educational PDFs, guides, and tools. For learning purposes only — not financial advice.
+              Digital educational PDFs, guides, and tools. For learning purposes only.
             </p>
           </div>
 

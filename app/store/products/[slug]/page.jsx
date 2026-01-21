@@ -67,9 +67,9 @@ export default function StoreProductDetailPage({ params }) {
       </div>
 
       <div className="rounded-none border border-white/10 bg-white/5 p-6">
-        <p className="text-sm font-semibold text-white">Educational disclaimer</p>
+        <p className="text-sm font-semibold text-white">Disclaimer</p>
         <p className="mt-2 text-sm leading-relaxed text-white/70">
-          This is for educational purposes only. This is not financial advice.
+          This product is for educational purposes only. It is not advice and does not provide recommendations.
         </p>
       </div>
     </div>

@@ -13,14 +13,14 @@ export default function StoreAboutPage() {
 
       <div className="rounded-none border border-white/10 bg-white/5 p-6 text-sm leading-relaxed text-white/70 space-y-4">
         <p>
-          BM Digital Store is a digital education store focused on personal finance learning.
-          We sell digital educational PDFs, guides, and tools designed for learning purposes.
+          BM Digital Store sells digital educational PDFs, guides, and learning tools.
+          All content is designed for educational and informational purposes only.
         </p>
         <p>
-          This store does not provide 1:1 guidance. Content is delivered digitally.
+          This store does not provide 1:1 guidance or consulting. All products are delivered digitally.
         </p>
         <p className="text-white/80">
-          Disclaimer: Content is provided for informational and educational purposes only and is not financial advice.
+          Disclaimer: Content is for educational purposes only. This is not advice of any kind.
         </p>
       </div>
     </div>

@@ -34,7 +34,7 @@ export default function StoreHomePage() {
         {[
           { t: 'Digital delivery', d: 'No physical shipping. Access is digital.' },
           { t: 'Clear policies', d: 'Terms, privacy, refund, and delivery pages are available.' },
-          { t: 'Educational only', d: 'For learning purposes only — not financial advice.' },
+          { t: 'Educational only', d: 'For learning purposes only — not advice.' },
         ].map((c) => (
           <div key={c.t} className="rounded-none border border-white/10 bg-white/5 p-5">
             <p className="text-sm font-semibold text-white">{c.t}</p>
@@ -46,7 +46,7 @@ export default function StoreHomePage() {
       <section className="rounded-none border border-white/10 bg-white/5 p-6">
         <p className="text-sm font-semibold text-white">Disclaimer</p>
         <p className="mt-2 text-sm leading-relaxed text-white/70">
-          This content is for educational purposes only. It is not financial advice.
+          This content is for educational purposes only. It is not advice.
         </p>
       </section>
     </div>

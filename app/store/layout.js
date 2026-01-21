@@ -3,7 +3,7 @@ export const metadata = {
     default: 'BM Digital Store',
     template: '%s | BM Digital Store',
   },
-  description: 'Digital educational PDFs and tools. For learning purposes only. Not financial advice.',
+  description: 'Digital educational PDFs and tools. For learning purposes only.',
 };
 
 import StoreNavigation from '@/components/store/StoreNavigation';

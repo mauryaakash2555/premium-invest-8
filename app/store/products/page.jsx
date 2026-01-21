@@ -39,7 +39,7 @@ export default function StoreProductsPage() {
       </div>
 
       <div className="rounded-none border border-white/10 bg-white/5 p-5 text-sm text-white/70">
-        Disclaimer: These products are for educational purposes only and are not financial advice.
+        Disclaimer: These products are for educational purposes only. They do not provide advice or recommendations.
       </div>
     </div>
   );
