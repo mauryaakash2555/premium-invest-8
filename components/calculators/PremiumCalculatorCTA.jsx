@@ -3,23 +3,23 @@
 import styles from "./PremiumCalculatorCTA.module.css";
 
 export function PremiumCalculatorCTA({
-  labelBefore = "Reveal Detailed Analysis",
-  onClickAction,
-  price,
+  labelBefore = "Open in Digital Store",
+  storeUrl,
   buttonClassName = "calculator-premium-cta",
 }) {
+  const href = String(storeUrl || "https://store.bmwealth.co.in").trim();
+
   return (
     <div className={styles.wrap}>
       <div className={styles.inner}>
-        <button
-          type="button"
+        <a
+          href={href}
           className={[styles.button, buttonClassName].filter(Boolean).join(" ")}
-          onClick={() => {
-            onClickAction?.({ price });
-          }}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {labelBefore}
-        </button>
+        </a>
 
         <div className={styles.lockedCard} aria-hidden="true">
           <div className={styles.lockedInner}>
@@ -40,7 +40,7 @@ export function PremiumCalculatorCTA({
         <div className={styles.compliance}>
           Educational projection based on stated assumptions.
           <br />
-          Not investment advice. AMFI Registered — ARN 90008.
+          Not investment advice.
         </div>
       </div>
     </div>

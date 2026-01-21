@@ -53,7 +53,7 @@ export function LeadCaptureModal({
   title = "Get your report",
   body = "",
   freeLabel = "Email Free Summary",
-  payLabel = "Unlock Premium Blueprint — ₹299",
+  payLabel = "Open in Digital Store",
   payButtonClassName = "",
   optInLabel = "I agree to receive tax updates and analysis via WhatsApp",
   whatsappHelpText = "Use +91 format so we can send your blueprint instantly.",
@@ -81,11 +81,8 @@ export function LeadCaptureModal({
   }, [name, email, whatsapp]);
 
   const canSubmitPay = useMemo(() => {
-    return (
-      String(name || "").trim().length >= 2 &&
-      isValidEmail(email) &&
-      Boolean(normalizeWhatsApp(whatsapp))
-    );
+    // Store redirect does not require WhatsApp.
+    return String(name || "").trim().length >= 2 && isValidEmail(email);
   }, [name, email, whatsapp]);
 
   async function handle(action) {
@@ -124,12 +121,12 @@ export function LeadCaptureModal({
     }
 
     if (action === "pay") {
-      if (!normalizedPhone) {
-        setErr("Please enter a valid 10-digit mobile number.");
-        return;
-      }
       if (!canSubmitPay) {
-        setErr("Please check your details and try again.");
+        if (hasAnyPhoneInput && !normalizedPhone) {
+          setErr("Please enter a valid 10-digit mobile number (or leave it blank).");
+        } else {
+          setErr("Please check your details and try again.");
+        }
         return;
       }
     } else {
@@ -151,7 +148,7 @@ export function LeadCaptureModal({
     };
 
     setBusy(true);
-    setInfo(action === "free" ? "Sending your summary…" : "Starting payment…");
+    setInfo(action === "free" ? "Sending your summary…" : "Opening the Digital Store…");
     try {
       if (action === "free") {
         await onFree?.(payload);

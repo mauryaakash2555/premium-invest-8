@@ -225,7 +225,7 @@ export function PropertyVsSipCalculator() {
     setStatusNote("");
 
     if (!model) {
-      throw new Error("Please click Calculate first, then unlock premium.");
+      throw new Error("Please click Calculate first, then view the detailed report in our Digital Store.");
     }
 
     const leadRes = await fetch("/api/leads/capture", {
@@ -241,35 +241,10 @@ export function PropertyVsSipCalculator() {
     const leadId = leadJson?.leadId || null;
     if (leadId) leadIdRef.current = String(leadId);
 
-    setStatusNote("Starting payment...");
-    track("payment_start", { leadId: leadIdRef.current || undefined });
-
-    const orderRes = await fetch("/api/payments/cashfree/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: 399,
-        productName: `Property vs SIP Premium Report (₹${gapCrAbs}Cr opportunity)`,
-        customerName: payload?.name || "",
-        customerEmail: payload?.email || "",
-        customerPhone: payload?.phone || "",
-      }),
-    });
-    const orderJson = await orderRes.json().catch(() => null);
-    if (!orderRes.ok || !orderJson?.payment_session_id) {
-      track("payment_failed", { stage: "create_order" });
-      const msg = typeof orderJson?.error === "string" ? orderJson.error.trim() : "";
-      if (msg) throw new Error(msg);
-      throw new Error("Payment could not be started. Please try again.");
-    }
-
+    setStatusNote("");
     setLeadOpen(false);
-    const checkoutUrl = typeof orderJson?.checkout_url === "string" && orderJson.checkout_url.trim() ? orderJson.checkout_url.trim() : "";
-    if (!checkoutUrl) {
-      track("payment_failed", { stage: "missing_checkout_url" });
-      throw new Error("Payment gateway URL not received. Please try again.");
-    }
-    window.location.assign(checkoutUrl);
+    const storeUrl = "https://store.bmwealth.co.in/products/property-vs-sip-premium-report";
+    window.location.assign(storeUrl);
   }
 
   useEffect(() => {
@@ -646,17 +621,12 @@ export function PropertyVsSipCalculator() {
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                       <div className="text-base font-semibold text-white">Ready to act on this?</div>
                       <div className="mt-2 text-sm text-slate-200/75">
-                        Property vs SIP, which one is for You, Unlock the ₹399, and find out the hidden charges which normal people failed to recognise
+                        Property vs SIP is an educational comparison. View the detailed PDF/tools in our Digital Store.
                       </div>
                       <div className="mt-4">
                         <PremiumCalculatorCTA
-                          labelBefore="Show Me How — ₹399"
-                          labelAfter="Preparing Your Report…"
-                          price={399}
-                          onClickAction={() => {
-                            track("premium_click");
-                            setLeadOpen(true);
-                          }}
+                          labelBefore="Open in Digital Store"
+                          storeUrl="https://store.bmwealth.co.in/products/property-vs-sip-premium-report"
                         />
                       </div>
 
@@ -917,13 +887,13 @@ export function PropertyVsSipCalculator() {
         onOpenChange={setLeadOpen}
         onFree={handleFree}
         onPay={handlePay}
-        title="What Do I Do Now? — ₹399"
+        title="What Do I Do Now?"
         body={`Get your personalized roadmap to move from property to wealth-compounding equity.\n\nWhat you'll receive:\n\nYOUR COMPLETE EXIT PLAN\n- Month-by-month transition timeline\n- Capital gains tax minimization\n- Equity allocation strategy\n- Risk management framework\n\nWEALTH RECOVERY ROADMAP\n- How to recover ₹${gapCrAbs}Cr opportunity cost\n- Mumbai property exit timing guide\n- Hybrid allocation options\n- Family conversation script\n\nMUMBAI MARKET INTELLIGENCE\n- Locality-wise data (2015–2025)\n- Price trend reality check\n- Where smart money is moving\n- When property makes sense (rare)\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
         freeLabel="Email Summary"
-        payLabel="Send It Now — ₹399"
+        payLabel="Open in Digital Store"
         payButtonClassName="calculator-premium-cta"
         optInLabel="Send investment tips via WhatsApp"
-        whatsappHelpText="Optional for Email Summary. For premium, WhatsApp helps us support delivery if email fails. Use +91XXXXXXXXXX."
+        whatsappHelpText="Optional for Email Summary. Use +91XXXXXXXXXX."
         footerNote={`This is an illustrative educational tool based on your inputs and locked assumptions. Not SEBI-registered investment advice. Consult a financial advisor before making decisions.\n\nARN 90008 | IRDAI 277925 | Educational purposes only`}
       />
 
@@ -934,7 +904,7 @@ export function PropertyVsSipCalculator() {
         title={`Wait. Don't lose ₹${gapCrAbs}Cr.`}
         bodyPrimary={`Your calculation shows ₹${gapCrAbs}Cr opportunity cost over ${yearsFinal} years.\n\nMost Mumbai property owners never see this clearly.\n\nWant to understand your options?`}
         bodySecondary=""
-        primaryLabel="Show Me How — ₹399"
+        primaryLabel="Open in Digital Store"
         primaryButtonClassName="calculator-premium-cta"
         secondaryLabel="Email Summary"
         note=""
@@ -942,7 +912,7 @@ export function PropertyVsSipCalculator() {
         onPrimary={() => {
           track("exit_intent_premium_click");
           setExitOpen(false);
-          setLeadOpen(true);
+          window.location.assign("https://store.bmwealth.co.in/products/property-vs-sip-premium-report");
         }}
         onSecondary={() => {
           track("exit_intent_lead_capture");

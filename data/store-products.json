@@ -37,5 +37,31 @@
     ],
     "description": "A learning toolkit that explains concepts and terminology used in long-term personal finance learning.",
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "tax-optimization-blueprint",
+    "name": "Tax Optimization Blueprint (Educational PDF)",
+    "priceInr": 299,
+    "type": "Educational PDF",
+    "whatYouGet": [
+      "1 downloadable PDF blueprint",
+      "Checklist-style sections",
+      "Reference notes for common tax concepts"
+    ],
+    "description": "An educational blueprint that explains common tax optimisation concepts and checklist-style steps for learning and planning.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "property-vs-sip-premium-report",
+    "name": "Property vs SIP Premium Report (Educational PDF)",
+    "priceInr": 399,
+    "type": "Educational PDF",
+    "whatYouGet": [
+      "1 downloadable educational report",
+      "Key assumptions explained",
+      "Glossary + FAQs"
+    ],
+    "description": "An educational report that explains the concepts behind property vs SIP comparisons, assumptions, and trade-offs.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   }
 ]

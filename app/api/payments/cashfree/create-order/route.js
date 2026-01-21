@@ -3,6 +3,13 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+function getNormalizedHost(req) {
+  const rawHost = req.headers.get('x-forwarded-host') || req.headers.get('host') || '';
+  const host = String(rawHost).split(',')[0].trim().toLowerCase();
+  const hostNoPort = host.split(':')[0];
+  return hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
+}
+
 function getCashfreeEnv() {
   return String(process.env.CASHFREE_ENV || "").trim().toUpperCase();
 }
@@ -54,6 +61,16 @@ function makeOrderId() {
 
 export async function POST(req) {
   try {
+    // bmwealth.co.in must remain non-commercial. Payments must only happen on store.bmwealth.co.in.
+    const normalizedHost = getNormalizedHost(req);
+    const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
+    if (!isStoreHost) {
+      return NextResponse.json(
+        { error: 'payments_disabled_on_main_site', message: 'Payments are handled only on https://store.bmwealth.co.in.' },
+        { status: 404 }
+      );
+    }
+
     const appId = getAppId();
     const secretKey = getSecretKey();
     const env = getCashfreeEnv();
@@ -106,7 +123,7 @@ export async function POST(req) {
         customer_phone: customerPhone.slice(0, 15),
       },
       order_meta: {
-        return_url: "https://bmwealth.co.in/payment-success",
+        return_url: "https://store.bmwealth.co.in/payment-success",
       },
     };
 

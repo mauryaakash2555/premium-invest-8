@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+const STORE_URL = 'https://store.bmwealth.co.in';
+
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,6 +48,7 @@ const Navigation = () => {
     { href: '/services', label: 'Services' },
     { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
+    { href: STORE_URL, label: 'Store', external: true },
   ];
 
   return (
@@ -96,6 +99,23 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
+
+            <a
+              href={STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'var(--lux-accent)',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 600,
+                transition: 'color 0.3s ease',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }}
+            >
+              Digital Store
+            </a>
           </div>
         </div>
       </nav>
@@ -149,20 +169,37 @@ const Navigation = () => {
         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', maxWidth: '400px', margin: '0 auto' }}>
           {mobileLinks.map((item) => {
             const isActive = pathname === item.href;
+
+            const style = {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: isActive ? 'var(--lux-accent)' : '#9aa3ad',
+              fontSize: '10px',
+              fontWeight: isActive ? 600 : 400,
+              transition: 'color 0.2s ease',
+            };
+
+            if (item.external) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={style}
+                >
+                  {item.label}
+                </a>
+              );
+            }
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  color: isActive ? 'var(--lux-accent)' : '#9aa3ad',
-                  fontSize: '10px',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'color 0.2s ease',
-                }}
+                style={style}
               >
                 {item.label}
               </Link>

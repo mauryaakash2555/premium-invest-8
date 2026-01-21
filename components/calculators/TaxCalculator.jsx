@@ -207,35 +207,10 @@ export function TaxCalculator() {
     const leadId = leadJson?.leadId || null;
     if (leadId) leadIdRef.current = String(leadId);
 
-    setStatusNote("Starting payment...");
-    track("payment_start", { leadId: leadIdRef.current || undefined });
-
-    const orderRes = await fetch("/api/payments/cashfree/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: 299,
-        productName: `Tax Optimization Blueprint (Save ${formatINR(savings)})`,
-        customerName: payload?.name || "",
-        customerEmail: payload?.email || "",
-        customerPhone: payload?.phone || "",
-      }),
-    });
-    const orderJson = await orderRes.json().catch(() => null);
-    if (!orderRes.ok || !orderJson?.payment_session_id) {
-      track("payment_failed", { stage: "create_order" });
-      const msg = typeof orderJson?.error === "string" ? orderJson.error.trim() : "";
-      if (msg) throw new Error(msg);
-      throw new Error("Payment could not be started. Please try again.");
-    }
-
+    setStatusNote("");
     setLeadOpen(false);
-    const checkoutUrl = typeof orderJson?.checkout_url === "string" && orderJson.checkout_url.trim() ? orderJson.checkout_url.trim() : "";
-    if (!checkoutUrl) {
-      track("payment_failed", { stage: "missing_checkout_url" });
-      throw new Error("Payment gateway URL not received. Please try again.");
-    }
-    window.location.assign(checkoutUrl);
+    const storeUrl = "https://store.bmwealth.co.in/products/tax-optimization-blueprint";
+    window.location.assign(storeUrl);
   }
 
   useEffect(() => {
@@ -473,7 +448,7 @@ export function TaxCalculator() {
               </>
             }
             title="Tax Optimization Intelligence — FY 2025-26"
-            subtitle="Compare Old vs New regime, then unlock a 10-point optimization blueprint."
+            subtitle="Compare Old vs New regime, then view the detailed educational PDF/tools on our Digital Store."
           />
         }
         disclaimer={<span className="whitespace-pre-line">{COMPLIANCE_FOOTER}</span>}
@@ -718,17 +693,12 @@ export function TaxCalculator() {
                       <div className="text-base font-semibold text-white">Ready to optimize your taxes?</div>
                       <div className="mt-2 text-sm text-slate-200/75">
                         Your inputs show a potential savings of {formatINR(savings)}.
-                        Unlock the ₹299 blueprint for a step-by-step execution roadmap.
+                        View the detailed educational PDF/tools in our Digital Store.
                       </div>
                       <div className="mt-4">
                         <PremiumCalculatorCTA
-                          labelBefore="Unlock Full Blueprint — ₹299"
-                          labelAfter="Preparing Your Blueprint…"
-                          price={299}
-                          onClickAction={() => {
-                            track("premium_click");
-                            setLeadOpen(true);
-                          }}
+                          labelBefore="Open in Digital Store"
+                          storeUrl="https://store.bmwealth.co.in/products/tax-optimization-blueprint"
                         />
                       </div>
 
@@ -990,13 +960,13 @@ export function TaxCalculator() {
         onOpenChange={setLeadOpen}
         onFree={handleFree}
         onPay={handlePay}
-        title="Your 10-Point Tax Blueprint — ₹299"
+        title="Your 10-Point Tax Blueprint"
         body={`Get your personalized execution roadmap to optimize your taxes.\n\nWhat you'll receive:\n\nYOUR TAX OPTIMIZATION PLAN\n- Old vs New regime decision explained\n- Deduction-by-deduction breakdown\n- HRA structuring for Mumbai residents\n- Section 80C deployment strategy\n\nMONTH-BY-MONTH EXECUTION\n- What to fix in April\n- What not to miss before December\n- What must be done before March 31\n\nHIDDEN OPTIMIZATION\n- Mumbai-specific HRA structuring\n- 80C allocation mistakes to avoid\n- 80D family split strategy\n- NPS top-up positioning\n\nInstant download\nEmail delivery\nSupport via WhatsApp`}
         freeLabel="Email Summary"
-        payLabel="Unlock Blueprint — ₹299"
+        payLabel="Open in Digital Store"
         payButtonClassName="calculator-premium-cta"
         optInLabel="Send investment tips via WhatsApp"
-        whatsappHelpText="Optional for Email Summary. For premium, WhatsApp helps us support delivery if email fails. Use +91XXXXXXXXXX."
+        whatsappHelpText="Optional for Email Summary. Use +91XXXXXXXXXX."
         footerNote={`This is an illustrative educational tool based on your inputs and prevailing tax rules. Not SEBI-registered investment advice. Consult a tax advisor before making decisions.\n\nARN 90008 | IRDAI 277925 | Educational purposes only`}
       />
 
@@ -1007,7 +977,7 @@ export function TaxCalculator() {
         title={`Wait. Don't overpay ${formatINR(savings)}.`}
         bodyPrimary={`Your calculation shows ₹${savingsLakhs} potential savings.\n\nMost taxpayers never optimize properly.\n\nWant to see how to keep this money?`}
         bodySecondary=""
-        primaryLabel="Unlock Blueprint — ₹299"
+        primaryLabel="Open in Digital Store"
         primaryButtonClassName="calculator-premium-cta"
         secondaryLabel="Email Summary"
         note=""
@@ -1015,7 +985,7 @@ export function TaxCalculator() {
         onPrimary={() => {
           track("exit_intent_premium_click");
           setExitOpen(false);
-          setLeadOpen(true);
+          window.open("https://store.bmwealth.co.in/products/tax-optimization-blueprint", "_blank", "noopener,noreferrer");
         }}
         onSecondary={() => {
           track("exit_intent_lead_capture");

@@ -161,6 +161,7 @@ const navigationLinks = {
       { label: "Services", href: "/services" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
+      { label: "Digital Store", href: "https://store.bmwealth.co.in", external: true },
     ],
     resources: [
       { label: "Tools", href: "/tools" },
@@ -262,13 +263,25 @@ return (
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
                 {navigationLinks.quick.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
-                      style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
-                    >
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                        style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                        style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

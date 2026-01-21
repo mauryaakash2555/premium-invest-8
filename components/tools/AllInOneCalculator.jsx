@@ -4145,7 +4145,7 @@ ${text}
                   </button>
                 </div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginBottom: '12px' }}>
-                  Sorted by premium (lowest first) • CSR = Claim Settlement Ratio • Click "Buy" to visit insurer website
+                  Sorted by premium (lowest first) • CSR = Claim Settlement Ratio • Click "Visit" to open the insurer website
                 </div>
                 <table className="aio-taxTable">
                   <thead>
@@ -4189,7 +4189,7 @@ ${text}
                                 textDecoration: 'none',
                               }}
                             >
-                              Buy Now →
+                              Visit Site →
                             </a>
                           ) : (
                             <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>—</span>
