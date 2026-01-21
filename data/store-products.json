@@ -1,6 +1,6 @@
 [
   {
-    "slug": "basics-of-personal-finance",
+    "slug": "basics-of-personal-finance-pdf",
     "name": "Basics of Personal Finance (PDF)",
     "priceInr": 99,
     "type": "Educational PDF",
@@ -13,7 +13,7 @@
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   },
   {
-    "slug": "tax-planning-checklist",
+    "slug": "tax-planning-checklist-pdf",
     "name": "Tax Planning Checklist (PDF)",
     "priceInr": 149,
     "type": "Educational PDF",
@@ -26,7 +26,7 @@
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   },
   {
-    "slug": "monthly-savings-toolkit",
+    "slug": "monthly-savings-toolkit-pdf",
     "name": "Monthly Savings Learning Toolkit (PDF)",
     "priceInr": 199,
     "type": "Educational PDF",
@@ -39,22 +39,22 @@
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   },
   {
-    "slug": "tax-optimization-blueprint",
-    "name": "Tax Optimization Blueprint (Educational PDF)",
+    "slug": "tax-optimization-pdf",
+    "name": "Tax Optimization (Educational PDF)",
     "priceInr": 299,
     "type": "Educational PDF",
     "whatYouGet": [
-      "1 downloadable PDF blueprint",
+      "1 downloadable PDF",
       "Checklist-style sections",
       "Reference notes for common tax concepts"
     ],
-    "description": "An educational blueprint that explains common tax optimisation concepts and checklist-style steps for learning and planning.",
+    "description": "An educational PDF that explains common tax optimisation concepts and checklist-style steps for learning and planning.",
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   },
   {
-    "slug": "property-vs-sip-premium-report",
-    "name": "Property vs SIP Premium Report (Educational PDF)",
-    "priceInr": 399,
+    "slug": "property-vs-sip-pdf",
+    "name": "Property vs SIP (Educational PDF)",
+    "priceInr": 299,
     "type": "Educational PDF",
     "whatYouGet": [
       "1 downloadable educational report",

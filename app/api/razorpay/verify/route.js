@@ -6,9 +6,9 @@ export async function POST() {
   return NextResponse.json(
     {
       ok: false,
-      error: "razorpay_removed",
-      message: "Razorpay has been removed. Payments are handled only on https://store.bmwealth.co.in.",
+      error: "payments_disabled_on_main_site",
+      message: "Payments are handled only on https://store.bmwealth.co.in.",
     },
-    { status: 410 }
+    { status: 404 }
   );
 }

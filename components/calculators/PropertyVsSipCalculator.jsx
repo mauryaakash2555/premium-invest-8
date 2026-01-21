@@ -243,7 +243,7 @@ export function PropertyVsSipCalculator() {
 
     setStatusNote("");
     setLeadOpen(false);
-    const storeUrl = "https://store.bmwealth.co.in/products/property-vs-sip-premium-report";
+    const storeUrl = "https://store.bmwealth.co.in/products/property-vs-sip-pdf";
     window.location.assign(storeUrl);
   }
 
@@ -626,7 +626,7 @@ export function PropertyVsSipCalculator() {
                       <div className="mt-4">
                         <PremiumCalculatorCTA
                           labelBefore="Open in Digital Store"
-                          storeUrl="https://store.bmwealth.co.in/products/property-vs-sip-premium-report"
+                          storeUrl="https://store.bmwealth.co.in/products/property-vs-sip-pdf"
                         />
                       </div>
 
@@ -912,7 +912,7 @@ export function PropertyVsSipCalculator() {
         onPrimary={() => {
           track("exit_intent_premium_click");
           setExitOpen(false);
-          window.location.assign("https://store.bmwealth.co.in/products/property-vs-sip-premium-report");
+          window.location.assign("https://store.bmwealth.co.in/products/property-vs-sip-pdf");
         }}
         onSecondary={() => {
           track("exit_intent_lead_capture");

@@ -14,7 +14,10 @@
     "test:e2e": "playwright test tests/e2e/chatbot.spec.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "validate:all": "node scripts/validate-all.js"
+    "validate:all": "node scripts/validate-all.js",
+    "audit:gateway:html": "node scripts/gateway-audit/live-html.mjs",
+    "audit:gateway:flow": "set PLAYWRIGHT_SKIP_WEB_SERVER=1&& npx playwright test tests/e2e/gateway-audit-flow.spec.js",
+    "audit:gateway": "npm run audit:gateway:html && npm run audit:gateway:flow"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",

@@ -209,7 +209,7 @@ export function TaxCalculator() {
 
     setStatusNote("");
     setLeadOpen(false);
-    const storeUrl = "https://store.bmwealth.co.in/products/tax-optimization-blueprint";
+    const storeUrl = "https://store.bmwealth.co.in/products/tax-optimization-pdf";
     window.location.assign(storeUrl);
   }
 
@@ -698,7 +698,7 @@ export function TaxCalculator() {
                       <div className="mt-4">
                         <PremiumCalculatorCTA
                           labelBefore="Open in Digital Store"
-                          storeUrl="https://store.bmwealth.co.in/products/tax-optimization-blueprint"
+                          storeUrl="https://store.bmwealth.co.in/products/tax-optimization-pdf"
                         />
                       </div>
 
@@ -985,7 +985,7 @@ export function TaxCalculator() {
         onPrimary={() => {
           track("exit_intent_premium_click");
           setExitOpen(false);
-          window.open("https://store.bmwealth.co.in/products/tax-optimization-blueprint", "_blank", "noopener,noreferrer");
+          window.open("https://store.bmwealth.co.in/products/tax-optimization-pdf", "_blank", "noopener,noreferrer");
         }}
         onSecondary={() => {
           track("exit_intent_lead_capture");

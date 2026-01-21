@@ -1,11 +1,11 @@
 /**
- * Store-only Payments Compliance Smoke Test
+ * Store-only Razorpay Compliance Smoke Test
  *
  * Verifies that premium CTAs on bmwealth.co.in open the Digital Store
- * (store.bmwealth.co.in) and that the payment order API is disabled on
+ * (store.bmwealth.co.in) and that Razorpay order creation is disabled on
  * non-store hosts.
  *
- * Run with: npm run test:e2e -- tests/e2e/cashfree-payment.spec.js
+ * Run with: npx playwright test tests/e2e/razorpay-payment.spec.js
  */
 
 import { test, expect } from "@playwright/test";
@@ -30,11 +30,11 @@ test.describe("Digital Store redirects", () => {
     await storeLink.click();
     const popup = await popupPromise;
 
-    expect(popup.url()).toContain("https://store.bmwealth.co.in/products/property-vs-sip-premium-report");
+    expect(popup.url()).toContain("https://store.bmwealth.co.in/products/property-vs-sip-pdf");
   });
 
-  test("Tax Leak Detector premium CTA opens store product page", async ({ page }) => {
-    await page.goto(`${BASE_URL}/tools/tax-leak-detector`);
+  test("Tax Optimization premium CTA opens store product page", async ({ page }) => {
+    await page.goto(`${BASE_URL}/tools/tax-optimization`);
     await page.waitForSelector('button:has-text("Calculate"), button:has-text("Check")', { timeout: 10000 });
 
     const calculateBtn = page.locator('button:has-text("Calculate"), button:has-text("Check")').first();
@@ -48,14 +48,14 @@ test.describe("Digital Store redirects", () => {
     await storeLink.click();
     const popup = await popupPromise;
 
-    expect(popup.url()).toContain("https://store.bmwealth.co.in/products/tax-optimization-blueprint");
+    expect(popup.url()).toContain("https://store.bmwealth.co.in/products/tax-optimization-pdf");
   });
 });
 
 test.describe("Payment API compliance", () => {
-  test("Cashfree create-order is disabled on non-store hosts", async ({ page }) => {
-    const res = await page.request.post(`${BASE_URL}/api/payments/cashfree/create-order`, {
-      data: { amount: 299, productName: "Test" },
+  test("Razorpay create-order is disabled on non-store hosts", async ({ page }) => {
+    const res = await page.request.post(`${BASE_URL}/api/payments/razorpay/create-order`, {
+      data: { productSlug: "tax-optimization-pdf" },
     });
 
     expect(res.status()).toBe(404);

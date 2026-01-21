@@ -1,12 +1,23 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import products from '@/data/store-products.json';
+import { RazorpayCheckoutButton } from '@/components/store/RazorpayCheckoutButton';
+
+const LEGACY_SLUG_REDIRECTS = {
+  'basics-of-personal-finance': 'basics-of-personal-finance-pdf',
+  'tax-planning-checklist': 'tax-planning-checklist-pdf',
+  'monthly-savings-toolkit': 'monthly-savings-toolkit-pdf',
+  'tax-optimization-blueprint': 'tax-optimization-pdf',
+  'property-vs-sip-premium-report': 'property-vs-sip-pdf',
+};
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
 
 export function generateMetadata({ params }) {
-  const product = products.find((p) => p.slug === params.slug);
+  const requestedSlug = params?.slug;
+  const slug = LEGACY_SLUG_REDIRECTS[requestedSlug] || requestedSlug;
+  const product = products.find((p) => p.slug === slug);
   if (!product) return { title: 'Product' };
   return {
     title: product.name,
@@ -15,7 +26,13 @@ export function generateMetadata({ params }) {
 }
 
 export default function StoreProductDetailPage({ params }) {
-  const product = products.find((p) => p.slug === params.slug);
+  const requestedSlug = params?.slug;
+  const slug = LEGACY_SLUG_REDIRECTS[requestedSlug] || requestedSlug;
+  if (requestedSlug && slug && requestedSlug !== slug) {
+    redirect(`/products/${slug}`);
+  }
+
+  const product = products.find((p) => p.slug === slug);
   if (!product) return notFound();
 
   return (
@@ -32,14 +49,7 @@ export default function StoreProductDetailPage({ params }) {
             <span className="text-white/60">Price: </span>
             <span className="text-lg font-semibold text-white">₹{product.priceInr}</span>
           </div>
-          <button
-            type="button"
-            disabled
-            className="cursor-not-allowed rounded-none border border-white/15 bg-white/5 px-5 py-3 text-sm text-white/60"
-            title="Payments not enabled yet"
-          >
-            Buy Now (Coming soon)
-          </button>
+          <RazorpayCheckoutButton productSlug={product.slug} productName={product.name} />
         </div>
 
         {/* CCAvenue-required delivery notice - must be visible */}

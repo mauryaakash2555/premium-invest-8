@@ -25,13 +25,14 @@ If you need to run scripts manually:
 
 ## 💳 RAZORPAY (TEST MODE) REQUIRED ENV VARS
 
-Payments use Cashfree (server-side only). Ensure these exist in your local environment (do NOT commit real values):
+Payments are **store-only** (https://store.bmwealth.co.in). The main site (https://bmwealth.co.in) must have **zero checkout logic** and must not load the Razorpay SDK.
 
-- CASHFREE_APP_ID
-- CASHFREE_SECRET_KEY
-- CASHFREE_ENV (PROD or TEST)
+Ensure these exist in your environment for the store deployment (do NOT commit real values):
 
-See premium-invest-8/.env.example for placeholders.
+- RAZORPAY_KEY_ID
+- RAZORPAY_KEY_SECRET
+
+See .env.example for placeholders.
 
 **You must read these 2 files FIRST:**
 
