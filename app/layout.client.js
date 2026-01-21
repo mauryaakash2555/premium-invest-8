@@ -35,6 +35,7 @@ import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
 import CookieConsent from "@/components/shared/CookieConsent";
 import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
 import { schemaGraph } from "./metadata";
+import Script from "next/script";
 
 const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
 
@@ -198,6 +199,22 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
             />
               </>
                     )}
+
+        {/* CueLinks Affiliate Tracking (Publisher ID: 223077) — main site only */}
+        {!isStoreHost && (
+          <Script id="cuelinks" strategy="afterInteractive">
+            {`
+(function(d, t) {
+  var cId = '223077';
+  var s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.async = true;
+  s.src = 'https://cdn0.cuelinks.com/js/' + 'cuelinkssv2.js';
+  document.getElementsByTagName('body')[0].appendChild(s);
+})(document, 'script');
+            `}
+          </Script>
+        )}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#090A0C" />
       </head>
