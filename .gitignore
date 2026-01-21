@@ -65,6 +65,10 @@ backup/locked_*/
 .tmp*
 .tmp*/
 
+# Local temp logs (never commit)
+.tmp_*_out.txt
+.tmp_git_*.txt
+
 # Playwright artifacts (never commit)
 playwright-report/
 test-results/
