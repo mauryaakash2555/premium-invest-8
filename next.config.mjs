@@ -78,6 +78,15 @@ const nextConfig = {
       },
     ];
   },
+
+  // VS Code's Simple Browser/webviews can block eval(), which Next dev may use for source maps.
+  // Use non-eval source maps in dev for the client bundle to avoid runtime crashes.
+  webpack(config, { dev, isServer }) {
+    if (dev && !isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
