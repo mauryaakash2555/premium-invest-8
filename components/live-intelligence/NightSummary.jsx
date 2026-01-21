@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCurrentModeConfig, getISTTime } from '@/lib/live-intelligence/modes';
 import { downloadDailySummaryPDF } from '@/lib/live-intelligence/pdfGenerator';
 import WhatsAppShare from './WhatsAppShare';
+import { trackNightSummaryView } from '@/lib/live-intelligence/analytics';
 
 /**
  * NightSummary - Instagram-style swipeable cards for 9PM-12AM
@@ -67,6 +68,7 @@ export default function NightSummary() {
   const [summaryData, setSummaryData] = useState(DEFAULT_SUMMARY);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const trackedViewRef = useRef(false);
   
   const TOTAL_SLIDES = 5;
 
@@ -82,6 +84,14 @@ export default function NightSummary() {
     const interval = setInterval(checkMode, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  // Analytics: count a view when the dashboard becomes visible
+  useEffect(() => {
+    if (!isVisible) return;
+    if (trackedViewRef.current) return;
+    trackedViewRef.current = true;
+    trackNightSummaryView({ surface: 'night_summary' });
+  }, [isVisible]);
 
   // Fetch night summary data from API
   useEffect(() => {
@@ -121,10 +131,7 @@ export default function NightSummary() {
     }
     
     fetchSummary();
-    // Refresh every 5 minutes in case data updates
-    const refreshInterval = setInterval(fetchSummary, 5 * 60 * 1000);
-    
-    return () => clearInterval(refreshInterval);
+    return () => {};
   }, [isVisible]);
 
   // Auto-advance every 10 seconds
@@ -134,7 +141,7 @@ export default function NightSummary() {
     const timer = setTimeout(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % TOTAL_SLIDES);
-    }, 10000);
+    }, 8000);
     
     return () => clearTimeout(timer);
   }, [currentSlide, isVisible, isAutoPlaying]);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
+import { SPEC_CATEGORIES } from '@/lib/live-intelligence/headlines';
 
 /**
  * Live Intelligence Admin Panel
@@ -14,36 +15,24 @@ import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
  * - Trigger breaking news
  */
 
-// Comprehensive categories matching frontend CategoryFilter
+// Jan 21 spec categories
 const CATEGORIES = [
-  // BM Wealth Services (priority)
-  { key: 'bonds', label: 'Bonds & CMS', icon: '📜', group: 'services' },
-  { key: 'mutual_funds', label: 'Mutual Funds', icon: '📊', group: 'services' },
-  { key: 'sip', label: 'SIP', icon: '📅', group: 'services' },
-  { key: 'insurance', label: 'Insurance', icon: '🛡️', group: 'services' },
-  { key: 'pms_aif', label: 'PMS & AIF', icon: '💼', group: 'services' },
-  { key: 'trading', label: 'Trading', icon: '📉', group: 'services' },
-  // Market Categories
-  { key: 'breaking', label: 'Breaking News', icon: '🔴', group: 'markets' },
-  { key: 'ipo', label: 'IPO', icon: '🚀', group: 'markets' },
-  { key: 'market', label: 'Market Update', icon: '📈', group: 'markets' },
-  { key: 'corporate', label: 'Corporate Actions', icon: '🏢', group: 'markets' },
-  { key: 'results', label: 'Quarterly Results', icon: '📋', group: 'markets' },
-  { key: 'regulatory', label: 'Regulatory', icon: '⚖️', group: 'markets' },
-  { key: 'global', label: 'Global Markets', icon: '🌍', group: 'markets' },
-  { key: 'sectors', label: 'Sectors', icon: '🏭', group: 'markets' },
-  { key: 'economy', label: 'Economic Data', icon: '📉', group: 'markets' },
-  { key: 'insider', label: 'Insider/Bulk Deals', icon: '👔', group: 'markets' },
-  { key: 'fixed_income', label: 'Fixed Deposits', icon: '🏦', group: 'markets' },
-  { key: 'forex_gold', label: 'Forex & Gold', icon: '🥇', group: 'markets' },
-  { key: 'real_estate', label: 'Real Estate', icon: '🏠', group: 'markets' },
+  SPEC_CATEGORIES.market,
+  SPEC_CATEGORIES.mutual_funds,
+  SPEC_CATEGORIES.breaking,
+  SPEC_CATEGORIES.insurance,
+  SPEC_CATEGORIES.fixed_income,
+  SPEC_CATEGORIES.pms,
+  SPEC_CATEGORIES.real_estate,
+  SPEC_CATEGORIES.forex_gold,
 ];
 
 const URGENCY_LEVELS = [
-  { key: 'low', label: 'Low', color: '#6b7280' },
-  { key: 'medium', label: 'Medium', color: '#3b82f6' },
-  { key: 'high', label: 'High', color: '#f59e0b' },
-  { key: 'critical', label: 'Critical', color: '#ef4444' },
+  { key: 'BREAKING', label: '🔴 Breaking', color: '#ef4444' },
+  { key: 'IMPORTANT', label: '🟡 Important', color: '#c0a062' },
+  { key: 'PREMIUM', label: '💎 Premium', color: '#a78bfa' },
+  { key: 'REGULAR', label: '🟢 Regular', color: '#22c55e' },
+  { key: 'EDUCATIONAL', label: '🔵 Educational', color: '#60a5fa' },
 ];
 
 function formatDate(iso) {
@@ -75,13 +64,15 @@ export function LiveIntelligenceAdmin() {
   // Form state
   const [form, setForm] = useState({
     headline: '',
-    category: 'market_update',
-    urgency: 'medium',
+    category: 'market',
+    urgency: 'REGULAR',
     whyItMatters: '',
     dataPoint: '',
     source: '',
+    validFrom: '',
     validUntil: '',
-    isBreaking: false,
+    pinned: false,
+    triggerBreakingOverlay: false,
   });
 
   // Load headlines
@@ -140,8 +131,8 @@ export function LiveIntelligenceAdmin() {
         await loadHeadlines();
         resetForm();
         
-        // If marked as breaking, trigger breaking news
-        if (form.isBreaking && !editingId) {
+        // Optional: trigger breaking overlay (separate from pin-to-top)
+        if (form.triggerBreakingOverlay && !editingId) {
           await triggerBreakingNews(j);
         }
       } else {
@@ -207,13 +198,15 @@ export function LiveIntelligenceAdmin() {
     setEditingId(headline.id);
     setForm({
       headline: headline.headline || headline.block_what_happened || '',
-      category: headline.category || 'market_update',
-      urgency: headline.urgency || 'medium',
+      category: headline.category || 'market',
+      urgency: String(headline.urgency || 'REGULAR').toUpperCase(),
       whyItMatters: headline.why_it_matters || headline.block_why_it_matters || '',
       dataPoint: headline.data_point || headline.block_where_fits || '',
       source: headline.source || headline.source_name || '',
+      validFrom: headline.valid_from ? headline.valid_from.slice(0, 16) : '',
       validUntil: headline.valid_until ? headline.valid_until.slice(0, 16) : '',
-      isBreaking: false,
+      pinned: Boolean(headline.pinned),
+      triggerBreakingOverlay: false,
     });
     setShowForm(true);
     setShowPreview(false);
@@ -223,13 +216,15 @@ export function LiveIntelligenceAdmin() {
   const resetForm = () => {
     setForm({
       headline: '',
-      category: 'market_update',
-      urgency: 'medium',
+      category: 'market',
+      urgency: 'REGULAR',
       whyItMatters: '',
       dataPoint: '',
       source: '',
+      validFrom: '',
       validUntil: '',
-      isBreaking: false,
+      pinned: false,
+      triggerBreakingOverlay: false,
     });
     setEditingId(null);
     setShowForm(false);
@@ -354,6 +349,15 @@ export function LiveIntelligenceAdmin() {
             
             <div className="li-form-grid">
               <div className="li-form-row">
+                <label>Valid From (schedule)</label>
+                <input
+                  type="datetime-local"
+                  value={form.validFrom}
+                  onChange={(e) => setForm(f => ({ ...f, validFrom: e.target.value }))}
+                />
+              </div>
+
+              <div className="li-form-row">
                 <label>Valid Until (optional)</label>
                 <input
                   type="datetime-local"
@@ -361,16 +365,29 @@ export function LiveIntelligenceAdmin() {
                   onChange={(e) => setForm(f => ({ ...f, validUntil: e.target.value }))}
                 />
               </div>
-              
+            </div>
+
+            <div className="li-form-grid">
+              <div className="li-form-row li-checkbox-row">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={form.pinned}
+                    onChange={(e) => setForm(f => ({ ...f, pinned: e.target.checked }))}
+                  />
+                  📌 Pin to top (override rotation)
+                </label>
+              </div>
+
               {!editingId && (
                 <div className="li-form-row li-checkbox-row">
                   <label>
                     <input
                       type="checkbox"
-                      checked={form.isBreaking}
-                      onChange={(e) => setForm(f => ({ ...f, isBreaking: e.target.checked }))}
+                      checked={form.triggerBreakingOverlay}
+                      onChange={(e) => setForm(f => ({ ...f, triggerBreakingOverlay: e.target.checked }))}
                     />
-                    🔴 Trigger as Breaking News (30s interrupt)
+                    🔴 Trigger breaking overlay (30s)
                   </label>
                 </div>
               )}
@@ -396,7 +413,7 @@ export function LiveIntelligenceAdmin() {
               <div className="li-preview-header">Preview</div>
               <div className="li-preview-card">
                 <div className="li-preview-category">
-                  {CATEGORIES.find(c => c.key === form.category)?.icon} {form.category.replace('_', ' ')}
+                  {CATEGORIES.find(c => c.key === form.category)?.icon} {CATEGORIES.find(c => c.key === form.category)?.label || form.category}
                 </div>
                 <div className="li-preview-headline">{form.headline || 'Headline text...'}</div>
                 {form.whyItMatters && (

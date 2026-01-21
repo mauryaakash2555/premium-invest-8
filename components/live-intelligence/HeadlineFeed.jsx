@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HeadlineCard from './HeadlineCard';
 import { 
@@ -10,6 +10,7 @@ import {
   CURATED_HEADLINES 
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
+import { trackPanelExpand, trackPanelCollapse, trackHeadlineView, trackHeadlinePause } from '@/lib/live-intelligence/analytics';
 
 // Sort headlines with BREAKING first, then by urgency priority
 const sortHeadlinesWithBreakingFirst = (headlines) => {
@@ -53,22 +54,34 @@ export default function HeadlineFeed() {
   const [mode, setMode] = useState(null);
   const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [breakingUntil, setBreakingUntil] = useState(0);
+  const [lastBreakingId, setLastBreakingId] = useState(null);
+
+  const visibleSinceRef = useRef(0);
+  const visibleHeadlineRef = useRef(null);
+  const visibleIntervalRef = useRef(8000);
+
+  const getRotationCap = useCallback(() => {
+    const m = getCurrentModeConfig();
+    return m?.key === 'global_watch' ? 5 : 15;
+  }, []);
 
   // Fetch live headlines from API
   const fetchLiveHeadlines = useCallback(async (category) => {
     try {
+      const cap = getRotationCap();
       const url = category === 'all' 
-        ? '/api/live-intelligence/feed?limit=20'
-        : `/api/live-intelligence/feed?category=${category}&limit=20`;
+        ? `/api/live-intelligence/feed?limit=${cap}`
+        : `/api/live-intelligence/feed?category=${category}&limit=${cap}`;
       
-      const res = await fetch(url, { cache: 'no-store' });
+      const res = await fetch(url);
       if (!res.ok) throw new Error('Feed API failed');
       
       const data = await res.json();
       if (data.ok && data.headlines && data.headlines.length > 0) {
         // Sort: Breaking news first, then by urgency/priority
         const sorted = sortHeadlinesWithBreakingFirst(data.headlines);
-        setHeadlines(sorted);
+        setHeadlines(sorted.slice(0, cap));
         setIsLive(data.source === 'database');
         setActiveIndex(0);
         return true;
@@ -77,7 +90,7 @@ export default function HeadlineFeed() {
       console.warn('[HeadlineFeed] Live feed unavailable:', err.message);
     }
     return false;
-  }, []);
+  }, [getRotationCap]);
 
   // Load headlines - try live first, then fallback to curated
   useEffect(() => {
@@ -87,26 +100,66 @@ export default function HeadlineFeed() {
     fetchLiveHeadlines(selectedCategory).then((success) => {
       if (cancelled) return;
       if (!success) {
+        const cap = getRotationCap();
         // Fallback to curated headlines
         const filtered = getHeadlinesByCategory(selectedCategory);
         const sorted = sortByPriority(filtered);
-        setHeadlines(sorted);
+        setHeadlines(sorted.slice(0, cap));
         setActiveIndex(0);
         setIsLive(false);
       }
       setIsLoading(false);
     });
     
-    // Refresh live headlines every 3 minutes
+    // Spec: Data refresh every 5 minutes
     const refreshInterval = setInterval(() => {
       fetchLiveHeadlines(selectedCategory);
-    }, 3 * 60 * 1000);
+    }, 5 * 60 * 1000);
     
     return () => {
       cancelled = true;
       clearInterval(refreshInterval);
     };
   }, [selectedCategory, fetchLiveHeadlines]);
+
+  // Panel expand/collapse analytics
+  useEffect(() => {
+    trackPanelExpand({ surface: 'headline_feed' });
+    return () => {
+      // Flush last visible headline pause on unmount
+      const now = Date.now();
+      const start = visibleSinceRef.current;
+      const h = visibleHeadlineRef.current;
+      const interval = visibleIntervalRef.current || 8000;
+      if (h && start) {
+        const visibleMs = now - start;
+        const thresholdMs = Math.round(interval * 1.5);
+        if (visibleMs >= thresholdMs) trackHeadlinePause(h, visibleMs);
+      }
+      trackPanelCollapse({ surface: 'headline_feed' });
+    };
+  }, []);
+
+  // Breaking interrupt: when a new breaking item appears, show it for 30 seconds.
+  useEffect(() => {
+    if (isPaused) return;
+    if (!headlines || headlines.length === 0) return;
+
+    const now = Date.now();
+    if (breakingUntil > now) return;
+
+    const breakingIndex = headlines.findIndex(
+      (h) => h?.urgency === 'BREAKING' || h?.category === 'breaking'
+    );
+    if (breakingIndex === -1) return;
+
+    const id = headlines[breakingIndex]?.id;
+    if (!id || id === lastBreakingId) return;
+
+    setLastBreakingId(id);
+    setBreakingUntil(now + 30000);
+    setActiveIndex(breakingIndex);
+  }, [headlines, isPaused, breakingUntil, lastBreakingId]);
 
   // Get current mode for rotation speed
   useEffect(() => {
@@ -117,9 +170,51 @@ export default function HeadlineFeed() {
     return () => clearInterval(interval);
   }, []);
 
+  // Headline impression + pause-interest tracking
+  useEffect(() => {
+    if (!headlines || headlines.length === 0) return;
+
+    const now = Date.now();
+    const prev = visibleHeadlineRef.current;
+    const prevStart = visibleSinceRef.current;
+    const prevInterval = visibleIntervalRef.current || 8000;
+
+    // Close out previous visibility window
+    if (prev && prevStart) {
+      const visibleMs = now - prevStart;
+      const thresholdMs = Math.round(prevInterval * 1.5);
+      if (visibleMs >= thresholdMs) trackHeadlinePause(prev, visibleMs);
+    }
+
+    // Start new visibility window
+    const current = headlines[activeIndex];
+    if (!current) return;
+
+    const baseSpeed = getRotationSpeed(current?.urgency);
+    const modeSpeed = mode?.rotationSpeed || 8000;
+    const interval = Math.min(baseSpeed, modeSpeed);
+
+    visibleHeadlineRef.current = current;
+    visibleSinceRef.current = now;
+    visibleIntervalRef.current = interval;
+
+    trackHeadlineView(current);
+  }, [activeIndex, headlines, mode]);
+
   // Auto-rotation
   useEffect(() => {
     if (isPaused || headlines.length === 0) return;
+
+    // If we're in a breaking interrupt window, keep showing the breaking item.
+    const now = Date.now();
+    if (breakingUntil > now) {
+      const remaining = breakingUntil - now;
+      const t = setTimeout(() => {
+        // After the interrupt ends, advance once to resume rotation.
+        setActiveIndex((prev) => (prev + 1) % headlines.length);
+      }, remaining);
+      return () => clearTimeout(t);
+    }
 
     const currentHeadline = headlines[activeIndex];
     const baseSpeed = getRotationSpeed(currentHeadline?.urgency);

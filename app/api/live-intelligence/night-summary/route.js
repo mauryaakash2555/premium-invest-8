@@ -13,6 +13,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendAPIFailureAlert } from '@/lib/monitoring/email-alerts';
+import { getISTDateKey, getISTNow } from '@/lib/live-intelligence/modes';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,6 +23,28 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 function getSupabase() {
   if (!supabaseUrl || !supabaseKey) return null;
   return createClient(supabaseUrl, supabaseKey);
+}
+
+function getISTDayRangeUtc() {
+  const istNow = getISTNow();
+  const y = istNow.getFullYear();
+  const m = istNow.getMonth();
+  const d = istNow.getDate();
+
+  // IST midnight expressed in UTC = Date.UTC(...) - 5.5 hours
+  const startUtcMs = Date.UTC(y, m, d, 0, 0, 0) - (5.5 * 60 * 60 * 1000);
+  const endUtcMs = startUtcMs + (24 * 60 * 60 * 1000);
+  return {
+    dateKey: getISTDateKey(istNow),
+    startUtc: new Date(startUtcMs),
+    endUtc: new Date(endUtcMs),
+  };
+}
+
+function isNightSummaryWindowIST() {
+  const istNow = getISTNow();
+  const hour = istNow.getHours();
+  return hour >= 21 && hour < 24;
 }
 
 /**
@@ -86,7 +109,7 @@ async function fetchFIIData() {
     // Try to fetch from NSE or cached source
     const supabase = getSupabase();
     if (supabase) {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getISTDateKey();
       const { data } = await supabase
         .from('fii_dii_data')
         .select('*')
@@ -117,13 +140,13 @@ async function fetchTopHeadlines() {
   if (!supabase) return [];
 
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const { startUtc, endUtc } = getISTDayRangeUtc();
 
     const { data, error } = await supabase
       .from('intelligence_items')
       .select('headline, category, urgency')
-      .gte('created_at', today.toISOString())
+      .gte('created_at', startUtc.toISOString())
+      .lt('created_at', endUtc.toISOString())
       .in('urgency', ['BREAKING', 'IMPORTANT', 'HIGH'])
       .order('created_at', { ascending: false })
       .limit(4);
@@ -159,18 +182,22 @@ async function fetchTomorrowEvents() {
   if (!supabase) return [];
 
   try {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
+    const istNow = getISTNow();
+    const y = istNow.getFullYear();
+    const m = istNow.getMonth();
+    const d = istNow.getDate();
 
-    const dayAfter = new Date(tomorrow);
-    dayAfter.setDate(dayAfter.getDate() + 1);
+    // Tomorrow's IST midnight in UTC
+    const tomorrowStartUtcMs = (Date.UTC(y, m, d, 0, 0, 0) - (5.5 * 60 * 60 * 1000)) + (24 * 60 * 60 * 1000);
+    const tomorrowEndUtcMs = tomorrowStartUtcMs + (24 * 60 * 60 * 1000);
+    const tomorrowStartUtc = new Date(tomorrowStartUtcMs);
+    const tomorrowEndUtc = new Date(tomorrowEndUtcMs);
 
     const { data, error } = await supabase
       .from('market_events')
       .select('*')
-      .gte('event_date', tomorrow.toISOString())
-      .lt('event_date', dayAfter.toISOString())
+      .gte('event_date', tomorrowStartUtc.toISOString())
+      .lt('event_date', tomorrowEndUtc.toISOString())
       .order('event_time', { ascending: true })
       .limit(4);
 
@@ -218,7 +245,7 @@ async function generateNightSummary() {
   // Cache in Supabase
   const supabase = getSupabase();
   if (supabase) {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getISTDateKey();
     
     await supabase
       .from('night_summaries')
@@ -238,7 +265,7 @@ async function generateNightSummary() {
 export async function GET() {
   try {
     const supabase = getSupabase();
-    const today = new Date().toISOString().split('T')[0];
+    const today = getISTDateKey();
 
     // Check for cached summary
     if (supabase) {
@@ -255,6 +282,17 @@ export async function GET() {
           ...cached.summary_data,
         });
       }
+    }
+
+    // Spec: generated once at 9PM IST and served until midnight.
+    // If someone requests before 9PM and we have no cached summary, return a clear message.
+    if (!isNightSummaryWindowIST()) {
+      return NextResponse.json({
+        success: false,
+        error: 'night_summary_not_ready',
+        message: 'Night Summary is available from 9:00 PM to 12:00 AM IST.',
+        isLive: false,
+      }, { status: 404 });
     }
 
     // Generate new summary

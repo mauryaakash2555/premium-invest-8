@@ -1,5 +1,8 @@
 # 🎯 LIVE MOOD - Complete Project Specification
 
+> IMPORTANT (Jan 21, 2026): The current source-of-truth spec is `docs/live-intelligence/SOURCE_OF_TRUTH_2026-01-21.md`.
+> Keep this document as historical reference; when there is conflict, the source-of-truth file wins.
+
 > **Note**: Original Huly laser reference replaced with our custom proprietary laser animation.
 > The seamless loop video is now at `public/videos/laser-beam.mp4` (see `LASER_LOOP_FIX_GUIDE.md` for details).
 

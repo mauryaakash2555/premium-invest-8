@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import { normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -47,6 +48,28 @@ async function verifyAdmin() {
 
 export const dynamic = 'force-dynamic';
 
+function normalizeUrgencyToSpec(urgency) {
+  const u = String(urgency || '').trim().toUpperCase();
+  if (!u) return 'REGULAR';
+  if (u === 'BREAKING' || u === 'IMPORTANT' || u === 'PREMIUM' || u === 'REGULAR' || u === 'EDUCATIONAL') {
+    return u;
+  }
+  // Legacy → spec
+  if (u === 'CRITICAL') return 'BREAKING';
+  if (u === 'HIGH') return 'IMPORTANT';
+  if (u === 'MEDIUM') return 'REGULAR';
+  if (u === 'LOW' || u === 'ROUTINE') return 'EDUCATIONAL';
+  return 'REGULAR';
+}
+
+function toIsoOrNull(value) {
+  const v = String(value || '').trim();
+  if (!v) return null;
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
+}
+
 /**
  * GET - Fetch all headlines (admin + auto-generated)
  */
@@ -83,13 +106,16 @@ export async function GET() {
         why_it_matters: item.block_why_it_matters,
         block_why_it_matters: item.block_why_it_matters,
         block_where_fits: item.block_where_fits,
-        category: item.category,
-        urgency: item.urgency,
+        rawCategory: item.category,
+        category: normalizeCategoryToSpec(item.category),
+        urgency: normalizeUrgencyToSpec(item.urgency),
         source: item.source_name,
         source_name: item.source_name,
         source_url: item.source_url,
         status: item.status,
         valid_until: item.valid_until,
+        valid_from: item.valid_from || item.created_at,
+        pinned: false,
         created_at: item.created_at,
         type: 'auto',
       })),
@@ -98,10 +124,14 @@ export async function GET() {
         headline: item.headline,
         why_it_matters: item.why_it_matters,
         data_point: item.data_point,
-        category: item.category,
-        urgency: item.urgency,
+        rawCategory: item.category,
+        category: normalizeCategoryToSpec(item.category),
+        urgency: normalizeUrgencyToSpec(item.urgency),
         source: item.source,
         valid_until: item.valid_until,
+        valid_from: item.valid_from,
+        pinned: Boolean(item.is_breaking),
+        cta_button: item.cta_button,
         created_at: item.created_at,
         type: 'admin',
       })),
@@ -144,14 +174,17 @@ export async function POST(request) {
       .from('live_intelligence_headlines')
       .insert({
         headline: body.headline,
-        category: body.category || 'market_update',
-        urgency: body.urgency || 'medium',
+        category: body.category || 'market',
+        urgency: normalizeUrgencyToSpec(body.urgency),
         why_it_matters: body.whyItMatters || body.why_it_matters || '',
         data_point: body.dataPoint || body.data_point || '',
         source: body.source || 'Admin',
-        valid_from: new Date().toISOString(),
-        valid_until: body.validUntil || null,
+        cta_button: body.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
+        valid_from: toIsoOrNull(body.validFrom) || new Date().toISOString(),
+        valid_until: toIsoOrNull(body.validUntil),
         is_active: true,
+        // Use existing schema field as a production-ready pin-to-top flag
+        is_breaking: Boolean(body.pinned),
         created_by: 'admin',
       })
       .select()
@@ -201,11 +234,14 @@ export async function PUT(request) {
         .update({
           headline: body.headline,
           category: body.category,
-          urgency: body.urgency,
+          urgency: normalizeUrgencyToSpec(body.urgency),
           why_it_matters: body.whyItMatters || body.why_it_matters,
           data_point: body.dataPoint || body.data_point,
           source: body.source,
-          valid_until: body.validUntil || null,
+          cta_button: body.cta_button,
+          valid_from: toIsoOrNull(body.validFrom) || undefined,
+          valid_until: toIsoOrNull(body.validUntil),
+          is_breaking: typeof body.pinned === 'boolean' ? Boolean(body.pinned) : undefined,
           updated_at: new Date().toISOString(),
         })
         .eq('id', id)

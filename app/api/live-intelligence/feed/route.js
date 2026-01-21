@@ -11,7 +11,8 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { CURATED_HEADLINES, getHeadlinesByCategory } from '@/lib/live-intelligence/headlines';
+import { CURATED_HEADLINES, getHeadlinesByCategory, normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
+import { getCurrentMode } from '@/lib/live-intelligence/modes';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -23,33 +24,90 @@ function getSupabase() {
   return createClient(supabaseUrl, supabaseKey);
 }
 
-export const dynamic = 'force-dynamic';
+// Spec (Jan 21, 2026): headlines cached 5 minutes
+export const revalidate = 300;
+
+const FEED_CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60',
+};
+
+const MAX_ROTATION_HEADLINES = 15;
+const GLOBAL_WATCH_MAX = 5;
+const MIN_ROTATION_HEADLINES = 5;
 
 // Urgency level weights for priority calculation
 const URGENCY_WEIGHTS = {
   BREAKING: 100,
-  MARKET_MOVE: 80,
-  REGULATORY: 70,
-  OPPORTUNITY: 60,
-  HIGH: 50,
-  MEDIUM: 40,
-  REGULAR: 30,
-  LOW: 20,
-  ROUTINE: 10,
+  IMPORTANT: 50,
+  PREMIUM: 40,
+  REGULAR: 20,
+  EDUCATIONAL: 15,
 };
 
 // Category priority weights
 const CATEGORY_WEIGHTS = {
-  market_update: 10,
-  market_move: 10,
-  regulatory: 8,
-  opportunity: 7,
-  rbi: 6,
-  sebi: 6,
-  portfolio_tip: 5,
-  tax_insight: 4,
-  global: 3,
+  market: 10,
+  mutual_funds: 9,
+  breaking: 12,
+  insurance: 7,
+  fixed_income: 7,
+  pms: 6,
+  real_estate: 5,
+  forex_gold: 5,
 };
+
+function normalizeUrgencyToSpec(urgency) {
+  const u = String(urgency || '').trim().toUpperCase();
+  if (!u) return 'REGULAR';
+  if (u === 'BREAKING' || u === 'IMPORTANT' || u === 'PREMIUM' || u === 'REGULAR' || u === 'EDUCATIONAL') {
+    return u;
+  }
+  // Legacy → spec
+  if (u === 'HIGH') return 'IMPORTANT';
+  if (u === 'MEDIUM') return 'REGULAR';
+  if (u === 'LOW' || u === 'ROUTINE') return 'EDUCATIONAL';
+  if (u === 'MARKET_MOVE' || u === 'REGULATORY' || u === 'OPPORTUNITY') return 'IMPORTANT';
+  return 'REGULAR';
+}
+
+function isBreakingSpec(headline) {
+  return normalizeUrgencyToSpec(headline?.urgency) === 'BREAKING' || headline?.category === 'breaking';
+}
+
+function getInternalCategoryKeysForSpec(specKey) {
+  // Map spec keys to the categories that exist in DB/legacy systems.
+  // This keeps the UI stable even if sources store different category names.
+  const key = String(specKey || '').trim();
+  if (!key || key === 'all') return null;
+  const map = {
+    market: [
+      'market',
+      'market_update',
+      'market_move',
+      'corporate',
+      'results',
+      'regulatory',
+      'economy',
+      'sebi',
+      'rbi',
+      'sectors',
+      'ipo',
+      'global',
+      'portfolio_tip',
+      'tax_insight',
+      'opportunity',
+      'trading',
+    ],
+    mutual_funds: ['mutual_funds', 'sip'],
+    breaking: ['breaking'],
+    insurance: ['insurance'],
+    fixed_income: ['fixed_income', 'bonds'],
+    pms: ['pms', 'pms_aif'],
+    real_estate: ['real_estate'],
+    forex_gold: ['forex_gold'],
+  };
+  return map[key] || [key];
+}
 
 /**
  * Calculate priority score for a headline
@@ -59,7 +117,7 @@ function calculatePriority(headline) {
   const now = Date.now();
   
   // Urgency component
-  const urgency = URGENCY_WEIGHTS[headline.urgency?.toUpperCase()] || 30;
+  const urgency = URGENCY_WEIGHTS[normalizeUrgencyToSpec(headline.urgency)] || URGENCY_WEIGHTS.REGULAR;
   
   // Recency component (higher = more recent, max 60 for items < 1 hour old)
   const timestamp = new Date(headline.created_at || headline.timestamp);
@@ -69,7 +127,8 @@ function calculatePriority(headline) {
   // Category weight component
   const categoryWeight = CATEGORY_WEIGHTS[headline.category] || 5;
   
-  return (urgency * 3) + (recency * 2) + categoryWeight;
+  const pinnedBoost = headline?.pinned ? 100000 : 0;
+  return pinnedBoost + (urgency * 3) + (recency * 2) + categoryWeight;
 }
 
 /**
@@ -83,6 +142,12 @@ function filterExpired(headlines) {
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
   
   return headlines.filter(h => {
+    // Check valid_from (scheduled headlines)
+    if (h.valid_from) {
+      const startDate = new Date(h.valid_from);
+      if (startDate > now) return false;
+    }
+
     // Check valid_until expiry
     if (h.valid_until) {
       const expiryDate = new Date(h.valid_until);
@@ -133,6 +198,31 @@ function enforceCategoryBalance(headlines) {
   return result;
 }
 
+function ensureAtLeastOnePerCategory(headlines) {
+  // Spec: At least 1 from each active category (when available)
+  const byCategory = new Map();
+  for (const h of headlines) {
+    const cat = h?.category || 'market';
+    if (!byCategory.has(cat)) byCategory.set(cat, []);
+    byCategory.get(cat).push(h);
+  }
+
+  const selected = [];
+  const remaining = [];
+
+  for (const [cat, items] of byCategory.entries()) {
+    if (items.length > 0) selected.push(items[0]);
+    for (let i = 1; i < items.length; i++) remaining.push(items[i]);
+  }
+
+  // If we already exceed the max, keep the highest-priority ones.
+  if (selected.length >= MAX_ROTATION_HEADLINES) {
+    return selected.slice(0, MAX_ROTATION_HEADLINES);
+  }
+
+  return [...selected, ...remaining];
+}
+
 /**
  * GET - Fetch headlines for frontend display
  */
@@ -140,20 +230,28 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || 'all';
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50);
+    const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
+    const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
+
+    // Spec: global_watch shows minimal items (max 5)
+    const modeKey = getCurrentMode();
+    const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
+    const limit = Math.min(Math.max(1, requestedLimit), hardMax);
+    const minRequired = Math.min(MIN_ROTATION_HEADLINES, limit);
     
     const supabase = getSupabase();
     
     // Use curated headlines if database unavailable
     if (!supabase) {
       console.warn('Live Intelligence feed: Database unavailable, using curated content');
-      const curatedHeadlines = getCuratedHeadlines(category);
+      const curatedHeadlines = getCuratedHeadlines(category, limit);
       return NextResponse.json({
         ok: true,
         headlines: curatedHeadlines,
         source: 'curated',
         count: curatedHeadlines.length,
-      });
+        mode: modeKey,
+      }, { headers: FEED_CACHE_HEADERS });
     }
     
     // Fetch from headlines table (cron-populated from RSS feeds)
@@ -182,9 +280,16 @@ export async function GET(request) {
     
     // Apply category filter if specified
     if (category && category !== 'all') {
-      headlinesQuery = headlinesQuery.eq('category', category);
-      autoQuery = autoQuery.eq('category', category);
-      adminQuery = adminQuery.eq('category', category);
+      const internalKeys = getInternalCategoryKeysForSpec(category);
+      if (internalKeys && internalKeys.length > 0) {
+        headlinesQuery = headlinesQuery.in('category', internalKeys);
+        autoQuery = autoQuery.in('category', internalKeys);
+        adminQuery = adminQuery.in('category', internalKeys);
+      } else {
+        headlinesQuery = headlinesQuery.eq('category', category);
+        autoQuery = autoQuery.eq('category', category);
+        adminQuery = adminQuery.eq('category', category);
+      }
     }
     
     // Execute queries with error handling
@@ -208,46 +313,65 @@ export async function GET(request) {
       // Headlines table (main source - cron-populated)
       ...(headlinesResult.data || []).map(item => ({
         id: item.id,
-        category: item.category || 'market_update',
-        icon: getCategoryIcon(item.category),
+        rawCategory: item.category || 'market_update',
+        category: normalizeCategoryToSpec(item.category || 'market_update'),
+        icon: getCategoryIcon(normalizeCategoryToSpec(item.category || 'market_update')),
         headline: item.title,
         whyItMatters: item.why_it_matters || item.summary,
+        why_it_matters: item.why_it_matters || item.summary,
         dataPoint: item.data_point || '',
-        urgency: item.urgency || 'REGULAR',
+        data_point: item.data_point || '',
+        urgency: normalizeUrgencyToSpec(item.urgency || 'REGULAR'),
         timestamp: item.published_at || item.created_at,
         created_at: item.created_at,
         source: item.source,
         valid_until: item.valid_until,
+        valid_from: item.valid_from || item.published_at || item.created_at,
+        cta_button: item.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
+        pinned: false,
         type: 'headlines',
         url: item.url,
       })),
       // Intelligence items (legacy)
       ...(autoResult.data || []).map(item => ({
         id: item.id,
-        category: item.category || 'market_update',
-        icon: getCategoryIcon(item.category),
+        rawCategory: item.category || 'market_update',
+        category: normalizeCategoryToSpec(item.category || 'market_update'),
+        icon: getCategoryIcon(normalizeCategoryToSpec(item.category || 'market_update')),
         headline: item.block_what_happened,
         whyItMatters: item.block_why_it_matters,
+        why_it_matters: item.block_why_it_matters,
         dataPoint: item.block_where_fits,
-        urgency: item.urgency || 'REGULAR',
+        data_point: item.block_where_fits,
+        urgency: normalizeUrgencyToSpec(item.urgency || 'REGULAR'),
         timestamp: item.created_at,
         created_at: item.created_at,
         source: item.source_name,
         valid_until: item.valid_until,
+        valid_from: item.valid_from || item.created_at,
+        cta_button: item.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
+        pinned: false,
         type: 'auto',
       })),
       ...(adminResult.data || []).map(item => ({
         id: item.id,
-        category: item.category || 'market_update',
-        icon: getCategoryIcon(item.category),
+        rawCategory: item.category || 'market_update',
+        category: normalizeCategoryToSpec(item.category || 'market_update'),
+        icon: getCategoryIcon(normalizeCategoryToSpec(item.category || 'market_update')),
         headline: item.headline,
         whyItMatters: item.why_it_matters,
+        why_it_matters: item.why_it_matters,
         dataPoint: item.data_point,
-        urgency: item.urgency || 'REGULAR',
+        data_point: item.data_point,
+        urgency: normalizeUrgencyToSpec(item.urgency || 'REGULAR'),
         timestamp: item.created_at,
         created_at: item.created_at,
         source: item.source,
         valid_until: item.valid_until,
+        valid_from: item.valid_from || item.created_at,
+        cta_button: item.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
+        // Use existing schema field as a production-ready "pin to top" flag
+        pinned: Boolean(item.is_breaking),
         type: 'admin',
       })),
     ];
@@ -262,60 +386,92 @@ export async function GET(request) {
     }
     
     // Step 2: Sort by priority
-    const sorted = notExpired.sort((a, b) => {
-      return calculatePriority(b) - calculatePriority(a);
-    });
+    const sorted = notExpired.sort((a, b) => calculatePriority(b) - calculatePriority(a));
+
+    // Pin-to-top override (admin pinned items first)
+    const pinned = sorted.filter((h) => h?.pinned);
+    const rest = sorted.filter((h) => !h?.pinned);
+
+    // Step 2.5: Ensure category variety when available
+    const seeded = ensureAtLeastOnePerCategory(rest);
     
     // Step 3: Enforce category balance
-    const balanced = enforceCategoryBalance(sorted);
+    const balanced = enforceCategoryBalance(seeded);
     
     // Step 4: Apply limit
-    const final = balanced.slice(0, limit);
+    let final = [...pinned, ...balanced].slice(0, limit);
+
+    // Spec: Minimum headlines in rotation = 5 (when possible)
+    if (final.length > 0 && final.length < minRequired) {
+      const fallbackPool = getCuratedHeadlines(category, limit);
+      const existingIds = new Set(final.map((h) => h.id));
+      for (const h of fallbackPool) {
+        if (final.length >= minRequired) break;
+        if (existingIds.has(h.id)) continue;
+        existingIds.add(h.id);
+        final.push(h);
+      }
+      final = final.slice(0, limit);
+    }
     
     // If no headlines available, fallback to curated content
     if (final.length === 0) {
       console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
-      const curatedHeadlines = getCuratedHeadlines(category);
-      return NextResponse.json({
+      const curatedHeadlines = getCuratedHeadlines(category, limit);
+      return NextResponse.json(
+        {
+          ok: true,
+          headlines: curatedHeadlines,
+          source: 'curated',
+          count: curatedHeadlines.length,
+          mode: modeKey,
+          stats: {
+            total_fetched: combined.length,
+            stale_filtered: staleCount,
+            fresh_remaining: 0,
+            returned: curatedHeadlines.length,
+            warning: 'No fresh headlines in database - showing curated content',
+          },
+        },
+        { headers: FEED_CACHE_HEADERS }
+      );
+    }
+
+    return NextResponse.json(
+      {
         ok: true,
-        headlines: curatedHeadlines,
-        source: 'curated',
-        count: curatedHeadlines.length,
+        headlines: final,
+        source: 'database',
+        count: final.length,
+        mode: modeKey,
         stats: {
           total_fetched: combined.length,
           stale_filtered: staleCount,
-          fresh_remaining: 0,
-          returned: curatedHeadlines.length,
-          warning: 'No fresh headlines in database - showing curated content',
+          fresh_remaining: notExpired.length,
+          returned: final.length,
+          warning: staleCount > 0 ? `${staleCount} headlines filtered (expired or older than 24h)` : null,
         },
-      });
-    }
-    
-    return NextResponse.json({
-      ok: true,
-      headlines: final,
-      source: 'database',
-      count: final.length,
-      stats: {
-        total_fetched: combined.length,
-        stale_filtered: staleCount,
-        fresh_remaining: notExpired.length,
-        returned: final.length,
-        warning: staleCount > 0 ? `${staleCount} headlines filtered (expired or older than 24h)` : null,
       },
-    });
+      { headers: FEED_CACHE_HEADERS }
+    );
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
     
     // Use curated headlines on error
-    const curated = getCuratedHeadlines('all');
-    return NextResponse.json({
-      ok: true,
-      headlines: curated,
-      source: 'curated',
-      count: curated.length,
-      warning: error.message,
-    });
+    const modeKey = getCurrentMode();
+    const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
+    const curated = getCuratedHeadlines('all', hardMax);
+    return NextResponse.json(
+      {
+        ok: true,
+        headlines: curated,
+        source: 'curated',
+        count: curated.length,
+        mode: modeKey,
+        warning: error.message,
+      },
+      { headers: FEED_CACHE_HEADERS }
+    );
   }
 }
 
@@ -324,15 +480,14 @@ export async function GET(request) {
  */
 function getCategoryIcon(category) {
   const icons = {
-    market_update: '📊',
-    market_move: '📈',
-    regulatory: '⚖️',
-    opportunity: '💎',
-    rbi: '🏦',
-    sebi: '📋',
-    portfolio_tip: '💡',
-    tax_insight: '💰',
-    global: '🌐',
+    market: '📈',
+    mutual_funds: '💰',
+    breaking: '🔴',
+    insurance: '🛡️',
+    fixed_income: '🏦',
+    pms: '💎',
+    real_estate: '🏠',
+    forex_gold: '💵',
   };
   return icons[category] || '📰';
 }
@@ -341,19 +496,27 @@ function getCategoryIcon(category) {
  * Curated headlines - use rich content from lib/live-intelligence/headlines.js
  * These are real, factual, SEBI-safe headlines (not placeholder data)
  */
-function getCuratedHeadlines(category) {
+function getCuratedHeadlines(category, limit = MAX_ROTATION_HEADLINES) {
   // Use the comprehensive curated headlines from lib
   let headlines = CURATED_HEADLINES.map(h => ({
     ...h,
     // Ensure fresh timestamp for curated items
     timestamp: h.timestamp || new Date().toISOString(),
-    icon: h.icon || getCategoryIcon(h.category),
+    category: normalizeCategoryToSpec(h.category),
+    icon: h.icon || getCategoryIcon(normalizeCategoryToSpec(h.category)),
+    whyItMatters: h.whyItMatters || h.why_it_matters,
+    why_it_matters: h.whyItMatters || h.why_it_matters,
+    dataPoint: h.dataPoint || h.data_point || '',
+    data_point: h.dataPoint || h.data_point || '',
+    valid_from: h.valid_from || h.timestamp || new Date().toISOString(),
+    valid_until: h.valid_until || null,
+    cta_button: h.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
+    pinned: false,
   }));
   
   if (category && category !== 'all') {
     headlines = headlines.filter(h => h.category === category);
   }
   
-  // Return first 20 headlines, sorted by priority
-  return headlines.slice(0, 20);
+  return headlines.slice(0, Math.max(1, Math.min(limit, MAX_ROTATION_HEADLINES)));
 }

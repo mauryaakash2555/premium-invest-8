@@ -90,6 +90,10 @@ export default function MarketMoodStrip({ onToggleRain }) {
   useEffect(() => {
     if (headlines.length === 0) return;
     const speed = (modeConfig && modeConfig.rotationSpeed) ? modeConfig.rotationSpeed : 12000;
+    // Spec: calm rotation (fade) — no scrolling ticker.
+    // Night summary: keep a single minimal line (no rotation) to push users into the overlay.
+    if (modeConfig?.key === 'night_summary') return;
+
     const timer = setInterval(() => {
       setMoodIndex((prev) => (prev + 1) % headlines.length);
     }, speed);
@@ -102,9 +106,13 @@ export default function MarketMoodStrip({ onToggleRain }) {
   const icon = currentHeadline?.icon || (category && category.icon) ? (currentHeadline?.icon || category?.icon) : '📡';
   const headlineText = currentHeadline?.headline || currentHeadline?.title || '';
   const whyText = currentHeadline?.whyItMatters || currentHeadline?.summary || '';
-  const displayText = currentHeadline 
-    ? icon + ' ' + headlineText + (whyText ? ' — ' + whyText : '')
-    : 'Loading market intelligence...';
+
+  const isNightSummary = modeConfig?.key === 'night_summary';
+  const displayText = isNightSummary
+    ? '🌙 What You Missed Today — Tap to open'
+    : (currentHeadline
+        ? icon + ' ' + headlineText + (whyText ? ' — ' + whyText : '')
+        : 'Loading market intelligence...');
 
   const handleClick = () => {
     if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
@@ -132,7 +140,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
         <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />
 
         <div
-          className='relative flex-1 overflow-hidden h-full flex items-center rounded-full bg-black/20 backdrop-blur-sm px-2'
+          className='relative flex-1 overflow-hidden h-full flex items-center rounded-full bg-black/20 backdrop-blur-sm px-3'
           role='button'
           tabIndex={0}
           onClick={handleClick}
@@ -140,19 +148,24 @@ export default function MarketMoodStrip({ onToggleRain }) {
           style={{ cursor: 'pointer' }}
         >
           <div className='absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent z-10' />
-          <div className='absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-black/20 to-transparent z-10' />
-          
+          <div className='absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-black/20 to-transparent z-10' />
+
           <AnimatePresence mode='wait'>
-            <motion.div key={index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className='whitespace-nowrap flex items-center'>
-              <motion.p
-                initial={{ x: '10%' }}
-                animate={{ x: ['10%', '-100%'] }}
-                transition={{ duration: 22, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
-                className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase m-0 pr-[50%]'
+            <motion.div
+              key={isNightSummary ? 'night' : index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              className='w-full'
+            >
+              <p
+                className='text-[9px] md:text-[10px] font-light tracking-[1.1px] uppercase m-0 truncate'
                 style={{ color: 'rgba(200, 215, 240, 0.75)' }}
+                title={displayText}
               >
                 {displayText}
-              </motion.p>
+              </p>
             </motion.div>
           </AnimatePresence>
         </div>

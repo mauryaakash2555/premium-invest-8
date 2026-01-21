@@ -3,12 +3,12 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
+import { trackCtaClick } from '@/lib/live-intelligence/analytics';
 
 // ═══════════════════════════════════════════════════════════
-// ⚠️ COLOR BAN: NO TAN, GOLD, ORANGE, BROWN in Live Intelligence
-// Allowed: Laser blue (100,160,255), cyan (80,180,200), purple (180,120,220),
-//          green (100,180,140), red for breaking (255,80,80)
-// BANNED: Any rgba with (200-255, 140-180, 60-120) combos = tan/gold/orange
+// ⚠️ PALETTE NOTE (Jan 21, 2026 spec):
+// Avoid muddy/tan washes. Premium accents are allowed (including gold for IMPORTANT / market_close).
+// Keep backgrounds neutral and glassy; use accents sparingly.
 // ═══════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════
@@ -451,10 +451,17 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
         {/* Header: Prominent Category Badge + Urgency + Time + Save */}
         <div className="li-headline-header">
           {/* BREAKING Badge - prominent red for breaking news */}
-          {(headline.urgency === 'BREAKING' || headline.urgency === 'IMPORTANT') && (
+          {headline.urgency === 'BREAKING' && (
             <span className="li-breaking-badge">
               <span className="li-breaking-dot" />
               BREAKING
+            </span>
+          )}
+
+          {headline.urgency === 'IMPORTANT' && (
+            <span className="li-breaking-badge">
+              <span className="li-breaking-dot" />
+              IMPORTANT
             </span>
           )}
           
@@ -501,6 +508,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
               className="li-headline-action"
               onClick={(e) => {
                 e.stopPropagation();
+                trackCtaClick(headline, { text: ctaConfig.text });
                 ctaConfig.action();
               }}
             >

@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BM_WEALTH_SERVICES, MARKET_CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { SPEC_CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { trackCategoryFilter } from '@/lib/live-intelligence/analytics';
 
 /**
  * CategoryFilter - Horizontal scrollable category tabs
@@ -13,14 +14,17 @@ import { BM_WEALTH_SERVICES, MARKET_CATEGORIES } from '@/lib/live-intelligence/h
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [showAll, setShowAll] = useState(false);
 
-  // Main tabs: All + Services (priority) + a few markets
-  const serviceTabs = Object.values(BM_WEALTH_SERVICES);
-  const quickMarketTabs = ['ipo', 'market', 'regulatory'].map((key) => MARKET_CATEGORIES[key]).filter(Boolean);
-
+  // Jan 21 spec: All + fixed category set
   const mainTabs = [
     { key: 'all', label: 'All', icon: '✨' },
-    ...serviceTabs,
-    ...quickMarketTabs,
+    SPEC_CATEGORIES.market,
+    SPEC_CATEGORIES.mutual_funds,
+    SPEC_CATEGORIES.breaking,
+    SPEC_CATEGORIES.insurance,
+    SPEC_CATEGORIES.fixed_income,
+    SPEC_CATEGORIES.pms,
+    SPEC_CATEGORIES.real_estate,
+    SPEC_CATEGORIES.forex_gold,
   ];
 
   return (
@@ -46,7 +50,10 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
               key={cat.key}
               type="button"
               className={`li-category-tab ${selectedCategory === cat.key ? 'active' : ''}`}
-              onClick={() => onCategoryChange(cat.key)}
+              onClick={() => {
+                trackCategoryFilter(cat.key);
+                onCategoryChange(cat.key);
+              }}
             >
               <span className="li-category-icon">{cat.icon}</span>
               <span className="li-category-label">{cat.label}</span>
@@ -122,6 +129,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
                     type="button"
                     className={`li-category-modal-row ${selectedCategory === 'all' ? 'active' : ''}`}
                     onClick={() => {
+                      trackCategoryFilter('all');
                       onCategoryChange('all');
                       setShowAll(false);
                     }}
@@ -130,31 +138,15 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
                     <span className="li-category-modal-label">All Categories</span>
                   </button>
                   
-                  {/* Services Section */}
-                  <div className="li-category-group-label">BM Wealth Services</div>
-                  {Object.values(BM_WEALTH_SERVICES).map((cat) => (
+                  {/* Spec Categories */}
+                  <div className="li-category-group-label">Categories</div>
+                  {Object.values(SPEC_CATEGORIES).map((cat) => (
                     <button
                       key={cat.key}
                       type="button"
                       className={`li-category-modal-row ${selectedCategory === cat.key ? 'active' : ''}`}
                       onClick={() => {
-                        onCategoryChange(cat.key);
-                        setShowAll(false);
-                      }}
-                    >
-                      <span className="li-category-modal-icon">{cat.icon}</span>
-                      <span className="li-category-modal-label">{cat.label}</span>
-                    </button>
-                  ))}
-                  
-                  {/* Markets Section */}
-                  <div className="li-category-group-label">Market Intelligence</div>
-                  {Object.values(MARKET_CATEGORIES).map((cat) => (
-                    <button
-                      key={cat.key}
-                      type="button"
-                      className={`li-category-modal-row ${selectedCategory === cat.key ? 'active' : ''}`}
-                      onClick={() => {
+                        trackCategoryFilter(cat.key);
                         onCategoryChange(cat.key);
                         setShowAll(false);
                       }}

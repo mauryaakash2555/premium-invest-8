@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { trackSummaryShare } from '@/lib/live-intelligence/analytics';
+import { trackShareClick, trackSummaryShare } from '@/lib/live-intelligence/analytics';
 
 /**
  * WhatsAppShare - Share content to WhatsApp and opt-in for daily updates
@@ -82,8 +82,16 @@ export default function WhatsAppShare({
     const url = `https://wa.me/?text=${text}`;
     
     window.open(url, '_blank');
+    // Spec event (Jan 21, 2026)
+    trackShareClick(null, 'whatsapp', {
+      surface: 'night_summary',
+      shareType: 'summary',
+      summaryType: type,
+      hasSummary: Boolean(summary),
+    });
+    // Legacy alias
     trackSummaryShare(type, 'whatsapp');
-  }, [formatForWhatsApp, type]);
+  }, [formatForWhatsApp, summary, type]);
 
   // Handle opt-in submission
   const handleOptIn = async (e) => {

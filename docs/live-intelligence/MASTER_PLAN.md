@@ -1,5 +1,8 @@
 # LIVE INTELLIGENCE - COMPLETE MASTER PLAN
 
+> IMPORTANT (Jan 21, 2026): The current source-of-truth spec is `docs/live-intelligence/SOURCE_OF_TRUTH_2026-01-21.md`.
+> Keep this document as historical reference; when there is conflict, the source-of-truth file wins.
+
 > Last updated: January 13, 2026
 > Status: Phase 1 COMPLETE, starting Phase 2
 
@@ -315,14 +318,11 @@ Features:
 ### PHASE 6: Analytics + WhatsApp ✅ COMPLETE
 - ✅ Event tracking
 - ✅ Engagement metrics
-- ✅ WhatsApp opt-in
-- ✅ Share functionality
+- ⏸️ WhatsApp opt-in (DEFERRED)
+- ✅ Share functionality (on-site)
 
-### PHASE 7: Personalization ✅ COMPLETE
-- ✅ Behavioral tracking
-- ✅ Category preferences
-- ✅ Learning streaks
-- ✅ Gamification
+### PHASE 7: Personalization ⏳ FUTURE / PARTIAL
+- ⏳ Personalization (Future / partial)
 
 ---
 

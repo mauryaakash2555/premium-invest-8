@@ -1,6 +1,9 @@
 # 📄 BM WEALTH – LIVE INTELLIGENCE HERO
 ## MASTER HANDOFF SPEC (FOR AI IMPLEMENTATION)
 
+> IMPORTANT (Jan 21, 2026): The current source-of-truth spec is `docs/live-intelligence/SOURCE_OF_TRUTH_2026-01-21.md`.
+> Keep this document as historical reference; when there is conflict, the source-of-truth file wins.
+
 > **Version**: FINAL v1  
 > **Date**: January 11, 2026  
 > **Status**: FROZEN – No changes without explicit approval
@@ -249,7 +252,7 @@ No heavy CMS.
 - `headline_pause` (visible > threshold)
 - `panel_expand`
 - `summary_view`
-- `whatsapp_cta_view` / `click`
+- `whatsapp_cta_view` / `click` (DEFERRED)
 
 **Pause = interest.**
 
@@ -261,6 +264,8 @@ This feeds:
 ---
 
 ## 1️⃣5️⃣ WHATSAPP OPT-IN (SUBTLE)
+
+DEFERRED (Jan 21, 2026): WhatsApp integration is intentionally paused until API credentials + final flow are provided. Do not treat this section as source-of-truth.
 
 Show ONLY when:
 - user expands panel multiple times

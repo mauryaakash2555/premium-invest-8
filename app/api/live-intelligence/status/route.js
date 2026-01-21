@@ -40,7 +40,13 @@ export async function GET() {
     return NextResponse.json({
       success: false,
       error: 'Database not configured',
-    }, { status: 500 });
+      health: {
+        database: 'missing',
+        ingest_running: false,
+        process_running: false,
+      },
+      hint: 'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to enable status telemetry.',
+    });
   }
 
   try {
