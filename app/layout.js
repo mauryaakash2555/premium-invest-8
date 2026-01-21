@@ -1,6 +1,9 @@
-import RootLayoutClient from './layout.client';
 import { headers } from 'next/headers';
-import { metadata as mainMetadata } from './metadata';
+import Script from 'next/script';
+import { Playfair_Display, Inter } from 'next/font/google';
+import './globals.css';
+import LayoutShellClient from './layout.shell.client';
+import { metadata as mainMetadata, schemaGraph } from './metadata';
 
 function getNormalizedHost(hdrs) {
 	const rawHost = hdrs.get('x-forwarded-host') || hdrs.get('host') || '';
@@ -8,6 +11,20 @@ function getNormalizedHost(hdrs) {
 	const hostNoPort = host.split(':')[0];
 	return hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
 }
+
+const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
+
+const playfair = Playfair_Display({
+	variable: '--font-playfair',
+	subsets: ['latin'],
+	display: 'swap',
+});
+
+const inter = Inter({
+	variable: '--font-inter',
+	subsets: ['latin'],
+	display: 'swap',
+});
 
 export function generateMetadata() {
 	const hdrs = headers();
@@ -34,12 +51,183 @@ export function generateMetadata() {
 }
 
 export default function RootLayout({ children }) {
-	const buildId = process.env.VERCEL_GIT_COMMIT_SHA || '';
+	const buildIdRaw = process.env.VERCEL_GIT_COMMIT_SHA || '';
+	const buildId = buildIdRaw || 'local';
 	const hdrs = headers();
-	const host = hdrs.get('x-forwarded-host') || hdrs.get('host') || '';
+	const normalizedHost = getNormalizedHost(hdrs);
+	const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
+	const siteUrl = isStoreHost ? 'https://store.bmwealth.co.in' : 'https://bmwealth.co.in';
+
 	return (
-		<RootLayoutClient buildId={buildId} host={host}>
-			{children}
-		</RootLayoutClient>
+		<html lang="en">
+			<head>
+				<meta name="x-ui-build" content={buildId} />
+
+				{/*
+					Pre-hydration SW/cache reset.
+					Fixes hydration mismatches when a stale service worker serves old JS bundles.
+				*/}
+				<Script id="sw-cache-reset" strategy="beforeInteractive">
+					{`
+(() => {
+	try {
+		const url = new URL(window.location.href);
+		const params = url.searchParams;
+
+		const doneParam = '__swResetDone';
+		const alreadyDone = params.get(doneParam) === '1';
+		if (alreadyDone) {
+			params.delete(doneParam);
+			url.search = params.toString();
+			try {
+				window.history.replaceState(null, '', url.toString());
+			} catch {}
+		} else {
+			let buildMeta = '';
+			try {
+				const el = document.querySelector('meta[name="x-ui-build"]');
+				buildMeta = (el && el.getAttribute('content')) || '';
+			} catch {}
+
+			let buildChanged = false;
+			let prevBuild = '';
+			try {
+				if (buildMeta && window.localStorage) {
+					const buildKey = '__bmw_ui_build_v1';
+					prevBuild = localStorage.getItem(buildKey) || '';
+					if (prevBuild && prevBuild !== buildMeta) buildChanged = true;
+					localStorage.setItem(buildKey, buildMeta);
+				}
+			} catch {}
+
+			let hasController = false;
+			try {
+				hasController = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+			} catch {}
+
+			const firstSeenBuildWithSW = !!buildMeta && !prevBuild && hasController;
+
+			const force =
+				params.get('resetSW') === '1' ||
+				params.get('reset-sw') === '1' ||
+				params.has('resetSW') ||
+				params.has('reset-sw');
+
+			const isLocalHost =
+				window.location.hostname === 'localhost' ||
+				window.location.hostname === '127.0.0.1';
+
+			const shouldRun = !!(force || isLocalHost || buildChanged || firstSeenBuildWithSW);
+
+			const flagKey = '__bmw_sw_reset_done_v2:' + (buildMeta || 'no-build');
+			const alreadyRan = !!(!force && window.sessionStorage && sessionStorage.getItem(flagKey) === '1');
+
+			if (shouldRun && !alreadyRan) {
+				try {
+					if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
+				} catch {}
+
+				const tasks = [];
+				if ('serviceWorker' in navigator) {
+					tasks.push(
+						navigator.serviceWorker
+							.getRegistrations()
+							.then((regs) => Promise.all(regs.map((r) => r.unregister())))
+							.catch(() => {})
+					);
+				}
+
+				if ('caches' in window) {
+					tasks.push(
+						caches
+							.keys()
+							.then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+							.catch(() => {})
+					);
+				}
+
+				if (tasks.length) {
+					Promise.all(tasks).finally(() => {
+						params.delete('resetSW');
+						params.delete('reset-sw');
+						params.set(doneParam, '1');
+						url.search = params.toString();
+						window.location.replace(url.toString());
+					});
+				}
+			}
+		}
+	} catch {
+		// ignore
+	}
+})();
+					`}
+				</Script>
+
+				{/* Google Analytics */}
+				{GA4_MEASUREMENT_ID && (
+					<>
+						<Script
+							src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
+							strategy="afterInteractive"
+						/>
+						<Script id="ga4-init" strategy="afterInteractive">
+							{`
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA4_MEASUREMENT_ID}');
+							`}
+						</Script>
+					</>
+				)}
+
+				<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+				<meta name="theme-color" content="#090A0C" />
+
+				{/* JSON-LD (server-rendered to avoid hydration mismatch) */}
+				{!isStoreHost && (
+					<script
+						type="application/ld+json"
+						dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph(siteUrl)) }}
+					/>
+				)}
+
+				{/* CueLinks Affiliate Tracking (Publisher ID: 223077) — main site only */}
+				{!isStoreHost && (
+					<Script id="cuelinks" strategy="afterInteractive">
+						{`
+(function(d, t) {
+	var cId = '223077';
+	var s = document.createElement('script');
+	s.type = 'text/javascript';
+	s.async = true;
+	s.src = 'https://cdn0.cuelinks.com/js/' + 'cuelinkssv2.js';
+	document.getElementsByTagName('body')[0].appendChild(s);
+})(document, 'script');
+						`}
+					</Script>
+				)}
+			</head>
+			<body
+				className={`${playfair.variable} ${inter.variable}`}
+				style={{
+					backgroundColor: '#000',
+					color: '#fff',
+					margin: 0,
+					overflowX: 'hidden',
+					maxWidth: '100%',
+					width: '100%',
+				}}
+			>
+				<LayoutShellClient
+					isStoreHost={isStoreHost}
+					buildId={buildId}
+					measurementId={GA4_MEASUREMENT_ID}
+				>
+					{children}
+				</LayoutShellClient>
+			</body>
+		</html>
 	);
 }
