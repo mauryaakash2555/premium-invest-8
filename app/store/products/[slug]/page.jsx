@@ -42,6 +42,14 @@ export default function StoreProductDetailPage({ params }) {
           </button>
         </div>
 
+        {/* CCAvenue-required delivery notice - must be visible */}
+        <div className="mt-4 rounded-none border border-amber-500/30 bg-amber-500/10 p-4">
+          <p className="text-sm font-semibold text-amber-400">📥 Digital Delivery</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">
+            This is a digital product. Access/download link will be provided immediately after successful payment. No physical goods are shipped.
+          </p>
+        </div>
+
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <div>
             <p className="text-sm font-semibold text-white">What you receive</p>
@@ -52,7 +60,7 @@ export default function StoreProductDetailPage({ params }) {
             </ul>
           </div>
           <div>
-            <p className="text-sm font-semibold text-white">Delivery</p>
+            <p className="text-sm font-semibold text-white">Delivery method</p>
             <p className="mt-2 text-sm leading-relaxed text-white/70">{product.delivery}</p>
           </div>
         </div>
