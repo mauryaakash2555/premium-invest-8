@@ -26,8 +26,8 @@ const inter = Inter({
 	display: 'swap',
 });
 
-export function generateMetadata() {
-	const hdrs = headers();
+export async function generateMetadata() {
+	const hdrs = await headers();
 	const normalizedHost = getNormalizedHost(hdrs);
 	const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
 
@@ -50,10 +50,10 @@ export function generateMetadata() {
 	};
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
 	const buildIdRaw = process.env.VERCEL_GIT_COMMIT_SHA || '';
 	const buildId = buildIdRaw || 'local';
-	const hdrs = headers();
+	const hdrs = await headers();
 	const normalizedHost = getNormalizedHost(hdrs);
 	const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
 	const siteUrl = isStoreHost ? 'https://store.bmwealth.co.in' : 'https://bmwealth.co.in';
