@@ -200,6 +200,9 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
               </>
                     )}
 
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#090A0C" />
+
         {/* CueLinks Affiliate Tracking (Publisher ID: 223077) — main site only */}
         {!isStoreHost && (
           <Script id="cuelinks" strategy="afterInteractive">
@@ -215,8 +218,6 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
             `}
           </Script>
         )}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#090A0C" />
       </head>
       <body
         className={`${playfair.variable} ${inter.variable}`}
