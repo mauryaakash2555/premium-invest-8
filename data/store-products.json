@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "basics-of-personal-finance",
+    "name": "Basics of Personal Finance (PDF)",
+    "priceInr": 99,
+    "type": "Educational PDF",
+    "whatYouGet": [
+      "1 downloadable PDF guide",
+      "Key terms glossary",
+      "Simple budgeting worksheet"
+    ],
+    "description": "A beginner-friendly PDF covering budgeting, saving, and money basics in clear language.",
+    "delivery": "Delivered digitally (instant access after successful payment once payment is enabled)."
+  },
+  {
+    "slug": "tax-planning-checklist",
+    "name": "Tax Planning Checklist (PDF)",
+    "priceInr": 149,
+    "type": "Educational PDF",
+    "whatYouGet": [
+      "1 downloadable PDF checklist",
+      "Year-round checklist template",
+      "Common documentation list"
+    ],
+    "description": "A practical checklist to help you organise documents and understand tax planning basics.",
+    "delivery": "Delivered digitally (instant access after successful payment once payment is enabled)."
+  },
+  {
+    "slug": "monthly-savings-toolkit",
+    "name": "Monthly Savings Learning Toolkit (PDF)",
+    "priceInr": 199,
+    "type": "Educational PDF",
+    "whatYouGet": [
+      "1 downloadable PDF toolkit",
+      "Goal-setting worksheet",
+      "Simple glossary and examples"
+    ],
+    "description": "A learning toolkit that explains concepts and terminology used in long-term personal finance learning.",
+    "delivery": "Delivered digitally (instant access after successful payment once payment is enabled)."
+  }
+]

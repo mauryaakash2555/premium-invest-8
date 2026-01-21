@@ -1,10 +1,56 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
+  const url = request.nextUrl;
+  const pathname = url.pathname;
+  const rawHost = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
+  const host = String(rawHost).split(',')[0].trim().toLowerCase();
+  const hostNoPort = host.split(':')[0];
+  const normalizedHost = hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
+
+  const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
+
+  // Legacy internal store prefix is not used anymore.
+  // Hard-block it everywhere to avoid any accidental exposure.
+  if (pathname.startsWith('/_store')) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Store host must never expose the internal store path prefix.
+  // External URLs stay clean (/, /products, /about...).
+  if (isStoreHost && (pathname === '/store' || pathname.startsWith('/store/'))) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Block direct access to internal store routes on the main domain.
+  // (Store is exposed via hostname rewrite only.)
+  if (!isStoreHost && (pathname === '/store' || pathname.startsWith('/store/'))) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Block the demo /products page on the main domain. This page includes finance-style fields
+  // (risk/returns/AUM) and must not be accessible on bmwealth.co.in.
+  if (!isStoreHost && (pathname === '/products' || pathname.startsWith('/products/'))) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Block checkout-like routes on the main domain.
+  if (!isStoreHost && (pathname === '/checkout' || pathname.startsWith('/checkout/'))) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Host-based store routing: store.bmwealth.co.in/* -> /store/* (dedicated store shell)
+  // Keep /api as-is (shared infra). Everything else on store host must be store-only.
+  if (isStoreHost && !pathname.startsWith('/api')) {
+    const rewriteUrl = url.clone();
+    rewriteUrl.pathname = `/store${pathname === '/' ? '' : pathname}`;
+    return NextResponse.rewrite(rewriteUrl);
+  }
+
   const response = NextResponse.next();
 
   // Blog: disable caching (existing behavior)
-  if (request.nextUrl.pathname.startsWith('/blog')) {
+  if (pathname.startsWith('/blog')) {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
     response.headers.set('CDN-Cache-Control', 'no-store');
     response.headers.set('Vercel-CDN-Cache-Control', 'no-store');
@@ -12,10 +58,10 @@ export function middleware(request) {
   }
 
   // API: security headers (Phase 5)
-  if (request.nextUrl.pathname.startsWith('/api')) {
+  if (pathname.startsWith('/api')) {
     // PDFs are intentionally embedded in same-origin iframes (Live Intelligence PDF modal).
     // Keep a strict default, but allow framing for the public PDF endpoints.
-    if (request.nextUrl.pathname.startsWith('/api/pdf')) {
+    if (pathname.startsWith('/api/pdf')) {
       // Intentionally omit X-Frame-Options so the PDF can render inside iframes
       // (some webviews/dev browsers don't behave as strict same-origin).
     } else {
@@ -30,5 +76,8 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/blog/:path*', '/api/:path*'],
+  matcher: [
+    // Run on all pages (needed for host-based store routing) but skip Next.js internals.
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json).*)',
+  ],
 };

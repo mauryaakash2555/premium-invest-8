@@ -34,7 +34,7 @@ import WhatsAppFloat from "@/components/user/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
 import CookieConsent from "@/components/shared/CookieConsent";
 import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
-import { metadata, schemaGraph } from "./metadata";
+import { schemaGraph } from "./metadata";
 
 const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
 
@@ -50,16 +50,22 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({ children, buildId: buildIdProp }) {
+export default function RootLayout({ children, buildId: buildIdProp, host: hostProp }) {
   // Used only for deploy verification/debugging (no visual output)
   const buildId = buildIdProp || 'local';
+  const host = typeof hostProp === 'string' ? hostProp : '';
+  const hostClean = String(host).split(',')[0].trim().toLowerCase();
+  const hostNoPort = hostClean.split(':')[0];
+  const normalizedHost = hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
+  const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
+
   const pathname = usePathname();
   const isLaserPage = pathname === '/live-intelligence';
   const isClientPortal = pathname === '/client-portal';
   // Pages with their own custom footer - don't add global Footer
   const hasCustomFooter = isLaserPage || isClientPortal;
 
-  const siteUrl = metadata.metadataBase?.toString?.() || "https://bmwealth.co.in";
+  const siteUrl = isStoreHost ? "https://store.bmwealth.co.in" : "https://bmwealth.co.in";
   return (
     <html lang="en">
       <head>
@@ -83,86 +89,91 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
 
     // One-time loop guard that does not rely on storage (some browsers/extensions block it).
     const doneParam = '__swResetDone';
-    if (params.get(doneParam) === '1') {
+    const alreadyDone = params.get(doneParam) === '1';
+    if (alreadyDone) {
       params.delete(doneParam);
       url.search = params.toString();
       try {
         window.history.replaceState(null, '', url.toString());
       } catch {}
-      return;
-    }
+    } else {
+      // Detect deploy changes (works on live environments).
+      // If a stale SW/cache is serving old JS bundles, this prevents hydration mismatches.
+      let buildMeta = '';
+      try {
+        const el = document.querySelector('meta[name="x-ui-build"]');
+        buildMeta = (el && el.getAttribute('content')) || '';
+      } catch {}
 
-    // Detect deploy changes (works on live environments).
-    // If a stale SW/cache is serving old JS bundles, this prevents hydration mismatches.
-    let buildMeta = '';
-    try {
-      const el = document.querySelector('meta[name="x-ui-build"]');
-      buildMeta = (el && el.getAttribute('content')) || '';
-    } catch {}
+      let buildChanged = false;
+      let prevBuild = '';
+      try {
+        if (buildMeta && window.localStorage) {
+          const buildKey = '__bmw_ui_build_v1';
+          prevBuild = localStorage.getItem(buildKey) || '';
+          if (prevBuild && prevBuild !== buildMeta) buildChanged = true;
+          localStorage.setItem(buildKey, buildMeta);
+        }
+      } catch {}
 
-    let buildChanged = false;
-    let prevBuild = '';
-    try {
-      if (buildMeta && window.localStorage) {
-        const buildKey = '__bmw_ui_build_v1';
-        prevBuild = localStorage.getItem(buildKey) || '';
-        if (prevBuild && prevBuild !== buildMeta) buildChanged = true;
-        localStorage.setItem(buildKey, buildMeta);
+      let hasController = false;
+      try {
+        hasController = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+      } catch {}
+
+      const firstSeenBuildWithSW = !!buildMeta && !prevBuild && hasController;
+
+      const force =
+        params.get('resetSW') === '1' ||
+        params.get('reset-sw') === '1' ||
+        params.has('resetSW') ||
+        params.has('reset-sw');
+
+      const isLocalHost =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+
+      const shouldRun = !!(force || isLocalHost || buildChanged || firstSeenBuildWithSW);
+
+      // Avoid reload loops.
+      const flagKey = '__bmw_sw_reset_done_v2:' + (buildMeta || 'no-build');
+      const alreadyRan = !!(!force && window.sessionStorage && sessionStorage.getItem(flagKey) === '1');
+
+      if (shouldRun && !alreadyRan) {
+        try {
+          if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
+        } catch {}
+
+        const tasks = [];
+        if ('serviceWorker' in navigator) {
+          tasks.push(
+            navigator.serviceWorker
+              .getRegistrations()
+              .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+              .catch(() => {})
+          );
+        }
+
+        if ('caches' in window) {
+          tasks.push(
+            caches
+              .keys()
+              .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+              .catch(() => {})
+          );
+        }
+
+        if (tasks.length) {
+          Promise.all(tasks).finally(() => {
+            params.delete('resetSW');
+            params.delete('reset-sw');
+            params.set(doneParam, '1');
+            url.search = params.toString();
+            window.location.replace(url.toString());
+          });
+        }
       }
-    } catch {}
-
-    let hasController = false;
-    try {
-      hasController = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
-    } catch {}
-
-    const firstSeenBuildWithSW = !!buildMeta && !prevBuild && hasController;
-
-    const force =
-      params.get('resetSW') === '1' ||
-      params.get('reset-sw') === '1' ||
-      params.has('resetSW') ||
-      params.has('reset-sw');
-
-    const isLocalHost =
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1';
-
-    if (!force && !isLocalHost && !buildChanged && !firstSeenBuildWithSW) return;
-
-    // Avoid reload loops.
-    const flagKey = '__bmw_sw_reset_done_v2:' + (buildMeta || 'no-build');
-    if (!force && window.sessionStorage && sessionStorage.getItem(flagKey) === '1') return;
-    if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
-
-    const tasks = [];
-    if ('serviceWorker' in navigator) {
-      tasks.push(
-        navigator.serviceWorker
-          .getRegistrations()
-          .then((regs) => Promise.all(regs.map((r) => r.unregister())))
-          .catch(() => {})
-      );
     }
-
-    if ('caches' in window) {
-      tasks.push(
-        caches
-          .keys()
-          .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
-          .catch(() => {})
-      );
-    }
-
-    if (!tasks.length) return;
-
-    Promise.all(tasks).finally(() => {
-      params.delete('resetSW');
-      params.delete('reset-sw');
-      params.set(doneParam, '1');
-      url.search = params.toString();
-      window.location.replace(url.toString());
-    });
   } catch {
     // ignore
   }
@@ -201,10 +212,12 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
           width: "100%",
         }}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph(siteUrl)) }}
-        />
+        {!isStoreHost && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph(siteUrl)) }}
+          />
+        )}
         <div
           className="main-wrapper"
           data-ui-build={buildId}
@@ -215,15 +228,15 @@ export default function RootLayout({ children, buildId: buildIdProp }) {
             position: "relative",
           }}
         >
-          <Navigation />
+          {!isStoreHost && <Navigation />}
           <main style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}>
             {children}
           </main>
           {/* Only render global Footer if page doesn't have custom footer */}
-          {!hasCustomFooter && <Footer />}
+          {!hasCustomFooter && !isStoreHost && <Footer />}
         </div>
-        <LuxuryMobileDock />
-        <WhatsAppFloat />
+        {!isStoreHost && <LuxuryMobileDock />}
+        {!isStoreHost && <WhatsAppFloat />}
         <CookieConsent />
         <AnalyticsGate measurementId={GA4_MEASUREMENT_ID} />
       </body>
