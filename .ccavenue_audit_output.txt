@@ -1,0 +1,30 @@
+PASS | Store home HTTP 200 | HTTP=200
+PASS | Store home title has no finance words | TITLE="Home | BM Digital Store" BANNED=<none>
+PASS | Store home visible text has no finance words | BANNED=<none>
+PASS | Store navbar has no finance links | FOUND=<none>
+PASS | Store /products HTTP 200 | HTTP=200
+PASS | Store /products shows ₹
+PASS | Store /products mentions digital delivery
+PASS | Store /products has no finance words | BANNED=<none>
+PASS | Store /products/basics-of-personal-finance HTTP 200 | HTTP=200
+PASS | PDP shows ₹
+PASS | PDP says delivered digitally
+PASS | PDP shows disclaimer in body
+PASS | PDP has no finance words | BANNED=<none>
+PASS | Store legal page /terms HTTP 200 | HTTP=200
+PASS | Store legal page /privacy HTTP 200 | HTTP=200
+PASS | Store legal page /refund HTTP 200 | HTTP=200
+PASS | Store legal page /delivery HTTP 200 | HTTP=200
+PASS | Delivery page says no physical goods
+PASS | Delivery page says delivered digitally
+PASS | Store host /blog is not accessible | HTTP=404
+PASS | Store host /services is not accessible | HTTP=404
+PASS | Main host blocks /products | HTTP=404
+PASS | Main host blocks /products/anything | HTTP=404
+PASS | Main host blocks /checkout | HTTP=404
+PASS | Main host blocks /store | HTTP=404
+PASS | Main host blocks /store/anything | HTTP=404
+PASS | Store /contact HTTP 200 | HTTP=200
+PASS | Store contact has email
+PASS | Store contact has phone
+PASS | Store contact has city/state
