@@ -48,6 +48,66 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
     : { r: 0, g: 255, b: 136 }
 }
 
+function parseHexColorToRgb(hex: string): { r: number; g: number; b: number } | null {
+  const value = hex.trim()
+
+  // #rgb
+  const short = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(value)
+  if (short) {
+    return {
+      r: Number.parseInt(short[1] + short[1], 16),
+      g: Number.parseInt(short[2] + short[2], 16),
+      b: Number.parseInt(short[3] + short[3], 16),
+    }
+  }
+
+  // #rrggbb
+  const long = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value)
+  if (long) {
+    return {
+      r: Number.parseInt(long[1], 16),
+      g: Number.parseInt(long[2], 16),
+      b: Number.parseInt(long[3], 16),
+    }
+  }
+
+  return null
+}
+
+function resolveCssVar(value: string, el: HTMLElement): string {
+  const trimmed = value.trim()
+  const m = /^var\((--[^)\s,]+)(?:\s*,\s*([^\)]+))?\)$/.exec(trimmed)
+  if (!m) return trimmed
+
+  const varName = m[1]
+  const fallback = (m[2] || "").trim()
+  const computed = getComputedStyle(el).getPropertyValue(varName).trim()
+  return computed || fallback || trimmed
+}
+
+function cssColorToRgb(value: string, el: HTMLElement): { r: number; g: number; b: number } {
+  const hex = parseHexColorToRgb(value)
+  if (hex) return hex
+
+  // Let the browser parse modern CSS colors (rgb/hsl/oklch/oklab/etc.).
+  try {
+    const probe = document.createElement("canvas")
+    probe.width = 1
+    probe.height = 1
+    const probeCtx = probe.getContext("2d")
+    if (!probeCtx) return { r: 0, g: 255, b: 136 }
+
+    const resolved = resolveCssVar(value, el)
+    probeCtx.clearRect(0, 0, 1, 1)
+    probeCtx.fillStyle = resolved
+    probeCtx.fillRect(0, 0, 1, 1)
+    const data = probeCtx.getImageData(0, 0, 1, 1).data
+    return { r: data[0], g: data[1], b: data[2] }
+  } catch {
+    return { r: 0, g: 255, b: 136 }
+  }
+}
+
 export function LaserBeam({
   width = 400,
   height = 300,
@@ -100,7 +160,7 @@ export function LaserBeam({
     let effectiveBeamLength = beamLength
 
     const dpr = window.devicePixelRatio || 1
-    const rgb = hexToRgb(color)
+    const rgb = cssColorToRgb(color, canvas)
 
     const computePerimeter = (bw: number, bh: number, br: number, pad: number) => {
       const bwInner = bw - pad * 2
