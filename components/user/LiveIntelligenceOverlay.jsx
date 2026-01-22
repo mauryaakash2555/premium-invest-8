@@ -22,6 +22,7 @@ import HeadlineFeed from '@/components/live-intelligence/HeadlineFeed';
 import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
 import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
+import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
@@ -2645,6 +2646,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <SavedHeadlinesSection />
             </div>
           )}
+
+          {/* Morning Brief (only visible in morning_brief mode) */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <MorningBrief />
+          </div>
 
           {/* Night section (only visible in night_summary mode) */}
           <div style={{ gridColumn: '1 / -1' }}>

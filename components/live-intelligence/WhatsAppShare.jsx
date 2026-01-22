@@ -84,7 +84,7 @@ export default function WhatsAppShare({
     window.open(url, '_blank');
     // Spec event (Jan 21, 2026)
     trackShareClick(null, 'whatsapp', {
-      surface: 'night_summary',
+      surface: type === 'night' ? 'night_summary' : 'morning_brief',
       shareType: 'summary',
       summaryType: type,
       hasSummary: Boolean(summary),
