@@ -48,8 +48,22 @@ export function LaserBeam({
   className = "",
 }: LaserBeamProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const animationRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
+  const dimsRef = useRef({
+    canvasW: 0,
+    canvasH: 0,
+    w: 0,
+    h: 0,
+    r: 0,
+    offsetX: 0,
+    offsetY: 0,
+    straightWidth: 0,
+    straightHeight: 0,
+    cornerLength: 0,
+    perimeter: 0,
+  });
 
   const glowPadding = glowIntensity + 4;
 
@@ -59,34 +73,61 @@ export function LaserBeam({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    ctxRef.current = ctx;
 
     const dpr = window.devicePixelRatio || 1;
 
-    const setup = () => {
+    const computeDims = () => {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      const nextCanvasW = rect.width;
+      const nextCanvasH = rect.height;
+
+      // Protect against transient 0x0 measurements.
+      if (nextCanvasW < 10 || nextCanvasH < 10) return false;
+
+      canvas.width = nextCanvasW * dpr;
+      canvas.height = nextCanvasH * dpr;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-      return { canvasW: rect.width, canvasH: rect.height };
+
+      const w = nextCanvasW - glowPadding * 2;
+      const h = nextCanvasH - glowPadding * 2;
+      const r = Math.min(borderRadius, Math.min(w, h) / 2);
+      const offsetX = glowPadding;
+      const offsetY = glowPadding;
+
+      const straightWidth = Math.max(0, w - 2 * r);
+      const straightHeight = Math.max(0, h - 2 * r);
+      const cornerLength = (Math.PI * r) / 2;
+      const perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength;
+
+      dimsRef.current = {
+        canvasW: nextCanvasW,
+        canvasH: nextCanvasH,
+        w,
+        h,
+        r,
+        offsetX,
+        offsetY,
+        straightWidth,
+        straightHeight,
+        cornerLength,
+        perimeter,
+      };
+
+      return true;
     };
 
-    let { canvasW, canvasH } = setup();
-
-    const w = canvasW - glowPadding * 2;
-    const h = canvasH - glowPadding * 2;
-    const r = Math.min(borderRadius, Math.min(w, h) / 2);
-    const offsetX = glowPadding;
-    const offsetY = glowPadding;
-
-    const straightWidth = w - 2 * r;
-    const straightHeight = h - 2 * r;
-    const cornerLength = (Math.PI * r) / 2;
-    const perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength;
+    // Initial compute after layout.
+    computeDims();
 
     const rgb = hexToRgb(color);
 
     const getPointOnPath = (progress: number): { x: number; y: number } => {
+      const { w, h, r, offsetX, offsetY, straightWidth, straightHeight, cornerLength, perimeter } = dimsRef.current;
+
+      if (!perimeter || w <= 0 || h <= 0) return { x: offsetX + r, y: offsetY };
+
       const adjustedProgress = direction === "counterclockwise" ? 1 - progress : progress;
       let distance = adjustedProgress * perimeter;
 
@@ -154,15 +195,22 @@ export function LaserBeam({
         return;
       }
 
-      // If the element resized (responsive), re-setup to avoid drift/blurry rendering.
+      const { canvasW, canvasH, perimeter } = dimsRef.current;
+
+      // Keep canvas crisp if layout changes.
       const rect = canvas.getBoundingClientRect();
       if (Math.abs(rect.width - canvasW) > 0.5 || Math.abs(rect.height - canvasH) > 0.5) {
-        ({ canvasW, canvasH } = setup());
+        computeDims();
       }
 
       ctx.clearRect(0, 0, canvasW, canvasH);
 
       if (!active) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      if (!perimeter) {
         animationRef.current = requestAnimationFrame(animate);
         return;
       }
@@ -214,17 +262,26 @@ export function LaserBeam({
       animationRef.current = requestAnimationFrame(animate);
     };
 
+    const resizeObserver = new ResizeObserver(() => {
+      // Reset timing to avoid visible jumps after large relayouts.
+      startTimeRef.current = 0;
+      computeDims();
+    });
+    resizeObserver.observe(canvas);
+
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
+      resizeObserver.disconnect();
     };
   }, [active, beamLength, borderRadius, borderWidth, color, delay, direction, duration, glowIntensity, glowPadding]);
 
   return (
     <div
-      className={`relative ${className}`}
+      className={className}
       style={{
+        position: "relative",
         width,
         height,
         borderRadius,
@@ -234,8 +291,9 @@ export function LaserBeam({
     >
       <canvas
         ref={canvasRef}
-        className="pointer-events-none absolute"
         style={{
+          position: "absolute",
+          pointerEvents: "none",
           top: -glowPadding,
           left: -glowPadding,
           width: `calc(100% + ${glowPadding * 2}px)`,
@@ -243,7 +301,9 @@ export function LaserBeam({
           borderRadius,
         }}
       />
-      {children && <div className="relative z-10 h-full w-full">{children}</div>}
+      {children && (
+        <div style={{ position: "relative", zIndex: 10, height: "100%", width: "100%" }}>{children}</div>
+      )}
     </div>
   );
 }
