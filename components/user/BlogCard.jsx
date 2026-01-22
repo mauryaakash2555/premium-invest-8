@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { LaserBeam } from '@/components/LaserBeamCanvas';
+import { LaserBeam } from '@/components/ui/laser-beam';
 
 export default function BlogCard({ post, variant = 'default' }) {
   const cardRef = useRef(null);
@@ -75,11 +75,11 @@ export default function BlogCard({ post, variant = 'default' }) {
         <LaserBeam
           width="100%"
           height={isMobile ? mobileCardHeight : 'auto'}
-          color="#60a5fa"
+          color="#3b82f6"
           borderRadius={isMobile ? 12 : 16}
-          duration={12}
-          glowIntensity={18}
-          beamLength={0.08}
+          duration={4.2}
+          glowIntensity={22}
+          beamLength={0.15}
           borderWidth={1}
           backgroundColor="transparent"
         >
