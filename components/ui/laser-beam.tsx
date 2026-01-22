@@ -76,6 +76,7 @@ export function LaserBeam({
   const startTimeRef = useRef<number>(0)
 
   const glowPadding = glowIntensity + 4
+  const pathPadding = expandCanvas ? glowPadding : 0
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -101,9 +102,9 @@ export function LaserBeam({
     const dpr = window.devicePixelRatio || 1
     const rgb = hexToRgb(color)
 
-    const computePerimeter = (bw: number, bh: number, br: number) => {
-      const bwInner = bw - glowPadding * 2
-      const bhInner = bh - glowPadding * 2
+    const computePerimeter = (bw: number, bh: number, br: number, pad: number) => {
+      const bwInner = bw - pad * 2
+      const bhInner = bh - pad * 2
       const brInner = Math.min(br, Math.min(bwInner, bhInner) / 2)
       const sw = bwInner - 2 * brInner
       const sh = bhInner - 2 * brInner
@@ -122,11 +123,11 @@ export function LaserBeam({
 
       canvasW = rect.width
       canvasH = rect.height
-      w = canvasW - glowPadding * 2
-      h = canvasH - glowPadding * 2
+      w = canvasW - pathPadding * 2
+      h = canvasH - pathPadding * 2
       r = Math.min(borderRadius, Math.min(w, h) / 2)
-      offsetX = glowPadding
-      offsetY = glowPadding
+      offsetX = pathPadding
+      offsetY = pathPadding
 
       straightWidth = w - 2 * r
       straightHeight = h - 2 * r
@@ -134,7 +135,12 @@ export function LaserBeam({
       perimeter = 2 * straightWidth + 2 * straightHeight + 4 * cornerLength
 
       if (normalizeToSize && perimeter > 0) {
-        const basePerimeter = computePerimeter(normalizeBaseWidth, normalizeBaseHeight, normalizeBaseBorderRadius)
+        const basePerimeter = computePerimeter(
+          normalizeBaseWidth,
+          normalizeBaseHeight,
+          normalizeBaseBorderRadius,
+          pathPadding
+        )
         if (basePerimeter > 0) {
           // Keep pixels/sec similar (bigger boxes => longer duration)
           effectiveDuration = duration * (perimeter / basePerimeter)

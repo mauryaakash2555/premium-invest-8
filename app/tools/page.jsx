@@ -34,7 +34,7 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
             height="100%"
             color="#C9A24D"
             borderRadius={0}
-            duration={5}
+            duration={8}
             glowIntensity={20}
             beamLength={0.12}
             borderWidth={1}
