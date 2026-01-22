@@ -249,15 +249,40 @@ return (
             {/* Vault Column */}
             <div className="space-y-10">
               <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                <Gem
-                  className="w-5 h-5 drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.75)]"
-                  strokeWidth={1.5}
+                <span
+                  aria-hidden
                   style={{
-                    color: 'oklch(0.78 0.08 65)',
-                    filter:
-                      'drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.70)) drop-shadow(0 0 22px oklch(0.78 0.08 65 / 0.28))',
+                    position: 'relative',
+                    width: '20px',
+                    height: '20px',
+                    display: 'inline-grid',
+                    placeItems: 'center',
                   }}
-                />
+                >
+                  <span
+                    aria-hidden
+                    style={{
+                      position: 'absolute',
+                      inset: '-10px',
+                      background:
+                        'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0.10) 28%, rgba(170,198,255,0.22) 55%, transparent 72%)',
+                      filter: 'blur(6px)',
+                      opacity: 0.85,
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <Gem
+                    className="w-5 h-5"
+                    strokeWidth={1.5}
+                    style={{
+                      position: 'relative',
+                      zIndex: 1,
+                      color: 'oklch(0.78 0.08 65)',
+                      filter:
+                        'brightness(1.08) drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.78)) drop-shadow(0 0 26px oklch(0.78 0.08 65 / 0.30)) drop-shadow(0 0 40px rgba(170, 198, 255, 0.18))',
+                    }}
+                  />
+                </span>
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
