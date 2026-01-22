@@ -34,7 +34,7 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
           <LaserBeam
             width="100%"
             height="100%"
-            color="var(--accent)"
+            color="var(--lux-accent)"
             borderRadius={0}
             duration={12}
             glowIntensity={20}

@@ -75,7 +75,7 @@ export default function BlogCard({ post, variant = 'default' }) {
         <LaserBeam
           width="100%"
           height={isMobile ? mobileCardHeight : 'auto'}
-          color="var(--accent)"
+          color="var(--li-accent-strong)"
           borderRadius={isMobile ? 12 : 16}
           duration={5}
           glowIntensity={20}
@@ -215,7 +215,7 @@ export default function BlogCard({ post, variant = 'default' }) {
                   style={{
                     height: 1,
                     width: '100%',
-                      background: 'linear-gradient(90deg, transparent, rgba(214,179,106,0.62), transparent)',
+                    background: 'linear-gradient(90deg, transparent, var(--li-accent), transparent)',
                     marginBottom: 14,
                     opacity: 0.9,
                   }}

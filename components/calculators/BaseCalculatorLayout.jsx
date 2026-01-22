@@ -8,7 +8,7 @@ export function BaseCalculatorLayout({
   children,
   disclaimer = null,
   maxWidthClass = "max-w-md lg:max-w-6xl",
-  laserColor = "var(--accent)",
+  laserColor = "var(--lux-accent)",
   laserEnabled = true,
 }) {
   const innerContent = (
