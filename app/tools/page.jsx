@@ -6,7 +6,7 @@ import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
-import { LaserBeam } from "@/components/LaserBeamCanvas";
+import { LaserBeam } from "@/components/ui/laser-beam";
 
 /*
   LAYOUT-LOCKED: /tools hub page
@@ -34,11 +34,17 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
             height="100%"
             color="#C9A24D"
             borderRadius={0}
-            duration={20}
-            glowIntensity={10}
-            beamLength={0.08}
-            borderWidth={0}
+            duration={5}
+            glowIntensity={20}
+            beamLength={0.12}
+            borderWidth={1}
+            baseBorderWidth={0}
             backgroundColor="transparent"
+            expandCanvas={false}
+            normalizeToSize
+            normalizeBaseWidth={350}
+            normalizeBaseHeight={220}
+            normalizeBaseBorderRadius={0}
           />
         </div>
       ) : null}

@@ -77,11 +77,16 @@ export default function BlogCard({ post, variant = 'default' }) {
           height={isMobile ? mobileCardHeight : 'auto'}
           color="#3b82f6"
           borderRadius={isMobile ? 12 : 16}
-          duration={8.5}
-          glowIntensity={22}
-          beamLength={0.2}
+          duration={5}
+          glowIntensity={20}
+          beamLength={0.12}
           borderWidth={1}
-          backgroundColor="transparent"
+          baseBorderWidth={0}
+          backgroundColor="rgba(59,130,246,0.03)"
+          normalizeToSize
+          normalizeBaseWidth={350}
+          normalizeBaseHeight={220}
+          normalizeBaseBorderRadius={16}
         >
           <div
             ref={cardRef}
