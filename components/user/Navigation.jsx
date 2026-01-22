@@ -63,6 +63,7 @@ const Navigation = () => {
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/about-us', label: 'About Us' },
+    { path: '/intelligence', label: 'Intelligence' },
     { path: '/services', label: 'Services' },
     { path: '/tools', label: 'Tools' },
     { path: '/live-intelligence', label: 'Live Intel' },
