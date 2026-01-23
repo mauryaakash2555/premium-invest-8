@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Insurance | BM Wealth",
+  title: "Insurance Advisor in Mumbai (IRDAI) | BM Wealth",
   description:
-    "Insurance planning support with clear comparisons, documentation, and claims-ready guidance through IRDAI-licensed distribution.",
+    "Insurance planning in Mumbai with clear comparisons, documentation, and claims-ready guidance through IRDAI-licensed distribution support.",
   path: "/insurance",
 });
 

@@ -215,7 +215,7 @@ const Blog = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             Financial Insights
@@ -223,7 +223,7 @@ const Blog = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -277,7 +277,7 @@ const Blog = () => {
                   background: '#000000',
                   borderRadius: '16px',
                   padding: '24px',
-                  border: '1px solid rgba(218, 165, 32, 0.2)',
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
                   overflow: 'hidden'
                 }}>
                   {/* Image skeleton */}
@@ -359,7 +359,7 @@ const Blog = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-8px)';
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(218, 165, 32, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px color-mix(in oklab, var(--lux-accent) 30%, transparent)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -381,7 +381,7 @@ const Blog = () => {
                       style={{
                         width: '100%',
                         height: '240px',
-                        background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                        background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                       }}
                     />
                   )}
@@ -401,7 +401,7 @@ const Blog = () => {
                           alignItems: 'center',
                           gap: '6px',
                           fontSize: '14px',
-                          color: '#C0A062',
+                          color: 'var(--lux-accent)',
                         }}
                       >
                         <Tag size={14} />
@@ -424,7 +424,7 @@ const Blog = () => {
                     <h3
                       style={{
                         fontSize: '22px',
-                        color: '#DAA520',
+                        color: 'var(--lux-accent)',
                         marginBottom: '12px',
                         lineHeight: 1.3,
                       }}
@@ -449,7 +449,7 @@ const Blog = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         paddingTop: '16px',
-                        borderTop: '1px solid rgba(218, 165, 32, 0.2)',
+                        borderTop: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
                       }}
                     >
                       <span
@@ -458,7 +458,7 @@ const Blog = () => {
                           alignItems: 'center',
                           gap: '8px',
                           fontSize: '14px',
-                          color: '#C0A062',
+                          color: 'var(--lux-accent)',
                         }}
                       >
                         <User size={16} />
@@ -470,7 +470,7 @@ const Blog = () => {
                           alignItems: 'center',
                           gap: '6px',
                           fontSize: '14px',
-                          color: '#DAA520',
+                          color: 'var(--lux-accent)',
                           cursor: 'pointer',
                         }}
                       >
@@ -498,14 +498,14 @@ const Blog = () => {
             style={{
               padding: '60px 40px',
               textAlign: 'center',
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
             }}
           >
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '20px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               BM Wealth Talks Podcast

@@ -25,12 +25,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showNav, setShowNav] = useState(true);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const servicesRef = useRef(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -60,18 +62,70 @@ const Navigation = () => {
     };
   }, [pathname]);
 
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/about-us', label: 'About Us' },
-    { path: '/intelligence', label: 'Intelligence' },
-    { path: '/services', label: 'Services' },
-    { path: '/tools', label: 'Tools' },
-    { path: '/live-intelligence', label: 'Live Intel' },
-    { path: '/client-portal', label: 'Client Portal' },
-    { path: '/curated-partners', label: 'Curated Partners' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+  useEffect(() => {
+    // Close dropdown on route change
+    setServicesOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!servicesOpen) return;
+
+    const onMouseDown = (e) => {
+      const el = servicesRef.current;
+      if (!el) return;
+      if (e.target instanceof Node && !el.contains(e.target)) {
+        setServicesOpen(false);
+      }
+    };
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setServicesOpen(false);
+    };
+
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onMouseDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [servicesOpen]);
+
+  const serviceLinks = [
+    { path: '/services', label: 'Services Overview', sub: 'What we offer' },
+    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'PMS-first planning' },
+    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based allocation' },
+    { path: '/insurance', label: 'Insurance', sub: 'Protection architecture' },
+    { path: '/fixed-deposits', label: 'Fixed Deposits', sub: 'Liquidity & stability' },
   ];
+
+  const servicesActive = serviceLinks.some((l) => pathname === l.path);
+
+  const DesktopLink = ({ path, label }) => {
+    const isActive = pathname === path;
+    return isActive ? (
+      <Link
+        href={path}
+        className="bm-navlink-active relative text-[12px] font-bold uppercase tracking-[2.5px] no-underline text-[color:var(--lux-accent)] nav-active-glow"
+      >
+        {label}
+        <span
+          className="absolute -bottom-2 left-0 w-full h-[1px] pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
+          aria-hidden="true"
+        />
+      </Link>
+    ) : (
+      <Link
+        href={path}
+        className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
+      >
+        {label}
+        <span
+          className="absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
+          aria-hidden="true"
+        />
+      </Link>
+    );
+  };
 
   // Ultra-Luxury Logo Component - Matching Mobile Dock Aesthetic
   const Logo = ({ size = 40, fontSize = '20px' }) => (
@@ -148,36 +202,89 @@ const Navigation = () => {
         <div className="w-full max-w-[1600px] flex justify-between items-center">
           <Logo size={48} fontSize="24px" />
           <div className="flex gap-10 items-center">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.path;
-              return isActive ? (
-                /* ACTIVE PAGE - Gold text + permanent underline, NO hover effects whatsoever */
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  className="bm-navlink-active relative text-[12px] font-bold uppercase tracking-[2.5px] no-underline text-[color:var(--lux-accent)] nav-active-glow"
+            <DesktopLink path="/" label="Home" />
+            <DesktopLink path="/about-us" label="About Us" />
+            <DesktopLink path="/intelligence" label="Intelligence" />
+
+            {/* Desktop-only glass dropdown for Services */}
+            <div
+              className="relative"
+              ref={servicesRef}
+            >
+              <button
+                type="button"
+                onClick={() => setServicesOpen((v) => !v)}
+                className={cn(
+                  "group relative text-[12px] uppercase tracking-[2.5px] no-underline transition-all duration-300",
+                  servicesActive
+                    ? "font-bold text-[color:var(--lux-accent)]"
+                    : "font-medium text-white/90 hover:text-white hover:scale-105"
+                )}
+                aria-haspopup="menu"
+                aria-expanded={servicesOpen}
+              >
+                Services
+                <span
+                  className={cn(
+                    "ml-2 inline-block align-middle transition-transform duration-200",
+                    servicesOpen ? "rotate-180" : "rotate-0"
+                  )}
+                  aria-hidden="true"
                 >
-                  {link.label}
-                  <span 
-                    className="absolute -bottom-2 left-0 w-full h-[1px] pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
-                    aria-hidden="true"
-                  />
-                </Link>
-              ) : (
-                /* NON-ACTIVE - White text + hover underline animation */
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
+                  ▾
+                </span>
+                <span
+                  className={cn(
+                    "absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent",
+                    servicesActive ? "left-0 w-full" : ""
+                  )}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {servicesOpen ? (
+                <div
+                  role="menu"
+                  className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_30px_120px_rgba(0,0,0,0.65)] overflow-hidden"
                 >
-                  {link.label}
-                  <span 
-                    className="absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
-                    aria-hidden="true"
-                  />
-                </Link>
-              );
-            })}
+                  <div className="p-5">
+                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">
+                      Services
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {serviceLinks.map((l) => (
+                        <Link
+                          key={l.path}
+                          href={l.path}
+                          role="menuitem"
+                          className={cn(
+                            "rounded-xl border border-white/10 px-4 py-3 no-underline transition-all duration-200",
+                            pathname === l.path
+                              ? "bg-white/10"
+                              : "bg-white/0 hover:bg-white/5"
+                          )}
+                          style={{ outline: 'none' }}
+                        >
+                          <div className="text-[13px] font-semibold text-white/90">{l.label}</div>
+                          <div className="mt-1 text-[11px] text-white/60">{l.sub}</div>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="mt-4 h-px w-full bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent opacity-40" />
+                    <div className="mt-4 text-[11px] text-white/60">
+                      Premium planning across PMS, funds, insurance and liquidity.
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            <DesktopLink path="/tools" label="Tools" />
+            <DesktopLink path="/live-intelligence" label="Live Intel" />
+            <DesktopLink path="/client-portal" label="Client Portal" />
+            <DesktopLink path="/curated-partners" label="Curated Partners" />
+            <DesktopLink path="/blog" label="Blog" />
+            <DesktopLink path="/contact" label="Contact" />
           </div>
         </div>
       </nav>

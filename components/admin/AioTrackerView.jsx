@@ -52,7 +52,7 @@ export function AioTrackerView({ data }) {
 
   return (
     <div style={{ marginTop: 22 }}>
-      <h2 style={{ color: '#C0A062', fontSize: 18 }}>AIO Tracker</h2>
+      <h2 style={{ color: 'var(--lux-accent)', fontSize: 18 }}>AIO Tracker</h2>
       <div style={{ opacity: 0.7, fontSize: 12, marginTop: 6 }}>
         Window: {data?.windowDays} days · Unique emails: {fmtNum(totals.unique_emails || 0)}
       </div>
@@ -77,7 +77,7 @@ export function AioTrackerView({ data }) {
       <div style={{ marginTop: 18, padding: 14, borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
           <div>
-            <div style={{ fontWeight: 900, color: '#C0A062' }}>Recent Captured Emails</div>
+            <div style={{ fontWeight: 900, color: 'var(--lux-accent)' }}>Recent Captured Emails</div>
             <div style={{ fontSize: 12, opacity: 0.7 }}>From AIO lead capture events (copy/paste into email tools)</div>
           </div>
           <button
@@ -87,8 +87,8 @@ export function AioTrackerView({ data }) {
             style={{
               borderRadius: 10,
               padding: '10px 12px',
-              border: '1px solid rgba(192,160,98,0.25)',
-              background: 'rgba(192,160,98,0.08)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 25%, transparent)',
+              background: 'color-mix(in oklab, var(--lux-accent) 8%, transparent)',
               color: 'rgba(255,255,255,0.9)',
               fontWeight: 800,
               cursor: 'pointer',
@@ -118,7 +118,7 @@ export function AioTrackerView({ data }) {
 
       {Array.isArray(data?.recentCaptures) && data.recentCaptures.length ? (
         <div style={{ marginTop: 18, overflowX: 'auto' }}>
-          <div style={{ color: '#C0A062', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+          <div style={{ color: 'var(--lux-accent)', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
             Recent Captures (detail)
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
@@ -157,7 +157,7 @@ function Stat({ label, value }) {
   return (
     <div style={{ padding: 14, borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
       <div style={{ fontSize: 11, opacity: 0.65, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{label}</div>
-      <div style={{ marginTop: 8, fontSize: 22, fontWeight: 900, color: '#C0A062' }}>{value}</div>
+      <div style={{ marginTop: 8, fontSize: 22, fontWeight: 900, color: 'var(--lux-accent)' }}>{value}</div>
     </div>
   );
 }
@@ -166,7 +166,7 @@ function List({ title, items }) {
   const rows = Array.isArray(items) ? items : [];
   return (
     <div style={{ padding: 14, borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
-      <div style={{ fontSize: 12, fontWeight: 900, color: '#C0A062' }}>{title}</div>
+      <div style={{ fontSize: 12, fontWeight: 900, color: 'var(--lux-accent)' }}>{title}</div>
       {rows.length ? (
         <div style={{ marginTop: 10 }}>
           {rows.map((r) => (
@@ -175,7 +175,7 @@ function List({ title, items }) {
               style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '6px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}
             >
               <div style={{ fontWeight: 800, opacity: 0.9 }}>{r.key}</div>
-              <div style={{ color: '#C0A062', fontWeight: 900 }}>{fmtNum(r.count)}</div>
+              <div style={{ color: 'var(--lux-accent)', fontWeight: 900 }}>{fmtNum(r.count)}</div>
             </div>
           ))}
         </div>

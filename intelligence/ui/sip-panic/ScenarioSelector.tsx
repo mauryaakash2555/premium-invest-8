@@ -6,6 +6,10 @@ import type { SIPScenario } from "@/intelligence/simulations/sip-vs-panic";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLang } from "./LangContext";
+
+const TooltipContentAny = TooltipContent as any;
 
 export type ScenarioKey = "discipline" | "panic20" | "panic40" | "stopAnyFall" | "custom";
 
@@ -75,15 +79,25 @@ export function ScenarioSelector(props: {
   onChange: (next: ScenarioSelectionState) => void;
 }) {
   const { value, onChange } = props;
+  const { t } = useLang();
 
   const [showMore, setShowMore] = useState<boolean>(() => {
-    return Boolean(value.enabled.panic40 || value.enabled.stopAnyFall || value.enabled.custom);
+    return Boolean(value.enabled.panic40 || value.enabled.stopAnyFall);
+  });
+
+  const [showCustomBuilder, setShowCustomBuilder] = useState<boolean>(() => {
+    return Boolean(value.enabled.custom);
   });
 
   useEffect(() => {
     // If an advanced option becomes enabled (e.g., via external state), ensure it's visible.
-    if (value.enabled.panic40 || value.enabled.stopAnyFall || value.enabled.custom) setShowMore(true);
-  }, [value.enabled.custom, value.enabled.panic40, value.enabled.stopAnyFall]);
+    if (value.enabled.panic40 || value.enabled.stopAnyFall) setShowMore(true);
+  }, [value.enabled.panic40, value.enabled.stopAnyFall]);
+
+  useEffect(() => {
+    // Keep builder visible if custom gets enabled externally.
+    if (value.enabled.custom) setShowCustomBuilder(true);
+  }, [value.enabled.custom]);
 
   const rows = useMemo(
     () =>
@@ -122,8 +136,8 @@ export function ScenarioSelector(props: {
 
   return (
     <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-      <h2 className="text-base font-semibold gold-gradient-text">Scenarios</h2>
-      <p className="mt-1 text-sm text-white/85">Choose which investor behaviors to compare.</p>
+      <h2 className="text-base font-semibold gold-gradient-text">{t("scenario.title")}</h2>
+      <p className="mt-1 text-sm text-white/85">{t("scenario.subtitle")}</p>
 
       <div className="mt-5 space-y-4">
         {rows.map((row) => {
@@ -134,11 +148,9 @@ export function ScenarioSelector(props: {
           const isCustom = row.key === "custom";
           const th = Math.max(5, Math.min(60, Math.round(value.custom.panicThresholdPct || 30)));
           const stop = Math.max(1, Math.min(24, Math.round(value.custom.stopDurationMonths || 6)));
-          const title = isCustom
-            ? `+ Create Custom Scenario` + (checked ? ` — Stop SIP at ${th}% drawdown, resume after ${stop} months` : "")
-            : row.title;
+          const title = isCustom ? `Stop SIP at ${th}% Drawdown` : row.title;
           const subtitle = isCustom
-            ? "Your custom rule: choose a panic point and auto-resume timing"
+            ? `Stops equity SIP when market falls ${th}% from peak, then auto-resumes after ${stop} months.`
             : row.subtitle;
 
           return (
@@ -149,6 +161,7 @@ export function ScenarioSelector(props: {
                 onCheckedChange={(v) => {
                   const next = { ...value, enabled: { ...value.enabled } };
                   next.enabled[row.key] = Boolean(v);
+                  if (row.key === "custom" && Boolean(v)) setShowCustomBuilder(true);
                   onChange(next);
                 }}
                 className="mt-1 border-white/25 bg-black/20 data-[state=checked]:bg-[oklch(0.78_0.08_65)] data-[state=checked]:text-black data-[state=checked]:border-[oklch(0.78_0.08_65)]"
@@ -156,11 +169,34 @@ export function ScenarioSelector(props: {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold text-white">{title}</p>
-                  {locked ? <span className="text-[11px] text-white/50">Required</span> : null}
+                  {locked ? (
+                    <span className="text-[11px] text-white/50">Required</span>
+                  ) : row.key === "custom" ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowCustomBuilder((v) => !v);
+                        if (!value.enabled.custom) {
+                          onChange({
+                            ...value,
+                            enabled: { ...value.enabled, custom: true },
+                            custom: {
+                              ...value.custom,
+                              panicThresholdPct: Math.max(5, Math.min(60, Math.round(value.custom.panicThresholdPct || 30))),
+                              stopDurationMonths: Math.max(1, Math.min(24, Math.round(value.custom.stopDurationMonths || 6))),
+                            },
+                          });
+                        }
+                      }}
+                      className="min-h-11 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:border-white/15"
+                    >
+                      {showCustomBuilder ? "✕ Hide" : "⚙️ Configure"}
+                    </button>
+                  ) : null}
                 </div>
                 <p className="mt-1 text-xs text-white/75">{subtitle}</p>
 
-                {row.key === "custom" && checked ? (
+                {row.key === "custom" && checked && showCustomBuilder ? (
                   <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <Label className="text-white/85 text-xs">Panic threshold (% fall)</Label>
@@ -216,30 +252,39 @@ export function ScenarioSelector(props: {
 
       <div className="mt-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setShowMore(true);
-              onChange({
-                ...value,
-                enabled: { ...value.enabled, custom: true },
-                custom: {
-                  ...value.custom,
-                  panicThresholdPct: Math.max(5, Math.min(60, Math.round(value.custom.panicThresholdPct || 30))),
-                  stopDurationMonths: Math.max(1, Math.min(24, Math.round(value.custom.stopDurationMonths || 6))),
-                },
-              });
-            }}
-            className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs text-white hover:border-white/20"
-          >
-            + Create Custom Scenario
-          </button>
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMore(true);
+                    onChange({
+                      ...value,
+                      enabled: { ...value.enabled, custom: true },
+                      custom: {
+                        ...value.custom,
+                        panicThresholdPct: Math.max(5, Math.min(60, Math.round(value.custom.panicThresholdPct || 30))),
+                        stopDurationMonths: Math.max(1, Math.min(24, Math.round(value.custom.stopDurationMonths || 6))),
+                      },
+                    });
+                  }}
+                  className="w-full min-h-11 rounded-xl border border-dashed border-white/20 bg-white/10 px-4 py-3 text-xs text-white hover:border-white/30"
+                >
+                  {t("scenario.createCustom")}
+                </button>
+              </TooltipTrigger>
+              <TooltipContentAny side="top" className="max-w-[260px] border border-white/10 bg-black/90 text-white/90">
+                <div className="text-[11px] text-white/80 leading-snug">{t("scenario.customTooltip")}</div>
+              </TooltipContentAny>
+            </Tooltip>
+          </TooltipProvider>
           <button
             type="button"
             onClick={() => setShowMore((v) => !v)}
-            className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-xs text-white/80 hover:border-white/15"
+            className="w-full min-h-11 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-xs text-white/80 hover:border-white/15"
           >
-            {showMore ? "Hide more options" : "More options"}
+            {showMore ? t("scenario.hideMore") : t("scenario.more")}
           </button>
         </div>
       </div>

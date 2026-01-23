@@ -59,13 +59,18 @@ async function main() {
   const { status: scanStatus } = await run('npm', ['run', 'security:scan']);
   if (scanStatus !== 0) checks.push({ pass: false, message: 'Secrets scan failed (see output above)' });
 
-  // 4) Chat validation (existing)
-  console.log('4️⃣ Running chat validation...');
+  // 4) Palette guard (brand integrity)
+  console.log('4️⃣ Enforcing premium palette lock...');
+  const { status: paletteStatus } = await run('npm', ['run', 'lint:palette']);
+  if (paletteStatus !== 0) checks.push({ pass: false, message: 'Palette guard failed (npm run lint:palette)' });
+
+  // 5) Chat validation (existing)
+  console.log('5️⃣ Running chat validation...');
   const { status: chatStatus } = await run('npm', ['run', 'validate:chat']);
   if (chatStatus !== 0) checks.push({ pass: false, message: 'Chat validation failed (npm run validate:chat)' });
 
-  // 5) Unit tests
-  console.log('5️⃣ Running tests...');
+  // 6) Unit tests
+  console.log('6️⃣ Running tests...');
   const { status: testStatus } = await run('npm', ['test']);
   if (testStatus !== 0) checks.push({ pass: false, message: 'Tests failed (npm test)' });
 

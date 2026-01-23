@@ -36,7 +36,7 @@ export default function RegulatoryCompliance() {
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-12">
-          <Scale className="w-10 h-10 text-[#C0A062]" />
+          <Scale className="w-10 h-10 text-[color:var(--lux-accent)]" />
           <h1 className="text-4xl md:text-5xl font-serif font-bold gold-gradient-text tracking-tight">
             Regulatory Compliance
           </h1>
@@ -44,7 +44,7 @@ export default function RegulatoryCompliance() {
 
         <div className="bp-body space-y-12 opacity-90 leading-relaxed">
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[color:var(--lux-accent)] border-b border-white/10 pb-2">
               Our Commitment
             </h2>
             <p className="text-gray-300">
@@ -53,7 +53,7 @@ export default function RegulatoryCompliance() {
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[color:var(--lux-accent)] border-b border-white/10 pb-2">
               Compliance Statement
             </h2>
             <p className="text-gray-300">
@@ -62,7 +62,7 @@ export default function RegulatoryCompliance() {
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[color:var(--lux-accent)] border-b border-white/10 pb-2">
               IRDAI Guidelines
             </h2>
             <p className="text-gray-300">
@@ -71,21 +71,21 @@ export default function RegulatoryCompliance() {
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[color:var(--lux-accent)] border-b border-white/10 pb-2">
               Grievance Redressal
             </h2>
             <p className="text-gray-300">
               We maintain a robust mechanism for addressing any client concerns. In the rare event of a grievance, our clients can expect a swift, transparent, and fair resolution process in accordance with regulatory mandates.
             </p>
             <div className="mt-4">
-              <p className="text-[#C0A062] font-bold">Principal Compliance Officer:</p>
+              <p className="text-[color:var(--lux-accent)] font-bold">Principal Compliance Officer:</p>
               <p className="text-gray-400">Brahmdeo Maurya</p>
               <p className="text-gray-400">Email: support@bmwealth.co.in</p>
             </div>
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[color:var(--lux-accent)] border-b border-white/10 pb-2">
               Transparency & Disclosure
             </h2>
             <p className="text-gray-300">
@@ -94,7 +94,7 @@ export default function RegulatoryCompliance() {
           </section>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-[#C0A062]/10 text-center">
+        <div className="mt-20 pt-10 border-t border-white/10 text-center">
           <p className="text-[10px] text-gray-600 uppercase tracking-[3px]">
             © 2025 BM Wealth | Regulatory Compliance Framework
           </p>

@@ -38,7 +38,7 @@ function netRate(expectedReturnPct, expenseRatioPct) {
 
 export function FundCostComparator({
   title = "Fund Cost & Return Comparator (Educational)",
-  accentColor = "#DAA520",
+  accentColor = "var(--lux-accent)",
   variant = "gold",
 } = {}) {
   const [lumpsum, setLumpsum] = useState(500000);
@@ -73,7 +73,7 @@ export function FundCostComparator({
     width: "100%",
     padding: "10px 12px",
     borderRadius: 10,
-    border: isNeutral ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(218, 165, 32, 0.22)",
+    border: isNeutral ? "1px solid rgba(255,255,255,0.14)" : "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
     background: "rgba(255,255,255,0.03)",
     color: "#fff",
     outline: "none",
@@ -87,13 +87,13 @@ export function FundCostComparator({
 
   const card = {
     background: isNeutral ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.04)",
-    border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(218, 165, 32, 0.18)",
+    border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
     borderRadius: isNeutral ? 16 : 12,
     padding: 18,
     backdropFilter: isNeutral ? "blur(10px)" : undefined,
   };
 
-  const scenarioLabelColor = isNeutral ? accentColor : "#C0A062";
+  const scenarioLabelColor = isNeutral ? accentColor : "var(--lux-accent)";
   const valueAccentColor = accentColor;
 
   return (
@@ -231,8 +231,8 @@ export function FundCostComparator({
           marginTop: 14,
           padding: 14,
           borderRadius: 14,
-          border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(218, 165, 32, 0.18)",
-          background: isNeutral ? "rgba(255,255,255,0.03)" : "rgba(218, 165, 32, 0.06)",
+          border: isNeutral ? "1px solid rgba(255,255,255,0.10)" : "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
+          background: isNeutral ? "rgba(255,255,255,0.03)" : "color-mix(in oklab, var(--lux-accent) 6%, transparent)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>

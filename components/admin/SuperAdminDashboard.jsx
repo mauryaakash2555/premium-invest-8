@@ -414,7 +414,7 @@ export function SuperAdminDashboard({ onLogout }) {
                       setAioDays(d);
                       void loadAioTracker(d);
                     }}
-                    style={aioDays === d ? { borderColor: 'rgba(192,160,98,0.55)' } : undefined}
+                    style={aioDays === d ? { borderColor: 'color-mix(in oklab, var(--lux-accent) 55%, transparent)' } : undefined}
                   >
                     {d}d
                   </button>

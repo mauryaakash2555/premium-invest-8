@@ -12,7 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { SIPInputForm } from "./SIPInputForm";
-import { ScenarioSelector, buildScenariosFromSelection, type ScenarioSelectionState } from "./ScenarioSelector";
+import { ScenarioSelector, buildScenariosFromSelection, type ScenarioKey, type ScenarioSelectionState } from "./ScenarioSelector";
 import { ResultsDashboard } from "./ResultsDashboard";
 import { TimelineChart } from "./TimelineChart";
 import { CalculationDetails } from "./CalculationDetails";
@@ -20,28 +20,35 @@ import { DrawdownPainChart } from "./DrawdownPainChart";
 import { LearningBubble } from "./LearningBubble";
 import { SocialProofBanner } from "./SocialProofBanner";
 import { RegretCalculator } from "./RegretCalculator";
-import { BehavioralQuiz } from "./BehavioralQuiz";
+import { QuizModal } from "./QuizModal";
 import { MissedRecoveryAnimation } from "./MissedRecoveryAnimation";
 import { downloadPremiumReport } from "./premiumReport";
 import { ComplianceBanner } from "./ComplianceBanner";
 import { TaxCalculationMode, type TaxCalculationModeKey } from "./TaxCalculationMode";
 import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
+import { LangProvider } from "./LangContext";
+import { LanguageToggle } from "./LanguageToggle";
+import type { Lang } from "./i18n";
+import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 
 const CALCULATOR_TYPE = "sip_vs_panic_selling";
 const LEARNING_BUBBLES_KEY = "bm.sipPanicSelling.hideLearningBubbles";
 const TAX_PROFILE_KEY = "bm.sipPanicSelling.taxProfile";
 const TAX_CALC_MODE_KEY = "bm.sipPanicSelling.taxCalcMode";
+const LANG_KEY = "bm.sipPanicSelling.lang";
+const INVESTMENT_TYPE_KEY = "bm.sipPanicSelling.investmentType";
+const QUIZ_PROFILE_KEY = "bm.sipPanicSelling.quizProfileV1";
 
 const TooltipContentAny: any = TooltipContent;
 
 type TaxProfileKey = "lt50l" | "50l_1cr" | "1cr_2cr" | "2cr_5cr" | "5cr_plus";
 
 const TAX_PROFILES: Array<{ k: TaxProfileKey; label: string; surchargeRate: number }> = [
-  { k: "lt50l", label: "Below ₹50L (no surcharge)", surchargeRate: 0 },
-  { k: "50l_1cr", label: "₹50L–₹1Cr (10% surcharge)", surchargeRate: 0.1 },
-  { k: "1cr_2cr", label: "₹1Cr–₹2Cr (15% surcharge)", surchargeRate: 0.15 },
-  { k: "2cr_5cr", label: "₹2Cr–₹5Cr (25% surcharge)", surchargeRate: 0.25 },
-  { k: "5cr_plus", label: "₹5Cr+ (37% surcharge)", surchargeRate: 0.37 },
+  { k: "lt50l", label: "Below ₹50 lakh (₹50,00,000) — no surcharge", surchargeRate: 0 },
+  { k: "50l_1cr", label: "₹50 lakh–₹1 crore (₹50,00,000–₹1,00,00,000) — 10% surcharge", surchargeRate: 0.1 },
+  { k: "1cr_2cr", label: "₹1 crore–₹2 crore (₹1,00,00,000–₹2,00,00,000) — 15% surcharge", surchargeRate: 0.15 },
+  { k: "2cr_5cr", label: "₹2 crore–₹5 crore (₹2,00,00,000–₹5,00,00,000) — 25% surcharge", surchargeRate: 0.25 },
+  { k: "5cr_plus", label: "₹5 crore+ (₹5,00,00,000+) — 37% surcharge", surchargeRate: 0.37 },
 ];
 
 function formatInr(amount: number): string {
@@ -51,12 +58,47 @@ function formatInr(amount: number): string {
 
 function formatInrLakhs(amount: number): string {
   const v = Number.isFinite(amount) ? amount : 0;
-  return `₹${(v / 100_000).toFixed(2)}L`;
+  const short = `₹${(v / 100_000).toFixed(2)}L`;
+  return `${short} (${formatInr(v)})`;
 }
 
 function safeTaxCalcMode(v: string | null): TaxCalculationModeKey | null {
   if (v === "conservative_stcg_30" || v === "optimized_ltcg_indexation_20") return v;
   return null;
+}
+
+function safeCrashPreset(v: string | null): "default" | "2008" | "2020" | "2022" | null {
+  if (v === "default" || v === "2008" || v === "2020" || v === "2022") return v;
+  return null;
+}
+
+function safeRiskComfort(v: string | null): "conservative" | "moderate" | "aggressive" | null {
+  if (v === "conservative" || v === "moderate" || v === "aggressive") return v;
+  return null;
+}
+
+function safeScenarioKey(v: string | null): ScenarioKey | null {
+  if (v === "discipline" || v === "panic20" || v === "panic40" || v === "stopAnyFall" || v === "custom") return v;
+  return null;
+}
+
+function safeLang(v: string | null): Lang | null {
+  return isLang(v) ? v : null;
+}
+
+function clampInt(n: number, min: number, max: number): number {
+  if (!Number.isFinite(n)) return min;
+  return Math.max(min, Math.min(max, Math.round(n)));
+}
+
+function getScenarioKeyFromRow(row: SIPSimulationResult | null): ScenarioKey {
+  if (!row) return "discipline";
+  if (row.scenario.behaviorType === "discipline") return "discipline";
+  if (row.scenario.behaviorType === "custom") return "custom";
+  if (row.scenario.behaviorType === "panic" && row.scenario.panicThreshold === -40) return "panic40";
+  if (row.scenario.behaviorType === "panic" && row.scenario.panicThreshold === -20) return "panic20";
+  if (row.scenario.behaviorType === "panic" && row.scenario.panicThreshold === -1) return "stopAnyFall";
+  return "discipline";
 }
 
 function formatPct(p: number): string {
@@ -149,8 +191,13 @@ export default function SIPPanicPage(props?: {
 
   const [taxCalcMode, setTaxCalcMode] = useState<TaxCalculationModeKey>("conservative_stcg_30");
 
+  const [investmentType, setInvestmentType] = useState<"equity_mf" | "stocks">("equity_mf");
+
+  const [lang, setLang] = useState<Lang>("en");
+
   const [learningBubblesDisabled, setLearningBubblesDisabled] = useState(false);
   const hasTrackedStart = useRef(false);
+  const hasAppliedShareParams = useRef(false);
 
   const [selection, setSelection] = useState<ScenarioSelectionState>({
     enabled: {
@@ -158,7 +205,7 @@ export default function SIPPanicPage(props?: {
       panic20: true,
       panic40: false,
       stopAnyFall: false,
-      custom: false,
+      custom: true,
     },
     custom: {
       panicThresholdPct: 30,
@@ -174,6 +221,51 @@ export default function SIPPanicPage(props?: {
   const [crashPreset, setCrashPreset] = useState<"default" | "2008" | "2020" | "2022">("default");
 
   const [showQuiz, setShowQuiz] = useState<boolean>(false);
+  const [quizProfileLabel, setQuizProfileLabel] = useState<string>("");
+
+  useEffect(() => {
+    // Initialize language from query string (share) or localStorage.
+    try {
+      const qsLang = safeLang(searchParams?.get("lang") ?? null);
+      if (qsLang) {
+        setLang(qsLang);
+        window.localStorage.setItem(LANG_KEY, qsLang);
+        return;
+      }
+
+      const stored = safeLang(window.localStorage.getItem(LANG_KEY));
+      if (stored) setLang(stored);
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(QUIZ_PROFILE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      const label = typeof parsed?.label === "string" ? parsed.label : "";
+      if (label) setQuizProfileLabel(label);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const onLangChange = (next: Lang) => {
+    setLang(next);
+    try {
+      window.localStorage.setItem(LANG_KEY, next);
+      const p = new URLSearchParams(window.location.search);
+      p.set("lang", next);
+      window.history.replaceState(null, "", `${window.location.pathname}?${p.toString()}`);
+    } catch {
+      // ignore
+    }
+  };
+
+  const t = (key: TranslationKey, vars?: Record<string, string | number>) => tStatic(lang, key, vars);
 
   const marketConditions: MarketConditions = useMemo(() => {
     return buildMarketConditionsForPreset(crashPreset);
@@ -282,6 +374,27 @@ export default function SIPPanicPage(props?: {
     }
   }, []);
 
+  useEffect(() => {
+    try {
+      const v = window.localStorage.getItem(INVESTMENT_TYPE_KEY);
+      if (v === "equity_mf" || v === "stocks") setInvestmentType(v);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const onInvestmentTypeChange = (next: "equity_mf" | "stocks") => {
+    setInvestmentType(next);
+    try {
+      window.localStorage.setItem(INVESTMENT_TYPE_KEY, next);
+      const p = new URLSearchParams(window.location.search);
+      p.set("inv", next);
+      window.history.replaceState(null, "", `${window.location.pathname}?${p.toString()}`);
+    } catch {
+      // ignore
+    }
+  };
+
   const taxConfig = useMemo(() => {
     const profile = TAX_PROFILES.find((p) => p.k === taxProfile) ?? TAX_PROFILES[0];
     return {
@@ -298,6 +411,7 @@ export default function SIPPanicPage(props?: {
       riskComfort,
       tax: taxConfig,
       taxCalculationMode: taxCalcMode,
+      investmentType,
     });
     setResults(out);
 
@@ -312,18 +426,7 @@ export default function SIPPanicPage(props?: {
         return cur.behavioralCost > best.behavioralCost ? cur : best;
       }, null);
 
-    const scenarioKey =
-      worstRow?.scenario.behaviorType === "custom"
-        ? "custom"
-        : worstRow?.scenario.behaviorType === "panic" && worstRow?.scenario.panicThreshold === -40
-          ? "panic40"
-          : worstRow?.scenario.behaviorType === "panic" && worstRow?.scenario.panicThreshold === -20
-            ? "panic20"
-            : worstRow?.scenario.behaviorType === "panic" && worstRow?.scenario.panicThreshold === -1
-              ? "stopAnyFall"
-              : disciplineRow
-                ? "discipline"
-                : "";
+    const scenarioKey = worstRow ? getScenarioKeyFromRow(worstRow) : disciplineRow ? "discipline" : "";
 
     void fetch("/api/intelligence/sip-vs-panic/track", {
       method: "POST",
@@ -336,6 +439,7 @@ export default function SIPPanicPage(props?: {
         duration_years: inputs.durationYears,
         tax_profile: taxProfile,
         tax_calc_mode: taxCalcMode,
+        investment_type: investmentType,
         risk_comfort: riskComfort,
         crash_preset: crashPreset,
         embed,
@@ -350,22 +454,144 @@ export default function SIPPanicPage(props?: {
       risk_comfort: riskComfort,
       tax_profile: taxProfile,
       tax_calc_mode: taxCalcMode,
+      investment_type: investmentType,
       scenarios_count: scenarios.length,
       crash_preset: crashPreset,
       embed,
       partner,
     });
+
+    return out;
+  };
+
+  const buildShareParams = (out: SIPSimulationResult[]) => {
+    const disciplineRow = out.find((r) => r.scenario.behaviorType === "discipline") ?? null;
+    const worstRow = out
+      .filter((r) => r.scenario.behaviorType !== "discipline")
+      .reduce<SIPSimulationResult | null>((best, cur) => {
+        if (!best) return cur;
+        return cur.behavioralCost > best.behavioralCost ? cur : best;
+      }, null);
+
+    const cost = worstRow?.behavioralCost ?? 0;
+    const disciplineAmt = disciplineRow?.postTaxCorpus ?? 0;
+    const worstAmt = worstRow?.postTaxCorpus ?? 0;
+    const focus = getScenarioKeyFromRow(worstRow);
+
+    const enabledKeys = (Object.keys(selection.enabled) as ScenarioKey[]).filter((k) => selection.enabled[k]);
+
+    const p = new URLSearchParams();
+    p.set("share", "1");
+    p.set("m", String(inputs.monthlyAmount));
+    p.set("y", String(inputs.durationYears));
+    p.set("tax", String(taxProfile));
+    p.set("tcm", String(taxCalcMode));
+    p.set("inv", String(investmentType));
+    p.set("rc", String(riskComfort));
+    p.set("crash", String(crashPreset));
+    p.set("en", enabledKeys.join(","));
+    p.set("focus", focus);
+    p.set("cost", String(Math.round(cost)));
+    p.set("disc", String(Math.round(disciplineAmt)));
+    p.set("panic", String(Math.round(worstAmt)));
+    p.set("lang", String(lang));
+
+    if (selection.enabled.custom) {
+      p.set("pt", String(clampInt(selection.custom.panicThresholdPct, 5, 60)));
+      p.set("sd", String(clampInt(selection.custom.stopDurationMonths, 1, 24)));
+    }
+
+    const th = worstRow?.scenario?.panicThreshold;
+    if (typeof th === "number") {
+      if (th === -1) p.set("pth", "any");
+      else if (th < 0) p.set("pth", String(Math.abs(th)));
+    }
+
+    return { params: p, focus, disciplineRow, worstRow };
   };
 
   const run = () => {
     try {
       setError(null);
-      compute({ track: true });
+      const out = compute({ track: true });
+
+      // Update URL so "Copy link" reflects the current run.
+      if (typeof window !== "undefined" && Array.isArray(out)) {
+        const next = new URLSearchParams(window.location.search);
+        const built = buildShareParams(out);
+        for (const [k, v] of built.params.entries()) next.set(k, v);
+        window.history.replaceState(null, "", `${window.location.pathname}?${next.toString()}`);
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Failed to run simulation";
       setError(msg);
     }
   };
+
+  useEffect(() => {
+    if (!searchParams || hasAppliedShareParams.current) return;
+    if (searchParams.get("share") !== "1") return;
+    hasAppliedShareParams.current = true;
+
+    const nextLang = safeLang(searchParams.get("lang"));
+    if (nextLang) setLang(nextLang);
+
+    const mRaw = Number(searchParams.get("m"));
+    const yRaw = Number(searchParams.get("y"));
+    const m = clampInt(mRaw, 1_000, 5_00_000);
+    const y = clampInt(yRaw, 1, 30);
+
+    setInputs({ monthlyAmount: m, durationYears: y });
+
+    const nextTax = searchParams.get("tax") as TaxProfileKey | null;
+    if (nextTax && TAX_PROFILES.some((p) => p.k === nextTax)) setTaxProfile(nextTax);
+
+    const nextTcm = safeTaxCalcMode(searchParams.get("tcm"));
+    if (nextTcm) setTaxCalcMode(nextTcm);
+
+    const nextInv = searchParams.get("inv");
+    if (nextInv === "equity_mf" || nextInv === "stocks") setInvestmentType(nextInv);
+
+    const nextRc = safeRiskComfort(searchParams.get("rc"));
+    if (nextRc) setRiskComfort(nextRc);
+
+    const nextCrash = safeCrashPreset(searchParams.get("crash"));
+    if (nextCrash) setCrashPreset(nextCrash);
+
+    const enabledCsv = searchParams.get("en");
+    const focus = safeScenarioKey(searchParams.get("focus"));
+    const ptRaw = Number(searchParams.get("pt"));
+    const sdRaw = Number(searchParams.get("sd"));
+
+    setSelection((prev) => {
+      const next: ScenarioSelectionState = {
+        ...prev,
+        enabled: { ...prev.enabled },
+        custom: { ...prev.custom },
+      };
+
+      if (enabledCsv) {
+        const enabledSet = new Set(
+          enabledCsv
+            .split(",")
+            .map((s) => safeScenarioKey(s.trim()))
+            .filter(Boolean) as ScenarioKey[]
+        );
+
+        (Object.keys(next.enabled) as ScenarioKey[]).forEach((k) => {
+          if (k === "discipline") next.enabled[k] = true;
+          else next.enabled[k] = enabledSet.has(k);
+        });
+      }
+
+      if (focus && focus !== "discipline") next.enabled[focus] = true;
+
+      if (Number.isFinite(ptRaw)) next.custom.panicThresholdPct = clampInt(ptRaw, 5, 60);
+      if (Number.isFinite(sdRaw)) next.custom.stopDurationMonths = clampInt(sdRaw, 1, 24);
+
+      return next;
+    });
+  }, [searchParams]);
 
   useEffect(() => {
     // Real-time impact calculator: update results as inputs change (no tracking).
@@ -414,28 +640,35 @@ export default function SIPPanicPage(props?: {
 
   const shareToWhatsApp = () => {
     try {
-      const cost = worst?.behavioralCost ?? 0;
+      const out = results;
+      const { params, worstRow } = buildShareParams(out);
       const canonical = `${window.location.origin}/intelligence/sip-vs-panic`;
-      const disciplineAmt = discipline?.postTaxCorpus ?? 0;
-      const worstAmt = worst?.postTaxCorpus ?? 0;
-      const worstName = worst?.scenario.name ?? "Panic behavior";
+      const shareUrl = `${canonical}?${params.toString()}`;
 
-      const shareUrl =
-        `${canonical}?share=1` +
-        `&m=${encodeURIComponent(String(inputs.monthlyAmount))}` +
-        `&y=${encodeURIComponent(String(inputs.durationYears))}` +
-        `&cost=${encodeURIComponent(String(Math.round(cost)))}` +
-        `&disc=${encodeURIComponent(String(Math.round(disciplineAmt)))}` +
-        `&panic=${encodeURIComponent(String(Math.round(worstAmt)))}` +
-        `&tax=${encodeURIComponent(String(taxProfile))}` +
-        `&rc=${encodeURIComponent(String(riskComfort))}` +
-        `&crash=${encodeURIComponent(String(crashPreset))}`;
+      const cost = worstRow?.behavioralCost ?? 0;
+      const disciplineAmt = out.find((r) => r.scenario.behaviorType === "discipline")?.postTaxCorpus ?? 0;
+      const worstAmt = worstRow?.postTaxCorpus ?? 0;
+      const costPct = disciplineAmt > 0 ? Math.round((cost / disciplineAmt) * 100) : 0;
+
+      const worstName = worstRow?.scenario.name ?? "Panic behavior";
+      const th = worstRow?.scenario?.panicThreshold;
+      const thresholdLine =
+        typeof th === "number"
+          ? th === -1
+            ? "Panic rule: pause in any red month"
+            : th < 0
+              ? `Panic rule: stop at ${Math.abs(th)}% drawdown`
+              : ""
+          : "";
 
       const message =
         `🚨 If you stop SIP during crashes, you could lose ${formatInrLakhs(cost)}.\n\n` +
         `✅ Stay Disciplined: ${formatInrLakhs(disciplineAmt)}\n` +
-        `❌ ${worstName}: ${formatInrLakhs(worstAmt)}\n\n` +
-        `Inputs: ₹${inputs.monthlyAmount.toLocaleString("en-IN")}/month • ${inputs.durationYears} years\n\n` +
+        `❌ ${worstName}: ${formatInrLakhs(worstAmt)}\n` +
+        (costPct > 0 ? `📉 That’s ~${costPct}% of your potential wealth.\n` : "") +
+        (thresholdLine ? `ℹ️ ${thresholdLine}\n` : "") +
+        `\nInputs: ₹${inputs.monthlyAmount.toLocaleString("en-IN")}/month • ${inputs.durationYears} years\n` +
+        `Tax mode: ${taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle")}\n\n` +
         `Try it: ${shareUrl}\n` +
         `Via BM Wealth Intelligence`;
 
@@ -446,7 +679,69 @@ export default function SIPPanicPage(props?: {
         tax_profile: taxProfile,
       });
 
+      trackEvent("sip_whatsapp_shared", {
+        calculator_type: CALCULATOR_TYPE,
+        behavioral_cost: cost,
+        panic_threshold: typeof th === "number" ? Math.abs(th) : undefined,
+        sip_amount: inputs.monthlyAmount,
+        duration_years: inputs.durationYears,
+      });
+
       window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    } catch {
+      // ignore
+    }
+  };
+
+  const shareToEmail = () => {
+    try {
+      const out = results;
+      const { params, worstRow } = buildShareParams(out);
+      const canonical = `${window.location.origin}/intelligence/sip-vs-panic`;
+      const shareUrl = `${canonical}?${params.toString()}`;
+
+      const cost = worstRow?.behavioralCost ?? 0;
+      const disciplineAmt = out.find((r) => r.scenario.behaviorType === "discipline")?.postTaxCorpus ?? 0;
+      const worstAmt = worstRow?.postTaxCorpus ?? 0;
+      const costPct = disciplineAmt > 0 ? Math.round((cost / disciplineAmt) * 100) : 0;
+
+      const th = worstRow?.scenario?.panicThreshold;
+      const thresholdLine =
+        typeof th === "number"
+          ? th === -1
+            ? "Panic rule: pause in any red month"
+            : th < 0
+              ? `Panic rule: stop at ${Math.abs(th)}% drawdown`
+              : ""
+          : "";
+
+      const subject = "My SIP vs Panic Selling Analysis";
+      const body =
+        `My SIP vs Panic analysis (education-only)\n\n` +
+        `Inputs: ₹${inputs.monthlyAmount.toLocaleString("en-IN")}/month • ${inputs.durationYears} years\n` +
+        `Tax mode: ${taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle")}\n` +
+        (thresholdLine ? `${thresholdLine}\n` : "") +
+        `\nResults (after tax):\n` +
+        `- Stay disciplined: ${formatInrLakhs(disciplineAmt)}\n` +
+        `- Panic behavior: ${formatInrLakhs(worstAmt)}\n` +
+        `- Behavioral cost: ${formatInrLakhs(cost)}${costPct > 0 ? ` (~${costPct}% of potential)` : ""}\n\n` +
+        `Try the simulator: ${shareUrl}\n`;
+
+      trackEvent("calculator_share", {
+        calculator_type: CALCULATOR_TYPE,
+        channel: "email",
+        behavioral_cost: cost,
+        tax_profile: taxProfile,
+      });
+
+      trackEvent("sip_email_shared", {
+        calculator_type: CALCULATOR_TYPE,
+        behavioral_cost: cost,
+        sip_amount: inputs.monthlyAmount,
+        duration_years: inputs.durationYears,
+      });
+
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     } catch {
       // ignore
     }
@@ -480,78 +775,92 @@ export default function SIPPanicPage(props?: {
   };
 
   return (
-    <main className="px-4 sm:px-6 lg:px-10 py-10 lg:py-14">
-      {!embed ? <BackRow /> : null}
+    <LangProvider value={{ lang, setLang: onLangChange }}>
+      <QuizModal
+        open={showQuiz}
+        onClose={() => setShowQuiz(false)}
+        onSubmit={(profile) => {
+          try {
+            window.localStorage.setItem(QUIZ_PROFILE_KEY, JSON.stringify(profile));
+          } catch {
+            // ignore
+          }
+          setQuizProfileLabel(profile.label);
 
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/25 px-3 py-1 text-[11px] text-white/70">
-            <span className="gold-gradient-text font-semibold">SIP vs Panic Selling</span>
-            <span aria-hidden="true">•</span>
-            <span>Education-only simulator</span>
-            {partner ? (
-              <>
-                <span aria-hidden="true">•</span>
-                <span className="text-white/60">Partner: {partner}</span>
-              </>
-            ) : null}
-          </div>
-          <div className="mt-4">
-            <ComplianceBanner />
-          </div>
-          <h1 className="mt-4 text-3xl sm:text-4xl font-semibold gold-gradient-text">
-            What Happens If You Stop SIP During a Market Crash?
-          </h1>
-          <p className="mt-3 text-sm sm:text-base text-white/75 max-w-3xl mx-auto">
-            Compare calm investing vs panic-selling, and see the post-tax cost — month by month.
-          </p>
-        </header>
+          setRiskComfort(profile.riskComfort);
+          setSelection((prev) => ({
+            ...prev,
+            enabled: {
+              ...prev.enabled,
+              custom: true,
+              panic20: false,
+              panic40: false,
+              stopAnyFall: false,
+            },
+            custom: {
+              ...prev.custom,
+              panicThresholdPct: profile.thresholdPct,
+            },
+          }));
+          setTimeout(() => run(), 0);
+        }}
+      />
+      <main className="sip-panic-readable px-4 sm:px-6 lg:px-10 py-10 lg:py-14">
+        {!embed ? <BackRow /> : null}
+
+        <div className="max-w-6xl mx-auto">
+          <header className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[11px] text-white/95">
+              <span className="gold-gradient-text font-semibold">{t("page.badgeTitle")}</span>
+              <span aria-hidden="true">•</span>
+              <span className="text-white/90">{t("page.badgeSubtitle")}</span>
+              {partner ? (
+                <>
+                  <span aria-hidden="true">•</span>
+                  <span className="text-white/90">{t("page.partner", { partner })}</span>
+                </>
+              ) : null}
+            </div>
+
+            <div className="mt-4">
+              <ComplianceBanner />
+            </div>
+
+            <div className="mt-5 flex justify-center">
+              <LanguageToggle />
+            </div>
+
+            <h1 className="mt-6 text-3xl sm:text-4xl font-semibold gold-gradient-text">{t("page.title")}</h1>
+            <p className="mt-3 text-sm sm:text-base text-white/90 max-w-3xl mx-auto">{t("page.subtitle")}</p>
+          </header>
 
         <SocialProofBanner />
 
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold gold-gradient-text">Quick behavioral quiz (optional)</h2>
-              <p className="mt-1 text-xs text-white/75">This helps personalize recommendations. You can skip and take it later.</p>
+              <h2 className="text-base font-semibold gold-gradient-text">{t("quiz.cardTitle")}</h2>
+              <p className="mt-1 text-xs text-white/90">{t("quiz.cardSubtitle")}</p>
+              <div className="mt-3 text-[11px] text-white/70">
+                ✓ Personalized insights · ✓ Compare your profile · ✓ Apply a recommended scenario
+              </div>
+              {quizProfileLabel ? (
+                <div className="mt-2 text-[11px] text-white/65">
+                  Your last profile: <span className="font-semibold text-white/80">{quizProfileLabel}</span>
+                </div>
+              ) : null}
             </div>
             <button
               type="button"
-              onClick={() => setShowQuiz((v) => !v)}
-              className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/80 hover:border-white/15"
+              onClick={() => setShowQuiz(true)}
+              className={
+                "min-h-11 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
+              }
             >
-              {showQuiz ? "Hide quiz" : "Take quiz"}
+              {quizProfileLabel ? "Retake quiz" : t("quiz.show")}
             </button>
           </div>
-          {showQuiz ? (
-            <div className="mt-4">
-              <BehavioralQuiz
-                className="mt-0"
-                onApply={({ thresholdPct, riskComfort: rc }) => {
-                  setRiskComfort(rc);
-                  setSelection((prev) => ({
-                    ...prev,
-                    enabled: {
-                      ...prev.enabled,
-                      custom: true,
-                      panic20: false,
-                      panic40: false,
-                      stopAnyFall: false,
-                    },
-                    custom: {
-                      ...prev.custom,
-                      panicThresholdPct: thresholdPct,
-                    },
-                  }));
-                  setTimeout(() => run(), 0);
-                }}
-              />
-            </div>
-          ) : (
-            <div className="mt-3 text-[11px] text-white/60">
-              Tip: If you don’t have time now, come back after you see your first results.
-            </div>
-          )}
+          <div className="mt-3 text-[11px] text-white/85">{t("quiz.tip")}</div>
         </div>
 
         {showCta ? (
@@ -574,8 +883,8 @@ export default function SIPPanicPage(props?: {
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold gold-gradient-text">Replay market crashes (illustrative)</h2>
-              <p className="mt-1 text-xs text-white/75">Choose a crash-style path to see behavior under stress. Education-only, not historical index data.</p>
+              <h2 className="text-base font-semibold gold-gradient-text">{t("crash.title")}</h2>
+              <p className="mt-1 text-xs text-white/75">{t("crash.subtitle")}</p>
             </div>
             <LearningBubble title="How it works" disabled={learningBubblesDisabled} onDisableChange={disableLearningBubbles}>
               These presets tune crash depth, duration, and recovery windows in the deterministic market path.
@@ -598,11 +907,17 @@ export default function SIPPanicPage(props?: {
                 onClick={() => setCrashPreset(opt.k)}
                 className={
                   crashPreset === opt.k
-                    ? "rounded-full border border-white/20 bg-white/10 px-3 py-2 text-white"
-                    : "rounded-full border border-white/10 bg-black/20 px-3 py-2 text-white/80 hover:bg-white/5"
+                    ? "min-h-11 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white"
+                    : "min-h-11 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-white/80 hover:bg-white/5"
                 }
               >
-                {opt.label}
+                {opt.k === "default"
+                  ? t("crash.default")
+                  : opt.k === "2008"
+                    ? t("crash.2008")
+                    : opt.k === "2020"
+                      ? t("crash.2020")
+                      : t("crash.2022")}
               </button>
             ))}
           </div>
@@ -649,8 +964,8 @@ export default function SIPPanicPage(props?: {
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-semibold gold-gradient-text">How do you feel about market downturns?</h2>
-                  <p className="mt-1 text-xs text-white/75">Used to personalize insights — not a product recommendation.</p>
+                  <h2 className="text-base font-semibold gold-gradient-text">{t("risk.title")}</h2>
+                  <p className="mt-1 text-xs text-white/75">{t("risk.subtitle")}</p>
                 </div>
                 <LearningBubble
                   title="Why we ask this"
@@ -681,9 +996,50 @@ export default function SIPPanicPage(props?: {
                       onChange={() => setRiskComfort(opt.k)}
                       className="accent-[oklch(0.78_0.08_65)]"
                     />
-                    <span className="text-white/90">{opt.label}</span>
+                    <span className="text-white/90">
+                      {opt.k === "conservative" ? t("risk.conservative") : opt.k === "moderate" ? t("risk.moderate") : t("risk.aggressive")}
+                    </span>
                   </label>
                 ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+              <div>
+                <h2 className="text-base font-semibold gold-gradient-text">What are you investing in?</h2>
+                <p className="mt-1 text-xs text-white/75">Used for education-only tax defaults (MF vs direct stocks).</p>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 gap-2 text-sm">
+                <label className="min-h-11 flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-3 cursor-pointer hover:border-white/15">
+                  <input
+                    type="radio"
+                    name="investmentType"
+                    value="equity_mf"
+                    checked={investmentType === "equity_mf"}
+                    onChange={() => onInvestmentTypeChange("equity_mf")}
+                    className="mt-1 accent-[oklch(0.78_0.08_65)]"
+                  />
+                  <span className="min-w-0">
+                    <span className="text-white/90 font-medium">Equity Mutual Fund SIP</span>
+                    <span className="block text-xs text-white/65">Default engine tax rules for equity mutual funds.</span>
+                  </span>
+                </label>
+
+                <label className="min-h-11 flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-3 cursor-pointer hover:border-white/15">
+                  <input
+                    type="radio"
+                    name="investmentType"
+                    value="stocks"
+                    checked={investmentType === "stocks"}
+                    onChange={() => onInvestmentTypeChange("stocks")}
+                    className="mt-1 accent-[oklch(0.78_0.08_65)]"
+                  />
+                  <span className="min-w-0">
+                    <span className="text-white/90 font-medium">Direct Stocks SIP</span>
+                    <span className="block text-xs text-white/65">Uses direct equity defaults in the tax engine.</span>
+                  </span>
+                </label>
               </div>
             </div>
 
@@ -731,7 +1087,7 @@ export default function SIPPanicPage(props?: {
                             <button
                               type="button"
                               aria-label={`Explain surcharge for ${opt.label}`}
-                              className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-black/25 text-[11px] text-white/70 hover:text-white/90 hover:border-white/15"
+                              className="ml-auto inline-flex h-11 w-11 sm:h-7 sm:w-7 items-center justify-center rounded-full border border-white/10 bg-black/25 text-[11px] text-white/70 hover:text-white/90 hover:border-white/15"
                             >
                               i
                             </button>
@@ -819,6 +1175,24 @@ export default function SIPPanicPage(props?: {
           <div className="lg:col-span-6 space-y-4">
             <TimelineChart
               data={chartData}
+              show={{
+                discipline: selection.enabled.discipline,
+                panic20: selection.enabled.panic20,
+                panic40: selection.enabled.panic40,
+                anyFall: selection.enabled.stopAnyFall,
+                custom: selection.enabled.custom,
+                invested: false,
+              }}
+              labels={{
+                discipline: "Discipline",
+                panic20: "Stop at 20%",
+                panic40: "Stop at 40%",
+                anyFall: "Pause in Red Months",
+                custom: selection.enabled.custom
+                  ? `Custom (${Math.round(selection.custom.panicThresholdPct || 30)}% / ${Math.round(selection.custom.stopDurationMonths || 6)}m)`
+                  : "Custom",
+                invested: "Invested",
+              }}
               title="Graph 1 — Your Wealth Path"
               subtitle="Disciplined SIP vs panic behaviors across the same market path."
               exportId="sip-panic-wealth-chart"
@@ -928,7 +1302,9 @@ export default function SIPPanicPage(props?: {
                         </div>
                         <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 flex items-center justify-between gap-4">
                           <span>Cost if you stay disciplined</span>
-                          <span className="font-semibold text-white tabular-nums">₹0.00L</span>
+                          <span className="font-semibold text-white tabular-nums">
+                            <LakhTooltip amount={0} />
+                          </span>
                         </div>
                         <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 flex items-center justify-between gap-4">
                           <span>Difference you can save</span>
@@ -1010,17 +1386,48 @@ export default function SIPPanicPage(props?: {
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={shareToEmail}
+                  className="min-h-11 w-full touch-manipulation rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
+                >
+                  Share via Email
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      const disciplineRow = results.find((r) => r.scenario.behaviorType === "discipline") ?? null;
+                      const worstRow = results
+                        .filter((r) => r.scenario.behaviorType !== "discipline")
+                        .reduce<SIPSimulationResult | null>((best, cur) => {
+                          if (!best) return cur;
+                          return cur.behavioralCost > best.behavioralCost ? cur : best;
+                        }, null);
+
+                      trackEvent("sip_pdf_downloaded", {
+                        calculator_type: CALCULATOR_TYPE,
+                        behavioral_cost: worstRow?.behavioralCost ?? 0,
+                        tax_profile: taxProfile,
+                        discipline_post_tax: disciplineRow?.postTaxCorpus ?? 0,
+                        panic_post_tax: worstRow?.postTaxCorpus ?? 0,
+                        panic_threshold: typeof worstRow?.scenario?.panicThreshold === "number" ? Math.abs(worstRow.scenario.panicThreshold) : undefined,
+                      });
+                    } catch {
+                      // ignore
+                    }
+
                     void downloadPremiumReport({
                       results,
                       monthlyAmount: inputs.monthlyAmount,
                       durationYears: inputs.durationYears,
                       riskComfort,
-                      taxProfile,
+                      taxProfile: getTaxProfileLabel(taxProfile),
+                      taxCalcMode: taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle"),
+                      marketAssumptionTitle: marketAssumptions.title,
                       chartSvgId: "sip-panic-wealth-chart",
-                    })
-                  }
-                  className="w-full rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
+                    });
+                  }}
+                  className="min-h-11 w-full touch-manipulation rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
                 >
                   Download Client Report (PDF)
                 </button>
@@ -1031,7 +1438,7 @@ export default function SIPPanicPage(props?: {
                     const el = document.getElementById("sip-panic-inputs");
                     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
-                  className="w-full rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
+                  className="min-h-11 w-full touch-manipulation rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
                 >
                   Try a different choice
                 </button>
@@ -1162,7 +1569,7 @@ export default function SIPPanicPage(props?: {
           })()}
         </div>
 
-        <MissedRecoveryAnimation discipline={discipline} worst={worst} chartData={chartData} />
+        <MissedRecoveryAnimation discipline={discipline} worst={worst} chartData={chartData} monthlyAmount={inputs.monthlyAmount} />
 
         <RegretCalculator monthlyAmount={inputs.monthlyAmount} />
 
@@ -1245,6 +1652,7 @@ export default function SIPPanicPage(props?: {
         </div>
         ) : null}
       </div>
-    </main>
+      </main>
+    </LangProvider>
   );
 }

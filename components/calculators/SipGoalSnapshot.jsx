@@ -38,7 +38,7 @@ export function SipGoalSnapshot() {
     width: "100%",
     padding: "10px 12px",
     borderRadius: 10,
-    border: "1px solid rgba(218, 165, 32, 0.22)",
+    border: "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
     background: "rgba(255,255,255,0.03)",
     color: "#fff",
     outline: "none",
@@ -52,7 +52,7 @@ export function SipGoalSnapshot() {
 
   const card = {
     background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(218, 165, 32, 0.18)",
+    border: "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
     borderRadius: 12,
     padding: 18,
   };
@@ -83,13 +83,13 @@ export function SipGoalSnapshot() {
           marginTop: 14,
           padding: 14,
           borderRadius: 12,
-          border: "1px solid rgba(218, 165, 32, 0.18)",
-          background: "rgba(218, 165, 32, 0.06)",
+          border: "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
+          background: "color-mix(in oklab, var(--lux-accent) 6%, transparent)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <div style={{ fontSize: 13, color: "#e5e5e5" }}>
-            Estimated required SIP (monthly): <strong style={{ color: "#DAA520" }}>{formatINR(result.sip)}</strong>
+            Estimated required SIP (monthly): <strong style={{ color: "var(--lux-accent)" }}>{formatINR(result.sip)}</strong>
           </div>
           <div style={{ fontSize: 12, color: "#b8b8b8" }}>Illustration only</div>
         </div>

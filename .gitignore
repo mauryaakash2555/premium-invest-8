@@ -80,4 +80,7 @@ test-results/
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
 
+# Local helpers (never commit)
+.tools/oklch-to-hex.js
+
 

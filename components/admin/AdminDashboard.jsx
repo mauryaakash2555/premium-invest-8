@@ -49,7 +49,7 @@ export function AdminDashboard() {
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 16px 60px', color: '#fff' }}>
-      <h1 style={{ color: '#C0A062', fontFamily: '"Playfair Display", serif' }}>Admin</h1>
+      <h1 style={{ color: 'var(--lux-accent)', fontFamily: '"Playfair Display", serif' }}>Admin</h1>
 
       <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
         <button onClick={() => setTab('summary')} style={btnStyle(tab === 'summary')}>Summary</button>
@@ -80,8 +80,8 @@ function btnStyle(active) {
     padding: '10px 14px',
     borderRadius: 12,
     border: '1px solid rgba(255,255,255,0.10)',
-    background: active ? 'rgba(192,160,98,0.15)' : 'rgba(255,255,255,0.04)',
-    color: active ? '#C0A062' : 'rgba(255,255,255,0.85)',
+    background: active ? 'color-mix(in oklab, var(--lux-accent) 15%, transparent)' : 'rgba(255,255,255,0.04)',
+    color: active ? 'var(--lux-accent)' : 'rgba(255,255,255,0.85)',
     cursor: 'pointer',
   };
 }

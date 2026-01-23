@@ -198,7 +198,7 @@ const Services = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             Our Services
@@ -206,7 +206,7 @@ const Services = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -259,13 +259,13 @@ const Services = () => {
                 wordWrap: 'break-word',
                 overflowWrap: 'break-word'
               }}>
-                <div style={{ color: '#DAA520', marginBottom: '20px', fontSize: 'clamp(40px, 8vw, 50px)' }}>
+                <div style={{ color: 'var(--lux-accent)', marginBottom: '20px', fontSize: 'clamp(40px, 8vw, 50px)' }}>
                   {service.icon}
                 </div>
                 <h2
                   style={{
                     fontSize: 'clamp(22px, 5vw, 36px)',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     marginBottom: '16px',
                     lineHeight: 1.3,
                     wordWrap: 'break-word',
@@ -289,7 +289,7 @@ const Services = () => {
                 <h3
                   style={{
                     fontSize: 'clamp(18px, 4vw, 20px)',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     marginBottom: '12px',
                   }}
                 >
@@ -317,7 +317,7 @@ const Services = () => {
                         overflowWrap: 'break-word',
                       }}
                     >
-                      <ArrowRight size={16} style={{ color: '#DAA520', flexShrink: 0 }} />
+                      <ArrowRight size={16} style={{ color: 'var(--lux-accent)', flexShrink: 0 }} />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -329,7 +329,7 @@ const Services = () => {
                       display: 'inline-block',
                       marginTop: '20px',
                       padding: '12px 32px',
-                      background: 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)',
+                      background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                       color: '#000000',
                       textDecoration: 'none',
                       borderRadius: '8px',
@@ -340,11 +340,11 @@ const Services = () => {
                     }}
                     onMouseOver={(e) => {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.borderColor = '#DAA520';
-                      e.currentTarget.style.color = '#DAA520';
+                      e.currentTarget.style.borderColor = 'var(--lux-accent)';
+                      e.currentTarget.style.color = 'var(--lux-accent)';
                     }}
                     onMouseOut={(e) => {
-                      e.currentTarget.style.background = 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)';
                       e.currentTarget.style.borderColor = 'transparent';
                       e.currentTarget.style.color = '#000000';
                     }}
@@ -371,14 +371,14 @@ const Services = () => {
             style={{
               padding: '60px 40px',
               textAlign: 'center',
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
             }}
           >
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '20px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Let's Establish Your Financial Future Together

@@ -49,7 +49,7 @@ const CuratedPartners = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(135deg, rgba(10,10,10,0.4) 0%, rgba(192,160,98,0.15) 50%, rgba(10,10,10,0.6) 100%)',
+            background: 'linear-gradient(135deg, rgba(10,10,10,0.4) 0%, color-mix(in oklab, var(--lux-accent) 15%, transparent) 50%, rgba(10,10,10,0.6) 100%)',
           }}
         />
         
@@ -57,18 +57,18 @@ const CuratedPartners = () => {
           <div
             style={{
               display: 'inline-block',
-              background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.25) 0%, rgba(218, 165, 32, 0.15) 100%)',
-              border: '2px solid rgba(192, 160, 98, 0.5)',
+              background: 'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 25%, transparent) 0%, color-mix(in oklab, var(--lux-accent) 15%, transparent) 100%)',
+              border: '2px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)',
               borderRadius: '30px',
               padding: '10px 24px',
               marginBottom: '24px',
-              boxShadow: '0 8px 32px rgba(192, 160, 98, 0.25)',
+              boxShadow: '0 8px 32px color-mix(in oklab, var(--lux-accent) 25%, transparent)',
             }}
           >
             <span
               style={{
                 fontSize: '14px',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: 700,
                 letterSpacing: '2px',
                 display: 'flex',
@@ -88,9 +88,9 @@ const CuratedPartners = () => {
               fontWeight: 400,
               letterSpacing: '4px',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               lineHeight: 1.2,
-              textShadow: '0 4px 20px rgba(192, 160, 98, 0.4)',
+              textShadow: '0 4px 20px color-mix(in oklab, var(--lux-accent) 40%, transparent)',
             }}
           >
             Curated Partners
@@ -116,8 +116,8 @@ const CuratedPartners = () => {
         {/* POSITION #1 - DIAMOND ADVISORY PARTNER (RESERVED) */}
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.12) 0%, rgba(218, 165, 32, 0.08) 50%, rgba(0, 0, 0, 0.5) 100%)',
-            border: '3px solid rgba(192, 160, 98, 0.5)',
+            background: 'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 12%, transparent) 0%, color-mix(in oklab, var(--lux-accent) 8%, transparent) 50%, rgba(0, 0, 0, 0.5) 100%)',
+            border: '3px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)',
             borderRadius: '16px',
             padding: '70px 90px',
             marginBottom: '40px',
@@ -129,14 +129,14 @@ const CuratedPartners = () => {
             position: 'relative',
             overflow: 'hidden',
             transition: 'all 0.4s ease',
-            boxShadow: '0 8px 40px rgba(192, 160, 98, 0.15)',
+            boxShadow: '0 8px 40px color-mix(in oklab, var(--lux-accent) 15%, transparent)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 12px 60px rgba(192, 160, 98, 0.35)';
+            e.currentTarget.style.boxShadow = '0 12px 60px color-mix(in oklab, var(--lux-accent) 35%, transparent)';
             e.currentTarget.style.transform = 'translateY(-4px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 40px rgba(192, 160, 98, 0.15)';
+            e.currentTarget.style.boxShadow = '0 8px 40px color-mix(in oklab, var(--lux-accent) 15%, transparent)';
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
@@ -148,7 +148,7 @@ const CuratedPartners = () => {
               left: '-50%',
               width: '200%',
               height: '200%',
-              background: 'linear-gradient(45deg, transparent 30%, rgba(192, 160, 98, 0.1) 50%, transparent 70%)',
+              background: 'linear-gradient(45deg, transparent 30%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 50%, transparent 70%)',
               animation: 'shimmer 8s infinite',
               pointerEvents: 'none',
             }}
@@ -160,7 +160,7 @@ const CuratedPartners = () => {
               position: 'absolute',
               top: '20px',
               right: '20px',
-              background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+              background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
               color: '#000',
               padding: '8px 16px',
               borderRadius: '20px',
@@ -170,7 +170,7 @@ const CuratedPartners = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '0 4px 15px rgba(192, 160, 98, 0.4)',
+              boxShadow: '0 4px 15px color-mix(in oklab, var(--lux-accent) 40%, transparent)',
             }}
           >
             <Star size={14} fill="#000" />
@@ -186,7 +186,7 @@ const CuratedPartners = () => {
                   style={{
                     fontSize: '18px',
                     fontWeight: 800,
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     letterSpacing: '3px',
                     marginBottom: '6px',
                   }}
@@ -197,11 +197,11 @@ const CuratedPartners = () => {
                   style={{
                     fontSize: '46px',
                     fontFamily: '"Playfair Display", serif',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     fontWeight: 700,
                     margin: 0,
                     letterSpacing: '3px',
-                    textShadow: '0 2px 15px rgba(192, 160, 98, 0.5)',
+                    textShadow: '0 2px 15px color-mix(in oklab, var(--lux-accent) 50%, transparent)',
                   }}
                 >
                   DIAMOND ADVISORY PARTNER
@@ -212,7 +212,7 @@ const CuratedPartners = () => {
             <p
               style={{
                 fontSize: '22px',
-                color: 'rgba(192, 160, 98, 0.95)',
+                color: 'color-mix(in oklab, var(--lux-accent) 95%, transparent)',
                 marginBottom: '36px',
                 fontWeight: 600,
                 fontStyle: 'italic',
@@ -234,13 +234,13 @@ const CuratedPartners = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '14px',
-                    background: 'rgba(192, 160, 98, 0.08)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 8%, transparent)',
                     padding: '14px 18px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(192, 160, 98, 0.2)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
                   }}
                 >
-                  <Sparkles size={20} style={{ color: '#C0A062', flexShrink: 0 }} />
+                  <Sparkles size={20} style={{ color: 'var(--lux-accent)', flexShrink: 0 }} />
                   <span
                     style={{
                       fontSize: '17px',
@@ -261,17 +261,17 @@ const CuratedPartners = () => {
             <div
               style={{
                 textAlign: 'center',
-                background: 'rgba(192, 160, 98, 0.15)',
+                background: 'color-mix(in oklab, var(--lux-accent) 15%, transparent)',
                 padding: '20px 28px',
                 borderRadius: '12px',
-                border: '2px solid rgba(192, 160, 98, 0.3)',
+                border: '2px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                 marginBottom: '12px',
               }}
             >
-              <div style={{ fontSize: '14px', color: 'rgba(192, 160, 98, 0.8)', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>INVESTMENT</div>
+              <div style={{ fontSize: '14px', color: 'color-mix(in oklab, var(--lux-accent) 80%, transparent)', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>INVESTMENT</div>
               <div style={{ 
                 fontSize: '32px', 
-                color: '#C0A062', 
+                color: 'var(--lux-accent)', 
                 fontWeight: 700, 
                 fontFamily: '"Playfair Display", serif', 
                 letterSpacing: '1px',
@@ -292,7 +292,7 @@ const CuratedPartners = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+                background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 color: '#000',
                 padding: '20px 40px',
                 borderRadius: '8px',
@@ -302,15 +302,15 @@ const CuratedPartners = () => {
                 border: '2px solid transparent',
                 transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 6px 25px rgba(192, 160, 98, 0.3)',
+                boxShadow: '0 6px 25px color-mix(in oklab, var(--lux-accent) 30%, transparent)',
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'scale(1.05)';
-                e.target.style.boxShadow = '0 8px 35px rgba(192, 160, 98, 0.5)';
+                e.target.style.boxShadow = '0 8px 35px color-mix(in oklab, var(--lux-accent) 50%, transparent)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'scale(1)';
-                e.target.style.boxShadow = '0 6px 25px rgba(192, 160, 98, 0.3)';
+                e.target.style.boxShadow = '0 6px 25px color-mix(in oklab, var(--lux-accent) 30%, transparent)';
               }}
             >
               Apply for Partnership
@@ -321,8 +321,8 @@ const CuratedPartners = () => {
         {/* POSITION #2 - BM WEALTH (GOLD PARTNER) */}
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.6) 100%)',
-            border: '3px solid rgba(192, 160, 98, 0.4)',
+            background: 'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 8%, transparent) 0%, rgba(0, 0, 0, 0.6) 100%)',
+            border: '3px solid color-mix(in oklab, var(--lux-accent) 40%, transparent)',
             borderRadius: '16px',
             padding: '70px 90px',
             marginBottom: '40px',
@@ -333,16 +333,16 @@ const CuratedPartners = () => {
             minHeight: '400px',
             position: 'relative',
             transition: 'all 0.4s ease',
-            boxShadow: '0 6px 35px rgba(192, 160, 98, 0.12)',
+            boxShadow: '0 6px 35px color-mix(in oklab, var(--lux-accent) 12%, transparent)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.6)';
-            e.currentTarget.style.boxShadow = '0 10px 50px rgba(192, 160, 98, 0.25)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 60%, transparent)';
+            e.currentTarget.style.boxShadow = '0 10px 50px color-mix(in oklab, var(--lux-accent) 25%, transparent)';
             e.currentTarget.style.transform = 'translateY(-3px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
-            e.currentTarget.style.boxShadow = '0 6px 35px rgba(192, 160, 98, 0.12)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 40%, transparent)';
+            e.currentTarget.style.boxShadow = '0 6px 35px color-mix(in oklab, var(--lux-accent) 12%, transparent)';
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
@@ -352,9 +352,9 @@ const CuratedPartners = () => {
               position: 'absolute',
               top: '20px',
               right: '20px',
-              background: 'rgba(192, 160, 98, 0.2)',
-              border: '2px solid #C0A062',
-              color: '#C0A062',
+              background: 'color-mix(in oklab, var(--lux-accent) 20%, transparent)',
+              border: '2px solid var(--lux-accent)',
+              color: 'var(--lux-accent)',
               padding: '8px 16px',
               borderRadius: '20px',
               fontSize: '12px',
@@ -374,7 +374,7 @@ const CuratedPartners = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
               <div
                 style={{
-                  background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+                  background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   padding: '8px 18px',
                   borderRadius: '8px',
                   fontSize: '16px',
@@ -391,11 +391,11 @@ const CuratedPartners = () => {
               style={{
                 fontSize: '46px',
                 fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: 700,
                 margin: '0 0 14px 0',
                 letterSpacing: '3px',
-                textShadow: '0 2px 12px rgba(192, 160, 98, 0.4)',
+                textShadow: '0 2px 12px color-mix(in oklab, var(--lux-accent) 40%, transparent)',
               }}
             >
               BM WEALTH
@@ -404,7 +404,7 @@ const CuratedPartners = () => {
             <p
               style={{
                 fontSize: '20px',
-                color: 'rgba(192, 160, 98, 0.9)',
+                color: 'color-mix(in oklab, var(--lux-accent) 90%, transparent)',
                 marginBottom: '24px',
                 fontWeight: 600,
               }}
@@ -443,13 +443,13 @@ const CuratedPartners = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    background: 'rgba(192, 160, 98, 0.08)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 8%, transparent)',
                     padding: '14px 16px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(192, 160, 98, 0.2)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
                   }}
                 >
-                  <div style={{ color: '#C0A062', flexShrink: 0 }}>{item.icon}</div>
+                  <div style={{ color: 'var(--lux-accent)', flexShrink: 0 }}>{item.icon}</div>
                   <span
                     style={{
                       fontSize: '14px',
@@ -468,15 +468,15 @@ const CuratedPartners = () => {
               style={{
                 display: 'inline-block',
                 padding: '12px 20px',
-                background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.15) 0%, rgba(218, 165, 32, 0.1) 100%)',
+                background: 'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 15%, transparent) 0%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 100%)',
                 borderRadius: '8px',
-                border: '2px solid rgba(192, 160, 98, 0.35)',
+                border: '2px solid color-mix(in oklab, var(--lux-accent) 35%, transparent)',
               }}
             >
               <p
                 style={{
                   fontSize: '14px',
-                  color: '#C0A062',
+                  color: 'var(--lux-accent)',
                   margin: 0,
                   fontWeight: 700,
                   letterSpacing: '0.5px',
@@ -496,7 +496,7 @@ const CuratedPartners = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '12px',
-                background: 'linear-gradient(135deg, #C0A062 0%, #DAA520 100%)',
+                background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 color: '#000',
                 padding: '22px 44px',
                 borderRadius: '8px',
@@ -505,15 +505,15 @@ const CuratedPartners = () => {
                 fontWeight: 800,
                 transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 6px 25px rgba(192, 160, 98, 0.3)',
+                boxShadow: '0 6px 25px color-mix(in oklab, var(--lux-accent) 30%, transparent)',
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'scale(1.05)';
-                e.target.style.boxShadow = '0 8px 35px rgba(192, 160, 98, 0.5)';
+                e.target.style.boxShadow = '0 8px 35px color-mix(in oklab, var(--lux-accent) 50%, transparent)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'scale(1)';
-                e.target.style.boxShadow = '0 6px 25px rgba(192, 160, 98, 0.3)';
+                e.target.style.boxShadow = '0 6px 25px color-mix(in oklab, var(--lux-accent) 30%, transparent)';
               }}
             >
               <Calendar size={22} />
@@ -526,7 +526,7 @@ const CuratedPartners = () => {
         <div
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.6) 100%)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
+            border: '2px solid color-mix(in oklab, var(--lux-accent) 25%, transparent)',
             borderRadius: '16px',
             padding: '70px 90px',
             marginBottom: '60px',
@@ -538,11 +538,11 @@ const CuratedPartners = () => {
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.35)';
-            e.currentTarget.style.boxShadow = '0 6px 30px rgba(192, 160, 98, 0.15)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 35%, transparent)';
+            e.currentTarget.style.boxShadow = '0 6px 30px color-mix(in oklab, var(--lux-accent) 15%, transparent)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.25)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 25%, transparent)';
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
@@ -552,7 +552,7 @@ const CuratedPartners = () => {
               style={{
                 fontSize: '26px',
                 fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.75)',
+                color: 'color-mix(in oklab, var(--lux-accent) 75%, transparent)',
                 letterSpacing: '2px',
                 marginBottom: '18px',
               }}
@@ -564,7 +564,7 @@ const CuratedPartners = () => {
               style={{
                 fontSize: '46px',
                 fontFamily: '"Playfair Display", serif',
-                color: 'rgba(192, 160, 98, 0.85)',
+                color: 'color-mix(in oklab, var(--lux-accent) 85%, transparent)',
                 fontWeight: 600,
                 margin: '0 0 14px 0',
                 letterSpacing: '2px',
@@ -600,7 +600,7 @@ const CuratedPartners = () => {
                     padding: '12px 0',
                   }}
                 >
-                  <CheckCircle size={20} style={{ color: 'rgba(192, 160, 98, 0.75)', flexShrink: 0 }} />
+                  <CheckCircle size={20} style={{ color: 'color-mix(in oklab, var(--lux-accent) 75%, transparent)', flexShrink: 0 }} />
                   <span
                     style={{
                       fontSize: '16px',
@@ -624,23 +624,23 @@ const CuratedPartners = () => {
                 alignItems: 'center',
                 gap: '8px',
                 background: 'transparent',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 padding: '20px 40px',
                 borderRadius: '8px',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 600,
-                border: '2px solid rgba(192, 160, 98, 0.6)',
+                border: '2px solid color-mix(in oklab, var(--lux-accent) 60%, transparent)',
                 transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(192, 160, 98, 0.12)';
-                e.target.style.borderColor = '#C0A062';
+                e.target.style.background = 'color-mix(in oklab, var(--lux-accent) 12%, transparent)';
+                e.target.style.borderColor = 'var(--lux-accent)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.background = 'transparent';
-                e.target.style.borderColor = 'rgba(192, 160, 98, 0.6)';
+                e.target.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 60%, transparent)';
               }}
             >
               Apply for Partnership

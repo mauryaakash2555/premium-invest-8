@@ -393,8 +393,8 @@ const Contact = () => {
           /* Contact Information: tone down hover ONLY for Phone/Email/Location */
           .contact-info-card.contact-info-card--subtle:hover {
             transform: translateY(-3px) scale(1.01) !important;
-            border-color: rgba(218, 165, 32, 0.28) !important;
-            box-shadow: 0 8px 22px rgba(218, 165, 32, 0.18), 0 0 10px rgba(218, 165, 32, 0.08) !important;
+            border-color: color-mix(in oklab, var(--lux-accent) 28%, transparent) !important;
+            box-shadow: 0 8px 22px color-mix(in oklab, var(--lux-accent) 18%, transparent), 0 0 10px color-mix(in oklab, var(--lux-accent) 8%, transparent) !important;
           }
         `}</style>
         <div
@@ -412,7 +412,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '30px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Contact Information
@@ -428,19 +428,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Phone
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>+91 8850977259</p>
@@ -456,19 +456,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <Mail size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Email
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
@@ -489,19 +489,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Location
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
@@ -881,14 +881,14 @@ const Contact = () => {
             style={{
               padding: '60px 40px',
               textAlign: 'center',
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
             }}
           >
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '16px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Initiate Your Financial Transformation

@@ -57,7 +57,7 @@ export function LeadsList({ summary }) {
   return (
     <div style={{ marginTop: 22 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-        <h2 style={{ color: '#C0A062', fontSize: 18, margin: 0 }}>Leads</h2>
+        <h2 style={{ color: 'var(--lux-accent)', fontSize: 18, margin: 0 }}>Leads</h2>
         <select value={filter} onChange={(e) => setFilter(e.target.value)} style={selectStyle} aria-label="Lead time filter">
           <option value="today" style={optionStyle}>Today</option>
           <option value="yesterday" style={optionStyle}>Yesterday</option>

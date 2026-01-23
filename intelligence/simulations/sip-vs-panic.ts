@@ -45,6 +45,8 @@ export interface ChartDataPoint {
   perfectDisciplineValue: number;
   panic20Value: number;
   panic40Value: number;
+  /** Optional: "Pause SIP in Any Red Month" behavior line. */
+  anyFallValue?: number;
   /** Optional: custom behavior line (e.g. panic at 30% drawdown + auto-resume). */
   customValue?: number;
   investedAmount: number;
@@ -53,6 +55,7 @@ export interface ChartDataPoint {
     discipline: "active" | "paused";
     panic20: "active" | "paused";
     panic40: "active" | "paused";
+    anyFall?: "active" | "paused";
     custom?: "active" | "paused";
   };
 }
@@ -125,6 +128,13 @@ export interface SIPSimulationOptions {
   riskComfort?: "conservative" | "moderate" | "aggressive";
 
   /**
+   * Education-only toggle for instrument type. Used for default (engine-based) capital gains tax rules.
+   * - equity_mf: Equity mutual fund (default)
+   * - stocks: Direct equity / stocks
+   */
+  investmentType?: "equity_mf" | "stocks";
+
+  /**
    * Education-only toggle for how equity capital gains tax is approximated.
    * - conservative_stcg_30: treats gains as short-term and taxes at 30% flat.
    * - optimized_ltcg_indexation_20: treats gains as long-term and taxes at 20% after an indexation-style cost adjustment.
@@ -152,6 +162,7 @@ function computeEducationalEquityBaseTax(params: {
   totalInvested: number;
   holdingPeriodMonths: number;
   mode?: SIPSimulationOptions["taxCalculationMode"];
+  investmentType?: SIPSimulationOptions["investmentType"];
 }): {
   category: "ltcg" | "stcg" | "slab";
   method: TaxMethod;
@@ -218,7 +229,7 @@ function computeEducationalEquityBaseTax(params: {
   const baseTax = calculateCapitalGainsTax({
     gains,
     holdingPeriodMonths: params.holdingPeriodMonths,
-    assetType: "equity_mf",
+    assetType: params.investmentType ?? "equity_mf",
   });
 
   const taxableGains = Math.max(0, baseTax.taxableGains);
@@ -582,12 +593,13 @@ function initScenarioState(): ScenarioState {
   };
 }
 
-function scenarioKeyForChart(s: SIPScenario): "discipline" | "panic20" | "panic40" | null {
+function scenarioKeyForChart(s: SIPScenario): "discipline" | "panic20" | "panic40" | "anyFall" | null {
   if (s.behaviorType === "discipline") return "discipline";
   const th = s.panicThreshold;
   if (s.behaviorType !== "panic" || typeof th !== "number") return null;
   if (th === -20) return "panic20";
   if (th === -40) return "panic40";
+  if (th === -1) return "anyFall";
   return null;
 }
 
@@ -610,6 +622,7 @@ export function simulateSIPVsPanic(
   const cashMonthlyRate = afterStopMode === "cash" ? compoundMonthlyTotal(cashAnnualRatePct, 12) : 0;
 
   const riskComfort = options?.riskComfort;
+  const investmentType = options?.investmentType;
   const taxCalculationMode = options?.taxCalculationMode;
   const taxCessRate = options?.tax?.applyCess ? (options?.tax?.cessRate ?? 0.04) : 0;
   const taxSurchargeRate = options?.tax?.applySurcharge ? (options?.tax?.surchargeRate ?? 0) : 0;
@@ -742,8 +755,8 @@ export function simulateSIPVsPanic(
       state.cashValue *= 1 + cashMonthlyRate;
     }
 
-    // Build chart values (only the required 3 scenario lines).
-    const getValue = (key: "discipline" | "panic20" | "panic40"): number => {
+    // Build chart values (baseline + common panic variants + optional educational lines).
+    const getValue = (key: "discipline" | "panic20" | "panic40" | "anyFall"): number => {
       for (const s of scenarios) {
         const k = scenarioKeyForChart(s);
         if (k === key) {
@@ -763,12 +776,29 @@ export function simulateSIPVsPanic(
       return undefined;
     };
 
-    const getStatus = (key: "discipline" | "panic20" | "panic40"): "active" | "paused" => {
+    const getStatus = (key: "discipline" | "panic20" | "panic40" | "anyFall"): "active" | "paused" => {
       for (const s of scenarios) {
         const k = scenarioKeyForChart(s);
         if (k === key) return scenarioStates.get(s.name)!.sipStatus;
       }
       return "active";
+    };
+
+    const getAnyFallValue = (): number | undefined => {
+      for (const s of scenarios) {
+        if (scenarioKeyForChart(s) !== "anyFall") continue;
+        const st = scenarioStates.get(s.name)!;
+        return st.equityValue + st.cashValue;
+      }
+      return undefined;
+    };
+
+    const getAnyFallStatus = (): "active" | "paused" | undefined => {
+      for (const s of scenarios) {
+        if (scenarioKeyForChart(s) !== "anyFall") continue;
+        return scenarioStates.get(s.name)!.sipStatus;
+      }
+      return undefined;
     };
 
     const getCustomStatus = (): "active" | "paused" | undefined => {
@@ -786,6 +816,7 @@ export function simulateSIPVsPanic(
       perfectDisciplineValue: getValue("discipline"),
       panic20Value: getValue("panic20"),
       panic40Value: getValue("panic40"),
+      anyFallValue: getAnyFallValue(),
       customValue: getCustomValue(),
       investedAmount: disciplineInvestedCumulative,
       marketDrawdown: -drawdownFrac * 100,
@@ -793,6 +824,7 @@ export function simulateSIPVsPanic(
         discipline: getStatus("discipline"),
         panic20: getStatus("panic20"),
         panic40: getStatus("panic40"),
+        anyFall: getAnyFallStatus(),
         custom: getCustomStatus(),
       },
     });
@@ -815,6 +847,7 @@ export function simulateSIPVsPanic(
     totalInvested: disciplineInvested,
     holdingPeriodMonths: timeline.length,
     mode: taxCalculationMode,
+    investmentType,
   });
   const disciplineAddOns = applySurchargeAndCess({
     baseTax: disciplineBaseTax.baseTax,
@@ -839,6 +872,7 @@ export function simulateSIPVsPanic(
       totalInvested,
       holdingPeriodMonths: timeline.length,
       mode: taxCalculationMode,
+      investmentType,
     });
     const addOns = applySurchargeAndCess({
       baseTax: baseTax.baseTax,

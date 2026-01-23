@@ -78,7 +78,7 @@ a {
     */
 
   .btn-primary {
-    background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
+    background: linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%);
     color: #000000;
     border: none;
     padding: 14px 32px;
@@ -92,15 +92,15 @@ a {
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #8B6F47 0%, #704214 100%);
+    background: linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 18%, black) 0%, #704214 100%);
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(139, 111, 71, 0.6), 0 0 20px rgba(218, 165, 32, 0.4);
+    box-shadow: 0 12px 35px rgba(139, 111, 71, 0.6), 0 0 20px color-mix(in oklab, var(--lux-accent) 40%, transparent);
   }
 
 .btn-secondary {
   background: transparent;
-  color: #DAA520;
-  border: 2px solid #DAA520;
+  color: var(--lux-accent);
+  border: 2px solid var(--lux-accent);
   padding: 12px 30px;
   font-size: 16px;
   font-weight: 600;
@@ -112,10 +112,10 @@ a {
 }
 
   .btn-secondary:hover {
-    background: #DAA520;
+    background: var(--lux-accent);
     color: #000000;
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(218, 165, 32, 0.6), 0 0 20px rgba(218, 165, 32, 0.4);
+    box-shadow: 0 12px 35px color-mix(in oklab, var(--lux-accent) 60%, transparent), 0 0 20px color-mix(in oklab, var(--lux-accent) 40%, transparent);
   }
 
 /* 
@@ -130,7 +130,7 @@ a {
 
 /* Golden Gradient Text */
 .golden-gradient {
-  background: linear-gradient(135deg, #DAA520 0%, #C0A062 100%);
+  background: linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -140,7 +140,7 @@ a {
 .glass-effect {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(218, 165, 32, 0.1);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 10%, transparent);
   border-radius: 16px;
 }
 
@@ -170,7 +170,7 @@ a {
 
 /* Premium glass effect for home hero CTAs */
 .hero-section-responsive .btn-primary {
-  background: rgba(218, 165, 32, 0.85);
+  background: color-mix(in oklab, var(--lux-accent) 85%, transparent);
   backdrop-filter: blur(10px);
   color: #000000;
   font-weight: 500;
@@ -178,25 +178,25 @@ a {
 }
 
   .hero-section-responsive .btn-primary:hover {
-    background: rgba(218, 165, 32, 0.95);
+    background: color-mix(in oklab, var(--lux-accent) 95%, transparent);
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(218, 165, 32, 0.5), 0 0 25px rgba(218, 165, 32, 0.4);
+    box-shadow: 0 15px 40px color-mix(in oklab, var(--lux-accent) 50%, transparent), 0 0 25px color-mix(in oklab, var(--lux-accent) 40%, transparent);
   }
 
 .hero-section-responsive .btn-secondary {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(218, 165, 32, 0.4);
-  color: #DAA520;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 40%, transparent);
+  color: var(--lux-accent);
   font-weight: 400;
   letter-spacing: 0.5px;
 }
 
   .hero-section-responsive .btn-secondary:hover {
-    background: rgba(218, 165, 32, 0.15);
-    border-color: rgba(218, 165, 32, 0.8);
+    background: color-mix(in oklab, var(--lux-accent) 15%, transparent);
+    border-color: color-mix(in oklab, var(--lux-accent) 80%, transparent);
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(218, 165, 32, 0.4), 0 0 25px rgba(218, 165, 32, 0.3);
+    box-shadow: 0 15px 40px color-mix(in oklab, var(--lux-accent) 40%, transparent), 0 0 25px color-mix(in oklab, var(--lux-accent) 30%, transparent);
   }
 
 /* 
@@ -206,7 +206,7 @@ a {
 .service-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(218, 165, 32, 0.2);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);
   border-radius: 20px;
   padding: 30px;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -216,14 +216,14 @@ a {
 
   .service-card:hover {
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(218, 165, 32, 0.6) !important;
-    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 60%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 50%, transparent), 0 0 30px color-mix(in oklab, var(--lux-accent) 30%, transparent) !important;
   }
 
 .blog-card-premium {
   background: rgba(255, 255, 255, 0.03) !important;
   backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(218, 165, 32, 0.2) !important;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent) !important;
   border-radius: 20px !important;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
   cursor: pointer;
@@ -232,15 +232,15 @@ a {
 
   .blog-card-premium:hover {
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(218, 165, 32, 0.6) !important;
-    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 60%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 50%, transparent), 0 0 30px color-mix(in oklab, var(--lux-accent) 30%, transparent) !important;
   }
 
 .platform-card,
 .partner-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(218, 165, 32, 0.2);
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);
   border-radius: 20px;
   padding: 30px;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -250,8 +250,8 @@ a {
 .platform-card:hover,
 .partner-card:hover {
   transform: translateY(-12px) scale(1.02) !important;
-  border-color: rgba(218, 165, 32, 0.6) !important;
-  box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+  border-color: color-mix(in oklab, var(--lux-accent) 60%, transparent) !important;
+  box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 50%, transparent), 0 0 30px color-mix(in oklab, var(--lux-accent) 30%, transparent) !important;
 }
 
 .contact-info-card {
@@ -261,8 +261,8 @@ a {
 
 .contact-info-card:hover {
   transform: translateY(-8px) scale(1.02) !important;
-  border-color: rgba(218, 165, 32, 0.5) !important;
-  box-shadow: 0 15px 50px rgba(218, 165, 32, 0.4), 0 0 25px rgba(218, 165, 32, 0.2) !important;
+  border-color: color-mix(in oklab, var(--lux-accent) 50%, transparent) !important;
+  box-shadow: 0 15px 50px color-mix(in oklab, var(--lux-accent) 40%, transparent), 0 0 25px color-mix(in oklab, var(--lux-accent) 20%, transparent) !important;
 }
 
 .whatsapp-contact-card:hover {
@@ -310,12 +310,12 @@ a {
     */
 
 .sebi-disclaimer {
-  background: rgba(218, 165, 32, 0.05);
-  border-left: 4px solid #DAA520;
+  background: color-mix(in oklab, var(--lux-accent) 5%, transparent);
+  border-left: 4px solid var(--lux-accent);
   padding: 16px 20px;
   margin: 20px 0;
   font-size: 14px;
-  color: #C0A062;
+  color: var(--lux-accent);
   font-style: italic;
 }
 
@@ -328,9 +328,9 @@ a {
 }
 
 .coming-next-block:hover {
-  border-left-color: rgba(192, 160, 98, 0.9) !important;
+  border-left-color: color-mix(in oklab, var(--lux-accent) 90%, transparent) !important;
   background: rgba(255, 255, 255, 0.05) !important;
-  box-shadow: inset 0 0 30px 5px rgba(192, 160, 98, 0.12);
+  box-shadow: inset 0 0 30px 5px color-mix(in oklab, var(--lux-accent) 12%, transparent);
 }
 
 .whatsapp-cta-btn {
@@ -338,9 +338,9 @@ a {
 }
 
 .whatsapp-cta-btn:hover {
-  border-color: rgba(192, 160, 98, 0.8) !important;
-  background: rgba(192, 160, 98, 0.05) !important;
-  box-shadow: 0 0 20px 5px rgba(192, 160, 98, 0.15);
+  border-color: color-mix(in oklab, var(--lux-accent) 80%, transparent) !important;
+  background: color-mix(in oklab, var(--lux-accent) 5%, transparent) !important;
+  box-shadow: 0 0 20px 5px color-mix(in oklab, var(--lux-accent) 15%, transparent);
 }
 
 /* 

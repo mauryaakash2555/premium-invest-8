@@ -16,7 +16,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
       <h2
         style={{
           fontSize: 'clamp(28px, 4vw, 36px)',
-          color: '#DAA520',
+          color: 'var(--lux-accent)',
           marginBottom: '30px',
           fontFamily: "'Playfair Display', serif",
           display: 'flex',
@@ -39,29 +39,29 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
             key={post.slug}
             onClick={() => navigate(`/blog/${post.slug}`)}
             style={{
-              background: 'rgba(192, 160, 98, 0.05)',
-              border: '1px solid rgba(192, 160, 98, 0.2)',
+              background: 'color-mix(in oklab, var(--lux-accent) 6%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
               borderRadius: '12px',
               padding: '24px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(192, 160, 98, 0.1)';
-              e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
+              e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 10%, transparent)';
+              e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 45%, transparent)';
               e.currentTarget.style.transform = 'translateY(-4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(192, 160, 98, 0.05)';
-              e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.2)';
+              e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 6%, transparent)';
+              e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 22%, transparent)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             <div
               style={{
                 display: 'inline-block',
-                background: 'rgba(218, 165, 32, 0.1)',
-                color: '#DAA520',
+                background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+                color: 'var(--lux-accent)',
                 padding: '6px 12px',
                 borderRadius: '6px',
                 fontSize: '12px',
@@ -74,7 +74,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
             <h3
               style={{
                 fontSize: '18px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '12px',
                 lineHeight: 1.4,
                 fontWeight: '600',
@@ -98,7 +98,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingTop: '16px',
-                borderTop: '1px solid rgba(192, 160, 98, 0.1)',
+                borderTop: '1px solid color-mix(in oklab, var(--lux-accent) 14%, transparent)',
               }}
             >
               {post.read_time && (
@@ -121,7 +121,7 @@ const RelatedPosts = ({ posts, currentPostSlug }) => {
                   alignItems: 'center',
                   gap: '6px',
                   fontSize: '14px',
-                  color: '#C0A062',
+                  color: 'var(--lux-accent)',
                   fontWeight: '600',
                 }}
               >

@@ -85,7 +85,20 @@ export default function NewPage() {
 
 ## 🎨 BRAND STANDARDS
 
-- **Gold Gradient:** `linear-gradient(135deg, #DAA520 0%, #C0A062 100%)`
+- **CRITICAL COLOR LOCK (READ FIRST):**
+  - ✅ Use ONLY: `var(--lux-accent)` (defined in `app/globals.css` as `oklch(0.78 0.08 65)`)
+  - ❌ NEVER use muddy browns/tans/bronze shades.
+  - ❌ NEVER introduce alternate golds (examples forbidden: `#DAA520`, `#C0A062`, `#C6A15B`, `#B8860B`).
+  - If you need depth, use neutrals + `color-mix(in oklab, var(--lux-accent) …, transparent)`.
+
+### Automated Guardrails (MANDATORY)
+
+- Run `npm run lint:palette` before shipping.
+- If legacy files still contain forbidden colors, run `npm run fix:palette` (then re-run `npm run lint:palette`).
+- Exceptions (do not edit per current product constraints):
+  - `components/user/LuxuryMobileDock.jsx`
+  - `frontend/src/components/LuxuryMobileDock.js`
+  - `lib/live-intelligence/modes.js`
 - **Luxury Glass:** `rgba(255, 255, 255, 0.03)` with `backdrop-filter: blur(20px)`
 - **Fonts:** `Playfair Display` for headings, `Inter` for body.
 

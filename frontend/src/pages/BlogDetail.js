@@ -62,7 +62,7 @@ const BlogDetail = () => {
   if (isLoading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontSize: '18px', color: '#C0A062' }}>Loading blog post...</p>
+        <p style={{ fontSize: '18px', color: 'var(--lux-accent)' }}>Loading blog post...</p>
       </div>
     );
   }
@@ -70,7 +70,7 @@ const BlogDetail = () => {
   if (error || !post) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '20px' }}>
-        <p style={{ fontSize: '18px', color: '#C0A062' }}>{error || 'Blog post not found'}</p>
+        <p style={{ fontSize: '18px', color: 'var(--lux-accent)' }}>{error || 'Blog post not found'}</p>
         <button
           onClick={() => navigate('/blog')}
           className="btn-primary"
@@ -160,14 +160,14 @@ const BlogDetail = () => {
             gap: '8px',
             background: 'transparent',
             border: 'none',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             fontSize: '16px',
             cursor: 'pointer',
             padding: '8px 0',
             transition: 'color 0.3s ease',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = '#DAA520')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = '#C0A062')}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--lux-accent)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--lux-accent)')}
         >
           <ArrowLeft size={20} />
           Back to Blog
@@ -214,7 +214,7 @@ const BlogDetail = () => {
           <h1
             style={{
               fontSize: 'clamp(32px, 5vw, 48px)',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: 1.2,
             }}
@@ -229,7 +229,7 @@ const BlogDetail = () => {
               gap: '20px',
               flexWrap: 'wrap',
               paddingBottom: '24px',
-              borderBottom: '1px solid rgba(218, 165, 32, 0.2)',
+              borderBottom: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
             }}
           >
             <span
@@ -238,7 +238,7 @@ const BlogDetail = () => {
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '16px',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
               }}
             >
               <User size={18} />
@@ -276,7 +276,7 @@ const BlogDetail = () => {
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '16px',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
               }}
             >
               <Tag size={18} />
@@ -297,7 +297,7 @@ const BlogDetail = () => {
             <span
               style={{
                 fontSize: '16px',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: '500',
               }}
             >
@@ -417,19 +417,19 @@ const BlogDetail = () => {
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
-          <div style={{ marginTop: '60px', paddingTop: '30px', borderTop: '1px solid rgba(218, 165, 32, 0.2)' }}>
-            <h3 style={{ color: '#C0A062', fontSize: '18px', marginBottom: '16px' }}>Tags</h3>
+          <div style={{ marginTop: '60px', paddingTop: '30px', borderTop: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)' }}>
+            <h3 style={{ color: 'var(--lux-accent)', fontSize: '18px', marginBottom: '16px' }}>Tags</h3>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               {post.tags.map((tag, index) => (
                 <span
                   key={index}
                   style={{
-                    background: 'rgba(218, 165, 32, 0.1)',
-                    color: '#DAA520',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+                    color: 'var(--lux-accent)',
                     padding: '8px 16px',
                     borderRadius: '20px',
                     fontSize: '14px',
-                    border: '1px solid rgba(218, 165, 32, 0.3)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                   }}
                 >
                   {tag}

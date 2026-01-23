@@ -21,7 +21,7 @@ const RefundPolicy = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 48px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: 'var(--lux-accent)',
             marginBottom: '12px',
             lineHeight: '1.2'
           }}>Refund Policy</h1>
@@ -46,7 +46,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>1. Advisory and Consultation Services</h2>
@@ -82,7 +82,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>2. Mutual Fund Transactions</h2>
@@ -117,7 +117,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>3. Insurance Products</h2>
@@ -147,7 +147,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>4. Refund Processing Time</h2>
@@ -179,7 +179,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>5. How to Request a Refund</h2>
@@ -188,7 +188,7 @@ const RefundPolicy = () => {
               </p>
               <ol style={{ listStyleType: 'decimal', paddingLeft: '24px', marginBottom: '20px', color: '#B8B8B8' }}>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
-                  Send an email to <strong style={{ color: '#DAA520' }}>refunds@bmwealth.co.in</strong> with the subject line 
+                  Send an email to <strong style={{ color: 'var(--lux-accent)' }}>refunds@bmwealth.co.in</strong> with the subject line 
                   "Refund Request - [Your Name]"
                 </li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>
@@ -213,7 +213,7 @@ const RefundPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>6. Contact Information</h2>
@@ -221,10 +221,10 @@ const RefundPolicy = () => {
                 For questions about this Refund Policy or to request a refund:
               </p>
               <div style={{
-                background: 'rgba(218, 165, 32, 0.05)',
+                background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
                 padding: '24px',
                 borderRadius: '8px',
-                border: '1px solid rgba(218, 165, 32, 0.2)'
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)'
               }}>
                 <p style={{ fontSize: '16px', color: '#E5E5E5', marginBottom: '12px' }}><strong>BM Wealth</strong></p>
                 <p style={{ fontSize: '16px', color: '#B8B8B8', marginBottom: '12px' }}>Proprietor: Brahmdeo Maurya</p>
@@ -239,15 +239,15 @@ const RefundPolicy = () => {
 
             {/* License Information */}
             <section style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>Regulatory Information</h3>
               <p style={{ fontSize: '14px', color: '#B8B8B8', marginBottom: '8px' }}>

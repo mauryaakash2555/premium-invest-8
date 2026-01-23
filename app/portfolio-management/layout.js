@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Portfolio Planning | BM Wealth",
+  title: "Portfolio Management Services (PMS) in Mumbai | BM Wealth",
   description:
-    "Portfolio planning and periodic review with a premium, process-led approach: allocation, rebalancing, and documentation.",
+    "Portfolio Management (PMS support) in Mumbai: allocation frameworks, disciplined rebalancing, and periodic review with clear documentation.",
   path: "/portfolio-management",
 });
 

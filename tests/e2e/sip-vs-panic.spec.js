@@ -27,6 +27,52 @@ test("SIP vs Panic: loads canonical page without console errors", async ({ page 
   expect(consoleErrors, consoleErrors.join("\n")).toEqual([]);
 });
 
+test.describe("SIP vs Panic: share link restore", () => {
+  test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+
+  test("Run (Save & Share) + Copy link restores inputs", async ({ page, browserName }) => {
+    test.skip(browserName !== "chromium", "Clipboard read/write is most reliable in Chromium");
+
+    await page.goto("/intelligence/sip-vs-panic", { waitUntil: "networkidle" });
+
+    // Set SIP amount
+    const sipInput = page.getByRole("spinbutton").first();
+    await expect(sipInput).toBeVisible();
+    await sipInput.fill("15000");
+
+    // Set duration to 5y using keyboard on the slider thumb.
+    const durationThumb = page.locator('[data-testid="duration-years-slider"] [role="slider"]').first();
+    await expect(durationThumb).toBeVisible();
+    await durationThumb.focus();
+    await durationThumb.press("Home"); // 1
+    for (let i = 0; i < 4; i += 1) await durationThumb.press("ArrowRight"); // 5
+
+    // Generate share params into the URL.
+    await page.getByRole("button", { name: /Run(\s+Simulation|\s*\(Save\s*&\s*Share\))?/i }).click();
+    await page.waitForURL(/\bshare=1\b/);
+    const shareUrl = page.url();
+    expect(shareUrl).toContain("m=15000");
+    expect(shareUrl).toContain("y=5");
+
+    // Copy link
+    await page.getByRole("button", { name: /Copy link/i }).click();
+    await expect(page.getByText("✓ Link copied to clipboard!")).toBeVisible();
+
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copied).toContain("/intelligence/sip-vs-panic");
+    expect(copied).toContain("share=1");
+    expect(copied).toContain("m=15000");
+    expect(copied).toContain("y=5");
+
+    // Open copied URL and verify inputs restore.
+    await page.goto(copied, { waitUntil: "networkidle" });
+    await expect(page.getByRole("spinbutton").first()).toHaveValue("15000");
+
+    const durationThumb2 = page.locator('[data-testid="duration-years-slider"] [role="slider"]').first();
+    await expect(durationThumb2).toHaveAttribute("aria-valuenow", "5");
+  });
+});
+
 test("SIP vs Panic: short horizons show no-crash warning; 3y shows late crash note", async ({ page }) => {
   await page.goto("/intelligence/sip-vs-panic", { waitUntil: "networkidle" });
 

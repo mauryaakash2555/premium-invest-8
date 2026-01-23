@@ -64,8 +64,9 @@ export const CONSTANTS = {
   // 🔵 UI
   UI: {
     COLORS: {
-      PRIMARY_GOLD: "#C6A15B",
-      SECONDARY_GOLD: "#E0C98A",
+      // Brand lock: never use alternate gold hexes. Use the canonical CSS variable.
+      PRIMARY_GOLD: "var(--lux-accent)",
+      SECONDARY_GOLD: "var(--lux-accent)",
       BACKGROUND_DARK: "#0B0B0C",
       CARD_DARK: "#111214",
     },

@@ -1017,7 +1017,7 @@ export default function ITRFilingHelp() {
             key={s.key}
             className={`flex-1 py-4 px-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors
               ${step === s.key || (step === STEPS.PROCESSING && s.key === STEPS.UPLOAD) 
-                ? 'bg-gradient-to-r from-[#c0a062]/20 to-transparent text-[#c0a062]' 
+                ? 'bg-gradient-to-r from-[var(--lux-accent)]/20 to-transparent text-[var(--lux-accent)]' 
                 : 'text-white/50'}`}
           >
             <s.icon className="w-4 h-4" />
@@ -1054,7 +1054,7 @@ export default function ITRFilingHelp() {
                 <div 
                   className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors
                     ${file 
-                      ? 'border-[#c0a062]/50 bg-[#c0a062]/10' 
+                      ? 'border-[var(--lux-accent)]/50 bg-[var(--lux-accent)]/10' 
                       : 'border-white/20 hover:border-white/40 hover:bg-white/5'}`}
                   onClick={() => fileInputRef.current?.click()}
                 >
@@ -1068,7 +1068,7 @@ export default function ITRFilingHelp() {
                   
                   {file ? (
                     <div className="space-y-2">
-                      <FileText className="w-12 h-12 mx-auto text-[#c0a062]" />
+                      <FileText className="w-12 h-12 mx-auto text-[var(--lux-accent)]" />
                       <p className="text-white font-medium">{file.name}</p>
                       <p className="text-xs text-white/60">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
@@ -1129,7 +1129,7 @@ export default function ITRFilingHelp() {
         {/* STEP: PROCESSING */}
         {step === STEPS.PROCESSING && (
           <div className="py-12 text-center space-y-6">
-            <Loader2 className="w-16 h-16 mx-auto text-[#c0a062] animate-spin" />
+            <Loader2 className="w-16 h-16 mx-auto text-[var(--lux-accent)] animate-spin" />
             <div>
               <p className="text-lg text-white font-medium">Processing Document...</p>
               <p className="text-sm text-white/60 mt-2">
@@ -1145,7 +1145,7 @@ export default function ITRFilingHelp() {
             <div className="max-w-md mx-auto">
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#c0a062] to-[#d4b77a] transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-[var(--lux-accent)] to-[#d4b77a] transition-all duration-300"
                   style={{ width: `${ocrProgress}%` }}
                 />
               </div>
@@ -1163,9 +1163,9 @@ export default function ITRFilingHelp() {
           <div className="space-y-6">
             {/* Document Type Badge */}
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#c0a062]/20 border border-[#c0a062]/30">
-                <CheckCircle className="w-4 h-4 text-[#c0a062]" />
-                <span className="text-sm text-[#c0a062]">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--lux-accent)]/20 border border-[var(--lux-accent)]/30">
+                <CheckCircle className="w-4 h-4 text-[var(--lux-accent)]" />
+                <span className="text-sm text-[var(--lux-accent)]">
                   Detected: {documentTypeLabels[documentType] || 'Document'}
                 </span>
               </div>
@@ -1235,9 +1235,9 @@ export default function ITRFilingHelp() {
                     <p className="text-xs text-white/50">Taxable Income</p>
                     <p className="text-lg text-white mt-1">{formatINR(liveResult.taxableIncome)}</p>
                   </div>
-                  <div className={`p-3 rounded-lg border text-center ${liveResult.refundDue > 0 ? 'bg-green-900/20 border-green-500/30' : 'bg-[#c0a062]/10 border-[#c0a062]/30'}`}>
+                  <div className={`p-3 rounded-lg border text-center ${liveResult.refundDue > 0 ? 'bg-green-900/20 border-green-500/30' : 'bg-[var(--lux-accent)]/10 border-[var(--lux-accent)]/30'}`}>
                     <p className="text-xs text-white/50">{liveResult.refundDue > 0 ? 'Estimated Refund' : 'Estimated Tax Due'}</p>
-                    <p className={`text-lg mt-1 ${liveResult.refundDue > 0 ? 'text-green-400' : 'text-[#c0a062]'}`}>
+                    <p className={`text-lg mt-1 ${liveResult.refundDue > 0 ? 'text-green-400' : 'text-[var(--lux-accent)]'}`}>
                       {formatINR(liveResult.refundDue > 0 ? liveResult.refundDue : liveResult.taxDue)}
                     </p>
                   </div>
@@ -1251,7 +1251,7 @@ export default function ITRFilingHelp() {
             {/* Editable Form */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Edit3 className="w-5 h-5 text-[#c0a062]" />
+                <Edit3 className="w-5 h-5 text-[var(--lux-accent)]" />
                 Review & Edit Extracted Values
               </h3>
               
@@ -1461,7 +1461,7 @@ export default function ITRFilingHelp() {
                   onClick={() => setRegime('new')}
                   className={`p-4 rounded-xl border transition-colors text-left
                     ${regime === 'new' 
-                      ? 'border-[#c0a062] bg-[#c0a062]/20' 
+                      ? 'border-[var(--lux-accent)] bg-[var(--lux-accent)]/20' 
                       : 'border-white/10 hover:border-white/20'}`}
                 >
                   <p className="font-medium text-white">New Regime</p>
@@ -1471,7 +1471,7 @@ export default function ITRFilingHelp() {
                   onClick={() => setRegime('old')}
                   className={`p-4 rounded-xl border transition-colors text-left
                     ${regime === 'old' 
-                      ? 'border-[#c0a062] bg-[#c0a062]/20' 
+                      ? 'border-[var(--lux-accent)] bg-[var(--lux-accent)]/20' 
                       : 'border-white/10 hover:border-white/20'}`}
                 >
                   <p className="font-medium text-white">Old Regime</p>
@@ -1524,13 +1524,13 @@ export default function ITRFilingHelp() {
               <div className={`p-5 rounded-xl border text-center ${
                 result.refundDue > 0 
                   ? 'bg-green-900/20 border-green-500/30' 
-                  : 'bg-[#c0a062]/10 border-[#c0a062]/30'
+                  : 'bg-[var(--lux-accent)]/10 border-[var(--lux-accent)]/30'
               }`}>
                 <p className="text-xs text-white/50 uppercase tracking-wider">
                   {result.refundDue > 0 ? 'Estimated Refund' : 'Estimated Tax Due'}
                 </p>
                 <p className={`text-2xl font-bold mt-2 ${
-                  result.refundDue > 0 ? 'text-green-400' : 'text-[#c0a062]'
+                  result.refundDue > 0 ? 'text-green-400' : 'text-[var(--lux-accent)]'
                 }`}>
                   {formatINR(result.refundDue > 0 ? result.refundDue : result.taxDue)}
                 </p>
@@ -1596,12 +1596,12 @@ export default function ITRFilingHelp() {
                       <td className="py-3 text-white/80">TDS Already Paid</td>
                       <td className="py-3 text-right text-green-400">- {formatINR(result.tdsAlreadyPaid)}</td>
                     </tr>
-                    <tr className={`${result.refundDue > 0 ? 'bg-green-900/20' : 'bg-[#c0a062]/10'}`}>
+                    <tr className={`${result.refundDue > 0 ? 'bg-green-900/20' : 'bg-[var(--lux-accent)]/10'}`}>
                       <td className="py-3 font-semibold text-white">
                         {result.refundDue > 0 ? 'Estimated Refund' : 'Estimated Tax Payable'}
                       </td>
                       <td className={`py-3 text-right font-semibold text-lg ${
-                        result.refundDue > 0 ? 'text-green-400' : 'text-[#c0a062]'
+                        result.refundDue > 0 ? 'text-green-400' : 'text-[var(--lux-accent)]'
                       }`}>
                         {formatINR(result.refundDue > 0 ? result.refundDue : result.taxDue)}
                       </td>
@@ -1668,13 +1668,13 @@ export default function ITRFilingHelp() {
             </div>
             
             {/* Soft CTA */}
-            <div className="p-5 rounded-xl border border-[#c0a062]/30 bg-[#c0a062]/10 text-center">
+            <div className="p-5 rounded-xl border border-[var(--lux-accent)]/30 bg-[var(--lux-accent)]/10 text-center">
               <p className="text-sm text-white/80 mb-3">
                 Need help filing or reviewing your return?
               </p>
               <a
                 href="/contact"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#c0a062]/20 border border-[#c0a062]/40 text-[#c0a062] text-sm font-medium hover:bg-[#c0a062]/30 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--lux-accent)]/20 border border-[var(--lux-accent)]/40 text-[var(--lux-accent)] text-sm font-medium hover:bg-[var(--lux-accent)]/30 transition-colors"
               >
                 Talk to a BM Wealth professional
               </a>
@@ -1711,12 +1711,12 @@ function EditableField({ label, value, onChange, extracted, edited, max, hint })
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={`w-full pl-8 pr-4 py-3 rounded-lg bg-white/5 border text-white 
-            focus:outline-none focus:ring-2 focus:ring-[#c0a062]/50
-            ${wasEdited ? 'border-[#c0a062]/50' : 'border-white/10'}`}
+            focus:outline-none focus:ring-2 focus:ring-[var(--lux-accent)]/50
+            ${wasEdited ? 'border-[var(--lux-accent)]/50' : 'border-white/10'}`}
         />
         {wasEdited && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2">
-            <Edit3 className="w-4 h-4 text-[#c0a062]" />
+            <Edit3 className="w-4 h-4 text-[var(--lux-accent)]" />
           </span>
         )}
       </div>

@@ -642,16 +642,16 @@ export function TaxCalculator() {
                       className="text-sm font-semibold"
                       style={{ color: "oklch(0.985 0 0)" }}
                     >
-                      Cashflow optimisation also includes smart credit usage.
+                      💡 Cashflow optimisation also includes smart credit usage.
                     </div>
                     <div
                       className="mt-1 text-[13px]"
                       style={{ color: "oklch(0.86 0 0)" }}
                     >
-                      For professionals, the right credit card improves liquidity without increasing risk.
+                      For high-income professionals, the right credit card improves liquidity without increasing risk.
                     </div>
                     <div className="mt-4">
-                      <Link href="/blog/best-credit-cards-high-income-india" className="bm-cta-gold-flat">
+                      <Link href="/best-credit-cards-high-income-india" className="bm-cta-gold-flat">
                         View Suitable Credit Cards
                       </Link>
                     </div>

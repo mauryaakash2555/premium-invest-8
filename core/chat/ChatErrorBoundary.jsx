@@ -83,7 +83,7 @@ export default class ChatErrorBoundary extends React.Component {
             width: 'min(360px, calc(100vw - 36px))',
             borderRadius: 18,
             background: 'rgba(7,7,8,0.72)',
-            border: '1px solid rgba(192,160,98,0.22)',
+            border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
             backdropFilter: 'blur(18px)',
             WebkitBackdropFilter: 'blur(18px)',
             padding: '14px 14px',
@@ -93,7 +93,7 @@ export default class ChatErrorBoundary extends React.Component {
           role="status"
           aria-live="polite"
         >
-          <div style={{ fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: 12, color: 'rgba(192,160,98,0.85)' }}>
+          <div style={{ fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: 12, color: 'color-mix(in oklab, var(--lux-accent) 85%, transparent)' }}>
             Concierge
           </div>
           <div style={{ marginTop: 8, fontSize: 13, lineHeight: 1.45, opacity: 0.9 }}>

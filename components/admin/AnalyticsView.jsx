@@ -36,7 +36,7 @@ export function AnalyticsView({ analytics }) {
 
   return (
     <div style={{ marginTop: 22 }}>
-      <h2 style={{ color: '#C0A062', fontSize: 18 }}>Analytics</h2>
+      <h2 style={{ color: 'var(--lux-accent)', fontSize: 18 }}>Analytics</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginTop: 12 }}>
         <Stat label="Visitors (today)" value={analytics?.today?.visitors ?? 0} />
         <Stat label="Conversations" value={analytics?.today?.conversations_started ?? 0} />
@@ -45,7 +45,7 @@ export function AnalyticsView({ analytics }) {
       </div>
 
       <div style={{ marginTop: 18 }}>
-        <h3 style={{ color: '#C0A062', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <h3 style={{ color: 'var(--lux-accent)', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
           AI Usage
         </h3>
 
@@ -61,7 +61,7 @@ export function AnalyticsView({ analytics }) {
               {topProviders(aiToday?.tokens_by_provider).map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '6px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ fontWeight: 800 }}>{k}</div>
-                  <div style={{ color: '#C0A062', fontWeight: 900 }}>{fmtNum(v)}</div>
+                  <div style={{ color: 'var(--lux-accent)', fontWeight: 900 }}>{fmtNum(v)}</div>
                 </div>
               ))}
             </div>
@@ -76,7 +76,7 @@ export function AnalyticsView({ analytics }) {
       </div>
 
       <div style={{ marginTop: 18 }}>
-        <h3 style={{ color: '#C0A062', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <h3 style={{ color: 'var(--lux-accent)', fontSize: 14, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
           Product Pitch Performance (Week)
         </h3>
 
@@ -115,7 +115,7 @@ function Stat({ label, value }) {
   return (
     <div style={{ padding: 14, borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
       <div style={{ fontSize: 11, opacity: 0.65, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{label}</div>
-      <div style={{ marginTop: 8, fontSize: 22, fontWeight: 900, color: '#C0A062' }}>{value}</div>
+      <div style={{ marginTop: 8, fontSize: 22, fontWeight: 900, color: 'var(--lux-accent)' }}>{value}</div>
     </div>
   );
 }

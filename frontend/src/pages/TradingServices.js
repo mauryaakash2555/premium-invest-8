@@ -40,7 +40,7 @@ const TradingServices = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#DAA520',
+            color: 'var(--lux-accent)',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -61,7 +61,7 @@ const TradingServices = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Comprehensive Trading Solutions
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -73,7 +73,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Demat Account Opening Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -85,7 +85,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Equity Trading Strategies
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -97,7 +97,7 @@ const TradingServices = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Risk Management in Trading
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

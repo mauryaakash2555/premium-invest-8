@@ -61,7 +61,7 @@ const Platforms = () => {
               fontWeight: 300,
               letterSpacing: '3px',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               lineHeight: 1.2,
             }}
           >
@@ -87,8 +87,8 @@ const Platforms = () => {
         {/* POSITION #1 - DIAMOND PARTNER (RESERVED) */}
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(192, 160, 98, 0.08) 0%, rgba(0, 0, 0, 0.4) 100%)',
-            border: '2px solid rgba(192, 160, 98, 0.4)',
+            background: 'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 8%, transparent) 0%, rgba(0, 0, 0, 0.4) 100%)',
+            border: '2px solid color-mix(in oklab, var(--lux-accent) 40%, transparent)',
             borderRadius: '12px',
             padding: '60px 80px',
             marginBottom: '40px',
@@ -100,7 +100,7 @@ const Platforms = () => {
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 40px rgba(192, 160, 98, 0.2)';
+            e.currentTarget.style.boxShadow = '0 0 40px color-mix(in oklab, var(--lux-accent) 20%, transparent)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.boxShadow = 'none';
@@ -115,7 +115,7 @@ const Platforms = () => {
                   style={{
                     fontSize: '16px',
                     fontWeight: 700,
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     letterSpacing: '2px',
                     marginBottom: '4px',
                   }}
@@ -126,7 +126,7 @@ const Platforms = () => {
                   style={{
                     fontSize: '42px',
                     fontFamily: '"Playfair Display", serif',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     fontWeight: 600,
                     margin: 0,
                     letterSpacing: '2px',
@@ -140,7 +140,7 @@ const Platforms = () => {
             <p
               style={{
                 fontSize: '20px',
-                color: 'rgba(192, 160, 98, 0.9)',
+                color: 'color-mix(in oklab, var(--lux-accent) 90%, transparent)',
                 marginBottom: '32px',
                 fontWeight: 500,
               }}
@@ -163,7 +163,7 @@ const Platforms = () => {
                     gap: '12px',
                   }}
                 >
-                  <Sparkles size={18} style={{ color: '#C0A062', flexShrink: 0 }} />
+                  <Sparkles size={18} style={{ color: 'var(--lux-accent)', flexShrink: 0 }} />
                   <span
                     style={{
                       fontSize: '16px',
@@ -187,18 +187,18 @@ const Platforms = () => {
                 alignItems: 'center',
                 gap: '8px',
                 background: 'transparent',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 padding: '18px 36px',
                 borderRadius: '6px',
                 textDecoration: 'none',
                 fontSize: '17px',
                 fontWeight: 600,
-                border: '2px solid #C0A062',
+                border: '2px solid var(--lux-accent)',
                 transition: 'all 0.3s ease',
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(192, 160, 98, 0.15)';
+                e.target.style.background = 'color-mix(in oklab, var(--lux-accent) 15%, transparent)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.background = 'transparent';
@@ -213,7 +213,7 @@ const Platforms = () => {
         <div
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
+            border: '2px solid color-mix(in oklab, var(--lux-accent) 25%, transparent)',
             borderRadius: '12px',
             padding: '60px 80px',
             marginBottom: '40px',
@@ -225,11 +225,11 @@ const Platforms = () => {
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(192, 160, 98, 0.15)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 40%, transparent)';
+            e.currentTarget.style.boxShadow = '0 0 30px color-mix(in oklab, var(--lux-accent) 15%, transparent)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.25)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 25%, transparent)';
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
@@ -239,7 +239,7 @@ const Platforms = () => {
               style={{
                 fontSize: '24px',
                 fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
+                color: 'color-mix(in oklab, var(--lux-accent) 80%, transparent)',
                 letterSpacing: '2px',
                 marginBottom: '12px',
               }}
@@ -251,7 +251,7 @@ const Platforms = () => {
               style={{
                 fontSize: '42px',
                 fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: 600,
                 margin: '0 0 12px 0',
                 letterSpacing: '2px',
@@ -263,7 +263,7 @@ const Platforms = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
+                color: 'color-mix(in oklab, var(--lux-accent) 85%, transparent)',
                 marginBottom: '28px',
                 fontWeight: 500,
               }}
@@ -286,7 +286,7 @@ const Platforms = () => {
                     gap: '12px',
                   }}
                 >
-                  <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: 'var(--lux-accent)', flexShrink: 0, marginTop: '2px' }} />
                   <span
                     style={{
                       fontSize: '16px',
@@ -311,7 +311,7 @@ const Platforms = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: '#C0A062',
+                background: 'var(--lux-accent)',
                 color: '#000',
                 padding: '18px 36px',
                 borderRadius: '6px',
@@ -322,11 +322,11 @@ const Platforms = () => {
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = '#DAA520';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1.02)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = '#C0A062';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1)';
               }}
             >
@@ -340,7 +340,7 @@ const Platforms = () => {
         <div
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
+            border: '2px solid color-mix(in oklab, var(--lux-accent) 25%, transparent)',
             borderRadius: '12px',
             padding: '60px 80px',
             marginBottom: '40px',
@@ -352,11 +352,11 @@ const Platforms = () => {
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(192, 160, 98, 0.15)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 40%, transparent)';
+            e.currentTarget.style.boxShadow = '0 0 30px color-mix(in oklab, var(--lux-accent) 15%, transparent)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.25)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 25%, transparent)';
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
@@ -366,7 +366,7 @@ const Platforms = () => {
               style={{
                 fontSize: '24px',
                 fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
+                color: 'color-mix(in oklab, var(--lux-accent) 80%, transparent)',
                 letterSpacing: '2px',
                 marginBottom: '12px',
               }}
@@ -378,7 +378,7 @@ const Platforms = () => {
               style={{
                 fontSize: '42px',
                 fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: 600,
                 margin: '0 0 12px 0',
                 letterSpacing: '2px',
@@ -390,7 +390,7 @@ const Platforms = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
+                color: 'color-mix(in oklab, var(--lux-accent) 85%, transparent)',
                 marginBottom: '28px',
                 fontWeight: 500,
               }}
@@ -413,7 +413,7 @@ const Platforms = () => {
                     gap: '12px',
                   }}
                 >
-                  <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: 'var(--lux-accent)', flexShrink: 0, marginTop: '2px' }} />
                   <span
                     style={{
                       fontSize: '16px',
@@ -438,7 +438,7 @@ const Platforms = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: '#C0A062',
+                background: 'var(--lux-accent)',
                 color: '#000',
                 padding: '18px 36px',
                 borderRadius: '6px',
@@ -449,11 +449,11 @@ const Platforms = () => {
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = '#DAA520';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1.02)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = '#C0A062';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1)';
               }}
             >
@@ -467,7 +467,7 @@ const Platforms = () => {
         <div
           style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            border: '2px solid rgba(192, 160, 98, 0.25)',
+            border: '2px solid color-mix(in oklab, var(--lux-accent) 25%, transparent)',
             borderRadius: '12px',
             padding: '60px 80px',
             marginBottom: '60px',
@@ -479,11 +479,11 @@ const Platforms = () => {
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.4)';
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(192, 160, 98, 0.15)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 40%, transparent)';
+            e.currentTarget.style.boxShadow = '0 0 30px color-mix(in oklab, var(--lux-accent) 15%, transparent)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.25)';
+            e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 25%, transparent)';
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
@@ -493,7 +493,7 @@ const Platforms = () => {
               style={{
                 fontSize: '24px',
                 fontWeight: 700,
-                color: 'rgba(192, 160, 98, 0.8)',
+                color: 'color-mix(in oklab, var(--lux-accent) 80%, transparent)',
                 letterSpacing: '2px',
                 marginBottom: '12px',
               }}
@@ -505,7 +505,7 @@ const Platforms = () => {
               style={{
                 fontSize: '42px',
                 fontFamily: '"Playfair Display", serif',
-                color: '#C0A062',
+                color: 'var(--lux-accent)',
                 fontWeight: 600,
                 margin: '0 0 12px 0',
                 letterSpacing: '2px',
@@ -517,7 +517,7 @@ const Platforms = () => {
             <p
               style={{
                 fontSize: '18px',
-                color: 'rgba(192, 160, 98, 0.85)',
+                color: 'color-mix(in oklab, var(--lux-accent) 85%, transparent)',
                 marginBottom: '28px',
                 fontWeight: 500,
               }}
@@ -540,7 +540,7 @@ const Platforms = () => {
                     gap: '12px',
                   }}
                 >
-                  <CheckCircle size={18} style={{ color: '#C0A062', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: 'var(--lux-accent)', flexShrink: 0, marginTop: '2px' }} />
                   <span
                     style={{
                       fontSize: '16px',
@@ -565,7 +565,7 @@ const Platforms = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: '#C0A062',
+                background: 'var(--lux-accent)',
                 color: '#000',
                 padding: '18px 36px',
                 borderRadius: '6px',
@@ -576,11 +576,11 @@ const Platforms = () => {
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = '#DAA520';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1.02)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = '#C0A062';
+                e.target.style.background = 'var(--lux-accent)';
                 e.target.style.transform = 'scale(1)';
               }}
             >
@@ -601,7 +601,7 @@ const Platforms = () => {
               margin: '0 auto',
             }}
           >
-            <strong style={{ color: 'rgba(192, 160, 98, 0.6)' }}>Affiliate Disclosure:</strong> We may earn commission when you sign up through our links at no extra cost to you. This helps us provide free educational content.
+            <strong style={{ color: 'color-mix(in oklab, var(--lux-accent) 60%, transparent)' }}>Affiliate Disclosure:</strong> We may earn commission when you sign up through our links at no extra cost to you. This helps us provide free educational content.
           </p>
         </div>
 

@@ -98,7 +98,7 @@ export function BrokerageEstimator() {
     width: "100%",
     padding: "10px 12px",
     borderRadius: 10,
-    border: "1px solid rgba(218, 165, 32, 0.22)",
+    border: "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
     background: "rgba(255,255,255,0.03)",
     color: "#fff",
     outline: "none",
@@ -112,7 +112,7 @@ export function BrokerageEstimator() {
 
   const card = {
     background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(218, 165, 32, 0.18)",
+    border: "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
     borderRadius: 12,
     padding: 18,
   };
@@ -120,9 +120,9 @@ export function BrokerageEstimator() {
   const pill = (active) => ({
     padding: "8px 12px",
     borderRadius: 999,
-    border: "1px solid rgba(218, 165, 32, 0.22)",
-    background: active ? "rgba(218, 165, 32, 0.18)" : "transparent",
-    color: active ? "#DAA520" : "#d0d0d0",
+    border: "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
+    background: active ? "color-mix(in oklab, var(--lux-accent) 18%, transparent)" : "transparent",
+    color: active ? "var(--lux-accent)" : "#d0d0d0",
     cursor: "pointer",
     fontSize: 13,
   });
@@ -139,7 +139,7 @@ export function BrokerageEstimator() {
 
   return (
     <div style={card}>
-      <h3 style={{ margin: "0 0 10px 0", fontSize: 18, color: "#DAA520", fontWeight: 700 }}>
+      <h3 style={{ margin: "0 0 10px 0", fontSize: 18, color: "var(--lux-accent)", fontWeight: 700 }}>
         Brokerage & Charges Estimator (Educational)
       </h3>
       <p style={{ margin: "0 0 16px 0", fontSize: 14, color: "#d0d0d0", lineHeight: 1.75 }}>
@@ -200,7 +200,7 @@ export function BrokerageEstimator() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <div style={{ fontSize: 13, color: "#b8b8b8" }}>Gross P&L</div>
-          <div style={{ fontSize: 14, color: result.grossPnL >= 0 ? "#DAA520" : "#fff", fontWeight: 700 }}>
+          <div style={{ fontSize: 14, color: result.grossPnL >= 0 ? "var(--lux-accent)" : "#fff", fontWeight: 700 }}>
             {formatINR(result.grossPnL)}
           </div>
         </div>
@@ -248,7 +248,7 @@ export function BrokerageEstimator() {
         </div>
         <div style={{ marginTop: 8, display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <div style={{ fontSize: 13, color: "#b8b8b8" }}>Net P&L (after charges)</div>
-          <div style={{ fontSize: 16, color: result.netPnL >= 0 ? "#DAA520" : "#fff", fontWeight: 800 }}>
+          <div style={{ fontSize: 16, color: result.netPnL >= 0 ? "var(--lux-accent)" : "#fff", fontWeight: 800 }}>
             {formatINR(result.netPnL)}
           </div>
         </div>

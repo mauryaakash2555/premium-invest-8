@@ -80,14 +80,22 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Luxury accent (fallback first; OKLCH override below) */
-  --lux-accent: #C9A24D;
-}
+  /*
+    ───────────────────────────────────────────────────────────────────────────
+    COLOR LOCK (CRITICAL)
 
-@supports (color: oklch(0.78 0.08 65)) {
-  :root {
-    --lux-accent: oklch(0.78 0.08 65);
-  }
+    This repo must NEVER introduce:
+    - muddy browns / tan / bronze / “poop” tones
+    - alternate golds (no var(--lux-accent), var(--lux-accent), #C6A15B, var(--lux-accent), etc.)
+
+    Only ONE gold accent is allowed everywhere:
+      var(--lux-accent)
+
+    If a third‑party requires HEX, use the exact hex equivalent of this value
+    (representation change only), and document why.
+    ───────────────────────────────────────────────────────────────────────────
+  */
+  --lux-accent: oklch(0.78 0.08 65);
 }
 
 .dark {
@@ -1120,8 +1128,13 @@
     opacity: 0.55;
     transition: opacity 420ms ease;
     background:
-      linear-gradient(180deg, rgba(214, 179, 106, 0.10) 0%, rgba(214, 179, 106, 0.02) 28%, rgba(0, 0, 0, 0.0) 60%),
-      radial-gradient(60% 45% at 50% 78%, rgba(214, 179, 106, 0.12) 0%, rgba(0, 0, 0, 0) 65%);
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--lux-accent) 10%, transparent) 0%,
+        color-mix(in oklab, var(--lux-accent) 2%, transparent) 28%,
+        rgba(0, 0, 0, 0.0) 60%
+      ),
+      radial-gradient(60% 45% at 50% 78%, color-mix(in oklab, var(--lux-accent) 12%, transparent) 0%, rgba(0, 0, 0, 0) 65%);
   }
 
   .service-card.service-card--mutual:hover::after,
@@ -1141,8 +1154,8 @@
     background: linear-gradient(
       115deg,
       transparent 42%,
-      rgba(214, 179, 106, 0.10) 49%,
-      rgba(214, 179, 106, 0.14) 52%,
+      color-mix(in oklab, var(--lux-accent) 10%, transparent) 49%,
+      color-mix(in oklab, var(--lux-accent) 14%, transparent) 52%,
       transparent 60%
     );
     transform: translate3d(-35%, -35%, 0) rotate(10deg);
@@ -1230,7 +1243,7 @@
   .blog-card-premium {
     background: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(218, 165, 32, 0.2) !important;
+    border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent) !important;
     border-radius: 20px !important;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
     cursor: pointer;
@@ -1239,15 +1252,16 @@
 
   .blog-card-premium:hover {
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(218, 165, 32, 0.6) !important;
-    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 60%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 45%, transparent),
+      0 0 30px color-mix(in oklab, var(--lux-accent) 28%, transparent) !important;
   }
 
   /* HOME: Blog card styled like Mutual Funds card (keep original size, subtle hover) */
   .blog-card-premium.blog-card-premium--home-mutual {
     background: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(214, 179, 106, 0.55) !important;
+    border: 1px solid color-mix(in oklab, var(--lux-accent) 55%, transparent) !important;
     border-radius: 20px !important;
     transition:
       transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -1264,21 +1278,24 @@
   .blog-card-premium.blog-card-premium--home-mutual:hover {
     /* Match the default blog-card hover (lift + scale + glow), while keeping Mutual shimmer overlays */
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(214, 179, 106, 0.86) !important;
-    box-shadow: 0 20px 60px rgba(214, 179, 106, 0.42), 0 0 30px rgba(214, 179, 106, 0.26) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 86%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 42%, transparent),
+      0 0 30px color-mix(in oklab, var(--lux-accent) 26%, transparent) !important;
   }
 
   /* Mobile/touch: treat the pulse as a hover moment */
   .blog-card-premium.blog-card-premium--home-mutual.mutual-premium-pulse {
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(214, 179, 106, 0.90) !important;
-    box-shadow: 0 20px 60px rgba(214, 179, 106, 0.42), 0 0 30px rgba(214, 179, 106, 0.26) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 90%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 42%, transparent),
+      0 0 30px color-mix(in oklab, var(--lux-accent) 26%, transparent) !important;
   }
 
   .blog-card-premium.blog-card-premium--home-mutual:active {
     transform: translateY(-6px) scale(1.01) !important;
-    border-color: rgba(214, 179, 106, 0.88) !important;
-    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.55), 0 0 28px rgba(214, 179, 106, 0.18) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 88%, transparent) !important;
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.55),
+      0 0 28px color-mix(in oklab, var(--lux-accent) 18%, transparent) !important;
   }
 
   .blog-card-premium.blog-card-premium--home-mutual::after {
@@ -1290,8 +1307,13 @@
     opacity: 0.55;
     transition: opacity 420ms ease;
     background:
-      linear-gradient(180deg, rgba(214, 179, 106, 0.10) 0%, rgba(214, 179, 106, 0.02) 28%, rgba(0, 0, 0, 0.0) 60%),
-      radial-gradient(60% 45% at 50% 78%, rgba(214, 179, 106, 0.12) 0%, rgba(0, 0, 0, 0) 65%);
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--lux-accent) 10%, transparent) 0%,
+        color-mix(in oklab, var(--lux-accent) 2%, transparent) 28%,
+        rgba(0, 0, 0, 0.0) 60%
+      ),
+      radial-gradient(60% 45% at 50% 78%, color-mix(in oklab, var(--lux-accent) 12%, transparent) 0%, rgba(0, 0, 0, 0) 65%);
   }
 
   .blog-card-premium.blog-card-premium--home-mutual:hover::after,
@@ -1311,8 +1333,8 @@
     background: linear-gradient(
       115deg,
       transparent 42%,
-      rgba(214, 179, 106, 0.10) 49%,
-      rgba(214, 179, 106, 0.14) 52%,
+      color-mix(in oklab, var(--lux-accent) 10%, transparent) 49%,
+      color-mix(in oklab, var(--lux-accent) 14%, transparent) 52%,
       transparent 60%
     );
     transform: translate3d(-35%, -35%, 0) rotate(10deg);
@@ -1337,7 +1359,7 @@
   .platform-card, .partner-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(218, 165, 32, 0.2);
+    border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);
     border-radius: 20px;
     padding: 30px;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -1346,8 +1368,9 @@
 
   .platform-card:hover, .partner-card:hover {
     transform: translateY(-12px) scale(1.02) !important;
-    border-color: rgba(218, 165, 32, 0.6) !important;
-    box-shadow: 0 20px 60px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.3) !important;
+    border-color: color-mix(in oklab, var(--lux-accent) 60%, transparent) !important;
+    box-shadow: 0 20px 60px color-mix(in oklab, var(--lux-accent) 45%, transparent),
+      0 0 30px color-mix(in oklab, var(--lux-accent) 28%, transparent) !important;
   }
 
   .contact-info-card {
@@ -2671,14 +2694,14 @@ body[data-laser-active="true"] .li-footer-wrapper footer .gold-particle {
 body[data-laser-active="true"] .li-footer-wrapper footer .luxury-particles::after {
   /* Keep original particle texture (gold) */
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
-    radial-gradient(circle at 80% 70%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
-    radial-gradient(circle at 40% 80%, rgba(192, 160, 98, 0.10) 1px, transparent 1px),
-    radial-gradient(circle at 90% 20%, rgba(192, 160, 98, 0.10) 1px, transparent 1px) !important;
+    radial-gradient(circle at 20% 30%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 90% 20%, color-mix(in oklab, var(--lux-accent) 10%, transparent) 1px, transparent 1px) !important;
 }
 
 /* Catch the most visible hard-coded gold utility colors inside the footer (Tailwind arbitrary values) */
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="text-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="text-[var(--lux-accent)]"] {
   color: var(--li-panel-title) !important;
 }
 
@@ -2686,7 +2709,7 @@ body[data-laser-active="true"] .li-footer-wrapper footer [class*="text-[#D4B576]
   color: var(--li-panel-body) !important;
 }
 
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="border-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="border-[var(--lux-accent)]"] {
   border-color: rgba(170, 198, 255, 0.18) !important;
 }
 
@@ -2697,23 +2720,23 @@ body[data-laser-active="true"] .li-footer-wrapper footer {
 }
 
 /* Target the most common gold gradients in footer wings/lines */
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="via-[#C0A062]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="via-[var(--lux-accent)]"] {
   --tw-gradient-via: rgba(170, 198, 255, 0.52) !important;
 }
 
 /* Replace gold-tinted arbitrary drop-shadow utilities */
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="drop-shadow-[0_0_20px_color-mix(in oklab, var(--lux-accent) 30%, transparent)]"] {
   /* Do NOT change the BM Wealth wordmark gradient; only soften the gold shadow */
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.10)) !important;
 }
 
 /* Replace gold-tinted arbitrary box-shadow utilities (footer container glow) */
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="shadow-[0_-30px_120px_rgba(192,160,98,0.25)]"] {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="shadow-[0_-30px_120px_color-mix(in oklab, var(--lux-accent) 25%, transparent)]"] {
   box-shadow: 0 -30px 120px rgba(60, 120, 255, 0.10) !important;
 }
 
 /* Reduce remaining gold hover accents on legal micro-links and concierge hover */
-body[data-laser-active="true"] .li-footer-wrapper footer [class*="hover:text-[#C0A062]"]:hover {
+body[data-laser-active="true"] .li-footer-wrapper footer [class*="hover:text-[var(--lux-accent)]"]:hover {
   color: var(--li-panel-title) !important;
 }
 /* ==========================================================================
@@ -2805,6 +2828,22 @@ body[data-laser-active="true"] .laser-footer li {
     color: rgba(220, 230, 255, 0.70) !important;
     -webkit-text-fill-color: rgba(220, 230, 255, 0.70) !important;
   }
+}
+
+/*
+  SIP vs Panic readability lock
+  The simulator is education-first; text must be readable and stable.
+  Avoid overly-faint utility colors on this page.
+*/
+.sip-panic-readable .text-white\/55 { color: rgba(255,255,255,0.88) !important; }
+.sip-panic-readable .text-white\/60 { color: rgba(255,255,255,0.88) !important; }
+.sip-panic-readable .text-white\/65 { color: rgba(255,255,255,0.90) !important; }
+.sip-panic-readable .text-white\/70 { color: rgba(255,255,255,0.92) !important; }
+.sip-panic-readable .text-white\/75 { color: rgba(255,255,255,0.94) !important; }
+
+/* Keep the simulator feeling steady: no shimmering gradient animations. */
+.sip-panic-readable .gold-gradient-text {
+  animation: none !important;
 }
 
 /* ==========================================================================

@@ -79,7 +79,7 @@ export default function Compliance() {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             Regulatory Compliance & Investor Charter
@@ -87,7 +87,7 @@ export default function Compliance() {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -121,7 +121,7 @@ export default function Compliance() {
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -172,7 +172,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -200,7 +200,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -228,7 +228,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -256,7 +256,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -284,7 +284,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -323,7 +323,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -351,7 +351,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -379,7 +379,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -407,7 +407,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -435,7 +435,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -463,7 +463,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -502,7 +502,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -530,7 +530,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -558,7 +558,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -586,7 +586,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -614,7 +614,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -642,7 +642,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -659,10 +659,10 @@ export default function Compliance() {
             
             {/* License Info Box */}
             <div style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
               marginTop: '30px'
             }}>
               <p style={{
@@ -671,7 +671,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
-                <strong style={{ color: '#DAA520' }}>IRDAI License Number:</strong> 277925
+                <strong style={{ color: 'var(--lux-accent)' }}>IRDAI License Number:</strong> 277925
               </p>
               <p style={{
                 fontSize: '16px',
@@ -679,7 +679,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
-                <strong style={{ color: '#DAA520' }}>AMFI Registration:</strong> ARN 90008
+                <strong style={{ color: 'var(--lux-accent)' }}>AMFI Registration:</strong> ARN 90008
               </p>
               <p style={{
                 fontSize: '16px',
@@ -687,7 +687,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
-                <strong style={{ color: '#DAA520' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
+                <strong style={{ color: 'var(--lux-accent)' }}>Validity:</strong> Perpetual (subject to regulatory compliance)
               </p>
               <p style={{
                 fontSize: '16px',
@@ -695,7 +695,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '8px'
               }}>
-                <strong style={{ color: '#DAA520' }}>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
+                <strong style={{ color: 'var(--lux-accent)' }}>Regulatory Bodies:</strong> IRDAI (Insurance) | AMFI (Mutual Funds)
               </p>
               <p style={{
                 fontSize: '16px',
@@ -703,7 +703,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 margin: '0'
               }}>
-                <strong style={{ color: '#DAA520' }}>Principal Officer:</strong> Brahmdeo Maurya
+                <strong style={{ color: 'var(--lux-accent)' }}>Principal Officer:</strong> Brahmdeo Maurya
               </p>
             </div>
             
@@ -719,7 +719,7 @@ export default function Compliance() {
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -747,7 +747,7 @@ export default function Compliance() {
             </p>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
               marginBottom: '20px'
@@ -755,7 +755,7 @@ export default function Compliance() {
               <h4 style={{
                 fontSize: '18px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>
                 Step 1: Contact Us Directly
@@ -787,7 +787,7 @@ export default function Compliance() {
             </div>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
               marginBottom: '20px'
@@ -795,7 +795,7 @@ export default function Compliance() {
               <h4 style={{
                 fontSize: '18px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>
                 Step 2: Written Complaint
@@ -821,7 +821,7 @@ export default function Compliance() {
                   top: '8px',
                   width: '3px',
                   height: '20px',
-                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   borderRadius: '2px'
                 }}></div>
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -848,7 +848,7 @@ export default function Compliance() {
                   top: '8px',
                   width: '3px',
                   height: '20px',
-                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   borderRadius: '2px'
                 }}></div>
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -875,7 +875,7 @@ export default function Compliance() {
                   top: '8px',
                   width: '3px',
                   height: '20px',
-                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   borderRadius: '2px'
                 }}></div>
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -902,7 +902,7 @@ export default function Compliance() {
                   top: '8px',
                   width: '3px',
                   height: '20px',
-                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   borderRadius: '2px'
                 }}></div>
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -929,7 +929,7 @@ export default function Compliance() {
                   top: '8px',
                   width: '3px',
                   height: '20px',
-                  background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                  background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                   borderRadius: '2px'
                 }}></div>
                 <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -946,7 +946,7 @@ export default function Compliance() {
             </div>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
               marginBottom: '30px'
@@ -954,7 +954,7 @@ export default function Compliance() {
               <h4 style={{
                 fontSize: '18px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>
                 Step 3: Escalation to Regulatory Authorities
@@ -981,7 +981,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 marginBottom: '16px'
               }}>
-                Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.amfiindia.com</a>
+                Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>https://www.amfiindia.com</a>
               </p>
               <p style={{
                 fontSize: '16px',
@@ -997,7 +997,7 @@ export default function Compliance() {
                 color: '#B8B8B8',
                 margin: '0'
               }}>
-                Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>https://www.irdai.gov.in</a>
+                Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>https://www.irdai.gov.in</a>
               </p>
             </div>
             
@@ -1025,7 +1025,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1053,7 +1053,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1081,7 +1081,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1097,15 +1097,15 @@ export default function Compliance() {
             </div>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.1)',
+              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
               padding: '20px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <p style={{
                 fontSize: '16px',
                 lineHeight: '1.8',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 fontWeight: '600',
                 margin: '0'
               }}>
@@ -1124,7 +1124,7 @@ export default function Compliance() {
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1231,7 +1231,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1259,7 +1259,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1287,7 +1287,7 @@ export default function Compliance() {
                 top: '8px',
                 width: '3px',
                 height: '20px',
-                background: 'linear-gradient(180deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(180deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 borderRadius: '2px'
               }}></div>
               <div style={{ paddingLeft: '16px', width: '100%' }}>
@@ -1366,7 +1366,7 @@ export default function Compliance() {
               color: '#B8B8B8',
               marginBottom: '24px'
             }}>
-              Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.irdai.gov.in</a>
+              Website: <a href="https://www.irdai.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>www.irdai.gov.in</a>
             </p>
             
             <p style={{
@@ -1384,7 +1384,7 @@ export default function Compliance() {
               color: '#B8B8B8',
               marginBottom: '30px'
             }}>
-              Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: '#DAA520', textDecoration: 'none' }}>www.amfiindia.com</a>
+              Website: <a href="https://www.amfiindia.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>www.amfiindia.com</a>
             </p>
             
             <h3 style={{
@@ -1436,7 +1436,7 @@ export default function Compliance() {
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1444,10 +1444,10 @@ export default function Compliance() {
             </h2>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.1)',
+              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <p style={{
                 fontSize: '16px',
@@ -1470,7 +1470,7 @@ export default function Compliance() {
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(28px, 5vw, 36px)',
               fontWeight: '600',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               lineHeight: '1.3'
             }}>
@@ -1478,15 +1478,15 @@ export default function Compliance() {
             </h2>
             
             <div style={{
-              background: 'rgba(218, 165, 32, 0.1)',
+              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <p style={{
                 fontSize: '16px',
                 lineHeight: '1.8',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 fontWeight: '600',
                 margin: '0'
               }}>

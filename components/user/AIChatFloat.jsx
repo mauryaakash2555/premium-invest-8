@@ -620,7 +620,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
     return (
       <svg width="100%" viewBox={`0 0 ${w} ${h}`} className={styles.miniChart} aria-hidden="true">
         <path d={pathFor(bKey)} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" />
-        <path d={pathFor(aKey)} fill="none" stroke="rgba(192,160,98,0.95)" strokeWidth="2.5" />
+        <path d={pathFor(aKey)} fill="none" stroke="color-mix(in oklab, var(--lux-accent) 95%, transparent)" strokeWidth="2.5" />
       </svg>
     );
   }
@@ -1322,20 +1322,20 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 <div style={{ marginTop: 8, display: "flex", gap: 16, flexWrap: "wrap" }}>
                   <div>
                     <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>LEADS</div>
-                    <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)" }}>
                       {dashboard?.today?.leads?.length ?? 0}
                     </div>
                   </div>
                   <div>
                     <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>CHATS</div>
-                    <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)" }}>
                       {dashboard?.today?.conversations?.length ?? 0}
                     </div>
                   </div>
                     {FEATURE_REVENUE_TRACKING ? (
                       <div>
                         <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "0.12em" }}>REVENUE TODAY</div>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)" }}>
                           {fmtINR(dashboard?.today?.revenue_today ?? 0)}
                         </div>
                       </div>
@@ -1345,13 +1345,13 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                   <div style={{ marginTop: 10, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
                     <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                       THIS WEEK{" "}
-                      <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                         {fmtINR(dashboard?.today?.revenue_week ?? 0)}
                       </span>
                     </div>
                     <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                       THIS MONTH{" "}
-                      <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                      <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                         {fmtINR(dashboard?.today?.revenue_month ?? 0)}
                       </span>
                     </div>
@@ -1373,45 +1373,45 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                 <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap", opacity: 0.85 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     TOTAL LEADS{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                    <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                       {dashboard?.all?.total_leads ?? dashboard?.all?.leads?.length ?? 0}
                     </span>
                   </div>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     NEW TODAY{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                    <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                       {dashboard?.all?.new_today ?? 0}
                     </span>
                   </div>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     CONVERSATIONS{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                    <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                       {dashboard?.all?.total_conversations_today ?? dashboard?.today?.conversations?.length ?? 0}
                     </span>
                   </div>
                 </div>
                 <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", opacity: 0.85 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
-                    HOT <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.HOT ?? 0}</span>
+                    HOT <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.HOT ?? 0}</span>
                   </div>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
-                    WARM <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.WARM ?? 0}</span>
+                    WARM <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.WARM ?? 0}</span>
                   </div>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
-                    COLD <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.COLD ?? 0}</span>
+                    COLD <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{dashboard?.today?.lead_score_counts?.COLD ?? 0}</span>
                   </div>
                 </div>
 
                 <div style={{ marginTop: 8, display: "flex", gap: 10, flexWrap: "wrap", opacity: 0.8 }}>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     AI GEMINI{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                    <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                       {dashboard?.today?.ai_provider_counts?.gemini ?? 0}
                     </span>
                   </div>
                   <div style={{ fontSize: 11, letterSpacing: "0.14em" }}>
                     AI GROQ{" "}
-                    <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>
+                    <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>
                       {dashboard?.today?.ai_provider_counts?.groq ?? 0}
                     </span>
                   </div>
@@ -1601,7 +1601,7 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
                           padding: "10px 12px",
                           borderRadius: 14,
                           border: "1px solid rgba(255,255,255,0.08)",
-                          background: c.sender === "user" ? "rgba(255,255,255,0.04)" : "rgba(192,160,98,0.06)",
+                          background: c.sender === "user" ? "rgba(255,255,255,0.04)" : "color-mix(in oklab, var(--lux-accent) 6%, transparent)",
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", gap: 10, opacity: 0.7, fontSize: 11 }}>

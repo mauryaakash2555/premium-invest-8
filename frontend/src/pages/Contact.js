@@ -274,7 +274,7 @@ const Contact = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             Get In Touch
@@ -282,7 +282,7 @@ const Contact = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '700px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -319,7 +319,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '30px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Contact Information
@@ -339,19 +339,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Phone
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>+91 8850977259</p>
@@ -371,19 +371,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <Mail size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Email
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>
@@ -405,19 +405,19 @@ const Contact = () => {
                   style={{
                     width: '50px',
                     height: '50px',
-                    background: 'rgba(218, 165, 32, 0.1)',
+                    background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     flexShrink: 0,
                   }}
                 >
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '20px', color: '#DAA520', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
                     Location
                   </h3>
                   <p style={{ fontSize: '16px', color: '#CCCCCC' }}>Mumbai, Maharashtra</p>
@@ -494,7 +494,7 @@ const Contact = () => {
               style={{
                 fontSize: 'clamp(24px, 3vw, 36px)',
                 marginBottom: '30px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Send Us a Message
@@ -506,7 +506,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -526,7 +526,7 @@ const Contact = () => {
                     width: '100%',
                     padding: '14px',
                     background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(218, 165, 32, 0.3)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                     borderRadius: '8px',
                     color: '#FFFFFF',
                     fontSize: '16px',
@@ -534,8 +534,8 @@ const Contact = () => {
                     opacity: isSubmitting ? 0.6 : 1,
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onFocus={(e) => (e.target.style.borderColor = 'var(--lux-accent)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 30%, transparent)')}
                 />
               </div>
 
@@ -545,7 +545,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -565,7 +565,7 @@ const Contact = () => {
                     width: '100%',
                     padding: '14px',
                     background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(218, 165, 32, 0.3)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                     borderRadius: '8px',
                     color: '#FFFFFF',
                     fontSize: '16px',
@@ -573,8 +573,8 @@ const Contact = () => {
                     opacity: isSubmitting ? 0.6 : 1,
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onFocus={(e) => (e.target.style.borderColor = 'var(--lux-accent)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 30%, transparent)')}
                 />
               </div>
 
@@ -584,7 +584,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -604,7 +604,7 @@ const Contact = () => {
                     width: '100%',
                     padding: '14px',
                     background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(218, 165, 32, 0.3)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                     borderRadius: '8px',
                     color: '#FFFFFF',
                     fontSize: '16px',
@@ -612,8 +612,8 @@ const Contact = () => {
                     opacity: isSubmitting ? 0.6 : 1,
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onFocus={(e) => (e.target.style.borderColor = 'var(--lux-accent)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 30%, transparent)')}
                 />
               </div>
 
@@ -623,7 +623,7 @@ const Contact = () => {
                   style={{
                     display: 'block',
                     fontSize: '16px',
-                    color: '#C0A062',
+                    color: 'var(--lux-accent)',
                     marginBottom: '8px',
                     fontWeight: 500,
                   }}
@@ -643,7 +643,7 @@ const Contact = () => {
                     width: '100%',
                     padding: '14px',
                     background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(218, 165, 32, 0.3)',
+                    border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                     borderRadius: '8px',
                     color: '#FFFFFF',
                     fontSize: '16px',
@@ -652,8 +652,8 @@ const Contact = () => {
                     opacity: isSubmitting ? 0.6 : 1,
                     cursor: isSubmitting ? 'not-allowed' : 'text',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#DAA520')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(218, 165, 32, 0.3)')}
+                  onFocus={(e) => (e.target.style.borderColor = 'var(--lux-accent)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 30%, transparent)')}
                 />
               </div>
 
@@ -703,9 +703,9 @@ const Contact = () => {
                       alignItems: 'center',
                       gap: '10px',
                       padding: '12px 24px',
-                      background: 'rgba(192, 160, 98, 0.08)',
-                      color: '#C0A062',
-                      border: '1px solid rgba(192, 160, 98, 0.3)',
+                      background: 'color-mix(in oklab, var(--lux-accent) 8%, transparent)',
+                      color: 'var(--lux-accent)',
+                      border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                       borderRadius: '8px',
                       textDecoration: 'none',
                       fontWeight: '500',
@@ -713,16 +713,16 @@ const Contact = () => {
                       transition: 'all 0.4s ease',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(218, 165, 32, 0.15)';
+                      e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 15%, transparent)';
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.borderColor = 'rgba(218, 165, 32, 0.5)';
-                      e.currentTarget.style.color = '#DAA520';
+                      e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 50%, transparent)';
+                      e.currentTarget.style.color = 'var(--lux-accent)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(192, 160, 98, 0.08)';
+                      e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 8%, transparent)';
                       e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = 'rgba(192, 160, 98, 0.3)';
-                      e.currentTarget.style.color = '#C0A062';
+                      e.currentTarget.style.borderColor = 'color-mix(in oklab, var(--lux-accent) 30%, transparent)';
+                      e.currentTarget.style.color = 'var(--lux-accent)';
                     }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -750,14 +750,14 @@ const Contact = () => {
             style={{
               padding: '60px 40px',
               textAlign: 'center',
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
             }}
           >
             <h2
               style={{
                 fontSize: 'clamp(24px, 3vw, 40px)',
                 marginBottom: '16px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Initiate Your Financial Transformation

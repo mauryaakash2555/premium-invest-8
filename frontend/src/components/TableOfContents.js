@@ -64,8 +64,8 @@ const TableOfContents = ({ content }) => {
   return (
     <div
       style={{
-        background: 'rgba(192, 160, 98, 0.05)',
-        border: '1px solid rgba(192, 160, 98, 0.2)',
+        background: 'color-mix(in oklab, var(--lux-accent) 6%, transparent)',
+        border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
         borderRadius: '12px',
         padding: '30px',
         marginBottom: '40px',
@@ -74,7 +74,7 @@ const TableOfContents = ({ content }) => {
       <h3
         style={{
           fontSize: '22px',
-          color: '#DAA520',
+          color: 'var(--lux-accent)',
           marginBottom: '20px',
           display: 'flex',
           alignItems: 'center',
@@ -92,7 +92,7 @@ const TableOfContents = ({ content }) => {
               style={{
                 background: 'none',
                 border: 'none',
-                color: activeId === heading.id ? '#DAA520' : '#C0A062',
+                color: activeId === heading.id ? 'var(--lux-accent)' : 'rgba(255,255,255,0.75)',
                 fontSize: '16px',
                 cursor: 'pointer',
                 textAlign: 'left',
@@ -104,10 +104,10 @@ const TableOfContents = ({ content }) => {
                 alignItems: 'center',
                 gap: '8px',
                 fontWeight: activeId === heading.id ? '600' : '400',
-                background: activeId === heading.id ? 'rgba(218, 165, 32, 0.1)' : 'transparent',
+                background: activeId === heading.id ? 'color-mix(in oklab, var(--lux-accent) 10%, transparent)' : 'transparent',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(218, 165, 32, 0.1)';
+                e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 10%, transparent)';
                 e.currentTarget.style.paddingLeft = '16px';
               }}
               onMouseLeave={(e) => {
@@ -117,7 +117,7 @@ const TableOfContents = ({ content }) => {
                 e.currentTarget.style.paddingLeft = '12px';
               }}
             >
-              <span style={{ color: '#DAA520', fontSize: '18px' }}>→</span>
+              <span style={{ color: 'var(--lux-accent)', fontSize: '18px' }}>→</span>
               {heading.text}
             </button>
           </li>

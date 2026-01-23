@@ -1,9 +1,9 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Mutual Funds | BM Wealth",
+  title: "Mutual Fund Distributor in Mumbai | BM Wealth",
   description:
-    "Mutual fund support with clear comparisons, portfolio fit, and disciplined review—delivered with premium documentation and transparency.",
+    "Mutual fund selection and SIP setup in Mumbai with clear comparisons, portfolio fit checks, and disciplined review—documentation-first and transparent.",
   path: "/mutual-funds",
 });
 

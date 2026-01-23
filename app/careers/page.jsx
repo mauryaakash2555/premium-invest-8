@@ -80,7 +80,7 @@ const Careers = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: 'clamp(28px, 4.5vw, 56px)',
             fontWeight: '300',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             marginBottom: '24px',
             lineHeight: '1.2',
             letterSpacing: '3px',
@@ -93,7 +93,7 @@ const Careers = () => {
             className="page-hero-subtitle-responsive"
             style={{
             fontSize: 'clamp(16px, 2.5vw, 20px)',
-            color: '#C0A062',
+            color: 'var(--lux-accent)',
             maxWidth: '700px',
             margin: '0 auto',
             lineHeight: '1.6'
@@ -106,7 +106,7 @@ const Careers = () => {
       <div className="bp-body" style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
         
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Why Choose a Career with BM Wealth?
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -118,12 +118,12 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Current Job Openings
           </h2>
           
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
-            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)', borderRadius: '8px', border: '1px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)' }}>
+            <h3 style={{ fontSize: '26px', color: 'var(--lux-accent)', marginBottom: '16px', fontWeight: '600' }}>
               Client Relationship Associate (Wealth Distribution)
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -140,8 +140,8 @@ const Careers = () => {
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
-            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)', borderRadius: '8px', border: '1px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)' }}>
+            <h3 style={{ fontSize: '26px', color: 'var(--lux-accent)', marginBottom: '16px', fontWeight: '600' }}>
               Client Relationship Manager
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -155,8 +155,8 @@ const Careers = () => {
             </p>
           </div>
 
-          <div style={{ marginBottom: '40px', padding: '30px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '8px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
-            <h3 style={{ fontSize: '26px', color: '#C0A062', marginBottom: '16px', fontWeight: '600' }}>
+          <div style={{ marginBottom: '40px', padding: '30px', background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)', borderRadius: '8px', border: '1px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)' }}>
+            <h3 style={{ fontSize: '26px', color: 'var(--lux-accent)', marginBottom: '16px', fontWeight: '600' }}>
               Insurance Consultant
             </h3>
             <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '16px' }}>
@@ -172,7 +172,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Career Growth and Development
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -181,7 +181,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Employee Benefits and Culture
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -190,7 +190,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Application Process
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>
@@ -198,7 +198,7 @@ const Careers = () => {
           </p>
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <a href="mailto:mauryaakash2555@gmail.com" style={{
-              backgroundColor: '#DAA520',
+              backgroundColor: 'var(--lux-accent)',
               color: '#000',
               padding: '16px 36px',
               borderRadius: '6px',
@@ -213,7 +213,7 @@ const Careers = () => {
         </section>
 
         <section style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '36px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '36px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             Internship Opportunities
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

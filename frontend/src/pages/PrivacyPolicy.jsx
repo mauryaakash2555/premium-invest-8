@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 48px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: 'var(--lux-accent)',
             marginBottom: '12px',
             lineHeight: '1.2'
           }}>Privacy Policy</h1>
@@ -45,7 +45,7 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>1. Information We Collect</h2>
@@ -81,7 +81,7 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>2. How We Use Your Information</h2>
@@ -106,7 +106,7 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>3. Data Security Measures</h2>
@@ -134,11 +134,11 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>4. Data Sharing and Disclosure</h2>
-              <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', marginBottom: '20px' }}>
+              <p style={{ fontSize: '16px', color: 'var(--lux-accent)', lineHeight: '1.8', fontWeight: '600', marginBottom: '20px' }}>
                 We DO NOT sell your personal data to third parties.
               </p>
               <p style={{ fontSize: '16px', color: '#B8B8B8', lineHeight: '1.8', marginBottom: '20px' }}>
@@ -169,7 +169,7 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>5. Your Rights</h2>
@@ -195,7 +195,7 @@ const PrivacyPolicy = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>6. Contact Information</h2>
@@ -204,10 +204,10 @@ const PrivacyPolicy = () => {
                 data practices, please contact us:
               </p>
               <div style={{
-                background: 'rgba(218, 165, 32, 0.05)',
+                background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
                 padding: '24px',
                 borderRadius: '8px',
-                border: '1px solid rgba(218, 165, 32, 0.2)'
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)'
               }}>
                 <p style={{ fontSize: '16px', color: '#E5E5E5', marginBottom: '12px' }}><strong>BM Wealth</strong></p>
                 <p style={{ fontSize: '16px', color: '#B8B8B8', marginBottom: '12px' }}>Proprietor: Brahmdeo Maurya</p>
@@ -222,15 +222,15 @@ const PrivacyPolicy = () => {
 
             {/* License Information */}
             <section style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>Regulatory Information</h3>
               <p style={{ fontSize: '14px', color: '#B8B8B8', marginBottom: '8px' }}>

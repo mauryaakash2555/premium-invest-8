@@ -210,12 +210,12 @@ export default function CuratedPartners() {
           {/* Left Side */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginBottom: '25px' }} className="card-header-flex">
-              <span style={{ fontSize: '72px', filter: 'drop-shadow(0 0 30px rgba(192, 160, 98, 0.9))' }}>💎</span>
+              <span style={{ fontSize: '72px', filter: 'drop-shadow(0 0 30px color-mix(in oklab, var(--lux-accent) 90%, transparent))' }}>💎</span>
               <div>
-                <div style={{ fontSize: '18px', fontWeight: 900, color: '#FFF', letterSpacing: '5px', marginBottom: '8px', textShadow: '0 0 15px rgba(192,160,98,1)' }}>
+                <div style={{ fontSize: '18px', fontWeight: 900, color: '#FFF', letterSpacing: '5px', marginBottom: '8px', textShadow: '0 0 15px color-mix(in oklab, var(--lux-accent) 100%, transparent)' }}>
                   ULTIMATE SPONSORSHIP
                 </div>
-                <h2 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontFamily: '"Playfair Display", serif', color: '#FFF', fontWeight: 900, margin: 0, letterSpacing: '3px', textShadow: '0 0 30px rgba(192, 160, 98, 0.8)' }}>
+                <h2 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontFamily: '"Playfair Display", serif', color: '#FFF', fontWeight: 900, margin: 0, letterSpacing: '3px', textShadow: '0 0 30px color-mix(in oklab, var(--lux-accent) 80%, transparent)' }}>
                   DIAMOND PARTNER
                 </h2>
               </div>
@@ -640,9 +640,9 @@ export default function CuratedPartners() {
         }
 
         @keyframes pulse {
-          0% { transform: scale(1); box-shadow: 0 10px 40px rgba(192, 160, 98, 0.8); }
-          50% { transform: scale(1.05); box-shadow: 0 15px 60px rgba(192, 160, 98, 1); }
-          100% { transform: scale(1); box-shadow: 0 10px 40px rgba(192, 160, 98, 0.8); }
+          0% { transform: scale(1); box-shadow: 0 10px 40px color-mix(in oklab, var(--lux-accent) 80%, transparent); }
+          50% { transform: scale(1.05); box-shadow: 0 15px 60px color-mix(in oklab, var(--lux-accent) 100%, transparent); }
+          100% { transform: scale(1); box-shadow: 0 10px 40px color-mix(in oklab, var(--lux-accent) 80%, transparent); }
         }
 
         @keyframes linearSweep {

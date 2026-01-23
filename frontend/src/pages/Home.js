@@ -135,7 +135,7 @@ const Home = () => {
             className="hero-subtitle-responsive"
             style={{
               fontSize: 'clamp(28px, 4.5vw, 56px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               marginBottom: '24px',
               fontWeight: 300,
               letterSpacing: '3px',
@@ -150,7 +150,7 @@ const Home = () => {
             className="hero-description-responsive"
             style={{
               fontSize: 'clamp(16px, 2.2vw, 22px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               marginBottom: '60px',
               maxWidth: '800px',
               margin: '0 auto 60px',
@@ -205,7 +205,7 @@ const Home = () => {
           <p
             style={{
               fontSize: '18px',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '700px',
               margin: '0 auto',
             }}
@@ -255,13 +255,13 @@ const Home = () => {
                     objectFit: 'cover',
                   }}
                 />
-                <div style={{ color: '#DAA520', marginBottom: '16px' }}>
+                <div style={{ color: 'var(--lux-accent)', marginBottom: '16px' }}>
                   {service.icon}
                 </div>
                 <h3
                   style={{
                     fontSize: '24px',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     marginBottom: '12px',
                   }}
                 >
@@ -281,7 +281,7 @@ const Home = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  color: '#C0A062',
+                  color: 'var(--lux-accent)',
                   fontSize: '14px',
                   fontWeight: 500,
                 }}>
@@ -332,18 +332,18 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <Shield size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 AMFI Registered
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -357,18 +357,18 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <TrendingUp size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Elite Guidance
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -381,18 +381,18 @@ const Home = () => {
                 style={{
                   width: '80px',
                   height: '80px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <PieChart size={40} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Tailored Solutions
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -418,7 +418,7 @@ const Home = () => {
             alignItems: 'center', 
             gap: '12px', 
             marginBottom: '16px',
-            color: '#DAA520'
+            color: 'var(--lux-accent)'
           }}>
             <BookOpen size={32} />
             <h2
@@ -434,7 +434,7 @@ const Home = () => {
           <p
             style={{
               fontSize: '18px',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '700px',
               margin: '0 auto',
             }}
@@ -480,10 +480,10 @@ const Home = () => {
                 <div style={{
                   display: 'inline-block',
                   padding: '6px 16px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '20px',
                   fontSize: '14px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                   marginBottom: '20px',
                   fontWeight: 500,
                 }}>
@@ -493,7 +493,7 @@ const Home = () => {
                 <h3
                   style={{
                     fontSize: 'clamp(24px, 4vw, 32px)',
-                    color: '#DAA520',
+                    color: 'var(--lux-accent)',
                     marginBottom: '16px',
                     lineHeight: 1.3,
                   }}
@@ -516,7 +516,7 @@ const Home = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  color: '#C0A062',
+                  color: 'var(--lux-accent)',
                   fontSize: '16px',
                   fontWeight: 500,
                 }}>
@@ -545,14 +545,14 @@ const Home = () => {
           style={{
             padding: '60px 40px',
             textAlign: 'center',
-            background: 'rgba(218, 165, 32, 0.05)',
+            background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
           }}
         >
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
             }}
           >
             Ready to Commence Your Wealth Journey?

@@ -24,11 +24,22 @@
 ﻿"use client"
 
 import { MessageCircle, ArrowRight, ExternalLink, ShieldCheck, Gem, Crown, Info, MapPin } from "lucide-react"
-import { useState, useEffect, useRef } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 import { useIsMobile } from "@/hooks/useIsMobile"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import NewsletterSignup from "@/components/shared/NewsletterSignup"
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function rand() {
+    a |= 0;
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null)
@@ -43,6 +54,20 @@ const Footer = () => {
   const noticeRef = useRef(null)
   const [sebiActive, setSebiActive] = useState(false)
   const [noticeActive, setNoticeActive] = useState(false)
+
+  const dustParticles = useMemo(() => {
+    const count = isMobile ? 14 : 25;
+    const rand = mulberry32(20260123 + count);
+
+    return Array.from({ length: count }, (_, i) => {
+      const variant = (i % 3) + 1;
+      const top = rand() * 95;
+      const left = rand() * 95;
+      const dur = 7 + rand() * 12;
+      const delay = rand() * 15;
+      return { variant, top, left, dur, delay };
+    });
+  }, [isMobile]);
 
   useEffect(() => {
     setMounted(true)
@@ -68,11 +93,11 @@ const Footer = () => {
 
     const makeObserver = (el, onVisible, options) => {
       if (!el) return null
-      const obs = new IntersectionObserver(([entry]) => {
+      const observer = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) onVisible()
       }, options)
-      obs.observe(el)
-      return obs
+      observer.observe(el)
+      return observer
     }
 
     // Always observe ONLY the footer Concierge WhatsApp card (desktop + mobile)
@@ -153,8 +178,9 @@ const Footer = () => {
       if (intervalId) window.clearInterval(intervalId)
       timeouts.forEach((t) => clearTimeout(t))
     }
-  }, [isMobile])
-const navigationLinks = {
+  }, [isMobile]);
+
+  const navigationLinks = {
     quick: [
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about-us" },
@@ -178,15 +204,14 @@ const navigationLinks = {
       { label: "Refund Policy", href: "/refund" },
       { label: "Compliance", href: "/compliance" },
     ],
-  }
+  };
 
   const googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=66,+Vinod+Villa+Bldg.,+1st+floor+office+no.+108,+Cavel+Cross+Lane+3,+Kalbadevi,+Mumbai+-+400002,+Maharashtra,+India"
 
-  if (!mounted) return null;
 
-  const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered
+  const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered;
 
-return (
+  return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
       {/* ULTRA LUXURY WAVE TOP */}
   <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90 bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent shadow-[0_0_22px_color-mix(in_oklab,var(--lux-accent)_35%,transparent)]" />
@@ -199,15 +224,15 @@ return (
         
         {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-          {[...Array(isMobile ? 14 : 25)].map((_, i) => (
+          {dustParticles.map((p, i) => (
             <div 
               key={i}
               className="gold-particle" 
               style={{ 
-                top: `${Math.random() * 95}%`, 
-                left: `${Math.random() * 95}%`, 
-                animation: `dust-drift-random-${(i % 3) + 1} ${7 + Math.random() * 12}s infinite linear`,
-                animationDelay: `${Math.random() * 15}s`
+                top: `${p.top}%`,
+                left: `${p.left}%`,
+                animation: `dust-drift-random-${p.variant} ${p.dur}s infinite linear`,
+                animationDelay: `${p.delay}s`,
               }} 
             />
           ))}
@@ -370,13 +395,16 @@ return (
                   <p className="m-0 transition-all cursor-pointer tracking-wide break-all hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>support@bmwealth.co.in</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Location</p>
+                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'var(--lux-accent)' }}>Location</p>
                   <a 
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start hover:text-[oklch(0.78_0.08_65)] hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.55)]"
-                    style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}
+                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start"
+                    style={{
+                      color: 'rgba(235,235,235,0.82)',
+                      filter: 'drop-shadow(0 0 0 transparent)',
+                    }}
                   >
                     <MapPin className="w-4 h-4 transition-transform group-hover:scale-125" />
                     Mumbai, Maharashtra
@@ -407,13 +435,13 @@ return (
                   justifyContent: 'flex-start', // Always start from left
                 }}
               >
-                {/* Dynamic Expansion - Brown to Green from Inside */}
+                {/* Dynamic Expansion - Accent/Green from inside (no brown tones allowed) */}
                 <div 
                   className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
                   style={{ 
                     background: isWHAActive 
                       ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
-                      : (isWHAPremium ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
+                      : (isWHAPremium ? 'radial-gradient(circle at center, color-mix(in oklab, var(--lux-accent) 28%, transparent) 0%, transparent 75%)' : 'transparent'),
                     transform: isWHAPremium ? 'scale(2.5)' : 'scale(0)',
                     opacity: isWHAPremium ? 1 : 0,
                     zIndex: 1
@@ -432,7 +460,7 @@ return (
                   <div 
                     className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
-                      borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
+                        borderColor: isWHAPremium ? '#25D366' : 'color-mix(in oklab, var(--lux-accent) 30%, transparent)',
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
                     }}
                   >
@@ -458,7 +486,7 @@ return (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
                       <p className={cn(
                         "text-[9px] md:text-[10px] m-0 uppercase tracking-[3px] md:tracking-[4px] font-black transition-colors duration-500",
-                        isWHAPremium ? "text-white" : "text-[oklch(0.78_0.08_65)]"
+                        isWHAPremium ? "text-white" : "text-[color:var(--lux-accent)]"
                       )}>
                         Concierge
                       </p>

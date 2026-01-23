@@ -4,10 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { TrendingUp } from "lucide-react";
 
-function formatLakhs(amount: number): string {
-  const v = Number.isFinite(amount) ? Math.max(0, amount) : 0;
-  return `₹${(v / 100_000).toFixed(1)}L`;
-}
+import { LakhTooltip } from "./LakhTooltip";
 
 type SocialProofStats = {
   ok: boolean;
@@ -63,7 +60,8 @@ export function SocialProofBanner() {
           </span>
           <span className="text-white/35">•</span>
           <span>
-            <span className="font-semibold text-white">Avg cost:</span> {formatLakhs(view.avgBehavioralCost)}
+            <span className="font-semibold text-white">Avg cost:</span>{" "}
+            <LakhTooltip amount={view.avgBehavioralCost} decimals={1} className="tabular-nums cursor-help underline decoration-white/15 underline-offset-4 hover:decoration-white/30" />
           </span>
         </div>
       </div>

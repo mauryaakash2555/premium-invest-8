@@ -39,7 +39,7 @@ const Navigation = () => {
           ? 'rgba(0, 0, 0, 0.95)'
           : 'transparent',
         backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-        borderBottom: isScrolled ? '1px solid rgba(218, 165, 32, 0.1)' : 'none',
+        borderBottom: isScrolled ? '1px solid color-mix(in oklab, var(--lux-accent) 10%, transparent)' : 'none',
         transition: 'all 0.3s ease',
       }}
     >
@@ -59,7 +59,7 @@ const Navigation = () => {
             fontSize: '28px',
             fontFamily: "'Playfair Display', serif",
             fontWeight: 700,
-            background: 'linear-gradient(135deg, #DAA520, #B8860B)',
+            background: 'linear-gradient(135deg, var(--lux-accent), var(--lux-accent))',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             textDecoration: 'none',
@@ -82,7 +82,7 @@ const Navigation = () => {
               to={link.path}
               style={{
                 color:
-                  location.pathname === link.path ? '#DAA520' : '#FFFFFF',
+                  location.pathname === link.path ? 'var(--lux-accent)' : '#FFFFFF',
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontWeight: 500,

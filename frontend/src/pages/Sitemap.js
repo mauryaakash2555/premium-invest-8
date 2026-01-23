@@ -69,7 +69,7 @@ const Sitemap = () => {
             fontFamily: '"Playfair Display", serif',
             fontSize: '52px',
             fontWeight: '700',
-            color: '#DAA520',
+            color: 'var(--lux-accent)',
             marginBottom: '24px',
             lineHeight: '1.2'
           }}>
@@ -93,7 +93,7 @@ const Sitemap = () => {
           
           {/* Main Services */}
           <div>
-            <h2 style={{ fontSize: '28px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            <h2 style={{ fontSize: '28px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
               Main Services
             </h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -106,7 +106,7 @@ const Sitemap = () => {
                     lineHeight: '1.6',
                     transition: 'color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#C0A062'}
+                  onMouseEnter={(e) => e.target.style.color = 'var(--lux-accent)'}
                   onMouseLeave={(e) => e.target.style.color = '#e5e5e5'}>
                     → {item.name}
                   </Link>
@@ -117,7 +117,7 @@ const Sitemap = () => {
 
           {/* Company Info */}
           <div>
-            <h2 style={{ fontSize: '28px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            <h2 style={{ fontSize: '28px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
               Company Information
             </h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -130,7 +130,7 @@ const Sitemap = () => {
                     lineHeight: '1.6',
                     transition: 'color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#C0A062'}
+                  onMouseEnter={(e) => e.target.style.color = 'var(--lux-accent)'}
                   onMouseLeave={(e) => e.target.style.color = '#e5e5e5'}>
                     → {item.name}
                   </Link>
@@ -141,7 +141,7 @@ const Sitemap = () => {
 
           {/* Legal & Compliance */}
           <div>
-            <h2 style={{ fontSize: '28px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            <h2 style={{ fontSize: '28px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
               Legal & Compliance
             </h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -154,7 +154,7 @@ const Sitemap = () => {
                     lineHeight: '1.6',
                     transition: 'color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#C0A062'}
+                  onMouseEnter={(e) => e.target.style.color = 'var(--lux-accent)'}
                   onMouseLeave={(e) => e.target.style.color = '#e5e5e5'}>
                     → {item.name}
                   </Link>
@@ -165,7 +165,7 @@ const Sitemap = () => {
 
           {/* Resources */}
           <div>
-            <h2 style={{ fontSize: '28px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            <h2 style={{ fontSize: '28px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
               Resources & Tools
             </h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -178,7 +178,7 @@ const Sitemap = () => {
                     lineHeight: '1.6',
                     transition: 'color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#C0A062'}
+                  onMouseEnter={(e) => e.target.style.color = 'var(--lux-accent)'}
                   onMouseLeave={(e) => e.target.style.color = '#e5e5e5'}>
                     → {item.name}
                   </Link>
@@ -190,25 +190,25 @@ const Sitemap = () => {
         </div>
 
         {/* Contact Section */}
-        <section style={{ marginTop: '80px', padding: '40px', background: 'rgba(218, 165, 32, 0.1)', borderRadius: '12px', border: '1px solid rgba(192, 160, 98, 0.5)' }}>
-          <h2 style={{ fontSize: '32px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', textAlign: 'center', fontFamily: '"Playfair Display", serif' }}>
+        <section style={{ marginTop: '80px', padding: '40px', background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)', borderRadius: '12px', border: '1px solid color-mix(in oklab, var(--lux-accent) 50%, transparent)' }}>
+          <h2 style={{ fontSize: '32px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', textAlign: 'center', fontFamily: '"Playfair Display", serif' }}>
             Contact Information
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px', textAlign: 'center' }}>
             <div>
-              <h3 style={{ fontSize: '20px', color: '#C0A062', marginBottom: '12px', fontWeight: '600' }}>Phone</h3>
+              <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '12px', fontWeight: '600' }}>Phone</h3>
               <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>+91 8850977259</p>
             </div>
             <div>
-              <h3 style={{ fontSize: '20px', color: '#C0A062', marginBottom: '12px', fontWeight: '600' }}>Email</h3>
+              <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '12px', fontWeight: '600' }}>Email</h3>
               <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>support@bmwealth.co.in</p>
             </div>
             <div>
-              <h3 style={{ fontSize: '20px', color: '#C0A062', marginBottom: '12px', fontWeight: '600' }}>Location</h3>
+              <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '12px', fontWeight: '600' }}>Location</h3>
               <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>Mumbai, Maharashtra</p>
             </div>
             <div>
-              <h3 style={{ fontSize: '20px', color: '#C0A062', marginBottom: '12px', fontWeight: '600' }}>Registrations</h3>
+              <h3 style={{ fontSize: '20px', color: 'var(--lux-accent)', marginBottom: '12px', fontWeight: '600' }}>Registrations</h3>
               <p style={{ fontSize: '17px', color: '#e5e5e5', lineHeight: '1.6' }}>AMFI ARN 90008<br />IRDAI License 277925</p>
             </div>
           </div>
@@ -216,12 +216,12 @@ const Sitemap = () => {
 
         {/* Quick Links CTA */}
         <div style={{ marginTop: '60px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '28px', color: '#C0A062', marginBottom: '24px', fontWeight: '600' }}>
+          <h3 style={{ fontSize: '28px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600' }}>
             Ready to Start Your Financial Journey?
           </h3>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/contact" style={{
-              backgroundColor: '#DAA520',
+              backgroundColor: 'var(--lux-accent)',
               color: '#000',
               padding: '14px 32px',
               borderRadius: '6px',
@@ -233,13 +233,13 @@ const Sitemap = () => {
             </Link>
             <Link to="/services" style={{
               backgroundColor: 'transparent',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
               padding: '14px 32px',
               borderRadius: '6px',
               textDecoration: 'none',
               fontWeight: '600',
               fontSize: '16px',
-              border: '2px solid #DAA520'
+              border: '2px solid var(--lux-accent)'
             }}>
               View All Services
             </Link>
@@ -248,7 +248,7 @@ const Sitemap = () => {
 
         {/* SEO Content */}
         <section style={{ marginTop: '80px' }}>
-          <h2 style={{ fontSize: '32px', color: '#DAA520', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+          <h2 style={{ fontSize: '32px', color: 'var(--lux-accent)', marginBottom: '24px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             About BM Wealth Mumbai
           </h2>
           <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#e5e5e5', marginBottom: '20px', textAlign: 'justify' }}>

@@ -36,7 +36,7 @@ export default function LegalDisclosures() {
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-12">
-          <ShieldCheck className="w-10 h-10 text-[#C0A062]" />
+          <ShieldCheck className="w-10 h-10 text-[var(--lux-accent)]" />
           <h1 className="text-4xl md:text-5xl font-serif font-bold gold-gradient-text tracking-tight">
             Legal Disclosures
           </h1>
@@ -44,7 +44,7 @@ export default function LegalDisclosures() {
 
         <div className="bp-body space-y-12 opacity-90 leading-relaxed">
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[var(--lux-accent)] border-b border-[var(--lux-accent)]/20 pb-2">
               Registration & Licensing
             </h2>
             <p className="text-gray-300">
@@ -52,18 +52,18 @@ export default function LegalDisclosures() {
             </p>
             <ul className="list-none p-0 space-y-4 text-gray-400">
               <li className="flex items-start gap-3">
-                <span className="text-[#C0A062] font-bold">ARN:</span>
+                <span className="text-[var(--lux-accent)] font-bold">ARN:</span>
                 <span>AMFI Registered Mutual Fund Distributor (ARN-90008)</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[#C0A062] font-bold">IRDAI:</span>
+                <span className="text-[var(--lux-accent)] font-bold">IRDAI:</span>
                 <span>Licensed Insurance Corporate Agent (IRDAI-277925)</span>
               </li>
             </ul>
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[var(--lux-accent)] border-b border-[var(--lux-accent)]/20 pb-2">
               Distribution Remuneration
             </h2>
             <p className="text-gray-300">
@@ -75,19 +75,19 @@ export default function LegalDisclosures() {
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[var(--lux-accent)] border-b border-[var(--lux-accent)]/20 pb-2">
               Market Dynamics & Risk
             </h2>
             <p className="text-gray-300">
               Investment products are subject to market dynamics. Performance data, where provided, represents historical outcomes and is not a guarantee of future results.
             </p>
-            <div className="bg-[#C0A062]/5 border-l-4 border-[#C0A062] p-6 rounded-r-lg italic text-gray-400">
+            <div className="bg-[var(--lux-accent)]/5 border-l-4 border-[var(--lux-accent)] p-6 rounded-r-lg italic text-gray-400">
               "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before committing capital. BM Wealth serves as a facilitator and distributor, providing access to premier investment vehicles."
             </div>
           </section>
 
           <section className="space-y-6">
-            <h2 className="text-2xl font-serif text-[#C0A062] border-b border-[#C0A062]/20 pb-2">
+            <h2 className="text-2xl font-serif text-[var(--lux-accent)] border-b border-[var(--lux-accent)]/20 pb-2">
               Confidentiality & Integrity
             </h2>
             <p className="text-gray-300">
@@ -96,7 +96,7 @@ export default function LegalDisclosures() {
           </section>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-[#C0A062]/10 text-center">
+        <div className="mt-20 pt-10 border-t border-[var(--lux-accent)]/10 text-center">
           <p className="text-[10px] text-gray-600 uppercase tracking-[3px]">
             © 2025 BM Wealth | Mumbai, Maharashtra
           </p>

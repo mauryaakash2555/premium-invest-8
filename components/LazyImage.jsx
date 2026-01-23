@@ -1,4 +1,6 @@
-﻿'use client';
+﻿/* eslint-disable @next/next/no-img-element */
+
+'use client';
 
 import { useState } from 'react';
 
@@ -60,7 +62,7 @@ export default function LazyImage({ src, alt, className, style, priority = false
             alignItems: 'center',
             justifyContent: 'center',
             background: 'rgba(40,40,40,1)',
-            color: 'rgba(192,160,98,0.6)',
+            color: 'color-mix(in oklab, var(--lux-accent) 60%, transparent)',
             fontSize: '14px',
             borderRadius: style?.borderRadius || '8px',
           }}

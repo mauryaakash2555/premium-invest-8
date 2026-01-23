@@ -23,7 +23,7 @@ function StatCard({ icon, label, value }) {
       <div style={{ fontSize: 11, letterSpacing: "0.12em", opacity: 0.7, textTransform: "uppercase" }}>
         {icon} {label}
       </div>
-      <div style={{ marginTop: 6, fontSize: 22, fontWeight: 900, color: "rgba(192,160,98,0.95)" }}>{value}</div>
+      <div style={{ marginTop: 6, fontSize: 22, fontWeight: 900, color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)" }}>{value}</div>
     </div>
   );
 }
@@ -86,9 +86,9 @@ export function FamilyAdminView({ onExit }) {
             style={{
               padding: "10px 12px",
               borderRadius: 12,
-              border: "1px solid rgba(192,160,98,0.35)",
-              background: "rgba(192,160,98,0.12)",
-              color: "rgba(192,160,98,0.95)",
+              border: "1px solid color-mix(in oklab, var(--lux-accent) 35%, transparent)",
+              background: "color-mix(in oklab, var(--lux-accent) 12%, transparent)",
+              color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)",
               fontWeight: 800,
               cursor: "pointer",
               minWidth: 110,
@@ -151,15 +151,15 @@ export function FamilyAdminView({ onExit }) {
             <div style={{ marginTop: 10, display: "flex", gap: 12, flexWrap: "wrap", opacity: 0.9 }}>
               <div style={{ fontSize: 13 }}>
                 🔥 Hot:{" "}
-                <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{stats?.breakdown?.hot ?? 0}</span>
+                <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{stats?.breakdown?.hot ?? 0}</span>
               </div>
               <div style={{ fontSize: 13 }}>
                 🟡 Warm:{" "}
-                <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{stats?.breakdown?.warm ?? 0}</span>
+                <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{stats?.breakdown?.warm ?? 0}</span>
               </div>
               <div style={{ fontSize: 13 }}>
                 ⚪ Cold:{" "}
-                <span style={{ color: "rgba(192,160,98,0.95)", fontWeight: 900 }}>{stats?.breakdown?.cold ?? 0}</span>
+                <span style={{ color: "color-mix(in oklab, var(--lux-accent) 95%, transparent)", fontWeight: 900 }}>{stats?.breakdown?.cold ?? 0}</span>
               </div>
             </div>
           </div>

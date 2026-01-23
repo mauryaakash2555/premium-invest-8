@@ -37,7 +37,7 @@ const FAQSection = ({ faqs }) => {
       <h2
         style={{
           fontSize: 'clamp(28px, 4vw, 36px)',
-          color: '#DAA520',
+          color: 'var(--lux-accent)',
           marginBottom: '30px',
           fontFamily: "'Playfair Display', serif",
         }}
@@ -49,8 +49,8 @@ const FAQSection = ({ faqs }) => {
           <div
             key={index}
             style={{
-              background: 'rgba(192, 160, 98, 0.05)',
-              border: '1px solid rgba(192, 160, 98, 0.2)',
+              background: 'color-mix(in oklab, var(--lux-accent) 6%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)',
               borderRadius: '12px',
               overflow: 'hidden',
               transition: 'all 0.3s ease',
@@ -71,7 +71,7 @@ const FAQSection = ({ faqs }) => {
                 gap: '16px',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(192, 160, 98, 0.08)';
+                e.currentTarget.style.background = 'color-mix(in oklab, var(--lux-accent) 8%, transparent)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'none';
@@ -80,7 +80,7 @@ const FAQSection = ({ faqs }) => {
               <span
                 style={{
                   fontSize: '18px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                   fontWeight: '600',
                   lineHeight: 1.4,
                 }}
@@ -88,9 +88,9 @@ const FAQSection = ({ faqs }) => {
                 {faq.question}
               </span>
               {openIndex === index ? (
-                <ChevronUp size={24} color="#DAA520" style={{ flexShrink: 0 }} />
+                <ChevronUp size={24} color="var(--lux-accent)" style={{ flexShrink: 0 }} />
               ) : (
-                <ChevronDown size={24} color="#C0A062" style={{ flexShrink: 0 }} />
+                <ChevronDown size={24} color="var(--lux-accent)" style={{ flexShrink: 0 }} />
               )}
             </button>
             {openIndex === index && (

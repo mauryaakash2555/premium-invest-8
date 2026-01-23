@@ -31,9 +31,9 @@ const ReadingProgress = () => {
         style={{
           height: '100%',
           width: `${progress}%`,
-          background: 'linear-gradient(90deg, #C0A062 0%, #DAA520 100%)',
+          background: 'var(--lux-accent)',
           transition: 'width 0.1s ease-out',
-          boxShadow: '0 0 10px rgba(218, 165, 32, 0.5)',
+          boxShadow: '0 0 10px color-mix(in oklab, var(--lux-accent) 55%, transparent)',
         }}
       />
     </div>

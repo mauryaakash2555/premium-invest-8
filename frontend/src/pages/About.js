@@ -79,7 +79,7 @@ const About = () => {
               opacity: 0.95,
               textShadow: '0 3px 12px rgba(0,0,0,0.4)',
               fontFamily: '"Playfair Display", serif',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
             }}
           >
             About Us
@@ -87,7 +87,7 @@ const About = () => {
           <p
             style={{
               fontSize: 'clamp(16px, 2vw, 20px)',
-              color: '#C0A062',
+              color: 'var(--lux-accent)',
               maxWidth: '800px',
               margin: '0 auto',
               lineHeight: 1.6,
@@ -113,7 +113,7 @@ const About = () => {
               style={{
                 fontSize: 'clamp(28px, 4vw, 48px)',
                 marginBottom: '24px',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
               }}
             >
               Our Story
@@ -126,7 +126,7 @@ const About = () => {
                 marginBottom: '20px',
               }}
             >
-              Under the distinguished leadership of <strong style={{ color: '#DAA520' }}>Brahmdeo Maurya</strong>, BM Wealth 
+              Under the distinguished leadership of <strong style={{ color: 'var(--lux-accent)' }}>Brahmdeo Maurya</strong>, BM Wealth 
               orchestrates comprehensive wealth strategies for discerning Mumbai investors.
             </p>
             <p
@@ -167,7 +167,7 @@ const About = () => {
                 width: '250px',
                 height: '250px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #DAA520 0%, #C0A062 100%)',
+                background: 'linear-gradient(135deg, var(--lux-accent) 0%, var(--lux-accent) 100%)',
                 margin: '0 auto 30px',
                 display: 'flex',
                 alignItems: 'center',
@@ -179,10 +179,10 @@ const About = () => {
             >
               BM
             </div>
-            <h3 style={{ fontSize: '24px', color: '#DAA520', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '24px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
               Brahmdeo Maurya
             </h3>
-            <p style={{ fontSize: '16px', color: '#C0A062', marginBottom: '8px' }}>
+            <p style={{ fontSize: '16px', color: 'var(--lux-accent)', marginBottom: '8px' }}>
               Founder
             </p>
           </div>
@@ -207,7 +207,7 @@ const About = () => {
             >
               Our Values
             </h2>
-            <p style={{ fontSize: '18px', color: '#C0A062' }}>
+            <p style={{ fontSize: '18px', color: 'var(--lux-accent)' }}>
               The principles that guide everything we do
             </p>
           </div>
@@ -224,18 +224,18 @@ const About = () => {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <Users size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Client-Centric
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -249,18 +249,18 @@ const About = () => {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <Award size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Exceptional Standards
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -274,18 +274,18 @@ const About = () => {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <Target size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Results-Driven
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -299,18 +299,18 @@ const About = () => {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'rgba(218, 165, 32, 0.1)',
+                  background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: '#DAA520',
+                  color: 'var(--lux-accent)',
                 }}
               >
                 <Heart size={35} />
               </div>
-              <h3 style={{ fontSize: '22px', color: '#DAA520', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '22px', color: 'var(--lux-accent)', marginBottom: '12px' }}>
                 Integrity
               </h3>
               <p style={{ fontSize: '16px', color: '#CCCCCC', lineHeight: 1.6 }}>
@@ -329,14 +329,14 @@ const About = () => {
           style={{
             padding: '60px 40px',
             textAlign: 'center',
-            background: 'rgba(218, 165, 32, 0.05)',
+            background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
           }}
         >
           <h2
             style={{
               fontSize: 'clamp(24px, 3vw, 40px)',
               marginBottom: '20px',
-              color: '#DAA520',
+              color: 'var(--lux-accent)',
             }}
           >
             IRDAI Licensed | AMFI Registered Financial Advisory

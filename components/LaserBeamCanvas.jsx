@@ -14,7 +14,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
  * Props:
  * - width/height: Container dimensions (number or string like "100%", "auto")
  * - duration: Animation cycle in seconds (default: 18 for calm effect)
- * - color: Laser color as hex (default: "#c0a062" gold)
+ * - color: Laser color as hex (default: "var(--lux-accent)" gold)
  * - borderRadius: Corner radius in px (default: 12)
  * - active: Whether animation runs (default: true)
  * - glowIntensity: Glow blur radius in px (default: 12)

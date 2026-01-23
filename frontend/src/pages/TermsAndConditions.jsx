@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 48px)',
             fontWeight: '700',
-            color: '#DAA520',
+            color: 'var(--lux-accent)',
             marginBottom: '12px',
             lineHeight: '1.2'
           }}>Terms and Conditions</h1>
@@ -34,7 +34,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>1. Acceptance of Terms</h2>
@@ -55,7 +55,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>2. Services Provided</h2>
@@ -69,7 +69,7 @@ const TermsAndConditions = () => {
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '12px' }}>Investment planning and advisory</li>
                 <li style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: 0 }}>Financial planning consultations</li>
               </ul>
-              <p style={{ fontSize: '16px', color: '#DAA520', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
+              <p style={{ fontSize: '16px', color: 'var(--lux-accent)', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
                 We are IRDAI Licensed and AMFI Registered. We follow SEBI guidelines but are NOT SEBI-registered 
                 investment advisors.
               </p>
@@ -81,7 +81,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>3. No Investment Advice Guarantee</h2>
@@ -103,7 +103,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>4. User Responsibilities</h2>
@@ -126,7 +126,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>5. Limitation of Liability</h2>
@@ -155,7 +155,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>6. Intellectual Property</h2>
@@ -176,7 +176,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>7. Privacy and Data Protection</h2>
@@ -197,7 +197,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>8. Governing Law and Jurisdiction</h2>
@@ -214,7 +214,7 @@ const TermsAndConditions = () => {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(24px, 4vw, 32px)',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '20px',
                 lineHeight: '1.3'
               }}>9. Contact Information</h2>
@@ -222,10 +222,10 @@ const TermsAndConditions = () => {
                 If you have any questions or concerns about these Terms and Conditions, please contact us:
               </p>
               <div style={{
-                background: 'rgba(218, 165, 32, 0.05)',
+                background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
                 padding: '24px',
                 borderRadius: '8px',
-                border: '1px solid rgba(218, 165, 32, 0.2)'
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)'
               }}>
                 <p style={{ fontSize: '16px', color: '#E5E5E5', marginBottom: '12px' }}><strong>BM Wealth</strong></p>
                 <p style={{ fontSize: '16px', color: '#B8B8B8', marginBottom: '12px' }}>Proprietor: Brahmdeo Maurya</p>
@@ -239,15 +239,15 @@ const TermsAndConditions = () => {
 
             {/* License Information */}
             <section style={{
-              background: 'rgba(218, 165, 32, 0.05)',
+              background: 'color-mix(in oklab, var(--lux-accent) 5%, transparent)',
               padding: '24px',
               borderRadius: '8px',
-              border: '1px solid rgba(218, 165, 32, 0.3)'
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)'
             }}>
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#DAA520',
+                color: 'var(--lux-accent)',
                 marginBottom: '16px'
               }}>Regulatory Information</h3>
               <p style={{ fontSize: '14px', color: '#B8B8B8', marginBottom: '8px' }}>

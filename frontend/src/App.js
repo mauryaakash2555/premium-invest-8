@@ -40,7 +40,7 @@ const PageLoader = () => (
     alignItems: 'center',
     minHeight: '100vh',
     background: '#000000',
-    color: '#DAA520'
+    color: 'var(--lux-accent)'
   }}>
     <div>Loading...</div>
   </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -25,6 +25,8 @@ export function LakhTooltip(props: {
 }) {
   const { amount, decimals = 2, className, prefix } = props;
 
+  const [open, setOpen] = useState(false);
+
   const { short, full } = useMemo(() => {
     const v = Number.isFinite(amount) ? amount : 0;
     return {
@@ -35,10 +37,12 @@ export function LakhTooltip(props: {
 
   return (
     <TooltipProvider delayDuration={150}>
-      <Tooltip>
+      <Tooltip open={open} onOpenChange={setOpen}>
         <TooltipTrigger asChild>
           <span
             tabIndex={0}
+            onClick={() => setOpen((v) => !v)}
+            onBlur={() => setOpen(false)}
             className={
               className ??
               "inline-flex items-center gap-1 tabular-nums cursor-help underline decoration-white/20 underline-offset-4 hover:decoration-white/40 focus:outline-none focus:ring-2 focus:ring-white/15 rounded"

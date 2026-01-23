@@ -73,7 +73,29 @@ export const schemaGraph = (siteUrl) => ({
       name: SITE_NAME,
       url: siteUrl,
       logo: `${siteUrl}/logo.png`,
-      sameAs: [],
+      sameAs: [
+        "https://twitter.com/bmwealth",
+        "https://linkedin.com/company/bmwealth",
+        "https://facebook.com/bmwealth",
+      ],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          telephone: "+91 88509 77259",
+          email: "support@bmwealth.co.in",
+          areaServed: "IN",
+          availableLanguage: ["en", "hi"],
+        },
+      ],
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "66, Vinod Villa Bldg., 1st Floor, Office 108, Cavel Cross Lane 3, Kalbadevi",
+        addressLocality: "Mumbai",
+        addressRegion: "Maharashtra",
+        postalCode: "400002",
+        addressCountry: "IN",
+      },
     },
     {
       "@type": "WebSite",
@@ -102,6 +124,7 @@ export const schemaGraph = (siteUrl) => ({
       url: siteUrl,
       image: `${siteUrl}/logo.png`,
       telephone: "+91 88509 77259",
+      email: "support@bmwealth.co.in",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Mumbai",
@@ -110,6 +133,75 @@ export const schemaGraph = (siteUrl) => ({
       },
       areaServed: "Mumbai",
       parentOrganization: { "@id": `${siteUrl}#organization` },
+    },
+
+    {
+      "@type": "FinancialService",
+      "@id": `${siteUrl}#financialservice`,
+      name: "BM Wealth",
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
+      telephone: "+91 88509 77259",
+      email: "support@bmwealth.co.in",
+      areaServed: {
+        "@type": "City",
+        name: "Mumbai",
+      },
+      provider: { "@id": `${siteUrl}#organization` },
+      serviceType: [
+        "Portfolio Management (PMS)",
+        "Mutual Funds",
+        "SIP",
+        "Insurance",
+        "Fixed Deposits",
+        "Trading & Demat Support",
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "BM Wealth Services",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Portfolio Management",
+              url: `${siteUrl}/portfolio-management`,
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Mutual Funds",
+              url: `${siteUrl}/mutual-funds`,
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Insurance",
+              url: `${siteUrl}/insurance`,
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Fixed Deposits",
+              url: `${siteUrl}/fixed-deposits`,
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Live Intelligence",
+              url: `${siteUrl}/live-intelligence`,
+            },
+          },
+        ],
+      },
     },
   ],
 });

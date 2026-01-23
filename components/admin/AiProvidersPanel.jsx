@@ -43,7 +43,7 @@ const AI_PROVIDERS = [
     key: 'anthropic',
     name: 'Claude (Anthropic)',
     icon: '🟤',
-    color: '#C0A062',
+    color: 'var(--lux-accent)',
     jobs: [
       'Super Admin only',
       'Strategy advisor',
@@ -77,7 +77,7 @@ export function AiProvidersPanel({ summary }) {
   return (
     <section style={{ marginTop: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <div style={{ fontSize: 14, fontWeight: 900, color: '#C0A062', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--lux-accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           🤖 AI Providers
         </div>
         {mostUsed && mostUsed[1] > 0 && (
@@ -85,8 +85,8 @@ export function AiProvidersPanel({ summary }) {
             fontSize: 10,
             padding: '4px 8px',
             borderRadius: 8,
-            background: 'rgba(192,160,98,0.15)',
-            color: 'rgba(192,160,98,0.9)',
+            background: 'color-mix(in oklab, var(--lux-accent) 15%, transparent)',
+            color: 'color-mix(in oklab, var(--lux-accent) 90%, transparent)',
             fontWeight: 700,
           }}>
             Most used today: {mostUsed[0]?.toUpperCase()} ({fmtNum(mostUsed[1])} calls)
@@ -203,13 +203,13 @@ export function AiProvidersPanel({ summary }) {
         marginTop: 14,
         padding: 12,
         borderRadius: 10,
-        background: 'rgba(192,160,98,0.08)',
-        border: '1px solid rgba(192,160,98,0.15)',
+        background: 'color-mix(in oklab, var(--lux-accent) 8%, transparent)',
+        border: '1px solid color-mix(in oklab, var(--lux-accent) 15%, transparent)',
         fontSize: 11,
         color: 'rgba(255,255,255,0.7)',
         lineHeight: 1.5,
       }}>
-        <strong style={{ color: '#C0A062' }}>💡 How it works:</strong>{' '}
+        <strong style={{ color: 'var(--lux-accent)' }}>💡 How it works:</strong>{' '}
         The system auto-picks providers based on user type. Super Admin gets Claude first, Family Admin gets Groq first, Public users get Gemini first.
         If the primary fails or hits rate limits, it falls back to the next provider automatically.
       </div>

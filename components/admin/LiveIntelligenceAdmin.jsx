@@ -29,7 +29,7 @@ const CATEGORIES = [
 
 const URGENCY_LEVELS = [
   { key: 'BREAKING', label: '🔴 Breaking', color: '#ef4444' },
-  { key: 'IMPORTANT', label: '🟡 Important', color: '#c0a062' },
+  { key: 'IMPORTANT', label: '🟡 Important', color: 'var(--lux-accent)' },
   { key: 'PREMIUM', label: '💎 Premium', color: '#a78bfa' },
   { key: 'REGULAR', label: '🟢 Regular', color: '#22c55e' },
   { key: 'EDUCATIONAL', label: '🔵 Educational', color: '#60a5fa' },

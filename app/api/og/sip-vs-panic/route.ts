@@ -111,7 +111,7 @@ export async function GET(req: Request) {
           { style: { fontSize: 14, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1 } },
           "Behavioral cost"
         ),
-        h("div", { style: { fontSize: 46, fontWeight: 900, color: "#D4AF37" } }, formatLakhs(cost))
+        h("div", { style: { fontSize: 46, fontWeight: 900, color: "var(--lux-accent)" } }, formatLakhs(cost))
       )
     ),
     h(

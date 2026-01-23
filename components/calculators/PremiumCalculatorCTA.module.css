@@ -116,6 +116,6 @@
 .compliance {
   margin-top: 10px;
   font-size: 11px;
-  color: rgba(192, 160, 98, 0.7);
+  color: color-mix(in oklab, var(--lux-accent) 70%, transparent);
   text-align: center;
 }
