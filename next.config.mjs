@@ -87,6 +87,26 @@ const nextConfig = {
     }
     return config;
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/intelligence/sip-vs-panic-selling',
+        destination: '/intelligence/sip-vs-panic',
+        permanent: true,
+      },
+      {
+        source: '/intelligence/sip-vs-panic-simulator',
+        destination: '/intelligence/sip-vs-panic',
+        permanent: true,
+      },
+      {
+        source: '/intelligence/stop-sip-during-crash',
+        destination: '/intelligence/sip-vs-panic',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

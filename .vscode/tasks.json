@@ -332,6 +332,96 @@
 				"$tsc"
 			],
 			"group": "build"
+		},
+		{
+			"label": "qa-curl-sip-vs-panic",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$base='http://localhost:3000'; Write-Host '--- redirect sip-vs-panic-selling'; curl.exe -sI \"$base/intelligence/sip-vs-panic-selling\" | Select-String -Pattern '^HTTP/|^location:'; Write-Host '--- redirect sip-vs-panic-simulator'; curl.exe -sI \"$base/intelligence/sip-vs-panic-simulator\" | Select-String -Pattern '^HTTP/|^location:'; Write-Host '--- redirect stop-sip-during-crash'; curl.exe -sI \"$base/intelligence/stop-sip-during-crash\" | Select-String -Pattern '^HTTP/|^location:'; Write-Host '--- canonical status'; curl.exe -sI \"$base/intelligence/sip-vs-panic\" | Select-Object -First 1; Write-Host '--- json-ld present?'; $html = curl.exe -s \"$base/intelligence/sip-vs-panic\"; Write-Host (\"jsonLd=\" + ($html | Select-String -Pattern 'application/ld\\+json' -Quiet)); Write-Host '--- api/events status'; $resp = curl.exe -s -D - -o NUL -X POST \"$base/api/events\" -H \"Content-Type: application/json\" -d '{\"event_type\":\"calculator_view\",\"data\":{\"calculator_type\":\"sip_vs_panic_selling\"}}'; $resp | Select-String -Pattern '^HTTP/' -AllMatches | Select-Object -First 1"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-curl-sip-vs-panic-2",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"& { $base='http://localhost:3000'; Write-Host '--- redirect sip-vs-panic-selling'; curl.exe -sI \"$base/intelligence/sip-vs-panic-selling\" | Select-String -Pattern '^(HTTP/|location:)'; Write-Host '--- redirect sip-vs-panic-simulator'; curl.exe -sI \"$base/intelligence/sip-vs-panic-simulator\" | Select-String -Pattern '^(HTTP/|location:)'; Write-Host '--- redirect stop-sip-during-crash'; curl.exe -sI \"$base/intelligence/stop-sip-during-crash\" | Select-String -Pattern '^(HTTP/|location:)'; Write-Host '--- canonical status'; curl.exe -sI \"$base/intelligence/sip-vs-panic\" | Select-String -Pattern '^HTTP/' | Select-Object -First 1; Write-Host '--- json-ld present?'; $html = curl.exe -s \"$base/intelligence/sip-vs-panic\"; Write-Host (\"jsonLd=\" + ($html | Select-String -Pattern 'application/ld\\+json' -Quiet)); Write-Host '--- api/events status'; $hdr = curl.exe -s -D - -o NUL -X POST \"$base/api/events\" -H 'Content-Type: application/json' -d '{\"event_type\":\"calculator_view\",\"data\":{\"calculator_type\":\"sip_vs_panic_selling\"}}'; $hdr | Select-String -Pattern '^HTTP/' | Select-Object -First 1 }"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-run-sip-vs-panic-script",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-sip-vs-panic.ps1"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-run-sip-vs-panic-script-3",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-sip-vs-panic.ps1"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-port-3000",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d c:\\Users\\admin\\premium-invest-8 && netstat -ano | findstr \":3000\" > .tmp_port3000.txt 2>&1"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-port-3000-ps",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; netstat -ano | Select-String ':3000' | ForEach-Object { $_.Line } | Set-Content -Encoding UTF8 .tmp_port3000.txt"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "qa-port-3000-ps-2",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; netstat -ano | Select-String ':3000' | ForEach-Object { $_.Line } | Set-Content -Encoding UTF8 .tmp_port3000.txt"
+			],
+			"isBackground": false
 		}
 	]
 }

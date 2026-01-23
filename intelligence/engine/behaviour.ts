@@ -13,11 +13,18 @@ function hasToggle(behaviour: BehaviourConfig, toggle: BehaviourToggle): boolean
   return behaviour.toggles.includes(toggle);
 }
 
+function hasAnyToggle(behaviour: BehaviourConfig, toggles: BehaviourToggle[]): boolean {
+  for (const t of toggles) {
+    if (hasToggle(behaviour, t)) return true;
+  }
+  return false;
+}
+
 export function computeBehaviourEffects(params: {
   behaviour: BehaviourConfig;
   yearIndex: number;
   monthIndex: number;
-  marketCycle: "bull" | "bear" | "sideways";
+  marketCycle: "bull" | "bear" | "sideways" | "crash";
 }): BehaviourEffects {
   const { behaviour, marketCycle } = params;
   const intensity = Math.min(1, Math.max(0, behaviour.intensity ?? 0.65));
@@ -26,12 +33,12 @@ export function computeBehaviourEffects(params: {
   let extraDelayMonths = 0;
   let forceDerisk = false;
 
-  if (hasToggle(behaviour, "delay")) {
+  if (hasAnyToggle(behaviour, ["delay", "delay_start"])) {
     extraDelayMonths = Math.round(3 + 9 * intensity);
   }
 
-  if (hasToggle(behaviour, "panic")) {
-    if (marketCycle === "bear") {
+  if (hasAnyToggle(behaviour, ["panic", "panic_sell"])) {
+    if (marketCycle === "bear" || marketCycle === "crash") {
       contributionMultiplier *= 1 - 0.35 * intensity;
       forceDerisk = true;
     }
@@ -40,11 +47,16 @@ export function computeBehaviourEffects(params: {
     }
   }
 
-  if (hasToggle(behaviour, "discipline")) {
+  if (hasAnyToggle(behaviour, ["discipline", "perfect_discipline"])) {
     // Discipline overrides some panic effects (net positive).
     contributionMultiplier *= 1 + 0.10 * intensity;
     // No forced derisk if disciplined.
     forceDerisk = false;
+  }
+
+  // Overconfidence: ramps up contributions after gains (consequence-only modeling).
+  if (hasAnyToggle(behaviour, ["overconfident"]) && (marketCycle === "bull")) {
+    contributionMultiplier *= 1 + 0.15 * intensity;
   }
 
   return { contributionMultiplier, extraDelayMonths, forceDerisk };

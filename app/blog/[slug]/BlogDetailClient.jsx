@@ -104,6 +104,12 @@ export default function BlogDetailClient({ slug }) {
     return normalizeBlogHtmlForPremium(rawHtml);
   }, [rawHtml]);
 
+  const pageClassName = useMemo(() => {
+    const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';
+    // Slug-only (already url-safe); used for per-post styling without touching content text.
+    return `blog-detail-page blog-detail--${safe}`;
+  }, [slug]);
+
   // Mobile-only reading progress + back-to-top
   useEffect(() => {
     if (!isMobile) return;
@@ -309,7 +315,7 @@ export default function BlogDetailClient({ slug }) {
   const heroImage = post.imageUrl || post.image_url || post.image || null;
 
   return (
-    <div className="blog-detail-page" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
+    <div className={pageClassName} style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
       {/* Mobile-only reading progress */}
       {isMobile && (
         <>
@@ -830,6 +836,58 @@ export default function BlogDetailClient({ slug }) {
         .blog-detail-page .blog-html :global(h3),
         .blog-detail-page .blog-html :global(h4) {
           color: var(--lux-accent) !important;
+        }
+
+        /* BLOG 11 ONLY: tighten typography + spacing to match other premium posts */
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(h2) {
+          font-family: "Playfair Display", serif;
+          font-size: 30px;
+          line-height: 1.25;
+          letter-spacing: 0.2px;
+          margin: 42px 0 14px;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(h3) {
+          font-family: "Playfair Display", serif;
+          font-size: 20px;
+          line-height: 1.35;
+          margin: 22px 0 10px;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(p) {
+          margin: 0 0 16px;
+          color: rgba(229, 229, 229, 0.92);
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(ul),
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(ol) {
+          margin: 0 0 18px;
+          padding-left: 1.2rem;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(li) {
+          margin: 0 0 10px;
+          color: rgba(229, 229, 229, 0.9);
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(hr) {
+          border: none;
+          border-top: 1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.10));
+          margin: 34px 0;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat) {
+          width: min(720px, 100%);
+          justify-content: center;
+          margin: 10px auto 18px;
+          padding: 14px 18px;
+          letter-spacing: 0.12em;
+          text-transform: none;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat) {
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
       `}</style>
     </div>

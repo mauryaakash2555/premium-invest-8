@@ -8,7 +8,6 @@ export function generateStaticParams() {
   return all
     .map((p) => p?.slug)
     .filter(Boolean)
-    .slice(0, 10)
     .map((slug) => ({ slug }));
 }
 

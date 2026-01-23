@@ -36,7 +36,10 @@ export async function POST(req) {
   } catch (e) {
     const msg = String(e?.message || "");
     if (msg.includes("Supabase env not configured")) {
-      return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
+      // In local/dev environments the analytics DB may be intentionally unconfigured.
+      // Returning 200 avoids noisy error logs and broken client fetches, while still
+      // indicating that the event was not persisted.
+      return NextResponse.json({ ok: true, stored: false, error: "setup_required" }, { status: 200 });
     }
     return NextResponse.json({ ok: false }, { status: 500 });
   }

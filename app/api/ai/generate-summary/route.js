@@ -10,20 +10,7 @@
 
 import { NextResponse } from 'next/server';
 
-// OpenAI client - initialized lazily to avoid build errors if package not installed
-let openai = null;
-
-async function getOpenAI() {
-  if (!openai && process.env.OPENAI_API_KEY) {
-    try {
-      const { default: OpenAI } = await import('openai');
-      openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    } catch (e) {
-      console.warn('OpenAI package not available');
-    }
-  }
-  return openai;
-}
+import { mistralChat } from '@/lib/ai/tiered';
 
 // Cache for generated summaries (to avoid repeated calls)
 const summaryCache = new Map();
@@ -63,30 +50,24 @@ export async function POST(request) {
       }
     }
 
-    // Generate with OpenAI (if available)
-    const client = await getOpenAI();
-    if (!client) {
-      // Return fallback if OpenAI not configured
+    // Tier 2 — Shared Intelligence: Mistral (cache first, then generate)
+    const fullPrompt = `${prompt}\n\nContext:\n${contextString}`;
+    const res = await mistralChat({
+      system: systemPrompt,
+      prompt: fullPrompt,
+      temperature: 0.7,
+      maxTokens: 1100,
+    });
+
+    if (!res?.text) {
       return NextResponse.json(getFallback(type));
     }
 
-    const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `${prompt}\n\nContext:\n${contextString}` },
-      ],
-      temperature: 0.7,
-      max_tokens: 1000,
-      response_format: { type: 'json_object' },
-    });
+    // Extract JSON from response (robust to minor formatting)
+    const jsonMatch = String(res.text).match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return NextResponse.json(getFallback(type));
 
-    const content = completion.choices[0]?.message?.content;
-    if (!content) {
-      throw new Error('No content in response');
-    }
-
-    const result = JSON.parse(content);
+    const result = JSON.parse(jsonMatch[0]);
 
     // Cache result
     summaryCache.set(cacheKey, {

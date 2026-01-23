@@ -1,8 +1,9 @@
 import { runSimulation, runParallelScenarios } from "./index";
+import type { SimulationConfig } from "./types";
 
 // Example usage (logic-only). This file is safe to delete later.
 
-const baseConfig = {
+const baseConfig: SimulationConfig = {
   startYear: 2026,
   years: 10,
   initialCapital: 500_000,
@@ -20,7 +21,7 @@ const baseConfig = {
   behaviour: { toggles: ["discipline"], intensity: 0.7 },
   taxes: {},
   contributions: { monthlyContribution: 25_000, stepUpAnnual: 0.1 },
-} as const;
+};
 
 export function runExample() {
   const single = runSimulation(baseConfig);

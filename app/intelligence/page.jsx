@@ -1,4 +1,8 @@
+import Link from "next/link";
+
 import { buildMetadata } from "@/lib/seo/metadata";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export const metadata = buildMetadata({
   title: "Intelligence | BM Wealth",
@@ -15,9 +19,24 @@ export default function IntelligencePage() {
           Intelligence
         </h1>
         <p className="mt-4 text-sm sm:text-base text-white/75">
-          This section is being powered by a new simulation engine. UI will be
-          built later; today’s focus is core logic.
+          Tools here are powered by our simulation engine (market patterns, behavior, costs, and simplified India-first tax).
         </p>
+
+        <div className="mt-8 grid grid-cols-1 gap-4">
+          <Card className="border border-white/10 ultra-luxury-glass premium-hover-glow rounded-none overflow-hidden">
+            <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="text-base font-semibold gold-gradient-text truncate">SIP vs Panic Selling</h2>
+                <p className="mt-1 text-sm text-white/70">
+                  See what stopping your SIP during a crash really costs (post-tax) — with timeline + drawdown visualization.
+                </p>
+              </div>
+              <Link href="/intelligence/sip-vs-panic" className="shrink-0 inline-flex">
+                <Button className="calculator-premium-cta">Open Simulator</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </main>
   );

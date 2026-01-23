@@ -510,17 +510,38 @@ return (
                   Regulatory IDs
                 </span>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                  PMS 2430447816
-                </span>
+                <a
+                  href="https://www.sebi.gov.in/sebiweb/other/OtherAction.do?doRecognisedFpi=yes&intmId=42"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
+                  style={{ color: 'oklch(0.78 0.08 65)' }}
+                  aria-label="Verify PMS ID 2430447816 on SEBI"
+                >
+                  PMS 2430447816 ✓ Verify on SEBI
+                </a>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                  IRDAI 277925
-                </span>
+                <a
+                  href="https://irdai.gov.in/admincms/cms/NormalData_Layout.aspx?page=PageNo234&mid=7.5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
+                  style={{ color: 'oklch(0.78 0.08 65)' }}
+                  aria-label="Verify IRDAI license 277925"
+                >
+                  IRDAI 277925 ✓ Verify license
+                </a>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                  AMFI ARN 90008
-                </span>
+                <a
+                  href="https://www.amfiindia.com/research-information/other-data/mfd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
+                  style={{ color: 'oklch(0.78 0.08 65)' }}
+                  aria-label="Verify AMFI ARN 90008"
+                >
+                  AMFI ARN 90008 ✓ Verify on AMFI
+                </a>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
                 <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: 'oklch(0.95 0.01 85 / 0.70)' }}>
                   Wealth Distribution

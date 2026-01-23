@@ -1,8 +1,30 @@
-export type MarketCycle = "bull" | "bear" | "sideways";
+export type MarketCycle = "bull" | "bear" | "sideways" | "crash";
 
-export type BehaviourToggle = "panic" | "discipline" | "delay";
+/**
+ * Behaviour toggles are used by the engine and are intentionally consequence-focused.
+ * STEP_1_PROMPT uses names like panic_sell/stop_sip/delay_start/perfect_discipline/overconfident.
+ * We keep backward-compatible aliases (panic/discipline/delay) as well.
+ */
+export type BehaviourToggle =
+  | "panic"
+  | "discipline"
+  | "delay"
+  | "panic_sell"
+  | "stop_sip"
+  | "delay_start"
+  | "perfect_discipline"
+  | "overconfident";
 
 export type AssetBucketKind = "MF" | "SIP" | "Stocks" | "FD" | "Insurance";
+
+export type AssetClass = "equity" | "debt" | "hybrid" | "cash";
+
+export type TaxAssetTypeIndia =
+  | "equity_mf"
+  | "stocks"
+  | "debt_mf"
+  | "fd"
+  | "insurance";
 
 export type Frequency = "monthly" | "yearly";
 
@@ -25,6 +47,8 @@ export interface MarketModelConfig {
   equityReturnAnnual?: Partial<Record<MarketCycle, number>>;
   /** Optional override for annualized expected return by cycle (debt). */
   debtReturnAnnual?: Partial<Record<MarketCycle, number>>;
+  /** If true, applies volatility clustering to equity returns (GARCH-like). */
+  volatilityClustering?: boolean;
 }
 
 export interface InflationModelConfig {
@@ -49,6 +73,12 @@ export interface TaxConfigIndia {
 
   /** If true, taxes are deducted from cash/bucket immediately on realization. */
   deductOnRealization?: boolean;
+
+  /** Slab proxy for debt MF & other income (simplified). */
+  incomeTaxSlabRate?: number;
+
+  /** Section 80C max deduction (placeholder for education; not advice). */
+  section80cMaxDeduction?: number;
 }
 
 export interface PortfolioAllocation {

@@ -8,6 +8,8 @@
 
 import { NextResponse } from 'next/server';
 
+import { mistralChat } from '@/lib/ai/tiered';
+
 export const dynamic = 'force-dynamic';
 
 /**
@@ -23,16 +25,8 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Headline required' }, { status: 400 });
     }
 
-    const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
-
-    if (!geminiApiKey) {
-      // Fallback: Generate basic content from available data
-      return NextResponse.json({
-        ok: true,
-        source: 'fallback',
-        content: generateFallbackContent(headline, category, whyItMatters, dataPoint),
-      });
-    }
+    // Tier 2 — Shared Intelligence: Mistral (cached where appropriate)
+    // If key isn't configured, fall back to deterministic content.
 
     // Build AI prompt - designed to generate MEANINGFUL content, not generic fluff
     const categoryLabel = getCategoryLabel(category);
@@ -82,23 +76,13 @@ Return ONLY valid JSON:
   "expertTip": "..."
 }`;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 800,
-          },
-        }),
-      }
-    );
+    const res = await mistralChat({
+      prompt,
+      temperature: 0.3,
+      maxTokens: 900,
+    });
 
-    if (!response.ok) {
-      console.error('[Explain API] Gemini error:', response.status);
+    if (!res?.text) {
       return NextResponse.json({
         ok: true,
         source: 'fallback',
@@ -106,8 +90,7 @@ Return ONLY valid JSON:
       });
     }
 
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const text = res.text;
 
     // Extract JSON from response
     const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -124,6 +107,7 @@ Return ONLY valid JSON:
       return NextResponse.json({
         ok: true,
         source: 'ai',
+        provider: res.provider,
         content: {
           whatHappened: content.whatHappened || headline,
           whyItMatters: content.whyItMatters || whyItMatters || 'This development may impact related investments.',
