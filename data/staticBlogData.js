@@ -4618,11 +4618,6 @@ export const staticBlogPost11 = {
     "best credit cards for high income professionals India 2026, cashflow optimisation, credit usage advisory",
 
   content: `
-  <blockquote style="border-left: 3px solid var(--lux-accent); padding-left: 16px; margin: 0 0 24px 0; font-style: italic; color: rgba(255,255,255,0.85);">
-    For high-income professionals, a credit card should never be viewed as a spending tool.
-    Instead, it is a <strong>cash-flow, liquidity, and credit-profile management instrument</strong>.
-  </blockquote>
-
   <p>When selected and used correctly, a credit card can:</p>
   <ul>
     <li>Smooth short-term cash requirements</li>
