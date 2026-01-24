@@ -1,22 +1,35 @@
-export const metadata = {
+import { buildMetadata, getMetadataBase } from '@/lib/seo/metadata';
+
+export const metadata = buildMetadata({
   title: 'Live Intelligence | BM Wealth',
   description:
     'Live Intelligence helps you explore market updates, insights, and financial context in a clean, fast interface. Review everything carefully before acting.',
-  alternates: {
-    canonical: '/live-intelligence',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+  path: '/live-intelligence',
+});
 
 import Link from 'next/link';
 
 export default function LiveIntelligenceLayout({ children }) {
+  const baseUrl = getMetadataBase().origin;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+      { '@type': 'ListItem', position: 2, name: 'Live Intelligence', item: `${baseUrl}/live-intelligence` },
+    ],
+  };
+
   return (
     <>
       {children}
+
+      {/* Schema-only breadcrumbs (no UI change) */}
+      <script
+        id="live-intelligence-breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       {/* Visually hidden, indexable HTML (no UI change) */}
       <div

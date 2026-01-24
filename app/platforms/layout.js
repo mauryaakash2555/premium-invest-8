@@ -2,8 +2,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Investment Platforms | BM Wealth Mumbai",
-    description: "Explore popular investment platforms we cover. Compare Zerodha, Smallcase, and Groww for trading and investing.",
+    title: "Investment Platforms | BM Wealth",
+    description:
+      "Explore investment platforms like Zerodha, Groww, Smallcase and more. Compare features and choose what suits your execution style.",
     path: "/platforms",
   }),
   keywords: "investment platforms, trading platforms, Zerodha, Smallcase, Groww, Mumbai investment",

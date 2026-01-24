@@ -5,6 +5,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
+import RelatedServices from '@/components/seo/RelatedServices';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import { SipGoalSnapshot } from '@/components/calculators/SipGoalSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
@@ -74,6 +75,40 @@ const SIPServices = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'SIP Planning',
+    name: 'SIP Investment',
+    url: pageUrl,
+    provider: {
+      '@type': 'FinancialService',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    areaServed: 'IN',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Wealth Management Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'SIP Planning',
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Mutual Fund Investment',
+          },
+        },
+      ],
+    },
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -111,6 +146,11 @@ const SIPServices = () => {
         id="sip-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="sip-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
       {/* Hero */}
@@ -390,6 +430,8 @@ const SIPServices = () => {
         </section>
 
         <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
+
+        <RelatedServices currentService="sip" />
 
         <ClosingPerspective>
           SIP is a method. Its effectiveness depends on clarity of purpose, consistency, and long-term perspective.

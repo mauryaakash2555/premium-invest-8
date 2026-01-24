@@ -2239,7 +2239,7 @@ footer {
   }
   
   /* Single column on very small screens */
-  .calculator-container .lg\\:grid-cols-2 {
+  .calculator-container .grid {
     grid-template-columns: 1fr !important;
   }
 }

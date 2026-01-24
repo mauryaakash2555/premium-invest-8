@@ -2,8 +2,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
   ...buildMetadata({
-    title: "About BM Wealth Mumbai | Financial Advisor Brahmdeo Maurya ARN 90008",
-    description: "Mumbai-based wealth advisor led by Brahmdeo Maurya. PMS Certification 2430447816 | AMFI Registered (ARN 90008) | IRDAI Licensed (277925). Serving 500+ investors with portfolio management (PMS), mutual funds, SIP, and insurance support.",
+    title: "About BM Wealth | Trusted Wealth Partner in Mumbai",
+    description:
+      "Meet BM Wealth, led by Brahmdeo Maurya (ARN 90008). Premium financial advisory for high-income families in Mumbai with AMFI/IRDAI compliance.",
     path: "/about-us",
   }),
 };

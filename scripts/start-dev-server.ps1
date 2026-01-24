@@ -26,6 +26,16 @@ if ($existingPid) {
   Start-Sleep -Milliseconds 300
 }
 
+# Clear potentially stale build artifacts that can confuse webviews (VS Code Simple Browser)
+# and cause webpack runtime errors after restarts.
+try {
+  $nextDir = Join-Path $AppRoot '.next'
+  if (Test-Path $nextDir) {
+    try { Remove-Item -Recurse -Force (Join-Path $nextDir 'cache') -ErrorAction SilentlyContinue } catch {}
+    try { Remove-Item -Recurse -Force (Join-Path $nextDir 'static') -ErrorAction SilentlyContinue } catch {}
+  }
+} catch {}
+
 # Start Next dev server detached, so the task can finish once it is ready.
 $cmd = "cd /d `"$AppRoot`" && npm run dev"
 Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', $cmd) -WorkingDirectory $AppRoot -WindowStyle Hidden -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr

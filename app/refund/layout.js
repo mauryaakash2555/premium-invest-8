@@ -20,8 +20,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Refund Policy | BM Wealth Mumbai",
-  description: "Refund and cancellation policy.",
+  title: "Refund Policy | BM Wealth",
+  description: "Read BM Wealth’s refund and cancellation policy for services and digital products.",
   path: "/refund",
 });
 

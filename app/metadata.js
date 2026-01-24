@@ -2,8 +2,9 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, getMetadataBase } from "@/lib/seo/metadata
 
 export const metadata = {
   metadataBase: getMetadataBase(),
-  title: "BM Wealth | Portfolio Management (PMS), Mutual Funds, SIP",
-  description: "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+  title: "BM Wealth - Portfolio Management, Mutual Funds & SIP Investments",
+  description:
+    "BM Wealth offers premium portfolio management, mutual funds, SIP and insurance solutions for high-income investors in Mumbai. Trusted advisory, simplified execution.",
   alternates: {
     canonical: "/",
   },
@@ -17,9 +18,9 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: "BM Wealth",
+    title: "BM Wealth - Portfolio Management, Mutual Funds & SIP Investments",
     description:
-      "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "BM Wealth offers premium portfolio management, mutual funds, SIP and insurance solutions for high-income investors in Mumbai. Trusted advisory, simplified execution.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -28,9 +29,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BM Wealth",
+    title: "BM Wealth - Portfolio Management, Mutual Funds & SIP Investments",
     description:
-      "Premium portfolio management (PMS-first) and wealth services across mutual funds, SIP, insurance, trading & demat, and portfolio planning.",
+      "BM Wealth offers premium portfolio management, mutual funds, SIP and insurance solutions for high-income investors in Mumbai. Trusted advisory, simplified execution.",
     images: [DEFAULT_OG_IMAGE],
   },
   robots: {
@@ -44,9 +45,7 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
+  // Set Google Search Console verification via deployment config if needed.
   category: "finance",
   classification: "business",
   author: SITE_NAME,
@@ -57,7 +56,6 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: getMetadataBase(),
   other: {
     "msapplication-TileColor": "#000000",
     "theme-color": "#000000",

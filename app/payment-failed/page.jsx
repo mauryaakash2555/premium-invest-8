@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 export default function PaymentFailedPage() {
   return (
     <main className="min-h-[70vh] px-6 py-10">

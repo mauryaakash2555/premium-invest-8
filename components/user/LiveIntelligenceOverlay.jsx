@@ -22,6 +22,7 @@ import HeadlineFeed from '@/components/live-intelligence/HeadlineFeed';
 import ModeIndicator from '@/components/live-intelligence/ModeIndicator';
 import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
+import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
@@ -37,9 +38,6 @@ import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
 import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import Link from 'next/link';
 import LazyTradingView from '@/components/shared/LazyTradingView';
-
-// Ultra-luxury theme overrides
-import './LiveIntelligenceOverlay.luxury.css';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -115,14 +113,14 @@ const VoiceControl = ({ headline, summary, className = '' }) => {
         alignItems: 'center',
         gap: '6px',
         padding: '6px 12px',
-        borderRadius: 0,
+        borderRadius: '8px',
         border: 'none',
-        background: isPlaying ? 'oklch(0.78 0.08 65 / 0.20)' : 'oklch(0.78 0.08 65 / 0.10)',
-        color: isPlaying ? 'oklch(0.78 0.08 65 / 0.95)' : 'oklch(0.78 0.08 65 / 0.80)',
+        background: isPlaying ? 'rgba(100, 255, 150, 0.15)' : 'rgba(170, 198, 255, 0.10)',
+        color: isPlaying ? 'rgba(100, 255, 150, 0.95)' : 'rgba(170, 198, 255, 0.80)',
         fontSize: '13px',
         fontWeight: 500,
         cursor: 'pointer',
-        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'all 0.2s ease',
       }}
       title={isPlaying ? 'Stop reading (Space)' : 'Read aloud (Space)'}
     >
@@ -134,7 +132,8 @@ const VoiceControl = ({ headline, summary, className = '' }) => {
 
 /**
  * MarketStatusBadge - Shows NSE OPEN/CLOSED status
- * Uses luxury gold palette
+ * ⚠️ NOTE: DO NOT CHANGE COLORS WITHOUT ASKING USER FIRST
+ * Uses icy blue colors to match laser page palette
  */
 const MarketStatusBadge = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -161,14 +160,13 @@ const MarketStatusBadge = () => {
   return (
     <span style={{
       padding: '3px 10px',
-      borderRadius: 0,
+      borderRadius: '4px',
       fontSize: '9px',
       fontWeight: 600,
-      letterSpacing: '0.15em',
-      textTransform: 'uppercase',
-      background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'oklch(0.75 0.01 85 / 0.10)',
-      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'oklch(0.75 0.01 85 / 0.20)'}`,
-      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'oklch(0.75 0.01 85 / 0.90)',
+      letterSpacing: '0.1em',
+      background: isOpen ? 'rgba(100, 220, 180, 0.12)' : 'rgba(120, 150, 200, 0.12)',
+      border: `1px solid ${isOpen ? 'rgba(100, 220, 180, 0.30)' : 'rgba(120, 150, 200, 0.30)'}`,
+      color: isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(160, 185, 220, 0.95)',
     }}>
       NSE {isOpen ? 'OPEN' : 'CLOSED'}
     </span>
@@ -387,7 +385,6 @@ export default function LiveIntelligenceOverlay({
   const overlayContent = (
     <div
       ref={overlayRef}
-      data-li-panel
       className={`li-overlay ${isOpen ? 'li-overlay-open' : ''} ${isAnimating && !isOpen ? 'li-overlay-closing' : ''}`}
       style={{
         position: 'fixed',
@@ -396,12 +393,13 @@ export default function LiveIntelligenceOverlay({
         right: 0,
         bottom: 0,
         zIndex: 9999,
+        background: '#090A0C',
         overflowY: 'auto',
         overflowX: 'hidden',
         opacity: isOpen ? 1 : 0,
         transform: isOpen ? 'scale(1)' : 'scale(0.98)',
         transition: isOpen 
-          ? 'opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1)' 
+          ? 'opacity 400ms ease-out, transform 400ms ease-out' 
           : 'opacity 300ms ease-in, transform 300ms ease-in',
         pointerEvents: isOpen ? 'auto' : 'none',
         visibility: isOpen || isAnimating ? 'visible' : 'hidden',
@@ -425,26 +423,26 @@ export default function LiveIntelligenceOverlay({
       )}
       {/* Global styles for overlay */}
       <style>{`
-        /* Show scrollbar - luxury gold */
+        /* Show scrollbar (users want visible scroll feedback) */
         .li-overlay {
           -ms-overflow-style: auto;
           scrollbar-width: thin;
-          scrollbar-color: oklch(0.78 0.08 65 / 0.35) transparent;
+          scrollbar-color: rgba(170, 198, 255, 0.35) rgba(0, 0, 0, 0);
         }
         .li-overlay::-webkit-scrollbar {
           width: 10px;
         }
         .li-overlay::-webkit-scrollbar-track {
-          background: transparent;
+          background: rgba(0, 0, 0, 0);
         }
         .li-overlay::-webkit-scrollbar-thumb {
-          background: oklch(0.78 0.08 65 / 0.22);
-          border-radius: 0;
-          border: 2px solid transparent;
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 10px;
+          border: 2px solid rgba(0, 0, 0, 0);
           background-clip: padding-box;
         }
         .li-overlay::-webkit-scrollbar-thumb:hover {
-          background: oklch(0.78 0.08 65 / 0.32);
+          background: rgba(170, 198, 255, 0.32);
           background-clip: padding-box;
         }
 
@@ -456,12 +454,12 @@ export default function LiveIntelligenceOverlay({
         }
         .li-number-input {
           -moz-appearance: textfield;
-          border-bottom: 1px solid oklch(0.78 0.08 65 / 0.18) !important;
+          border-bottom: 1px solid rgba(170, 198, 255, 0.18) !important;
           padding-bottom: 2px !important;
         }
         .li-number-input:focus {
-          border-bottom-color: oklch(0.78 0.08 65 / 0.55) !important;
-          box-shadow: 0 10px 22px oklch(0.78 0.08 65 / 0.12);
+          border-bottom-color: rgba(170, 198, 255, 0.55) !important;
+          box-shadow: 0 10px 22px rgba(100, 160, 255, 0.12);
         }
         
         /* Ensure footer inside overlay has normal styling */
@@ -508,20 +506,20 @@ export default function LiveIntelligenceOverlay({
           overflow-x: auto !important;
           max-width: 100%;
           scrollbar-width: thin;
-          scrollbar-color: oklch(0.78 0.08 65 / 0.30) transparent;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
         }
         .li-category-filter::-webkit-scrollbar {
           height: 5px;
         }
         .li-category-filter::-webkit-scrollbar-track {
-          background: transparent;
+          background: rgba(0, 0, 0, 0);
         }
         .li-category-filter::-webkit-scrollbar-thumb {
-          background: oklch(0.78 0.08 65 / 0.22);
-          border-radius: 0;
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
         }
         .li-category-filter::-webkit-scrollbar-thumb:hover {
-          background: oklch(0.78 0.08 65 / 0.35);
+          background: rgba(170, 198, 255, 0.35);
         }
         .li-category-scroll {
           flex-wrap: nowrap !important;
@@ -529,46 +527,46 @@ export default function LiveIntelligenceOverlay({
           padding-right: 20px;
           padding-bottom: 6px;
           scrollbar-width: thin;
-          scrollbar-color: oklch(0.78 0.08 65 / 0.30) transparent;
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
         }
         .li-category-scroll::-webkit-scrollbar {
           height: 5px;
         }
         .li-category-scroll::-webkit-scrollbar-track {
-          background: transparent;
+          background: rgba(0, 0, 0, 0);
         }
         .li-category-scroll::-webkit-scrollbar-thumb {
-          background: oklch(0.78 0.08 65 / 0.22);
-          border-radius: 0;
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
         }
         .li-category-scroll::-webkit-scrollbar-thumb:hover {
-          background: oklch(0.78 0.08 65 / 0.35);
+          background: rgba(170, 198, 255, 0.35);
         }
 
         /* ═══════════════════════════════════════════════════════════
            ICON STYLES - Clean premium look without spinning
            ═══════════════════════════════════════════════════════════ */
 
-        /* Global Markets Icon - Static with subtle gold glow */
+        /* Global Markets Icon - Static with subtle glow */
         .li-globe-icon {
-          filter: drop-shadow(0 0 6px oklch(0.78 0.08 65 / 0.4));
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
         }
 
-        /* Live Chart Icon - Static with gold glow */
+        /* Live Chart Icon - Static with glow */
         .li-chart-icon {
-          filter: drop-shadow(0 0 6px oklch(0.78 0.08 65 / 0.4));
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
         }
 
-        /* Live Signals Icon - Static with gold glow */
+        /* Live Signals Icon - Static with glow */
         .li-signals-icon {
-          filter: drop-shadow(0 0 6px oklch(0.78 0.08 65 / 0.4));
+          filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
         }
 
-        /* Live dot animation - subtle pulse with luxury gold */
+        /* Live dot animation - subtle pulse only */
         .li-live-dot {
           width: 8px;
           height: 8px;
-          background: oklch(0.78 0.08 65 / 0.9);
+          background: rgba(140, 220, 180, 0.9);
           border-radius: 50%;
           animation: liveDotPulse 1.5s ease-in-out infinite;
         }
@@ -576,11 +574,11 @@ export default function LiveIntelligenceOverlay({
         @keyframes liveDotPulse {
           0%, 100% { 
             opacity: 0.5; 
-            box-shadow: 0 0 0 0 oklch(0.78 0.08 65 / 0.4); 
+            box-shadow: 0 0 0 0 rgba(140, 220, 180, 0.4); 
           }
           50% { 
             opacity: 1; 
-            box-shadow: 0 0 0 6px oklch(0.78 0.08 65 / 0); 
+            box-shadow: 0 0 0 6px rgba(140, 220, 180, 0); 
           }
         }
       `}</style>
@@ -591,7 +589,7 @@ export default function LiveIntelligenceOverlay({
       {/* Achievement Popup - Shows when badge is unlocked */}
       <AchievementPopup />
 
-      {/* FOOTER - full black like about page */}
+      {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
       <div
         data-li-footer
         className="li-footer-wrapper"
@@ -603,7 +601,7 @@ export default function LiveIntelligenceOverlay({
           zIndex: 100,
           width: '100%',
           marginTop: 0,
-          background: '#000000',
+          background: '#090A0C',
         }}
       >
         {footerWithHandlers}
@@ -636,14 +634,14 @@ function SavedHeadlinesSection() {
       <div style={{
         padding: '32px',
         textAlign: 'center',
-        background: 'rgba(10, 10, 10, 0.6)',
-        borderRadius: '0',
-        border: '1px solid rgba(200, 195, 175, 0.1)',
+        background: 'rgba(20, 25, 35, 0.6)',
+        borderRadius: '16px',
+        border: '1px solid rgba(100, 160, 255, 0.1)',
       }}>
         <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔖</div>
         <h4 style={{
           margin: '0 0 8px',
-          color: 'rgba(220, 215, 200, 0.85)',
+          color: 'rgba(200, 215, 240, 0.85)',
           fontSize: '16px',
           fontWeight: 600,
         }}>
@@ -651,7 +649,7 @@ function SavedHeadlinesSection() {
         </h4>
         <p style={{
           margin: 0,
-          color: 'rgba(200, 195, 175, 0.6)',
+          color: 'rgba(180, 195, 230, 0.6)',
           fontSize: '14px',
         }}>
           Tap the 📑 icon on any headline to save it for later
@@ -664,7 +662,7 @@ function SavedHeadlinesSection() {
     <div>
       <h3 style={{
         margin: '0 0 16px',
-        color: 'rgba(235, 230, 220, 0.95)',
+        color: 'rgba(230, 240, 255, 0.95)',
         fontSize: '17px',
         fontWeight: 600,
         display: 'flex',
@@ -675,7 +673,7 @@ function SavedHeadlinesSection() {
         <span style={{
           marginLeft: 'auto',
           fontSize: '12px',
-          color: 'rgba(200, 195, 175, 0.6)',
+          color: 'rgba(180, 195, 230, 0.6)',
         }}>
           {saved.length} saved
         </span>
@@ -686,9 +684,9 @@ function SavedHeadlinesSection() {
           <div
             key={headline.id}
             style={{
-              background: 'linear-gradient(180deg, rgba(10, 10, 10, 0.90) 0%, rgba(0, 0, 0, 0.95) 100%)',
-              border: '1px solid rgba(200, 195, 175, 0.15)',
-              borderRadius: '0',
+              background: 'linear-gradient(180deg, rgba(20, 25, 35, 0.90) 0%, rgba(12, 14, 20, 0.95) 100%)',
+              border: '1px solid rgba(100, 160, 255, 0.15)',
+              borderRadius: '12px',
               padding: '16px',
               display: 'flex',
               flexDirection: 'column',
@@ -700,7 +698,7 @@ function SavedHeadlinesSection() {
                 margin: 0,
                 fontSize: '15px',
                 fontWeight: 600,
-                color: 'rgba(235, 230, 220, 0.95)',
+                color: 'rgba(235, 242, 255, 0.95)',
                 flex: 1,
                 lineHeight: 1.4,
               }}>
@@ -725,7 +723,7 @@ function SavedHeadlinesSection() {
             <p style={{
               margin: 0,
               fontSize: '13px',
-              color: 'rgba(200, 195, 175, 0.65)',
+              color: 'rgba(200, 215, 240, 0.65)',
               lineHeight: 1.5,
             }}>
               {headline.whyItMatters}
@@ -735,7 +733,7 @@ function SavedHeadlinesSection() {
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '11px',
-              color: 'rgba(200, 195, 175, 0.5)',
+              color: 'rgba(180, 195, 230, 0.5)',
               marginTop: '4px',
             }}>
               <span>{headline.source}</span>
@@ -1093,13 +1091,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         width: '100%',
         margin: 0,
         padding: 0,
-        background: '#000000',
+        background: '#090A0C',
         overflow: 'hidden',
         isolation: 'isolate',
       }}
       data-li-panel
     >
-      {/* Static top fade (panel-only): warm gold luxury gradient */}
+      {/* Static top fade (panel-only): calm continuity */}
       <div
         aria-hidden="true"
         style={{
@@ -1110,9 +1108,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           height: '180px',
           pointerEvents: 'none',
           background:
-            'linear-gradient(180deg, oklch(0.02 0.003 280 / 0.72) 0%, transparent 78%),' +
-            'radial-gradient(78% 170% at 50% 0%, oklch(0.78 0.08 65 / 0.08) 0%, transparent 66%),' +
-            'radial-gradient(40% 120% at 50% 0%, oklch(0.95 0.01 85 / 0.04) 0%, transparent 60%)',
+            'linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.00) 78%),' +
+            'radial-gradient(78% 170% at 50% 0%, rgba(150,190,255,0.10) 0%, rgba(150,190,255,0.00) 66%),' +
+            'radial-gradient(40% 120% at 50% 0%, rgba(230,247,255,0.06) 0%, rgba(230,247,255,0.00) 60%)',
           opacity: 1,
         }}
       />
@@ -1151,7 +1149,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           opacity: 0;
         }
 
-        /* The actual moving light pulse (::before) - warm gold luxury */
+        /* The actual moving light pulse (::before) */
         .li-beam::before {
           content: "";
           position: absolute;
@@ -1161,23 +1159,23 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           height: 80px;
           background: linear-gradient(
             180deg,
-            oklch(0.78 0.08 65 / 0) 0%,
-            oklch(0.85 0.06 65 / 0.45) 30%,
-            oklch(0.95 0.03 85 / 0.85) 50%,
-            oklch(0.85 0.06 65 / 0.45) 70%,
-            oklch(0.78 0.08 65 / 0) 100%
+            rgba(170, 210, 255, 0.00) 0%,
+            rgba(200, 230, 255, 0.45) 30%,
+            rgba(235, 250, 255, 0.85) 50%,
+            rgba(200, 230, 255, 0.45) 70%,
+            rgba(170, 210, 255, 0.00) 100%
           );
           border-radius: 999px;
           filter: blur(0.5px);
           box-shadow:
-            0 0 8px oklch(0.78 0.08 65 / 0.55),
-            0 0 20px oklch(0.78 0.08 65 / 0.35),
-            0 0 40px oklch(0.78 0.08 65 / 0.20);
+            0 0 8px rgba(170, 210, 255, 0.55),
+            0 0 20px rgba(140, 190, 255, 0.35),
+            0 0 40px rgba(120, 170, 255, 0.20);
           animation: liBeamPulse var(--beam-duration, 4s) ease-in-out infinite;
           animation-delay: var(--beam-delay, 0s);
         }
 
-        /* Static faint track line (::after) - warm gold */
+        /* Static faint track line (::after) */
         .li-beam::after {
           content: "";
           position: absolute;
@@ -1188,10 +1186,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           height: 100%;
           background: linear-gradient(
             180deg,
-            oklch(0.78 0.08 65 / 0.12) 0%,
-            oklch(0.78 0.08 65 / 0.06) 30%,
-            oklch(0.78 0.08 65 / 0.03) 60%,
-            oklch(0.78 0.08 65 / 0) 100%
+            rgba(170, 210, 255, 0.12) 0%,
+            rgba(170, 210, 255, 0.06) 30%,
+            rgba(170, 210, 255, 0.03) 60%,
+            rgba(170, 210, 255, 0.00) 100%
           );
           opacity: 0.65;
         }
@@ -1208,9 +1206,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           width: 3px;
           height: 120px;
           box-shadow:
-            0 0 12px oklch(0.78 0.08 65 / 0.65),
-            0 0 28px oklch(0.78 0.08 65 / 0.45),
-            0 0 56px oklch(0.78 0.08 65 / 0.25);
+            0 0 12px rgba(170, 210, 255, 0.65),
+            0 0 28px rgba(140, 190, 255, 0.45),
+            0 0 56px rgba(120, 170, 255, 0.25);
         }
 
         /* Left beams */
@@ -1230,19 +1228,19 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           100% { top: calc(100% + 100px); opacity: 0; }
         }
 
-        /* KPI Card styling - luxury */
+        /* KPI Card styling */
         .li-kpi-card {
           position: relative;
           display: flex;
           flex-direction: column;
           text-align: left;
-          border-radius: 0;
-          border: 1px solid oklch(0.95 0.01 85 / 0.10);
-          background: linear-gradient(180deg, oklch(0.11 0.005 280 / 0.95) 0%, oklch(0.07 0.004 280 / 0.98) 100%);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 oklch(0.95 0.01 85 / 0.04);
+          border-radius: 18px;
+          border: 1px solid rgba(170, 198, 255, 0.12);
+          background: linear-gradient(180deg, rgba(20, 24, 32, 0.95) 0%, rgba(10, 10, 12, 0.98) 100%);
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
           padding: 20px;
           overflow: hidden;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .li-kpi-top {
@@ -1255,15 +1253,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         }
 
         .li-kpi-trend-pill {
-          color: oklch(0.78 0.08 65 / 0.90);
+          color: rgba(140, 220, 180, 0.90);
           font-size: 11px;
           font-weight: 600;
           padding: 2px 8px;
-          border-radius: 0;
-          background: oklch(0.78 0.08 65 / 0.15);
+          border-radius: 6px;
+          background: rgba(140, 220, 180, 0.10);
           line-height: 1.2;
           white-space: nowrap;
-          letter-spacing: 0.05em;
         }
 
         .li-kpi-trend-pill.is-placeholder {
@@ -1282,14 +1279,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         }
 
         .li-kpi-card:hover {
-          border-color: oklch(0.78 0.08 65 / 0.28);
+          border-color: rgba(170, 198, 255, 0.28);
           transform: translateY(-2px);
         }
 
         .li-dash-card {
-          border-radius: 0;
-          border: 1px solid oklch(0.95 0.01 85 / 0.08);
-          background: linear-gradient(180deg, oklch(0.11 0.005 280 / 0.92) 0%, oklch(0.07 0.004 280 / 0.96) 100%);
+          border-radius: 20px;
+          border: 1px solid rgba(170, 198, 255, 0.10);
+          background: linear-gradient(180deg, rgba(16, 20, 28, 0.92) 0%, rgba(10, 10, 12, 0.96) 100%);
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40);
           padding: 24px;
         }
@@ -1303,8 +1300,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: oklch(0.78 0.08 65 / 0.9);
-          box-shadow: 0 0 8px oklch(0.78 0.08 65 / 0.6);
+          background: rgba(140, 220, 180, 0.9);
+          box-shadow: 0 0 8px rgba(140, 220, 180, 0.6);
           animation: liLivePulse 2s ease-in-out infinite;
         }
 
@@ -1325,13 +1322,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         /* Chart area scan-box */
         .li-chart-area {
           position: relative;
-          border-radius: 0;
-          border: 1px solid oklch(0.95 0.01 85 / 0.10);
+          border-radius: 14px;
+          border: 1px solid rgba(170, 198, 255, 0.14);
           background:
-            radial-gradient(55% 85% at 50% 0%, oklch(0.78 0.08 65 / 0.08) 0%, transparent 65%),
-            linear-gradient(180deg, oklch(0.95 0.01 85 / 0.03) 0%, transparent 50%),
-            repeating-linear-gradient(90deg, oklch(0.95 0.01 85 / 0.012) 0px, oklch(0.95 0.01 85 / 0.012) 1px, transparent 2px, transparent 40px),
-            repeating-linear-gradient(0deg, oklch(0.95 0.01 85 / 0.008) 0px, oklch(0.95 0.01 85 / 0.008) 1px, transparent 2px, transparent 40px);
+            radial-gradient(55% 85% at 50% 0%, rgba(160, 190, 255, 0.12) 0%, rgba(10, 10, 12, 0.0) 65%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.00) 50%),
+            repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0px, rgba(255, 255, 255, 0.012) 1px, rgba(0, 0, 0, 0.00) 2px, rgba(0, 0, 0, 0.00) 40px),
+            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.008) 0px, rgba(255, 255, 255, 0.008) 1px, rgba(0, 0, 0, 0.00) 2px, rgba(0, 0, 0, 0.00) 40px);
           overflow: hidden;
         }
 
@@ -1344,11 +1341,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           height: 2px;
           background: linear-gradient(
             90deg,
-            oklch(0.78 0.08 65 / 0) 0%,
-            oklch(0.95 0.03 85 / 0.50) 50%,
-            oklch(0.78 0.08 65 / 0) 100%
+            rgba(170, 210, 255, 0.00) 0%,
+            rgba(200, 230, 255, 0.50) 50%,
+            rgba(170, 210, 255, 0.00) 100%
           );
-          box-shadow: 0 0 20px oklch(0.78 0.08 65 / 0.4);
+          box-shadow: 0 0 20px rgba(170, 210, 255, 0.4);
           animation: liChartScan 4s ease-in-out infinite;
           pointer-events: none;
         }
@@ -1366,7 +1363,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           left: 0; right: 0;
           top: 50%;
           height: 1px;
-          background: linear-gradient(90deg, oklch(0.78 0.08 65 / 0) 0%, oklch(0.78 0.08 65 / 0.20) 20%, oklch(0.78 0.08 65 / 0.20) 80%, oklch(0.78 0.08 65 / 0) 100%);
+          background: linear-gradient(90deg, rgba(170, 198, 255, 0.00) 0%, rgba(170, 198, 255, 0.20) 20%, rgba(170, 198, 255, 0.20) 80%, rgba(170, 198, 255, 0.00) 100%);
         }
 
         /* Scanning highlight */
@@ -1377,11 +1374,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           height: 1px;
           background: linear-gradient(
             90deg,
-            oklch(0.78 0.08 65 / 0) 0%,
-            oklch(0.95 0.03 85 / 0.70) 50%,
-            oklch(0.78 0.08 65 / 0) 100%
+            rgba(170, 210, 255, 0.00) 0%,
+            rgba(200, 230, 255, 0.70) 50%,
+            rgba(170, 210, 255, 0.00) 100%
           );
-          box-shadow: 0 0 12px oklch(0.78 0.08 65 / 0.5);
+          box-shadow: 0 0 12px rgba(170, 210, 255, 0.5);
           animation: liHorizontalScan 3s ease-in-out infinite;
         }
 
@@ -1397,34 +1394,34 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           align-items: center;
           gap: 8px;
           padding: 8px 14px;
-          border-radius: 0;
-          background: oklch(0.06 0.005 280 / 0.30);
-          border: 1px solid oklch(0.95 0.01 85 / 0.08);
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          border-radius: 10px;
+          background: rgba(0, 0, 0, 0.30);
+          border: 1px solid rgba(170, 198, 255, 0.08);
+          transition: all 0.25s ease;
         }
 
         .li-stat-pill:hover {
-          border-color: oklch(0.78 0.08 65 / 0.28);
-          background: oklch(0.78 0.08 65 / 0.08);
+          border-color: rgba(170, 198, 255, 0.18);
+          background: rgba(130, 160, 255, 0.08);
         }
 
         .li-signal-card {
           padding: 14px 16px;
-          border-radius: 0;
-          background: oklch(0.06 0.005 280 / 0.25);
-          border: 1px solid oklch(0.95 0.01 85 / 0.08);
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          border-radius: 12px;
+          background: rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(170, 198, 255, 0.08);
+          transition: all 0.3s ease;
         }
 
         .li-signal-card:hover {
-          border-color: oklch(0.78 0.08 65 / 0.28);
-          background: oklch(0.10 0.006 280 / 0.50);
+          border-color: rgba(170, 198, 255, 0.18);
+          background: rgba(10, 15, 25, 0.50);
         }
 
         .li-table-wrapper {
           overflow-x: auto;
           scrollbar-width: thin;
-          scrollbar-color: rgba(200, 170, 110, 0.30) rgba(0, 0, 0, 0);
+          scrollbar-color: rgba(170, 198, 255, 0.30) rgba(0, 0, 0, 0);
         }
         .li-table-wrapper::-webkit-scrollbar {
           height: 5px;
@@ -1433,11 +1430,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           background: rgba(0, 0, 0, 0);
         }
         .li-table-wrapper::-webkit-scrollbar-thumb {
-          background: rgba(200, 170, 110, 0.22);
-          border-radius: 0;
+          background: rgba(170, 198, 255, 0.22);
+          border-radius: 5px;
         }
         .li-table-wrapper::-webkit-scrollbar-thumb:hover {
-          background: rgba(200, 170, 110, 0.35);
+          background: rgba(170, 198, 255, 0.35);
         }
 
         .li-table-header {
@@ -1534,7 +1531,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           position: absolute;
           inset: 0;
           border-radius: 50%;
-          transform: scaleX(-1);
           background: conic-gradient(
             rgba(100, 160, 255, 0.90) 0deg 208deg,
             rgba(140, 220, 180, 0.85) 208deg 295deg,
@@ -1716,23 +1712,23 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         @keyframes liGlobeSpinEarth {
           0% {
             transform: perspective(700px) rotateX(10deg) rotateY(0deg);
-            filter: drop-shadow(0 0 4px rgba(200, 170, 110, 0.45));
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
           70% {
             transform: perspective(700px) rotateX(10deg) rotateY(-252deg);
-            filter: drop-shadow(0 0 4px rgba(200, 170, 110, 0.45));
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
           88% {
             transform: perspective(700px) rotateX(10deg) rotateY(-318deg);
-            filter: drop-shadow(0 0 10px rgba(200, 170, 110, 0.7));
+            filter: drop-shadow(0 0 10px rgba(140, 200, 255, 0.7));
           }
           94% {
             transform: perspective(700px) rotateX(10deg) rotateY(-338deg) scale(1.03);
-            filter: drop-shadow(0 0 18px rgba(220, 190, 130, 1)) drop-shadow(0 0 44px rgba(200, 170, 110, 0.9));
+            filter: drop-shadow(0 0 18px rgba(170, 230, 255, 1)) drop-shadow(0 0 44px rgba(120, 210, 255, 0.9));
           }
           100% {
             transform: perspective(700px) rotateX(10deg) rotateY(-360deg);
-            filter: drop-shadow(0 0 4px rgba(200, 170, 110, 0.45));
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.45));
           }
         }
         
@@ -1745,19 +1741,19 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         @keyframes liChartWave {
           0%, 100% { 
             transform: scaleY(1) translateY(0);
-            filter: drop-shadow(0 0 6px rgba(200, 170, 110, 0.4));
+            filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
           }
           25% { 
             transform: scaleY(1.05) translateY(-1px);
-            filter: drop-shadow(0 0 8px rgba(200, 170, 110, 0.6));
+            filter: drop-shadow(0 0 8px rgba(140, 190, 255, 0.6));
           }
           50% { 
             transform: scaleY(0.95) translateY(1px);
-            filter: drop-shadow(0 0 6px rgba(200, 170, 110, 0.4));
+            filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.4));
           }
           75% { 
             transform: scaleY(1.02) translateY(-0.5px);
-            filter: drop-shadow(0 0 10px rgba(200, 170, 110, 0.7));
+            filter: drop-shadow(0 0 10px rgba(140, 190, 255, 0.7));
           }
         }
 
@@ -1768,11 +1764,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         
         @keyframes liCalcPulse {
           0%, 100% { 
-            filter: drop-shadow(0 0 4px rgba(200, 170, 110, 0.4));
+            filter: drop-shadow(0 0 4px rgba(140, 190, 255, 0.4));
             transform: scale(1);
           }
           50% { 
-            filter: drop-shadow(0 0 12px rgba(220, 190, 130, 0.8));
+            filter: drop-shadow(0 0 12px rgba(140, 220, 255, 0.8));
             transform: scale(1.05);
           }
         }
@@ -1786,46 +1782,50 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Arrow - Minimal, goes to home page */}
+        {/* Sticky Close/Back Button - TOP RIGHT, highly visible, always in viewport */}
         <button
           onClick={onClose}
-          aria-label="Back to home"
+          aria-label="Close and go back to home"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            left: '14px',
-            zIndex: 9999,
-            width: '28px',
-            height: '28px',
-            borderRadius: 0,
-            border: 'none',
-            background: 'transparent',
-            color: 'oklch(0.78 0.08 65 / 0.60)',
+            top: '90px',
+            right: '20px',
+            zIndex: 99999,
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            background: 'rgba(0, 0, 0, 0.9)',
+            color: 'rgba(255, 255, 255, 1)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '18px',
-            fontWeight: 300,
-            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            fontSize: '22px',
+            fontWeight: 400,
+            transition: 'all 0.2s ease',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 80, 80, 0.15)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'oklch(0.78 0.08 65 / 0.08)';
-            e.currentTarget.style.color = 'oklch(0.78 0.08 65 / 0.95)';
+            e.currentTarget.style.background = 'rgba(220, 50, 50, 1)';
+            e.currentTarget.style.transform = 'scale(1.15)';
+            e.currentTarget.style.borderColor = 'rgba(255, 100, 100, 0.8)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'oklch(0.78 0.08 65 / 0.60)';
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
           }}
         >
-          ←
+          ✕
         </button>
 
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
         <div className="li-header-section" style={{ marginBottom: '8px' }}>
           {/* Row 1: Title + Feature Controls (top-right) */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ margin: 0, color: 'oklch(0.95 0.01 85 / 0.96)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 300, letterSpacing: '-0.03em', fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }}>
+            <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
               Live Intelligence
             </h2>
             
@@ -1844,7 +1844,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           </div>
           
           {/* Row 3: Subtitle */}
-          <p style={{ margin: '10px 0 0', color: 'oklch(0.75 0.01 85 / 0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.8, letterSpacing: '0.02em' }}>
+          <p style={{ margin: '10px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
             Your financial command center — real-time portfolio insights and signals.
           </p>
           
@@ -1869,10 +1869,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 14px',
-                      background: isActive ? 'rgba(200, 170, 110, 0.12)' : 'rgba(200, 170, 110, 0.04)',
-                      border: `1px solid ${isActive ? 'rgba(200, 170, 110, 0.30)' : 'rgba(200, 170, 110, 0.08)'}`,
-                      borderRadius: '0',
-                      color: isActive ? 'rgba(220, 190, 130, 0.95)' : 'rgba(200, 195, 175, 0.60)',
+                      background: isActive ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
+                      border: `1px solid ${isActive ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                      borderRadius: '10px',
+                      color: isActive ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
                       fontSize: '12px',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -1881,14 +1881,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     }}
                     onMouseOver={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.background = 'rgba(200, 170, 110, 0.08)';
-                        e.currentTarget.style.color = 'rgba(220, 190, 130, 0.80)';
+                        e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
+                        e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
                       }
                     }}
                     onMouseOut={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.background = 'rgba(200, 170, 110, 0.04)';
-                        e.currentTarget.style.color = 'rgba(200, 195, 175, 0.60)';
+                        e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
+                        e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
                       }
                     }}
                   >
@@ -1904,10 +1904,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 14px',
-                    background: 'linear-gradient(135deg, rgba(200, 170, 110, 0.15) 0%, rgba(140, 200, 150, 0.10) 100%)',
-                    border: '1px solid rgba(140, 200, 150, 0.25)',
-                    borderRadius: '0',
-                    color: 'rgba(140, 200, 150, 0.95)',
+                    background: 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)',
+                    border: '1px solid rgba(140, 220, 180, 0.25)',
+                    borderRadius: '10px',
+                    color: 'rgba(140, 220, 180, 0.95)',
                     fontSize: '12px',
                     fontWeight: 600,
                     textDecoration: 'none',
@@ -1915,12 +1915,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     whiteSpace: 'nowrap',
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(200, 170, 110, 0.20) 0%, rgba(140, 200, 150, 0.15) 100%)';
-                    e.currentTarget.style.borderColor = 'rgba(140, 200, 150, 0.40)';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.20) 0%, rgba(140, 220, 180, 0.15) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.40)';
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(200, 170, 110, 0.15) 0%, rgba(140, 200, 150, 0.10) 100%)';
-                    e.currentTarget.style.borderColor = 'rgba(140, 200, 150, 0.25)';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)';
+                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.25)';
                   }}
                 >
                   <span>Open Full Intelligence</span>
@@ -1940,9 +1940,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   appearance: 'none',
                   border: '1px solid rgba(255,255,255,0.12)',
                   background: 'rgba(10,10,12,0.70)',
-                  color: 'rgba(235, 230, 220, 0.85)',
+                  color: 'rgba(235,242,255,0.85)',
                   padding: '10px 16px',
-                  borderRadius: '0',
+                  borderRadius: '10px',
                   cursor: 'pointer',
                   fontSize: '13px',
                   fontWeight: 500,
@@ -1952,8 +1952,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   gap: '6px',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.35)';
-                  e.currentTarget.style.background = 'rgba(200, 170, 110, 0.10)';
+                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                  e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
@@ -1978,11 +1978,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   right: 0,
                   marginTop: '8px',
                   minWidth: '200px',
-                  background: 'rgba(10, 10, 10, 0.98)',
-                  border: '1px solid rgba(200, 195, 175, 0.20)',
-                  borderRadius: '0',
+                  background: 'rgba(15, 18, 25, 0.98)',
+                  border: '1px solid rgba(100, 160, 255, 0.20)',
+                  borderRadius: '14px',
                   padding: '8px',
-                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(200, 170, 110, 0.08)',
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(100, 160, 255, 0.08)',
                   backdropFilter: 'blur(20px)',
                   zIndex: 200,
                 }}>
@@ -2005,10 +2005,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       padding: '12px 14px',
                       background: 'transparent',
                       border: 'none',
-                      borderRadius: '0',
+                      borderRadius: '10px',
                       color: (typeof navigator !== 'undefined' && navigator.share)
-                        ? 'rgba(235, 230, 220, 0.85)'
-                        : 'rgba(235, 230, 220, 0.40)',
+                        ? 'rgba(220, 230, 255, 0.85)'
+                        : 'rgba(220, 230, 255, 0.40)',
                       fontSize: '13px',
                       fontWeight: 500,
                       cursor: (typeof navigator !== 'undefined' && navigator.share) ? 'pointer' : 'not-allowed',
@@ -2018,14 +2018,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     }}
                     onMouseOver={(e) => {
                       if (!(typeof navigator !== 'undefined' && navigator.share)) return;
-                      e.currentTarget.style.background = 'rgba(200, 170, 110, 0.12)';
+                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
                       e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
                     }}
                     onMouseOut={(e) => {
                       e.currentTarget.style.background = 'transparent';
                       e.currentTarget.style.color = (typeof navigator !== 'undefined' && navigator.share)
-                        ? 'rgba(235, 230, 220, 0.85)'
-                        : 'rgba(235, 230, 220, 0.40)';
+                        ? 'rgba(220, 230, 255, 0.85)'
+                        : 'rgba(220, 230, 255, 0.40)';
                     }}
                   >
                     <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📲</span>
@@ -2052,8 +2052,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                         padding: '12px 14px',
                         background: 'transparent',
                         border: 'none',
-                        borderRadius: '0',
-                        color: 'rgba(235, 230, 220, 0.85)',
+                        borderRadius: '10px',
+                        color: 'rgba(220, 230, 255, 0.85)',
                         fontSize: '13px',
                         fontWeight: 500,
                         cursor: 'pointer',
@@ -2061,12 +2061,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                         textDecoration: 'none',
                       }}
                       onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(200, 170, 110, 0.12)';
+                        e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
                         e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
                       }}
                       onMouseOut={(e) => {
                         e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = 'rgba(235, 230, 220, 0.85)';
+                        e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
                       }}
                     >
                       <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>{item.icon}</span>
@@ -2098,20 +2098,20 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       padding: '12px 14px',
                       background: 'transparent',
                       border: 'none',
-                      borderRadius: '0',
-                      color: 'rgba(235, 230, 220, 0.85)',
+                      borderRadius: '10px',
+                      color: 'rgba(220, 230, 255, 0.85)',
                       fontSize: '13px',
                       fontWeight: 500,
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.background = 'rgba(200, 170, 110, 0.12)';
+                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
                       e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
                     }}
                     onMouseOut={(e) => {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = 'rgba(235, 230, 220, 0.85)';
+                      e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
                     }}
                   >
                     <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📋</span>
@@ -2125,24 +2125,24 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               type="button"
               style={{
                 appearance: 'none',
-                border: '1px solid rgba(200, 195, 175, 0.45)',
-                background: 'linear-gradient(180deg, rgba(200, 170, 110, 0.18) 0%, rgba(10,10,12,0.65) 100%)',
-                color: 'rgba(235, 230, 220, 0.95)',
+                border: '1px solid rgba(170,198,255,0.45)',
+                background: 'linear-gradient(180deg, rgba(130,160,255,0.18) 0%, rgba(10,10,12,0.65) 100%)',
+                color: 'rgba(245,248,255,0.95)',
                 padding: '10px 16px',
-                borderRadius: '0',
+                borderRadius: '10px',
                 cursor: 'pointer',
                 fontSize: '13px',
                 fontWeight: 500,
-                boxShadow: '0 0 20px rgba(200, 170, 110, 0.12)',
+                boxShadow: '0 0 20px rgba(140,190,255,0.12)',
                 transition: 'all 0.25s ease',
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.65)';
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(200, 170, 110, 0.20)';
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.65)';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(140,190,255,0.20)';
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.45)';
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(200, 170, 110, 0.12)';
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.45)';
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(140,190,255,0.12)';
               }}
             >
               + Add Goal
@@ -2155,9 +2155,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 appearance: 'none',
                 border: '1px solid rgba(255,255,255,0.12)',
                 background: 'rgba(10,10,12,0.70)',
-                color: 'rgba(235, 230, 220, 0.85)',
+                color: 'rgba(235,242,255,0.85)',
                 padding: '10px 16px',
-                borderRadius: '0',
+                borderRadius: '10px',
                 cursor: 'pointer',
                 fontSize: '13px',
                 fontWeight: 500,
@@ -2168,8 +2168,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 textDecoration: 'none',
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.35)';
-                e.currentTarget.style.background = 'rgba(200, 170, 110, 0.10)';
+                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
+                e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
@@ -2192,15 +2192,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           {kpi.map((card) => (
             <div key={card.label} className="li-kpi-card">
               <div className="li-kpi-top">
-                <div style={{ color: 'rgba(200, 195, 175, 0.55)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
+                <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
                   {card.label}
                 </div>
                 {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
               </div>
-              <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(235, 230, 220, 0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+              <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
                 {card.value}
               </div>
-              <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200, 195, 175, 0.50)', fontSize: '12px', lineHeight: 1.4 }}>
+              <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200,215,240,0.50)', fontSize: '12px', lineHeight: 1.4 }}>
                 {card.hint}
               </div>
             </div>
@@ -2216,17 +2216,17 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ color: 'rgba(235, 230, 220, 0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
+                  <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
                     Allocation Overview
                   </div>
                   <div className="li-live-dot" />
                 </div>
-                <div style={{ marginTop: '4px', color: 'rgba(200, 195, 175, 0.55)', fontSize: '12px' }}>
+                <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
                   Real-time asset diversification
                 </div>
               </div>
               <div className="li-stat-pill" style={{ fontSize: '11px' }}>
-                <span style={{ color: 'rgba(200, 195, 175, 0.55)' }}>Updated</span>
+                <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
                 <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
               </div>
             </div>
@@ -2282,7 +2282,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 <div key={item.k} className="li-stat-pill" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '12px 14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.c, boxShadow: `0 0 8px ${item.c}` }} />
-                    <div style={{ color: 'rgba(200, 195, 175, 0.55)', fontSize: '11px' }}>{item.k}</div>
+                    <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px' }}>{item.k}</div>
                   </div>
                   <div style={{ marginTop: '6px', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                     <input
@@ -2301,14 +2301,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                         outline: 'none',
                         padding: 0,
                         margin: 0,
-                        color: 'rgba(235, 230, 220, 0.94)',
+                        color: 'rgba(245,248,255,0.94)',
                         fontSize: '18px',
                         fontWeight: 600,
                         textAlign: 'left',
                         fontVariantNumeric: 'tabular-nums',
                       }}
                     />
-                    <span style={{ color: 'rgba(235, 230, 220, 0.60)', fontSize: '14px', fontWeight: 600 }}>%</span>
+                    <span style={{ color: 'rgba(245,248,255,0.60)', fontSize: '14px', fontWeight: 600 }}>%</span>
                   </div>
                 </div>
               ))}
@@ -2321,15 +2321,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           {/* Right column - Live Signals */}
           <div className="li-dash-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ color: 'rgba(235, 230, 220, 0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
+              <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
                 Live Signals
               </div>
               <div style={{
                 padding: '3px 10px',
-                borderRadius: '0',
-                background: 'rgba(200, 170, 110, 0.12)',
+                borderRadius: '8px',
+                background: 'rgba(100,160,255,0.12)',
                 border: 'none',
-                color: 'rgba(220, 190, 130, 0.95)',
+                color: 'rgba(140,190,255,0.95)',
                 fontSize: '10px',
                 fontWeight: 600,
                 letterSpacing: '0.05em',
@@ -2337,7 +2337,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 COMING SOON
               </div>
             </div>
-            <div style={{ marginTop: '4px', color: 'rgba(200, 195, 175, 0.55)', fontSize: '12px' }}>
+            <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
               Portfolio alerts & opportunities
             </div>
 
@@ -2345,16 +2345,16 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               {/* Coming Soon Placeholder */}
               <div style={{
                 padding: '24px',
-                borderRadius: '0',
-                background: 'rgba(200, 170, 110, 0.04)',
-                border: '1px dashed rgba(200, 195, 175, 0.15)',
+                borderRadius: '12px',
+                background: 'rgba(100,160,255,0.04)',
+                border: '1px dashed rgba(100,160,255,0.15)',
                 textAlign: 'center',
               }}>
                 <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔔</div>
-                <div style={{ color: 'rgba(235, 230, 220, 0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
+                <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
                   Live Signals / Personalized Alerts
                 </div>
-                <div style={{ color: 'rgba(200, 195, 175, 0.45)', fontSize: '11px', lineHeight: 1.5, maxWidth: '320px', margin: '0 auto' }}>
+                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5, maxWidth: '320px', margin: '0 auto' }}>
                   Coming soon. Until then, join the waitlist or connect your portfolio for early access.
                 </div>
 
@@ -2366,10 +2366,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       alignItems: 'center',
                       gap: '8px',
                       padding: '9px 14px',
-                      borderRadius: '0',
-                      background: 'rgba(200, 170, 110, 0.12)',
-                      border: '1px solid rgba(200, 170, 110, 0.22)',
-                      color: 'rgba(235, 230, 220, 0.90)',
+                      borderRadius: '10px',
+                      background: 'rgba(100,160,255,0.12)',
+                      border: '1px solid rgba(100,160,255,0.22)',
+                      color: 'rgba(235,242,255,0.90)',
                       fontSize: '12px',
                       fontWeight: 600,
                       textDecoration: 'none',
@@ -2385,10 +2385,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       alignItems: 'center',
                       gap: '8px',
                       padding: '9px 14px',
-                      borderRadius: '0',
+                      borderRadius: '10px',
                       background: 'rgba(10,10,12,0.55)',
-                      border: '1px solid rgba(200, 195, 175, 0.18)',
-                      color: 'rgba(235, 230, 220, 0.85)',
+                      border: '1px solid rgba(170,198,255,0.18)',
+                      color: 'rgba(200,215,240,0.85)',
                       fontSize: '12px',
                       fontWeight: 600,
                       textDecoration: 'none',
@@ -2407,15 +2407,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ color: 'rgba(235, 230, 220, 0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
+                  <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
                     Holdings
                   </div>
                   <div style={{
                     padding: '3px 10px',
-                    borderRadius: '0',
-                    background: 'rgba(200, 170, 110, 0.12)',
+                    borderRadius: '8px',
+                    background: 'rgba(100,160,255,0.12)',
                     border: 'none',
-                    color: 'rgba(220, 190, 130, 0.95)',
+                    color: 'rgba(140,190,255,0.95)',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.05em',
@@ -2423,7 +2423,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     COMING SOON
                   </div>
                 </div>
-                <div style={{ marginTop: '4px', color: 'rgba(200, 195, 175, 0.55)', fontSize: '12px' }}>
+                <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
                   Real-time portfolio positions
                 </div>
               </div>
@@ -2432,16 +2432,16 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             {/* Coming Soon Placeholder */}
             <div style={{
               padding: '32px',
-              borderRadius: '0',
-              background: 'rgba(200, 170, 110, 0.04)',
-              border: '1px dashed rgba(200, 195, 175, 0.15)',
+              borderRadius: '14px',
+              background: 'rgba(100,160,255,0.04)',
+              border: '1px dashed rgba(100,160,255,0.15)',
               textAlign: 'center',
             }}>
               <div style={{ fontSize: '32px', marginBottom: '12px' }}>📊</div>
-              <div style={{ color: 'rgba(235, 230, 220, 0.75)', fontSize: '14px', fontWeight: 500, marginBottom: '8px' }}>
+              <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '14px', fontWeight: 500, marginBottom: '8px' }}>
                 Portfolio Tracking
               </div>
-              <div style={{ color: 'rgba(200, 195, 175, 0.45)', fontSize: '12px', lineHeight: 1.5, maxWidth: '400px', margin: '0 auto' }}>
+              <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '12px', lineHeight: 1.5, maxWidth: '400px', margin: '0 auto' }}>
                 Link your demat account or manually add your investments to see real-time holdings, P&L, and performance analytics
               </div>
               <div style={{ marginTop: '16px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -2452,10 +2452,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     alignItems: 'center',
                     gap: '8px',
                     padding: '9px 14px',
-                    borderRadius: '0',
-                    background: 'rgba(200, 170, 110, 0.12)',
-                    border: '1px solid rgba(200, 170, 110, 0.22)',
-                    color: 'rgba(235, 230, 220, 0.90)',
+                    borderRadius: '10px',
+                    background: 'rgba(100,160,255,0.12)',
+                    border: '1px solid rgba(100,160,255,0.22)',
+                    color: 'rgba(235,242,255,0.90)',
                     fontSize: '12px',
                     fontWeight: 600,
                     textDecoration: 'none',
@@ -2471,10 +2471,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     alignItems: 'center',
                     gap: '8px',
                     padding: '9px 14px',
-                    borderRadius: '0',
+                    borderRadius: '10px',
                     background: 'rgba(10,10,12,0.55)',
-                    border: '1px solid rgba(200, 195, 175, 0.18)',
-                    color: 'rgba(235, 230, 220, 0.85)',
+                    border: '1px solid rgba(170,198,255,0.18)',
+                    color: 'rgba(200,215,240,0.85)',
                     fontSize: '12px',
                     fontWeight: 600,
                     textDecoration: 'none',
@@ -2496,15 +2496,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             style={{ 
               gridColumn: '1 / -1',
               background: '#000000',
-              border: '1px solid rgba(200, 195, 175, 0.10)',
-              borderRadius: '0',
+              border: '1px solid rgba(100, 180, 255, 0.10)',
+              borderRadius: '16px',
               overflow: 'hidden',
               padding: 0,
             }}
           >
             <div style={{
               padding: '16px 20px',
-              borderBottom: '1px solid rgba(200, 195, 175, 0.10)',
+              borderBottom: '1px solid rgba(100, 180, 255, 0.10)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -2515,32 +2515,32 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h3 style={{ 
                   margin: 0, 
-                  color: 'rgba(235, 230, 220, 0.95)', 
+                  color: 'rgba(220, 240, 255, 0.95)', 
                   fontSize: '16px', 
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                 }}>
-                  <svg className="li-chart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(200, 170, 110, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="li-chart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                   </svg>
                   Live Chart — NIFTY 50
                 </h3>
                 <span style={{
                   padding: '3px 8px',
-                  background: 'rgba(200, 170, 110, 0.12)',
-                  border: '1px solid rgba(200, 170, 110, 0.25)',
-                  borderRadius: '0',
+                  background: 'rgba(100, 180, 255, 0.12)',
+                  border: '1px solid rgba(100, 180, 255, 0.25)',
+                  borderRadius: '4px',
                   fontSize: '9px',
                   fontWeight: 600,
-                  color: 'rgba(200, 170, 110, 0.95)',
+                  color: 'rgba(140, 200, 255, 0.95)',
                   letterSpacing: '0.08em',
                 }}>
                   TRADINGVIEW
                 </span>
               </div>
-              <div style={{ color: 'rgba(200, 195, 175, 0.55)', fontSize: '11px' }}>
+              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
                 Real-time data • Powered by TradingView
               </div>
             </div>
@@ -2558,7 +2558,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 />
               </div>
             </LazyTradingView>
-            <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(200, 195, 175, 0.08)', fontSize: '10px', color: 'rgba(200, 195, 175, 0.50)' }}>
+            <div style={{ padding: '8px 16px', background: '#000000', borderTop: '1px solid rgba(100, 180, 255, 0.08)', fontSize: '10px', color: 'rgba(180, 200, 230, 0.50)' }}>
               💡 Click the symbol name at top-left to search & change stocks (SENSEX, BANKNIFTY, RELIANCE, TCS, etc.)
             </div>
           </div>
@@ -2572,15 +2572,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             style={{ 
               gridColumn: '1 / -1',
               background: '#000000',
-              border: '1px solid rgba(200, 195, 175, 0.10)',
-              borderRadius: '0',
+              border: '1px solid rgba(100, 180, 255, 0.10)',
+              borderRadius: '16px',
               overflow: 'hidden',
               padding: 0,
             }}
           >
             <div style={{
               padding: '14px 20px',
-              borderBottom: '1px solid rgba(200, 195, 175, 0.08)',
+              borderBottom: '1px solid rgba(100, 180, 255, 0.08)',
               background: '#000000',
               display: 'flex',
               alignItems: 'center',
@@ -2591,14 +2591,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h3 style={{ 
                   margin: 0,
-                  color: 'rgba(235, 230, 220, 0.95)',
+                  color: 'rgba(230, 240, 255, 0.95)',
                   fontSize: '15px',
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                 }}>
-                  <svg className="li-globe-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(200, 170, 110, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="li-globe-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="2" y1="12" x2="22" y2="12"/>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -2607,7 +2607,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 </h3>
                 <MarketStatusBadge />
               </div>
-              <div style={{ color: 'rgba(200, 195, 175, 0.50)', fontSize: '10px' }}>
+              <div style={{ color: 'rgba(180, 200, 230, 0.50)', fontSize: '10px' }}>
                 Real-time quotes • TradingView
               </div>
             </div>
@@ -2651,6 +2651,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
           )}
 
+          {/* Morning Brief (only visible in morning_brief mode) */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <MorningBrief />
+          </div>
+
           {/* Night section (only visible in night_summary mode) */}
           <div style={{ gridColumn: '1 / -1' }}>
             <NightSummary />
@@ -2668,7 +2673,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             }}>
               <h3 style={{ 
                 margin: 0, 
-                color: 'rgba(235, 230, 220, 0.95)', 
+                color: 'rgba(230, 240, 255, 0.95)', 
                 fontSize: '17px', 
                 fontWeight: 600,
                 letterSpacing: '0.02em',
@@ -2676,13 +2681,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 alignItems: 'center',
                 gap: '8px',
               }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(200, 170, 110, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(200, 170, 110, 0.4))' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(140, 190, 255, 0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 6px rgba(140, 190, 255, 0.4))' }}>
                   <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
                 </svg>
                 Quick Access
               </h3>
               <span style={{ 
-                color: 'rgba(200, 195, 175, 0.50)', 
+                color: 'rgba(180, 200, 230, 0.50)', 
                 fontSize: '11px' 
               }}>
                 Click to explore services
@@ -2762,33 +2767,33 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     display: 'block',
                     textDecoration: 'none',
                     padding: '20px',
-                    background: 'linear-gradient(180deg, rgba(15, 15, 15, 0.96) 0%, rgba(10, 10, 10, 0.98) 100%)',
-                    border: '1px solid rgba(200, 195, 175, 0.10)',
-                    borderRadius: '0',
-                    transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                    background: 'linear-gradient(180deg, rgba(18, 22, 30, 0.96) 0%, rgba(10, 10, 12, 0.98) 100%)',
+                    border: '1px solid rgba(170, 198, 255, 0.10)',
+                    borderRadius: '16px',
+                    transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
                     cursor: 'pointer',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.25)';
+                    e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.25)';
                     e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(200, 170, 110, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(140, 190, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.10)';
+                    e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.10)';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.03)';
                   }}
                 >
                   <div style={{ 
                     marginBottom: '12px',
-                    color: 'rgba(200, 170, 110, 0.85)',
-                    filter: 'drop-shadow(0 0 8px rgba(200, 170, 110, 0.25))',
+                    color: 'rgba(140, 190, 255, 0.85)',
+                    filter: 'drop-shadow(0 0 8px rgba(140, 190, 255, 0.25))',
                   }}>
                     {iconMap[service.icon]}
                   </div>
                   <div style={{ 
-                    color: 'rgba(235, 230, 220, 0.95)', 
+                    color: 'rgba(235, 245, 255, 0.95)', 
                     fontSize: '15px', 
                     fontWeight: 600,
                     marginBottom: '6px',
@@ -2797,7 +2802,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     {service.title}
                   </div>
                   <div style={{ 
-                    color: 'rgba(200, 195, 175, 0.60)', 
+                    color: 'rgba(170, 198, 255, 0.60)', 
                     fontSize: '12px',
                   }}>
                     {service.desc}
@@ -2840,10 +2845,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     height: 'min(90vh, calc(100dvh - 32px))',
                     maxHeight: 'calc(100dvh - 32px)',
                     margin: 'auto',
-                    backgroundColor: '#000000',
-                    borderRadius: '0',
+                    backgroundColor: '#0a0a12',
+                    borderRadius: '16px',
                     overflow: 'hidden',
-                    border: '1px solid rgba(200, 195, 175, 0.15)',
+                    border: '1px solid rgba(170, 198, 255, 0.15)',
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
                   }}
                   onClick={(e) => e.stopPropagation()}
@@ -2857,10 +2862,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       top: '12px',
                       right: '12px',
                       zIndex: 10,
-                      color: 'rgba(235, 230, 220, 0.9)',
+                      color: 'rgba(230, 240, 255, 0.9)',
                       background: 'rgba(0, 0, 0, 0.7)',
-                      border: '1px solid rgba(200, 195, 175, 0.2)',
-                      borderRadius: '0',
+                      border: '1px solid rgba(170, 198, 255, 0.2)',
+                      borderRadius: '10px',
                       width: '44px',
                       height: '44px',
                       cursor: 'pointer',
@@ -2871,12 +2876,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       transition: 'all 0.2s ease',
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.background = 'rgba(200, 170, 110, 0.15)';
-                      e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.4)';
+                      e.currentTarget.style.background = 'rgba(170, 198, 255, 0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.4)';
                     }}
                     onMouseOut={(e) => {
                       e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
-                      e.currentTarget.style.borderColor = 'rgba(200, 195, 175, 0.2)';
+                      e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.2)';
                     }}
                   >
                     ✕
@@ -2889,7 +2894,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       width: '100%',
                       height: '100%',
                       border: 'none',
-                      borderRadius: '0',
+                      borderRadius: '16px',
                       display: 'block',
                     }}
                   />

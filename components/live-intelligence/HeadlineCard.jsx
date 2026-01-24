@@ -346,13 +346,21 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
     onSaveChange?.();
   }, [isSaved, headline, onSaveChange]);
 
+  // Track if user is scrolling to prevent accidental card opens
+  const isScrollingRef = useRef(false);
+  const touchStartXRef = useRef(0);
+
   // Mobile gestures: Long press to save
   const handleTouchStart = useCallback((e) => {
     touchStartY.current = e.touches[0].clientY;
+    touchStartXRef.current = e.touches[0].clientX;
+    isScrollingRef.current = false;
     const timer = setTimeout(() => {
-      handleSave();
-      // Haptic feedback if available
-      if (navigator.vibrate) navigator.vibrate(50);
+      if (!isScrollingRef.current) {
+        handleSave();
+        // Haptic feedback if available
+        if (navigator.vibrate) navigator.vibrate(50);
+      }
     }, 800);
     setLongPressTimer(timer);
   }, [handleSave]);
@@ -362,15 +370,24 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
       clearTimeout(longPressTimer);
       setLongPressTimer(null);
     }
-    // Swipe up gesture to open modal
-    const touchEndY = e.changedTouches[0].clientY;
-    const swipeDistance = touchStartY.current - touchEndY;
-    if (swipeDistance > 80) {
-      setShowModal(true);
+    // Only trigger swipe-to-open if NOT scrolling (minimal movement)
+    if (!isScrollingRef.current) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const swipeDistance = touchStartY.current - touchEndY;
+      // Swipe up gesture to open modal - increased threshold
+      if (swipeDistance > 100) {
+        setShowModal(true);
+      }
     }
   }, [longPressTimer]);
 
-  const handleTouchMove = useCallback(() => {
+  const handleTouchMove = useCallback((e) => {
+    // Track movement - if user moves more than 15px, they are scrolling
+    const moveY = Math.abs(e.touches[0].clientY - touchStartY.current);
+    const moveX = Math.abs(e.touches[0].clientX - touchStartXRef.current);
+    if (moveY > 15 || moveX > 15) {
+      isScrollingRef.current = true;
+    }
     // Cancel long press if user moves finger
     if (longPressTimer) {
       clearTimeout(longPressTimer);
@@ -410,6 +427,11 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
   const handleCardClick = (e) => {
     // Prevent any scroll behavior from parent containers
     e.stopPropagation();
+    
+    // Don't open if user was scrolling (mobile)
+    if (isScrollingRef.current) {
+      return;
+    }
     
     // In archive mode, open source URL directly
     if (mode === 'archive') {

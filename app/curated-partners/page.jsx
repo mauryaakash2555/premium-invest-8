@@ -120,8 +120,24 @@ export default function CuratedPartners() {
               textShadow: '0 6px 30px color-mix(in oklab, var(--lux-accent) 20%, transparent)',
             }}
           >
-            Curated Partners
+            Partner Placement Framework
           </h1>
+          <div
+            style={{
+              display: 'inline-block',
+              marginBottom: '16px',
+              padding: '10px 16px',
+              borderRadius: 0,
+              border: '1px solid rgba(255,255,255,0.14)',
+              background: 'rgba(255,255,255,0.04)',
+              color: 'rgba(255,255,255,0.78)',
+              fontSize: '12px',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Invite-Only
+          </div>
           <p
             style={{
               fontSize: 'clamp(18px, 2.5vw, 22px)',
@@ -132,7 +148,7 @@ export default function CuratedPartners() {
               fontWeight: 300,
             }}
           >
-            An exclusive network of verified professionals for your complete financial wellness
+            Partner placements are reviewed periodically for fit, transparency, and client experience.
           </p>
         </div>
       </section>
@@ -140,9 +156,9 @@ export default function CuratedPartners() {
       {/* Partner Cards Section */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
         
-        {/* POSITION #1 - DIAMOND ADVISORY PARTNER (COMPETITIVE BIDDING) */}
+        {/* POSITION #1 - DIAMOND PARTNER (INVITE-ONLY PLACEMENT) */}
         <MobileScrollBoost
-          className="partner-card diamond-shiny-card bidding-active"
+          className="partner-card diamond-shiny-card"
           holdMs={5000}
           onMouseEnter={() => setHoveredCard(1)}
           onMouseLeave={() => setHoveredCard(null)}
@@ -204,7 +220,7 @@ export default function CuratedPartners() {
             }}
           >
             <Star size={16} fill="#000" className="animate-spin-slow" />
-            BIDDING ACTIVE
+            INVITE-ONLY
           </div>
 
           {/* Left Side */}
@@ -213,7 +229,7 @@ export default function CuratedPartners() {
               <span style={{ fontSize: '72px', filter: 'drop-shadow(0 0 30px color-mix(in oklab, var(--lux-accent) 90%, transparent))' }}>💎</span>
               <div>
                 <div style={{ fontSize: '18px', fontWeight: 900, color: '#FFF', letterSpacing: '5px', marginBottom: '8px', textShadow: '0 0 15px color-mix(in oklab, var(--lux-accent) 100%, transparent)' }}>
-                  ULTIMATE SPONSORSHIP
+                  PARTNER PLACEMENT
                 </div>
                 <h2 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontFamily: '"Playfair Display", serif', color: '#FFF', fontWeight: 900, margin: 0, letterSpacing: '3px', textShadow: '0 0 30px color-mix(in oklab, var(--lux-accent) 80%, transparent)' }}>
                   DIAMOND PARTNER
@@ -221,16 +237,16 @@ export default function CuratedPartners() {
               </div>
             </div>
 
-            <p style={{ fontSize: '24px', color: 'rgba(255,255,255,0.72)', marginBottom: '32px', fontWeight: 800, fontStyle: 'italic', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              The Ultimate Bidding War for the #1 Spot
+            <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.70)', marginBottom: '26px', fontWeight: 600, letterSpacing: '0.6px' }}>
+              Expression of interest is available for qualified partners.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {[
-                'Maximum Dominance & Brand Visibility',
-                'Prime Home Page Real-Estate (Reserved)',
-                'Direct Access to Ultra-High-Net-Worth Leads',
-                'Exclusive Media Synergy & Co-Branding',
+                'Premium placement within our partner framework',
+                'Clear positioning, disclosures, and compliance-first tone',
+                'Lead intake via BM Wealth contact workflows',
+                'Periodic review for fit and client experience',
               ].map((benefit, idx) => (
                 <div
                   key={idx}
@@ -253,29 +269,25 @@ export default function CuratedPartners() {
                 </div>
               ))}
             </div>
-            
-            <div style={{ marginTop: '30px', padding: '15px 20px', background: 'rgba(255,255,255,0.04)', border: '1px dashed color-mix(in oklab, var(--lux-accent) 45%, transparent)', borderRadius: 0 }}>
-              <p style={{ color: '#FFF', fontSize: '15px', margin: 0, fontWeight: 500 }}>
-                ⚠️ <span style={{ color: 'var(--lux-accent)', fontWeight: 700 }}>Note:</span> Multiple sponsors are currently bidding for this slot. Final selection based on authority and service excellence.
-              </p>
-            </div>
           </div>
 
           {/* Right Side */}
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '25px', position: 'relative', zIndex: 1 }} className="card-right-side">
             <div style={{ textAlign: 'center', background: 'rgba(0, 0, 0, 0.65)', padding: '35px 45px', borderRadius: 0, border: '1px solid color-mix(in oklab, var(--lux-accent) 35%, transparent)', marginBottom: '15px', boxShadow: '0 20px 80px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.06)' }}>
-              <div style={{ fontSize: '18px', color: 'var(--lux-accent)', marginBottom: '12px', letterSpacing: '3px', fontWeight: 900 }}>CURRENT BIDDING</div>
-              <div style={{ fontSize: '46px', color: '#FFF', fontWeight: 900, fontFamily: '"Playfair Display", serif', letterSpacing: '1px', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
-                <span>Private</span>
+              <div style={{ fontSize: '14px', color: 'var(--lux-accent)', marginBottom: '12px', letterSpacing: '0.26em', fontWeight: 900, textTransform: 'uppercase' }}>
+                Review Status
               </div>
-              <div style={{ fontSize: '15px', color: 'var(--lux-accent)', marginTop: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>🔥 12 SPONSORS VYING</div>
+              <div style={{ fontSize: '28px', color: '#FFF', fontWeight: 800, fontFamily: '"Playfair Display", serif', letterSpacing: '0.5px' }}>
+                Invite-only
+              </div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.70)', marginTop: '10px', fontWeight: 600, letterSpacing: '0.04em' }}>
+                Selection based on fit and client experience
+              </div>
             </div>
 
-            <Link href="/contact?subject=diamond-bidding-competition" className="btn-diamond-shiny">
-              Enter the Competition
+            <Link href="/contact?subject=diamond-expression-of-interest" className="btn-diamond-shiny">
+              Expression of Interest
             </Link>
-            
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>SLOT RENEWS MONTHLY</p>
           </div>
         </MobileScrollBoost>
 

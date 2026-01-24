@@ -42,21 +42,34 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+            // Blog pages are safe to CDN-cache; use SWR in prod.
+            value: isProd
+              ? 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400'
+              : 'no-store',
           },
           {
             key: 'CDN-Cache-Control',
-            value: 'no-store',
+            value: isProd ? 'public, s-maxage=3600, stale-while-revalidate=86400' : 'no-store',
           },
           {
             key: 'Vercel-CDN-Cache-Control',
-            value: 'no-store',
+            value: isProd ? 'public, s-maxage=3600, stale-while-revalidate=86400' : 'no-store',
           },
         ],
       },
       {
         // Cache static assets for 1 year (production only)
         source: '/:path*.(ico|jpg|jpeg|png|gif|webp|avif|svg|woff|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: isProd ? 'public, max-age=31536000, immutable' : 'no-store',
+          },
+        ],
+      },
+      {
+        // Cache heavier media/docs for 1 year (production only)
+        source: '/:path*.(mp4|webm|mp3|pdf)',
         headers: [
           {
             key: 'Cache-Control',

@@ -2,9 +2,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = {
   ...buildMetadata({
-    title: "Contact — BM Wealth",
+    title: "Contact BM Wealth - Financial Advisory Services",
     description:
-      "Contact BM Wealth Mumbai for premium wealth services and distribution support. Office in Kalbadevi. Call +91 88509 77259 or WhatsApp.",
+      "Get in touch with BM Wealth in Mumbai for portfolio management, mutual funds and insurance advisory. Call, WhatsApp or visit our Kalbadevi office.",
     path: "/contact",
   }),
 };

@@ -17,14 +17,14 @@
  * It helps one specific feature work correctly.
  *
  * TO MODIFY:
- * - 🔧 Search for "TO MODIFY" notes inside the file.
+ * - ≡ƒöº Search for "TO MODIFY" notes inside the file.
  */
 
 'use client';
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { ExternalLink, CheckCircle, Sparkles } from 'lucide-react';
+import { CheckCircle, Sparkles } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import FAQSection from '@/components/shared/FAQSection';
 import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
@@ -50,7 +50,7 @@ export default function Platforms() {
     {
       question: 'Are these links affiliate links?',
       answer:
-        'Some links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
+        'Execution links (if/when enabled) may include sponsored or tracked URLs. Where applicable, we will disclose this clearly.',
     },
     {
       question: 'Which platform should I choose?',
@@ -186,14 +186,14 @@ export default function Platforms() {
             
             <div style={{ marginTop: '20px', padding: '12px 15px', background: 'rgba(255,255,255,0.04)', border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, rgba(255,255,255,0.12))', borderRadius: 0 }}>
               <p style={{ color: '#FFF', fontSize: '14px', margin: 0, fontWeight: 600 }}>
-                🔥 <span style={{ color: 'var(--lux-accent)', fontWeight: 800 }}>Bidding Alert:</span> 8 Institutional Sponsors are currently vying for this exclusive slot.
+                🚨 <span style={{ color: 'var(--lux-accent)', fontWeight: 800 }}>Bidding Alert:</span> 8 Institutional Sponsors are currently vying for this exclusive slot.
               </p>
             </div>
           </div>
 
           <div className="platform-button">
             <Link href="/contact?subject=diamond-bidding-platforms" className="btn-diamond-shiny-sm">
-              Enter Bidding
+              <span>Enter Bidding</span>
             </Link>
           </div>
         </MobileScrollBoost>
@@ -216,11 +216,35 @@ export default function Platforms() {
                 </div>
               ))}
             </div>
+
+            <div style={{ marginTop: '18px' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  fontSize: '11px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.65)',
+                  border: '1px solid rgba(255,255,255,0.16)',
+                  background: 'rgba(255,255,255,0.04)',
+                  padding: '8px 12px',
+                }}
+              >
+                Execution integration under review
+              </span>
+              <div style={{ marginTop: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6 }}>
+                Execution links will be enabled once platform integrations are live.
+              </div>
+            </div>
           </div>
           <div className="platform-button">
-            <a href="/track/zerodha" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              Open Free Demat Account <ExternalLink size={16} />
-            </a>
+            <div
+              className="btn-primary"
+              aria-disabled="true"
+              style={{ opacity: 0.55, cursor: 'not-allowed', pointerEvents: 'none' }}
+            >
+              Execution currently unavailable
+            </div>
           </div>
         </MobileScrollBoost>
 
@@ -242,11 +266,35 @@ export default function Platforms() {
                 </div>
               ))}
             </div>
+
+            <div style={{ marginTop: '18px' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  fontSize: '11px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.65)',
+                  border: '1px solid rgba(255,255,255,0.16)',
+                  background: 'rgba(255,255,255,0.04)',
+                  padding: '8px 12px',
+                }}
+              >
+                Execution integration under review
+              </span>
+              <div style={{ marginTop: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6 }}>
+                Execution links will be enabled once platform integrations are live.
+              </div>
+            </div>
           </div>
           <div className="platform-button">
-            <a href="/track/smallcase" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              Explore Smallcases <ExternalLink size={16} />
-            </a>
+            <div
+              className="btn-primary"
+              aria-disabled="true"
+              style={{ opacity: 0.55, cursor: 'not-allowed', pointerEvents: 'none' }}
+            >
+              Execution currently unavailable
+            </div>
           </div>
         </MobileScrollBoost>
 
@@ -268,28 +316,52 @@ export default function Platforms() {
                 </div>
               ))}
             </div>
+
+            <div style={{ marginTop: '18px' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  fontSize: '11px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.65)',
+                  border: '1px solid rgba(255,255,255,0.16)',
+                  background: 'rgba(255,255,255,0.04)',
+                  padding: '8px 12px',
+                }}
+              >
+                Execution integration under review
+              </span>
+              <div style={{ marginTop: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6 }}>
+                Execution links will be enabled once platform integrations are live.
+              </div>
+            </div>
           </div>
           <div className="platform-button">
-            <a href="/track/groww" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              Start Free Account <ExternalLink size={16} />
-            </a>
+            <div
+              className="btn-primary"
+              aria-disabled="true"
+              style={{ opacity: 0.55, cursor: 'not-allowed', pointerEvents: 'none' }}
+            >
+              Execution currently unavailable
+            </div>
           </div>
         </MobileScrollBoost>
 
         <section style={{ padding: '10px 20px 0' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: 'rgba(255,255,255,0.75)', maxWidth: '900px', margin: '0 auto 0', textAlign: 'center' }}>
-            Related resources: <Link href="/mutual-funds" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
-            <Link href="/sip" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>SIP</Link> ·{' '}
+            Related resources: <Link href="/mutual-funds" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Mutual Funds</Link> {' • '}
+            <Link href="/sip" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>SIP</Link> {' • '}
             <Link href="/contact" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Contact</Link>
           </p>
         </section>
 
         <FAQSection faqs={faqs} />
 
-        {/* Affiliate Disclaimer */}
+        {/* Disclosure */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
-            <strong style={{ color: 'color-mix(in oklab, var(--lux-accent) 70%, rgba(255,255,255,0.62))' }}>Affiliate Disclosure:</strong> Some outbound links may be affiliate/sponsored links. If you sign up through them, we may earn a commission at no extra cost to you. This helps us support free educational content.
+            <strong style={{ color: 'color-mix(in oklab, var(--lux-accent) 70%, rgba(255,255,255,0.62))' }}>Disclosure:</strong> This directory is informational. Execution integrations may be unavailable while reviewed. If/when outbound execution links are enabled, we will disclose sponsored/tracked URLs where applicable.
           </p>
         </div>
 

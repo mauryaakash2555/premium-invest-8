@@ -20,8 +20,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Terms & Conditions | BM Wealth Mumbai",
-  description: "Terms and conditions for using BM Wealth services.",
+  title: "Terms & Conditions | BM Wealth",
+  description: "Review the terms and conditions for using BM Wealth’s website and services.",
   path: "/terms",
 });
 

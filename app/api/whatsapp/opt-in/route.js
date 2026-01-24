@@ -110,8 +110,7 @@ export async function POST(request) {
  */
 export async function DELETE(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const phone = searchParams.get('phone');
+    const phone = request.nextUrl.searchParams.get('phone');
 
     if (!phone) {
       return NextResponse.json(

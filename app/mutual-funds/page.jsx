@@ -5,6 +5,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
+import RelatedServices from '@/components/seo/RelatedServices';
 import { FundCostComparator } from '@/components/calculators/FundCostComparator';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
@@ -181,6 +182,40 @@ const MutualFunds = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Mutual Fund Investment Services',
+    name: 'Mutual Fund Investment Services',
+    url: pageUrl,
+    provider: {
+      '@type': 'FinancialService',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    areaServed: 'IN',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Wealth Management Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Mutual Fund Investment',
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'SIP Planning',
+          },
+        },
+      ],
+    },
+  };
+
   const divider = {
     height: 1,
     background: `linear-gradient(90deg, rgba(${ACCENT_RGB},0), rgba(${ACCENT_RGB},0.35), rgba(255,255,255,0.10), rgba(${ACCENT_RGB},0.35), rgba(${ACCENT_RGB},0))`,
@@ -205,6 +240,11 @@ const MutualFunds = () => {
         id="mutual-funds-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="mutual-funds-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
       {/* Hero (luxury, high-end spacing, no brown) */}
@@ -628,6 +668,8 @@ const MutualFunds = () => {
         </section>
 
         <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
+
+        <RelatedServices currentService="mutual-funds" />
 
         <ClosingPerspective>
           Mutual funds are tools. Their effectiveness depends on clarity of purpose, discipline, and long-term

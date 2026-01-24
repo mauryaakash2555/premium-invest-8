@@ -12,27 +12,12 @@ import {
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 import { trackPanelExpand, trackPanelCollapse, trackHeadlineView, trackHeadlinePause } from '@/lib/live-intelligence/analytics';
 
-// Sort headlines with BREAKING first, then by urgency priority
-const sortHeadlinesWithBreakingFirst = (headlines) => {
-  const urgencyOrder = { BREAKING: 0, IMPORTANT: 1, PREMIUM: 2, REGULAR: 3, EDUCATIONAL: 4 };
-  
-  return [...headlines].sort((a, b) => {
-    // Breaking news always first
-    const aIsBreaking = a.urgency === 'BREAKING' || a.category === 'breaking';
-    const bIsBreaking = b.urgency === 'BREAKING' || b.category === 'breaking';
-    
-    if (aIsBreaking && !bIsBreaking) return -1;
-    if (!aIsBreaking && bIsBreaking) return 1;
-    
-    // Then sort by urgency level
-    const aOrder = urgencyOrder[a.urgency] ?? 3;
-    const bOrder = urgencyOrder[b.urgency] ?? 3;
-    
-    if (aOrder !== bOrder) return aOrder - bOrder;
-    
-    // Then by timestamp (newest first)
-    return new Date(b.timestamp || b.created_at || 0) - new Date(a.timestamp || a.created_at || 0);
-  });
+// Preserve API ordering (category-balanced/priority-scored), but ensure a BREAKING item can lead.
+const moveBreakingToFront = (headlines) => {
+  const list = Array.isArray(headlines) ? headlines : [];
+  const breakingIndex = list.findIndex((h) => h?.urgency === 'BREAKING' || h?.category === 'breaking');
+  if (breakingIndex <= 0) return list;
+  return [list[breakingIndex], ...list.slice(0, breakingIndex), ...list.slice(breakingIndex + 1)];
 };
 
 /**
@@ -79,9 +64,9 @@ export default function HeadlineFeed() {
       
       const data = await res.json();
       if (data.ok && data.headlines && data.headlines.length > 0) {
-        // Sort: Breaking news first, then by urgency/priority
-        const sorted = sortHeadlinesWithBreakingFirst(data.headlines);
-        setHeadlines(sorted.slice(0, cap));
+        // Keep API-provided ordering (already balanced/scored), but allow BREAKING to surface first.
+        const ordered = moveBreakingToFront(data.headlines);
+        setHeadlines(ordered.slice(0, cap));
         setIsLive(data.source === 'database');
         setActiveIndex(0);
         return true;

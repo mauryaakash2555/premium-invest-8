@@ -85,7 +85,7 @@ export async function POST(request) {
  */
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const period = searchParams.get('period') || 'day'; // day, week, month
     const eventType = searchParams.get('type');
     
