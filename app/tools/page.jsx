@@ -6,7 +6,7 @@ import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { getBodyTextPaletteStyles } from "@/lib/ui/bodyTextPaletteStyles";
-import { LaserBeam } from "@/components/LaserBeamCanvas";
+import { LaserBeam } from "@/components/ui/laser-beam";
 
 /*
   LAYOUT-LOCKED: /tools hub page
@@ -26,19 +26,26 @@ export const metadata = buildMetadata({
 
 function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
   const content = (
-    <Card className={`border border-white/10 ultra-luxury-glass premium-hover-glow relative overflow-hidden rounded-none h-full ${className}`}>
+    <Card
+      className={`border border-white/10 ultra-luxury-glass premium-hover-glow relative overflow-hidden rounded-none h-full ${laser ? "overflow-visible" : ""} ${className}`}
+    >
       {laser ? (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{ borderRadius: 0 }}>
+        <div className="absolute inset-0 pointer-events-none overflow-visible" aria-hidden="true" style={{ borderRadius: 0 }}>
           <LaserBeam
             width="100%"
             height="100%"
-            color="#C9A24D"
+            color="var(--lux-accent)"
             borderRadius={0}
-            duration={20}
-            glowIntensity={10}
-            beamLength={0.08}
-            borderWidth={0}
+            duration={12}
+            glowIntensity={20}
+            beamLength={0.12}
+            borderWidth={1}
+            baseBorderWidth={0}
             backgroundColor="transparent"
+            normalizeToSize
+            normalizeBaseWidth={350}
+            normalizeBaseHeight={220}
+            normalizeBaseBorderRadius={0}
           />
         </div>
       ) : null}
