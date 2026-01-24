@@ -199,9 +199,9 @@ const Navigation = () => {
         style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
         suppressHydrationWarning
       >
-        <div className="w-full max-w-[1600px] flex justify-between items-center">
+        <div className="w-full max-w-[1600px] flex items-center">
           <Logo size={48} fontSize="24px" />
-          <div className="flex gap-10 items-center">
+          <div className="flex gap-6 items-center ml-auto">
             <DesktopLink path="/" label="Home" />
             <DesktopLink path="/about-us" label="About Us" />
             <DesktopLink path="/intelligence" label="Intelligence" />

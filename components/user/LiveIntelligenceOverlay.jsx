@@ -1782,38 +1782,40 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Close/Back Button - TOP RIGHT, highly visible */}
+        {/* Sticky Close/Back Button - TOP RIGHT, highly visible, always in viewport */}
         <button
           onClick={onClose}
           aria-label="Close and go back to home"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            top: '16px',
-            right: '16px',
+            top: '90px',
+            right: '20px',
             zIndex: 99999,
-            width: '36px',
-            height: '36px',
+            width: '48px',
+            height: '48px',
             borderRadius: '50%',
-            border: 'none',
-            background: 'rgba(0, 0, 0, 0.85)',
-            color: 'rgba(255, 255, 255, 0.9)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            background: 'rgba(0, 0, 0, 0.9)',
+            color: 'rgba(255, 255, 255, 1)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '18px',
-            fontWeight: 300,
+            fontSize: '22px',
+            fontWeight: 400,
             transition: 'all 0.2s ease',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 80, 80, 0.15)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 50, 50, 0.9)';
-            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.background = 'rgba(220, 50, 50, 1)';
+            e.currentTarget.style.transform = 'scale(1.15)';
+            e.currentTarget.style.borderColor = 'rgba(255, 100, 100, 0.8)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.85)';
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
             e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
           }}
         >
           ✕
