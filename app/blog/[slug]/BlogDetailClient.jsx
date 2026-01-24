@@ -265,6 +265,123 @@ export default function BlogDetailClient({ slug }) {
     };
   }, [post, scrollBoostSeed]);
 
+  // Upgrade affiliate execution links inside blog HTML into a consistent premium CTA card.
+  // This keeps the underlying href/rel intact, but avoids rendering long tracking URLs.
+  useEffect(() => {
+    if (!post) return;
+    if (typeof window === 'undefined') return;
+
+    let cancelled = false;
+    let observer = null;
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    const enhanceAnchors = (container) => {
+      if (!container) return false;
+
+      const anchors = Array.from(container.querySelectorAll('a.bm-cta-gold-flat'));
+      if (anchors.length === 0) return false;
+
+      anchors.forEach((a) => {
+        if (!a || a.dataset?.bmExecEnhanced === '1') return;
+        a.dataset.bmExecEnhanced = '1';
+
+        const href = a.getAttribute('href') || '';
+        if (!href) return;
+
+        const p = a.closest('p');
+        if (!p) return;
+
+        // Optional label paragraph usually sits right above the link paragraph.
+        const prev = p.previousElementSibling;
+        const prevText = (prev?.textContent || '').toLowerCase();
+        const labelP = prev && prev.tagName === 'P' && prevText.includes('optional execution link') ? prev : null;
+
+        // Pull a human title from the nearest previous heading (H2/H3), if available.
+        let title = '';
+        let cursor = (labelP || p).previousElementSibling;
+        while (cursor) {
+          if (cursor.tagName === 'H2' || cursor.tagName === 'H3') {
+            title = (cursor.textContent || '').trim();
+            break;
+          }
+          cursor = cursor.previousElementSibling;
+        }
+
+        const rel = a.getAttribute('rel') || 'nofollow sponsored noopener noreferrer';
+        const target = a.getAttribute('target') || '_blank';
+
+        const card = document.createElement('div');
+        card.className = 'bm-exec-card';
+        card.setAttribute('data-bm-exec-card', '1');
+
+        const meta = document.createElement('div');
+        meta.className = 'bm-exec-card-meta';
+        meta.textContent = 'SPONSORED LINK · OPENS IN A NEW TAB';
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'bm-exec-card-title';
+        titleEl.textContent = title || 'Execution Link';
+
+        const btn = document.createElement('a');
+        btn.className = 'bm-exec-card-button';
+        btn.setAttribute('href', href);
+        btn.setAttribute('target', target);
+        btn.setAttribute('rel', rel);
+        btn.textContent = 'CHECK ELIGIBILITY →';
+
+        card.appendChild(titleEl);
+        card.appendChild(meta);
+        card.appendChild(btn);
+
+        // Replace the original paragraphs with the new card.
+        if (labelP) {
+          labelP.replaceWith(card);
+          p.remove();
+        } else {
+          p.replaceWith(card);
+        }
+      });
+
+      return true;
+    };
+
+    const tryEnhance = () => {
+      if (cancelled) return;
+
+      const container = document.querySelector('.blog-detail-page .blog-html');
+      const did = enhanceAnchors(container);
+
+      if (did) {
+        if (observer) observer.disconnect();
+        observer = null;
+        return;
+      }
+
+      attempts += 1;
+      if (attempts >= maxAttempts) {
+        if (observer) observer.disconnect();
+        observer = null;
+        return;
+      }
+
+      window.setTimeout(tryEnhance, 50);
+    };
+
+    // Observe DOM changes so the enhancement also works when content is swapped/hydrated later.
+    observer = new MutationObserver(() => tryEnhance());
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+
+    // Kick off immediately.
+    tryEnhance();
+
+    return () => {
+      cancelled = true;
+      if (observer) observer.disconnect();
+      observer = null;
+    };
+  }, [post, scrollBoostSeed]);
+
   if (isLoading) {
     return (
       <div style={{
