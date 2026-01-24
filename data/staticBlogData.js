@@ -4709,18 +4709,18 @@ export const staticBlogPost11 = {
     IDFC First Bank cards work well as a <strong>primary credit card</strong>, especially for those who want predictable billing and minimal complexity.
   </p>
 
-  <p><strong>Optional execution link:</strong></p>
-  <p>
-    👉
+  <div style="background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 100%); border: 1px solid rgba(255,255,255,0.12); border-radius: 0; padding: 28px 32px; margin: 24px 0; box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+    <div style="font-size: 20px; font-family: 'Playfair Display', serif; color: rgba(255,255,255,0.92); font-weight: 600; margin-bottom: 6px;">IDFC First Bank Credit Card</div>
+    <div style="font-size: 11px; color: rgba(255,255,255,0.50); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px;">Sponsored Link • Opens in a new tab</div>
     <a
-      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
+      style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1.5px solid var(--lux-accent); color: var(--lux-accent); padding: 12px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; transition: all 0.3s ease;"
     >
-      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply
+      Check Eligibility →
     </a>
-  </p>
+  </div>
 
   <hr />
 
@@ -4746,18 +4746,18 @@ export const staticBlogPost11 = {
 
   <p>AU Bank products are often chosen by users who want <strong>quick access without excessive documentation</strong>.</p>
 
-  <p><strong>Optional execution link:</strong></p>
-  <p>
-    👉
+  <div style="background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 100%); border: 1px solid rgba(255,255,255,0.12); border-radius: 0; padding: 28px 32px; margin: 24px 0; box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+    <div style="font-size: 20px; font-family: 'Playfair Display', serif; color: rgba(255,255,255,0.92); font-weight: 600; margin-bottom: 6px;">AU Bank Credit Options</div>
+    <div style="font-size: 11px; color: rgba(255,255,255,0.50); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px;">Sponsored Link • Opens in a new tab</div>
     <a
-      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
+      style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1.5px solid var(--lux-accent); color: var(--lux-accent); padding: 12px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; transition: all 0.3s ease;"
     >
-      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number
+      Check Eligibility →
     </a>
-  </p>
+  </div>
 
   <hr />
 
@@ -4785,18 +4785,18 @@ export const staticBlogPost11 = {
     IndusInd cards are often chosen as a <strong>secondary or premium card</strong>, complementing a more utility-focused primary card.
   </p>
 
-  <p><strong>Optional execution link:</strong></p>
-  <p>
-    👉
+  <div style="background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 100%); border: 1px solid rgba(255,255,255,0.12); border-radius: 0; padding: 28px 32px; margin: 24px 0; box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+    <div style="font-size: 20px; font-family: 'Playfair Display', serif; color: rgba(255,255,255,0.92); font-weight: 600; margin-bottom: 6px;">IndusInd Bank Credit Card</div>
+    <div style="font-size: 11px; color: rgba(255,255,255,0.50); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px;">Sponsored Link • Opens in a new tab</div>
     <a
-      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
+      style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1.5px solid var(--lux-accent); color: var(--lux-accent); padding: 12px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; transition: all 0.3s ease;"
     >
-      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead
+      Check Eligibility →
     </a>
-  </p>
+  </div>
 
   <hr />
 
