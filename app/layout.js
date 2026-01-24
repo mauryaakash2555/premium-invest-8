@@ -189,7 +189,14 @@ export default async function RootLayout({ children }) {
 							if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
 						} catch {}
 
-						const doReload = didWork || shouldDevHardReload;
+						// Even if there is no SW/cache to delete, a deploy can leave the browser holding
+						// stale JS chunks (HTML/chunk mismatch). A one-time cache-busting reload fixes it.
+						const doReload =
+							didWork ||
+							shouldDevHardReload ||
+							force ||
+							buildChanged ||
+							firstSeenBuildWithSW;
 						if (!doReload) return;
 						try {
 							if (shouldDevHardReload && window.sessionStorage) {

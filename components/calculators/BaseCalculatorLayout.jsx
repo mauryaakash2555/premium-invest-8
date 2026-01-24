@@ -1,7 +1,7 @@
 "use client";
 
 import { DisclaimerFooter } from "@/components/calculators/DisclaimerFooter";
-import { LaserBeam } from "@/components/ui/laser-beam";
+import { LaserBeam } from "@/components/LaserBeamCanvas";
 
 export function BaseCalculatorLayout({
   header,
@@ -29,16 +29,11 @@ export function BaseCalculatorLayout({
           height="auto"
           color={laserColor}
           borderRadius={12}
-          duration={5}
-          glowIntensity={20}
-          beamLength={0.12}
+          duration={18}
+          glowIntensity={12}
+          beamLength={0.10}
           borderWidth={1}
-          baseBorderWidth={0}
           backgroundColor="transparent"
-          normalizeToSize
-          normalizeBaseWidth={350}
-          normalizeBaseHeight={220}
-          normalizeBaseBorderRadius={12}
         >
           {innerContent}
         </LaserBeam>
