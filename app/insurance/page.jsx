@@ -6,6 +6,7 @@ import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import RelatedServices from '@/components/seo/RelatedServices';
 import { InsuranceCoverSnapshot } from '@/components/calculators/InsuranceCoverSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
@@ -72,6 +73,33 @@ const Insurance = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Insurance & Investment Planning',
+    name: 'Insurance & Investment Planning',
+    url: pageUrl,
+    provider: {
+      '@type': 'FinancialService',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    areaServed: 'IN',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Wealth Management Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Insurance Solutions',
+          },
+        },
+      ],
+    },
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -110,6 +138,11 @@ const Insurance = () => {
         id="insurance-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="insurance-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
   <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
@@ -376,6 +409,8 @@ const Insurance = () => {
         </section>
 
         <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
+
+        <RelatedServices currentService="insurance" />
 
         <ClosingPerspective>
           Insurance works best when the structure is clear and the servicing is consistent. The goal is simple: protect what matters, with documentation and expectations aligned from day one.

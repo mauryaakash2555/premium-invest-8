@@ -32,6 +32,7 @@ import Navigation from "@/components/user/Navigation";
 import Footer from "@/components/user/Footer";
 import WhatsAppFloat from "@/components/user/WhatsAppFloat";
 import { LuxuryMobileDock } from "@/components/user/LuxuryMobileDock";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import CookieConsent from "@/components/shared/CookieConsent";
 import { AnalyticsGate } from "@/components/analytics/AnalyticsGate";
 import { schemaGraph } from "./metadata";
@@ -154,6 +155,15 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
         let didWork = false;
         const tasks = [];
 
+        const devHardKey = '__bmw_dev_hard_reload_v1';
+        let shouldDevHardReload = false;
+        try {
+          shouldDevHardReload =
+            isLocalHost &&
+            !!window.sessionStorage &&
+            sessionStorage.getItem(devHardKey) !== '1';
+        } catch {}
+
         if ('serviceWorker' in navigator) {
           tasks.push(
             navigator.serviceWorker
@@ -199,8 +209,13 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
             if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
           } catch {}
 
-          // Only reload if we actually cleared something.
-          if (!didWork) return;
+          const doReload = didWork || shouldDevHardReload;
+          if (!doReload) return;
+          try {
+            if (shouldDevHardReload && window.sessionStorage) {
+              sessionStorage.setItem(devHardKey, '1');
+            }
+          } catch {}
           params.delete('resetSW');
           params.delete('reset-sw');
           params.set(doneParam, '1');
@@ -281,6 +296,7 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
           }}
         >
           {!isStoreHost && <Navigation />}
+          {!isStoreHost && <Breadcrumbs />}
           <main style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}>
             {children}
           </main>

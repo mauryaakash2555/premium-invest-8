@@ -6,6 +6,7 @@ import FAQSection from '@/components/shared/FAQSection';
 import ClosingPerspective from '@/components/shared/ClosingPerspective';
 import BackToLiveIntelligence from '@/components/shared/BackToLiveIntelligence';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import RelatedServices from '@/components/seo/RelatedServices';
 import { RebalanceDriftSnapshot } from '@/components/calculators/RebalanceDriftSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
@@ -79,6 +80,33 @@ const PortfolioManagement = () => {
     publisher: { '@type': 'Organization', name: SITE_NAME },
   };
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Portfolio Management Services (PMS)',
+    name: 'Portfolio Management Services (PMS)',
+    url: pageUrl,
+    provider: {
+      '@type': 'FinancialService',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    areaServed: 'IN',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Wealth Management Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Portfolio Management Service',
+          },
+        },
+      ],
+    },
+  };
+
   const step = {
     width: 34,
     height: 34,
@@ -116,6 +144,11 @@ const PortfolioManagement = () => {
         id="portfolio-management-article-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        id="portfolio-management-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
       {/* Hero */}
@@ -331,6 +364,8 @@ const PortfolioManagement = () => {
         </section>
 
         <FAQSection faqs={faqs} pageUrl={pageUrl} title="Questions People Quietly Ask" />
+
+        <RelatedServices currentService="portfolio-management" />
 
         <ClosingPerspective>
           Portfolios perform best when the structure is clear and the review process is calm. A disciplined approach helps you stay aligned to goals while navigating market cycles.

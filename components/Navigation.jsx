@@ -61,11 +61,12 @@ const Navigation = () => {
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 999,
+          zIndex: 9999,
           background: isScrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(20px)' : 'none',
           borderBottom: isScrolled ? '1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.06))' : 'none',
           transition: 'all 0.3s ease',
+          pointerEvents: 'auto',
         }}
       >
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -94,6 +95,13 @@ const Navigation = () => {
                   transition: 'color 0.3s ease',
                   textTransform: 'uppercase',
                   letterSpacing: '1px',
+                  padding: '8px 4px',
+                  cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
+                onClick={(e) => {
+                  // Ensure navigation happens
+                  e.currentTarget.blur();
                 }}
               >
                 {link.label}

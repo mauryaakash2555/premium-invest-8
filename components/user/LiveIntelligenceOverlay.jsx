@@ -1782,39 +1782,41 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Arrow - Minimal, goes to home page */}
+        {/* Sticky Close/Back Button - TOP RIGHT, highly visible */}
         <button
           onClick={onClose}
-          aria-label="Back to home"
+          aria-label="Close and go back to home"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            left: '14px',
-            zIndex: 9999,
-            width: '28px',
-            height: '28px',
-            borderRadius: '6px',
+            top: '16px',
+            right: '16px',
+            zIndex: 99999,
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
             border: 'none',
-            background: 'transparent',
-            color: 'rgba(140, 190, 255, 0.60)',
+            background: 'rgba(0, 0, 0, 0.85)',
+            color: 'rgba(255, 255, 255, 0.9)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '18px',
             fontWeight: 300,
-            transition: 'all 0.15s ease',
+            transition: 'all 0.2s ease',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(140, 190, 255, 0.08)';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.95)';
+            e.currentTarget.style.background = 'rgba(255, 50, 50, 0.9)';
+            e.currentTarget.style.transform = 'scale(1.1)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = 'rgba(140, 190, 255, 0.60)';
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.85)';
+            e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          ←
+          ✕
         </button>
 
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}

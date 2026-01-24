@@ -20,8 +20,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Privacy Policy | BM Wealth Mumbai",
-  description: "BM Wealth privacy policy.",
+  title: "Privacy Policy | BM Wealth",
+  description: "Read BM Wealth’s privacy policy and how we handle personal information.",
   path: "/privacy",
 });
 

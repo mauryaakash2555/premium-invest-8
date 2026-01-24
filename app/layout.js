@@ -135,6 +135,14 @@ export default async function RootLayout({ children }) {
 			if (shouldRun && !alreadyRan) {
 				let didWork = false;
 				const tasks = [];
+				const devHardKey = '__bmw_dev_hard_reload_v1';
+				let shouldDevHardReload = false;
+				try {
+					shouldDevHardReload =
+						isLocalHost &&
+						!!window.sessionStorage &&
+						sessionStorage.getItem(devHardKey) !== '1';
+				} catch {}
 
 				if ('serviceWorker' in navigator) {
 					tasks.push(
@@ -176,20 +184,24 @@ export default async function RootLayout({ children }) {
 					);
 				}
 
-				Promise.all(tasks)
-					.finally(() => {
+				Promise.all(tasks).finally(() => {
 						try {
 							if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
 						} catch {}
 
-						// Only reload if we actually cleared something.
-						if (!didWork) return;
+						const doReload = didWork || shouldDevHardReload;
+						if (!doReload) return;
+						try {
+							if (shouldDevHardReload && window.sessionStorage) {
+								sessionStorage.setItem(devHardKey, '1');
+							}
+						} catch {}
 						params.delete('resetSW');
 						params.delete('reset-sw');
 						params.set(doneParam, '1');
 						url.search = params.toString();
 						window.location.replace(url.toString());
-					});
+				});
 			}
 		}
 	} catch {

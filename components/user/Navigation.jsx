@@ -245,7 +245,7 @@ const Navigation = () => {
               {servicesOpen ? (
                 <div
                   role="menu"
-                  className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_30px_120px_rgba(0,0,0,0.65)] overflow-hidden"
+                  className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/20 backdrop-blur-3xl shadow-[0_30px_120px_rgba(0,0,0,0.55)] overflow-hidden"
                 >
                   <div className="p-5">
                     <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">
@@ -281,6 +281,7 @@ const Navigation = () => {
 
             <DesktopLink path="/tools" label="Tools" />
             <DesktopLink path="/live-intelligence" label="Live Intel" />
+            <DesktopLink path="/platforms" label="Platforms" />
             <DesktopLink path="/client-portal" label="Client Portal" />
             <DesktopLink path="/curated-partners" label="Curated Partners" />
             <DesktopLink path="/blog" label="Blog" />
