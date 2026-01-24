@@ -209,8 +209,7 @@ export async function PUT(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const id = request.nextUrl.searchParams.get('id');
     
     if (!id) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
@@ -298,8 +297,7 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const id = request.nextUrl.searchParams.get('id');
     
     if (!id) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });

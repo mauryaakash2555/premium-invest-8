@@ -21,7 +21,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get('category') || 'all';
     const dateRange = searchParams.get('dateRange') || '30days';
     const search = searchParams.get('search') || '';

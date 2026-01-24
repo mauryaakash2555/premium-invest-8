@@ -28,8 +28,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const feedUrl = searchParams.get('url');
+    const feedUrl = request.nextUrl.searchParams.get('url');
 
     if (!feedUrl) {
       return NextResponse.json(
