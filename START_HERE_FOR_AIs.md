@@ -2,13 +2,6 @@
 
 ## ⚠️ STOP BEFORE YOU CODE!
 
-## 🚨 CRITICAL COLOR RULE (DO NOT BREAK)
-
-- This repo must NEVER reintroduce muddy brown / tan / bronze tones.
-- This repo must NEVER introduce alternate golds (no `#DAA520`, `#C0A062`, `#C6A15B`, etc.).
-- Use ONLY `var(--lux-accent)` (defined in `app/globals.css` as `oklch(0.78 0.08 65)`).
-- If a library requires HEX, use the exact HEX equivalent of `var(--lux-accent)` and document why.
-
 ## ✅ DEV SERVER (1-CLICK, RELIABLE)
 
 Use the VS Code Task (recommended):

@@ -33,21 +33,26 @@ import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import FAQSection from '@/components/shared/FAQSection';
 
 export default function BlogPage() {
-  // Always render static posts immediately (SSR + first paint), then optionally
-  // merge backend posts in the background for production.
-  const staticBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
-
-  const [blogPosts, setBlogPosts] = useState(staticBlogs);
-  const [isLoading, setIsLoading] = useState(false);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchBackendBlogs();
+    fetchBlogPosts();
   }, []);
-
-  const fetchBackendBlogs = async () => {
+  const fetchBlogPosts = async () => {
     try {
-      // Fetch backend blogs only on production host (avoid localhost CORS noise)
+      // Ensure staticBlogData is an array and has content
+      const staticBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
+        ? staticBlogData 
+        : [staticBlogPost];
+      
+      // Show all static blogs immediately
+      setBlogPosts(staticBlogs);
+      setIsLoading(false);
+      
+      // Then try to fetch backend blogs in background (skip on localhost to avoid CORS noise)
       const debug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === '1';
       const isLocalhost =
         typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -74,12 +79,23 @@ export default function BlogPage() {
       setIsLoading(false);
     }
   };
+  const allPosts = blogPosts.length > 0 ? blogPosts : [staticBlogPost];
+  
+  // Get unique categories
+  const categories = [...new Set(allPosts.map(post => post.category).filter(Boolean))];
+  
+  // Filter posts by selected category
+  const displayPosts = selectedCategory 
+    ? allPosts.filter(post => post.category === selectedCategory)
+    : allPosts;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // DESIGN RULE: Display ALL posts, no category filtering.
-  // Category filters looked cheap and were removed intentionally.
-  // ─────────────────────────────────────────────────────────────────────────────
-  const displayPosts = blogPosts.length > 0 ? blogPosts : [staticBlogPost];
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -212,14 +228,92 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* 
-        ─────────────────────────────────────────────────────────────────────────────
-        DESIGN RULE: No ugly inline filter buttons.
-        Category filtering and "Explore Live Intelligence" / "Browse Tools" buttons
-        have been intentionally removed. They looked cheap and cluttered.
-        DO NOT add them back.
-        ─────────────────────────────────────────────────────────────────────────────
-      */}
+      {/* Internal links */}
+      <section className="section-container" style={{ paddingTop: '26px', paddingBottom: '10px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '12px',
+          }}
+        >
+          <Link
+            href="/live-intelligence"
+            style={{
+              padding: '10px 16px',
+              borderRadius: 0,
+              border: '1px solid rgba(170, 198, 255, 0.35)',
+              background: 'rgba(170, 198, 255, 0.08)',
+              color: 'rgba(235, 242, 255, 0.92)',
+              textDecoration: 'none',
+              fontSize: '14px',
+            }}
+          >
+            Explore Live Intelligence
+          </Link>
+          <Link
+            href="/tools"
+            style={{
+              padding: '10px 16px',
+              borderRadius: 0,
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 45%, transparent)',
+              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              color: 'rgba(235, 242, 255, 0.92)',
+              textDecoration: 'none',
+              fontSize: '14px',
+            }}
+          >
+            Browse Tools
+          </Link>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      {categories.length > 1 && (
+        <section className="section-container" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '12px',
+            justifyContent: 'center',
+          }}>
+            <button
+              onClick={() => setSelectedCategory(null)}
+              style={{
+                padding: '8px 20px',
+                borderRadius: 0,
+                border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
+                background: selectedCategory === null ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
+                color: selectedCategory === null ? 'var(--lux-accent)' : '#888',
+                cursor: 'pointer',
+                fontSize: '14px',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              All
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: 0,
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
+                  background: selectedCategory === category ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
+                  color: selectedCategory === category ? 'var(--lux-accent)' : '#888',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Blog Posts */}
       <section className="section-container blog-posts-section">

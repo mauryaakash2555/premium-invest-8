@@ -7,8 +7,6 @@ import WhatsAppFloat from '@/components/user/WhatsAppFloat';
 import { LuxuryMobileDock } from '@/components/user/LuxuryMobileDock';
 import CookieConsent from '@/components/shared/CookieConsent';
 import { AnalyticsGate } from '@/components/analytics/AnalyticsGate';
-import { Toaster } from 'react-hot-toast';
-import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 
 export default function LayoutShellClient({
   children,
@@ -34,7 +32,6 @@ export default function LayoutShellClient({
         }}
       >
         {!isStoreHost && <Navigation />}
-        {!isStoreHost && <Breadcrumbs />}
         <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
           {children}
         </main>
@@ -46,8 +43,6 @@ export default function LayoutShellClient({
 
       <CookieConsent />
       <AnalyticsGate measurementId={measurementId} />
-
-      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
     </>
   );
 }

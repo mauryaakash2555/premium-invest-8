@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Slider } from "@/components/ui/slider";
 
@@ -629,32 +628,6 @@ export function TaxCalculator() {
                         </div>
                       </>
                     )}
-                  </div>
-
-                  <div
-                    className="rounded-xl p-4"
-                    style={{
-                      border: "1px solid oklch(1 0 0 / 0.10)",
-                      backgroundColor: "oklch(0.18 0 0 / 0.55)",
-                    }}
-                  >
-                    <div
-                      className="text-sm font-semibold"
-                      style={{ color: "oklch(0.985 0 0)" }}
-                    >
-                      💡 Cashflow optimisation also includes smart credit usage.
-                    </div>
-                    <div
-                      className="mt-1 text-[13px]"
-                      style={{ color: "oklch(0.86 0 0)" }}
-                    >
-                      For high-income professionals, the right credit card improves liquidity without increasing risk.
-                    </div>
-                    <div className="mt-4">
-                      <Link href="/best-credit-cards-high-income-india" className="bm-cta-gold-flat">
-                        View Suitable Credit Cards
-                      </Link>
-                    </div>
                   </div>
 
                   {winner !== "tie" && savings > 0 ? (

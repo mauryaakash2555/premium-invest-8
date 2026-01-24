@@ -24,22 +24,11 @@
 ﻿"use client"
 
 import { MessageCircle, ArrowRight, ExternalLink, ShieldCheck, Gem, Crown, Info, MapPin } from "lucide-react"
-import { useMemo, useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useIsMobile } from "@/hooks/useIsMobile"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import NewsletterSignup from "@/components/shared/NewsletterSignup"
-
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return function rand() {
-    a |= 0;
-    a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null)
@@ -54,20 +43,6 @@ const Footer = () => {
   const noticeRef = useRef(null)
   const [sebiActive, setSebiActive] = useState(false)
   const [noticeActive, setNoticeActive] = useState(false)
-
-  const dustParticles = useMemo(() => {
-    const count = isMobile ? 14 : 25;
-    const rand = mulberry32(20260123 + count);
-
-    return Array.from({ length: count }, (_, i) => {
-      const variant = (i % 3) + 1;
-      const top = rand() * 95;
-      const left = rand() * 95;
-      const dur = 7 + rand() * 12;
-      const delay = rand() * 15;
-      return { variant, top, left, dur, delay };
-    });
-  }, [isMobile]);
 
   useEffect(() => {
     setMounted(true)
@@ -93,11 +68,11 @@ const Footer = () => {
 
     const makeObserver = (el, onVisible, options) => {
       if (!el) return null
-      const observer = new IntersectionObserver(([entry]) => {
+      const obs = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) onVisible()
       }, options)
-      observer.observe(el)
-      return observer
+      obs.observe(el)
+      return obs
     }
 
     // Always observe ONLY the footer Concierge WhatsApp card (desktop + mobile)
@@ -178,9 +153,8 @@ const Footer = () => {
       if (intervalId) window.clearInterval(intervalId)
       timeouts.forEach((t) => clearTimeout(t))
     }
-  }, [isMobile]);
-
-  const navigationLinks = {
+  }, [isMobile])
+const navigationLinks = {
     quick: [
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about-us" },
@@ -204,14 +178,15 @@ const Footer = () => {
       { label: "Refund Policy", href: "/refund" },
       { label: "Compliance", href: "/compliance" },
     ],
-  };
+  }
 
   const googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=66,+Vinod+Villa+Bldg.,+1st+floor+office+no.+108,+Cavel+Cross+Lane+3,+Kalbadevi,+Mumbai+-+400002,+Maharashtra,+India"
 
+  if (!mounted) return null;
 
-  const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered;
+  const isWHAPremium = isWHAScrollBoost || (isMobile && isWHAActive) || isWHAHovered
 
-  return (
+return (
     <footer className="relative w-full mt-20 font-inter overflow-hidden bg-black">
       {/* ULTRA LUXURY WAVE TOP */}
   <div className="absolute top-0 left-0 w-full h-[6px] luxury-wave-3s z-30 opacity-90 bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent shadow-[0_0_22px_color-mix(in_oklab,var(--lux-accent)_35%,transparent)]" />
@@ -224,15 +199,15 @@ const Footer = () => {
         
         {/* ENHANCED: Truly Randomized Floating Dust Particles Across Whole Footer */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-          {dustParticles.map((p, i) => (
+          {[...Array(isMobile ? 14 : 25)].map((_, i) => (
             <div 
               key={i}
               className="gold-particle" 
               style={{ 
-                top: `${p.top}%`,
-                left: `${p.left}%`,
-                animation: `dust-drift-random-${p.variant} ${p.dur}s infinite linear`,
-                animationDelay: `${p.delay}s`,
+                top: `${Math.random() * 95}%`, 
+                left: `${Math.random() * 95}%`, 
+                animation: `dust-drift-random-${(i % 3) + 1} ${7 + Math.random() * 12}s infinite linear`,
+                animationDelay: `${Math.random() * 15}s`
               }} 
             />
           ))}
@@ -274,40 +249,15 @@ const Footer = () => {
             {/* Vault Column */}
             <div className="space-y-10">
               <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                <span
-                  aria-hidden
+                <Gem
+                  className="w-5 h-5 drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.75)]"
+                  strokeWidth={1.5}
                   style={{
-                    position: 'relative',
-                    width: '20px',
-                    height: '20px',
-                    display: 'inline-grid',
-                    placeItems: 'center',
+                    color: 'oklch(0.78 0.08 65)',
+                    filter:
+                      'drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.70)) drop-shadow(0 0 22px oklch(0.78 0.08 65 / 0.28))',
                   }}
-                >
-                  <span
-                    aria-hidden
-                    style={{
-                      position: 'absolute',
-                      inset: '-10px',
-                      background:
-                        'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0.10) 28%, rgba(170,198,255,0.22) 55%, transparent 72%)',
-                      filter: 'blur(6px)',
-                      opacity: 0.85,
-                      pointerEvents: 'none',
-                    }}
-                  />
-                  <Gem
-                    className="w-5 h-5"
-                    strokeWidth={1.5}
-                    style={{
-                      position: 'relative',
-                      zIndex: 1,
-                      color: 'oklch(0.78 0.08 65)',
-                      filter:
-                        'brightness(1.08) drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.78)) drop-shadow(0 0 26px oklch(0.78 0.08 65 / 0.30)) drop-shadow(0 0 40px rgba(170, 198, 255, 0.18))',
-                    }}
-                  />
-                </span>
+                />
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -395,16 +345,13 @@ const Footer = () => {
                   <p className="m-0 transition-all cursor-pointer tracking-wide break-all hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>support@bmwealth.co.in</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'var(--lux-accent)' }}>Location</p>
+                  <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Location</p>
                   <a 
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start"
-                    style={{
-                      color: 'rgba(235,235,235,0.82)',
-                      filter: 'drop-shadow(0 0 0 transparent)',
-                    }}
+                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start hover:text-[oklch(0.78_0.08_65)] hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.55)]"
+                    style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}
                   >
                     <MapPin className="w-4 h-4 transition-transform group-hover:scale-125" />
                     Mumbai, Maharashtra
@@ -435,13 +382,13 @@ const Footer = () => {
                   justifyContent: 'flex-start', // Always start from left
                 }}
               >
-                {/* Dynamic Expansion - Accent/Green from inside (no brown tones allowed) */}
+                {/* Dynamic Expansion - Brown to Green from Inside */}
                 <div 
                   className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
                   style={{ 
                     background: isWHAActive 
                       ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
-                      : (isWHAPremium ? 'radial-gradient(circle at center, color-mix(in oklab, var(--lux-accent) 28%, transparent) 0%, transparent 75%)' : 'transparent'),
+                      : (isWHAPremium ? 'radial-gradient(circle at center, rgba(139, 111, 71, 0.35) 0%, transparent 75%)' : 'transparent'),
                     transform: isWHAPremium ? 'scale(2.5)' : 'scale(0)',
                     opacity: isWHAPremium ? 1 : 0,
                     zIndex: 1
@@ -460,7 +407,7 @@ const Footer = () => {
                   <div 
                     className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
-                        borderColor: isWHAPremium ? '#25D366' : 'color-mix(in oklab, var(--lux-accent) 30%, transparent)',
+                      borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
                     }}
                   >
@@ -486,7 +433,7 @@ const Footer = () => {
                       <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
                       <p className={cn(
                         "text-[9px] md:text-[10px] m-0 uppercase tracking-[3px] md:tracking-[4px] font-black transition-colors duration-500",
-                        isWHAPremium ? "text-white" : "text-[color:var(--lux-accent)]"
+                        isWHAPremium ? "text-white" : "text-[oklch(0.78_0.08_65)]"
                       )}>
                         Concierge
                       </p>
@@ -538,38 +485,17 @@ const Footer = () => {
                   Regulatory IDs
                 </span>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <a
-                  href="https://www.sebi.gov.in/sebiweb/other/OtherAction.do?doRecognisedFpi=yes&intmId=42"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
-                  style={{ color: 'oklch(0.78 0.08 65)' }}
-                  aria-label="Verify PMS ID 2430447816 on SEBI"
-                >
-                  PMS 2430447816 ✓ Verify on SEBI
-                </a>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                  PMS 2430447816
+                </span>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <a
-                  href="https://irdai.gov.in/admincms/cms/NormalData_Layout.aspx?page=PageNo234&mid=7.5"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
-                  style={{ color: 'oklch(0.78 0.08 65)' }}
-                  aria-label="Verify IRDAI license 277925"
-                >
-                  IRDAI 277925 ✓ Verify license
-                </a>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                  IRDAI 277925
+                </span>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
-                <a
-                  href="https://www.amfiindia.com/research-information/other-data/mfd"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)] hover:underline"
-                  style={{ color: 'oklch(0.78 0.08 65)' }}
-                  aria-label="Verify AMFI ARN 90008"
-                >
-                  AMFI ARN 90008 ✓ Verify on AMFI
-                </a>
+                <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.24em] uppercase drop-shadow-[0_0_6px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
+                  AMFI ARN 90008
+                </span>
                 <span style={{ color: 'oklch(0.95 0.01 85 / 0.25)' }}>•</span>
                 <span className="text-[10px] md:text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: 'oklch(0.95 0.01 85 / 0.70)' }}>
                   Wealth Distribution

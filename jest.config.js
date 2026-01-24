@@ -5,7 +5,7 @@ const createJestConfig = nextJest({ dir: './' });
 const customJestConfig = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testMatch: ['<rootDir>/tests/**/*.(test|spec).(js|jsx|ts|tsx)'],
+  testMatch: ['<rootDir>/tests/**/*.(test|spec).(js|jsx)'],
   testPathIgnorePatterns: ['<rootDir>/tests/e2e/'],
   modulePathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/out/'],
   watchPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/out/'],

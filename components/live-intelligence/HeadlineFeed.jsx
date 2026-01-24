@@ -52,7 +52,6 @@ export default function HeadlineFeed() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [mode, setMode] = useState(null);
-  const [isModeTransitioning, setIsModeTransitioning] = useState(false);
   const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [breakingUntil, setBreakingUntil] = useState(0);
@@ -166,14 +165,7 @@ export default function HeadlineFeed() {
   useEffect(() => {
     setMode(getCurrentModeConfig());
     const interval = setInterval(() => {
-      const nextMode = getCurrentModeConfig();
-      setMode((prev) => {
-        if (prev?.key && nextMode?.key && prev.key !== nextMode.key) {
-          setIsModeTransitioning(true);
-          window.setTimeout(() => setIsModeTransitioning(false), 260);
-        }
-        return nextMode;
-      });
+      setMode(getCurrentModeConfig());
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -309,7 +301,7 @@ export default function HeadlineFeed() {
 
   return (
     <>
-      <div className={`li-headline-feed ${isModeTransitioning ? 'li-mode-transition' : ''}`} data-headline-feed>
+      <div className="li-headline-feed" data-headline-feed>
         {/* Category Filter */}
         <CategoryFilter 
           selectedCategory={selectedCategory} 
@@ -363,11 +355,6 @@ export default function HeadlineFeed() {
       <style jsx>{`
         .li-headline-feed {
           margin-top: 24px;
-        }
-
-        .li-headline-feed.li-mode-transition {
-          opacity: 0.92;
-          transition: opacity 260ms ease;
         }
 
         .li-headline-progress {

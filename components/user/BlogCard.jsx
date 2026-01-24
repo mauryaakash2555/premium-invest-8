@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { LaserBeam } from '@/components/ui/laser-beam';
+import { LaserBeam } from '@/components/LaserBeamCanvas';
 
 export default function BlogCard({ post, variant = 'default' }) {
   const cardRef = useRef(null);
@@ -75,18 +75,13 @@ export default function BlogCard({ post, variant = 'default' }) {
         <LaserBeam
           width="100%"
           height={isMobile ? mobileCardHeight : 'auto'}
-          color="var(--li-accent-strong)"
+          color="#60a5fa"
           borderRadius={isMobile ? 12 : 16}
-          duration={5}
-          glowIntensity={20}
-          beamLength={0.12}
+          duration={12}
+          glowIntensity={18}
+          beamLength={0.08}
           borderWidth={1}
-          baseBorderWidth={0}
           backgroundColor="transparent"
-          normalizeToSize
-          normalizeBaseWidth={350}
-          normalizeBaseHeight={220}
-          normalizeBaseBorderRadius={16}
         >
           <div
             ref={cardRef}
@@ -215,7 +210,7 @@ export default function BlogCard({ post, variant = 'default' }) {
                   style={{
                     height: 1,
                     width: '100%',
-                    background: 'linear-gradient(90deg, transparent, var(--li-accent), transparent)',
+                      background: 'linear-gradient(90deg, transparent, rgba(214,179,106,0.62), transparent)',
                     marginBottom: 14,
                     opacity: 0.9,
                   }}

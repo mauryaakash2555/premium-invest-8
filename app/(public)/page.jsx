@@ -55,7 +55,7 @@ const GoldenHorizonSweep = () => (
     animate={{ x: '100%' }}
     transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
   >
-    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[var(--lux-accent)]/6 to-transparent blur-[120px]" />
+    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[#C0A062]/6 to-transparent blur-[120px]" />
   </motion.div>
 );
 
@@ -96,17 +96,24 @@ export default function HomePage() {
           height: '85vh',
         }}
       >
-        {/* Background Image (optimized) */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, opacity: 0.60, filter: 'brightness(1.0) saturate(1.1) contrast(1.2)' }} aria-hidden="true">
-          <Image
-            src="https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-          />
-        </div>
+        {/* Background Image - PREMIUM DARK */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            // Premium dark mood - visible but not distracting
+            opacity: 0.60,
+            filter: 'brightness(1.0) saturate(1.1) contrast(1.2)',
+            zIndex: 1,
+          }}
+        />
 
         {/* Animated Clouds with lightning effect (client-only to avoid hydration mismatch) */}
         {mounted ? <AnimatedClouds enableRain={rainEnabled} enableLightning={true} /> : null}
@@ -199,35 +206,9 @@ export default function HomePage() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/services" className="btn-primary">
-              View All Services
-            </Link>
-            <Link href="/live-intelligence" className="btn-secondary">
-              Explore Live Intelligence
-            </Link>
-            <Link href="/contact" className="btn-secondary">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* SEO / Internal Linking: Crawlable Quick Links */}
-      <section className="section-container" style={{ paddingTop: 0 }}>
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', marginBottom: '10px', color: '#FFFFFF' }}>Explore BM Wealth</h2>
-          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.72)', maxWidth: '760px', margin: '0 auto' }}>
-            Quick access to key services and resources.
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/portfolio-management" className="btn-secondary">Portfolio Management</Link>
-          <Link href="/mutual-funds" className="btn-secondary">Mutual Funds</Link>
-          <Link href="/insurance" className="btn-secondary">Insurance</Link>
-          <Link href="/fixed-deposits" className="btn-secondary">Fixed Deposits</Link>
-          <Link href="/live-intelligence" className="btn-secondary">Live Intelligence</Link>
-          <Link href="/contact" className="btn-primary">Contact</Link>
+          <Link href="/services" className="btn-primary">
+            View All Services
+          </Link>
         </div>
       </section>
 

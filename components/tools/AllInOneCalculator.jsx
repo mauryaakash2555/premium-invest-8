@@ -3507,6 +3507,7 @@ ${text}
     } catch {
       // ignore
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCopyTaxSummary = useCallback(async () => {
@@ -3907,7 +3908,7 @@ ${text}
                       <div style={{ 
                         height: '100%', 
                         width: `${protectionScore}%`, 
-                        background: protectionScore >= 80 ? 'linear-gradient(90deg, #E6C77B, var(--lux-accent))' : 
+                        background: protectionScore >= 80 ? 'linear-gradient(90deg, #E6C77B, #D4AF37)' : 
                                     protectionScore >= 60 ? 'linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.8))' : 
                                     'rgba(255,255,255,0.4)',
                         borderRadius: '4px',

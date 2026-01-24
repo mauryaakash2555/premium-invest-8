@@ -17,7 +17,7 @@
  * It helps one specific feature work correctly.
  *
  * TO MODIFY:
- * - ≡ƒöº Search for "TO MODIFY" notes inside the file.
+ * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
 'use client';
@@ -186,14 +186,14 @@ export default function Platforms() {
             
             <div style={{ marginTop: '20px', padding: '12px 15px', background: 'rgba(255,255,255,0.04)', border: '1px solid color-mix(in oklab, var(--lux-accent) 20%, rgba(255,255,255,0.12))', borderRadius: 0 }}>
               <p style={{ color: '#FFF', fontSize: '14px', margin: 0, fontWeight: 600 }}>
-                🚨 <span style={{ color: 'var(--lux-accent)', fontWeight: 800 }}>Bidding Alert:</span> 8 Institutional Sponsors are currently vying for this exclusive slot.
+                🔥 <span style={{ color: 'var(--lux-accent)', fontWeight: 800 }}>Bidding Alert:</span> 8 Institutional Sponsors are currently vying for this exclusive slot.
               </p>
             </div>
           </div>
 
           <div className="platform-button">
             <Link href="/contact?subject=diamond-bidding-platforms" className="btn-diamond-shiny-sm">
-              <span>Enter Bidding</span>
+              Enter Bidding
             </Link>
           </div>
         </MobileScrollBoost>
@@ -219,7 +219,7 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="/track/zerodha" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              <span>Open Free Demat Account</span> <ExternalLink size={16} />
+              Open Free Demat Account <ExternalLink size={16} />
             </a>
           </div>
         </MobileScrollBoost>
@@ -245,7 +245,7 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="/track/smallcase" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              <span>Explore Smallcases</span> <ExternalLink size={16} />
+              Explore Smallcases <ExternalLink size={16} />
             </a>
           </div>
         </MobileScrollBoost>
@@ -271,15 +271,15 @@ export default function Platforms() {
           </div>
           <div className="platform-button">
             <a href="/track/groww" target="_blank" rel="sponsored nofollow noopener noreferrer" className="btn-primary">
-              <span>Start Free Account</span> <ExternalLink size={16} />
+              Start Free Account <ExternalLink size={16} />
             </a>
           </div>
         </MobileScrollBoost>
 
         <section style={{ padding: '10px 20px 0' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: 'rgba(255,255,255,0.75)', maxWidth: '900px', margin: '0 auto 0', textAlign: 'center' }}>
-            Related resources: <Link href="/mutual-funds" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Mutual Funds</Link> {' • '}
-            <Link href="/sip" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>SIP</Link> {' • '}
+            Related resources: <Link href="/mutual-funds" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
+            <Link href="/sip" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>SIP</Link> ·{' '}
             <Link href="/contact" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Contact</Link>
           </p>
         </section>

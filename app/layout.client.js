@@ -25,7 +25,7 @@
 
 'use client';
 
-import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import { usePathname } from 'next/navigation';
 import "./globals.css";
 import Navigation from "@/components/user/Navigation";
@@ -47,12 +47,6 @@ const playfair = Playfair_Display({
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -140,36 +134,23 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1';
 
-      // Localhost/dev can still hit stale cached HTML/chunks (often from an old SW or browser cache),
-      // which can surface as webpack runtime errors like:
-      //   TypeError: Cannot read properties of undefined (reading 'call')
-      // We only trigger a reload if we actually deleted caches/unregistered SW.
-      const shouldRun = !!(force || buildChanged || firstSeenBuildWithSW || isLocalHost);
+      const shouldRun = !!(force || isLocalHost || buildChanged || firstSeenBuildWithSW);
 
       // Avoid reload loops.
       const flagKey = '__bmw_sw_reset_done_v2:' + (buildMeta || 'no-build');
       const alreadyRan = !!(!force && window.sessionStorage && sessionStorage.getItem(flagKey) === '1');
 
       if (shouldRun && !alreadyRan) {
-        let didWork = false;
-        const tasks = [];
+        try {
+          if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
+        } catch {}
 
+        const tasks = [];
         if ('serviceWorker' in navigator) {
           tasks.push(
             navigator.serviceWorker
               .getRegistrations()
-              .then((regs) => {
-                if (regs && regs.length) didWork = true;
-                return Promise.all(
-                  (regs || []).map((r) => {
-                    try {
-                      return r.unregister();
-                    } catch {
-                      return Promise.resolve();
-                    }
-                  })
-                );
-              })
+              .then((regs) => Promise.all(regs.map((r) => r.unregister())))
               .catch(() => {})
           );
         }
@@ -178,35 +159,20 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
           tasks.push(
             caches
               .keys()
-              .then((keys) => {
-                if (keys && keys.length) didWork = true;
-                return Promise.all(
-                  (keys || []).map((k) => {
-                    try {
-                      return caches.delete(k);
-                    } catch {
-                      return Promise.resolve();
-                    }
-                  })
-                );
-              })
+              .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
               .catch(() => {})
           );
         }
 
-        Promise.all(tasks).finally(() => {
-          try {
-            if (window.sessionStorage) sessionStorage.setItem(flagKey, '1');
-          } catch {}
-
-          // Only reload if we actually cleared something.
-          if (!didWork) return;
-          params.delete('resetSW');
-          params.delete('reset-sw');
-          params.set(doneParam, '1');
-          url.search = params.toString();
-          window.location.replace(url.toString());
-        });
+        if (tasks.length) {
+          Promise.all(tasks).finally(() => {
+            params.delete('resetSW');
+            params.delete('reset-sw');
+            params.set(doneParam, '1');
+            url.search = params.toString();
+            window.location.replace(url.toString());
+          });
+        }
       }
     }
   } catch {
@@ -254,7 +220,7 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
         )}
       </head>
       <body
-        className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+        className={`${playfair.variable} ${inter.variable}`}
         style={{
           backgroundColor: "#000",
           color: "#fff",
