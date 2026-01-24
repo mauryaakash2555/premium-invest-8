@@ -27,6 +27,9 @@ function getSupabase() {
 // Spec (Jan 21, 2026): headlines cached 5 minutes
 export const revalidate = 300;
 
+// This route reads request-scoped data (query params) and must not be statically optimized.
+export const dynamic = 'force-dynamic';
+
 const FEED_CACHE_HEADERS = {
   'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60',
 };
@@ -228,7 +231,7 @@ function ensureAtLeastOnePerCategory(headlines) {
  */
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const category = searchParams.get('category') || 'all';
     const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
     const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
