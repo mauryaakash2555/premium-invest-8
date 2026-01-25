@@ -338,8 +338,13 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
         setPortfolioTickers(getPortfolioTickersFromStorage());
       }
     };
+    const onPortfolioUpdated = () => setPortfolioTickers(getPortfolioTickersFromStorage());
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    window.addEventListener('li-portfolio-updated', onPortfolioUpdated);
+    return () => {
+      window.removeEventListener('li-portfolio-updated', onPortfolioUpdated);
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
 
   const portfolioMatches = getMatchedPortfolioTickers(headline?.headline, portfolioTickers);

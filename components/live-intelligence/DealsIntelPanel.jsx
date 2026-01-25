@@ -50,7 +50,11 @@ export default function DealsIntelPanel() {
       if (!e || e.key === 'li_portfolio_context_v1') loadPortfolio();
     };
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    window.addEventListener('li-portfolio-updated', loadPortfolio);
+    return () => {
+      window.removeEventListener('li-portfolio-updated', loadPortfolio);
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
 
   useEffect(() => {
