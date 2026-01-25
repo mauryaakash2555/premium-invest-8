@@ -31,6 +31,7 @@ function formatQty(qty) {
 export default function DealsIntelPanel() {
   const [state, setState] = useState({ loading: true, payload: null });
   const [portfolioTickers, setPortfolioTickers] = useState([]);
+  const [onlyMine, setOnlyMine] = useState(false);
 
   useEffect(() => {
     function loadPortfolio() {
@@ -80,12 +81,26 @@ export default function DealsIntelPanel() {
     const bulk = state?.payload?.bulk?.deals || [];
     const block = state?.payload?.block?.deals || [];
 
-    const list = [...bulk.map((d) => ({ ...d, kind: 'bulk' })), ...block.map((d) => ({ ...d, kind: 'block' }))]
+    let list = [...bulk.map((d) => ({ ...d, kind: 'bulk' })), ...block.map((d) => ({ ...d, kind: 'block' }))]
       .map((d) => ({
         ...d,
         __portfolioMatch: tickerSet.size ? tickerSet.has(normalizeSymbol(d.symbol)) : false,
-      }))
-      .slice(0, 12);
+      }));
+
+    // Sort: portfolio matches first, then higher value
+    list.sort((a, b) => {
+      const pm = (b.__portfolioMatch ? 1 : 0) - (a.__portfolioMatch ? 1 : 0);
+      if (pm) return pm;
+      const av = typeof a.valueCr === 'number' ? a.valueCr : -1;
+      const bv = typeof b.valueCr === 'number' ? b.valueCr : -1;
+      return bv - av;
+    });
+
+    if (onlyMine && tickerSet.size) {
+      list = list.filter((d) => d.__portfolioMatch);
+    }
+
+    list = list.slice(0, 12);
 
     return {
       list,
@@ -93,7 +108,7 @@ export default function DealsIntelPanel() {
       hasError: Boolean(state?.payload?.bulk?.error || state?.payload?.block?.error || state?.payload?.error),
       hasPortfolio: tickerSet.size > 0,
     };
-  }, [state, portfolioTickers]);
+  }, [state, portfolioTickers, onlyMine]);
 
   return (
     <div
@@ -114,9 +129,55 @@ export default function DealsIntelPanel() {
             Smart money activity snapshot
           </div>
         </div>
-        <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-          {state.loading ? 'Updating…' : 'Live'}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          {view.hasPortfolio ? (
+            <button
+              type="button"
+              onClick={() => setOnlyMine((v) => !v)}
+              style={{
+                padding: '5px 10px',
+                borderRadius: '999px',
+                fontSize: '11px',
+                fontWeight: 800,
+                letterSpacing: '0.02em',
+                cursor: 'pointer',
+                background: onlyMine ? 'rgba(255, 210, 110, 0.12)' : 'rgba(170,198,255,0.10)',
+                border: onlyMine ? '1px solid rgba(255, 210, 110, 0.22)' : '1px solid rgba(170,198,255,0.12)',
+                color: onlyMine ? 'rgba(255, 225, 160, 0.95)' : 'rgba(170,198,255,0.80)',
+              }}
+              title={onlyMine ? 'Showing only your tickers' : 'Show only your tickers'}
+            >
+              {onlyMine ? 'ONLY MINE' : 'FILTER'}
+            </button>
+          ) : null}
+
+          <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
+            {state.loading ? 'Updating…' : 'Live'}
+          </div>
         </div>
+      </div>
+
+      <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <a
+          href="https://www.nseindia.com/companies-listing/corporate-filings-bulk-deals"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'rgba(170,198,255,0.70)', fontSize: '11px', textDecoration: 'none' }}
+          onClick={(e) => e.stopPropagation?.()}
+          title="Open NSE bulk deals"
+        >
+          NSE Bulk ↗
+        </a>
+        <a
+          href="https://www.nseindia.com/companies-listing/corporate-filings-block-deals"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'rgba(170,198,255,0.70)', fontSize: '11px', textDecoration: 'none' }}
+          onClick={(e) => e.stopPropagation?.()}
+          title="Open NSE block deals"
+        >
+          NSE Block ↗
+        </a>
       </div>
 
       <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>

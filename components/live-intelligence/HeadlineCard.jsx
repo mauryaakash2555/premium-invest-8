@@ -6,6 +6,51 @@ import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intel
 import { trackCtaClick } from '@/lib/live-intelligence/analytics';
 import { getExplainUserContext } from '@/lib/live-intelligence/userContextClient';
 
+const PORTFOLIO_STORAGE_KEY = 'li_portfolio_context_v1';
+
+function safeJsonParse(value, fallback) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function normalizeTicker(value) {
+  const s = String(value || '').trim();
+  if (!s) return '';
+  return s.toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+function getPortfolioTickersFromStorage() {
+  if (typeof window === 'undefined') return [];
+  const raw = safeJsonParse(window.localStorage.getItem(PORTFOLIO_STORAGE_KEY) || 'null', null);
+  const list = Array.isArray(raw?.tickers) ? raw.tickers : Array.isArray(raw?.symbols) ? raw.symbols : [];
+  const cleaned = (list || [])
+    .map((t) => normalizeTicker(t))
+    .filter(Boolean)
+    .slice(0, 20);
+  return Array.from(new Set(cleaned));
+}
+
+function getMatchedPortfolioTickers(headlineText, portfolioTickers) {
+  const text = String(headlineText || '');
+  if (!text || !Array.isArray(portfolioTickers) || portfolioTickers.length === 0) return [];
+
+  const upper = text.toUpperCase();
+  const matches = [];
+
+  for (const rawTicker of portfolioTickers) {
+    const ticker = normalizeTicker(rawTicker);
+    if (!ticker || ticker.length < 2) continue;
+    // word-boundary-ish match for common tickers
+    const re = new RegExp(`(^|[^A-Z0-9])${ticker}([^A-Z0-9]|$)`);
+    if (re.test(upper)) matches.push(ticker);
+  }
+
+  return matches.slice(0, 3);
+}
+
 // ═══════════════════════════════════════════════════════════
 // ⚠️ PALETTE NOTE (Jan 21, 2026 spec):
 // Avoid muddy/tan washes. Premium accents are allowed (including gold for IMPORTANT / market_close).
@@ -279,10 +324,25 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
   const [longPressTimer, setLongPressTimer] = useState(null);
   const [aiContent, setAiContent] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [portfolioTickers, setPortfolioTickers] = useState([]);
   const touchStartY = useRef(0);
   const category = CATEGORIES[headline.category];
   const urgency = URGENCY_LEVELS[headline.urgency];
   const ctaConfig = CTA_BUTTONS[headline.category];
+
+  // Lightweight portfolio context (optional): highlight headlines mentioning your tickers.
+  useEffect(() => {
+    setPortfolioTickers(getPortfolioTickersFromStorage());
+    const onStorage = (e) => {
+      if (!e || e.key === PORTFOLIO_STORAGE_KEY) {
+        setPortfolioTickers(getPortfolioTickersFromStorage());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  const portfolioMatches = getMatchedPortfolioTickers(headline?.headline, portfolioTickers);
 
   // Fetch AI content when modal opens
   useEffect(() => {
@@ -524,6 +584,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
             const trust = getTrustBadge(headline.trustLabel, headline.trustScore);
             const riskLevel = String(headline.riskLevel || '').toLowerCase();
             const opp = typeof headline.opportunityScore === 'number' ? headline.opportunityScore : null;
+            const hasPortfolioMatch = Array.isArray(portfolioMatches) && portfolioMatches.length > 0;
 
             const showOpp = opp != null && opp >= 70;
             const showRisk = riskLevel === 'moderate' || riskLevel === 'high';
@@ -535,7 +596,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
                 ? { text: `OPP ${opp}`, variant: 'opportunity', title: 'Opportunity signal (heuristic)' }
                 : null;
 
-            if (!trust && !secondary) return null;
+            if (!trust && !secondary && !hasPortfolioMatch) return null;
             return (
               <span className="li-signal-group" onClick={(e) => e.stopPropagation()}>
                 {trust && (
@@ -546,6 +607,14 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
                 {secondary && (
                   <span className={`li-signal-badge ${secondary.variant}`} title={secondary.title}>
                     {secondary.text}
+                  </span>
+                )}
+                {hasPortfolioMatch && (
+                  <span
+                    className="li-signal-badge portfolio"
+                    title={`Matches your portfolio context: ${portfolioMatches.join(', ')}`}
+                  >
+                    YOUR LIST
                   </span>
                 )}
               </span>
@@ -830,6 +899,11 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
           border-color: rgba(80, 200, 140, 0.25);
           background: rgba(80, 200, 140, 0.07);
           color: rgba(150, 240, 200, 0.80);
+        }
+        .li-signal-badge.portfolio {
+          border-color: rgba(255, 210, 110, 0.30);
+          background: rgba(255, 210, 110, 0.08);
+          color: rgba(255, 225, 160, 0.90);
         }
         .li-signal-badge.moderate {
           border-color: rgba(255, 190, 90, 0.30);
