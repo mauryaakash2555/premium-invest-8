@@ -1,0 +1,23 @@
+/* Toast/notification animations (global) */
+
+@keyframes liToastIn {
+  from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.99); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes liToastOut {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.99); }
+}
+
+.li-toast {
+  will-change: transform, opacity;
+}
+
+.li-toast[data-state='open'] {
+  animation: liToastIn 260ms var(--li-ease-premium) both;
+}
+
+.li-toast[data-state='closed'] {
+  animation: liToastOut 220ms ease-in both;
+}

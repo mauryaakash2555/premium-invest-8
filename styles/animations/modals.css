@@ -1,0 +1,10 @@
+/* Modal/dialog animations (global) */
+
+.li-modal-backdrop {
+  animation: fadeIn 220ms ease-out both;
+}
+
+.li-modal-panel {
+  animation: liFadeInUp 320ms var(--li-ease-premium) both;
+  will-change: transform, opacity;
+}

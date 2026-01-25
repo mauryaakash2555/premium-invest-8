@@ -44,6 +44,7 @@ import { getPersonalizationEngine } from '@/lib/live-intelligence/personalizatio
 import Link from 'next/link';
 import LazyTradingView from '@/components/shared/LazyTradingView';
 import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockStatusBadge';
+import AnimatedNumber from '@/components/animations/AnimatedNumber';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -951,24 +952,28 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     return [
       {
         label: 'Total Invested',
-        value: `₹${invested.toFixed(1)}L`,
+        kind: 'moneyL',
+        number: invested,
         hint: 'Across MF + PMS + FD',
         trend: null,
       },
       {
         label: 'Current Value',
-        value: `₹${currentValue.toFixed(1)}L`,
+        kind: 'moneyL',
+        number: currentValue,
         hint: `${unrealized >= 0 ? '+' : '−'}₹ ${Math.abs(unrealized).toFixed(1)}L unrealized`,
         trend: `${totalReturnPct >= 0 ? '+' : ''}${totalReturnPct.toFixed(1)}%`,
       },
       {
         label: 'XIRR',
-        value: `${xirr.toFixed(1)}%`,
+        kind: 'percent',
+        number: xirr,
         hint: 'Last 12 months (est.)',
         trend: null,
       },
       {
         label: 'Risk Score',
+        kind: 'text',
         value: riskScore,
         hint: `Equity ${equityPct}% allocation`,
         trend: null,
@@ -1094,7 +1099,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     allocationBumpTimerRef.current = window.setTimeout(() => setAllocationBumpKey(null), 1200);
   };
 
-  const donutSpeedMultiplier = 1;
+  // Donut rotation speed control (0.5x → 2x), persisted
+  const [donutSpeedMultiplier, setDonutSpeedMultiplier] = useState(1);
+  const donutSpeedPersistRef = useRef(null);
 
   const allocationBumpTimerRef = useRef(null);
   const [allocationBumpKey, setAllocationBumpKey] = useState(null);
@@ -1104,6 +1111,33 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
       window.clearTimeout(allocationBumpTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem('li_donut_rot_speed_v1');
+      const v = Number(raw);
+      if (Number.isFinite(v) && v >= 0.5 && v <= 2) setDonutSpeedMultiplier(v);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
+      donutSpeedPersistRef.current = window.setTimeout(() => {
+        try {
+          window.localStorage.setItem('li_donut_rot_speed_v1', String(donutSpeedMultiplier));
+        } catch {}
+      }, 180);
+    } catch {}
+
+    return () => {
+      try {
+        if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
+      } catch {}
+    };
+  }, [donutSpeedMultiplier]);
 
   const onRipplePointerDown = (e) => {
     const el = e.currentTarget;
@@ -2283,7 +2317,26 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
               </div>
               <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                {card.value}
+                {card.kind === 'moneyL' ? (
+                  <AnimatedNumber
+                    value={Number(card.number) || 0}
+                    currencySymbol="₹"
+                    suffix="L"
+                    minimumFractionDigits={1}
+                    maximumFractionDigits={1}
+                    ariaLabel={card.label}
+                  />
+                ) : card.kind === 'percent' ? (
+                  <AnimatedNumber
+                    value={Number(card.number) || 0}
+                    suffix="%"
+                    minimumFractionDigits={1}
+                    maximumFractionDigits={1}
+                    ariaLabel={card.label}
+                  />
+                ) : (
+                  card.value
+                )}
               </div>
               <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200,215,240,0.50)', fontSize: '12px', lineHeight: 1.4 }}>
                 {card.hint}
@@ -2310,9 +2363,47 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   Real-time asset diversification
                 </div>
               </div>
-              <div className="li-stat-pill" style={{ fontSize: '11px' }}>
-                <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
-                <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <div className="li-stat-pill" style={{ fontSize: '11px' }}>
+                  <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
+                  <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
+                </div>
+
+                <div
+                  className="li-stat-pill"
+                  style={{
+                    padding: '8px 10px',
+                    gap: '10px',
+                    alignItems: 'center',
+                    fontSize: '11px',
+                    borderColor: 'rgba(170,198,255,0.14)',
+                    background: 'rgba(10,10,12,0.45)',
+                  }}
+                  aria-label="Donut rotation speed"
+                >
+                  <span style={{ color: 'rgba(200,215,240,0.55)' }}>Rotation</span>
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={2}
+                    step={0.1}
+                    value={donutSpeedMultiplier}
+                    onChange={(e) => {
+                      const v = Number(e.target.value);
+                      const clamped = Math.max(0.5, Math.min(2, Number.isFinite(v) ? v : 1));
+                      setDonutSpeedMultiplier(clamped);
+                    }}
+                    aria-label="Rotation speed"
+                    style={{
+                      width: '110px',
+                      accentColor: 'rgba(120,220,255,0.85)',
+                      cursor: 'pointer',
+                    }}
+                  />
+                  <span style={{ color: 'rgba(235,242,255,0.85)', fontVariantNumeric: 'tabular-nums' }}>
+                    {donutSpeedMultiplier.toFixed(1)}x
+                  </span>
+                </div>
               </div>
             </div>
 

@@ -1,0 +1,35 @@
+/* Card animations + hover surfaces (global)
+   - Keep to transform/opacity for 60fps
+   - Respects prefers-reduced-motion (handled in utilities.css)
+*/
+
+.li-card {
+  position: relative;
+}
+
+.li-card.hover-lift {
+  will-change: transform, box-shadow;
+}
+
+.li-card.hover-lift:hover {
+  transform: translate3d(0, -6px, 0);
+}
+
+.li-card-glow {
+  position: relative;
+}
+
+.li-card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(520px 220px at 35% 20%, rgba(100,160,255,0.10), transparent 55%);
+  opacity: 0;
+  transition: opacity 300ms var(--li-ease-premium);
+  pointer-events: none;
+}
+
+.li-card-glow:hover::before {
+  opacity: 1;
+}

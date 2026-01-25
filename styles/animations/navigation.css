@@ -1,0 +1,31 @@
+/* Navigation transitions (global) */
+
+.li-nav-item {
+  transition: transform 220ms var(--li-ease-premium), background 220ms var(--li-ease-premium);
+}
+
+.li-nav-item:hover {
+  transform: translate3d(0, -1px, 0);
+}
+
+.li-nav-underline {
+  position: relative;
+}
+
+.li-nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(170, 198, 255, 0.70);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms var(--li-ease-premium);
+}
+
+.li-nav-underline[data-active='1']::after {
+  transform: scaleX(1);
+}

@@ -5,7 +5,12 @@
 
 @import "../styles/animations/utilities.css";
 @import "../styles/animations/buttons.css";
+@import "../styles/animations/cards.css";
 @import "../styles/animations/charts.css";
+@import "../styles/animations/forms.css";
+@import "../styles/animations/navigation.css";
+@import "../styles/animations/modals.css";
+@import "../styles/animations/notifications.css";
 
 @custom-variant dark (&:is(.dark *));
 
