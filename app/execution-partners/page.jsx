@@ -40,12 +40,6 @@ function AffiliateCard({
     <MobileScrollBoost
       holdMs={4500}
       className="platform-card"
-      style={{
-        width: 'calc(100% - 30px)',
-        marginLeft: '15px',
-        marginRight: '15px',
-        marginBottom: '26px',
-      }}
     >
       <div className="platform-content" style={{ minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -102,12 +96,6 @@ function ComingSoonCard({ title, subtitle }) {
     <MobileScrollBoost
       holdMs={4200}
       className="platform-card"
-      style={{
-        width: 'calc(100% - 30px)',
-        marginLeft: '15px',
-        marginRight: '15px',
-        marginBottom: '26px',
-      }}
     >
       <div className="platform-content" style={{ minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -153,7 +141,7 @@ export default function ExecutionPartnersPage() {
       {/* Hero */}
       <section
         style={{
-          minHeight: '70vh',
+          minHeight: '55vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -170,10 +158,10 @@ export default function ExecutionPartnersPage() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: 'url(/6th.png)',
+            backgroundImage: 'url(/services/Trading%20Service.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.42,
+            opacity: 0.34,
           }}
         />
         <div
@@ -426,6 +414,90 @@ export default function ExecutionPartnersPage() {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .platform-card {
+          width: calc(100% - 30px);
+          margin-left: 15px;
+          margin-right: 15px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          padding: 60px 50px;
+          margin-bottom: 24px;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 40px;
+          align-items: center;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          border-radius: 0;
+          text-align: left;
+          min-height: 280px;
+        }
+
+        .platform-card:hover {
+          background: rgba(255, 255, 255, 0.04);
+          border-color: color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.12));
+          transform: translateY(-2px);
+          box-shadow: 0 18px 70px rgba(0,0,0,0.55);
+        }
+
+        .platform-content {
+          flex: 1;
+        }
+
+        .platform-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        }
+
+        .btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          position: relative;
+          overflow: hidden;
+          background: oklch(0.95 0.01 85);
+          color: oklch(0.06 0.005 280);
+          padding: 18px 36px;
+          border-radius: 0;
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 700;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+          border: none;
+          cursor: pointer;
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+          background: color-mix(in oklab, var(--lux-accent) 60%, oklch(0.95 0.01 85));
+        }
+
+        @media (max-width: 768px) {
+          .platform-card {
+            padding: 40px 30px;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            text-align: center;
+          }
+
+          .platform-button {
+            justify-content: center;
+          }
+
+          .btn-primary {
+            padding: 16px 28px;
+            font-size: 14px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

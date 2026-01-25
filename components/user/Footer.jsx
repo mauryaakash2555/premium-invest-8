@@ -161,6 +161,7 @@ const navigationLinks = {
       { label: "Services", href: "/services" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
+      { label: "Careers", href: "/careers" },
       { label: "Digital Store", href: "https://store.bmwealth.co.in", external: true },
     ],
     resources: [
@@ -170,7 +171,6 @@ const navigationLinks = {
       { label: "Live Intelligence", href: "/live-intelligence" },
       { label: "Investment Platforms", href: "/platforms" },
       { label: "Curated Partners", href: "/curated-partners" },
-      { label: "Careers", href: "/careers" },
       { label: "Sitemap", href: "/sitemap-page" },
     ],
     legal: [

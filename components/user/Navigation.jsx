@@ -106,6 +106,7 @@ const Navigation = () => {
     { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based allocation' },
     { path: '/insurance', label: 'Insurance', sub: 'Protection architecture' },
     { path: '/fixed-deposits', label: 'Fixed Deposits', sub: 'Liquidity & stability' },
+    { path: '/sip-calculator', label: 'SIP Calculator', sub: 'SIP planning tool' },
   ];
 
   const servicesActive = serviceLinks.some((l) => pathname === l.path);
