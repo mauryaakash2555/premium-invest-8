@@ -27,6 +27,8 @@ import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
+import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel';
+import SectorPulsePanel from '@/components/live-intelligence/SectorPulsePanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -2350,6 +2352,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <MarketIntelPanel />
+              <OptionsIntelPanel />
+              <SectorPulsePanel />
             </div>
           </div>
 
