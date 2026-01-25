@@ -3507,7 +3507,6 @@ ${text}
     } catch {
       // ignore
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCopyTaxSummary = useCallback(async () => {

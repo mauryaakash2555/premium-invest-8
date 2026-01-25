@@ -4716,7 +4716,7 @@ export const staticBlogPost11 = {
 
   <p><strong>Optional execution link:</strong></p>
   <p>
-    👉
+    ≡ƒæë
     <a
       class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply"
@@ -4753,7 +4753,7 @@ export const staticBlogPost11 = {
 
   <p><strong>Optional execution link:</strong></p>
   <p>
-    👉
+    ≡ƒæë
     <a
       class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number"
@@ -4792,7 +4792,7 @@ export const staticBlogPost11 = {
 
   <p><strong>Optional execution link:</strong></p>
   <p>
-    👉
+    ≡ƒæë
     <a
       class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead"
