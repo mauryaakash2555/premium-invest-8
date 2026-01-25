@@ -883,13 +883,14 @@ export default function SIPPanicPage(props?: {
               onChangeMonthlyAmount={(monthly) =>
                 setInputs((prev) => ({
                   ...prev,
-                  monthlyAmount: clampInt(monthly, 1_000, 5_00_000),
+                  // Allow free typing (including intermediate states); BeginnerModeView clamps for calc and onBlur.
+                  monthlyAmount: Number.isFinite(monthly) ? monthly : prev.monthlyAmount,
                 }))
               }
               onChangeDurationYears={(years) =>
                 setInputs((prev) => ({
                   ...prev,
-                  durationYears: clampInt(years, 1, 30),
+                  durationYears: Number.isFinite(years) ? years : prev.durationYears,
                 }))
               }
               onRequestAdvanced={() => onUiModeChange("advanced")}

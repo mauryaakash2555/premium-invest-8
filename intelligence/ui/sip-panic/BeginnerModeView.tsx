@@ -35,8 +35,10 @@ export function BeginnerModeView(props: {
   onRequestAdvanced: () => void;
 }) {
   const panicStopPct = 30;
-  const monthly = clampInt(props.monthlyAmount, 1_000, 5_00_000);
-  const years = clampInt(props.durationYears, 1, 30);
+  // Do not clamp the input value on every keystroke (it makes typing e.g. 15000 nearly impossible).
+  // Clamp only for calculations + onBlur.
+  const monthlyForCalc = clampInt(props.monthlyAmount, 1_000, 5_00_000);
+  const yearsForCalc = clampInt(props.durationYears, 1, 30);
   const market = useMemo(() => buildDefaultMarketConditions(), []);
   const crashStartMonth = market.crashStartMonth ?? 30;
   const crashStartYearApprox = Math.max(0, Math.round((crashStartMonth / 12) * 10) / 10);
@@ -65,7 +67,7 @@ export function BeginnerModeView(props: {
 
     const cashAnnualRatePct = 6;
 
-    const out = simulateSIPVsPanic(monthly, years, scenarios, market, {
+    const out = simulateSIPVsPanic(monthlyForCalc, yearsForCalc, scenarios, market, {
       afterStopMode: "cash",
       cashAnnualRatePct,
       riskComfort: "moderate",
@@ -93,9 +95,9 @@ export function BeginnerModeView(props: {
       costPct,
       cashAnnualRatePct,
     };
-  }, [market, monthly, panicStopPct, years]);
+  }, [market, monthlyForCalc, panicStopPct, yearsForCalc]);
 
-  const totalInvested = monthly * 12 * years;
+  const totalInvested = monthlyForCalc * 12 * yearsForCalc;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -109,7 +111,7 @@ export function BeginnerModeView(props: {
         <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses a designed crash/recovery path + simplified tax.</p>
       </section>
 
-      {years * 12 < crashStartMonth ? (
+      {yearsForCalc * 12 < crashStartMonth ? (
         <section className="rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm text-amber-100">
           <div className="font-semibold">Why might the cost look like ₹0 for short durations?</div>
           <div className="mt-1 text-xs text-amber-100/90">
@@ -169,8 +171,14 @@ export function BeginnerModeView(props: {
                 min={1000}
                 max={500000}
                 step={500}
-                value={monthly}
-                onChange={(e) => props.onChangeMonthlyAmount(Number(e.target.value))}
+                value={Number.isFinite(props.monthlyAmount) ? props.monthlyAmount : ""}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  props.onChangeMonthlyAmount(raw === "" ? Number.NaN : Number(raw));
+                }}
+                onBlur={() => {
+                  props.onChangeMonthlyAmount(clampInt(props.monthlyAmount, 1_000, 5_00_000));
+                }}
                 className="no-spinner h-10 bg-black/25 border-white/12 text-white placeholder:text-white/45"
               />
               <span className="text-[11px] text-white/55">/mo</span>
@@ -181,15 +189,15 @@ export function BeginnerModeView(props: {
           <div>
             <div className="flex items-center justify-between gap-3">
               <div className="text-[11px] font-semibold text-white/70">Duration</div>
-              <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/80 tabular-nums">{years}y</div>
+                <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/80 tabular-nums">{yearsForCalc}y</div>
             </div>
             <div className="mt-2">
               <Slider
                 min={1}
                 max={30}
                 step={1}
-                value={[years]}
-                onValueChange={(arr) => props.onChangeDurationYears(Number(arr?.[0] ?? years))}
+                value={[yearsForCalc]}
+                onValueChange={(arr) => props.onChangeDurationYears(Number(arr?.[0] ?? yearsForCalc))}
                 trackClassName="bg-white/10"
                 rangeClassName="bg-[oklch(0.78_0.08_65)]"
                 thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
