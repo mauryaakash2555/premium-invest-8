@@ -2,6 +2,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+function safeJsonParse(value, fallback) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function normalizeSymbol(sym) {
+  const s = String(sym || '').trim();
+  if (!s) return '';
+  return s.split(/[-\s]/)[0].toUpperCase();
+}
+
 function formatCr(valueCr) {
   const n = Number(valueCr);
   if (!Number.isFinite(n)) return '—';
@@ -16,6 +30,27 @@ function formatQty(qty) {
 
 export default function DealsIntelPanel() {
   const [state, setState] = useState({ loading: true, payload: null });
+  const [portfolioTickers, setPortfolioTickers] = useState([]);
+
+  useEffect(() => {
+    function loadPortfolio() {
+      if (typeof window === 'undefined') return;
+      const raw = safeJsonParse(window.localStorage.getItem('li_portfolio_context_v1') || 'null', null);
+      const list = Array.isArray(raw?.tickers) ? raw.tickers : Array.isArray(raw?.symbols) ? raw.symbols : [];
+      const cleaned = (list || [])
+        .map((t) => normalizeSymbol(t))
+        .filter(Boolean)
+        .slice(0, 20);
+      setPortfolioTickers(cleaned);
+    }
+
+    loadPortfolio();
+    const onStorage = (e) => {
+      if (!e || e.key === 'li_portfolio_context_v1') loadPortfolio();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,18 +76,24 @@ export default function DealsIntelPanel() {
   }, []);
 
   const view = useMemo(() => {
+    const tickerSet = new Set(portfolioTickers.map((t) => normalizeSymbol(t)));
     const bulk = state?.payload?.bulk?.deals || [];
     const block = state?.payload?.block?.deals || [];
 
     const list = [...bulk.map((d) => ({ ...d, kind: 'bulk' })), ...block.map((d) => ({ ...d, kind: 'block' }))]
+      .map((d) => ({
+        ...d,
+        __portfolioMatch: tickerSet.size ? tickerSet.has(normalizeSymbol(d.symbol)) : false,
+      }))
       .slice(0, 12);
 
     return {
       list,
       hasAny: list.length > 0,
       hasError: Boolean(state?.payload?.bulk?.error || state?.payload?.block?.error || state?.payload?.error),
+      hasPortfolio: tickerSet.size > 0,
     };
-  }, [state]);
+  }, [state, portfolioTickers]);
 
   return (
     <div
@@ -121,6 +162,23 @@ export default function DealsIntelPanel() {
                     <span style={{ color: 'rgba(245,248,255,0.90)', fontSize: '12px', fontWeight: 800 }}>
                       {d.symbol}
                     </span>
+                    {d.__portfolioMatch ? (
+                      <span
+                        style={{
+                          padding: '2px 8px',
+                          borderRadius: '999px',
+                          fontSize: '10px',
+                          fontWeight: 800,
+                          letterSpacing: '0.04em',
+                          background: 'rgba(255, 210, 110, 0.12)',
+                          border: '1px solid rgba(255, 210, 110, 0.22)',
+                          color: 'rgba(255, 225, 160, 0.95)',
+                        }}
+                        title="Matches your portfolio context"
+                      >
+                        YOUR LIST
+                      </span>
+                    ) : null}
                     {side ? (
                       <span style={{ color: sideColor, fontSize: '10px', fontWeight: 800, letterSpacing: '0.05em' }}>
                         {side}
@@ -147,6 +205,12 @@ export default function DealsIntelPanel() {
       {view.hasError ? (
         <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '11px', lineHeight: 1.35 }}>
           Source may throttle requests.
+        </div>
+      ) : null}
+
+      {!view.hasPortfolio ? (
+        <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '10.5px', lineHeight: 1.35 }}>
+          Tip: set `li_portfolio_context_v1` in localStorage (e.g. tickers: TCS, HDFCBANK) to highlight relevant deals.
         </div>
       ) : null}
 
