@@ -89,8 +89,8 @@ FEATURE_ANALYTICS=false
 **Steps:**
 1. Open: `http://localhost:3000/api/health`
 2. If Supabase is not ok, check `.env.local`:
-   - `NEXT_PUBLIC_SUPABASE_URL=...`
-   - `SUPABASE_SERVICE_ROLE_KEY=...`
+  - `NEXT_PUBLIC_SUPABASE_URL=`
+  - `SUPABASE_SERVICE_ROLE_KEY=""`
 3. In Supabase SQL editor, run: `supabase/schema.sql`
 
 ---

@@ -6,7 +6,8 @@
  * - Commission fields should be null while placeholder=true.
  *
  * Usage:
- *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/seed-affiliates.js
+ *   Set env vars: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+ *   Then run: node scripts/seed-affiliates.js
  */
 
 const { createClient } = require('@supabase/supabase-js');

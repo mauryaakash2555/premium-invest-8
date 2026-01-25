@@ -63,10 +63,10 @@ function normalizeBlogHtmlForPremium(html) {
   // Convert legacy "bright yellow" / alt-gold accents into the canonical premium accent.
   // CRITICAL: do not introduce any alternate gold RGB/hex values here.
   return html
-    .replace(/var(--lux-accent)/gi, 'var(--lux-accent)')
-    .replace(/var(--lux-accent)/gi, 'var(--lux-accent)')
-    .replace(/var(--lux-accent)/gi, 'var(--lux-accent)')
-    .replace(/var(--lux-accent)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
     // Convert common legacy gold rgba(...) to accent-only color-mix(...)
     .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,\s*([0-9]*\.?[0-9]+)\s*\)/gi, rgbaToAccent)
     .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,\s*([0-9]*\.?[0-9]+)\s*\)/gi, rgbaToAccent)
@@ -74,105 +74,6 @@ function normalizeBlogHtmlForPremium(html) {
     // Content is already live; rename label everywhere consistently.
     .replace(/Coming Next:/gi, 'Next Read:')
     .replace(/Coming Next/gi, 'Next Read');
-}
-
-function renderBlog12PlainTextToPremiumHtml(text) {
-  const escapeHtml = (s) =>
-    s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-
-  const lines = String(text).replace(/\r\n/g, '\n').split('\n');
-
-  const parts = [];
-  let listItems = [];
-  const flushList = () => {
-    if (!listItems.length) return;
-    parts.push(`<ul class="bm-plain-ul">${listItems.join('')}</ul>`);
-    listItems = [];
-  };
-
-  const subheads = new Set([
-    'Over-borrowing',
-    'Long Tenures for Short Problems',
-    'Ignoring Total Cost',
-    'Mixing Consumption with Liquidity',
-  ]);
-
-  const isUnderscoreRule = (line) => /^_{10,}$/.test(line);
-  const isNumberedHeading = (line) => /^\d+\.\s+/.test(line);
-  const isBulletLine = (line) => /^•/.test(line);
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (line === '') {
-      flushList();
-      parts.push('<div class="bm-plain-spacer"></div>');
-      continue;
-    }
-
-    if (isUnderscoreRule(line)) {
-      flushList();
-      parts.push(`<div class="bm-plain-sep">${escapeHtml(line)}</div>`);
-      continue;
-    }
-
-    if (
-      line === 'Personal Loans for Short-Term Cashflow (Professionals)' ||
-      line === 'Personal Loans for Short-Term Cashflow: A Practical Guide for Professionals'
-    ) {
-      flushList();
-      parts.push(`<h1 class="bm-plain-h1">${escapeHtml(line)}</h1>`);
-      continue;
-    }
-
-    if (line === 'You can paste this as-is into your blog system.') {
-      flushList();
-      parts.push(`<p class="bm-plain-kicker">${escapeHtml(line)}</p>`);
-      continue;
-    }
-
-    if (
-      line === 'When Does a Personal Loan Actually Make Sense?' ||
-      line === 'Key Factors Professionals Must Evaluate' ||
-      line === 'Personal Loans as a Cashflow Bridge (Not a Crutch)' ||
-      line === 'Common Mistakes Professionals Make with Personal Loans' ||
-      line === 'How Personal Loans Fit into Broader Financial Planning' ||
-      line === 'Final Thoughts' ||
-      line === 'Disclosure'
-    ) {
-      flushList();
-      parts.push(`<h2 class="bm-plain-h2">${escapeHtml(line)}</h2>`);
-      continue;
-    }
-
-    if (isNumberedHeading(line)) {
-      flushList();
-      parts.push(`<h3 class="bm-plain-h3">${escapeHtml(line)}</h3>`);
-      continue;
-    }
-
-    if (subheads.has(line)) {
-      flushList();
-      parts.push(`<p class="bm-plain-subhead"><strong>${escapeHtml(line)}</strong></p>`);
-      continue;
-    }
-
-    if (isBulletLine(line)) {
-      listItems.push(`<li class="bm-plain-li">${escapeHtml(line)}</li>`);
-      continue;
-    }
-
-    flushList();
-    parts.push(`<p class="bm-plain-p">${escapeHtml(line)}</p>`);
-  }
-
-  flushList();
-  return `<div class="bm-plain-rich">${parts.join('')}</div>`;
 }
 
 export default function BlogDetailClient({ slug }) {
@@ -219,20 +120,8 @@ export default function BlogDetailClient({ slug }) {
   }, [post]);
 
   const renderedHtml = useMemo(() => {
-    const normalized = normalizeBlogHtmlForPremium(rawHtml);
-
-    // Blog 12: content is stored as exact plain text; transform at render time without changing characters.
-    if (
-      slug === 'personal-loans-short-term-cashflow-professionals' &&
-      typeof normalized === 'string' &&
-      normalized.length > 0 &&
-      !normalized.includes('<')
-    ) {
-      return renderBlog12PlainTextToPremiumHtml(normalized);
-    }
-
-    return normalized;
-  }, [rawHtml, slug]);
+    return normalizeBlogHtmlForPremium(rawHtml);
+  }, [rawHtml]);
 
   const pageClassName = useMemo(() => {
     const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';
@@ -303,81 +192,91 @@ export default function BlogDetailClient({ slug }) {
       }
     });
 
-    // BLOG 11: Premium affiliate CTA blocks
+    // Premium affiliate CTA blocks
     // - Full width
     // - Never show raw URLs
-    // - Keep lightweight click tracking for the 3 affiliate CTAs only
+    // - Keeps click tracking only when an event name is available
     const affiliateCleanups = [];
-    if (post?.slug === 'best-credit-cards-high-income-india') {
-      const affiliateLinks = Array.from(root.querySelectorAll('a.bm-cta-gold-flat'));
-      affiliateLinks.forEach((a) => {
-        a.classList.add('coming-next-block');
-        a.classList.add('bm-affiliate-cta');
+    const affiliateLinks = Array.from(root.querySelectorAll('a.bm-cta-gold-flat'));
+    affiliateLinks.forEach((a) => {
+      a.classList.add('coming-next-block');
+      a.classList.add('bm-affiliate-cta');
 
-        const href = String(a.getAttribute('href') || '');
-        const hrefLower = href.toLowerCase();
+      const href = String(a.getAttribute('href') || '');
+      const hrefLower = href.toLowerCase();
 
-        let eventName = null;
-        let affiliateKey = null;
-        let friendlyTitle = 'Check eligibility';
-        let friendlySubtitle = 'Sponsored link • Opens in a new tab';
+      const dataTitle = a.getAttribute('data-bm-title');
+      const dataSubtitle = a.getAttribute('data-bm-subtitle');
+      const dataEvent = a.getAttribute('data-bm-event');
+      const dataAffiliate = a.getAttribute('data-bm-affiliate');
+      const dataPlacement = a.getAttribute('data-bm-placement');
+
+      let eventName = dataEvent || null;
+      let affiliateKey = dataAffiliate || null;
+      let friendlyTitle = dataTitle || 'Check eligibility';
+      let friendlySubtitle = dataSubtitle || 'Sponsored link • Opens in a new tab';
+
+      // Backward-compatible defaults for Blog 11's three known partners
+      if (!dataTitle || !dataEvent || !dataAffiliate) {
         if (hrefLower.includes('idfcfirstbank')) {
-          eventName = 'affiliate_idfc_click';
-          affiliateKey = 'idfc';
-          friendlyTitle = 'IDFC First Bank Credit Card';
+          eventName = dataEvent || 'affiliate_idfc_click';
+          affiliateKey = dataAffiliate || 'idfc';
+          friendlyTitle = dataTitle || 'IDFC First Bank Credit Card';
         } else if (hrefLower.includes('aubank')) {
-          eventName = 'affiliate_au_click';
-          affiliateKey = 'au';
-          friendlyTitle = 'AU Bank Credit Options';
+          eventName = dataEvent || 'affiliate_au_click';
+          affiliateKey = dataAffiliate || 'au';
+          friendlyTitle = dataTitle || 'AU Bank Credit Options';
         } else if (hrefLower.includes('indusind')) {
-          eventName = 'affiliate_indusind_click';
-          affiliateKey = 'indusind';
-          friendlyTitle = 'IndusInd Bank Credit Card';
+          eventName = dataEvent || 'affiliate_indusind_click';
+          affiliateKey = dataAffiliate || 'indusind';
+          friendlyTitle = dataTitle || 'IndusInd Bank Credit Card';
         }
+      }
 
-        if (affiliateKey) {
-          a.setAttribute('data-affiliate', affiliateKey);
-        }
+      if (affiliateKey) {
+        a.setAttribute('data-affiliate', affiliateKey);
+      }
 
-        // Replace the raw URL text with a premium card layout.
-        // Keep the anchor itself as the clickable target.
-        try {
-          a.textContent = '';
-          a.setAttribute('aria-label', `${friendlyTitle} (sponsored link)`);
+      // Replace the raw URL text with a premium card layout.
+      // Keep the anchor itself as the clickable target.
+      try {
+        a.textContent = '';
+        a.setAttribute('aria-label', `${friendlyTitle} (sponsored link)`);
 
-          const meta = document.createElement('div');
-          meta.className = 'bm-affiliate-meta';
+        const meta = document.createElement('div');
+        meta.className = 'bm-affiliate-meta';
 
-          const titleEl = document.createElement('div');
-          titleEl.className = 'bm-affiliate-title';
-          titleEl.textContent = friendlyTitle;
+        const titleEl = document.createElement('div');
+        titleEl.className = 'bm-affiliate-title';
+        titleEl.textContent = friendlyTitle;
 
-          const subEl = document.createElement('div');
-          subEl.className = 'bm-affiliate-subtitle';
-          subEl.textContent = friendlySubtitle;
+        const subEl = document.createElement('div');
+        subEl.className = 'bm-affiliate-subtitle';
+        subEl.textContent = friendlySubtitle;
 
-          meta.appendChild(titleEl);
-          meta.appendChild(subEl);
-          a.appendChild(meta);
-        } catch {
-          // If DOM manipulation fails for any reason, fall back to non-URL text.
-          a.textContent = friendlyTitle;
-        }
+        meta.appendChild(titleEl);
+        meta.appendChild(subEl);
+        a.appendChild(meta);
+      } catch {
+        // If DOM manipulation fails for any reason, fall back to non-URL text.
+        a.textContent = friendlyTitle;
+      }
 
-        if (eventName) {
-          const onClick = () => {
-            trackEvent(eventName, {
-              placement: 'blog_11',
-              blog_slug: post?.slug,
-              href,
-            });
-          };
+      if (eventName) {
+        const onClick = () => {
+          trackEvent(eventName, {
+            placement:
+              dataPlacement ||
+              (post?.slug === 'best-credit-cards-high-income-india' ? 'blog_11' : 'blog_detail'),
+            blog_slug: post?.slug,
+            href,
+          });
+        };
 
-          a.addEventListener('click', onClick, true);
-          affiliateCleanups.push(() => a.removeEventListener('click', onClick, true));
-        }
-      });
-    }
+        a.addEventListener('click', onClick, true);
+        affiliateCleanups.push(() => a.removeEventListener('click', onClick, true));
+      }
+    });
 
     // Method 4: Divs with border-left styling that contain "Next Read" (the inner wrapper)
     allDivs.forEach(div => {

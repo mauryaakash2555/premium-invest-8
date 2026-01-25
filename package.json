@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:palette": "node scripts/lint-palette.js",
     "validate:chat": "node scripts/validate-chat.mjs",
     "security:scan": "node scripts/security/scan-secrets.js",
     "test": "jest",
