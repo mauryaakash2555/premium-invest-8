@@ -4647,18 +4647,18 @@ export const staticBlogPost11 = {
     IDFC First Bank cards work well as a <strong>primary credit card</strong>, especially for those who want predictable billing and minimal complexity.
   </p>
 
-  <div class="bm-exec-card" data-bm-exec-card="1">
-    <div class="bm-exec-card-title">IDFC First Bank Credit Card</div>
-    <div class="bm-exec-card-meta">SPONSORED LINK · OPENS IN A NEW TAB</div>
+  <p><strong>Optional execution link:</strong></p>
+  <p>
+    👉
     <a
-      class="bm-exec-card-button"
+      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
     >
-      CHECK ELIGIBILITY →
+      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply
     </a>
-  </div>
+  </p>
 
   <hr />
 
@@ -4684,18 +4684,18 @@ export const staticBlogPost11 = {
 
   <p>AU Bank products are often chosen by users who want <strong>quick access without excessive documentation</strong>.</p>
 
-  <div class="bm-exec-card" data-bm-exec-card="1">
-    <div class="bm-exec-card-title">AU Bank Credit Options</div>
-    <div class="bm-exec-card-meta">SPONSORED LINK · OPENS IN A NEW TAB</div>
+  <p><strong>Optional execution link:</strong></p>
+  <p>
+    👉
     <a
-      class="bm-exec-card-button"
+      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
     >
-      CHECK ELIGIBILITY →
+      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number
     </a>
-  </div>
+  </p>
 
   <hr />
 
@@ -4723,18 +4723,18 @@ export const staticBlogPost11 = {
     IndusInd cards are often chosen as a <strong>secondary or premium card</strong>, complementing a more utility-focused primary card.
   </p>
 
-  <div class="bm-exec-card" data-bm-exec-card="1">
-    <div class="bm-exec-card-title">IndusInd Bank Credit Card</div>
-    <div class="bm-exec-card-meta">SPONSORED LINK · OPENS IN A NEW TAB</div>
+  <p><strong>Optional execution link:</strong></p>
+  <p>
+    👉
     <a
-      class="bm-exec-card-button"
+      class="bm-cta-gold-flat"
       href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
     >
-      CHECK ELIGIBILITY →
+      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead
     </a>
-  </div>
+  </p>
 
   <hr />
 
