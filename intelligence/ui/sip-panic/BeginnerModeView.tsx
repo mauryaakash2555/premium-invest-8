@@ -91,49 +91,58 @@ export function BeginnerModeView(props: {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-white">What if you panic during a crash?</h2>
-        <p className="mt-2 text-sm sm:text-base text-white/75">See how much fear could cost you (education-only).</p>
+      <section className="rounded-2xl border border-amber-400/35 bg-amber-400/10 p-6 sm:p-8 text-center">
+        <p className="text-xs text-amber-100/90 font-semibold">Your simulation shows</p>
+        <div className="mt-2 text-4xl sm:text-5xl font-semibold text-amber-200 tabular-nums">
+          <LakhTooltip amount={result.behavioralCost} />
+        </div>
+        <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s ~{result.costPct}% of your potential wealth — lost by panic selling.</p>
+        <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses a designed crash/recovery path + simplified tax.</p>
       </section>
 
-      <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-8 space-y-6">
-        <div>
-          <label className="block text-sm font-semibold text-white/90">Monthly SIP (₹)</label>
-          <div className="mt-2 flex items-center gap-3">
-            <Input
-              type="number"
-              inputMode="numeric"
-              min={1000}
-              max={500000}
-              step={500}
-              value={monthly}
-              onChange={(e) => props.onChangeMonthlyAmount(Number(e.target.value))}
-              className="no-spinner bg-black/25 border-white/12 text-white placeholder:text-white/45"
-            />
-            <span className="text-xs text-white/60">/month</span>
-          </div>
-          <p className="mt-2 text-[11px] text-white/60">Total invested: ₹{totalInvested.toLocaleString("en-IN")}</p>
-        </div>
+      <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5 sm:p-6">
+        <div className="text-sm font-semibold text-white/90">How much & how long?</div>
+        <div className="mt-1 text-[11px] text-white/60">Optional — adjust to match your situation.</div>
 
-        <div>
-          <div className="flex items-center justify-between gap-3">
-            <label className="block text-sm font-semibold text-white/90">Duration (years)</label>
-            <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/80 tabular-nums">{years}y</div>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div className="text-[11px] font-semibold text-white/70">Monthly SIP (₹)</div>
+            <div className="mt-2 flex items-center gap-2">
+              <Input
+                type="number"
+                inputMode="numeric"
+                min={1000}
+                max={500000}
+                step={500}
+                value={monthly}
+                onChange={(e) => props.onChangeMonthlyAmount(Number(e.target.value))}
+                className="no-spinner h-10 bg-black/25 border-white/12 text-white placeholder:text-white/45"
+              />
+              <span className="text-[11px] text-white/55">/mo</span>
+            </div>
+            <div className="mt-2 text-[11px] text-white/60">Total invested: ₹{totalInvested.toLocaleString("en-IN")}</div>
           </div>
-          <div className="mt-2">
-            <Slider
-              min={1}
-              max={30}
-              step={1}
-              value={[years]}
-              onValueChange={(arr) => props.onChangeDurationYears(Number(arr?.[0] ?? years))}
-              trackClassName="bg-white/10"
-              rangeClassName="bg-[oklch(0.78_0.08_65)]"
-              thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
-            />
-            <div className="mt-1 flex items-center justify-between text-[11px] text-white/55">
-              <span>1y</span>
-              <span>30y</span>
+
+          <div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-[11px] font-semibold text-white/70">Duration</div>
+              <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/80 tabular-nums">{years}y</div>
+            </div>
+            <div className="mt-2">
+              <Slider
+                min={1}
+                max={30}
+                step={1}
+                value={[years]}
+                onValueChange={(arr) => props.onChangeDurationYears(Number(arr?.[0] ?? years))}
+                trackClassName="bg-white/10"
+                rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+              />
+              <div className="mt-1 flex items-center justify-between text-[11px] text-white/55">
+                <span>1y</span>
+                <span>30y</span>
+              </div>
             </div>
           </div>
         </div>
@@ -159,15 +168,6 @@ export function BeginnerModeView(props: {
             <p className="mt-2 text-[11px] text-red-100/70">Final wealth estimate</p>
           </div>
         </div>
-      </section>
-
-      <section className="rounded-2xl border border-amber-400/35 bg-amber-400/10 p-6 sm:p-8 text-center">
-        <p className="text-xs text-amber-100/90 font-semibold">Cost of panic</p>
-        <div className="mt-2 text-4xl sm:text-5xl font-semibold text-amber-200 tabular-nums">
-          <LakhTooltip amount={result.behavioralCost} />
-        </div>
-        <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s ~{result.costPct}% of your potential wealth.</p>
-        <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses simplified tax + a designed crash/recovery path.</p>
       </section>
 
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass p-6">

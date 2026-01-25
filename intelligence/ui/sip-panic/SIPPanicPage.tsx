@@ -862,15 +862,19 @@ export default function SIPPanicPage(props?: {
               <ComplianceBanner />
             </div>
 
-            <div className="mt-5 flex justify-center">
-              <LanguageToggle />
+            <div className="mt-5">
+              <ModeToggle currentMode={uiMode} onChange={onUiModeChange} />
             </div>
+
+            {uiMode === "advanced" ? (
+              <div className="mt-5 flex justify-center">
+                <LanguageToggle />
+              </div>
+            ) : null}
 
             <h1 className="mt-6 text-3xl sm:text-4xl font-semibold gold-gradient-text">{t("page.title")}</h1>
             <p className="mt-3 text-sm sm:text-base text-white/90 max-w-3xl mx-auto">{t("page.subtitle")}</p>
           </header>
-
-          <ModeToggle currentMode={uiMode} onChange={onUiModeChange} />
 
           {uiMode === "beginner" ? (
             <BeginnerModeView
@@ -892,6 +896,13 @@ export default function SIPPanicPage(props?: {
             />
           ) : (
             <>
+              <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+                <div className="text-sm font-semibold text-white/90">Advanced Mode — full customization for professionals</div>
+                <div className="mt-1 text-xs text-white/70">
+                  Tax assumptions, scenario builders, risk profile, crash presets, and all details.
+                </div>
+              </div>
+
               <SocialProofBanner />
 
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
