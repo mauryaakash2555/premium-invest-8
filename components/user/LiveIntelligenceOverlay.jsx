@@ -26,6 +26,7 @@ import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
+import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -978,8 +979,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             { s: 'NSE:NIFTY', d: 'NIFTY 50' },
             { s: 'NSE:BANKNIFTY', d: 'Bank NIFTY' },
             { s: 'BSE:SENSEX', d: 'SENSEX' },
+            { s: 'NSE:INDIAVIX', d: 'India VIX' },
             { s: 'NSE:NIFTYIT', d: 'NIFTY IT' },
             { s: 'NSE:NIFTYFIN', d: 'NIFTY FIN' },
+            { s: 'NSE:NIFTYPHARMA', d: 'NIFTY Pharma' },
+            { s: 'NSE:NIFTYFMCG', d: 'NIFTY FMCG' },
+            { s: 'NSE:NIFTYAUTO', d: 'NIFTY Auto' },
+            { s: 'NSE:NIFTYMETAL', d: 'NIFTY Metal' },
+            { s: 'NSE:NIFTYREALTY', d: 'NIFTY Realty' },
             { s: 'NSE:NIFTYMIDCAP50', d: 'NIFTY MIDCAP 50' },
           ],
         },
@@ -2322,7 +2329,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div className="li-dash-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
-                Live Signals
+                Market Intel
               </div>
               <div style={{
                 padding: '3px 10px',
@@ -2334,71 +2341,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 fontWeight: 600,
                 letterSpacing: '0.05em',
               }}>
-                COMING SOON
+                LIVE
               </div>
             </div>
             <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
-              Portfolio alerts & opportunities
+              Flows, volatility & risk context
             </div>
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {/* Coming Soon Placeholder */}
-              <div style={{
-                padding: '24px',
-                borderRadius: '12px',
-                background: 'rgba(100,160,255,0.04)',
-                border: '1px dashed rgba(100,160,255,0.15)',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔔</div>
-                <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
-                  Live Signals / Personalized Alerts
-                </div>
-                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5, maxWidth: '320px', margin: '0 auto' }}>
-                  Coming soon. Until then, join the waitlist or connect your portfolio for early access.
-                </div>
-
-                <div style={{ marginTop: '14px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <a
-                    href="/client-portal"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '9px 14px',
-                      borderRadius: '10px',
-                      background: 'rgba(100,160,255,0.12)',
-                      border: '1px solid rgba(100,160,255,0.22)',
-                      color: 'rgba(235,242,255,0.90)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Connect Portfolio
-                    <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
-                  </a>
-                  <a
-                    href="/contact?subject=Live%20Signals%20Waitlist"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '9px 14px',
-                      borderRadius: '10px',
-                      background: 'rgba(10,10,12,0.55)',
-                      border: '1px solid rgba(170,198,255,0.18)',
-                      color: 'rgba(200,215,240,0.85)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Join Waitlist
-                    <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
-                  </a>
-                </div>
-              </div>
+              <MarketIntelPanel />
             </div>
           </div>
 
