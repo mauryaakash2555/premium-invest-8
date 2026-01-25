@@ -394,7 +394,8 @@ a.bm-cta-gold-flat:focus-visible {
 
   .ultra-luxury-glass {
     backdrop-filter: blur(20px) saturate(180%);
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.22) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
   }
 
   /* Public desktop navbar: active link must never show hover underline effects */

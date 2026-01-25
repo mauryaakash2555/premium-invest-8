@@ -101,15 +101,15 @@ const Navigation = () => {
   }, [servicesOpen, partnersOpen]);
 
   const serviceLinks = [
-    { path: '/services', label: 'Services Overview', sub: 'What we offer' },
-    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'PMS-first planning' },
-    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based allocation' },
+    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'Portfolio-first planning' },
+    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based execution' },
+    { path: '/sip', label: 'SIP', sub: 'Disciplined investing rhythm' },
     { path: '/insurance', label: 'Insurance', sub: 'Protection architecture' },
+    { path: '/trading-services', label: 'Trading Services', sub: 'Execution & workflows' },
     { path: '/fixed-deposits', label: 'Fixed Deposits', sub: 'Liquidity & stability' },
-    { path: '/sip-calculator', label: 'SIP Calculator', sub: 'SIP planning tool' },
   ];
 
-  const servicesActive = serviceLinks.some((l) => pathname === l.path);
+  const servicesActive = pathname === '/services' || serviceLinks.some((l) => pathname === l.path);
 
   const partnerLinks = [
     { path: '/execution-partners', label: 'Execution Partners', sub: 'Optional routing links' },
