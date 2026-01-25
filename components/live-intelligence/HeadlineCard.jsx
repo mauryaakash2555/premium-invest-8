@@ -51,7 +51,7 @@ const CTA_BUTTONS = {
   mutual_funds: {
     text: 'Explore Funds',
     icon: '📊',
-    action: () => window.open('/services/mutual-funds', '_blank'),
+    action: () => window.open('/mutual-funds', '_blank'),
   },
   insurance: {
     text: 'Get Quote',
@@ -61,12 +61,12 @@ const CTA_BUTTONS = {
   fixed_income: {
     text: 'Compare Rates',
     icon: '🏦',
-    action: () => window.open('/tools/fd-calculator', '_blank'),
+    action: () => window.open('/fixed-deposits', '_blank'),
   },
   bonds: {
     text: 'Learn More',
     icon: '📜',
-    action: () => window.open('/services/fixed-deposits', '_blank'),
+    action: () => window.open('/fixed-deposits', '_blank'),
   },
   sip: {
     text: 'Start SIP',

@@ -471,6 +471,33 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "build-premium-invest-8",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "clean-next-artifacts",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location '${workspaceFolder}'; if (Test-Path .next) { Remove-Item -Recurse -Force .next }; if (Test-Path .swc) { Remove-Item -Recurse -Force .swc }; if (Test-Path .turbo) { Remove-Item -Recurse -Force .turbo }; Write-Host 'CLEAN_DONE'"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }

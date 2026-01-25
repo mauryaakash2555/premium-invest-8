@@ -12,13 +12,26 @@ export default function LazyTradingView({
   minHeight = 400,
   rootMargin = '200px',
   placeholder = null,
+  fallbackLoadAfterMs = 3000,
 }) {
   const [shouldLoad, setShouldLoad] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
+    if (shouldLoad) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setShouldLoad(true);
+      return;
+    }
+
     const node = ref.current;
     if (!node) return;
+
+    let fallbackTimer = null;
+    if (typeof fallbackLoadAfterMs === 'number' && fallbackLoadAfterMs > 0) {
+      fallbackTimer = setTimeout(() => setShouldLoad(true), fallbackLoadAfterMs);
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -31,8 +44,11 @@ export default function LazyTradingView({
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
-  }, [rootMargin]);
+    return () => {
+      observer.disconnect();
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+    };
+  }, [rootMargin, fallbackLoadAfterMs, shouldLoad]);
 
   const defaultPlaceholder = (
     <div
