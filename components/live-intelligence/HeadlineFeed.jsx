@@ -9,7 +9,7 @@ import {
   getRotationSpeed,
   CURATED_HEADLINES 
 } from '@/lib/live-intelligence/headlines';
-import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
+import { getCurrentMode } from '@/lib/modes';
 import { trackPanelExpand, trackPanelCollapse, trackHeadlineView, trackHeadlinePause } from '@/lib/live-intelligence/analytics';
 
 // Preserve API ordering (category-balanced/priority-scored), but ensure a BREAKING item can lead.
@@ -47,8 +47,8 @@ export default function HeadlineFeed() {
   const visibleIntervalRef = useRef(8000);
 
   const getRotationCap = useCallback(() => {
-    const m = getCurrentModeConfig();
-    return m?.key === 'global_watch' ? 5 : 15;
+    const m = getCurrentMode();
+    return typeof m?.maxHeadlines === 'number' ? m.maxHeadlines : 15;
   }, []);
 
   // Fetch live headlines from API
@@ -148,9 +148,9 @@ export default function HeadlineFeed() {
 
   // Get current mode for rotation speed
   useEffect(() => {
-    setMode(getCurrentModeConfig());
+    setMode(getCurrentMode());
     const interval = setInterval(() => {
-      setMode(getCurrentModeConfig());
+      setMode(getCurrentMode());
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -176,8 +176,8 @@ export default function HeadlineFeed() {
     if (!current) return;
 
     const baseSpeed = getRotationSpeed(current?.urgency);
-    const modeSpeed = mode?.rotationSpeed || 8000;
-    const interval = Math.min(baseSpeed, modeSpeed);
+    const modeSpeedMs = (typeof mode?.rotationSpeed === 'number' ? mode.rotationSpeed : 8) * 1000;
+    const interval = Math.min(baseSpeed, modeSpeedMs);
 
     visibleHeadlineRef.current = current;
     visibleSinceRef.current = now;
@@ -203,9 +203,9 @@ export default function HeadlineFeed() {
 
     const currentHeadline = headlines[activeIndex];
     const baseSpeed = getRotationSpeed(currentHeadline?.urgency);
-    const modeSpeed = mode?.rotationSpeed || 8000;
+    const modeSpeedMs = (typeof mode?.rotationSpeed === 'number' ? mode.rotationSpeed : 8) * 1000;
     // Use the shorter of the two (more urgent = faster)
-    const speed = Math.min(baseSpeed, modeSpeed);
+    const speed = Math.min(baseSpeed, modeSpeedMs);
 
     const timer = setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % headlines.length);
