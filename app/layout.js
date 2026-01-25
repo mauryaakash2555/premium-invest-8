@@ -247,18 +247,19 @@ gtag('config', '${GA4_MEASUREMENT_ID}');
 					/>
 				)}
 
-				{/* CueLinks Affiliate Tracking (Publisher ID: 223077) — main site only */}
+				{/* CueLinks Affiliate Tracking (cId: 257199) — main site only */}
 				{!isStoreHost && (
 					<Script id="cuelinks" strategy="afterInteractive">
 						{`
+var cId =  "257199";
+
 (function(d, t) {
-	var cId = '223077';
-	var s = document.createElement('script');
-	s.type = 'text/javascript';
+	var s = document.createElement("script");
+	s.type = "text/javascript";
 	s.async = true;
-	s.src = 'https://cdn0.cuelinks.com/js/' + 'cuelinkssv2.js';
-	document.getElementsByTagName('body')[0].appendChild(s);
-})(document, 'script');
+	s.src = (document.location.protocol == "https:" ? "https://cdn0.cuelinks.com/js/" : "http://cdn0.cuelinks.com/js/")  + "cuelinksv2.js";
+	document.getElementsByTagName("body")[0].appendChild(s);
+}());
 						`}
 					</Script>
 				)}
