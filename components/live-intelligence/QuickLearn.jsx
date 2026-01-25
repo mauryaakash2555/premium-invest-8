@@ -203,19 +203,20 @@ export default function QuickLearn() {
           <div className="ql-count">{doneCount}/{lessons.length} done</div>
         </div>
 
-        <div className="ql-topic">{lesson.topic}</div>
-        <div className="ql-question">{lesson.question}</div>
+        <div key={lesson.id} className="ql-content">
+          <div className="ql-topic">{lesson.topic}</div>
+          <div className="ql-question">{lesson.question}</div>
 
-        {!isRevealed ? (
-          <button
-            className="ql-btn li-ripple"
-            onPointerDown={onRipplePointerDown}
-            onClick={() => setRevealed((p) => ({ ...p, [activeIdx]: true }))}
-          >
-            Show Answer
-          </button>
-        ) : (
-          <div className="ql-answer-wrap" data-revealed="1">
+          {!isRevealed ? (
+            <button
+              className="ql-btn li-ripple"
+              onPointerDown={onRipplePointerDown}
+              onClick={() => setRevealed((p) => ({ ...p, [activeIdx]: true }))}
+            >
+              Show Answer
+            </button>
+          ) : (
+            <div className="ql-answer-wrap" data-revealed="1">
             <div className="ql-answer">
               <span className="ql-label">Answer</span>
               {lesson.answer}
@@ -241,8 +242,9 @@ export default function QuickLearn() {
             ) : (
               <div className="ql-completed">Done</div>
             )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
         <div className="ql-nav">
           <button
@@ -364,6 +366,10 @@ export default function QuickLearn() {
           border-left: 2px solid rgba(100, 160, 255, 0.35);
           border-radius: 0 6px 6px 0;
           margin-bottom: 12px;
+        }
+
+        .ql-content {
+          animation: qlReveal 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) both;
         }
         .ql-btn {
           width: 100%;
@@ -514,6 +520,9 @@ export default function QuickLearn() {
           margin-top: 10px;
           padding-top: 8px;
           border-top: 1px solid rgba(100, 160, 255, 0.06);
+          .ql-content {
+            animation: none;
+          }
         }
       `}</style>
     </>

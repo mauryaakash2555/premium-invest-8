@@ -320,7 +320,14 @@ const getHeadlineDetails = (headline) => {
  */
 export default function HeadlineCard({ headline, isActive = false, onSaveChange, mode = 'live' }) {
   const [showModal, setShowModal] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const [, setNowTick] = useState(0);
+
+    // Keep relative-time labels fresh (e.g., 26m → 27m)
+    useEffect(() => {
+      const t = setInterval(() => setNowTick((x) => x + 1), 60000);
+      return () => clearInterval(t);
+    }, []);
   const [longPressTimer, setLongPressTimer] = useState(null);
   const [aiContent, setAiContent] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);

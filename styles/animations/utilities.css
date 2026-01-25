@@ -95,6 +95,11 @@
   100% { background-position: -200% 0; opacity: 0.6; }
 }
 
+@keyframes liPulseSoft {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
 .li-skeleton {
   position: relative;
   overflow: hidden;
@@ -107,6 +112,12 @@
     );
   background-size: 200% 100%;
   animation: liShimmer 2s linear infinite;
+}
+
+/* Spec-aligned pulse option (opacity 0.4 → 0.8) */
+.li-skeleton--pulse {
+  background: rgba(255,255,255,0.06);
+  animation: liPulseSoft 1.5s ease-in-out infinite;
 }
 
 /* Coming-soon animated gradient badge */

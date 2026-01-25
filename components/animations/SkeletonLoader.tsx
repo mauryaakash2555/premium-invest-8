@@ -3,6 +3,7 @@
 import React from 'react';
 
 type Variant = 'block' | 'text' | 'circle';
+type AnimationMode = 'pulse' | 'shimmer';
 
 type Props = {
   width?: number | string;
@@ -11,6 +12,7 @@ type Props = {
   className?: string;
   style?: React.CSSProperties;
   variant?: Variant;
+  animation?: AnimationMode;
   ariaBusy?: boolean;
 };
 
@@ -21,6 +23,7 @@ export default function SkeletonLoader({
   className,
   style,
   variant = 'block',
+  animation = 'pulse',
   ariaBusy = true,
 }: Props) {
   const borderRadius =
@@ -32,7 +35,13 @@ export default function SkeletonLoader({
   return (
     <div
       aria-busy={ariaBusy}
-      className={['li-skeleton', className].filter(Boolean).join(' ')}
+      className={[
+        'li-skeleton',
+        animation === 'pulse' ? 'li-skeleton--pulse' : '',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={{
         width: computedWidth,
         height: computedHeight,
