@@ -28,6 +28,8 @@ import { TaxCalculationMode, type TaxCalculationModeKey } from "./TaxCalculation
 import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
 import { LangProvider } from "./LangContext";
 import { LanguageToggle } from "./LanguageToggle";
+import { ModeToggle, type SIPUiMode } from "./ModeToggle";
+import { BeginnerModeView } from "./BeginnerModeView";
 import type { Lang } from "./i18n";
 import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 
@@ -38,6 +40,7 @@ const TAX_CALC_MODE_KEY = "bm.sipPanicSelling.taxCalcMode";
 const LANG_KEY = "bm.sipPanicSelling.lang";
 const INVESTMENT_TYPE_KEY = "bm.sipPanicSelling.investmentType";
 const QUIZ_PROFILE_KEY = "bm.sipPanicSelling.quizProfileV1";
+const UI_MODE_KEY = "bm.sipPanicSelling.uiMode";
 
 const TooltipContentAny: any = TooltipContent;
 
@@ -84,6 +87,11 @@ function safeScenarioKey(v: string | null): ScenarioKey | null {
 
 function safeLang(v: string | null): Lang | null {
   return isLang(v) ? v : null;
+}
+
+function safeUiMode(v: string | null): SIPUiMode | null {
+  if (v === "beginner" || v === "advanced") return v;
+  return null;
 }
 
 function clampInt(n: number, min: number, max: number): number {
@@ -170,6 +178,8 @@ export default function SIPPanicPage(props?: {
   const searchParams = useSearchParams();
   const qsEmbed = searchParams?.get("embed") === "1";
   const qsPartner = searchParams?.get("partner") || "";
+  const qsMode = searchParams?.get("mode") || "";
+  const qsUi = searchParams?.get("ui") || "";
   const qsHideDisclaimer = searchParams?.get("hideDisclaimer") === "1";
   const qsCta = searchParams?.get("cta") === "1";
   const qsCtaText = searchParams?.get("ctaText") || "";
@@ -184,6 +194,8 @@ export default function SIPPanicPage(props?: {
   const ctaUrl = (qsCtaUrl || "https://bmwealth.co.in/contact") as string;
 
   const [inputs, setInputs] = useState({ monthlyAmount: 10_000, durationYears: 10 });
+
+  const [uiMode, setUiMode] = useState<SIPUiMode>("beginner");
 
   const [riskComfort, setRiskComfort] = useState<"conservative" | "moderate" | "aggressive">("moderate");
 
@@ -382,6 +394,30 @@ export default function SIPPanicPage(props?: {
       // ignore
     }
   }, []);
+
+  useEffect(() => {
+    const fromQuery = safeUiMode((qsMode || qsUi || "").toLowerCase());
+    if (fromQuery) {
+      setUiMode(fromQuery);
+      return;
+    }
+
+    try {
+      const saved = safeUiMode(window.localStorage.getItem(UI_MODE_KEY));
+      if (saved) setUiMode(saved);
+    } catch {
+      // ignore
+    }
+  }, [qsMode, qsUi]);
+
+  const onUiModeChange = (next: SIPUiMode) => {
+    setUiMode(next);
+    try {
+      window.localStorage.setItem(UI_MODE_KEY, next);
+    } catch {
+      // ignore
+    }
+  };
 
   const onInvestmentTypeChange = (next: "equity_mf" | "stocks") => {
     setInvestmentType(next);
@@ -834,7 +870,29 @@ export default function SIPPanicPage(props?: {
             <p className="mt-3 text-sm sm:text-base text-white/90 max-w-3xl mx-auto">{t("page.subtitle")}</p>
           </header>
 
-        <SocialProofBanner />
+          <ModeToggle currentMode={uiMode} onChange={onUiModeChange} />
+
+          {uiMode === "beginner" ? (
+            <BeginnerModeView
+              monthlyAmount={inputs.monthlyAmount}
+              durationYears={inputs.durationYears}
+              onChangeMonthlyAmount={(monthly) =>
+                setInputs((prev) => ({
+                  ...prev,
+                  monthlyAmount: clampInt(monthly, 1_000, 5_00_000),
+                }))
+              }
+              onChangeDurationYears={(years) =>
+                setInputs((prev) => ({
+                  ...prev,
+                  durationYears: clampInt(years, 1, 30),
+                }))
+              }
+              onRequestAdvanced={() => onUiModeChange("advanced")}
+            />
+          ) : (
+            <>
+              <SocialProofBanner />
 
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
@@ -1651,6 +1709,8 @@ export default function SIPPanicPage(props?: {
           </div>
         </div>
         ) : null}
+            </>
+          )}
       </div>
       </main>
     </LangProvider>
