@@ -48,14 +48,30 @@ export async function downloadPremiumReport(params: {
   durationYears: number;
   riskComfort: string;
   taxProfile: string;
+  taxCalcMode?: string;
+  marketAssumptionTitle?: string;
   chartSvgId: string;
 }) {
-  const { results, monthlyAmount, durationYears, riskComfort, taxProfile, chartSvgId } = params;
+  const { results, monthlyAmount, durationYears, riskComfort, taxProfile, taxCalcMode, marketAssumptionTitle, chartSvgId } = params;
 
   const discipline = results.find((r) => r.scenario.behaviorType === "discipline") ?? null;
   const worst = results
     .filter((r) => r.scenario.behaviorType !== "discipline")
     .sort((a, b) => (b.behavioralCost ?? 0) - (a.behavioralCost ?? 0))[0] ?? null;
+
+  const worstRule = (() => {
+    if (!worst) return "—";
+    if (worst.scenario.behaviorType === "custom") {
+      const th = Math.abs(Number(worst.scenario.panicThreshold ?? -30));
+      const stop = Number.isFinite((worst.scenario as any).stopDuration) ? Number((worst.scenario as any).stopDuration) : undefined;
+      return stop ? `Custom: stop at ${th}% drawdown, resume after ${stop} months` : `Custom: stop at ${th}% drawdown`;
+    }
+    if (worst.scenario.behaviorType === "panic" && worst.scenario.panicThreshold === -1) return "Pause SIP in any red month";
+    if (worst.scenario.behaviorType === "panic" && typeof worst.scenario.panicThreshold === "number") {
+      return `Stop SIP at ${Math.abs(worst.scenario.panicThreshold)}% drawdown`;
+    }
+    return worst.scenario.name;
+  })();
 
   const { jsPDF } = await import("jspdf");
   const autoTable = (await import("jspdf-autotable")).default;
@@ -70,7 +86,7 @@ export async function downloadPremiumReport(params: {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.setTextColor(212, 175, 55);
-  doc.text("BEHAVIORAL COST ANALYSIS REPORT", 14, 18);
+  doc.text("SIP vs Panic Selling - Your Financial Analysis", 14, 18);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
@@ -89,7 +105,45 @@ export async function downloadPremiumReport(params: {
   doc.text(`Monthly investment: ${inr0(monthlyAmount)}`, 14, 43);
   doc.text(`Duration: ${durationYears} years`, 14, 49);
   doc.text(`Risk profile: ${riskComfort}`, 14, 55);
-  doc.text(`Tax profile: ${taxProfile}`, 14, 61);
+  doc.text("Tax profile:", 14, 61);
+  {
+    const lines = doc.splitTextToSize(String(taxProfile), 160);
+    doc.text(lines, 34, 61);
+  }
+
+  doc.text("Panic rule:", 14, 67);
+  {
+    const lines = doc.splitTextToSize(String(worstRule), 160);
+    doc.text(lines, 34, 67);
+  }
+
+  if (taxCalcMode) {
+    doc.text("Tax mode:", 14, 73);
+    const lines = doc.splitTextToSize(String(taxCalcMode), 160);
+    doc.text(lines, 34, 73);
+  }
+  if (marketAssumptionTitle) {
+    doc.text("Market assumption:", 14, taxCalcMode ? 79 : 73);
+    const lines = doc.splitTextToSize(String(marketAssumptionTitle), 160);
+    doc.text(lines, 45, taxCalcMode ? 79 : 73);
+  }
+
+  // Headline results
+  if (discipline && worst) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Summary (after tax)", 14, marketAssumptionTitle || taxCalcMode ? 89 : 80);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(215, 215, 215);
+    const baseY = (marketAssumptionTitle || taxCalcMode ? 95 : 86);
+    doc.text(`Stay disciplined: ${inr0(discipline.postTaxCorpus)}`, 14, baseY);
+    doc.text(`${worstRule}: ${inr0(worst.postTaxCorpus)}`, 14, baseY + 6);
+    doc.setTextColor(255, 125, 125);
+    doc.text(`Behavioral cost: ${inr0(worst.behavioralCost ?? 0)}`, 14, baseY + 12);
+  }
 
   // Chart
   const svg = document.getElementById(chartSvgId) as unknown as SVGSVGElement | null;
@@ -99,8 +153,8 @@ export async function downloadPremiumReport(params: {
 
     doc.setDrawColor(45, 45, 52);
     doc.setLineWidth(0.4);
-    doc.roundedRect(14, 68, 182, 70, 3, 3, "S");
-    doc.addImage(dataUrl, "PNG", 15, 69, 180, 68, undefined, "SLOW");
+    doc.roundedRect(14, 116, 182, 66, 3, 3, "S");
+    doc.addImage(dataUrl, "PNG", 15, 117, 180, 64, undefined, "SLOW");
   }
 
   // Results table
@@ -114,7 +168,7 @@ export async function downloadPremiumReport(params: {
   ]);
 
   autoTable(doc, {
-    startY: 144,
+    startY: 192,
     head: [["Scenario", "Invested", "Final", "Post-tax", "XIRR", "Behavioral cost"]],
     body: rows,
     styles: { fontSize: 9, textColor: [230, 230, 230], fillColor: [12, 12, 13], lineColor: [45, 45, 52] },
@@ -184,5 +238,5 @@ export async function downloadPremiumReport(params: {
   doc.text("Education-only. Not investment/tax/legal advice. Mutual fund investments are subject to market risks.", 14, 287);
 
   const stamp = new Date().toISOString().slice(0, 10);
-  doc.save(`bmw_sip-vs-panic_report_${stamp}.pdf`);
+  doc.save(`SIP_Panic_Report_${stamp}.pdf`);
 }

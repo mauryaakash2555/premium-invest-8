@@ -11,7 +11,8 @@ function formatInr(amount: number): string {
 
 function formatInrLakhs(amount: number): string {
   const v = Number.isFinite(amount) ? amount : 0;
-  return `₹${(v / 100_000).toFixed(2)}L`;
+  const short = `₹${(v / 100_000).toFixed(2)}L`;
+  return `${short} (${formatInr(v)})`;
 }
 
 function formatPct(p: number): string {

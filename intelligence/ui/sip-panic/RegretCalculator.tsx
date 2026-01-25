@@ -2,10 +2,7 @@
 
 import { useMemo } from "react";
 
-function formatLakhs(amount: number): string {
-  const v = Number.isFinite(amount) ? Math.max(0, amount) : 0;
-  return `₹${(v / 100_000).toFixed(1)}L`;
-}
+import { LakhTooltip } from "./LakhTooltip";
 
 function futureValueSip(params: { monthlyAmount: number; years: number; assumedAnnualReturn: number }): number {
   const monthlyAmount = Math.max(0, params.monthlyAmount);
@@ -44,8 +41,14 @@ export function RegretCalculator(props: { monthlyAmount: number }) {
           <div key={r.years} className="rounded-xl border border-white/10 bg-black/20 p-4">
             <div className="text-xs text-white/70">If you started</div>
             <div className="mt-1 text-sm font-semibold text-white">{r.years} years ago</div>
-            <div className="mt-3 text-2xl font-semibold gold-gradient-text tabular-nums">{formatLakhs(r.hypothetical)}</div>
-            <div className="mt-1 text-[11px] text-white/60">Delay cost: {formatLakhs(r.regret)}</div>
+            <div className="mt-3 text-2xl font-semibold gold-gradient-text tabular-nums">
+              <LakhTooltip amount={r.hypothetical} decimals={1} className="tabular-nums cursor-help" />
+            </div>
+            <div className="mt-1 text-[11px] text-white/60">
+              Delay cost:{" "}
+              <LakhTooltip amount={r.regret} decimals={1} className="tabular-nums cursor-help" />
+            </div>
+            <div className="mt-1 text-[11px] text-white/55">Based on a 12% annual assumed return (education-only). Not a forecast.</div>
           </div>
         ))}
       </div>

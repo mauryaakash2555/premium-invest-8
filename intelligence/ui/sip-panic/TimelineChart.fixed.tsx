@@ -6,10 +6,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Contrast, Download, Link2, Printer } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { trackEvent } from "@/lib/analytics";
 
 import type { ChartDataPoint } from "@/intelligence/simulations/sip-vs-panic";
 
-type SeriesKey = "discipline" | "panic20" | "panic40" | "invested";
+type SeriesKey = "discipline" | "panic20" | "panic40" | "anyFall" | "custom" | "invested";
 
 type SeriesValues = Record<SeriesKey, number[]>;
 
@@ -24,6 +25,17 @@ type SeriesComputed = {
 
 function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
+}
+
+const inr0 = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 0,
+});
+
+function formatInr0(amount: number): string {
+  const v = Number.isFinite(amount) ? Math.max(0, amount) : 0;
+  return inr0.format(Math.round(v));
 }
 
 function formatLakhs(amount: number): string {
@@ -90,10 +102,27 @@ function buildSeries(data: ChartDataPoint[], dims: { width: number; height: numb
     discipline: data.map((d) => Math.max(0, d?.perfectDisciplineValue ?? 0)),
     panic20: data.map((d) => Math.max(0, d?.panic20Value ?? 0)),
     panic40: data.map((d) => Math.max(0, d?.panic40Value ?? 0)),
+    anyFall: data.map((d) => {
+      const v = (d as any)?.anyFallValue;
+      return Number.isFinite(v) ? Math.max(0, v) : Number.NaN;
+    }),
+    custom: data.map((d) => {
+      const v = (d as any)?.customValue;
+      return Number.isFinite(v) ? Math.max(0, v) : Number.NaN;
+    }),
     invested: data.map((d) => Math.max(0, d?.investedAmount ?? 0)),
   };
 
-  const allMax = Math.max(1, ...values.discipline, ...values.panic20, ...values.panic40, ...values.invested);
+  const finite = (x: number) => Number.isFinite(x);
+  const allMax = Math.max(
+    1,
+    ...values.discipline,
+    ...values.panic20,
+    ...values.panic40,
+    ...values.invested,
+    ...values.anyFall.filter(finite),
+    ...values.custom.filter(finite)
+  );
   const yMin = 0;
   const yMax = allMax * 1.08;
 
@@ -113,8 +142,21 @@ function buildSeries(data: ChartDataPoint[], dims: { width: number; height: numb
 
   const pathFor = (arr: number[]) => {
     if (n === 0) return "";
-    let d = `M ${xTo(0)} ${yTo(arr[0] ?? 0)}`;
-    for (let i = 1; i < n; i += 1) d += ` L ${xTo(i)} ${yTo(arr[i] ?? 0)}`;
+    let d = "";
+    let started = false;
+    for (let i = 0; i < n; i += 1) {
+      const v = arr[i];
+      if (!Number.isFinite(v)) {
+        started = false;
+        continue;
+      }
+      if (!started) {
+        d += `M ${xTo(i)} ${yTo(v)}`;
+        started = true;
+      } else {
+        d += ` L ${xTo(i)} ${yTo(v)}`;
+      }
+    }
     return d;
   };
 
@@ -124,6 +166,8 @@ function buildSeries(data: ChartDataPoint[], dims: { width: number; height: numb
       discipline: pathFor(values.discipline),
       panic20: pathFor(values.panic20),
       panic40: pathFor(values.panic40),
+      anyFall: pathFor(values.anyFall),
+      custom: pathFor(values.custom),
       invested: pathFor(values.invested),
     },
     xTo,
@@ -136,18 +180,21 @@ function buildSeries(data: ChartDataPoint[], dims: { width: number; height: numb
 export function TimelineChart(props: {
   data: ChartDataPoint[];
   show?: Partial<Record<SeriesKey, boolean>>;
+  labels?: Partial<Record<SeriesKey, string>>;
   height?: number;
   title?: string;
   subtitle?: string;
   headerRight?: ReactNode;
   exportId?: string;
 }) {
-  const { data, show, height = 360, title, subtitle, headerRight, exportId } = props;
+  const { data, show, labels, height = 360, title, subtitle, headerRight, exportId } = props;
 
   const [showSeries, setShowSeries] = useState<Record<SeriesKey, boolean>>({
     discipline: show?.discipline ?? true,
     panic20: show?.panic20 ?? true,
     panic40: show?.panic40 ?? true,
+    anyFall: show?.anyFall ?? false,
+    custom: show?.custom ?? false,
     invested: show?.invested ?? false,
   });
 
@@ -159,17 +206,32 @@ export function TimelineChart(props: {
   const padding = { l: 58, r: 18, t: 20, b: 40 };
 
   const colors: Record<SeriesKey, { stroke: string; glow: string; label: string }> = {
-    discipline: { stroke: "var(--color-matte-gold)", glow: "var(--color-matte-gold)", label: "Discipline" },
-    panic20: { stroke: "var(--color-destructive)", glow: "var(--color-destructive)", label: "Panic 20" },
-    panic40: { stroke: "var(--color-destructive)", glow: "var(--color-destructive)", label: "Panic 40" },
-    invested: { stroke: "oklch(0.78 0.00 0 / 0.55)", glow: "oklch(0.78 0.00 0 / 0.10)", label: "Invested" },
+    discipline: { stroke: "var(--color-matte-gold)", glow: "var(--color-matte-gold)", label: labels?.discipline ?? "Discipline" },
+    panic20: { stroke: "var(--color-destructive)", glow: "var(--color-destructive)", label: labels?.panic20 ?? "Stop at 20%" },
+    panic40: { stroke: "var(--color-destructive)", glow: "var(--color-destructive)", label: labels?.panic40 ?? "Stop at 40%" },
+    anyFall: { stroke: "oklch(0.78 0.00 0 / 0.78)", glow: "oklch(0.78 0.00 0 / 0.20)", label: labels?.anyFall ?? "Pause in Red Months" },
+    custom: { stroke: "oklch(0.88 0.03 80 / 0.92)", glow: "oklch(0.88 0.03 80 / 0.25)", label: labels?.custom ?? "Custom" },
+    invested: { stroke: "oklch(0.78 0.00 0 / 0.55)", glow: "oklch(0.78 0.00 0 / 0.10)", label: labels?.invested ?? "Invested" },
   };
+
+  useEffect(() => {
+    if (!show) return;
+    setShowSeries((s) => ({
+      ...s,
+      discipline: show.discipline ?? s.discipline,
+      panic20: show.panic20 ?? s.panic20,
+      panic40: show.panic40 ?? s.panic40,
+      anyFall: show.anyFall ?? s.anyFall,
+      custom: show.custom ?? s.custom,
+      invested: show.invested ?? s.invested,
+    }));
+  }, [show?.anyFall, show?.custom, show?.discipline, show?.invested, show?.panic20, show?.panic40]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const isMobile = window.matchMedia?.("(max-width: 768px)")?.matches;
     if (!isMobile) return;
-    setShowSeries((s) => ({ ...s, discipline: true, panic20: true, panic40: false, invested: false }));
+    setShowSeries((s) => ({ ...s, discipline: true, panic20: true, panic40: false, anyFall: false, custom: false, invested: false }));
   }, []);
 
   const series = useMemo(() => buildSeries(data, { width, height, padding }), [data, height]);
@@ -202,11 +264,16 @@ export function TimelineChart(props: {
   }, [crashZone.end, crashZone.start, data]);
 
   const firstPaused = useMemo(() => {
-    const firstFor = (k: "panic20" | "panic40") => {
+    const firstFor = (k: "panic20" | "panic40" | "anyFall" | "custom") => {
       for (let i = 0; i < data.length; i += 1) if (data[i]?.sipStatus?.[k] === "paused") return i;
       return null;
     };
-    return { panic20: firstFor("panic20"), panic40: firstFor("panic40") };
+    return {
+      panic20: firstFor("panic20"),
+      panic40: firstFor("panic40"),
+      anyFall: firstFor("anyFall"),
+      custom: firstFor("custom"),
+    };
   }, [data]);
 
   const topLabelYs = useMemo(() => {
@@ -214,12 +281,14 @@ export function TimelineChart(props: {
     const rowH = 14;
     const minDx = 170;
 
-    const candidates: Array<{ key: "crash" | "recovery" | "panic20" | "panic40"; x: number }> = [];
+    const candidates: Array<{ key: "crash" | "recovery" | "panic20" | "panic40" | "anyFall" | "custom"; x: number }> = [];
 
     if (crashZone.start !== null) candidates.push({ key: "crash", x: series.xTo(crashZone.start) + 10 });
     if (recoveryZone.start !== null) candidates.push({ key: "recovery", x: series.xTo(recoveryZone.start) + 10 });
     if (firstPaused.panic20 !== null && showSeries.panic20) candidates.push({ key: "panic20", x: series.xTo(firstPaused.panic20) + 6 });
     if (firstPaused.panic40 !== null && showSeries.panic40) candidates.push({ key: "panic40", x: series.xTo(firstPaused.panic40) + 6 });
+    if (firstPaused.anyFall !== null && showSeries.anyFall) candidates.push({ key: "anyFall", x: series.xTo(firstPaused.anyFall) + 6 });
+    if (firstPaused.custom !== null && showSeries.custom) candidates.push({ key: "custom", x: series.xTo(firstPaused.custom) + 6 });
 
     candidates.sort((a, b) => a.x - b.x);
 
@@ -233,22 +302,30 @@ export function TimelineChart(props: {
     const out: Partial<Record<(typeof candidates)[number]["key"], number>> = {};
     for (const p of placed) out[p.key] = baseY + p.row * rowH;
     return out;
-  }, [crashZone.start, firstPaused.panic20, firstPaused.panic40, recoveryZone.start, series, showSeries.panic20, showSeries.panic40]);
+  }, [crashZone.start, firstPaused.anyFall, firstPaused.custom, firstPaused.panic20, firstPaused.panic40, recoveryZone.start, series, showSeries.anyFall, showSeries.custom, showSeries.panic20, showSeries.panic40]);
 
   const hover = useMemo(() => {
     if (hoverIndex === null) return null;
     const i = clamp(hoverIndex, 0, Math.max(0, data.length - 1));
     const point = data[i];
     if (!point) return null;
+
+    const at = (arr: number[], idx: number) => {
+      const v = arr[idx];
+      return Number.isFinite(v) ? (v ?? 0) : 0;
+    };
+
     return {
       i,
       x: series.xTo(i),
-      label: `MONTH ${point.monthNumber + 1}`,
+      label: `MONTH ${point.monthNumber}`,
       values: {
-        discipline: series.values.discipline[i] ?? 0,
-        panic20: series.values.panic20[i] ?? 0,
-        panic40: series.values.panic40[i] ?? 0,
-        invested: series.values.invested[i] ?? 0,
+        discipline: at(series.values.discipline, i),
+        panic20: at(series.values.panic20, i),
+        panic40: at(series.values.panic40, i),
+        anyFall: at(series.values.anyFall, i),
+        custom: at(series.values.custom, i),
+        invested: at(series.values.invested, i),
       },
     };
   }, [data, hoverIndex, series]);
@@ -259,6 +336,8 @@ export function TimelineChart(props: {
       discipline: series.values.discipline[lastIdx] ?? 0,
       panic20: series.values.panic20[lastIdx] ?? 0,
       panic40: series.values.panic40[lastIdx] ?? 0,
+      anyFall: Number.isFinite(series.values.anyFall[lastIdx]) ? (series.values.anyFall[lastIdx] ?? 0) : 0,
+      custom: Number.isFinite(series.values.custom[lastIdx]) ? (series.values.custom[lastIdx] ?? 0) : 0,
       invested: series.values.invested[lastIdx] ?? 0,
     };
     const d = Math.max(0, endValues.discipline);
@@ -267,9 +346,11 @@ export function TimelineChart(props: {
       costVsDiscipline: {
         panic20: d > 0 ? Math.max(0, d - Math.max(0, endValues.panic20)) : 0,
         panic40: d > 0 ? Math.max(0, d - Math.max(0, endValues.panic40)) : 0,
+        anyFall: d > 0 ? Math.max(0, d - Math.max(0, endValues.anyFall)) : 0,
+        custom: d > 0 ? Math.max(0, d - Math.max(0, endValues.custom)) : 0,
       },
     };
-  }, [data.length, series.values.discipline, series.values.invested, series.values.panic20, series.values.panic40]);
+  }, [data.length, series.values.anyFall, series.values.custom, series.values.discipline, series.values.invested, series.values.panic20, series.values.panic40]);
 
   const setHoverFromClientX = (clientX: number) => {
     const svg = svgRef.current;
@@ -394,8 +475,37 @@ export function TimelineChart(props: {
 
   const copyShareLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast.success("✓ Link copied to clipboard", { duration: 2000 });
+      const url = window.location.href;
+
+      // Prefer async clipboard API (works on localhost/https), but keep a fallback for Safari/iOS quirks.
+      const canUseClipboard =
+        typeof navigator !== "undefined" &&
+        typeof navigator.clipboard?.writeText === "function" &&
+        typeof window !== "undefined" &&
+        window.isSecureContext;
+
+      if (canUseClipboard) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = url;
+        ta.setAttribute("readonly", "true");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand("copy");
+        ta.remove();
+        if (!ok) throw new Error("execCommand copy failed");
+      }
+
+      trackEvent("sip_link_copied", {
+        calculator_type: "sip_vs_panic",
+        channel: "copy_link",
+      });
+      toast.success("✓ Link copied to clipboard!", { duration: 2000 });
     } catch {
       toast.error("Failed to copy. Try manually selecting the URL.", { duration: 2000 });
     }
@@ -455,21 +565,21 @@ export function TimelineChart(props: {
           <button
             type="button"
             onClick={exportAsSvg}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5 min-h-11"
           >
             <Download className="h-4 w-4" /> Export SVG
           </button>
           <button
             type="button"
             onClick={exportAsPdf}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5 min-h-11"
           >
             <Printer className="h-4 w-4" /> Export PDF
           </button>
           <button
             type="button"
             onClick={copyShareLink}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/85 hover:bg-white/5 min-h-11"
           >
             <Link2 className="h-4 w-4" /> Copy link
           </button>
@@ -497,10 +607,23 @@ export function TimelineChart(props: {
               ? "linear-gradient(90deg, var(--color-matte-gold), color-mix(in oklab, var(--color-matte-gold) 60%, white 40%))"
               : isPanic
                 ? "linear-gradient(90deg, var(--color-destructive), color-mix(in oklab, var(--color-destructive) 70%, white 30%))"
-                : "linear-gradient(90deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))";
-          const lastIdx = Math.max(0, data.length - 1);
-          const end = series.values[k][lastIdx] ?? 0;
-          const cost = k === "panic20" ? legendStats.costVsDiscipline.panic20 : k === "panic40" ? legendStats.costVsDiscipline.panic40 : 0;
+                : k === "custom"
+                  ? "linear-gradient(90deg, oklch(0.88 0.03 80 / 0.85), oklch(0.88 0.03 80 / 0.35))"
+                  : k === "anyFall"
+                    ? "linear-gradient(90deg, rgba(255,255,255,0.55), rgba(255,255,255,0.20))"
+                    : "linear-gradient(90deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))";
+
+          const end = legendStats.endValues[k] ?? 0;
+          const cost =
+            k === "panic20"
+              ? legendStats.costVsDiscipline.panic20
+              : k === "panic40"
+                ? legendStats.costVsDiscipline.panic40
+                : k === "anyFall"
+                  ? legendStats.costVsDiscipline.anyFall
+                  : k === "custom"
+                    ? legendStats.costVsDiscipline.custom
+                    : 0;
           return (
             <button
               key={k}
@@ -512,14 +635,15 @@ export function TimelineChart(props: {
               <span className="h-3 w-10 rounded-full" style={{ background: lineStyle }} />
               <span className="min-w-[120px]">
                 <div className="text-[13px] font-medium text-white/90">{colors[k].label}</div>
-                <div className="wealth-tooltip-value text-[15px] font-semibold text-white">{formatLakhs(end)}</div>
+                <div className="wealth-tooltip-value text-[15px] font-semibold text-white tabular-nums">{formatLakhs(end)}</div>
+                <div className="mt-0.5 text-[11px] text-white/55 tabular-nums">{formatInr0(end)}</div>
               </span>
               {cost > 0 ? (
-                <span
-                  className="wealth-tooltip-value ml-auto text-[13px] font-semibold"
-                  style={{ color: "var(--color-destructive)" }}
-                >
-                  -{formatLakhs(cost)}
+                <span className="ml-auto text-right tabular-nums" title={formatInr0(cost)}>
+                  <div className="wealth-tooltip-value text-[13px] font-semibold" style={{ color: "var(--color-destructive)" }}>
+                    -{formatLakhs(cost)}
+                  </div>
+                  <div className="mt-0.5 text-[11px] text-white/55">-{formatInr0(cost)}</div>
                 </span>
               ) : null}
             </button>
@@ -626,6 +750,7 @@ export function TimelineChart(props: {
                   textAnchor="end"
                   fontFamily="var(--font-inter)"
                 >
+                  <title>{formatInr0(v)}</title>
                   {formatLakhs(v)}
                 </text>
               ));
@@ -719,6 +844,32 @@ export function TimelineChart(props: {
                 transition={{ duration: 1.2, delay: 0.20, ease: [0.16, 1, 0.3, 1] }}
               />
             ) : null}
+            {showSeries.anyFall ? (
+              <motion.path
+                d={series.paths.anyFall}
+                fill="none"
+                stroke={colors.anyFall.glow}
+                strokeWidth={5}
+                filter="url(#softGlow)"
+                opacity={0.14}
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 0.14 }}
+                transition={{ duration: 1.2, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              />
+            ) : null}
+            {showSeries.custom ? (
+              <motion.path
+                d={series.paths.custom}
+                fill="none"
+                stroke={colors.custom.glow}
+                strokeWidth={5}
+                filter="url(#softGlow)"
+                opacity={0.16}
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 0.16 }}
+                transition={{ duration: 1.2, delay: 0.30, ease: [0.16, 1, 0.3, 1] }}
+              />
+            ) : null}
             {showSeries.invested ? (
               <path d={series.paths.invested} fill="none" stroke={colors.invested.stroke} strokeWidth={2} strokeDasharray="7 6" />
             ) : null}
@@ -758,6 +909,30 @@ export function TimelineChart(props: {
                 transition={{ duration: 1.4, delay: 0.20, ease: [0.16, 1, 0.3, 1] }}
               />
             ) : null}
+            {showSeries.anyFall ? (
+              <motion.path
+                d={series.paths.anyFall}
+                fill="none"
+                stroke={colors.anyFall.stroke}
+                strokeWidth={2.4}
+                strokeDasharray="10 7"
+                initial={{ pathLength: 0, opacity: 0.35 }}
+                animate={{ pathLength: 1, opacity: 0.92 }}
+                transition={{ duration: 1.4, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              />
+            ) : null}
+            {showSeries.custom ? (
+              <motion.path
+                d={series.paths.custom}
+                fill="none"
+                stroke={colors.custom.stroke}
+                strokeWidth={2.6}
+                strokeDasharray="0"
+                initial={{ pathLength: 0, opacity: 0.35 }}
+                animate={{ pathLength: 1, opacity: 0.98 }}
+                transition={{ duration: 1.4, delay: 0.30, ease: [0.16, 1, 0.3, 1] }}
+              />
+            ) : null}
 
             {hover ? (
               <g>
@@ -770,6 +945,12 @@ export function TimelineChart(props: {
                 ) : null}
                 {showSeries.panic40 ? (
                   <circle cx={hover.x} cy={series.yTo(hover.values.panic40)} r={4} fill={colors.panic40.stroke} />
+                ) : null}
+                {showSeries.anyFall && Number.isFinite(series.values.anyFall[hover.i]) ? (
+                  <circle cx={hover.x} cy={series.yTo(series.values.anyFall[hover.i] ?? 0)} r={3.8} fill={colors.anyFall.stroke} />
+                ) : null}
+                {showSeries.custom && Number.isFinite(series.values.custom[hover.i]) ? (
+                  <circle cx={hover.x} cy={series.yTo(series.values.custom[hover.i] ?? 0)} r={3.9} fill={colors.custom.stroke} />
                 ) : null}
               </g>
             ) : null}
@@ -838,6 +1019,70 @@ export function TimelineChart(props: {
                 </text>
               </g>
             ) : null}
+            {firstPaused.anyFall !== null && showSeries.anyFall && Number.isFinite(series.values.anyFall[firstPaused.anyFall]) ? (
+              <g>
+                <line
+                  x1={series.xTo(firstPaused.anyFall)}
+                  y1={padding.t}
+                  x2={series.xTo(firstPaused.anyFall)}
+                  y2={height - padding.b}
+                  stroke={colors.anyFall.stroke}
+                  strokeDasharray="6 6"
+                  strokeOpacity={0.40}
+                />
+                <circle
+                  cx={series.xTo(firstPaused.anyFall)}
+                  cy={series.yTo(series.values.anyFall[firstPaused.anyFall] ?? 0)}
+                  r={6}
+                  fill={colors.anyFall.stroke}
+                  stroke="rgba(0,0,0,0.9)"
+                  strokeWidth={2}
+                />
+                <text
+                  x={series.xTo(firstPaused.anyFall) + 6}
+                  y={topLabelYs.anyFall ?? padding.t + 42}
+                  fill="rgba(255,255,255,0.85)"
+                  fontSize="11"
+                  fontFamily="var(--font-inter)"
+                  fontWeight={600}
+                  letterSpacing="0.04em"
+                >
+                  PAUSED HERE (RED MONTH)
+                </text>
+              </g>
+            ) : null}
+            {firstPaused.custom !== null && showSeries.custom && Number.isFinite(series.values.custom[firstPaused.custom]) ? (
+              <g>
+                <line
+                  x1={series.xTo(firstPaused.custom)}
+                  y1={padding.t}
+                  x2={series.xTo(firstPaused.custom)}
+                  y2={height - padding.b}
+                  stroke={colors.custom.stroke}
+                  strokeDasharray="6 6"
+                  strokeOpacity={0.45}
+                />
+                <circle
+                  cx={series.xTo(firstPaused.custom)}
+                  cy={series.yTo(series.values.custom[firstPaused.custom] ?? 0)}
+                  r={6}
+                  fill={colors.custom.stroke}
+                  stroke="rgba(0,0,0,0.9)"
+                  strokeWidth={2}
+                />
+                <text
+                  x={series.xTo(firstPaused.custom) + 6}
+                  y={topLabelYs.custom ?? padding.t + 56}
+                  fill="rgba(255,255,255,0.88)"
+                  fontSize="11"
+                  fontFamily="var(--font-inter)"
+                  fontWeight={600}
+                  letterSpacing="0.04em"
+                >
+                  PAUSED HERE (CUSTOM)
+                </text>
+              </g>
+            ) : null}
           </svg>
         </div>
 
@@ -861,6 +1106,8 @@ export function TimelineChart(props: {
                   showSeries.discipline ? ("discipline" as const) : null,
                   showSeries.panic20 ? ("panic20" as const) : null,
                   showSeries.panic40 ? ("panic40" as const) : null,
+                  showSeries.anyFall && Number.isFinite(series.values.anyFall[hover.i]) ? ("anyFall" as const) : null,
+                  showSeries.custom && Number.isFinite(series.values.custom[hover.i]) ? ("custom" as const) : null,
                   showSeries.invested ? ("invested" as const) : null,
                 ].filter(Boolean) as SeriesKey[]
               ).map((k) => (
@@ -870,29 +1117,50 @@ export function TimelineChart(props: {
                       className="h-2 w-2 rounded-full"
                       style={{
                         background:
-                          k === "discipline" ? "var(--color-matte-gold)" : k === "invested" ? "rgba(255,255,255,0.55)" : "var(--color-destructive)",
+                          k === "discipline"
+                            ? "var(--color-matte-gold)"
+                            : k === "invested"
+                              ? "rgba(255,255,255,0.55)"
+                              : k === "custom"
+                                ? colors.custom.stroke
+                                : k === "anyFall"
+                                  ? colors.anyFall.stroke
+                                  : "var(--color-destructive)",
                       }}
                     />
                     <span>{colors[k].label}</span>
                   </div>
-                  <div className="wealth-tooltip-value text-[14px] font-semibold text-white">{formatLakhs(hover.values[k])}</div>
+                  <div className="text-right">
+                    <div className="wealth-tooltip-value text-[14px] font-semibold text-white tabular-nums">{formatLakhs(hover.values[k])}</div>
+                    <div className="mt-0.5 text-[11px] text-white/55 tabular-nums">{formatInr0(hover.values[k])}</div>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {showSeries.discipline && (showSeries.panic20 || showSeries.panic40) ? (
+            {showSeries.discipline && (showSeries.panic20 || showSeries.panic40 || showSeries.anyFall || showSeries.custom) ? (
               <div className="mt-3 border-t border-white/10 pt-3 flex items-center justify-between gap-6">
                 <div className="text-white/70">Behavioral gap</div>
-                <div className="wealth-tooltip-value text-[15px] font-bold" style={{ color: "var(--color-destructive)" }}>
-                  -
-                  {formatLakhs(
-                    Math.max(
-                      0,
-                      hover.values.discipline -
-                        Math.max(showSeries.panic20 ? hover.values.panic20 : 0, showSeries.panic40 ? hover.values.panic40 : 0)
-                    )
-                  )}
-                </div>
+                {(() => {
+                  const gap = Math.max(
+                    0,
+                    hover.values.discipline -
+                      Math.max(
+                        showSeries.panic20 ? hover.values.panic20 : 0,
+                        showSeries.panic40 ? hover.values.panic40 : 0,
+                        showSeries.anyFall && Number.isFinite(series.values.anyFall[hover.i]) ? (series.values.anyFall[hover.i] ?? 0) : 0,
+                        showSeries.custom && Number.isFinite(series.values.custom[hover.i]) ? (series.values.custom[hover.i] ?? 0) : 0
+                      )
+                  );
+                  return (
+                    <div className="text-right" title={formatInr0(gap)}>
+                      <div className="wealth-tooltip-value text-[15px] font-bold" style={{ color: "var(--color-destructive)" }}>
+                        -{formatLakhs(gap)}
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-white/55 tabular-nums">-{formatInr0(gap)}</div>
+                    </div>
+                  );
+                })()}
               </div>
             ) : null}
           </motion.div>

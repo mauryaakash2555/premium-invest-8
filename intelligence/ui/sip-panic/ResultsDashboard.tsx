@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChevronDown, ChevronUp, Info } from "lucide-react";
-import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
+import { LakhTooltip } from "./LakhTooltip";
+import { TaxBreakdownDialog } from "./TaxBreakdownDialog";
 
 const TooltipContentAny = TooltipContent as any;
 
@@ -26,8 +27,11 @@ function TaxExemptionInfo(props: {
   gain: number;
   simulatorTaxPaid: number;
   breakdown?: SIPSimulationResult["taxBreakdown"];
+  row: SIPSimulationResult;
 }) {
-  const { gain, simulatorTaxPaid, breakdown } = props;
+  const { gain, simulatorTaxPaid, breakdown, row } = props;
+
+  const [open, setOpen] = useState(false);
 
   const method = breakdown?.method ?? "engine_default";
   const category = breakdown?.category ?? "ltcg";
@@ -81,7 +85,8 @@ function TaxExemptionInfo(props: {
           <button
             type="button"
             aria-label="Tax info"
-            className="inline-flex items-center justify-center rounded-full text-white/55 hover:text-white/85 focus:outline-none focus:ring-2 focus:ring-white/20"
+            onClick={() => setOpen(true)}
+            className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-full text-white/55 hover:text-white/85 focus:outline-none focus:ring-2 focus:ring-white/20"
           >
             <Info className="h-3.5 w-3.5" />
           </button>
@@ -97,7 +102,7 @@ function TaxExemptionInfo(props: {
             <div className="mt-1 text-[11px] text-white/70">
               <span className="font-semibold text-white/85">LTCG Tax Breakdown</span>
               <div>
-                You don&apos;t pay tax on the first <span className="font-semibold text-white/85">₹1.25L</span> of LTCG gains (annual exemption concept).
+                You don&apos;t pay tax on the first <span className="font-semibold text-white/85">₹1.25L (₹1,25,000)</span> of LTCG gains (annual exemption concept).
               </div>
             </div>
           ) : null}
@@ -133,7 +138,7 @@ function TaxExemptionInfo(props: {
                   <span className="font-semibold tabular-nums">{formatInr0(exemptionApplied)}</span>
                 </div>
                 <div className="mt-1 text-[11px] text-white/70">
-                  (You don&apos;t pay tax on first ₹1.25L of LTCG gains)
+                  (You don&apos;t pay tax on first ₹1.25L (₹1,25,000) of LTCG gains)
                 </div>
               </>
             ) : null}
@@ -185,8 +190,20 @@ function TaxExemptionInfo(props: {
             Simulator tax paid shown on the card: <span className="font-semibold text-white/85">{formatInr0(simulatorTaxPaid)}</span>.
             This is an education-only model and may differ from your actual tax situation.
           </div>
+
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="text-[11px] font-semibold text-[oklch(0.78_0.08_65)] hover:opacity-90"
+            >
+              View full breakdown →
+            </button>
+          </div>
         </TooltipContentAny>
       </Tooltip>
+
+      <TaxBreakdownDialog open={open} onClose={() => setOpen(false)} row={row} />
     </TooltipProvider>
   );
 }
@@ -220,10 +237,6 @@ function XirrInfo() {
       </Tooltip>
     </TooltipProvider>
   );
-}
-
-function formatInrLakhs(amount: number): string {
-  return formatLakhsInlineText(amount, 2);
 }
 
 function formatPct(p: number): string {
@@ -281,7 +294,7 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                         <button
                           type="button"
                           aria-label="What is behavioral cost?"
-                          className="inline-flex items-center justify-center rounded-full text-white/55 hover:text-white/85 focus:outline-none focus:ring-2 focus:ring-white/20"
+                          className="inline-flex items-center justify-center h-11 w-11 rounded-full text-white/55 hover:text-white/85 focus:outline-none focus:ring-2 focus:ring-white/20"
                         >
                           <Info className="h-3.5 w-3.5" />
                         </button>
@@ -322,11 +335,12 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                         gain={Math.max(0, (r.calculation?.finalEquityValue ?? 0) - (r.calculation?.equityContributed ?? 0))}
                         simulatorTaxPaid={r.taxPaid}
                         breakdown={r.taxBreakdown}
+                        row={r}
                       />
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right tabular-nums" style={{ color: isDiscipline ? undefined : "var(--color-destructive)" }}>
-                    {isDiscipline ? "—" : <LakhTooltip amount={r.behavioralCost} prefix="-" className="tabular-nums" />}
+                  <td className={`px-4 py-3 text-right tabular-nums ${isDiscipline ? "" : "text-red-500"}`}>
+                    {isDiscipline ? "—" : <LakhTooltip amount={r.behavioralCost} prefix="-" className="tabular-nums text-red-500" />}
                   </td>
                 </tr>
               );
@@ -359,6 +373,7 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                         gain={Math.max(0, (r.calculation?.finalEquityValue ?? 0) - (r.calculation?.equityContributed ?? 0))}
                         simulatorTaxPaid={r.taxPaid}
                         breakdown={r.taxBreakdown}
+                        row={r}
                       />
                     </div>
                     <div className={`text-base font-semibold ${isDiscipline ? "gold-gradient-text" : "text-white/90"}`}>
@@ -376,11 +391,11 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                 {!isDiscipline ? (
                   <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
                     <div className="text-[11px] tracking-wide text-white/70 uppercase">Your behavioral cost</div>
-                    <div className="mt-2 text-3xl sm:text-4xl font-semibold" style={{ color: "var(--color-destructive)" }}>
+                    <div className="mt-2 text-3xl sm:text-4xl font-semibold text-red-500">
                       <LakhTooltip
                         amount={r.behavioralCost}
                         prefix="-"
-                        className="tabular-nums cursor-help underline decoration-white/15 underline-offset-4 hover:decoration-white/30"
+                        className="tabular-nums text-red-500 cursor-help underline decoration-white/15 underline-offset-4 hover:decoration-white/30"
                       />
                     </div>
                     <div className="mt-2 text-xs text-white/80">Gap vs disciplined outcome (post-tax). This is the “cost of panic”.</div>
@@ -401,6 +416,7 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                         gain={Math.max(0, (r.calculation?.finalEquityValue ?? 0) - (r.calculation?.equityContributed ?? 0))}
                         simulatorTaxPaid={r.taxPaid}
                         breakdown={r.taxBreakdown}
+                        row={r}
                       />
                     </div>
                     <div className="mt-1 text-white/90 font-semibold">
@@ -430,6 +446,7 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                         gain={Math.max(0, (r.calculation?.finalEquityValue ?? 0) - (r.calculation?.equityContributed ?? 0))}
                         simulatorTaxPaid={r.taxPaid}
                         breakdown={r.taxBreakdown}
+                        row={r}
                       />
                     </div>
                     <div className="text-white/90 font-semibold">{formatInr0(r.taxPaid)}</div>
@@ -449,7 +466,10 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                     <div className="rounded-lg border border-white/10 bg-black/20 p-3">
                       <div className="text-white/55">Mode</div>
                       <div className="mt-1 font-semibold text-white/90">{r.calculation.mode === "cash" ? "Cash bucket" : "Pure stop"}</div>
-                      <div className="mt-2 text-white/65">Monthly SIP: {formatInrLakhs(r.calculation.monthlySip * 12).replace("L", "L/yr")}</div>
+                      <div className="mt-2 text-white/65">
+                        Annual SIP: <LakhTooltip amount={r.calculation.monthlySip * 12} className="tabular-nums cursor-help" />
+                        <span className="text-white/55">/yr</span>
+                      </div>
                     </div>
                     <div className="rounded-lg border border-white/10 bg-black/20 p-3">
                       <div className="text-white/55">Trigger & pauses</div>
@@ -464,13 +484,21 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                     </div>
                     <div className="rounded-lg border border-white/10 bg-black/20 p-3">
                       <div className="text-white/55">Contributions</div>
-                      <div className="mt-1 text-white/90">Equity contributed: {formatInrLakhs(r.calculation.equityContributed)}</div>
-                      <div className="mt-1 text-white/90">Cash contributed: {formatInrLakhs(r.calculation.cashContributed)}</div>
+                      <div className="mt-1 text-white/90">
+                        Equity contributed: <LakhTooltip amount={r.calculation.equityContributed} className="tabular-nums cursor-help" />
+                      </div>
+                      <div className="mt-1 text-white/90">
+                        Cash contributed: <LakhTooltip amount={r.calculation.cashContributed} className="tabular-nums cursor-help" />
+                      </div>
                     </div>
                     <div className="rounded-lg border border-white/10 bg-black/20 p-3">
                       <div className="text-white/55">End values</div>
-                      <div className="mt-1 text-white/90">Equity value: {formatInrLakhs(r.calculation.finalEquityValue)}</div>
-                      <div className="mt-1 text-white/90">Cash value: {formatInrLakhs(r.calculation.finalCashValue)}</div>
+                      <div className="mt-1 text-white/90">
+                        Equity value: <LakhTooltip amount={r.calculation.finalEquityValue} className="tabular-nums cursor-help" />
+                      </div>
+                      <div className="mt-1 text-white/90">
+                        Cash value: <LakhTooltip amount={r.calculation.finalCashValue} className="tabular-nums cursor-help" />
+                      </div>
                     </div>
                   </div>
                   <div className="mt-3 text-[11px] text-white/65">
@@ -578,7 +606,9 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
         {discipline ? (
           <div className="sm:text-right">
             <div className="text-xs text-white/55">Baseline (Stay calm)</div>
-            <div className="text-sm font-semibold text-white/90">{formatInrLakhs(discipline.postTaxCorpus)}</div>
+            <div className="text-sm font-semibold text-white/90">
+              <LakhTooltip amount={discipline.postTaxCorpus} className="tabular-nums cursor-help" />
+            </div>
           </div>
         ) : null}
       </div>
