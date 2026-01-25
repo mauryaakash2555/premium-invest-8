@@ -215,12 +215,12 @@ export default function TaxOptimizationToolPage() {
               Some users prefer optimising liquidity and execution after seeing their results.
             </p>
             <TrackedLink
-              href="/execution-partners"
+              href="/partners"
               className="mt-3 inline-flex items-center justify-center border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
               eventName="execution_options_click"
-              eventParams={{ tool: "tax-optimization", href: "/execution-partners" }}
+              eventParams={{ tool: "tax-optimization", href: "/partners" }}
             >
-              View Execution Options
+              Explore partner execution options →
             </TrackedLink>
           </div>
         </div>

@@ -10,6 +10,23 @@ export function middleware(request) {
 
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
 
+  // Revenue/navigation consolidation: redirect legacy segmented pages to /partners.
+  if (pathname === '/execution-partners' || pathname.startsWith('/execution-partners/')) {
+    const redirectUrl = url.clone();
+    redirectUrl.pathname = '/partners';
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+  if (pathname === '/curated-partners' || pathname.startsWith('/curated-partners/')) {
+    const redirectUrl = url.clone();
+    redirectUrl.pathname = '/partners';
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+  if (pathname === '/platforms' || pathname.startsWith('/platforms/')) {
+    const redirectUrl = url.clone();
+    redirectUrl.pathname = '/partners';
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   // Legacy internal store prefix is not used anymore.
   // Hard-block it everywhere to avoid any accidental exposure.
   if (pathname.startsWith('/_store')) {

@@ -210,6 +210,7 @@ export default function BlogDetailClient({ slug }) {
       const dataEvent = a.getAttribute('data-bm-event');
       const dataAffiliate = a.getAttribute('data-bm-affiliate');
       const dataPlacement = a.getAttribute('data-bm-placement');
+      const dataCta = a.getAttribute('data-bm-cta');
 
       let eventName = dataEvent || null;
       let affiliateKey = dataAffiliate || null;
@@ -257,6 +258,12 @@ export default function BlogDetailClient({ slug }) {
         meta.appendChild(titleEl);
         meta.appendChild(subEl);
         a.appendChild(meta);
+
+        const btn = document.createElement('div');
+        btn.className = 'bm-affiliate-btn';
+        btn.textContent =
+          dataCta || (String(affiliateKey || '').toLowerCase() === 'loan_hub' ? 'Check Eligibility' : 'Apply via Official Partner');
+        a.appendChild(btn);
       } catch {
         // If DOM manipulation fails for any reason, fall back to non-URL text.
         a.textContent = friendlyTitle;
@@ -267,7 +274,9 @@ export default function BlogDetailClient({ slug }) {
           trackEvent(eventName, {
             placement:
               dataPlacement ||
-              (post?.slug === 'best-credit-cards-high-income-india' ? 'blog_11' : 'blog_detail'),
+              (post?.slug === 'best-credit-cards-high-income-india'
+                ? 'blog_best-credit-cards-high-income-india'
+                : 'blog_detail'),
             blog_slug: post?.slug,
             href,
           });
@@ -1005,149 +1014,7 @@ export default function BlogDetailClient({ slug }) {
           margin: 34px 0;
         }
 
-        /* ─────────────────────────────────────────────────────────────────────────────
-         * AFFILIATE CTA BOXES (BLOG 11)
-         * CRITICAL COLOR RULE:
-         * - DO NOT introduce any other golds/browns.
-         * - Use ONLY var(--lux-accent) + neutrals.
-         * ───────────────────────────────────────────────────────────────────────────── */
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat) {
-          position: relative;
-          display: block;
-          width: 100%;
-          max-width: none;
-          margin: 24px 0 28px;
-          padding: 22px 22px 80px;
-          border-radius: 16px;
-          border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255,255,255,0.12));
-          background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.04) 100%);
-          color: rgba(229, 229, 229, 0.9);
-          text-decoration: none;
-          font-weight: 600;
-          letter-spacing: 0.01em;
-          text-transform: none;
-          overflow-wrap: anywhere;
-          word-break: break-word;
-          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                      box-shadow 0.35s ease, 
-                      background 0.35s ease, 
-                      border-color 0.35s ease;
-        }
-
-        /* Animated shimmer on the CTA box (neutral + accent only) */
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat)::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          background: linear-gradient(
-            105deg,
-            transparent 20%,
-            color-mix(in oklab, var(--lux-accent) 18%, transparent) 40%,
-            color-mix(in oklab, var(--lux-accent) 28%, transparent) 50%,
-            color-mix(in oklab, var(--lux-accent) 18%, transparent) 60%,
-            transparent 80%
-          );
-          background-size: 200% 100%;
-          animation: affiliateShimmer 3s ease-in-out infinite;
-          pointer-events: none;
-        }
-
-        @keyframes affiliateShimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(.bm-affiliate-meta) {
-          position: relative;
-          z-index: 2;
-        }
-
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(.bm-affiliate-title) {
-          font-family: "Playfair Display", serif;
-          font-size: 18px;
-          line-height: 1.25;
-          color: rgba(245, 245, 245, 0.92);
-          margin-bottom: 6px;
-        }
-
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(.bm-affiliate-subtitle) {
-          font-size: 12px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          color: rgba(235, 235, 235, 0.62);
-        }
-
-        /* Premium Animated Button with pulse + "Show results"-like sheen */
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat)::after {
-          content: 'Check Eligibility →';
-          position: absolute;
-          left: 22px;
-          bottom: 18px;
-          transform: translateX(0);
-          padding: 14px 22px;
-          border-radius: 999px;
-          font-size: 13px;
-          font-weight: 800;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: #0a0a0a;
-          background: var(--lux-accent);
-          box-shadow: 
-            0 4px 20px color-mix(in oklab, var(--lux-accent) 45%, transparent),
-            0 8px 40px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.25);
-          pointer-events: none;
-          animation: ctaPulse 2.5s ease-in-out infinite;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        /* Sheen overlay (uses neutral white only; base remains var(--lux-accent)) */
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat)::after {
-          background-image:
-            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.26) 50%, transparent 100%);
-          background-size: 220% 100%;
-          background-position: 220% 0;
-          animation: ctaPulse 2.5s ease-in-out infinite, ctaSheen 2.2s ease-in-out infinite;
-        }
-
-        @keyframes ctaSheen {
-          0% { background-position: 220% 0; }
-          60% { background-position: -120% 0; }
-          100% { background-position: -120% 0; }
-        }
-
-        @keyframes ctaPulse {
-          0%, 100% {
-            box-shadow: 
-              0 4px 20px color-mix(in oklab, var(--lux-accent) 40%, transparent),
-              0 8px 40px rgba(0, 0, 0, 0.5),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-          }
-          50% {
-            box-shadow: 
-              0 6px 30px color-mix(in oklab, var(--lux-accent) 55%, transparent),
-              0 12px 50px rgba(0, 0, 0, 0.6),
-              inset 0 1px 0 rgba(255, 255, 255, 0.35);
-          }
-        }
-
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat):hover {
-          background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.06) 100%);
-          transform: translateY(-4px) scale(1.01);
-          box-shadow: 0 28px 100px rgba(0,0,0,0.55);
-          border-color: color-mix(in oklab, var(--lux-accent) 40%, rgba(255,255,255,0.18));
-        }
-
-        .blog-detail--best-credit-cards-high-income-india .blog-html :global(a.bm-cta-gold-flat):hover::after {
-          animation: ctaSheen 1.4s ease-in-out infinite;
-          box-shadow: 
-            0 8px 32px color-mix(in oklab, var(--lux-accent) 70%, transparent),
-            0 16px 60px rgba(0, 0, 0, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4);
-          transform: translateX(0) scale(1.03);
-        }
+        /* Affiliate CTA card styling lives in app/globals.css so it applies site-wide. */
       `}</style>
     </div>
   );

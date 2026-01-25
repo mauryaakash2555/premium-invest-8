@@ -101,12 +101,12 @@ export default function PropertyVsSipToolPage() {
               After comparing scenarios, you can review execution options without any external links.
             </p>
             <TrackedLink
-              href="/execution-partners"
+              href="/partners"
               className="mt-3 inline-flex items-center justify-center border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
               eventName="execution_options_click"
-              eventParams={{ tool: "property-vs-sip", href: "/execution-partners" }}
+              eventParams={{ tool: "property-vs-sip", href: "/partners" }}
             >
-              View Execution Options
+              Explore partner execution options →
             </TrackedLink>
           </div>
         </div>

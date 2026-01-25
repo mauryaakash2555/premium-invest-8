@@ -4619,11 +4619,6 @@ export const staticBlogPost11 = {
 
   content: `
   <div style="margin-bottom: 40px;">
-    <p style="font-size: 20px; color: var(--lux-accent); font-style: italic; margin-bottom: 25px; line-height: 2;">
-      For high-income professionals, a credit card should never be viewed as a spending tool.
-      Instead, it is a <strong>cash-flow, liquidity, and credit-profile management instrument</strong>.
-    </p>
-
     <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
       When selected and used correctly, a credit card can:
     </p>
@@ -4640,6 +4635,10 @@ export const staticBlogPost11 = {
     <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
       This guide is written for salaried professionals, founders, consultants, and business owners who already manage their finances carefully and want a
       <strong>stable, disciplined credit setup</strong>.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.9; margin: 22px 0 0; color: rgba(229,229,229,0.75);">
+      View current credit card execution partners → <a href="/execution-partners" style="color: var(--lux-accent); text-decoration: underline;">Execution Partners</a>
     </p>
   </div>
 
@@ -4698,10 +4697,10 @@ export const staticBlogPost11 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
-  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">IDFC First Bank Credit Card</h2>
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Axis Bank Credit Card</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
-    IDFC First Bank credit cards are widely recognised for their <strong>lifetime-free structure</strong> and emphasis on transparency. They are particularly suitable for professionals who prefer simplicity and reliability over aggressive marketing features.
+    Axis Bank offers a broad set of credit card options with wide servicing coverage. For high-income professionals, the priority should be <strong>reliability, fee clarity, and approval/onboarding quality</strong>.
   </p>
 
   <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Suitable for:</h3>
@@ -4719,35 +4718,47 @@ export const staticBlogPost11 = {
   </ul>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
-    IDFC First Bank cards work well as a <strong>primary credit card</strong>, especially for those who want predictable billing and minimal complexity.
+    For disciplined users, a well-chosen Axis card can work as a <strong>primary credit card</strong> that fits existing cash-flow cycles.
   </p>
 
   <p style="font-size: 16px; line-height: 1.9; margin-bottom: 12px; color: rgba(229,229,229,0.85);"><strong>Optional execution link:</strong></p>
   <p style="margin: 0 0 0;">
     <a
       class="bm-cta-gold-flat"
-      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply"
+      data-bm-title="Axis Credit Card"
+      data-bm-subtitle="Sponsored link • Opens in a new tab"
+      data-bm-event="affiliate_axis_cc_click"
+      data-bm-affiliate="axis_cc"
+      data-bm-placement="blog_best-credit-cards-high-income-india"
+      data-bm-cta="Apply via Official Partner"
+      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fweb.axisbank.co.in%2FDigitalChannel%2FWebForm%2F"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
     >
-      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply
+      Axis Credit Card
     </a>
   </p>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
-  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">AU Bank Credit Options</h2>
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">YES Bank POP Credit Card</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
-    AU Bank has expanded rapidly with a focus on <strong>digital-first banking products</strong>. Its credit and account offerings are designed for users who value speed and accessibility, including professionals outside traditional metro-only banking ecosystems.
-  </p>
-
-  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Suitable for:</h3>
-  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
-    <li>Professionals building a new banking relationship</li>
-    <li>Users looking for fast, digital onboarding</li>
-    <li>Metro and non-metro residents</li>
-  </ul>
+    YES Bank POP is a digital application flow that can suit professionals who want a streamlined onboarding experience. Focus on <strong>fee clarity, repayment discipline, and service reliability</strong> over promotions.
+    <a
+      class="bm-cta-gold-flat"
+      data-bm-title="YES Bank POP Credit Card"
+      data-bm-subtitle="Sponsored link • Opens in a new tab"
+      data-bm-event="affiliate_yes_cc_click"
+      data-bm-affiliate="yes_cc"
+      data-bm-placement="blog_best-credit-cards-high-income-india"
+      data-bm-cta="Apply via Official Partner"
+      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fppipl.getpopcard.co%2F"
+      target="_blank"
+      rel="nofollow sponsored noopener noreferrer"
+    >
+      YES Bank POP Credit Card
+    </a>
 
   <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Why it stands out:</h3>
   <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
@@ -4772,10 +4783,10 @@ export const staticBlogPost11 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
-  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">IndusInd Bank Credit Card</h2>
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">HDFC Bank Credit Card</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
-    IndusInd Bank credit cards are positioned toward <strong>premium and lifestyle-oriented usage</strong>. These cards are generally better suited for professionals with established credit histories and higher discretionary spending.
+    HDFC Bank credit cards are widely used across income profiles, and the application experience is familiar to many professionals. Keep the selection criteria grounded in <strong>fee transparency, digital reliability, and long-term usability</strong>.
   </p>
 
   <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Suitable for:</h3>
@@ -4793,19 +4804,31 @@ export const staticBlogPost11 = {
   </ul>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
-    IndusInd cards are often chosen as a <strong>secondary or premium card</strong>, complementing a more utility-focused primary card.
+    For high-income users, HDFC cards can work as a <strong>stable primary or secondary card</strong> depending on existing banking relationships and usage discipline.
   </p>
 
   <p style="font-size: 16px; line-height: 1.9; margin-bottom: 12px; color: rgba(229,229,229,0.85);"><strong>Optional execution link:</strong></p>
   <p style="margin: 0;">
     <a
       class="bm-cta-gold-flat"
-      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead"
+      data-bm-title="HDFC Credit Card"
+      data-bm-subtitle="Sponsored link • Opens in a new tab"
+      data-bm-event="affiliate_hdfc_cc_click"
+      data-bm-affiliate="hdfc_cc"
+      data-bm-placement="blog_best-credit-cards-high-income-india"
+      data-bm-cta="Apply via Official Partner"
+      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fapplyonline.hdfcbank.com%2Fcards%2Fcredit-cards.html"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
     >
-      https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead
+      HDFC Credit Card
     </a>
+  </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75);">
+    Explore partner execution options → <a href="/partners" style="color: var(--lux-accent); text-decoration: underline;">Partners</a>
   </p>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
@@ -5058,6 +5081,10 @@ export const staticBlogPost12 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <p style="font-size: 16px; line-height: 1.9; margin: 0 0 14px; color: rgba(229,229,229,0.80);">
+    Explore partner execution options → <a href="/partners" style="color: var(--lux-accent); text-decoration: underline;">Partners</a>
+  </p>
+
   <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 18px;">
     <h3 style="color: var(--lux-accent); font-size: 22px; margin: 0 0 12px; font-family: 'Playfair Display', serif;">Optional partner reference</h3>
     <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.72); margin: 0 0 16px;">
@@ -5070,10 +5097,10 @@ export const staticBlogPost12 = {
       data-bm-event="affiliate_loan_hub_click"
       data-bm-affiliate="loan_hub"
       data-bm-placement="blog_12"
-      href="/execution-partners"
+      data-bm-cta="Check Eligibility"
+      href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Floanhubindia.com%2Fapply-now%2F"
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
-      style="display: inline-block; padding: 12px 16px; border: 1px solid color-mix(in oklab, var(--lux-accent) 45%, transparent); border-radius: 12px; text-decoration: none; color: rgba(255,255,255,0.92); background: rgba(0,0,0,0.35);"
     >
       Loan Hub
     </a>

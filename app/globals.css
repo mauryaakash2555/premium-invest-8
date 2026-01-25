@@ -69,6 +69,122 @@
   --lux-accent: #C9A24D;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * PREMIUM AFFILIATE CTA CARDS
+ * - Used by blog posts (a.bm-cta-gold-flat upgraded client-side)
+ * - Also reused on /execution-partners
+ * CRITICAL COLOR RULE:
+ * - Do not introduce alternate golds/browns.
+ * - Use ONLY var(--lux-accent) + neutrals.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+a.bm-cta-gold-flat {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 24px 0 28px;
+  padding: 22px 22px 20px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.12));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.04) 100%);
+  color: rgba(229, 229, 229, 0.9);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease;
+}
+
+a.bm-cta-gold-flat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    color-mix(in oklab, var(--lux-accent) 18%, transparent) 40%,
+    color-mix(in oklab, var(--lux-accent) 28%, transparent) 50%,
+    color-mix(in oklab, var(--lux-accent) 18%, transparent) 60%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: bmAffiliateShimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bmAffiliateShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.bm-affiliate-meta {
+  position: relative;
+  z-index: 2;
+}
+
+.bm-affiliate-title {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  line-height: 1.25;
+  color: rgba(245, 245, 245, 0.92);
+  margin-bottom: 6px;
+}
+
+.bm-affiliate-subtitle {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(235, 235, 235, 0.62);
+}
+
+.bm-affiliate-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: var(--lux-accent);
+  box-shadow:
+    0 4px 20px color-mix(in oklab, var(--lux-accent) 45%, transparent),
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+a.bm-cta-gold-flat:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.06) 100%);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 28px 100px rgba(0, 0, 0, 0.55);
+  border-color: color-mix(in oklab, var(--lux-accent) 40%, rgba(255, 255, 255, 0.18));
+}
+
+a.bm-cta-gold-flat:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.75),
+    0 0 0 5px color-mix(in oklab, var(--lux-accent) 45%, transparent);
+}
+
 @supports (color: oklch(0.78 0.08 65)) {
   :root {
     --lux-accent: oklch(0.78 0.08 65);
