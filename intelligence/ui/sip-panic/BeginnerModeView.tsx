@@ -101,14 +101,18 @@ export function BeginnerModeView(props: {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <section className="rounded-2xl border border-amber-400/35 bg-amber-400/10 p-6 sm:p-8 text-center">
-        <p className="text-xs text-amber-100/90 font-semibold">Your simulation shows</p>
-        <div className="mt-2 text-4xl sm:text-5xl font-semibold text-amber-200 tabular-nums">
-          <LakhTooltip amount={result.behavioralCost} />
+      <section className="rounded-3xl border border-white/15 bg-gradient-to-br from-slate-950/85 via-slate-950/65 to-indigo-950/55 p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55)]">
+        <div className="text-[11px] font-semibold tracking-wide text-white/70">PRIMARY TRUTH</div>
+        <div className="mt-3 text-4xl sm:text-6xl font-semibold text-white tabular-nums leading-tight">
+          You could lose <span className="text-rose-300"><LakhTooltip amount={result.behavioralCost} /></span>
         </div>
-        <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s {result.costPct}% of your potential wealth — lost by panic selling.</p>
-        <p className="mt-2 text-[11px] text-amber-100/80">Lost by stopping SIP when markets fall ~{panicStopPct}%.</p>
-        <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses a designed crash/recovery path + simplified tax.</p>
+        <p className="mt-3 text-sm sm:text-base text-white/85 font-semibold">
+          Same market path. Different behavior.
+        </p>
+        <p className="mt-2 text-[12px] text-white/70">
+          Stopping your SIP around a ~{panicStopPct}% drawdown cuts off the crash buying window and the recovery compounding.
+        </p>
+        <p className="mt-4 text-[11px] text-white/55">Education-only. Simplified market + tax model.</p>
       </section>
 
       {yearsForCalc * 12 < crashStartMonth ? (

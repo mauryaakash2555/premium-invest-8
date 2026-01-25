@@ -27,8 +27,9 @@ function titleCase(v: string): string {
 }
 
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const sp = url.searchParams;
+  try {
+    const url = new URL(req.url);
+    const sp = url.searchParams;
 
   const monthly = safeNumber(sp.get("m"));
   const years = safeNumber(sp.get("y"));
@@ -111,7 +112,8 @@ export async function GET(req: Request) {
           { style: { fontSize: 14, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1 } },
           "Behavioral cost"
         ),
-        h("div", { style: { fontSize: 46, fontWeight: 900, color: "var(--lux-accent)" } }, formatLakhs(cost))
+        // NOTE: ImageResponse rendering does not reliably support CSS variables.
+        h("div", { style: { fontSize: 46, fontWeight: 900, color: "#FB7185" } }, formatLakhs(cost))
       )
     ),
     h(
@@ -215,11 +217,18 @@ export async function GET(req: Request) {
     )
   );
 
-  return new ImageResponse(
-    root,
-    {
-      width: 1200,
-      height: 630,
-    }
-  );
+    return new ImageResponse(
+      root,
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return new Response(`OG generation error: ${message}`, {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+  }
 }
