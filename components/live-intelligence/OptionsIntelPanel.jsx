@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import PanelSkeleton from './PanelSkeleton';
 
 function formatNumberCompact(value) {
   const n = Number(value);
@@ -59,8 +60,13 @@ export default function OptionsIntelPanel() {
     { key: 'BANKNIFTY', data: view.bank },
   ];
 
+  if (state.loading) {
+    return <PanelSkeleton rows={1} columns={2} />;
+  }
+
   return (
     <div
+      className="li-fade-in"
       style={{
         padding: '16px',
         borderRadius: '12px',

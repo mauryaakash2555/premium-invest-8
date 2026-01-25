@@ -1,0 +1,98 @@
+/* Shared animation utilities (global)
+   - Uses transform/opacity for 60fps
+   - Respects prefers-reduced-motion
+*/
+
+:root {
+  --li-ease-premium: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes liFadeInUp {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.li-fade-in-up {
+  animation: liFadeInUp 600ms var(--li-ease-premium) both;
+}
+
+@keyframes liFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.li-fade-in {
+  animation: liFadeIn 200ms ease-out both;
+}
+
+/* Shimmer skeleton */
+@keyframes liShimmer {
+  0% { background-position: 200% 0; opacity: 0.6; }
+  50% { opacity: 0.8; }
+  100% { background-position: -200% 0; opacity: 0.6; }
+}
+
+.li-skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.04) 0%,
+      rgba(255,255,255,0.10) 30%,
+      rgba(255,255,255,0.04) 60%
+    );
+  background-size: 200% 100%;
+  animation: liShimmer 2s linear infinite;
+}
+
+/* Coming-soon animated gradient badge */
+@keyframes liGradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes liPulseBorder {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@keyframes liPopIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.li-coming-soon-badge {
+  position: relative;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 255, 100, 0.30),
+    rgba(0, 200, 255, 0.30),
+    rgba(0, 255, 100, 0.30)
+  );
+  background-size: 200% 200%;
+  animation: liGradientShift 3s ease-in-out infinite, liPopIn 420ms var(--li-ease-premium) both;
+}
+
+.li-coming-soon-badge::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255,255,255,0.18);
+  pointer-events: none;
+  animation: liPulseBorder 1.5s ease-in-out infinite;
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .li-fade-in-up,
+  .li-fade-in,
+  .li-skeleton,
+  .li-coming-soon-badge {
+    animation: none !important;
+  }
+  .li-coming-soon-badge::after {
+    animation: none !important;
+  }
+}

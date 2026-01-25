@@ -1,0 +1,50 @@
+/* Chart + numeric micro-animations (global) */
+
+@keyframes liPercentBump {
+  0% { transform: translate3d(0, 0, 0) scale(1); box-shadow: none; }
+  20% { transform: translate3d(0, -1px, 0) scale(1.03); box-shadow: 0 0 0 0 rgba(100,160,255,0.0); }
+  100% { transform: translate3d(0, 0, 0) scale(1); box-shadow: 0 0 0 10px rgba(100,160,255,0.0); }
+}
+
+.li-percent-bump {
+  animation: liPercentBump 1.2s ease-out;
+}
+
+/* Allocation hover label */
+.li-alloc-hover-label {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(170,198,255,0.14);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  color: rgba(200,215,240,0.55);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translate3d(0, 4px, 0);
+  transition: opacity 200ms ease, transform 200ms ease, color 250ms ease;
+  pointer-events: none;
+}
+
+.li-alloc-pill:hover .li-alloc-hover-label,
+.li-alloc-pill:focus-within .li-alloc-hover-label {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  color: rgba(200,215,240,0.80);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .li-percent-bump {
+    animation: none !important;
+  }
+  .li-alloc-hover-label {
+    transition: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}

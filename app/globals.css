@@ -3,6 +3,10 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+@import "../styles/animations/utilities.css";
+@import "../styles/animations/buttons.css";
+@import "../styles/animations/charts.css";
+
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════════

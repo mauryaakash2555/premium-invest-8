@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import PanelSkeleton from './PanelSkeleton';
 
 function safeJsonParse(value, fallback) {
   try {
@@ -114,8 +115,13 @@ export default function DealsIntelPanel() {
     };
   }, [state, portfolioTickers, onlyMine]);
 
+  if (state.loading) {
+    return <PanelSkeleton rows={3} columns={1} />;
+  }
+
   return (
     <div
+      className="li-fade-in"
       style={{
         padding: '16px',
         borderRadius: '12px',

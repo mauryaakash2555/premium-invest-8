@@ -1059,6 +1059,33 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const next = String(raw ?? '').replace(/[^0-9]/g, '');
     const num = next === '' ? 0 : Math.max(0, Math.min(100, parseInt(next, 10)));
     setAllocations((prev) => ({ ...prev, [key]: num }));
+    setAllocationBumpKey(key);
+    window.clearTimeout(allocationBumpTimerRef.current);
+    allocationBumpTimerRef.current = window.setTimeout(() => setAllocationBumpKey(null), 1200);
+  };
+
+  const donutSpeedMultiplier = 1;
+
+  const allocationBumpTimerRef = useRef(null);
+  const [allocationBumpKey, setAllocationBumpKey] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(allocationBumpTimerRef.current);
+    };
+  }, []);
+
+  const onRipplePointerDown = (e) => {
+    const el = e.currentTarget;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX ?? rect.left + rect.width / 2) - rect.left;
+    const y = (e.clientY ?? rect.top + rect.height / 2) - rect.top;
+    el.style.setProperty('--li-ripple-x', `${x}px`);
+    el.style.setProperty('--li-ripple-y', `${y}px`);
+    el.classList.remove('li-ripple-animate');
+    void el.offsetWidth;
+    el.classList.add('li-ripple-animate');
   };
 
   const donutGradient = (() => {
@@ -1520,6 +1547,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           animation: liOrbitSpin 8s linear infinite;
         }
 
+        /* Smooth pause/resume on interaction */
+        .li-donut-container:hover .li-donut-orbit,
+        .li-donut-container:hover .li-donut-main,
+        .li-donut-container:active .li-donut-orbit,
+        .li-donut-container:active .li-donut-main {
+          animation-play-state: paused;
+        }
+
         .li-donut-orbit::before {
           content: "";
           position: absolute;
@@ -1553,7 +1588,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             0 0 40px rgba(100, 160, 255, 0.25),
             0 0 80px rgba(100, 160, 255, 0.10),
             inset 0 0 30px rgba(0, 0, 0, 0.3);
-          animation: liDonutShimmer 4s ease-in-out infinite;
+          animation:
+            liDonutShimmer 4s ease-in-out infinite,
+            liDonutRotate var(--li-donut-rot-dur, 30s) linear infinite;
+          will-change: transform;
+        }
+
+        @keyframes liDonutRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         @keyframes liDonutShimmer {
@@ -2265,7 +2308,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 <div className="li-donut-orbit" />
                 
                 {/* Main donut with gradient */}
-                <div className="li-donut-main" style={{ background: donutGradient }}>
+                <div
+                  className="li-donut-main"
+                  style={{
+                    background: donutGradient,
+                    '--li-donut-rot-dur': `${30 / donutSpeedMultiplier}s`,
+                  }}
+                >
                   {/* Floating particles */}
                   <div className="li-donut-particles">
                     <div className="li-donut-particle" />
@@ -2291,7 +2340,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 { key: 'gold', k: 'Gold', c: 'rgba(255,200,120,0.85)' },
                 { key: 'cash', k: 'Cash', c: 'rgba(180,150,255,0.80)' },
               ].map((item) => (
-                <div key={item.k} className="li-stat-pill" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '12px 14px' }}>
+                <div
+                  key={item.k}
+                  className={`li-stat-pill li-alloc-pill ${allocationBumpKey === item.key ? 'li-percent-bump' : ''}`}
+                  style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '12px 14px' }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.c, boxShadow: `0 0 8px ${item.c}` }} />
                     <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px' }}>{item.k}</div>
@@ -2321,6 +2374,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                       }}
                     />
                     <span style={{ color: 'rgba(245,248,255,0.60)', fontSize: '14px', fontWeight: 600 }}>%</span>
+                  </div>
+
+                  <div className="li-alloc-hover-label">
+                    Hover to edit
+                    <span style={{ opacity: 0.8 }}>✦</span>
                   </div>
                 </div>
               ))}
@@ -2373,13 +2431,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <div style={{
                     padding: '3px 10px',
                     borderRadius: '8px',
-                    background: 'rgba(100,160,255,0.12)',
+                      background: 'rgba(100,160,255,0.12)',
                     border: 'none',
                     color: 'rgba(140,190,255,0.95)',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.05em',
-                  }}>
+                    }} className="li-coming-soon-badge">
                     COMING SOON
                   </div>
                 </div>
@@ -2407,6 +2465,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{ marginTop: '16px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <a
                   href="/client-portal"
+                  onPointerDown={onRipplePointerDown}
+                  className="li-cta-primary li-ripple"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -2422,10 +2482,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   }}
                 >
                   Connect Portfolio
-                  <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
+                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>→</span>
                 </a>
                 <a
                   href="/contact?subject=Holdings%20%2F%20Portfolio%20Tracking%20Waitlist"
+                  onPointerDown={onRipplePointerDown}
+                  className="li-cta-secondary li-ripple"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -2440,8 +2502,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     textDecoration: 'none',
                   }}
                 >
+                  <span className="li-bell-icon" aria-hidden="true">🔔</span>
                   Join Waitlist
-                  <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
+                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>↗</span>
                 </a>
               </div>
             </div>

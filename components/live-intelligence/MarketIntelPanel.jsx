@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import PanelSkeleton from './PanelSkeleton';
 
 function formatSignedCr(value) {
   if (value == null || Number.isNaN(value)) return '—';
@@ -58,8 +59,13 @@ export default function MarketIntelPanel() {
     { label: 'DII Net', value: view.diiNetCr, helper: 'Domestic' },
   ];
 
+  if (state.loading) {
+    return <PanelSkeleton rows={1} columns={2} />;
+  }
+
   return (
     <div
+      className="li-fade-in"
       style={{
         padding: '16px',
         borderRadius: '12px',

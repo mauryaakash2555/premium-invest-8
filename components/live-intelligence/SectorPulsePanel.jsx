@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import PanelSkeleton from './PanelSkeleton';
 
 function toneFromPct(pct) {
   const n = Number(pct);
@@ -65,8 +66,13 @@ export default function SectorPulsePanel() {
     };
   }, [state]);
 
+  if (state.loading) {
+    return <PanelSkeleton rows={4} columns={2} />;
+  }
+
   return (
     <div
+      className="li-fade-in"
       style={{
         padding: '16px',
         borderRadius: '12px',
