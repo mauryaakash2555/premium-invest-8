@@ -12,7 +12,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { CURATED_HEADLINES, getHeadlinesByCategory, normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
-import { getCurrentMode } from '@/lib/live-intelligence/modes';
+import { getCurrentMode } from '@/lib/modes';
+import { dedupeHeadlines, enrichHeadline } from '@/lib/live-intelligence/intelligenceScoring';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -355,6 +356,7 @@ export async function GET(request) {
         cta_button: item.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
         pinned: false,
         type: 'auto',
+        url: item.url || item.source_url || null,
       })),
       ...(adminResult.data || []).map(item => ({
         id: item.id,
@@ -376,6 +378,7 @@ export async function GET(request) {
         // Use existing schema field as a production-ready "pin to top" flag
         pinned: Boolean(item.is_breaking),
         type: 'admin',
+        url: item.url || item.source_url || null,
       })),
     ];
     
@@ -404,6 +407,21 @@ export async function GET(request) {
     // Step 4: Apply limit
     let final = [...pinned, ...balanced].slice(0, limit);
 
+    // Step 4.5: Intelligent enrichment + lightweight noise suppression + dedupe
+    // - adds: qualityScore, trustScore/trustLabel, opportunityScore, riskLevel, actionable
+    // - filters: low-quality unless pinned/breaking
+    // - dedupes: near-duplicate titles
+    const minQuality = modeKey === 'night' || modeKey === 'global' ? 60 : 65;
+    final = dedupeHeadlines(
+      final
+        .map((h) => enrichHeadline(h))
+        .filter((h) => {
+          if (h?.pinned) return true;
+          if (isBreakingSpec(h)) return true;
+          return (h?.qualityScore ?? 0) >= minQuality;
+        })
+    ).slice(0, limit);
+
     // Spec: Minimum headlines in rotation = 5 (when possible)
     if (final.length > 0 && final.length < minRequired) {
       const fallbackPool = getCuratedHeadlines(category, limit);
@@ -412,7 +430,7 @@ export async function GET(request) {
         if (final.length >= minRequired) break;
         if (existingIds.has(h.id)) continue;
         existingIds.add(h.id);
-        final.push(h);
+        final.push(enrichHeadline(h));
       }
       final = final.slice(0, limit);
     }

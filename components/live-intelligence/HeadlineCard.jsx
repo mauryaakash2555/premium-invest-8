@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CATEGORIES, URGENCY_LEVELS, formatRelativeTime } from '@/lib/live-intelligence/headlines';
 import { trackCtaClick } from '@/lib/live-intelligence/analytics';
+import { getExplainUserContext } from '@/lib/live-intelligence/userContextClient';
 
 // ═══════════════════════════════════════════════════════════
 // ⚠️ PALETTE NOTE (Jan 21, 2026 spec):
@@ -42,6 +43,17 @@ const CATEGORY_SHORT_CODES = {
 
 const getCategoryShortCode = (categoryKey) => {
   return CATEGORY_SHORT_CODES[categoryKey] || categoryKey?.toUpperCase()?.slice(0, 4) || 'NEWS';
+};
+
+const getTrustBadge = (trustLabel, trustScore) => {
+  const label = String(trustLabel || '').toLowerCase();
+  if (!label) return null;
+
+  if (label === 'official') return { text: 'OFFICIAL', variant: 'official', title: 'Official source' };
+  if (label === 'reputable') return { text: 'REPUTABLE', variant: 'reputable', title: 'Reputable source' };
+  if (label === 'community') return { text: 'COMMUNITY', variant: 'community', title: 'Community / social source' };
+  const score = typeof trustScore === 'number' ? trustScore : null;
+  return { text: score != null ? `TRUST ${score}` : 'TRUST', variant: 'unknown', title: 'Source trust signal' };
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -298,6 +310,12 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
         whyItMatters: headline.whyItMatters,
         dataPoint: headline.dataPoint,
         source: headline.source,
+        url: headline.url,
+        trustLabel: headline.trustLabel,
+        trustScore: headline.trustScore,
+        opportunityScore: headline.opportunityScore,
+        riskLevel: headline.riskLevel,
+        userContext: getExplainUserContext(),
       }),
     })
       .then((res) => res.json())
@@ -500,6 +518,39 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
           <span className="li-headline-time">
             {formatRelativeTime(headline.timestamp)}
           </span>
+
+          {/* Micro-badges: Trust / Opportunity / Risk (clean, non-animated) */}
+          {(() => {
+            const trust = getTrustBadge(headline.trustLabel, headline.trustScore);
+            const riskLevel = String(headline.riskLevel || '').toLowerCase();
+            const opp = typeof headline.opportunityScore === 'number' ? headline.opportunityScore : null;
+
+            const showOpp = opp != null && opp >= 70;
+            const showRisk = riskLevel === 'moderate' || riskLevel === 'high';
+
+            // Keep header clean: trust + (risk OR opportunity)
+            const secondary = showRisk
+              ? { text: riskLevel === 'high' ? 'RISK HIGH' : 'RISK MOD', variant: riskLevel, title: 'Risk signal (heuristic)' }
+              : showOpp
+                ? { text: `OPP ${opp}`, variant: 'opportunity', title: 'Opportunity signal (heuristic)' }
+                : null;
+
+            if (!trust && !secondary) return null;
+            return (
+              <span className="li-signal-group" onClick={(e) => e.stopPropagation()}>
+                {trust && (
+                  <span className={`li-signal-badge trust ${trust.variant}`} title={trust.title}>
+                    {trust.text}
+                  </span>
+                )}
+                {secondary && (
+                  <span className={`li-signal-badge ${secondary.variant}`} title={secondary.title}>
+                    {secondary.text}
+                  </span>
+                )}
+              </span>
+            );
+          })()}
           
           {/* Save/Bookmark Button - clean icon */}
           <button
@@ -523,7 +574,23 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
           {headline.dataPoint && (
             <span className="li-headline-data">{headline.dataPoint}</span>
           )}
-          <span className="li-headline-source">Source: {headline.source}</span>
+          <span className="li-headline-source">
+            Source: {headline.source}
+            {headline.url ? (
+              <button
+                type="button"
+                className="li-source-link"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(String(headline.url), '_blank', 'noopener,noreferrer');
+                }}
+                aria-label="Open source"
+                title="Open source"
+              >
+                ↗
+              </button>
+            ) : null}
+          </span>
           {ctaConfig ? (
             <button
               type="button"
@@ -568,7 +635,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
         /* Breaking News Red Pulse Glow */
         .li-headline-card.breaking {
           border-color: rgba(255, 80, 80, 0.35);
-          animation: breakingPulseGlow 2s ease-in-out infinite;
+          animation: breakingPulseGlow 2s ease-in-out 3;
         }
 
         /* BREAKING BADGE - Prominent red badge */
@@ -717,6 +784,64 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
           font-variant-numeric: tabular-nums;
         }
 
+        .li-signal-group {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .li-signal-badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 3px 8px;
+          border-radius: 999px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(210, 225, 255, 0.82);
+          user-select: none;
+          white-space: nowrap;
+        }
+
+        .li-signal-badge.official {
+          border-color: rgba(80, 200, 140, 0.35);
+          background: rgba(80, 200, 140, 0.10);
+          color: rgba(150, 240, 200, 0.92);
+        }
+        .li-signal-badge.reputable {
+          border-color: rgba(120, 170, 255, 0.35);
+          background: rgba(120, 170, 255, 0.10);
+          color: rgba(180, 215, 255, 0.92);
+        }
+        .li-signal-badge.community {
+          border-color: rgba(255, 190, 90, 0.35);
+          background: rgba(255, 190, 90, 0.10);
+          color: rgba(255, 220, 170, 0.92);
+        }
+        .li-signal-badge.unknown {
+          border-color: rgba(255, 255, 255, 0.16);
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .li-signal-badge.opportunity {
+          border-color: rgba(80, 200, 140, 0.25);
+          background: rgba(80, 200, 140, 0.07);
+          color: rgba(150, 240, 200, 0.80);
+        }
+        .li-signal-badge.moderate {
+          border-color: rgba(255, 190, 90, 0.30);
+          background: rgba(255, 190, 90, 0.08);
+          color: rgba(255, 220, 170, 0.86);
+        }
+        .li-signal-badge.high {
+          border-color: rgba(255, 90, 90, 0.35);
+          background: rgba(255, 90, 90, 0.10);
+          color: rgba(255, 170, 170, 0.92);
+        }
+
         /* Save/Bookmark Button - clean star icon */
         .li-headline-save {
           background: none;
@@ -734,6 +859,27 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
           opacity: 1;
           color: rgba(100, 160, 255, 0.9);
           background: rgba(100, 160, 255, 0.15);
+        }
+
+        .li-source-link {
+          margin-left: 8px;
+          background: none;
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          color: rgba(180, 195, 230, 0.65);
+          padding: 2px 6px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 12px;
+          line-height: 1;
+          opacity: 0.9;
+          transition: all 0.15s ease;
+        }
+
+        .li-source-link:hover {
+          opacity: 1;
+          color: rgba(140, 190, 255, 0.95);
+          border-color: rgba(140, 190, 255, 0.25);
+          background: rgba(140, 190, 255, 0.08);
         }
 
         .li-headline-save.saved {
@@ -1112,6 +1258,15 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
                       </h4>
                       <p className="li-modal-section-content">{details.whyItMatters || details.whyItHappened}</p>
                     </div>
+
+                    {details.whyThisMattersToYou && (
+                      <div className="li-modal-section">
+                        <h4 className="li-modal-section-title">
+                          <span>🎯</span> Why This Matters To You
+                        </h4>
+                        <p className="li-modal-section-content">{details.whyThisMattersToYou}</p>
+                      </div>
+                    )}
 
                     <div className="li-modal-section">
                       <div className="li-modal-benefits">
