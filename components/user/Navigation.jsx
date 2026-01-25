@@ -201,7 +201,7 @@ const Navigation = () => {
       >
         <div className="w-full max-w-[1600px] flex items-center">
           <Logo size={48} fontSize="24px" />
-          <div className="flex gap-6 items-center ml-auto">
+          <div className="ml-auto flex items-center justify-end gap-6">
             <DesktopLink path="/" label="Home" />
             <DesktopLink path="/about-us" label="About Us" />
             <DesktopLink path="/intelligence" label="Intelligence" />

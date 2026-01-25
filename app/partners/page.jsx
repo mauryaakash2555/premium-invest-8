@@ -195,15 +195,15 @@ export default function PartnersPage() {
         <h3 style={{ margin: '10px 0 8px', fontSize: 14, color: 'rgba(255,255,255,0.82)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           Credit Cards
         </h3>
-        {EXECUTION_PARTNERS.creditCards.map((p) => (
-          <ExecutionCard key={p.key} {...p} />
+        {EXECUTION_PARTNERS.creditCards.map(({ key, ...props }) => (
+          <ExecutionCard key={key} {...props} />
         ))}
 
         <h3 style={{ margin: '22px 0 8px', fontSize: 14, color: 'rgba(255,255,255,0.82)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           Personal Loans
         </h3>
-        {EXECUTION_PARTNERS.personalLoans.map((p) => (
-          <ExecutionCard key={p.key} {...p} />
+        {EXECUTION_PARTNERS.personalLoans.map(({ key, ...props }) => (
+          <ExecutionCard key={key} {...props} />
         ))}
 
         <p style={{ margin: '14px 0 0', fontSize: 13, lineHeight: 1.75, color: 'rgba(229,229,229,0.62)' }}>
@@ -214,8 +214,8 @@ export default function PartnersPage() {
         <p style={{ margin: '0 0 6px', fontSize: 14, lineHeight: 1.75, color: 'rgba(229,229,229,0.70)' }}>
           No external links yet.
         </p>
-        {PLATFORMS_UNDER_REVIEW.map((p) => (
-          <PlatformCard key={p.key} {...p} />
+        {PLATFORMS_UNDER_REVIEW.map(({ key, ...props }) => (
+          <PlatformCard key={key} {...props} />
         ))}
 
         <SectionTitle>Partner With BM Wealth</SectionTitle>
