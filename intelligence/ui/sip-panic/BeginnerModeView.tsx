@@ -34,6 +34,7 @@ export function BeginnerModeView(props: {
   onChangeDurationYears: (years: number) => void;
   onRequestAdvanced: () => void;
 }) {
+  const panicStopPct = 30;
   const monthly = clampInt(props.monthlyAmount, 1_000, 5_00_000);
   const years = clampInt(props.durationYears, 1, 30);
 
@@ -48,7 +49,7 @@ export function BeginnerModeView(props: {
         name: "Panic: Stop SIP at 30% Drawdown",
         description: "Stops SIP contributions once market is down 30% from peak",
         behaviorType: "panic",
-        panicThreshold: -30,
+        panicThreshold: -panicStopPct,
       },
     ];
 
@@ -97,6 +98,7 @@ export function BeginnerModeView(props: {
           <LakhTooltip amount={result.behavioralCost} />
         </div>
         <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s ~{result.costPct}% of your potential wealth — lost by panic selling.</p>
+        <p className="mt-2 text-[11px] text-amber-100/80">Lost by stopping SIP when markets fall ~{panicStopPct}%.</p>
         <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses a designed crash/recovery path + simplified tax.</p>
       </section>
 
@@ -144,6 +146,42 @@ export function BeginnerModeView(props: {
                 <span>30y</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="mt-5 pt-4 border-t border-white/10">
+          <div className="text-[11px] text-white/60">Quick scenarios</div>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                props.onChangeMonthlyAmount(5_000);
+                props.onChangeDurationYears(5);
+              }}
+              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+            >
+              Conservative
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                props.onChangeMonthlyAmount(10_000);
+                props.onChangeDurationYears(10);
+              }}
+              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+            >
+              Balanced
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                props.onChangeMonthlyAmount(20_000);
+                props.onChangeDurationYears(20);
+              }}
+              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+            >
+              Aggressive
+            </button>
           </div>
         </div>
       </section>
