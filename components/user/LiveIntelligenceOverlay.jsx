@@ -43,6 +43,7 @@ import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
 import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import Link from 'next/link';
 import LazyTradingView from '@/components/shared/LazyTradingView';
+import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockStatusBadge';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -2564,7 +2565,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   </svg>
                   Global Markets
                 </h3>
-                <MarketStatusBadge />
+                <MarketClockStatusBadge />
               </div>
               <div style={{ color: 'rgba(180, 200, 230, 0.50)', fontSize: '10px' }}>
                 Real-time quotes • TradingView
