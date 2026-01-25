@@ -120,8 +120,28 @@ export default function BlogDetailClient({ slug }) {
   }, [post]);
 
   const renderedHtml = useMemo(() => {
-    return normalizeBlogHtmlForPremium(rawHtml);
-  }, [rawHtml]);
+    const normalized = normalizeBlogHtmlForPremium(rawHtml);
+
+    // Blog 12: content is stored as exact plain text; preserve formatting at render time.
+    if (
+      slug === 'personal-loans-short-term-cashflow-professionals' &&
+      typeof normalized === 'string' &&
+      normalized.length > 0 &&
+      !normalized.includes('<')
+    ) {
+      const escapeHtml = (s) =>
+        s
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
+      return `<pre class="bm-plain-pre">${escapeHtml(normalized)}</pre>`;
+    }
+
+    return normalized;
+  }, [rawHtml, slug]);
 
   const pageClassName = useMemo(() => {
     const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';
