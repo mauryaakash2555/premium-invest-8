@@ -29,6 +29,7 @@ import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndica
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
 import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel';
 import SectorPulsePanel from '@/components/live-intelligence/SectorPulsePanel';
+import DealsIntelPanel from '@/components/live-intelligence/DealsIntelPanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -2354,6 +2355,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <MarketIntelPanel />
               <OptionsIntelPanel />
               <SectorPulsePanel />
+              <DealsIntelPanel />
             </div>
           </div>
 
