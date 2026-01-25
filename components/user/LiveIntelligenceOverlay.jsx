@@ -239,6 +239,36 @@ export default function LiveIntelligenceOverlay({
   const overlayRef = useRef(null);
   const hasAutoOpenedRef = useRef(false);
 
+  // TradingView chart interval UX (keep minimal + isolated)
+  const [tvInterval, setTvInterval] = useState('D');
+  const [tvIsSwitching, setTvIsSwitching] = useState(false);
+  const tvSwitchTimersRef = useRef([]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+      } catch {}
+      tvSwitchTimersRef.current = [];
+    };
+  }, []);
+
+  const handleTvIntervalChange = useCallback((nextInterval) => {
+    if (!nextInterval || nextInterval === tvInterval) return;
+    try {
+      tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+    } catch {}
+    tvSwitchTimersRef.current = [];
+
+    setTvIsSwitching(true);
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvInterval(nextInterval), 140)
+    );
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvIsSwitching(false), 520)
+    );
+  }, [tvInterval]);
+
   // Mount check for portal
   useEffect(() => {
     setMounted(true);
@@ -2563,16 +2593,34 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   TRADINGVIEW
                 </span>
               </div>
-              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
-                Real-time data • Powered by TradingView
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <div className="li-timeframe-toggle" aria-label="Chart timeframe">
+                  {['D', 'W', 'M'].map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className={`li-timeframe-btn ${tvInterval === t ? 'active' : ''}`}
+                      onClick={() => handleTvIntervalChange(t)}
+                      disabled={tvIsSwitching}
+                      aria-pressed={tvInterval === t}
+                      title={t === 'D' ? 'Daily' : t === 'W' ? 'Weekly' : 'Monthly'}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                  Real-time data • Powered by TradingView
+                </div>
               </div>
             </div>
 
-            <LazyTradingView minHeight={500}>
-              <div style={{ height: '500px', width: '100%', background: '#000000' }}>
+            <LazyTradingView minHeight={500} contentKey={tvInterval} loadingLabel="Loading TradingView…">
+              <div className="li-tv-frame-switch" data-switching={tvIsSwitching ? '1' : '0'} style={{ height: '500px', width: '100%', background: '#000000' }}>
                 {/* TradingView Advanced Chart - Direct iframe for reliability */}
                 <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1"
+                  key={tvInterval}
+                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=${tvInterval}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
                   style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
                   frameBorder="0"
                   allowtransparency="true"
