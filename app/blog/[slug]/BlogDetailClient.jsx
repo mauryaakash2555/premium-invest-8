@@ -76,6 +76,105 @@ function normalizeBlogHtmlForPremium(html) {
     .replace(/Coming Next/gi, 'Next Read');
 }
 
+function renderBlog12PlainTextToPremiumHtml(text) {
+  const escapeHtml = (s) =>
+    s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+  const lines = String(text).replace(/\r\n/g, '\n').split('\n');
+
+  const parts = [];
+  let listItems = [];
+  const flushList = () => {
+    if (!listItems.length) return;
+    parts.push(`<ul class="bm-plain-ul">${listItems.join('')}</ul>`);
+    listItems = [];
+  };
+
+  const subheads = new Set([
+    'Over-borrowing',
+    'Long Tenures for Short Problems',
+    'Ignoring Total Cost',
+    'Mixing Consumption with Liquidity',
+  ]);
+
+  const isUnderscoreRule = (line) => /^_{10,}$/.test(line);
+  const isNumberedHeading = (line) => /^\d+\.\s+/.test(line);
+  const isBulletLine = (line) => /^•/.test(line);
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (line === '') {
+      flushList();
+      parts.push('<div class="bm-plain-spacer"></div>');
+      continue;
+    }
+
+    if (isUnderscoreRule(line)) {
+      flushList();
+      parts.push(`<div class="bm-plain-sep">${escapeHtml(line)}</div>`);
+      continue;
+    }
+
+    if (
+      line === 'Personal Loans for Short-Term Cashflow (Professionals)' ||
+      line === 'Personal Loans for Short-Term Cashflow: A Practical Guide for Professionals'
+    ) {
+      flushList();
+      parts.push(`<h1 class="bm-plain-h1">${escapeHtml(line)}</h1>`);
+      continue;
+    }
+
+    if (line === 'You can paste this as-is into your blog system.') {
+      flushList();
+      parts.push(`<p class="bm-plain-kicker">${escapeHtml(line)}</p>`);
+      continue;
+    }
+
+    if (
+      line === 'When Does a Personal Loan Actually Make Sense?' ||
+      line === 'Key Factors Professionals Must Evaluate' ||
+      line === 'Personal Loans as a Cashflow Bridge (Not a Crutch)' ||
+      line === 'Common Mistakes Professionals Make with Personal Loans' ||
+      line === 'How Personal Loans Fit into Broader Financial Planning' ||
+      line === 'Final Thoughts' ||
+      line === 'Disclosure'
+    ) {
+      flushList();
+      parts.push(`<h2 class="bm-plain-h2">${escapeHtml(line)}</h2>`);
+      continue;
+    }
+
+    if (isNumberedHeading(line)) {
+      flushList();
+      parts.push(`<h3 class="bm-plain-h3">${escapeHtml(line)}</h3>`);
+      continue;
+    }
+
+    if (subheads.has(line)) {
+      flushList();
+      parts.push(`<p class="bm-plain-subhead"><strong>${escapeHtml(line)}</strong></p>`);
+      continue;
+    }
+
+    if (isBulletLine(line)) {
+      listItems.push(`<li class="bm-plain-li">${escapeHtml(line)}</li>`);
+      continue;
+    }
+
+    flushList();
+    parts.push(`<p class="bm-plain-p">${escapeHtml(line)}</p>`);
+  }
+
+  flushList();
+  return `<div class="bm-plain-rich">${parts.join('')}</div>`;
+}
+
 export default function BlogDetailClient({ slug }) {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -122,22 +221,14 @@ export default function BlogDetailClient({ slug }) {
   const renderedHtml = useMemo(() => {
     const normalized = normalizeBlogHtmlForPremium(rawHtml);
 
-    // Blog 12: content is stored as exact plain text; preserve formatting at render time.
+    // Blog 12: content is stored as exact plain text; transform at render time without changing characters.
     if (
       slug === 'personal-loans-short-term-cashflow-professionals' &&
       typeof normalized === 'string' &&
       normalized.length > 0 &&
       !normalized.includes('<')
     ) {
-      const escapeHtml = (s) =>
-        s
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-
-      return `<pre class="bm-plain-pre">${escapeHtml(normalized)}</pre>`;
+      return renderBlog12PlainTextToPremiumHtml(normalized);
     }
 
     return normalized;

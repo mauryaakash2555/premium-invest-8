@@ -1363,18 +1363,81 @@
   animation: none !important;
 }
 
-/* Blog 12: plain-text body (exact text, preserved whitespace) */
-.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-pre {
-  white-space: pre-wrap;
-  font-family: inherit;
-  font-size: 16px;
-  line-height: 1.9;
+/* Blog 12: premium formatting for exact plain-text (no wording changes) */
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-rich {
   color: #E5E5E5;
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-sep {
+  margin: 10px 0 18px;
+  color: rgba(229, 229, 229, 0.35);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  user-select: none;
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-h1 {
+  margin: 8px 0 10px;
+  font-size: 34px;
+  line-height: 1.15;
+  color: color-mix(in oklab, var(--lux-accent) 92%, transparent);
+  font-family: var(--font-heading, ui-serif);
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-kicker {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(229, 229, 229, 0.65);
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-h2 {
+  margin: 28px 0 10px;
+  font-size: 26px;
+  line-height: 1.25;
+  color: color-mix(in oklab, var(--lux-accent) 85%, transparent);
+  font-family: var(--font-heading, ui-serif);
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-h3 {
+  margin: 18px 0 6px;
+  font-size: 18px;
+  line-height: 1.4;
+  color: rgba(229, 229, 229, 0.92);
+  font-weight: 700;
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-p,
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-subhead {
+  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 1.95;
+  color: rgba(229, 229, 229, 0.9);
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-subhead strong {
+  color: color-mix(in oklab, var(--lux-accent) 70%, transparent);
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0 16px;
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-li {
+  white-space: pre-wrap; /* preserve the embedded tab character */
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in oklab, var(--lux-accent) 14%, transparent);
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);
-  border-radius: 12px;
-  padding: 18px;
-  margin: 0;
+}
+
+.blog-detail--personal-loans-short-term-cashflow-professionals .bm-plain-spacer {
+  height: 10px;
 }
 
 /* Floating WhatsApp / Chat entry (luxury system) */
