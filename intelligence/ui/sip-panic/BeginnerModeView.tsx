@@ -37,6 +37,9 @@ export function BeginnerModeView(props: {
   const panicStopPct = 30;
   const monthly = clampInt(props.monthlyAmount, 1_000, 5_00_000);
   const years = clampInt(props.durationYears, 1, 30);
+  const market = useMemo(() => buildDefaultMarketConditions(), []);
+  const crashStartMonth = market.crashStartMonth ?? 30;
+  const crashStartYearApprox = Math.max(0, Math.round((crashStartMonth / 12) * 10) / 10);
 
   const result = useMemo(() => {
     const scenarios: SIPScenario[] = [
@@ -60,8 +63,11 @@ export function BeginnerModeView(props: {
       surchargeRate: 0,
     };
 
-    const out = simulateSIPVsPanic(monthly, years, scenarios, buildDefaultMarketConditions(), {
+    const cashAnnualRatePct = 6;
+
+    const out = simulateSIPVsPanic(monthly, years, scenarios, market, {
       afterStopMode: "cash",
+      cashAnnualRatePct,
       riskComfort: "moderate",
       tax: taxConfig,
       taxCalculationMode: "conservative_stcg_30",
@@ -85,8 +91,9 @@ export function BeginnerModeView(props: {
       panicAmt,
       behavioralCost,
       costPct,
+      cashAnnualRatePct,
     };
-  }, [monthly, years]);
+  }, [market, monthly, panicStopPct, years]);
 
   const totalInvested = monthly * 12 * years;
 
@@ -97,10 +104,56 @@ export function BeginnerModeView(props: {
         <div className="mt-2 text-4xl sm:text-5xl font-semibold text-amber-200 tabular-nums">
           <LakhTooltip amount={result.behavioralCost} />
         </div>
-        <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s ~{result.costPct}% of your potential wealth — lost by panic selling.</p>
+        <p className="mt-3 text-sm text-amber-100/90 font-semibold">That’s {result.costPct}% of your potential wealth — lost by panic selling.</p>
         <p className="mt-2 text-[11px] text-amber-100/80">Lost by stopping SIP when markets fall ~{panicStopPct}%.</p>
         <p className="mt-3 text-[11px] text-amber-100/75">Education-only. Uses a designed crash/recovery path + simplified tax.</p>
       </section>
+
+      {years * 12 < crashStartMonth ? (
+        <section className="rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm text-amber-100">
+          <div className="font-semibold">Why might the cost look like ₹0 for short durations?</div>
+          <div className="mt-1 text-xs text-amber-100/90">
+            This education model places the “big crash” around Year ~{crashStartYearApprox}. If your duration ends before that,
+            the panic trigger may never occur, so the cost can be near zero.
+          </div>
+        </section>
+      ) : null}
+
+      <details className="rounded-2xl border border-white/10 bg-black/20 p-5">
+        <summary className="cursor-pointer select-none text-sm font-semibold text-white/90">
+          Assumptions used in Beginner mode (education-only)
+        </summary>
+        <div className="mt-3 space-y-3 text-[12px] text-white/75">
+          <div>
+            <div className="font-semibold text-white/85">Crash / recovery path</div>
+            <div>
+              Crash: {Math.abs(market.crashDepthPct ?? 35)}% over ~{market.crashDurationMonths ?? 6} months starting ~Month {crashStartMonth} (≈ Year {crashStartYearApprox}).
+              Recovery: +{market.recoveryGainPct ?? 45}% over ~{market.recoveryDurationMonths ?? 12} months.
+              Secondary correction: {Math.abs(market.secondaryCorrectionDepthPct ?? 20)}% over ~{market.secondaryCorrectionDurationMonths ?? 3} months around Month {market.secondaryCorrectionStartMonth ?? 78}.
+            </div>
+          </div>
+
+          <div>
+            <div className="font-semibold text-white/85">Panic rule</div>
+            <div>
+              Stops SIP contributions once the market is ~{panicStopPct}% down from the last peak (a drawdown trigger).
+              After stopping, contributions are modeled as going to cash at ~{result.cashAnnualRatePct}% annual.
+            </div>
+          </div>
+
+          <div>
+            <div className="font-semibold text-white/85">Tax (simplified)</div>
+            <div>
+              Equity MF style, conservative gains tax approximation (30% on gains) + 4% cess; no surcharge in Beginner mode.
+              This is a teaching model and may differ from your actual taxes.
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-[11px] text-white/65">
+            Want to change crash presets, tax profile, or see month-by-month charts? Use Advanced Mode.
+          </div>
+        </div>
+      </details>
 
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5 sm:p-6">
         <div className="text-sm font-semibold text-white/90">How much & how long?</div>
