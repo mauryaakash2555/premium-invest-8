@@ -12,17 +12,19 @@ $StdErr = Join-Path $AppRoot 'dev_err.log'
 
 function Get-ListeningPid([int]$LocalPort) {
   try {
-    $conn = Get-NetTCPConnection -LocalPort $LocalPort -State Listen -ErrorAction Stop | Select-Object -First 1
-    if ($null -ne $conn) { return $conn.OwningProcess }
+    $conns = Get-NetTCPConnection -LocalPort $LocalPort -State Listen -ErrorAction Stop
+    if ($null -ne $conns) { return @($conns | Select-Object -ExpandProperty OwningProcess) }
   } catch {
-    return $null
+    return @()
   }
-  return $null
+  return @()
 }
 
-$existingPid = Get-ListeningPid -LocalPort $Port
-if ($existingPid) {
-  try { Stop-Process -Id $existingPid -Force -ErrorAction SilentlyContinue } catch {}
+$existingPids = @(Get-ListeningPid -LocalPort $Port | Where-Object { $_ -and $_ -gt 0 } | Select-Object -Unique)
+if ($existingPids -and $existingPids.Count -gt 0) {
+  foreach ($existingPid in $existingPids) {
+    try { Stop-Process -Id $existingPid -Force -ErrorAction SilentlyContinue } catch {}
+  }
   Start-Sleep -Milliseconds 300
 }
 
@@ -37,7 +39,8 @@ try {
 } catch {}
 
 # Start Next dev server detached, so the task can finish once it is ready.
-$cmd = "cd /d `"$AppRoot`" && npm run dev"
+# Use npx so the requested -Port is honored (package.json dev script is pinned to 3000).
+$cmd = "cd /d `"$AppRoot`" && npx.cmd next dev -p $Port"
 Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', $cmd) -WorkingDirectory $AppRoot -WindowStyle Hidden -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr
 
 $deadline = (Get-Date).AddSeconds($TimeoutSeconds)

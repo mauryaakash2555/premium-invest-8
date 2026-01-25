@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { trackEvent } from '@/lib/analytics';
 
 const EXECUTION_PARTNERS = {
@@ -10,37 +9,16 @@ const EXECUTION_PARTNERS = {
       key: 'axis_cc',
       brand: 'Axis Bank',
       title: 'Axis Credit Card',
-      bullets: [
-        'Apply online via the official partner flow',
-        'Eligibility and approval depend on bank criteria',
-        'BM Wealth may earn a referral fee',
-      ],
-      href: 'https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fweb.axisbank.co.in%2FDigitalChannel%2FWebForm%2F',
-      event: 'affiliate_axis_cc_click',
     },
     {
       key: 'hdfc_cc',
       brand: 'HDFC Bank',
       title: 'HDFC Credit Card',
-      bullets: [
-        'Apply online via the official partner flow',
-        'Eligibility and approval depend on bank criteria',
-        'BM Wealth may earn a referral fee',
-      ],
-      href: 'https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fapplyonline.hdfcbank.com%2Fcards%2Fcredit-cards.html',
-      event: 'affiliate_hdfc_cc_click',
     },
     {
       key: 'yes_cc',
       brand: 'YES Bank',
       title: 'Yes Bank POP Club Credit Card',
-      bullets: [
-        'Apply online via the official partner flow',
-        'Eligibility and approval depend on bank criteria',
-        'BM Wealth may earn a referral fee',
-      ],
-      href: 'https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fppipl.getpopcard.co%2F',
-      event: 'affiliate_yes_cc_click',
     },
   ],
   personalLoans: [
@@ -48,13 +26,6 @@ const EXECUTION_PARTNERS = {
       key: 'loan_hub',
       brand: 'Loan Hub',
       title: 'Loan Hub Personal Loan',
-      bullets: [
-        'Apply online via the official partner flow',
-        'Eligibility and approval depend on lender criteria',
-        'BM Wealth may earn a referral fee',
-      ],
-      href: 'https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Floanhubindia.com%2Fapply-now%2F',
-      event: 'affiliate_loan_hub_click',
     },
   ],
 };
@@ -93,41 +64,14 @@ function SectionTitle({ children }) {
   );
 }
 
-function ExecutionCard({ title, brand, bullets, href, event }) {
+function ExecutionCard({ title, brand }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="nofollow sponsored noopener noreferrer"
-      className="bm-cta-gold-flat"
-      aria-label={`${title} (sponsored link)`}
-      onClick={() =>
-        trackEvent(event, {
-          source: 'partners',
-          page: '/partners',
-          partner: brand,
-        })
-      }
-    >
+    <div className="bm-cta-gold-flat" aria-label={`${title}`}>
       <div className="bm-affiliate-meta">
         <div className="bm-affiliate-title">{title}</div>
-        <div className="bm-affiliate-subtitle">Sponsored link • Opens in a new tab</div>
-        <ul
-          style={{
-            margin: '10px 0 0',
-            paddingLeft: 18,
-            color: 'rgba(229,229,229,0.78)',
-            fontSize: 13,
-            lineHeight: 1.7,
-          }}
-        >
-          {bullets.slice(0, 3).map((b, idx) => (
-            <li key={idx}>{b}</li>
-          ))}
-        </ul>
+        <div className="bm-affiliate-subtitle">{brand}</div>
       </div>
-      <div className="bm-affiliate-btn">Apply via Official Partner</div>
-    </a>
+    </div>
   );
 }
 
@@ -205,10 +149,6 @@ export default function PartnersPage() {
         {EXECUTION_PARTNERS.personalLoans.map(({ key, ...props }) => (
           <ExecutionCard key={key} {...props} />
         ))}
-
-        <p style={{ margin: '14px 0 0', fontSize: 13, lineHeight: 1.75, color: 'rgba(229,229,229,0.62)' }}>
-          Affiliate disclosure: BM Wealth may earn a referral fee if you apply via these links.
-        </p>
 
         <SectionTitle>Platforms (Under Review)</SectionTitle>
         <p style={{ margin: '0 0 6px', fontSize: 14, lineHeight: 1.75, color: 'rgba(229,229,229,0.70)' }}>

@@ -6,7 +6,7 @@ import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 
 const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
-export default function ExecutionPartnersPage() {
+export default function BestCreditCardsIndiaPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -64,7 +64,7 @@ export default function ExecutionPartnersPage() {
               lineHeight: 1.2,
             }}
           >
-            Execution Partners
+            Best Credit Cards in India
           </h1>
           <p
             style={{
@@ -75,28 +75,13 @@ export default function ExecutionPartnersPage() {
               lineHeight: 1.7,
             }}
           >
-            Apply directly on official partner platforms.
+            Apply directly on official bank platforms.
           </p>
         </div>
       </section>
 
-      {/* Cards Section (exact platform-card clone) */}
+      {/* Cards Section */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
-        {/* Credit Cards */}
-        <div style={{ width: 'calc(100% - 30px)', marginLeft: '15px', marginRight: '15px', marginBottom: '18px' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(24px, 3.6vw, 40px)',
-              fontFamily: '"Playfair Display", serif',
-              color: 'rgba(255,255,255,0.92)',
-              letterSpacing: '1.5px',
-              margin: 0,
-            }}
-          >
-            Credit Cards
-          </h2>
-        </div>
-
         <MobileScrollBoost className="platform-card" holdMs={4500}>
           <div className="platform-content">
             <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(255,255,255,0.62)', letterSpacing: '2px', marginBottom: '10px' }}>#1</div>
@@ -229,43 +214,6 @@ export default function ExecutionPartnersPage() {
           </div>
         </MobileScrollBoost>
 
-        {/* Personal Loans */}
-        <div style={{ width: 'calc(100% - 30px)', marginLeft: '15px', marginRight: '15px', marginTop: '12px', marginBottom: '18px' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(24px, 3.6vw, 40px)',
-              fontFamily: '"Playfair Display", serif',
-              color: 'rgba(255,255,255,0.92)',
-              letterSpacing: '1.5px',
-              margin: 0,
-            }}
-          >
-            Personal Loans
-          </h2>
-        </div>
-
-        <MobileScrollBoost className="platform-card" holdMs={4500}>
-          <div className="platform-content">
-            <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(255,255,255,0.62)', letterSpacing: '2px', marginBottom: '10px' }}>#1</div>
-            <h2 style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontFamily: '"Playfair Display", serif', color: 'rgba(255,255,255,0.92)', fontWeight: 600, margin: '0 0 10px 0', letterSpacing: '1.5px' }}>
-              LOAN HUB
-            </h2>
-            <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.70)', marginBottom: '20px', fontWeight: 500 }}>
-              Compare personal loan offers from multiple RBI-regulated lenders.
-            </p>
-          </div>
-          <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Floanhubindia.com%2Fapply-now%2F"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>CHECK ELIGIBILITY</span>
-            </a>
-          </div>
-        </MobileScrollBoost>
-
         {/* Disclosure */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
@@ -362,14 +310,11 @@ export default function ExecutionPartnersPage() {
             min-height: auto;
             text-align: center;
           }
+        }
 
-          .platform-button {
-            justify-content: center;
-          }
-
-          .btn-primary {
-            padding: 16px 28px;
-            font-size: 14px;
+        @media (max-width: 480px) {
+          .platform-card {
+            padding: 45px 25px;
           }
         }
       `}</style>

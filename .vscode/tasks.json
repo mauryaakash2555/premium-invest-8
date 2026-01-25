@@ -90,6 +90,43 @@
 			}
 		},
 		{
+			"label": "start-next-dev-3001",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && npx.cmd next dev -p 3001"
+			],
+			"isBackground": true,
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": {
+					"regexp": "^$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^\\s*(▲ Next\\.js|> next dev|next dev)\\b",
+					"endsPattern": "(Ready in|ready - started server|started server)"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"label": "test-affiliate-links-e2e",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && set PLAYWRIGHT_SKIP_WEB_SERVER=1&& set BASE_URL=http://localhost:3001&& npx playwright test tests/e2e/affiliate-links.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
 			"label": "test-chat-api",
 			"type": "shell",
 			"command": "cmd",
@@ -422,6 +459,18 @@
 				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; netstat -ano | Select-String ':3000' | ForEach-Object { $_.Line } | Set-Content -Encoding UTF8 .tmp_port3000.txt"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "build (verify)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
