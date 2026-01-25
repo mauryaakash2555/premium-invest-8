@@ -31,8 +31,8 @@ import { cn } from '@/lib/utils';
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showNav, setShowNav] = useState(true);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const servicesRef = useRef(null);
+  const [partnersOpen, setPartnersOpen] = useState(false);
+  const partnersRef = useRef(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -64,22 +64,22 @@ const Navigation = () => {
 
   useEffect(() => {
     // Close dropdown on route change
-    setServicesOpen(false);
+    setPartnersOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!servicesOpen) return;
+    if (!partnersOpen) return;
 
     const onMouseDown = (e) => {
-      const el = servicesRef.current;
+      const el = partnersRef.current;
       if (!el) return;
       if (e.target instanceof Node && !el.contains(e.target)) {
-        setServicesOpen(false);
+        setPartnersOpen(false);
       }
     };
 
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setServicesOpen(false);
+      if (e.key === 'Escape') setPartnersOpen(false);
     };
 
     document.addEventListener('mousedown', onMouseDown);
@@ -88,17 +88,15 @@ const Navigation = () => {
       document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [servicesOpen]);
+  }, [partnersOpen]);
 
-  const serviceLinks = [
-    { path: '/services', label: 'Services Overview', sub: 'What we offer' },
-    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'PMS-first planning' },
-    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based allocation' },
-    { path: '/insurance', label: 'Insurance', sub: 'Protection architecture' },
-    { path: '/fixed-deposits', label: 'Fixed Deposits', sub: 'Liquidity & stability' },
+  const partnerLinks = [
+    { path: '/execution-partners', label: 'Execution Partners', sub: 'Optional routing links' },
+    { path: '/curated-partners', label: 'Curated Partners', sub: 'Placement framework' },
+    { path: '/platforms', label: 'Investment Platforms', sub: 'Platforms directory' },
   ];
 
-  const servicesActive = serviceLinks.some((l) => pathname === l.path);
+  const partnersActive = partnerLinks.some((l) => pathname === l.path);
 
   const DesktopLink = ({ path, label }) => {
     const isActive = pathname === path;
@@ -206,25 +204,25 @@ const Navigation = () => {
             <DesktopLink path="/about-us" label="About Us" />
             <DesktopLink path="/intelligence" label="Intelligence" />
 
-            {/* Desktop-only glass dropdown for Services */}
-            <div className="relative" ref={servicesRef}>
+            {/* Desktop-only glass dropdown for Partners */}
+            <div className="relative" ref={partnersRef}>
               <button
                 type="button"
-                onClick={() => setServicesOpen((v) => !v)}
+                onClick={() => setPartnersOpen((v) => !v)}
                 className={cn(
                   "group relative text-[12px] uppercase tracking-[2.5px] no-underline transition-all duration-300",
-                  servicesActive
+                  partnersActive
                     ? "font-bold text-[color:var(--lux-accent)]"
                     : "font-medium text-white/90 hover:text-white hover:scale-105"
                 )}
                 aria-haspopup="menu"
-                aria-expanded={servicesOpen}
+                aria-expanded={partnersOpen}
               >
-                Services
+                Partners
                 <span
                   className={cn(
                     "ml-2 inline-block align-middle transition-transform duration-200",
-                    servicesOpen ? "rotate-180" : "rotate-0"
+                    partnersOpen ? "rotate-180" : "rotate-0"
                   )}
                   aria-hidden="true"
                 >
@@ -233,21 +231,21 @@ const Navigation = () => {
                 <span
                   className={cn(
                     "absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent",
-                    servicesActive ? "left-0 w-full" : ""
+                    partnersActive ? "left-0 w-full" : ""
                   )}
                   aria-hidden="true"
                 />
               </button>
 
-              {servicesOpen ? (
+              {partnersOpen ? (
                 <div
                   role="menu"
                   className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/20 backdrop-blur-3xl shadow-[0_30px_120px_rgba(0,0,0,0.55)] overflow-hidden"
                 >
                   <div className="p-5">
-                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">Services</div>
+                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">Partners</div>
                     <div className="mt-3 grid grid-cols-2 gap-2">
-                      {serviceLinks.map((l) => (
+                      {partnerLinks.map((l) => (
                         <Link
                           key={l.path}
                           href={l.path}
@@ -265,7 +263,7 @@ const Navigation = () => {
                     </div>
                     <div className="mt-4 h-px w-full bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent opacity-40" />
                     <div className="mt-4 text-[11px] text-white/60">
-                      Premium planning across PMS, funds, insurance and liquidity.
+                      Optional routing links and partner framework pages.
                     </div>
                   </div>
                 </div>
@@ -274,11 +272,7 @@ const Navigation = () => {
 
             <DesktopLink path="/tools" label="Tools" />
             <DesktopLink path="/live-intelligence" label="Live Intel" />
-            <DesktopLink path="/platforms" label="Platforms" />
-            <DesktopLink path="/partners" label="Partners" />
-            <DesktopLink path="/execution-partners" label="Execution Partners" />
             <DesktopLink path="/client-portal" label="Client Portal" />
-            <DesktopLink path="/curated-partners" label="Curated Partners" />
             <DesktopLink path="/blog" label="Blog" />
             <DesktopLink path="/contact" label="Contact" />
           </div>

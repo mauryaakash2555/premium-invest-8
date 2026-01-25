@@ -44,17 +44,7 @@ function AffiliateCard({
         width: 'calc(100% - 30px)',
         marginLeft: '15px',
         marginRight: '15px',
-        background:
-          'radial-gradient(900px 520px at 30% 10%, rgba(255,255,255,0.04), transparent 60%), linear-gradient(135deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.58) 100%)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        borderRadius: 0,
-        padding: '44px 38px',
         marginBottom: '26px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto',
-        gap: '26px',
-        alignItems: 'center',
-        boxShadow: '0 14px 55px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06) inset',
       }}
     >
       <div className="platform-content" style={{ minWidth: 0 }}>
@@ -88,18 +78,18 @@ function AffiliateCard({
         </div>
       </div>
 
-      <div className="platform-button" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 }}>
+      <div className="platform-button" style={{ marginTop: 18 }}>
         <a
           href={href}
           target="_blank"
           rel="nofollow sponsored noopener noreferrer"
           className="btn-primary"
           onClick={() => trackEvent(eventName, { source: 'execution_partners', page: '/execution-partners', partner: title })}
-          style={{ textAlign: 'center', paddingLeft: 18, paddingRight: 18 }}
+          style={{ textAlign: 'center', display: 'inline-flex', paddingLeft: 18, paddingRight: 18 }}
         >
           {ctaLabel}
         </a>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', maxWidth: 240, textAlign: 'right', lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', maxWidth: 520, lineHeight: 1.5, marginTop: 10 }}>
           External link. Terms, fees, and eligibility are defined by the provider.
         </div>
       </div>
@@ -116,17 +106,7 @@ function ComingSoonCard({ title, subtitle }) {
         width: 'calc(100% - 30px)',
         marginLeft: '15px',
         marginRight: '15px',
-        background:
-          'radial-gradient(900px 520px at 30% 10%, rgba(255,255,255,0.03), transparent 60%), linear-gradient(135deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.58) 100%)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        borderRadius: 0,
-        padding: '44px 38px',
         marginBottom: '26px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto',
-        gap: '26px',
-        alignItems: 'center',
-        boxShadow: '0 14px 55px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06) inset',
       }}
     >
       <div className="platform-content" style={{ minWidth: 0 }}>
@@ -151,8 +131,8 @@ function ComingSoonCard({ title, subtitle }) {
         </p>
       </div>
 
-      <div className="platform-button">
-        <div className="btn-primary" aria-disabled="true" style={{ opacity: 0.55, cursor: 'not-allowed', pointerEvents: 'none' }}>
+      <div className="platform-button" style={{ marginTop: 18 }}>
+        <div className="btn-primary" aria-disabled="true" style={{ opacity: 0.55, cursor: 'not-allowed', pointerEvents: 'none', display: 'inline-flex' }}>
           Not available
         </div>
       </div>
@@ -173,14 +153,14 @@ export default function ExecutionPartnersPage() {
       {/* Hero */}
       <section
         style={{
-          minHeight: '62vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
           paddingTop: '80px',
-          paddingBottom: '60px',
+          paddingBottom: '50px',
         }}
       >
         <div
@@ -190,11 +170,10 @@ export default function ExecutionPartnersPage() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80)',
+            backgroundImage: 'url(/6th.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.36,
+            opacity: 0.42,
           }}
         />
         <div
@@ -204,8 +183,7 @@ export default function ExecutionPartnersPage() {
             left: 0,
             right: 0,
             bottom: 0,
-            background:
-              'radial-gradient(900px 520px at 70% 0%, color-mix(in oklab, var(--lux-accent) 10%, transparent), transparent 65%), linear-gradient(135deg, rgba(10,10,10,0.70) 0%, rgba(10,10,10,0.90) 100%)',
+            background: 'linear-gradient(180deg, rgba(10,10,10,0.18) 0%, rgba(10,10,10,0.35) 100%)',
           }}
         />
 
@@ -239,14 +217,13 @@ export default function ExecutionPartnersPage() {
 
           <h1
             style={{
-              fontSize: 'clamp(38px, 6vw, 58px)',
+              fontSize: 'clamp(32px, 5vw, 52px)',
               marginBottom: '18px',
-              fontWeight: 400,
-              letterSpacing: '4px',
+              fontWeight: 300,
+              letterSpacing: '3px',
               fontFamily: '"Playfair Display", serif',
               color: 'var(--lux-accent)',
               lineHeight: 1.2,
-              textShadow: '0 6px 30px color-mix(in oklab, var(--lux-accent) 20%, transparent)',
             }}
           >
             Execution Partners
@@ -254,12 +231,11 @@ export default function ExecutionPartnersPage() {
 
           <p
             style={{
-              fontSize: 'clamp(18px, 2.5vw, 22px)',
-              color: 'rgba(255, 255, 255, 0.95)',
-              maxWidth: '760px',
+              fontSize: 'clamp(16px, 2.2vw, 20px)',
+              color: 'rgba(255, 255, 255, 0.9)',
+              maxWidth: '700px',
               margin: '0 auto',
-              lineHeight: 1.85,
-              fontWeight: 300,
+              lineHeight: 1.7,
             }}
           >
             This page is a neutral routing bridge for users who want to explore optional execution or banking products after using BM Wealth tools and educational content.
@@ -287,6 +263,45 @@ export default function ExecutionPartnersPage() {
               External links may be sponsored and are marked accordingly.
             </p>
           </div>
+
+          <AffiliateCard
+            title="Axis Bank Credit Card"
+            subtitle="Often chosen for broad acceptance and straightforward onboarding."
+            features={[
+              'Check current variants, fees, and eligibility on the provider site',
+              'Best used when billing and repayment are fully automated',
+              'Treat rewards as secondary to discipline',
+            ]}
+            href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fweb.axisbank.co.in%2FDigitalChannel%2FWebForm%2F"
+            eventName="execution_options_click"
+            ctaLabel="Open provider page"
+          />
+
+          <AffiliateCard
+            title="HDFC Credit Card"
+            subtitle="A mainstream option; verify eligibility, fees, and benefits before applying."
+            features={[
+              'Compare fees vs your expected usage',
+              'Prefer one primary card for clean tracking',
+              'Always repay in full on time',
+            ]}
+            href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fapplyonline.hdfcbank.com%2Fcards%2Fcredit-cards.html"
+            eventName="execution_options_click"
+            ctaLabel="Open provider page"
+          />
+
+          <AffiliateCard
+            title="YES Bank POP Credit Card"
+            subtitle="A digital-first application flow; validate terms and suitability on the provider site."
+            features={[
+              'Confirm fees, limits, and reward structure',
+              'Avoid over-optimizing for rewards',
+              'Works best with strict monthly repayment discipline',
+            ]}
+            href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fppipl.getpopcard.co%2F"
+            eventName="execution_options_click"
+            ctaLabel="Open provider page"
+          />
 
           <AffiliateCard
             title="IDFC First Bank Credit Card"
@@ -337,16 +352,24 @@ export default function ExecutionPartnersPage() {
                 margin: 0,
               }}
             >
-              Personal Loans <span style={{ color: 'rgba(255,255,255,0.60)' }}>(Coming soon)</span>
+              Personal Loans <span style={{ color: 'rgba(255,255,255,0.60)' }}>(Optional)</span>
             </h2>
             <p style={{ marginTop: 12, marginBottom: 0, color: 'rgba(255,255,255,0.70)', lineHeight: 1.75 }}>
-              A neutral reference list is planned. We will publish this only when the framework, disclosures, and experience checks are complete.
+              Optional references for users comparing short-term borrowing. External links may be sponsored and are marked accordingly.
             </p>
           </div>
 
-          <ComingSoonCard
-            title="Personal Loan Providers"
-            subtitle="Optional references will appear here once review and disclosures are complete."
+          <AffiliateCard
+            title="Loan Hub"
+            subtitle="A reference option for users checking short-term personal loan eligibility."
+            features={[
+              'Compare offers across providers where applicable',
+              'Review APR/fees carefully before proceeding',
+              'Only borrow when repayment is predictable',
+            ]}
+            href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Floanhubindia.com%2Fapply-now%2F"
+            eventName="execution_options_click"
+            ctaLabel="Check eligibility"
           />
 
           <div style={{ width: 'calc(100% - 30px)', marginLeft: '15px', marginRight: '15px', marginTop: '12px', marginBottom: '18px' }}>
