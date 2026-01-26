@@ -2,7 +2,7 @@ import Script from "next/script";
 import Link from "next/link";
 import BackRow from "@/components/shared/BackRow";
 import { buildMetadata, getMetadataBase } from "@/lib/seo/metadata";
-import { trackEvent } from '@/lib/analytics';
+import TrackedLink from "@/components/shared/TrackedLink";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
 
@@ -214,13 +214,14 @@ export default function TaxOptimizationToolPage() {
             <p className="mt-2 text-sm text-white/75 leading-relaxed">
               Some users prefer optimising liquidity and execution after seeing their results.
             </p>
-            <Link
-              href="/execution-partners"
+            <TrackedLink
+              href="/partners"
               className="mt-3 inline-flex items-center justify-center border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-              onClick={() => trackEvent('execution_options_click', { tool: 'tax-optimization', href: '/execution-partners' })}
+              eventName="execution_options_click"
+              eventParams={{ tool: "tax-optimization", href: "/partners" }}
             >
-              View Execution Options
-            </Link>
+              Explore partner execution options →
+            </TrackedLink>
           </div>
         </div>
       </section>

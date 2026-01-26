@@ -27,6 +27,7 @@ import Link from 'next/link';
 import { Calendar, User, ArrowLeft, ChevronUp } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import BlogDisclaimer from '@/components/shared/BlogDisclaimer';
+import { trackEvent } from '@/lib/analytics';
 
 function isMobileViewport() {
   if (typeof window === 'undefined') return false;
@@ -45,13 +46,31 @@ function isMobileViewport() {
 
 function normalizeBlogHtmlForPremium(html) {
   if (typeof html !== 'string') return html;
-  // Convert "bright yellow" accents into premium matte gold across blog HTML.
+
+  const clamp01 = (n) => {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return 0;
+    return Math.min(1, Math.max(0, x));
+  };
+
+  const rgbaToAccent = (_full, a) => {
+    const alpha = clamp01(a);
+    const pct = Math.round(alpha * 100);
+    // Approximates rgba(alpha) using only the canonical accent.
+    return `color-mix(in oklab, var(--lux-accent) ${pct}%, transparent)`;
+  };
+
+  // Convert legacy "bright yellow" / alt-gold accents into the canonical premium accent.
+  // CRITICAL: do not introduce any alternate gold RGB/hex values here.
   return html
-    .replace(/#DAA520/gi, 'var(--lux-accent)')
-    .replace(/#B8860B/gi, 'var(--lux-accent)')
-    // Keep rgba form for inline styles that expect rgba(...), but align to the same accent family.
-    .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,/gi, 'rgba(201, 162, 77,')
-    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,/gi, 'rgba(201, 162, 77,')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    .replace(/var\(--lux-accent\)/gi, 'var(--lux-accent)')
+    // Convert common legacy gold rgba(...) to accent-only color-mix(...)
+    .replace(/rgba\(\s*218\s*,\s*165\s*,\s*32\s*,\s*([0-9]*\.?[0-9]+)\s*\)/gi, rgbaToAccent)
+    .replace(/rgba\(\s*184\s*,\s*134\s*,\s*11\s*,\s*([0-9]*\.?[0-9]+)\s*\)/gi, rgbaToAccent)
+    .replace(/rgba\(\s*192\s*,\s*160\s*,\s*98\s*,\s*([0-9]*\.?[0-9]+)\s*\)/gi, rgbaToAccent)
     // Content is already live; rename label everywhere consistently.
     .replace(/Coming Next:/gi, 'Next Read:')
     .replace(/Coming Next/gi, 'Next Read');
@@ -103,6 +122,12 @@ export default function BlogDetailClient({ slug }) {
   const renderedHtml = useMemo(() => {
     return normalizeBlogHtmlForPremium(rawHtml);
   }, [rawHtml]);
+
+  const pageClassName = useMemo(() => {
+    const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';
+    // Slug-only (already url-safe); used for per-post styling without touching content text.
+    return `blog-detail-page blog-detail--${safe}`;
+  }, [slug]);
 
   // Mobile-only reading progress + back-to-top
   useEffect(() => {
@@ -164,6 +189,101 @@ export default function BlogDetailClient({ slug }) {
       if (href.includes('wa.me') || href.includes('whatsapp.com')) {
         a.classList.add('whatsapp-cta-btn');
         if (!waCtas.includes(a)) waCtas.push(a);
+      }
+    });
+
+    // Premium affiliate CTA blocks
+    // - Full width
+    // - Never show raw URLs
+    // - Keeps click tracking only when an event name is available
+    const affiliateCleanups = [];
+    const affiliateLinks = Array.from(root.querySelectorAll('a.bm-cta-gold-flat'));
+    affiliateLinks.forEach((a) => {
+      a.classList.add('coming-next-block');
+      a.classList.add('bm-affiliate-cta');
+
+      const href = String(a.getAttribute('href') || '');
+      const hrefLower = href.toLowerCase();
+
+      const dataTitle = a.getAttribute('data-bm-title');
+      const dataSubtitle = a.getAttribute('data-bm-subtitle');
+      const dataEvent = a.getAttribute('data-bm-event');
+      const dataAffiliate = a.getAttribute('data-bm-affiliate');
+      const dataPlacement = a.getAttribute('data-bm-placement');
+      const dataCta = a.getAttribute('data-bm-cta');
+
+      let eventName = dataEvent || null;
+      let affiliateKey = dataAffiliate || null;
+      let friendlyTitle = dataTitle || 'Check eligibility';
+      let friendlySubtitle = dataSubtitle || 'Sponsored link • Opens in a new tab';
+
+      // Backward-compatible defaults for Blog 11's three known partners
+      if (!dataTitle || !dataEvent || !dataAffiliate) {
+        if (hrefLower.includes('idfcfirstbank')) {
+          eventName = dataEvent || 'affiliate_idfc_click';
+          affiliateKey = dataAffiliate || 'idfc';
+          friendlyTitle = dataTitle || 'IDFC First Bank Credit Card';
+        } else if (hrefLower.includes('aubank')) {
+          eventName = dataEvent || 'affiliate_au_click';
+          affiliateKey = dataAffiliate || 'au';
+          friendlyTitle = dataTitle || 'AU Bank Credit Options';
+        } else if (hrefLower.includes('indusind')) {
+          eventName = dataEvent || 'affiliate_indusind_click';
+          affiliateKey = dataAffiliate || 'indusind';
+          friendlyTitle = dataTitle || 'IndusInd Bank Credit Card';
+        }
+      }
+
+      if (affiliateKey) {
+        a.setAttribute('data-affiliate', affiliateKey);
+      }
+
+      // Replace the raw URL text with a premium card layout.
+      // Keep the anchor itself as the clickable target.
+      try {
+        a.textContent = '';
+        a.setAttribute('aria-label', `${friendlyTitle} (sponsored link)`);
+
+        const meta = document.createElement('div');
+        meta.className = 'bm-affiliate-meta';
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'bm-affiliate-title';
+        titleEl.textContent = friendlyTitle;
+
+        const subEl = document.createElement('div');
+        subEl.className = 'bm-affiliate-subtitle';
+        subEl.textContent = friendlySubtitle;
+
+        meta.appendChild(titleEl);
+        meta.appendChild(subEl);
+        a.appendChild(meta);
+
+        const btn = document.createElement('div');
+        btn.className = 'bm-affiliate-btn';
+        btn.textContent =
+          dataCta || (String(affiliateKey || '').toLowerCase() === 'loan_hub' ? 'Check Eligibility' : 'Apply via Official Partner');
+        a.appendChild(btn);
+      } catch {
+        // If DOM manipulation fails for any reason, fall back to non-URL text.
+        a.textContent = friendlyTitle;
+      }
+
+      if (eventName) {
+        const onClick = () => {
+          trackEvent(eventName, {
+            placement:
+              dataPlacement ||
+              (post?.slug === 'best-credit-cards-high-income-india'
+                ? 'blog_best-credit-cards-high-income-india'
+                : 'blog_detail'),
+            blog_slug: post?.slug,
+            href,
+          });
+        };
+
+        a.addEventListener('click', onClick, true);
+        affiliateCleanups.push(() => a.removeEventListener('click', onClick, true));
       }
     });
 
@@ -262,6 +382,7 @@ export default function BlogDetailClient({ slug }) {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', updateBoost);
       cleanups.forEach((fn) => fn());
+      affiliateCleanups.forEach((fn) => fn());
     };
   }, [post, scrollBoostSeed]);
 
@@ -307,9 +428,10 @@ export default function BlogDetailClient({ slug }) {
   }
 
   const heroImage = post.imageUrl || post.image_url || post.image || null;
+  const progressPct = Math.round(readProgress * 100);
 
   return (
-    <div className="blog-detail-page" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
+    <div className={pageClassName} style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
       {/* Mobile-only reading progress */}
       {isMobile && (
         <>
@@ -338,9 +460,31 @@ export default function BlogDetailClient({ slug }) {
             />
           </div>
 
+          {/* Mobile-only reading % HUD (transparent, left-bottom) */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'fixed',
+              left: 14,
+              bottom: 16,
+              zIndex: 10002,
+              padding: '8px 10px',
+              borderRadius: 999,
+              background: 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              color: 'rgba(255,255,255,0.75)',
+              fontSize: 12,
+              lineHeight: 1,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+            }}
+          >
+            {progressPct}%
+          </div>
+
           {/* Mobile-only ultra-premium progress ring */}
           {showBackToTop && (() => {
-            const pct = Math.round(readProgress * 100);
             const radius = 20;
             const stroke = 2;
             const circumference = 2 * Math.PI * radius;
@@ -412,7 +556,7 @@ export default function BlogDetailClient({ slug }) {
                     fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                     letterSpacing="0.3"
                   >
-                    {pct}%
+                    {progressPct}%
                   </text>
                 </svg>
               </button>
@@ -831,6 +975,46 @@ export default function BlogDetailClient({ slug }) {
         .blog-detail-page .blog-html :global(h4) {
           color: var(--lux-accent) !important;
         }
+
+        /* BLOG 11 ONLY: tighten typography + spacing to match other premium posts */
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(h2) {
+          font-family: "Playfair Display", serif;
+          font-size: 30px;
+          line-height: 1.25;
+          letter-spacing: 0.2px;
+          margin: 42px 0 14px;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(h3) {
+          font-family: "Playfair Display", serif;
+          font-size: 20px;
+          line-height: 1.35;
+          margin: 22px 0 10px;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(p) {
+          margin: 0 0 16px;
+          color: rgba(229, 229, 229, 0.92);
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(ul),
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(ol) {
+          margin: 0 0 18px;
+          padding-left: 1.2rem;
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(li) {
+          margin: 0 0 10px;
+          color: rgba(229, 229, 229, 0.9);
+        }
+
+        .blog-detail--best-credit-cards-high-income-india .blog-html :global(hr) {
+          border: none;
+          border-top: 1px solid color-mix(in oklab, var(--lux-accent) 18%, rgba(255,255,255,0.10));
+          margin: 34px 0;
+        }
+
+        /* Affiliate CTA card styling lives in app/globals.css so it applies site-wide. */
       `}</style>
     </div>
   );

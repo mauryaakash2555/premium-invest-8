@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 // ═══════════════════════════════════════════════════════════
 // QUICK LEARN - 30-second micro lessons on financial concepts
@@ -131,6 +131,27 @@ export default function QuickLearn() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [revealed, setRevealed] = useState({});
   const [completed, setCompleted] = useState({});
+  const celebrateTimerRef = useRef(null);
+  const [celebrate, setCelebrate] = useState(false);
+
+  const onRipplePointerDown = useCallback((e) => {
+    const el = e.currentTarget;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX ?? rect.left + rect.width / 2) - rect.left;
+    const y = (e.clientY ?? rect.top + rect.height / 2) - rect.top;
+    el.style.setProperty('--li-ripple-x', `${x}px`);
+    el.style.setProperty('--li-ripple-y', `${y}px`);
+    el.classList.remove('li-ripple-animate');
+    void el.offsetWidth;
+    el.classList.add('li-ripple-animate');
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (celebrateTimerRef.current) clearTimeout(celebrateTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const daily = getDailyLessonSet(3);
@@ -160,6 +181,13 @@ export default function QuickLearn() {
   const isAllDone = doneCount === lessons.length;
   const isRevealed = !!revealed[activeIdx];
 
+  useEffect(() => {
+    if (!isAllDone) return;
+    setCelebrate(true);
+    if (celebrateTimerRef.current) clearTimeout(celebrateTimerRef.current);
+    celebrateTimerRef.current = setTimeout(() => setCelebrate(false), 1600);
+  }, [isAllDone]);
+
   return (
     <>
       <div className="ql-wrap">
@@ -175,15 +203,20 @@ export default function QuickLearn() {
           <div className="ql-count">{doneCount}/{lessons.length} done</div>
         </div>
 
-        <div className="ql-topic">{lesson.topic}</div>
-        <div className="ql-question">{lesson.question}</div>
+        <div key={lesson.id} className="ql-content">
+          <div className="ql-topic">{lesson.topic}</div>
+          <div className="ql-question">{lesson.question}</div>
 
-        {!isRevealed ? (
-          <button className="ql-btn" onClick={() => setRevealed((p) => ({ ...p, [activeIdx]: true }))}>
-            Show Answer
-          </button>
-        ) : (
-          <div className="ql-answer-wrap">
+          {!isRevealed ? (
+            <button
+              className="ql-btn li-ripple"
+              onPointerDown={onRipplePointerDown}
+              onClick={() => setRevealed((p) => ({ ...p, [activeIdx]: true }))}
+            >
+              Show Answer
+            </button>
+          ) : (
+            <div className="ql-answer-wrap" data-revealed="1">
             <div className="ql-answer">
               <span className="ql-label">Answer</span>
               {lesson.answer}
@@ -195,7 +228,8 @@ export default function QuickLearn() {
 
             {!completed[activeIdx] ? (
               <button
-                className="ql-done"
+                className="ql-done li-ripple"
+                onPointerDown={onRipplePointerDown}
                 onClick={() => {
                   setCompleted((p) => ({ ...p, [activeIdx]: true }));
                   // Auto-advance if possible
@@ -208,13 +242,15 @@ export default function QuickLearn() {
             ) : (
               <div className="ql-completed">Done</div>
             )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
         <div className="ql-nav">
           <button
             type="button"
-            className="ql-nav-btn"
+            className="ql-nav-btn li-ripple"
+            onPointerDown={onRipplePointerDown}
             onClick={() => setActiveIdx((p) => Math.max(0, p - 1))}
             disabled={activeIdx === 0}
           >
@@ -225,7 +261,8 @@ export default function QuickLearn() {
           </div>
           <button
             type="button"
-            className="ql-nav-btn"
+            className="ql-nav-btn li-ripple"
+            onPointerDown={onRipplePointerDown}
             onClick={() => setActiveIdx((p) => Math.min(lessons.length - 1, p + 1))}
             disabled={activeIdx === lessons.length - 1}
           >
@@ -234,7 +271,10 @@ export default function QuickLearn() {
         </div>
 
         {isAllDone && (
-          <div className="ql-all-done">All done for today</div>
+          <div className={`ql-all-done ${celebrate ? 'ql-celebrate' : ''}`} aria-live="polite">
+            <span className="ql-check" aria-hidden="true">✓</span>
+            All done for today
+          </div>
         )}
 
         <div className="ql-footer">
@@ -243,6 +283,17 @@ export default function QuickLearn() {
       </div>
 
       <style jsx>{`
+        @keyframes qlReveal {
+          from { opacity: 0; transform: translate3d(0, 10px, 0); filter: blur(4px); }
+          to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
+        }
+
+        @keyframes qlPop {
+          0% { transform: scale(0.92); opacity: 0.6; }
+          60% { transform: scale(1.02); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
         .ql-wrap {
           background: rgba(10, 14, 22, 0.95);
           border: 1px solid rgba(100, 160, 255, 0.12);
@@ -275,6 +326,7 @@ export default function QuickLearn() {
           height: 100%;
           background: rgba(100, 160, 255, 0.35);
           border-right: 1px solid rgba(100, 160, 255, 0.25);
+          transition: width 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1));
         }
         .ql-count {
           font-size: 10px;
@@ -315,6 +367,10 @@ export default function QuickLearn() {
           border-radius: 0 6px 6px 0;
           margin-bottom: 12px;
         }
+
+        .ql-content {
+          animation: qlReveal 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) both;
+        }
         .ql-btn {
           width: 100%;
           padding: 10px;
@@ -325,16 +381,14 @@ export default function QuickLearn() {
           font-size: 13px;
           font-weight: 600;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
         }
         .ql-btn:hover {
           background: rgba(100, 160, 255, 0.18);
         }
         .ql-answer-wrap {
-          animation: fadeUp 0.2s ease;
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(6px); }
-          to { opacity: 1; transform: translateY(0); }
+          animation: qlReveal 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) both;
         }
         .ql-answer {
           font-size: 12px;
@@ -344,6 +398,7 @@ export default function QuickLearn() {
           background: rgba(100, 160, 255, 0.06);
           border-radius: 6px;
           margin-bottom: 8px;
+          animation: qlReveal 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) both;
         }
         .ql-fact {
           font-size: 11px;
@@ -354,6 +409,7 @@ export default function QuickLearn() {
           border: 1px solid rgba(100, 160, 255, 0.08);
           border-radius: 5px;
           margin-bottom: 10px;
+          animation: qlReveal 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) 90ms both;
         }
         .ql-label {
           display: block;
@@ -374,6 +430,8 @@ export default function QuickLearn() {
           font-size: 12px;
           font-weight: 600;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
         }
         .ql-done:hover {
           background: rgba(100, 180, 140, 0.2);
@@ -401,6 +459,8 @@ export default function QuickLearn() {
           font-weight: 600;
           cursor: pointer;
           min-width: 74px;
+          position: relative;
+          overflow: hidden;
         }
         .ql-nav-btn:disabled {
           opacity: 0.35;
@@ -420,6 +480,38 @@ export default function QuickLearn() {
           border-radius: 8px;
           border: 1px solid rgba(100, 180, 140, 0.18);
           background: rgba(100, 180, 140, 0.06);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .ql-check {
+          width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(140, 220, 180, 0.18);
+          border: 1px solid rgba(140, 220, 180, 0.28);
+          box-shadow: 0 0 18px rgba(140, 220, 180, 0.12);
+        }
+
+        .ql-celebrate {
+          animation: qlPop 520ms var(--li-ease-premium, cubic-bezier(0.22, 1, 0.36, 1)) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .ql-progress-bar {
+            transition: none;
+          }
+          .ql-answer-wrap,
+          .ql-answer,
+          .ql-fact,
+          .ql-celebrate {
+            animation: none;
+          }
         }
         .ql-footer {
           text-align: right;
@@ -428,6 +520,9 @@ export default function QuickLearn() {
           margin-top: 10px;
           padding-top: 8px;
           border-top: 1px solid rgba(100, 160, 255, 0.06);
+          .ql-content {
+            animation: none;
+          }
         }
       `}</style>
     </>

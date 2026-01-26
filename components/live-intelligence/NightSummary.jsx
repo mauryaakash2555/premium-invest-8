@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { getCurrentModeConfig, getISTTime } from '@/lib/live-intelligence/modes';
 import { downloadDailySummaryPDF } from '@/lib/live-intelligence/pdfGenerator';
 import WhatsAppShare from './WhatsAppShare';
@@ -59,6 +59,7 @@ const DEFAULT_SUMMARY = {
 };
 
 export default function NightSummary() {
+  const reduceMotion = useReducedMotion();
   const [mode, setMode] = useState(null);
   const [time, setTime] = useState('');
   const [isVisible, setIsVisible] = useState(false);
@@ -208,20 +209,32 @@ export default function NightSummary() {
     return `${sign}${formatNumber(change)} (${sign}${percent.toFixed(2)}%)`;
   };
 
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-    }),
-  };
+  const slideVariants = reduceMotion
+    ? {
+        enter: { opacity: 0 },
+        center: { opacity: 1 },
+        exit: { opacity: 0 },
+      }
+    : {
+        enter: (direction) => ({
+          x: direction > 0 ? 220 : -220,
+          opacity: 0,
+          scale: 0.985,
+          filter: 'blur(6px)',
+        }),
+        center: {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          filter: 'blur(0px)',
+        },
+        exit: (direction) => ({
+          x: direction < 0 ? 220 : -220,
+          opacity: 0,
+          scale: 0.99,
+          filter: 'blur(6px)',
+        }),
+      };
 
   // Slide 1: Markets Recap
   const MarketsSlide = () => (
@@ -443,7 +456,11 @@ export default function NightSummary() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0.01 }
+                    : { duration: 0.48, ease: [0.22, 1, 0.36, 1] }
+                }
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.2}
@@ -770,23 +787,32 @@ export default function NightSummary() {
         }
 
         .li-ns-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
           border: none;
           background: rgba(100, 140, 220, 0.25);
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: transform 0.18s ease, background 0.18s ease, width 0.22s ease;
           padding: 0;
         }
 
         .li-ns-dot.active {
-          background: rgba(100, 140, 220, 0.9);
-          transform: scale(1.2);
+          width: 24px;
+          background: linear-gradient(90deg, rgba(100, 140, 220, 0.95), rgba(120, 220, 255, 0.75));
+          transform: translate3d(0, -1px, 0);
+          box-shadow: 0 0 18px rgba(100, 140, 220, 0.22);
         }
 
         .li-ns-dot:hover:not(.active) {
           background: rgba(100, 140, 220, 0.45);
+          transform: translate3d(0, -1px, 0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .li-ns-dot {
+            transition: none;
+          }
         }
 
         /* Counter */

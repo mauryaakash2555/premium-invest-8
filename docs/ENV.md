@@ -33,7 +33,7 @@ Important:
 **Get from:** Supabase project settings → API.
 **Used in:** Validated in `lib/env.js` (currently not used directly by the server client).
 **If missing:** Some code paths may treat Supabase as “not configured”.
-**Example:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE.PAYLOAD`
+**Example:** `<set-in-env>`
 
 ---
 
@@ -42,7 +42,7 @@ Important:
 **Get from:** Supabase project settings → API → service_role key.
 **Used in:** `lib/supabaseAdmin.js` (server).
 **If missing:** All Supabase writes/reads from Next API routes fail (leads, events, admin dashboard).
-**Example:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.SERVICE.ROLE.FAKE`
+**Example:** `<set-in-env>`
 
 ---
 
@@ -63,7 +63,7 @@ Important:
 **Get from:** Groq console.
 **Used in:** `app/api/chat/route.js`
 **If missing:** User chat returns setup/fallback responses.
-**Example:** `gsk_FAKE_GROQ_KEY_123`
+**Example:** `FAKE_GROQ_KEY`
 
 ---
 
@@ -72,7 +72,7 @@ Important:
 **Get from:** Anthropic console.
 **Used in:** `app/api/chat/route.js`, `app/api/admin/strategy/route.js`, `app/api/health/route.js`
 **If missing:** Admin mode AI won’t work; health will show anthropic missing.
-**Example:** `sk-ant-api03-FAKE_ANTHROPIC_KEY`
+**Example:** `FAKE_ANTHROPIC_KEY`
 
 ---
 
@@ -81,7 +81,7 @@ Important:
 **Get from:** Google AI Studio / `ai.google.dev`.
 **Used in:** `app/api/chat/route.js` (Gemini code exists), `app/api/health/route.js` (deep check).
 **If missing:** Health will show gemini missing; chat still works (uses Groq/Claude).
-**Example:** `AIzaSyFAKE_GEMINI_KEY`
+**Example:** `FAKE_GEMINI_KEY`
 
 ---
 
@@ -117,7 +117,7 @@ Important:
 **Get from:** Vercel CLI.
 **Used in:** Not referenced by app source directly.
 **If missing:** Usually no app impact.
-**Example:** `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.FAKE...`
+**Example:** `<set-in-env>`
 
 ---
 

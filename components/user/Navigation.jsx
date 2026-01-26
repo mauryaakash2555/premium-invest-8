@@ -33,6 +33,8 @@ const Navigation = () => {
   const [showNav, setShowNav] = useState(true);
   const [servicesOpen, setServicesOpen] = useState(false);
   const servicesRef = useRef(null);
+  const [partnersOpen, setPartnersOpen] = useState(false);
+  const partnersRef = useRef(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -65,21 +67,29 @@ const Navigation = () => {
   useEffect(() => {
     // Close dropdown on route change
     setServicesOpen(false);
+    setPartnersOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!servicesOpen) return;
+    if (!servicesOpen && !partnersOpen) return;
 
     const onMouseDown = (e) => {
-      const el = servicesRef.current;
-      if (!el) return;
-      if (e.target instanceof Node && !el.contains(e.target)) {
+      const servicesEl = servicesRef.current;
+      const partnersEl = partnersRef.current;
+
+      if (servicesOpen && servicesEl && e.target instanceof Node && !servicesEl.contains(e.target)) {
         setServicesOpen(false);
+      }
+      if (partnersOpen && partnersEl && e.target instanceof Node && !partnersEl.contains(e.target)) {
+        setPartnersOpen(false);
       }
     };
 
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setServicesOpen(false);
+      if (e.key === 'Escape') {
+        setServicesOpen(false);
+        setPartnersOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', onMouseDown);
@@ -88,17 +98,26 @@ const Navigation = () => {
       document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [servicesOpen]);
+  }, [servicesOpen, partnersOpen]);
 
   const serviceLinks = [
-    { path: '/services', label: 'Services Overview', sub: 'What we offer' },
-    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'PMS-first planning' },
-    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based allocation' },
+    { path: '/portfolio-management', label: 'Portfolio Management', sub: 'Portfolio-first planning' },
+    { path: '/mutual-funds', label: 'Mutual Funds', sub: 'Goal-based execution' },
+    { path: '/sip', label: 'SIP', sub: 'Disciplined investing rhythm' },
     { path: '/insurance', label: 'Insurance', sub: 'Protection architecture' },
+    { path: '/trading-services', label: 'Trading Services', sub: 'Execution & workflows' },
     { path: '/fixed-deposits', label: 'Fixed Deposits', sub: 'Liquidity & stability' },
   ];
 
-  const servicesActive = serviceLinks.some((l) => pathname === l.path);
+  const servicesActive = pathname === '/services' || serviceLinks.some((l) => pathname === l.path);
+
+  const partnerLinks = [
+    { path: '/execution-partners', label: 'Execution Partners', sub: 'Optional routing links' },
+    { path: '/curated-partners', label: 'Curated Partners', sub: 'Placement framework' },
+    { path: '/platforms', label: 'Investment Platforms', sub: 'Platforms directory' },
+  ];
+
+  const partnersActive = partnerLinks.some((l) => pathname === l.path);
 
   const DesktopLink = ({ path, label }) => {
     const isActive = pathname === path;
@@ -201,16 +220,13 @@ const Navigation = () => {
       >
         <div className="w-full max-w-[1600px] flex items-center">
           <Logo size={48} fontSize="24px" />
-          <div className="flex gap-6 items-center ml-auto">
+          <div className="ml-auto flex items-center justify-end gap-6">
             <DesktopLink path="/" label="Home" />
             <DesktopLink path="/about-us" label="About Us" />
             <DesktopLink path="/intelligence" label="Intelligence" />
 
             {/* Desktop-only glass dropdown for Services */}
-            <div
-              className="relative"
-              ref={servicesRef}
-            >
+            <div className="relative" ref={servicesRef}>
               <button
                 type="button"
                 onClick={() => setServicesOpen((v) => !v)}
@@ -248,9 +264,7 @@ const Navigation = () => {
                   className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/20 backdrop-blur-3xl shadow-[0_30px_120px_rgba(0,0,0,0.55)] overflow-hidden"
                 >
                   <div className="p-5">
-                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">
-                      Services
-                    </div>
+                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">Services</div>
                     <div className="mt-3 grid grid-cols-2 gap-2">
                       {serviceLinks.map((l) => (
                         <Link
@@ -259,9 +273,7 @@ const Navigation = () => {
                           role="menuitem"
                           className={cn(
                             "rounded-xl border border-white/10 px-4 py-3 no-underline transition-all duration-200",
-                            pathname === l.path
-                              ? "bg-white/10"
-                              : "bg-white/0 hover:bg-white/5"
+                            pathname === l.path ? "bg-white/10" : "bg-white/0 hover:bg-white/5"
                           )}
                           style={{ outline: 'none' }}
                         >
@@ -279,11 +291,75 @@ const Navigation = () => {
               ) : null}
             </div>
 
+            {/* Desktop-only glass dropdown for Partners */}
+            <div className="relative" ref={partnersRef}>
+              <button
+                type="button"
+                onClick={() => setPartnersOpen((v) => !v)}
+                className={cn(
+                  "group relative text-[12px] uppercase tracking-[2.5px] no-underline transition-all duration-300",
+                  partnersActive
+                    ? "font-bold text-[color:var(--lux-accent)]"
+                    : "font-medium text-white/90 hover:text-white hover:scale-105"
+                )}
+                aria-haspopup="menu"
+                aria-expanded={partnersOpen}
+              >
+                Partners
+                <span
+                  className={cn(
+                    "ml-2 inline-block align-middle transition-transform duration-200",
+                    partnersOpen ? "rotate-180" : "rotate-0"
+                  )}
+                  aria-hidden="true"
+                >
+                  ▾
+                </span>
+                <span
+                  className={cn(
+                    "absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent",
+                    partnersActive ? "left-0 w-full" : ""
+                  )}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {partnersOpen ? (
+                <div
+                  role="menu"
+                  className="absolute left-1/2 -translate-x-1/2 mt-5 w-[520px] rounded-2xl border border-white/10 bg-black/20 backdrop-blur-3xl shadow-[0_30px_120px_rgba(0,0,0,0.55)] overflow-hidden"
+                >
+                  <div className="p-5">
+                    <div className="text-[11px] tracking-[0.35em] uppercase text-white/60">Partners</div>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {partnerLinks.map((l) => (
+                        <Link
+                          key={l.path}
+                          href={l.path}
+                          role="menuitem"
+                          className={cn(
+                            "rounded-xl border border-white/10 px-4 py-3 no-underline transition-all duration-200",
+                            pathname === l.path ? "bg-white/10" : "bg-white/0 hover:bg-white/5"
+                          )}
+                          style={{ outline: 'none' }}
+                        >
+                          <div className="text-[13px] font-semibold text-white/90">{l.label}</div>
+                          <div className="mt-1 text-[11px] text-white/60">{l.sub}</div>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="mt-4 h-px w-full bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent opacity-40" />
+                    <div className="mt-4 text-[11px] text-white/60">
+                      Optional routing links and partner framework pages.
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
             <DesktopLink path="/tools" label="Tools" />
             <DesktopLink path="/live-intelligence" label="Live Intel" />
-            <DesktopLink path="/platforms" label="Platforms" />
             <DesktopLink path="/client-portal" label="Client Portal" />
-            <DesktopLink path="/curated-partners" label="Curated Partners" />
             <DesktopLink path="/blog" label="Blog" />
             <DesktopLink path="/contact" label="Contact" />
           </div>

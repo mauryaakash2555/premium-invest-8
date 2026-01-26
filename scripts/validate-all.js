@@ -13,28 +13,56 @@ function requireEnv(name, checks) {
   if (!process.env[name]) checks.push({ pass: false, message: `Missing: ${name}` });
 }
 
+function shouldRequireEnv() {
+  // Local deploy scripts (like update-staging.ps1) run on developer machines where
+  // Vercel/CI secrets usually aren't present. Keep strict enforcement for CI.
+  if (String(process.env.VALIDATE_ALL_STRICT_ENV || '').toLowerCase() === 'true') return true;
+  if (String(process.env.CI || '').toLowerCase() === 'true') return true;
+  if (String(process.env.VERCEL || '').toLowerCase() === 'true') return true;
+  return false;
+}
+
 async function main() {
   console.log('🔍 Running complete validation...\n');
 
   const checks = [];
+  const strictEnv = shouldRequireEnv();
 
   // 1) Environment variables (conditional on feature flags)
   console.log('1️⃣ Checking environment variables...');
-  requireEnv('NEXT_PUBLIC_SUPABASE_URL', checks);
-  requireEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', checks);
-  requireEnv('SUPABASE_SERVICE_ROLE_KEY', checks);
+  if (strictEnv) {
+    requireEnv('NEXT_PUBLIC_SUPABASE_URL', checks);
+    requireEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', checks);
+    requireEnv('SUPABASE_SERVICE_ROLE_KEY', checks);
+  } else {
+    const missing = ['NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY'].filter(
+      (k) => !process.env[k]
+    );
+    if (missing.length) {
+      console.warn(`⚠️  Skipping strict env enforcement locally. Missing: ${missing.join(', ')}`);
+      console.warn('   Set VALIDATE_ALL_STRICT_ENV=true to enforce env vars.');
+    }
+  }
 
   // AI providers are feature-flagged, default ON unless explicitly false
-  if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_GEMINI)) requireEnv('GEMINI_API_KEY', checks);
-  if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_GROQ)) requireEnv('GROQ_API_KEY', checks);
-  if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_CLAUDE)) requireEnv('ANTHROPIC_API_KEY', checks);
+  if (strictEnv) {
+    if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_GEMINI)) requireEnv('GEMINI_API_KEY', checks);
+    if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_GROQ)) requireEnv('GROQ_API_KEY', checks);
+    if (!isFalse(process.env.NEXT_PUBLIC_FEATURE_USE_CLAUDE)) requireEnv('ANTHROPIC_API_KEY', checks);
+  }
 
   // Admin auth: recommend hash + session secret
-  if (!process.env.SUPER_ADMIN_PASSWORD_HASH && !process.env.ADMIN_PASSWORD_HASH && !process.env.SUPER_ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD) {
-    checks.push({ pass: false, message: 'Missing: SUPER_ADMIN_PASSWORD_HASH (preferred) or ADMIN_PASSWORD_HASH (legacy) or SUPER_ADMIN_PASSWORD/ADMIN_PASSWORD (fallback)' });
-  }
-  if (!process.env.ADMIN_SESSION_SECRET) {
-    checks.push({ pass: false, message: 'Missing: ADMIN_SESSION_SECRET (required for secure cookie signing)' });
+  if (strictEnv) {
+    if (!process.env.SUPER_ADMIN_PASSWORD_HASH && !process.env.ADMIN_PASSWORD_HASH && !process.env.SUPER_ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD) {
+      checks.push({
+        pass: false,
+        message:
+          'Missing: SUPER_ADMIN_PASSWORD_HASH (preferred) or ADMIN_PASSWORD_HASH (legacy) or SUPER_ADMIN_PASSWORD/ADMIN_PASSWORD (fallback)',
+      });
+    }
+    if (!process.env.ADMIN_SESSION_SECRET) {
+      checks.push({ pass: false, message: 'Missing: ADMIN_SESSION_SECRET (required for secure cookie signing)' });
+    }
   }
 
   // 2) File structure

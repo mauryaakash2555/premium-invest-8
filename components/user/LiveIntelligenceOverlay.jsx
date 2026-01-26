@@ -26,6 +26,11 @@ import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
+import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
+import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel';
+import SectorPulsePanel from '@/components/live-intelligence/SectorPulsePanel';
+import DealsIntelPanel from '@/components/live-intelligence/DealsIntelPanel';
+import PortfolioTickersPanel from '@/components/live-intelligence/PortfolioTickersPanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -38,9 +43,15 @@ import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
 import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import Link from 'next/link';
 import LazyTradingView from '@/components/shared/LazyTradingView';
+import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockStatusBadge';
+import AnimatedNumber from '@/components/animations/AnimatedNumber';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
+
+const tvInterval = 'D';
+const tvIsSwitching = false;
+const handleTvIntervalChange = () => {};
 
 /**
  * VoiceControl - Button to read headlines aloud
@@ -232,6 +243,36 @@ export default function LiveIntelligenceOverlay({
   const [mounted, setMounted] = useState(false);
   const overlayRef = useRef(null);
   const hasAutoOpenedRef = useRef(false);
+
+  // TradingView chart interval UX (keep minimal + isolated)
+  const [tvInterval, setTvInterval] = useState('D');
+  const [tvIsSwitching, setTvIsSwitching] = useState(false);
+  const tvSwitchTimersRef = useRef([]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+      } catch {}
+      tvSwitchTimersRef.current = [];
+    };
+  }, []);
+
+  const handleTvIntervalChange = useCallback((nextInterval) => {
+    if (!nextInterval || nextInterval === tvInterval) return;
+    try {
+      tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+    } catch {}
+    tvSwitchTimersRef.current = [];
+
+    setTvIsSwitching(true);
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvInterval(nextInterval), 140)
+    );
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvIsSwitching(false), 520)
+    );
+  }, [tvInterval]);
 
   // Mount check for portal
   useEffect(() => {
@@ -915,24 +956,28 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     return [
       {
         label: 'Total Invested',
-        value: `₹${invested.toFixed(1)}L`,
+        kind: 'moneyL',
+        number: invested,
         hint: 'Across MF + PMS + FD',
         trend: null,
       },
       {
         label: 'Current Value',
-        value: `₹${currentValue.toFixed(1)}L`,
+        kind: 'moneyL',
+        number: currentValue,
         hint: `${unrealized >= 0 ? '+' : '−'}₹ ${Math.abs(unrealized).toFixed(1)}L unrealized`,
         trend: `${totalReturnPct >= 0 ? '+' : ''}${totalReturnPct.toFixed(1)}%`,
       },
       {
         label: 'XIRR',
-        value: `${xirr.toFixed(1)}%`,
+        kind: 'percent',
+        number: xirr,
         hint: 'Last 12 months (est.)',
         trend: null,
       },
       {
         label: 'Risk Score',
+        kind: 'text',
         value: riskScore,
         hint: `Equity ${equityPct}% allocation`,
         trend: null,
@@ -978,8 +1023,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             { s: 'NSE:NIFTY', d: 'NIFTY 50' },
             { s: 'NSE:BANKNIFTY', d: 'Bank NIFTY' },
             { s: 'BSE:SENSEX', d: 'SENSEX' },
+            { s: 'NSE:INDIAVIX', d: 'India VIX' },
             { s: 'NSE:NIFTYIT', d: 'NIFTY IT' },
             { s: 'NSE:NIFTYFIN', d: 'NIFTY FIN' },
+            { s: 'NSE:NIFTYPHARMA', d: 'NIFTY Pharma' },
+            { s: 'NSE:NIFTYFMCG', d: 'NIFTY FMCG' },
+            { s: 'NSE:NIFTYAUTO', d: 'NIFTY Auto' },
+            { s: 'NSE:NIFTYMETAL', d: 'NIFTY Metal' },
+            { s: 'NSE:NIFTYREALTY', d: 'NIFTY Realty' },
             { s: 'NSE:NIFTYMIDCAP50', d: 'NIFTY MIDCAP 50' },
           ],
         },
@@ -1047,6 +1098,62 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const next = String(raw ?? '').replace(/[^0-9]/g, '');
     const num = next === '' ? 0 : Math.max(0, Math.min(100, parseInt(next, 10)));
     setAllocations((prev) => ({ ...prev, [key]: num }));
+    setAllocationBumpKey(key);
+    window.clearTimeout(allocationBumpTimerRef.current);
+    allocationBumpTimerRef.current = window.setTimeout(() => setAllocationBumpKey(null), 1200);
+  };
+
+  // Donut rotation speed control (0.5x → 2x), persisted
+  const [donutSpeedMultiplier, setDonutSpeedMultiplier] = useState(1);
+  const donutSpeedPersistRef = useRef(null);
+
+  const allocationBumpTimerRef = useRef(null);
+  const [allocationBumpKey, setAllocationBumpKey] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(allocationBumpTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem('li_donut_rot_speed_v1');
+      const v = Number(raw);
+      if (Number.isFinite(v) && v >= 0.5 && v <= 2) setDonutSpeedMultiplier(v);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
+      donutSpeedPersistRef.current = window.setTimeout(() => {
+        try {
+          window.localStorage.setItem('li_donut_rot_speed_v1', String(donutSpeedMultiplier));
+        } catch {}
+      }, 180);
+    } catch {}
+
+    return () => {
+      try {
+        if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
+      } catch {}
+    };
+  }, [donutSpeedMultiplier]);
+
+  const onRipplePointerDown = (e) => {
+    const el = e.currentTarget;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX ?? rect.left + rect.width / 2) - rect.left;
+    const y = (e.clientY ?? rect.top + rect.height / 2) - rect.top;
+    el.style.setProperty('--li-ripple-x', `${x}px`);
+    el.style.setProperty('--li-ripple-y', `${y}px`);
+    el.classList.remove('li-ripple-animate');
+    void el.offsetWidth;
+    el.classList.add('li-ripple-animate');
   };
 
   const donutGradient = (() => {
@@ -1508,6 +1615,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           animation: liOrbitSpin 8s linear infinite;
         }
 
+        /* Smooth pause/resume on interaction */
+        .li-donut-container:hover .li-donut-orbit,
+        .li-donut-container:hover .li-donut-main,
+        .li-donut-container:active .li-donut-orbit,
+        .li-donut-container:active .li-donut-main {
+          animation-play-state: paused;
+        }
+
         .li-donut-orbit::before {
           content: "";
           position: absolute;
@@ -1541,7 +1656,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             0 0 40px rgba(100, 160, 255, 0.25),
             0 0 80px rgba(100, 160, 255, 0.10),
             inset 0 0 30px rgba(0, 0, 0, 0.3);
-          animation: liDonutShimmer 4s ease-in-out infinite;
+          animation:
+            liDonutShimmer 4s ease-in-out infinite,
+            liDonutRotate var(--li-donut-rot-dur, 30s) linear infinite;
+          will-change: transform;
+        }
+
+        @keyframes liDonutRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         @keyframes liDonutShimmer {
@@ -2198,7 +2321,26 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
               </div>
               <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                {card.value}
+                {card.kind === 'moneyL' ? (
+                  <AnimatedNumber
+                    value={Number(card.number) || 0}
+                    currencySymbol="₹"
+                    suffix="L"
+                    minimumFractionDigits={1}
+                    maximumFractionDigits={1}
+                    ariaLabel={card.label}
+                  />
+                ) : card.kind === 'percent' ? (
+                  <AnimatedNumber
+                    value={Number(card.number) || 0}
+                    suffix="%"
+                    minimumFractionDigits={1}
+                    maximumFractionDigits={1}
+                    ariaLabel={card.label}
+                  />
+                ) : (
+                  card.value
+                )}
               </div>
               <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200,215,240,0.50)', fontSize: '12px', lineHeight: 1.4 }}>
                 {card.hint}
@@ -2225,9 +2367,47 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   Real-time asset diversification
                 </div>
               </div>
-              <div className="li-stat-pill" style={{ fontSize: '11px' }}>
-                <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
-                <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <div className="li-stat-pill" style={{ fontSize: '11px' }}>
+                  <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
+                  <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
+                </div>
+
+                <div
+                  className="li-stat-pill"
+                  style={{
+                    padding: '8px 10px',
+                    gap: '10px',
+                    alignItems: 'center',
+                    fontSize: '11px',
+                    borderColor: 'rgba(170,198,255,0.14)',
+                    background: 'rgba(10,10,12,0.45)',
+                  }}
+                  aria-label="Donut rotation speed"
+                >
+                  <span style={{ color: 'rgba(200,215,240,0.55)' }}>Rotation</span>
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={2}
+                    step={0.1}
+                    value={donutSpeedMultiplier}
+                    onChange={(e) => {
+                      const v = Number(e.target.value);
+                      const clamped = Math.max(0.5, Math.min(2, Number.isFinite(v) ? v : 1));
+                      setDonutSpeedMultiplier(clamped);
+                    }}
+                    aria-label="Rotation speed"
+                    style={{
+                      width: '110px',
+                      accentColor: 'rgba(120,220,255,0.85)',
+                      cursor: 'pointer',
+                    }}
+                  />
+                  <span style={{ color: 'rgba(235,242,255,0.85)', fontVariantNumeric: 'tabular-nums' }}>
+                    {donutSpeedMultiplier.toFixed(1)}x
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -2253,7 +2433,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 <div className="li-donut-orbit" />
                 
                 {/* Main donut with gradient */}
-                <div className="li-donut-main" style={{ background: donutGradient }}>
+                <div
+                  className="li-donut-main"
+                  style={{
+                    background: donutGradient,
+                    '--li-donut-rot-dur': `${30 / donutSpeedMultiplier}s`,
+                  }}
+                >
                   {/* Floating particles */}
                   <div className="li-donut-particles">
                     <div className="li-donut-particle" />
@@ -2279,7 +2465,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 { key: 'gold', k: 'Gold', c: 'rgba(255,200,120,0.85)' },
                 { key: 'cash', k: 'Cash', c: 'rgba(180,150,255,0.80)' },
               ].map((item) => (
-                <div key={item.k} className="li-stat-pill" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '12px 14px' }}>
+                <div
+                  key={item.k}
+                  className={`li-stat-pill li-alloc-pill ${allocationBumpKey === item.key ? 'li-percent-bump' : ''}`}
+                  style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '12px 14px' }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.c, boxShadow: `0 0 8px ${item.c}` }} />
                     <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px' }}>{item.k}</div>
@@ -2310,6 +2500,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     />
                     <span style={{ color: 'rgba(245,248,255,0.60)', fontSize: '14px', fontWeight: 600 }}>%</span>
                   </div>
+
+                  <div className="li-alloc-hover-label">
+                    Hover to edit
+                    <span style={{ opacity: 0.8 }}>✦</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -2322,7 +2517,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div className="li-dash-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
-                Live Signals
+                Market Intel
               </div>
               <div style={{
                 padding: '3px 10px',
@@ -2334,71 +2529,19 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 fontWeight: 600,
                 letterSpacing: '0.05em',
               }}>
-                COMING SOON
+                LIVE
               </div>
             </div>
             <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
-              Portfolio alerts & opportunities
+              Flows, volatility & risk context
             </div>
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {/* Coming Soon Placeholder */}
-              <div style={{
-                padding: '24px',
-                borderRadius: '12px',
-                background: 'rgba(100,160,255,0.04)',
-                border: '1px dashed rgba(100,160,255,0.15)',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔔</div>
-                <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>
-                  Live Signals / Personalized Alerts
-                </div>
-                <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.5, maxWidth: '320px', margin: '0 auto' }}>
-                  Coming soon. Until then, join the waitlist or connect your portfolio for early access.
-                </div>
-
-                <div style={{ marginTop: '14px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <a
-                    href="/client-portal"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '9px 14px',
-                      borderRadius: '10px',
-                      background: 'rgba(100,160,255,0.12)',
-                      border: '1px solid rgba(100,160,255,0.22)',
-                      color: 'rgba(235,242,255,0.90)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Connect Portfolio
-                    <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
-                  </a>
-                  <a
-                    href="/contact?subject=Live%20Signals%20Waitlist"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '9px 14px',
-                      borderRadius: '10px',
-                      background: 'rgba(10,10,12,0.55)',
-                      border: '1px solid rgba(170,198,255,0.18)',
-                      color: 'rgba(200,215,240,0.85)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Join Waitlist
-                    <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
-                  </a>
-                </div>
-              </div>
+              <MarketIntelPanel />
+              <OptionsIntelPanel />
+              <SectorPulsePanel />
+              <PortfolioTickersPanel />
+              <DealsIntelPanel />
             </div>
           </div>
 
@@ -2413,13 +2556,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <div style={{
                     padding: '3px 10px',
                     borderRadius: '8px',
-                    background: 'rgba(100,160,255,0.12)',
+                      background: 'rgba(100,160,255,0.12)',
                     border: 'none',
                     color: 'rgba(140,190,255,0.95)',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.05em',
-                  }}>
+                    }} className="li-coming-soon-badge">
                     COMING SOON
                   </div>
                 </div>
@@ -2447,6 +2590,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div style={{ marginTop: '16px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <a
                   href="/client-portal"
+                  onPointerDown={onRipplePointerDown}
+                  className="li-cta-primary li-ripple"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -2462,10 +2607,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   }}
                 >
                   Connect Portfolio
-                  <span style={{ fontSize: '10px', opacity: 0.75 }}>→</span>
+                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>→</span>
                 </a>
                 <a
                   href="/contact?subject=Holdings%20%2F%20Portfolio%20Tracking%20Waitlist"
+                  onPointerDown={onRipplePointerDown}
+                  className="li-cta-secondary li-ripple"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -2480,8 +2627,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     textDecoration: 'none',
                   }}
                 >
+                  <span className="li-bell-icon" aria-hidden="true">🔔</span>
                   Join Waitlist
-                  <span style={{ fontSize: '10px', opacity: 0.75 }}>↗</span>
+                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>↗</span>
                 </a>
               </div>
             </div>
@@ -2540,16 +2688,34 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   TRADINGVIEW
                 </span>
               </div>
-              <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
-                Real-time data • Powered by TradingView
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <div className="li-timeframe-toggle" aria-label="Chart timeframe">
+                  {['D', 'W', 'M'].map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className={`li-timeframe-btn ${tvInterval === t ? 'active' : ''}`}
+                      onClick={() => handleTvIntervalChange(t)}
+                      disabled={tvIsSwitching}
+                      aria-pressed={tvInterval === t}
+                      title={t === 'D' ? 'Daily' : t === 'W' ? 'Weekly' : 'Monthly'}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
+                  Real-time data • Powered by TradingView
+                </div>
               </div>
             </div>
 
-            <LazyTradingView minHeight={500}>
-              <div style={{ height: '500px', width: '100%', background: '#000000' }}>
+            <LazyTradingView minHeight={500} contentKey={tvInterval} loadingLabel="Loading TradingView…">
+              <div className="li-tv-frame-switch" data-switching={tvIsSwitching ? '1' : '0'} style={{ height: '500px', width: '100%', background: '#000000' }}>
                 {/* TradingView Advanced Chart - Direct iframe for reliability */}
                 <iframe
-                  src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1"
+                  key={tvInterval}
+                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=${tvInterval}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
                   style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
                   frameBorder="0"
                   allowtransparency="true"
@@ -2605,7 +2771,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   </svg>
                   Global Markets
                 </h3>
-                <MarketStatusBadge />
+                <MarketClockStatusBadge />
               </div>
               <div style={{ color: 'rgba(180, 200, 230, 0.50)', fontSize: '10px' }}>
                 Real-time quotes • TradingView

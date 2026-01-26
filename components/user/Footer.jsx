@@ -159,13 +159,9 @@ const navigationLinks = {
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about-us" },
       { label: "Services", href: "/services" },
-      { label: "Portfolio Management", href: "/portfolio-management" },
-      { label: "Mutual Funds", href: "/mutual-funds" },
-      { label: "Insurance", href: "/insurance" },
-      { label: "Fixed Deposits", href: "/fixed-deposits" },
-      { label: "SIP", href: "/sip" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
+      { label: "Careers", href: "/careers" },
       { label: "Digital Store", href: "https://store.bmwealth.co.in", external: true },
     ],
     resources: [
@@ -175,7 +171,6 @@ const navigationLinks = {
       { label: "Live Intelligence", href: "/live-intelligence" },
       { label: "Investment Platforms", href: "/platforms" },
       { label: "Curated Partners", href: "/curated-partners" },
-      { label: "Careers", href: "/careers" },
       { label: "Sitemap", href: "/sitemap-page" },
     ],
     legal: [

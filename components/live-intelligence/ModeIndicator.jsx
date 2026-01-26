@@ -1,7 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getCurrentModeConfig, getISTTime, isMarketOpen } from '@/lib/live-intelligence/modes';
+import { getCurrentMode, getISTNow, isMarketOpen } from '@/lib/modes';
+
+function pad2(n) {
+  return String(n).padStart(2, '0');
+}
+
+function formatISTTime(date = new Date()) {
+  const ist = getISTNow(date);
+  return `${pad2(ist.getHours())}:${pad2(ist.getMinutes())}:${pad2(ist.getSeconds())}`;
+}
 
 /**
  * ModeIndicator - Shows current time-based mode with live clock
@@ -17,18 +26,29 @@ export default function ModeIndicator() {
 
   useEffect(() => {
     // Initial load
-    setMode(getCurrentModeConfig());
-    setTime(getISTTime());
+    const initialMode = getCurrentMode();
+    setMode(initialMode);
+    setTime(formatISTTime());
     setMarketOpen(isMarketOpen());
+
+    // Update locked header title without modifying the locked file
+    try {
+      const headerTitle = document.querySelector('.li-header-section h2');
+      if (headerTitle && initialMode) {
+        headerTitle.textContent = `${initialMode.icon} ${initialMode.name}`;
+      }
+    } catch {
+      // no-op
+    }
 
     // Update time every second for smooth clock
     const clockInterval = setInterval(() => {
-      setTime(getISTTime());
+      setTime(formatISTTime());
     }, 1000);
 
     // Check for mode changes every 60 seconds
     const modeInterval = setInterval(() => {
-      const newMode = getCurrentModeConfig();
+      const newMode = getCurrentMode();
       setMarketOpen(isMarketOpen());
       
       if (newMode.key !== mode?.key) {
@@ -38,6 +58,16 @@ export default function ModeIndicator() {
           setMode(newMode);
           setIsTransitioning(false);
         }, 300);
+
+        // Keep header title in sync
+        try {
+          const headerTitle = document.querySelector('.li-header-section h2');
+          if (headerTitle) {
+            headerTitle.textContent = `${newMode.icon} ${newMode.name}`;
+          }
+        } catch {
+          // no-op
+        }
       }
     }, 60000);
 
@@ -53,18 +83,14 @@ export default function ModeIndicator() {
     <>
       <div
         className={`li-mode-indicator ${isTransitioning ? 'transitioning' : ''}`}
-        style={{
-          '--accent': mode.accentColor,
-          '--accent-dim': mode.accentColorDim,
-          '--glow': mode.glowColor,
-        }}
+        style={{ '--accent': mode.accentColor || 'rgba(235,242,255,0.92)' }}
       >
         {/* Mode Icon */}
         <span className="li-mode-icon">{mode.icon}</span>
 
         {/* Mode Info */}
         <div className="li-mode-info">
-          <span className="li-mode-label">{mode.label}</span>
+          <span className="li-mode-label">{mode.name}</span>
           <span className="li-mode-time">{time} IST</span>
         </div>
 
@@ -81,14 +107,12 @@ export default function ModeIndicator() {
           align-items: center;
           gap: 12px;
           padding: 10px 18px 10px 14px;
-          background: rgba(10, 12, 18, 0.85);
-          border: 1px solid var(--accent-dim);
+          background: rgba(10, 12, 18, 0.78);
+          border: 1px solid rgba(255, 255, 255, 0.10);
           border-radius: 100px;
           backdrop-filter: blur(12px);
-          box-shadow: 
-            0 0 20px var(--glow),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-          transition: all 0.4s ease;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+          transition: opacity 0.25s ease, transform 0.25s ease;
           opacity: 1;
           transform: translateY(0);
         }
@@ -101,7 +125,6 @@ export default function ModeIndicator() {
         .li-mode-icon {
           font-size: 20px;
           line-height: 1;
-          filter: drop-shadow(0 0 6px var(--glow));
         }
 
         .li-mode-info {
@@ -115,7 +138,6 @@ export default function ModeIndicator() {
           font-weight: 600;
           color: var(--accent);
           letter-spacing: 0.02em;
-          text-shadow: 0 0 12px var(--glow);
         }
 
         .li-mode-time {
@@ -145,8 +167,6 @@ export default function ModeIndicator() {
 
         .li-market-status.open .li-market-dot {
           background: rgba(100, 220, 150, 1);
-          box-shadow: 0 0 8px rgba(100, 220, 150, 0.6);
-          animation: pulse-dot 2s ease-in-out infinite;
         }
 
         .li-market-status.closed .li-market-dot {
@@ -166,11 +186,6 @@ export default function ModeIndicator() {
 
         .li-market-status.closed .li-market-label {
           color: rgba(200, 120, 120, 0.8);
-        }
-
-        @keyframes pulse-dot {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.7; transform: scale(1.15); }
         }
 
         /* Responsive */

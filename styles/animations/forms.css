@@ -1,0 +1,22 @@
+/* Form micro-interactions (global) */
+
+.li-input {
+  transition: box-shadow 220ms var(--li-ease-premium), border-color 220ms var(--li-ease-premium), transform 220ms var(--li-ease-premium);
+  will-change: box-shadow, border-color, transform;
+}
+
+.li-input:focus {
+  box-shadow: 0 0 0 4px rgba(100, 160, 255, 0.15);
+}
+
+.li-input:focus-visible {
+  outline: none;
+}
+
+.li-input:disabled {
+  opacity: 0.7;
+}
+
+.li-form-error {
+  animation: liFadeInUp 420ms var(--li-ease-premium) both;
+}

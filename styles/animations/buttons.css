@@ -1,0 +1,121 @@
+/* CTA buttons + micro-interactions (global) */
+
+@keyframes liRipple {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 0.35; }
+  to { transform: translate(-50%, -50%) scale(18); opacity: 0; }
+}
+
+.li-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.li-ripple::after {
+  content: "";
+  position: absolute;
+  left: var(--li-ripple-x, 50%);
+  top: var(--li-ripple-y, 50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.li-ripple.li-ripple-animate::after {
+  opacity: 1;
+  animation: liRipple 600ms ease-out;
+}
+
+.li-cta-primary {
+  background: linear-gradient(90deg, rgba(0,200,255,0.26), rgba(0,255,120,0.18));
+  border: 1px solid rgba(120, 220, 255, 0.25);
+  box-shadow: 0 0 22px rgba(0, 200, 255, 0.10);
+  transition: transform 200ms ease, box-shadow 250ms ease, filter 250ms ease;
+}
+
+@keyframes liFocusRing {
+  0% { box-shadow: 0 0 0 0 rgba(120, 220, 255, 0.0), 0 0 22px rgba(0, 200, 255, 0.10); }
+  100% { box-shadow: 0 0 0 4px rgba(120, 220, 255, 0.22), 0 0 22px rgba(0, 200, 255, 0.10); }
+}
+
+.li-cta-secondary {
+  background: rgba(10,10,12,0.55);
+  border: 1px solid rgba(170,198,255,0.22);
+  transition: transform 200ms ease, box-shadow 250ms ease, border-color 250ms ease;
+}
+
+.li-cta-primary:focus-visible,
+.li-cta-secondary:focus-visible {
+  outline: none;
+  animation: liFocusRing 220ms var(--li-ease-premium) both;
+}
+
+.li-cta-primary:focus-visible {
+  border-color: rgba(120, 220, 255, 0.38);
+}
+
+.li-cta-secondary:focus-visible {
+  border-color: rgba(170, 198, 255, 0.38);
+  box-shadow: 0 0 0 4px rgba(170, 198, 255, 0.18);
+}
+
+.li-cta-primary:hover {
+  transform: translate3d(0, -1px, 0);
+  filter: brightness(1.08);
+  box-shadow: 0 0 28px rgba(0, 220, 255, 0.18);
+}
+
+.li-cta-secondary:hover {
+  transform: translate3d(0, -1px, 0);
+  border-color: rgba(170,198,255,0.32);
+  box-shadow: 0 0 18px rgba(170,198,255,0.10);
+}
+
+.li-cta-arrow {
+  display: inline-block;
+  transform: translate3d(-6px, 0, 0);
+  opacity: 0;
+  transition: transform 250ms var(--li-ease-premium), opacity 250ms var(--li-ease-premium);
+}
+
+.li-cta-primary:hover .li-cta-arrow,
+.li-cta-secondary:hover .li-cta-arrow {
+  transform: translate3d(0, 0, 0);
+  opacity: 0.9;
+}
+
+/* Bell icon (gentle sway + pulse). Stops on hover */
+@keyframes liBellSway {
+  0%, 100% { transform: rotateZ(-5deg) scale(1); }
+  50% { transform: rotateZ(5deg) scale(1.05); }
+}
+
+.li-bell-icon {
+  display: inline-flex;
+  transform-origin: 50% 0%;
+  animation: liBellSway 0.8s ease-in-out infinite;
+}
+
+.li-cta-secondary:hover .li-bell-icon,
+.li-cta-primary:hover .li-bell-icon {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .li-ripple.li-ripple-animate::after,
+  .li-bell-icon {
+    animation: none !important;
+  }
+  .li-cta-primary:focus-visible,
+  .li-cta-secondary:focus-visible {
+    animation: none !important;
+  }
+  .li-cta-arrow {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

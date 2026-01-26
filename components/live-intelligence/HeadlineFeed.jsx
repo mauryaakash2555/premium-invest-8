@@ -9,7 +9,7 @@ import {
   getRotationSpeed,
   CURATED_HEADLINES 
 } from '@/lib/live-intelligence/headlines';
-import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
+import { getCurrentMode } from '@/lib/modes';
 import { trackPanelExpand, trackPanelCollapse, trackHeadlineView, trackHeadlinePause } from '@/lib/live-intelligence/analytics';
 
 // Preserve API ordering (category-balanced/priority-scored), but ensure a BREAKING item can lead.
@@ -47,8 +47,8 @@ export default function HeadlineFeed() {
   const visibleIntervalRef = useRef(8000);
 
   const getRotationCap = useCallback(() => {
-    const m = getCurrentModeConfig();
-    return m?.key === 'global_watch' ? 5 : 15;
+    const m = getCurrentMode();
+    return typeof m?.maxHeadlines === 'number' ? m.maxHeadlines : 15;
   }, []);
 
   // Fetch live headlines from API
@@ -148,9 +148,9 @@ export default function HeadlineFeed() {
 
   // Get current mode for rotation speed
   useEffect(() => {
-    setMode(getCurrentModeConfig());
+    setMode(getCurrentMode());
     const interval = setInterval(() => {
-      setMode(getCurrentModeConfig());
+      setMode(getCurrentMode());
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -176,8 +176,8 @@ export default function HeadlineFeed() {
     if (!current) return;
 
     const baseSpeed = getRotationSpeed(current?.urgency);
-    const modeSpeed = mode?.rotationSpeed || 8000;
-    const interval = Math.min(baseSpeed, modeSpeed);
+    const modeSpeedMs = (typeof mode?.rotationSpeed === 'number' ? mode.rotationSpeed : 8) * 1000;
+    const interval = Math.min(baseSpeed, modeSpeedMs);
 
     visibleHeadlineRef.current = current;
     visibleSinceRef.current = now;
@@ -203,9 +203,9 @@ export default function HeadlineFeed() {
 
     const currentHeadline = headlines[activeIndex];
     const baseSpeed = getRotationSpeed(currentHeadline?.urgency);
-    const modeSpeed = mode?.rotationSpeed || 8000;
+    const modeSpeedMs = (typeof mode?.rotationSpeed === 'number' ? mode.rotationSpeed : 8) * 1000;
     // Use the shorter of the two (more urgent = faster)
-    const speed = Math.min(baseSpeed, modeSpeed);
+    const speed = Math.min(baseSpeed, modeSpeedMs);
 
     const timer = setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % headlines.length);
@@ -338,6 +338,17 @@ export default function HeadlineFeed() {
       </div>
 
       <style jsx>{`
+        @keyframes liHeadlineActivate {
+          0% { opacity: 0.55; transform: translate3d(0, 8px, 0) scale(0.99); filter: blur(4px); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0px); }
+        }
+
+        @keyframes liDotPulse {
+          0% { box-shadow: 0 0 0 0 rgba(170, 198, 255, 0.0); }
+          60% { box-shadow: 0 0 0 10px rgba(170, 198, 255, 0.0); }
+          100% { box-shadow: 0 0 0 0 rgba(170, 198, 255, 0.0); }
+        }
+
         .li-headline-feed {
           margin-top: 24px;
         }
@@ -370,6 +381,7 @@ export default function HeadlineFeed() {
           background: rgba(170, 198, 255, 0.90);
           box-shadow: 0 0 8px rgba(170, 198, 255, 0.5);
           transform: scale(1.3);
+          animation: liDotPulse 1.2s ease-out;
         }
 
         .li-progress-dot.past {
@@ -407,6 +419,7 @@ export default function HeadlineFeed() {
           transition: all 0.3s ease;
           display: flex;
           flex-direction: column;
+          will-change: transform, opacity;
         }
 
         .li-headline-wrapper:not(.active) {
@@ -415,6 +428,18 @@ export default function HeadlineFeed() {
 
         .li-headline-wrapper.active {
           opacity: 1;
+          animation: liHeadlineActivate 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .li-progress-dot,
+          .li-headline-wrapper {
+            transition: none;
+          }
+          .li-progress-dot.active,
+          .li-headline-wrapper.active {
+            animation: none;
+          }
         }
 
         /* Ensure cards have equal height in each row */
