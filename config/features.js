@@ -39,6 +39,9 @@ const NEXT_PUBLIC = {
   USE_GEMINI: process.env.NEXT_PUBLIC_FEATURE_USE_GEMINI,
   USE_GROQ: process.env.NEXT_PUBLIC_FEATURE_USE_GROQ,
   USE_CLAUDE: process.env.NEXT_PUBLIC_FEATURE_USE_CLAUDE,
+
+  SEBI_AUDIT: process.env.NEXT_PUBLIC_FEATURE_SEBI_AUDIT,
+  SEBI_AUDIT_CLAUDE_FALLBACK: process.env.NEXT_PUBLIC_FEATURE_SEBI_AUDIT_CLAUDE_FALLBACK,
 };
 
 function readFlag(key) {
@@ -85,6 +88,10 @@ export const FEATURES = {
   USE_GEMINI: readFlag("USE_GEMINI"),
   USE_GROQ: readFlag("USE_GROQ"),
   USE_CLAUDE: readFlag("USE_CLAUDE"),
+
+  // Compliance guardrails
+  SEBI_AUDIT: readFlag("SEBI_AUDIT"),
+  SEBI_AUDIT_CLAUDE_FALLBACK: readFlag("SEBI_AUDIT_CLAUDE_FALLBACK"),
 };
 
 // Helper to check if feature enabled

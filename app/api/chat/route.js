@@ -28,6 +28,7 @@ import { isAdminFromCookies } from "@/lib/adminSession";
 import { isFamilyFromRequest } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { AFFILIATE_CONTEXT_PROMPT, getAIResponse } from "@/lib/ai/provider";
+import { auditSebiReplySafe } from "@/lib/compliance/sebiAudit";
 import { buildConversationHistorySafe } from "@/lib/ai/contextManager";
 import { analyzeIntent } from "@/lib/ai/intentAnalyzer";
 import { generateSmartSuggestions } from "@/lib/ai/suggestionGenerator";
@@ -1060,6 +1061,33 @@ export async function POST(req) {
 
       // Enforce brevity for public users; allow super-admin to request depth.
       reply = truncateToSentences(reply, userType === "super_admin" ? 12 : 4);
+
+      // SEBI safety audit (best-effort): only for finance-related messages.
+      // Runs cheap regex check, and uses Gemini to repair risky replies.
+      // If Gemini is quota/rate-limited, optionally falls back to Claude.
+      if (isFinanceRelatedMessage(message)) {
+        const audit = await auditSebiReplySafe({
+          userMessage: message,
+          reply,
+          keys: { GEMINI_API_KEY: env?.GEMINI_API_KEY, ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY },
+        });
+
+        if (audit?.reply && String(audit.reply).trim()) {
+          reply = String(audit.reply).trim();
+        }
+
+        // Observability (best-effort)
+        await logEventSafe({
+          leadId,
+          event_type: "sebi_audit",
+          data: {
+            conversationId,
+            ok: Boolean(audit?.ok),
+            auditedBy: audit?.auditedBy || null,
+            issues: Array.isArray(audit?.issues) ? audit.issues.slice(0, 10) : [],
+          },
+        });
+      }
 
       // Feature 11: decide whether to attach a pitch AFTER the bot reply is ready.
       if (pitch_intent && shouldPitch(conversationLength, lastPitchAt)) {
