@@ -174,12 +174,11 @@ export default function QuickLearn() {
     localStorage.setItem('li_quicklearn_state', JSON.stringify(stored));
   }, [revealed, completed, activeIdx, lessons.length]);
 
-  if (!lessons.length) return null;
-
-  const lesson = lessons[Math.min(activeIdx, lessons.length - 1)];
-  const doneCount = lessons.reduce((acc, _, i) => acc + (completed[i] ? 1 : 0), 0);
-  const isAllDone = doneCount === lessons.length;
-  const isRevealed = !!revealed[activeIdx];
+  const lessonsCount = lessons.length;
+  const doneCount = lessonsCount
+    ? lessons.reduce((acc, _, i) => acc + (completed[i] ? 1 : 0), 0)
+    : 0;
+  const isAllDone = lessonsCount > 0 && doneCount === lessonsCount;
 
   useEffect(() => {
     if (!isAllDone) return;
@@ -187,6 +186,11 @@ export default function QuickLearn() {
     if (celebrateTimerRef.current) clearTimeout(celebrateTimerRef.current);
     celebrateTimerRef.current = setTimeout(() => setCelebrate(false), 1600);
   }, [isAllDone]);
+
+  if (!lessonsCount) return null;
+
+  const lesson = lessons[Math.min(activeIdx, lessonsCount - 1)];
+  const isRevealed = !!revealed[activeIdx];
 
   return (
     <>
