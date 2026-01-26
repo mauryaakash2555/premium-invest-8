@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import PanelSkeleton from './PanelSkeleton';
+import { useFIIDIIFlow } from '@/hooks/useMarketData';
+import { LiveBadge } from '@/components/LiveBadge';
 
 function formatSignedCr(value) {
   if (value == null || Number.isNaN(value)) return '—';
@@ -17,49 +19,26 @@ function valueTone(value) {
 }
 
 export default function MarketIntelPanel() {
-  const [state, setState] = useState({ loading: true, payload: null });
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function run() {
-      try {
-        const res = await fetch('/api/live-intelligence/market-intel', { cache: 'no-store' });
-        const json = await res.json();
-        if (cancelled) return;
-        setState({ loading: false, payload: json });
-      } catch (e) {
-        if (cancelled) return;
-        setState({ loading: false, payload: { error: String(e?.message || e) } });
-      }
-    }
-
-    run();
-    const id = setInterval(run, 2 * 60 * 1000);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, []);
+  const { data, loading, refreshing, stale, error } = useFIIDIIFlow(30_000);
 
   const view = useMemo(() => {
-    const fii = state?.payload?.fiiDii;
+    const fii = data;
     return {
-      lastUpdated: state?.payload?.lastUpdated || null,
+      lastUpdated: fii?.lastUpdated || null,
       date: fii?.date || null,
       fiiNetCr: fii?.fiiNetCr ?? null,
       diiNetCr: fii?.diiNetCr ?? null,
       ok: Boolean(fii?.ok),
-      error: state?.payload?.error || null,
+      error: error || null,
     };
-  }, [state]);
+  }, [data, error]);
 
   const rows = [
     { label: 'FII Net', value: view.fiiNetCr, helper: 'Foreign' },
     { label: 'DII Net', value: view.diiNetCr, helper: 'Domestic' },
   ];
 
-  if (state.loading) {
+  if (loading && !data) {
     return <PanelSkeleton rows={1} columns={2} />;
   }
 
@@ -83,9 +62,11 @@ export default function MarketIntelPanel() {
             {view.date ? `Trade date: ${view.date}` : 'Trade date: —'}
           </div>
         </div>
-        <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-          {state.loading ? 'Updating…' : view.lastUpdated ? 'Updated' : '—'}
-        </div>
+        {view.lastUpdated ? (
+          <LiveBadge lastUpdate={view.lastUpdated} />
+        ) : (
+          <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>{refreshing ? 'Updating…' : '—'}</div>
+        )}
       </div>
 
       <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
@@ -122,7 +103,11 @@ export default function MarketIntelPanel() {
         })}
       </div>
 
-      {view.error ? (
+      {stale ? (
+        <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '11px', lineHeight: 1.35 }}>
+          Reconnecting… showing last known values.
+        </div>
+      ) : view.error ? (
         <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '11px', lineHeight: 1.35 }}>
           Data may be temporarily unavailable.
         </div>

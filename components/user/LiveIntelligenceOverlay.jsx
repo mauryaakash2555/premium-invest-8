@@ -45,6 +45,8 @@ import Link from 'next/link';
 import LazyTradingView from '@/components/shared/LazyTradingView';
 import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockStatusBadge';
 import AnimatedNumber from '@/components/animations/AnimatedNumber';
+import { ShareDropdown } from '@/components/ShareDropdown';
+import { AddGoalButton } from '@/components/GoalModal';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -797,7 +799,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [portfolioValue] = useState(28.3);
   const [totalInvested] = useState(24.8);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const shareMenuRef = useRef(null);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
@@ -844,33 +845,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const urlWithEmail = addUtm(shareUrl, 'email');
     const urlWithTwitter = addUtm(shareUrl, 'twitter');
     const urlWithLinkedin = addUtm(shareUrl, 'linkedin');
-    const urlWithTelegram = addUtm(shareUrl, 'telegram');
     
     return {
       whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${urlWithWhatsapp}`)}`,
       email: `mailto:?subject=${encodeURIComponent('BM Wealth Live Intelligence')}&body=${encodeURIComponent(`${shareText}\n\n${urlWithEmail}`)}`,
       twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(urlWithTwitter)}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(urlWithLinkedin)}`,
-      telegram: `https://t.me/share/url?url=${encodeURIComponent(urlWithTelegram)}&text=${encodeURIComponent(shareText)}`,
     };
   }, [shareText, shareUrl]);
-
-  useEffect(() => {
-    if (!showShareMenu) return;
-    const onDocMouseDown = (e) => {
-      if (!shareMenuRef.current) return;
-      if (!shareMenuRef.current.contains(e.target)) setShowShareMenu(false);
-    };
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') setShowShareMenu(false);
-    };
-    document.addEventListener('mousedown', onDocMouseDown);
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', onDocMouseDown);
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [showShareMenu]);
 
   // Tab order for keyboard navigation
   const tabOrder = ['pulse', 'live', 'timings', '2days', 'saved'];
@@ -2054,198 +2036,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           
           {/* Row 5: Action buttons - Share & Add Goal */}
           <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap', overflowX: 'auto', paddingBottom: '4px', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
-            {/* Share Button with Dropdown */}
-            <div ref={shareMenuRef} style={{ position: 'relative' }}>
-              <button
-                type="button"
-                onClick={() => setShowShareMenu((v) => !v)}
-                style={{
-                  appearance: 'none',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  background: 'rgba(10,10,12,0.70)',
-                  color: 'rgba(235,242,255,0.85)',
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  transition: 'all 0.25s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(170,198,255,0.35)';
-                  e.currentTarget.style.background = 'rgba(130,160,255,0.10)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-                  e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
-                }}
-              >
-                <span>Share</span>
-                <span style={{ fontSize: '10px', opacity: 0.7 }}>▼</span>
-              </button>
+            <ShareDropdown
+              open={showShareMenu}
+              onOpenChange={setShowShareMenu}
+              pageUrl={shareUrl}
+              shareText={shareText}
+              links={shareLinks}
+            />
 
-              {/* Share dropdown menu */}
-              {showShareMenu && (
-                <div
-                  onMouseDown={(e) => {
-                    // Prevent document-level outside-click handlers from closing
-                    // the menu before the anchor default navigation runs.
-                    e.stopPropagation();
-                  }}
-                  style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '8px',
-                  minWidth: '200px',
-                  background: 'rgba(15, 18, 25, 0.98)',
-                  border: '1px solid rgba(100, 160, 255, 0.20)',
-                  borderRadius: '14px',
-                  padding: '8px',
-                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.50), 0 0 60px rgba(100, 160, 255, 0.08)',
-                  backdropFilter: 'blur(20px)',
-                  zIndex: 200,
-                }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (typeof navigator !== 'undefined' && navigator.share) {
-                        navigator
-                          .share({ title: 'BM Wealth Live Intelligence', text: shareText, url: shareUrl })
-                          .catch(() => {});
-                      }
-                      setShowShareMenu(false);
-                    }}
-                    disabled={!(typeof navigator !== 'undefined' && navigator.share)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      width: '100%',
-                      padding: '12px 14px',
-                      background: 'transparent',
-                      border: 'none',
-                      borderRadius: '10px',
-                      color: (typeof navigator !== 'undefined' && navigator.share)
-                        ? 'rgba(220, 230, 255, 0.85)'
-                        : 'rgba(220, 230, 255, 0.40)',
-                      fontSize: '13px',
-                      fontWeight: 500,
-                      cursor: (typeof navigator !== 'undefined' && navigator.share) ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.2s ease',
-                      textDecoration: 'none',
-                      textAlign: 'left',
-                    }}
-                    onMouseOver={(e) => {
-                      if (!(typeof navigator !== 'undefined' && navigator.share)) return;
-                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
-                      e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = (typeof navigator !== 'undefined' && navigator.share)
-                        ? 'rgba(220, 230, 255, 0.85)'
-                        : 'rgba(220, 230, 255, 0.40)';
-                    }}
-                  >
-                    <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📲</span>
-                    <span>System Share</span>
-                  </button>
-                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
-                  {[
-                    { key: 'whatsapp', icon: '💬', label: 'WhatsApp', href: shareLinks.whatsapp },
-                    { key: 'email', icon: '📧', label: 'Email', href: shareLinks.email },
-                    { key: 'twitter', icon: '𝕏', label: 'Twitter / X', href: shareLinks.twitter },
-                    { key: 'linkedin', icon: '💼', label: 'LinkedIn', href: shareLinks.linkedin },
-                    { key: 'telegram', icon: '✈️', label: 'Telegram', href: shareLinks.telegram },
-                  ].map((item) => (
-                    <a
-                      key={item.key}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        width: '100%',
-                        padding: '12px 14px',
-                        background: 'transparent',
-                        border: 'none',
-                        borderRadius: '10px',
-                        color: 'rgba(220, 230, 255, 0.85)',
-                        fontSize: '13px',
-                        fontWeight: 500,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        textDecoration: 'none',
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
-                        e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
-                      }}
-                    >
-                      <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>{item.icon}</span>
-                      <span>{item.label}</span>
-                    </a>
-                  ))}
-                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '6px 0' }} />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const toCopy = shareUrl;
-                      const doFallback = () => {
-                        prompt('Copy this link:', toCopy);
-                      };
-                      if (typeof navigator === 'undefined') {
-                        doFallback();
-                      } else if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(toCopy).then(() => alert('Link copied!')).catch(doFallback);
-                      } else {
-                        doFallback();
-                      }
-                      setShowShareMenu(false);
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      width: '100%',
-                      padding: '12px 14px',
-                      background: 'transparent',
-                      border: 'none',
-                      borderRadius: '10px',
-                      color: 'rgba(220, 230, 255, 0.85)',
-                      fontSize: '13px',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = 'rgba(100, 160, 255, 0.12)';
-                      e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = 'rgba(220, 230, 255, 0.85)';
-                    }}
-                  >
-                    <span style={{ width: '22px', textAlign: 'center', fontSize: '16px' }}>📋</span>
-                    <span>Copy Link</span>
-                  </button>
-                </div>
-              )}
-            </div>
-            {/* Add Goal Button */}
-            <button
-              type="button"
+            <AddGoalButton
               style={{
                 appearance: 'none',
                 border: '1px solid rgba(170,198,255,0.45)',
@@ -2259,17 +2058,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 boxShadow: '0 0 20px rgba(140,190,255,0.12)',
                 transition: 'all 0.25s ease',
               }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.65)';
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(140,190,255,0.20)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(170,198,255,0.45)';
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(140,190,255,0.12)';
-              }}
-            >
-              + Add Goal
-            </button>
+            />
             
             {/* Archive Link */}
             <Link
