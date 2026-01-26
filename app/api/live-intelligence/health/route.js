@@ -57,23 +57,35 @@ async function checkSupabase() {
 export async function GET() {
   const supabase = await checkSupabase();
 
+  const strictAi = process.env.LIVE_INTELLIGENCE_STRICT_AI === '1' || process.env.NODE_ENV === 'production';
+  const allowCuratedFallback =
+    process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK === '1' ||
+    (process.env.NODE_ENV !== 'production' && process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK !== '0');
+
   const ai = {
     gemini: presentEnvBool('GEMINI_API_KEY or GOOGLE_AI_API_KEY', process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY),
     groq: presentEnvBool('GROQ_API_KEY', process.env.GROQ_API_KEY),
     claude: presentEnvBool('ANTHROPIC_API_KEY or CLAUDE_API_KEY', process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY),
   };
 
-  const ready = supabase.ok && ai.gemini.present;
+  const ready = supabase.ok && (!strictAi || (ai.gemini.present && ai.groq.present));
 
   return NextResponse.json({
     ok: true,
     timestamp: new Date().toISOString(),
     supabase,
     ai,
+    strictAi,
+    allowCuratedFallback,
     ready,
     notes: [
       'This endpoint checks configuration presence/connectivity only.',
-      'Live Intelligence will still render using curated fallbacks when providers are missing.',
+      strictAi
+        ? 'Strict AI mode is enabled: missing AI keys will cause processing to fail (no placeholder content).'
+        : 'Non-strict AI mode: pipeline may use conservative fallback blocks if AI keys are missing.',
+      allowCuratedFallback
+        ? 'Curated feed fallback is enabled (primarily for development).'
+        : 'Curated feed fallback is disabled: feed expects live database headlines.',
     ],
   });
 }

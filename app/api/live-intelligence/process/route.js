@@ -17,6 +17,11 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+// In strict mode, the pipeline must use real AI providers (no placeholder output).
+// Default: strict in production; can be enabled in dev via LIVE_INTELLIGENCE_STRICT_AI=1.
+const STRICT_AI = process.env.LIVE_INTELLIGENCE_STRICT_AI === '1' || IS_PROD;
+
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -28,7 +33,10 @@ function getSupabase() {
 async function processWithGroq(item) {
   const groqApiKey = process.env.GROQ_API_KEY;
   if (!groqApiKey) {
-    console.warn('GROQ_API_KEY not set, using fallback classification');
+    if (STRICT_AI) {
+      throw new Error('GROQ_API_KEY not set (strict mode)');
+    }
+    console.warn('GROQ_API_KEY not set, using fallback classification (non-strict)');
     return {
       category: item.category || 'market_update',
       urgency: 'medium',
@@ -107,7 +115,10 @@ Respond in JSON format only:
 async function processWithGemini(item, groqResult) {
   const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
   if (!geminiApiKey) {
-    console.warn('GEMINI_API_KEY not set, using placeholder content');
+    if (STRICT_AI) {
+      throw new Error('GEMINI_API_KEY/GOOGLE_AI_API_KEY not set (strict mode)');
+    }
+    console.warn('GEMINI_API_KEY not set, using fallback content (non-strict)');
     return generateFallbackContent(item, groqResult);
   }
 
@@ -344,6 +355,24 @@ export async function POST(request) {
       );
     }
 
+    if (STRICT_AI) {
+      const missing = [];
+      if (!(process.env.GROQ_API_KEY && String(process.env.GROQ_API_KEY).trim())) missing.push('GROQ_API_KEY');
+      if (!((process.env.GEMINI_API_KEY && String(process.env.GEMINI_API_KEY).trim()) || (process.env.GOOGLE_AI_API_KEY && String(process.env.GOOGLE_AI_API_KEY).trim()))) {
+        missing.push('GEMINI_API_KEY/GOOGLE_AI_API_KEY');
+      }
+      if (missing.length) {
+        return NextResponse.json(
+          {
+            error: 'AI pipeline not configured (strict mode)',
+            missing,
+            hint: 'Set the missing env vars on Vercel/your environment to enable live AI processing.',
+          },
+          { status: 503 }
+        );
+      }
+    }
+
     const { itemId, processAll } = await request.json().catch(() => ({}));
 
     let itemsToProcess = [];
@@ -480,6 +509,25 @@ export async function GET(request) {
         { error: 'Supabase not configured' },
         { status: 503 }
       );
+    }
+
+    if (STRICT_AI) {
+      const missing = [];
+      if (!(process.env.GROQ_API_KEY && String(process.env.GROQ_API_KEY).trim())) missing.push('GROQ_API_KEY');
+      if (!((process.env.GEMINI_API_KEY && String(process.env.GEMINI_API_KEY).trim()) || (process.env.GOOGLE_AI_API_KEY && String(process.env.GOOGLE_AI_API_KEY).trim()))) {
+        missing.push('GEMINI_API_KEY/GOOGLE_AI_API_KEY');
+      }
+      if (missing.length) {
+        return NextResponse.json(
+          {
+            error: 'AI pipeline not configured (strict mode)',
+            missing,
+            hint: 'Set the missing env vars on Vercel/your environment to enable live AI processing.',
+            cron: Boolean(request.headers.get('authorization')),
+          },
+          { status: 503 }
+        );
+      }
     }
 
     // Check if this is a cron request (has authorization header)

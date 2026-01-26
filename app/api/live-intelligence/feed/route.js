@@ -15,6 +15,13 @@ import { CURATED_HEADLINES, getHeadlinesByCategory, normalizeCategoryToSpec } fr
 import { getCurrentMode } from '@/lib/modes';
 import { dedupeHeadlines, enrichHeadline } from '@/lib/live-intelligence/intelligenceScoring';
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+// If enabled, the API may serve curated headlines when live data is unavailable.
+// Default: enabled only in development to avoid shipping non-live content.
+const ALLOW_CURATED_FALLBACK =
+  process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK === '1' ||
+  (!IS_PROD && process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK !== '0');
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -247,15 +254,31 @@ export async function GET(request) {
     
     // Use curated headlines if database unavailable
     if (!supabase) {
-      console.warn('Live Intelligence feed: Database unavailable, using curated content');
-      const curatedHeadlines = getCuratedHeadlines(category, limit);
-      return NextResponse.json({
-        ok: true,
-        headlines: curatedHeadlines,
-        source: 'curated',
-        count: curatedHeadlines.length,
-        mode: modeKey,
-      }, { headers: FEED_CACHE_HEADERS });
+      if (ALLOW_CURATED_FALLBACK) {
+        console.warn('Live Intelligence feed: Database unavailable, using curated content');
+        const curatedHeadlines = getCuratedHeadlines(category, limit);
+        return NextResponse.json({
+          ok: true,
+          headlines: curatedHeadlines,
+          source: 'curated',
+          count: curatedHeadlines.length,
+          mode: modeKey,
+          warning: 'Database not configured; set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY for live headlines.',
+        }, { headers: FEED_CACHE_HEADERS });
+      }
+
+      return NextResponse.json(
+        {
+          ok: false,
+          headlines: [],
+          source: 'unavailable',
+          count: 0,
+          mode: modeKey,
+          error: 'Database not configured for live headlines',
+          hint: 'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (and ensure /api/cron/headlines is running).',
+        },
+        { status: 503, headers: FEED_CACHE_HEADERS }
+      );
     }
     
     // Fetch from headlines table (cron-populated from RSS feeds)
@@ -435,23 +458,43 @@ export async function GET(request) {
       final = final.slice(0, limit);
     }
     
-    // If no headlines available, fallback to curated content
+    // If no headlines available, fallback to curated content (dev only by default)
     if (final.length === 0) {
-      console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
-      const curatedHeadlines = getCuratedHeadlines(category, limit);
+      if (ALLOW_CURATED_FALLBACK) {
+        console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
+        const curatedHeadlines = getCuratedHeadlines(category, limit);
+        return NextResponse.json(
+          {
+            ok: true,
+            headlines: curatedHeadlines,
+            source: 'curated',
+            count: curatedHeadlines.length,
+            mode: modeKey,
+            stats: {
+              total_fetched: combined.length,
+              stale_filtered: staleCount,
+              fresh_remaining: 0,
+              returned: curatedHeadlines.length,
+              warning: 'No fresh headlines in database - showing curated content',
+            },
+          },
+          { headers: FEED_CACHE_HEADERS }
+        );
+      }
+
       return NextResponse.json(
         {
           ok: true,
-          headlines: curatedHeadlines,
-          source: 'curated',
-          count: curatedHeadlines.length,
+          headlines: [],
+          source: 'empty',
+          count: 0,
           mode: modeKey,
           stats: {
             total_fetched: combined.length,
             stale_filtered: staleCount,
             fresh_remaining: 0,
-            returned: curatedHeadlines.length,
-            warning: 'No fresh headlines in database - showing curated content',
+            returned: 0,
+            warning: 'No fresh headlines available (live mode).',
           },
         },
         { headers: FEED_CACHE_HEADERS }
@@ -477,21 +520,35 @@ export async function GET(request) {
     );
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
-    
-    // Use curated headlines on error
+
     const modeKey = getCurrentMode();
-    const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
-    const curated = getCuratedHeadlines('all', hardMax);
+    if (ALLOW_CURATED_FALLBACK) {
+      // Use curated headlines on error
+      const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
+      const curated = getCuratedHeadlines('all', hardMax);
+      return NextResponse.json(
+        {
+          ok: true,
+          headlines: curated,
+          source: 'curated',
+          count: curated.length,
+          mode: modeKey,
+          warning: error.message,
+        },
+        { headers: FEED_CACHE_HEADERS }
+      );
+    }
+
     return NextResponse.json(
       {
-        ok: true,
-        headlines: curated,
-        source: 'curated',
-        count: curated.length,
+        ok: false,
+        headlines: [],
+        source: 'error',
+        count: 0,
         mode: modeKey,
-        warning: error.message,
+        error: error?.message || 'Feed error',
       },
-      { headers: FEED_CACHE_HEADERS }
+      { status: 500, headers: FEED_CACHE_HEADERS }
     );
   }
 }
