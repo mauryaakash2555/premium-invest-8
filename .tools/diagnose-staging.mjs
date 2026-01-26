@@ -1,8 +1,12 @@
 import { chromium } from '@playwright/test';
 
-const url = process.argv[2];
+const args = process.argv.slice(2);
+const url = args.find((a) => !a.startsWith('-'));
+const screenshotIndex = args.findIndex((a) => a === '--screenshot');
+const screenshotPath = screenshotIndex >= 0 ? args[screenshotIndex + 1] : null;
+
 if (!url) {
-  console.error('Usage: node .tools/diagnose-staging.mjs <url>');
+  console.error('Usage: node .tools/diagnose-staging.mjs <url> [--screenshot <path>]');
   process.exit(2);
 }
 
@@ -49,6 +53,15 @@ function isIgnorableConsole(msgType, text) {
     await page.waitForTimeout(5000);
   } catch (e) {
     pageErrors.push(String(e?.stack || e));
+  }
+
+  if (screenshotPath) {
+    try {
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      console.log('screenshot:', screenshotPath);
+    } catch (e) {
+      pageErrors.push(`Screenshot failed: ${String(e?.stack || e)}`);
+    }
   }
 
   console.log('finalUrl:', page.url());
