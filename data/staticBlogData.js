@@ -4900,7 +4900,7 @@ export const staticBlogPost11 = {
 
 // --- BLOG 12: Personal Loans for Short-Term Cashflow (Professionals) ---
 // NOTE: Educational-only. Any partner references are optional and disclosed.
-export const staticBlogPost12 = {
+const staticBlogPost12_legacy = {
   id: "blog-12",
   slug: "personal-loans-short-term-cashflow-professionals",
   title: "Personal Loans for Short-Term Cashflow: A Practical Framework for Professionals",
