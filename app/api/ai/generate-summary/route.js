@@ -2,62 +2,21 @@
  * AI Summary Generation API for Live Intelligence
  *
  * Generates AI-powered market summaries.
- * Primary: Mistral (tiered AI). Fallback: Gemini (if configured). Last fallback: deterministic JSON.
+ * Provider order: Groq → Gemini → deterministic fallback.
  *
  * @file app/api/ai/generate-summary/route.js
  * @created January 13, 2026
  */
 
 import { NextResponse } from 'next/server';
-
-import { mistralChat } from '@/lib/ai/tiered';
+import { getAIEnvSafe } from '@/config/env';
+import { getAIResponse } from '@/lib/ai/provider';
 
 // Cache for generated summaries (to avoid repeated calls)
 const summaryCache = new Map();
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 export const dynamic = 'force-dynamic';
-
-function getGeminiApiKey() {
-  const k = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
-  return k && String(k).trim() ? String(k).trim() : null;
-}
-
-async function geminiGenerateText({ apiKey, systemPrompt, userPrompt, maxOutputTokens = 1200 }) {
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
-  const url =
-    'https://generativelanguage.googleapis.com/v1beta/models/' +
-    encodeURIComponent(model) +
-    ':generateContent?key=' +
-    encodeURIComponent(apiKey);
-
-  const body = {
-    systemInstruction: systemPrompt
-      ? { role: 'system', parts: [{ text: String(systemPrompt) }] }
-      : undefined,
-    contents: [{ role: 'user', parts: [{ text: String(userPrompt || '') }] }],
-    generationConfig: {
-      temperature: 0.6,
-      maxOutputTokens: Number(maxOutputTokens) || 1200,
-    },
-  };
-
-  const r = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-
-  if (!r.ok) {
-    const t = await r.text().catch(() => '');
-    throw new Error(`Gemini error: ${r.status} ${t}`);
-  }
-
-  const json = await r.json();
-  const text =
-    json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join('') || '';
-  return String(text || '').trim();
-}
 
 function extractJsonObject(text) {
   const jsonMatch = String(text || '').match(/\{[\s\S]*\}/);
@@ -73,8 +32,10 @@ function extractJsonObject(text) {
  * POST - Generate AI summary
  */
 export async function POST(request) {
+  let payload;
   try {
-    const { type, prompt, context, systemPrompt } = await request.json();
+    payload = await request.json();
+    const { type, prompt, context, systemPrompt } = payload || {};
 
     if (!type || !prompt) {
       return NextResponse.json(
@@ -101,31 +62,26 @@ export async function POST(request) {
       }
     }
 
-    // Tier 2 — Shared Intelligence: Mistral (cache first, then generate)
     const fullPrompt = `${prompt}\n\nContext:\n${contextString}`;
-    const res = await mistralChat({
-      system: systemPrompt,
-      prompt: fullPrompt,
-      temperature: 0.7,
-      maxTokens: 1100,
+
+    const env = getAIEnvSafe();
+    const ai = await getAIResponse({
+      message: fullPrompt,
+      conversationHistory: [],
+      system: String(systemPrompt || ''),
+      context: null,
+      userType: 'public',
+      keys: {
+        GROQ_API_KEY: env?.GROQ_API_KEY,
+        GEMINI_API_KEY: env?.GEMINI_API_KEY,
+        ANTHROPIC_API_KEY: env?.ANTHROPIC_API_KEY,
+      },
+      groq: { maxTokens: 900, temperature: 0.6 },
+      gemini: { maxTokens: 1200, temperature: 0.6 },
     });
 
-    let provider = null;
-    let rawText = res?.text ? String(res.text) : '';
-    if (rawText) provider = 'mistral';
-
-    // Fallback to Gemini if Mistral isn't configured/available.
-    if (!rawText) {
-      const geminiKey = getGeminiApiKey();
-      if (geminiKey) {
-        try {
-          rawText = await geminiGenerateText({ apiKey: geminiKey, systemPrompt, userPrompt: fullPrompt });
-          if (rawText) provider = 'gemini';
-        } catch (e) {
-          console.error('[api/ai/generate-summary] Gemini fallback failed:', e);
-        }
-      }
-    }
+    const provider = ai?.provider || null;
+    const rawText = ai?.reply ? String(ai.reply) : '';
 
     const result = extractJsonObject(rawText);
     if (!result) {
@@ -147,7 +103,7 @@ export async function POST(request) {
     console.error('AI summary generation failed:', error);
 
     // Return fallback based on type
-    const type = (await request.json().catch(() => ({})))?.type || 'morning';
+    const type = payload?.type || 'morning';
     return NextResponse.json(getFallback(type), {
       headers: { 'x-ai-provider': 'fallback' },
     });
