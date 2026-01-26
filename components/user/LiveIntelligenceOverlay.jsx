@@ -49,6 +49,10 @@ import AnimatedNumber from '@/components/animations/AnimatedNumber';
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
 
+const tvInterval = 'D';
+const tvIsSwitching = false;
+const handleTvIntervalChange = () => {};
+
 /**
  * VoiceControl - Button to read headlines aloud
  */
