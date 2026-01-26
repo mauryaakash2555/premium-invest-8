@@ -28,6 +28,13 @@ function isIgnorableConsole(msgType, text) {
   page.on('pageerror', (err) => {
     pageErrors.push(String(err?.stack || err));
   });
+  page.on('crash', () => {
+    pageErrors.push('Page crashed (Playwright page crash event)');
+  });
+  page.on('close', () => {
+    // Not always an error, but useful when diagnosing sudden client-side exceptions.
+    pageErrors.push('Page closed (Playwright page close event)');
+  });
   page.on('requestfailed', (req) => {
     const failure = req.failure();
     const status = failure?.errorText || 'requestfailed';
@@ -38,7 +45,11 @@ function isIgnorableConsole(msgType, text) {
   console.log('goto:', resp?.status(), resp?.url());
 
   // Give client-side hydration errors time to surface.
-  await page.waitForTimeout(5000);
+  try {
+    await page.waitForTimeout(5000);
+  } catch (e) {
+    pageErrors.push(String(e?.stack || e));
+  }
 
   console.log('finalUrl:', page.url());
 

@@ -143,6 +143,28 @@ function calculatePriority(headline) {
 }
 
 /**
+ * Filter out headlines that are not currently valid (scheduled/expired)
+ * - valid_from in the future => excluded
+ * - valid_until in the past  => excluded
+ */
+function filterByValidityWindow(headlines) {
+  const now = new Date();
+  return headlines.filter((h) => {
+    if (h.valid_from) {
+      const startDate = new Date(h.valid_from);
+      if (startDate > now) return false;
+    }
+
+    if (h.valid_until) {
+      const expiryDate = new Date(h.valid_until);
+      if (expiryDate <= now) return false;
+    }
+
+    return true;
+  });
+}
+
+/**
  * Filter out expired headlines
  * A headline is expired if:
  * 1. valid_until is set and in the past
@@ -166,13 +188,46 @@ function filterExpired(headlines) {
     }
     
     // Check freshness - headlines older than 24 hours are stale
-    if (h.created_at) {
-      const createdAt = new Date(h.created_at);
+    const freshnessValue = h.created_at || h.timestamp;
+    if (freshnessValue) {
+      const createdAt = new Date(freshnessValue);
       if (createdAt < oneDayAgo) return false;
     }
     
     return true;
   });
+}
+
+function buildRotation(items, { limit, modeKey }) {
+  // Step 2: Sort by priority
+  const sorted = items.sort((a, b) => calculatePriority(b) - calculatePriority(a));
+
+  // Pin-to-top override (admin pinned items first)
+  const pinned = sorted.filter((h) => h?.pinned);
+  const rest = sorted.filter((h) => !h?.pinned);
+
+  // Step 2.5: Ensure category variety when available
+  const seeded = ensureAtLeastOnePerCategory(rest);
+
+  // Step 3: Enforce category balance
+  const balanced = enforceCategoryBalance(seeded);
+
+  // Step 4: Apply limit
+  let final = [...pinned, ...balanced].slice(0, limit);
+
+  // Step 4.5: Intelligent enrichment + lightweight noise suppression + dedupe
+  const minQuality = modeKey === 'night' || modeKey === 'global' ? 60 : 65;
+  final = dedupeHeadlines(
+    final
+      .map((h) => enrichHeadline(h))
+      .filter((h) => {
+        if (h?.pinned) return true;
+        if (isBreakingSpec(h)) return true;
+        return (h?.qualityScore ?? 0) >= minQuality;
+      })
+  ).slice(0, limit);
+
+  return final;
 }
 
 /**
@@ -404,49 +459,24 @@ export async function GET(request) {
         url: item.url || item.source_url || null,
       })),
     ];
-    
-    // Step 1: Filter expired headlines (includes 24hr freshness check)
-    const notExpired = filterExpired(combined);
-    const staleCount = combined.length - notExpired.length;
-    
+
+    // Step 1: Apply validity window (scheduled/expired)
+    const withinWindow = filterByValidityWindow(combined);
+
+    // Step 1.5: Filter stale headlines (includes 24hr freshness check)
+    const fresh = filterExpired(withinWindow);
+    const staleCount = withinWindow.length - fresh.length;
+
     // If ALL headlines are stale (older than 24h), show a warning
-    if (notExpired.length === 0 && combined.length > 0) {
+    if (fresh.length === 0 && withinWindow.length > 0) {
       console.warn('[Live Intelligence] All headlines are stale (older than 24h). Database needs fresh content.');
     }
-    
-    // Step 2: Sort by priority
-    const sorted = notExpired.sort((a, b) => calculatePriority(b) - calculatePriority(a));
 
-    // Pin-to-top override (admin pinned items first)
-    const pinned = sorted.filter((h) => h?.pinned);
-    const rest = sorted.filter((h) => !h?.pinned);
-
-    // Step 2.5: Ensure category variety when available
-    const seeded = ensureAtLeastOnePerCategory(rest);
-    
-    // Step 3: Enforce category balance
-    const balanced = enforceCategoryBalance(seeded);
-    
-    // Step 4: Apply limit
-    let final = [...pinned, ...balanced].slice(0, limit);
-
-    // Step 4.5: Intelligent enrichment + lightweight noise suppression + dedupe
-    // - adds: qualityScore, trustScore/trustLabel, opportunityScore, riskLevel, actionable
-    // - filters: low-quality unless pinned/breaking
-    // - dedupes: near-duplicate titles
-    const minQuality = modeKey === 'night' || modeKey === 'global' ? 60 : 65;
-    final = dedupeHeadlines(
-      final
-        .map((h) => enrichHeadline(h))
-        .filter((h) => {
-          if (h?.pinned) return true;
-          if (isBreakingSpec(h)) return true;
-          return (h?.qualityScore ?? 0) >= minQuality;
-        })
-    ).slice(0, limit);
+    let final = buildRotation(fresh, { limit, modeKey });
 
     // Spec: Minimum headlines in rotation = 5 (when possible)
-    if (final.length > 0 && final.length < minRequired) {
+    // IMPORTANT: do not mix curated in strict/live mode
+    if (ALLOW_CURATED_FALLBACK && final.length > 0 && final.length < minRequired) {
       const fallbackPool = getCuratedHeadlines(category, limit);
       const existingIds = new Set(final.map((h) => h.id));
       for (const h of fallbackPool) {
@@ -458,7 +488,9 @@ export async function GET(request) {
       final = final.slice(0, limit);
     }
     
-    // If no headlines available, fallback to curated content (dev only by default)
+    // If no headlines available, fallback behavior:
+    // - dev: curated fallback (when allowed)
+    // - prod strict/live: return latest available DB items even if stale (still real data)
     if (final.length === 0) {
       if (ALLOW_CURATED_FALLBACK) {
         console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
@@ -471,11 +503,38 @@ export async function GET(request) {
             count: curatedHeadlines.length,
             mode: modeKey,
             stats: {
-              total_fetched: combined.length,
+              total_fetched: withinWindow.length,
               stale_filtered: staleCount,
               fresh_remaining: 0,
               returned: curatedHeadlines.length,
               warning: 'No fresh headlines in database - showing curated content',
+            },
+          },
+          { headers: FEED_CACHE_HEADERS }
+        );
+      }
+
+      if (withinWindow.length > 0) {
+        // Serve latest available DB items (even if older than freshness window).
+        // This keeps the site functional without inventing data.
+        let staleFinal = buildRotation(withinWindow, { limit, modeKey });
+        if (staleFinal.length === 0) {
+          staleFinal = dedupeHeadlines(withinWindow.map((h) => enrichHeadline(h))).slice(0, limit);
+        }
+
+        return NextResponse.json(
+          {
+            ok: true,
+            headlines: staleFinal,
+            source: 'database_stale',
+            count: staleFinal.length,
+            mode: modeKey,
+            stats: {
+              total_fetched: withinWindow.length,
+              stale_filtered: staleCount,
+              fresh_remaining: 0,
+              returned: staleFinal.length,
+              warning: 'No fresh headlines in last 24h; showing latest available database items.',
             },
           },
           { headers: FEED_CACHE_HEADERS }
@@ -490,7 +549,7 @@ export async function GET(request) {
           count: 0,
           mode: modeKey,
           stats: {
-            total_fetched: combined.length,
+            total_fetched: withinWindow.length,
             stale_filtered: staleCount,
             fresh_remaining: 0,
             returned: 0,
@@ -509,9 +568,9 @@ export async function GET(request) {
         count: final.length,
         mode: modeKey,
         stats: {
-          total_fetched: combined.length,
+          total_fetched: withinWindow.length,
           stale_filtered: staleCount,
-          fresh_remaining: notExpired.length,
+          fresh_remaining: fresh.length,
           returned: final.length,
           warning: staleCount > 0 ? `${staleCount} headlines filtered (expired or older than 24h)` : null,
         },
