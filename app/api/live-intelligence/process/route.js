@@ -518,12 +518,14 @@ export async function GET(request) {
         missing.push('GEMINI_API_KEY/GOOGLE_AI_API_KEY');
       }
       if (missing.length) {
+        const authHeader = request.headers.get('authorization');
+        const isVercelCron = request.headers.get('x-vercel-cron') === '1';
         return NextResponse.json(
           {
             error: 'AI pipeline not configured (strict mode)',
             missing,
             hint: 'Set the missing env vars on Vercel/your environment to enable live AI processing.',
-            cron: Boolean(request.headers.get('authorization')),
+            cron: Boolean(authHeader) || isVercelCron,
           },
           { status: 503 }
         );
@@ -533,9 +535,11 @@ export async function GET(request) {
     // Check if this is a cron request (has authorization header)
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+    const isAuthorizedCron = (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) || isVercelCron;
     
     // If cron request, trigger processing
-    if (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+    if (isAuthorizedCron) {
       // Process all pending items (same as POST with processAll)
       const { data: itemsToProcess } = await supabase
         .from('intelligence_items')

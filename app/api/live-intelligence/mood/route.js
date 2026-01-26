@@ -243,9 +243,11 @@ export async function GET(request) {
     // Check if this is a cron request
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+    const isAuthorizedCron = (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) || isVercelCron;
     
     // If cron request, always generate fresh mood
-    if (authHeader && cronSecret && authHeader === `Bearer ${cronSecret}`) {
+    if (isAuthorizedCron) {
       const marketData = await getMarketContext();
       const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
 

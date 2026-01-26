@@ -178,10 +178,11 @@ export async function GET(request) {
     // Optional: restrict to cron/internal calls
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
     
     // In production, verify the cron secret
     if (process.env.NODE_ENV === 'production' && cronSecret) {
-      if (authHeader !== `Bearer ${cronSecret}`) {
+      if (!isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
     }
