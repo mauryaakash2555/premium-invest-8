@@ -82,6 +82,23 @@ export default function MarketMoodIndicator() {
     []
   );
 
+  // Spark polyline points - MUST be called before any early returns (Rules of Hooks)
+  const spark = useMemo(() => {
+    const pts = Array.isArray(history) ? history : [];
+    const n = pts.length;
+    if (n === 0) return '';
+    const w = 120;
+    const h = 24;
+    const pad = 2;
+    return pts
+      .map((v, i) => {
+        const x = n === 1 ? w / 2 : (i / (n - 1)) * w;
+        const y = pad + (1 - Math.max(0, Math.min(1, v))) * (h - pad * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      })
+      .join(' ');
+  }, [history]);
+
   useEffect(() => {
     fetchMarketMood();
     // Lightweight refresh so time + sparkline stays meaningful
@@ -176,22 +193,6 @@ export default function MarketMoodIndicator() {
   const moodConfig = MOOD_LEVELS[mood.level] || MOOD_LEVELS.neutral;
   const score = scoreForLevel[mood.level] ?? 0.5;
   const needlePct = Math.max(0, Math.min(100, Math.round(score * 100)));
-
-  const spark = useMemo(() => {
-    const pts = Array.isArray(history) ? history : [];
-    const n = pts.length;
-    if (n === 0) return '';
-    const w = 120;
-    const h = 24;
-    const pad = 2;
-    return pts
-      .map((v, i) => {
-        const x = n === 1 ? w / 2 : (i / (n - 1)) * w;
-        const y = pad + (1 - Math.max(0, Math.min(1, v))) * (h - pad * 2);
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      })
-      .join(' ');
-  }, [history]);
 
   return (
     <div 
