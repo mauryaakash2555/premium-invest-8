@@ -51,10 +51,6 @@ import { AddGoalButton } from '@/components/GoalModal';
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
 
-const tvInterval = 'D';
-const tvIsSwitching = false;
-const handleTvIntervalChange = () => {};
-
 /**
  * VoiceControl - Button to read headlines aloud
  */
@@ -248,6 +244,7 @@ export default function LiveIntelligenceOverlay({
 
   // TradingView chart interval UX (keep minimal + isolated)
   const [tvInterval, setTvInterval] = useState('D');
+  const [tvSymbol, setTvSymbol] = useState('TVC:NIFTY');
   const [tvIsSwitching, setTvIsSwitching] = useState(false);
   const tvSwitchTimersRef = useRef([]);
 
@@ -275,6 +272,22 @@ export default function LiveIntelligenceOverlay({
       setTimeout(() => setTvIsSwitching(false), 520)
     );
   }, [tvInterval]);
+
+  const handleTvSymbolChange = useCallback((nextSymbol) => {
+    if (!nextSymbol || nextSymbol === tvSymbol) return;
+    try {
+      tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+    } catch {}
+    tvSwitchTimersRef.current = [];
+
+    setTvIsSwitching(true);
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvSymbol(nextSymbol), 120)
+    );
+    tvSwitchTimersRef.current.push(
+      setTimeout(() => setTvIsSwitching(false), 520)
+    );
+  }, [tvSymbol]);
 
   // Mount check for portal
   useEffect(() => {
@@ -2493,6 +2506,26 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     </button>
                   ))}
                 </div>
+
+                <div className="li-symbol-toggle" aria-label="Chart symbol">
+                  {[ 
+                    { key: 'TVC:NIFTY', label: 'NIFTY' },
+                    { key: 'NSE:BANKNIFTY', label: 'BANKNIFTY' },
+                    { key: 'BSE:SENSEX', label: 'SENSEX' },
+                  ].map((s) => (
+                    <button
+                      key={s.key}
+                      type="button"
+                      className={`li-symbol-btn ${tvSymbol === s.key ? 'active' : ''}`}
+                      onClick={() => handleTvSymbolChange(s.key)}
+                      disabled={tvIsSwitching}
+                      aria-pressed={tvSymbol === s.key}
+                      title={`Load ${s.label}`}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
                 <div style={{ color: 'rgba(180, 200, 230, 0.55)', fontSize: '11px' }}>
                   Real-time data • Powered by TradingView
                 </div>
@@ -2503,8 +2536,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <div className="li-tv-frame-switch" data-switching={tvIsSwitching ? '1' : '0'} style={{ height: '500px', width: '100%', background: '#000000' }}>
                 {/* TradingView Advanced Chart - Direct iframe for reliability */}
                 <iframe
-                  key={tvInterval}
-                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=NSE%3ANIFTY&interval=${tvInterval}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
+                  key={`${tvSymbol}:${tvInterval}`}
+                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=${encodeURIComponent(tvSymbol)}&interval=${tvInterval}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
                   style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
                   frameBorder="0"
                   allowtransparency="true"

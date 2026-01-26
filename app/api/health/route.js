@@ -127,6 +127,7 @@ export async function GET(req) {
     gemini: aiEnv?.GEMINI_API_KEY ? ok("gemini", { configured: true }) : bad("gemini", "missing_key", { configured: false }),
     anthropic: aiEnv?.ANTHROPIC_API_KEY ? ok("anthropic", { configured: true }) : bad("anthropic", "missing_key", { configured: false }),
     groq: aiEnv?.GROQ_API_KEY ? ok("groq", { configured: true }) : bad("groq", "missing_key", { configured: false }),
+    mistral: process.env.MISTRAL_API_KEY ? ok("mistral", { configured: true }) : bad("mistral", "missing_key", { configured: false }),
   };
 
   if (deep && aiEnv?.GEMINI_API_KEY) {

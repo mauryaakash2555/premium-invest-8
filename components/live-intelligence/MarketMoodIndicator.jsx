@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useAnimation } from '@/hooks/useAnimation';
+import { LiveBadge } from '@/components/LiveBadge';
 
 // Market mood levels with colors (laser blue theme - NO gold/tan/orange)
 const MOOD_LEVELS = {
@@ -107,7 +108,7 @@ export default function MarketMoodIndicator() {
       if (refreshTimerRef.current) window.clearInterval(refreshTimerRef.current);
       refreshTimerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   const fetchMarketMood = async () => {
@@ -241,14 +242,20 @@ export default function MarketMoodIndicator() {
             </div>
           </div>
         </div>
-        
-        <div style={{
-          fontSize: '18px',
-          color: 'rgba(180, 195, 220, 0.4)',
-          transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.2s ease',
-        }}>
-          ▼
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+          <LiveBadge lastUpdate={mood.lastUpdated || new Date().toISOString()} />
+          <div
+            style={{
+              fontSize: '18px',
+              color: 'rgba(180, 195, 220, 0.4)',
+              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease',
+              lineHeight: 1,
+            }}
+          >
+            ▼
+          </div>
         </div>
       </div>
 

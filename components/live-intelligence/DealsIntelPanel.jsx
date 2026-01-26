@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import PanelSkeleton from './PanelSkeleton';
+import { LiveBadge } from '@/components/LiveBadge';
 
 function safeJsonParse(value, fallback) {
   try {
@@ -30,7 +31,7 @@ function formatQty(qty) {
 }
 
 export default function DealsIntelPanel() {
-  const [state, setState] = useState({ loading: true, payload: null });
+  const [state, setState] = useState({ loading: true, payload: null, lastUpdatedAt: null });
   const [portfolioTickers, setPortfolioTickers] = useState([]);
   const [onlyMine, setOnlyMine] = useState(false);
 
@@ -66,10 +67,10 @@ export default function DealsIntelPanel() {
         const res = await fetch('/api/live-intelligence/deals-intel', { cache: 'no-store' });
         const json = await res.json();
         if (cancelled) return;
-        setState({ loading: false, payload: json });
+        setState({ loading: false, payload: json, lastUpdatedAt: Date.now() });
       } catch (e) {
         if (cancelled) return;
-        setState({ loading: false, payload: { bulk: { deals: [] }, block: { deals: [] }, error: String(e?.message || e) } });
+        setState({ loading: false, payload: { bulk: { deals: [] }, block: { deals: [] }, error: String(e?.message || e) }, lastUpdatedAt: Date.now() });
       }
     }
 
@@ -161,9 +162,7 @@ export default function DealsIntelPanel() {
             </button>
           ) : null}
 
-          <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-            {state.loading ? 'Updating…' : 'Live'}
-          </div>
+          <LiveBadge lastUpdate={state.lastUpdatedAt || new Date().toISOString()} />
         </div>
       </div>
 

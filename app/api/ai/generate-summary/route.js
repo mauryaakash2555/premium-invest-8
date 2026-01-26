@@ -1,9 +1,9 @@
 /**
  * AI Summary Generation API for Live Intelligence
- * 
- * Generates AI-powered market summaries using OpenAI.
- * Used for morning briefings and night summaries.
- * 
+ *
+ * Generates AI-powered market summaries.
+ * Primary: Mistral (tiered AI). Fallback: Gemini (if configured). Last fallback: deterministic JSON.
+ *
  * @file app/api/ai/generate-summary/route.js
  * @created January 13, 2026
  */
@@ -17,6 +17,57 @@ const summaryCache = new Map();
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 export const dynamic = 'force-dynamic';
+
+function getGeminiApiKey() {
+  const k = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
+  return k && String(k).trim() ? String(k).trim() : null;
+}
+
+async function geminiGenerateText({ apiKey, systemPrompt, userPrompt, maxOutputTokens = 1200 }) {
+  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const url =
+    'https://generativelanguage.googleapis.com/v1beta/models/' +
+    encodeURIComponent(model) +
+    ':generateContent?key=' +
+    encodeURIComponent(apiKey);
+
+  const body = {
+    systemInstruction: systemPrompt
+      ? { role: 'system', parts: [{ text: String(systemPrompt) }] }
+      : undefined,
+    contents: [{ role: 'user', parts: [{ text: String(userPrompt || '') }] }],
+    generationConfig: {
+      temperature: 0.6,
+      maxOutputTokens: Number(maxOutputTokens) || 1200,
+    },
+  };
+
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!r.ok) {
+    const t = await r.text().catch(() => '');
+    throw new Error(`Gemini error: ${r.status} ${t}`);
+  }
+
+  const json = await r.json();
+  const text =
+    json?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join('') || '';
+  return String(text || '').trim();
+}
+
+function extractJsonObject(text) {
+  const jsonMatch = String(text || '').match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return null;
+  try {
+    return JSON.parse(jsonMatch[0]);
+  } catch {
+    return null;
+  }
+}
 
 /**
  * POST - Generate AI summary
@@ -59,15 +110,29 @@ export async function POST(request) {
       maxTokens: 1100,
     });
 
-    if (!res?.text) {
-      return NextResponse.json(getFallback(type));
+    let provider = null;
+    let rawText = res?.text ? String(res.text) : '';
+    if (rawText) provider = 'mistral';
+
+    // Fallback to Gemini if Mistral isn't configured/available.
+    if (!rawText) {
+      const geminiKey = getGeminiApiKey();
+      if (geminiKey) {
+        try {
+          rawText = await geminiGenerateText({ apiKey: geminiKey, systemPrompt, userPrompt: fullPrompt });
+          if (rawText) provider = 'gemini';
+        } catch (e) {
+          console.error('[api/ai/generate-summary] Gemini fallback failed:', e);
+        }
+      }
     }
 
-    // Extract JSON from response (robust to minor formatting)
-    const jsonMatch = String(res.text).match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return NextResponse.json(getFallback(type));
-
-    const result = JSON.parse(jsonMatch[0]);
+    const result = extractJsonObject(rawText);
+    if (!result) {
+      return NextResponse.json(getFallback(type), {
+        headers: { 'x-ai-provider': provider || 'fallback' },
+      });
+    }
 
     // Cache result
     summaryCache.set(cacheKey, {
@@ -75,13 +140,17 @@ export async function POST(request) {
       timestamp: Date.now(),
     });
 
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+      headers: { 'x-ai-provider': provider || 'unknown' },
+    });
   } catch (error) {
     console.error('AI summary generation failed:', error);
 
     // Return fallback based on type
     const type = (await request.json().catch(() => ({})))?.type || 'morning';
-    return NextResponse.json(getFallback(type));
+    return NextResponse.json(getFallback(type), {
+      headers: { 'x-ai-provider': 'fallback' },
+    });
   }
 }
 

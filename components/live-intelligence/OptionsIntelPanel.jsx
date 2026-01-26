@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import PanelSkeleton from './PanelSkeleton';
+import { LiveBadge } from '@/components/LiveBadge';
 
 function formatNumberCompact(value) {
   const n = Number(value);
@@ -20,7 +21,7 @@ function badgeTone(pcr) {
 }
 
 export default function OptionsIntelPanel() {
-  const [state, setState] = useState({ loading: true, payload: null });
+  const [state, setState] = useState({ loading: true, payload: null, lastUpdatedAt: null });
 
   useEffect(() => {
     let cancelled = false;
@@ -30,10 +31,10 @@ export default function OptionsIntelPanel() {
         const res = await fetch('/api/live-intelligence/options-intel', { cache: 'no-store' });
         const json = await res.json();
         if (cancelled) return;
-        setState({ loading: false, payload: json });
+        setState({ loading: false, payload: json, lastUpdatedAt: Date.now() });
       } catch (e) {
         if (cancelled) return;
-        setState({ loading: false, payload: { error: String(e?.message || e) } });
+        setState({ loading: false, payload: { error: String(e?.message || e) }, lastUpdatedAt: Date.now() });
       }
     }
 
@@ -84,8 +85,8 @@ export default function OptionsIntelPanel() {
             PCR + Open Interest snapshot
           </div>
         </div>
-        <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-          {state.loading ? 'Updating…' : 'Live'}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <LiveBadge lastUpdate={state.lastUpdatedAt || new Date().toISOString()} />
         </div>
       </div>
 

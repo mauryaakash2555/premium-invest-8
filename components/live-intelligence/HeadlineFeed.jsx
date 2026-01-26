@@ -45,6 +45,7 @@ export default function HeadlineFeed() {
   const visibleSinceRef = useRef(0);
   const visibleHeadlineRef = useRef(null);
   const visibleIntervalRef = useRef(8000);
+  const resumeTimerRef = useRef(null);
 
   const getRotationCap = useCallback(() => {
     const m = getCurrentMode();
@@ -230,8 +231,25 @@ export default function HeadlineFeed() {
     setActiveIndex(index);
     setIsPaused(true);
     // Resume after 15 seconds of inactivity
-    setTimeout(() => setIsPaused(false), 15000);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => setIsPaused(false), 15000);
   }, []);
+
+  const handlePrevHeadline = useCallback(() => {
+    if (!headlines || headlines.length === 0) return;
+    setIsPaused(true);
+    setActiveIndex((prev) => (prev - 1 + headlines.length) % headlines.length);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => setIsPaused(false), 15000);
+  }, [headlines]);
+
+  const handleNextHeadline = useCallback(() => {
+    if (!headlines || headlines.length === 0) return;
+    setIsPaused(true);
+    setActiveIndex((prev) => (prev + 1) % headlines.length);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => setIsPaused(false), 15000);
+  }, [headlines]);
 
   if (headlines.length === 0) {
     return (
@@ -304,9 +322,29 @@ export default function HeadlineFeed() {
               aria-label={`Headline ${i + 1}`}
             />
           ))}
-          <span className="li-headline-count">
-            {activeIndex + 1} / {headlines.length}
-          </span>
+          <div className="li-headline-count" aria-label="Headline pagination">
+            <button
+              type="button"
+              className="li-page-btn"
+              onClick={handlePrevHeadline}
+              aria-label="Previous headline"
+              title="Previous"
+            >
+              Prev
+            </button>
+            <span className="li-page-text">
+              Showing {activeIndex + 1} of {headlines.length}
+            </span>
+            <button
+              type="button"
+              className="li-page-btn"
+              onClick={handleNextHeadline}
+              aria-label="Next headline"
+              title="Next"
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         {/* Headlines Grid */}
@@ -390,9 +428,36 @@ export default function HeadlineFeed() {
 
         .li-headline-count {
           margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: 10px;
           font-size: 12px;
-          color: rgba(180, 195, 230, 0.5);
+          color: rgba(180, 195, 230, 0.55);
           font-variant-numeric: tabular-nums;
+        }
+
+        .li-page-text {
+          color: rgba(180, 195, 230, 0.55);
+          white-space: nowrap;
+        }
+
+        .li-page-btn {
+          appearance: none;
+          border: 1px solid rgba(170, 198, 255, 0.18);
+          background: rgba(170, 198, 255, 0.06);
+          color: rgba(200, 215, 240, 0.80);
+          padding: 6px 10px;
+          border-radius: 10px;
+          font-size: 11px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .li-page-btn:hover {
+          background: rgba(170, 198, 255, 0.10);
+          border-color: rgba(170, 198, 255, 0.28);
+          color: rgba(220, 235, 255, 0.90);
         }
 
         .li-headline-grid {

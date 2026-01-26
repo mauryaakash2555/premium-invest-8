@@ -66,6 +66,7 @@ export async function GET() {
     gemini: presentEnvBool('GEMINI_API_KEY or GOOGLE_AI_API_KEY', process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY),
     groq: presentEnvBool('GROQ_API_KEY', process.env.GROQ_API_KEY),
     claude: presentEnvBool('ANTHROPIC_API_KEY or CLAUDE_API_KEY', process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY),
+    mistral: presentEnvBool('MISTRAL_API_KEY', process.env.MISTRAL_API_KEY),
   };
 
   const ready = supabase.ok && (!strictAi || (ai.gemini.present && ai.groq.present));

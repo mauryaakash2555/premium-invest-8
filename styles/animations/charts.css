@@ -198,6 +198,51 @@
   cursor: not-allowed;
 }
 
+/* Symbol toggle (overlay chart header) */
+.li-symbol-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(10, 10, 12, 0.55);
+  border: 1px solid rgba(170, 198, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.li-symbol-btn {
+  position: relative;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(170, 198, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(200, 215, 240, 0.78);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 160ms ease, background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.li-symbol-btn:hover {
+  transform: translate3d(0, -1px, 0);
+  border-color: rgba(170, 198, 255, 0.26);
+  background: rgba(100, 160, 255, 0.08);
+}
+
+.li-symbol-btn.active {
+  background: linear-gradient(135deg, rgba(100, 160, 255, 0.20), rgba(120, 220, 255, 0.10));
+  border-color: rgba(120, 220, 255, 0.32);
+  color: rgba(235, 245, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(100, 160, 255, 0.10);
+}
+
+.li-symbol-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Frame crossfade when switching timeframe */
 .li-tv-frame-switch {
   transition: opacity 220ms ease, transform 220ms ease;

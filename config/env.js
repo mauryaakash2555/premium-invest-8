@@ -49,18 +49,38 @@ const supabaseSchema = z.object({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
 });
 
-const aiSchema = z.object({
-  GEMINI_API_KEY: z.string().min(1),
-  ANTHROPIC_API_KEY: z.string().min(1),
-  GROQ_API_KEY: z.string().min(1).optional(),
-});
+const aiSchema = z
+  .object({
+    // Preferred names
+    GEMINI_API_KEY: z.string().min(1).optional(),
+    ANTHROPIC_API_KEY: z.string().min(1).optional(),
+
+    // Aliases used in some deployments
+    GOOGLE_AI_API_KEY: z.string().min(1).optional(),
+    CLAUDE_API_KEY: z.string().min(1).optional(),
+
+    // Optional providers
+    GROQ_API_KEY: z.string().min(1).optional(),
+  })
+  .refine((v) => Boolean(v.GEMINI_API_KEY || v.GOOGLE_AI_API_KEY), "Set GEMINI_API_KEY or GOOGLE_AI_API_KEY")
+  .refine((v) => Boolean(v.ANTHROPIC_API_KEY || v.CLAUDE_API_KEY), "Set ANTHROPIC_API_KEY or CLAUDE_API_KEY");
 
 // Safe (partial) parsing: allow enabling only one provider in some environments.
 const aiSafeSchema = z.object({
   GEMINI_API_KEY: z.string().min(1).optional(),
   ANTHROPIC_API_KEY: z.string().min(1).optional(),
+  GOOGLE_AI_API_KEY: z.string().min(1).optional(),
+  CLAUDE_API_KEY: z.string().min(1).optional(),
   GROQ_API_KEY: z.string().min(1).optional(),
 });
+
+function normalizeAIEnv(v) {
+  return {
+    GEMINI_API_KEY: v?.GEMINI_API_KEY || v?.GOOGLE_AI_API_KEY || undefined,
+    ANTHROPIC_API_KEY: v?.ANTHROPIC_API_KEY || v?.CLAUDE_API_KEY || undefined,
+    GROQ_API_KEY: v?.GROQ_API_KEY || undefined,
+  };
+}
 
 function hasRedacted(obj) {
   try {
@@ -108,14 +128,15 @@ export function getAIEnv() {
     const msg = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
     throw new Error(`Missing/invalid environment variables: ${msg}`);
   }
-  return parsed.data;
+  return normalizeAIEnv(parsed.data);
 }
 
 export function getAIEnvSafe() {
   const parsed = aiSafeSchema.safeParse(process.env);
   if (!parsed.success) return null;
   if (hasRedacted(parsed.data)) return null;
-  if (!parsed.data.GEMINI_API_KEY && !parsed.data.ANTHROPIC_API_KEY && !parsed.data.GROQ_API_KEY) return null;
-  return parsed.data;
+  const normalized = normalizeAIEnv(parsed.data);
+  if (!normalized.GEMINI_API_KEY && !normalized.ANTHROPIC_API_KEY && !normalized.GROQ_API_KEY) return null;
+  return normalized;
 }
 

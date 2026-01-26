@@ -12,6 +12,10 @@ function pad2(n) {
   return String(n).padStart(2, '0');
 }
 
+function dayShort(d) {
+  return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d] || '';
+}
+
 function getMarketPhase(istTime) {
   const day = istTime.getDay(); // 0 Sun
   const isWeekday = day >= 1 && day <= 5;
@@ -123,6 +127,12 @@ export default function MarketClockStatusBadge() {
     const boundary = nextMarketBoundary(ist);
     const ms = boundary.target.getTime() - ist.getTime();
 
+    const boundaryDay = boundary?.target ? dayShort(boundary.target.getDay()) : '';
+    const boundaryTime = boundary?.target
+      ? `${pad2(boundary.target.getHours())}:${pad2(boundary.target.getMinutes())}`
+      : '';
+    const boundaryExact = boundaryDay && boundaryTime ? `${boundaryDay} ${boundaryTime} IST` : '';
+
     const timeStr = `${pad2(ist.getHours())}:${pad2(ist.getMinutes())}:${pad2(ist.getSeconds())}`;
 
     const color = phase.isOpen ? 'rgba(100, 220, 180, 0.95)' : 'rgba(255, 100, 100, 0.85)';
@@ -134,6 +144,7 @@ export default function MarketClockStatusBadge() {
       boundary,
       countdown: formatCountdown(ms),
       timeStr,
+      boundaryExact,
       color,
       dim,
       border,
@@ -199,6 +210,11 @@ export default function MarketClockStatusBadge() {
 
       <span style={{ color: 'rgba(180,200,230,0.55)', fontSize: '10px' }}>
         {ui.boundary.label} {ui.countdown}
+        <span style={{ color: 'rgba(180,200,230,0.40)' }}>
+          {' '}
+          • Hours 09:15–15:30 IST
+          {ui.boundaryExact ? ` • Next ${ui.boundaryExact}` : ''}
+        </span>
       </span>
 
       <style jsx>{`
