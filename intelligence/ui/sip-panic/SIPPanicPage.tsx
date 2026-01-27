@@ -225,6 +225,7 @@ export default function SIPPanicPage(props?: {
 
   const [learningBubblesDisabled, setLearningBubblesDisabled] = useState(false);
   const hasTrackedStart = useRef(false);
+  const hasTrackedChallengeOpen = useRef(false);
   const hasAppliedShareParams = useRef(false);
 
   const [selection, setSelection] = useState<ScenarioSelectionState>({
@@ -279,6 +280,22 @@ export default function SIPPanicPage(props?: {
       const y = clampInt(qsStoryYears, 1, 30);
       if (Number.isFinite(qsStoryMonthly) || Number.isFinite(qsStoryYears)) {
         setInputs({ monthlyAmount: m, durationYears: y });
+      }
+    }
+
+    // Challenge Mode: track opens (powers real conversion stats later; no fake counters).
+    if (qsChallenge && !hasTrackedChallengeOpen.current) {
+      hasTrackedChallengeOpen.current = true;
+      try {
+        trackEvent("sip_vs_panic_challenge_opened", {
+          calculator_type: CALCULATOR_TYPE,
+          mode: "challenge",
+          challenger_choice: qsChallengerChoice ?? "",
+          monthly_amount: Number.isFinite(qsStoryMonthly) ? clampInt(qsStoryMonthly, 1_000, 5_00_000) : undefined,
+          duration_years: Number.isFinite(qsStoryYears) ? clampInt(qsStoryYears, 1, 30) : undefined,
+        });
+      } catch {
+        // ignore
       }
     }
 
