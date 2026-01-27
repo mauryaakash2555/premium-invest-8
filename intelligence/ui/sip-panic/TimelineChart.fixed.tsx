@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Contrast, Download, Link2, Printer } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { trackEvent } from "@/lib/analytics";
+import { addUtmParams } from "@/lib/urls/shareUtm";
 
 import type { ChartDataPoint } from "@/intelligence/simulations/sip-vs-panic";
 
@@ -475,7 +476,10 @@ export function TimelineChart(props: {
 
   const copyShareLink = async () => {
     try {
-      const url = window.location.href;
+      const url = addUtmParams(window.location.href, {
+        medium: "copy_link",
+        content: "timeline_chart",
+      });
 
       // Prefer async clipboard API (works on localhost/https), but keep a fallback for Safari/iOS quirks.
       const canUseClipboard =

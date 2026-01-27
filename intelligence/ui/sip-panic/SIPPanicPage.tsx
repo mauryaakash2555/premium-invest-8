@@ -33,6 +33,7 @@ import { BeginnerModeView } from "./BeginnerModeView";
 import { OnboardingWizard, type AvatarKey, type CrashPreset, type OnboardingResult } from "./OnboardingWizard";
 import type { Lang } from "./i18n";
 import { isLang, t as tStatic, type TranslationKey } from "./i18n";
+import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
 
 const CALCULATOR_TYPE = "sip_vs_panic_selling";
 const LEARNING_BUBBLES_KEY = "bm.sipPanicSelling.hideLearningBubbles";
@@ -748,8 +749,10 @@ export default function SIPPanicPage(props?: {
     try {
       const out = results;
       const { params, worstRow } = buildShareParams(out);
-      const canonical = `${window.location.origin}/intelligence/sip-vs-panic`;
-      const shareUrl = `${canonical}?${params.toString()}`;
+      const shareUrl = buildShareUrlWithUtm(params, {
+        medium: "whatsapp",
+        content: "result",
+      });
 
       const cost = worstRow?.behavioralCost ?? 0;
       const disciplineAmt = out.find((r) => r.scenario.behaviorType === "discipline")?.postTaxCorpus ?? 0;
@@ -768,15 +771,14 @@ export default function SIPPanicPage(props?: {
           : "";
 
       const message =
-        `🚨 If you stop SIP during crashes, you could lose ${formatInrLakhs(cost)}.\n\n` +
-        `✅ Stay Disciplined: ${formatInrLakhs(disciplineAmt)}\n` +
-        `❌ ${worstName}: ${formatInrLakhs(worstAmt)}\n` +
-        (costPct > 0 ? `📉 That’s ~${costPct}% of your potential wealth.\n` : "") +
-        (thresholdLine ? `ℹ️ ${thresholdLine}\n` : "") +
+        `SIP vs Panic (education-only): stopping SIP during drawdowns could cost ~${formatInrLakhs(cost)} (post-tax model).\n\n` +
+        `Stay disciplined: ${formatInrLakhs(disciplineAmt)}\n` +
+        `${worstName}: ${formatInrLakhs(worstAmt)}\n` +
+        (costPct > 0 ? `Gap: ~${costPct}% of potential wealth\n` : "") +
+        (thresholdLine ? `${thresholdLine}\n` : "") +
         `\nInputs: ₹${inputs.monthlyAmount.toLocaleString("en-IN")}/month • ${inputs.durationYears} years\n` +
         `Tax mode: ${taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle")}\n\n` +
-        `Try it: ${shareUrl}\n` +
-        `Via BM Wealth Intelligence`;
+        `${shareUrl}`;
 
       trackEvent("calculator_share", {
         calculator_type: CALCULATOR_TYPE,
@@ -803,8 +805,10 @@ export default function SIPPanicPage(props?: {
     try {
       const out = results;
       const { params, worstRow } = buildShareParams(out);
-      const canonical = `${window.location.origin}/intelligence/sip-vs-panic`;
-      const shareUrl = `${canonical}?${params.toString()}`;
+      const shareUrl = buildShareUrlWithUtm(params, {
+        medium: "email",
+        content: "result",
+      });
 
       const cost = worstRow?.behavioralCost ?? 0;
       const disciplineAmt = out.find((r) => r.scenario.behaviorType === "discipline")?.postTaxCorpus ?? 0;
@@ -821,7 +825,7 @@ export default function SIPPanicPage(props?: {
               : ""
           : "";
 
-      const subject = "My SIP vs Panic Selling Analysis";
+      const subject = "SIP vs Panic: education-only analysis";
       const body =
         `My SIP vs Panic analysis (education-only)\n\n` +
         `Inputs: ₹${inputs.monthlyAmount.toLocaleString("en-IN")}/month • ${inputs.durationYears} years\n` +
@@ -831,7 +835,7 @@ export default function SIPPanicPage(props?: {
         `- Stay disciplined: ${formatInrLakhs(disciplineAmt)}\n` +
         `- Panic behavior: ${formatInrLakhs(worstAmt)}\n` +
         `- Behavioral cost: ${formatInrLakhs(cost)}${costPct > 0 ? ` (~${costPct}% of potential)` : ""}\n\n` +
-        `Try the simulator: ${shareUrl}\n`;
+        `Link: ${shareUrl}\n`;
 
       trackEvent("calculator_share", {
         calculator_type: CALCULATOR_TYPE,

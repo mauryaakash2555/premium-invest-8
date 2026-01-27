@@ -1875,6 +1875,16 @@ export const staticBlogPost5 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
+  <a class="coming-next-block" href="/intelligence/sip-vs-panic/guide" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid color-mix(in oklab, var(--lux-accent) 50%, transparent); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: var(--lux-accent); margin-bottom: 15px;">Related Tool:</p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: var(--lux-accent); font-weight: 600;">Should you stop SIP during a crash? (Guide + Simulator) →</p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">Education-only: quantify the behavior gap and see what panic decisions can cost after tax assumptions.</p>
+    </div>
+  </a>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
+
   <a class="coming-next-block" href="/blog/emergency-fund-12-months-mumbai" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid color-mix(in oklab, var(--lux-accent) 50%, transparent); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: var(--lux-accent); margin-bottom: 15px;">Next Read:</p>

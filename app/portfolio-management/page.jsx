@@ -205,6 +205,38 @@ const PortfolioManagement = () => {
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+        <section style={{ marginBottom: '34px' }}>
+          <div className="svc-card" style={{ padding: 22, textAlign: 'center' }}>
+            <h2 style={{ margin: 0, fontSize: '18px', color: TITLE, fontWeight: 600 }}>
+              Stress-test behavior during drawdowns
+            </h2>
+            <p style={{ margin: '10px 0 0 0', fontSize: '14px', color: BODY, lineHeight: '1.7' }}>
+              Portfolio planning is mostly behavior. Use this education-only tool to see what stopping SIPs during crashes can cost.
+            </p>
+            <div style={{ marginTop: 12, display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link
+                href="/intelligence/sip-vs-panic/guide"
+                data-ga-event="tool_internal_link"
+                data-ga-label="portfolio_mgmt_to_sip_vs_panic_guide"
+                style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline', textUnderlineOffset: 4, fontWeight: 600 }}
+              >
+                Read the crash guide →
+              </Link>
+              <span aria-hidden="true" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                •
+              </span>
+              <Link
+                href="/intelligence/sip-vs-panic"
+                data-ga-event="tool_open"
+                data-ga-label="portfolio_mgmt_open_sip_vs_panic"
+                style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline', textUnderlineOffset: 4, fontWeight: 600 }}
+              >
+                Open simulator →
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             How Portfolio Planning Works (Simple Flow)

@@ -307,6 +307,8 @@ const MutualFunds = () => {
             <Link
               href="/tools"
               className="mf-cta"
+              data-ga-event="tool_internal_link"
+              data-ga-label="mutual_funds_to_tools"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -328,6 +330,8 @@ const MutualFunds = () => {
             <Link
               href="/contact"
               className="mf-cta"
+              data-ga-event="contact_click"
+              data-ga-label="mutual_funds_to_contact"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -344,6 +348,51 @@ const MutualFunds = () => {
             >
               Talk to BM Wealth <span aria-hidden="true">→</span>
             </Link>
+          </div>
+
+          <div
+            className="mf-card"
+            style={{
+              padding: 18,
+              maxWidth: 920,
+              margin: '0 auto 18px',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: 13, color: MUTED, marginBottom: 10 }}>
+              Market drawdowns are where discipline breaks.
+            </div>
+            <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link
+                href="/intelligence/sip-vs-panic/guide"
+                data-ga-event="tool_internal_link"
+                data-ga-label="mutual_funds_to_sip_vs_panic_guide"
+                style={{
+                  color: `rgba(${ACCENT_RGB}, 0.95)`,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 4,
+                  fontWeight: 600,
+                }}
+              >
+                Should you stop SIP during a crash? →
+              </Link>
+              <span aria-hidden="true" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                •
+              </span>
+              <Link
+                href="/intelligence/sip-vs-panic"
+                data-ga-event="tool_open"
+                data-ga-label="mutual_funds_open_sip_vs_panic"
+                style={{
+                  color: `rgba(${ACCENT_RGB}, 0.95)`,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 4,
+                  fontWeight: 600,
+                }}
+              >
+                Run the SIP vs Panic simulator →
+              </Link>
+            </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
