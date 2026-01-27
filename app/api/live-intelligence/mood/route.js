@@ -47,11 +47,81 @@ function hasUsableMarketData(marketData) {
   return items.some((x) => x?.live === true && x?.value !== '---' && x?.value != null);
 }
 
+function pickMarketItem(items, predicates) {
+  for (const pred of predicates) {
+    const found = items.find((x) => {
+      try {
+        return pred(x);
+      } catch {
+        return false;
+      }
+    });
+    if (found) return found;
+  }
+  return null;
+}
+
+function formatPct(changePct) {
+  if (typeof changePct !== 'number' || !Number.isFinite(changePct)) return null;
+  const rounded = Math.round(changePct * 100) / 100;
+  const sign = rounded > 0 ? '+' : '';
+  return `${sign}${rounded}%`;
+}
+
+function trendWord(changePct) {
+  if (typeof changePct !== 'number' || !Number.isFinite(changePct)) return 'steady';
+  if (Math.abs(changePct) < 0.1) return 'flat';
+  return changePct > 0 ? 'higher' : 'lower';
+}
+
+function generateMoodRuleBased(marketData) {
+  if (!hasUsableMarketData(marketData)) throw new Error('Market data unavailable');
+
+  const items = Array.isArray(marketData?.items) ? marketData.items : [];
+
+  const nifty = pickMarketItem(items, [
+    (x) => String(x?.id || '').toLowerCase().includes('nifty') && !String(x?.id || '').toLowerCase().includes('bank'),
+    (x) => String(x?.name || '').toLowerCase().includes('nifty') && !String(x?.name || '').toLowerCase().includes('bank'),
+  ]);
+
+  const bankNifty = pickMarketItem(items, [
+    (x) => String(x?.id || '').toLowerCase().includes('bank') && String(x?.id || '').toLowerCase().includes('nifty'),
+    (x) => String(x?.name || '').toLowerCase().includes('bank') && String(x?.name || '').toLowerCase().includes('nifty'),
+  ]);
+
+  const sensex = pickMarketItem(items, [
+    (x) => String(x?.id || '').toLowerCase().includes('sensex'),
+    (x) => String(x?.name || '').toLowerCase().includes('sensex'),
+  ]);
+
+  const parts = [];
+  if (nifty) {
+    const pct = formatPct(nifty?.changePct);
+    parts.push(`Nifty ${trendWord(nifty?.changePct)}${pct ? ` ${pct}` : ''}`.trim());
+  }
+  if (bankNifty) {
+    const pct = formatPct(bankNifty?.changePct);
+    parts.push(`Bank Nifty ${trendWord(bankNifty?.changePct)}${pct ? ` ${pct}` : ''}`.trim());
+  } else if (sensex) {
+    const pct = formatPct(sensex?.changePct);
+    parts.push(`Sensex ${trendWord(sensex?.changePct)}${pct ? ` ${pct}` : ''}`.trim());
+  }
+
+  const mood_text = (parts.join('. ') + (parts.length ? '.' : '')).trim();
+  const mood_type = determineMoodType(marketData);
+
+  if (!mood_text) throw new Error('Market data unavailable');
+  return { mood_text, mood_type };
+}
+
 // Generate mood with Gemini
 async function generateMoodWithGemini(marketData) {
   const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
-  
-  if (!geminiApiKey) throw new Error('Missing GEMINI_API_KEY/GOOGLE_AI_API_KEY');
+
+  // If Gemini is not configured, fall back to a strictly live, rule-based mood.
+  if (!geminiApiKey) {
+    return generateMoodRuleBased(marketData);
+  }
   if (!hasUsableMarketData(marketData)) throw new Error('Market data unavailable');
 
   try {

@@ -132,50 +132,78 @@ export default function MarketMoodIndicator() {
 
   const fetchMarketMood = async () => {
     try {
-      const response = await fetch('/api/live-intelligence/mood');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.mood) {
-          setMoodError(null);
-          // Map API mood_type to our level
-          const levelMap = {
-            'bullish': 'bullish',
-            'very_bullish': 'very_bullish',
-            'bearish': 'bearish',
-            'volatile': 'cautious',
-            'mixed': 'neutral',
-            'neutral': 'neutral',
-            'cautiously_optimistic': 'cautiously_optimistic',
-          };
-          
-          setMood({
-            level: levelMap[data.mood.mood_type] || 'neutral',
-            summary: data.mood.mood_text || 'Market data loading...',
-            factors: [],
-            lastUpdated: data.mood.generated_at || data.mood.created_at || new Date().toISOString(),
-          });
+      const response = await fetch('/api/live-intelligence/mood', { cache: 'no-store' });
 
-          const lvl = levelMap[data.mood.mood_type] || 'neutral';
-          const score = scoreForLevel[lvl] ?? 0.5;
-          setHistory((prev) => {
-            const next = [...(Array.isArray(prev) ? prev : []), score];
-            return next.slice(-12);
-          });
-        } else {
-          throw new Error('Invalid response');
-        }
+      let data = null;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
+
+      if (!response.ok) {
+        const msg = String(data?.error || `mood_unavailable_${response.status}`);
+        setMoodError(msg);
+        // Keep previous mood if we have one; otherwise show unavailable.
+        setMood((prev) =>
+          prev || {
+            level: 'neutral',
+            summary: 'Live mood unavailable',
+            factors: [],
+            lastUpdated: new Date().toISOString(),
+          }
+        );
+        return;
+      }
+
+      if (data?.success && data?.mood) {
+        setMoodError(null);
+        // Map API mood_type to our level
+        const levelMap = {
+          bullish: 'bullish',
+          very_bullish: 'very_bullish',
+          bearish: 'bearish',
+          volatile: 'cautious',
+          mixed: 'neutral',
+          neutral: 'neutral',
+          cautiously_optimistic: 'cautiously_optimistic',
+        };
+
+        const lvl = levelMap[data.mood.mood_type] || 'neutral';
+
+        setMood({
+          level: lvl,
+          summary: data.mood.mood_text || 'Market data loading...',
+          factors: [],
+          lastUpdated: data.mood.generated_at || data.mood.created_at || new Date().toISOString(),
+        });
+
+        const score = scoreForLevel[lvl] ?? 0.5;
+        setHistory((prev) => {
+          const next = [...(Array.isArray(prev) ? prev : []), score];
+          return next.slice(-12);
+        });
       } else {
-        throw new Error('API error');
+        setMoodError('invalid_mood_payload');
+        setMood((prev) =>
+          prev || {
+            level: 'neutral',
+            summary: 'Live mood unavailable',
+            factors: [],
+            lastUpdated: new Date().toISOString(),
+          }
+        );
       }
     } catch (error) {
-      console.error('Failed to fetch market mood:', error);
-      setMood({
-        level: 'neutral',
-        summary: 'Live mood unavailable',
-        factors: [],
-        lastUpdated: new Date().toISOString(),
-      });
       setMoodError(String(error?.message || 'unavailable'));
+      setMood((prev) =>
+        prev || {
+          level: 'neutral',
+          summary: 'Live mood unavailable',
+          factors: [],
+          lastUpdated: new Date().toISOString(),
+        }
+      );
     } finally {
       setLoading(false);
     }

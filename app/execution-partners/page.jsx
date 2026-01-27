@@ -6,9 +6,9 @@ import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 
 const BODY_TEXT_STYLES = getBodyTextPaletteStyles({ scopeSelector: '.bp-body' });
 
-function SectionHeading({ children }) {
+function SectionHeading({ id, children }) {
   return (
-    <div style={{ width: 'calc(100% - 30px)', margin: '0 15px 18px' }}>
+    <div id={id} style={{ width: 'calc(100% - 30px)', margin: '0 15px 18px' }}>
       <h2
         style={{
           fontSize: 'clamp(22px, 3.5vw, 32px)',
@@ -189,14 +189,14 @@ export default function ExecutionPartnersPage() {
 
       {/* Cards */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
-        <SectionHeading>Credit Cards</SectionHeading>
+        <SectionHeading id="credit-cards">Credit Cards</SectionHeading>
         {CREDIT_CARDS.map((p) => (
           <ExecutionCard key={p.rank} {...p} />
         ))}
 
         <div style={{ height: 18 }} />
 
-        <SectionHeading>Personal Loans</SectionHeading>
+        <SectionHeading id="personal-loans">Personal Loans</SectionHeading>
         {PERSONAL_LOANS.map((p) => (
           <ExecutionCard key={`pl-${p.rank}`} {...p} />
         ))}

@@ -243,11 +243,13 @@ export default function BlogPage() {
             style={{
               padding: '10px 16px',
               borderRadius: 0,
-              border: '1px solid rgba(170, 198, 255, 0.35)',
-              background: 'rgba(170, 198, 255, 0.08)',
+              border: '1px solid rgba(255,255,255,0.14)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)',
               color: 'rgba(235, 242, 255, 0.92)',
               textDecoration: 'none',
               fontSize: '14px',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
             }}
           >
             Explore Live Intelligence
@@ -257,11 +259,13 @@ export default function BlogPage() {
             style={{
               padding: '10px 16px',
               borderRadius: 0,
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 45%, transparent)',
-              background: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
+              border: '1px solid rgba(255,255,255,0.14)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)',
               color: 'rgba(235, 242, 255, 0.92)',
               textDecoration: 'none',
               fontSize: '14px',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
             }}
           >
             Browse Tools
@@ -283,12 +287,17 @@ export default function BlogPage() {
               style={{
                 padding: '8px 20px',
                 borderRadius: 0,
-                border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
-                background: selectedCategory === null ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
-                color: selectedCategory === null ? 'var(--lux-accent)' : '#888',
+                border: '1px solid rgba(255,255,255,0.14)',
+                background:
+                  selectedCategory === null
+                    ? 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
+                    : 'transparent',
+                color: selectedCategory === null ? 'rgba(245,245,245,0.92)' : '#888',
                 cursor: 'pointer',
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
+                backdropFilter: selectedCategory === null ? 'blur(10px)' : undefined,
+                WebkitBackdropFilter: selectedCategory === null ? 'blur(10px)' : undefined,
               }}
             >
               All
@@ -300,12 +309,17 @@ export default function BlogPage() {
                 style={{
                   padding: '8px 20px',
                   borderRadius: 0,
-                  border: '1px solid color-mix(in oklab, var(--lux-accent) 38%, transparent)',
-                  background: selectedCategory === category ? 'color-mix(in oklab, var(--lux-accent) 16%, transparent)' : 'transparent',
-                  color: selectedCategory === category ? 'var(--lux-accent)' : '#888',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background:
+                    selectedCategory === category
+                      ? 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
+                      : 'transparent',
+                  color: selectedCategory === category ? 'rgba(245,245,245,0.92)' : '#888',
                   cursor: 'pointer',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
+                  backdropFilter: selectedCategory === category ? 'blur(10px)' : undefined,
+                  WebkitBackdropFilter: selectedCategory === category ? 'blur(10px)' : undefined,
                 }}
               >
                 {category}

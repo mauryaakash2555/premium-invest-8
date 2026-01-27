@@ -786,11 +786,13 @@ export default function BlogDetailClient({ slug }) {
 
         {/* Internal Links */}
         <div style={{
-          background: 'rgba(0,0,0,0.35)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.018) 100%)',
+          border: '1px solid rgba(255,255,255,0.10)',
           borderRadius: 0,
           padding: '28px',
-          margin: '0 0 40px 0'
+          margin: '0 0 40px 0',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
         }}>
           <h3 style={{
             fontSize: '20px',
@@ -809,51 +811,56 @@ export default function BlogDetailClient({ slug }) {
               display: 'inline-block',
               padding: '10px 14px',
               borderRadius: 0,
-              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
               color: '#e5e5e5',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
             }}>Mutual Funds</Link>
             <Link href="/sip" style={{
               display: 'inline-block',
               padding: '10px 14px',
               borderRadius: 0,
-              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
               color: '#e5e5e5',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
             }}>SIP Guide</Link>
             <Link href="/insurance" style={{
               display: 'inline-block',
               padding: '10px 14px',
               borderRadius: 0,
-              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
               color: '#e5e5e5',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
             }}>Insurance</Link>
             <Link href="/tools" style={{
               display: 'inline-block',
               padding: '10px 14px',
               borderRadius: 0,
-              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
               color: '#e5e5e5',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
             }}>Free Tools</Link>
             <Link href="/contact" style={{
               display: 'inline-block',
               padding: '10px 14px',
               borderRadius: 0,
-              backgroundColor: 'color-mix(in oklab, var(--lux-accent) 10%, transparent)',
-              border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
               color: '#e5e5e5',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
             }}>Contact</Link>
           </div>
         </div>
