@@ -1,6 +1,7 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import SIPPanicPage from "@/intelligence/ui/sip-panic/SIPPanicPage";
 import Link from "next/link";
+import CrisisModeBanner from "@/components/intelligence/CrisisModeBanner";
 
 const PATH = "/intelligence/sip-vs-panic";
 
@@ -99,6 +100,8 @@ export default function SIPPanicRoutePage() {
 
   return (
     <>
+      <CrisisModeBanner placement="sip_vs_panic" />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

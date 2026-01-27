@@ -3,6 +3,7 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import CrisisModeBanner from "@/components/intelligence/CrisisModeBanner";
 
 export const metadata = buildMetadata({
   title: "Intelligence | BM Wealth",
@@ -15,6 +16,8 @@ export default function IntelligencePage() {
   return (
     <main className="px-6 lg:px-10 py-14 lg:py-20">
       <div className="max-w-4xl mx-auto">
+        <CrisisModeBanner placement="intelligence" />
+
         <h1 className="text-3xl sm:text-4xl font-semibold gold-gradient-text">
           Intelligence
         </h1>
