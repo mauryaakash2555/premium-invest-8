@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 const mainNavItems = [
   { label: "Home", icon: <Home className="w-5 h-5" strokeWidth={1} />, href: "/" },
   { label: "Services", icon: <Briefcase className="w-5 h-5" strokeWidth={1} />, href: "/services" },
-  { label: "Partners", icon: <Users className="w-5 h-5" strokeWidth={1} />, href: "/curated-partners" },
+  { label: "Partners", icon: <Users className="w-5 h-5" strokeWidth={1} />, href: "/partners" },
   { label: "Tools", icon: <Layers className="w-5 h-5" strokeWidth={1} />, href: "/tools" },
 ];
 
@@ -41,7 +41,7 @@ const allNavItems = [
   { label: "Platforms", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/platforms" },
   { label: "Tools", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools" },
   { label: "Live Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/live-intelligence" },
-  { label: "Curated Partners", icon: <Users className="w-6 h-6" strokeWidth={1} />, href: "/curated-partners" },
+  { label: "Partners", icon: <Users className="w-6 h-6" strokeWidth={1} />, href: "/partners" },
   { label: "Blog", icon: <BookOpen className="w-6 h-6" strokeWidth={1} />, href: "/blog" },
   { label: "Contact", icon: <Mail className="w-6 h-6" strokeWidth={1} />, href: "/contact" },
 ];
