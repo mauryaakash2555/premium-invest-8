@@ -11,16 +11,12 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { CURATED_HEADLINES, getHeadlinesByCategory, normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
+import { normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
 import { getCurrentMode } from '@/lib/modes';
 import { dedupeHeadlines, enrichHeadline } from '@/lib/live-intelligence/intelligenceScoring';
 
-const IS_PROD = process.env.NODE_ENV === 'production';
-// If enabled, the API may serve curated headlines when live data is unavailable.
-// Default: enabled only in development to avoid shipping non-live content.
-const ALLOW_CURATED_FALLBACK =
-  process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK === '1' ||
-  (!IS_PROD && process.env.LIVE_INTELLIGENCE_ALLOW_CURATED_FALLBACK !== '0');
+// Strict mode: no curated/dummy fallbacks.
+const ALLOW_CURATED_FALLBACK = false;
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -307,21 +303,8 @@ export async function GET(request) {
     
     const supabase = getSupabase();
     
-    // Use curated headlines if database unavailable
+    // No curated fallback if database unavailable
     if (!supabase) {
-      if (ALLOW_CURATED_FALLBACK) {
-        console.warn('Live Intelligence feed: Database unavailable, using curated content');
-        const curatedHeadlines = getCuratedHeadlines(category, limit);
-        return NextResponse.json({
-          ok: true,
-          headlines: curatedHeadlines,
-          source: 'curated',
-          count: curatedHeadlines.length,
-          mode: modeKey,
-          warning: 'Database not configured; set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY for live headlines.',
-        }, { headers: FEED_CACHE_HEADERS });
-      }
-
       return NextResponse.json(
         {
           ok: false,
@@ -475,45 +458,11 @@ export async function GET(request) {
     let final = buildRotation(fresh, { limit, modeKey });
 
     // Spec: Minimum headlines in rotation = 5 (when possible)
-    // IMPORTANT: do not mix curated in strict/live mode
-    if (ALLOW_CURATED_FALLBACK && final.length > 0 && final.length < minRequired) {
-      const fallbackPool = getCuratedHeadlines(category, limit);
-      const existingIds = new Set(final.map((h) => h.id));
-      for (const h of fallbackPool) {
-        if (final.length >= minRequired) break;
-        if (existingIds.has(h.id)) continue;
-        existingIds.add(h.id);
-        final.push(enrichHeadline(h));
-      }
-      final = final.slice(0, limit);
-    }
+    // Strict mode: never mix curated/dummy items.
     
     // If no headlines available, fallback behavior:
-    // - dev: curated fallback (when allowed)
     // - prod strict/live: return latest available DB items even if stale (still real data)
     if (final.length === 0) {
-      if (ALLOW_CURATED_FALLBACK) {
-        console.log('[Live Intelligence] No fresh headlines in database, using curated fallback');
-        const curatedHeadlines = getCuratedHeadlines(category, limit);
-        return NextResponse.json(
-          {
-            ok: true,
-            headlines: curatedHeadlines,
-            source: 'curated',
-            count: curatedHeadlines.length,
-            mode: modeKey,
-            stats: {
-              total_fetched: withinWindow.length,
-              stale_filtered: staleCount,
-              fresh_remaining: 0,
-              returned: curatedHeadlines.length,
-              warning: 'No fresh headlines in database - showing curated content',
-            },
-          },
-          { headers: FEED_CACHE_HEADERS }
-        );
-      }
-
       if (withinWindow.length > 0) {
         // Serve latest available DB items (even if older than freshness window).
         // This keeps the site functional without inventing data.
@@ -581,23 +530,6 @@ export async function GET(request) {
     console.error('Live Intelligence feed error:', error);
 
     const modeKey = getCurrentMode();
-    if (ALLOW_CURATED_FALLBACK) {
-      // Use curated headlines on error
-      const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
-      const curated = getCuratedHeadlines('all', hardMax);
-      return NextResponse.json(
-        {
-          ok: true,
-          headlines: curated,
-          source: 'curated',
-          count: curated.length,
-          mode: modeKey,
-          warning: error.message,
-        },
-        { headers: FEED_CACHE_HEADERS }
-      );
-    }
-
     return NextResponse.json(
       {
         ok: false,
@@ -629,31 +561,4 @@ function getCategoryIcon(category) {
   return icons[category] || '📰';
 }
 
-/**
- * Curated headlines - use rich content from lib/live-intelligence/headlines.js
- * These are real, factual, SEBI-safe headlines (not placeholder data)
- */
-function getCuratedHeadlines(category, limit = MAX_ROTATION_HEADLINES) {
-  // Use the comprehensive curated headlines from lib
-  let headlines = CURATED_HEADLINES.map(h => ({
-    ...h,
-    // Ensure fresh timestamp for curated items
-    timestamp: h.timestamp || new Date().toISOString(),
-    category: normalizeCategoryToSpec(h.category),
-    icon: h.icon || getCategoryIcon(normalizeCategoryToSpec(h.category)),
-    whyItMatters: h.whyItMatters || h.why_it_matters,
-    why_it_matters: h.whyItMatters || h.why_it_matters,
-    dataPoint: h.dataPoint || h.data_point || '',
-    data_point: h.dataPoint || h.data_point || '',
-    valid_from: h.valid_from || h.timestamp || new Date().toISOString(),
-    valid_until: h.valid_until || null,
-    cta_button: h.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
-    pinned: false,
-  }));
-  
-  if (category && category !== 'all') {
-    headlines = headlines.filter(h => h.category === category);
-  }
-  
-  return headlines.slice(0, Math.max(1, Math.min(limit, MAX_ROTATION_HEADLINES)));
-}
+

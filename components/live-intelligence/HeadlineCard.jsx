@@ -191,121 +191,31 @@ const savedHeadlines = {
 // Export for use in overlay
 export { savedHeadlines };
 
-// Detailed explanations for headlines - educational content
-const HEADLINE_DETAILS = {
-  // SIP related
-  'SIP inflows hit all-time high': {
-    whatHappened: 'Indian investors invested a record ₹26,459 crore through Systematic Investment Plans (SIPs) in January 2026, surpassing the previous record.',
-    whyItHappened: 'Growing financial literacy, increased trust in mutual funds after consistent returns, and easier digital onboarding have made SIP investing mainstream. The government\'s push for financial inclusion and rising disposable income among the middle class are key drivers.',
-    howItBenefits: '• Shows strong market confidence from retail investors\n• Higher inflows support market stability during volatility\n• Indicates healthy domestic liquidity — reduces FII dependency\n• Long-term wealth creation becoming a national habit',
-    expertTip: 'If you haven\'t started a SIP yet, now is a great time. Even ₹500/month can grow significantly over 10+ years through compounding.',
-  },
-  'NIFTY crosses 25,000': {
-    whatHappened: 'The NIFTY 50 index crossed the historic 25,000 mark for the first time, reflecting strong market momentum and investor confidence.',
-    whyItHappened: 'Strong corporate earnings, robust GDP growth, controlled inflation, and continued domestic retail participation. FIIs have also turned net buyers after a period of selling.',
-    howItBenefits: '• Portfolio values increase for equity investors\n• Positive sentiment attracts more foreign investment\n• Creates wealth effect — consumer spending may rise\n• Validates India\'s growth story on the global stage',
-    expertTip: 'While milestones are exciting, focus on your asset allocation and long-term goals rather than short-term market levels.',
-  },
-  'FIIs added': {
-    whatHappened: 'Foreign Institutional Investors (FIIs) invested ₹2,300 crore in large-cap banking stocks, signaling renewed interest in India\'s financial sector.',
-    whyItHappened: 'Attractive valuations after recent corrections, strong loan growth, improving asset quality, and expectations of interest rate cuts making banks more profitable.',
-    howItBenefits: '• Banking stocks may see price appreciation\n• Indicates smart money confidence in financials\n• Strengthens rupee due to dollar inflows\n• Good for existing bank stock/fund holders',
-    expertTip: 'Consider banking sector funds if you\'re underweight financials. They typically benefit from economic growth cycles.',
-  },
-  'Gold touches': {
-    whatHappened: 'Gold prices reached ₹63,500 per 10 grams as global economic uncertainty and geopolitical tensions increased safe-haven demand.',
-    whyItHappened: 'Global uncertainty from geopolitical conflicts, potential US recession fears, and central banks diversifying reserves into gold. Traditionally, gold rises when risk appetite falls.',
-    howItBenefits: '• Portfolio hedge against equity volatility\n• Sovereign Gold Bonds earn 2.5% extra interest\n• Gold historically preserves purchasing power\n• Good for diversification — typically 5-10% allocation recommended',
-    expertTip: 'SGBs are the best way to hold gold — no storage cost, earn interest, and tax-free at maturity if held 8 years.',
-  },
-  'RBI signals': {
-    whatHappened: 'The Reserve Bank of India indicated it may cut the repo rate in the upcoming February monetary policy meeting, potentially reducing borrowing costs.',
-    whyItHappened: 'Inflation has moderated within RBI\'s target range, economic growth remains strong, and global central banks are also turning dovish. Lower rates support economic activity.',
-    howItBenefits: '• Lower EMIs for home/car loans\n• Banks\' net interest margins may compress, but loan growth increases\n• Rate-sensitive sectors (real estate, auto) typically rally\n• Existing bond fund holders see NAV appreciation',
-    expertTip: 'Consider locking in current FD rates before cuts. For debt funds, medium to long duration funds benefit most from rate cuts.',
-  },
-  'SBI revises FD rates': {
-    whatHappened: 'State Bank of India increased fixed deposit rates, now offering 7.25% for senior citizens — the best rates in 18 months.',
-    whyItHappened: 'Banks compete for deposits as credit demand rises. Higher rates attract savers while RBI maintains tight monetary policy to control inflation.',
-    howItBenefits: '• Higher risk-free returns for conservative investors\n• Senior citizens get extra 0.50% over regular rates\n• Good for emergency fund parking\n• Tax-saving FDs offer 7.25% with 80C benefit',
-    expertTip: 'Ladder your FDs — don\'t put everything in one tenure. This balances liquidity with higher rates.',
-  },
-  'default': null, // No generic fallback - use headline data directly
-};
+function deriveDetailsFromHeadline(headline) {
+  const whatHappened =
+    headline?.block_what_happened ||
+    headline?.what_happened ||
+    headline?.headline ||
+    '';
+  const whyItMatters =
+    headline?.block_why_it_matters ||
+    headline?.why_it_matters ||
+    headline?.whyItMatters ||
+    '';
+  const howItBenefits =
+    headline?.block_where_fits ||
+    headline?.how_it_benefits ||
+    headline?.where_fits ||
+    headline?.block_who_cares ||
+    '';
+  const expertTip = headline?.expert_tip || '';
 
-// Generate dynamic details from headline data when AI content not available
-const generateDynamicDetails = (headline) => {
-  const category = CATEGORIES[headline.category];
-  const categoryLabel = category?.label || 'Market Update';
-  
-  // Generate meaningful market mood based on urgency
-  const moodByUrgency = {
-    'BREAKING': 'Markets reacting to breaking news - volatility expected',
-    'URGENT': 'Important development - investors taking note',
-    'REGULAR': 'Market digesting new information',
-  };
-  
-  // Generate meaningful key takeaway based on category
-  const keyTakeaways = {
-    'rbi': 'Monitor any changes to repo rates and their impact on loan EMIs',
-    'sebi': 'Stay updated on regulatory changes affecting your investments',
-    'tax_insight': 'Review tax implications for your portfolio',
-    'mutual_funds': 'Track NAV changes and fund performance',
-    'fixed_income': 'Compare FD rates across banks before investing',
-    'insurance': 'Review your coverage and premium payments',
-    'forex_gold': 'Consider portfolio diversification with commodities',
-    'ipo': 'Assess risk before applying to new issues',
-    'global': 'Understand how global events affect Indian markets',
-    'market_move': 'Avoid panic selling - stick to your investment plan',
-    'regulatory': 'Ensure your investments comply with new regulations',
-    'corporate': 'Check if this affects any stocks in your portfolio',
-    'market_update': 'Review affected sectors in your portfolio',
-  };
-  
-  const keyTakeaway = keyTakeaways[headline.category] || 'Review affected sectors in your portfolio';
-  
-  return {
-    whatHappened: headline.headline,
-    whyItMatters: headline.whyItMatters || `This ${categoryLabel.toLowerCase()} development affects investor sentiment and may influence market dynamics.`,
-    marketMood: moodByUrgency[headline.urgency] || 'Neutral - Processing new information',
-    howItBenefits: `• For equity investors: Monitor sector-specific impacts\n• For debt investors: Watch for rate implications\n• For SIP investors: Continue disciplined investing\n• Key takeaway: ${keyTakeaway}`,
-    expertTip: `Review how this ${categoryLabel.toLowerCase()} news affects your specific holdings. Consider consulting your advisor for portfolio adjustments.`,
-  };
-};
+  return { whatHappened, whyItMatters, howItBenefits, expertTip };
+}
 
 // Get detailed info for a headline - prioritize AI-generated content from database
 const getHeadlineDetails = (headline) => {
-  // First check if headline has AI-generated content from database
-  if (headline.block_what_happened && headline.block_what_happened !== 'Processing...') {
-    return {
-      whatHappened: headline.block_what_happened || headline.headline,
-      whyItMatters: headline.block_why_it_matters || headline.whyItMatters || 'Market and economic factors contributed to this development.',
-      howItBenefits: headline.block_where_fits || headline.block_who_cares || '• Stay informed about market movements\n• Make better investment decisions\n• Understand the broader economic picture',
-      expertTip: headline.expert_tip || 'Monitor developments and consult your financial advisor for personalized guidance.',
-    };
-  }
-  
-  // Also check alternate field names from live API
-  if (headline.what_happened || headline.why_it_matters) {
-    return {
-      whatHappened: headline.what_happened || headline.headline,
-      whyItMatters: headline.why_it_matters || headline.whyItMatters || 'Multiple factors contributed to this development.',
-      howItBenefits: headline.how_it_benefits || headline.where_fits || '• Relevant for your investment decisions\n• Keep track of market dynamics\n• Adjust strategy as needed',
-      expertTip: headline.expert_tip || 'Stay informed and review your portfolio periodically.',
-    };
-  }
-  
-  // Fallback to curated headline details
-  const headlineText = headline.headline.toLowerCase();
-  
-  for (const [key, details] of Object.entries(HEADLINE_DETAILS)) {
-    if (key !== 'default' && details && headlineText.includes(key.toLowerCase())) {
-      return details;
-    }
-  }
-  
-  // No generic fallback - generate dynamic content from headline data
-  return generateDynamicDetails(headline);
+  return deriveDetailsFromHeadline(headline);
 };
 
 /**
@@ -331,6 +241,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
   const [longPressTimer, setLongPressTimer] = useState(null);
   const [aiContent, setAiContent] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
   const [portfolioTickers, setPortfolioTickers] = useState([]);
   const touchStartY = useRef(0);
   const category = CATEGORIES[headline.category];
@@ -362,17 +273,14 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
     
     // Check if headline already has AI content from database
     if (headline.block_what_happened && headline.block_what_happened !== 'Processing...') {
-      setAiContent({
-        whatHappened: headline.block_what_happened,
-        whyItMatters: headline.block_why_it_matters || headline.whyItMatters || 'This development impacts related investments.',
-        howItBenefits: headline.block_where_fits || '• Stay informed about market developments\n• Monitor related sectors',
-        expertTip: headline.expert_tip || 'Consult your financial advisor for personalized guidance.',
-      });
+      setAiError(null);
+      setAiContent(deriveDetailsFromHeadline(headline));
       return;
     }
     
     // Fetch AI-generated content
     setAiLoading(true);
+    setAiError(null);
     fetch('/api/live-intelligence/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -395,12 +303,13 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
         if (data.ok && data.content) {
           setAiContent(data.content);
         } else {
-          // Fallback to dynamic generation
-          setAiContent(generateDynamicDetails(headline));
+          setAiError('AI explanation unavailable');
+          setAiContent(null);
         }
       })
       .catch(() => {
-        setAiContent(generateDynamicDetails(headline));
+        setAiError('AI explanation unavailable');
+        setAiContent(null);
       })
       .finally(() => setAiLoading(false));
   }, [showModal, aiContent, headline]);
@@ -408,10 +317,11 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
   // Reset AI content when headline changes
   useEffect(() => {
     setAiContent(null);
+    setAiError(null);
   }, [headline.id]);
 
   // Get display content (AI or fallback)
-  const details = aiContent || generateDynamicDetails(headline);
+  const details = aiContent || deriveDetailsFromHeadline(headline);
 
   // Check if saved on mount
   useEffect(() => {

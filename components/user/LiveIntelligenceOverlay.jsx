@@ -258,14 +258,14 @@ export default function LiveIntelligenceOverlay({
 
   // TradingView chart interval UX (keep minimal + isolated)
   const [tvInterval, setTvInterval] = useState('D');
-  const [tvSymbol, setTvSymbol] = useState('TVC:NIFTY');
+  const [tvSymbol, setTvSymbol] = useState('NSE:NIFTY');
   const [tvIsSwitching, setTvIsSwitching] = useState(false);
   const tvSwitchTimersRef = useRef([]);
 
   // Defensive: avoid runtime crashes if a bundler/edit regression ever removes these bindings.
   // `typeof` is safe even if the identifier is undeclared.
   const tvIntervalSafe = typeof tvInterval === 'string' && tvInterval ? tvInterval : 'D';
-  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'TVC:NIFTY';
+  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'NSE:NIFTY';
 
   useEffect(() => {
     return () => {
@@ -846,13 +846,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   // TradingView chart interval/symbol state (local to panel)
   const [tvInterval, setTvInterval] = useState('D');
-  const [tvSymbol, setTvSymbol] = useState('TVC:NIFTY');
+  const [tvSymbol, setTvSymbol] = useState('NSE:NIFTY');
   const [tvIsSwitching, setTvIsSwitching] = useState(false);
   const tvSwitchTimersRef = useRef([]);
 
   // Defensive: derived safe values for TradingView bindings
   const tvIntervalSafe = typeof tvInterval === 'string' && tvInterval ? tvInterval : 'D';
-  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'TVC:NIFTY';
+  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'NSE:NIFTY';
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -2531,7 +2531,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
                 <div className="li-symbol-toggle" aria-label="Chart symbol">
                   {[ 
-                    { key: 'TVC:NIFTY', label: 'NIFTY' },
+                    { key: 'NSE:NIFTY', label: 'NIFTY' },
                     { key: 'NSE:BANKNIFTY', label: 'BANKNIFTY' },
                     { key: 'BSE:SENSEX', label: 'SENSEX' },
                   ].map((s) => (

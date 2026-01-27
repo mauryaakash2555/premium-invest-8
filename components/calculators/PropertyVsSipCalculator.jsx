@@ -12,6 +12,7 @@ import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLay
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
 import { PremiumCalculatorCTA } from "@/components/calculators/PremiumCalculatorCTA";
+import { ExecutionOptionsCTA } from "@/components/calculators/ExecutionOptionsCTA";
 
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
@@ -639,6 +640,12 @@ export function PropertyVsSipCalculator() {
                       <div className="mt-3 text-xs text-slate-200/70">Instant PDF • Based on your ₹{propertyCr}Cr scenario</div>
                     </div>
                   ) : null}
+
+                  <ExecutionOptionsCTA
+                    title="Want help executing this?"
+                    subtitle="We’ll help you translate this gap into a simple action plan (portfolio path, SIP amount, and timeline)."
+                    whatsappPrefill={`Hi BM Wealth, I used the Property vs SIP calculator. My scenario is ₹${propertyCr}Cr property and ₹${formatLakhs(model.inputs.monthlySip)} SIP for ${yearsFinal} years. I want help executing the next steps.`}
+                  />
 
                   <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
                     <p>1,200+ calculations done</p>

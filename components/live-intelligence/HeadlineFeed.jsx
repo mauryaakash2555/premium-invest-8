@@ -4,10 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HeadlineCard from './HeadlineCard';
 import { 
-  getHeadlinesByCategory, 
-  sortByPriority, 
-  getRotationSpeed,
-  CURATED_HEADLINES 
+  getRotationSpeed
 } from '@/lib/live-intelligence/headlines';
 import { getCurrentMode } from '@/lib/modes';
 import { trackPanelExpand, trackPanelCollapse, trackHeadlineView, trackHeadlinePause } from '@/lib/live-intelligence/analytics';
@@ -29,7 +26,6 @@ const moveBreakingToFront = (headlines) => {
  * - Category filtering
  * - Priority-based sorting
  * - Mode-based rotation speed override
- * - Falls back to curated headlines if API fails
  */
 export default function HeadlineFeed() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -78,7 +74,7 @@ export default function HeadlineFeed() {
     return false;
   }, [getRotationCap]);
 
-  // Load headlines - try live first, then fallback to curated
+  // Load headlines - strict live only (no curated/dummy fallbacks)
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
@@ -87,10 +83,7 @@ export default function HeadlineFeed() {
       if (cancelled) return;
       if (!success) {
         const cap = getRotationCap();
-        // Fallback to curated headlines
-        const filtered = getHeadlinesByCategory(selectedCategory);
-        const sorted = sortByPriority(filtered);
-        setHeadlines(sorted.slice(0, cap));
+        setHeadlines([]);
         setActiveIndex(0);
         setIsLive(false);
       }

@@ -12,6 +12,7 @@ import { BaseCalculatorLayout } from "@/components/calculators/BaseCalculatorLay
 import { CalculatorHeader } from "@/components/calculators/CalculatorHeader";
 import { Breakdown as BreakdownPanel } from "@/components/calculators/Breakdown";
 import { PremiumCalculatorCTA } from "@/components/calculators/PremiumCalculatorCTA";
+import { ExecutionOptionsCTA } from "@/components/calculators/ExecutionOptionsCTA";
 
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
@@ -173,7 +174,13 @@ export function TaxCalculator() {
     const res = await fetch("/api/leads/capture", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, source: "tax_optimization" }),
+      body: JSON.stringify({
+        ...payload,
+        source: "tax_optimization",
+        meta: {
+          estimatedSavingsInr: Number(savings) || 0,
+        },
+      }),
     });
     const json = await res.json().catch(() => null);
     if (!res.ok || !json?.ok) {
@@ -197,7 +204,13 @@ export function TaxCalculator() {
     const leadRes = await fetch("/api/leads/capture", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, source: "tax_optimization" }),
+      body: JSON.stringify({
+        ...payload,
+        source: "tax_optimization",
+        meta: {
+          estimatedSavingsInr: Number(savings) || 0,
+        },
+      }),
     });
     const leadJson = await leadRes.json().catch(() => null);
     if (!leadRes.ok || !leadJson?.ok) {
@@ -711,6 +724,12 @@ export function TaxCalculator() {
                       <div className="mt-3 text-xs text-slate-200/70">Instant PDF • Based on your ₹{formatLakhs(salary)} scenario</div>
                     </div>
                   ) : null}
+
+                  <ExecutionOptionsCTA
+                    title="Want help executing this tax plan?"
+                    subtitle="We’ll sanity-check your deductions, regime choice, and create a clean checklist for FY 2025–26."
+                    whatsappPrefill={`Hi BM Wealth, I used the Tax Optimization calculator. My annual salary is ₹${formatLakhs(salary)} and the estimated savings is ${formatINR(savings)}. I want help executing the next steps.`}
+                  />
 
                   <div className="trust-badges text-[11px] text-slate-200/70 space-y-1">
                     <p>1,200+ calculations done</p>

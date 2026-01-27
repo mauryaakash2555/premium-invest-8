@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { getBodyTextPaletteStyles } from '@/lib/ui/bodyTextPaletteStyles';
 
@@ -75,7 +76,7 @@ export default function BestCreditCardsIndiaPage() {
               lineHeight: 1.7,
             }}
           >
-            Apply directly on official bank platforms.
+            Shortlist the right card in 2 minutes. We help you pick and execute.
           </p>
         </div>
       </section>
@@ -93,14 +94,9 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fweb.axisbank.co.in%2FDigitalChannel%2FWebForm%2F"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
@@ -115,14 +111,9 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fapplyonline.hdfcbank.com%2Fcards%2Fcredit-cards.html"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
@@ -137,14 +128,9 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fppipl.getpopcard.co%2F"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
@@ -159,14 +145,9 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fwww.idfcfirstbank.com%2Fcredit-card%2Fntb-diy%2Fapply"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
@@ -181,14 +162,9 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Fsavingsaccount.aubank.in%2Fsaself%2Fmobile-number"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
@@ -203,21 +179,15 @@ export default function BestCreditCardsIndiaPage() {
             </p>
           </div>
           <div className="platform-button">
-            <a
-              href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Finduseasycredit.indusind.bank.in%2Fcustomer%2Fcredit-card%2Fnew-lead"
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="btn-primary"
-            >
-              <span>APPLY NOW</span>
-            </a>
+            <Link href="/execution-partners" className="btn-primary">
+              <span>GET CARD SHORTLIST</span>
+            </Link>
           </div>
         </MobileScrollBoost>
 
-        {/* Disclosure */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
-            BM Wealth may receive a referral fee if you apply via these links.
+            Educational shortlist. Final application happens on official bank channels.
           </p>
         </div>
       </section>

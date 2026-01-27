@@ -18,51 +18,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import IntelligenceCard from './IntelligenceCard';
 
-// Fallback items when API/DB is not available
-const FALLBACK_ITEMS = [
-  {
-    id: 'fallback-1',
-    category: 'market_update',
-    urgency: 'medium',
-    block_what_happened: 'Indian markets opened flat amid mixed global cues. Nifty 50 trades near 23,500 levels.',
-    block_why_it_matters: 'Flat openings often indicate market consolidation. This typically happens when investors await key economic data or global market direction before making significant moves.',
-    block_where_fits: 'Affects: Equity portfolios, Mutual Funds, SIPs',
-    block_who_cares: 'Active traders, SIP investors, Equity fund holders',
-    block_signals: [
-      { key: 'volatility_moderate', label: 'Volatility moderate' },
-      { key: 'no_rebalancing', label: 'No rebalancing alerts' },
-    ],
-    block_source_timestamp: 'Source: Market Data | Updated just now',
-  },
-  {
-    id: 'fallback-2',
-    category: 'policy_change',
-    urgency: 'high',
-    block_what_happened: 'RBI maintains repo rate at 6.5% in latest monetary policy review.',
-    block_why_it_matters: 'The repo rate is the rate at which RBI lends to banks. Unchanged rates indicate stable monetary policy, affecting loan EMIs, fixed deposit rates, and overall liquidity in the economy.',
-    block_where_fits: 'Affects: All debt instruments, FDs, Loans, Bonds',
-    block_who_cares: 'FD investors, Loan holders, Debt fund investors, Home buyers',
-    block_signals: [
-      { key: 'risk_unchanged', label: 'Risk score unchanged' },
-      { key: 'sip_continue', label: 'SIP continuation recommended' },
-    ],
-    block_source_timestamp: 'Source: RBI | Updated 2 hours ago',
-  },
-  {
-    id: 'fallback-3',
-    category: 'global_market',
-    urgency: 'low',
-    block_what_happened: 'US markets closed higher overnight. S&P 500 gained 0.4% while Nasdaq added 0.6%.',
-    block_why_it_matters: 'US market performance often influences Asian markets including India. Positive overnight cues typically support bullish sentiment in early trading sessions.',
-    block_where_fits: 'Affects: International funds, Global allocation portfolios, Tech stocks',
-    block_who_cares: 'Diversified investors, International fund holders, Global equity investors',
-    block_signals: [
-      { key: 'volatility_low', label: 'Volatility low' },
-    ],
-    block_source_timestamp: 'Source: Global Markets | Updated 6 hours ago',
-  },
-];
-
 const CATEGORIES = [
   { key: 'all', label: 'All' },
   { key: 'market_update', label: 'Markets' },
@@ -74,10 +29,9 @@ const CATEGORIES = [
 ];
 
 export default function IntelligenceFeed({ limit = 10 }) {
-  const [items, setItems] = useState(FALLBACK_ITEMS);
+  const [items, setItems] = useState([]);
   const [category, setCategory] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const fetchItems = useCallback(async () => {
     try {
@@ -97,21 +51,13 @@ export default function IntelligenceFeed({ limit = 10 }) {
       
       if (data.items && data.items.length > 0) {
         setItems(data.items);
-        setError(null);
+        return;
       } else {
-        // Use filtered fallback if no DB items
-        const filtered = category === 'all' 
-          ? FALLBACK_ITEMS 
-          : FALLBACK_ITEMS.filter(item => item.category === category);
-        setItems(filtered.length > 0 ? filtered : FALLBACK_ITEMS);
+        setItems([]);
       }
     } catch (err) {
-      console.warn('IntelligenceFeed: Using fallback data:', err.message);
-      // Silent fallback - don't show error to user
-      const filtered = category === 'all' 
-        ? FALLBACK_ITEMS 
-        : FALLBACK_ITEMS.filter(item => item.category === category);
-      setItems(filtered.length > 0 ? filtered : FALLBACK_ITEMS);
+      console.warn('IntelligenceFeed: Live items unavailable:', err.message);
+      setItems([]);
     } finally {
       setLoading(false);
     }

@@ -133,10 +133,7 @@ function autoCalculatePct(id, currentValue, sourcePct) {
   // (Some sources return strings like "-0.52%"; parse defensively.)
   const parsedSourcePct = parseNumber(sourcePct);
   if (parsedSourcePct != null) {
-    // Treat 0% (or near-0 after rounding) as invalid so the UI never looks "missing".
-    if (Math.abs(parsedSourcePct) >= 0.01 && Math.abs(parsedSourcePct) <= 10) {
-      return roundTo2(parsedSourcePct);
-    }
+    if (Math.abs(parsedSourcePct) <= 10) return roundTo2(parsedSourcePct);
   }
   
   // Otherwise, calculate from previous price
@@ -146,18 +143,11 @@ function autoCalculatePct(id, currentValue, sourcePct) {
   if (prevPrice && prevPrice > 0 && currentValue > 0) {
     const calculatedPct = ((currentValue - prevPrice) / prevPrice) * 100;
     // Sanity check: if calculated % is too extreme (>10%), something is wrong
-    // Also avoid returning 0% / near-0% so the ticker never appears blank.
-    if (Math.abs(calculatedPct) <= 10 && Math.abs(calculatedPct) >= 0.01) {
-      return roundTo2(calculatedPct);
-    }
+    if (Math.abs(calculatedPct) <= 10) return roundTo2(calculatedPct);
   }
-  
-  // Last resort: use fallback percentage
-  const fallback = getFallbackData().find(f => f.id === id);
-  if (fallback && typeof fallback.changePct === "number" && fallback.changePct !== 0) {
-    return roundTo2(fallback.changePct);
-  }
-  return 0;
+
+  // No dummy/assumed % values.
+  return null;
 }
 
 // Some metal sources occasionally return percentage in "basis" form (e.g. 52 instead of 0.52).
@@ -171,29 +161,13 @@ function normalizeMetalSourcePct(pct) {
   return n;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// FALLBACK DATA - Updated: 2026-01-15 06:00 PM IST (MCX FUTURES PRICES)
-// IMPORTANT: Update these values periodically as markets change!
-// ════════════════════════════════════════════════════════════════════════════
-function getFallbackData() {
-  return [
-    { id: "NIFTY50", name: "NIFTY 50", kind: "index", value: 25666, changePct: -0.26, direction: "down", currency: "INR" },  // Google Finance Jan 15
-    { id: "SENSEX", name: "SENSEX", kind: "index", value: 83383, changePct: -0.29, direction: "down", currency: "INR" },  // Google Finance Jan 15
-    { id: "GOLD", name: "MCX GOLD", kind: "metal", value: 143017, changePct: 0.52, direction: "up", currency: "INR" },  // MCX FUTURES per 10g (record high ~1.43 lakh)
-    { id: "SILVER", name: "MCX SILVER", kind: "metal", value: 283725, changePct: 1.45, direction: "up", currency: "INR" },  // MCX FUTURES per kg (record high ~2.84 lakh)
-    { id: "CRUDEOIL", name: "MCX CRUDE", kind: "commodity", value: 5350, changePct: -0.30, direction: "down", currency: "INR" },  // MCX per barrel (~$61 WTI)
-    { id: "BTC", name: "BITCOIN", kind: "crypto", value: 96500, changePct: 1.25, direction: "up", currency: "USD" },  // ~$96,500 Jan 15
-    { id: "USDINR", name: "USD/INR", kind: "fx", value: 86.55, changePct: 0.12, direction: "up", currency: "INR" },  // ~86.55 Jan 15
-  ];
-}
-
 function makeUpdatingItem({ id, name, kind, currency }) {
   return {
     id,
     name,
     kind,
     value: "---",
-    changePct: 0,
+    changePct: null,
     direction: "neutral",
     currency,
     source: "updating",
@@ -1107,7 +1081,7 @@ async function fetchMarketDataFromAPIs() {
     
     // BITCOIN - 3 sources (AUTO-CALCULATE % if source doesn't provide it)
     // ALWAYS SHOW - display "Updating..." when no live data
-    const btc = cg || binance || (av.btc ? { value: av.btc.value, changePct: 0, source: "alphavantage" } : null);
+    const btc = cg || binance || (av.btc ? { value: av.btc.value, changePct: null, source: "alphavantage" } : null);
     if (btc) {
       const btcPct = autoCalculatePct("BTC", btc.value, btc.changePct);
       items.push({

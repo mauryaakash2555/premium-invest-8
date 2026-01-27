@@ -24,11 +24,11 @@ function getSupabase() {
 }
 
 // Fetch current market context
-async function getMarketContext() {
+async function getMarketContext(request) {
   try {
     // Fetch from our market-data API
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
-    const response = await fetch(`${baseUrl}/api/market-data`, {
+    const baseUrl = request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
+    const response = await fetch(`${baseUrl}/api/market-data?nocache=1`, {
       next: { revalidate: 0 },
     });
 
@@ -42,18 +42,32 @@ async function getMarketContext() {
   }
 }
 
+function hasUsableMarketData(marketData) {
+  const items = Array.isArray(marketData?.items) ? marketData.items : [];
+  return items.some((x) => x?.live === true && x?.value !== '---' && x?.value != null);
+}
+
 // Generate mood with Gemini
 async function generateMoodWithGemini(marketData) {
   const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
   
-  if (!geminiApiKey) {
-    return generateFallbackMood(marketData);
-  }
+  if (!geminiApiKey) throw new Error('Missing GEMINI_API_KEY/GOOGLE_AI_API_KEY');
+  if (!hasUsableMarketData(marketData)) throw new Error('Market data unavailable');
 
   try {
-    const marketSummary = marketData?.data?.map(item => 
-      `${item.name}: ${item.price} (${item.change >= 0 ? '+' : ''}${item.changePercent}%)`
-    ).join(', ') || 'No market data available';
+    const items = Array.isArray(marketData?.items) ? marketData.items : [];
+    const marketSummary = items
+      .filter((x) => x?.live === true)
+      .slice(0, 12)
+      .map((item) => {
+        const name = String(item?.name || item?.id || '').trim();
+        const value = item?.value;
+        const pct = typeof item?.changePct === 'number' ? item.changePct : null;
+        const pctText = pct == null ? '' : ` (${pct >= 0 ? '+' : ''}${pct}%)`;
+        return `${name}: ${value}${pctText}`;
+      })
+      .filter(Boolean)
+      .join(', ');
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
@@ -106,21 +120,21 @@ Return ONLY the mood text, nothing else.`
         mood_type: determineMoodType(marketData),
       };
     }
-
-    return generateFallbackMood(marketData);
+    throw new Error('Gemini returned unusable mood');
   } catch (error) {
     console.error('Gemini mood generation error:', error);
-    return generateFallbackMood(marketData);
+    throw error;
   }
 }
 
 // Determine mood type from market data
 function determineMoodType(marketData) {
-  if (!marketData?.data?.length) return 'neutral';
+  const items = Array.isArray(marketData?.items) ? marketData.items : [];
+  if (!items.length) return 'neutral';
 
-  const changes = marketData.data
-    .filter(item => item.changePercent !== undefined)
-    .map(item => parseFloat(item.changePercent) || 0);
+  const changes = items
+    .map((item) => (typeof item?.changePct === 'number' ? item.changePct : null))
+    .filter((x) => typeof x === 'number' && Number.isFinite(x));
 
   if (!changes.length) return 'neutral';
 
@@ -135,29 +149,11 @@ function determineMoodType(marketData) {
   return 'neutral';
 }
 
-// Fallback mood generator
-function generateFallbackMood(marketData) {
-  const moodType = determineMoodType(marketData);
-  
-  const moodTexts = {
-    bullish: 'Markets showing positive momentum. Investor sentiment upbeat.',
-    bearish: 'Markets under pressure. Cautious sentiment prevails.',
-    volatile: 'Markets experiencing heightened volatility. Mixed signals across sectors.',
-    mixed: 'Markets trading mixed. Sectoral divergence observed.',
-    neutral: 'Markets trading steady. Volatility remains contained.',
-  };
-
-  return {
-    mood_text: moodTexts[moodType] || moodTexts.neutral,
-    mood_type: moodType,
-  };
-}
-
 // POST: Generate new mood text
 export async function POST(request) {
   try {
     // Get current market context
-    const marketData = await getMarketContext();
+    const marketData = await getMarketContext(request);
 
     // Generate mood text
     const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
@@ -220,18 +216,14 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Mood generation error:', error);
-    
-    // Return fallback mood on error
-    const fallback = generateFallbackMood(null);
-    return NextResponse.json({
-      success: true,
-      mood: {
-        ...fallback,
-        generated_at: new Date().toISOString(),
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: error?.message || 'Mood generation failed',
       },
-      stored: false,
-      error: error.message,
-    });
+      { status: 503 }
+    );
   }
 }
 
@@ -248,7 +240,7 @@ export async function GET(request) {
     
     // If cron request, always generate fresh mood
     if (isAuthorizedCron) {
-      const marketData = await getMarketContext();
+      const marketData = await getMarketContext(request);
       const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
 
       if (!supabase) {
@@ -307,7 +299,7 @@ export async function GET(request) {
     }
 
     // Generate fresh mood if none exists or expired
-    const marketData = await getMarketContext();
+    const marketData = await getMarketContext(request);
     const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
 
     return NextResponse.json({
@@ -322,16 +314,13 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Mood fetch error:', error);
-    
-    // Return fallback on error
-    const fallback = generateFallbackMood(null);
-    return NextResponse.json({
-      success: true,
-      mood: {
-        ...fallback,
-        generated_at: new Date().toISOString(),
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: error?.message || 'Mood unavailable',
       },
-      source: 'fallback',
-    });
+      { status: 503 }
+    );
   }
 }

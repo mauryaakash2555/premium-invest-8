@@ -11,7 +11,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { CURATED_HEADLINES, sortByPriority, CATEGORIES } from '@/lib/live-intelligence/headlines';
+import { CATEGORIES } from '@/lib/live-intelligence/headlines';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
 const COLORS = {
@@ -44,6 +44,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
   const [headlines, setHeadlines] = useState([]);
   const [modeConfig, setModeConfig] = useState(null);
   const [isLive, setIsLive] = useState(false);
+  const [hasTriedFetch, setHasTriedFetch] = useState(false);
   const router = useRouter();
 
   // Fetch live headlines from API
@@ -62,20 +63,18 @@ export default function MarketMoodStrip({ onToggleRain }) {
         return true;
       }
     } catch (err) {
-      console.warn('[MarketMoodStrip] Live feed unavailable, using curated:', err.message);
+      console.warn('[MarketMoodStrip] Live feed unavailable:', err.message);
+      setHeadlines([]);
+      setIsLive(false);
+    } finally {
+      setHasTriedFetch(true);
     }
     return false;
   }, []);
 
   useEffect(() => {
     // Try to fetch live headlines first
-    fetchLiveHeadlines().then((success) => {
-      if (!success) {
-        // Fallback to curated headlines
-        const sorted = sortByPriority(CURATED_HEADLINES);
-        setHeadlines(sorted.slice(0, 8));
-      }
-    });
+    fetchLiveHeadlines();
     
     setModeConfig(getCurrentModeConfig());
     
@@ -112,7 +111,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
     ? '🌙 What You Missed Today — Tap to open'
     : (currentHeadline
         ? icon + ' ' + headlineText + (whyText ? ' — ' + whyText : '')
-        : 'Loading market intelligence...');
+        : (hasTriedFetch ? '📡 Live feed unavailable — Tap to open' : 'Loading market intelligence...'));
 
   const handleClick = () => {
     if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
@@ -134,7 +133,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
             <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 160, 255, 0.35)' : COLORS.accentDim }} />
             <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 160, 255, 1)' : COLORS.accent }} />
           </span>
-          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>{isLive ? 'Live' : 'Live Mood'}</span>
+          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>{isLive ? 'Live' : (hasTriedFetch ? 'Unavailable' : 'Live Mood')}</span>
         </div>
         
         <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />

@@ -74,6 +74,7 @@ export default function MarketMoodIndicator() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [history, setHistory] = useState([]);
+  const [moodError, setMoodError] = useState(null);
   const refreshTimerRef = useRef(null);
   const { prefersReducedMotion } = useAnimation();
 
@@ -135,6 +136,7 @@ export default function MarketMoodIndicator() {
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.mood) {
+          setMoodError(null);
           // Map API mood_type to our level
           const levelMap = {
             'bullish': 'bullish',
@@ -169,14 +171,11 @@ export default function MarketMoodIndicator() {
       console.error('Failed to fetch market mood:', error);
       setMood({
         level: 'neutral',
-        summary: 'Markets processing new information',
+        summary: 'Live mood unavailable',
         factors: [],
         lastUpdated: new Date().toISOString(),
       });
-      setHistory((prev) => {
-        const next = [...(Array.isArray(prev) ? prev : []), 0.5];
-        return next.slice(-12);
-      });
+      setMoodError(String(error?.message || 'unavailable'));
     } finally {
       setLoading(false);
     }
