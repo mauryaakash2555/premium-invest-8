@@ -4761,7 +4761,7 @@ export const staticBlogPost11 = {
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75);">
-    Explore partner execution options → <a href="/partners" style="color: var(--lux-accent); text-decoration: underline;">Partners</a>
+    Explore partner execution options → <a href="/execution-partners" style="color: var(--lux-accent); text-decoration: underline;">Execution Partners</a>
   </p>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />

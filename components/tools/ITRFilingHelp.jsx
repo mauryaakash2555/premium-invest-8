@@ -502,14 +502,30 @@ const generateSummaryPDF = async (data, result, documentType) => {
   const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   const time = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
+  const BRAND_LINE = 'BM Wealth • bmwealth.co.in • +91 8850977259 • ARN 90008';
   const FOOTER_TEXT =
-    'This is an estimate generated for educational purposes. Not a filing document. Consult a qualified professional before submission.';
+    'This is an estimate for educational purposes only. Not a filing document. Please consult a qualified professional before submission.';
 
-  const addFooter = () => {
-    doc.setFontSize(8);
-    doc.setTextColor(120, 120, 120);
-    const lines = doc.splitTextToSize(FOOTER_TEXT, 170);
-    doc.text(lines, 20, 290);
+  const stampHeaderAndFooterAllPages = () => {
+    const total = doc.getNumberOfPages();
+    for (let i = 1; i <= total; i += 1) {
+      doc.setPage(i);
+
+      // Header
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
+      doc.text('BM Wealth', 20, 14);
+      doc.setDrawColor(220, 220, 220);
+      doc.line(20, 16, 190, 16);
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(120, 120, 120);
+      doc.text(BRAND_LINE, 20, 284);
+      const lines = doc.splitTextToSize(FOOTER_TEXT, 130);
+      doc.text(lines, 20, 289);
+      doc.text(`Page ${i} of ${total}`, 190, 289, { align: 'right' });
+    }
   };
 
   const addRow = (label, value, y, indent = 0) => {
@@ -550,7 +566,6 @@ const generateSummaryPDF = async (data, result, documentType) => {
   doc.setFontSize(10);
   doc.setTextColor(60, 60, 60);
   doc.text('Extraction status: Assisted (Review required)', 20, 110);
-  addFooter();
 
   // PAGE 2 — INCOME BREAKDOWN
   doc.addPage();
@@ -580,7 +595,6 @@ const generateSummaryPDF = async (data, result, documentType) => {
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
   y = addRow('Gross Total Income', result.totalIncome, y);
-  addFooter();
 
   // PAGE 3 — DEDUCTIONS
   doc.addPage();
@@ -611,7 +625,6 @@ const generateSummaryPDF = async (data, result, documentType) => {
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
   y = addRow('Total Deductions', result.deductionsApplied.total || 0, y);
-  addFooter();
 
   // PAGE 4 — TAX COMPUTATION
   doc.addPage();
@@ -646,7 +659,29 @@ const generateSummaryPDF = async (data, result, documentType) => {
   } else {
     y = addRow('Net Payable (estimate)', result.taxDue, y);
   }
-  addFooter();
+
+  // Simple glossary to reduce jargon confusion
+  y += 10;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.text('Glossary (simple)', 20, y);
+  y += 7;
+  doc.setFontSize(9);
+  doc.setTextColor(60, 60, 60);
+  const glossaryLines = [
+    'FY: Financial Year (income period). AY: Assessment Year (filing period).',
+    'HRA: House Rent Allowance exemption (subject to rules + documentation).',
+    '80C/80D: Common deduction sections (limits apply).',
+    'Cess: Health & Education Cess (4% on tax + surcharge).',
+  ];
+  glossaryLines.forEach((line) => {
+    const wrapped = doc.splitTextToSize(line, 170);
+    doc.text(wrapped, 20, y);
+    y += wrapped.length * 5;
+  });
+
+  // Stamp BM Wealth header/footer + page numbers on all pages
+  stampHeaderAndFooterAllPages();
 
   return doc;
 };

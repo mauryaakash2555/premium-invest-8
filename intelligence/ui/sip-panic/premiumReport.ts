@@ -7,39 +7,56 @@ function inr0(amount: number): string {
 
 async function svgToPngDataUrl(svg: SVGSVGElement, opts?: { background?: string; maxPx?: number }) {
   const background = opts?.background ?? "#070708";
-  const maxPx = Math.max(800, Math.min(6000, opts?.maxPx ?? 3200));
 
-  const xml = new XMLSerializer().serializeToString(svg);
+  const viewBox = svg.viewBox?.baseVal;
+  const vbW = Math.max(1, Number(viewBox?.width || svg.getAttribute("width") || 900));
+  const vbH = Math.max(1, Number(viewBox?.height || svg.getAttribute("height") || 360));
+
+  const maxPx = Math.max(1200, Math.min(6000, Number(opts?.maxPx ?? 3600)));
+  // Force an upscale so charts don't look blurry in PDFs.
+  const scale = Math.max(2, Math.min(4, maxPx / Math.max(vbW, vbH)));
+  const pixelW = Math.round(vbW * scale);
+  const pixelH = Math.round(vbH * scale);
+
+  const clone = svg.cloneNode(true) as SVGSVGElement;
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+  clone.setAttribute("width", String(vbW));
+  clone.setAttribute("height", String(vbH));
+
+  const xml = new XMLSerializer().serializeToString(clone);
   const svgBlob = new Blob([`<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n${xml}`], { type: "image/svg+xml;charset=utf-8" });
   const url = URL.createObjectURL(svgBlob);
 
-  const img = new Image();
-  img.decoding = "async";
+  try {
+    const img = new Image();
+    img.decoding = "async";
+    img.crossOrigin = "anonymous";
 
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = () => reject(new Error("Failed to load SVG"));
-    img.src = url;
-  });
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Failed to load SVG"));
+      img.src = url;
+    });
 
-  const w = Math.max(1, img.width || 1200);
-  const h = Math.max(1, img.height || 630);
-  const scale = Math.min(1, maxPx / Math.max(w, h));
+    const canvas = document.createElement("canvas");
+    canvas.width = pixelW;
+    canvas.height = pixelH;
 
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(w * scale);
-  canvas.height = Math.round(h * scale);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas not supported");
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Canvas not supported");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
-  ctx.fillStyle = background;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, pixelW, pixelH);
+    ctx.drawImage(img, 0, 0, pixelW, pixelH);
 
-  URL.revokeObjectURL(url);
-
-  return canvas.toDataURL("image/png");
+    return canvas.toDataURL("image/png");
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 export async function downloadPremiumReport(params: {
@@ -78,20 +95,50 @@ export async function downloadPremiumReport(params: {
 
   const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
 
-  // Background
-  doc.setFillColor(7, 7, 8);
-  doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), "F");
+  const PAGE_W = doc.internal.pageSize.getWidth();
+  const PAGE_H = doc.internal.pageSize.getHeight();
+  const TITLE = "SIP vs Panic Selling - Your Financial Analysis";
+  const preparedOn = new Date().toLocaleDateString("en-IN");
 
-  // Header
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.setTextColor(212, 175, 55);
-  doc.text("SIP vs Panic Selling - Your Financial Analysis", 14, 18);
+  const drawChrome = () => {
+    // Background
+    doc.setFillColor(7, 7, 8);
+    doc.rect(0, 0, PAGE_W, PAGE_H, "F");
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  doc.setTextColor(185, 185, 185);
-  doc.text(`Prepared by BM Wealth • ${new Date().toLocaleDateString()}`, 14, 25);
+    // Header
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.setTextColor(212, 175, 55);
+    doc.text(TITLE, 14, 18);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(185, 185, 185);
+    doc.text(`BM Wealth • Prepared on ${preparedOn}`, 14, 25);
+
+    doc.setDrawColor(45, 45, 52);
+    doc.setLineWidth(0.3);
+    doc.line(14, 28, 196, 28);
+
+    // Footer
+    doc.setDrawColor(45, 45, 52);
+    doc.setLineWidth(0.3);
+    doc.line(14, 284, 196, 284);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(160, 160, 160);
+    doc.text("Education-only. Not investment/tax/legal advice.", 14, 290);
+    doc.text("bmwealth.co.in • +91 8850977259 • ARN 90008", 196, 290, { align: "right" });
+
+    const pageNumber = doc.getCurrentPageInfo().pageNumber;
+    const total = doc.getNumberOfPages();
+    doc.setTextColor(120, 120, 120);
+    doc.text(`${pageNumber}/${total}`, 196, 295, { align: "right" });
+  };
+
+  // First page chrome
+  drawChrome();
 
   // Parameters
   doc.setFont("helvetica", "bold");
@@ -148,13 +195,17 @@ export async function downloadPremiumReport(params: {
   // Chart
   const svg = document.getElementById(chartSvgId) as unknown as SVGSVGElement | null;
   if (svg) {
-    const clone = svg.cloneNode(true) as SVGSVGElement;
-    const dataUrl = await svgToPngDataUrl(clone, { background: "#070708", maxPx: 2400 });
+    const dataUrl = await svgToPngDataUrl(svg, { background: "#070708", maxPx: 3600 });
 
     doc.setDrawColor(45, 45, 52);
     doc.setLineWidth(0.4);
     doc.roundedRect(14, 116, 182, 66, 3, 3, "S");
     doc.addImage(dataUrl, "PNG", 15, 117, 180, 64, undefined, "SLOW");
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(170, 170, 170);
+    doc.text("Chart: post-tax corpus over time (discipline vs selected behaviors).", 15, 186);
   }
 
   // Results table
@@ -171,10 +222,30 @@ export async function downloadPremiumReport(params: {
     startY: 192,
     head: [["Scenario", "Invested", "Final", "Post-tax", "XIRR", "Behavioral cost"]],
     body: rows,
-    styles: { fontSize: 9, textColor: [230, 230, 230], fillColor: [12, 12, 13], lineColor: [45, 45, 52] },
-    headStyles: { fillColor: [0, 0, 0], textColor: [212, 175, 55] },
+    styles: {
+      fontSize: 9,
+      textColor: [230, 230, 230],
+      fillColor: [12, 12, 13],
+      lineColor: [45, 45, 52],
+      lineWidth: 0.2,
+      cellPadding: 2.2,
+      overflow: "linebreak",
+      valign: "middle",
+    },
+    headStyles: { fillColor: [0, 0, 0], textColor: [212, 175, 55], fontStyle: "bold" },
+    alternateRowStyles: { fillColor: [10, 10, 12] },
     theme: "grid",
     margin: { left: 14, right: 14 },
+    columnStyles: {
+      1: { halign: "right" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+      5: { halign: "right" },
+    },
+    didDrawPage: () => {
+      drawChrome();
+    },
   });
 
   const endY = (doc as any).lastAutoTable?.finalY ?? 200;
@@ -204,39 +275,114 @@ export async function downloadPremiumReport(params: {
     startY: Math.min(270, endY + 8),
     head: [["Tax breakdown", "Type", "Gains", "Base tax", "Surcharge", "Cess", "Total tax"]],
     body: taxRows,
-    styles: { fontSize: 8, textColor: [230, 230, 230], fillColor: [12, 12, 13], lineColor: [45, 45, 52] },
-    headStyles: { fillColor: [0, 0, 0], textColor: [212, 175, 55] },
+    styles: {
+      fontSize: 8,
+      textColor: [230, 230, 230],
+      fillColor: [12, 12, 13],
+      lineColor: [45, 45, 52],
+      lineWidth: 0.2,
+      cellPadding: 2,
+      overflow: "linebreak",
+      valign: "middle",
+    },
+    headStyles: { fillColor: [0, 0, 0], textColor: [212, 175, 55], fontStyle: "bold" },
+    alternateRowStyles: { fillColor: [10, 10, 12] },
     theme: "grid",
     margin: { left: 14, right: 14 },
+    columnStyles: {
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+      5: { halign: "right" },
+      6: { halign: "right" },
+    },
+    didDrawPage: () => {
+      drawChrome();
+    },
   });
 
   const afterTaxY = (doc as any).lastAutoTable?.finalY ?? endY;
 
+  // If we're too close to the footer, continue on a new page.
+  let y = afterTaxY + 10;
+  if (y > 250) {
+    doc.addPage();
+    drawChrome();
+    y = 36;
+  }
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   doc.setTextColor(255, 255, 255);
-  doc.text("Key insights", 14, Math.min(276, afterTaxY + 10));
+  doc.text("Key insights", 14, y);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(200, 200, 200);
 
   const insights = [
-    worst && discipline ? `Behavioral cost vs discipline: ${inr0(worst.behavioralCost)}` : "Behavioral cost depends on your panic behavior.",
-    "Discipline tends to win because you keep buying when prices are down.",
-    "A written plan (rules + buffer) reduces the chance of panic selling.",
+    worst && discipline ? `Behavioral cost vs discipline: ${inr0(worst.behavioralCost)}` : "Behavioral cost depends on your selected behavior.",
+    "Behavioral cost is not a market crash loss; it’s a behavior-driven gap vs staying disciplined.",
+    "Discipline tends to win because you keep buying through drawdowns and participate in the recovery.",
   ];
 
-  let y = Math.min(276, afterTaxY + 16);
+  y += 6;
   for (let i = 0; i < insights.length; i += 1) {
-    doc.text(`${i + 1}. ${insights[i]}`, 16, y);
-    y += 6;
+    const lines = doc.splitTextToSize(`${i + 1}. ${insights[i]}`, 182);
+    doc.text(lines, 14, y);
+    y += lines.length * 5.2;
   }
 
-  doc.setFontSize(8);
-  doc.setTextColor(160, 160, 160);
-  doc.text("Education-only. Not investment/tax/legal advice. Mutual fund investments are subject to market risks.", 14, 287);
+  y += 4;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255);
+  doc.text("Action plan (education-only)", 14, y);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(200, 200, 200);
+  const actions = [
+    "Write your SIP rule before the next crash (e.g., keep SIP on, rebalance only on dates, not feelings).",
+    "Keep an emergency buffer so you’re not forced to stop SIP during volatility.",
+    "If panic is likely, automate decisions (SIP auto-debit + a pre-decided rebalancing calendar).",
+  ];
+  y += 6;
+  for (let i = 0; i < actions.length; i += 1) {
+    const lines = doc.splitTextToSize(`${i + 1}. ${actions[i]}`, 182);
+    doc.text(lines, 14, y);
+    y += lines.length * 5.2;
+  }
+
+  y += 4;
+  if (y > 250) {
+    doc.addPage();
+    drawChrome();
+    y = 36;
+  }
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255);
+  doc.text("Glossary", 14, y);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(200, 200, 200);
+  const glossary = [
+    "SIP: Systematic Investment Plan (a fixed amount invested regularly).",
+    "Drawdown: % fall from the market’s recent peak.",
+    "XIRR: Annualized return accounting for timing of cashflows.",
+    "STCG/LTCG: Short/Long Term Capital Gains (tax categories; simplified here).",
+    "Behavioral cost: After-tax gap between staying disciplined and the worst selected behavior.",
+  ];
+  y += 6;
+  for (let i = 0; i < glossary.length; i += 1) {
+    const lines = doc.splitTextToSize(`${i + 1}. ${glossary[i]}`, 182);
+    doc.text(lines, 14, y);
+    y += lines.length * 5.1;
+  }
 
   const stamp = new Date().toISOString().slice(0, 10);
-  doc.save(`SIP_Panic_Report_${stamp}.pdf`);
+  doc.save(`BM-Wealth_SIP-vs-Panic_${stamp}.pdf`);
 }

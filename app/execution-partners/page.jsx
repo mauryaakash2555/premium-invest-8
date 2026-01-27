@@ -337,16 +337,24 @@ export default function ExecutionPartnersPage() {
                 margin: 0,
               }}
             >
-              Personal Loans <span style={{ color: 'rgba(255,255,255,0.60)' }}>(Coming soon)</span>
+              Personal Loans <span style={{ color: 'rgba(255,255,255,0.60)' }}>(Optional)</span>
             </h2>
             <p style={{ marginTop: 12, marginBottom: 0, color: 'rgba(255,255,255,0.70)', lineHeight: 1.75 }}>
-              A neutral reference list is planned. We will publish this only when the framework, disclosures, and experience checks are complete.
+              Optional partner reference for users who want to compare loan offers after using BM Wealth tools.
             </p>
           </div>
 
-          <ComingSoonCard
-            title="Personal Loan Providers"
-            subtitle="Optional references will appear here once review and disclosures are complete."
+          <AffiliateCard
+            title="Loan Hub"
+            subtitle="Compare personal loan offers from RBI-regulated lenders."
+            features={[
+              'Useful for short-term liquidity planning (verify total cost of credit)',
+              'Check eligibility and offers on the provider site',
+              'Terms, fees, and approval are defined by the lender/provider',
+            ]}
+            href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Floanhubindia.com%2Fapply-now%2F"
+            eventName="affiliate_loan_hub_click"
+            ctaLabel="Check eligibility"
           />
 
           <div style={{ width: 'calc(100% - 30px)', marginLeft: '15px', marginRight: '15px', marginTop: '12px', marginBottom: '18px' }}>

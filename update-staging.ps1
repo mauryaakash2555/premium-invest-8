@@ -48,14 +48,30 @@ Write-Host "7️⃣ Sync staging with main..." -ForegroundColor Yellow
 git merge main --quiet
 Assert-Git
 
-Write-Host "8️⃣ Checking for changes..." -ForegroundColor Yellow
+Write-Host "8️⃣ Checking for local working tree changes..." -ForegroundColor Yellow
 if (git status --porcelain) {
   git add .
   git commit -m "auto-update staging" --quiet
-  git push -u origin staging --quiet
-  Write-Host "✅ Deployment complete!" -ForegroundColor Green
+  Assert-Git
+}
+
+Write-Host "9️⃣ Pushing staging branch..." -ForegroundColor Yellow
+git fetch origin --quiet
+Assert-Git
+
+if (git rev-parse --verify origin/staging 2>$null) {
+  $ahead = (git rev-list --count origin/staging..staging).Trim()
+  if ($ahead -ne "0") {
+    git push origin staging --quiet
+    Assert-Git
+    Write-Host "✅ Deployment complete! Pushed $ahead commit(s) to origin/staging." -ForegroundColor Green
+  } else {
+    Write-Host ">>> Staging already up to date. Skipped push." -ForegroundColor Gray
+  }
 } else {
-  Write-Host ">>> No changes to commit. Skipped push." -ForegroundColor Gray
+  git push -u origin staging --quiet
+  Assert-Git
+  Write-Host "✅ Deployment complete! Pushed new origin/staging branch." -ForegroundColor Green
 }
 
 Write-Host "🌐 Check your staging deployment in Vercel (staging branch)." -ForegroundColor Cyan
