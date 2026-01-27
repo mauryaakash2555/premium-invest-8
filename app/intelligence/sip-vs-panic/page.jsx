@@ -143,6 +143,15 @@ export default function SIPPanicRoutePage() {
             </Link>
             <span className="text-white/25">•</span>
             <Link
+              href="/intelligence/sip-vs-panic/guide"
+              className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
+              data-ga-event="tool_internal_link"
+              data-ga-label="sip_vs_panic_to_guide"
+            >
+              Read the crash guide →
+            </Link>
+            <span className="text-white/25">•</span>
+            <Link
               href="/blog"
               className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
               data-ga-event="tool_internal_link"

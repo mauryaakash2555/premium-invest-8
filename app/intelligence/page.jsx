@@ -30,6 +30,16 @@ export default function IntelligencePage() {
                 <p className="mt-1 text-sm text-white/70">
                   See what stopping your SIP during a crash really costs (post-tax) — with timeline + drawdown visualization.
                 </p>
+                <div className="mt-2 text-sm">
+                  <Link
+                    href="/intelligence/sip-vs-panic/guide"
+                    className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
+                    data-ga-event="tool_internal_link"
+                    data-ga-label="intelligence_to_sip_vs_panic_guide"
+                  >
+                    Read the guide →
+                  </Link>
+                </div>
               </div>
               <Link href="/intelligence/sip-vs-panic" className="shrink-0 inline-flex">
                 <Button
