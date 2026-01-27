@@ -121,17 +121,31 @@ const VoiceControl = ({ headline, summary, className = '' }) => {
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        padding: '6px 12px',
-        borderRadius: '8px',
-        border: 'none',
-        background: isPlaying ? 'rgba(100, 255, 150, 0.15)' : 'rgba(170, 198, 255, 0.10)',
-        color: isPlaying ? 'rgba(100, 255, 150, 0.95)' : 'rgba(170, 198, 255, 0.80)',
+        padding: '8px 12px',
+        borderRadius: '10px',
+        border: `1px solid ${isPlaying ? 'rgba(100, 255, 150, 0.35)' : 'rgba(170, 198, 255, 0.28)'}`,
+        background: isPlaying ? 'rgba(100, 255, 150, 0.16)' : 'rgba(170, 198, 255, 0.14)',
+        color: isPlaying ? 'rgba(170, 255, 210, 0.98)' : 'rgba(235, 242, 255, 0.92)',
         fontSize: '13px',
         fontWeight: 500,
         cursor: 'pointer',
         transition: 'all 0.2s ease',
+        boxShadow: isPlaying ? '0 10px 26px rgba(0,0,0,0.30)' : '0 8px 22px rgba(0,0,0,0.22)',
       }}
       title={isPlaying ? 'Stop reading (Space)' : 'Read aloud (Space)'}
+      aria-label={isPlaying ? 'Stop reading' : 'Read aloud'}
+      onMouseOver={(e) => {
+        if (!isPlaying) {
+          e.currentTarget.style.background = 'rgba(170, 198, 255, 0.20)';
+          e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.40)';
+        }
+        e.currentTarget.style.transform = 'translateY(-1px)';
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.background = isPlaying ? 'rgba(100, 255, 150, 0.16)' : 'rgba(170, 198, 255, 0.14)';
+        e.currentTarget.style.borderColor = isPlaying ? 'rgba(100, 255, 150, 0.35)' : 'rgba(170, 198, 255, 0.28)';
+      }}
     >
       <span>{isPlaying ? '⏸️' : '🔊'}</span>
       <span className="hidden sm:inline">{isPlaying ? 'Stop' : 'Listen'}</span>
@@ -248,6 +262,11 @@ export default function LiveIntelligenceOverlay({
   const [tvIsSwitching, setTvIsSwitching] = useState(false);
   const tvSwitchTimersRef = useRef([]);
 
+  // Defensive: avoid runtime crashes if a bundler/edit regression ever removes these bindings.
+  // `typeof` is safe even if the identifier is undeclared.
+  const tvIntervalSafe = typeof tvInterval === 'string' && tvInterval ? tvInterval : 'D';
+  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'TVC:NIFTY';
+
   useEffect(() => {
     return () => {
       try {
@@ -258,7 +277,7 @@ export default function LiveIntelligenceOverlay({
   }, []);
 
   const handleTvIntervalChange = useCallback((nextInterval) => {
-    if (!nextInterval || nextInterval === tvInterval) return;
+    if (!nextInterval || nextInterval === tvIntervalSafe) return;
     try {
       tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
     } catch {}
@@ -271,10 +290,10 @@ export default function LiveIntelligenceOverlay({
     tvSwitchTimersRef.current.push(
       setTimeout(() => setTvIsSwitching(false), 520)
     );
-  }, [tvInterval]);
+  }, [tvIntervalSafe]);
 
   const handleTvSymbolChange = useCallback((nextSymbol) => {
-    if (!nextSymbol || nextSymbol === tvSymbol) return;
+    if (!nextSymbol || nextSymbol === tvSymbolSafe) return;
     try {
       tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
     } catch {}
@@ -287,7 +306,7 @@ export default function LiveIntelligenceOverlay({
     tvSwitchTimersRef.current.push(
       setTimeout(() => setTvIsSwitching(false), 520)
     );
-  }, [tvSymbol]);
+  }, [tvSymbolSafe]);
 
   // Mount check for portal
   useEffect(() => {
@@ -814,7 +833,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days
+  const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days, 4days
   const [breakingHeadline, setBreakingHeadline] = useState(null); // For breaking news click
   const [allocations, setAllocations] = useState({
     equity: 58,
@@ -822,6 +841,44 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     gold: 8,
     cash: 10,
   });
+
+  const [isAllocationEditing, setIsAllocationEditing] = useState(false);
+
+  // TradingView chart interval/symbol state (local to panel)
+  const [tvInterval, setTvInterval] = useState('D');
+  const [tvSymbol, setTvSymbol] = useState('TVC:NIFTY');
+  const [tvIsSwitching, setTvIsSwitching] = useState(false);
+  const tvSwitchTimersRef = useRef([]);
+
+  // Defensive: derived safe values for TradingView bindings
+  const tvIntervalSafe = typeof tvInterval === 'string' && tvInterval ? tvInterval : 'D';
+  const tvSymbolSafe = typeof tvSymbol === 'string' && tvSymbol ? tvSymbol : 'TVC:NIFTY';
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+      tvSwitchTimersRef.current = [];
+    };
+  }, []);
+
+  const handleTvIntervalChange = useCallback((nextInterval) => {
+    if (!nextInterval || nextInterval === tvIntervalSafe) return;
+    tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+    tvSwitchTimersRef.current = [];
+    setTvIsSwitching(true);
+    tvSwitchTimersRef.current.push(setTimeout(() => setTvInterval(nextInterval), 140));
+    tvSwitchTimersRef.current.push(setTimeout(() => setTvIsSwitching(false), 520));
+  }, [tvIntervalSafe]);
+
+  const handleTvSymbolChange = useCallback((nextSymbol) => {
+    if (!nextSymbol || nextSymbol === tvSymbolSafe) return;
+    tvSwitchTimersRef.current.forEach((t) => clearTimeout(t));
+    tvSwitchTimersRef.current = [];
+    setTvIsSwitching(true);
+    tvSwitchTimersRef.current.push(setTimeout(() => setTvSymbol(nextSymbol), 120));
+    tvSwitchTimersRef.current.push(setTimeout(() => setTvIsSwitching(false), 520));
+  }, [tvSymbolSafe]);
 
   // Handle breaking news headline click - scroll to feed and highlight
   const handleBreakingClick = useCallback((headline) => {
@@ -868,7 +925,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, [shareText, shareUrl]);
 
   // Tab order for keyboard navigation
-  const tabOrder = ['pulse', 'live', 'timings', '2days', 'saved'];
+  const tabOrder = ['pulse', 'live', 'timings', '2days', '4days', 'saved'];
 
   // ═══════════════════════════════════════════════════════════
   // KEYBOARD SHORTCUTS for navigation
@@ -877,6 +934,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const handleKeyDown = (e) => {
       // Don't intercept if user is typing
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+      // Escape - close overlay
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose?.();
+        return;
+      }
       
       // Arrow Left/Right - Navigate tabs
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
@@ -897,8 +961,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         setShowShareMenu(prev => !prev);
       }
       
-      // Number keys 1-4 for quick tab switch
-      if (e.key >= '1' && e.key <= '4' && !e.ctrlKey && !e.metaKey) {
+      // Number keys 1-6 for quick tab switch
+      if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey) {
         const index = parseInt(e.key) - 1;
         if (tabOrder[index]) {
           setActiveTab(tabOrder[index]);
@@ -944,8 +1008,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const totalReturnPct = invested > 0 ? (unrealized / invested) * 100 : 0;
 
     const equityPct = Number(allocations?.equity) || 0;
-    const riskScore = equityPct >= 70 ? 'High' : equityPct >= 40 ? 'Moderate' : 'Low';
-
     const xirr = totalReturnPct;
 
     return [
@@ -978,54 +1040,28 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         trend: null,
       },
     ];
-  }, [allocations?.equity, portfolioValue, totalInvested]);
-
-  const tvChartOptions = useMemo(
-    () => ({
-      autosize: true,
-      symbol: 'NSE:NIFTY',
-      interval: 'D',
-      timezone: 'Asia/Kolkata',
-      theme: 'dark',
-      style: '1',
-      locale: 'in',
-      withdateranges: true,
-      hide_side_toolbar: false,
-      allow_symbol_change: true,
-      save_image: true,
-      details: true,
-      calendar: false,
-      support_host: 'https://www.tradingview.com',
-    }),
-    []
-  );
+  }, [allocations?.equity, portfolioValue, riskScore, totalInvested]);
 
   const tvMarketsOptions = useMemo(
     () => ({
       colorTheme: 'dark',
       dateRange: '12M',
       showChart: true,
-      isTransparent: false,
+      locale: 'in',
       showSymbolLogo: true,
       showFloatingTooltip: false,
-      width: '100%',
-      height: '100%',
-      locale: 'in',
       tabs: [
         {
-          title: 'Indices',
+          title: 'India',
           symbols: [
             { s: 'NSE:NIFTY', d: 'NIFTY 50' },
-            { s: 'NSE:BANKNIFTY', d: 'Bank NIFTY' },
+            { s: 'NSE:BANKNIFTY', d: 'BANKNIFTY' },
             { s: 'BSE:SENSEX', d: 'SENSEX' },
-            { s: 'NSE:INDIAVIX', d: 'India VIX' },
             { s: 'NSE:NIFTYIT', d: 'NIFTY IT' },
-            { s: 'NSE:NIFTYFIN', d: 'NIFTY FIN' },
             { s: 'NSE:NIFTYPHARMA', d: 'NIFTY Pharma' },
             { s: 'NSE:NIFTYFMCG', d: 'NIFTY FMCG' },
             { s: 'NSE:NIFTYAUTO', d: 'NIFTY Auto' },
             { s: 'NSE:NIFTYMETAL', d: 'NIFTY Metal' },
-            { s: 'NSE:NIFTYREALTY', d: 'NIFTY Realty' },
             { s: 'NSE:NIFTYMIDCAP50', d: 'NIFTY MIDCAP 50' },
           ],
         },
@@ -1098,9 +1134,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     allocationBumpTimerRef.current = window.setTimeout(() => setAllocationBumpKey(null), 1200);
   };
 
-  // Donut rotation speed control (0.5x → 2x), persisted
-  const [donutSpeedMultiplier, setDonutSpeedMultiplier] = useState(1);
-  const donutSpeedPersistRef = useRef(null);
+  // Donut rotation speed intentionally fixed (avoid debug controls)
+  const donutRotationSeconds = 30;
 
   const allocationBumpTimerRef = useRef(null);
   const [allocationBumpKey, setAllocationBumpKey] = useState(null);
@@ -1111,32 +1146,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const raw = window.localStorage.getItem('li_donut_rot_speed_v1');
-      const v = Number(raw);
-      if (Number.isFinite(v) && v >= 0.5 && v <= 2) setDonutSpeedMultiplier(v);
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
-      donutSpeedPersistRef.current = window.setTimeout(() => {
-        try {
-          window.localStorage.setItem('li_donut_rot_speed_v1', String(donutSpeedMultiplier));
-        } catch {}
-      }, 180);
-    } catch {}
-
-    return () => {
-      try {
-        if (donutSpeedPersistRef.current) window.clearTimeout(donutSpeedPersistRef.current);
-      } catch {}
-    };
-  }, [donutSpeedMultiplier]);
+ 
 
   const onRipplePointerDown = (e) => {
     const el = e.currentTarget;
@@ -1900,52 +1910,59 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Close/Back Button - TOP RIGHT, highly visible, always in viewport */}
+        {/* Sticky Close/Back Button - TOP RIGHT, refined */}
         <button
           onClick={onClose}
-          aria-label="Close and go back to home"
+          aria-label="Close (Esc)"
+          title="Close (Esc)"
           className="li-sticky-back-btn"
           style={{
             position: 'fixed',
-            top: '90px',
-            right: '20px',
+            top: '16px',
+            right: '16px',
             zIndex: 99999,
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            background: 'rgba(0, 0, 0, 0.9)',
-            color: 'rgba(255, 255, 255, 1)',
+            width: '44px',
+            height: '44px',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 255, 255, 0.16)',
+            background: 'rgba(10, 10, 12, 0.72)',
+            color: 'rgba(235, 242, 255, 0.95)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '22px',
-            fontWeight: 400,
-            transition: 'all 0.2s ease',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 80, 80, 0.15)',
+            transition: 'transform 0.18s ease, background 0.18s ease, border-color 0.18s ease',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(10px)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(220, 50, 50, 1)';
-            e.currentTarget.style.transform = 'scale(1.15)';
-            e.currentTarget.style.borderColor = 'rgba(255, 100, 100, 0.8)';
+            e.currentTarget.style.background = 'rgba(220, 50, 50, 0.15)';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+            e.currentTarget.style.borderColor = 'rgba(255, 100, 100, 0.30)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+            e.currentTarget.style.background = 'rgba(10, 10, 12, 0.72)';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.16)';
           }}
         >
-          ✕
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </button>
 
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
         <div className="li-header-section" style={{ marginBottom: '8px' }}>
           {/* Row 1: Title + Feature Controls (top-right) */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-              Live Intelligence
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap' }}>
+              <h2 style={{ margin: 0, color: 'rgba(235,242,255,0.96)', fontSize: '28px', fontWeight: 700, letterSpacing: '-0.02em' }}>
+                BM Wealth
+              </h2>
+              <span style={{ color: 'rgba(200,215,240,0.75)', fontSize: '14px', fontWeight: 600 }}>
+                Live Intelligence
+              </span>
+            </div>
             
             {/* Feature Controls: Voice, Badges */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
@@ -1962,7 +1979,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           </div>
           
           {/* Row 3: Subtitle */}
-          <p style={{ margin: '10px 0 0', color: 'rgba(200,215,240,0.65)', fontSize: '14px', maxWidth: '52ch', lineHeight: 1.5 }}>
+          <p style={{ margin: '10px 0 0', color: 'rgba(200,215,240,0.68)', fontSize: '14px', maxWidth: '62ch', lineHeight: 1.55 }}>
             Your financial command center — real-time portfolio insights and signals.
           </p>
           
@@ -1970,11 +1987,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[
-                { key: 'pulse', label: 'Live Market Pulse', icon: '📡' },
-                { key: 'live', label: 'Live', icon: '🔴' },
-                { key: 'timings', label: 'Timings', icon: '🕐' },
-                { key: '2days', label: '2 Days', icon: '📊' },
-                { key: 'saved', label: 'Saved', icon: '🔖' },
+                { key: 'pulse', label: 'Pulse', title: 'Live Market Pulse' },
+                { key: 'live', label: 'Live', title: 'Live Feed' },
+                { key: 'timings', label: 'Timings', title: 'Market Timings' },
+                { key: '2days', label: '2D', title: 'Last 2 Days' },
+                { key: '4days', label: '4D', title: 'Last 4 Days' },
+                { key: 'saved', label: 'Saved', title: 'Saved Items' },
               ].map((tab) => {
                 const isActive = activeTab === tab.key;
                 return (
@@ -1982,73 +2000,83 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
+                  aria-label={tab.title || tab.label}
+                  title={tab.title || tab.label}
                   style={{
                     display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      padding: '8px 14px',
-                      background: isActive ? 'rgba(100, 180, 255, 0.12)' : 'rgba(100, 180, 255, 0.04)',
-                      border: `1px solid ${isActive ? 'rgba(100, 180, 255, 0.30)' : 'rgba(100, 180, 255, 0.08)'}`,
+                      padding: '9px 14px',
+                      background: isActive
+                        ? 'linear-gradient(180deg, rgba(100, 180, 255, 0.18) 0%, rgba(100, 180, 255, 0.10) 100%)'
+                        : 'rgba(100, 180, 255, 0.04)',
+                      border: `1px solid ${isActive ? 'rgba(100, 180, 255, 0.36)' : 'rgba(100, 180, 255, 0.10)'}`,
                       borderRadius: '10px',
-                      color: isActive ? 'rgba(140, 210, 255, 0.95)' : 'rgba(150, 180, 220, 0.60)',
+                      color: isActive ? 'rgba(235, 242, 255, 0.95)' : 'rgba(180, 200, 230, 0.62)',
                       fontSize: '12px',
-                      fontWeight: 600,
+                      fontWeight: 700,
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                       whiteSpace: 'nowrap',
+                      boxShadow: isActive ? '0 8px 24px rgba(0,0,0,0.35), 0 0 0 3px rgba(100,180,255,0.08)' : 'none',
                     }}
                     onMouseOver={(e) => {
                       if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.08)';
-                        e.currentTarget.style.color = 'rgba(180, 210, 255, 0.80)';
+                        e.currentTarget.style.color = 'rgba(235, 242, 255, 0.85)';
+                        e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.22)';
                       }
                     }}
                     onMouseOut={(e) => {
                       if (!isActive) {
                         e.currentTarget.style.background = 'rgba(100, 180, 255, 0.04)';
-                        e.currentTarget.style.color = 'rgba(150, 180, 220, 0.60)';
+                        e.currentTarget.style.color = 'rgba(180, 200, 230, 0.62)';
+                        e.currentTarget.style.borderColor = 'rgba(100, 180, 255, 0.10)';
                       }
                     }}
                   >
-                    <span>{tab.icon}</span>
                     <span>{tab.label}</span>
                   </button>
                 );})}
-                {/* Open Full Intelligence CTA - Links to dedicated page */}
-                <a
-                  href="/live-intelligence"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 14px',
-                    background: 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)',
-                    border: '1px solid rgba(140, 220, 180, 0.25)',
-                    borderRadius: '10px',
-                    color: 'rgba(140, 220, 180, 0.95)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.20) 0%, rgba(140, 220, 180, 0.15) 100%)';
-                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.40)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.15) 0%, rgba(140, 220, 180, 0.10) 100%)';
-                    e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.25)';
-                  }}
-                >
-                  <span>Open Full Intelligence</span>
-                  <span style={{ fontSize: '10px' }}>→</span>
-                </a>
               </div>
             </div>
           
           {/* Row 5: Action buttons - Share & Add Goal */}
-          <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap', overflowX: 'auto', paddingBottom: '4px', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
+          <div className="li-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap' }}>
+            {/* Primary CTA */}
+            <a
+              href="/live-intelligence"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '11px 18px',
+                background: 'linear-gradient(135deg, rgba(100, 180, 255, 0.30) 0%, rgba(140, 220, 180, 0.20) 100%)',
+                border: '1px solid rgba(140, 220, 180, 0.40)',
+                borderRadius: '12px',
+                color: 'rgba(245, 248, 255, 0.96)',
+                fontSize: '13px',
+                fontWeight: 850,
+                textDecoration: 'none',
+                transition: 'transform 0.18s ease, background 0.18s ease, border-color 0.18s ease',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 14px 40px rgba(0,0,0,0.45), 0 0 0 3px rgba(100,180,255,0.10)',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.38) 0%, rgba(140, 220, 180, 0.26) 100%)';
+                e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.55)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(100, 180, 255, 0.30) 0%, rgba(140, 220, 180, 0.20) 100%)';
+                e.currentTarget.style.borderColor = 'rgba(140, 220, 180, 0.40)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <span>Open Full Intelligence</span>
+              <span style={{ fontSize: '11px', opacity: 0.9 }}>→</span>
+            </a>
+
             <ShareDropdown
               open={showShareMenu}
               onOpenChange={setShowShareMenu}
@@ -2101,7 +2129,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 e.currentTarget.style.background = 'rgba(10,10,12,0.70)';
               }}
             >
-              <span>📚</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 4h10a2 2 0 0 1 2 2v14a1 1 0 0 0-1-1H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 4v16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
               <span>View Archive</span>
             </Link>
           </div>
@@ -2175,41 +2206,26 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
                 </div>
 
-                <div
+                <button
+                  type="button"
+                  onClick={() => setIsAllocationEditing((v) => !v)}
                   className="li-stat-pill"
                   style={{
-                    padding: '8px 10px',
-                    gap: '10px',
+                    padding: '8px 12px',
+                    gap: '8px',
                     alignItems: 'center',
                     fontSize: '11px',
-                    borderColor: 'rgba(170,198,255,0.14)',
-                    background: 'rgba(10,10,12,0.45)',
+                    borderColor: isAllocationEditing ? 'rgba(140,220,180,0.26)' : 'rgba(170,198,255,0.14)',
+                    background: isAllocationEditing ? 'rgba(140,220,180,0.10)' : 'rgba(10,10,12,0.45)',
+                    cursor: 'pointer',
                   }}
-                  aria-label="Donut rotation speed"
+                  aria-label={isAllocationEditing ? 'Finish editing allocations' : 'Adjust allocations'}
+                  title={isAllocationEditing ? 'Done' : 'Adjust allocation weights'}
                 >
-                  <span style={{ color: 'rgba(200,215,240,0.55)' }}>Rotation</span>
-                  <input
-                    type="range"
-                    min={0.5}
-                    max={2}
-                    step={0.1}
-                    value={donutSpeedMultiplier}
-                    onChange={(e) => {
-                      const v = Number(e.target.value);
-                      const clamped = Math.max(0.5, Math.min(2, Number.isFinite(v) ? v : 1));
-                      setDonutSpeedMultiplier(clamped);
-                    }}
-                    aria-label="Rotation speed"
-                    style={{
-                      width: '110px',
-                      accentColor: 'rgba(120,220,255,0.85)',
-                      cursor: 'pointer',
-                    }}
-                  />
-                  <span style={{ color: 'rgba(235,242,255,0.85)', fontVariantNumeric: 'tabular-nums' }}>
-                    {donutSpeedMultiplier.toFixed(1)}x
+                  <span style={{ color: isAllocationEditing ? 'rgba(140,220,180,0.92)' : 'rgba(200,215,240,0.70)', fontWeight: 800 }}>
+                    {isAllocationEditing ? 'Done' : 'Adjust'}
                   </span>
-                </div>
+                </button>
               </div>
             </div>
 
@@ -2239,7 +2255,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   className="li-donut-main"
                   style={{
                     background: donutGradient,
-                    '--li-donut-rot-dur': `${30 / donutSpeedMultiplier}s`,
+                    '--li-donut-rot-dur': `${donutRotationSeconds}s`,
                   }}
                 >
                   {/* Floating particles */}
@@ -2277,35 +2293,38 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px' }}>{item.k}</div>
                   </div>
                   <div style={{ marginTop: '6px', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                    <input
-                      className="li-number-input"
-                      inputMode="numeric"
-                      type="text"
-                      value={String(allocations[item.key])}
-                      onChange={(e) => handleAllocationChange(item.key, e.target.value)}
-                      onFocus={(e) => e.currentTarget.select()}
-                      aria-label={`${item.k} allocation percent`}
-                      style={{
-                        width: '44px',
-                        cursor: 'text',
-                        background: 'transparent',
-                        border: 'none',
-                        outline: 'none',
-                        padding: 0,
-                        margin: 0,
-                        color: 'rgba(245,248,255,0.94)',
-                        fontSize: '18px',
-                        fontWeight: 600,
-                        textAlign: 'left',
-                        fontVariantNumeric: 'tabular-nums',
-                      }}
-                    />
-                    <span style={{ color: 'rgba(245,248,255,0.60)', fontSize: '14px', fontWeight: 600 }}>%</span>
-                  </div>
-
-                  <div className="li-alloc-hover-label">
-                    Hover to edit
-                    <span style={{ opacity: 0.8 }}>✦</span>
+                    {isAllocationEditing ? (
+                      <>
+                        <input
+                          className="li-number-input"
+                          inputMode="numeric"
+                          type="text"
+                          value={String(allocations[item.key])}
+                          onChange={(e) => handleAllocationChange(item.key, e.target.value)}
+                          onFocus={(e) => e.currentTarget.select()}
+                          aria-label={`${item.k} allocation percent`}
+                          style={{
+                            width: '44px',
+                            cursor: 'text',
+                            background: 'transparent',
+                            border: 'none',
+                            outline: 'none',
+                            padding: 0,
+                            margin: 0,
+                            color: 'rgba(245,248,255,0.94)',
+                            fontSize: '18px',
+                            fontWeight: 700,
+                            textAlign: 'left',
+                            fontVariantNumeric: 'tabular-nums',
+                          }}
+                        />
+                        <span style={{ color: 'rgba(245,248,255,0.60)', fontSize: '14px', fontWeight: 700 }}>%</span>
+                      </>
+                    ) : (
+                      <div style={{ color: 'rgba(245,248,255,0.94)', fontSize: '18px', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
+                        {Number(allocations[item.key]) || 0}%
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -2496,10 +2515,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     <button
                       key={t}
                       type="button"
-                      className={`li-timeframe-btn ${tvInterval === t ? 'active' : ''}`}
+                      className={`li-timeframe-btn ${tvIntervalSafe === t ? 'active' : ''}`}
                       onClick={() => handleTvIntervalChange(t)}
                       disabled={tvIsSwitching}
-                      aria-pressed={tvInterval === t}
+                      aria-pressed={tvIntervalSafe === t}
                       title={t === 'D' ? 'Daily' : t === 'W' ? 'Weekly' : 'Monthly'}
                     >
                       {t}
@@ -2516,10 +2535,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     <button
                       key={s.key}
                       type="button"
-                      className={`li-symbol-btn ${tvSymbol === s.key ? 'active' : ''}`}
+                      className={`li-symbol-btn ${tvSymbolSafe === s.key ? 'active' : ''}`}
                       onClick={() => handleTvSymbolChange(s.key)}
                       disabled={tvIsSwitching}
-                      aria-pressed={tvSymbol === s.key}
+                      aria-pressed={tvSymbolSafe === s.key}
                       title={`Load ${s.label}`}
                     >
                       {s.label}
@@ -2532,12 +2551,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
 
-            <LazyTradingView minHeight={500} contentKey={tvInterval} loadingLabel="Loading TradingView…">
+            <LazyTradingView minHeight={500} contentKey={tvIntervalSafe} loadingLabel="Loading TradingView…">
               <div className="li-tv-frame-switch" data-switching={tvIsSwitching ? '1' : '0'} style={{ height: '500px', width: '100%', background: '#000000' }}>
                 {/* TradingView Advanced Chart - Direct iframe for reliability */}
                 <iframe
-                  key={`${tvSymbol}:${tvInterval}`}
-                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=${encodeURIComponent(tvSymbol)}&interval=${tvInterval}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
+                  key={`${tvSymbolSafe}:${tvIntervalSafe}`}
+                  src={`https://www.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=${encodeURIComponent(tvSymbolSafe)}&interval=${tvIntervalSafe}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=131722&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FKolkata&allow_symbol_change=1&details=1&hotlist=1`}
                   style={{ width: '100%', height: '100%', border: 'none', display: 'block', backgroundColor: '#000000' }}
                   frameBorder="0"
                   allowtransparency="true"

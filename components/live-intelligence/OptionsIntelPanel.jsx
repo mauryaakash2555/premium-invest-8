@@ -12,6 +12,12 @@ function formatNumberCompact(value) {
   return n.toFixed(0);
 }
 
+function formatMaybeNumber(value, fmt) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return null;
+  return typeof fmt === 'function' ? fmt(n) : String(n);
+}
+
 function badgeTone(pcr) {
   const n = Number(pcr);
   if (!Number.isFinite(n)) return 'neutral';
@@ -101,6 +107,12 @@ export default function OptionsIntelPanel() {
                 ? 'rgba(255, 100, 100, 0.7)'
                 : 'rgba(200,215,240,0.70)';
 
+          const hasSnapshot = Boolean(c.data?.timestamp);
+          const pcrStr = formatMaybeNumber(pcr, (n) => n.toFixed(2));
+          const underlyingStr = formatMaybeNumber(c.data?.underlying, (n) => n.toFixed(0));
+          const callsOiStr = formatMaybeNumber(c.data?.totalCallOI, (n) => formatNumberCompact(n));
+          const putsOiStr = formatMaybeNumber(c.data?.totalPutOI, (n) => formatNumberCompact(n));
+
           return (
             <div
               key={c.key}
@@ -113,26 +125,38 @@ export default function OptionsIntelPanel() {
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
                 <div style={{ color: 'rgba(200,215,240,0.60)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.04em' }}>{c.key}</div>
-                <div style={{ color: 'rgba(200,215,240,0.35)', fontSize: '10px' }}>{c.data?.timestamp ? 'NSE' : '—'}</div>
+                <div style={{ color: 'rgba(200,215,240,0.35)', fontSize: '10px' }}>{hasSnapshot ? 'NSE' : 'Awaiting'}</div>
               </div>
 
               <div style={{ marginTop: '8px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px' }}>
                 <div style={{ color, fontSize: '18px', fontWeight: 700, letterSpacing: '-0.02em' }}>
-                  PCR {typeof pcr === 'number' ? pcr.toFixed(2) : '—'}
+                  PCR {pcrStr ?? (hasSnapshot ? 'N/A' : '—')}
                 </div>
                 <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-                  U {typeof c.data?.underlying === 'number' ? c.data.underlying.toFixed(0) : '—'}
+                  Underlying {underlyingStr ?? (hasSnapshot ? 'N/A' : '—')}
                 </div>
               </div>
 
               <div style={{ marginTop: '8px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '10.5px' }}>
-                  Calls OI: <span style={{ color: 'rgba(200,215,240,0.70)', fontWeight: 700 }}>{formatNumberCompact(c.data?.totalCallOI)}</span>
+                  Calls OI:{' '}
+                  <span style={{ color: 'rgba(200,215,240,0.70)', fontWeight: 700 }}>
+                    {callsOiStr ?? (hasSnapshot ? 'N/A' : '—')}
+                  </span>
                 </div>
                 <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '10.5px' }}>
-                  Puts OI: <span style={{ color: 'rgba(200,215,240,0.70)', fontWeight: 700 }}>{formatNumberCompact(c.data?.totalPutOI)}</span>
+                  Puts OI:{' '}
+                  <span style={{ color: 'rgba(200,215,240,0.70)', fontWeight: 700 }}>
+                    {putsOiStr ?? (hasSnapshot ? 'N/A' : '—')}
+                  </span>
                 </div>
               </div>
+
+              {!hasSnapshot ? (
+                <div style={{ marginTop: '8px', color: 'rgba(200,215,240,0.35)', fontSize: '11px', lineHeight: 1.35 }}>
+                  Snapshot will appear when the source updates.
+                </div>
+              ) : null}
             </div>
           );
         })}

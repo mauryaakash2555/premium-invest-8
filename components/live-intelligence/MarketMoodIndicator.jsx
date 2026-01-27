@@ -15,7 +15,6 @@ import { LiveBadge } from '@/components/LiveBadge';
 const MOOD_LEVELS = {
   'very_bullish': {
     label: 'Very Bullish',
-    icon: '🚀',
     color: 'rgba(100, 220, 140, 0.95)',
     bgColor: 'rgba(100, 220, 140, 0.12)',
     borderColor: 'rgba(100, 220, 140, 0.25)',
@@ -23,7 +22,6 @@ const MOOD_LEVELS = {
   },
   'bullish': {
     label: 'Bullish',
-    icon: '📈',
     color: 'rgba(120, 200, 160, 0.95)',
     bgColor: 'rgba(120, 200, 160, 0.10)',
     borderColor: 'rgba(120, 200, 160, 0.20)',
@@ -31,7 +29,6 @@ const MOOD_LEVELS = {
   },
   'cautiously_optimistic': {
     label: 'Cautiously Optimistic',
-    icon: '🔵',
     color: 'rgba(140, 190, 255, 0.95)',
     bgColor: 'rgba(140, 190, 255, 0.10)',
     borderColor: 'rgba(140, 190, 255, 0.20)',
@@ -39,7 +36,6 @@ const MOOD_LEVELS = {
   },
   'neutral': {
     label: 'Neutral',
-    icon: '⚖️',
     color: 'rgba(180, 195, 220, 0.85)',
     bgColor: 'rgba(180, 195, 220, 0.08)',
     borderColor: 'rgba(180, 195, 220, 0.15)',
@@ -47,7 +43,6 @@ const MOOD_LEVELS = {
   },
   'cautious': {
     label: 'Cautious',
-    icon: '⚠️',
     color: 'rgba(180, 160, 220, 0.95)',
     bgColor: 'rgba(180, 160, 220, 0.10)',
     borderColor: 'rgba(180, 160, 220, 0.20)',
@@ -55,13 +50,24 @@ const MOOD_LEVELS = {
   },
   'bearish': {
     label: 'Bearish',
-    icon: '📉',
     color: 'rgba(255, 140, 140, 0.95)',
     bgColor: 'rgba(255, 140, 140, 0.10)',
     borderColor: 'rgba(255, 140, 140, 0.20)',
     description: 'Negative sentiment - risk-off mode active',
   },
 };
+
+function MoodIcon({ color = 'rgba(200,215,240,0.8)' }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 19V5" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8 19V11" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 19V8" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M16 19V13" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M20 19V6" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function MarketMoodIndicator() {
   const [mood, setMood] = useState(null);
@@ -195,6 +201,17 @@ export default function MarketMoodIndicator() {
   const score = scoreForLevel[mood.level] ?? 0.5;
   const needlePct = Math.max(0, Math.min(100, Math.round(score * 100)));
 
+  const trendUi = useMemo(() => {
+    const pts = Array.isArray(history) ? history : [];
+    if (pts.length < 2) return { label: 'Awaiting', dir: 'flat' };
+    const a = pts[pts.length - 2];
+    const b = pts[pts.length - 1];
+    const delta = b - a;
+    if (delta > 0.05) return { label: 'Rising', dir: 'up' };
+    if (delta < -0.05) return { label: 'Falling', dir: 'down' };
+    return { label: 'Stable', dir: 'flat' };
+  }, [history]);
+
   return (
     <div 
       style={{
@@ -222,7 +239,23 @@ export default function MarketMoodIndicator() {
         gap: '12px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '20px' }}>{moodConfig.icon}</span>
+          <span
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 12,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(10,10,12,0.45)',
+              border: `1px solid ${moodConfig.borderColor}`,
+              boxShadow: `0 0 0 4px ${moodConfig.bgColor}`,
+              flex: '0 0 auto',
+            }}
+            aria-hidden="true"
+          >
+            <MoodIcon color={moodConfig.color} />
+          </span>
           <div>
             <div style={{
               fontSize: '10px',
@@ -317,8 +350,8 @@ export default function MarketMoodIndicator() {
           color: 'rgba(180, 195, 220, 0.45)',
           letterSpacing: '0.06em',
           textTransform: 'uppercase',
-        }} title="Mood trend is indicative, not advice">
-          Trend
+        }} title="Educational indicator; not investment advice">
+          Trend · {trendUi.label}
         </div>
         <svg width="120" height="24" viewBox="0 0 120 24" aria-hidden="true" style={{ opacity: 0.9 }}>
           <polyline
@@ -334,6 +367,10 @@ export default function MarketMoodIndicator() {
             }}
           />
         </svg>
+      </div>
+
+      <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.45)', fontSize: '11px', lineHeight: 1.35 }}>
+        Educational context only — not investment advice.
       </div>
 
       {/* Expanded Section */}

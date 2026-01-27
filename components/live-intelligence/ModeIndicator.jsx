@@ -31,16 +31,6 @@ export default function ModeIndicator() {
     setTime(formatISTTime());
     setMarketOpen(isMarketOpen());
 
-    // Update locked header title without modifying the locked file
-    try {
-      const headerTitle = document.querySelector('.li-header-section h2');
-      if (headerTitle && initialMode) {
-        headerTitle.textContent = `${initialMode.icon} ${initialMode.name}`;
-      }
-    } catch {
-      // no-op
-    }
-
     // Update time every second for smooth clock
     const clockInterval = setInterval(() => {
       setTime(formatISTTime());
@@ -59,15 +49,6 @@ export default function ModeIndicator() {
           setIsTransitioning(false);
         }, 300);
 
-        // Keep header title in sync
-        try {
-          const headerTitle = document.querySelector('.li-header-section h2');
-          if (headerTitle) {
-            headerTitle.textContent = `${newMode.icon} ${newMode.name}`;
-          }
-        } catch {
-          // no-op
-        }
       }
     }, 60000);
 
@@ -85,8 +66,8 @@ export default function ModeIndicator() {
         className={`li-mode-indicator ${isTransitioning ? 'transitioning' : ''}`}
         style={{ '--accent': mode.accentColor || 'rgba(235,242,255,0.92)' }}
       >
-        {/* Mode Icon */}
-        <span className="li-mode-icon">{mode.icon}</span>
+        {/* Mode Mark (brand-consistent; no emoji) */}
+        <span className="li-mode-mark" aria-hidden="true" />
 
         {/* Mode Info */}
         <div className="li-mode-info">
@@ -97,7 +78,7 @@ export default function ModeIndicator() {
         {/* Market Status Dot */}
         <div className={`li-market-status ${marketOpen ? 'open' : 'closed'}`}>
           <span className="li-market-dot" />
-          <span className="li-market-label">{marketOpen ? 'LIVE' : 'CLOSED'}</span>
+          <span className="li-market-label">NSE • {marketOpen ? 'OPEN' : 'CLOSED'}</span>
         </div>
       </div>
 
@@ -122,9 +103,13 @@ export default function ModeIndicator() {
           transform: translateY(-8px);
         }
 
-        .li-mode-icon {
-          font-size: 20px;
-          line-height: 1;
+        .li-mode-mark {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          background: radial-gradient(circle at 30% 30%, rgba(180, 220, 255, 0.95), rgba(120, 180, 255, 0.25));
+          box-shadow: 0 0 0 4px rgba(120, 180, 255, 0.10), 0 0 18px rgba(120, 180, 255, 0.18);
+          flex: 0 0 auto;
         }
 
         .li-mode-info {
@@ -178,6 +163,7 @@ export default function ModeIndicator() {
           font-weight: 700;
           letter-spacing: 0.1em;
           color: rgba(220, 230, 255, 0.5);
+          text-transform: uppercase;
         }
 
         .li-market-status.open .li-market-label {
@@ -195,8 +181,9 @@ export default function ModeIndicator() {
             gap: 10px;
           }
 
-          .li-mode-icon {
-            font-size: 18px;
+          .li-mode-mark {
+            width: 9px;
+            height: 9px;
           }
 
           .li-mode-label {

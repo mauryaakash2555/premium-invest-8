@@ -136,7 +136,7 @@ export default function SectorPulsePanel() {
             <div
               key={s.name}
               style={{
-                padding: '10px 10px',
+                padding: '12px 12px',
                 borderRadius: '12px',
                 background: 'rgba(10,10,12,0.45)',
                 border: '1px solid rgba(170,198,255,0.10)',
@@ -146,8 +146,8 @@ export default function SectorPulsePanel() {
                 gap: '10px',
               }}
             >
-              <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', fontWeight: 700 }}>{short}</div>
-              <div style={{ color, fontSize: '12px', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
+              <div style={{ color: 'rgba(200,215,240,0.62)', fontSize: '12px', fontWeight: 800, letterSpacing: '0.02em' }}>{short}</div>
+              <div style={{ color, fontSize: '12px', fontWeight: 900, fontVariantNumeric: 'tabular-nums' }}>
                 {typeof s.pct === 'number' ? `${s.pct >= 0 ? '+' : ''}${s.pct.toFixed(2)}%` : '—'}
               </div>
             </div>

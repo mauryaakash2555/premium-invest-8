@@ -29,9 +29,9 @@ export default function ModeHeaderTitle({
   }, []);
 
   const title = useMemo(() => {
+    // Brand-first title; keep mode label separate to avoid emoji-heavy headers.
     const label = mode?.name || 'Live Intelligence';
-    const icon = mode?.icon || '';
-    return icon ? `${icon} ${label}` : label;
+    return label;
   }, [mode]);
 
   const description = mode?.description;
@@ -44,7 +44,11 @@ export default function ModeHeaderTitle({
   return (
     <div className={className}>
       <div className="flex items-baseline gap-2">
-        <h1 className="text-white text-xl font-bold tracking-tight">{title}</h1>
+        <h1 className="text-white text-xl font-bold tracking-tight">BM Wealth</h1>
+        <span className="text-white/70 text-sm font-semibold">Live Intelligence</span>
+        <span className="text-white/70 text-xs font-semibold px-2 py-0.5 rounded-full border border-white/15 bg-white/5">
+          {title}
+        </span>
         {timeLabel ? (
           <span className="text-xs text-white/70">{timeLabel}</span>
         ) : null}

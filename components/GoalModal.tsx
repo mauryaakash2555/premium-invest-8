@@ -85,7 +85,7 @@ export function AddGoalButton(props: { className?: string; style?: CSSProperties
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-              <div style={{ fontSize: 16, fontWeight: 800 }}>📌 Investment Goal</div>
+              <div style={{ fontSize: 16, fontWeight: 800 }}>Investment Goal</div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
@@ -100,7 +100,9 @@ export function AddGoalButton(props: { className?: string; style?: CSSProperties
                 }}
                 aria-label="Close"
               >
-                ✕
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
               </button>
             </div>
 

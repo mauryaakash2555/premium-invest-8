@@ -125,11 +125,7 @@ export default function PortfolioTickersPanel() {
           }}
         />
 
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ color: 'rgba(200,215,240,0.40)', fontSize: '11px' }}>
-            Parsed: {parsed.length ? parsed.join(', ') : '—'}
-          </div>
-
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
               type="button"
@@ -168,6 +164,32 @@ export default function PortfolioTickersPanel() {
             </button>
           </div>
         </div>
+
+        {parsed.length ? (
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }} aria-label="Detected tickers">
+            {parsed.slice(0, 10).map((t) => (
+              <span
+                key={t}
+                style={{
+                  padding: '3px 8px',
+                  borderRadius: '999px',
+                  fontSize: '10px',
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  background: 'rgba(170,198,255,0.10)',
+                  border: '1px solid rgba(170,198,255,0.14)',
+                  color: 'rgba(210,225,255,0.85)',
+                }}
+                title="Detected from input"
+              >
+                {t}
+              </span>
+            ))}
+            {parsed.length > 10 ? (
+              <span style={{ color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>+{parsed.length - 10} more</span>
+            ) : null}
+          </div>
+        ) : null}
 
         {status ? (
           <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px' }}>{status}</div>

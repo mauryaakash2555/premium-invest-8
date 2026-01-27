@@ -41,7 +41,7 @@ export function FeedToggle({ onFeedChange, className = '' }) {
   };
   
   return (
-    <div className={`flex items-center gap-1 bg-[var(--li-button-bg,rgba(170,198,255,0.10))] rounded-full p-1 ${className}`}>
+    <div className={`flex items-center gap-1 bg-[var(--li-button-bg,rgba(170,198,255,0.10))] border border-[var(--li-border,rgba(170,198,255,0.14))] rounded-full p-1 ${className}`}>
       <button
         onClick={() => handleToggle('market')}
         className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all ${
@@ -49,6 +49,7 @@ export function FeedToggle({ onFeedChange, className = '' }) {
             ? 'text-[var(--li-text,rgba(235,242,255,0.94))]'
             : 'text-[var(--li-text-muted,rgba(220,230,255,0.62))] hover:text-[var(--li-text,rgba(235,242,255,0.94))]'
         }`}
+        title="Market feed"
       >
         {feedMode === 'market' && (
           <motion.div
@@ -58,8 +59,8 @@ export function FeedToggle({ onFeedChange, className = '' }) {
           />
         )}
         <span className="relative flex items-center gap-2">
-          <span>🌐</span>
-          <span className="hidden sm:inline">Market View</span>
+          <span className="hidden sm:inline">Market</span>
+          <span className="sm:hidden">Market</span>
         </span>
       </button>
       
@@ -70,6 +71,7 @@ export function FeedToggle({ onFeedChange, className = '' }) {
             ? 'text-[var(--li-text,rgba(235,242,255,0.94))]'
             : 'text-[var(--li-text-muted,rgba(220,230,255,0.62))] hover:text-[var(--li-text,rgba(235,242,255,0.94))]'
         }`}
+        title={hasPersonalization ? 'Personalized feed' : 'Personalized feed (learns from what you read)'}
       >
         {feedMode === 'personalized' && (
           <motion.div
@@ -79,11 +81,8 @@ export function FeedToggle({ onFeedChange, className = '' }) {
           />
         )}
         <span className="relative flex items-center gap-2">
-          <span>👤</span>
-          <span className="hidden sm:inline">My View</span>
-          {!hasPersonalization && feedMode !== 'personalized' && (
-            <span className="hidden sm:inline text-xs opacity-60">(New)</span>
-          )}
+          <span className="hidden sm:inline">My Feed</span>
+          <span className="sm:hidden">My</span>
         </span>
       </button>
     </div>

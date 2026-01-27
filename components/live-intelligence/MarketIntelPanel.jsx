@@ -59,7 +59,7 @@ export default function MarketIntelPanel() {
             FII / DII Flow
           </div>
           <div style={{ marginTop: '3px', color: 'rgba(200,215,240,0.45)', fontSize: '11px' }}>
-            {view.date ? `Trade date: ${view.date}` : 'Trade date: —'}
+            {view.date ? `Trade date: ${view.date}` : 'Trade date: Awaiting update'}
           </div>
         </div>
         {view.lastUpdated ? (

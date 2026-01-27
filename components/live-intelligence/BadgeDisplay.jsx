@@ -164,26 +164,67 @@ export function BadgeDisplay({ className = '' }) {
       {/* Trophy Button */}
       <button
         onClick={() => setIsOpen(true)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '6px 10px',
-          borderRadius: '8px',
-          background: 'rgba(100, 160, 255, 0.10)',
-          border: 'none',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-        }}
-        title="View achievements (Ctrl+A)"
+        className={`li-achievements-btn ${className}`}
+        aria-label="Open achievements"
+        title="Achievements (Ctrl+A)"
       >
-        <span style={{ fontSize: '14px' }}>🏆</span>
-        {earnedBadges.length > 0 && (
-          <span style={{ fontSize: '12px', fontWeight: 500, color: 'rgba(235, 242, 255, 0.94)' }}>
-            {earnedBadges.length}
-          </span>
-        )}
+        <span className="li-achievements-icon" aria-hidden="true">🏆</span>
+        <span className="li-achievements-label">Achievements</span>
+        <span className="li-achievements-count" aria-label={`${earnedBadges.length} earned badges`}>
+          {earnedBadges.length}
+        </span>
       </button>
+
+      <style jsx>{`
+        .li-achievements-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+          border-radius: 10px;
+          background: rgba(100, 160, 255, 0.10);
+          border: 1px solid rgba(100, 160, 255, 0.22);
+          cursor: pointer;
+          transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+        }
+        .li-achievements-btn:hover {
+          background: rgba(100, 160, 255, 0.16);
+          border-color: rgba(100, 160, 255, 0.35);
+          transform: translateY(-1px);
+        }
+        .li-achievements-btn:focus-visible {
+          outline: 2px solid rgba(140, 210, 255, 0.55);
+          outline-offset: 2px;
+        }
+        .li-achievements-icon {
+          font-size: 14px;
+          line-height: 1;
+        }
+        .li-achievements-label {
+          display: none;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(235, 242, 255, 0.92);
+        }
+        .li-achievements-count {
+          min-width: 18px;
+          height: 18px;
+          padding: 0 6px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          font-weight: 800;
+          color: rgba(235, 242, 255, 0.92);
+          background: rgba(0, 0, 0, 0.35);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          font-variant-numeric: tabular-nums;
+        }
+        @media (min-width: 640px) {
+          .li-achievements-label { display: inline; }
+        }
+      `}</style>
       
       {/* Modal */}
       <AnimatePresence>
@@ -244,6 +285,7 @@ export function BadgeDisplay({ className = '' }) {
                     color: 'rgba(200, 215, 240, 0.5)',
                     cursor: 'pointer',
                   }}
+                  aria-label="Close achievements"
                 >
                   ×
                 </button>

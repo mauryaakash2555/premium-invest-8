@@ -102,12 +102,12 @@ export function ShareDropdown(props: {
   }, [open]);
 
   const shareOptions: Array<{ icon: string; label: string; action: ShareAction }> = [
-    { icon: '📋', label: 'Copy Link', action: 'copyLink' },
-    { icon: '📧', label: 'Email', action: 'email' },
-    { icon: '💬', label: 'WhatsApp', action: 'whatsapp' },
-    { icon: '𝕏', label: 'Twitter / X', action: 'twitter' },
-    { icon: '💼', label: 'LinkedIn', action: 'linkedin' },
-    { icon: '📊', label: 'Export PDF', action: 'pdf' },
+    { icon: '⧉', label: 'Copy Link', action: 'copyLink' },
+    { icon: '@', label: 'Email', action: 'email' },
+    { icon: 'WA', label: 'WhatsApp', action: 'whatsapp' },
+    { icon: 'X', label: 'Twitter / X', action: 'twitter' },
+    { icon: 'in', label: 'LinkedIn', action: 'linkedin' },
+    { icon: 'PDF', label: 'Export PDF', action: 'pdf' },
   ];
 
   async function handleShare(action: ShareAction) {

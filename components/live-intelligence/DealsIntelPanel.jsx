@@ -202,7 +202,7 @@ export default function DealsIntelPanel() {
               lineHeight: 1.5,
             }}
           >
-            Deals data may be temporarily unavailable.
+            {view.hasError ? 'Deals are temporarily unavailable. Please try again in a minute.' : 'No bulk/block deals to show right now.'}
           </div>
         ) : (
           view.list.map((d, idx) => {
@@ -274,13 +274,13 @@ export default function DealsIntelPanel() {
 
       {view.hasError ? (
         <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '11px', lineHeight: 1.35 }}>
-          Source may throttle requests.
+          Data source may be rate-limited; showing best-effort results.
         </div>
       ) : null}
 
       {!view.hasPortfolio ? (
         <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.35)', fontSize: '10.5px', lineHeight: 1.35 }}>
-          Tip: set `li_portfolio_context_v1` in localStorage (e.g. tickers: TCS, HDFCBANK) to highlight relevant deals.
+          Add tickers in “Your tickers” to highlight deals relevant to you.
         </div>
       ) : null}
 

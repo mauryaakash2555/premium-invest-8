@@ -192,7 +192,7 @@ export default function MarketClockStatusBadge() {
           textTransform: 'uppercase',
           overflow: 'hidden',
         }}
-        title={`${ui.phase.phase} • ${ui.boundary.label} ${ui.countdown}`}
+        title={`NSE • ${ui.phase.phase} • ${ui.boundary.label} ${ui.countdown}`}
       >
         <span
           style={{
@@ -205,7 +205,7 @@ export default function MarketClockStatusBadge() {
             pointerEvents: 'none',
           }}
         />
-        NSE {ui.phase.phase}
+        NSE • {ui.phase.phase}
       </span>
 
       <span style={{ color: 'rgba(180,200,230,0.55)', fontSize: '10px' }}>
