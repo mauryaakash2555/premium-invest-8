@@ -1010,6 +1010,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const equityPct = Number(allocations?.equity) || 0;
     const xirr = totalReturnPct;
 
+    // Keep this computed locally to avoid any accidental undeclared identifier crashes.
+    const riskScoreLabel = equityPct >= 80 ? 'High' : equityPct >= 50 ? 'Moderate' : 'Low';
+
     return [
       {
         label: 'Total Invested',
@@ -1035,12 +1038,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
       {
         label: 'Risk Score',
         kind: 'text',
-        value: riskScore,
+        value: riskScoreLabel,
         hint: `Equity ${equityPct}% allocation`,
         trend: null,
       },
     ];
-  }, [allocations?.equity, portfolioValue, riskScore, totalInvested]);
+  }, [allocations?.equity, portfolioValue, totalInvested]);
 
   const tvMarketsOptions = useMemo(
     () => ({
