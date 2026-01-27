@@ -718,13 +718,16 @@ export function simulateSIPVsPanic(
       // - discipline/custom active months: contribute to equity
       // - panic threshold scenarios after trigger: optionally contribute to cash (still saving monthly)
       // - stop-during-any-fall paused months: contribute nothing
+      // - custom pause/stop: if afterStopMode=cash, model continued saving into cash while SIP is paused
       const isPanicThresholdScenario = scenario.behaviorType === "panic" && (scenario.panicThreshold ?? 0) < 0 && scenario.panicThreshold !== -1;
+      const isCustomPausedScenario =
+        scenario.behaviorType === "custom" && typeof scenario.panicThreshold === "number" && scenario.panicThreshold < 0;
 
       const contributeToEquity = state.sipStatus === "active" && sipThisMonth > 0;
       const contributeToCash =
         afterStopMode === "cash" &&
         state.sipStatus === "paused" &&
-        isPanicThresholdScenario &&
+        (isPanicThresholdScenario || isCustomPausedScenario) &&
         sipThisMonth > 0;
 
       if (contributeToEquity) {

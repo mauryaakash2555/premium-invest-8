@@ -41,6 +41,8 @@ export function BeginnerModeView(props: {
 }) {
   const panicStopPct = 30;
 
+  const MONTH_MS = 520;
+
   const lastTrackedStoryOutcomeRef = useRef<string>("");
 
   type StoryChoice = "continue" | "stop" | "pause_6" | "pause_12";
@@ -99,10 +101,13 @@ export function BeginnerModeView(props: {
     }
 
     return {
+      // Represent "stop" as a long custom pause so it renders into chartData.customValue
+      // (needed for the month-by-month replay scrubber).
       name: "Your choice: Stop SIP",
-      description: "Stops equity SIP at a 30% drawdown and never restarts in this model",
-      behaviorType: "panic",
+      description: "Stops SIP at a 30% drawdown and does not restart in this model",
+      behaviorType: "custom",
       panicThreshold: -panicStopPct,
+      stopDuration: Math.max(12, yearsForCalc * 12 + 1),
     };
   }
 
@@ -322,6 +327,69 @@ export function BeginnerModeView(props: {
 
   const totalInvested = monthlyForCalc * 12 * yearsForCalc;
 
+  const chart = result.out?.[0]?.chartData ?? [];
+  const totalMonths = chart.length;
+
+  const replayInitKeyRef = useRef<string>("");
+  const [replayMonthIdx, setReplayMonthIdx] = useState<number>(0);
+  const [replayPlaying, setReplayPlaying] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (storyStep < 2) return;
+    if (!totalMonths) return;
+
+    const k = `${storyChoice}|${monthlyForCalc}|${yearsForCalc}`;
+    if (replayInitKeyRef.current === k) return;
+    replayInitKeyRef.current = k;
+
+    const crashIdx = Math.max(0, Math.min(totalMonths - 1, crashStartMonth));
+    setReplayPlaying(false);
+    setReplayMonthIdx(crashIdx);
+  }, [crashStartMonth, monthlyForCalc, storyChoice, storyStep, totalMonths, yearsForCalc]);
+
+  useEffect(() => {
+    if (!replayPlaying) return;
+    if (storyStep < 2) return;
+    if (!totalMonths) return;
+
+    const id = window.setInterval(() => {
+      setReplayMonthIdx((prev) => {
+        const next = prev + 1;
+        if (next >= totalMonths) {
+          window.clearInterval(id);
+          setReplayPlaying(false);
+          return prev;
+        }
+        return next;
+      });
+    }, MONTH_MS);
+
+    return () => window.clearInterval(id);
+  }, [replayPlaying, storyStep, totalMonths]);
+
+  const replayPoint = totalMonths ? chart[Math.max(0, Math.min(totalMonths - 1, replayMonthIdx))] : null;
+  const replayDisciplineValue = replayPoint?.perfectDisciplineValue ?? 0;
+  const replayChoiceValue =
+    storyChoice === "continue"
+      ? replayDisciplineValue
+      : typeof replayPoint?.customValue === "number"
+      ? replayPoint.customValue
+      : replayDisciplineValue;
+  const replayGap = Math.max(0, replayDisciplineValue - replayChoiceValue);
+  const replayStatus =
+    storyChoice === "continue"
+      ? replayPoint?.sipStatus?.discipline
+      : replayPoint?.sipStatus?.custom;
+
+  const replayMonthLabel = useMemo(() => {
+    if (!replayPoint?.date) return "";
+    try {
+      return new Date(replayPoint.date).toLocaleString("en-IN", { month: "short", year: "numeric" });
+    } catch {
+      return "";
+    }
+  }, [replayPoint?.date]);
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-7">
@@ -508,6 +576,105 @@ export function BeginnerModeView(props: {
                   </div>
                   <div className="mt-1 text-[11px] text-white/55">Education-only, simplified market + tax model.</div>
                 </div>
+
+                {replayPoint ? (
+                  <div className="mt-3 rounded-xl border border-white/10 bg-black/20 p-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div>
+                        <div className="text-[11px] font-semibold text-white/85">Replay the crash (month-by-month)</div>
+                        <div className="mt-1 text-[11px] text-white/55">
+                          Scrub to see where the paths diverge. {replayMonthLabel ? `Now: ${replayMonthLabel}` : ""}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setReplayPlaying((v) => !v)}
+                          className="min-h-9 rounded-lg border border-white/15 bg-black/20 px-3 py-1 text-[11px] font-semibold text-white/85 hover:bg-white/5"
+                        >
+                          {replayPlaying ? "Pause" : "Play"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setReplayPlaying(false);
+                            setReplayMonthIdx(Math.max(0, Math.min(totalMonths - 1, crashStartMonth)));
+                          }}
+                          className="min-h-9 rounded-lg border border-white/15 bg-black/20 px-3 py-1 text-[11px] font-semibold text-white/85 hover:bg-white/5"
+                        >
+                          Jump to crash
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <Slider
+                        value={[replayMonthIdx]}
+                        min={0}
+                        max={Math.max(0, totalMonths - 1)}
+                        step={1}
+                        onValueChange={(v) => {
+                          const next = Array.isArray(v) ? v[0] : 0;
+                          setReplayPlaying(false);
+                          setReplayMonthIdx(next);
+                        }}
+                      />
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/65">
+                        <span>
+                          Month <span className="font-semibold text-white/85">{(replayPoint.monthNumber ?? 0).toLocaleString("en-IN")}</span>
+                        </span>
+                        <span className="text-white/35">•</span>
+                        <span>
+                          Market drawdown: <span className="font-semibold text-white/85">{Math.round(replayPoint.marketDrawdown || 0)}%</span>
+                        </span>
+                        {replayStatus ? (
+                          <>
+                            <span className="text-white/35">•</span>
+                            <span>
+                              Your SIP status:{" "}
+                              <span
+                                className={
+                                  "rounded-full border px-2 py-[2px] text-[10px] font-semibold " +
+                                  (replayStatus === "active"
+                                    ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-100"
+                                    : "border-rose-400/25 bg-rose-400/10 text-rose-100")
+                                }
+                              >
+                                {replayStatus}
+                              </span>
+                            </span>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="rounded-xl border border-white/10 bg-black/10 p-3">
+                        <div className="text-[10px] font-semibold text-white/70">Discipline wealth (so far)</div>
+                        <div className="mt-1 text-[13px] font-semibold text-white tabular-nums">
+                          <LakhTooltip amount={replayDisciplineValue} />
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-black/10 p-3">
+                        <div className="text-[10px] font-semibold text-white/70">Your path (so far)</div>
+                        <div className="mt-1 text-[13px] font-semibold text-white tabular-nums">
+                          <LakhTooltip amount={replayChoiceValue} />
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-black/10 p-3">
+                        <div className="text-[10px] font-semibold text-white/70">Gap (so far)</div>
+                        <div className="mt-1 text-[13px] font-semibold text-white tabular-nums">
+                          <LakhTooltip amount={replayGap} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-2 text-[11px] text-white/55">
+                      Tip: big gaps usually form when you stop buying during drawdowns and miss the recovery compounding.
+                    </div>
+                  </div>
+                ) : null}
 
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <button
