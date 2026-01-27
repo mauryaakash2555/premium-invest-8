@@ -46,6 +46,7 @@ import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
 import CrisisModeBanner from '@/components/intelligence/CrisisModeBanner';
+import ClientErrorBoundary from '@/components/shared/ClientErrorBoundary';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -167,10 +168,12 @@ export default function HomePage() {
       </section>
 
       {/* Live Intelligence Overlay - Full page overlay */}
-      <LiveIntelligenceOverlay 
-        liveMoodRef={liveMoodRef}
-        footerContent={<LaserFooter />}
-      />
+      <ClientErrorBoundary name="LiveIntelligenceOverlay" eventType="live_intelligence_overlay_error" fallback={null}>
+        <LiveIntelligenceOverlay 
+          liveMoodRef={liveMoodRef}
+          footerContent={<LaserFooter />}
+        />
+      </ClientErrorBoundary>
 
       {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
 
