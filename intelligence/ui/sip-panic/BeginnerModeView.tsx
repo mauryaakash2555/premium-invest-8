@@ -47,25 +47,18 @@ export function BeginnerModeView(props: {
   const [storyStep, setStoryStep] = useState<0 | 1 | 2>(props.initialStoryStep ?? 0);
   const [storyChoice, setStoryChoice] = useState<StoryChoice>((props.initialStoryChoice as StoryChoice) ?? "stop");
 
-  const choiceLabel =
-    storyChoice === "continue"
-      ? "Continue SIP (discipline)"
-      : storyChoice === "pause_6"
-      ? "Pause for 6 months, then restart"
-      : storyChoice === "pause_12"
-      ? "Pause for 12 months, then restart"
-      : "Stop SIP (fear takes over)";
+  const storyChoiceToLabel = (choice: StoryChoice): string => {
+    if (choice === "continue") return "Continue SIP (discipline)";
+    if (choice === "pause_6") return "Pause for 6 months, then restart";
+    if (choice === "pause_12") return "Pause for 12 months, then restart";
+    return "Stop SIP (fear takes over)";
+  };
 
-  const challengerLabel =
-    props.challengerChoice === "continue"
-      ? "Continue SIP (discipline)"
-      : props.challengerChoice === "pause_6"
-      ? "Pause for 6 months, then restart"
-      : props.challengerChoice === "pause_12"
-      ? "Pause for 12 months, then restart"
-      : props.challengerChoice === "stop"
-      ? "Stop SIP (fear takes over)"
-      : "";
+  const choiceLabel = storyChoiceToLabel(storyChoice);
+
+  const challengerLabel = props.challengerChoice
+    ? storyChoiceToLabel(props.challengerChoice as StoryChoice)
+    : "";
 
   const primaryTruthLine =
     storyChoice === "continue"
@@ -278,6 +271,8 @@ export function BeginnerModeView(props: {
       const p = new URLSearchParams();
       p.set("ui", "beginner");
       p.set("story", "1");
+      // Enables dynamic OG/meta on the route (challenge preview).
+      p.set("share", "1");
       p.set("challenge", "1");
       p.set("chc", storyChoice);
       p.set("m", String(monthlyForCalc));

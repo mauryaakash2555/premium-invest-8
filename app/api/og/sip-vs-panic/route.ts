@@ -40,26 +40,142 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const sp = url.searchParams;
 
-  const monthly = safeNumber(sp.get("m"));
-  const years = safeNumber(sp.get("y"));
-  const cost = safeNumber(sp.get("cost"));
-  const disciplined = safeNumber(sp.get("disc"));
-  const panic = safeNumber(sp.get("panic"));
+    const monthly = safeNumber(sp.get("m"));
+    const years = safeNumber(sp.get("y"));
+    const cost = safeNumber(sp.get("cost"));
+    const disciplined = safeNumber(sp.get("disc"));
+    const panic = safeNumber(sp.get("panic"));
 
-  const mode = safeLabel(sp.get("mode"), 16);
-  const sc = safeLabel(sp.get("sc"), 16);
-  const storyDecision = mode === "story" ? storyChoiceLabel(sc) : "";
+    const mode = safeLabel(sp.get("mode"), 16);
+    const sc = safeLabel(sp.get("sc"), 16);
+    const chc = safeLabel(sp.get("chc"), 16);
 
-  const tax = safeLabel(sp.get("tax"), 18);
-  const rc = safeLabel(sp.get("rc"), 18);
-  const crash = safeLabel(sp.get("crash"), 18);
-  const partner = safeLabel(sp.get("partner"), 32);
+    const storyDecision = mode === "story" ? storyChoiceLabel(sc) : "";
+    const challengeDecision = mode === "challenge" ? storyChoiceLabel(chc) : "";
 
-  const title = "SIP vs Panic Selling";
+    const tax = safeLabel(sp.get("tax"), 18);
+    const rc = safeLabel(sp.get("rc"), 18);
+    const crash = safeLabel(sp.get("crash"), 18);
+    const partner = safeLabel(sp.get("partner"), 32);
 
-  const h = React.createElement;
+    const title = "SIP vs Panic Selling";
 
-  const root = h(
+    const h = React.createElement;
+
+    if (mode === "challenge") {
+      const root = h(
+        "div",
+        {
+          style: {
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            backgroundColor: "#070708",
+            padding: 64,
+            color: "#FFFFFF",
+            fontFamily: "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial",
+          },
+        },
+        h(
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: 14 } },
+          h("div", { style: { fontSize: 44, fontWeight: 800, letterSpacing: -1 } }, title),
+          h(
+            "div",
+            { style: { display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" } },
+            h(
+              "div",
+              {
+                style: {
+                  padding: "6px 10px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.16)",
+                  background: "rgba(251, 191, 36, 0.16)",
+                  color: "rgba(255,255,255,0.92)",
+                  fontSize: 16,
+                  fontWeight: 800,
+                  letterSpacing: 0.2,
+                },
+              },
+              "Challenge Mode (2 min)"
+            ),
+            challengeDecision
+              ? h(
+                  "div",
+                  {
+                    style: {
+                      padding: "6px 10px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      backgroundColor: "rgba(0,0,0,0.22)",
+                      color: "rgba(255,255,255,0.84)",
+                      fontSize: 16,
+                    },
+                  },
+                  `They chose: ${challengeDecision}`
+                )
+              : null,
+            h("div", { style: { fontSize: 22, color: "rgba(255,255,255,0.78)" } }, "Education-only simulator"),
+            partner
+              ? h(
+                  "div",
+                  {
+                    style: {
+                      marginLeft: 8,
+                      padding: "6px 10px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      background: "rgba(0,0,0,0.22)",
+                      color: "rgba(255,255,255,0.82)",
+                      fontSize: 16,
+                    },
+                  },
+                  `Partner: ${partner}`
+                )
+              : null
+          )
+        ),
+        h(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+              padding: 26,
+              borderRadius: 24,
+              border: "1px solid rgba(255,255,255,0.12)",
+              backgroundColor: "rgba(0,0,0,0.28)",
+            },
+          },
+          h("div", { style: { fontSize: 18, color: "rgba(255,255,255,0.75)" } }, "What would you do at a -30% crash?"),
+          h(
+            "div",
+            { style: { fontSize: 34, fontWeight: 900, color: "#FBBF24", letterSpacing: -0.5 } },
+            "Continue • Pause • Stop"
+          ),
+          h(
+            "div",
+            { style: { fontSize: 18, color: "rgba(255,255,255,0.75)" } },
+            `Inputs: ₹${monthly.toLocaleString("en-IN")}/month • ${years} years`
+          ),
+          h(
+            "div",
+            { style: { fontSize: 16, color: "rgba(255,255,255,0.55)" } },
+            "Tap to choose your behavior • bmwealth.co.in"
+          )
+        )
+      );
+
+      return new ImageResponse(root, {
+        width: 1200,
+        height: 630,
+      });
+    }
+
+    const root = h(
     "div",
     {
       style: {
@@ -262,15 +378,12 @@ export async function GET(req: Request) {
         h("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.55)" } }, "bmwealth.co.in")
       )
     )
-  );
-
-    return new ImageResponse(
-      root,
-      {
-        width: 1200,
-        height: 630,
-      }
     );
+
+    return new ImageResponse(root, {
+      width: 1200,
+      height: 630,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return new Response(`OG generation error: ${message}`, {

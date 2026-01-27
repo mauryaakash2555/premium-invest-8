@@ -10,7 +10,9 @@ export async function generateMetadata({ searchParams }) {
   const share = String(sp?.share || "") === "1";
 
   const isStory = String(sp?.story || "") === "1";
+  const isChallenge = String(sp?.challenge || "") === "1";
   const sc = String(sp?.sc || "");
+  const chc = String(sp?.chc || "");
 
   const storyChoiceLabel =
     sc === "continue"
@@ -20,6 +22,17 @@ export async function generateMetadata({ searchParams }) {
       : sc === "pause_12"
       ? "Pause 12 months"
       : sc === "stop"
+      ? "Stop SIP"
+      : "";
+
+  const challengeChoiceLabel =
+    chc === "continue"
+      ? "Continue SIP"
+      : chc === "pause_6"
+      ? "Pause 6 months"
+      : chc === "pause_12"
+      ? "Pause 12 months"
+      : chc === "stop"
       ? "Stop SIP"
       : "";
 
@@ -36,19 +49,25 @@ export async function generateMetadata({ searchParams }) {
   const costLakh = Number.isFinite(cost) ? `₹${(Math.max(0, cost) / 100_000).toFixed(2)}L` : "";
 
   const title = share
-    ? isStory && storyChoiceLabel
+    ? isChallenge && challengeChoiceLabel
+      ? `SIP Crash Challenge: They chose ${challengeChoiceLabel} | BM Wealth`
+      : isStory && storyChoiceLabel
       ? `SIP vs Panic Story: ${storyChoiceLabel} • Cost ${costLakh} | BM Wealth`
       : `SIP vs Panic: Potential cost ${costLakh} | BM Wealth`
     : "SIP vs Panic Selling Simulator | BM Wealth";
 
   const description = share
-    ? isStory && storyChoiceLabel
+    ? isChallenge && challengeChoiceLabel
+      ? `SIP Crash Challenge (education-only): your friend chose “${challengeChoiceLabel}”. What would you do at a -30% crash? Run the 2-minute Story Mode and compare outcomes.`
+      : isStory && storyChoiceLabel
       ? `Education-only Story Mode result: decision “${storyChoiceLabel}”. Inputs: ₹${Number.isFinite(monthly) ? monthly.toLocaleString("en-IN") : "10,000"}/month for ${Number.isFinite(years) ? years : 10} years. See the post-tax behavioral cost of fear vs discipline.`
       : `Education-only result: ₹${Number.isFinite(monthly) ? monthly.toLocaleString("en-IN") : "10,000"}/month for ${Number.isFinite(years) ? years : 10} years. See the post-tax behavioral cost of stopping SIP during drawdowns.${crash ? ` Crash preset: ${crash}.` : ""}${rc ? ` Risk comfort: ${rc}.` : ""}`
     : "What happens if you stop your SIP during a market crash? Compare disciplined investing vs panic-selling and see the post-tax cost of fear.";
 
   const og = share
-    ? `/api/og/sip-vs-panic?m=${encodeURIComponent(String(monthly || 0))}&y=${encodeURIComponent(String(years || 0))}&cost=${encodeURIComponent(String(cost || 0))}&disc=${encodeURIComponent(String(disc || 0))}&panic=${encodeURIComponent(String(panic || 0))}&tax=${encodeURIComponent(tax)}&rc=${encodeURIComponent(rc)}&crash=${encodeURIComponent(crash)}&partner=${encodeURIComponent(partner)}${isStory ? `&mode=story&sc=${encodeURIComponent(sc)}` : ""}`
+    ? isChallenge
+      ? `/api/og/sip-vs-panic?m=${encodeURIComponent(String(monthly || 0))}&y=${encodeURIComponent(String(years || 0))}&partner=${encodeURIComponent(partner)}&mode=challenge&chc=${encodeURIComponent(chc)}`
+      : `/api/og/sip-vs-panic?m=${encodeURIComponent(String(monthly || 0))}&y=${encodeURIComponent(String(years || 0))}&cost=${encodeURIComponent(String(cost || 0))}&disc=${encodeURIComponent(String(disc || 0))}&panic=${encodeURIComponent(String(panic || 0))}&tax=${encodeURIComponent(tax)}&rc=${encodeURIComponent(rc)}&crash=${encodeURIComponent(crash)}&partner=${encodeURIComponent(partner)}${isStory ? `&mode=story&sc=${encodeURIComponent(sc)}` : ""}`
     : "/logo.png";
 
   return {
