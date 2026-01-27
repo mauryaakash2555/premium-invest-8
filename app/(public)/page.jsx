@@ -39,14 +39,13 @@ import { getServicesForHome } from '@/data/servicesCatalog';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
-import LiveIntelligenceOverlay from '@/components/user/LiveIntelligenceOverlay';
+import LiveIntelligenceOverlayIsolated from '@/components/user/LiveIntelligenceOverlayIsolated';
 import LaserFooter from '@/components/user/LaserFooter';
 import HeroContent from '@/components/home/HeroContent';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
 import CrisisModeBanner from '@/components/intelligence/CrisisModeBanner';
-import ClientErrorBoundary from '@/components/shared/ClientErrorBoundary';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -168,12 +167,7 @@ export default function HomePage() {
       </section>
 
       {/* Live Intelligence Overlay - Full page overlay */}
-      <ClientErrorBoundary name="LiveIntelligenceOverlay" eventType="live_intelligence_overlay_error" fallback={null}>
-        <LiveIntelligenceOverlay 
-          liveMoodRef={liveMoodRef}
-          footerContent={<LaserFooter />}
-        />
-      </ClientErrorBoundary>
+      <LiveIntelligenceOverlayIsolated liveMoodRef={liveMoodRef} footerContent={<LaserFooter />} />
 
       {/* THREE PREMIUM LIVE CARDS SECTION - NEW */}
 

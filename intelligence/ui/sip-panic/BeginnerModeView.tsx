@@ -60,6 +60,8 @@ export function BeginnerModeView(props: {
     ? storyChoiceToLabel(props.challengerChoice as StoryChoice)
     : "";
 
+  const isChallengeResponse = Boolean(props.challengerChoice);
+
   const primaryTruthLine =
     storyChoice === "continue"
       ? "Continuing your SIP through the crash keeps buying low and compounds the recovery."
@@ -190,6 +192,8 @@ export function BeginnerModeView(props: {
         calculator_type: "sip_vs_panic_selling",
         mode: "story",
         story_choice: storyChoice,
+        is_challenge_response: isChallengeResponse,
+        challenger_choice: isChallengeResponse ? (props.challengerChoice as StoryChoice) : undefined,
         monthly_amount: monthlyForCalc,
         duration_years: yearsForCalc,
         behavioral_cost: Math.round(result.behavioralCost || 0),
@@ -200,7 +204,7 @@ export function BeginnerModeView(props: {
     } catch {
       // ignore
     }
-  }, [monthlyForCalc, result.behavioralCost, result.choiceAmt, result.costPct, result.disciplineAmt, storyChoice, storyStep, yearsForCalc]);
+  }, [isChallengeResponse, monthlyForCalc, props.challengerChoice, result.behavioralCost, result.choiceAmt, result.costPct, result.disciplineAmt, storyChoice, storyStep, yearsForCalc]);
 
   const buildStoryShareUrl = useMemo(() => {
     try {
