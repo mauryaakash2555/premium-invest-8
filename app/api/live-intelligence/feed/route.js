@@ -38,6 +38,10 @@ const FEED_CACHE_HEADERS = {
   'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60',
 };
 
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+};
+
 const MAX_ROTATION_HEADLINES = 15;
 const GLOBAL_WATCH_MAX = 5;
 const MIN_ROTATION_HEADLINES = 5;
@@ -493,6 +497,7 @@ function ensureAtLeastOnePerCategory(headlines) {
 export async function GET(request) {
   try {
     const { searchParams } = request.nextUrl;
+    const cacheHeaders = searchParams.get('nocache') === '1' ? NO_CACHE_HEADERS : FEED_CACHE_HEADERS;
     const category = searchParams.get('category') || 'all';
     const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
     const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
@@ -522,7 +527,7 @@ export async function GET(request) {
           error: rssHeadlines.length > 0 ? null : 'Database not configured and RSS unavailable',
           hint: 'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (and ensure /api/cron/headlines is running) for enriched headlines.',
         },
-        { status: 200, headers: FEED_CACHE_HEADERS }
+        { status: 200, headers: cacheHeaders }
       );
     }
     
@@ -693,7 +698,7 @@ export async function GET(request) {
               warning: 'No fresh headlines in last 24h; showing latest available database items.',
             },
           },
-          { headers: FEED_CACHE_HEADERS }
+          { headers: cacheHeaders }
         );
       }
 
@@ -715,7 +720,7 @@ export async function GET(request) {
               warning: 'Database has no fresh headlines; serving live RSS headlines.',
             },
           },
-          { headers: FEED_CACHE_HEADERS }
+          { headers: cacheHeaders }
         );
       }
 
@@ -734,7 +739,7 @@ export async function GET(request) {
             warning: 'No fresh headlines available (live mode).',
           },
         },
-        { headers: FEED_CACHE_HEADERS }
+        { headers: cacheHeaders }
       );
     }
 
@@ -753,7 +758,7 @@ export async function GET(request) {
           warning: staleCount > 0 ? `${staleCount} headlines filtered (expired or older than 24h)` : null,
         },
       },
-      { headers: FEED_CACHE_HEADERS }
+      { headers: cacheHeaders }
     );
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
@@ -768,7 +773,7 @@ export async function GET(request) {
         mode,
         error: error?.message || 'Feed error',
       },
-      { status: 500, headers: FEED_CACHE_HEADERS }
+      { status: 500, headers: NO_CACHE_HEADERS }
     );
   }
 }

@@ -194,6 +194,15 @@ a.bm-cta-gold-flat:focus-visible {
     0 0 0 5px color-mix(in oklab, var(--lux-accent) 45%, transparent);
 }
 
+/* Premium editorial inline CTA (Blog #12) */
+.optional-execution a.text-link {
+  text-decoration: none;
+}
+
+.optional-execution a.text-link:hover {
+  text-decoration: underline;
+}
+
 @supports (color: oklch(0.78 0.08 65)) {
   :root {
     --lux-accent: oklch(0.78 0.08 65);

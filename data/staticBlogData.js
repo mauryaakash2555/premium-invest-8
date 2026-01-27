@@ -5263,32 +5263,17 @@ export const staticBlogPost12 = {
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">When used sparingly and strategically, they can serve as an effective short-term cashflow tool — nothing more, nothing less.</p>
 
+  <section class="optional-execution" style="margin: 18px 0 0;">
+    <p class="label" style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 10px; color: rgba(229,229,229,0.62);">Optional next step</p>
+    <p class="text" style="font-size: 16px; line-height: 1.9; margin: 0 0 10px; color: rgba(229,229,229,0.70);">
+      If you choose to explore execution after understanding the risks, you may review available lending options below.
+    </p>
+    <a href="/execution-partners" class="text-link" style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.72);">View execution options →</a>
+  </section>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 16px;">Disclosure</h2>
-  <a
-    class="bm-cta-gold-flat"
-    data-bm-title="Execution Partners"
-    data-bm-subtitle="Internal link"
-    data-bm-event="execution_partners_click"
-    data-bm-affiliate="internal"
-    data-bm-placement="blog_personal-loans-short-term-cashflow-professionals"
-    data-bm-cta="Execution Partners"
-    href="/execution-partners"
-  >Execution Partners</a>
-
-  <a
-    class="bm-cta-gold-flat"
-    data-bm-title="Loan Hub"
-    data-bm-subtitle="Sponsored link • Opens in a new tab"
-    data-bm-event="affiliate_loan_hub_click"
-    data-bm-affiliate="loan_hub"
-    data-bm-placement="blog_personal-loans-short-term-cashflow-professionals"
-    data-bm-cta="Loan Hub"
-    href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Foffersvault.site%2Floans"
-    target="_blank"
-    rel="nofollow sponsored noopener noreferrer"
-  >Loan Hub</a>
   `,
 };
 

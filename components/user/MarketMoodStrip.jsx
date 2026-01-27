@@ -50,7 +50,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
   // Fetch live headlines from API
   const fetchLiveHeadlines = useCallback(async () => {
     try {
-      const res = await fetch('/api/live-intelligence/feed?limit=10', { 
+      const res = await fetch('/api/live-intelligence/feed?limit=10&nocache=1', { 
         cache: 'no-store',
         next: { revalidate: 0 }
       });
@@ -59,7 +59,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
       
       if (data.ok && data.headlines && data.headlines.length > 0) {
         setHeadlines(data.headlines);
-        setIsLive(data.source === 'database');
+        setIsLive(data.source === 'database' || data.source === 'database_stale' || data.source === 'rss');
         return true;
       }
     } catch (err) {

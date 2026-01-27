@@ -53,10 +53,10 @@ export default function HeadlineFeed() {
     try {
       const cap = getRotationCap();
       const url = category === 'all' 
-        ? `/api/live-intelligence/feed?limit=${cap}`
-        : `/api/live-intelligence/feed?category=${category}&limit=${cap}`;
+        ? `/api/live-intelligence/feed?limit=${cap}&nocache=1`
+        : `/api/live-intelligence/feed?category=${category}&limit=${cap}&nocache=1`;
       
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error('Feed API failed');
       
       const data = await res.json();
