@@ -281,7 +281,7 @@ async function fetchRSSFeed(source) {
   try {
     const response = await fetch(source.url, {
       headers: {
-        'User-Agent': 'BMWealth-Bot/1.0 (+https://bmwealth.in)',
+        'User-Agent': 'BMWealth-Bot/1.0 (+https://bmwealth.co.in)',
         'Accept': 'application/rss+xml, application/xml, text/xml',
       },
       cache: 'no-store',

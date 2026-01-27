@@ -8,7 +8,33 @@ export function middleware(request) {
   const hostNoPort = host.split(':')[0];
   const normalizedHost = hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
 
+  // Canonicalize domain/protocol to avoid duplicate indexation (www vs non-www, http vs https).
+  // Preferred host: bmwealth.co.in (non-www). Store host is handled separately.
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
+  const isMainProdHost = hostNoPort === 'bmwealth.co.in' || hostNoPort === 'www.bmwealth.co.in';
+  const proto = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
+  const canonicalUrl = url.clone();
+  let shouldRedirect = false;
+
+  if (!isStoreHost && hostNoPort === 'www.bmwealth.co.in') {
+    canonicalUrl.hostname = 'bmwealth.co.in';
+    shouldRedirect = true;
+  }
+
+  if (!isStoreHost && isMainProdHost && proto === 'http') {
+    canonicalUrl.protocol = 'https:';
+    shouldRedirect = true;
+  }
+
+  // Strip legacy homepage query variant that should not be indexed.
+  if (pathname === '/' && canonicalUrl.searchParams.get('live') === '1') {
+    canonicalUrl.searchParams.delete('live');
+    shouldRedirect = true;
+  }
+
+  if (shouldRedirect) {
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
 
   // Legacy internal store prefix is not used anymore.
   // Hard-block it everywhere to avoid any accidental exposure.

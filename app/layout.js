@@ -218,24 +218,6 @@ export default async function RootLayout({ children }) {
 					`}
 				</Script>
 
-				{/* Google Analytics */}
-				{GA4_MEASUREMENT_ID && (
-					<>
-						<Script
-							src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
-							strategy="afterInteractive"
-						/>
-						<Script id="ga4-init" strategy="afterInteractive">
-							{`
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA4_MEASUREMENT_ID}');
-							`}
-						</Script>
-					</>
-				)}
-
 				<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 				<meta name="theme-color" content="#090A0C" />
 

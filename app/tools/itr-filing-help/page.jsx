@@ -91,7 +91,7 @@ export default function ITRFilingHelpPage() {
     provider: {
       "@type": "Organization",
       name: "BM Wealth",
-      url: "https://www.bmwealth.in",
+      url: "https://bmwealth.co.in",
     },
   };
 
