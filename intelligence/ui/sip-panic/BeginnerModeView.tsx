@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import type { MarketConditions, SIPScenario } from "@/intelligence/simulations/sip-vs-panic";
 import { simulateSIPVsPanic } from "@/intelligence/simulations/sip-vs-panic";
+import { trackEvent } from "@/lib/analytics";
 
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,64 @@ export function BeginnerModeView(props: {
   onRequestAdvanced: () => void;
 }) {
   const panicStopPct = 30;
+
+  type StoryChoice = "continue" | "stop" | "pause_6" | "pause_12";
+  const [storyStep, setStoryStep] = useState<0 | 1 | 2>(0);
+  const [storyChoice, setStoryChoice] = useState<StoryChoice>("stop");
+
+  const choiceLabel =
+    storyChoice === "continue"
+      ? "Continue SIP (discipline)"
+      : storyChoice === "pause_6"
+      ? "Pause for 6 months, then restart"
+      : storyChoice === "pause_12"
+      ? "Pause for 12 months, then restart"
+      : "Stop SIP (fear takes over)";
+
+  const primaryTruthLine =
+    storyChoice === "continue"
+      ? "Continuing your SIP through the crash keeps buying low and compounds the recovery."
+      : storyChoice === "pause_6" || storyChoice === "pause_12"
+      ? "Pausing during the crash reduces low-price buying; restarting helps, but timing still matters."
+      : `Stopping your SIP around a ~${panicStopPct}% drawdown cuts off the crash buying window and the recovery compounding.`;
+
+  function buildChoiceScenario(choice: StoryChoice): SIPScenario {
+    if (choice === "continue") {
+      return {
+        name: "Your choice: Continue SIP",
+        description: "Keeps investing through the crash and recovery",
+        behaviorType: "discipline",
+      };
+    }
+
+    if (choice === "pause_6") {
+      return {
+        name: "Your choice: Pause 6 months",
+        description: "Pauses SIP at a 30% drawdown, then restarts after ~6 months",
+        behaviorType: "custom",
+        panicThreshold: -panicStopPct,
+        stopDuration: 6,
+      };
+    }
+
+    if (choice === "pause_12") {
+      return {
+        name: "Your choice: Pause 12 months",
+        description: "Pauses SIP at a 30% drawdown, then restarts after ~12 months",
+        behaviorType: "custom",
+        panicThreshold: -panicStopPct,
+        stopDuration: 12,
+      };
+    }
+
+    return {
+      name: "Your choice: Stop SIP",
+      description: "Stops equity SIP at a 30% drawdown and never restarts in this model",
+      behaviorType: "panic",
+      panicThreshold: -panicStopPct,
+    };
+  }
+
   // Do not clamp the input value on every keystroke (it makes typing e.g. 15000 nearly impossible).
   // Clamp only for calculations + onBlur.
   const monthlyForCalc = clampInt(props.monthlyAmount, 1_000, 5_00_000);
@@ -44,19 +103,14 @@ export function BeginnerModeView(props: {
   const crashStartYearApprox = Math.max(0, Math.round((crashStartMonth / 12) * 10) / 10);
 
   const result = useMemo(() => {
-    const scenarios: SIPScenario[] = [
-      {
-        name: "Perfect Discipline",
-        description: "Never stops SIP, regardless of market conditions",
-        behaviorType: "discipline",
-      },
-      {
-        name: "Panic: Stop SIP at 30% Drawdown",
-        description: "Stops SIP contributions once market is down 30% from peak",
-        behaviorType: "panic",
-        panicThreshold: -panicStopPct,
-      },
-    ];
+    const disciplineScenario: SIPScenario = {
+      name: "Perfect Discipline",
+      description: "Never stops SIP, regardless of market conditions",
+      behaviorType: "discipline",
+    };
+    const choiceScenario = buildChoiceScenario(storyChoice);
+
+    const scenarios: SIPScenario[] = [disciplineScenario, choiceScenario];
 
     const taxConfig = {
       applyCess: true,
@@ -76,31 +130,215 @@ export function BeginnerModeView(props: {
       investmentType: "equity_mf",
     });
 
-    const disciplineRow = out.find((r) => r.scenario.behaviorType === "discipline") ?? null;
-    const panicRow = out.find((r) => r.scenario.behaviorType !== "discipline") ?? null;
+    const disciplineRow = out.find((r) => r.scenario.name === disciplineScenario.name) ?? null;
+    const choiceRow = out.find((r) => r.scenario.name === choiceScenario.name) ?? null;
 
     const disciplineAmt = disciplineRow?.postTaxCorpus ?? 0;
-    const panicAmt = panicRow?.postTaxCorpus ?? 0;
-    const behavioralCost = panicRow?.behavioralCost ?? Math.max(0, disciplineAmt - panicAmt);
+    const choiceAmt = choiceRow?.postTaxCorpus ?? 0;
+    const behavioralCost = Math.max(0, disciplineAmt - choiceAmt);
 
     const costPct = disciplineAmt > 0 ? Math.round((behavioralCost / disciplineAmt) * 100) : 0;
 
     return {
       out,
       disciplineRow,
-      panicRow,
+      choiceRow,
       disciplineAmt,
-      panicAmt,
+      choiceAmt,
       behavioralCost,
       costPct,
       cashAnnualRatePct,
+      story: {
+        step: storyStep,
+        choice: storyChoice,
+      },
     };
-  }, [market, monthlyForCalc, panicStopPct, yearsForCalc]);
+  }, [market, monthlyForCalc, panicStopPct, storyChoice, storyStep, yearsForCalc]);
 
   const totalInvested = monthlyForCalc * 12 * yearsForCalc;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-7">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-[11px] font-semibold tracking-wide text-white/70">STORY MODE (2 MIN)</div>
+            <div className="mt-1 text-sm font-semibold text-white/90">A guided crash decision, with real numbers</div>
+            <div className="mt-1 text-[12px] text-white/65">
+              You’ll face a simulated ~{Math.abs(market.crashDepthPct ?? 35)}% crash around Year ~{crashStartYearApprox}.
+              Choose your behavior and see the estimated cost.
+            </div>
+          </div>
+
+          {storyStep === 0 ? (
+            <button
+              type="button"
+              onClick={() => {
+                setStoryStep(1);
+                trackEvent("calculator_start", {
+                  calculator_type: "sip_vs_panic_selling",
+                  start_mode: "story",
+                });
+              }}
+              className="min-h-10 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
+            >
+              Start
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setStoryStep(0);
+                trackEvent("calculator_open", {
+                  calculator_type: "sip_vs_panic_selling",
+                  open_mode: "story_reset",
+                });
+              }}
+              className="min-h-10 rounded-xl border border-white/15 bg-black/20 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/5"
+            >
+              Reset
+            </button>
+          )}
+        </div>
+
+        {storyStep >= 1 ? (
+          <div className="mt-5 rounded-xl border border-white/10 bg-black/20 p-4">
+            <div className="text-xs font-semibold text-white/85">Scene: “The crash hits.”</div>
+            <div className="mt-1 text-[12px] text-white/70">
+              Headlines are red. Your portfolio is falling. You notice the market is down ~{panicStopPct}% from peak (drawdown).
+              What do you do?
+            </div>
+
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setStoryChoice("continue");
+                  setStoryStep(2);
+                  trackEvent("calculator_calculate", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "continue",
+                  });
+                  trackEvent("calculator_complete", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "continue",
+                  });
+                }}
+                className={
+                  "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
+                  (storyChoice === "continue" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-100" : "border-white/10 bg-black/10 text-white/85")
+                }
+              >
+                Continue SIP (discipline)
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStoryChoice("stop");
+                  setStoryStep(2);
+                  trackEvent("calculator_calculate", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "stop",
+                  });
+                  trackEvent("calculator_complete", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "stop",
+                  });
+                }}
+                className={
+                  "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
+                  (storyChoice === "stop" ? "border-rose-400/40 bg-rose-400/10 text-rose-100" : "border-white/10 bg-black/10 text-white/85")
+                }
+              >
+                Stop SIP (fear takes over)
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStoryChoice("pause_6");
+                  setStoryStep(2);
+                  trackEvent("calculator_calculate", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "pause_6",
+                  });
+                  trackEvent("calculator_complete", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "pause_6",
+                  });
+                }}
+                className={
+                  "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
+                  (storyChoice === "pause_6" ? "border-indigo-400/40 bg-indigo-400/10 text-indigo-100" : "border-white/10 bg-black/10 text-white/85")
+                }
+              >
+                Pause 6 months, then restart
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStoryChoice("pause_12");
+                  setStoryStep(2);
+                  trackEvent("calculator_calculate", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "pause_12",
+                  });
+                  trackEvent("calculator_complete", {
+                    calculator_type: "sip_vs_panic_selling",
+                    mode: "story",
+                    story_choice: "pause_12",
+                  });
+                }}
+                className={
+                  "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
+                  (storyChoice === "pause_12" ? "border-indigo-300/40 bg-indigo-300/10 text-indigo-100" : "border-white/10 bg-black/10 text-white/85")
+                }
+              >
+                Pause 12 months, then restart
+              </button>
+            </div>
+
+            {storyStep >= 2 ? (
+              <div className="mt-4 text-[12px] text-white/75">
+                <div className="font-semibold text-white/85">Outcome (estimated, after tax)</div>
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-4">
+                    <div className="text-[11px] font-semibold text-emerald-100/90">Perfect discipline</div>
+                    <div className="mt-2 text-2xl font-semibold text-emerald-200 tabular-nums">
+                      <LakhTooltip amount={result.disciplineAmt} />
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-black/10 p-4">
+                    <div className="text-[11px] font-semibold text-white/80">{buildChoiceScenario(storyChoice).name}</div>
+                    <div className="mt-2 text-2xl font-semibold text-white tabular-nums">
+                      <LakhTooltip amount={result.choiceAmt} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-3 rounded-xl border border-white/10 bg-black/20 p-3">
+                  <div className="text-[11px] font-semibold text-white/85">Behavioral cost</div>
+                  <div className="mt-1 text-[12px] text-white/70">
+                    Estimated wealth gap: <span className="font-semibold text-white/85"><LakhTooltip amount={result.behavioralCost} /></span>
+                    {result.costPct > 0 ? <span className="text-white/60"> (≈ {result.costPct}% of the disciplined outcome)</span> : null}
+                  </div>
+                  <div className="mt-1 text-[11px] text-white/55">Education-only, simplified market + tax model.</div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+
       <section className="rounded-3xl border border-white/15 bg-gradient-to-br from-slate-950/85 via-slate-950/65 to-indigo-950/55 p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55)]">
         <div className="text-[11px] font-semibold tracking-wide text-white/70">PRIMARY TRUTH</div>
         <div className="mt-3 text-4xl sm:text-6xl font-semibold text-white tabular-nums leading-tight">
@@ -110,7 +348,7 @@ export function BeginnerModeView(props: {
           Same market path. Different behavior.
         </p>
         <p className="mt-2 text-[12px] text-white/70">
-          Stopping your SIP around a ~{panicStopPct}% drawdown cuts off the crash buying window and the recovery compounding.
+          {primaryTruthLine}
         </p>
         <p className="mt-4 text-[11px] text-white/55">Education-only. Simplified market + tax model.</p>
       </section>
@@ -264,9 +502,9 @@ export function BeginnerModeView(props: {
           </div>
 
           <div className="rounded-2xl border border-red-500/25 bg-red-500/10 p-6 text-center">
-            <p className="text-xs text-red-100/90 font-semibold">If you panic & stop investing</p>
+            <p className="text-xs text-red-100/90 font-semibold">If you {choiceLabel.toLowerCase()}</p>
             <div className="mt-3 text-3xl sm:text-4xl font-semibold text-red-200 tabular-nums">
-              <LakhTooltip amount={result.panicAmt} />
+              <LakhTooltip amount={result.choiceAmt} />
             </div>
             <p className="mt-2 text-[11px] text-red-100/70">Final wealth estimate</p>
           </div>
