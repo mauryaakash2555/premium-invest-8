@@ -9,6 +9,20 @@ export async function generateMetadata({ searchParams }) {
   const sp = await searchParams;
   const share = String(sp?.share || "") === "1";
 
+  const isStory = String(sp?.story || "") === "1";
+  const sc = String(sp?.sc || "");
+
+  const storyChoiceLabel =
+    sc === "continue"
+      ? "Continue SIP"
+      : sc === "pause_6"
+      ? "Pause 6 months"
+      : sc === "pause_12"
+      ? "Pause 12 months"
+      : sc === "stop"
+      ? "Stop SIP"
+      : "";
+
   const monthly = Number(sp?.m || 0);
   const years = Number(sp?.y || 0);
   const cost = Number(sp?.cost || 0);
@@ -19,16 +33,22 @@ export async function generateMetadata({ searchParams }) {
   const crash = String(sp?.crash || "");
   const partner = String(sp?.partner || "");
 
+  const costLakh = Number.isFinite(cost) ? `₹${(Math.max(0, cost) / 100_000).toFixed(2)}L` : "";
+
   const title = share
-    ? `SIP vs Panic: Potential cost ${Number.isFinite(cost) ? `₹${(Math.max(0, cost) / 100_000).toFixed(2)}L` : ""} | BM Wealth`
+    ? isStory && storyChoiceLabel
+      ? `SIP vs Panic Story: ${storyChoiceLabel} • Cost ${costLakh} | BM Wealth`
+      : `SIP vs Panic: Potential cost ${costLakh} | BM Wealth`
     : "SIP vs Panic Selling Simulator | BM Wealth";
 
   const description = share
-    ? `Education-only result: ₹${Number.isFinite(monthly) ? monthly.toLocaleString("en-IN") : "10,000"}/month for ${Number.isFinite(years) ? years : 10} years. See the post-tax behavioral cost of stopping SIP during drawdowns.${crash ? ` Crash preset: ${crash}.` : ""}${rc ? ` Risk comfort: ${rc}.` : ""}`
+    ? isStory && storyChoiceLabel
+      ? `Education-only Story Mode result: decision “${storyChoiceLabel}”. Inputs: ₹${Number.isFinite(monthly) ? monthly.toLocaleString("en-IN") : "10,000"}/month for ${Number.isFinite(years) ? years : 10} years. See the post-tax behavioral cost of fear vs discipline.`
+      : `Education-only result: ₹${Number.isFinite(monthly) ? monthly.toLocaleString("en-IN") : "10,000"}/month for ${Number.isFinite(years) ? years : 10} years. See the post-tax behavioral cost of stopping SIP during drawdowns.${crash ? ` Crash preset: ${crash}.` : ""}${rc ? ` Risk comfort: ${rc}.` : ""}`
     : "What happens if you stop your SIP during a market crash? Compare disciplined investing vs panic-selling and see the post-tax cost of fear.";
 
   const og = share
-    ? `/api/og/sip-vs-panic?m=${encodeURIComponent(String(monthly || 0))}&y=${encodeURIComponent(String(years || 0))}&cost=${encodeURIComponent(String(cost || 0))}&disc=${encodeURIComponent(String(disc || 0))}&panic=${encodeURIComponent(String(panic || 0))}&tax=${encodeURIComponent(tax)}&rc=${encodeURIComponent(rc)}&crash=${encodeURIComponent(crash)}&partner=${encodeURIComponent(partner)}`
+    ? `/api/og/sip-vs-panic?m=${encodeURIComponent(String(monthly || 0))}&y=${encodeURIComponent(String(years || 0))}&cost=${encodeURIComponent(String(cost || 0))}&disc=${encodeURIComponent(String(disc || 0))}&panic=${encodeURIComponent(String(panic || 0))}&tax=${encodeURIComponent(tax)}&rc=${encodeURIComponent(rc)}&crash=${encodeURIComponent(crash)}&partner=${encodeURIComponent(partner)}${isStory ? `&mode=story&sc=${encodeURIComponent(sc)}` : ""}`
     : "/logo.png";
 
   return {

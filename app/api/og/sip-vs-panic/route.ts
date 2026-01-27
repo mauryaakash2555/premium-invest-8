@@ -26,6 +26,15 @@ function titleCase(v: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function storyChoiceLabel(choice: string): string {
+  const c = String(choice || "").trim();
+  if (c === "continue") return "Continue SIP";
+  if (c === "pause_6") return "Pause 6 months";
+  if (c === "pause_12") return "Pause 12 months";
+  if (c === "stop") return "Stop SIP";
+  return "";
+}
+
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -36,6 +45,10 @@ export async function GET(req: Request) {
   const cost = safeNumber(sp.get("cost"));
   const disciplined = safeNumber(sp.get("disc"));
   const panic = safeNumber(sp.get("panic"));
+
+  const mode = safeLabel(sp.get("mode"), 16);
+  const sc = safeLabel(sp.get("sc"), 16);
+  const storyDecision = mode === "story" ? storyChoiceLabel(sc) : "";
 
   const tax = safeLabel(sp.get("tax"), 18);
   const rc = safeLabel(sp.get("rc"), 18);
@@ -71,6 +84,40 @@ export async function GET(req: Request) {
         h(
           "div",
           { style: { display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" } },
+          mode === "story"
+            ? h(
+                "div",
+                {
+                  style: {
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    border: "1px solid rgba(255,255,255,0.16)",
+                    background: "rgba(99, 102, 241, 0.16)",
+                    color: "rgba(235,242,255,0.95)",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    letterSpacing: 0.2,
+                  },
+                },
+                "Story Mode"
+              )
+            : null,
+          storyDecision
+            ? h(
+                "div",
+                {
+                  style: {
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    backgroundColor: "rgba(0,0,0,0.22)",
+                    color: "rgba(255,255,255,0.84)",
+                    fontSize: 16,
+                  },
+                },
+                `Decision: ${storyDecision}`
+              )
+            : null,
           h("div", { style: { fontSize: 22, color: "rgba(255,255,255,0.78)" } }, "Education-only simulator"),
           h("div", { style: { fontSize: 22, color: "rgba(255,255,255,0.40)" } }, "•"),
           h("div", { style: { fontSize: 22, color: "rgba(255,255,255,0.78)" } }, "BM Wealth Intelligence"),

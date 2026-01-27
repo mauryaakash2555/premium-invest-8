@@ -113,56 +113,6 @@ export function BeginnerModeView(props: {
   // Clamp only for calculations + onBlur.
   const monthlyForCalc = clampInt(props.monthlyAmount, 1_000, 5_00_000);
   const yearsForCalc = clampInt(props.durationYears, 1, 30);
-
-  const buildStoryShareUrl = useMemo(() => {
-    try {
-      const p = new URLSearchParams();
-      p.set("ui", "beginner");
-      p.set("story", "1");
-      p.set("sc", storyChoice);
-      p.set("m", String(monthlyForCalc));
-      p.set("y", String(yearsForCalc));
-
-      return buildShareUrlWithUtm(p, {
-        medium: "story",
-        content: "sip_vs_panic",
-      });
-    } catch {
-      return "";
-    }
-  }, [monthlyForCalc, storyChoice, yearsForCalc]);
-
-  const copyStoryLink = async () => {
-    try {
-      if (!buildStoryShareUrl) return;
-      await navigator.clipboard.writeText(buildStoryShareUrl);
-      trackEvent("calculator_share", {
-        calculator_type: "sip_vs_panic_selling",
-        channel: "story_link_copy",
-        story_choice: storyChoice,
-      });
-    } catch {
-      // ignore
-    }
-  };
-
-  const shareStoryWhatsApp = () => {
-    try {
-      if (!buildStoryShareUrl) return;
-      const title = `SIP vs Panic (Story Mode) — my crash decision: ${choiceLabel}`;
-      const msg = `${title}\n\nEstimated gap vs discipline: ${String(result.costPct || 0)}% (education-only model)\n\n${buildStoryShareUrl}`;
-
-      trackEvent("calculator_share", {
-        calculator_type: "sip_vs_panic_selling",
-        channel: "story_whatsapp",
-        story_choice: storyChoice,
-      });
-
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
-    } catch {
-      // ignore
-    }
-  };
   const market = useMemo(() => buildDefaultMarketConditions(), []);
   const crashStartMonth = market.crashStartMonth ?? 30;
   const crashStartYearApprox = Math.max(0, Math.round((crashStartMonth / 12) * 10) / 10);
@@ -219,6 +169,70 @@ export function BeginnerModeView(props: {
       },
     };
   }, [market, monthlyForCalc, panicStopPct, storyChoice, storyStep, yearsForCalc]);
+
+  const buildStoryShareUrl = useMemo(() => {
+    try {
+      const p = new URLSearchParams();
+      p.set("ui", "beginner");
+      p.set("story", "1");
+      // Enables dynamic OG/meta on the route (used by WhatsApp/Twitter/LinkedIn previews).
+      p.set("share", "1");
+      p.set("sc", storyChoice);
+      p.set("m", String(monthlyForCalc));
+      p.set("y", String(yearsForCalc));
+
+      // Include computed outcomes so share previews are specific (no server recompute needed).
+      p.set("cost", String(Math.round(result.behavioralCost || 0)));
+      p.set("disc", String(Math.round(result.disciplineAmt || 0)));
+      p.set("panic", String(Math.round(result.choiceAmt || 0)));
+
+      // Labels used by OG renderer.
+      p.set("rc", "moderate");
+      p.set("crash", "story");
+      p.set("tax", "stcg30");
+
+      return buildShareUrlWithUtm(p, {
+        medium: "story",
+        content: "sip_vs_panic",
+      });
+    } catch {
+      return "";
+    }
+  }, [monthlyForCalc, result.behavioralCost, result.choiceAmt, result.disciplineAmt, storyChoice, yearsForCalc]);
+
+  const copyStoryLink = async () => {
+    try {
+      if (!buildStoryShareUrl) return;
+      await navigator.clipboard.writeText(buildStoryShareUrl);
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_link_copy",
+        story_choice: storyChoice,
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  const shareStoryWhatsApp = () => {
+    try {
+      if (!buildStoryShareUrl) return;
+      const title = `SIP vs Panic (Story Mode) — my crash decision: ${choiceLabel}`;
+      const gap = Math.max(0, Math.round(result.behavioralCost || 0));
+      const gapL = `₹${(gap / 100_000).toFixed(2)}L`;
+      const msg = `${title}\n\nEstimated gap vs discipline: ${gapL} (~${String(result.costPct || 0)}%)\nEducation-only model\n\n${buildStoryShareUrl}`;
+
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_whatsapp",
+        story_choice: storyChoice,
+      });
+
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+    } catch {
+      // ignore
+    }
+  };
 
   const totalInvested = monthlyForCalc * 12 * yearsForCalc;
 
