@@ -64,7 +64,7 @@ export default function HeadlineFeed() {
         // Keep API-provided ordering (already balanced/scored), but allow BREAKING to surface first.
         const ordered = moveBreakingToFront(data.headlines);
         setHeadlines(ordered.slice(0, cap));
-        setIsLive(data.source === 'database');
+        setIsLive(data.source === 'database' || data.source === 'database_stale' || data.source === 'rss');
         setActiveIndex(0);
         return true;
       }

@@ -42,6 +42,208 @@ const MAX_ROTATION_HEADLINES = 15;
 const GLOBAL_WATCH_MAX = 5;
 const MIN_ROTATION_HEADLINES = 5;
 
+// Live RSS fallback feeds (real-time external sources; not curated/dummy).
+// Used only when database is unavailable/empty.
+const RSS_FALLBACK_FEEDS = [
+  {
+    sourceKey: 'moneycontrol',
+    sourceName: 'MoneyControl',
+    url: 'https://www.moneycontrol.com/rss/latestnews.xml',
+    category: 'market',
+  },
+  {
+    sourceKey: 'moneycontrol',
+    sourceName: 'MoneyControl',
+    url: 'https://www.moneycontrol.com/rss/mfnews.xml',
+    category: 'mutual_funds',
+  },
+  {
+    sourceKey: 'economicTimes',
+    sourceName: 'Economic Times',
+    url: 'https://economictimes.indiatimes.com/rssfeedstopstories.cms',
+    category: 'market',
+  },
+  {
+    sourceKey: 'mint',
+    sourceName: 'Mint',
+    url: 'https://www.livemint.com/rss/markets',
+    category: 'market',
+  },
+];
+
+function stripCdata(s) {
+  return String(s || '')
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, '$1')
+    .trim();
+}
+
+function decodeHtmlEntities(input) {
+  const str = String(input || '');
+  if (!str) return '';
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&#x27;/gi, "'")
+    .replace(/&#x2F;/gi, '/')
+    .replace(/&#(\d+);/g, (_, n) => {
+      const code = Number.parseInt(n, 10);
+      if (!Number.isFinite(code)) return _;
+      try {
+        return String.fromCharCode(code);
+      } catch {
+        return _;
+      }
+    })
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => {
+      const code = Number.parseInt(hex, 16);
+      if (!Number.isFinite(code)) return _;
+      try {
+        return String.fromCharCode(code);
+      } catch {
+        return _;
+      }
+    });
+}
+
+function extractTag(xmlChunk, tagName) {
+  const re = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
+  const m = String(xmlChunk || '').match(re);
+  if (!m) return '';
+  return decodeHtmlEntities(stripCdata(m[1]));
+}
+
+function extractAtomLink(xmlChunk) {
+  const m = String(xmlChunk || '').match(/<link[^>]*href=["']([^"']+)["'][^>]*\/?\s*>/i);
+  return m ? decodeHtmlEntities(m[1].trim()) : '';
+}
+
+function simpleHash(value) {
+  const s = String(value || '');
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(16);
+}
+
+function parseRssXml(xml) {
+  const items = [];
+  const raw = String(xml || '');
+  if (!raw) return items;
+
+  const rssItems = raw.match(/<item[\s\S]*?<\/item>/gi) || [];
+  for (const block of rssItems) {
+    const title = extractTag(block, 'title');
+    const link = extractTag(block, 'link') || extractTag(block, 'guid');
+    const pubDate = extractTag(block, 'pubDate');
+    if (!title) continue;
+    items.push({ title, link, pubDate });
+  }
+
+  if (items.length > 0) return items;
+
+  // Atom fallback
+  const entries = raw.match(/<entry[\s\S]*?<\/entry>/gi) || [];
+  for (const block of entries) {
+    const title = extractTag(block, 'title');
+    const link = extractAtomLink(block);
+    const pubDate = extractTag(block, 'published') || extractTag(block, 'updated');
+    if (!title) continue;
+    items.push({ title, link, pubDate });
+  }
+
+  return items;
+}
+
+async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, modeKey }) {
+  const origin = request?.nextUrl?.origin;
+  if (!origin) return [];
+
+  const filteredFeeds = RSS_FALLBACK_FEEDS.filter((f) => {
+    if (!categorySpecKey || categorySpecKey === 'all') return true;
+    return normalizeCategoryToSpec(f.category) === categorySpecKey;
+  });
+
+  // If filter removes all feeds, still attempt market feed as a safe default.
+  const feedsToUse = filteredFeeds.length > 0 ? filteredFeeds : RSS_FALLBACK_FEEDS.filter((f) => f.category === 'market');
+
+  const responses = await Promise.allSettled(
+    feedsToUse.map(async (feed) => {
+      const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feed.url)}`;
+      const res = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!res.ok) return [];
+      const xml = await res.text();
+      const parsed = parseRssXml(xml);
+      return parsed.map((p) => ({ ...p, feed }));
+    })
+  );
+
+  const merged = [];
+  for (const r of responses) {
+    if (r.status === 'fulfilled' && Array.isArray(r.value)) merged.push(...r.value);
+  }
+
+  // Map to internal headline objects.
+  const normalized = merged
+    .map(({ title, link, pubDate, feed }) => {
+      const ts = pubDate ? new Date(pubDate) : null;
+      const timestamp = ts && !Number.isNaN(ts.getTime()) ? ts.toISOString() : new Date().toISOString();
+      const specCategory = normalizeCategoryToSpec(feed?.category || 'market');
+      const idSeed = link || `${feed?.sourceKey}:${title}:${timestamp}`;
+      const url = link && /^https?:\/\//i.test(link) ? link : null;
+
+      return {
+        id: `rss_${feed?.sourceKey || 'src'}_${simpleHash(idSeed)}`,
+        rawCategory: feed?.category || 'market',
+        category: specCategory,
+        icon: getCategoryIcon(specCategory),
+        headline: title,
+        what_happened: title,
+        whyItMatters: '',
+        why_it_matters: '',
+        dataPoint: '',
+        data_point: '',
+        urgency: 'REGULAR',
+        timestamp,
+        created_at: timestamp,
+        source: feed?.sourceName || 'RSS',
+        valid_from: timestamp,
+        valid_until: null,
+        pinned: false,
+        type: 'rss',
+        url,
+        cta_button: url ? { text: 'Open Source', link: url, icon: '↗' } : { text: 'Learn More', link: '/contact', icon: '→' },
+      };
+    })
+    .filter((h) => Boolean(h?.headline))
+    .sort((a, b) => {
+      const at = new Date(a.timestamp).getTime();
+      const bt = new Date(b.timestamp).getTime();
+      return bt - at;
+    });
+
+  // De-dupe by URL/headline
+  const seen = new Set();
+  const unique = [];
+  for (const h of normalized) {
+    const key = (h.url || h.headline || '').toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    unique.push(h);
+    if (unique.length >= Math.max(limit * 3, limit)) break;
+  }
+
+  // Apply the same pipeline used for DB items.
+  const withinWindow = filterByValidityWindow(unique);
+  const fresh = filterExpired(withinWindow);
+  const final = buildRotation(fresh, { limit, modeKey });
+  return final.slice(0, limit);
+}
+
 // Urgency level weights for priority calculation
 const URGENCY_WEIGHTS = {
   BREAKING: 100,
@@ -212,7 +414,7 @@ function buildRotation(items, { limit, modeKey }) {
   let final = [...pinned, ...balanced].slice(0, limit);
 
   // Step 4.5: Intelligent enrichment + lightweight noise suppression + dedupe
-  const minQuality = modeKey === 'night' || modeKey === 'global' ? 60 : 65;
+  const minQuality = modeKey === 'nightsummary' || modeKey === 'globalwatch' ? 60 : 65;
   final = dedupeHeadlines(
     final
       .map((h) => enrichHeadline(h))
@@ -295,27 +497,32 @@ export async function GET(request) {
     const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
     const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
 
-    // Spec: global_watch shows minimal items (max 5)
-    const modeKey = getCurrentMode();
-    const hardMax = modeKey === 'global_watch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
+    // Spec: globalwatch shows minimal items (max 5)
+    const mode = getCurrentMode();
+    const modeKey = mode?.key || 'globalwatch';
+    const hardMax = modeKey === 'globalwatch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
     const limit = Math.min(Math.max(1, requestedLimit), hardMax);
     const minRequired = Math.min(MIN_ROTATION_HEADLINES, limit);
     
     const supabase = getSupabase();
     
-    // No curated fallback if database unavailable
+    // Strict mode: if DB is unavailable, fall back to LIVE RSS (real sources) rather than dummy/curated.
     if (!supabase) {
+      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey });
       return NextResponse.json(
         {
-          ok: false,
-          headlines: [],
-          source: 'unavailable',
-          count: 0,
-          mode: modeKey,
-          error: 'Database not configured for live headlines',
-          hint: 'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (and ensure /api/cron/headlines is running).',
+          ok: true,
+          headlines: rssHeadlines,
+          source: rssHeadlines.length > 0 ? 'rss' : 'unavailable',
+          count: rssHeadlines.length,
+          mode,
+          stats: {
+            warning: 'Database not configured; serving live RSS headlines.',
+          },
+          error: rssHeadlines.length > 0 ? null : 'Database not configured and RSS unavailable',
+          hint: 'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (and ensure /api/cron/headlines is running) for enriched headlines.',
         },
-        { status: 503, headers: FEED_CACHE_HEADERS }
+        { status: 200, headers: FEED_CACHE_HEADERS }
       );
     }
     
@@ -477,7 +684,7 @@ export async function GET(request) {
             headlines: staleFinal,
             source: 'database_stale',
             count: staleFinal.length,
-            mode: modeKey,
+            mode,
             stats: {
               total_fetched: withinWindow.length,
               stale_filtered: staleCount,
@@ -490,13 +697,35 @@ export async function GET(request) {
         );
       }
 
+      // DB is configured but empty/no content: fall back to LIVE RSS.
+      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey });
+      if (rssHeadlines.length > 0) {
+        return NextResponse.json(
+          {
+            ok: true,
+            headlines: rssHeadlines,
+            source: 'rss',
+            count: rssHeadlines.length,
+            mode,
+            stats: {
+              total_fetched: 0,
+              stale_filtered: staleCount,
+              fresh_remaining: 0,
+              returned: rssHeadlines.length,
+              warning: 'Database has no fresh headlines; serving live RSS headlines.',
+            },
+          },
+          { headers: FEED_CACHE_HEADERS }
+        );
+      }
+
       return NextResponse.json(
         {
           ok: true,
           headlines: [],
           source: 'empty',
           count: 0,
-          mode: modeKey,
+          mode,
           stats: {
             total_fetched: withinWindow.length,
             stale_filtered: staleCount,
@@ -515,7 +744,7 @@ export async function GET(request) {
         headlines: final,
         source: 'database',
         count: final.length,
-        mode: modeKey,
+        mode,
         stats: {
           total_fetched: withinWindow.length,
           stale_filtered: staleCount,
@@ -529,14 +758,14 @@ export async function GET(request) {
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
 
-    const modeKey = getCurrentMode();
+    const mode = getCurrentMode();
     return NextResponse.json(
       {
         ok: false,
         headlines: [],
         source: 'error',
         count: 0,
-        mode: modeKey,
+        mode,
         error: error?.message || 'Feed error',
       },
       { status: 500, headers: FEED_CACHE_HEADERS }

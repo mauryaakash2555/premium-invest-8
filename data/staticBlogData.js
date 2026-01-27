@@ -5266,29 +5266,29 @@ export const staticBlogPost12 = {
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 16px;">Disclosure</h2>
-  <p style="font-size: 18px; line-height: 2; margin: 0 0 12px; color: #E5E5E5;">
-    vs code ai agent link them to our "<a
-      href="/execution-partners"
-      data-bm-title="Execution Partners"
-      data-bm-subtitle="Internal link"
-      data-bm-event="execution_partners_click"
-      data-bm-affiliate="internal"
-      data-bm-placement="blog_personal-loans-short-term-cashflow-professionals"
-      data-bm-cta="Execution Partners"
-      style="color: var(--lux-accent); text-decoration: underline;"
-    >Execution Partners</a>"
-  </p>
+  <a
+    class="bm-cta-gold-flat"
+    data-bm-title="Execution Partners"
+    data-bm-subtitle="Internal link"
+    data-bm-event="execution_partners_click"
+    data-bm-affiliate="internal"
+    data-bm-placement="blog_personal-loans-short-term-cashflow-professionals"
+    data-bm-cta="Execution Partners"
+    href="/execution-partners"
+  >Execution Partners</a>
 
   <a
     class="bm-cta-gold-flat"
-    data-bm-title="Loans"
-    data-bm-subtitle="Internal link"
-    data-bm-event="execution_partners_loans_click"
-    data-bm-affiliate="internal"
+    data-bm-title="Loan Hub"
+    data-bm-subtitle="Sponsored link • Opens in a new tab"
+    data-bm-event="affiliate_loan_hub_click"
+    data-bm-affiliate="loan_hub"
     data-bm-placement="blog_personal-loans-short-term-cashflow-professionals"
-    data-bm-cta="Loans"
-    href="/execution-partners#personal-loans"
-  >Loans</a>
+    data-bm-cta="Loan Hub"
+    href="https://linksredirect.com/?cid=257199&source=linkkit&url=https%3A%2F%2Foffersvault.site%2Floans"
+    target="_blank"
+    rel="nofollow sponsored noopener noreferrer"
+  >Loan Hub</a>
   `,
 };
 
