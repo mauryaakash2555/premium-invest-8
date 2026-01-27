@@ -1,5 +1,6 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import SIPPanicPage from "@/intelligence/ui/sip-panic/SIPPanicPage";
+import Link from "next/link";
 
 const PATH = "/intelligence/sip-vs-panic";
 
@@ -106,7 +107,83 @@ export default function SIPPanicRoutePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      {/*
+        Server-rendered explainer (SEO + comprehension):
+        Keeps the simulator powerful while making the “what/why/how” obvious for first-time users.
+      */}
+      <section className="px-6 lg:px-10 pt-10 pb-6">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-semibold gold-gradient-text">SIP vs Panic Selling</h1>
+          <p className="mt-2 text-sm sm:text-base text-white/75 max-w-3xl">
+            Education-only simulator to visualize the post-tax cost of stopping SIPs during drawdowns. It’s not a forecast.
+          </p>
+
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              { t: "1) Set your plan", d: "Monthly SIP + time horizon" },
+              { t: "2) Pick a crash", d: "2008 / 2020 / 2022-style preset" },
+              { t: "3) Compare behavior", d: "Discipline vs panic rules (post-tax)" },
+            ].map((x) => (
+              <div key={x.t} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                <div className="text-xs font-semibold text-white/85">{x.t}</div>
+                <div className="mt-1 text-[12px] text-white/65">{x.d}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+            <Link
+              href="/sip"
+              className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
+              data-ga-event="tool_internal_link"
+              data-ga-label="sip_vs_panic_to_sip"
+            >
+              What is SIP? →
+            </Link>
+            <span className="text-white/25">•</span>
+            <Link
+              href="/blog"
+              className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
+              data-ga-event="tool_internal_link"
+              data-ga-label="sip_vs_panic_to_blog"
+            >
+              Read investing guides →
+            </Link>
+            <span className="text-white/25">•</span>
+            <Link
+              href="/intelligence"
+              className="text-[oklch(0.78_0.08_65)] hover:opacity-90"
+              data-ga-event="tool_internal_link"
+              data-ga-label="sip_vs_panic_to_intelligence"
+            >
+              Explore more simulators →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <SIPPanicPage faqs={faqs} />
+
+      <noscript>
+        <section className="px-6 lg:px-10 py-10">
+          <div className="max-w-5xl mx-auto rounded-2xl border border-white/10 bg-black/25 p-5">
+            <h2 className="text-base font-semibold text-white/90">JavaScript is required</h2>
+            <p className="mt-2 text-sm text-white/70">
+              This simulator is interactive and needs JavaScript to run calculations and charts.
+              You can still bookmark the page and try again with JS enabled.
+            </p>
+            <div className="mt-3 text-sm">
+              <a
+                href="/embed/sip-vs-panic"
+                className="text-[oklch(0.78_0.08_65)] underline"
+              >
+                Open embed version →
+              </a>
+            </div>
+          </div>
+        </section>
+      </noscript>
     </>
   );
 }

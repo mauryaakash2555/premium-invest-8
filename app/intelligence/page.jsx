@@ -32,7 +32,13 @@ export default function IntelligencePage() {
                 </p>
               </div>
               <Link href="/intelligence/sip-vs-panic" className="shrink-0 inline-flex">
-                <Button className="calculator-premium-cta">Open Simulator</Button>
+                <Button
+                  className="calculator-premium-cta"
+                  data-ga-event="tool_open"
+                  data-ga-label="intelligence_open_sip_vs_panic"
+                >
+                  Open Simulator
+                </Button>
               </Link>
             </CardContent>
           </Card>

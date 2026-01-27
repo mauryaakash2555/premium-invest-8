@@ -10,6 +10,7 @@ import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import { SipGoalSnapshot } from '@/components/calculators/SipGoalSnapshot';
 import { getServiceLuxuryStyles } from '@/lib/ui/serviceLuxuryStyles';
 import { setupServiceMobilePulse } from '@/lib/ui/serviceMobilePulse';
+import { trackEvent } from '@/lib/analytics/gtag';
 
 const ACCENT = '#D6B36A';
 const ACCENT_RGB = '214, 179, 106';
@@ -26,6 +27,10 @@ const SIPServices = () => {
     window.scrollTo(0, 0);
     const cleanup = setupServiceMobilePulse();
     return cleanup;
+  }, []);
+
+  useEffect(() => {
+    trackEvent?.('related_tool_impression', { tool: 'sip_vs_panic', page: '/sip' });
   }, []);
 
   const PAGE_PATH = '/sip';
@@ -209,6 +214,27 @@ const SIPServices = () => {
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+        <section style={{ marginBottom: '34px' }}>
+          <div className="svc-card" style={{ padding: 22 }}>
+            <h2 style={{ margin: 0, fontSize: '18px', color: TITLE, fontWeight: 600 }}>
+              Try the “SIP vs Panic Selling” simulator
+            </h2>
+            <p style={{ margin: '10px 0 0 0', fontSize: '14px', color: BODY, lineHeight: '1.7' }}>
+              See, in rupees, what stopping a SIP during drawdowns can cost (education-only, post-tax approximation).
+            </p>
+            <div style={{ marginTop: 12 }}>
+              <Link
+                href="/intelligence/sip-vs-panic"
+                data-ga-event="related_tool_click"
+                data-ga-label="sip_to_sip_vs_panic"
+                onClick={() => trackEvent?.('related_tool_click', { tool: 'sip_vs_panic', page: '/sip' })}
+                style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline', textUnderlineOffset: 4 }}
+              >
+                Open simulator →
+              </Link>
+            </div>
+          </div>
+        </section>
         {/* How SIP Works (Simple Flow) */}
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: 600, fontFamily: '"Playfair Display", serif' }}>

@@ -170,6 +170,27 @@ const TradingServices = () => {
       </section>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+        <section style={{ marginBottom: '40px' }}>
+          <div className="svc-card" style={{ padding: 22 }}>
+            <h2 style={{ margin: 0, fontSize: '18px', color: TITLE, fontWeight: 600 }}>
+              Want a crash-behavior demo?
+            </h2>
+            <p style={{ margin: '10px 0 0 0', fontSize: '14px', color: BODY, lineHeight: '1.7' }}>
+              Run the “SIP vs Panic Selling” simulator to see how behavior during drawdowns can change outcomes (education-only).
+            </p>
+            <div style={{ marginTop: 12 }}>
+              <Link
+                href="/intelligence/sip-vs-panic"
+                data-ga-event="related_tool_click"
+                data-ga-label="trading_to_sip_vs_panic"
+                style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline', textUnderlineOffset: 4 }}
+              >
+                Open simulator →
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
             How Trading & Demat Works (Simple Flow)
