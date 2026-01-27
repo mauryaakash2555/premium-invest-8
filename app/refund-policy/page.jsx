@@ -1,5 +1,5 @@
 import { buildMetadata } from '@/lib/seo/metadata';
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 export const metadata = buildMetadata({
   title: 'Refund Policy (Legacy) | BM Wealth',
@@ -9,5 +9,5 @@ export const metadata = buildMetadata({
 });
 
 export default function RefundPolicyLegacyPage() {
-  redirect("/refund");
+  permanentRedirect("/refund");
 }

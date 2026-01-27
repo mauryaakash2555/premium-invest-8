@@ -1,13 +1,36 @@
+import { headers } from "next/headers";
 import { getMetadataBase } from "@/lib/seo/metadata";
 
-export default function robots() {
-  const base = getMetadataBase().toString().replace(/\/$/, "");
+function getNormalizedHost(hdrs) {
+  const rawHost = hdrs.get("x-forwarded-host") || hdrs.get("host") || "";
+  const host = String(rawHost).split(",")[0].trim().toLowerCase();
+  const hostNoPort = host.split(":")[0];
+  return hostNoPort.startsWith("www.") ? hostNoPort.slice(4) : hostNoPort;
+}
+
+export default async function robots() {
+  const hdrs = await headers();
+  const normalizedHost = getNormalizedHost(hdrs);
+  const isStoreHost = normalizedHost === "store.bmwealth.co.in";
+
+  const base = (isStoreHost ? "https://store.bmwealth.co.in" : getMetadataBase().toString()).replace(/\/$/, "");
 
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/cdn-cgi/",
+          "/_next/",
+          "/api/",
+          "/admin-secret-akash",
+          "/admin-secret-xyz",
+          "/_store",
+          "/store",
+        ],
+      },
+    ],
     sitemap: `${base}/sitemap.xml`,
   };
 }

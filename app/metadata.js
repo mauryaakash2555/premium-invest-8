@@ -5,9 +5,6 @@ export const metadata = {
   title: "BM Wealth - Portfolio Management, Mutual Funds & SIP Investments",
   description:
     "BM Wealth offers premium portfolio management, mutual funds, SIP and insurance solutions for high-income investors in Mumbai. Trusted advisory, simplified execution.",
-  alternates: {
-    canonical: "/",
-  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
