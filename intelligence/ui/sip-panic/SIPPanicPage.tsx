@@ -30,6 +30,7 @@ import { LangProvider } from "./LangContext";
 import { LanguageToggle } from "./LanguageToggle";
 import { ModeToggle, type SIPUiMode } from "./ModeToggle";
 import { BeginnerModeView } from "./BeginnerModeView";
+import { OnboardingWizard, type AvatarKey, type CrashPreset, type OnboardingResult } from "./OnboardingWizard";
 import type { Lang } from "./i18n";
 import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 
@@ -41,6 +42,8 @@ const LANG_KEY = "bm.sipPanicSelling.lang";
 const INVESTMENT_TYPE_KEY = "bm.sipPanicSelling.investmentType";
 const QUIZ_PROFILE_KEY = "bm.sipPanicSelling.quizProfileV1";
 const UI_MODE_KEY = "bm.sipPanicSelling.uiMode";
+const ONBOARDING_V1_KEY = "bm.sipPanicSelling.onboardingV1Completed";
+const AVATAR_KEY = "bm.sipPanicSelling.avatarV1";
 
 const TooltipContentAny: any = TooltipContent;
 
@@ -232,6 +235,9 @@ export default function SIPPanicPage(props?: {
 
   const [crashPreset, setCrashPreset] = useState<"default" | "2008" | "2020" | "2022">("default");
 
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [avatar, setAvatar] = useState<AvatarKey>("balanced_raj");
+
   const [showQuiz, setShowQuiz] = useState<boolean>(false);
   const [quizProfileLabel, setQuizProfileLabel] = useState<string>("");
 
@@ -252,6 +258,70 @@ export default function SIPPanicPage(props?: {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    // Beginner onboarding wizard: show only for non-embed, non-share visits.
+    if (embed) return;
+    if (searchParams?.get("share") === "1") return;
+
+    try {
+      const done = window.localStorage.getItem(ONBOARDING_V1_KEY) === "1";
+      if (!done) setShowOnboarding(true);
+
+      const storedAvatar = window.localStorage.getItem(AVATAR_KEY) as AvatarKey | null;
+      if (storedAvatar === "nervous_nisha" || storedAvatar === "balanced_raj" || storedAvatar === "aggressive_amit") {
+        setAvatar(storedAvatar);
+      }
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const applyOnboarding = (r: OnboardingResult) => {
+    setInputs((prev) => ({ ...prev, monthlyAmount: clampInt(r.monthlyAmount, 1_000, 5_00_000) }));
+    setCrashPreset(r.crashPreset as CrashPreset);
+    setAvatar(r.avatar);
+
+    const nextRiskComfort =
+      r.avatar === "nervous_nisha" ? "conservative" : r.avatar === "aggressive_amit" ? "aggressive" : "moderate";
+    setRiskComfort(nextRiskComfort);
+
+    // Keep it simple: always compare Discipline vs Panic-20%.
+    setSelection((prev) => ({
+      ...prev,
+      enabled: {
+        discipline: true,
+        panic20: true,
+        panic40: false,
+        stopAnyFall: false,
+        custom: false,
+      },
+    }));
+
+    try {
+      window.localStorage.setItem(ONBOARDING_V1_KEY, "1");
+      window.localStorage.setItem(AVATAR_KEY, r.avatar);
+    } catch {
+      // ignore
+    }
+
+    setShowOnboarding(false);
+
+    try {
+      const p = new URLSearchParams(window.location.search);
+      p.set("focus", r.choice === "panic" ? "panic20" : "discipline");
+      window.history.replaceState(null, "", `${window.location.pathname}?${p.toString()}`);
+    } catch {
+      // ignore
+    }
+
+    // Instant gratification: scroll to results.
+    setTimeout(() => {
+      const el = document.getElementById("sip-panic-results");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   useEffect(() => {
     try {
@@ -812,6 +882,21 @@ export default function SIPPanicPage(props?: {
 
   return (
     <LangProvider value={{ lang, setLang: onLangChange }}>
+      <OnboardingWizard
+        open={showOnboarding && uiMode === "beginner"}
+        defaultMonthlyAmount={inputs.monthlyAmount}
+        defaultCrashPreset={crashPreset as CrashPreset}
+        onClose={() => {
+          try {
+            window.localStorage.setItem(ONBOARDING_V1_KEY, "1");
+          } catch {
+            // ignore
+          }
+          setShowOnboarding(false);
+        }}
+        onComplete={applyOnboarding}
+      />
+
       <QuizModal
         open={showQuiz}
         onClose={() => setShowQuiz(false)}
@@ -1537,7 +1622,7 @@ export default function SIPPanicPage(props?: {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6" id="sip-panic-results">
           <ResultsDashboard results={results} />
         </div>
 
