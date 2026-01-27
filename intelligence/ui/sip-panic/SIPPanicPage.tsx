@@ -31,6 +31,7 @@ import { LanguageToggle } from "./LanguageToggle";
 import { ModeToggle, type SIPUiMode } from "./ModeToggle";
 import { BeginnerModeView } from "./BeginnerModeView";
 import { OnboardingWizard, type AvatarKey, type CrashPreset, type OnboardingResult } from "./OnboardingWizard";
+import { ShareResultCard } from "./ShareResultCard";
 import type { Lang } from "./i18n";
 import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
@@ -1551,6 +1552,37 @@ export default function SIPPanicPage(props?: {
                   Share via Email
                 </button>
 
+                {(() => {
+                  try {
+                    const out = results;
+                    const { params, worstRow } = buildShareParams(out);
+                    const shareUrl = buildShareUrlWithUtm(params, { medium: "share_card", content: "image" });
+                    const disciplineAmt = out.find((r) => r.scenario.behaviorType === "discipline")?.postTaxCorpus ?? 0;
+                    const worstAmt = worstRow?.postTaxCorpus ?? 0;
+                    const cost = worstRow?.behavioralCost ?? 0;
+
+                    return (
+                      <ShareResultCard
+                        calculatorType={CALCULATOR_TYPE}
+                        shareUrl={shareUrl}
+                        monthlyAmount={inputs.monthlyAmount}
+                        durationYears={inputs.durationYears}
+                        crashLabel={crashPreset === "default" ? "Default" : crashPreset}
+                        taxModeLabel={
+                          taxCalcMode === "optimized_ltcg_indexation_20"
+                            ? t("taxMode.optimizedTitle")
+                            : t("taxMode.conservativeTitle")
+                        }
+                        disciplinePostTax={disciplineAmt}
+                        panicPostTax={worstAmt}
+                        behavioralCost={cost}
+                      />
+                    );
+                  } catch {
+                    return null;
+                  }
+                })()}
+
                 <button
                   type="button"
                   onClick={() => {
@@ -1619,6 +1651,16 @@ export default function SIPPanicPage(props?: {
                     <li>Market-return intuition: Nifty-style long-term averages often quoted ~14–15% annual (not guaranteed).</li>
                     <li>Crash references: 2008 (≈−60%), 2020 (≈−40%), 2022 (≈−18%) used as illustration presets.</li>
                     <li>Rupee-cost averaging: in drawdowns you buy more units, lowering average cost over time.</li>
+                  </ul>
+                </div>
+
+                <div className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
+                  <div className="text-[11px] font-semibold text-white/80">Assumptions & limitations (education-only)</div>
+                  <ul className="mt-2 text-[11px] text-white/65 space-y-1">
+                    <li>It’s a simplified simulation and uses deterministic crash-style paths (not real historical data).</li>
+                    <li>Crash patterns may not repeat; results are not forecasts.</li>
+                    <li>Tax calculations are approximate and depend on your actual holding periods and rules.</li>
+                    <li>Doesn’t model every real-world variable (expense ratios, liquidity needs, tracking error, etc.).</li>
                   </ul>
                 </div>
               </div>
