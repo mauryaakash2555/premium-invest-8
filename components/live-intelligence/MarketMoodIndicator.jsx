@@ -106,6 +106,18 @@ export default function MarketMoodIndicator() {
       .join(' ');
   }, [history]);
 
+  // Trend UI - MUST be called before any early returns (Rules of Hooks)
+  const trendUi = useMemo(() => {
+    const pts = Array.isArray(history) ? history : [];
+    if (pts.length < 2) return { label: 'Awaiting', dir: 'flat' };
+    const a = pts[pts.length - 2];
+    const b = pts[pts.length - 1];
+    const delta = b - a;
+    if (delta > 0.05) return { label: 'Rising', dir: 'up' };
+    if (delta < -0.05) return { label: 'Falling', dir: 'down' };
+    return { label: 'Stable', dir: 'flat' };
+  }, [history]);
+
   useEffect(() => {
     fetchMarketMood();
     // Lightweight refresh so time + sparkline stays meaningful
@@ -200,17 +212,6 @@ export default function MarketMoodIndicator() {
   const moodConfig = MOOD_LEVELS[mood.level] || MOOD_LEVELS.neutral;
   const score = scoreForLevel[mood.level] ?? 0.5;
   const needlePct = Math.max(0, Math.min(100, Math.round(score * 100)));
-
-  const trendUi = useMemo(() => {
-    const pts = Array.isArray(history) ? history : [];
-    if (pts.length < 2) return { label: 'Awaiting', dir: 'flat' };
-    const a = pts[pts.length - 2];
-    const b = pts[pts.length - 1];
-    const delta = b - a;
-    if (delta > 0.05) return { label: 'Rising', dir: 'up' };
-    if (delta < -0.05) return { label: 'Falling', dir: 'down' };
-    return { label: 'Stable', dir: 'flat' };
-  }, [history]);
 
   return (
     <div 
