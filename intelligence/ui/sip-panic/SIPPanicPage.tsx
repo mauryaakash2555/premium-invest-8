@@ -99,6 +99,11 @@ function safeUiMode(v: string | null): SIPUiMode | null {
   return null;
 }
 
+function safeStoryChoice(v: string | null): "continue" | "stop" | "pause_6" | "pause_12" | null {
+  if (v === "continue" || v === "stop" || v === "pause_6" || v === "pause_12") return v;
+  return null;
+}
+
 function clampInt(n: number, min: number, max: number): number {
   if (!Number.isFinite(n)) return min;
   return Math.max(min, Math.min(max, Math.round(n)));
@@ -189,6 +194,10 @@ export default function SIPPanicPage(props?: {
   const qsCta = searchParams?.get("cta") === "1";
   const qsCtaText = searchParams?.get("ctaText") || "";
   const qsCtaUrl = searchParams?.get("ctaUrl") || "";
+  const qsStory = searchParams?.get("story") === "1";
+  const qsStoryChoice = safeStoryChoice(searchParams?.get("sc") ?? null);
+  const qsStoryMonthly = Number(searchParams?.get("m"));
+  const qsStoryYears = Number(searchParams?.get("y"));
 
   const embed = props?.embed ?? qsEmbed;
   const partner = props?.partner ?? qsPartner;
@@ -262,6 +271,15 @@ export default function SIPPanicPage(props?: {
   }, []);
 
   useEffect(() => {
+    // Story Mode deep link: optionally prefill beginner inputs even if not a full "share=1" link.
+    if (qsStory) {
+      const m = clampInt(qsStoryMonthly, 1_000, 5_00_000);
+      const y = clampInt(qsStoryYears, 1, 30);
+      if (Number.isFinite(qsStoryMonthly) || Number.isFinite(qsStoryYears)) {
+        setInputs({ monthlyAmount: m, durationYears: y });
+      }
+    }
+
     // Beginner onboarding wizard: show only for non-embed, non-share visits.
     if (embed) return;
     if (searchParams?.get("share") === "1") return;
@@ -984,6 +1002,8 @@ export default function SIPPanicPage(props?: {
                 }))
               }
               onRequestAdvanced={() => onUiModeChange("advanced")}
+              initialStoryChoice={qsStory ? (qsStoryChoice ?? "stop") : undefined}
+              initialStoryStep={qsStory ? 2 : undefined}
             />
           ) : (
             <>

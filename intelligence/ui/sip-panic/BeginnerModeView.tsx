@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { MarketConditions, SIPScenario } from "@/intelligence/simulations/sip-vs-panic";
 import { simulateSIPVsPanic } from "@/intelligence/simulations/sip-vs-panic";
@@ -9,6 +9,7 @@ import { trackEvent } from "@/lib/analytics";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { LakhTooltip } from "./LakhTooltip";
+import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
 
 function buildDefaultMarketConditions(): MarketConditions {
   return {
@@ -34,12 +35,14 @@ export function BeginnerModeView(props: {
   onChangeMonthlyAmount: (monthly: number) => void;
   onChangeDurationYears: (years: number) => void;
   onRequestAdvanced: () => void;
+  initialStoryChoice?: "continue" | "stop" | "pause_6" | "pause_12";
+  initialStoryStep?: 0 | 1 | 2;
 }) {
   const panicStopPct = 30;
 
   type StoryChoice = "continue" | "stop" | "pause_6" | "pause_12";
-  const [storyStep, setStoryStep] = useState<0 | 1 | 2>(0);
-  const [storyChoice, setStoryChoice] = useState<StoryChoice>("stop");
+  const [storyStep, setStoryStep] = useState<0 | 1 | 2>(props.initialStoryStep ?? 0);
+  const [storyChoice, setStoryChoice] = useState<StoryChoice>((props.initialStoryChoice as StoryChoice) ?? "stop");
 
   const choiceLabel =
     storyChoice === "continue"
@@ -94,10 +97,72 @@ export function BeginnerModeView(props: {
     };
   }
 
+  // Allow deep-linking into a specific story choice.
+  // Only apply when props request it (avoid fighting user interaction).
+  useEffect(() => {
+    const nextChoice = props.initialStoryChoice as StoryChoice | undefined;
+    const nextStep = props.initialStoryStep;
+    if (!nextChoice && typeof nextStep !== "number") return;
+
+    if (nextChoice && nextChoice !== storyChoice) setStoryChoice(nextChoice);
+    if (typeof nextStep === "number" && nextStep !== storyStep) setStoryStep(nextStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.initialStoryChoice, props.initialStoryStep]);
+
   // Do not clamp the input value on every keystroke (it makes typing e.g. 15000 nearly impossible).
   // Clamp only for calculations + onBlur.
   const monthlyForCalc = clampInt(props.monthlyAmount, 1_000, 5_00_000);
   const yearsForCalc = clampInt(props.durationYears, 1, 30);
+
+  const buildStoryShareUrl = useMemo(() => {
+    try {
+      const p = new URLSearchParams();
+      p.set("ui", "beginner");
+      p.set("story", "1");
+      p.set("sc", storyChoice);
+      p.set("m", String(monthlyForCalc));
+      p.set("y", String(yearsForCalc));
+
+      return buildShareUrlWithUtm(p, {
+        medium: "story",
+        content: "sip_vs_panic",
+      });
+    } catch {
+      return "";
+    }
+  }, [monthlyForCalc, storyChoice, yearsForCalc]);
+
+  const copyStoryLink = async () => {
+    try {
+      if (!buildStoryShareUrl) return;
+      await navigator.clipboard.writeText(buildStoryShareUrl);
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_link_copy",
+        story_choice: storyChoice,
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  const shareStoryWhatsApp = () => {
+    try {
+      if (!buildStoryShareUrl) return;
+      const title = `SIP vs Panic (Story Mode) — my crash decision: ${choiceLabel}`;
+      const msg = `${title}\n\nEstimated gap vs discipline: ${String(result.costPct || 0)}% (education-only model)\n\n${buildStoryShareUrl}`;
+
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_whatsapp",
+        story_choice: storyChoice,
+      });
+
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+    } catch {
+      // ignore
+    }
+  };
   const market = useMemo(() => buildDefaultMarketConditions(), []);
   const crashStartMonth = market.crashStartMonth ?? 30;
   const crashStartYearApprox = Math.max(0, Math.round((crashStartMonth / 12) * 10) / 10);
@@ -332,6 +397,23 @@ export function BeginnerModeView(props: {
                     {result.costPct > 0 ? <span className="text-white/60"> (≈ {result.costPct}% of the disciplined outcome)</span> : null}
                   </div>
                   <div className="mt-1 text-[11px] text-white/55">Education-only, simplified market + tax model.</div>
+                </div>
+
+                <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                  <button
+                    type="button"
+                    onClick={copyStoryLink}
+                    className="min-h-10 rounded-xl border border-white/15 bg-black/20 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/5"
+                  >
+                    Copy story link
+                  </button>
+                  <button
+                    type="button"
+                    onClick={shareStoryWhatsApp}
+                    className="min-h-10 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
+                  >
+                    Share on WhatsApp
+                  </button>
                 </div>
               </div>
             ) : null}
