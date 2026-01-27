@@ -204,6 +204,24 @@ export default function SIPPanicRoutePage() {
             <p className="mt-2 text-sm text-white/70">
               This simulator is interactive and needs JavaScript to run calculations and charts.
               You can still bookmark the page and try again with JS enabled.
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/intelligence/sip-vs-panic/story"
+                  className="inline-flex items-center justify-center rounded-full bg-[oklch(0.78_0.08_65)] px-5 py-2 text-sm font-semibold text-black hover:opacity-90"
+                  data-ga-event="tool_open"
+                  data-ga-label="sip_vs_panic_open_story"
+                >
+                  Try Story Mode (2 min)
+                </Link>
+                <Link
+                  href="/intelligence/sip-vs-panic/guide"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-black/25 px-5 py-2 text-sm font-semibold text-white/85 hover:bg-black/35"
+                  data-ga-event="tool_open"
+                  data-ga-label="sip_vs_panic_open_guide"
+                >
+                  Read the guide
+                </Link>
+              </div>
             </p>
             <div className="mt-3 text-sm">
               <a
