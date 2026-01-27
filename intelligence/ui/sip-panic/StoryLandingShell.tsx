@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import SIPPanicPage from "./SIPPanicPage";
 import { SocialProofBanner } from "./SocialProofBanner";
+import { StoryStatsBanner } from "./StoryStatsBanner";
 
 function buildNextSearchParams(current: URLSearchParams, patch: Record<string, string | null>) {
   const next = new URLSearchParams(current.toString());
@@ -94,6 +95,7 @@ export default function StoryLandingShell() {
             </div>
 
             <SocialProofBanner />
+            <StoryStatsBanner />
           </div>
         </div>
       </section>

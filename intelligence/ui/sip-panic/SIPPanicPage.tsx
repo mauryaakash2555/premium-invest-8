@@ -198,6 +198,8 @@ export default function SIPPanicPage(props?: {
   const qsStoryChoice = safeStoryChoice(searchParams?.get("sc") ?? null);
   const qsStoryMonthly = Number(searchParams?.get("m"));
   const qsStoryYears = Number(searchParams?.get("y"));
+  const qsChallenge = searchParams?.get("challenge") === "1";
+  const qsChallengerChoice = safeStoryChoice(searchParams?.get("chc") ?? null);
 
   const embed = props?.embed ?? qsEmbed;
   const partner = props?.partner ?? qsPartner;
@@ -1002,8 +1004,17 @@ export default function SIPPanicPage(props?: {
                 }))
               }
               onRequestAdvanced={() => onUiModeChange("advanced")}
-              initialStoryChoice={qsStory ? (qsStoryChoice ?? "stop") : undefined}
-              initialStoryStep={qsStory ? 2 : undefined}
+              initialStoryChoice={qsStory && !qsChallenge ? (qsStoryChoice ?? undefined) : undefined}
+              challengerChoice={qsChallenge ? (qsChallengerChoice ?? undefined) : undefined}
+              initialStoryStep={
+                qsStory
+                  ? qsChallenge
+                    ? 1
+                    : qsStoryChoice
+                    ? 2
+                    : 0
+                  : undefined
+              }
             />
           ) : (
             <>

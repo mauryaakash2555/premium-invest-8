@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { MarketConditions, SIPScenario } from "@/intelligence/simulations/sip-vs-panic";
 import { simulateSIPVsPanic } from "@/intelligence/simulations/sip-vs-panic";
@@ -37,8 +37,11 @@ export function BeginnerModeView(props: {
   onRequestAdvanced: () => void;
   initialStoryChoice?: "continue" | "stop" | "pause_6" | "pause_12";
   initialStoryStep?: 0 | 1 | 2;
+  challengerChoice?: "continue" | "stop" | "pause_6" | "pause_12";
 }) {
   const panicStopPct = 30;
+
+  const lastTrackedStoryOutcomeRef = useRef<string>("");
 
   type StoryChoice = "continue" | "stop" | "pause_6" | "pause_12";
   const [storyStep, setStoryStep] = useState<0 | 1 | 2>(props.initialStoryStep ?? 0);
@@ -52,6 +55,17 @@ export function BeginnerModeView(props: {
       : storyChoice === "pause_12"
       ? "Pause for 12 months, then restart"
       : "Stop SIP (fear takes over)";
+
+  const challengerLabel =
+    props.challengerChoice === "continue"
+      ? "Continue SIP (discipline)"
+      : props.challengerChoice === "pause_6"
+      ? "Pause for 6 months, then restart"
+      : props.challengerChoice === "pause_12"
+      ? "Pause for 12 months, then restart"
+      : props.challengerChoice === "stop"
+      ? "Stop SIP (fear takes over)"
+      : "";
 
   const primaryTruthLine =
     storyChoice === "continue"
@@ -170,6 +184,31 @@ export function BeginnerModeView(props: {
     };
   }, [market, monthlyForCalc, panicStopPct, storyChoice, storyStep, yearsForCalc]);
 
+  // Persist a real completion event with computed outcomes (powers live Story stats).
+  useEffect(() => {
+    if (storyStep < 2) return;
+
+    const key = `${storyChoice}|${monthlyForCalc}|${yearsForCalc}|${Math.round(result.behavioralCost || 0)}`;
+    if (lastTrackedStoryOutcomeRef.current === key) return;
+    lastTrackedStoryOutcomeRef.current = key;
+
+    try {
+      trackEvent("sip_vs_panic_story_completed", {
+        calculator_type: "sip_vs_panic_selling",
+        mode: "story",
+        story_choice: storyChoice,
+        monthly_amount: monthlyForCalc,
+        duration_years: yearsForCalc,
+        behavioral_cost: Math.round(result.behavioralCost || 0),
+        discipline: Math.round(result.disciplineAmt || 0),
+        panic: Math.round(result.choiceAmt || 0),
+        cost_pct: Math.round(result.costPct || 0),
+      });
+    } catch {
+      // ignore
+    }
+  }, [monthlyForCalc, result.behavioralCost, result.choiceAmt, result.costPct, result.disciplineAmt, storyChoice, storyStep, yearsForCalc]);
+
   const buildStoryShareUrl = useMemo(() => {
     try {
       const p = new URLSearchParams();
@@ -234,6 +273,54 @@ export function BeginnerModeView(props: {
     }
   };
 
+  const buildChallengeUrl = useMemo(() => {
+    try {
+      const p = new URLSearchParams();
+      p.set("ui", "beginner");
+      p.set("story", "1");
+      p.set("challenge", "1");
+      p.set("chc", storyChoice);
+      p.set("m", String(monthlyForCalc));
+      p.set("y", String(yearsForCalc));
+
+      return buildShareUrlWithUtm(p, {
+        medium: "challenge",
+        content: "sip_vs_panic",
+      });
+    } catch {
+      return "";
+    }
+  }, [monthlyForCalc, storyChoice, yearsForCalc]);
+
+  const shareChallengeWhatsApp = () => {
+    try {
+      if (!buildChallengeUrl) return;
+      const msg = `SIP Crash Challenge (2 min) — what would you do at a -${panicStopPct}% crash?\n\nI just ran this simulator. Take the challenge and compare outcomes (education-only).\n\n${buildChallengeUrl}`;
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_challenge_whatsapp",
+        story_choice: storyChoice,
+      });
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+    } catch {
+      // ignore
+    }
+  };
+
+  const copyChallengeLink = async () => {
+    try {
+      if (!buildChallengeUrl) return;
+      await navigator.clipboard.writeText(buildChallengeUrl);
+      trackEvent("calculator_share", {
+        calculator_type: "sip_vs_panic_selling",
+        channel: "story_challenge_link_copy",
+        story_choice: storyChoice,
+      });
+    } catch {
+      // ignore
+    }
+  };
+
   const totalInvested = monthlyForCalc * 12 * yearsForCalc;
 
   return (
@@ -282,6 +369,16 @@ export function BeginnerModeView(props: {
 
         {storyStep >= 1 ? (
           <div className="mt-5 rounded-xl border border-white/10 bg-black/20 p-4">
+            {props.challengerChoice ? (
+              <div className="mb-3 rounded-xl border border-white/10 bg-black/20 p-3">
+                <div className="text-[11px] font-semibold text-white/85">Challenge</div>
+                <div className="mt-1 text-[12px] text-white/70">
+                  Someone challenged you — they chose <span className="font-semibold text-white/85">{challengerLabel}</span>.
+                  What would you do?
+                </div>
+              </div>
+            ) : null}
+
             <div className="text-xs font-semibold text-white/85">Scene: “The crash hits.”</div>
             <div className="mt-1 text-[12px] text-white/70">
               Headlines are red. Your portfolio is falling. You notice the market is down ~{panicStopPct}% from peak (drawdown).
@@ -423,10 +520,24 @@ export function BeginnerModeView(props: {
                   </button>
                   <button
                     type="button"
+                    onClick={copyChallengeLink}
+                    className="min-h-10 rounded-xl border border-white/15 bg-black/20 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/5"
+                  >
+                    Copy challenge link
+                  </button>
+                  <button
+                    type="button"
                     onClick={shareStoryWhatsApp}
                     className="min-h-10 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
                   >
                     Share on WhatsApp
+                  </button>
+                  <button
+                    type="button"
+                    onClick={shareChallengeWhatsApp}
+                    className="min-h-10 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
+                  >
+                    Challenge on WhatsApp
                   </button>
                 </div>
               </div>
