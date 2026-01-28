@@ -39,6 +39,7 @@ import GoalsPanel from '@/components/live-intelligence/GoalsPanel';
 import ClientIdentityPanel from '@/components/live-intelligence/ClientIdentityPanel';
 import WealthDeskPanel from '@/components/live-intelligence/WealthDeskPanel';
 import WhatThisMeansPanel from '@/components/live-intelligence/WhatThisMeansPanel';
+import AskIntelligencePanel from '@/components/live-intelligence/AskIntelligencePanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -2327,14 +2328,14 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           </div>
         </div>
 
-        {/* Market Mood Indicator - Global sentiment at the top */}
+        {/* Premium client identity / tier (local-only until login exists) */}
         <div className="max-w-7xl mx-auto" style={{ marginTop: '16px' }}>
-          <MarketMoodIndicator />
+          <ClientIdentityPanel />
         </div>
 
-        {/* Premium client identity / tier (local-only until login exists) */}
+        {/* Market Mood Indicator - Global sentiment */}
         <div className="max-w-7xl mx-auto" style={{ marginTop: '12px' }}>
-          <ClientIdentityPanel />
+          <MarketMoodIndicator />
         </div>
 
         {/* KPI row */}
@@ -2614,6 +2615,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <SmartAlertsPanel />
                   <TodayIntelPanel />
                   <WhatThisMeansPanel />
+                  <AskIntelligencePanel />
                   <GoalsPanel />
                   <WealthDeskPanel />
                 </>
