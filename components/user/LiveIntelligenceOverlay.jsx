@@ -894,7 +894,25 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   const [lastActiveIso, setLastActiveIso] = useState(null);
 
+  const [showDeepDive, setShowDeepDive] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return window.localStorage.getItem('li_deep_dive_v1') === '1';
+    } catch {
+      return false;
+    }
+  });
+
   const [isAllocationEditing, setIsAllocationEditing] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem('li_deep_dive_v1', showDeepDive ? '1' : '0');
+    } catch {
+      // ignore
+    }
+  }, [showDeepDive]);
 
   const portfolioValue = typeof portfolioSnapshot?.currentL === 'number' ? portfolioSnapshot.currentL : null;
   const totalInvested = typeof portfolioSnapshot?.investedL === 'number' ? portfolioSnapshot.investedL : null;
@@ -2547,11 +2565,42 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               <TodayIntelPanel />
               <WhatThisMeansPanel />
               <GoalsPanel />
-              <MarketIntelPanel />
-              <OptionsIntelPanel />
-              <SectorPulsePanel />
-              <PortfolioTickersPanel />
-              <DealsIntelPanel />
+              <button
+                type="button"
+                onClick={() => setShowDeepDive((v) => !v)}
+                style={{
+                  appearance: 'none',
+                  border: '1px solid rgba(170,198,255,0.16)',
+                  background: 'rgba(10,10,12,0.55)',
+                  color: 'rgba(235,242,255,0.86)',
+                  padding: '10px 12px',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  fontSize: 12,
+                  fontWeight: 900,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                }}
+                aria-expanded={showDeepDive}
+                aria-label={showDeepDive ? 'Hide deep dive modules' : 'Show deep dive modules'}
+              >
+                <span style={{ color: 'rgba(200,215,240,0.75)' }}>Deep dive</span>
+                <span style={{ color: 'rgba(200,215,240,0.55)', fontSize: 11, fontWeight: 800 }}>
+                  {showDeepDive ? 'Hide' : 'Show'}
+                </span>
+              </button>
+
+              {showDeepDive ? (
+                <>
+                  <MarketIntelPanel />
+                  <OptionsIntelPanel />
+                  <SectorPulsePanel />
+                  <PortfolioTickersPanel />
+                  <DealsIntelPanel />
+                </>
+              ) : null}
             </div>
           </div>
 

@@ -51,6 +51,7 @@ export default function ClientIdentityPanel(props: { style?: CSSProperties }) {
   const [tier, setTier] = useState<Tier>('Private');
   const [since, setSince] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [snapshotReturnPct, setSnapshotReturnPct] = useState<number | null>(null);
 
   useEffect(() => {
     const n = safeGet(KEY_NAME);
@@ -61,6 +62,20 @@ export default function ClientIdentityPanel(props: { style?: CSSProperties }) {
     setSince(s || isoToday());
 
     if (!s) safeSet(KEY_SINCE, isoToday());
+
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem('li_portfolio_snapshot_v1') : null;
+      const snap = raw ? (JSON.parse(raw) as any) : null;
+      const invested = typeof snap?.investedL === 'number' ? snap.investedL : null;
+      const current = typeof snap?.currentL === 'number' ? snap.currentL : null;
+      if (invested != null && current != null && invested > 0) {
+        setSnapshotReturnPct(((current - invested) / invested) * 100);
+      } else {
+        setSnapshotReturnPct(null);
+      }
+    } catch {
+      setSnapshotReturnPct(null);
+    }
   }, []);
 
   const label = useMemo(() => {
@@ -89,6 +104,14 @@ export default function ClientIdentityPanel(props: { style?: CSSProperties }) {
           </div>
           <div style={{ marginTop: 6, color: 'rgba(200,215,240,0.55)', fontSize: 12, lineHeight: 1.4 }}>
             Private Client Dashboard • Tier: <span style={{ color: 'rgba(235,242,255,0.86)', fontWeight: 800 }}>{tier}</span> • Since: {formatSince(since)}
+          </div>
+          <div style={{ marginTop: 6, color: 'rgba(200,215,240,0.55)', fontSize: 12, lineHeight: 1.4 }}>
+            Portfolio snapshot: <span style={{ color: 'rgba(235,242,255,0.86)', fontWeight: 800 }}>
+              {snapshotReturnPct == null ? '—' : `${snapshotReturnPct >= 0 ? '+' : ''}${snapshotReturnPct.toFixed(1)}%`}
+            </span>
+            <span style={{ marginLeft: 8, color: 'rgba(200,215,240,0.40)', fontSize: 11 }}>
+              (vs invested; local snapshot)
+            </span>
           </div>
         </div>
 
