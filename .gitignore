@@ -58,6 +58,9 @@ scripts/safety/backups/
 # Local lock snapshots (never commit)
 backup/locked_*/
 
+# Local full-site zip snapshots (never commit)
+backup/site-snapshots/
+
 # Local safety backups (never commit)
 .safety-backups/
 
