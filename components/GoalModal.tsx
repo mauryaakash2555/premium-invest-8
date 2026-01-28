@@ -10,10 +10,12 @@ type GoalDraft = {
   category: string;
 };
 
-const KEY = 'investmentGoal';
+const KEY_LEGACY = 'investmentGoal';
+const KEY_LIST = 'li_goals_v1';
 
 export function AddGoalButton(props: { className?: string; style?: CSSProperties }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [goal, setGoal] = useState<GoalDraft>({
     name: '',
     targetAmount: '',
@@ -32,14 +34,39 @@ export function AddGoalButton(props: { className?: string; style?: CSSProperties
 
   const handleSave = () => {
     try {
-      window.localStorage.setItem(KEY, JSON.stringify({ ...goal, savedAt: new Date().toISOString() }));
+      const name = goal.name.trim();
+      if (!name) {
+        setError('Please enter a goal name.');
+        return;
+      }
+      setError(null);
+
+      const nextGoal = {
+        id: String(Date.now()),
+        ...goal,
+        name,
+        savedAt: new Date().toISOString(),
+      };
+
+      // Store list form (preferred)
+      const raw = window.localStorage.getItem(KEY_LIST);
+      let list: any[] = [];
+      try {
+        const parsed = raw ? JSON.parse(raw) : null;
+        if (Array.isArray(parsed)) list = parsed;
+      } catch {
+        list = [];
+      }
+      list.unshift(nextGoal);
+      window.localStorage.setItem(KEY_LIST, JSON.stringify(list.slice(0, 20)));
+
+      // Store legacy single-goal form for any older consumers
+      window.localStorage.setItem(KEY_LEGACY, JSON.stringify({ ...goal, name, savedAt: nextGoal.savedAt }));
+
       window.dispatchEvent(new CustomEvent('li-goal-updated'));
-      // eslint-disable-next-line no-alert
-      alert('Goal saved!');
       setIsOpen(false);
     } catch {
-      // eslint-disable-next-line no-alert
-      alert('Could not save goal.');
+      setError('Could not save goal.');
     }
   };
 
@@ -107,6 +134,23 @@ export function AddGoalButton(props: { className?: string; style?: CSSProperties
             </div>
 
             <div style={{ marginTop: 12, display: 'grid', gap: 10 }}>
+              {error ? (
+                <div
+                  role="status"
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    background: 'rgba(255, 100, 100, 0.08)',
+                    border: '1px solid rgba(255, 100, 100, 0.18)',
+                    color: 'rgba(255, 170, 170, 0.90)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                  }}
+                >
+                  {error}
+                </div>
+              ) : null}
+
               <input
                 type="text"
                 placeholder="Goal name (e.g., Retirement)"

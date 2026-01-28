@@ -31,6 +31,14 @@ import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel'
 import SectorPulsePanel from '@/components/live-intelligence/SectorPulsePanel';
 import DealsIntelPanel from '@/components/live-intelligence/DealsIntelPanel';
 import PortfolioTickersPanel from '@/components/live-intelligence/PortfolioTickersPanel';
+import PortfolioContextPanel from '@/components/live-intelligence/PortfolioContextPanel';
+import TodayIntelPanel from '@/components/live-intelligence/TodayIntelPanel';
+import SmartAlertsPanel from '@/components/live-intelligence/SmartAlertsPanel';
+import ConciergeBriefPanel from '@/components/live-intelligence/ConciergeBriefPanel';
+import GoalsPanel from '@/components/live-intelligence/GoalsPanel';
+import ClientIdentityPanel from '@/components/live-intelligence/ClientIdentityPanel';
+import WealthDeskPanel from '@/components/live-intelligence/WealthDeskPanel';
+import WhatThisMeansPanel from '@/components/live-intelligence/WhatThisMeansPanel';
 import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 
 // New feature imports for voice, theme, gamification, personalization
@@ -47,6 +55,7 @@ import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockSt
 import AnimatedNumber from '@/components/animations/AnimatedNumber';
 import { ShareDropdown } from '@/components/ShareDropdown';
 import { AddGoalButton } from '@/components/GoalModal';
+import { PortfolioSnapshotButton } from '@/components/PortfolioSnapshotModal';
 
 // Session storage key to track if auto-open happened this session
 const SESSION_KEY = 'li-overlay-auto-opened';
@@ -828,21 +837,141 @@ function SavedHeadlinesSection() {
  * Panel component with dashboard content and EPIC DONUT
  */
 function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
-  const [portfolioValue] = useState(28.3);
-  const [totalInvested] = useState(24.8);
+  const LI_PORTFOLIO_SNAPSHOT_KEY = 'li_portfolio_snapshot_v1';
+  const LI_ALLOCATIONS_KEY = 'li_allocations_v1';
+  const LI_LAST_ACTIVE_KEY = 'li_last_active_v1';
+
+  const safeParseJson = (value, fallback = null) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return fallback;
+    }
+  };
+
+  const toFiniteNumber = (value) => {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string' && value.trim() !== '') {
+      const n = Number(value);
+      if (Number.isFinite(n)) return n;
+    }
+    return null;
+  };
+
+  const loadPortfolioSnapshot = () => {
+    if (typeof window === 'undefined') return null;
+    const raw = safeParseJson(window.localStorage.getItem(LI_PORTFOLIO_SNAPSHOT_KEY) || 'null', null);
+    if (!raw || typeof raw !== 'object') return null;
+    const investedL = toFiniteNumber(raw.investedL);
+    const currentL = toFiniteNumber(raw.currentL);
+    const updatedAt = typeof raw.updatedAt === 'string' ? raw.updatedAt : null;
+    if (investedL == null || currentL == null || !updatedAt) return null;
+    return { investedL, currentL, updatedAt };
+  };
+
+  const loadAllocations = () => {
+    if (typeof window === 'undefined') {
+      return { equity: 0, debt: 0, gold: 0, cash: 0 };
+    }
+    const raw = safeParseJson(window.localStorage.getItem(LI_ALLOCATIONS_KEY) || 'null', null);
+    const base = { equity: 0, debt: 0, gold: 0, cash: 0 };
+    if (!raw || typeof raw !== 'object') return base;
+    const next = { ...base };
+    for (const k of Object.keys(base)) {
+      const v = toFiniteNumber(raw[k]);
+      if (v != null) next[k] = Math.max(0, Math.min(100, Math.round(v)));
+    }
+    return next;
+  };
+
+  const [portfolioSnapshot, setPortfolioSnapshot] = useState(() => loadPortfolioSnapshot());
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [activeTab, setActiveTab] = useState('pulse'); // Tab state: pulse, live, timings, 2days, 4days
   const [breakingHeadline, setBreakingHeadline] = useState(null); // For breaking news click
-  const [allocations, setAllocations] = useState({
-    equity: 58,
-    debt: 24,
-    gold: 8,
-    cash: 10,
-  });
+  const [allocations, setAllocations] = useState(() => loadAllocations());
+
+  const [lastActiveIso, setLastActiveIso] = useState(null);
 
   const [isAllocationEditing, setIsAllocationEditing] = useState(false);
+
+  const portfolioValue = typeof portfolioSnapshot?.currentL === 'number' ? portfolioSnapshot.currentL : null;
+  const totalInvested = typeof portfolioSnapshot?.investedL === 'number' ? portfolioSnapshot.investedL : null;
+
+  const snapshotAsOfText = useMemo(() => {
+    if (!portfolioSnapshot?.updatedAt) return null;
+    try {
+      return new Date(portfolioSnapshot.updatedAt).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return null;
+    }
+  }, [portfolioSnapshot?.updatedAt]);
+
+  const greetingLine = useMemo(() => {
+    const hr = new Date().getHours();
+    const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+    let clientName = '';
+    try {
+      clientName = typeof window !== 'undefined' ? (window.localStorage.getItem('li_client_name_v1') || '') : '';
+    } catch {
+      clientName = '';
+    }
+    const namePart = clientName && clientName.trim() ? `, ${clientName.trim()}` : '';
+    if (!lastActiveIso) return `${greeting}${namePart}.`;
+    const last = new Date(lastActiveIso).getTime();
+    const mins = Math.max(0, Math.round((Date.now() - last) / 60000));
+    if (!Number.isFinite(mins)) return `${greeting}.`;
+    const rel = mins < 2 ? 'just now' : mins < 60 ? `${mins} min ago` : mins < 24 * 60 ? `${Math.round(mins / 60)} hr ago` : `${Math.round(mins / (24 * 60))} day ago`;
+    return `${greeting}${namePart}. Last active: ${rel}.`;
+  }, [lastActiveIso]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const prev = window.localStorage.getItem(LI_LAST_ACTIVE_KEY);
+    setLastActiveIso(prev);
+    const nowIso = new Date().toISOString();
+    window.localStorage.setItem(LI_LAST_ACTIVE_KEY, nowIso);
+
+    const onVis = () => {
+      if (document.visibilityState === 'visible') {
+        const iso = new Date().toISOString();
+        window.localStorage.setItem(LI_LAST_ACTIVE_KEY, iso);
+        setLastActiveIso(iso);
+      }
+    };
+    document.addEventListener('visibilitychange', onVis);
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      try {
+        window.localStorage.setItem(LI_LAST_ACTIVE_KEY, new Date().toISOString());
+      } catch {
+        // ignore
+      }
+    };
+  }, []);
+
+  // Keep snapshot in sync with the modal (stored locally).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const sync = () => setPortfolioSnapshot(loadPortfolioSnapshot());
+    window.addEventListener('li-portfolio-snapshot-updated', sync);
+    return () => window.removeEventListener('li-portfolio-snapshot-updated', sync);
+  }, []);
+
+  const allocationPersistTimerRef = useRef(null);
+  useEffect(() => {
+    return () => {
+      if (allocationPersistTimerRef.current) window.clearTimeout(allocationPersistTimerRef.current);
+    };
+  }, []);
 
   // TradingView chart interval/symbol state (local to panel)
   const [tvInterval, setTvInterval] = useState('D');
@@ -898,7 +1027,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, []);
 
   const shareText = useMemo(
-    () => 'Check out BM Wealth Live Intelligence — real-time portfolio insights and market signals.',
+    () => 'Check out BM Wealth Live Intelligence — live market context and education-first insights.',
     []
   );
 
@@ -1002,10 +1131,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, [showPdfModal, handlePdfClose]);
 
   const kpi = useMemo(() => {
-    const currentValue = portfolioValue;
-    const invested = totalInvested;
-    const unrealized = currentValue - invested;
-    const totalReturnPct = invested > 0 ? (unrealized / invested) * 100 : 0;
+    const currentValue = typeof portfolioValue === 'number' ? portfolioValue : null;
+    const invested = typeof totalInvested === 'number' ? totalInvested : null;
+    const unrealized = currentValue != null && invested != null ? currentValue - invested : null;
+    const totalReturnPct = invested != null && invested > 0 && unrealized != null ? (unrealized / invested) * 100 : null;
 
     const equityPct = Number(allocations?.equity) || 0;
     const xirr = totalReturnPct;
@@ -1018,28 +1147,34 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         label: 'Total Invested',
         kind: 'moneyL',
         number: invested,
-        hint: 'Across MF + PMS + FD',
+        hint: invested == null ? 'Set a portfolio snapshot to see numbers' : 'Snapshot (saved on this device)',
         trend: null,
       },
       {
         label: 'Current Value',
         kind: 'moneyL',
         number: currentValue,
-        hint: `${unrealized >= 0 ? '+' : '−'}₹ ${Math.abs(unrealized).toFixed(1)}L unrealized`,
-        trend: `${totalReturnPct >= 0 ? '+' : ''}${totalReturnPct.toFixed(1)}%`,
+        hint:
+          unrealized == null
+            ? '—'
+            : `${unrealized >= 0 ? '+' : '−'}₹ ${Math.abs(unrealized).toFixed(1)}L unrealized`,
+        trend:
+          totalReturnPct == null
+            ? null
+            : `${totalReturnPct >= 0 ? '+' : ''}${totalReturnPct.toFixed(1)}%`,
       },
       {
         label: 'XIRR',
         kind: 'percent',
         number: xirr,
-        hint: 'Last 12 months (est.)',
+        hint: xirr == null ? '—' : 'Directional, based on snapshot',
         trend: null,
       },
       {
         label: 'Risk Score',
         kind: 'text',
         value: riskScoreLabel,
-        hint: `Equity ${equityPct}% allocation`,
+        hint: equityPct ? `Equity ${equityPct}% allocation` : 'Set your allocation to estimate risk',
         trend: null,
       },
     ];
@@ -1131,7 +1266,18 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const handleAllocationChange = (key, raw) => {
     const next = String(raw ?? '').replace(/[^0-9]/g, '');
     const num = next === '' ? 0 : Math.max(0, Math.min(100, parseInt(next, 10)));
-    setAllocations((prev) => ({ ...prev, [key]: num }));
+    setAllocations((prev) => {
+      const nextAlloc = { ...prev, [key]: num };
+      if (typeof window !== 'undefined') {
+        window.clearTimeout(allocationPersistTimerRef.current);
+        allocationPersistTimerRef.current = window.setTimeout(() => {
+          try {
+            window.localStorage.setItem(LI_ALLOCATIONS_KEY, JSON.stringify(nextAlloc));
+          } catch {}
+        }, 250);
+      }
+      return nextAlloc;
+    });
     setAllocationBumpKey(key);
     window.clearTimeout(allocationBumpTimerRef.current);
     allocationBumpTimerRef.current = window.setTimeout(() => setAllocationBumpKey(null), 1200);
@@ -1983,8 +2129,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           
           {/* Row 3: Subtitle */}
           <p style={{ margin: '10px 0 0', color: 'rgba(200,215,240,0.68)', fontSize: '14px', maxWidth: '62ch', lineHeight: 1.55 }}>
-            Your financial command center — real-time portfolio insights and signals.
+            Your financial command center — live market context and education-first insights.
           </p>
+
+          <div style={{ marginTop: '6px', color: 'rgba(200,215,240,0.48)', fontSize: '12px', maxWidth: '62ch', lineHeight: 1.45 }}>
+            {greetingLine}
+          </div>
+
           
           {/* Row 4: Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days, Saved */}
           <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
@@ -2088,6 +2239,22 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               links={shareLinks}
             />
 
+            <PortfolioSnapshotButton
+              style={{
+                appearance: 'none',
+                border: '1px solid rgba(170,198,255,0.45)',
+                background: 'rgba(10,10,12,0.70)',
+                color: 'rgba(245,248,255,0.95)',
+                padding: '10px 16px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+                boxShadow: '0 0 20px rgba(140,190,255,0.08)',
+                transition: 'all 0.25s ease',
+              }}
+            />
+
             <AddGoalButton
               style={{
                 appearance: 'none',
@@ -2146,6 +2313,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <MarketMoodIndicator />
         </div>
 
+        {/* Premium client identity / tier (local-only until login exists) */}
+        <div className="max-w-7xl mx-auto" style={{ marginTop: '12px' }}>
+          <ClientIdentityPanel />
+        </div>
+
         {/* KPI row */}
         <div className="li-kpi-grid max-w-7xl mx-auto" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
           {kpi.map((card) => (
@@ -2158,6 +2330,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
               <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
                 {card.kind === 'moneyL' ? (
+                  card.number == null ? (
+                    <span style={{ opacity: 0.8 }}>—</span>
+                  ) : (
                   <AnimatedNumber
                     value={Number(card.number) || 0}
                     currencySymbol="₹"
@@ -2166,7 +2341,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     maximumFractionDigits={1}
                     ariaLabel={card.label}
                   />
+                  )
                 ) : card.kind === 'percent' ? (
+                  card.number == null ? (
+                    <span style={{ opacity: 0.8 }}>—</span>
+                  ) : (
                   <AnimatedNumber
                     value={Number(card.number) || 0}
                     suffix="%"
@@ -2174,6 +2353,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                     maximumFractionDigits={1}
                     ariaLabel={card.label}
                   />
+                  )
                 ) : (
                   card.value
                 )}
@@ -2200,13 +2380,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <div className="li-live-dot" />
                 </div>
                 <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
-                  Real-time asset diversification
+                  Allocation + snapshot (saved locally)
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                 <div className="li-stat-pill" style={{ fontSize: '11px' }}>
                   <span style={{ color: 'rgba(200,215,240,0.55)' }}>Updated</span>
-                  <span style={{ color: 'rgba(140,220,180,0.85)' }}>just now</span>
+                  <span style={{ color: 'rgba(140,220,180,0.85)' }}>{snapshotAsOfText || 'Not set'}</span>
                 </div>
 
                 <button
@@ -2272,8 +2452,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 
                 {/* Center cutout */}
                 <div className="li-donut-center">
-                  <div className="li-donut-value">₹{portfolioValue.toFixed(1)}L</div>
-                  <div className="li-donut-label">Portfolio</div>
+                  <div className="li-donut-value">{portfolioValue == null ? '—' : `₹${portfolioValue.toFixed(1)}L`}</div>
+                  <div className="li-donut-label">{portfolioValue == null ? 'Set snapshot' : 'Portfolio snapshot'}</div>
                 </div>
               </div>
             </div>
@@ -2361,6 +2541,12 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </div>
 
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <ConciergeBriefPanel />
+              <WealthDeskPanel />
+              <SmartAlertsPanel />
+              <TodayIntelPanel />
+              <WhatThisMeansPanel />
+              <GoalsPanel />
               <MarketIntelPanel />
               <OptionsIntelPanel />
               <SectorPulsePanel />
@@ -2371,92 +2557,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
           {/* Full-width Holdings table */}
           <div className="li-dash-card" style={{ gridColumn: '1 / -1' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
-                    Holdings
-                  </div>
-                  <div style={{
-                    padding: '3px 10px',
-                    borderRadius: '8px',
-                      background: 'rgba(100,160,255,0.12)',
-                    border: 'none',
-                    color: 'rgba(140,190,255,0.95)',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                    letterSpacing: '0.05em',
-                    }} className="li-coming-soon-badge">
-                    COMING SOON
-                  </div>
-                </div>
-                <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
-                  Real-time portfolio positions
-                </div>
-              </div>
-            </div>
-
-            {/* Coming Soon Placeholder */}
-            <div style={{
-              padding: '32px',
-              borderRadius: '14px',
-              background: 'rgba(100,160,255,0.04)',
-              border: '1px dashed rgba(100,160,255,0.15)',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '32px', marginBottom: '12px' }}>📊</div>
-              <div style={{ color: 'rgba(200,215,240,0.75)', fontSize: '14px', fontWeight: 500, marginBottom: '8px' }}>
-                Portfolio Tracking
-              </div>
-              <div style={{ color: 'rgba(200,215,240,0.45)', fontSize: '12px', lineHeight: 1.5, maxWidth: '400px', margin: '0 auto' }}>
-                Link your demat account or manually add your investments to see real-time holdings, P&L, and performance analytics
-              </div>
-              <div style={{ marginTop: '16px', display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <a
-                  href="/client-portal"
-                  onPointerDown={onRipplePointerDown}
-                  className="li-cta-primary li-ripple"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '9px 14px',
-                    borderRadius: '10px',
-                    background: 'rgba(100,160,255,0.12)',
-                    border: '1px solid rgba(100,160,255,0.22)',
-                    color: 'rgba(235,242,255,0.90)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                  }}
-                >
-                  Connect Portfolio
-                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>→</span>
-                </a>
-                <a
-                  href="/contact?subject=Holdings%20%2F%20Portfolio%20Tracking%20Waitlist"
-                  onPointerDown={onRipplePointerDown}
-                  className="li-cta-secondary li-ripple"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '9px 14px',
-                    borderRadius: '10px',
-                    background: 'rgba(10,10,12,0.55)',
-                    border: '1px solid rgba(170,198,255,0.18)',
-                    color: 'rgba(200,215,240,0.85)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                  }}
-                >
-                  <span className="li-bell-icon" aria-hidden="true">🔔</span>
-                  Join Waitlist
-                  <span className="li-cta-arrow" style={{ fontSize: '10px' }}>↗</span>
-                </a>
-              </div>
-            </div>
+            <PortfolioContextPanel
+              onSelectSymbol={(sym) => handleTvSymbolChange(sym)}
+              style={{ background: 'transparent', border: 'none', padding: 0 }}
+            />
           </div>
 
           {/* ═══════════════════════════════════════════════════════════

@@ -1276,7 +1276,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
                     <div className="li-modal-section">
                       <div className="li-modal-tip">
                         <h4 className="li-modal-section-title">
-                          <span className="li-modal-tip-icon">💡</span> Expert View
+                          <span className="li-modal-tip-icon">💡</span> Context (Education)
                         </h4>
                         <p className="li-modal-section-content">{details.expertTip}</p>
                       </div>
