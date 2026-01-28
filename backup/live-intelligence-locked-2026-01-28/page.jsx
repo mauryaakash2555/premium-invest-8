@@ -1,7 +1,13 @@
 'use client';
 
 /**
- * /live-intelligence - Dedicated Page Route
+ * ╔══════════════════════════════════════════════════════════════════════════════╗
+ * ║  🔒 LOCKED FILE - /live-intelligence PAGE                                    ║
+ * ║  Last Updated: January 15, 2026                                               ║
+ * ║                                                                               ║
+ * ║  IF YOU BREAK THIS FILE:                                                      ║
+ * ║  Copy-Item "backup\live-intelligence-locked-2026-01-15\page.jsx" "app\live-intelligence\" -Force ║
+ * ╚══════════════════════════════════════════════════════════════════════════════╝
  * 
  * ⚠️ DESIGN LOCK: This page renders the EXACT SAME LiveIntelligencePanel
  * that the overlay uses. Any changes to the overlay panel automatically

@@ -3,15 +3,15 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════╗
  * ║  🔒 LOCKED FILE - LIVE INTELLIGENCE OVERLAY                                  ║
- * ║  Last Updated: January 15, 2026                                               ║
+ * ║  Last Updated: January 28, 2026                                               ║
  * ║                                                                               ║
  * ║  ⚠️  DO NOT MODIFY WITHOUT READING:                                          ║
- * ║      backup/live-intelligence-locked-2026-01-15/RESTORE_GUIDE.md             ║
+ * ║      backup/live-intelligence-locked-2026-01-28/RESTORE_GUIDE.md             ║
  * ║                                                                               ║
  * ║  CRITICAL SECTIONS MARKED WITH: ⚠️ PROTECTED CODE - DO NOT MODIFY ⚠️        ║
  * ║                                                                               ║
  * ║  IF YOU BREAK THIS FILE:                                                      ║
- * ║  Copy-Item "backup\live-intelligence-locked-2026-01-15\LiveIntelligenceOverlay.jsx" "components\user\" -Force ║
+ * ║  Copy-Item "backup\live-intelligence-locked-2026-01-28\LiveIntelligenceOverlay.jsx" "components\user\" -Force ║
  * ╚══════════════════════════════════════════════════════════════════════════════╝
  */
 

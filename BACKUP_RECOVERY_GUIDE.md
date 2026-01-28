@@ -3,6 +3,21 @@
 
 ---
 
+## ✅ Current Lock (January 28, 2026)
+
+### Live Intelligence locked folder (fast restore)
+
+- Folder: `backup/live-intelligence-locked-2026-01-28/`
+- Restore steps: see `backup/live-intelligence-locked-2026-01-28/RESTORE_GUIDE.md`
+
+### Full website zip snapshot (clean backup)
+
+- Script: `.tools/backup-site.ps1`
+- Output: `backup/site-snapshots/<timestamp>_<name>/repo.zip`
+
+
+---
+
 ## 🛡️ MULTIPLE LAYERS OF PROTECTION
 
 Your codebase has **5 independent backup layers**. If anything goes wrong, you can recover.
