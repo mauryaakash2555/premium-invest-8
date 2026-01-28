@@ -894,12 +894,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   const [lastActiveIso, setLastActiveIso] = useState(null);
 
-  const [showDeepDive, setShowDeepDive] = useState(() => {
-    if (typeof window === 'undefined') return false;
+  const [intelView, setIntelView] = useState(() => {
+    if (typeof window === 'undefined') return 'forYou';
     try {
-      return window.localStorage.getItem('li_deep_dive_v1') === '1';
+      const v = window.localStorage.getItem('li_intel_view_v1');
+      return v === 'market' ? 'market' : 'forYou';
     } catch {
-      return false;
+      return 'forYou';
     }
   });
 
@@ -908,11 +909,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      window.localStorage.setItem('li_deep_dive_v1', showDeepDive ? '1' : '0');
+      window.localStorage.setItem('li_intel_view_v1', intelView);
     } catch {
       // ignore
     }
-  }, [showDeepDive]);
+  }, [intelView]);
 
   const portfolioValue = typeof portfolioSnapshot?.currentL === 'number' ? portfolioSnapshot.currentL : null;
   const totalInvested = typeof portfolioSnapshot?.investedL === 'number' ? portfolioSnapshot.investedL : null;
@@ -2539,7 +2540,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div className="li-dash-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ color: 'rgba(235,242,255,0.94)', fontSize: '16px', fontWeight: 500, letterSpacing: '-0.01em' }}>
-                Market Intel
+                Intelligence Hub
               </div>
               <div style={{
                 padding: '3px 10px',
@@ -2555,44 +2556,51 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               </div>
             </div>
             <div style={{ marginTop: '4px', color: 'rgba(200,215,240,0.55)', fontSize: '12px' }}>
-              Flows, volatility & risk context
+              {intelView === 'market' ? 'Market modules (deep dive)' : 'Personalized context & actions'}
             </div>
 
-            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <ConciergeBriefPanel />
-              <WealthDeskPanel />
-              <SmartAlertsPanel />
-              <TodayIntelPanel />
-              <WhatThisMeansPanel />
-              <GoalsPanel />
+            <div style={{ marginTop: '12px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <button
                 type="button"
-                onClick={() => setShowDeepDive((v) => !v)}
+                onClick={() => setIntelView('forYou')}
                 style={{
                   appearance: 'none',
-                  border: '1px solid rgba(170,198,255,0.16)',
-                  background: 'rgba(10,10,12,0.55)',
-                  color: 'rgba(235,242,255,0.86)',
-                  padding: '10px 12px',
-                  borderRadius: 12,
+                  border: `1px solid ${intelView === 'forYou' ? 'rgba(212,175,55,0.28)' : 'rgba(170,198,255,0.14)'}`,
+                  background: intelView === 'forYou' ? 'rgba(212,175,55,0.10)' : 'rgba(10,10,12,0.45)',
+                  color: 'rgba(235,242,255,0.88)',
+                  padding: '8px 12px',
+                  borderRadius: 999,
                   cursor: 'pointer',
                   fontSize: 12,
                   fontWeight: 900,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 12,
                 }}
-                aria-expanded={showDeepDive}
-                aria-label={showDeepDive ? 'Hide deep dive modules' : 'Show deep dive modules'}
+                aria-pressed={intelView === 'forYou'}
               >
-                <span style={{ color: 'rgba(200,215,240,0.75)' }}>Deep dive</span>
-                <span style={{ color: 'rgba(200,215,240,0.55)', fontSize: 11, fontWeight: 800 }}>
-                  {showDeepDive ? 'Hide' : 'Show'}
-                </span>
+                For you
               </button>
 
-              {showDeepDive ? (
+              <button
+                type="button"
+                onClick={() => setIntelView('market')}
+                style={{
+                  appearance: 'none',
+                  border: `1px solid ${intelView === 'market' ? 'rgba(170,198,255,0.28)' : 'rgba(170,198,255,0.14)'}`,
+                  background: intelView === 'market' ? 'rgba(170,198,255,0.10)' : 'rgba(10,10,12,0.45)',
+                  color: 'rgba(235,242,255,0.88)',
+                  padding: '8px 12px',
+                  borderRadius: 999,
+                  cursor: 'pointer',
+                  fontSize: 12,
+                  fontWeight: 900,
+                }}
+                aria-pressed={intelView === 'market'}
+              >
+                Market
+              </button>
+            </div>
+
+            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {intelView === 'market' ? (
                 <>
                   <MarketIntelPanel />
                   <OptionsIntelPanel />
@@ -2600,7 +2608,16 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                   <PortfolioTickersPanel />
                   <DealsIntelPanel />
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <ConciergeBriefPanel />
+                  <SmartAlertsPanel />
+                  <TodayIntelPanel />
+                  <WhatThisMeansPanel />
+                  <GoalsPanel />
+                  <WealthDeskPanel />
+                </>
+              )}
             </div>
           </div>
 
