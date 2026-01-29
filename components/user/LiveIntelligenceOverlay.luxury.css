@@ -218,13 +218,31 @@
   box-shadow: 0 0 12px oklch(0.78 0.08 65 / 0.70) !important;
 }
 
+/* Keep donut geometry perfectly circular (avoid any global overrides) */
+[data-li-panel] .li-donut-container {
+  width: 180px !important;
+  height: 180px !important;
+  min-width: 180px !important;
+  min-height: 180px !important;
+  aspect-ratio: 1 / 1 !important;
+  position: relative !important;
+  border-radius: 9999px !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+
+[data-li-panel] .li-donut-glow,
+[data-li-panel] .li-donut-orbit,
+[data-li-panel] .li-donut-main,
+[data-li-panel] .li-donut-center,
+[data-li-panel] .li-donut-particles {
+  border-radius: 9999px !important;
+}
+
 [data-li-panel] .li-donut-main {
-  background: conic-gradient(
-    oklch(0.78 0.08 65 / 0.92) 0deg 210deg,
-    oklch(0.95 0.01 85 / 0.75) 210deg 300deg,
-    oklch(0.78 0.04 65 / 0.85) 300deg 330deg,
-    oklch(0.95 0.01 85 / 0.40) 330deg 360deg
-  ) !important;
+  /* IMPORTANT: do NOT set background here.
+     The overlay sets a dynamic inline conic-gradient per allocation.
+     Overriding it makes the donut look “broken” (static/wrong segments). */
   box-shadow:
     0 0 44px oklch(0.78 0.08 65 / 0.22),
     0 0 90px oklch(0.78 0.08 65 / 0.10),
