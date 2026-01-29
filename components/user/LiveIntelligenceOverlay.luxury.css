@@ -162,7 +162,7 @@
 }
 
 /* Navigation tabs */
-[data-li-panel] button[type="button"]:not(.li-sticky-back-btn) {
+[data-li-panel] button[type="button"]:not(.li-sticky-back-btn):not(.li-donut-btn) {
   background: oklch(0.95 0.01 85 / 0.04) !important;
   border: 1px solid var(--li-border-subtle) !important;
   color: var(--li-text-secondary) !important;
@@ -173,11 +173,82 @@
   font-weight: 500 !important;
 }
 
-[data-li-panel] button[type="button"]:not(.li-sticky-back-btn):hover {
+[data-li-panel] button[type="button"]:not(.li-sticky-back-btn):not(.li-donut-btn):hover {
   background: var(--li-accent) !important;
   border-color: var(--li-accent) !important;
   color: oklch(0.06 0.005 280) !important;
   box-shadow: 0 12px 40px var(--li-accent-glow) !important;
+}
+
+/* DONUT UI FIX
+  Ensure the donut remains circular/visible under luxury overrides.
+  (We do this here rather than touching the locked overlay component.) */
+[data-li-panel] .li-donut-container {
+  width: 180px !important;
+  height: 180px !important;
+}
+
+[data-li-panel] .li-donut-glow,
+[data-li-panel] .li-donut-orbit,
+[data-li-panel] .li-donut-main,
+[data-li-panel] .li-donut-center,
+[data-li-panel] .li-donut-particles,
+[data-li-panel] .li-donut-particle {
+  border-radius: 50% !important;
+}
+
+[data-li-panel] .li-donut-glow {
+  background: radial-gradient(
+    circle,
+    oklch(0.78 0.08 65 / 0.18) 0%,
+    oklch(0.78 0.08 65 / 0.06) 55%,
+    transparent 72%
+  ) !important;
+}
+
+[data-li-panel] .li-donut-orbit {
+  border-color: var(--li-border-medium) !important;
+  border-top-color: oklch(0.78 0.08 65 / 0.70) !important;
+  border-right-color: oklch(0.95 0.01 85 / 0.45) !important;
+  box-shadow: 0 0 18px oklch(0.78 0.08 65 / 0.14) !important;
+}
+
+[data-li-panel] .li-donut-orbit::before {
+  background: oklch(0.78 0.08 65 / 0.95) !important;
+  box-shadow: 0 0 12px oklch(0.78 0.08 65 / 0.70) !important;
+}
+
+[data-li-panel] .li-donut-main {
+  background: conic-gradient(
+    oklch(0.78 0.08 65 / 0.92) 0deg 210deg,
+    oklch(0.95 0.01 85 / 0.75) 210deg 300deg,
+    oklch(0.78 0.04 65 / 0.85) 300deg 330deg,
+    oklch(0.95 0.01 85 / 0.40) 330deg 360deg
+  ) !important;
+  box-shadow:
+    0 0 44px oklch(0.78 0.08 65 / 0.22),
+    0 0 90px oklch(0.78 0.08 65 / 0.10),
+    inset 0 0 28px rgba(0, 0, 0, 0.35) !important;
+  /* Prevent any accidental global filters from washing it out */
+  filter: none !important;
+}
+
+[data-li-panel] .li-donut-center {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(16, 16, 16, 0.96) 0%,
+    rgba(0, 0, 0, 0.98) 100%
+  ) !important;
+  border-color: oklch(0.78 0.08 65 / 0.35) !important;
+}
+
+[data-li-panel] .li-donut-value {
+  color: var(--li-text-primary) !important;
+  text-shadow: 0 0 24px oklch(0.78 0.08 65 / 0.22) !important;
+}
+
+[data-li-panel] .li-donut-label {
+  color: var(--li-text-muted) !important;
 }
 
 /* Back button */

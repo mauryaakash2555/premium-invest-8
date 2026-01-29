@@ -45,7 +45,6 @@ import HeroContent from '@/components/home/HeroContent';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
-import CrisisModeBanner from '@/components/intelligence/CrisisModeBanner';
 
 // --- LUXURY COMPONENTS KEPT ---
 
@@ -118,11 +117,6 @@ export default function HomePage() {
 
         {/* Animated Clouds with lightning effect (client-only to avoid hydration mismatch) */}
         {mounted ? <AnimatedClouds enableRain={rainEnabled} enableLightning={true} /> : null}
-
-        {/* Crisis Mode banner (down days) */}
-        <div className="relative z-20">
-          <CrisisModeBanner placement="home" />
-        </div>
 
         {/* 1. Golden Horizon Sweep Kept */}
         <GoldenHorizonSweep />
