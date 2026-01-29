@@ -245,6 +245,13 @@ var cId =  "257199";
 						`}
 					</Script>
 				)}
+
+{/* Ahrefs Analytics */}
+          <Script
+			              src="https://analytics.ahrefs.com/analytics.js"
+							              data-key="OlyusN83yhRyxxfJXgqKSg"
+											              strategy="afterInteractive"
+															            />
 			</head>
 			<body
 				className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}
