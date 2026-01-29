@@ -1571,6 +1571,14 @@ footer .whatsapp-card:hover {
     0 0 0 1px color-mix(in oklab, var(--lux-accent) 28%, transparent);
 }
 
+/* Floating 3D chatbot trigger (Spline canvas) */
+.chatbot-float {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .whatsapp-float {
     animation: none !important;

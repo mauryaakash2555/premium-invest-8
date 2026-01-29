@@ -15,8 +15,8 @@ export default function BackRow({ href = "/", label = "← Back to Home" }) {
 
   return (
     <div className="px-6 py-3 lg:px-10 mt-24 text-xs text-slate-300/80 flex items-center gap-4" style={{ position: "relative", zIndex: 2 }}>
-      <Link href={href} legacyBehavior>
-        <a onClick={handleBackClick} className="hover:underline">{label}</a>
+      <Link href={href} onClick={handleBackClick} className="hover:underline">
+        {label}
       </Link>
     </div>
   );

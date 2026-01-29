@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo, Fragment } from 'react';
 import { Upload, FileText, AlertTriangle, CheckCircle, Edit3, Calculator, Download, Trash2, Loader2, Info, XCircle } from 'lucide-react';
 
 /**
@@ -80,6 +80,210 @@ const normalizeForAnchorSearch = (text) =>
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ ]{2,}/g, ' ')
     .trim();
+
+const clamp01 = (n) => Math.max(0, Math.min(1, Number(n) || 0));
+
+function makeDocId() {
+  // Short, collision-resistant enough for a session.
+  return `doc_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function getFileKind(file) {
+  const t = String(file?.type || '').toLowerCase();
+  if (t === 'application/pdf' || file?.name?.toLowerCase?.().endsWith?.('.pdf')) return 'pdf';
+  if (t.startsWith('image/')) return 'image';
+  return 'unknown';
+}
+
+function extractSnippet(text, idx, before = 50, after = 140) {
+  const s = String(text || '');
+  if (!s) return null;
+  const start = Math.max(0, idx - before);
+  const end = Math.min(s.length, idx + after);
+  return s.slice(start, end).replace(/\s{2,}/g, ' ').trim();
+}
+
+function findEvidenceInPages(pagesText, anchors) {
+  const pages = Array.isArray(pagesText) ? pagesText : [];
+  const anchorList = (Array.isArray(anchors) ? anchors : [anchors]).filter(Boolean).map((a) => String(a).toLowerCase());
+  if (pages.length === 0 || anchorList.length === 0) return null;
+
+  for (let pageIdx = 0; pageIdx < pages.length; pageIdx++) {
+    const pageText = String(pages[pageIdx] || '');
+    const low = pageText.toLowerCase();
+    for (const a of anchorList) {
+      const idx = low.indexOf(a);
+      if (idx >= 0) {
+        return {
+          page: pageIdx + 1,
+          anchor: a,
+          snippet: extractSnippet(pageText, idx),
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+async function loadPdfJsWithRetry() {
+  try {
+    return await import('pdfjs-dist/build/pdf.mjs');
+  } catch (err) {
+    const message = err?.message || '';
+    const isChunkLoad = err?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
+    if (!isChunkLoad) throw err;
+    await new Promise((r) => setTimeout(r, 300));
+    return await import('pdfjs-dist/build/pdf.mjs');
+  }
+}
+
+async function loadTesseractCdn() {
+  if (typeof window === 'undefined') {
+    throw new Error('Tesseract can only be loaded in the browser');
+  }
+  if (window.Tesseract) return window.Tesseract;
+
+  const src = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-tesseract="1"]');
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.defer = true;
+    script.dataset.tesseract = '1';
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+
+  if (!window.Tesseract) {
+    throw new Error('Tesseract failed to initialize');
+  }
+  return window.Tesseract;
+}
+
+async function fileToDataUrl(file) {
+  const f = file;
+  if (!f) return null;
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = reject;
+    reader.readAsDataURL(f);
+  });
+}
+
+async function preprocessImageDataUrl(dataUrl, { contrast = 1.25 } = {}) {
+  // Lightweight preprocessing: grayscale + contrast.
+  // (Deskew is intentionally not attempted here to avoid heavy dependencies.)
+  const src = String(dataUrl || '');
+  if (!src.startsWith('data:image/')) return src;
+
+  const img = await new Promise((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = reject;
+    i.src = src;
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = imageData.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const r = d[i];
+    const g = d[i + 1];
+    const b = d[i + 2];
+    // luminance
+    let v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    // contrast around mid-point
+    v = (v - 128) * contrast + 128;
+    v = Math.max(0, Math.min(255, v));
+    d[i] = d[i + 1] = d[i + 2] = v;
+  }
+  ctx.putImageData(imageData, 0, 0);
+  return canvas.toDataURL('image/png');
+}
+
+function groupPdfJsItemsIntoLines(items) {
+  // PDF.js text items include a transform matrix; transform[4] is x, transform[5] is y.
+  // Bucket by y (rounded) to preserve line order.
+  const byY = new Map();
+  for (const item of items || []) {
+    const str = String(item?.str || '').trim();
+    if (!str) continue;
+    const t = item?.transform;
+    const x = Array.isArray(t) ? Number(t[4] || 0) : 0;
+    const y = Array.isArray(t) ? Number(t[5] || 0) : 0;
+    const key = Math.round(y);
+    const row = byY.get(key) || [];
+    row.push({ x, str });
+    byY.set(key, row);
+  }
+
+  // Higher y is usually higher on the page.
+  const ys = Array.from(byY.keys()).sort((a, b) => b - a);
+  const lines = ys.map((y) => {
+    const row = byY.get(y) || [];
+    row.sort((a, b) => a.x - b.x);
+    return row.map((r) => r.str).join(' ').replace(/\s{2,}/g, ' ').trim();
+  });
+
+  return lines.filter(Boolean);
+}
+
+function stripCommonHeaderFooter(pagesLines) {
+  if (!Array.isArray(pagesLines) || pagesLines.length < 2) return pagesLines;
+
+  const prefixCandidates = new Map();
+  const suffixCandidates = new Map();
+
+  for (const lines of pagesLines) {
+    const prefix = (lines || []).slice(0, 3).map((s) => s.toLowerCase());
+    const suffix = (lines || []).slice(-3).map((s) => s.toLowerCase());
+
+    for (const p of prefix) {
+      if (!p || p.length < 8) continue;
+      prefixCandidates.set(p, (prefixCandidates.get(p) || 0) + 1);
+    }
+    for (const s of suffix) {
+      if (!s || s.length < 8) continue;
+      suffixCandidates.set(s, (suffixCandidates.get(s) || 0) + 1);
+    }
+  }
+
+  const minCount = Math.max(2, Math.ceil(pagesLines.length * 0.6));
+  const commonHeader = new Set(
+    Array.from(prefixCandidates.entries())
+      .filter(([, c]) => c >= minCount)
+      .map(([t]) => t)
+  );
+  const commonFooter = new Set(
+    Array.from(suffixCandidates.entries())
+      .filter(([, c]) => c >= minCount)
+      .map(([t]) => t)
+  );
+
+  return pagesLines.map((lines) => {
+    const clean = [];
+    for (const line of lines || []) {
+      const low = String(line).toLowerCase();
+      if (commonHeader.has(low) || commonFooter.has(low)) continue;
+      clean.push(line);
+    }
+    return clean;
+  });
+}
 
 const parseFirstNumber = (raw) => {
   if (!raw) return null;
@@ -320,6 +524,45 @@ const extractBankInterestData = (text) => {
   return data;
 };
 
+const DOC_TYPE_LABELS = {
+  form16: 'Form 16',
+  ais: 'Annual Information Statement (AIS)',
+  bankInterest: 'Bank Interest Statement',
+  unknown: 'Unknown',
+};
+
+// Anchors used to locate evidence/snippets within pages.
+const FIELD_ANCHORS = {
+  grossSalary: ['gross salary', 'income from salary', 'total salary', 'salary as per provisions', 'gross total salary'],
+  exemptions: ['hra exemption', 'house rent allowance', 'section 10', 'u/s 10', '10(13a)'],
+  deduction80C: ['80c', 'section 80c', 'u/s 80c', 'chapter vi-a', 'chapter vi a'],
+  deduction80D: ['80d', 'section 80d', 'u/s 80d', 'medical insurance'],
+  deduction80DSelfFamily: ['80d', 'section 80d', 'medical insurance'],
+  deduction80DParents: ['80d', 'section 80d', 'medical insurance', 'parents'],
+  tdsDeducted: ['total tax deducted', 'total tax deducted at source', 'tds deducted', 'tax deducted at source', 'tds'],
+  interestIncome: ['interest income', 'interest on deposits', 'savings interest', 'interest'],
+  dividendIncome: ['dividend income', 'dividend'],
+  capitalGains: ['capital gains', 'short term capital gain', 'long term capital gain', 'stcg', 'ltcg'],
+  tdsEntries: ['tds', 'tax deducted', 'tax deducted at source'],
+  totalInterest: ['total interest', 'interest paid', 'interest earned', 'gross interest', 'interest certificate'],
+  tdsOnInterest: ['tds on interest', 'tax deducted on interest', 'tds', 'tax deducted'],
+};
+
+const REVIEW_FIELDS = [
+  { key: 'grossSalary', label: 'Gross Salary', max: null },
+  { key: 'exemptions', label: 'Exemptions (HRA, etc.)', max: null },
+  { key: 'deduction80C', label: 'Deduction 80C', max: 150000, hint: 'Old Regime only' },
+  { key: 'deduction80DSelfFamily', label: '80D Self/Family', max: 50000 },
+  { key: 'deduction80DParents', label: '80D Parents', max: 50000 },
+  { key: 'interestIncome', label: 'Interest Income', max: null },
+  { key: 'dividendIncome', label: 'Dividend Income', max: null },
+  { key: 'capitalGains', label: 'Capital Gains (Display Only)', max: null, hint: 'Not included in basic calculation' },
+  { key: 'totalInterest', label: 'Total Interest Earned (Bank)', max: null },
+  { key: 'tdsOnInterest', label: 'TDS on Interest', max: null },
+  { key: 'tdsDeducted', label: 'TDS Deducted', max: null },
+  { key: 'tdsEntries', label: 'TDS Entries (AIS)', max: null },
+];
+
 // Tax calculation (FY 2025-26 slabs)
 const calculateTax = (data, regime = 'new') => {
   const num = (v) => {
@@ -540,6 +783,8 @@ const generateSummaryPDF = async (data, result, documentType) => {
     form16: 'Form 16 (Salary Certificate)',
     ais: 'Annual Information Statement (AIS)',
     bankInterest: 'Bank Interest Statement',
+    multiple: 'Multiple documents',
+    unknown: 'Not specified',
   };
 
   // PAGE 1 — SUMMARY
@@ -696,11 +941,17 @@ const STEPS = {
 
 export default function ITRFilingHelp() {
   const [step, setStep] = useState(STEPS.UPLOAD);
-  const [file, setFile] = useState(null);
-  const [documentType, setDocumentType] = useState(null);
-  const [extractedData, setExtractedData] = useState({});
+  const [documents, setDocuments] = useState([]); // [{ id, file, kind, name, size, type, objectUrl }]
+  const [activeDocId, setActiveDocId] = useState(null);
+  const [viewerPage, setViewerPage] = useState(1);
+
+  // Consolidated extracted fields
+  const [fieldCandidates, setFieldCandidates] = useState({}); // fieldKey -> [{ docId, docName, value, confidence, page, snippet }]
+  const [fieldSelectedMeta, setFieldSelectedMeta] = useState({}); // fieldKey -> selected candidate (same shape)
+  const [extractedData, setExtractedData] = useState({}); // selected extracted values (for backward UI)
   const [editableData, setEditableData] = useState({});
   const [baselineData, setBaselineData] = useState({});
+  const [docAnalyses, setDocAnalyses] = useState({}); // docId -> { detectedType, method, ocrConfidence, totalPages }
   const [editedFields, setEditedFields] = useState(() => new Set());
   const [reviewConfirmed, setReviewConfirmed] = useState(false);
   const [regime, setRegime] = useState('new');
@@ -711,9 +962,37 @@ export default function ITRFilingHelp() {
   const [extractionMethod, setExtractionMethod] = useState(null); // 'selectable-text' | 'ocr' | 'mixed'
   const [ocrConfidence, setOcrConfidence] = useState(null); // 0..1 when OCR used
   const [processingStage, setProcessingStage] = useState(null); // 'detecting' | 'text' | 'ocr'
+  const [processingLabel, setProcessingLabel] = useState(null);
   const fileInputRef = useRef(null);
   const [tesseractLoaded, setTesseractLoaded] = useState(false);
   const [pdfJsLoaded, setPdfJsLoaded] = useState(false);
+
+  const activeDoc = useMemo(() => documents.find((d) => d.id === activeDocId) || documents[0] || null, [documents, activeDocId]);
+
+  const detectedDocLabel = useMemo(() => {
+    const types = Array.from(
+      new Set(
+        Object.values(docAnalyses || {})
+          .map((a) => a?.docType || a?.detectedType)
+          .filter(Boolean)
+      )
+    );
+    if (types.length === 0) return 'Document';
+    if (types.length === 1) return DOC_TYPE_LABELS[types[0]] || 'Document';
+    const parts = types.map((t) => DOC_TYPE_LABELS[t] || t);
+    return `Multiple (${parts.join(', ')})`;
+  }, [docAnalyses]);
+
+  // Cleanup object URLs when documents are removed/unmounted.
+  useEffect(() => {
+    return () => {
+      for (const d of documents) {
+        try {
+          if (d?.objectUrl) URL.revokeObjectURL(d.objectUrl);
+        } catch {}
+      }
+    };
+  }, [documents]);
   
   // Load Tesseract.js dynamically
   useEffect(() => {
@@ -735,49 +1014,93 @@ export default function ITRFilingHelp() {
   
   // Handle file selection
   const handleFileSelect = useCallback((e) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return;
+    const selected = Array.from(e.target.files || []).filter(Boolean);
+    if (selected.length === 0) return;
     
     setError(null);
     
-    // Validate file type
-    if (selectedFile.type !== 'application/pdf') {
-      setError('Only PDF files are supported. Please upload a PDF document.');
-      return;
+    const MAX_BYTES = 10 * 1024 * 1024;
+
+    const nextDocs = [];
+    for (const f of selected) {
+      const kind = getFileKind(f);
+      if (kind === 'unknown') {
+        setError('Unsupported file type. Please upload PDFs or images (JPG/PNG/WebP).');
+        continue;
+      }
+      if (f.size > MAX_BYTES) {
+        setError('One of the files is too large. Maximum 10MB per file.');
+        continue;
+      }
+
+      const id = makeDocId();
+      let objectUrl = null;
+      try {
+        objectUrl = URL.createObjectURL(f);
+      } catch {}
+      nextDocs.push({
+        id,
+        file: f,
+        kind,
+        name: f.name || (kind === 'pdf' ? 'document.pdf' : 'image'),
+        size: f.size,
+        type: f.type,
+        objectUrl,
+      });
     }
-    
-    // Validate file size (max 10MB)
-    if (selectedFile.size > 10 * 1024 * 1024) {
-      setError('File size too large. Maximum 10MB allowed.');
-      return;
+
+    setDocuments((prev) => [...prev, ...nextDocs]);
+    if (!activeDocId && nextDocs[0]?.id) {
+      setActiveDocId(nextDocs[0].id);
+      setViewerPage(1);
     }
-    
-    setFile(selectedFile);
     setReviewConfirmed(false);
     setExtractionMethod(null);
     setOcrConfidence(null);
     setProcessingStage(null);
-  }, []);
+  }, [activeDocId]);
+
+  const removeDocument = useCallback(
+    (id) => {
+      setDocuments((prev) => {
+        const next = [];
+        for (const d of prev || []) {
+          if (d.id === id) {
+            try {
+              if (d?.objectUrl) URL.revokeObjectURL(d.objectUrl);
+            } catch {}
+            continue;
+          }
+          next.push(d);
+        }
+
+        if (activeDocId === id) {
+          setActiveDocId(next[0]?.id || null);
+          setViewerPage(1);
+        }
+        return next;
+      });
+    },
+    [activeDocId]
+  );
 
   const buildCalculationInput = useCallback((data) => {
     const base = { ...(data || {}) };
-    // If Bank Interest, include interest into interestIncome for calculation.
-    if (documentType === 'bankInterest') {
-      const totalInterest = Number(base.totalInterest || 0);
-      base.interestIncome = Number(base.interestIncome || 0) + (Number.isFinite(totalInterest) ? totalInterest : 0);
-    }
+    // Multi-document: always fold bank interest into interest income for computation.
+    const totalInterest = Number(base.totalInterest || 0);
+    base.interestIncome = Number(base.interestIncome || 0) + (Number.isFinite(totalInterest) ? totalInterest : 0);
     return base;
-  }, [documentType]);
+  }, []);
 
   const liveResult = useMemo(() => {
     if (!editableData || Object.keys(editableData).length === 0) return null;
     return calculateTax(buildCalculationInput(editableData), regime);
   }, [editableData, regime, buildCalculationInput]);
   
-  // Process PDF with OCR
-  const processDocument = useCallback(async () => {
-    if (!file) return;
-    
+  // Multi-document processing (PDF + images)
+  const processDocuments = useCallback(async () => {
+    if (!documents || documents.length === 0) return;
+
     setStep(STEPS.PROCESSING);
     setProcessing(true);
     setOcrProgress(0);
@@ -785,175 +1108,231 @@ export default function ITRFilingHelp() {
     setExtractionMethod(null);
     setOcrConfidence(null);
     setProcessingStage('detecting');
-    
+    setProcessingLabel(null);
+
     try {
-      // Read PDF file
-      const arrayBuffer = await file.arrayBuffer();
+      const nextDocAnalyses = {};
+      const nextCandidates = {};
 
-      let fullText = '';
-      let usedText = false;
-      let usedOcr = false;
-      let ocrConfidenceSum = 0;
-      let ocrConfidenceCount = 0;
+      const totalDocs = documents.length;
+      let ocrConfSum = 0;
+      let ocrConfCount = 0;
+      const methodSet = new Set();
 
-      // 1) Selectable-text-first extraction using server-side pdfplumber.
-      // Strict: we do NOT fall back to client-side text extraction.
-      let serverResult;
-      const resp = await fetch('/api/itr/extract-text', {
-        method: 'POST',
-        headers: { 'content-type': 'application/pdf' },
-        body: arrayBuffer,
-      });
-      if (!resp.ok) {
-        const payload = await resp.json().catch(() => ({}));
-        throw new Error(payload?.message || 'Text extractor unavailable. Please try again later.');
-      }
-      serverResult = await resp.json();
+      for (let docIdx = 0; docIdx < documents.length; docIdx++) {
+        const doc = documents[docIdx];
+        setProcessingLabel(`${doc.name} (${docIdx + 1}/${totalDocs})`);
 
-      if (serverResult?.hasSelectableText) {
-        setProcessingStage('text');
-        usedText = true;
-        fullText = (serverResult.pages || []).map((p) => p.text).join('\n\n').trim();
-        setOcrProgress(100);
-      } else {
-        // Dynamic import of PDF.js (explicit ESM entry). In dev, a stale client can
-        // occasionally request a non-existent chunk after restarts; retry once.
-        const loadPdfJs = async () => {
+        let pagesText = [];
+        let fullText = '';
+        let method = null;
+        let docOcrConfidence = null;
+        let totalPages = 1;
+
+        if (doc.kind === 'pdf') {
+          const arrayBuffer = await doc.file.arrayBuffer();
+
+          // Attempt server-side pdfplumber (best for selectable text)
+          let serverResult = null;
           try {
-            return await import('pdfjs-dist/build/pdf.mjs');
-          } catch (err) {
-            const message = err?.message || '';
-            const isChunkLoad = err?.name === 'ChunkLoadError' || /Loading chunk .* failed/i.test(message);
-            if (!isChunkLoad) throw err;
-            await new Promise((r) => setTimeout(r, 300));
-            return await import('pdfjs-dist/build/pdf.mjs');
-          }
-        };
+            const resp = await fetch('/api/itr/extract-text', {
+              method: 'POST',
+              headers: { 'content-type': 'application/pdf' },
+              body: arrayBuffer,
+            });
+            if (resp.ok) serverResult = await resp.json();
+          } catch {}
 
-        const pdfjsLib = await loadPdfJs();
-        const pdfJsVersion = pdfjsLib?.version || pdfjsLib?.default?.version;
-        if (pdfjsLib?.GlobalWorkerOptions) {
-          const v = pdfJsVersion || '4.10.38';
-          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${v}/pdf.worker.min.mjs`;
-        }
-        setPdfJsLoaded(true);
-
-        // Load Tesseract in-browser via CDN to avoid bundler resolution issues.
-        // (Next dev can otherwise emit a runtime "Cannot find module 'tesseract.js'".)
-        const loadTesseract = async () => {
-          if (typeof window === 'undefined') {
-            throw new Error('Tesseract can only be loaded in the browser');
-          }
-          if (window.Tesseract) return window.Tesseract;
-
-          const src = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
-          await new Promise((resolve, reject) => {
-            const existing = document.querySelector('script[data-tesseract="1"]');
-            if (existing) {
-              existing.addEventListener('load', resolve, { once: true });
-              existing.addEventListener('error', reject, { once: true });
-              return;
+          if (serverResult?.hasSelectableText) {
+            setProcessingStage('text');
+            method = 'selectable-text';
+            totalPages = Number(serverResult.totalPages || serverResult.pages?.length || 1);
+            pagesText = (serverResult.pages || []).map((p) => String(p?.text || ''));
+            fullText = pagesText.join('\n\n').trim();
+          } else {
+            // Client-side selectable-text via PDF.js; OCR only if needed.
+            const pdfjsLib = await loadPdfJsWithRetry();
+            const pdfJsVersion = pdfjsLib?.version || pdfjsLib?.default?.version;
+            if (pdfjsLib?.GlobalWorkerOptions) {
+              const v = pdfJsVersion || '4.10.38';
+              pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${v}/pdf.worker.min.mjs`;
             }
-            const script = document.createElement('script');
-            script.src = src;
-            script.async = true;
-            script.defer = true;
-            script.dataset.tesseract = '1';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-          });
+            setPdfJsLoaded(true);
 
-          if (!window.Tesseract) {
-            throw new Error('Tesseract failed to initialize');
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            totalPages = pdf.numPages;
+            const pageLimit = Math.min(totalPages, 15);
+
+            const pagesLines = [];
+            for (let pageNum = 1; pageNum <= pageLimit; pageNum++) {
+              const page = await pdf.getPage(pageNum);
+              const content = await page.getTextContent();
+              pagesLines.push(groupPdfJsItemsIntoLines(content?.items));
+              const overall = ((docIdx + pageNum / Math.max(1, pageLimit)) / totalDocs) * 100;
+              setOcrProgress(Math.min(99, Math.round(overall)));
+            }
+
+            const cleanedLines = stripCommonHeaderFooter(pagesLines);
+            pagesText = cleanedLines.map((lines) => (lines || []).join('\n'));
+            const pdfJsText = pagesText.join('\n\n').trim();
+            const pdfJsSignal = pdfJsText.replace(/\s/g, '').length;
+
+            if (pdfJsSignal > 300) {
+              setProcessingStage('text');
+              method = 'selectable-text';
+              fullText = pdfJsText;
+            } else {
+              // OCR fallback
+              setProcessingStage('ocr');
+              method = 'ocr';
+
+              const Tesseract = await loadTesseractCdn();
+              setTesseractLoaded(true);
+
+              const ocrPageLimit = Math.min(totalPages, 10);
+              pagesText = [];
+              let confSum = 0;
+              let confN = 0;
+
+              for (let pageNum = 1; pageNum <= ocrPageLimit; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const scale = 2.0;
+                const viewport = page.getViewport({ scale });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                await page.render({ canvasContext: context, viewport }).promise;
+
+                const imageDataUrl = await preprocessImageDataUrl(canvas.toDataURL('image/png'));
+
+                const { data } = await Tesseract.recognize(imageDataUrl, 'eng', {
+                  tessedit_pageseg_mode: 3,
+                  preserve_interword_spaces: '1',
+                  logger: (m) => {
+                    if (m.status === 'recognizing text') {
+                      const overall = ((docIdx + (pageNum - 1 + m.progress) / Math.max(1, ocrPageLimit)) / totalDocs) * 100;
+                      setOcrProgress(Math.min(99, Math.round(overall)));
+                    }
+                  },
+                });
+
+                const confidencePct = Number(data?.confidence);
+                if (Number.isFinite(confidencePct)) {
+                  confSum += confidencePct;
+                  confN += 1;
+                }
+                pagesText.push(String(data?.text || ''));
+              }
+
+              fullText = pagesText.join('\n\n').trim();
+              if (confN > 0) docOcrConfidence = clamp01((confSum / confN) / 100);
+            }
           }
-          return window.Tesseract;
-        };
+        } else if (doc.kind === 'image') {
+          setProcessingStage('ocr');
+          method = 'ocr';
+          const Tesseract = await loadTesseractCdn();
+          setTesseractLoaded(true);
 
-        const Tesseract = await loadTesseract();
-        setTesseractLoaded(true);
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        const totalPages = pdf.numPages;
-        const pageLimit = Math.min(totalPages, 5);
-
-        setProcessingStage('ocr');
-        for (let pageNum = 1; pageNum <= pageLimit; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-
-          usedOcr = true;
-          const scale = 2.0;
-          const viewport = page.getViewport({ scale });
-
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          await page.render({ canvasContext: context, viewport }).promise;
-          const imageData = canvas.toDataURL('image/png');
-
-          const { data } = await Tesseract.recognize(imageData, 'eng', {
+          const dataUrl = await fileToDataUrl(doc.file);
+          const processed = await preprocessImageDataUrl(dataUrl);
+          const { data } = await Tesseract.recognize(processed, 'eng', {
             tessedit_pageseg_mode: 3,
             preserve_interword_spaces: '1',
             logger: (m) => {
               if (m.status === 'recognizing text') {
-                const pageProgress = ((pageNum - 1) / totalPages + m.progress / totalPages) * 100;
-                setOcrProgress(Math.round(pageProgress));
+                const overall = ((docIdx + m.progress) / totalDocs) * 100;
+                setOcrProgress(Math.min(99, Math.round(overall)));
               }
             },
           });
-
           const confidencePct = Number(data?.confidence);
-          if (Number.isFinite(confidencePct)) {
-            ocrConfidenceSum += confidencePct;
-            ocrConfidenceCount += 1;
+          if (Number.isFinite(confidencePct)) docOcrConfidence = clamp01(confidencePct / 100);
+          pagesText = [String(data?.text || '')];
+          fullText = pagesText[0];
+          totalPages = 1;
+        } else {
+          nextDocAnalyses[doc.id] = { detectedType: 'unknown', method: 'unknown', ocrConfidence: null, totalPages: 0 };
+          continue;
+        }
+
+        if (method) methodSet.add(method);
+        if (method === 'ocr' && typeof docOcrConfidence === 'number') {
+          ocrConfSum += docOcrConfidence;
+          ocrConfCount += 1;
+        }
+
+        const detectedType = detectDocumentType(fullText);
+        nextDocAnalyses[doc.id] = {
+          detectedType,
+          method,
+          ocrConfidence: docOcrConfidence,
+          totalPages,
+          name: doc.name,
+          kind: doc.kind,
+        };
+
+        // Extract values
+        let extracted = {};
+        if (detectedType === 'form16') extracted = extractForm16Data(fullText);
+        else if (detectedType === 'ais') extracted = extractAISData(fullText);
+        else if (detectedType === 'bankInterest') extracted = extractBankInterestData(fullText);
+
+        // Build candidates with evidence
+        const base = method === 'selectable-text' ? 0.98 : (typeof docOcrConfidence === 'number' ? docOcrConfidence : 0.7);
+        for (const [fieldKey, v] of Object.entries(extracted || {})) {
+          const value = typeof v === 'number' && Number.isFinite(v) ? v : null;
+          if (value == null) continue;
+          const anchors = FIELD_ANCHORS[fieldKey];
+          const evidence = anchors ? findEvidenceInPages(pagesText, anchors) : null;
+          let confidence = base;
+          if (evidence) confidence = clamp01(confidence + 0.08);
+          if (method === 'ocr' && typeof docOcrConfidence === 'number' && docOcrConfidence < 0.6) {
+            confidence = clamp01(confidence * 0.85);
           }
 
-          fullText += (data?.text || '') + '\n';
-          setOcrProgress(Math.round((pageNum / totalPages) * 100));
+          const cand = {
+            docId: doc.id,
+            docName: doc.name,
+            value,
+            confidence,
+            page: evidence?.page || 1,
+            snippet: evidence?.snippet || null,
+          };
+          nextCandidates[fieldKey] = [...(nextCandidates[fieldKey] || []), cand];
         }
       }
 
-      if (serverResult?.method === 'pdfplumber') {
-        setExtractionMethod('selectable-text');
-      } else if (usedText && usedOcr) setExtractionMethod('mixed');
-      else if (usedText) setExtractionMethod('selectable-text');
-      else if (usedOcr) setExtractionMethod('ocr');
+      // Consolidate: select highest-confidence candidate per field (but still show conflicts)
+      const nextSelected = {};
+      const nextSelectedMeta = {};
+      for (const fieldKey of Object.keys(nextCandidates)) {
+        const list = nextCandidates[fieldKey] || [];
+        list.sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+        if (list[0]) {
+          nextSelected[fieldKey] = list[0].value;
+          nextSelectedMeta[fieldKey] = list[0];
+        }
+      }
 
-      if (usedOcr && ocrConfidenceCount > 0) {
-        setOcrConfidence(Math.max(0, Math.min(1, (ocrConfidenceSum / ocrConfidenceCount) / 100)));
-      }
-      
-      // Detect document type
-      const detectedType = detectDocumentType(fullText);
-      
-      if (detectedType === 'unknown') {
-        setError('Could not identify document type. Please upload Form 16, AIS, or Bank Interest Statement.');
-        setStep(STEPS.UPLOAD);
-        setProcessing(false);
-        return;
-      }
-      
-      setDocumentType(detectedType);
-      
-      // Extract data based on document type
-      let extracted = {};
-      
-      if (detectedType === 'form16') {
-        extracted = extractForm16Data(fullText);
-      } else if (detectedType === 'ais') {
-        extracted = extractAISData(fullText);
-      } else if (detectedType === 'bankInterest') {
-        extracted = extractBankInterestData(fullText);
-      }
-      
-      setExtractedData(extracted);
-      setEditableData(extracted);
-      setBaselineData(extracted);
+      setDocAnalyses(nextDocAnalyses);
+      setFieldCandidates(nextCandidates);
+      setFieldSelectedMeta(nextSelectedMeta);
+      setExtractedData(nextSelected);
+      setEditableData(nextSelected);
+      setBaselineData(nextSelected);
       setEditedFields(new Set());
       setReviewConfirmed(false);
+
+      // Summary method/confidence for UI
+      const methods = Array.from(methodSet);
+      if (methods.length === 1) setExtractionMethod(methods[0]);
+      else if (methods.length > 1) setExtractionMethod('mixed');
+      if (ocrConfCount > 0) setOcrConfidence(clamp01(ocrConfSum / ocrConfCount));
+
+      setOcrProgress(100);
       setStep(STEPS.REVIEW);
-      
     } catch (error) {
       console.error('Document processing error:', error);
       const message = error?.message || '';
@@ -961,14 +1340,15 @@ export default function ITRFilingHelp() {
       if (isChunkLoad) {
         setError('PDF engine failed to load (dev-server chunk mismatch). Please hard refresh (Ctrl+F5) and try again.');
       } else {
-        setError('Error processing document. Please try again with a different PDF.');
+        setError(message || 'Error processing documents. Please try again.');
       }
       setStep(STEPS.UPLOAD);
     } finally {
       setProcessing(false);
       setProcessingStage(null);
+      setProcessingLabel(null);
     }
-  }, [file]);
+  }, [documents]);
   
   // Handle field edit
   const handleFieldChange = useCallback((field, value) => {
@@ -1002,19 +1382,35 @@ export default function ITRFilingHelp() {
     if (!result) return;
     
     try {
-      const doc = await generateSummaryPDF(editableData, result, documentType);
+      const detectedTypes = Object.values(docAnalyses || {})
+        .map((d) => d?.detectedType)
+        .filter(Boolean);
+      const unique = Array.from(new Set(detectedTypes));
+      const docTypeForPdf = unique.length === 1 ? unique[0] : (unique.length > 1 ? 'multiple' : 'unknown');
+      const doc = await generateSummaryPDF(editableData, result, docTypeForPdf);
       doc.save('BM_Wealth_Tax_Estimate.pdf');
     } catch (err) {
       console.error('PDF generation error:', err);
       setError('Error generating PDF. Please try again.');
     }
-  }, [editableData, result, documentType]);
+  }, [editableData, result, docAnalyses]);
   
   // Reset tool
   const handleReset = useCallback(() => {
     setStep(STEPS.UPLOAD);
-    setFile(null);
-    setDocumentType(null);
+    setDocuments((prev) => {
+      for (const d of prev || []) {
+        try {
+          if (d?.objectUrl) URL.revokeObjectURL(d.objectUrl);
+        } catch {}
+      }
+      return [];
+    });
+    setActiveDocId(null);
+    setViewerPage(1);
+    setDocAnalyses({});
+    setFieldCandidates({});
+    setFieldSelectedMeta({});
     setExtractedData({});
     setEditableData({});
     setBaselineData({});
@@ -1026,17 +1422,11 @@ export default function ITRFilingHelp() {
     setExtractionMethod(null);
     setOcrConfidence(null);
     setProcessingStage(null);
+    setProcessingLabel(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   }, []);
-  
-  // Document type labels
-  const documentTypeLabels = {
-    form16: 'Form 16',
-    ais: 'Annual Information Statement (AIS)',
-    bankInterest: 'Bank Interest Statement',
-  };
   
   // Render based on step
   return (
@@ -1088,7 +1478,7 @@ export default function ITRFilingHelp() {
               <div className="block">
                 <div 
                   className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors
-                    ${file 
+                    ${documents?.length 
                       ? 'border-[var(--lux-accent)]/50 bg-[var(--lux-accent)]/10' 
                       : 'border-white/20 hover:border-white/40 hover:bg-white/5'}`}
                   onClick={() => fileInputRef.current?.click()}
@@ -1096,37 +1486,66 @@ export default function ITRFilingHelp() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,application/pdf"
+                    multiple
+                    accept=".pdf,application/pdf,image/*"
                     onChange={handleFileSelect}
                     className="hidden"
                   />
                   
-                  {file ? (
-                    <div className="space-y-2">
+                  {documents?.length ? (
+                    <div className="space-y-3">
                       <FileText className="w-12 h-12 mx-auto text-[var(--lux-accent)]" />
-                      <p className="text-white font-medium">{file.name}</p>
-                      <p className="text-xs text-white/60">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      <p className="text-white font-medium">
+                        {documents.length} file{documents.length === 1 ? '' : 's'} added
                       </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setFile(null);
-                          if (fileInputRef.current) fileInputRef.current.value = '';
-                        }}
-                        className="text-xs text-red-400 hover:text-red-300 underline"
-                      >
-                        Remove
-                      </button>
+                      <p className="text-xs text-white/60">
+                        Click to add more, or pick an active document below.
+                      </p>
+
+                      <div className="mt-4 max-h-48 overflow-auto space-y-2 text-left">
+                        {documents.map((doc) => {
+                          const isActive = doc.id === activeDocId;
+                          return (
+                            <div
+                              key={doc.id}
+                              className={`p-3 rounded-lg border flex items-start justify-between gap-3 cursor-pointer transition-colors
+                                ${isActive ? 'border-[var(--lux-accent)]/50 bg-[var(--lux-accent)]/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveDocId(doc.id);
+                                setViewerPage(1);
+                              }}
+                            >
+                              <div className="min-w-0">
+                                <p className="text-sm text-white/90 font-medium truncate">{doc.name}</p>
+                                <p className="text-xs text-white/50">
+                                  {(doc.size / 1024 / 1024).toFixed(2)} MB • {doc.kind.toUpperCase()}
+                                  {doc.pages ? ` • ${doc.pages} pages` : ''}
+                                </p>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeDocument(doc.id);
+                                  if (fileInputRef.current) fileInputRef.current.value = '';
+                                }}
+                                className="text-xs text-red-400 hover:text-red-300 underline shrink-0"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   ) : (
                     <div className="space-y-2">
                       <Upload className="w-12 h-12 mx-auto text-white/40" />
-                      <p className="text-white/80">Click to upload PDF</p>
+                      <p className="text-white/80">Click to upload PDFs or images</p>
                       <p className="text-xs text-white/50">
-                        Supported: Form 16, AIS, Bank Interest Statement
+                        Supported: Form 16, AIS, Bank Interest Statement (PDF or photo)
                       </p>
-                      <p className="text-xs text-white/40">Maximum 10MB</p>
+                      <p className="text-xs text-white/40">Tip: Upload multiple documents together</p>
                     </div>
                   )}
                 </div>
@@ -1148,14 +1567,14 @@ export default function ITRFilingHelp() {
             </div>
             
             {/* Process Button */}
-            {file && (
+            {!!documents?.length && (
               <button
-                onClick={processDocument}
+                onClick={processDocuments}
                 disabled={processing}
                 className="w-full py-4 rounded-xl font-semibold text-white calculator-premium-cta disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <FileText className="w-5 h-5" />
-                Extract Data from PDF
+                Process Documents
               </button>
             )}
           </div>
@@ -1201,7 +1620,7 @@ export default function ITRFilingHelp() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--lux-accent)]/20 border border-[var(--lux-accent)]/30">
                 <CheckCircle className="w-4 h-4 text-[var(--lux-accent)]" />
                 <span className="text-sm text-[var(--lux-accent)]">
-                  Detected: {documentTypeLabels[documentType] || 'Document'}
+                  Detected: {detectedDocLabel}
                 </span>
               </div>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15">
@@ -1291,194 +1710,89 @@ export default function ITRFilingHelp() {
               </h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Form 16 Fields */}
-                {documentType === 'form16' && (
-                  <>
+                {REVIEW_FIELDS.map((field) => {
+                  const currentValue = editableData?.[field.key] ?? null;
+                  const baseValue = baselineData?.[field.key] ?? null;
+                  const extractedValue = extractedData?.[field.key];
+                  const edited = editedFields.has(field.key) || currentValue !== baseValue;
+
+                  const content = (
                     <EditableField
-                      label="Gross Salary"
-                      value={editableData.grossSalary}
-                      onChange={(v) => handleFieldChange('grossSalary', v)}
-                      extracted={extractedData.grossSalary}
-                      edited={editedFields.has('grossSalary') || editableData.grossSalary !== baselineData.grossSalary}
+                      label={field.label}
+                      value={currentValue}
+                      onChange={(v) => handleFieldChange(field.key, v)}
+                      extracted={extractedValue}
+                      max={field.max}
+                      hint={field.hint}
+                      edited={edited}
                     />
-                    <EditableField
-                      label="Exemptions (HRA, etc.)"
-                      value={editableData.exemptions}
-                      onChange={(v) => handleFieldChange('exemptions', v)}
-                      extracted={extractedData.exemptions}
-                      edited={editedFields.has('exemptions') || editableData.exemptions !== baselineData.exemptions}
-                    />
-                    <EditableField
-                      label="Deduction 80C"
-                      value={editableData.deduction80C}
-                      onChange={(v) => handleFieldChange('deduction80C', v)}
-                      extracted={extractedData.deduction80C}
-                      max={150000}
-                      edited={editedFields.has('deduction80C') || editableData.deduction80C !== baselineData.deduction80C}
-                    />
-                    <div className="sm:col-span-2 p-3 rounded-xl border border-white/10 bg-white/5">
-                      <p className="text-sm text-white/80 font-medium">Section 80D (Medical insurance) — review required</p>
-                      <p className="text-xs text-white/50 mt-1">
-                        Caps are applied automatically (25k/50k for self/family and parents based on senior status).
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <EditableField
-                          label="80D Self/Family"
-                          value={editableData.deduction80DSelfFamily ?? editableData.deduction80D ?? null}
-                          onChange={(v) => handleFieldChange('deduction80DSelfFamily', v)}
-                          extracted={extractedData.deduction80DSelfFamily ?? extractedData.deduction80D}
-                          max={50000}
-                          edited={
-                            editedFields.has('deduction80DSelfFamily') ||
-                            (editableData.deduction80DSelfFamily ?? null) !== (baselineData.deduction80DSelfFamily ?? null)
-                          }
-                        />
-                        <EditableField
-                          label="80D Parents"
-                          value={editableData.deduction80DParents ?? null}
-                          onChange={(v) => handleFieldChange('deduction80DParents', v)}
-                          extracted={extractedData.deduction80DParents}
-                          max={50000}
-                          edited={
-                            editedFields.has('deduction80DParents') ||
-                            (editableData.deduction80DParents ?? null) !== (baselineData.deduction80DParents ?? null)
-                          }
-                        />
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                        <label className="flex items-start gap-2 text-xs text-white/70">
-                          <input
-                            type="checkbox"
-                            checked={Boolean(editableData.selfFamilySenior)}
-                            onChange={(e) => {
-                              setEditableData((prev) => ({ ...prev, selfFamilySenior: e.target.checked }));
-                              setEditedFields((prev) => {
-                                const next = new Set(prev);
-                                next.add('selfFamilySenior');
-                                return next;
-                              });
-                              setReviewConfirmed(false);
-                            }}
-                            className="mt-0.5"
-                          />
-                          Self/Family is senior citizen (60+)
-                        </label>
-                        <label className="flex items-start gap-2 text-xs text-white/70">
-                          <input
-                            type="checkbox"
-                            checked={Boolean(editableData.parentsSenior)}
-                            onChange={(e) => {
-                              setEditableData((prev) => ({ ...prev, parentsSenior: e.target.checked }));
-                              setEditedFields((prev) => {
-                                const next = new Set(prev);
-                                next.add('parentsSenior');
-                                return next;
-                              });
-                              setReviewConfirmed(false);
-                            }}
-                            className="mt-0.5"
-                          />
-                          Parents are senior citizens (60+)
-                        </label>
-                      </div>
-                    </div>
-                    <EditableField
-                      label="TDS Deducted"
-                      value={editableData.tdsDeducted}
-                      onChange={(v) => handleFieldChange('tdsDeducted', v)}
-                      extracted={extractedData.tdsDeducted}
-                      edited={editedFields.has('tdsDeducted') || editableData.tdsDeducted !== baselineData.tdsDeducted}
-                    />
-                    {typeof extractedData.totalTaxAsPerDoc === 'number' && extractedData.totalTaxAsPerDoc > 0 && (
-                      <div className="sm:col-span-2 p-3 rounded-lg bg-white/5 border border-white/10">
-                        <p className="text-xs text-white/60">
-                          <Info className="w-3 h-3 inline mr-1" />
-                          Document mentions total tax: {formatINR(extractedData.totalTaxAsPerDoc)} (reference only)
-                        </p>
-                      </div>
-                    )}
-                  </>
-                )}
-                
-                {/* AIS Fields */}
-                {documentType === 'ais' && (
-                  <>
-                    <EditableField
-                      label="Interest Income"
-                      value={editableData.interestIncome}
-                      onChange={(v) => handleFieldChange('interestIncome', v)}
-                      extracted={extractedData.interestIncome}
-                      edited={editedFields.has('interestIncome') || editableData.interestIncome !== baselineData.interestIncome}
-                    />
-                    <EditableField
-                      label="Dividend Income"
-                      value={editableData.dividendIncome}
-                      onChange={(v) => handleFieldChange('dividendIncome', v)}
-                      extracted={extractedData.dividendIncome}
-                      edited={editedFields.has('dividendIncome') || editableData.dividendIncome !== baselineData.dividendIncome}
-                    />
-                    <EditableField
-                      label="Capital Gains (Display Only)"
-                      value={editableData.capitalGains}
-                      onChange={(v) => handleFieldChange('capitalGains', v)}
-                      extracted={extractedData.capitalGains}
-                      hint="Not included in basic calculation"
-                      edited={editedFields.has('capitalGains') || editableData.capitalGains !== baselineData.capitalGains}
-                    />
-                    <EditableField
-                      label="TDS Entries"
-                      value={editableData.tdsEntries}
-                      onChange={(v) => handleFieldChange('tdsEntries', v)}
-                      extracted={extractedData.tdsEntries}
-                      edited={editedFields.has('tdsEntries') || editableData.tdsEntries !== baselineData.tdsEntries}
-                    />
-                  </>
-                )}
-                
-                {/* Bank Interest Fields */}
-                {documentType === 'bankInterest' && (
-                  <>
-                    <EditableField
-                      label="Total Interest Earned"
-                      value={editableData.totalInterest}
-                      onChange={(v) => handleFieldChange('totalInterest', v)}
-                      extracted={extractedData.totalInterest}
-                      edited={editedFields.has('totalInterest') || editableData.totalInterest !== baselineData.totalInterest}
-                    />
-                    <EditableField
-                      label="TDS on Interest"
-                      value={editableData.tdsOnInterest}
-                      onChange={(v) => handleFieldChange('tdsOnInterest', v)}
-                      extracted={extractedData.tdsOnInterest}
-                      edited={editedFields.has('tdsOnInterest') || editableData.tdsOnInterest !== baselineData.tdsOnInterest}
-                    />
-                  </>
-                )}
-                
-                {/* Common additional fields for tax calculation */}
-                {documentType !== 'form16' && (
-                  <>
-                    <EditableField
-                      label="Gross Salary (if any)"
-                      value={editableData.grossSalary ?? null}
-                      onChange={(v) => handleFieldChange('grossSalary', v)}
-                      hint="Add if you have salary income"
-                      edited={editedFields.has('grossSalary') || (editableData.grossSalary ?? null) !== (baselineData.grossSalary ?? null)}
-                    />
-                    <EditableField
-                      label="Deduction 80C (if any)"
-                      value={editableData.deduction80C ?? null}
-                      onChange={(v) => handleFieldChange('deduction80C', v)}
-                      max={150000}
-                      hint="For Old Regime only"
-                      edited={editedFields.has('deduction80C') || (editableData.deduction80C ?? null) !== (baselineData.deduction80C ?? null)}
-                    />
-                  </>
+                  );
+
+                  if (field.key === 'deduction80DParents') {
+                    return (
+                      <Fragment key={field.key}>
+                        {content}
+                        <div className="sm:col-span-2 p-3 rounded-xl border border-white/10 bg-white/5">
+                          <p className="text-sm text-white/80 font-medium">Section 80D (Medical insurance) — caps apply</p>
+                          <p className="text-xs text-white/50 mt-1">
+                            Caps are applied automatically (25k/50k for self/family and parents based on senior status).
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            <label className="flex items-start gap-2 text-xs text-white/70">
+                              <input
+                                type="checkbox"
+                                checked={Boolean(editableData.selfFamilySenior)}
+                                onChange={(e) => {
+                                  setEditableData((prev) => ({ ...prev, selfFamilySenior: e.target.checked }));
+                                  setEditedFields((prev) => {
+                                    const next = new Set(prev);
+                                    next.add('selfFamilySenior');
+                                    return next;
+                                  });
+                                  setReviewConfirmed(false);
+                                }}
+                                className="mt-0.5"
+                              />
+                              Self/Family is senior citizen (60+)
+                            </label>
+                            <label className="flex items-start gap-2 text-xs text-white/70">
+                              <input
+                                type="checkbox"
+                                checked={Boolean(editableData.parentsSenior)}
+                                onChange={(e) => {
+                                  setEditableData((prev) => ({ ...prev, parentsSenior: e.target.checked }));
+                                  setEditedFields((prev) => {
+                                    const next = new Set(prev);
+                                    next.add('parentsSenior');
+                                    return next;
+                                  });
+                                  setReviewConfirmed(false);
+                                }}
+                                className="mt-0.5"
+                              />
+                              Parents are senior citizens (60+)
+                            </label>
+                          </div>
+                        </div>
+                      </Fragment>
+                    );
+                  }
+
+                  return <Fragment key={field.key}>{content}</Fragment>;
+                })}
+
+                {typeof extractedData.totalTaxAsPerDoc === 'number' && extractedData.totalTaxAsPerDoc > 0 && (
+                  <div className="sm:col-span-2 p-3 rounded-lg bg-white/5 border border-white/10">
+                    <p className="text-xs text-white/60">
+                      <Info className="w-3 h-3 inline mr-1" />
+                      Document mentions total tax: {formatINR(extractedData.totalTaxAsPerDoc)} (reference only)
+                    </p>
+                  </div>
                 )}
               </div>
               
-              {/* Map bank interest to interestIncome for calculation */}
-              {documentType === 'bankInterest' && Number(editableData.totalInterest || 0) > 0 && (
+              {/* Bank interest is added to income */}
+              {Number(editableData.totalInterest || 0) > 0 && (
                 <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                   <p className="text-xs text-white/60">
                     <Info className="w-3 h-3 inline mr-1" />

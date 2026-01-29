@@ -14,8 +14,7 @@
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
-/* Import luxury serif font */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+/* NOTE: No external font imports. Use Next.js self-hosted fonts from app/layout.js */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    CSS CUSTOM PROPERTIES - LUXURY PALETTE
@@ -66,7 +65,7 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 [data-li-panel] h2,
 .li-overlay h2 {
-  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  font-family: var(--font-playfair), Georgia, serif !important;
   color: var(--li-text-primary) !important;
   font-weight: 400 !important;
   letter-spacing: -0.02em !important;
@@ -74,7 +73,7 @@
 
 [data-li-panel] h3,
 .li-overlay h3 {
-  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  font-family: var(--font-playfair), Georgia, serif !important;
   color: var(--li-text-primary) !important;
   font-weight: 500 !important;
 }
@@ -451,17 +450,17 @@
 
 /* Tab buttons with blue styling */
 [data-li-panel] [style*="rgba(100, 180, 255"],
-[data-li-panel] [style*="rgba(100, 160, 255"],
-[data-li-panel] [style*="rgba(140, 190, 255"],
-[data-li-panel] [style*="rgba(140, 210, 255"],
-[data-li-panel] [style*="rgba(150, 180, 220"],
-[data-li-panel] [style*="rgba(180, 210, 255"],
-[data-li-panel] [style*="rgba(170, 198, 255"],
-[data-li-panel] [style*="rgba(170, 230, 255"],
-[data-li-panel] [style*="rgba(120, 210, 255"],
-[data-li-panel] [style*="rgba(130, 160, 255"],
-[data-li-panel] [style*="rgba(140, 200, 255"],
-[data-li-panel] [style*="rgba(140, 220, 255"] {
+[data-li-panel] [style*="rgba(100, 160, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(140, 190, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(140, 210, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(150, 180, 220"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(180, 210, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(170, 198, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(170, 230, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(120, 210, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(130, 160, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(140, 200, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle),
+[data-li-panel] [style*="rgba(140, 220, 255"]:not(.li-donut-main):not(.li-donut-glow):not(.li-donut-orbit):not(.li-donut-center):not(.li-donut-value):not(.li-donut-label):not(.li-donut-particles):not(.li-donut-particle) {
   filter: hue-rotate(180deg) saturate(0.3) !important;
 }
 

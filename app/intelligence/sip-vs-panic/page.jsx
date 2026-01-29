@@ -154,7 +154,7 @@ export default function SIPPanicRoutePage() {
         Server-rendered explainer (SEO + comprehension):
         Keeps the simulator powerful while making the “what/why/how” obvious for first-time users.
       */}
-      <section className="px-6 lg:px-10 pt-10 pb-6">
+      <section className="px-6 lg:px-10 pt-24 lg:pt-28 pb-6">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-semibold gold-gradient-text">SIP vs Panic Selling</h1>
           <p className="mt-2 text-sm sm:text-base text-white/75 max-w-3xl">

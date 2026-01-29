@@ -14,14 +14,13 @@
 
 'use client';
 
-import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import AIChatFloat from '@/components/user/AIChatFloat';
 import ChatErrorBoundary from '@/components/shared/ChatErrorBoundary';
+import Chatbot3DTrigger from '../../src/components/Chatbot3DTrigger';
 
 const WhatsAppFloat = () => {
-  const [showTooltip, setShowTooltip] = useState(false);
   const [open, setOpen] = useState(false);
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
@@ -30,55 +29,13 @@ const WhatsAppFloat = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* 🔵 Floating button */}
-      <button
-        type="button"
-        className="whatsapp-float"
+      {/* 🔵 Floating 3D bot trigger (keeps existing chat logic) */}
+      <Chatbot3DTrigger
+        className="chatbot-float"
         aria-label="Open chat"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        onClick={() => setOpen(true)}
-      >
-        <MessageCircle size={28} style={{ width: '28px', height: '28px' }} />
-      </button>
-
-      {/* 🔵 Tooltip */}
-      {showTooltip && (
-        <div
-          style={{
-            position: 'fixed',
-            // Lower tooltip to match button position
-            bottom: 'calc(140px + env(safe-area-inset-bottom))',
-            right: '20px',
-            background: 'rgba(7, 7, 8, 0.74)',
-            color: 'rgba(255, 255, 255, 0.92)',
-            padding: '8px 16px',
-            borderRadius: '0px',
-            border: '1px solid color-mix(in oklab, var(--lux-accent) 22%, rgba(255, 255, 255, 0.10))',
-            fontSize: '14px',
-            whiteSpace: 'nowrap',
-            boxShadow: '0 18px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06) inset',
-            zIndex: 999,
-            fontWeight: '500',
-            pointerEvents: 'none',
-            userSelect: 'none',
-          }}
-        >
-          Chat with us Instantly
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-6px',
-              right: '20px',
-              width: '0',
-              height: '0',
-              borderLeft: '6px solid transparent',
-              borderRight: '6px solid transparent',
-              borderTop: '6px solid rgba(7, 7, 8, 0.74)',
-            }}
-          />
-        </div>
-      )}
+        size={200}
+        onActivate={() => setOpen(true)}
+      />
 
       {/* 🔵 AI Chat modal */}
       <ChatErrorBoundary>

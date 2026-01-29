@@ -16,21 +16,9 @@ export default function LiveIntelligenceOverlayIsolated(props) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    let cancel = () => undefined;
-
-    try {
-      if (typeof window.requestIdleCallback === 'function') {
-        const id = window.requestIdleCallback(() => setReady(true), { timeout: 1500 });
-        cancel = () => window.cancelIdleCallback?.(id);
-      } else {
-        const id = window.setTimeout(() => setReady(true), 250);
-        cancel = () => window.clearTimeout(id);
-      }
-    } catch {
-      setReady(true);
-    }
-
-    return () => cancel();
+    // Render ASAP. This overlay is user-facing and should not be gated behind
+    // requestIdleCallback (it makes the UI feel "missing" on load).
+    setReady(true);
   }, []);
 
   if (!ready) return null;

@@ -303,6 +303,12 @@ export default function SIPPanicPage(props?: {
     if (embed) return;
     if (searchParams?.get("share") === "1") return;
 
+    const forceOnboarding =
+      searchParams?.get("onboarding") === "1" ||
+      searchParams?.get("wizard") === "1";
+
+    if (!forceOnboarding) return;
+
     try {
       const done = window.localStorage.getItem(ONBOARDING_V1_KEY) === "1";
       if (!done) setShowOnboarding(true);
@@ -513,7 +519,8 @@ export default function SIPPanicPage(props?: {
 
     try {
       const saved = safeUiMode(window.localStorage.getItem(UI_MODE_KEY));
-      if (saved) setUiMode(saved);
+      // Always default to beginner (brand + UX). Only restore a saved mode if it's beginner.
+      if (saved === "beginner") setUiMode(saved);
     } catch {
       // ignore
     }

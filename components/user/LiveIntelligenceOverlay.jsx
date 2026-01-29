@@ -1332,10 +1332,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   const donutGradient = (() => {
     const segments = [
-      { key: 'equity', color: 'rgba(100, 160, 255, 0.90)' },
-      { key: 'debt', color: 'rgba(140, 220, 180, 0.85)' },
-      { key: 'gold', color: 'rgba(255, 200, 120, 0.85)' },
-      { key: 'cash', color: 'rgba(180, 150, 255, 0.80)' },
+      { key: 'equity', color: 'rgba(120, 170, 255, 0.92)' },
+      { key: 'debt', color: 'rgba(180, 150, 255, 0.88)' },
+      { key: 'gold', color: 'rgba(212, 175, 55, 0.88)' },
+      { key: 'cash', color: 'rgba(235, 242, 255, 0.55)' },
     ];
 
     const total = segments.reduce((sum, seg) => sum + (Number(allocations?.[seg.key]) || 0), 0);
@@ -1784,7 +1784,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           border-radius: 50%;
           border: 1px solid rgba(170, 198, 255, 0.14);
           border-top-color: rgba(100, 160, 255, 0.55);
-          border-right-color: rgba(140, 220, 180, 0.35);
+          border-right-color: rgba(180, 150, 255, 0.40);
           box-shadow: 0 0 16px rgba(100, 160, 255, 0.10);
           animation: liOrbitSpin 8s linear infinite;
         }
@@ -1822,9 +1822,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           border-radius: 50%;
           background: conic-gradient(
             rgba(100, 160, 255, 0.90) 0deg 208deg,
-            rgba(140, 220, 180, 0.85) 208deg 295deg,
-            rgba(255, 200, 120, 0.85) 295deg 324deg,
-            rgba(180, 150, 255, 0.80) 324deg 360deg
+            rgba(180, 150, 255, 0.85) 208deg 295deg,
+            rgba(212, 175, 55, 0.85) 295deg 324deg,
+            rgba(235, 242, 255, 0.55) 324deg 360deg
           );
           box-shadow: 
             0 0 40px rgba(100, 160, 255, 0.25),
@@ -2481,10 +2481,10 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             {/* Asset breakdown */}
             <div className="li-asset-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '10px' }}>
               {[
-                { key: 'equity', k: 'Equity', c: 'rgba(100,160,255,0.90)' },
-                { key: 'debt', k: 'Debt', c: 'rgba(140,220,180,0.85)' },
-                { key: 'gold', k: 'Gold', c: 'rgba(255,200,120,0.85)' },
-                { key: 'cash', k: 'Cash', c: 'rgba(180,150,255,0.80)' },
+                { key: 'equity', k: 'Equity', c: 'rgba(120,170,255,0.92)' },
+                { key: 'debt', k: 'Debt', c: 'rgba(180,150,255,0.88)' },
+                { key: 'gold', k: 'Gold', c: 'rgba(212,175,55,0.88)' },
+                { key: 'cash', k: 'Cash', c: 'rgba(235,242,255,0.55)' },
               ].map((item) => (
                 <div
                   key={item.k}
@@ -2566,8 +2566,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 onClick={() => setIntelView('forYou')}
                 style={{
                   appearance: 'none',
-                  border: `1px solid ${intelView === 'forYou' ? 'rgba(212,175,55,0.28)' : 'rgba(170,198,255,0.14)'}`,
-                  background: intelView === 'forYou' ? 'rgba(212,175,55,0.10)' : 'rgba(10,10,12,0.45)',
+                  border: `1px solid ${intelView === 'forYou' ? 'rgba(180,150,255,0.34)' : 'rgba(170,198,255,0.14)'}`,
+                  background: intelView === 'forYou' ? 'rgba(180,150,255,0.12)' : 'rgba(10,10,12,0.45)',
                   color: 'rgba(235,242,255,0.88)',
                   padding: '8px 12px',
                   borderRadius: 999,
@@ -2577,7 +2577,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 }}
                 aria-pressed={intelView === 'forYou'}
               >
-                For you
+                Curated
               </button>
 
               <button

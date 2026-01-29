@@ -40,6 +40,25 @@
 			}
 		},
 		{
+			"label": "start-dev-premium-invest-8 (force restart 3000)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}\\scripts\\start-dev-server.ps1",
+				"-Port",
+				"3000",
+				"-TimeoutSeconds",
+				"30",
+				"-ForceRestart"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
 			"label": "start-frontend",
 			"type": "shell",
 			"command": "cmd",
@@ -537,6 +556,66 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "qa-next-static-assets-probe",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; $urls = @('http://localhost:3000/','http://localhost:3000/_next/static/chunks/webpack.js','http://localhost:3000/_next/static/chunks/main-app.js','http://localhost:3000/_next/static/css/app/layout.css','http://localhost:3000/_next/static/css/app/(public)/page.css'); foreach($u in $urls){ try { $r = Invoke-WebRequest -UseBasicParsing -Method Head $u -TimeoutSec 5; \"HEAD $u -> $($r.StatusCode)\" } catch { if ($_.Exception.Response) { \"HEAD $u -> $([int]$_.Exception.Response.StatusCode)\" } else { \"HEAD $u -> ERROR: $($_.Exception.Message)\" } } } ; \"DISK .next/static/css/app/layout.css exists? \" + (Test-Path '.next/static/css/app/layout.css'); \"DISK .next/static/css/app/(public)/page.css exists? \" + (Test-Path '.next/static/css/app/(public)/page.css'); $sample = Get-ChildItem '.next/static/chunks' -File -Filter '*.js' | Select-Object -First 3; foreach($s in $sample){ \"DISK chunk: \" + $s.Name }"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "qa-next-static-probe-script",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-next-static-probe.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "qa-fetch-home-assets",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-fetch-home-assets.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "qa-next-home-linked-assets",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-next-home-linked-assets.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
 		}
 	]
 }
