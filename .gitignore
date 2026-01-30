@@ -58,6 +58,12 @@ scripts/safety/backups/
 # Local lock snapshots (never commit)
 backup/locked_*/
 
+# Local lock backups (never commit)
+backup/LOCK_*/
+
+# Local git-archive zip snapshots (never commit)
+backup/**/premium-invest-8_*_git-archive.zip
+
 # Local full-site zip snapshots (never commit)
 backup/site-snapshots/
 
