@@ -77,6 +77,20 @@ export function LuxuryMobileDock() {
     pathname?.startsWith("/tax-leak-detector") ||
     pathname?.startsWith("/live-intelligence");
 
+  // Let other floating UI (e.g., the bot) know how much space the dock needs.
+  // When the dock is hidden (route-level) or visually down (reading mode), the bot can sit lower.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    const dockVisible = !hideDock && !isReading;
+    // Matches the dock's visual footprint (bottom-3 + padding), but keeps it minimal.
+    const clearancePx = dockVisible ? 72 : 12;
+    root.style.setProperty("--li-mobile-dock-clearance", `${clearancePx}px`);
+    return () => {
+      root.style.removeProperty("--li-mobile-dock-clearance");
+    };
+  }, [hideDock, isReading]);
+
   // If we navigate into a route where the dock is hidden, force-close any open menu
   // and clear transient highlight state.
   useEffect(() => {

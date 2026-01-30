@@ -280,8 +280,8 @@ export default function Chatbot3DTrigger({
     () => ({
       position: 'fixed',
       // Mobile: sit at the screen edge, but keep clear of the luxury bottom dock.
-      bottom: isMobileFloat ? 'calc(72px + env(safe-area-inset-bottom))' : '50px',
-      right: isMobileFloat ? 'calc(2px + env(safe-area-inset-right))' : '50px',
+      bottom: isMobileFloat ? 'calc(var(--li-mobile-dock-clearance, 72px) + env(safe-area-inset-bottom))' : '50px',
+      right: isMobileFloat ? 'calc(env(safe-area-inset-right) + 0px)' : '50px',
       width: `${resolvedSizePx}px`,
       height: `${resolvedSizePx}px`,
       background: 'transparent',
