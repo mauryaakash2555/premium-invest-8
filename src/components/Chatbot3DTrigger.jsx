@@ -267,13 +267,22 @@ export default function Chatbot3DTrigger({
   const prefersReducedMotion = usePrefersReducedMotion();
   const isMobileFloat = useIsMobileFloat();
 
+  const resolvedSizePx = useMemo(() => {
+    if (isMobileFloat) {
+      const base = typeof size === 'number' && Number.isFinite(size) ? size : 200;
+      // Mobile: slightly smaller so it doesn't cover nav/CTAs.
+      return Math.max(140, Math.min(170, Math.round(base * 0.82)));
+    }
+    return Math.max(180, Math.min(220, size));
+  }, [isMobileFloat, size]);
+
   const containerStyle = useMemo(
     () => ({
       position: 'fixed',
       bottom: isMobileFloat ? 'calc(80px + env(safe-area-inset-bottom))' : '50px',
-      right: isMobileFloat ? '20px' : '50px',
-      width: `${Math.max(180, Math.min(220, size))}px`,
-      height: `${Math.max(180, Math.min(220, size))}px`,
+      right: isMobileFloat ? 'calc(10px + env(safe-area-inset-right))' : '50px',
+      width: `${resolvedSizePx}px`,
+      height: `${resolvedSizePx}px`,
       background: 'transparent',
       border: 'none',
       boxShadow: 'none',
@@ -288,7 +297,7 @@ export default function Chatbot3DTrigger({
       outline: 'none',
       ...style,
     }),
-    [isMobileFloat, size, style, zIndex]
+    [isMobileFloat, resolvedSizePx, style, zIndex]
   );
 
   // Track cursor globally (whole page), not just over the canvas.
