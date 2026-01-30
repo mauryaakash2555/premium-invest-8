@@ -1,0 +1,10 @@
+{
+  "lockedDate": "2026-01-30",
+  "tag": "LOCK-2026-01-30-cedef5d",
+  "commit": "cedef5d85350c92e1520c1e6626f91d589a63197",
+  "branch": "main",
+  "backupType": "git-archive",
+  "archiveFile": "premium-invest-8_2026-01-30_cedef5d_git-archive.zip",
+  "generatedAtLocal": "2026-01-30",
+  "notes": "Reproducible snapshot of tracked files at the lock commit. Does not include node_modules/build outputs or secrets."
+}
