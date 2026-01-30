@@ -425,6 +425,9 @@ function buildRotation(items, { limit, modeKey }) {
       .map((h) => enrichHeadline(h))
       .filter((h) => {
         if (h?.pinned) return true;
+        // RSS fallback items are real-source headlines and may not have full enrichment fields.
+        // Keep them rather than dropping the rotation to empty.
+        if (h?.type === 'rss') return true;
         if (isBreakingSpec(h)) return true;
         return (h?.qualityScore ?? 0) >= minQuality;
       })
