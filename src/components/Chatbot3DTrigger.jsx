@@ -271,7 +271,7 @@ export default function Chatbot3DTrigger({
     if (isMobileFloat) {
       const base = typeof size === 'number' && Number.isFinite(size) ? size : 200;
       // Mobile: slightly smaller so it doesn't cover nav/CTAs.
-      return Math.max(140, Math.min(170, Math.round(base * 0.82)));
+      return Math.max(125, Math.min(150, Math.round(base * 0.72)));
     }
     return Math.max(180, Math.min(220, size));
   }, [isMobileFloat, size]);
@@ -281,7 +281,7 @@ export default function Chatbot3DTrigger({
       position: 'fixed',
       // Mobile: sit at the screen edge, but keep clear of the luxury bottom dock.
       bottom: isMobileFloat ? 'calc(var(--li-mobile-dock-clearance, 72px) + env(safe-area-inset-bottom))' : '50px',
-      right: isMobileFloat ? 'calc(env(safe-area-inset-right) + 0px)' : '50px',
+      right: isMobileFloat ? 'calc(env(safe-area-inset-right) - 6px)' : '50px',
       width: `${resolvedSizePx}px`,
       height: `${resolvedSizePx}px`,
       background: 'transparent',
@@ -384,6 +384,14 @@ export default function Chatbot3DTrigger({
   useEffect(() => {
     if (prefersReducedMotion) return;
     if (!containerRef.current) return;
+
+    // Mobile: keep the bot pinned (no drift), so right/bottom offsets are exact.
+    if (isMobileFloat) {
+      try {
+        containerRef.current.style.transform = 'translate3d(0px, 0px, 0)';
+      } catch {}
+      return;
+    }
 
     const el = containerRef.current;
     let mounted = true;

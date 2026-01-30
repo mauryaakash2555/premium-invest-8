@@ -271,6 +271,9 @@ a.bm-cta-gold-flat:focus-visible {
   --li-warning: rgba(255, 200, 100, 0.85);
   --li-error: rgba(255, 100, 100, 0.85);
   --li-glass-blur: 24px;
+
+  /* Mobile dock clearance used by the floating bot trigger (dock overrides when visible). */
+  --li-mobile-dock-clearance: 6px;
 }
 
 /* Light theme */

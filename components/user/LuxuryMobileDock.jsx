@@ -84,7 +84,7 @@ export function LuxuryMobileDock() {
     const root = document.documentElement;
     const dockVisible = !hideDock && !isReading;
     // Matches the dock's visual footprint (bottom-3 + padding), but keeps it minimal.
-    const clearancePx = dockVisible ? 72 : 12;
+    const clearancePx = dockVisible ? 72 : 6;
     root.style.setProperty("--li-mobile-dock-clearance", `${clearancePx}px`);
     return () => {
       root.style.removeProperty("--li-mobile-dock-clearance");
