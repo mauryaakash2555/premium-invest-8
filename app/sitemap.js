@@ -1,5 +1,7 @@
 import { getMetadataBase } from "@/lib/seo/metadata";
 import { staticBlogData, staticBlogPost } from "@/data/staticBlogData";
+import storeProducts from "@/data/store-products.json";
+import { headers } from "next/headers";
 import fs from "fs";
 import path from "path";
 
@@ -9,14 +11,34 @@ function url(base, path) {
   return cleanPath ? `${cleanBase}/${cleanPath}` : `${cleanBase}/`;
 }
 
-export default function sitemap() {
-  const base = getMetadataBase().toString();
+function getNormalizedHost(hdrs) {
+  const rawHost = hdrs.get("x-forwarded-host") || hdrs.get("host") || "";
+  const host = String(rawHost).split(",")[0].trim().toLowerCase();
+  const hostNoPort = host.split(":")[0];
+  return hostNoPort.startsWith("www.") ? hostNoPort.slice(4) : hostNoPort;
+}
+
+function normalizePathname(p) {
+  const s = String(p || "").trim();
+  if (!s) return "/";
+  if (!s.startsWith("/")) return `/${s}`;
+  return s;
+}
+
+export default async function sitemap() {
+  const hdrs = await headers();
+  const normalizedHost = getNormalizedHost(hdrs);
+  const isStoreHost = normalizedHost === "store.bmwealth.co.in";
+
+  const base = (isStoreHost ? "https://store.bmwealth.co.in" : getMetadataBase().toString()).replace(/\/$/, "");
   const lastModified = new Date();
 
   const blogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
-  const blogRoutes = blogs
-    .map((b) => (b?.slug ? `/blog/${String(b.slug).replace(/^\/+/, "")}` : null))
-    .filter(Boolean);
+  const blogRoutes = isStoreHost
+    ? []
+    : blogs
+        .map((b) => (b?.slug ? `/blog/${String(b.slug).replace(/^\/+/, "")}` : null))
+        .filter(Boolean);
 
   const discoverAppRoutes = () => {
     const appDir = path.join(process.cwd(), "app");
@@ -25,6 +47,18 @@ export default function sitemap() {
     const shouldExcludeSegment = (segment) => {
       if (!segment) return true;
       if (segment === "api") return true;
+      if (segment === "store") return true; // internal store shell; exposed via store hostname rewrite
+      if (segment === "products") return true; // blocked on main host; store has clean /products
+      if (segment === "login") return true;
+      if (segment === "dashboard") return true;
+      if (segment === "client-portal") return true;
+      if (segment === "embed") return true;
+      if (segment === "cdn-cgi") return true;
+      if (segment === "track") return true;
+      if (segment === "v0-test") return true;
+      if (segment === "sitemap-page") return true;
+      if (segment.startsWith("_")) return true;
+      if (segment.startsWith("__")) return true;
       if (segment.startsWith("admin-secret")) return true;
       if (segment.startsWith("[")) return true; // dynamic segment
       return false;
@@ -64,8 +98,32 @@ export default function sitemap() {
     return Array.from(discovered);
   };
 
+  if (isStoreHost) {
+    const productRoutes = Array.isArray(storeProducts)
+      ? storeProducts
+          .map((p) => (p?.slug ? `/products/${String(p.slug).replace(/^\/+/, "")}` : null))
+          .filter(Boolean)
+      : [];
+
+    const storeRoutes = [
+      "/",
+      "/products",
+      "/about",
+      "/contact",
+      "/delivery",
+      "/privacy",
+      "/terms",
+      "/refund",
+      ...productRoutes,
+    ];
+
+    const unique = Array.from(new Set(storeRoutes.map(normalizePathname)));
+    return unique.map((p) => ({ url: url(base, p), lastModified }));
+  }
+
   const appRoutes = discoverAppRoutes();
 
+  // Explicit public surface for main site (kept small + stable).
   const routes = [
     "/",
     "/tools",
@@ -93,10 +151,39 @@ export default function sitemap() {
     "/sitemap",
   ];
 
-  const unique = Array.from(new Set([...routes, ...appRoutes, ...blogRoutes]));
+  // Exclude known non-indexable or blocked URLs from the sitemap.
+  const excludedExact = new Set([
+    "/about",
+    "/privacy-policy",
+    "/terms-and-conditions",
+    "/refund-policy",
+    "/payment-success",
+    "/payment-failed",
+    "/live-intel",
+  ]);
 
-  return unique.map((path) => ({
-    url: url(base, path),
-    lastModified,
-  }));
+  const excludedPrefix = [
+    "/store",
+    "/_store",
+    "/products",
+    "/checkout",
+    "/admin-secret",
+    "/api",
+    "/cdn-cgi",
+    "/login",
+    "/client-portal",
+    "/dashboard",
+    "/embed",
+  ];
+
+  const isExcluded = (p) => {
+    const pathname = normalizePathname(p);
+    if (excludedExact.has(pathname)) return true;
+    return excludedPrefix.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  };
+
+  const unique = Array.from(new Set([ ...routes, ...appRoutes, ...blogRoutes].map(normalizePathname)))
+    .filter((p) => !isExcluded(p));
+
+  return unique.map((p) => ({ url: url(base, p), lastModified }));
 }

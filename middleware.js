@@ -32,6 +32,25 @@ export function middleware(request) {
     shouldRedirect = true;
   }
 
+  // Canonicalize legacy/duplicate paths to reduce duplicate indexation.
+  // Keep this list tight: only redirect routes that are known duplicates or intentionally noindex.
+  if (!isStoreHost) {
+    const canonicalPathRedirects = {
+      '/about': '/about-us',
+      '/privacy-policy': '/privacy',
+      '/terms-and-conditions': '/terms',
+      '/refund-policy': '/refund',
+      '/live-intel': '/live-intelligence',
+      '/sitemap-page': '/sitemap',
+    };
+
+    const target = canonicalPathRedirects[pathname];
+    if (target) {
+      canonicalUrl.pathname = target;
+      shouldRedirect = true;
+    }
+  }
+
   if (shouldRedirect) {
     return NextResponse.redirect(canonicalUrl, 308);
   }
@@ -74,14 +93,6 @@ export function middleware(request) {
   }
 
   const response = NextResponse.next();
-
-  // Blog: disable caching (existing behavior)
-  if (pathname.startsWith('/blog')) {
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
-    response.headers.set('CDN-Cache-Control', 'no-store');
-    response.headers.set('Vercel-CDN-Cache-Control', 'no-store');
-    response.headers.set('X-Vercel-Cache', 'MISS');
-  }
 
   // API: security headers (Phase 5)
   if (pathname.startsWith('/api')) {
