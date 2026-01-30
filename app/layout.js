@@ -2,7 +2,6 @@ import { headers } from 'next/headers';
 import Script from 'next/script';
 import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import '../components/user/LiveIntelligenceOverlay.luxury.css';
 import LayoutShellClient from './layout.shell.client';
 import { metadata as mainMetadata, schemaGraph } from './metadata';
 

@@ -75,7 +75,7 @@ export default function BlogCard({ post, variant = 'default' }) {
         <LaserBeam
           width="100%"
           height={isMobile ? mobileCardHeight : 'auto'}
-          color="var(--li-accent-strong)"
+          color="rgba(70, 120, 220, 1.0)"
           borderRadius={isMobile ? 12 : 16}
           duration={5}
           glowIntensity={20}

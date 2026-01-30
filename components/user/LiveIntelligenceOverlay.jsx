@@ -1332,15 +1332,15 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
   const donutGradient = (() => {
     const segments = [
-      { key: 'equity', color: 'var(--li-donut-equity, rgba(120, 170, 255, 0.92))' },
-      { key: 'debt', color: 'var(--li-donut-debt, rgba(180, 150, 255, 0.88))' },
-      { key: 'gold', color: 'var(--li-donut-gold, rgba(212, 175, 55, 0.88))' },
-      { key: 'cash', color: 'var(--li-donut-cash, rgba(235, 242, 255, 0.55))' },
+      { key: 'equity', color: 'rgba(120, 170, 255, 0.92)' },
+      { key: 'debt', color: 'rgba(180, 150, 255, 0.88)' },
+      { key: 'gold', color: 'rgba(212, 175, 55, 0.88)' },
+      { key: 'cash', color: 'rgba(235, 242, 255, 0.55)' },
     ];
 
     const total = segments.reduce((sum, seg) => sum + (Number(allocations?.[seg.key]) || 0), 0);
     if (!total) {
-      return 'conic-gradient(var(--li-donut-empty, rgba(100, 160, 255, 0.10)) 0deg 360deg)';
+      return 'conic-gradient(rgba(100, 160, 255, 0.10) 0deg 360deg)';
     }
 
     let start = 0;
