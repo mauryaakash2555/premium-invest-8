@@ -842,6 +842,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const LI_ALLOCATIONS_KEY = 'li_allocations_v1';
   const LI_LAST_ACTIVE_KEY = 'li_last_active_v1';
 
+  const DEFAULT_ALLOCATIONS = { equity: 58, debt: 24, gold: 8, cash: 10 };
+
   const safeParseJson = (value, fallback = null) => {
     try {
       return JSON.parse(value);
@@ -876,12 +878,17 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     }
     const raw = safeParseJson(window.localStorage.getItem(LI_ALLOCATIONS_KEY) || 'null', null);
     const base = { equity: 0, debt: 0, gold: 0, cash: 0 };
-    if (!raw || typeof raw !== 'object') return base;
+    if (!raw || typeof raw !== 'object') return { ...DEFAULT_ALLOCATIONS };
     const next = { ...base };
     for (const k of Object.keys(base)) {
       const v = toFiniteNumber(raw[k]);
       if (v != null) next[k] = Math.max(0, Math.min(100, Math.round(v)));
     }
+
+    // If saved allocations are effectively empty, show a nice prefilled default.
+    const sum = Object.values(next).reduce((acc, v) => acc + (Number(v) || 0), 0);
+    if (!sum) return { ...DEFAULT_ALLOCATIONS };
+
     return next;
   };
 
@@ -1334,8 +1341,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
     const segments = [
       { key: 'equity', color: 'rgba(120, 170, 255, 0.92)' },
       { key: 'debt', color: 'rgba(180, 150, 255, 0.88)' },
-      { key: 'gold', color: 'rgba(212, 175, 55, 0.88)' },
-      { key: 'cash', color: 'rgba(235, 242, 255, 0.55)' },
+      { key: 'gold', color: 'rgba(255, 175, 95, 0.88)' },
+      { key: 'cash', color: 'rgba(140, 220, 180, 0.88)' },
     ];
 
     const total = segments.reduce((sum, seg) => sum + (Number(allocations?.[seg.key]) || 0), 0);
@@ -2483,8 +2490,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               {[
                 { key: 'equity', k: 'Equity', c: 'rgba(120,170,255,0.92)' },
                 { key: 'debt', k: 'Debt', c: 'rgba(180,150,255,0.88)' },
-                { key: 'gold', k: 'Gold', c: 'rgba(212,175,55,0.88)' },
-                { key: 'cash', k: 'Cash', c: 'rgba(235,242,255,0.55)' },
+                { key: 'gold', k: 'Gold', c: 'rgba(255,175,95,0.88)' },
+                { key: 'cash', k: 'Cash', c: 'rgba(140,220,180,0.88)' },
               ].map((item) => (
                 <div
                   key={item.k}
