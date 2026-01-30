@@ -25,6 +25,7 @@ import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import QuickLearn from '@/components/live-intelligence/QuickLearn';
+import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
 import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel';
@@ -2831,6 +2832,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           {/* QuickLearn - 30 second daily micro-lessons */}
           <div style={{ gridColumn: '1 / -1' }}>
             <QuickLearn />
+          </div>
+
+          {/* Learning Path - premium explainers */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <LearningPathPanel />
           </div>
 
           {/* Saved Headlines Section */}

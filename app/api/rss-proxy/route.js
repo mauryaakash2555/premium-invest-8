@@ -25,10 +25,16 @@ const RSS_CACHE = new Map();
 const CACHE_TTL = 5 * 60 * 1000;
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+};
 
 export async function GET(request) {
   try {
     const feedUrl = request.nextUrl.searchParams.get('url');
+    const noCache = request.nextUrl.searchParams.get('nocache') === '1';
 
     if (!feedUrl) {
       return NextResponse.json(
@@ -46,17 +52,19 @@ export async function GET(request) {
       );
     }
 
-    // Check cache
-    const cached = RSS_CACHE.get(feedUrl);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      return new NextResponse(cached.data, {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/xml',
-          'X-Cache': 'HIT',
-          'Cache-Control': 'public, max-age=300',
-        },
-      });
+    // Check cache (unless explicitly bypassed)
+    if (!noCache) {
+      const cached = RSS_CACHE.get(feedUrl);
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return new NextResponse(cached.data, {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/xml',
+            'X-Cache': 'HIT',
+            'Cache-Control': 'public, max-age=300',
+          },
+        });
+      }
     }
 
     // Fetch RSS feed
@@ -65,7 +73,9 @@ export async function GET(request) {
         'User-Agent': 'BMWealth/1.0 RSS Reader',
         Accept: 'application/rss+xml, application/xml, text/xml',
       },
-      next: { revalidate: 300 }, // Next.js cache for 5 minutes
+      ...(noCache
+        ? { cache: 'no-store', next: { revalidate: 0 } }
+        : { next: { revalidate: 300 } }), // Next.js cache for 5 minutes
     });
 
     if (!response.ok) {
@@ -77,25 +87,27 @@ export async function GET(request) {
 
     const xml = await response.text();
 
-    // Update cache
-    RSS_CACHE.set(feedUrl, {
-      data: xml,
-      timestamp: Date.now(),
-    });
+    // Update cache (unless explicitly bypassed)
+    if (!noCache) {
+      RSS_CACHE.set(feedUrl, {
+        data: xml,
+        timestamp: Date.now(),
+      });
+    }
 
     return new NextResponse(xml, {
       status: 200,
       headers: {
         'Content-Type': 'application/xml',
-        'X-Cache': 'MISS',
-        'Cache-Control': 'public, max-age=300',
+        'X-Cache': noCache ? 'BYPASS' : 'MISS',
+        ...(noCache ? NO_CACHE_HEADERS : { 'Cache-Control': 'public, max-age=300' }),
       },
     });
   } catch (error) {
     console.error('RSS proxy error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch RSS feed' },
-      { status: 500 }
+      { status: 500, headers: NO_CACHE_HEADERS }
     );
   }
 }

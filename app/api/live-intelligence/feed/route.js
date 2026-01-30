@@ -163,7 +163,7 @@ function parseRssXml(xml) {
   return items;
 }
 
-async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, modeKey }) {
+async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, modeKey, noCache = false }) {
   const origin = request?.nextUrl?.origin;
   if (!origin) return [];
 
@@ -177,7 +177,7 @@ async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, mode
 
   const responses = await Promise.allSettled(
     feedsToUse.map(async (feed) => {
-      const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feed.url)}`;
+      const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feed.url)}${noCache ? '&nocache=1' : ''}`;
       const res = await fetch(proxyUrl, { cache: 'no-store' });
       if (!res.ok) return [];
       const xml = await res.text();
@@ -498,6 +498,7 @@ export async function GET(request) {
   try {
     const { searchParams } = request.nextUrl;
     const cacheHeaders = searchParams.get('nocache') === '1' ? NO_CACHE_HEADERS : FEED_CACHE_HEADERS;
+    const noCache = searchParams.get('nocache') === '1';
     const category = searchParams.get('category') || 'all';
     const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
     const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
@@ -513,7 +514,7 @@ export async function GET(request) {
     
     // Strict mode: if DB is unavailable, fall back to LIVE RSS (real sources) rather than dummy/curated.
     if (!supabase) {
-      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey });
+      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey, noCache });
       return NextResponse.json(
         {
           ok: true,
@@ -703,7 +704,7 @@ export async function GET(request) {
       }
 
       // DB is configured but empty/no content: fall back to LIVE RSS.
-      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey });
+      const rssHeadlines = await fetchRssFallbackHeadlines({ request, limit, categorySpecKey: category, modeKey, noCache });
       if (rssHeadlines.length > 0) {
         return NextResponse.json(
           {

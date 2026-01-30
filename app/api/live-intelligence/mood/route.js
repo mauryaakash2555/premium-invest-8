@@ -16,6 +16,13 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+};
+
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -29,6 +36,7 @@ async function getMarketContext(request) {
     // Fetch from our market-data API
     const baseUrl = request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
     const response = await fetch(`${baseUrl}/api/market-data?nocache=1`, {
+      cache: 'no-store',
       next: { revalidate: 0 },
     });
 
@@ -239,7 +247,7 @@ export async function POST(request) {
         },
         stored: false,
         warning: 'Supabase not configured',
-      });
+      }, { headers: NO_CACHE_HEADERS });
     }
 
     // Deactivate previous active moods
@@ -273,7 +281,7 @@ export async function POST(request) {
             generated_at: new Date().toISOString(),
           },
           stored: false,
-        });
+        }, { headers: NO_CACHE_HEADERS });
       }
       throw error;
     }
@@ -282,8 +290,8 @@ export async function POST(request) {
       success: true,
       mood: data,
       stored: true,
-    });
 
+    }, { headers: NO_CACHE_HEADERS });
   } catch (error) {
     console.error('Mood generation error:', error);
 
@@ -292,7 +300,7 @@ export async function POST(request) {
         success: false,
         error: error?.message || 'Mood generation failed',
       },
-      { status: 503 }
+      { status: 503, headers: NO_CACHE_HEADERS }
     );
   }
 }
@@ -320,7 +328,7 @@ export async function GET(request) {
           cron: true,
           stored: false,
           warning: 'Supabase not configured',
-        });
+        }, { headers: NO_CACHE_HEADERS });
       }
       
       // Deactivate old moods
@@ -343,7 +351,10 @@ export async function GET(request) {
         .select()
         .single();
       
-      return NextResponse.json({ success: true, mood: newMood || { mood_text, mood_type }, cron: true });
+      return NextResponse.json(
+        { success: true, mood: newMood || { mood_text, mood_type }, cron: true },
+        { headers: NO_CACHE_HEADERS }
+      );
     }
     
     // Regular GET: fetch active mood from database (if Supabase configured)
@@ -363,7 +374,7 @@ export async function GET(request) {
             success: true,
             mood: data,
             source: 'database',
-          });
+          }, { headers: NO_CACHE_HEADERS });
         }
       }
     }
@@ -372,15 +383,18 @@ export async function GET(request) {
     const marketData = await getMarketContext(request);
     const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
 
-    return NextResponse.json({
-      success: true,
-      mood: {
-        mood_text,
-        mood_type,
-        generated_at: new Date().toISOString(),
+    return NextResponse.json(
+      {
+        success: true,
+        mood: {
+          mood_text,
+          mood_type,
+          generated_at: new Date().toISOString(),
+        },
+        source: 'generated',
       },
-      source: 'generated',
-    });
+      { headers: NO_CACHE_HEADERS }
+    );
 
   } catch (error) {
     console.error('Mood fetch error:', error);
@@ -390,7 +404,7 @@ export async function GET(request) {
         success: false,
         error: error?.message || 'Mood unavailable',
       },
-      { status: 503 }
+      { status: 503, headers: NO_CACHE_HEADERS }
     );
   }
 }

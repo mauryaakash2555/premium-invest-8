@@ -11,6 +11,40 @@ import { NextResponse } from 'next/server';
 import { mistralChat } from '@/lib/ai/tiered';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+};
+
+async function geminiChat({ prompt, temperature = 0.3, maxOutputTokens = 900 }) {
+  const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
+  if (!geminiApiKey) return null;
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature,
+          maxOutputTokens,
+        },
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(`Gemini chat failed: ${response.status} ${body}`);
+  }
+
+  const data = await response.json();
+  const text = data?.candidates?.[0]?.content?.parts?.map((p) => p?.text).filter(Boolean).join('\n') || '';
+  return { provider: 'gemini', model: 'gemini-1.5-flash', text };
+}
 
 /**
  * POST - Generate AI explanation for a headline
@@ -94,11 +128,27 @@ Return ONLY valid JSON:
   "expertTip": "..."
 }`;
 
-    const res = await mistralChat({
-      prompt,
-      temperature: 0.3,
-      maxTokens: 900,
-    });
+    let res = null;
+    try {
+      res = await mistralChat({
+        prompt,
+        temperature: 0.3,
+        maxTokens: 900,
+      });
+    } catch (e) {
+      // Fall through to Gemini (if configured)
+      console.warn('[Explain API] Mistral failed, trying Gemini:', e?.message || e);
+      res = null;
+    }
+
+    if (!res) {
+      try {
+        res = await geminiChat({ prompt, temperature: 0.3, maxOutputTokens: 900 });
+      } catch (e) {
+        console.warn('[Explain API] Gemini failed:', e?.message || e);
+        res = null;
+      }
+    }
 
     const whyThisMattersToYou = generateWhyThisMattersToYou({
       headline,
@@ -115,11 +165,13 @@ Return ONLY valid JSON:
       return NextResponse.json({
         ok: true,
         source: 'fallback',
+        provider: null,
+        hint: 'Configure MISTRAL_API_KEY or GEMINI_API_KEY to enable AI explanations.',
         content: {
           ...generateFallbackContent(headline, category, whyItMatters, dataPoint),
           whyThisMattersToYou,
         },
-      });
+      }, { headers: NO_CACHE_HEADERS });
     }
 
     const text = res.text;
@@ -130,8 +182,9 @@ Return ONLY valid JSON:
       return NextResponse.json({
         ok: true,
         source: 'fallback',
+        provider: res.provider || null,
         content: generateFallbackContent(headline, category, whyItMatters, dataPoint),
-      });
+      }, { headers: NO_CACHE_HEADERS });
     }
 
     try {
@@ -148,21 +201,22 @@ Return ONLY valid JSON:
           expertTip: content.expertTip || 'Review how this news affects your specific investment holdings.',
           whyThisMattersToYou,
         },
-      });
+      }, { headers: NO_CACHE_HEADERS });
     } catch (parseError) {
       console.error('[Explain API] JSON parse error:', parseError);
       return NextResponse.json({
         ok: true,
         source: 'fallback',
+        provider: res.provider || null,
         content: {
           ...generateFallbackContent(headline, category, whyItMatters, dataPoint),
           whyThisMattersToYou,
         },
-      });
+      }, { headers: NO_CACHE_HEADERS });
     }
   } catch (error) {
     console.error('[Explain API] Error:', error);
-    return NextResponse.json({ error: 'Failed to generate explanation' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate explanation' }, { status: 500, headers: NO_CACHE_HEADERS });
   }
 }
 
