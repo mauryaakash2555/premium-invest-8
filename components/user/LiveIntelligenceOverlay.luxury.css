@@ -47,6 +47,13 @@
   
   /* Animation */
   --li-ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Donut segment colors (used by LiveIntelligenceOverlay donutGradient via CSS vars) */
+  --li-donut-equity: oklch(0.78 0.08 65 / 0.92);
+  --li-donut-debt: oklch(0.95 0.01 85 / 0.72);
+  --li-donut-gold: oklch(0.78 0.06 65 / 0.88);
+  --li-donut-cash: oklch(0.95 0.01 85 / 0.40);
+  --li-donut-empty: oklch(0.78 0.08 65 / 0.14);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
