@@ -1,6 +1,9 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
+import QuickLearn from '@/components/live-intelligence/QuickLearn';
+
+const STORAGE_KEY = 'li_learning_path_v1';
 
 const TOPICS = [
   {
@@ -127,85 +130,212 @@ function TopicIcon({ tag }) {
 }
 
 export default function LearningPathPanel() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [mode, setMode] = useState('daily'); // 'daily' | 'path'
   const [openKey, setOpenKey] = useState('mf');
+  const [completed, setCompleted] = useState({});
+  const [toast, setToast] = useState('');
+
+  useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem(STORAGE_KEY) : null;
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && typeof parsed === 'object') {
+        if (parsed.openKey && typeof parsed.openKey === 'string') setOpenKey(parsed.openKey);
+        if (parsed.completed && typeof parsed.completed === 'object') setCompleted(parsed.completed);
+        if (parsed.mode && (parsed.mode === 'daily' || parsed.mode === 'path')) setMode(parsed.mode);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (typeof window === 'undefined') return;
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ openKey, completed, mode, updatedAt: new Date().toISOString() })
+      );
+    } catch {
+      // ignore
+    }
+  }, [openKey, completed, mode]);
 
   const openTopic = useMemo(() => TOPICS.find((t) => t.key === openKey) || TOPICS[0], [openKey]);
+
+  const completedCount = useMemo(() => {
+    const keys = Object.keys(completed || {});
+    return keys.reduce((acc, k) => acc + (completed?.[k] ? 1 : 0), 0);
+  }, [completed]);
+
+  const level = useMemo(() => {
+    // Simple, kid-friendly progress levels.
+    const n = completedCount;
+    if (n >= 9) return 'Master';
+    if (n >= 6) return 'Pro';
+    if (n >= 3) return 'Rising';
+    if (n >= 1) return 'Starter';
+    return 'Beginner';
+  }, [completedCount]);
 
   const onSelect = useCallback((key) => {
     setOpenKey((prev) => (prev === key ? prev : key));
   }, []);
 
+  const markDone = useCallback(() => {
+    setCompleted((prev) => {
+      const next = { ...(prev || {}) };
+      next[openTopic.key] = true;
+      return next;
+    });
+    setToast(`Achievement unlocked: ${openTopic.tag} • ${openTopic.time}`);
+    window.clearTimeout((window).__li_lp_toast_timer);
+    (window).__li_lp_toast_timer = window.setTimeout(() => setToast(''), 1400);
+  }, [openTopic.key, openTopic.tag, openTopic.time]);
+
   return (
-    <section className="lp-wrap" aria-label="Learning Path">
+    <section className="lp-wrap" aria-label="Premium Learning">
       <div className="lp-header">
         <div className="lp-titleRow">
           <div className="lp-badge">Premium Learning</div>
-          <div className="lp-title">Learning Path</div>
+          <div className="lp-title">Learn in 2 ways</div>
+          <div className="lp-progress">Level: <span>{level}</span> • {completedCount}/{TOPICS.length} completed</div>
         </div>
         <div className="lp-sub">
-          Clean, SEBI-safe explainers • fast, practical, beginner-first
+          Tap one mode. Keep it simple. Education-only.
         </div>
       </div>
 
-      <div className="lp-grid">
-        <div className="lp-list" role="list">
-          {TOPICS.map((t) => {
-            const active = t.key === openKey;
-            return (
-              <button
-                key={t.key}
-                type="button"
-                className="lp-item"
-                data-active={active ? '1' : '0'}
-                onClick={() => onSelect(t.key)}
-              >
-                <div className="lp-itemLeft">
-                  <div className="lp-icon" aria-hidden="true">{TopicIcon({ tag: t.tag })}</div>
-                  <div className="lp-itemText">
-                    <div className="lp-itemLabel">{t.label}</div>
-                    <div className="lp-meta">
-                      <span className="lp-tag">{t.tag}</span>
-                      <span className="lp-dot" aria-hidden="true">•</span>
-                      <span className="lp-time">{t.time}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="lp-chevron" aria-hidden="true">›</div>
-              </button>
-            );
-          })}
-        </div>
+      {!isExpanded ? (
+        <div className="lp-choose">
+          <button
+            type="button"
+            className="lp-modeCard"
+            onClick={() => {
+              setMode('daily');
+              setIsExpanded(true);
+            }}
+          >
+            <div className="lp-modeTop">
+              <div className="lp-modeIcon" aria-hidden="true">⚡</div>
+              <div className="lp-modeName">Daily (30s)</div>
+            </div>
+            <div className="lp-modeDesc">3 micro-lessons. Just press “Got it!”.</div>
+            <div className="lp-modeHint">Best if you’re busy</div>
+          </button>
 
-        <div className="lp-detail" aria-live="polite">
-          <div className="lp-detailTop">
-            <div className="lp-detailBadge">Now Learning</div>
-            <div className="lp-detailTitle">{openTopic.label}</div>
-            <div className="lp-detailHint">3 crisp takeaways (no hype, no promises)</div>
+          <button
+            type="button"
+            className="lp-modeCard"
+            onClick={() => {
+              setMode('path');
+              setIsExpanded(true);
+            }}
+          >
+            <div className="lp-modeTop">
+              <div className="lp-modeIcon" aria-hidden="true">🧠</div>
+              <div className="lp-modeName">Continue Path</div>
+            </div>
+            <div className="lp-modeDesc">Pick a topic → 3 takeaways → mark complete.</div>
+            <div className="lp-modeHint">Unlock levels as you finish</div>
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="lp-tabs">
+            <button
+              type="button"
+              className="lp-tab"
+              data-active={mode === 'daily' ? '1' : '0'}
+              onClick={() => setMode('daily')}
+            >
+              Daily 30s
+            </button>
+            <button
+              type="button"
+              className="lp-tab"
+              data-active={mode === 'path' ? '1' : '0'}
+              onClick={() => setMode('path')}
+            >
+              Continue Path
+            </button>
+            <button type="button" className="lp-close" onClick={() => setIsExpanded(false)}>Hide</button>
           </div>
 
-          <div className="lp-points">
-            {openTopic.points.map((p, idx) => (
-              <div key={idx} className="lp-point">
-                <span className="lp-bullet" aria-hidden="true" />
-                <span className="lp-pointText">{p}</span>
+          {mode === 'daily' ? (
+            <div className="lp-daily">
+              <QuickLearn />
+              <div className="lp-disclaimer">Educational only. Not investment advice.</div>
+            </div>
+          ) : (
+            <div className="lp-grid">
+              <div className="lp-list" role="list">
+                {TOPICS.map((t) => {
+                  const active = t.key === openKey;
+                  const done = !!completed?.[t.key];
+                  return (
+                    <button
+                      key={t.key}
+                      type="button"
+                      className="lp-item"
+                      data-active={active ? '1' : '0'}
+                      data-done={done ? '1' : '0'}
+                      onClick={() => onSelect(t.key)}
+                    >
+                      <div className="lp-itemLeft">
+                        <div className="lp-icon" aria-hidden="true">{TopicIcon({ tag: t.tag })}</div>
+                        <div className="lp-itemText">
+                          <div className="lp-itemLabel">{t.label}</div>
+                          <div className="lp-meta">
+                            <span className="lp-tag">{t.tag}</span>
+                            <span className="lp-dot" aria-hidden="true">•</span>
+                            <span className="lp-time">{t.time}</span>
+                            {done ? <span className="lp-done">Done</span> : null}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="lp-chevron" aria-hidden="true">›</div>
+                    </button>
+                  );
+                })}
               </div>
-            ))}
-          </div>
 
-          <div className="lp-actions">
-            <a className="lp-cta" href="/contact">
-              Talk to an Advisor
-            </a>
-            <a className="lp-ghost" href="/live-intelligence">
-              Open Live Intelligence
-            </a>
-          </div>
+              <div className="lp-detail" aria-live="polite">
+                <div className="lp-detailTop">
+                  <div className="lp-detailBadge">Now Learning</div>
+                  <div className="lp-detailTitle">{openTopic.label}</div>
+                  <div className="lp-detailHint">3 crisp takeaways (no hype, no promises)</div>
+                </div>
 
-          <div className="lp-disclaimer">
-            Educational only. Not investment advice.
-          </div>
-        </div>
-      </div>
+                <div className="lp-points">
+                  {openTopic.points.map((p, idx) => (
+                    <div key={idx} className="lp-point">
+                      <span className="lp-bullet" aria-hidden="true" />
+                      <span className="lp-pointText">{p}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="lp-actions">
+                  {!completed?.[openTopic.key] ? (
+                    <button type="button" className="lp-cta" onClick={markDone}>
+                      Mark Complete
+                    </button>
+                  ) : (
+                    <div className="lp-complete">✅ Completed</div>
+                  )}
+                  <a className="lp-ghost" href="/live-intelligence">Open Live Intelligence</a>
+                </div>
+
+                <div className="lp-disclaimer">Educational only. Not investment advice.</div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {toast ? <div className="lp-toast" role="status">{toast}</div> : null}
 
       <style jsx>{`
         .lp-wrap {
@@ -227,6 +357,20 @@ export default function LearningPathPanel() {
           align-items: center;
           gap: 10px;
           flex-wrap: wrap;
+        }
+
+        .lp-progress {
+          margin-left: auto;
+          font-size: 11px;
+          color: rgba(180, 200, 230, 0.62);
+          display: inline-flex;
+          gap: 6px;
+          align-items: baseline;
+          white-space: nowrap;
+        }
+        .lp-progress span {
+          color: rgba(235, 245, 255, 0.92);
+          font-weight: 800;
         }
 
         .lp-badge {
@@ -257,6 +401,131 @@ export default function LearningPathPanel() {
           display: grid;
           grid-template-columns: 1fr;
         }
+
+        .lp-choose {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+          padding: 14px 16px 16px;
+        }
+
+        .lp-modeCard {
+          text-align: left;
+          border-radius: 16px;
+          border: 1px solid rgba(170, 198, 255, 0.14);
+          background: linear-gradient(135deg, rgba(20, 28, 44, 0.55) 0%, rgba(10, 10, 14, 0.65) 100%);
+          padding: 14px 14px;
+          cursor: pointer;
+          transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        .lp-modeCard:hover {
+          transform: translateY(-1px);
+          border-color: rgba(170, 198, 255, 0.26);
+          box-shadow: 0 20px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(170,198,255,0.08) inset;
+        }
+        .lp-modeTop {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .lp-modeIcon {
+          width: 34px;
+          height: 34px;
+          border-radius: 12px;
+          display: grid;
+          place-items: center;
+          background: rgba(170, 198, 255, 0.08);
+          border: 1px solid rgba(170, 198, 255, 0.16);
+          font-size: 16px;
+        }
+        .lp-modeName {
+          font-size: 14px;
+          font-weight: 850;
+          color: rgba(235, 245, 255, 0.96);
+        }
+        .lp-modeDesc {
+          margin-top: 8px;
+          font-size: 12px;
+          line-height: 1.45;
+          color: rgba(200, 215, 240, 0.62);
+        }
+        .lp-modeHint {
+          margin-top: 10px;
+          font-size: 11px;
+          color: rgba(200, 215, 240, 0.45);
+        }
+
+        .lp-tabs {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 16px 0;
+        }
+        .lp-tab {
+          appearance: none;
+          border: 1px solid rgba(170, 198, 255, 0.12);
+          background: rgba(10,10,12,0.35);
+          color: rgba(235,242,255,0.88);
+          border-radius: 999px;
+          padding: 8px 12px;
+          font-size: 12px;
+          font-weight: 850;
+          cursor: pointer;
+        }
+        .lp-tab[data-active='1'] {
+          border-color: rgba(170, 198, 255, 0.30);
+          background: rgba(170, 198, 255, 0.10);
+        }
+        .lp-close {
+          margin-left: auto;
+          appearance: none;
+          border: 1px solid rgba(255,255,255,0.10);
+          background: rgba(10,10,12,0.35);
+          color: rgba(235,242,255,0.78);
+          border-radius: 999px;
+          padding: 8px 12px;
+          font-size: 12px;
+          cursor: pointer;
+        }
+
+        .lp-daily {
+          padding: 14px 16px 16px;
+        }
+
+        .lp-done {
+          margin-left: 10px;
+          font-size: 11px;
+          color: rgba(100, 255, 150, 0.80);
+          border: 1px solid rgba(100, 255, 150, 0.22);
+          padding: 2px 8px;
+          border-radius: 999px;
+        }
+
+        .lp-complete {
+          font-size: 12px;
+          color: rgba(100, 255, 150, 0.88);
+          font-weight: 900;
+          padding: 10px 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(100, 255, 150, 0.18);
+          background: rgba(100, 255, 150, 0.08);
+        }
+
+        .lp-toast {
+          position: absolute;
+          right: 14px;
+          bottom: 14px;
+          padding: 10px 12px;
+          border-radius: 12px;
+          background: rgba(10,10,12,0.78);
+          border: 1px solid rgba(170,198,255,0.18);
+          color: rgba(235,242,255,0.88);
+          font-size: 12px;
+          font-weight: 850;
+          box-shadow: 0 18px 80px rgba(0,0,0,0.55);
+        }
+
+        .lp-wrap { position: relative; }
 
         .lp-list {
           display: grid;

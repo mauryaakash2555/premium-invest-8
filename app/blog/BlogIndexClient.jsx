@@ -461,10 +461,11 @@ export default function BlogPage() {
                         style={{
                           display: 'inline-block',
                           padding: '4px 12px',
-                          background: 'color-mix(in oklab, var(--lux-accent) 12%, transparent)',
+                          background: 'rgba(0,0,0,0.70)',
+                          border: '1px solid rgba(170,198,255,0.18)',
                           borderRadius: 0,
                           fontSize: '12px',
-                          color: 'var(--lux-accent)',
+                          color: 'rgba(235,242,255,0.86)',
                           marginBottom: '12px',
                         }}
                       >

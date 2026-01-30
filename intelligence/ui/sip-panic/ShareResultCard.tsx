@@ -79,6 +79,15 @@ function downloadDataUrl(filename: string, dataUrl: string) {
   a.remove();
 }
 
+function truncateMiddle(input: string, maxLen: number): string {
+  const s = String(input || '').trim();
+  if (!s) return '';
+  if (s.length <= maxLen) return s;
+  const keepStart = Math.max(8, Math.floor(maxLen * 0.65));
+  const keepEnd = Math.max(6, maxLen - keepStart - 1);
+  return `${s.slice(0, keepStart)}…${s.slice(-keepEnd)}`;
+}
+
 export function ShareResultCard(props: {
   calculatorType: string;
   shareUrl: string;
@@ -112,12 +121,23 @@ export function ShareResultCard(props: {
       }
     })();
 
+    const displayUrl = (() => {
+      try {
+        const u = new URL(shortUrl);
+        // Keep it clean inside the SVG (avoid long query strings).
+        return `${u.host}${u.pathname}`;
+      } catch {
+        return shortUrl;
+      }
+    })();
+
     return {
       cost,
       discipline,
       panic,
       pct,
       shortUrl,
+      displayUrl: truncateMiddle(displayUrl, 62),
     };
   }, [props.behavioralCost, props.disciplinePostTax, props.panicPostTax, props.shareUrl]);
 
@@ -165,10 +185,10 @@ export function ShareResultCard(props: {
         <svg
           ref={svgRef}
           viewBox="0 0 1080 1080"
-          width="1080"
-          height="1080"
+          preserveAspectRatio="xMidYMid meet"
           role="img"
           aria-label="SIP vs Panic share card"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
         >
           <defs>
             <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
@@ -246,7 +266,7 @@ export function ShareResultCard(props: {
             </text>
 
             <text x="28" y="184" fill="rgba(255,255,255,0.55)" fontSize="16" fontFamily="ui-sans-serif, system-ui" fontWeight="500">
-              {`Try it: ${view.shortUrl}`}
+              {`Try it: ${view.displayUrl}`}
             </text>
           </g>
 

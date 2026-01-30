@@ -1425,12 +1425,12 @@ a.bm-cta-gold-flat:focus-visible {
   .coming-next-block:hover,
   a:hover .coming-next-block,
   .coming-next-block:focus-within {
-    border-left-color: color-mix(in oklab, var(--lux-accent) 60%, rgba(255,255,255,0.10)) !important;
-    background: rgba(255, 255, 255, 0.05) !important;
+    border-left-color: color-mix(in oklab, var(--li-accent-strong) 85%, rgba(255,255,255,0.10)) !important;
+    background: rgba(0, 0, 0, 0.72) !important;
     box-shadow:
       0 18px 70px rgba(0, 0, 0, 0.55),
-      inset 0 0 0 1px color-mix(in oklab, var(--lux-accent) 12%, transparent),
-      inset 0 0 34px color-mix(in oklab, var(--lux-accent) 10%, transparent) !important;
+      inset 0 0 0 1px color-mix(in oklab, var(--li-accent) 14%, transparent),
+      inset 0 0 34px color-mix(in oklab, var(--li-accent) 14%, transparent) !important;
     transform: translateY(-2px);
   }
 
@@ -1442,33 +1442,22 @@ a.bm-cta-gold-flat:focus-visible {
   .whatsapp-cta-btn:hover,
   .whatsapp-cta-btn:focus-visible,
   .whatsapp-cta-btn:active {
-    border-color: color-mix(in oklab, var(--lux-accent) 55%, rgba(255,255,255,0.10)) !important;
-    background: color-mix(in oklab, var(--lux-accent) 6%, rgba(255,255,255,0.02)) !important;
+    border-color: color-mix(in oklab, var(--li-accent-strong) 70%, rgba(255,255,255,0.10)) !important;
+    background: rgba(0, 0, 0, 0.72) !important;
     box-shadow:
       0 22px 90px rgba(0, 0, 0, 0.65),
-      0 0 0 1px color-mix(in oklab, var(--lux-accent) 14%, transparent) inset,
-      0 0 30px color-mix(in oklab, var(--lux-accent) 18%, transparent) !important;
+      0 0 0 1px color-mix(in oklab, var(--li-accent) 16%, transparent) inset,
+      0 0 30px color-mix(in oklab, var(--li-accent) 22%, transparent) !important;
     transform: translateY(-1px);
   }
 
-/* Blog: scroll-trigger "hover" (desktop + mobile) */
-/* Blog: Next Read block + WhatsApp CTA - DESKTOP HOVER + SCROLL BOOST */
-/* PERMANENT GLOW - Always visible for "Next Read" and blog WhatsApp CTA */
-@keyframes premiumGoldGlow {
-  0%, 100% { 
-    box-shadow: 0 0 20px color-mix(in oklab, var(--lux-accent) 14%, transparent);
-  }
-  50% { 
-    box-shadow: 0 0 35px color-mix(in oklab, var(--lux-accent) 22%, transparent);
-  }
-}
-
-/* Blog detail: Next Read block - subtle pulse (always visible) */
+/* Blog detail: Next Read block */
 .blog-detail-page .coming-next-block,
 .blog-detail-page a.coming-next-block,
 .blog-detail-page div.coming-next-block {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  animation: premiumGoldGlow 3s ease-in-out infinite !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  box-shadow: 0 18px 70px rgba(0,0,0,0.55) !important;
 }
 
 .blog-detail-page .coming-next-block:hover,
@@ -1477,28 +1466,26 @@ a.bm-cta-gold-flat:focus-visible {
 .blog-detail-page .coming-next-block.is-scroll-boost,
 .blog-detail-page a.coming-next-block.is-scroll-boost,
 .blog-detail-page div.coming-next-block.is-scroll-boost {
-  background: color-mix(in oklab, var(--lux-accent) 8%, rgba(255,255,255,0.03)) !important;
+  background: rgba(0, 0, 0, 0.76) !important;
   box-shadow: 
-    inset 0 0 0 1px color-mix(in oklab, var(--lux-accent) 14%, transparent),
-    inset 0 0 46px color-mix(in oklab, var(--lux-accent) 10%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--li-accent) 16%, transparent),
+    inset 0 0 46px color-mix(in oklab, var(--li-accent) 14%, transparent),
     0 22px 90px rgba(0,0,0,0.68) !important;
   transform: translateY(-4px) scale(1.01) !important;
-  animation: none !important;
 }
 
-/* Blog detail: WhatsApp CTA (ONLY this CTA) - subtle pulse (always visible) */
+/* Blog detail: WhatsApp CTA (ONLY this CTA) */
 .blog-detail-page a.whatsapp-cta-btn {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  animation: premiumGoldGlow 3s ease-in-out infinite !important;
+  background: rgba(0, 0, 0, 0.72) !important;
 }
 
 .blog-detail-page a.whatsapp-cta-btn:hover,
 .blog-detail-page a.whatsapp-cta-btn.is-scroll-boost {
   box-shadow:
     0 22px 90px rgba(0,0,0,0.65),
-    0 0 34px color-mix(in oklab, var(--lux-accent) 22%, transparent) !important;
+    0 0 34px color-mix(in oklab, var(--li-accent) 22%, transparent) !important;
   transform: translateY(-3px) scale(1.02) !important;
-  animation: none !important;
 }
 
 
@@ -1730,21 +1717,21 @@ html {
 
   /* Blog: Coming-next block + WhatsApp CTA (mobile has no hover, so emulate on scroll/touch) */
   .coming-next-block.is-scroll-boost {
-    border-left-color: var(--lux-accent) !important;
-    background: color-mix(in oklab, var(--lux-accent) 8%, rgba(255,255,255,0.03)) !important;
+    border-left-color: var(--li-accent-strong) !important;
+    background: rgba(0,0,0,0.76) !important;
     box-shadow: 
-      inset 0 0 0 1px color-mix(in oklab, var(--lux-accent) 14%, transparent),
-      inset 0 0 46px color-mix(in oklab, var(--lux-accent) 10%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--li-accent) 16%, transparent),
+      inset 0 0 46px color-mix(in oklab, var(--li-accent) 14%, transparent),
       0 18px 70px rgba(0,0,0,0.60) !important;
     transform: translateY(-2px);
   }
 
   .whatsapp-cta-btn.is-scroll-boost {
-    border-color: var(--lux-accent) !important;
-    background: color-mix(in oklab, var(--lux-accent) 10%, rgba(255,255,255,0.03)) !important;
+    border-color: var(--li-accent-strong) !important;
+    background: rgba(0,0,0,0.76) !important;
     box-shadow:
       0 22px 90px rgba(0,0,0,0.65),
-      0 0 36px color-mix(in oklab, var(--lux-accent) 22%, transparent) !important;
+      0 0 36px color-mix(in oklab, var(--li-accent) 22%, transparent) !important;
     transform: translateY(-3px) scale(1.02);
   }
 

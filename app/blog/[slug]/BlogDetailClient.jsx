@@ -630,8 +630,9 @@ export default function BlogDetailClient({ slug }) {
         {post.category && (
           <div style={{
             display: 'inline-block',
-            backgroundColor: 'color-mix(in oklab, var(--lux-accent) 14%, transparent)',
-            color: 'var(--lux-accent)',
+            backgroundColor: 'rgba(0,0,0,0.72)',
+            border: '1px solid rgba(170,198,255,0.18)',
+            color: 'rgba(235,242,255,0.86)',
             padding: '6px 12px',
             borderRadius: 0,
             fontSize: '12px',

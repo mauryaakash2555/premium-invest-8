@@ -19,7 +19,8 @@ import { dedupeHeadlines, enrichHeadline } from '@/lib/live-intelligence/intelli
 const ALLOW_CURATED_FALLBACK = false;
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// Prefer service role for server-side reads; fall back to anon key for read-only queries.
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 function getSupabase() {
   if (!supabaseUrl || !supabaseKey) {

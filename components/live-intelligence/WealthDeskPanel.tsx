@@ -32,7 +32,7 @@ export default function WealthDeskPanel(props: { style?: CSSProperties }) {
         padding: '16px',
         borderRadius: '12px',
         background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(212,175,55,0.14)',
+        border: '1px solid rgba(170,198,255,0.16)',
         ...props.style,
       }}
       aria-label="Wealth desk"
@@ -52,9 +52,9 @@ export default function WealthDeskPanel(props: { style?: CSSProperties }) {
         <div style={{
           padding: '6px 10px',
           borderRadius: 10,
-          background: 'rgba(10,10,12,0.50)',
-          border: '1px solid rgba(212,175,55,0.22)',
-          color: 'rgba(212,175,55,0.85)',
+          background: 'rgba(10,10,12,0.55)',
+          border: '1px solid rgba(170,198,255,0.22)',
+          color: 'rgba(235,242,255,0.86)',
           fontSize: 11,
           fontWeight: 900,
         }}>
@@ -138,7 +138,7 @@ export default function WealthDeskPanel(props: { style?: CSSProperties }) {
             padding: '9px 12px',
             borderRadius: 12,
             background: 'rgba(10,10,12,0.55)',
-            border: '1px solid rgba(212,175,55,0.14)',
+            border: '1px solid rgba(170,198,255,0.16)',
             color: 'rgba(235,242,255,0.88)',
             fontSize: 12,
             fontWeight: 900,

@@ -90,8 +90,8 @@ export default function ClientIdentityPanel(props: { style?: CSSProperties }) {
       style={{
         padding: '16px',
         borderRadius: '12px',
-        background: 'linear-gradient(135deg, rgba(212,175,55,0.10) 0%, rgba(120,190,255,0.06) 100%)',
-        border: '1px solid rgba(212,175,55,0.18)',
+        background: 'linear-gradient(135deg, rgba(30, 60, 120, 0.16) 0%, rgba(10,10,12,0.66) 100%)',
+        border: '1px solid rgba(170,198,255,0.18)',
         boxShadow: '0 14px 36px rgba(0,0,0,0.28)',
         ...props.style,
       }}
@@ -121,8 +121,8 @@ export default function ClientIdentityPanel(props: { style?: CSSProperties }) {
               padding: '6px 10px',
               borderRadius: 10,
               background: 'rgba(10,10,12,0.50)',
-              border: '1px solid rgba(212,175,55,0.22)',
-              color: 'rgba(212,175,55,0.95)',
+              border: '1px solid rgba(170,198,255,0.22)',
+              color: 'rgba(235,242,255,0.90)',
               fontSize: 11,
               fontWeight: 950,
               letterSpacing: '0.08em',
