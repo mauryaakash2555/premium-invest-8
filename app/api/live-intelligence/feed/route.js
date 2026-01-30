@@ -765,6 +765,47 @@ export async function GET(request) {
   } catch (error) {
     console.error('Live Intelligence feed error:', error);
 
+    // Strict mode: never invent data. If the DB/feed handler fails, fall back to LIVE RSS (real sources).
+    try {
+      const { searchParams } = request?.nextUrl || { searchParams: new URLSearchParams() };
+      const noCache = searchParams.get('nocache') === '1';
+      const category = searchParams.get('category') || 'all';
+      const requested = parseInt(searchParams.get('limit') || String(MAX_ROTATION_HEADLINES), 10);
+      const requestedLimit = Number.isFinite(requested) ? requested : MAX_ROTATION_HEADLINES;
+
+      const mode = getCurrentMode();
+      const modeKey = mode?.key || 'globalwatch';
+      const hardMax = modeKey === 'globalwatch' ? GLOBAL_WATCH_MAX : MAX_ROTATION_HEADLINES;
+      const limit = Math.min(Math.max(1, requestedLimit), hardMax);
+
+      const rssHeadlines = await fetchRssFallbackHeadlines({
+        request,
+        limit,
+        categorySpecKey: category,
+        modeKey,
+        noCache,
+      });
+
+      if (rssHeadlines.length > 0) {
+        return NextResponse.json(
+          {
+            ok: true,
+            headlines: rssHeadlines,
+            source: 'rss_error_fallback',
+            count: rssHeadlines.length,
+            mode,
+            stats: {
+              warning: 'Primary feed handler failed; serving live RSS headlines.',
+            },
+            error: null,
+          },
+          { status: 200, headers: NO_CACHE_HEADERS }
+        );
+      }
+    } catch (fallbackError) {
+      console.error('Live Intelligence RSS fallback error:', fallbackError);
+    }
+
     const mode = getCurrentMode();
     return NextResponse.json(
       {

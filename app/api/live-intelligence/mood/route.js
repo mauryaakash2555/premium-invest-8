@@ -55,6 +55,14 @@ function hasUsableMarketData(marketData) {
   return items.some((x) => x?.live === true && x?.value !== '---' && x?.value != null);
 }
 
+function buildFallbackMood(reason) {
+  return {
+    mood_text: 'Markets steady. Live data temporarily unavailable.',
+    mood_type: 'neutral',
+    reason,
+  };
+}
+
 function pickMarketItem(items, predicates) {
   for (const pred of predicates) {
     const found = items.find((x) => {
@@ -83,7 +91,7 @@ function trendWord(changePct) {
 }
 
 function generateMoodRuleBased(marketData) {
-  if (!hasUsableMarketData(marketData)) throw new Error('Market data unavailable');
+  if (!hasUsableMarketData(marketData)) return buildFallbackMood('Market data unavailable');
 
   const items = Array.isArray(marketData?.items) ? marketData.items : [];
 
@@ -130,7 +138,7 @@ async function generateMoodWithGemini(marketData) {
   if (!geminiApiKey) {
     return generateMoodRuleBased(marketData);
   }
-  if (!hasUsableMarketData(marketData)) throw new Error('Market data unavailable');
+  if (!hasUsableMarketData(marketData)) return buildFallbackMood('Market data unavailable');
 
   try {
     const items = Array.isArray(marketData?.items) ? marketData.items : [];

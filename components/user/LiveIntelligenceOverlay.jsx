@@ -24,7 +24,6 @@ import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
-import QuickLearn from '@/components/live-intelligence/QuickLearn';
 import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
@@ -2827,11 +2826,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
           <div style={{ gridColumn: '1 / -1' }}>
             <HeadlineFeed />
-          </div>
-
-          {/* QuickLearn - 30 second daily micro-lessons */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <QuickLearn />
           </div>
 
           {/* Learning Path - premium explainers */}

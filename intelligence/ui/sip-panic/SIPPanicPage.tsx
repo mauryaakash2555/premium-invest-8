@@ -978,7 +978,7 @@ export default function SIPPanicPage(props?: {
       <main className="sip-panic-readable px-4 sm:px-6 lg:px-10 py-10 lg:py-14">
         {!embed ? <BackRow /> : null}
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <header className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[11px] text-white/95">
               <span className="gold-gradient-text font-semibold">{t("page.badgeTitle")}</span>
@@ -1156,7 +1156,7 @@ export default function SIPPanicPage(props?: {
 
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Left: Inputs */}
-          <div className="lg:col-span-3 space-y-4" id="sip-panic-inputs">
+          <div className="lg:col-span-4 xl:col-span-3 space-y-4" id="sip-panic-inputs">
             <div
               onPointerDown={() => {
                 if (hasTrackedStart.current) return;
@@ -1387,7 +1387,7 @@ export default function SIPPanicPage(props?: {
           </div>
 
           {/* Center: Charts */}
-          <div className="lg:col-span-6 space-y-4">
+          <div className="lg:col-span-8 xl:col-span-6 space-y-4">
             <TimelineChart
               data={chartData}
               show={{
@@ -1439,7 +1439,7 @@ export default function SIPPanicPage(props?: {
           </div>
 
           {/* Right: Consequence */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="lg:col-span-12 xl:col-span-3 space-y-4">
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <h2 className="text-base font-semibold gold-gradient-text">Based on your profile</h2>
               <p className="mt-1 text-xs text-white/75">Rule-based guidance (education-only). Simulation math stays deterministic.</p>
