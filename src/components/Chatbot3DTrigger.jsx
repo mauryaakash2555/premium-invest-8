@@ -279,8 +279,9 @@ export default function Chatbot3DTrigger({
   const containerStyle = useMemo(
     () => ({
       position: 'fixed',
-      bottom: isMobileFloat ? 'calc(80px + env(safe-area-inset-bottom))' : '50px',
-      right: isMobileFloat ? 'calc(10px + env(safe-area-inset-right))' : '50px',
+      // Mobile: sit at the screen edge, but keep clear of the luxury bottom dock.
+      bottom: isMobileFloat ? 'calc(72px + env(safe-area-inset-bottom))' : '50px',
+      right: isMobileFloat ? 'calc(2px + env(safe-area-inset-right))' : '50px',
       width: `${resolvedSizePx}px`,
       height: `${resolvedSizePx}px`,
       background: 'transparent',
