@@ -2,8 +2,8 @@ import PillarIndexClient from "../PillarIndexClient";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Public Impact | BM Wealth",
-  description: "Civic issues, community stories, and public outcomes.",
+  title: "Community Impact | BM Wealth",
+  description: "Stories and outcomes that improve everyday financial life.",
   path: "/blog/impact",
 });
 

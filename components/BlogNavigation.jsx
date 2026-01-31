@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const pillars = [
   { name: 'BM Editorial', slug: 'editorial' },
-  { name: 'Public Impact', slug: 'impact' },
+  { name: 'Community Impact', slug: 'impact' },
   { name: 'Guest Columns', slug: 'guest' },
   { name: 'Dev Writes', slug: 'dev' },
 ];

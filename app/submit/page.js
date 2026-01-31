@@ -105,14 +105,14 @@ export default function SubmitPage() {
           Submit Your Story
         </h1>
         <p style={{ color: 'rgba(235,242,255,0.86)', marginBottom: '26px', lineHeight: 1.7 }}>
-          Share a thoughtful public-impact story or guest column. Dev will review and publish the best submissions.
+          Share a thoughtful community-impact story or guest column. Dev will review and publish the best submissions.
         </p>
 
         <form onSubmit={onSubmit} style={{ display: 'grid', gap: '14px' }}>
           <div>
             <label style={{ color: '#9ca3af', fontSize: '13px' }}>Pillar</label>
             <select value={form.pillar} onChange={onChange('pillar')} style={inputStyle}>
-              <option value="IMPACT">Public Impact</option>
+              <option value="IMPACT">Community Impact</option>
               <option value="GUEST">Guest Columns</option>
             </select>
           </div>
