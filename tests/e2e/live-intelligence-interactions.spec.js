@@ -111,4 +111,33 @@ test.describe('Live Intelligence UX', () => {
     await expect(page.getByText('Premium Learning', { exact: false })).toBeVisible();
     await expect(page.getByText('Learn in 2 ways', { exact: false })).toBeVisible();
   });
+
+  test('direct /live-intelligence renders without client exception', async ({ page }) => {
+    await page.route('**/api/live-intelligence/mood*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockMood()),
+      });
+    });
+
+    await page.route('**/api/live-intelligence/feed*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockFeed()),
+      });
+    });
+
+    await page.goto('/live-intelligence', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(800);
+
+    // Common Next/Vercel crash banner copy
+    await expect(page.getByText('Application error', { exact: false })).toHaveCount(0);
+
+    const headlineFeed = page.locator('[data-headline-feed]');
+    await expect(headlineFeed).toBeVisible({ timeout: 20000 });
+
+    await expect(page.getByText('Premium Learning', { exact: false })).toBeVisible();
+  });
 });
