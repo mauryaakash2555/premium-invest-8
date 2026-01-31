@@ -163,28 +163,41 @@ const CTA_BUTTONS = {
 const savedHeadlines = {
   save: (headline) => {
     if (typeof localStorage === 'undefined') return;
-    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+    const savedRaw = localStorage.getItem('li_saved_headlines') || '[]';
+    const saved = Array.isArray(safeJsonParse(savedRaw, [])) ? safeJsonParse(savedRaw, []) : [];
     // Store headline with timestamp
     const entry = { ...headline, savedAt: new Date().toISOString() };
     if (!saved.find(h => h.id === headline.id)) {
       saved.unshift(entry);
-      localStorage.setItem('li_saved_headlines', JSON.stringify(saved.slice(0, 50))); // Max 50
+      try {
+        localStorage.setItem('li_saved_headlines', JSON.stringify(saved.slice(0, 50))); // Max 50
+      } catch {
+        // ignore write errors
+      }
     }
   },
   unsave: (headlineId) => {
     if (typeof localStorage === 'undefined') return;
-    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
-    const filtered = saved.filter(h => h.id !== headlineId);
-    localStorage.setItem('li_saved_headlines', JSON.stringify(filtered));
+    const savedRaw = localStorage.getItem('li_saved_headlines') || '[]';
+    const saved = Array.isArray(safeJsonParse(savedRaw, [])) ? safeJsonParse(savedRaw, []) : [];
+    const filtered = saved.filter(h => h && h.id !== headlineId);
+    try {
+      localStorage.setItem('li_saved_headlines', JSON.stringify(filtered));
+    } catch {
+      // ignore
+    }
   },
   isSaved: (headlineId) => {
     if (typeof localStorage === 'undefined') return false;
-    const saved = JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
-    return saved.some(h => h.id === headlineId);
+    const savedRaw = localStorage.getItem('li_saved_headlines') || '[]';
+    const saved = Array.isArray(safeJsonParse(savedRaw, [])) ? safeJsonParse(savedRaw, []) : [];
+    return saved.some(h => h && h.id === headlineId);
   },
   getAll: () => {
     if (typeof localStorage === 'undefined') return [];
-    return JSON.parse(localStorage.getItem('li_saved_headlines') || '[]');
+    const savedRaw = localStorage.getItem('li_saved_headlines') || '[]';
+    const saved = safeJsonParse(savedRaw, []);
+    return Array.isArray(saved) ? saved : [];
   },
 };
 
