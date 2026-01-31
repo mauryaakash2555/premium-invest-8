@@ -31,7 +31,7 @@ export function RegretCalculator(props: { monthlyAmount: number }) {
 
   return (
     <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-      <h2 className="text-base font-semibold gold-gradient-text">If You Had Started Earlier…</h2>
+      <h2 className="text-base font-semibold gold-gradient-text-static">If You Had Started Earlier…</h2>
       <p className="mt-2 text-xs text-white/70">
         Education-only urgency lens. Assumes a steady 12% annual market return and ignores taxes.
       </p>

@@ -79,7 +79,7 @@ export function SIPInputForm(props: {
     <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
       <div className="flex flex-col gap-4">
         <div>
-          <h2 className="text-base font-semibold gold-gradient-text">Inputs</h2>
+          <h2 className="text-base font-semibold gold-gradient-text-static">Inputs</h2>
           <p className="mt-1 text-sm text-white/85">
             ⚡ <span className="font-semibold text-white/90">Live Preview</span>: Results update as you adjust inputs.
             <br />

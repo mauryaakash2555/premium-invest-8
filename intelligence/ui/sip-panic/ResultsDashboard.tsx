@@ -556,7 +556,7 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
     <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold gold-gradient-text">Results</h2>
+          <h2 className="text-base font-semibold gold-gradient-text-static">Results</h2>
           <p className="mt-1 text-sm text-white/85">Final after-tax amount, annual return, and the cost of panic.</p>
         </div>
 

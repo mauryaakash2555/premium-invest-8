@@ -1,4 +1,4 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildMetadata, getMetadataBase } from "@/lib/seo/metadata";
 import SIPPanicPage from "@/intelligence/ui/sip-panic/SIPPanicPage";
 import Link from "next/link";
 import CrisisModeBanner from "@/components/intelligence/CrisisModeBanner";
@@ -111,19 +111,21 @@ export default function SIPPanicRoutePage() {
     },
   ];
 
+  const origin = getMetadataBase().origin;
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "SIP vs Panic Selling",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web",
-    url: `https://bmwealth.co.in${PATH}`,
+    url: `${origin}${PATH}`,
     description:
       "An education-only simulator showing the post-tax behavioral cost of stopping a SIP during market drawdowns.",
     publisher: {
       "@type": "Organization",
       name: "BM Wealth",
-      url: "https://bmwealth.co.in",
+      url: origin,
     },
   };
 

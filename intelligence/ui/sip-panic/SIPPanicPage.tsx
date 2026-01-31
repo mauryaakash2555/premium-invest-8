@@ -22,7 +22,6 @@ import { SocialProofBanner } from "./SocialProofBanner";
 import { RegretCalculator } from "./RegretCalculator";
 import { QuizModal } from "./QuizModal";
 import { MissedRecoveryAnimation } from "./MissedRecoveryAnimation";
-import { downloadPremiumReport } from "./premiumReport";
 import { ComplianceBanner } from "./ComplianceBanner";
 import { TaxCalculationMode, type TaxCalculationModeKey } from "./TaxCalculationMode";
 import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
@@ -1054,7 +1053,7 @@ export default function SIPPanicPage(props?: {
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold gold-gradient-text">{t("quiz.cardTitle")}</h2>
+              <h2 className="text-base font-semibold gold-gradient-text-static">{t("quiz.cardTitle")}</h2>
               <p className="mt-1 text-xs text-white/90">{t("quiz.cardSubtitle")}</p>
               <div className="mt-3 text-[11px] text-white/70">
                 ✓ Personalized insights · ✓ Compare your profile · ✓ Apply a recommended scenario
@@ -1098,7 +1097,7 @@ export default function SIPPanicPage(props?: {
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold gold-gradient-text">{t("crash.title")}</h2>
+              <h2 className="text-base font-semibold gold-gradient-text-static">{t("crash.title")}</h2>
               <p className="mt-1 text-xs text-white/75">{t("crash.subtitle")}</p>
             </div>
             <LearningBubble title="How it works" disabled={learningBubblesDisabled} onDisableChange={disableLearningBubbles}>
@@ -1179,7 +1178,7 @@ export default function SIPPanicPage(props?: {
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-semibold gold-gradient-text">{t("risk.title")}</h2>
+                  <h2 className="text-base font-semibold gold-gradient-text-static">{t("risk.title")}</h2>
                   <p className="mt-1 text-xs text-white/75">{t("risk.subtitle")}</p>
                 </div>
                 <LearningBubble
@@ -1221,7 +1220,7 @@ export default function SIPPanicPage(props?: {
 
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <div>
-                <h2 className="text-base font-semibold gold-gradient-text">What are you investing in?</h2>
+                <h2 className="text-base font-semibold gold-gradient-text-static">What are you investing in?</h2>
                 <p className="mt-1 text-xs text-white/75">Used for education-only tax defaults (MF vs direct stocks).</p>
               </div>
 
@@ -1263,7 +1262,7 @@ export default function SIPPanicPage(props?: {
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-semibold gold-gradient-text">Tax profile (education-only)</h2>
+                  <h2 className="text-base font-semibold gold-gradient-text-static">Tax profile (education-only)</h2>
                   <p className="mt-1 text-xs text-white/75">Applies 4% cess and a simple surcharge assumption on gains tax.</p>
                 </div>
                 <LearningBubble
@@ -1336,7 +1335,7 @@ export default function SIPPanicPage(props?: {
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-semibold gold-gradient-text">Panic point (slider)</h2>
+                  <h2 className="text-base font-semibold gold-gradient-text-static">Panic point (slider)</h2>
                   <p className="mt-1 text-xs text-white/75">Set the drawdown where you’d likely stop SIP (enables Custom Behavior).</p>
                 </div>
                 <LearningBubble
@@ -1387,7 +1386,7 @@ export default function SIPPanicPage(props?: {
           </div>
 
           {/* Center: Charts */}
-          <div className="lg:col-span-8 2xl:col-span-6 space-y-4 min-w-0">
+          <div className="lg:col-span-8 2xl:col-span-5 space-y-4 min-w-0">
             <TimelineChart
               data={chartData}
               show={{
@@ -1439,9 +1438,9 @@ export default function SIPPanicPage(props?: {
           </div>
 
           {/* Right: Consequence */}
-          <div className="lg:col-span-12 2xl:col-span-3 space-y-4 min-w-0">
+          <div className="lg:col-span-12 2xl:col-span-4 space-y-4 min-w-0">
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-              <h2 className="text-base font-semibold gold-gradient-text">Based on your profile</h2>
+              <h2 className="text-base font-semibold gold-gradient-text-static">Based on your profile</h2>
               <p className="mt-1 text-xs text-white/75">Rule-based guidance (education-only). Simulation math stays deterministic.</p>
 
               {(() => {
@@ -1556,7 +1555,7 @@ export default function SIPPanicPage(props?: {
             </div>
 
             <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-              <h2 className="text-base font-semibold gold-gradient-text">Your Consequence Summary</h2>
+              <h2 className="text-base font-semibold gold-gradient-text-static">Your Consequence Summary</h2>
               <p className="mt-1 text-xs text-white/75">The cost of fear vs staying disciplined (after tax).</p>
 
               <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
@@ -1640,7 +1639,7 @@ export default function SIPPanicPage(props?: {
 
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={async () => {
                     try {
                       const disciplineRow = results.find((r) => r.scenario.behaviorType === "discipline") ?? null;
                       const worstRow = results
@@ -1662,16 +1661,22 @@ export default function SIPPanicPage(props?: {
                       // ignore
                     }
 
-                    void downloadPremiumReport({
-                      results,
-                      monthlyAmount: inputs.monthlyAmount,
-                      durationYears: inputs.durationYears,
-                      riskComfort,
-                      taxProfile: getTaxProfileLabel(taxProfile),
-                      taxCalcMode: taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle"),
-                      marketAssumptionTitle: marketAssumptions.title,
-                      chartSvgId: "sip-panic-wealth-chart",
-                    });
+                    try {
+                      const mod = await import("./premiumReport");
+                      await mod.downloadPremiumReport({
+                        results,
+                        monthlyAmount: inputs.monthlyAmount,
+                        durationYears: inputs.durationYears,
+                        riskComfort,
+                        taxProfile: getTaxProfileLabel(taxProfile),
+                        taxCalcMode:
+                          taxCalcMode === "optimized_ltcg_indexation_20" ? t("taxMode.optimizedTitle") : t("taxMode.conservativeTitle"),
+                        marketAssumptionTitle: marketAssumptions.title,
+                        chartSvgId: "sip-panic-wealth-chart",
+                      });
+                    } catch {
+                      // ignore
+                    }
                   }}
                   className="min-h-11 w-full touch-manipulation rounded-xl border border-white/10 bg-black/25 px-4 py-2 text-sm text-white/85 hover:border-white/15"
                 >
@@ -1690,19 +1695,19 @@ export default function SIPPanicPage(props?: {
                 </button>
               </div>
 
-              <div className="mt-4 rounded-xl border border-white/10 bg-black/15 px-3 py-3">
-                <div className="text-[11px] text-white/60">Market assumption used</div>
-                <div className="mt-1 text-xs text-white/75 font-semibold">{marketAssumptions.title}</div>
-                <ul className="mt-2 text-[11px] text-white/65 space-y-1">
+              <div className="mt-4 rounded-xl border border-white/10 bg-black/15 px-4 py-4">
+                <div className="text-xs text-white/60">Market assumption used</div>
+                <div className="mt-1 text-sm text-white/80 font-semibold leading-snug">{marketAssumptions.title}</div>
+                <ul className="mt-3 text-xs text-white/70 space-y-1.5 leading-relaxed">
                   {marketAssumptions.lines.map((line) => (
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
-                <p className="mt-2 text-[11px] text-white/60">{marketAssumptions.note}</p>
+                <p className="mt-3 text-xs text-white/60 leading-relaxed">{marketAssumptions.note}</p>
 
                 <div className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
-                  <div className="text-[11px] font-semibold text-white/80">India context (education-only)</div>
-                  <ul className="mt-2 text-[11px] text-white/65 space-y-1">
+                  <div className="text-xs font-semibold text-white/85">India context (education-only)</div>
+                  <ul className="mt-2 text-xs text-white/70 space-y-1.5 leading-relaxed">
                     <li>Market-return intuition: Nifty-style long-term averages often quoted ~14–15% annual (not guaranteed).</li>
                     <li>Crash references: 2008 (≈−60%), 2020 (≈−40%), 2022 (≈−18%) used as illustration presets.</li>
                     <li>Rupee-cost averaging: in drawdowns you buy more units, lowering average cost over time.</li>
@@ -1710,8 +1715,8 @@ export default function SIPPanicPage(props?: {
                 </div>
 
                 <div className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
-                  <div className="text-[11px] font-semibold text-white/80">Assumptions & limitations (education-only)</div>
-                  <ul className="mt-2 text-[11px] text-white/65 space-y-1">
+                  <div className="text-xs font-semibold text-white/85">Assumptions & limitations (education-only)</div>
+                  <ul className="mt-2 text-xs text-white/70 space-y-1.5 leading-relaxed">
                     <li>It’s a simplified simulation and uses deterministic crash-style paths (not real historical data).</li>
                     <li>Crash patterns may not repeat; results are not forecasts.</li>
                     <li>Tax calculations are approximate and depend on your actual holding periods and rules.</li>
@@ -1730,7 +1735,7 @@ export default function SIPPanicPage(props?: {
         <div className="mt-6 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold gold-gradient-text">Compare across crashes</h2>
+              <h2 className="text-base font-semibold gold-gradient-text-static">Compare across crashes</h2>
               <p className="mt-1 text-xs text-white/75">Same inputs + behavior, different crash paths (education-only).</p>
             </div>
           </div>
@@ -1831,7 +1836,7 @@ export default function SIPPanicPage(props?: {
 
         {faqs.length ? (
           <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-            <h2 className="text-base font-semibold gold-gradient-text">Frequently asked questions</h2>
+            <h2 className="text-base font-semibold gold-gradient-text-static">Frequently asked questions</h2>
             <div className="mt-4 space-y-2">
               {faqs.map((f) => (
                 <details key={f.q} className="rounded-xl border border-white/10 bg-black/20 px-4 py-3">
@@ -1849,7 +1854,7 @@ export default function SIPPanicPage(props?: {
 
         {!hideDisclaimer ? (
         <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass p-5">
-          <h2 className="text-base font-semibold gold-gradient-text">Important Disclaimer</h2>
+          <h2 className="text-base font-semibold gold-gradient-text-static">Important Disclaimer</h2>
 
           <p className="mt-2 text-xs text-white/70">
             This simulator is for educational and informational purposes only. It uses a deterministic market path and simplified tax modeling.

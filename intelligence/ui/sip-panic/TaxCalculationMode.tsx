@@ -15,7 +15,7 @@ export function TaxCalculationMode(props: {
   return (
     <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
       <div>
-        <h2 className="text-base font-semibold gold-gradient-text">{t("taxMode.title")}</h2>
+        <h2 className="text-base font-semibold gold-gradient-text-static">{t("taxMode.title")}</h2>
         <p className="mt-1 text-xs text-white/75">{t("taxMode.subtitle")}</p>
       </div>
 

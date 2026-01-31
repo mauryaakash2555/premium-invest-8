@@ -9,15 +9,15 @@ export function middleware(request) {
   const normalizedHost = hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
 
   // Canonicalize domain/protocol to avoid duplicate indexation (www vs non-www, http vs https).
-  // Preferred host: bmwealth.co.in (non-www). Store host is handled separately.
+  // Preferred host: www.bmwealth.co.in. Store host is handled separately.
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
   const isMainProdHost = hostNoPort === 'bmwealth.co.in' || hostNoPort === 'www.bmwealth.co.in';
   const proto = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
   const canonicalUrl = url.clone();
   let shouldRedirect = false;
 
-  if (!isStoreHost && hostNoPort === 'www.bmwealth.co.in') {
-    canonicalUrl.hostname = 'bmwealth.co.in';
+  if (!isStoreHost && hostNoPort === 'bmwealth.co.in') {
+    canonicalUrl.hostname = 'www.bmwealth.co.in';
     shouldRedirect = true;
   }
 

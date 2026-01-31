@@ -558,7 +558,7 @@ export function TimelineChart(props: {
     >
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
         <div>
-          <h2 className="gold-gradient-text font-[var(--font-playfair)] text-[22px] sm:text-[28px] font-semibold tracking-[-0.02em]">
+          <h2 className="gold-gradient-text-static font-[var(--font-playfair)] text-[22px] sm:text-[28px] font-semibold tracking-[-0.02em]">
             {title ?? "SIP vs Panic Selling"}
           </h2>
           <div className="mt-1 wealth-chart-subtitle">{subtitle ?? "Discipline vs panic — after-tax corpus timeline"}</div>

@@ -28,7 +28,7 @@ export function BehavioralQuiz(props: {
 
   return (
     <div className={`rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5 ${className ?? ""}`}>
-      <h2 className="text-base font-semibold gold-gradient-text">{t("quiz.title")}</h2>
+      <h2 className="text-base font-semibold gold-gradient-text-static">{t("quiz.title")}</h2>
       <p className="mt-2 text-xs text-white/70">{t("quiz.subtitle")}</p>
 
       <div className="mt-4 space-y-4">

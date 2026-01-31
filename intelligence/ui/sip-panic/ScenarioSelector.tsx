@@ -136,7 +136,7 @@ export function ScenarioSelector(props: {
 
   return (
     <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-      <h2 className="text-base font-semibold gold-gradient-text">{t("scenario.title")}</h2>
+      <h2 className="text-base font-semibold gold-gradient-text-static">{t("scenario.title")}</h2>
       <p className="mt-1 text-sm text-white/85">{t("scenario.subtitle")}</p>
 
       <div className="mt-5 space-y-4">

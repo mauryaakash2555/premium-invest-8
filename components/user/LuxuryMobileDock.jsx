@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 
 const mainNavItems = [
   { label: "Home", icon: <Home className="w-5 h-5" strokeWidth={1} />, href: "/" },
-  { label: "Services", icon: <Briefcase className="w-5 h-5" strokeWidth={1} />, href: "/services" },
+  { label: "About Us", icon: <Info className="w-5 h-5" strokeWidth={1} />, href: "/about-us" },
   { label: "Partners", icon: <Users className="w-5 h-5" strokeWidth={1} />, href: "/partners" },
   { label: "Tools", icon: <Layers className="w-5 h-5" strokeWidth={1} />, href: "/tools" },
 ];

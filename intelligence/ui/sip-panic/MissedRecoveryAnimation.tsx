@@ -138,7 +138,7 @@ export function MissedRecoveryAnimation(props: {
 
   return (
     <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-      <h2 className="text-base font-semibold gold-gradient-text">What You Missed By Panicking</h2>
+      <h2 className="text-base font-semibold gold-gradient-text-static">What You Missed By Panicking</h2>
       <p className="mt-2 text-xs text-white/70">A month-by-month highlight of the recovery window after your panic trigger.</p>
 
       <div className="mt-4 grid grid-cols-1 gap-2">

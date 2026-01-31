@@ -115,7 +115,7 @@ export function DrawdownPainChart(props: {
     <section className="wealth-chart-container gold-grain-texture p-6 sm:p-10">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-sm font-semibold gold-gradient-text">{title ?? "Drawdown Pain (Market)"}</h3>
+          <h3 className="text-sm font-semibold gold-gradient-text-static">{title ?? "Drawdown Pain (Market)"}</h3>
           <p className="mt-1 text-xs text-white/70">
             {subtitle ?? "How deep the market goes below its previous peak during the journey."}
           </p>

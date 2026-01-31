@@ -483,6 +483,22 @@ a.bm-cta-gold-flat:focus-visible {
     animation: gold-shine 4s linear infinite;
   }
 
+  .gold-gradient-text-static {
+    background: linear-gradient(
+      135deg,
+      var(--lux-accent) 0%,
+      color-mix(in oklab, var(--lux-accent) 55%, white 45%) 25%,
+      color-mix(in oklab, var(--lux-accent) 30%, white 70%) 50%,
+      color-mix(in oklab, var(--lux-accent) 55%, white 45%) 75%,
+      var(--lux-accent) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: none;
+  }
+
   /* Navigation logo text glow */
   .nav-logo-text {
     filter: drop-shadow(0 0 10px color-mix(in oklab, var(--lux-accent) 40%, transparent));
