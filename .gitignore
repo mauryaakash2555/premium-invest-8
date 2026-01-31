@@ -89,6 +89,12 @@ test-results/
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
 
+# Local helper scripts (do not auto-commit)
+.tools/diag-package-json.ps1
+.tools/push-staging-only.ps1
+.tools/qa-canonical-local.ps1
+.tools/restore-package-json.ps1
+
 # ITR local storage (user session data - never commit)
 .itr_store/
 

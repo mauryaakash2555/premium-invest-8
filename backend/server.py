@@ -14,6 +14,24 @@ import asyncio
 import base64
 import io
 
+
+def _safe_object_id(id_str: str):
+    try:
+        from bson import ObjectId  # type: ignore
+
+        return ObjectId(str(id_str))
+    except Exception:
+        return None
+
+
+def _light_flags(text: str):
+    # Keep this lightweight and dependency-free.
+    sample = (text or "")[:512]
+    return {
+        "sentiment": {"label": "NEUTRAL", "score": 0.0, "sampleChars": len(sample)},
+        "toxicity": {"label": "SAFE", "score": 0.0, "sampleChars": len(sample)},
+    }
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -147,6 +165,28 @@ class BlogPostCreate(BaseModel):
     author: str
     category: str
     image_url: Optional[str] = None
+
+
+class PostSubmit(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    title: str
+    content_original: str
+    pillar: str  # IMPACT | GUEST | DEV
+    author_name: str
+    author_email: Optional[str] = None
+    author_linkedin: Optional[str] = None
+    location_tag: Optional[str] = None
+    visual_seed: Optional[str] = None
+    image_url: Optional[str] = None
+
+
+class PostApprove(BaseModel):
+    content_enhanced: str
+
+
+class PostReject(BaseModel):
+    reason: Optional[str] = None
 
 
 # Routes
@@ -313,6 +353,95 @@ async def get_blog_post_by_slug(slug: str):
         post["published_date"] = datetime.fromisoformat(post["published_date"])
 
     return post
+
+
+@api_router.post("/submit-post")
+async def submit_post(post: PostSubmit):
+    pillar = (post.pillar or "").upper().strip()
+    if pillar not in ["IMPACT", "GUEST", "DEV"]:
+        raise HTTPException(status_code=400, detail="Invalid pillar")
+
+    doc = post.model_dump()
+    doc["pillar"] = pillar
+    doc["status"] = "PENDING"
+    doc["content_enhanced"] = doc.get("content_enhanced")
+    doc["author_verified"] = False
+    doc["flags"] = _light_flags(doc.get("content_original") or "")
+    doc["impact_score"] = 0
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+
+    result = await db.posts.insert_one(doc)
+    return {"id": str(result.inserted_id), "message": "Submitted for review"}
+
+
+@api_router.get("/posts")
+async def get_posts(pillar: str = "EDITORIAL", status: str = "APPROVED"):
+    p = (pillar or "").upper().strip()
+    s = (status or "").upper().strip()
+
+    posts = (
+        await db.posts.find({"pillar": p, "status": s})
+        .sort("created_at", -1)
+        .limit(100)
+        .to_list(length=100)
+    )
+
+    for post in posts:
+        if "_id" in post:
+            post["_id"] = str(post["_id"])
+    return posts
+
+
+@api_router.get("/queue")
+async def get_queue():
+    pending = await db.posts.find({"status": "PENDING"}).sort("created_at", -1).limit(100).to_list(length=100)
+    for post in pending:
+        if "_id" in post:
+            post["_id"] = str(post["_id"])
+    return pending
+
+
+@api_router.post("/approve/{post_id}")
+async def approve_post(post_id: str, approval: PostApprove):
+    oid = _safe_object_id(post_id)
+    if not oid:
+        raise HTTPException(status_code=400, detail="Invalid post id")
+
+    result = await db.posts.update_one(
+        {"_id": oid},
+        {
+            "$set": {
+                "content_enhanced": approval.content_enhanced,
+                "status": "APPROVED",
+                "approved_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    return {"message": "Approved successfully"}
+
+
+@api_router.post("/reject/{post_id}")
+async def reject_post(post_id: str, rejection: PostReject):
+    oid = _safe_object_id(post_id)
+    if not oid:
+        raise HTTPException(status_code=400, detail="Invalid post id")
+
+    await db.posts.update_one(
+        {"_id": oid},
+        {
+            "$set": {
+                "status": "REJECTED",
+                "rejection_reason": rejection.reason or "Rejected",
+                "rejected_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+    )
+
+    return {"message": "Rejected"}
 
 
 # Include the router in the main app

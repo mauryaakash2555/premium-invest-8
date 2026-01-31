@@ -47,6 +47,7 @@ export default async function sitemap() {
     const shouldExcludeSegment = (segment) => {
       if (!segment) return true;
       if (segment === "api") return true;
+      if (segment === "admin") return true;
       if (segment === "store") return true; // internal store shell; exposed via store hostname rewrite
       if (segment === "products") return true; // blocked on main host; store has clean /products
       if (segment === "login") return true;
@@ -131,6 +132,11 @@ export default async function sitemap() {
     "/tools/tax-optimization",
     "/tools/itr-filing-help",
     "/blog",
+    "/blog/editorial",
+    "/blog/impact",
+    "/blog/guest",
+    "/blog/dev",
+    "/submit",
     "/best-credit-cards-high-income-india",
     "/live-intelligence",
     "/contact",

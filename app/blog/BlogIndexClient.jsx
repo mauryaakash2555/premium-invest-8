@@ -31,6 +31,7 @@ import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import FAQSection from '@/components/shared/FAQSection';
+import BlogNavigation from '@/components/BlogNavigation';
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -271,6 +272,11 @@ export default function BlogPage() {
             Browse Tools
           </Link>
         </div>
+      </section>
+
+      {/* Pillar Navigation (links; no layout changes to grid) */}
+      <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '0px' }}>
+        <BlogNavigation />
       </section>
 
       {/* Category Filter */}
