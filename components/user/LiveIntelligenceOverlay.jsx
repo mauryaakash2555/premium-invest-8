@@ -842,6 +842,24 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const LI_ALLOCATIONS_KEY = 'li_allocations_v1';
   const LI_LAST_ACTIVE_KEY = 'li_last_active_v1';
 
+  // Defensive: never let any localStorage or window usage crash the UI
+  function safeGetItem(key) {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        return window.localStorage.getItem(key);
+      }
+    } catch {}
+    return null;
+  }
+
+  function safeSetItem(key, value) {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(key, value);
+      }
+    } catch {}
+  }
+
   const DEFAULT_ALLOCATIONS = { equity: 58, debt: 24, gold: 8, cash: 10 };
 
   const safeParseJson = (value, fallback = null) => {
@@ -862,8 +880,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   };
 
   const loadPortfolioSnapshot = () => {
-    if (typeof window === 'undefined') return null;
-    const raw = safeParseJson(window.localStorage.getItem(LI_PORTFOLIO_SNAPSHOT_KEY) || 'null', null);
+    const raw = safeParseJson(safeGetItem(LI_PORTFOLIO_SNAPSHOT_KEY) || 'null', null);
     if (!raw || typeof raw !== 'object') return null;
     const investedL = toFiniteNumber(raw.investedL);
     const currentL = toFiniteNumber(raw.currentL);
@@ -873,10 +890,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   };
 
   const loadAllocations = () => {
-    if (typeof window === 'undefined') {
-      return { equity: 0, debt: 0, gold: 0, cash: 0 };
-    }
-    const raw = safeParseJson(window.localStorage.getItem(LI_ALLOCATIONS_KEY) || 'null', null);
+    const raw = safeParseJson(safeGetItem(LI_ALLOCATIONS_KEY) || 'null', null);
     const base = { equity: 0, debt: 0, gold: 0, cash: 0 };
     if (!raw || typeof raw !== 'object') return { ...DEFAULT_ALLOCATIONS };
     const next = { ...base };
@@ -884,11 +898,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
       const v = toFiniteNumber(raw[k]);
       if (v != null) next[k] = Math.max(0, Math.min(100, Math.round(v)));
     }
-
-    // If saved allocations are effectively empty, show a nice prefilled default.
     const sum = Object.values(next).reduce((acc, v) => acc + (Number(v) || 0), 0);
     if (!sum) return { ...DEFAULT_ALLOCATIONS };
-
     return next;
   };
 
@@ -903,9 +914,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [lastActiveIso, setLastActiveIso] = useState(null);
 
   const [intelView, setIntelView] = useState(() => {
-    if (typeof window === 'undefined') return 'forYou';
     try {
-      const v = window.localStorage.getItem('li_intel_view_v1');
+      const v = safeGetItem('li_intel_view_v1');
       return v === 'market' ? 'market' : 'forYou';
     } catch {
       return 'forYou';
@@ -915,12 +925,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [isAllocationEditing, setIsAllocationEditing] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     try {
-      window.localStorage.setItem('li_intel_view_v1', intelView);
-    } catch {
-      // ignore
-    }
+      safeSetItem('li_intel_view_v1', intelView);
+    } catch {}
   }, [intelView]);
 
   const portfolioValue = typeof portfolioSnapshot?.currentL === 'number' ? portfolioSnapshot.currentL : null;
@@ -960,28 +967,29 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, [lastActiveIso]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const prev = window.localStorage.getItem(LI_LAST_ACTIVE_KEY);
-    setLastActiveIso(prev);
-    const nowIso = new Date().toISOString();
-    window.localStorage.setItem(LI_LAST_ACTIVE_KEY, nowIso);
-
+    try {
+      const prev = safeGetItem(LI_LAST_ACTIVE_KEY);
+      setLastActiveIso(prev);
+      const nowIso = new Date().toISOString();
+      safeSetItem(LI_LAST_ACTIVE_KEY, nowIso);
+    } catch {}
     const onVis = () => {
-      if (document.visibilityState === 'visible') {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
         const iso = new Date().toISOString();
-        window.localStorage.setItem(LI_LAST_ACTIVE_KEY, iso);
+        safeSetItem(LI_LAST_ACTIVE_KEY, iso);
         setLastActiveIso(iso);
       }
     };
-    document.addEventListener('visibilitychange', onVis);
-
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', onVis);
+    }
     return () => {
-      document.removeEventListener('visibilitychange', onVis);
-      try {
-        window.localStorage.setItem(LI_LAST_ACTIVE_KEY, new Date().toISOString());
-      } catch {
-        // ignore
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', onVis);
       }
+      try {
+        safeSetItem(LI_LAST_ACTIVE_KEY, new Date().toISOString());
+      } catch {}
     };
   }, []);
 
