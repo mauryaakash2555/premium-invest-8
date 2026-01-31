@@ -105,6 +105,21 @@ export default function BlogDetailClient({ slug }) {
     setScrollBoostSeed((s) => s + 1);
   }, [slug]);
 
+  const allBlogs = useMemo(() => {
+    return Array.isArray(staticBlogData) && staticBlogData.length > 0
+      ? staticBlogData
+      : [staticBlogPost];
+  }, []);
+
+  const nextPost = useMemo(() => {
+    if (!post || !post.slug) return null;
+    const idx = allBlogs.findIndex((p) => p && p.slug === post.slug);
+    if (idx === -1) return null;
+    const next = allBlogs[(idx + 1) % allBlogs.length];
+    if (!next || next.slug === post.slug) return null;
+    return next;
+  }, [allBlogs, post]);
+
   useEffect(() => {
     const set = () => setIsMobile(isMobileViewport());
     set();
@@ -898,6 +913,107 @@ export default function BlogDetailClient({ slug }) {
             </div>
           </div>
         )}
+
+        {/* Blog-only: Next Read + WhatsApp CTA (always present, premium, hover-ready) */}
+        <div style={{ marginTop: '44px' }}>
+          {nextPost ? (
+            <Link
+              href={`/blog/${nextPost.slug}`}
+              className="coming-next-block"
+              style={{
+                display: 'block',
+                textDecoration: 'none',
+                padding: '22px',
+                border: '1px solid rgba(255,255,255,0.10)',
+                background: 'rgba(0,0,0,0.70)',
+                marginBottom: '14px',
+              }}
+            >
+              <div style={{
+                fontSize: '12px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(245, 248, 255, 0.62)',
+                marginBottom: '10px'
+              }}>
+                Next Read:
+              </div>
+              <div style={{
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '20px',
+                lineHeight: 1.35,
+                color: 'rgba(235, 242, 255, 0.96)'
+              }}>
+                {nextPost.title}
+              </div>
+              {nextPost.excerpt ? (
+                <div style={{
+                  marginTop: '10px',
+                  fontSize: '14px',
+                  lineHeight: 1.7,
+                  color: 'rgba(235, 242, 255, 0.68)'
+                }}>
+                  {nextPost.excerpt}
+                </div>
+              ) : null}
+              <div style={{
+                marginTop: '12px',
+                color: 'color-mix(in oklab, var(--lux-accent) 70%, white 30%)',
+                fontSize: '13px',
+                fontWeight: 600,
+              }}>
+                Tap to read →
+              </div>
+            </Link>
+          ) : null}
+
+          <a
+            className="whatsapp-cta-btn"
+            href={`https://wa.me/918850977259?text=${encodeURIComponent(
+              `Hi Dev, I just read "${post?.title || 'a BM Wealth blog'}" on BM Wealth. I want help with my next steps.`
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '16px',
+              textDecoration: 'none',
+              padding: '18px 22px',
+              border: '1px solid rgba(255,255,255,0.10)',
+              background: 'rgba(0,0,0,0.70)',
+              color: 'rgba(235, 242, 255, 0.92)',
+            }}
+          >
+            <div>
+              <div style={{
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '18px',
+                color: 'rgba(235, 242, 255, 0.96)'
+              }}>
+                WhatsApp Dev
+              </div>
+              <div style={{
+                marginTop: '6px',
+                fontSize: '13px',
+                lineHeight: 1.6,
+                color: 'rgba(235, 242, 255, 0.66)'
+              }}>
+                Get a quick, no-hype next-step plan. Education-only.
+              </div>
+            </div>
+            <div style={{
+              minWidth: '92px',
+              textAlign: 'right',
+              color: 'color-mix(in oklab, var(--lux-accent) 70%, white 30%)',
+              fontSize: '13px',
+              fontWeight: 700,
+            }}>
+              Open →
+            </div>
+          </a>
+        </div>
 
         {/* Back to Blog */}
         <div style={{ marginTop: '60px', textAlign: 'center' }}>
