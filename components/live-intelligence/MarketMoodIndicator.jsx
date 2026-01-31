@@ -234,7 +234,25 @@ export default function MarketMoodIndicator() {
     );
   }
 
-  if (!mood) return null;
+  if (!mood) {
+    return (
+      <div style={{
+        background: 'rgba(20, 30, 50, 0.6)',
+        borderRadius: '12px',
+        padding: '16px 20px',
+        marginBottom: '16px',
+        border: '1px solid rgba(100, 160, 255, 0.15)',
+        color: 'rgba(180, 195, 220, 0.7)',
+        fontSize: '15px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+      }}>
+        <MoodIcon color="rgba(180, 195, 220, 0.7)" />
+        <span>Live mood temporarily unavailable. Please check back soon.</span>
+      </div>
+    );
+  }
 
   const moodConfig = MOOD_LEVELS[mood.level] || MOOD_LEVELS.neutral;
   const score = scoreForLevel[mood.level] ?? 0.5;

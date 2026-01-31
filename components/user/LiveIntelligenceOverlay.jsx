@@ -16,6 +16,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo, cloneElement, isValidElement } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 
 import HeadlineFeed from '@/components/live-intelligence/HeadlineFeed';
@@ -2350,55 +2351,59 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
 
         {/* Market Mood Indicator - Global sentiment */}
         <div className="max-w-7xl mx-auto" style={{ marginTop: '12px' }}>
-          <MarketMoodIndicator />
+          <SectionErrorBoundary>
+            <MarketMoodIndicator />
+          </SectionErrorBoundary>
         </div>
 
         {/* KPI row */}
-        <div className="li-kpi-grid max-w-7xl mx-auto" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
-          {kpi.map((card) => (
-            <div key={card.label} className="li-kpi-card">
-              <div className="li-kpi-top">
-                <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
-                  {card.label}
+        <SectionErrorBoundary>
+          <div className="li-kpi-grid max-w-7xl mx-auto" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
+            {kpi.map((card) => (
+              <div key={card.label} className="li-kpi-card">
+                <div className="li-kpi-top">
+                  <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
+                    {card.label}
+                  </div>
+                  {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
                 </div>
-                {card.trend ? <div className="li-kpi-trend-pill">{card.trend}</div> : null}
-              </div>
-              <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                {card.kind === 'moneyL' ? (
-                  card.number == null ? (
-                    <span style={{ opacity: 0.8 }}>—</span>
+                <div className="li-kpi-value" style={{ marginTop: '12px', color: 'rgba(245,248,255,0.96)', fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+                  {card.kind === 'moneyL' ? (
+                    card.number == null ? (
+                      <span style={{ opacity: 0.8 }}>—</span>
+                    ) : (
+                    <AnimatedNumber
+                      value={Number(card.number) || 0}
+                      currencySymbol="₹"
+                      suffix="L"
+                      minimumFractionDigits={1}
+                      maximumFractionDigits={1}
+                      ariaLabel={card.label}
+                    />
+                    )
+                  ) : card.kind === 'percent' ? (
+                    card.number == null ? (
+                      <span style={{ opacity: 0.8 }}>—</span>
+                    ) : (
+                    <AnimatedNumber
+                      value={Number(card.number) || 0}
+                      suffix="%"
+                      minimumFractionDigits={1}
+                      maximumFractionDigits={1}
+                      ariaLabel={card.label}
+                    />
+                    )
                   ) : (
-                  <AnimatedNumber
-                    value={Number(card.number) || 0}
-                    currencySymbol="₹"
-                    suffix="L"
-                    minimumFractionDigits={1}
-                    maximumFractionDigits={1}
-                    ariaLabel={card.label}
-                  />
-                  )
-                ) : card.kind === 'percent' ? (
-                  card.number == null ? (
-                    <span style={{ opacity: 0.8 }}>—</span>
-                  ) : (
-                  <AnimatedNumber
-                    value={Number(card.number) || 0}
-                    suffix="%"
-                    minimumFractionDigits={1}
-                    maximumFractionDigits={1}
-                    ariaLabel={card.label}
-                  />
-                  )
-                ) : (
-                  card.value
-                )}
+                    card.value
+                  )}
+                </div>
+                <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200,215,240,0.50)', fontSize: '12px', lineHeight: 1.4 }}>
+                  {card.hint}
+                </div>
               </div>
-              <div className="li-kpi-hint" style={{ marginTop: '8px', color: 'rgba(200,215,240,0.50)', fontSize: '12px', lineHeight: 1.4 }}>
-                {card.hint}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </SectionErrorBoundary>
 
         <div className="li-section-divider" />
 
@@ -2831,15 +2836,21 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             </LazyTradingView>
           </div>
 
+
           {/* Headline Feed - FULL WIDTH - same component/styles as the laser hero page */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <HeadlineFeed />
-          </div>
+          <SectionErrorBoundary>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <HeadlineFeed />
+            </div>
+          </SectionErrorBoundary>
+
 
           {/* Learning Path - premium explainers */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <LearningPathPanel />
-          </div>
+          <SectionErrorBoundary>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <LearningPathPanel />
+            </div>
+          </SectionErrorBoundary>
 
           {/* Saved Headlines Section */}
           {activeTab === 'saved' && (
@@ -3106,5 +3117,28 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   );
 }
 
-// Export the panel for use in standalone page
-export { LiveIntelligencePanel };
+// --- ErrorBoundary for all major sections ---
+class SectionErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    // Optionally log error
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ color: '#ffb4b4', background: '#2a0a0a', padding: 16, borderRadius: 8, margin: 8, fontSize: 14 }}>
+          <b>Section failed to load.</b> Please refresh or try again later.
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export { LiveIntelligencePanel, SectionErrorBoundary };
