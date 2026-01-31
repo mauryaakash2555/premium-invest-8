@@ -125,8 +125,26 @@ export default function BlogPage() {
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div>
+      <script
+        id="blog-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* Mobile optimization for blog card images */}
       <style>{`
         @media (max-width: 768px) {
@@ -525,7 +543,7 @@ export default function BlogPage() {
         </p>
       </section>
 
-      <FAQSection faqs={faqs} />
+      <FAQSection faqs={faqs} withSchema={false} />
     </div>
   );
 }
