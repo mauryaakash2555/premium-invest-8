@@ -60,6 +60,19 @@ export default function ITRFilingHelpPage() {
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answer,
+      },
+    })),
+  };
+
   // SoftwareApplication Schema
   const softwareSchema = {
     "@context": "https://schema.org",
@@ -89,6 +102,11 @@ export default function ITRFilingHelpPage() {
         id="itr-help-software-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <script
+        id="itr-help-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
@@ -202,7 +220,7 @@ export default function ITRFilingHelpPage() {
               {/* Section 6: FAQs */}
               <section>
                 <h2 className="text-xl font-semibold text-white mb-4">Frequently asked questions</h2>
-                <FAQSection faqs={faqs} />
+                <FAQSection faqs={faqs} withSchema={false} />
               </section>
 
             </div>

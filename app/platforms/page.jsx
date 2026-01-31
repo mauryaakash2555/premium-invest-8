@@ -59,9 +59,27 @@ export default function Platforms() {
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', overflowX: 'hidden' }}>
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
+      <script
+        id="platforms-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* Hero Section */}
       <section
@@ -336,7 +354,7 @@ export default function Platforms() {
           </p>
         </section>
 
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={faqs} withSchema={false} />
 
         {/* Disclosure */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
