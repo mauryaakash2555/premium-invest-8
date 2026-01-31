@@ -165,6 +165,7 @@ export default function BlogDetailClient({ slug }) {
     // Detect "Next Read" blocks and WhatsApp CTAs by multiple methods
     const allLinks = Array.from(root.querySelectorAll('a'));
     const allDivs = Array.from(root.querySelectorAll('div'));
+    const borderLeftEls = Array.from(root.querySelectorAll('[style*="border-left"]'));
     
     // Method 1: Elements with the class already
     let comingBlocks = Array.from(root.querySelectorAll('.coming-next-block'));
@@ -287,15 +288,20 @@ export default function BlogDetailClient({ slug }) {
       }
     });
 
-    // Method 4: Divs with border-left styling that contain "Next Read" (the inner wrapper)
-    allDivs.forEach(div => {
-      const text = (div.textContent || '').toLowerCase();
-      const style = div.getAttribute('style') || '';
-      if ((text.includes('next read') || text.includes('coming next')) && style.includes('border-left')) {
-        div.classList.add('coming-next-block');
-        if (!comingBlocks.includes(div)) comingBlocks.push(div);
-      }
-    });
+    // Method 4: Elements with border-left styling that contain "Next Read" (inner wrapper)
+    const maybeMarkNextRead = (el) => {
+      if (!el) return;
+      const style = String(el.getAttribute?.('style') || '').toLowerCase();
+      if (!style.includes('border-left')) return;
+      const text = (el.textContent || '').toLowerCase();
+      if (!text) return;
+      if (!(text.includes('next read') || text.includes('coming next'))) return;
+      el.classList.add('coming-next-block');
+      if (!comingBlocks.includes(el)) comingBlocks.push(el);
+    };
+
+    allDivs.forEach((div) => maybeMarkNextRead(div));
+    borderLeftEls.forEach((el) => maybeMarkNextRead(el));
 
     // Debug: Log what we found
     const debug = new URLSearchParams(window.location.search).get('debug') === '1';

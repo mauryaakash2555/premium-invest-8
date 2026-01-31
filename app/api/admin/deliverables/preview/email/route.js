@@ -41,7 +41,7 @@ async function getLatestPropertyVsSipInputs(sb, leadId) {
 }
 
 function sampleLead() {
-  return { name: "Akash", email: "akash@example.com" };
+  return { name: "Dev", email: "dev@example.com" };
 }
 
 function samplePropertyVsSipInputs() {

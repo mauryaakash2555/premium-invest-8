@@ -18,8 +18,8 @@ function pillarCopy(pillar) {
   switch (pillar) {
     case 'IMPACT':
       return {
-        title: 'Public Impact',
-        subtitle: 'Civic issues, community stories, and public outcomes.',
+        title: 'Community Impact',
+        subtitle: 'Stories and outcomes that improve everyday financial life.',
         image:
           'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',
       };
@@ -54,12 +54,14 @@ export default function PillarIndexClient({ pillar }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
       setIsLoading(true);
       setError('');
+      setNote('');
       try {
         const url = `/api/proxy-posts?pillar=${encodeURIComponent(PILLAR)}&status=APPROVED`;
         const res = await fetch(url, { cache: 'no-store' });
@@ -67,7 +69,12 @@ export default function PillarIndexClient({ pillar }) {
         const json = await res.json();
         if (!cancelled) setPosts(Array.isArray(json) ? json : []);
       } catch (e) {
-        if (!cancelled) setError('Unable to load posts right now.');
+        // Prefer a graceful empty state over a hard error if upstream is temporarily down.
+        if (!cancelled) {
+          setPosts([]);
+          setError('');
+          setNote('Posts are syncing. Please check back in a minute.');
+        }
       } finally {
         if (!cancelled) setIsLoading(false);
       }
@@ -193,6 +200,9 @@ export default function PillarIndexClient({ pillar }) {
         ) : posts.length === 0 ? (
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts yet.</p>
+            {note ? (
+              <p style={{ color: '#888', marginTop: '8px' }}>{note}</p>
+            ) : null}
             <p style={{ color: '#888', marginTop: '8px' }}>
               Want to contribute?{' '}
               <Link href="/submit" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>

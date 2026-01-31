@@ -60,20 +60,6 @@ export default function ITRFilingHelpPage() {
     },
   ];
 
-  // FAQ Schema
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
-
   // SoftwareApplication Schema
   const softwareSchema = {
     "@context": "https://schema.org",
@@ -99,11 +85,6 @@ export default function ITRFilingHelpPage() {
     <>
       <BackRow href="/tools" label="← Back to Tools" />
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
-      <script
-        id="itr-help-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <script
         id="itr-help-software-schema"
         type="application/ld+json"

@@ -116,7 +116,7 @@ function getClientIp(req) {
   return String(xff).split(",")[0]?.trim() || "";
 }
 
-function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
+function buildAdminStrategicPrompt({ userName = "Dev" } = {}) {
   return (
     `You are BM Wealth's strategic business advisor.\n` +
     `User is ${userName} (founder).\n\n` +
@@ -138,7 +138,7 @@ function buildAdminStrategicPrompt({ userName = "Akash" } = {}) {
   );
 }
 
-function buildSuperAdminSystemPrompt({ userName = "Akash" } = {}) {
+function buildSuperAdminSystemPrompt({ userName = "Dev" } = {}) {
   return (
     `You are an executive assistant for ${userName} (super admin).\n` +
     `Default: be concise, high-signal, and actionable.\n` +
@@ -787,7 +787,7 @@ export async function POST(req) {
         return NextResponse.json({ ok: false, error: "disabled" }, { status: 404 });
       }
       const context = await buildAdminContextSafe();
-      const system = buildAdminStrategicPrompt({ userName: "Akash" });
+      const system = buildAdminStrategicPrompt({ userName: "Dev" });
       const a = await withTimeout(
         getAIResponse({
         message,
@@ -1001,7 +1001,7 @@ export async function POST(req) {
         });
         const system =
           userType === "super_admin"
-            ? buildSuperAdminSystemPrompt({ userName: "Akash" })
+            ? buildSuperAdminSystemPrompt({ userName: "Dev" })
             : [
                 buildSeBiSafeSystemPrompt({ userName }),
                 shouldIncludeAffiliateContext(message) ? AFFILIATE_CONTEXT_PROMPT : "",

@@ -1,6 +1,6 @@
 /**
  * Super Admin Dashboard
- * Full control panel for Akash only
+ * Full control panel for Dev only
  * 
  * 🔒 Uses CORE isolated auth module (never breaks)
  */
@@ -70,7 +70,7 @@ export default function SuperAdminPage() {
     return (
       <AdminLogin
         onLogin={handleLogin}
-        title="🎛️ Akash's Control Panel"
+        title="🎛️ Dev's Control Panel"
         subtitle="Super Admin Access"
       />
     );

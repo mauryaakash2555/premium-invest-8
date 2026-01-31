@@ -105,7 +105,7 @@ export default function SubmitPage() {
           Submit Your Story
         </h1>
         <p style={{ color: 'rgba(235,242,255,0.86)', marginBottom: '26px', lineHeight: 1.7 }}>
-          Share a thoughtful public-impact story or guest column. Akash will review and publish the best submissions.
+          Share a thoughtful public-impact story or guest column. Dev will review and publish the best submissions.
         </p>
 
         <form onSubmit={onSubmit} style={{ display: 'grid', gap: '14px' }}>
@@ -184,7 +184,7 @@ export default function SubmitPage() {
                 color: 'rgba(235,242,255,0.92)',
               }}
             >
-              Submitted. Akash will review soon.
+              Submitted. Dev will review soon.
             </div>
           ) : null}
 

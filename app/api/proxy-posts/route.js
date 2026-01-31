@@ -1,6 +1,27 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://bmwealth-backend.onrender.com";
+function normalizeBackendOrigin(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  const noTrailing = s.replace(/\/+$/, "");
+  // Allow env values to be either origin (https://host) OR include /api.
+  return noTrailing.endsWith("/api") ? noTrailing.slice(0, -4) : noTrailing;
+}
+
+function getBackendOrigin() {
+  const candidates = [
+    process.env.BACKEND_URL,
+    process.env.NEXT_BACKEND_URL,
+    process.env.NEXT_PUBLIC_BACKEND_URL,
+  ];
+
+  for (const c of candidates) {
+    const origin = normalizeBackendOrigin(c);
+    if (origin) return origin;
+  }
+
+  return "https://bmwealth-backend.onrender.com";
+}
 
 function json(status, body) {
   return NextResponse.json(body, {
@@ -16,11 +37,12 @@ export async function GET(req) {
   const status = req.nextUrl.searchParams.get("status") || "APPROVED";
 
   try {
+    const BACKEND_ORIGIN = getBackendOrigin();
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
 
     const upstream = await fetch(
-      `${BACKEND_URL}/api/posts?pillar=${encodeURIComponent(pillar)}&status=${encodeURIComponent(status)}`,
+      `${BACKEND_ORIGIN}/api/posts?pillar=${encodeURIComponent(pillar)}&status=${encodeURIComponent(status)}`,
       {
         method: "GET",
         headers: {

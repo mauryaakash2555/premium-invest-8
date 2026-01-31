@@ -268,11 +268,11 @@ export async function GET(request) {
           category: item.sourceCategory,
           urgency: 'low', // Will be updated by Groq
           
-          // Placeholder blocks (will be filled by Gemini)
+          // Blocks (will be filled by Gemini)
           block_what_happened: item.title,
-          block_why_it_matters: 'Processing...',
-          block_where_fits: 'Processing...',
-          block_who_cares: 'Processing...',
+          block_why_it_matters: '',
+          block_where_fits: '',
+          block_who_cares: '',
           block_signals: [],
           block_source_timestamp: `Source: ${item.sourceName} | ${new Date(item.pubDate).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
           

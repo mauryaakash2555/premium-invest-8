@@ -253,15 +253,24 @@ return (
             {/* Vault Column */}
             <div className="space-y-10">
               <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
-                <Gem
-                  className="w-5 h-5 drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.75)]"
-                  strokeWidth={1.5}
-                  style={{
-                    color: 'oklch(0.78 0.08 65)',
-                    filter:
-                      'drop-shadow(0 0 10px oklch(0.78 0.08 65 / 0.70)) drop-shadow(0 0 22px oklch(0.78 0.08 65 / 0.28))',
-                  }}
-                />
+                <span className="relative inline-flex w-5 h-5 items-center justify-center">
+                  <span
+                    className="pointer-events-none absolute -inset-2 rounded-full blur-md opacity-80"
+                    style={{
+                      background:
+                        'radial-gradient(circle, rgba(255,255,255,0.55) 0%, oklch(0.78 0.08 65 / 0.38) 38%, transparent 72%)',
+                    }}
+                  />
+                  <Gem
+                    className="relative z-10 w-5 h-5"
+                    strokeWidth={1.5}
+                    style={{
+                      color: 'oklch(0.78 0.08 65)',
+                      filter:
+                        'drop-shadow(0 0 12px oklch(0.78 0.08 65 / 0.82)) drop-shadow(0 0 28px oklch(0.78 0.08 65 / 0.28)) drop-shadow(0 0 44px oklch(0.78 0.08 65 / 0.14))',
+                    }}
+                  />
+                </span>
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">

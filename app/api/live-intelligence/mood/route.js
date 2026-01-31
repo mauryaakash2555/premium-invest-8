@@ -52,12 +52,26 @@ async function getMarketContext(request) {
 
 function hasUsableMarketData(marketData) {
   const items = Array.isArray(marketData?.items) ? marketData.items : [];
-  return items.some((x) => x?.live === true && x?.value !== '---' && x?.value != null);
+  const hasMeaningfulValue = (v) => {
+    if (v == null) return false;
+    if (typeof v === 'string' && v.trim() === '---') return false;
+    if (typeof v === 'number') return Number.isFinite(v) && v > 0;
+    const s = String(v)
+      .replace(/[₹,$]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const n = Number(s);
+    return Number.isFinite(n) && n > 0;
+  };
+
+  // Accept both truly-live values and last-known-good fallback values.
+  // We only need a meaningful price to generate a neutral, factual mood line.
+  return items.some((x) => hasMeaningfulValue(x?.value));
 }
 
 function buildFallbackMood(reason) {
   return {
-    mood_text: 'Markets steady. Live data temporarily unavailable.',
+    mood_text: 'Markets steady. Live mood updating.',
     mood_type: 'neutral',
     reason,
   };

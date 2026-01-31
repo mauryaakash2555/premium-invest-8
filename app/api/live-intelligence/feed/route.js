@@ -145,8 +145,9 @@ function parseRssXml(xml) {
     const title = extractTag(block, 'title');
     const link = extractTag(block, 'link') || extractTag(block, 'guid');
     const pubDate = extractTag(block, 'pubDate');
+    const description = extractTag(block, 'description') || extractTag(block, 'summary') || extractTag(block, 'content:encoded');
     if (!title) continue;
-    items.push({ title, link, pubDate });
+    items.push({ title, link, pubDate, description });
   }
 
   if (items.length > 0) return items;
@@ -157,8 +158,9 @@ function parseRssXml(xml) {
     const title = extractTag(block, 'title');
     const link = extractAtomLink(block);
     const pubDate = extractTag(block, 'published') || extractTag(block, 'updated');
+    const description = extractTag(block, 'summary') || extractTag(block, 'content');
     if (!title) continue;
-    items.push({ title, link, pubDate });
+    items.push({ title, link, pubDate, description });
   }
 
   return items;
@@ -194,12 +196,17 @@ async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, mode
 
   // Map to internal headline objects.
   const normalized = merged
-    .map(({ title, link, pubDate, feed }) => {
+    .map(({ title, link, pubDate, description, feed }) => {
       const ts = pubDate ? new Date(pubDate) : null;
       const timestamp = ts && !Number.isNaN(ts.getTime()) ? ts.toISOString() : new Date().toISOString();
       const specCategory = normalizeCategoryToSpec(feed?.category || 'market');
       const idSeed = link || `${feed?.sourceKey}:${title}:${timestamp}`;
       const url = link && /^https?:\/\//i.test(link) ? link : null;
+
+      const desc = String(description || '')
+        .replace(/\s+/g, ' ')
+        .replace(/^\s+|\s+$/g, '')
+        .slice(0, 220);
 
       return {
         id: `rss_${feed?.sourceKey || 'src'}_${simpleHash(idSeed)}`,
@@ -208,8 +215,8 @@ async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, mode
         icon: getCategoryIcon(specCategory),
         headline: title,
         what_happened: title,
-        whyItMatters: '',
-        why_it_matters: '',
+        whyItMatters: desc,
+        why_it_matters: desc,
         dataPoint: '',
         data_point: '',
         urgency: 'REGULAR',
@@ -591,7 +598,7 @@ export async function GET(request) {
     ]);
     
     // Combine headlines from all sources
-    const combined = [
+    const combinedRaw = [
       // Headlines table (main source - cron-populated)
       ...(headlinesResult.data || []).map(item => ({
         id: item.id,
@@ -659,6 +666,19 @@ export async function GET(request) {
         url: item.url || item.source_url || null,
       })),
     ];
+
+    // Filter out obvious placeholder/unfinished blocks so the UI never shows dummy text.
+    const combined = combinedRaw.filter((h) => {
+      const headline = String(h?.headline || '').trim();
+      if (!headline) return false;
+
+      const why = String(h?.why_it_matters || h?.whyItMatters || '').trim();
+      if (!why) return true; // allow empty, but never allow placeholders
+      const low = why.toLowerCase();
+      if (low === 'processing...' || low.includes('processing...')) return false;
+      if (low === 'educational context pending.' || low.includes('context pending')) return false;
+      return true;
+    });
 
     // Step 1: Apply validity window (scheduled/expired)
     const withinWindow = filterByValidityWindow(combined);

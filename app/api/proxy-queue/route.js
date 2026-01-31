@@ -1,6 +1,24 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://bmwealth-backend.onrender.com";
+function normalizeBackendOrigin(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  const noTrailing = s.replace(/\/+$/, "");
+  return noTrailing.endsWith("/api") ? noTrailing.slice(0, -4) : noTrailing;
+}
+
+function getBackendOrigin() {
+  const candidates = [
+    process.env.BACKEND_URL,
+    process.env.NEXT_BACKEND_URL,
+    process.env.NEXT_PUBLIC_BACKEND_URL,
+  ];
+  for (const c of candidates) {
+    const origin = normalizeBackendOrigin(c);
+    if (origin) return origin;
+  }
+  return "https://bmwealth-backend.onrender.com";
+}
 
 function json(status, body) {
   return NextResponse.json(body, {
@@ -13,10 +31,11 @@ function json(status, body) {
 
 export async function GET() {
   try {
+    const BACKEND_ORIGIN = getBackendOrigin();
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
 
-    const upstream = await fetch(`${BACKEND_URL}/api/queue`, {
+    const upstream = await fetch(`${BACKEND_ORIGIN}/api/queue`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",

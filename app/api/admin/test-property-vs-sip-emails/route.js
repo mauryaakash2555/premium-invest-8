@@ -29,7 +29,7 @@ export async function POST(req) {
   }
 
   const to = parsed.data.to || "mauryaaksh2555@gmail.com";
-  const displayName = String(parsed.data.name || "Akash").trim();
+  const displayName = String(parsed.data.name || "Dev").trim();
 
   // Deterministic sample data.
   const lead = {
