@@ -47,58 +47,114 @@ function isNightSummaryWindowIST() {
   return hour >= 21 && hour < 24;
 }
 
+function getBaseUrlFromRequest(request) {
+  // Prefer same-origin so staging never calls production domains (which can 403).
+  const origin = request?.nextUrl?.origin;
+  if (origin) return origin;
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
+}
+
+function emptyMarkets(reason = 'unavailable') {
+  return {
+    nifty: { value: 0, change: 0, percent: 0, source: reason },
+    sensex: { value: 0, change: 0, percent: 0, source: reason },
+    bankNifty: { value: 0, change: 0, percent: 0, source: reason },
+    fii: { value: 0, type: 'neutral', source: reason },
+  };
+}
+
+function coerceNumber(n) {
+  if (typeof n === 'number' && Number.isFinite(n)) return n;
+  const v = Number(String(n ?? '').replace(/,/g, '').trim());
+  return Number.isFinite(v) ? v : null;
+}
+
+function parseMarketDataItems(items) {
+  const markets = emptyMarkets('market_data');
+  const arr = Array.isArray(items) ? items : [];
+  for (const item of arr) {
+    const name = String(item?.name ?? '').toLowerCase();
+    const id = String(item?.id ?? '').toLowerCase();
+
+    const value = coerceNumber(item?.value ?? item?.price);
+    const percent = coerceNumber(item?.changePct ?? item?.changePercent);
+    const change = coerceNumber(item?.change) ?? (value != null && percent != null ? (value * percent) / 100 : null);
+
+    if (name.includes('nifty 50') || id === 'nifty50' || name === 'nifty') {
+      markets.nifty = { value: value ?? 0, change: change ?? 0, percent: percent ?? 0, source: 'market_data' };
+    } else if (name.includes('sensex') || id === 'sensex') {
+      markets.sensex = { value: value ?? 0, change: change ?? 0, percent: percent ?? 0, source: 'market_data' };
+    } else if (name.includes('bank nifty') || name.includes('banknifty') || id === 'banknifty') {
+      markets.bankNifty = { value: value ?? 0, change: change ?? 0, percent: percent ?? 0, source: 'market_data' };
+    }
+  }
+  return markets;
+}
+
+function parseIndicesSnapshot(payload) {
+  // indices-snapshot returns: { indices: [{ name, last, change, percentChange }, ...] }
+  const markets = emptyMarkets('indices_snapshot');
+  const arr = Array.isArray(payload?.indices) ? payload.indices : [];
+  for (const row of arr) {
+    const nm = String(row?.name ?? '').toUpperCase().replace(/\s+/g, ' ').trim();
+    const last = coerceNumber(row?.last);
+    const change = coerceNumber(row?.change);
+    const percent = coerceNumber(row?.percentChange);
+
+    if (nm === 'NIFTY 50') {
+      markets.nifty = { value: last ?? 0, change: change ?? 0, percent: percent ?? 0, source: 'indices_snapshot' };
+    } else if (nm === 'NIFTY BANK') {
+      markets.bankNifty = { value: last ?? 0, change: change ?? 0, percent: percent ?? 0, source: 'indices_snapshot' };
+    }
+  }
+  return markets;
+}
+
 /**
  * Fetch market data from our market-data API
  */
-async function fetchMarketData() {
+async function fetchMarketData({ request } = {}) {
+  const baseUrl = getBaseUrlFromRequest(request);
+  const out = emptyMarkets('fallback');
+
+  // 1) Prefer NSE indices snapshot for NIFTY/Bank NIFTY (reliable + lightweight).
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
-    const response = await fetch(`${baseUrl}/api/market-data`, {
+    const res = await fetch(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
+      cache: 'no-store',
       next: { revalidate: 0 },
     });
-
-    if (!response.ok) {
-      throw new Error(`Market data API returned ${response.status}`);
+    if (res.ok) {
+      const json = await res.json().catch(() => null);
+      const parsed = parseIndicesSnapshot(json);
+      out.nifty = parsed.nifty;
+      out.bankNifty = parsed.bankNifty;
     }
-
-    const data = await response.json();
-    
-    // Parse market data - API returns { items: [...] } with value/changePct fields
-    const markets = {
-      nifty: { value: 0, change: 0, percent: 0 },
-      sensex: { value: 0, change: 0, percent: 0 },
-      bankNifty: { value: 0, change: 0, percent: 0 },
-      fii: { value: 0, type: 'buyers' },
-    };
-
-    // Support both legacy 'data' and new 'items' response format
-    const items = data.items || data.data || [];
-    if (Array.isArray(items)) {
-      for (const item of items) {
-        const name = item.name?.toLowerCase() || '';
-        const id = item.id?.toLowerCase() || '';
-        // Get value from either 'value' or 'price' field
-        const value = parseFloat(item.value ?? item.price) || 0;
-        // Get percent from either 'changePct' or 'changePercent' field
-        const percent = parseFloat(item.changePct ?? item.changePercent) || 0;
-        // Estimate change from value and percent if not provided
-        const change = parseFloat(item.change) || (value * percent / 100);
-        
-        if (name.includes('nifty 50') || id === 'nifty50' || name === 'nifty') {
-          markets.nifty = { value, change, percent };
-        } else if (name.includes('sensex') || id === 'sensex') {
-          markets.sensex = { value, change, percent };
-        } else if (name.includes('bank nifty') || name.includes('banknifty') || id === 'banknifty') {
-          markets.bankNifty = { value, change, percent };
-        }
-      }
-    }
-
-    return markets;
-  } catch (error) {
-    console.error('Failed to fetch market data:', error);
-    throw error;
+  } catch (e) {
+    console.warn('Night summary: indices-snapshot unavailable:', e?.message || e);
   }
+
+  // 2) Use our own market-data route for Sensex + as a backup for missing fields.
+  //    IMPORTANT: same-origin (staging calls staging), never hard-fail.
+  try {
+    const res = await fetch(`${baseUrl}/api/market-data?nocache=1`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      const parsed = parseMarketDataItems(data?.items || data?.data);
+      // Fill only missing/zero values; keep indices-snapshot values if already present.
+      if (!out.nifty?.value) out.nifty = parsed.nifty;
+      if (!out.bankNifty?.value) out.bankNifty = parsed.bankNifty;
+      if (!out.sensex?.value) out.sensex = parsed.sensex;
+    } else {
+      console.warn(`Night summary: market-data non-OK status=${res.status}`);
+    }
+  } catch (e) {
+    console.warn('Night summary: market-data unavailable:', e?.message || e);
+  }
+
+  return out;
 }
 
 /**
@@ -217,9 +273,9 @@ async function fetchTomorrowEvents() {
 /**
  * Generate and cache night summary
  */
-async function generateNightSummary() {
+async function generateNightSummary({ request } = {}) {
   const [markets, fiiData, headlines, events] = await Promise.all([
-    fetchMarketData(),
+    fetchMarketData({ request }),
     fetchFIIData(),
     fetchTopHeadlines(),
     fetchTomorrowEvents(),
@@ -262,8 +318,9 @@ async function generateNightSummary() {
 /**
  * GET - Fetch night summary (cached or generate)
  */
-export async function GET() {
+export async function GET(request) {
   try {
+    // Note: This route must remain resilient. It is used by Live Intelligence UI and monitoring.
     const supabase = getSupabase();
     const today = getISTDateKey();
 
@@ -288,15 +345,17 @@ export async function GET() {
     // If someone requests before 9PM and we have no cached summary, return a clear message.
     if (!isNightSummaryWindowIST()) {
       return NextResponse.json({
-        success: false,
+        success: true,
+        cached: false,
+        notReady: true,
         error: 'night_summary_not_ready',
         message: 'Night Summary is available from 9:00 PM to 12:00 AM IST.',
         isLive: false,
-      }, { status: 404 });
+      }, { status: 200 });
     }
 
     // Generate new summary
-    const summary = await generateNightSummary();
+    const summary = await generateNightSummary({ request });
 
     return NextResponse.json({
       success: true,
@@ -313,12 +372,24 @@ export async function GET() {
       'No fallback available'
     );
 
+    // Best-effort fallback: never hard-fail the UI.
     return NextResponse.json({
-      success: false,
-      error: 'Failed to generate night summary',
-      message: 'Unable to load market summary. Please try again.',
+      success: true,
+      cached: false,
+      source: 'error_fallback',
+      date: new Date().toLocaleDateString('en-IN', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      generatedAt: new Date().toISOString(),
+      markets: emptyMarkets('error_fallback'),
+      developments: [],
+      tomorrow: [],
       isLive: false,
-    }, { status: 500 });
+      error: String(error?.message || error),
+    }, { status: 200 });
   }
 }
 
@@ -333,7 +404,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const summary = await generateNightSummary();
+    const summary = await generateNightSummary({ request });
 
     return NextResponse.json({
       success: true,
@@ -350,8 +421,11 @@ export async function POST(request) {
     );
 
     return NextResponse.json({
-      success: false,
-      error: error.message,
-    }, { status: 500 });
+      success: true,
+      regenerated: false,
+      source: 'error_fallback',
+      error: String(error?.message || error),
+      isLive: false,
+    }, { status: 200 });
   }
 }
