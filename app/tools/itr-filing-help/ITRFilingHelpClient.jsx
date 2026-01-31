@@ -2,10 +2,10 @@
 
 import dynamic from 'next/dynamic';
 
-const ITRFilingHelp = dynamic(() => import('@/components/tools/ITRFilingHelp'), {
+const ITRWorkbench = dynamic(() => import('@/components/ITR/ITRWorkbench'), {
   ssr: false,
 });
 
 export default function ITRFilingHelpClient() {
-  return <ITRFilingHelp />;
+  return <ITRWorkbench />;
 }

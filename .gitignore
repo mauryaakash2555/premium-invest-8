@@ -89,4 +89,7 @@ test-results/
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
 
+# ITR local storage (user session data - never commit)
+.itr_store/
+
 

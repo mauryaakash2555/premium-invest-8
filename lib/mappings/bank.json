@@ -1,0 +1,23 @@
+{
+  "docType": "bank",
+  "fields": [
+    {
+      "key": "interest_total",
+      "label": "Total Interest",
+      "synonyms": [
+        "interest",
+        "interest paid",
+        "total interest"
+      ]
+    },
+    {
+      "key": "tds_on_interest",
+      "label": "TDS on Interest",
+      "synonyms": [
+        "tds on interest",
+        "tax deducted",
+        "tds"
+      ]
+    }
+  ]
+}

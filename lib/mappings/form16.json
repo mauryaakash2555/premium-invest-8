@@ -1,0 +1,41 @@
+{
+  "docType": "form16",
+  "fields": [
+    {
+      "key": "gross_salary",
+      "label": "Gross Salary",
+      "synonyms": [
+        "gross salary",
+        "gross salary as per provisions",
+        "salary as per provisions",
+        "gross salary (total)"
+      ]
+    },
+    {
+      "key": "standard_deduction",
+      "label": "Standard Deduction",
+      "synonyms": [
+        "standard deduction"
+      ]
+    },
+    {
+      "key": "tds_total",
+      "label": "Total TDS",
+      "synonyms": [
+        "tds",
+        "total tds",
+        "total tax deducted",
+        "tax deducted at source",
+        "total tax deducted at source"
+      ]
+    },
+    {
+      "key": "net_tax_payable",
+      "label": "Net Tax Payable",
+      "synonyms": [
+        "net tax payable",
+        "tax payable"
+      ]
+    }
+  ]
+}

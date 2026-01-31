@@ -1,0 +1,30 @@
+{
+  "docType": "ais",
+  "fields": [
+    {
+      "key": "interest_total",
+      "label": "Interest",
+      "synonyms": [
+        "interest",
+        "interest income",
+        "interest from deposits"
+      ]
+    },
+    {
+      "key": "dividends_total",
+      "label": "Dividends",
+      "synonyms": [
+        "dividend",
+        "dividends"
+      ]
+    },
+    {
+      "key": "tds_total",
+      "label": "TDS",
+      "synonyms": [
+        "tds",
+        "tax deducted at source"
+      ]
+    }
+  ]
+}

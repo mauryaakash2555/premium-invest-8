@@ -26,7 +26,7 @@ export default function ITRFilingHelpPage() {
     {
       question: "Is my data stored or shared?",
       answer:
-        "We do not store, save, or share your documents. For selectable-text PDFs, the file may be sent to our server briefly for text extraction (pdfplumber) and processed transiently. For scanned/image PDFs, OCR runs in your browser. In all cases, you must review and verify values.",
+        "Your files are not shared. To support review, source-highlights, audit history, and exports, uploaded documents may be stored for your session (up to 30 days) unless you delete them sooner. Selectable-text PDFs can be extracted server-side via pdfplumber; scanned documents may require OCR. No automatic numeric guessing is performed — you must review and confirm every value.",
     },
     {
       question: "How accurate is the OCR extraction?",
