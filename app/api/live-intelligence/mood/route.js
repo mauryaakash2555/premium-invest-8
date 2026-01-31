@@ -33,18 +33,26 @@ function getSupabase() {
 // Fetch current market context
 async function getMarketContext(request) {
   try {
-    // Fetch from our market-data API
     const baseUrl = request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
+    // Prefer indices snapshot (lighter + usually available even when full market-data is flaky).
+    const idxRes = await fetch(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    });
+    if (idxRes.ok) {
+      const idxJson = await idxRes.json().catch(() => null);
+      const mapped = marketDataFromIndicesSnapshot(idxJson);
+      if (hasUsableMarketData(mapped)) return mapped;
+      if (Array.isArray(mapped?.items) && mapped.items.length) return mapped;
+    }
+
+    // Fallback: full market-data API
     const response = await fetch(`${baseUrl}/api/market-data?nocache=1`, {
       cache: 'no-store',
       next: { revalidate: 0 },
     });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    return await response.json();
+    if (!response.ok) return null;
+    return await response.json().catch(() => null);
   } catch {
     return null;
   }
@@ -71,10 +79,56 @@ function hasUsableMarketData(marketData) {
 
 function buildFallbackMood(reason) {
   return {
-    mood_text: 'Markets steady. Live mood updating.',
+    // Keep this honest: it should never pretend to be “live” if upstream data is missing.
+    mood_text: 'Live data temporarily unavailable.',
     mood_type: 'neutral',
+    generated_by: 'fallback',
     reason,
   };
+}
+
+function isFallbackText(text) {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  return (
+    t === buildFallbackMood('x').mood_text ||
+    // Legacy placeholder (older deployments stored this in DB)
+    t === 'Markets steady. Live mood updating.'
+  );
+}
+
+function normalizeIndexName(name) {
+  const n = String(name || '').toUpperCase().replace(/\s+/g, ' ').trim();
+  if (!n) return '';
+  if (n.includes('NIFTY') && n.includes('BANK')) return 'NIFTY BANK';
+  if (n.includes('NIFTY') && (n.includes('50') || n === 'NIFTY')) return 'NIFTY 50';
+  if (n.includes('SENSEX')) return 'SENSEX';
+  return n;
+}
+
+function marketDataFromIndicesSnapshot(payload) {
+  const raw = Array.isArray(payload?.indices) ? payload.indices : [];
+  const items = raw
+    .map((x) => {
+      const norm = normalizeIndexName(x?.name);
+      if (!norm) return null;
+      const last = typeof x?.last === 'number' && Number.isFinite(x.last) ? x.last : null;
+      const pct = typeof x?.percentChange === 'number' && Number.isFinite(x.percentChange) ? x.percentChange : null;
+      if (last == null && pct == null) return null;
+      return {
+        id: norm,
+        name: norm,
+        value: last != null ? last : (pct != null ? pct : '---'),
+        changePct: pct,
+        live: true,
+      };
+    })
+    .filter(Boolean);
+
+  const pick = (label) => items.find((it) => it.name === label) || null;
+  const core = [pick('NIFTY 50'), pick('NIFTY BANK'), pick('SENSEX')].filter(Boolean);
+  const merged = core.length ? core : items;
+  return { items: merged, source: 'indices_snapshot' };
 }
 
 function pickMarketItem(items, predicates) {
@@ -142,7 +196,7 @@ function generateMoodRuleBased(marketData) {
 
   // Never throw for missing/partial symbols. This endpoint is a UI dependency and must be resilient.
   if (!mood_text) return buildFallbackMood('Market data incomplete');
-  return { mood_text, mood_type };
+  return { mood_text, mood_type, generated_by: 'rule_based' };
 }
 
 // Generate mood with Gemini
@@ -219,6 +273,7 @@ Return ONLY the mood text, nothing else.`
       return {
         mood_text: cleanText,
         mood_type: determineMoodType(marketData),
+        generated_by: 'gemini',
       };
     }
     throw new Error('Gemini returned unusable mood');
@@ -258,7 +313,7 @@ export async function POST(request) {
     const marketData = await getMarketContext(request);
 
     // Generate mood text
-    const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
+    const { mood_text, mood_type, generated_by } = await generateMoodWithGemini(marketData);
 
     const supabase = getSupabase();
     if (!supabase) {
@@ -286,7 +341,7 @@ export async function POST(request) {
       .insert({
         mood_text,
         mood_type,
-        generated_by: 'gemini',
+        generated_by: generated_by || 'gemini',
         context_data: marketData,
         is_active: true,
         valid_until: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes
@@ -319,12 +374,22 @@ export async function POST(request) {
   } catch (error) {
     console.error('Mood generation error:', error);
 
+    // This endpoint is a UI dependency; do not return 503.
+    // Serve an honest fallback mood with 200 so the client never hard-fails.
+    const fallback = buildFallbackMood('Generation error');
     return NextResponse.json(
       {
-        success: false,
-        error: error?.message || 'Mood generation failed',
+        success: true,
+        mood: {
+          mood_text: fallback.mood_text,
+          mood_type: fallback.mood_type,
+          generated_by: fallback.generated_by,
+          generated_at: new Date().toISOString(),
+        },
+        stored: false,
+        source: 'error_fallback',
       },
-      { status: 503, headers: NO_CACHE_HEADERS }
+      { headers: NO_CACHE_HEADERS }
     );
   }
 }
@@ -343,7 +408,7 @@ export async function GET(request) {
     // If cron request, always generate fresh mood
     if (isAuthorizedCron) {
       const marketData = await getMarketContext(request);
-      const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
+      const { mood_text, mood_type, generated_by } = await generateMoodWithGemini(marketData);
 
       if (!supabase) {
         return NextResponse.json({
@@ -367,7 +432,7 @@ export async function GET(request) {
         .insert({
           mood_text,
           mood_type,
-          generated_by: 'gemini',
+          generated_by: generated_by || 'gemini',
           context_data: marketData,
           is_active: true,
           valid_until: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
@@ -394,18 +459,55 @@ export async function GET(request) {
       if (data && !error) {
         // Check if mood is still valid
         if (data.valid_until && new Date(data.valid_until) > new Date()) {
-          return NextResponse.json({
-            success: true,
-            mood: data,
-            source: 'database',
-          }, { headers: NO_CACHE_HEADERS });
+          const createdAt = data.created_at ? new Date(data.created_at).getTime() : 0;
+          const ageMs = createdAt ? Date.now() - createdAt : Number.POSITIVE_INFINITY;
+          const isGeneric = isFallbackText(data.mood_text) || data.generated_by === 'fallback';
+          const missingContext = data.context_data == null;
+
+          // If we stored a generic fallback (usually due to transient upstream outages),
+          // do NOT keep serving it for the full validity window. Try to regenerate after ~90s.
+          if (!(isGeneric || missingContext) || ageMs < 90_000) {
+            return NextResponse.json({
+              success: true,
+              mood: data,
+              source: 'database',
+            }, { headers: NO_CACHE_HEADERS });
+          }
         }
       }
     }
 
     // Generate fresh mood if none exists or expired
     const marketData = await getMarketContext(request);
-    const { mood_text, mood_type } = await generateMoodWithGemini(marketData);
+    const { mood_text, mood_type, generated_by } = await generateMoodWithGemini(marketData);
+
+    // If we can store, replace any stale fallback in DB so the UI stabilizes.
+    if (supabase && !isFallbackText(mood_text)) {
+      try {
+        await supabase.from('live_mood').update({ is_active: false }).eq('is_active', true);
+        const { data: newMood } = await supabase
+          .from('live_mood')
+          .insert({
+            mood_text,
+            mood_type,
+            generated_by: generated_by || 'gemini',
+            context_data: marketData,
+            is_active: true,
+            valid_until: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+          })
+          .select()
+          .single();
+
+        if (newMood) {
+          return NextResponse.json(
+            { success: true, mood: newMood, source: 'database_refreshed' },
+            { headers: NO_CACHE_HEADERS }
+          );
+        }
+      } catch {
+        // If DB write fails, still return the generated mood below.
+      }
+    }
 
     return NextResponse.json(
       {
@@ -423,12 +525,20 @@ export async function GET(request) {
   } catch (error) {
     console.error('Mood fetch error:', error);
 
+    // This endpoint is a UI dependency; do not return 503.
+    const fallback = buildFallbackMood('Fetch error');
     return NextResponse.json(
       {
-        success: false,
-        error: error?.message || 'Mood unavailable',
+        success: true,
+        mood: {
+          mood_text: fallback.mood_text,
+          mood_type: fallback.mood_type,
+          generated_by: fallback.generated_by,
+          generated_at: new Date().toISOString(),
+        },
+        source: 'error_fallback',
       },
-      { status: 503, headers: NO_CACHE_HEADERS }
+      { headers: NO_CACHE_HEADERS }
     );
   }
 }

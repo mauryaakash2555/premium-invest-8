@@ -21,7 +21,7 @@ function Test-UrlOk([string]$Url, [int]$TimeoutSec = 2) {
 }
 
 function Test-NextClientAssets([int]$LocalPort) {
-  $base = "http://localhost:$LocalPort"
+  $base = "http://127.0.0.1:$LocalPort"
 
   # (1) Webpack runtime chunk (should exist in dev)
   if (-not (Test-UrlOk -Url "$base/_next/static/chunks/webpack.js" -TimeoutSec 2)) {
@@ -71,12 +71,12 @@ function Get-ListeningPid([int]$LocalPort) {
 
 $existingPids = @(Get-ListeningPid -LocalPort $Port | Where-Object { $_ -and $_ -gt 0 } | Select-Object -Unique)
 if ($existingPids -and $existingPids.Count -gt 0) {
-  $readyUrl = "http://localhost:$Port/"
+  $readyUrl = "http://127.0.0.1:$Port/"
   try {
     $r = Invoke-WebRequest -Uri $readyUrl -Method Get -TimeoutSec 4 -UseBasicParsing
     if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) {
       if (Test-NextClientAssets -LocalPort $Port) {
-        Write-Host "READY http://localhost:$Port/"
+        Write-Host "READY http://127.0.0.1:$Port/"
         exit 0
       }
 
@@ -129,11 +129,11 @@ try {
 # Use npx so the requested -Port is honored (package.json dev script is pinned to 3000).
 $maxAttempts = 2
 for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-  $cmd = "cd /d `"$AppRoot`" && npx.cmd next dev -p $Port"
+  $cmd = "cd /d `"$AppRoot`" && npx.cmd next dev -H 127.0.0.1 -p $Port"
   $proc = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', $cmd) -WorkingDirectory $AppRoot -WindowStyle Hidden -RedirectStandardOutput $StdOut -RedirectStandardError $StdErr -PassThru
 
   $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-  $readyUrl = "http://localhost:$Port/"
+  $readyUrl = "http://127.0.0.1:$Port/"
 
   while ((Get-Date) -lt $deadline) {
     if (Test-UrlOk -Url $readyUrl -TimeoutSec 2) {
@@ -154,7 +154,7 @@ for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
 
   # If the server responds but assets are corrupted (common Next dev partial-state issue), recover once.
   if (Test-NextClientAssets -LocalPort $Port) {
-    Write-Host "READY http://localhost:$Port/"
+    Write-Host "READY http://127.0.0.1:$Port/"
     exit 0
   }
 

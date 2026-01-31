@@ -642,6 +642,168 @@
 			],
 			"isBackground": false,
 			"group": "test"
+		},
+		{
+			"label": "qa-get-tools-status",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}\\.tools\\qa-get-page-status.ps1",
+				"-Url",
+				"http://127.0.0.1:3000/tools",
+				"-TimeoutSeconds",
+				"20"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-fetch-feed-staging",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-fetch-json.ps1",
+				"-Url",
+				"https://stagingpremium-invest-8-n3uxpn3ed-akashs-projects-7840bca9.vercel.app/api/live-intelligence/feed?limit=15%26nocache=1",
+				"-TimeoutSeconds",
+				"30",
+				"-MaxChars",
+				"1400"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-write-staging-feed-snippet",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\qa-fetch-json.ps1 -Url 'https://stagingpremium-invest-8-n3uxpn3ed-akashs-projects-7840bca9.vercel.app/api/live-intelligence/feed?limit=15%26nocache=1' -TimeoutSeconds 30 -MaxChars 8000 | Set-Content -Encoding UTF8 .tmp_staging_feed_snippet.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-local-mood-json",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-fetch-json.ps1",
+				"-Url",
+				"http://127.0.0.1:3000/api/live-intelligence/mood?nocache=1",
+				"-TimeoutSeconds",
+				"30",
+				"-MaxChars",
+				"600"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-write-local-mood-snippet",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\qa-fetch-json.ps1 -Url 'http://127.0.0.1:3000/api/live-intelligence/mood?nocache=1' -TimeoutSeconds 30 -MaxChars 2000 | Set-Content -Encoding UTF8 .tmp_local_mood_snippet.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-local-indices-snapshot",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".tools\\qa-fetch-json.ps1",
+				"-Url",
+				"http://127.0.0.1:3000/api/live-intelligence/indices-snapshot?nocache=1",
+				"-TimeoutSeconds",
+				"30",
+				"-MaxChars",
+				"900"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-write-local-indices-snapshot",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\qa-fetch-json.ps1 -Url 'http://127.0.0.1:3000/api/live-intelligence/indices-snapshot?nocache=1' -TimeoutSeconds 30 -MaxChars 4000 | Set-Content -Encoding UTF8 .tmp_local_indices_snippet.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-write-local-mood-snippet-2",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\qa-fetch-json.ps1 -Url 'http://127.0.0.1:3000/api/live-intelligence/mood?nocache=1' -TimeoutSeconds 30 -MaxChars 2000 | Set-Content -Encoding UTF8 .tmp_local_mood_snippet2.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-git-status",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; git rev-parse --abbrev-ref HEAD; git log -1 --oneline; git status --porcelain"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-git-status-to-file",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; git status --porcelain | Set-Content -Encoding UTF8 .tmp_git_status.txt; git log -1 --oneline | Set-Content -Encoding UTF8 .tmp_git_head.txt; git rev-parse --abbrev-ref HEAD | Set-Content -Encoding UTF8 .tmp_git_branch.txt"
+			],
+			"isBackground": false,
+			"group": "test"
 		}
 	]
 }

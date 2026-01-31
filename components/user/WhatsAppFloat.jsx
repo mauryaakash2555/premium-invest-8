@@ -69,6 +69,7 @@ const WhatsAppFloat = () => {
   const [open, setOpen] = useState(false);
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
+  const isLiveIntelligence = Boolean(pathname?.startsWith('/live-intelligence'));
 
   const schedule = BOT_POPUP_SCHEDULE;
   const allowedPatterns = useMemo(
@@ -85,9 +86,10 @@ const WhatsAppFloat = () => {
     return allowedPatterns.some((re) => re.test(p));
   }, [allowedPatterns, pathname, schedule]);
 
-  if (pathname?.startsWith('/live-intelligence')) return null;
-
   useEffect(() => {
+    // Keep Live Intelligence clean (no bot auto-open, no timers).
+    if (isLiveIntelligence) return;
+
     // Never auto-open if already open.
     if (open) return;
     if (!canAutoOpenOnPath) return;
@@ -165,7 +167,9 @@ const WhatsAppFloat = () => {
         timerRef.current = null;
       }
     };
-  }, [canAutoOpenOnPath, open, pathname, schedule]);
+  }, [canAutoOpenOnPath, isLiveIntelligence, open, pathname, schedule]);
+
+  if (isLiveIntelligence) return null;
 
   return (
     <div style={{ position: 'relative' }}>
