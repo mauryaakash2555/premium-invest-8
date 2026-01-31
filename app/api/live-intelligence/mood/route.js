@@ -140,7 +140,8 @@ function generateMoodRuleBased(marketData) {
   const mood_text = (parts.join('. ') + (parts.length ? '.' : '')).trim();
   const mood_type = determineMoodType(marketData);
 
-  if (!mood_text) throw new Error('Market data unavailable');
+  // Never throw for missing/partial symbols. This endpoint is a UI dependency and must be resilient.
+  if (!mood_text) return buildFallbackMood('Market data incomplete');
   return { mood_text, mood_type };
 }
 
@@ -223,7 +224,8 @@ Return ONLY the mood text, nothing else.`
     throw new Error('Gemini returned unusable mood');
   } catch (error) {
     console.error('Gemini mood generation error:', error);
-    throw error;
+    // Gemini can fail in previews (missing key, quota, network). Fall back to rule-based mood.
+    return generateMoodRuleBased(marketData);
   }
 }
 
