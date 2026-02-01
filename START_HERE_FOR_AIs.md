@@ -2,6 +2,19 @@
 
 ## ⚠️ STOP BEFORE YOU CODE!
 
+## 🔒 CRITICAL: PROTECTED BOT - DO NOT TOUCH
+
+**READ THIS FIRST:** `DO_NOT_TOUCH_BOT.md`
+
+The floating chat bot uses **GENKUB** (black 3D robot):
+- Scene: `/spline/genkub/scene.splinecode`
+- Component: `src/components/Chatbot3DTrigger.jsx`
+- DO NOT change to r4x, DO NOT replace with icon, DO NOT add CSS filters
+
+**This is LOCKED by user request. Any changes to the bot require explicit user approval.**
+
+---
+
 ## ✅ DEV SERVER (1-CLICK, RELIABLE)
 
 Use the VS Code Task (recommended):

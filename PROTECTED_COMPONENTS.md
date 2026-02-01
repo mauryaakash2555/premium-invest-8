@@ -7,6 +7,20 @@ This document describes the bulletproof architecture for critical components tha
 1. **Market Ticker** (`/core/marketTicker/`)
 2. **AI Chat** (`/core/chat/`)
 3. **Admin Login** (`/core/admin/`)
+4. **🤖 Floating Chat Bot** (`/src/components/Chatbot3DTrigger.jsx`) - **GENKUB ONLY**
+
+## ⚠️ FLOATING BOT - SPECIAL PROTECTION
+
+**READ:** `DO_NOT_TOUCH_BOT.md`
+
+The floating chat bot is LOCKED to use GENKUB (black 3D robot):
+- Scene URL: `/spline/genkub/scene.splinecode`
+- DO NOT change to `/spline/r4x/` (white robot)
+- DO NOT replace with MessageCircle icon
+- DO NOT add CSS filters to darken/lighten
+- Mobile positioning is carefully tuned - DO NOT MODIFY
+
+**Any changes require explicit user approval.**
 
 ## Why This Architecture?
 

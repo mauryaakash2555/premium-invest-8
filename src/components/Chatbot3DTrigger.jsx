@@ -3,7 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 
-const DEFAULT_SCENE_URL = '/spline/r4x/scene.splinecode';
+/**
+ * 🔒 LOCKED: DO NOT CHANGE THIS DEFAULT
+ * The user's official bot is GENKUB (black 3D robot).
+ * See: DO_NOT_TOUCH_BOT.md for details.
+ * Changing this to r4x or any other scene is FORBIDDEN.
+ */
+const DEFAULT_SCENE_URL = '/spline/genkub/scene.splinecode';
 
 const FONT_URL_REWRITES = new Map([
   [

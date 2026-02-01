@@ -64,7 +64,10 @@ function Backup-Core {
         "components/user/WhatsAppFloat.jsx",
         "components/user/PremiumMarketTicker.jsx",
         "components/user/PremiumMarketTicker.module.css",
-        "lib/adminSession.js"
+        "lib/adminSession.js",
+        "src/components/Chatbot3DTrigger.jsx",
+        "public/spline/genkub/scene.splinecode",
+        "DO_NOT_TOUCH_BOT.md"
     )
     
     $relatedDir = Join-Path $backupDir "related"
