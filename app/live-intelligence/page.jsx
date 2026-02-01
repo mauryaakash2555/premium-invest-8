@@ -92,41 +92,43 @@ export default function LiveIntelligencePage() {
       {/* Render the EXACT same panel as the overlay */}
       <LiveIntelligencePanel onClose={handleClose} />
 
-      {/* Tiny portal hint - NOT learning UI, just a subtle gateway at the bottom */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 16px' }}>
+      {/* Premium learning portal CTA - bold and inviting */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 16px' }}>
         <Link
           href="/learn"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '10px',
-            padding: '14px 20px',
-            borderRadius: '14px',
-            border: '1px solid rgba(140, 180, 255, 0.15)',
-            background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.08), rgba(40, 60, 100, 0.04))',
-            color: 'rgba(180, 200, 230, 0.75)',
-            fontSize: '13px',
-            fontWeight: 500,
+            gap: '12px',
+            padding: '18px 28px',
+            borderRadius: '16px',
+            border: '1px solid rgba(140, 180, 255, 0.25)',
+            background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.14), rgba(50, 80, 140, 0.08))',
+            color: 'rgba(220, 235, 255, 0.92)',
+            fontSize: '15px',
+            fontWeight: 600,
             textDecoration: 'none',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+            boxShadow: '0 8px 32px rgba(60, 100, 180, 0.15)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.35)';
-            e.currentTarget.style.color = 'rgba(220, 230, 255, 0.95)';
-            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.14), rgba(40, 60, 100, 0.08))';
+            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.45)';
+            e.currentTarget.style.color = 'rgba(240, 248, 255, 1)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.22), rgba(50, 80, 140, 0.12))';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(60, 100, 180, 0.25)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.15)';
-            e.currentTarget.style.color = 'rgba(180, 200, 230, 0.75)';
-            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.08), rgba(40, 60, 100, 0.04))';
+            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.25)';
+            e.currentTarget.style.color = 'rgba(220, 235, 255, 0.92)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.14), rgba(50, 80, 140, 0.08))';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(60, 100, 180, 0.15)';
           }}
         >
-          <span style={{ fontSize: '16px' }}>✨</span>
+          <span style={{ fontSize: '18px', filter: 'drop-shadow(0 0 8px rgba(255,220,100,0.4))' }}>✨</span>
           <span>Want to understand why markets behave this way?</span>
-          <span style={{ opacity: 0.6 }}>→</span>
+          <span style={{ opacity: 0.7, fontSize: '16px' }}>→</span>
         </Link>
       </div>
 

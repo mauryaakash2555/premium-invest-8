@@ -265,7 +265,7 @@ export default function LearnPage() {
     <div
       style={{
         minHeight: '100vh',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingTop: 'calc(80px + env(safe-area-inset-top, 0px))', // Account for navbar height
         background: '#090A0C',
         color: 'rgba(235, 242, 255, 0.95)',
         overflowX: 'hidden',
@@ -277,7 +277,7 @@ export default function LearnPage() {
         style={{
           maxWidth: '1100px',
           margin: '0 auto',
-          padding: '18px 16px 8px',
+          padding: '24px 16px 12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -326,7 +326,20 @@ export default function LearnPage() {
         <LearningPathPanel />
       </div>
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      {/* LaserFooter - proper wrapper */}
+      <div
+        className="li-footer-wrapper"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1,
+          position: 'relative',
+          zIndex: 100,
+          width: '100%',
+          marginTop: '20px',
+          background: '#090A0C',
+        }}
+      >
         <LaserFooter inLiveOverlay={true} />
       </div>
 
