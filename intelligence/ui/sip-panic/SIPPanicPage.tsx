@@ -36,6 +36,8 @@ import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
 import FAQSection from "@/components/shared/FAQSection";
 
+const FAQSectionAny: any = FAQSection;
+
 const CALCULATOR_TYPE = "sip_vs_panic_selling";
 const LEARNING_BUBBLES_KEY = "bm.sipPanicSelling.hideLearningBubbles";
 const TAX_PROFILE_KEY = "bm.sipPanicSelling.taxProfile";
@@ -1838,7 +1840,7 @@ export default function SIPPanicPage(props?: {
         <RegretCalculator monthlyAmount={inputs.monthlyAmount} />
 
         {faqItems.length ? (
-          <FAQSection
+          <FAQSectionAny
             items={faqItems}
             pageUrl={props?.pageUrl}
             title="Frequently asked questions"
