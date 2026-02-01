@@ -566,15 +566,7 @@ export default function BlogPage() {
                       </div>
                     )}
 
-                    <a
-                      href={waHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="blog-hover-wa"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      WhatsApp →
-                    </a>
+
                   </div>
                 </MobileScrollBoost>
               );

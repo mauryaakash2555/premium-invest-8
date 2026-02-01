@@ -532,10 +532,11 @@ const WhatsAppFloat = () => {
         </div>
       ) : null}
 
-      {/* 🔵 Floating 3D bot trigger (keeps existing chat logic) */}
+      {/* 🔵 Floating 3D BLACK robot trigger */}
       <Chatbot3DTrigger
         className="chatbot-float"
         aria-label="Open chat"
+        sceneUrl="/spline/genkub/scene.splinecode"
         size={200}
         onActivate={() => {
           setShowNudge(false);

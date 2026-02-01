@@ -368,15 +368,7 @@ export default function PillarIndexClient({ pillar }) {
                         </div>
                       )}
 
-                      <a
-                        href={waHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="blog-hover-wa"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        WhatsApp →
-                      </a>
+
                     </div>
                   </div>
                 );

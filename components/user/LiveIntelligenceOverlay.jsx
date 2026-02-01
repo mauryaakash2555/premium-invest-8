@@ -25,7 +25,6 @@ import DonutCalculator from '@/components/live-intelligence/DonutCalculator';
 import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
-import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel';
 import { getIstGreeting } from '@/lib/time/istGreeting';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
@@ -2850,14 +2849,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <SectionErrorBoundary>
             <div style={{ gridColumn: '1 / -1' }}>
               <HeadlineFeed />
-            </div>
-          </SectionErrorBoundary>
-
-
-          {/* Learning Path - premium explainers */}
-          <SectionErrorBoundary>
-            <div style={{ gridColumn: '1 / -1' }}>
-              <LearningPathPanel />
             </div>
           </SectionErrorBoundary>
 

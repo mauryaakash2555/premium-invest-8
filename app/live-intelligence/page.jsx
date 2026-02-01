@@ -27,6 +27,9 @@ import { useRouter } from 'next/navigation';
 // This ensures 1:1 parity - any overlay changes automatically apply here
 import { LiveIntelligencePanel } from '@/components/user/LiveIntelligenceOverlay';
 
+// Learning summary only (no lessons) + CTA to /learn
+import LearningProgressSummary from '@/components/learn/LearningProgressSummary';
+
 // Import LaserFooter - the SAME footer used by the overlay (NOT the system Footer)
 import LaserFooter from '@/components/user/LaserFooter';
 
@@ -86,6 +89,10 @@ export default function LiveIntelligencePage() {
         overflowX: 'hidden',
       }}
     >
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 14px 0' }}>
+        <LearningProgressSummary />
+      </div>
+
       {/* Render the EXACT same panel as the overlay */}
       <LiveIntelligencePanel onClose={handleClose} />
 
