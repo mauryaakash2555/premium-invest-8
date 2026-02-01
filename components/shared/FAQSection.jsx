@@ -87,7 +87,7 @@ export default function FAQSection({
   title = "FAQs",
   subtitle = "Clear answers, minimal noise.",
   withSchema = true,
-}) {
+} = {}) {
   const faqs = normalizeFaqs(items ?? faqsProp);
   const [openIndex, setOpenIndex] = useState(null);
 
