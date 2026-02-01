@@ -1,9 +1,9 @@
 /**
  * FILE: components/user/MarketMoodStrip.jsx
- * PURPOSE: Live Intelligence rotating mood strip
+ * PURPOSE: Live Intelligence rotating strip (news-style headlines)
  * COLORS: Premium laser blue theme (NO gold/brown)
  * 
- * LIVE DATA: Fetches live market mood from /api/live-intelligence/mood
+ * LIVE DATA: Fetches live intelligence headlines from /api/live-intelligence/feed
  */
 
 'use client';
@@ -27,49 +27,101 @@ export default function MarketMoodStrip({ onToggleRain }) {
   const [hasTriedFetch, setHasTriedFetch] = useState(false);
   const router = useRouter();
 
-  // Fetch live market mood from API
-  const fetchLiveMood = useCallback(async () => {
+  const categoryLabel = (cat) => {
+    const c = String(cat || '').toLowerCase();
+    if (c === 'market' || c === 'share_market') return 'Share Market';
+    if (c === 'mutual_funds' || c === 'mutualfunds') return 'Mutual Funds';
+    if (c === 'breaking') return 'Breaking News';
+    if (c === 'insurance') return 'Insurance';
+    if (c === 'fixed_income' || c === 'fd_rd_bonds') return 'FD/RD/Bonds';
+    if (c === 'pms' || c === 'aif' || c === 'pms_aif') return 'PMS/AIF';
+    if (c === 'real_estate') return 'Real Estate';
+    if (c === 'forex_gold') return 'Forex/Gold';
+    return cat ? String(cat) : 'Intel';
+  };
+
+  const normalizeIcon = (h) => {
+    const icon = String(h?.icon || '').trim();
+    if (icon) return icon;
+    const c = String(h?.category || '').toLowerCase();
+    if (c === 'breaking') return '🔴';
+    if (c === 'market') return '📈';
+    if (c === 'mutual_funds') return '💰';
+    if (c === 'insurance') return '🛡️';
+    if (c === 'fixed_income') return '🏦';
+    if (c === 'pms') return '💎';
+    if (c === 'real_estate') return '🏠';
+    if (c === 'forex_gold') return '💵';
+    return '🧠';
+  };
+
+  const buildFallbackLines = useCallback(() => {
+    const ts = new Date().toISOString();
+    return [{ id: `fallback_${ts}`, icon: '🧠', text: 'Live data temporarily unavailable.', ts }];
+  }, []);
+
+  // Fetch live headlines from API
+  const fetchLiveHeadlines = useCallback(async () => {
     try {
-      const res = await fetch('/api/live-intelligence/mood?nocache=1', { cache: 'no-store', next: { revalidate: 0 } });
-      if (!res.ok) throw new Error('Mood API failed');
+      const limit = 12;
+      const res = await fetch(`/api/live-intelligence/feed?limit=${limit}&nocache=1`, {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      });
+      if (!res.ok) throw new Error('Feed API failed');
       const data = await res.json();
 
-      if (data?.success && data?.mood?.mood_text) {
-        const text = String(data.mood.mood_text || '').trim();
-        const ts = data.mood.generated_at || data.mood.created_at || new Date().toISOString();
+      if (data?.ok && Array.isArray(data?.headlines) && data.headlines.length > 0) {
+        const mapped = data.headlines
+          .filter((h) => h && (h.headline || h.text))
+          .slice(0, limit)
+          .map((h, idx) => {
+            const headline = String(h.headline || h.text || '').replace(/\s+/g, ' ').trim();
+            const why = String(h.why_it_matters || h.whyItMatters || '').replace(/\s+/g, ' ').trim();
+            const label = categoryLabel(h.category);
+            const merged = `${label} → ${headline}${why ? ` — ${why}` : ''}`.trim();
+            const text = merged.length > 160 ? merged.slice(0, 157).trimEnd() + '…' : merged;
+            const ts = h.timestamp || h.created_at || new Date().toISOString();
+            return {
+              id: String(h.id || `headline_${idx}_${ts}`),
+              icon: normalizeIcon(h),
+              text,
+              ts,
+            };
+          });
 
-        // Keep it short: one line in most modes; two lines if the text is long.
-        const parts = text.split(/\s*\.\s*/).map((s) => s.trim()).filter(Boolean);
-        const lines = parts.length ? parts.slice(0, 2) : [text];
-
-        setMoodLines([
-          { id: `mood_${ts}`, icon: '🧠', text: lines.join('. ') + (lines.length ? '.' : ''), ts },
-        ]);
-        setIsLive(true);
-        return true;
+        if (mapped.length > 0) {
+          setMoodLines(mapped);
+          setIsLive(true);
+          return true;
+        }
       }
     } catch (err) {
-      console.warn('[MarketMoodStrip] Live mood unavailable:', err.message);
-      setMoodLines([]);
+      console.warn('[MarketMoodStrip] Live headlines unavailable:', err.message);
+      setMoodLines(buildFallbackLines());
       setIsLive(false);
     } finally {
       setHasTriedFetch(true);
     }
+
+    // Empty/invalid payload: show a stable fallback line.
+    setMoodLines(buildFallbackLines());
+    setIsLive(false);
     return false;
-  }, []);
+  }, [buildFallbackLines]);
 
   useEffect(() => {
-    fetchLiveMood();
+    fetchLiveHeadlines();
     
     setModeConfig(getCurrentModeConfig());
     
-    // Refresh mood every 60s (lightweight)
+    // Refresh headlines every 5 min (API caches for 5 min)
     const refreshInterval = setInterval(() => {
-      fetchLiveMood();
-    }, 60 * 1000);
+      fetchLiveHeadlines();
+    }, 5 * 60 * 1000);
     
     return () => clearInterval(refreshInterval);
-  }, [fetchLiveMood]);
+  }, [fetchLiveHeadlines]);
 
   useEffect(() => {
     if (moodLines.length === 0) return;
@@ -90,7 +142,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
     ? '🌙 What You Missed Today — Tap to open'
     : (currentMood
         ? icon + ' ' + headlineText
-        : (hasTriedFetch ? '📡 Live mood updating — Tap to open' : 'Loading Live Mood…'));
+        : (hasTriedFetch ? '🧠 Live data temporarily unavailable.' : 'Loading Live Mood…'));
 
   const handleClick = () => {
     if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
@@ -112,7 +164,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
             <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 160, 255, 0.35)' : COLORS.accentDim }} />
             <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 160, 255, 1)' : COLORS.accent }} />
           </span>
-          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>{isLive ? 'Live Mood' : (hasTriedFetch ? 'Updating' : 'Live Mood')}</span>
+          <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>Live Mood</span>
         </div>
         
         <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />

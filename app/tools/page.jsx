@@ -119,28 +119,10 @@ export default function ToolsHubPage() {
     },
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <>
       <BackRow />
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
-      <script
-        id="tools-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
@@ -211,7 +193,7 @@ export default function ToolsHubPage() {
               </p>
             </div>
 
-            <FAQSection faqs={faqs} withSchema={false} />
+            <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/tools" />
           </div>
         </div>
       </section>

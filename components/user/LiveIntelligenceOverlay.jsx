@@ -26,6 +26,7 @@ import StreakBadge from '@/components/live-intelligence/StreakBadge';
 import MorningBrief from '@/components/live-intelligence/MorningBrief';
 import NightSummary from '@/components/live-intelligence/NightSummary';
 import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel';
+import { getIstGreeting } from '@/lib/time/istGreeting';
 import MarketMoodIndicator from '@/components/live-intelligence/MarketMoodIndicator';
 import MarketIntelPanel from '@/components/live-intelligence/MarketIntelPanel';
 import OptionsIntelPanel from '@/components/live-intelligence/OptionsIntelPanel';
@@ -332,6 +333,9 @@ export default function LiveIntelligenceOverlay({
         document.body.style.overflow = '';
         document.body.removeAttribute('data-laser-active');
       }
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.removeAttribute('data-laser-active');
+      }
     };
   }, []);
 
@@ -343,6 +347,9 @@ export default function LiveIntelligenceOverlay({
     if (typeof document !== 'undefined' && document.body) {
       document.body.style.overflow = 'hidden';
       document.body.setAttribute('data-laser-active', 'true');
+    }
+    if (typeof document !== 'undefined' && document.documentElement) {
+      document.documentElement.setAttribute('data-laser-active', 'true');
     }
     
     // Animation complete
@@ -360,6 +367,9 @@ export default function LiveIntelligenceOverlay({
       if (typeof document !== 'undefined' && document.body) {
         document.body.style.overflow = '';
         document.body.removeAttribute('data-laser-active');
+      }
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.removeAttribute('data-laser-active');
       }
     }, 300);
   }, [isOpen, isAnimating]);
@@ -950,8 +960,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, [portfolioSnapshot?.updatedAt]);
 
   const greetingLine = useMemo(() => {
-    const hr = new Date().getHours();
-    const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+    const greeting = getIstGreeting({ fallback: 'Hello' });
     let clientName = '';
     try {
       clientName = typeof window !== 'undefined' ? (window.localStorage.getItem('li_client_name_v1') || '') : '';

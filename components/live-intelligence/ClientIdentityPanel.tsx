@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { getIstGreeting } from '@/lib/time/istGreeting';
 
 const KEY_NAME = 'li_client_name_v1';
 const KEY_TIER = 'li_client_tier_v1';
@@ -40,10 +41,7 @@ function formatSince(iso: string): string {
 }
 
 function greeting(): string {
-  const hr = new Date().getHours();
-  if (hr < 12) return 'Good morning';
-  if (hr < 17) return 'Good afternoon';
-  return 'Good evening';
+  return getIstGreeting();
 }
 
 export default function ClientIdentityPanel(props: { style?: CSSProperties }) {

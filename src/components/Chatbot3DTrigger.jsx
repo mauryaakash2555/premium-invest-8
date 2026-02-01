@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 
-const DEFAULT_SCENE_URL = '/spline/genkub/scene.splinecode';
+const DEFAULT_SCENE_URL = '/spline/r4x/scene.splinecode';
 
 const FONT_URL_REWRITES = new Map([
   [
@@ -262,10 +262,72 @@ export default function Chatbot3DTrigger({
   const moveMetaRef = useRef({ pointerType: 'mouse', pointerId: 1, buttons: 0 });
   const cursorRef = useRef({ x: 0, y: 0, has: false });
   const animRef = useRef({ raf: 0, x: 0, y: 0 });
+  const activatedAtRef = useRef(0);
   const [ready, setReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const isMobileFloat = useIsMobileFloat();
+
+  const safeActivate = useCallback(() => {
+    if (typeof onActivate !== 'function') return;
+    const now = Date.now();
+
+    // Prevent double-activation when both pointerup and click fire.
+    if (now - (activatedAtRef.current || 0) < 450) return;
+    activatedAtRef.current = now;
+
+    // Let Spline's internal click/tap reactions run first.
+    // React's handlers are delegated; a 0ms delay prevents stealing the interaction.
+    setTimeout(() => {
+      try {
+        onActivate();
+      } catch {}
+    }, 0);
+  }, [onActivate]);
+
+  // Some WebGL runtimes attach aggressive event listeners (sometimes on document/window)
+  // that can interfere with React handlers on nested elements.
+  // Add a capture-phase fallback at the window level: if the interaction ends on this
+  // component, open the chat. `safeActivate` de-dupes rapid double fires.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (prefersReducedMotion) return;
+
+    const onWinPointerUp = (e) => {
+      try {
+        const el = containerRef.current;
+        if (!el) return;
+        if (!e) return;
+        if (e.pointerType === 'mouse' && e.button != null && e.button !== 0) return;
+        if (el.contains(e.target)) safeActivate();
+      } catch {
+        // ignore
+      }
+    };
+
+    const onWinClick = (e) => {
+      try {
+        const el = containerRef.current;
+        if (!el) return;
+        if (!e) return;
+        if (e.button != null && e.button !== 0) return;
+        if (el.contains(e.target)) safeActivate();
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener('pointerup', onWinPointerUp, true);
+    window.addEventListener('click', onWinClick, true);
+    return () => {
+      try {
+        window.removeEventListener('pointerup', onWinPointerUp, true);
+        window.removeEventListener('click', onWinClick, true);
+      } catch {
+        // ignore
+      }
+    };
+  }, [prefersReducedMotion, safeActivate]);
 
   const resolvedSizePx = useMemo(() => {
     if (isMobileFloat) {
@@ -653,20 +715,11 @@ export default function Chatbot3DTrigger({
 
   const handlePointerUp = useCallback(
     (e) => {
-      // Let Spline's internal click/tap reactions run first.
-      // React's handler is delegated; a 0ms delay prevents stealing the interaction.
-      if (typeof onActivate !== 'function') return;
-
       // Only respond to primary mouse button, but allow touch.
       if (e.pointerType === 'mouse' && e.button != null && e.button !== 0) return;
-
-      setTimeout(() => {
-        try {
-          onActivate();
-        } catch {}
-      }, 0);
+      safeActivate();
     },
-    [onActivate]
+    [safeActivate]
   );
 
   // Reduced-motion fallback: keep a simple button (no 3D).
@@ -705,11 +758,24 @@ export default function Chatbot3DTrigger({
       aria-label={ariaLabel}
       className={className}
       style={containerStyle}
+      onPointerUpCapture={handlePointerUp}
       onPointerUp={handlePointerUp}
+      onClickCapture={(e) => {
+        // Capture-phase fallback: some runtimes attach listeners on the canvas and may
+        // stop propagation; capture ensures we still open the modal.
+        if (e?.button != null && e.button !== 0) return;
+        safeActivate();
+      }}
+      onClick={(e) => {
+        // Some environments (e.g., automated tests) may not dispatch pointer events.
+        // Keep click as a reliable fallback.
+        if (e?.button != null && e.button !== 0) return;
+        safeActivate();
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onActivate?.();
+          safeActivate();
         }
       }}
       {...rest}

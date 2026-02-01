@@ -24,9 +24,10 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Calendar, User } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LazyImage from '@/components/user/LazyImage';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
@@ -37,6 +38,7 @@ export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -90,6 +92,22 @@ export default function BlogPage() {
     ? allPosts.filter(post => post.category === selectedCategory)
     : allPosts;
 
+  const siteOrigin = useMemo(() => {
+    try {
+      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://bmwealth.co.in';
+    } catch {
+      return 'https://bmwealth.co.in';
+    }
+  }, []);
+
+  const getPostHref = (post) => `/blog/${post?.slug || post?.id || ''}`;
+
+  const getWhatsAppHref = (postHref, title) => {
+    const url = `${siteOrigin}${postHref}`;
+    const msg = `Hi BM Wealth, I just read: ${title || 'your blog'}\n${url}\n\nI want help with:`;
+    return `https://wa.me/918850977259?text=${encodeURIComponent(msg)}`;
+  };
+
   const handleCategoryClick = (category) => {
     if (selectedCategory === category) {
       setSelectedCategory(null);
@@ -125,26 +143,8 @@ export default function BlogPage() {
     },
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <div>
-      <script
-        id="blog-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       {/* Mobile optimization for blog card images */}
       <style>{`
         @media (max-width: 768px) {
@@ -388,17 +388,32 @@ export default function BlogPage() {
               gap: '40px',
             }}
           >
-            {displayPosts.map((post) => (
-              <Link
-                href={`/blog/${post.slug || post.id}`}
-                key={post.id || post.slug}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
+            {displayPosts.map((post, idx) => {
+              const postHref = getPostHref(post);
+              const next = displayPosts.length > 1 ? displayPosts[(idx + 1) % displayPosts.length] : null;
+              const nextHref = next ? getPostHref(next) : null;
+              const nextTitle = next?.title || '';
+              const waHref = getWhatsAppHref(postHref, post?.title);
+
+              return (
                 <MobileScrollBoost
+                  key={post.id || post.slug || idx}
                   holdMs={6000}
                   bandTop={0.25}
                   bandBottom={0.85}
                   className="blog-card-premium"
+                  role="link"
+                  tabIndex={0}
+                  aria-label={post?.title ? `Open blog: ${post.title}` : 'Open blog'}
+                  onClick={() => {
+                    if (postHref && postHref !== '/blog/') router.push(postHref);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (postHref && postHref !== '/blog/') router.push(postHref);
+                    }
+                  }}
                   style={{
                     overflow: 'hidden',
                     cursor: 'pointer',
@@ -528,9 +543,42 @@ export default function BlogPage() {
                       )}
                     </div>
                   </div>
+
+                  {/* Hover CTA overlay (desktop hover + keyboard focus) */}
+                  <div className="blog-hover-cta" aria-label="Blog quick actions">
+                    {nextHref ? (
+                      <div className="blog-hover-next" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                        <span className="blog-hover-nextLabel">Next Read:</span>
+                        <Link
+                          href={nextHref}
+                          className="blog-hover-nextLink"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          {nextTitle || 'Recommended'}
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className="blog-hover-next">
+                        <span className="blog-hover-nextLabel">Next Read:</span>
+                        <span className="blog-hover-nextLink">Recommended</span>
+                      </div>
+                    )}
+
+                    <a
+                      href={waHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="blog-hover-wa"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      WhatsApp →
+                    </a>
+                  </div>
                 </MobileScrollBoost>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
@@ -543,7 +591,7 @@ export default function BlogPage() {
         </p>
       </section>
 
-      <FAQSection faqs={faqs} withSchema={false} />
+      <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/blog" withSchema />
     </div>
   );
 }

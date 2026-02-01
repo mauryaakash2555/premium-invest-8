@@ -39,28 +39,10 @@ export default function AllCalculatorsPage() {
     },
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
-
   return (
     <>
       <BackRow href="/tools" label="← Back to Tools" />
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
-      <script
-        id="all-calc-faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
@@ -90,7 +72,7 @@ export default function AllCalculatorsPage() {
               </p>
             </div>
 
-            <FAQSection faqs={faqs} />
+            <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/tools/all-calculators" />
           </div>
         </div>
       </section>

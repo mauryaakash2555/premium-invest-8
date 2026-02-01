@@ -34,6 +34,7 @@ import { ShareResultCard } from "./ShareResultCard";
 import type { Lang } from "./i18n";
 import { isLang, t as tStatic, type TranslationKey } from "./i18n";
 import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
+import FAQSection from "@/components/shared/FAQSection";
 
 const CALCULATOR_TYPE = "sip_vs_panic_selling";
 const LEARNING_BUBBLES_KEY = "bm.sipPanicSelling.hideLearningBubbles";
@@ -183,6 +184,7 @@ export default function SIPPanicPage(props?: {
   embed?: boolean;
   partner?: string;
   faqs?: Array<{ q: string; a: string }>;
+  pageUrl?: string;
 }) {
   const searchParams = useSearchParams();
   const qsEmbed = searchParams?.get("embed") === "1";
@@ -203,6 +205,7 @@ export default function SIPPanicPage(props?: {
   const embed = props?.embed ?? qsEmbed;
   const partner = props?.partner ?? qsPartner;
   const faqs = props?.faqs ?? [];
+  const faqItems = useMemo(() => faqs.map((f) => ({ question: f.q, answer: f.a })), [faqs]);
   const hideDisclaimer = embed ? qsHideDisclaimer : false;
   const showCta = embed ? qsCta : false;
   const ctaText = (qsCtaText || "Book a call") as string;
@@ -1834,20 +1837,13 @@ export default function SIPPanicPage(props?: {
 
         <RegretCalculator monthlyAmount={inputs.monthlyAmount} />
 
-        {faqs.length ? (
-          <div className="mt-10 rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
-            <h2 className="text-base font-semibold gold-gradient-text-static">Frequently asked questions</h2>
-            <div className="mt-4 space-y-2">
-              {faqs.map((f) => (
-                <details key={f.q} className="rounded-xl border border-white/10 bg-black/20 px-4 py-3">
-                  <summary className="cursor-pointer select-none text-sm text-white/90 font-semibold">
-                    {f.q}
-                  </summary>
-                  <div className="mt-2 text-xs text-white/75 leading-relaxed">{f.a}</div>
-                </details>
-              ))}
-            </div>
-          </div>
+        {faqItems.length ? (
+          <FAQSection
+            items={faqItems}
+            pageUrl={props?.pageUrl}
+            title="Frequently asked questions"
+            subtitle=""
+          />
         ) : null}
 
         <CalculationDetails results={results} />

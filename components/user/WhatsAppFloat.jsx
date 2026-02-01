@@ -19,7 +19,7 @@ import { usePathname } from 'next/navigation';
 import AIChatFloat from '@/components/user/AIChatFloat';
 import ChatErrorBoundary from '@/components/shared/ChatErrorBoundary';
 import Chatbot3DTrigger from '../../src/components/Chatbot3DTrigger';
-import { BOT_POPUP_SCHEDULE } from '@/config/botPopupSchedule';
+import { BOT_POPUP_SCHEDULE, BOT_NUDGE_CONFIG } from '@/config/botPopupSchedule';
 
 function safeNow() {
   try {
@@ -65,19 +65,101 @@ function pickDelayMs(pathname, schedule) {
   return 15000;
 }
 
+function pickNudgeText(pathname, nudge) {
+  const list = Array.isArray(nudge?.textByPathPattern) ? nudge.textByPathPattern : [];
+  for (const row of list) {
+    try {
+      const re = new RegExp(String(row?.pattern || ''));
+      if (re.test(pathname)) {
+        const t = String(row?.text || '').trim();
+        if (t) return t;
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return '';
+}
+
+function safeJsonParse(raw) {
+  try {
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function pickRotatingNudgeText(pathname, nudge) {
+  const pathText = pickNudgeText(pathname, nudge);
+  const extras = Array.isArray(nudge?.extraMessages)
+    ? nudge.extraMessages.map((x) => String(x || '').trim()).filter(Boolean)
+    : [];
+
+  const variants = [pathText, ...extras].filter(Boolean);
+  if (!variants.length) return '';
+
+  // Rotate across variants once per impression, per day.
+  const dayKey = localDayKey();
+  const key = 'bmw_bot_nudge_variant_v1';
+  let idx = 0;
+  try {
+    const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
+    const parsed = safeJsonParse(raw);
+    if (parsed && parsed.dayKey === dayKey && Number.isFinite(parsed.idx)) idx = parsed.idx;
+  } catch {
+    idx = 0;
+  }
+
+  const picked = variants[idx % variants.length];
+  try {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(key, JSON.stringify({ dayKey, idx: idx + 1, at: new Date().toISOString() }));
+    }
+  } catch {
+    // ignore
+  }
+  return picked;
+}
+
+function randInt(min, max) {
+  const a = Number(min);
+  const b = Number(max);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return 0;
+  const lo = Math.min(a, b);
+  const hi = Math.max(a, b);
+  return Math.floor(lo + Math.random() * (hi - lo + 1));
+}
+
 const WhatsAppFloat = () => {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
+  const [nudgeText, setNudgeText] = useState('');
+  const [showLovePulse, setShowLovePulse] = useState(false);
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
   const isLiveIntelligence = Boolean(pathname?.startsWith('/live-intelligence'));
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const schedule = BOT_POPUP_SCHEDULE;
+  const nudge = BOT_NUDGE_CONFIG;
   const allowedPatterns = useMemo(
     () => compilePatterns(schedule?.allowedPathPatterns),
     [schedule]
   );
+  const nudgeAllowedPatterns = useMemo(
+    () => compilePatterns(nudge?.allowedPathPatterns),
+    [nudge]
+  );
   const didScheduleRef = useRef(false);
   const timerRef = useRef(null);
+  const didNudgeRef = useRef(false);
+  const nudgeTimerRef = useRef(null);
+  const lovePulseTimerRef = useRef(null);
+  const lovePulseHideRef = useRef(null);
 
   const canAutoOpenOnPath = useMemo(() => {
     if (!schedule?.enabled) return false;
@@ -85,6 +167,13 @@ const WhatsAppFloat = () => {
     if (!allowedPatterns.length) return true;
     return allowedPatterns.some((re) => re.test(p));
   }, [allowedPatterns, pathname, schedule]);
+
+  const canNudgeOnPath = useMemo(() => {
+    if (!nudge?.enabled) return false;
+    const p = String(pathname || '/');
+    if (!nudgeAllowedPatterns.length) return true;
+    return nudgeAllowedPatterns.some((re) => re.test(p));
+  }, [nudge, nudgeAllowedPatterns, pathname]);
 
   useEffect(() => {
     // Keep Live Intelligence clean (no bot auto-open, no timers).
@@ -169,16 +258,289 @@ const WhatsAppFloat = () => {
     };
   }, [canAutoOpenOnPath, isLiveIntelligence, open, pathname, schedule]);
 
+  useEffect(() => {
+    // Keep Live Intelligence clean.
+    if (isLiveIntelligence) return;
+
+    // No nudge if chat is open.
+    if (open) {
+      setShowNudge(false);
+      return;
+    }
+
+    if (!canNudgeOnPath) return;
+    if (didNudgeRef.current) return;
+    didNudgeRef.current = true;
+
+    // Respect reduced-motion users.
+    try {
+      if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    const dayKey = localDayKey();
+    const key = 'bmw_bot_nudge_v1';
+    const maxPerDay = Number(nudge?.maxNudgesPerDay ?? 1);
+    const minDwell = Number(nudge?.minDwellMs ?? 6000);
+
+    let alreadyCount = 0;
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.dayKey === dayKey && Number.isFinite(parsed.count)) {
+          alreadyCount = parsed.count;
+        }
+      }
+    } catch {
+      alreadyCount = 0;
+    }
+
+    if (alreadyCount >= maxPerDay) return;
+
+    const delayMs = pickDelayMs(String(pathname || '/'), nudge);
+    const totalDelay = Math.max(minDwell, delayMs);
+    const text = pickRotatingNudgeText(String(pathname || '/'), nudge);
+    if (!text) return;
+
+    nudgeTimerRef.current = setTimeout(() => {
+      // If user navigated away, abort.
+      try {
+        const currentPath = window.location?.pathname || '';
+        if (String(currentPath) !== String(pathname || '')) return;
+      } catch {
+        // ignore
+      }
+
+      // If tab not visible, avoid surprise.
+      try {
+        if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
+      } catch {
+        // ignore
+      }
+
+      setNudgeText(text);
+      setShowNudge(true);
+
+      try {
+        const next = { dayKey, count: alreadyCount + 1, at: new Date().toISOString() };
+        window.localStorage.setItem(key, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+    }, totalDelay);
+
+    return () => {
+      if (nudgeTimerRef.current) {
+        try {
+          clearTimeout(nudgeTimerRef.current);
+        } catch {
+          // ignore
+        }
+        nudgeTimerRef.current = null;
+      }
+    };
+  }, [canNudgeOnPath, isLiveIntelligence, nudge, open, pathname]);
+
+  useEffect(() => {
+    // Keep Live Intelligence clean.
+    if (isLiveIntelligence) return;
+
+    // Don't pulse while chat is open or while a text nudge is already showing.
+    if (open || showNudge) {
+      setShowLovePulse(false);
+      return;
+    }
+
+    const lp = nudge?.lovePulse;
+    if (!lp?.enabled) return;
+
+    // Respect reduced-motion users.
+    try {
+      if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    const minMs = Number(lp?.minIntervalMs ?? 15000);
+    const maxMs = Number(lp?.maxIntervalMs ?? 25000);
+    const visibleMs = Number(lp?.visibleMs ?? 1600);
+
+    const clearTimers = () => {
+      if (lovePulseTimerRef.current) {
+        try {
+          clearTimeout(lovePulseTimerRef.current);
+        } catch {
+          // ignore
+        }
+        lovePulseTimerRef.current = null;
+      }
+      if (lovePulseHideRef.current) {
+        try {
+          clearTimeout(lovePulseHideRef.current);
+        } catch {
+          // ignore
+        }
+        lovePulseHideRef.current = null;
+      }
+    };
+
+    const scheduleNext = () => {
+      // If tab not visible, delay a bit.
+      try {
+        if (typeof document !== 'undefined' && document.visibilityState !== 'visible') {
+          lovePulseTimerRef.current = setTimeout(scheduleNext, 4000);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+
+      const wait = randInt(Math.max(2000, minMs), Math.max(3000, maxMs));
+      lovePulseTimerRef.current = setTimeout(() => {
+        // If user navigated away, abort.
+        try {
+          const currentPath = window.location?.pathname || '';
+          if (String(currentPath) !== String(pathname || '')) {
+            scheduleNext();
+            return;
+          }
+        } catch {
+          // ignore
+        }
+
+        setShowLovePulse(true);
+        lovePulseHideRef.current = setTimeout(() => {
+          setShowLovePulse(false);
+          scheduleNext();
+        }, Math.max(600, visibleMs));
+      }, wait);
+    };
+
+    clearTimers();
+    scheduleNext();
+
+    return () => {
+      clearTimers();
+    };
+  }, [isLiveIntelligence, nudge, open, pathname, showNudge]);
+
+  if (!mounted) return null;
   if (isLiveIntelligence) return null;
 
   return (
     <div style={{ position: 'relative' }}>
+      {showLovePulse && !showNudge ? (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: 'fixed',
+            right: '86px',
+            bottom: '210px',
+            zIndex: 2500,
+            pointerEvents: 'auto',
+          }}
+        >
+          <button
+            type="button"
+            aria-label="Need help? Open chat"
+            onClick={() => {
+              setShowLovePulse(false);
+              setOpen(true);
+            }}
+            style={{
+              borderRadius: '999px',
+              border: '1px solid rgba(170, 198, 255, 0.18)',
+              background: 'linear-gradient(135deg, rgba(12,14,20,0.90) 0%, rgba(0,0,0,0.70) 100%)',
+              boxShadow: '0 22px 80px rgba(0,0,0,0.70)',
+              padding: '10px 12px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              cursor: 'pointer',
+              color: 'rgba(235,245,255,0.92)',
+            }}
+          >
+            <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">❤️</span>
+            <span style={{ fontSize: 12, color: 'rgba(235,245,255,0.78)' }}>Tap me</span>
+          </button>
+        </div>
+      ) : null}
+
+      {showNudge ? (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: 'fixed',
+            right: '72px',
+            bottom: '240px',
+            zIndex: 2500,
+            maxWidth: '280px',
+            pointerEvents: 'auto',
+          }}
+        >
+          <div
+            style={{
+              borderRadius: '16px',
+              border: '1px solid rgba(170, 198, 255, 0.18)',
+              background: 'linear-gradient(135deg, rgba(12,14,20,0.92) 0%, rgba(0,0,0,0.78) 100%)',
+              boxShadow: '0 28px 90px rgba(0,0,0,0.75)',
+              padding: '12px 12px',
+              color: 'rgba(235,245,255,0.92)',
+              fontSize: '12px',
+              lineHeight: 1.45,
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              setShowNudge(false);
+              setOpen(true);
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <div style={{ flex: 1 }}>{nudgeText}</div>
+              <button
+                type="button"
+                aria-label="Dismiss"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowNudge(false);
+                }}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'rgba(235,245,255,0.65)',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  padding: 0,
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: 'rgba(170, 198, 255, 0.70)' }}>
+              Tap to open chat
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {/* 🔵 Floating 3D bot trigger (keeps existing chat logic) */}
       <Chatbot3DTrigger
         className="chatbot-float"
         aria-label="Open chat"
         size={200}
-        onActivate={() => setOpen(true)}
+        onActivate={() => {
+          setShowNudge(false);
+          setOpen(true);
+        }}
       />
 
       {/* 🔵 AI Chat modal */}

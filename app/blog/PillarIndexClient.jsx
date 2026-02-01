@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Calendar, User } from 'lucide-react';
 import BlogNavigation from '@/components/BlogNavigation';
 
@@ -54,6 +55,23 @@ export default function PillarIndexClient({ pillar }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const router = useRouter();
+
+  const siteOrigin = useMemo(() => {
+    try {
+      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://bmwealth.co.in';
+    } catch {
+      return 'https://bmwealth.co.in';
+    }
+  }, []);
+
+  const getPostHref = (post) => (post?.slug ? `/blog/${post.slug}` : '/blog');
+
+  const getWhatsAppHref = (postHref, title) => {
+    const url = `${siteOrigin}${postHref}`;
+    const msg = `Hi BM Wealth, I just read: ${title || 'your blog'}\n${url}\n\nI want help with:`;
+    return `https://wa.me/918850977259?text=${encodeURIComponent(msg)}`;
+  };
   const [note, setNote] = useState('');
 
   useEffect(() => {
@@ -227,14 +245,29 @@ export default function PillarIndexClient({ pillar }) {
                 gap: '40px',
               }}
             >
-              {posts.map((post) => (
-                <Link
-                  key={post._id}
-                  href={post.slug ? `/blog/${post.slug}` : '/blog'}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
+              {posts.map((post, idx) => {
+                const postHref = getPostHref(post);
+                const next = posts.length > 1 ? posts[(idx + 1) % posts.length] : null;
+                const nextHref = next ? getPostHref(next) : null;
+                const nextTitle = next?.title || '';
+                const waHref = getWhatsAppHref(postHref, post?.title);
+
+                return (
                   <div
+                    key={post._id || post.slug || idx}
                     className="blog-card-premium"
+                    role="link"
+                    tabIndex={0}
+                    aria-label={post?.title ? `Open blog: ${post.title}` : 'Open blog'}
+                    onClick={() => {
+                      if (postHref && postHref !== '/blog') router.push(postHref);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (postHref && postHref !== '/blog') router.push(postHref);
+                      }
+                    }}
                     style={{
                       overflow: 'hidden',
                       cursor: 'pointer',
@@ -312,9 +345,42 @@ export default function PillarIndexClient({ pillar }) {
                         </div>
                       ) : null}
                     </div>
+
+                    {/* Hover CTA overlay (desktop hover + keyboard focus) */}
+                    <div className="blog-hover-cta" aria-label="Blog quick actions">
+                      {nextHref ? (
+                        <div className="blog-hover-next" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                          <span className="blog-hover-nextLabel">Next Read:</span>
+                          <Link
+                            href={nextHref}
+                            className="blog-hover-nextLink"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            {nextTitle || 'Recommended'}
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="blog-hover-next">
+                          <span className="blog-hover-nextLabel">Next Read:</span>
+                          <span className="blog-hover-nextLink">Recommended</span>
+                        </div>
+                      )}
+
+                      <a
+                        href={waHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="blog-hover-wa"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        WhatsApp →
+                      </a>
+                    </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -40,9 +40,16 @@ export default function LiveIntelligencePage() {
     if (typeof document !== 'undefined' && document.body) {
       document.body.setAttribute('data-laser-active', 'true');
     }
+    // Also set on <html> to reliably scope scrollbar styling (some browsers scroll the root element)
+    if (typeof document !== 'undefined' && document.documentElement) {
+      document.documentElement.setAttribute('data-laser-active', 'true');
+    }
     return () => {
       if (typeof document !== 'undefined' && document.body) {
         document.body.removeAttribute('data-laser-active');
+      }
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.removeAttribute('data-laser-active');
       }
     };
   }, []);

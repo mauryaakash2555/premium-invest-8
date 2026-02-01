@@ -47,6 +47,7 @@ import styles from "./AIChatFloat.module.css";
 import { isFeatureEnabled } from "@/config/features";
 import { FamilyAdminView } from "@/components/admin/FamilyAdminView";
 import { createTrackedLink, logClick } from "@/lib/affiliate/tracker";
+import { getIstGreeting } from "@/lib/time/istGreeting";
 
 const COMPLIANCE_TEXT =
   "Welcome to BM Wealth. We provide educational guidance and product\n" +
@@ -101,27 +102,7 @@ function dayGreeting() {
   try {
     if (!FEATURE_TIME_GREETINGS) return "Hello!";
     // IMPORTANT: Always greet in India time (IST), not server timezone.
-    const now = new Date();
-    const hourPart = new Intl.DateTimeFormat("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      hour12: false,
-    })
-      .formatToParts(now)
-      .find((p) => p.type === "hour")?.value;
-
-    const h = Number.parseInt(String(hourPart || ""), 10);
-    if (!Number.isFinite(h)) return "Hello!";
-
-    // Required IST time ranges:
-    // 5 AM - 12 PM: Good morning
-    // 12 PM - 5 PM: Good afternoon
-    // 5 PM - 9 PM: Good evening
-    // 9 PM - 5 AM: Good night
-    if (h >= 5 && h < 12) return "Good morning!";
-    if (h >= 12 && h < 17) return "Good afternoon!";
-    if (h >= 17 && h < 21) return "Good evening!";
-    return "Good night!";
+    return `${getIstGreeting({ fallback: "Hello" })}!`;
   } catch {
     return "Hello!";
   }
@@ -179,7 +160,7 @@ function isGreetingOnly(text) {
 export default function AIChatFloat({ open, onClose, whatsappHref }) {
   // Safety: keep it OFF unless explicitly enabled via env flag.
   const flag = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED;
-  const enabled = flag ? flag === "true" : true;
+  const enabled = flag ? /^(1|true|yes|on)$/i.test(String(flag)) : true;
 
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -1088,8 +1069,88 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
   }
 
   // IMPORTANT: don't early-return before hooks; it breaks hook ordering when `open` toggles.
-  if (!enabled) return null;
   if (!open) return null;
+
+  // If the AI chat feature is disabled via env flag, still open a lightweight dialog
+  // so the floating trigger doesn't feel broken (and users can continue on WhatsApp).
+  if (!enabled) {
+    return (
+      <>
+        <div className={styles.overlay} role="dialog" aria-modal="true">
+          <button className={styles.dismiss} aria-label="Close" onClick={onClose} />
+
+          <div className={styles.panel}>
+            <div className={styles.scanline} />
+
+            <div className={styles.header}>
+              <div className={styles.brand}>
+                <div className={styles.badge}>CONCIERGE</div>
+                <div className={styles.title}>BM Wealth - Concierge</div>
+              </div>
+
+              <div className={styles.actions}>
+                <button type="button" className={styles.closeBtn} aria-label="Close" onClick={onClose}>
+                  <svg
+                    className={styles.closeX}
+                    aria-hidden="true"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      d="M4 4L14 14"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M14 4L4 14"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div style={{ padding: '16px 16px 18px', color: 'rgba(235,242,255,0.92)' }}>
+              <div style={{ fontSize: 14, lineHeight: 1.45, opacity: 0.9 }}>
+                Chat is temporarily unavailable in this build.
+              </div>
+              <div style={{ marginTop: 10, fontSize: 13, lineHeight: 1.5, opacity: 0.75 }}>
+                Please message us on WhatsApp and we’ll reply ASAP.
+              </div>
+
+              <a
+                href={whatsappHref || 'https://wa.me/918850977259'}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 14,
+                  padding: '10px 14px',
+                  borderRadius: 12,
+                  border: '1px solid color-mix(in oklab, var(--lux-accent) 24%, transparent)',
+                  background: 'rgba(7,7,8,0.55)',
+                  color: 'rgba(235,242,255,0.92)',
+                  textDecoration: 'none',
+                  fontWeight: 800,
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Open WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

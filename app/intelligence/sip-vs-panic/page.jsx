@@ -129,16 +129,6 @@ export default function SIPPanicRoutePage() {
     },
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   return (
     <>
       <CrisisModeBanner placement="sip_vs_panic" />
@@ -146,10 +136,6 @@ export default function SIPPanicRoutePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/*
@@ -216,7 +202,7 @@ export default function SIPPanicRoutePage() {
         </div>
       </section>
 
-      <SIPPanicPage faqs={faqs} />
+      <SIPPanicPage faqs={faqs} pageUrl={`${origin}${PATH}`} />
 
       <noscript>
         <section className="px-6 lg:px-10 py-10">

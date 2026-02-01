@@ -32,19 +32,21 @@ test.describe('Visual smoke screenshots', () => {
     await page.screenshot({ path: testInfo.outputPath('home.png'), fullPage: true });
 
     // Blog index
-    await gotoAndSettle(page, '/blog', 'main');
+    // Wait for the blog hero headline (more stable than relying on <main>).
+    await gotoAndSettle(page, '/blog', 'text=Financial Insights');
     await page.screenshot({ path: testInfo.outputPath('blog-index.png'), fullPage: true });
 
     // Blog detail (has Next Read + WhatsApp CTA in this codebase)
-    await gotoAndSettle(page, '/blog/best-credit-cards-high-income-india', 'main');
+    await gotoAndSettle(page, '/blog/best-credit-cards-high-income-india', '.blog-detail-page');
     await page.screenshot({ path: testInfo.outputPath('blog-detail.png'), fullPage: true });
 
     // Live Intelligence overlay page
-    await gotoAndSettle(page, '/live-intelligence', 'main');
+    // This page is client-mounted and sets a body attribute on mount.
+    await gotoAndSettle(page, '/live-intelligence', 'body[data-laser-active="true"]');
     await page.screenshot({ path: testInfo.outputPath('live-intelligence.png'), fullPage: true });
 
     // SIP vs Panic tool page (share card + preview)
-    await gotoAndSettle(page, '/intelligence/sip-vs-panic', 'main');
+    await gotoAndSettle(page, '/intelligence/sip-vs-panic', 'text=SIP vs Panic');
     await page.screenshot({ path: testInfo.outputPath('sip-vs-panic.png'), fullPage: true });
   });
 });

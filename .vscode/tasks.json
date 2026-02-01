@@ -565,8 +565,8 @@
 				"-NoProfile",
 				"-ExecutionPolicy",
 				"Bypass",
-				"-Command",
-				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; $urls = @('http://localhost:3000/','http://localhost:3000/_next/static/chunks/webpack.js','http://localhost:3000/_next/static/chunks/main-app.js','http://localhost:3000/_next/static/css/app/layout.css','http://localhost:3000/_next/static/css/app/(public)/page.css'); foreach($u in $urls){ try { $r = Invoke-WebRequest -UseBasicParsing -Method Head $u -TimeoutSec 5; \"HEAD $u -> $($r.StatusCode)\" } catch { if ($_.Exception.Response) { \"HEAD $u -> $([int]$_.Exception.Response.StatusCode)\" } else { \"HEAD $u -> ERROR: $($_.Exception.Message)\" } } } ; \"DISK .next/static/css/app/layout.css exists? \" + (Test-Path '.next/static/css/app/layout.css'); \"DISK .next/static/css/app/(public)/page.css exists? \" + (Test-Path '.next/static/css/app/(public)/page.css'); $sample = Get-ChildItem '.next/static/chunks' -File -Filter '*.js' | Select-Object -First 3; foreach($s in $sample){ \"DISK chunk: \" + $s.Name }"
+				"-File",
+				".tools\\qa-next-static-probe.ps1"
 			],
 			"isBackground": false,
 			"problemMatcher": [],
@@ -803,6 +803,31 @@
 				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; git status --porcelain | Set-Content -Encoding UTF8 .tmp_git_status.txt; git log -1 --oneline | Set-Content -Encoding UTF8 .tmp_git_head.txt; git rev-parse --abbrev-ref HEAD | Set-Content -Encoding UTF8 .tmp_git_branch.txt"
 			],
 			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "test-visual-smoke-e2e",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"playwright",
+				"test",
+				"tests/e2e/visual-smoke.spec.js",
+				"--reporter=line"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "test-chat-float-e2e",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"c:\\Users\\admin\\premium-invest-8\" && npx playwright test tests/e2e/chat-float-staging-health.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
 			"group": "test"
 		}
 	]

@@ -1,6 +1,12 @@
 # 📄 BM WEALTH – LIVE INTELLIGENCE HERO
 ## MASTER HANDOFF SPEC (FOR AI IMPLEMENTATION)
 
+important update (user change his mind)
+we r not doing anymore laser no more huly laser or unicorn user tried and he hasted it absolutelu u as an ai will be fired if u bring back this is ery important for user no more her laser user will ad a video when he has timeh ewill give it if confused any ai just ask user before implementing anything related to this confirmed once.
+
+
+
+
 > IMPORTANT (Jan 21, 2026): The current source-of-truth spec is `docs/live-intelligence/SOURCE_OF_TRUTH_2026-01-21.md`.
 > Keep this document as historical reference; when there is conflict, the source-of-truth file wins.
 
@@ -12,7 +18,6 @@
 
 ## 0️⃣ PROJECT INTENT (READ FIRST – NON-NEGOTIABLE)
 
-We are building an exact visual + behavioral replica of huly.io's hero laser + background, adapted to BM Wealth branding and content.
 
 **This is NOT:**
 - a news ticker
@@ -26,23 +31,6 @@ A **LIVE INTELLIGENCE STRIP** that feels like **Bloomberg × Luxury × BM Wealth
 
 ---
 
-## 1️⃣ VISUAL GOAL (HULY.IO PARITY)
-
-You must replicate exactly what huly.io ships in production, using standard web platform features.
-
-**Confirmed facts:**
-- huly hero effects are CSS + DOM + gradients + blur + blend-modes
-- NO WebGL shaders are required for pixel parity
-- "Volumetric" look is an illusion, not real 3D
-
-**The following must match:**
-- laser / light following interaction
-- glow falloff
-- foggy background depth
-- premium smoothness
-- layering and blend behavior
-
-**If the browser DevTools can inspect it → we can replicate it.**
 
 ---
 

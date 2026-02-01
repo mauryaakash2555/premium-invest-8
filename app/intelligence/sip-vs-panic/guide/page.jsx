@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo/metadata";
+import FAQSection from "@/components/shared/FAQSection";
 
 const PATH = "/intelligence/sip-vs-panic/guide";
 
@@ -35,46 +36,29 @@ export default function SipVsPanicGuidePage() {
     },
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Is it ever rational to pause a SIP during a crash?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "It can be rational if the SIP amount is no longer sustainable for your cashflow, your emergency fund is insufficient, or the original risk level no longer matches your goals. It is usually not rational purely because prices are down.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Why does stopping SIP during a crash often hurt outcomes?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Because you stop buying when prices are lower and often restart after prices recover, which can reduce long-term accumulation. The simulator visualizes this behavior gap as an education-only example.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Does the simulator predict the market?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "No. It uses a deterministic educational market path (with crash-style presets) to teach behavior trade-offs, not to forecast returns.",
-        },
-      },
-    ],
-  };
+  const faqs = [
+    {
+      question: "Is it ever rational to pause a SIP during a crash?",
+      answer:
+        "It can be rational if the SIP amount is no longer sustainable for your cashflow, your emergency fund is insufficient, or the original risk level no longer matches your goals. It is usually not rational purely because prices are down.",
+    },
+    {
+      question: "Why does stopping SIP during a crash often hurt outcomes?",
+      answer:
+        "Because you stop buying when prices are lower and often restart after prices recover, which can reduce long-term accumulation. The simulator visualizes this behavior gap as an education-only example.",
+    },
+    {
+      question: "Does the simulator predict the market?",
+      answer:
+        "No. It uses a deterministic educational market path (with crash-style presets) to teach behavior trade-offs, not to forecast returns.",
+    },
+  ];
 
   return (
     <main className="px-6 lg:px-10 py-14 lg:py-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="max-w-4xl mx-auto">
@@ -155,6 +139,10 @@ export default function SipVsPanicGuidePage() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="mt-10">
+          <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
         </section>
 
         <section className="mt-10">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import BackRow from "@/components/shared/BackRow";
 import { buildMetadata, getMetadataBase } from "@/lib/seo/metadata";
 import TrackedLink from "@/components/shared/TrackedLink";
+import FAQSection from "@/components/shared/FAQSection";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
 
@@ -22,6 +23,33 @@ export const metadata = {
 export default function TaxOptimizationToolPage() {
   const base = getMetadataBase().toString().replace(/\/$/, "");
 
+  const faqs = [
+    {
+      question: "Is the Old or New Regime better for FY 2025–26?",
+      answer:
+        "It depends on salary structure and deductions (80C, 80D, NPS, HRA, home-loan interest). Our tool compares both regimes with current slabs and shows an illustrative outcome.",
+    },
+    {
+      question: "What is this tool meant to show?",
+      answer:
+        "A clear estimate and comparison of Old vs New regime outcomes based on your inputs and published rules, along with a breakdown you can verify.",
+    },
+    {
+      question: "How is HRA exemption calculated?",
+      answer:
+        "HRA exemption is the minimum of: actual HRA received, rent paid minus 10% of basic salary, and 50% of basic for specified metro cities (assumed Mumbai here).",
+    },
+    {
+      question: "How accurate are the results?",
+      answer:
+        "They are estimates based on your inputs and current rules. Please verify with official sources or your tax professional for final outcomes.",
+    },
+    {
+      question: "Will I receive sales calls?",
+      answer: "No. Communication is limited to sharing your calculation and related updates.",
+    },
+  ];
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "FinancialCalculator",
@@ -35,57 +63,6 @@ export default function TaxOptimizationToolPage() {
       telephone: "+91-8850977259",
     },
     areaServed: { "@type": "City", name: "Mumbai" },
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Is the Old or New Regime better for FY 2025–26?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "It depends on salary structure and deductions (80C, 80D, NPS, HRA, home-loan interest). Our tool compares both regimes with current slabs and shows an illustrative outcome.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "What is this tool meant to show?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "A clear estimate and comparison of Old vs New regime outcomes based on your inputs and published rules, along with a breakdown you can verify.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How is HRA exemption calculated?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "HRA exemption is the minimum of: actual HRA received, rent paid minus 10% of basic salary, and 50% of basic for specified metro cities (assumed Mumbai here).",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How accurate are the results?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "They are estimates based on your inputs and current rules. Please verify with official sources or your tax professional for final outcomes.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Will I receive sales calls?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "No. Communication is limited to sharing your calculation and related updates.",
-        },
-      },
-    ],
   };
 
   const breadcrumbSchema = {
@@ -184,12 +161,6 @@ export default function TaxOptimizationToolPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <Script
-        id="tax-optimization-faq"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <Script
         id="tax-optimization-breadcrumbs"
         type="application/ld+json"
         strategy="afterInteractive"
@@ -205,6 +176,10 @@ export default function TaxOptimizationToolPage() {
       <section id="tools-tax-optimization" className="scroll-mt-24 px-6 lg:px-10 py-14 lg:py-20">
         <div className="w-full max-w-6xl mx-auto">
           <TaxCalculator />
+
+          <div className="mt-10">
+            <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
+          </div>
 
           {/* Soft execution router (internal only, no affiliates) */}
           <div className="mt-10 border border-white/10 bg-white/5 p-5">

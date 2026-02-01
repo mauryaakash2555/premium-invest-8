@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import BackRow from "@/components/shared/BackRow";
 import TrackedLink from "@/components/shared/TrackedLink";
+import FAQSection from "@/components/shared/FAQSection";
 import { PropertyVsSipCalculator } from "@/components/calculators/PropertyVsSipCalculator";
 import { buildMetadata, getMetadataBase, SITE_NAME } from "@/lib/seo/metadata";
 
@@ -23,6 +24,24 @@ export const metadata = {
 export default function PropertyVsSipToolPage() {
   const base = getMetadataBase().toString().replace(/\/$/, "");
   const pageUrl = `${base}${PATH}`;
+
+  const faqs = [
+    {
+      question: "Does this tool include stamp duty, taxes, and transaction costs?",
+      answer:
+        "No. This comparison uses locked assumptions and does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
+    },
+    {
+      question: "What assumptions are used in the Property vs SIP comparison?",
+      answer:
+        "The calculator uses locked assumptions (e.g., property CAGR, equity CAGR, rental yield, maintenance drag) to show an illustrative wealth gap based on your inputs.",
+    },
+    {
+      question: "What does this tool help you decide?",
+      answer:
+        "It helps quantify opportunity cost under fixed assumptions so you can compare scenarios more clearly. For a personalised plan, connect with our team.",
+    },
+  ];
 
   const calculatorSchema = {
     "@context": "https://schema.org",
@@ -51,46 +70,16 @@ export default function PropertyVsSipToolPage() {
     ],
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Does this tool include stamp duty, taxes, and transaction costs?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "No. This comparison uses locked assumptions and does not include stamp duty, transaction costs, taxes, EMI/loan schedules, or liquidity/exit constraints.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "What assumptions are used in the Property vs SIP comparison?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "The calculator uses locked assumptions (e.g., property CAGR, equity CAGR, rental yield, maintenance drag) to show an illustrative wealth gap based on your inputs.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "What does this tool help you decide?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            "It helps quantify opportunity cost under fixed assumptions so you can compare scenarios more clearly. For a personalised plan, connect with our team.",
-        },
-      },
-    ],
-  };
-
   return (
     <>
       <BackRow href="/tools" label="← Back to Tools" />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <PropertyVsSipCalculator />
+
+          <div className="mt-10">
+            <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
+          </div>
 
           {/* Soft execution router (internal only, no affiliates) */}
           <div className="mt-10 border border-white/10 bg-white/5 p-5">
@@ -132,12 +121,6 @@ export default function PropertyVsSipToolPage() {
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <Script
-        id="property-vs-sip-faq"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <details className="px-6 lg:px-10 group learn-more">
