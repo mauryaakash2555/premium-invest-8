@@ -7,30 +7,36 @@ import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel'
 import LaserFooter from '@/components/user/LaserFooter';
 
 /**
- * 🌌 LEARNING UNIVERSE - MAGICAL PORTAL ENTRY
+ * �️ THE WEALTH GUILD - Entry Experience
  * 
- * This is NOT a dashboard. This is NOT a navigation tab.
- * This is an immersive experience where users ENTER a new world.
+ * ARCHITECTURE RULE: This is an ENTRY SHELL only.
+ * LearningPathPanel is rendered as a pure engine - UNTOUCHED.
  * 
  * Entry sequence:
- * 1. Portal gate (full-screen, no distractions)
- * 2. "Begin the Journey" interaction
- * 3. Transition animation (blur → stars → reveal)
- * 4. Learning universe revealed
+ * 1. First visit: Show guild entry screen
+ * 2. User clicks "Enter"
+ * 3. Subtle fade transition (max 1.5s)
+ * 4. LearningPathPanel revealed
+ * 
+ * Subsequent visits: Skip entry, show LearningPathPanel directly
+ * 
+ * Storage key: wealth_guild_entered (localStorage)
  */
+
+const GUILD_ENTRY_KEY = 'wealth_guild_entered';
 
 export default function LearnPage() {
   const [mounted, setMounted] = useState(false);
-  const [portalPhase, setPortalPhase] = useState('gate'); // 'gate' | 'transitioning' | 'entered'
-  const [starOpacity, setStarOpacity] = useState(0);
+  const [hasEntered, setHasEntered] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     setMounted(true);
 
-    // Check if user has already entered today (optional: remember entry)
-    const hasEntered = sessionStorage.getItem('learn_portal_entered');
-    if (hasEntered === 'true') {
-      setPortalPhase('entered');
+    // Check if user has already entered the guild (persists across sessions)
+    const entered = localStorage.getItem(GUILD_ENTRY_KEY);
+    if (entered === 'true') {
+      setHasEntered(true);
     }
 
     // Match the laser/live-intelligence scoping so styles remain consistent.
@@ -51,21 +57,14 @@ export default function LearnPage() {
     };
   }, []);
 
-  const handleBeginJourney = useCallback(() => {
-    setPortalPhase('transitioning');
-    setStarOpacity(1);
+  const handleEnterGuild = useCallback(() => {
+    setIsTransitioning(true);
 
-    // After transition animation, reveal the learning universe
+    // Subtle transition - max 1.5s as required
     setTimeout(() => {
-      setPortalPhase('entered');
-      sessionStorage.setItem('learn_portal_entered', 'true');
-    }, 1800);
-  }, []);
-
-  const handleExitUniverse = useCallback(() => {
-    sessionStorage.removeItem('learn_portal_entered');
-    setPortalPhase('gate');
-    setStarOpacity(0);
+      setHasEntered(true);
+      localStorage.setItem(GUILD_ENTRY_KEY, 'true');
+    }, 1200);
   }, []);
 
   if (!mounted) {
@@ -73,29 +72,29 @@ export default function LearnPage() {
       <div
         style={{
           minHeight: '100vh',
-          background: '#050608',
+          background: '#08090B',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'rgba(170, 198, 255, 0.4)',
-          fontSize: '14px',
         }}
       >
-        <div style={{ animation: 'pulse 2s ease-in-out infinite' }}>✨</div>
+        <div style={{ color: 'rgba(160, 175, 200, 0.4)', fontSize: '13px' }}>
+          Loading...
+        </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════
-  // PORTAL GATE - The magical entry point
+  // GUILD ENTRY SCREEN - First visit only
   // ═══════════════════════════════════════════════════════════════
-  if (portalPhase === 'gate' || portalPhase === 'transitioning') {
+  if (!hasEntered) {
     return (
       <div
         style={{
           position: 'fixed',
           inset: 0,
-          background: '#050608',
+          background: '#08090B',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -103,176 +102,130 @@ export default function LearnPage() {
           padding: '24px',
           overflow: 'hidden',
           zIndex: 9999,
+          opacity: isTransitioning ? 0 : 1,
+          transform: isTransitioning ? 'scale(1.02)' : 'scale(1)',
+          transition: 'opacity 1.2s ease, transform 1.2s ease',
         }}
       >
-        {/* Starfield background */}
+        {/* Subtle ambient glow */}
         <div
           style={{
             position: 'absolute',
-            inset: 0,
-            background: `
-              radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
-              radial-gradient(2px 2px at 40% 70%, rgba(200,220,255,0.6) 0%, transparent 100%),
-              radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
-              radial-gradient(2px 2px at 80% 50%, rgba(180,200,255,0.7) 0%, transparent 100%),
-              radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
-              radial-gradient(1.5px 1.5px at 90% 10%, rgba(200,220,255,0.5) 0%, transparent 100%),
-              radial-gradient(1px 1px at 50% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
-              radial-gradient(2px 2px at 30% 50%, rgba(180,200,255,0.4) 0%, transparent 100%)
-            `,
-            opacity: portalPhase === 'transitioning' ? 1 : 0.3,
-            transition: 'opacity 1.2s ease',
-            animation: portalPhase === 'transitioning' ? 'starPulse 0.8s ease-in-out infinite' : 'none',
-          }}
-        />
-
-        {/* Radial glow */}
-        <div
-          style={{
-            position: 'absolute',
-            width: '600px',
-            height: '600px',
+            width: '500px',
+            height: '500px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(80,120,200,0.15) 0%, rgba(40,60,120,0.05) 40%, transparent 70%)',
-            opacity: portalPhase === 'transitioning' ? 1 : 0.5,
-            transition: 'opacity 1s ease, transform 1.5s ease',
-            transform: portalPhase === 'transitioning' ? 'scale(2.5)' : 'scale(1)',
+            background: 'radial-gradient(circle, rgba(70,90,130,0.08) 0%, transparent 60%)',
+            pointerEvents: 'none',
           }}
         />
 
-        {/* Portal content */}
+        {/* Guild crest / icon */}
         <div
           style={{
-            position: 'relative',
-            zIndex: 10,
-            textAlign: 'center',
-            maxWidth: '480px',
-            opacity: portalPhase === 'transitioning' ? 0 : 1,
-            transform: portalPhase === 'transitioning' ? 'scale(0.9) translateY(-20px)' : 'scale(1) translateY(0)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
+            fontSize: '36px',
+            marginBottom: '28px',
+            opacity: 0.9,
           }}
         >
-          {/* Icon */}
-          <div
-            style={{
-              fontSize: '48px',
-              marginBottom: '24px',
-              filter: 'drop-shadow(0 0 20px rgba(140,180,255,0.4))',
-            }}
-          >
-            ✨
-          </div>
-
-          {/* Title */}
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 700,
-              color: 'rgba(235, 242, 255, 0.95)',
-              marginBottom: '16px',
-              lineHeight: 1.3,
-            }}
-          >
-            You are about to enter<br />a learning universe
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            style={{
-              fontSize: '15px',
-              color: 'rgba(180, 200, 230, 0.7)',
-              marginBottom: '36px',
-              lineHeight: 1.6,
-            }}
-          >
-            This is not a course. This is not a syllabus.<br />
-            This changes how you think forever.
-          </p>
-
-          {/* Begin button */}
-          <button
-            onClick={handleBeginJourney}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              padding: '16px 32px',
-              borderRadius: '16px',
-              border: '1px solid rgba(140, 180, 255, 0.3)',
-              background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.2), rgba(60, 100, 180, 0.1))',
-              color: 'rgba(235, 242, 255, 0.95)',
-              fontSize: '16px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 8px 32px rgba(80, 120, 200, 0.2)',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.5)';
-              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.3), rgba(60, 100, 180, 0.15))';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 12px 40px rgba(80, 120, 200, 0.3)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.3)';
-              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.2), rgba(60, 100, 180, 0.1))';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 8px 32px rgba(80, 120, 200, 0.2)';
-            }}
-          >
-            <span>Begin the Journey</span>
-            <span style={{ fontSize: '18px' }}>→</span>
-          </button>
-
-          {/* Back link - subtle */}
-          <div style={{ marginTop: '32px' }}>
-            <Link
-              href="/live-intelligence"
-              style={{
-                fontSize: '13px',
-                color: 'rgba(180, 200, 230, 0.4)',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-              }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'rgba(180, 200, 230, 0.7)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'rgba(180, 200, 230, 0.4)'}
-            >
-              ← I'm not ready yet
-            </Link>
-          </div>
+          🏛️
         </div>
 
-        {/* CSS animations */}
-        <style jsx global>{`
-          @keyframes starPulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-          }
-          @keyframes pulse {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-          }
-        `}</style>
+        {/* Title */}
+        <h1
+          style={{
+            fontSize: '28px',
+            fontWeight: 600,
+            color: 'rgba(230, 235, 245, 0.95)',
+            marginBottom: '12px',
+            letterSpacing: '0.02em',
+            textAlign: 'center',
+          }}
+        >
+          The Wealth Guild
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          style={{
+            fontSize: '15px',
+            color: 'rgba(160, 175, 200, 0.65)',
+            marginBottom: '40px',
+            textAlign: 'center',
+            maxWidth: '320px',
+            lineHeight: 1.5,
+          }}
+        >
+          A place to understand money without noise.
+        </p>
+
+        {/* Enter button */}
+        <button
+          onClick={handleEnterGuild}
+          disabled={isTransitioning}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '14px 36px',
+            borderRadius: '12px',
+            border: '1px solid rgba(140, 160, 200, 0.2)',
+            background: 'rgba(60, 80, 120, 0.12)',
+            color: 'rgba(220, 230, 245, 0.9)',
+            fontSize: '15px',
+            fontWeight: 500,
+            cursor: isTransitioning ? 'default' : 'pointer',
+            transition: 'all 0.25s ease',
+            opacity: isTransitioning ? 0.5 : 1,
+          }}
+          onMouseOver={(e) => {
+            if (!isTransitioning) {
+              e.currentTarget.style.borderColor = 'rgba(140, 160, 200, 0.35)';
+              e.currentTarget.style.background = 'rgba(60, 80, 120, 0.18)';
+            }
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(140, 160, 200, 0.2)';
+            e.currentTarget.style.background = 'rgba(60, 80, 120, 0.12)';
+          }}
+        >
+          Enter
+        </button>
+
+        {/* Back link - very subtle */}
+        <div style={{ marginTop: '36px' }}>
+          <Link
+            href="/live-intelligence"
+            style={{
+              fontSize: '12px',
+              color: 'rgba(140, 155, 180, 0.4)',
+              textDecoration: 'none',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.color = 'rgba(140, 155, 180, 0.6)'}
+            onMouseOut={(e) => e.currentTarget.style.color = 'rgba(140, 155, 180, 0.4)'}
+          >
+            ← back to live intelligence
+          </Link>
+        </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════
-  // LEARNING UNIVERSE - The actual learning experience
+  // GUILD INTERIOR - LearningPathPanel rendered EXACTLY as-is
   // ═══════════════════════════════════════════════════════════════
   return (
     <div
       style={{
         minHeight: '100vh',
-        paddingTop: 'calc(80px + env(safe-area-inset-top, 0px))', // Account for navbar height
+        paddingTop: 'calc(80px + env(safe-area-inset-top, 0px))',
         background: '#090A0C',
         color: 'rgba(235, 242, 255, 0.95)',
         overflowX: 'hidden',
-        animation: 'fadeIn 0.8s ease',
+        animation: 'guildFadeIn 0.6s ease',
       }}
     >
-      {/* Minimal header - no navbar clutter */}
+      {/* Minimal header */}
       <div
         style={{
           maxWidth: '1100px',
@@ -284,49 +237,49 @@ export default function LearnPage() {
           gap: '12px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '20px' }}>✨</span>
-          <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(235, 242, 255, 0.9)' }}>
-            Learning Universe
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px', opacity: 0.85 }}>🏛️</span>
+          <span style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(200, 210, 230, 0.8)' }}>
+            The Wealth Guild
           </span>
         </div>
 
-        <button
-          onClick={handleExitUniverse}
+        <Link
+          href="/live-intelligence"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
             padding: '8px 14px',
             borderRadius: '10px',
-            border: '1px solid rgba(170, 198, 255, 0.15)',
-            background: 'rgba(0, 0, 0, 0.2)',
-            color: 'rgba(180, 200, 230, 0.7)',
+            border: '1px solid rgba(150, 170, 200, 0.12)',
+            background: 'rgba(0, 0, 0, 0.15)',
+            color: 'rgba(160, 175, 200, 0.7)',
             fontSize: '13px',
             fontWeight: 500,
-            cursor: 'pointer',
+            textDecoration: 'none',
             transition: 'all 0.2s ease',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.3)';
-            e.currentTarget.style.color = 'rgba(180, 200, 230, 0.9)';
+            e.currentTarget.style.borderColor = 'rgba(150, 170, 200, 0.25)';
+            e.currentTarget.style.color = 'rgba(160, 175, 200, 0.9)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(170, 198, 255, 0.15)';
-            e.currentTarget.style.color = 'rgba(180, 200, 230, 0.7)';
+            e.currentTarget.style.borderColor = 'rgba(150, 170, 200, 0.12)';
+            e.currentTarget.style.color = 'rgba(160, 175, 200, 0.7)';
           }}
         >
           <span>←</span>
-          <span>Exit Universe</span>
-        </button>
+          <span>Back</span>
+        </Link>
       </div>
 
-      {/* Learning content */}
+      {/* LearningPathPanel - RENDERED EXACTLY AS-IS, NO MODIFICATIONS */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '8px 16px 22px' }}>
         <LearningPathPanel />
       </div>
 
-      {/* LaserFooter - proper wrapper */}
+      {/* LaserFooter */}
       <div
         className="li-footer-wrapper"
         style={{
@@ -344,9 +297,9 @@ export default function LearnPage() {
       </div>
 
       <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes guildFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
       `}</style>
     </div>
