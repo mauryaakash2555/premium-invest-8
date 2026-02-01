@@ -3,7 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 
-const DEFAULT_SCENE_URL = '/spline/r4x/scene.splinecode';
+/**
+ * 🔒 LOCKED - DO NOT CHANGE THIS DEFAULT
+ * The user wants the BLACK genkub robot, NOT r4x (white)
+ * See DO_NOT_TOUCH_BOT.md for details
+ */
+const DEFAULT_SCENE_URL = '/spline/genkub/scene.splinecode';
 
 const FONT_URL_REWRITES = new Map([
   [
