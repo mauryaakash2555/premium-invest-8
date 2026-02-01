@@ -274,6 +274,125 @@ export default function LearnPage() {
         </Link>
       </div>
 
+      {/* PHASE 2 — Wealth Guild Orientation (UI-only, no engine changes) */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 16px' }}>
+        <section
+          aria-label="Wealth Guild Orientation"
+          style={{
+            padding: '16px 16px 14px',
+            borderRadius: '16px',
+            border: '1px solid rgba(150, 170, 200, 0.12)',
+            background:
+              'linear-gradient(180deg, rgba(60, 80, 120, 0.10) 0%, rgba(0, 0, 0, 0.06) 100%)',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px' }}>
+            <h2
+              style={{
+                margin: 0,
+                fontSize: '18px',
+                fontWeight: 600,
+                letterSpacing: '0.01em',
+                color: 'rgba(235, 242, 255, 0.92)',
+              }}
+            >
+              Welcome to The Wealth Guild
+            </h2>
+          </div>
+
+          <p
+            style={{
+              margin: '8px 0 0',
+              fontSize: '14px',
+              lineHeight: 1.55,
+              color: 'rgba(170, 185, 210, 0.78)',
+              maxWidth: '780px',
+            }}
+          >
+            This is not a course. There is no finish line.
+            <br />
+            You explore what matters. It grows as you grow.
+          </p>
+
+          {/* Mode framing (copy/layout only — engine preserved) */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '10px',
+              marginTop: '14px',
+            }}
+          >
+            <div
+              style={{
+                padding: '12px 12px',
+                borderRadius: '14px',
+                border: '1px solid rgba(150, 170, 200, 0.10)',
+                background: 'rgba(0, 0, 0, 0.18)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span aria-hidden="true" style={{ opacity: 0.9 }}>
+                  ⚡
+                </span>
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'rgba(220, 230, 245, 0.88)',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  Daily (30s) — Stay sharp
+                </div>
+              </div>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: 'rgba(160, 175, 200, 0.72)' }}>
+                A quick, lightweight check-in for consistency.
+              </div>
+            </div>
+
+            <div
+              style={{
+                padding: '12px 12px',
+                borderRadius: '14px',
+                border: '1px solid rgba(150, 170, 200, 0.10)',
+                background: 'rgba(0, 0, 0, 0.18)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span aria-hidden="true" style={{ opacity: 0.9 }}>
+                  🧠
+                </span>
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'rgba(220, 230, 245, 0.88)',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  Explore Freely — Go deep, at your pace
+                </div>
+              </div>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: 'rgba(160, 175, 200, 0.72)' }}>
+                Pick what you want, revisit anytime, and linger where it helps.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Subtle divider below orientation panel */}
+        <div
+          aria-hidden="true"
+          style={{
+            height: '1px',
+            background: 'rgba(150, 170, 200, 0.10)',
+            margin: '14px 0 6px',
+          }}
+        />
+      </div>
+
       {/* LearningPathPanel - RENDERED EXACTLY AS-IS, NO MODIFICATIONS */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '8px 16px 22px' }}>
         <LearningPathPanel />
