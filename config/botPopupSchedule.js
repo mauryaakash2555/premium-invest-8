@@ -71,6 +71,6 @@ export const BOT_NUDGE_CONFIG = {
     { pattern: '^/tools/itr-filing-help(?:/|$)', text: 'Want help? Upload Form 16 / AIS and I will explain the estimate.' },
     { pattern: '^/tools(?:/|$)', text: 'Need a calculator? Tell me your goal — SIP, tax, or insurance.' },
     { pattern: '^/blog(?:/|$)', text: 'Want a quick summary? Ask me what this article means for you.' },
-    { pattern: '.*', text: 'Ask me anything — SIP, tax, insurance, or a quick plan.' },
+    { pattern: '.*', text: 'Need help? Click me' },
   ],
 };
