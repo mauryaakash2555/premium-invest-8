@@ -258,6 +258,14 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
   const [portfolioTickers, setPortfolioTickers] = useState([]);
   const touchStartY = useRef(0);
   const category = CATEGORIES[headline.category];
+
+  const headlineTitle = String(
+    headline?.headline ||
+      headline?.title ||
+      headline?.block_what_happened ||
+      headline?.what_happened ||
+      ''
+  ).trim();
   const urgency = URGENCY_LEVELS[headline.urgency];
   const ctaConfig = CTA_BUTTONS[headline.category];
 
@@ -569,7 +577,9 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
 
         {/* Main Content */}
         <div className="li-headline-body">
-          <h4 className="li-headline-title">{headline.headline}</h4>
+          <h4 className="li-headline-title" title={headlineTitle || undefined}>
+            {headlineTitle || 'Market update'}
+          </h4>
           <p className="li-headline-why">{headline.whyItMatters}</p>
         </div>
 
