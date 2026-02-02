@@ -1,11 +1,12 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata = buildMetadata({
-  title: "Disclaimer | BM Wealth",
-  description: "Important disclaimers and risk disclosures.",
-  path: "/disclaimer",
+  title: 'Disclaimer | BM Wealth',
+  description:
+    'Read BM Wealth’s investment and website disclaimer, including market risk disclosures and informational limitations.',
+  path: '/disclaimer',
 });
 
 export default function Layout({ children }) {
-  return children;
+  return <>{children}</>;
 }

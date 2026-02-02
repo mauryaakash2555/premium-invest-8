@@ -27,11 +27,11 @@ import { useRouter } from 'next/navigation';
 // This ensures 1:1 parity - any overlay changes automatically apply here
 import { LiveIntelligencePanel } from '@/components/user/LiveIntelligenceOverlay';
 
-// Learning summary only (no lessons) + CTA to /learn
-import LearningProgressSummary from '@/components/learn/LearningProgressSummary';
-
 // Import LaserFooter - the SAME footer used by the overlay (NOT the system Footer)
 import LaserFooter from '@/components/user/LaserFooter';
+
+// Tiny portal hint - NOT learning UI, just a subtle gateway
+import Link from 'next/link';
 
 export default function LiveIntelligencePage() {
   const [mounted, setMounted] = useState(false);
@@ -89,12 +89,48 @@ export default function LiveIntelligencePage() {
         overflowX: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 14px 0' }}>
-        <LearningProgressSummary />
-      </div>
-
       {/* Render the EXACT same panel as the overlay */}
       <LiveIntelligencePanel onClose={handleClose} />
+
+      {/* Premium learning portal CTA - bold and inviting */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 16px' }}>
+        <Link
+          href="/learn"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            padding: '18px 28px',
+            borderRadius: '16px',
+            border: '1px solid rgba(140, 180, 255, 0.25)',
+            background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.14), rgba(50, 80, 140, 0.08))',
+            color: 'rgba(220, 235, 255, 0.92)',
+            fontSize: '15px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 8px 32px rgba(60, 100, 180, 0.15)',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.45)';
+            e.currentTarget.style.color = 'rgba(240, 248, 255, 1)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.22), rgba(50, 80, 140, 0.12))';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(60, 100, 180, 0.25)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.25)';
+            e.currentTarget.style.color = 'rgba(220, 235, 255, 0.92)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.14), rgba(50, 80, 140, 0.08))';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(60, 100, 180, 0.15)';
+          }}
+        >
+          <span style={{ fontSize: '18px', filter: 'drop-shadow(0 0 8px rgba(255,220,100,0.4))' }}>✨</span>
+          <span>Want to understand why markets behave this way?</span>
+          <span style={{ opacity: 0.7, fontSize: '16px' }}>→</span>
+        </Link>
+      </div>
 
       {/* LaserFooter - the SAME ice-blue themed footer used by the overlay */}
       <div

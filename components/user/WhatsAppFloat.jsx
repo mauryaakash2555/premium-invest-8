@@ -136,6 +136,7 @@ const WhatsAppFloat = () => {
   const [showNudge, setShowNudge] = useState(false);
   const [nudgeText, setNudgeText] = useState('');
   const [showLovePulse, setShowLovePulse] = useState(false);
+  const LOVE_NUDGE_TEXT = 'You are 100% my favorite human today';
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
   const isLiveIntelligence = Boolean(pathname?.startsWith('/live-intelligence'));
@@ -303,8 +304,7 @@ const WhatsAppFloat = () => {
 
     const delayMs = pickDelayMs(String(pathname || '/'), nudge);
     const totalDelay = Math.max(minDwell, delayMs);
-    const text = pickRotatingNudgeText(String(pathname || '/'), nudge);
-    if (!text) return;
+    const text = LOVE_NUDGE_TEXT;
 
     nudgeTimerRef.current = setTimeout(() => {
       // If user navigated away, abort.
@@ -468,7 +468,6 @@ const WhatsAppFloat = () => {
             }}
           >
             <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">❤️</span>
-            <span style={{ fontSize: 12, color: 'rgba(235,245,255,0.78)' }}>Tap me</span>
           </button>
         </div>
       ) : null}

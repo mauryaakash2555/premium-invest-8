@@ -13,9 +13,13 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
     "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
     "**/.turbo/**": true
   },
   "search.exclude": {
@@ -29,9 +33,15 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
     "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
+    "**/temp-full.json": true,
+    "**/*.mp4": true,
     "**/.turbo/**": true
   },
   "files.exclude": {
@@ -44,23 +54,92 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
-    "**/.tmp*/**": true
+    "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
+    "**/temp-full.json": true,
+    "**/*.mp4": true
   },
 
-  // Helps on larger JS/TS projects.
-  "typescript.tsserver.maxTsServerMemory": 4096,
+  // AGGRESSIVE MEMORY REDUCTION - prevents OOM crashes
+  "typescript.tsserver.maxTsServerMemory": 1024,
+  "typescript.tsserver.experimental.useVsCodeWatcher": true,
 
-  // Optional: reduces background Git work on very large repos.
+  // Disable heavy features to reduce RAM usage
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.occurrencesHighlight": "off",
+  "editor.selectionHighlight": false,
+  "editor.matchBrackets": "never",
+  "editor.folding": false,
+  "editor.glyphMargin": false,
+  "editor.hover.enabled": "off",
+  "editor.parameterHints.enabled": false,
+  "editor.suggest.showStatusBar": false,
+  "editor.wordBasedSuggestions": "off",
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
+  },
+  "editor.suggestOnTriggerCharacters": false,
+  "breadcrumbs.enabled": false,
+
+  // Disable Git completely in VS Code (use terminal instead)
+  "git.enabled": false,
   "git.autorefresh": false,
   "git.autofetch": false,
   "git.untrackedChanges": "hidden",
   "git.decorations.enabled": false,
   "scm.diffDecorations": "none",
 
-  // Reduce background TypeScript downloads/work.
+  // Disable extensions' background work
   "typescript.disableAutomaticTypeAcquisition": true,
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+
+  // Disable telemetry
+  "telemetry.telemetryLevel": "off",
+
+  // DISABLE COPILOT for this workspace to save memory
+  "github.copilot.enable": {
+    "*": false
+  },
+
+  // Disable Python/Pylance for this JS/Next.js project (saves ~500MB RAM)
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.indexing": false,
+  "pylance.indexing": false,
+
+  // Disable TypeScript for even more savings (use basic mode)
+  "typescript.tsserver.useSyntaxServer": "always",
+  "typescript.suggest.enabled": false,
+  "typescript.validate.enable": false,
+  "javascript.suggest.enabled": false,
+  "javascript.validate.enable": false,
+  
+  // Disable ALL language features
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "html.validate.scripts": false,
+  "html.validate.styles": false,
+  "json.validate.enable": false,
+  
+  // The built-in npm extension can do extra probing on large repos.
+  "npm.autoDetect": "off",
+
+  // Defensive: avoid the editor trying to fully load massive single files.
+  // (If VS Code detects a file as "large", it will fall back to a lightweight mode.)
+  "files.maxMemoryForLargeFilesMB": 64,
+
+  // Prefer respecting .gitignore/.ignore for search. Helps on huge repos.
+  "search.useIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
   "chat.tools.terminal.autoApprove": {
     "git add": true,
     "git commit": true,

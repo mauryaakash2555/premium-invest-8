@@ -17,6 +17,10 @@ const moveBreakingToFront = (headlines) => {
   return [list[breakingIndex], ...list.slice(0, breakingIndex), ...list.slice(breakingIndex + 1)];
 };
 
+const getHeadlineTitle = (h) => {
+  return String(h?.headline || h?.title || h?.block_what_happened || h?.what_happened || '').trim();
+};
+
 /**
  * HeadlineFeed - Rotating headlines with category filter
  * 
@@ -63,7 +67,8 @@ export default function HeadlineFeed() {
       if (data.ok && data.headlines && data.headlines.length > 0) {
         // Keep API-provided ordering (already balanced/scored), but allow BREAKING to surface first.
         const ordered = moveBreakingToFront(data.headlines);
-        setHeadlines(ordered.slice(0, cap));
+        const cleaned = ordered.filter((h) => Boolean(getHeadlineTitle(h)));
+        setHeadlines(cleaned.slice(0, cap));
         setIsLive(data.source === 'database' || data.source === 'database_stale' || data.source === 'rss');
         setActiveIndex(0);
         return true;

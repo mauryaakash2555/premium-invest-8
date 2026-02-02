@@ -5,9 +5,8 @@ import { MessageCircle } from 'lucide-react';
 
 /**
  * 🔒 LOCKED: DO NOT CHANGE THIS DEFAULT
- * The user's official bot is GENKUB (black 3D robot).
+ * The user's official bot is GENKUB (black 3D robot), not r4x (white).
  * See: DO_NOT_TOUCH_BOT.md for details.
- * Changing this to r4x or any other scene is FORBIDDEN.
  */
 const DEFAULT_SCENE_URL = '/spline/genkub/scene.splinecode';
 

@@ -36,7 +36,7 @@ export function middleware(request) {
   // Keep this list tight: only redirect routes that are known duplicates or intentionally noindex.
   if (!isStoreHost) {
     const canonicalPathRedirects = {
-      '/about': '/about-us',
+      '/about-us': '/about',
       '/privacy-policy': '/privacy',
       '/terms-and-conditions': '/terms',
       '/refund-policy': '/refund',
@@ -52,13 +52,16 @@ export function middleware(request) {
   }
 
   if (shouldRedirect) {
-    return NextResponse.redirect(canonicalUrl, 308);
+    // 301 to align with Google Search Console expectations for permanent canonicalization.
+    return NextResponse.redirect(canonicalUrl, 301);
   }
 
   // Legacy internal store prefix is not used anymore.
   // Hard-block it everywhere to avoid any accidental exposure.
   if (pathname.startsWith('/_store')) {
-    return new NextResponse('Not Found', { status: 404 });
+    const res = new NextResponse('Gone', { status: 410 });
+    res.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    return res;
   }
 
   // Store host must never expose the internal store path prefix.
