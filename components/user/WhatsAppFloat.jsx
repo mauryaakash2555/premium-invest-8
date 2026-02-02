@@ -136,13 +136,25 @@ const WhatsAppFloat = () => {
   const [showNudge, setShowNudge] = useState(false);
   const [nudgeText, setNudgeText] = useState('');
   const [showLovePulse, setShowLovePulse] = useState(false);
+  const [hasShownFavOnce, setHasShownFavOnce] = useState(false);
   const LOVE_NUDGE_TEXT = 'You are 100% my favorite human today';
   const whatsappHref = "https://wa.me/918850977259";
   const pathname = usePathname();
   const isLiveIntelligence = Boolean(pathname?.startsWith('/live-intelligence'));
 
+  const FAV_ONCE_KEY = 'bmw_bot_fav_once_session_v1';
+
   useEffect(() => {
     setMounted(true);
+
+    // Session-scoped: treat as "once per login/session".
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        setHasShownFavOnce(window.sessionStorage.getItem(FAV_ONCE_KEY) === '1');
+      }
+    } catch {
+      // ignore
+    }
   }, []);
 
   const schedule = BOT_POPUP_SCHEDULE;
@@ -282,25 +294,10 @@ const WhatsAppFloat = () => {
       // ignore
     }
 
-    const dayKey = localDayKey();
-    const key = 'bmw_bot_nudge_v1';
-    const maxPerDay = Number(nudge?.maxNudgesPerDay ?? 1);
+    // Only show this line once per session.
+    if (hasShownFavOnce) return;
+
     const minDwell = Number(nudge?.minDwellMs ?? 6000);
-
-    let alreadyCount = 0;
-    try {
-      const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.dayKey === dayKey && Number.isFinite(parsed.count)) {
-          alreadyCount = parsed.count;
-        }
-      }
-    } catch {
-      alreadyCount = 0;
-    }
-
-    if (alreadyCount >= maxPerDay) return;
 
     const delayMs = pickDelayMs(String(pathname || '/'), nudge);
     const totalDelay = Math.max(minDwell, delayMs);
@@ -326,11 +323,14 @@ const WhatsAppFloat = () => {
       setShowNudge(true);
 
       try {
-        const next = { dayKey, count: alreadyCount + 1, at: new Date().toISOString() };
-        window.localStorage.setItem(key, JSON.stringify(next));
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          window.sessionStorage.setItem(FAV_ONCE_KEY, '1');
+        }
       } catch {
         // ignore
       }
+
+      setHasShownFavOnce(true);
     }, totalDelay);
 
     return () => {
@@ -343,7 +343,7 @@ const WhatsAppFloat = () => {
         nudgeTimerRef.current = null;
       }
     };
-  }, [canNudgeOnPath, isLiveIntelligence, nudge, open, pathname]);
+  }, [canNudgeOnPath, hasShownFavOnce, isLiveIntelligence, nudge, open, pathname]);
 
   useEffect(() => {
     // Keep Live Intelligence clean.
@@ -358,6 +358,9 @@ const WhatsAppFloat = () => {
     const lp = nudge?.lovePulse;
     if (!lp?.enabled) return;
 
+    // Only start hearts after the one-time message has been shown/dismissed.
+    if (!hasShownFavOnce) return;
+
     // Respect reduced-motion users.
     try {
       if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
@@ -367,9 +370,8 @@ const WhatsAppFloat = () => {
       // ignore
     }
 
-    const minMs = Number(lp?.minIntervalMs ?? 15000);
-    const maxMs = Number(lp?.maxIntervalMs ?? 25000);
-    const visibleMs = Number(lp?.visibleMs ?? 1600);
+    const intervalMs = 15000;
+    const visibleMs = Number(lp?.visibleMs ?? 1100);
 
     const clearTimers = () => {
       if (lovePulseTimerRef.current) {
@@ -390,45 +392,37 @@ const WhatsAppFloat = () => {
       }
     };
 
-    const scheduleNext = () => {
-      // If tab not visible, delay a bit.
+    const tick = () => {
+      // If tab not visible, skip this tick.
       try {
-        if (typeof document !== 'undefined' && document.visibilityState !== 'visible') {
-          lovePulseTimerRef.current = setTimeout(scheduleNext, 4000);
-          return;
-        }
+        if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
       } catch {
         // ignore
       }
 
-      const wait = randInt(Math.max(2000, minMs), Math.max(3000, maxMs));
-      lovePulseTimerRef.current = setTimeout(() => {
-        // If user navigated away, abort.
-        try {
-          const currentPath = window.location?.pathname || '';
-          if (String(currentPath) !== String(pathname || '')) {
-            scheduleNext();
-            return;
-          }
-        } catch {
-          // ignore
-        }
+      // If user navigated away, skip.
+      try {
+        const currentPath = window.location?.pathname || '';
+        if (String(currentPath) !== String(pathname || '')) return;
+      } catch {
+        // ignore
+      }
 
-        setShowLovePulse(true);
-        lovePulseHideRef.current = setTimeout(() => {
-          setShowLovePulse(false);
-          scheduleNext();
-        }, Math.max(600, visibleMs));
-      }, wait);
+      setShowLovePulse(true);
+      clearTimeout(lovePulseHideRef.current);
+      lovePulseHideRef.current = setTimeout(() => {
+        setShowLovePulse(false);
+      }, Math.max(500, visibleMs));
     };
 
     clearTimers();
-    scheduleNext();
+    // First heart appears after 15s, then every 15s.
+    lovePulseTimerRef.current = setInterval(tick, intervalMs);
 
     return () => {
       clearTimers();
     };
-  }, [isLiveIntelligence, nudge, open, pathname, showNudge]);
+  }, [hasShownFavOnce, isLiveIntelligence, nudge, open, pathname, showNudge]);
 
   if (!mounted) return null;
   if (isLiveIntelligence) return null;
@@ -456,10 +450,10 @@ const WhatsAppFloat = () => {
             }}
             style={{
               borderRadius: '999px',
-              border: '1px solid rgba(170, 198, 255, 0.18)',
-              background: 'linear-gradient(135deg, rgba(12,14,20,0.90) 0%, rgba(0,0,0,0.70) 100%)',
-              boxShadow: '0 22px 80px rgba(0,0,0,0.70)',
-              padding: '10px 12px',
+              border: 'none',
+              background: 'transparent',
+              boxShadow: 'none',
+              padding: 0,
               display: 'inline-flex',
               alignItems: 'center',
               gap: '10px',
@@ -523,9 +517,6 @@ const WhatsAppFloat = () => {
               >
                 ×
               </button>
-            </div>
-            <div style={{ marginTop: 8, fontSize: 11, color: 'rgba(170, 198, 255, 0.70)' }}>
-              Tap to open chat
             </div>
           </div>
         </div>

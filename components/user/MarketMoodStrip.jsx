@@ -57,7 +57,26 @@ export default function MarketMoodStrip({ onToggleRain }) {
 
   const buildFallbackLines = useCallback(() => {
     const ts = new Date().toISOString();
-    return [{ id: `fallback_${ts}`, icon: '🧠', text: 'Live data temporarily unavailable.', ts }];
+    // Keep UI calm: do not repeatedly tell users it's broken.
+    return [{ id: `fallback_${ts}`, icon: '🧠', text: 'Live Mood updating…', ts }];
+  }, []);
+
+  const fetchMoodFallback = useCallback(async () => {
+    try {
+      const res = await fetch('/api/live-intelligence/mood?nocache=1', {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      });
+      if (!res.ok) return null;
+      const data = await res.json().catch(() => null);
+      const moodText = String(data?.mood_text || '').replace(/\s+/g, ' ').trim();
+      if (!moodText) return null;
+      // If the API itself says unavailable, we still avoid showing that exact phrase in the ticker.
+      if (moodText.toLowerCase().includes('temporarily unavailable')) return { text: 'Live Mood updating…' };
+      return { text: moodText };
+    } catch {
+      return null;
+    }
   }, []);
 
   // Fetch live headlines from API
@@ -98,17 +117,31 @@ export default function MarketMoodStrip({ onToggleRain }) {
       }
     } catch (err) {
       console.warn('[MarketMoodStrip] Live headlines unavailable:', err.message);
-      setMoodLines(buildFallbackLines());
+      const mood = await fetchMoodFallback();
+      if (mood?.text) {
+        const ts = new Date().toISOString();
+        setMoodLines([{ id: `mood_${ts}`, icon: '🧠', text: mood.text, ts }]);
+      } else {
+        setMoodLines(buildFallbackLines());
+      }
       setIsLive(false);
     } finally {
       setHasTriedFetch(true);
     }
 
     // Empty/invalid payload: show a stable fallback line.
-    setMoodLines(buildFallbackLines());
-    setIsLive(false);
+    {
+      const mood = await fetchMoodFallback();
+      if (mood?.text) {
+        const ts = new Date().toISOString();
+        setMoodLines([{ id: `mood_${ts}`, icon: '🧠', text: mood.text, ts }]);
+      } else {
+        setMoodLines(buildFallbackLines());
+      }
+      setIsLive(false);
+    }
     return false;
-  }, [buildFallbackLines]);
+  }, [buildFallbackLines, fetchMoodFallback]);
 
   useEffect(() => {
     fetchLiveHeadlines();
@@ -142,7 +175,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
     ? '🌙 What You Missed Today — Tap to open'
     : (currentMood
         ? icon + ' ' + headlineText
-        : (hasTriedFetch ? '🧠 Live data temporarily unavailable.' : 'Loading Live Mood…'));
+        : (hasTriedFetch ? '🧠 Live Mood updating…' : 'Loading Live Mood…'));
 
   const handleClick = () => {
     if (typeof window !== 'undefined' && window.__openLiveIntelligence) {

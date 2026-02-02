@@ -2114,34 +2114,32 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             top: '16px',
             right: '16px',
             zIndex: 99999,
-            width: '44px',
-            height: '44px',
-            borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.16)',
-            background: 'rgba(10, 10, 12, 0.72)',
-            color: 'rgba(235, 242, 255, 0.95)',
+            width: '28px',
+            height: '28px',
+            borderRadius: '999px',
+            border: 'none',
+            background: 'rgba(0, 0, 0, 0.25)',
+            color: 'rgba(235, 242, 255, 0.90)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: 'transform 0.18s ease, background 0.18s ease, border-color 0.18s ease',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+            transition: 'opacity 0.18s ease, background 0.18s ease',
+            boxShadow: 'none',
             backdropFilter: 'blur(10px)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(220, 50, 50, 0.15)';
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.borderColor = 'rgba(255, 100, 100, 0.30)';
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.38)';
+            e.currentTarget.style.opacity = '1';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'rgba(10, 10, 12, 0.72)';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.16)';
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.25)';
+            e.currentTarget.style.opacity = '0.92';
           }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+          <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1, fontWeight: 600 }}>
+            x
+          </span>
         </button>
 
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
