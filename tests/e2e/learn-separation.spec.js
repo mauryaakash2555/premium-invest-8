@@ -12,6 +12,16 @@ const BASE = process.env.E2E_BASE_URL || 'http://127.0.0.1:3000';
 function initProgressScript() {
   return () => {
     try {
+      // Prevent the pre-hydration SW/cache reset script from triggering a one-time reload on localhost.
+      // That reload can race Playwright interactions and leave the ask form in a reset state.
+      try {
+        sessionStorage.setItem('__bmw_dev_hard_reload_v1', '1');
+        sessionStorage.setItem('__bmw_sw_reset_done_v2:local', '1');
+        sessionStorage.setItem('__bmw_sw_reset_done_v2:no-build', '1');
+      } catch {
+        // ignore
+      }
+
       const dayKey = new Date().toISOString().slice(0, 10);
       localStorage.setItem(
         'li_premium_learning_v2',
@@ -73,18 +83,31 @@ test.describe('Learning separation & routing', () => {
 
     await page.goto(`${BASE}/learn`, { waitUntil: 'domcontentloaded' });
 
-    // The learning panel is client-rendered; allow hydration.
-    await page.waitForTimeout(800);
+    // /learn must start ask-only (no legacy engine UI)
+    await expect(page.getByRole('textbox', { name: /ask what you want to learn/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('.lp-wrap')).toHaveCount(0);
+    await expect(page.getByText('Learn in 2 ways')).toHaveCount(0);
 
-    await expect(page.locator('.lp-wrap')).toBeVisible();
+    // Enter ANY topic (no topic whitelist)
+    const ask = page.getByRole('textbox', { name: /ask what you want to learn/i });
+    await ask.click();
+    await ask.press('Control+A');
+    await page.keyboard.type('covered call strategy for indian equities', { delay: 5 });
 
-    // Sanity: the exact keys must still exist in localStorage
-    const keys = await page.evaluate(() => ({
-      premium: localStorage.getItem('li_premium_learning_v2'),
-      quick: localStorage.getItem('li_quicklearn_state'),
-    }));
+    const continueBtn = page.getByRole('button', { name: /continue/i });
+    await expect(continueBtn).toBeEnabled({ timeout: 15000 });
+    await continueBtn.click();
 
-    expect(typeof keys.premium === 'string' && keys.premium.length > 0).toBeTruthy();
-    expect(typeof keys.quick === 'string' && keys.quick.length > 0).toBeTruthy();
+    // Style chooser appears only after the ask
+    await expect(page.getByText('How would you like to explore this?', { exact: false })).toBeVisible({ timeout: 15000 });
+
+    // Pick a style and verify we render an output card
+    await page.getByRole('button', { name: /explain simply/i }).click();
+    await expect(page.locator('[aria-label="Learning output"]')).toBeVisible({ timeout: 20000 });
+
+    // Styles switchable mid-session
+    await page.getByRole('button', { name: /switch learning style/i }).click();
+    await page.getByRole('button', { name: /math & mechanics/i }).click();
+    await expect(page.locator('[aria-label="Learning output"]')).toBeVisible({ timeout: 20000 });
   });
 });

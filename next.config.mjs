@@ -23,6 +23,9 @@ const nextConfig = {
     ],
     // Image optimization settings for faster loading
     formats: ['image/avif', 'image/webp'],
+    // Explicitly allow the qualities we use across the site.
+    // Next.js 16 will require any non-default `quality` values to be listed here.
+    qualities: [60, 75, 90],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days cache
@@ -101,14 +104,8 @@ const nextConfig = {
     ];
   },
 
-  // VS Code's Simple Browser/webviews can block eval(), which Next dev may use for source maps.
-  // Use non-eval source maps in dev for the client bundle to avoid runtime crashes.
-  webpack(config, { dev, isServer }) {
-    if (dev && !isServer) {
-      config.devtool = 'source-map';
-    }
-    return config;
-  },
+  // NOTE: Do not override webpack devtool in dev.
+  // Next.js warns and may revert it, causing noisy logs and unstable perf.
 };
 
 const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });

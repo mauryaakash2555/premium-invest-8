@@ -24,29 +24,37 @@ export default function LearnLayout({ children }) {
     >
       {/* Hide main navbar and footer for this route */}
       <style>{`
-        /* Hide the main site navbar */
-        .learn-universe-layout ~ header,
-        .learn-universe-layout ~ nav,
-        body > header,
-        body > nav,
-        #main-navbar,
-        .main-navbar,
-        [data-navbar="main"] {
+        /*
+          Learning Sanctuary must open with ONLY the ask box.
+          We scope this using :has(.learn-universe-layout) so it applies immediately
+          (no client effect needed) and does not leak to other routes.
+        */
+
+        body:has(.learn-universe-layout) {
+          overflow: hidden !important;
+          background: #090A0C !important;
+        }
+
+        body:has(.learn-universe-layout) nav,
+        body:has(.learn-universe-layout) header,
+        body:has(.learn-universe-layout) footer,
+        body:has(.learn-universe-layout) [role="contentinfo"] {
           display: none !important;
         }
-        
-        /* Hide main site footer */
-        .learn-universe-layout ~ footer,
-        body > footer:not(.laser-footer),
-        #main-footer,
-        .main-footer,
-        [data-footer="main"] {
+
+        /* Hide global floating UI on /learn (dock + chat float + consent) */
+        body:has(.learn-universe-layout) [aria-label="Open chat"],
+        body:has(.learn-universe-layout) [aria-label="WhatsApp Us Concierge"],
+        body:has(.learn-universe-layout) [data-cookie-consent],
+        body:has(.learn-universe-layout) .luxury-mobile-dock,
+        body:has(.learn-universe-layout) [data-luxury-dock],
+        body:has(.learn-universe-layout) .ai-chat-float {
           display: none !important;
         }
-        
-        /* Reset any overflow issues */
+
         .learn-universe-layout {
           min-height: 100vh;
+          height: 100vh;
           background: #090A0C;
         }
       `}</style>
