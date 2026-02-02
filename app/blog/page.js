@@ -1,5 +1,5 @@
+import BlogIndexClient from "./BlogIndexClient";
 import { buildMetadata } from "@/lib/seo/metadata";
-import { redirect } from "next/navigation";
 
 export const metadata = buildMetadata({
   title: "Investment Insights Mumbai | Financial Planning Blog | BM Wealth",
@@ -9,5 +9,5 @@ export const metadata = buildMetadata({
 });
 
 export default function BlogPage() {
-  redirect("/blog/editorial");
+  return <BlogIndexClient />;
 }

@@ -1,14 +1,12 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata = {
-  ...buildMetadata({
-    title: "Wealth Services | Portfolio Management, Mutual Funds, Insurance | BM Wealth",
-    description:
-      "Explore BM Wealth services including PMS, mutual funds, insurance, fixed deposits and SIP planning. Premium advisory with a Mumbai-first approach.",
-    path: "/services",
-  }),
-};
+export const metadata = buildMetadata({
+  title: 'Wealth Services | PMS, Mutual Funds, SIP & Insurance | BM Wealth',
+  description:
+    'Explore BM Wealth services: portfolio management (PMS support), mutual funds, SIP execution, insurance, fixed deposits, and trading & demat support — delivered with a process-first approach.',
+  path: '/services',
+});
 
 export default function Layout({ children }) {
-  return children;
+  return <>{children}</>;
 }

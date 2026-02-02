@@ -131,16 +131,16 @@ export default async function sitemap() {
     "/tools/property-vs-sip",
     "/tools/tax-optimization",
     "/tools/itr-filing-help",
+    // /blog is the canonical blog index (must not be a redirect-only URL)
     "/blog",
     "/blog/editorial",
     "/blog/impact",
     "/blog/guest",
     "/blog/dev",
     "/submit",
-    "/best-credit-cards-high-income-india",
     "/live-intelligence",
     "/contact",
-    "/about-us",
+    "/about",
     "/services",
     "/platforms",
     "/mutual-funds",
@@ -159,13 +159,15 @@ export default async function sitemap() {
 
   // Exclude known non-indexable or blocked URLs from the sitemap.
   const excludedExact = new Set([
-    "/about",
+    "/about-us",
     "/privacy-policy",
     "/terms-and-conditions",
     "/refund-policy",
     "/payment-success",
     "/payment-failed",
     "/live-intel",
+    // Legacy redirect-only URL (canonical is the blog post under /blog/)
+    "/best-credit-cards-high-income-india",
   ]);
 
   const excludedPrefix = [
