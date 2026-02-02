@@ -286,7 +286,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
     };
   }, []);
 
-  const portfolioMatches = getMatchedPortfolioTickers(headline?.headline, portfolioTickers);
+  const portfolioMatches = getMatchedPortfolioTickers(headlineTitle, portfolioTickers);
 
   // Fetch AI content when modal opens
   useEffect(() => {
@@ -302,11 +302,13 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
     // Fetch AI-generated content
     setAiLoading(true);
     setAiError(null);
+    const titleForAi = headlineTitle || 'Market update';
+
     fetch('/api/live-intelligence/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        headline: headline.headline,
+        headline: titleForAi,
         category: headline.category,
         whyItMatters: headline.whyItMatters,
         dataPoint: headline.dataPoint,
@@ -1239,7 +1241,7 @@ export default function HeadlineCard({ headline, isActive = false, onSaveChange,
                     </span>
                   </div>
                   {/* Headline - no logo here, clean title */}
-                  <h3 className="li-modal-title" style={{ marginTop: 0 }}>{headline.headline}</h3>
+                  <h3 className="li-modal-title" style={{ marginTop: 0 }}>{headlineTitle || 'Market update'}</h3>
                 </div>
 
                 {/* AI Loading State */}

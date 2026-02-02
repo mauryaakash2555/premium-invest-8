@@ -52,6 +52,7 @@ import { getVoiceReader } from '@/lib/live-intelligence/voice';
 import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
 import { getPersonalizationEngine } from '@/lib/live-intelligence/personalization';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LazyTradingView from '@/components/shared/LazyTradingView';
 import MarketClockStatusBadge from '@/components/live-intelligence/MarketClockStatusBadge';
 import AnimatedNumber from '@/components/animations/AnimatedNumber';
@@ -384,19 +385,18 @@ export default function LiveIntelligenceOverlay({
     }
   }, [closeOverlay]);
 
-  // Expose open function globally for manual triggers
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    window.__openLiveIntelligence = openOverlay;
-    return () => {
-      delete window.__openLiveIntelligence;
-    };
-  }, [openOverlay]);
+  // Overlay deprecated: do NOT expose global opener.
 
   // Session-based auto-open: Only triggers ONCE per browser session.
   // The flag persists in sessionStorage until the browser/tab is closed.
   // DO NOT clear on beforeunload - that defeats the purpose of session-based triggering.
 
+  // Overlay deprecated: do NOT auto-open on scroll.
+  useEffect(() => {
+    return () => {};
+  }, []);
+
+  /*
   // Auto-open when scrolling past LIVE MOOD (once per session)
   useEffect(() => {
     let rafId = 0;
@@ -450,6 +450,7 @@ export default function LiveIntelligenceOverlay({
       observer?.disconnect();
     };
   }, [liveMoodRef, openOverlay, isOpen]);
+  */
 
   // NOTE: We intentionally do NOT auto-close when footer becomes visible.
   // Users want to view and use the full LaserFooter (client-portal version).
@@ -492,10 +493,9 @@ export default function LiveIntelligenceOverlay({
         overflowY: 'auto',
         overflowX: 'hidden',
         opacity: isOpen ? 1 : 0,
-        transform: isOpen ? 'scale(1)' : 'scale(0.98)',
-        transition: isOpen 
-          ? 'opacity 400ms ease-out, transform 400ms ease-out' 
-          : 'opacity 300ms ease-in, transform 300ms ease-in',
+        transform: 'none',
+        transition: isOpen ? 'opacity 400ms ease-out' : 'opacity 300ms ease-in',
+        willChange: 'opacity',
         pointerEvents: isOpen ? 'auto' : 'none',
         visibility: isOpen || isAnimating ? 'visible' : 'hidden',
       }}
@@ -678,28 +678,40 @@ export default function LiveIntelligenceOverlay({
         }
       `}</style>
 
-      {/* PANEL SECTION - Laser video removed, panel starts at top */}
-      <LiveIntelligencePanel onClose={closeOverlay} scrollContainerRef={overlayRef} />
-      
-      {/* Achievement Popup - Shows when badge is unlocked */}
-      <AchievementPopup />
-
-      {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
+      {/* Animating content wrapper (keeps scale animation without affecting fixed controls) */}
       <div
-        data-li-footer
-        className="li-footer-wrapper"
         style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1,
-          position: 'relative',
-          zIndex: 100,
-          width: '100%',
-          marginTop: 0,
-          background: '#090A0C',
+          transform: isOpen ? 'scale(1)' : 'scale(0.985)',
+          transformOrigin: 'top center',
+          transition: isOpen ? 'transform 400ms ease-out' : 'transform 300ms ease-in',
+          willChange: 'transform',
+          minHeight: '100%',
         }}
       >
-        {footerWithHandlers}
+
+        {/* PANEL SECTION - Laser video removed, panel starts at top */}
+        <LiveIntelligencePanel onClose={closeOverlay} scrollContainerRef={overlayRef} />
+        
+        {/* Achievement Popup - Shows when badge is unlocked */}
+        <AchievementPopup />
+
+        {/* FOOTER - rendered with original styling (data-laser-active handles the special colors) */}
+        <div
+          data-li-footer
+          className="li-footer-wrapper"
+          style={{
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            position: 'relative',
+            zIndex: 100,
+            width: '100%',
+            marginTop: 0,
+            background: '#090A0C',
+          }}
+        >
+          {footerWithHandlers}
+        </div>
       </div>
     </div>
   );
@@ -922,6 +934,58 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [allocations, setAllocations] = useState(() => loadAllocations());
 
   const [lastActiveIso, setLastActiveIso] = useState(null);
+
+  const router = useRouter();
+  const [learnPortalOpen, setLearnPortalOpen] = useState(false);
+  const [learnPortalStage, setLearnPortalStage] = useState(0);
+  const learnPortalTimersRef = useRef([]);
+
+  const clearLearnPortalTimers = useCallback(() => {
+    try {
+      for (const t of learnPortalTimersRef.current) {
+        clearTimeout(t);
+      }
+    } catch {
+      // ignore
+    }
+    learnPortalTimersRef.current = [];
+  }, []);
+
+  const startLearnPortal = useCallback(() => {
+    // Restore the “enter another world” feel (Opus-style): brief portal overlay, then route.
+    clearLearnPortalTimers();
+    setLearnPortalOpen(true);
+    setLearnPortalStage(1);
+
+    learnPortalTimersRef.current.push(
+      setTimeout(() => {
+        setLearnPortalStage(2);
+      }, 420)
+    );
+
+    // A short “pull-in” pulse so users actually notice the transition.
+    learnPortalTimersRef.current.push(
+      setTimeout(() => {
+        setLearnPortalStage(3);
+      }, 880)
+    );
+
+    learnPortalTimersRef.current.push(
+      setTimeout(() => {
+        try {
+          router.push('/learn');
+        } finally {
+          // keep overlay until navigation occurs; then cleanup on unmount
+        }
+      }, 1250)
+    );
+  }, [clearLearnPortalTimers, router]);
+
+  useEffect(() => {
+    return () => {
+      clearLearnPortalTimers();
+    };
+  }, [clearLearnPortalTimers]);
 
   const [intelView, setIntelView] = useState(() => {
     try {
@@ -1956,6 +2020,178 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         .li-sticky-back-btn {
           top: max(18px, calc(18px + env(safe-area-inset-top, 0px))) !important;
         }
+
+        /* Premium Learn CTA (single-line, magical entry) */
+        .li-learn-cta {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px 20px;
+          border-radius: 18px;
+          border: 1px solid rgba(140, 180, 255, 0.22);
+          background: radial-gradient(120% 140% at 10% 0%, rgba(120, 170, 255, 0.16) 0%, rgba(40, 70, 120, 0.06) 55%, rgba(0, 0, 0, 0) 100%),
+            linear-gradient(135deg, rgba(14, 16, 22, 0.92) 0%, rgba(6, 7, 10, 0.78) 100%);
+          color: rgba(230, 242, 255, 0.94);
+          font-size: 14px;
+          font-weight: 650;
+          letter-spacing: -0.01em;
+          text-decoration: none;
+          cursor: pointer;
+          overflow: hidden;
+          box-shadow: 0 14px 60px rgba(0, 0, 0, 0.55), 0 8px 30px rgba(80, 130, 220, 0.10);
+          transform: translateZ(0);
+          will-change: transform, box-shadow;
+          animation: liCtaEnter 720ms var(--li-ease-premium, cubic-bezier(0.2, 0.9, 0.25, 1)) both;
+        }
+
+        /* Learn portal transition overlay */
+        .li-learn-portal {
+          position: fixed;
+          inset: 0;
+          z-index: 200000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: radial-gradient(120% 120% at 50% 20%, rgba(120, 180, 255, 0.16) 0%, rgba(10, 12, 16, 0.94) 55%, rgba(0, 0, 0, 0.98) 100%);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          animation: liPortalFadeIn 260ms ease-out both;
+        }
+
+        .li-learn-portal-inner {
+          width: min(560px, calc(100vw - 44px));
+          padding: 22px 18px;
+          border-radius: 22px;
+          border: 1px solid rgba(140, 190, 255, 0.22);
+          background: linear-gradient(135deg, rgba(12, 14, 20, 0.84) 0%, rgba(0, 0, 0, 0.70) 100%);
+          box-shadow: 0 30px 120px rgba(0, 0, 0, 0.75);
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          transform: translateZ(0);
+          will-change: transform, filter;
+        }
+
+        .li-learn-portal[data-stage='3'] .li-learn-portal-inner {
+          transform: scale(1.02);
+          filter: brightness(1.08);
+          transition: transform 220ms ease, filter 220ms ease;
+        }
+
+        .li-learn-portal-ring {
+          position: absolute;
+          inset: -60px;
+          background: conic-gradient(from 180deg, rgba(160, 210, 255, 0.0), rgba(160, 210, 255, 0.25), rgba(110, 160, 255, 0.0), rgba(160, 210, 255, 0.22), rgba(160, 210, 255, 0.0));
+          filter: blur(18px);
+          opacity: 0.8;
+          animation: liPortalSpin 1.1s linear infinite;
+          pointer-events: none;
+        }
+
+        .li-learn-portal-title {
+          position: relative;
+          z-index: 2;
+          margin: 0;
+          color: rgba(235, 245, 255, 0.96);
+          font-size: 16px;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          text-shadow: 0 0 22px rgba(120, 180, 255, 0.22);
+        }
+
+        .li-learn-portal-sub {
+          position: relative;
+          z-index: 2;
+          margin: 10px 0 0;
+          color: rgba(200, 215, 240, 0.72);
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        @keyframes liPortalFadeIn {
+          from { opacity: 0; transform: scale(0.99); }
+          to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes liPortalSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        .li-learn-cta > span {
+          position: relative;
+          z-index: 2;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          text-shadow: 0 0 18px rgba(120, 180, 255, 0.22);
+        }
+
+        /* Soft aura glow */
+        .li-learn-cta::before {
+          content: '';
+          position: absolute;
+          inset: -20px;
+          background: conic-gradient(from 180deg, rgba(160, 210, 255, 0.0), rgba(160, 210, 255, 0.18), rgba(110, 160, 255, 0.0), rgba(160, 210, 255, 0.16), rgba(160, 210, 255, 0.0));
+          filter: blur(18px);
+          opacity: 0.55;
+          animation: liCtaGlow 7s linear infinite;
+          pointer-events: none;
+        }
+
+        /* Shimmer sweep */
+        .li-learn-cta::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(115deg, rgba(255, 255, 255, 0) 0%, rgba(190, 225, 255, 0.22) 35%, rgba(255, 255, 255, 0) 70%);
+          transform: translateX(-120%);
+          opacity: 0.65;
+          animation: liCtaShimmer 3.6s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        .li-learn-cta:hover {
+          border-color: rgba(140, 190, 255, 0.42);
+          color: rgba(245, 250, 255, 0.98);
+          box-shadow: 0 16px 70px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(80, 140, 255, 0.18);
+          transform: translate3d(0, -1px, 0);
+        }
+
+        .li-learn-cta:active {
+          transform: translate3d(0, 0, 0) scale(0.99);
+        }
+
+        @keyframes liCtaEnter {
+          0% { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.985); filter: blur(0.0px) saturate(0.9); }
+          60% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0px) saturate(1.05); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0px) saturate(1); }
+        }
+
+        @keyframes liCtaGlow {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        @keyframes liCtaShimmer {
+          0% { transform: translateX(-120%); }
+          55% { transform: translateX(120%); }
+          100% { transform: translateX(120%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .li-learn-cta {
+            animation: none;
+            transition: none;
+          }
+          .li-learn-cta::before,
+          .li-learn-cta::after {
+            animation: none;
+            opacity: 0;
+          }
+        }
         
         @media (max-width: 900px) {
           .li-panel-shell {
@@ -2095,6 +2331,58 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         }
       `}</style>
 
+      {/* Sticky close (moves with scroll container) */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 'max(10px, env(safe-area-inset-top, 0px))',
+          zIndex: 99999,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          padding: '10px 12px 0',
+          pointerEvents: 'none',
+        }}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close (Esc)"
+          title="Close (Esc)"
+          style={{
+            pointerEvents: 'auto',
+            width: '30px',
+            height: '30px',
+            borderRadius: '999px',
+            border: 'none',
+            background: 'rgba(0, 0, 0, 0.30)',
+            color: 'rgba(235, 242, 255, 0.92)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 'none',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            transition: 'background 160ms ease, transform 160ms ease, opacity 160ms ease',
+            opacity: 0.92,
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.42)';
+            e.currentTarget.style.opacity = '1';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.30)';
+            e.currentTarget.style.opacity = '0.92';
+            e.currentTarget.style.transform = 'none';
+          }}
+        >
+          <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1, fontWeight: 600 }}>
+            ×
+          </span>
+        </button>
+      </div>
+
       <div
         className="li-panel-shell max-w-7xl mx-auto"
         style={{
@@ -2103,45 +2391,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           overflowX: 'hidden',
         }}
       >
-        {/* Sticky Close/Back Button - TOP RIGHT, refined */}
-        <button
-          onClick={onClose}
-          aria-label="Close (Esc)"
-          title="Close (Esc)"
-          className="li-sticky-back-btn"
-          style={{
-            position: 'fixed',
-            top: '16px',
-            right: '16px',
-            zIndex: 99999,
-            width: '28px',
-            height: '28px',
-            borderRadius: '999px',
-            border: 'none',
-            background: 'rgba(0, 0, 0, 0.25)',
-            color: 'rgba(235, 242, 255, 0.90)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'opacity 0.18s ease, background 0.18s ease',
-            boxShadow: 'none',
-            backdropFilter: 'blur(10px)',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.38)';
-            e.currentTarget.style.opacity = '1';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.25)';
-            e.currentTarget.style.opacity = '0.92';
-          }}
-        >
-          <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1, fontWeight: 600 }}>
-            x
-          </span>
-        </button>
-
         {/* Dashboard header with navigation tabs and actions - MOBILE: STACKED VERTICALLY */}
         <div className="li-header-section" style={{ marginBottom: '8px' }}>
           {/* Row 1: Title + Feature Controls (top-right) */}
@@ -2871,42 +3120,30 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           <div style={{ gridColumn: '1 / -1', marginTop: '12px' }}>
             <Link
               href="/learn"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                padding: '16px 20px',
-                borderRadius: '16px',
-                border: '1px solid rgba(140, 180, 255, 0.22)',
-                background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.12), rgba(50, 80, 140, 0.07))',
-                color: 'rgba(220, 235, 255, 0.92)',
-                fontSize: '14px',
-                fontWeight: 600,
-                textDecoration: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 8px 32px rgba(60, 100, 180, 0.12)',
-              }}
-              aria-label="Open the Wealth Guild learning observatory"
-              onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.40)';
-                e.currentTarget.style.color = 'rgba(240, 248, 255, 1)';
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.18), rgba(50, 80, 140, 0.10))';
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(60, 100, 180, 0.20)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.22)';
-                e.currentTarget.style.color = 'rgba(220, 235, 255, 0.92)';
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.12), rgba(50, 80, 140, 0.07))';
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(60, 100, 180, 0.12)';
+              className="li-learn-cta"
+              aria-label="✨ Want to understand why markets behave this way? →"
+              onClick={(e) => {
+                // Prevent immediate navigation; show portal transition first.
+                e.preventDefault();
+                startLearnPortal();
               }}
             >
-              <span aria-hidden="true" style={{ fontSize: '18px' }}>✨</span>
-              <span>Want to understand why markets behave this way?</span>
-              <span aria-hidden="true" style={{ opacity: 0.7, fontSize: '16px' }}>→</span>
+              <span>✨ Want to understand why markets behave this way? →</span>
             </Link>
           </div>
+
+          {/* Portal transition overlay (short, premium) */}
+          {learnPortalOpen ? (
+            <div className="li-learn-portal" data-stage={learnPortalStage} role="dialog" aria-label="Opening Learning Observatory">
+              <div className="li-learn-portal-inner">
+                <div className="li-learn-portal-ring" aria-hidden="true" />
+                <h4 className="li-learn-portal-title">
+                  {learnPortalStage >= 2 ? 'Arriving in the Learning Observatory…' : 'Entering the Learning Observatory…'}
+                </h4>
+                <p className="li-learn-portal-sub">One moment — we’re switching you into learning mode.</p>
+              </div>
+            </div>
+          ) : null}
 
           {/* ═══════════════════════════════════════════════════════════
               QUICK ACCESS (Overlay) - Pixel-perfect match with laser page

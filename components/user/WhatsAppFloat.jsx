@@ -135,6 +135,7 @@ const WhatsAppFloat = () => {
   const [open, setOpen] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
   const [nudgeText, setNudgeText] = useState('');
+  const [nudgeVisible, setNudgeVisible] = useState(false);
   const [showLovePulse, setShowLovePulse] = useState(false);
   const [hasShownFavOnce, setHasShownFavOnce] = useState(false);
   const LOVE_NUDGE_TEXT = 'You are 100% my favorite human today';
@@ -171,8 +172,42 @@ const WhatsAppFloat = () => {
   const timerRef = useRef(null);
   const didNudgeRef = useRef(false);
   const nudgeTimerRef = useRef(null);
+  const nudgeAutoHideRef = useRef(null);
+  const nudgeUnmountRef = useRef(null);
   const lovePulseTimerRef = useRef(null);
   const lovePulseHideRef = useRef(null);
+
+  const clearNudgeTimers = () => {
+    if (nudgeAutoHideRef.current) {
+      try {
+        clearTimeout(nudgeAutoHideRef.current);
+      } catch {
+        // ignore
+      }
+      nudgeAutoHideRef.current = null;
+    }
+    if (nudgeUnmountRef.current) {
+      try {
+        clearTimeout(nudgeUnmountRef.current);
+      } catch {
+        // ignore
+      }
+      nudgeUnmountRef.current = null;
+    }
+  };
+
+  const beginHideNudge = (openChat = false) => {
+    // Start exit animation.
+    setNudgeVisible(false);
+    clearNudgeTimers();
+
+    // Unmount after transition.
+    nudgeUnmountRef.current = setTimeout(() => {
+      setShowNudge(false);
+      setNudgeVisible(false);
+      if (openChat) setOpen(true);
+    }, 240);
+  };
 
   const canAutoOpenOnPath = useMemo(() => {
     if (!schedule?.enabled) return false;
@@ -277,7 +312,9 @@ const WhatsAppFloat = () => {
 
     // No nudge if chat is open.
     if (open) {
+      clearNudgeTimers();
       setShowNudge(false);
+      setNudgeVisible(false);
       return;
     }
 
@@ -321,6 +358,33 @@ const WhatsAppFloat = () => {
 
       setNudgeText(text);
       setShowNudge(true);
+      setNudgeVisible(false);
+
+      // Animate in on next frame (prevents popping in at opacity:1)
+      try {
+        if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+          window.requestAnimationFrame(() => setNudgeVisible(true));
+        } else {
+          setTimeout(() => setNudgeVisible(true), 16);
+        }
+      } catch {
+        setTimeout(() => setNudgeVisible(true), 16);
+      }
+
+      // Auto-dismiss after a short time (premium nudge, not sticky)
+      clearNudgeTimers();
+      // User request: quick, calm appearance and exit (not sticky)
+      const autoHideMs = Math.max(900, Number(nudge?.autoHideMs ?? 1800));
+      nudgeAutoHideRef.current = setTimeout(() => {
+        // Only auto-hide if still on same path and chat is not open.
+        try {
+          const currentPath = window.location?.pathname || '';
+          if (String(currentPath) !== String(pathname || '')) return;
+        } catch {
+          // ignore
+        }
+        if (!open) beginHideNudge(false);
+      }, autoHideMs);
 
       try {
         if (typeof window !== 'undefined' && window.sessionStorage) {
@@ -344,6 +408,12 @@ const WhatsAppFloat = () => {
       }
     };
   }, [canNudgeOnPath, hasShownFavOnce, isLiveIntelligence, nudge, open, pathname]);
+
+  useEffect(() => {
+    return () => {
+      clearNudgeTimers();
+    };
+  }, []);
 
   useEffect(() => {
     // Keep Live Intelligence clean.
@@ -427,101 +497,10 @@ const WhatsAppFloat = () => {
   if (!mounted) return null;
   if (isLiveIntelligence) return null;
 
+  const showHeart = Boolean(showLovePulse && !showNudge);
+
   return (
     <div style={{ position: 'relative' }}>
-      {showLovePulse && !showNudge ? (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            position: 'fixed',
-            right: '86px',
-            bottom: '210px',
-            zIndex: 2500,
-            pointerEvents: 'auto',
-          }}
-        >
-          <button
-            type="button"
-            aria-label="Need help? Open chat"
-            onClick={() => {
-              setShowLovePulse(false);
-              setOpen(true);
-            }}
-            style={{
-              borderRadius: '999px',
-              border: 'none',
-              background: 'transparent',
-              boxShadow: 'none',
-              padding: 0,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              cursor: 'pointer',
-              color: 'rgba(235,245,255,0.92)',
-            }}
-          >
-            <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">❤️</span>
-          </button>
-        </div>
-      ) : null}
-
-      {showNudge ? (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            position: 'fixed',
-            right: '72px',
-            bottom: '240px',
-            zIndex: 2500,
-            maxWidth: '280px',
-            pointerEvents: 'auto',
-          }}
-        >
-          <div
-            style={{
-              borderRadius: '16px',
-              border: '1px solid rgba(170, 198, 255, 0.18)',
-              background: 'linear-gradient(135deg, rgba(12,14,20,0.92) 0%, rgba(0,0,0,0.78) 100%)',
-              boxShadow: '0 28px 90px rgba(0,0,0,0.75)',
-              padding: '12px 12px',
-              color: 'rgba(235,245,255,0.92)',
-              fontSize: '12px',
-              lineHeight: 1.45,
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setShowNudge(false);
-              setOpen(true);
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-              <div style={{ flex: 1 }}>{nudgeText}</div>
-              <button
-                type="button"
-                aria-label="Dismiss"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowNudge(false);
-                }}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  color: 'rgba(235,245,255,0.65)',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  padding: 0,
-                  lineHeight: 1,
-                }}
-              >
-                ×
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
       {/* 🔵 Floating 3D BLACK robot trigger */}
       <Chatbot3DTrigger
         className="chatbot-float"
@@ -532,7 +511,108 @@ const WhatsAppFloat = () => {
           setShowNudge(false);
           setOpen(true);
         }}
-      />
+      >
+        {/* Heart pulse: anchored near the bot head (desktop + mobile) */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '-10px',
+            top: '62px',
+            zIndex: 5,
+            opacity: showHeart ? 1 : 0,
+            transform: showHeart ? 'translate3d(0,0,0) scale(1)' : 'translate3d(0,6px,0) scale(0.96)',
+            transition: 'opacity 260ms ease, transform 260ms ease',
+            pointerEvents: showHeart ? 'auto' : 'none',
+          }}
+        >
+          <button
+            type="button"
+            aria-label="Need help? Open chat"
+            onClick={() => {
+              setShowLovePulse(false);
+              setOpen(true);
+            }}
+            style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '999px',
+              border: '1px solid rgba(170, 198, 255, 0.18)',
+              background: 'linear-gradient(135deg, rgba(12,14,20,0.82) 0%, rgba(0,0,0,0.62) 100%)',
+              boxShadow: '0 18px 50px rgba(0,0,0,0.55)',
+              padding: 0,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: 'rgba(235,245,255,0.92)',
+            }}
+          >
+            <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">❤️</span>
+          </button>
+        </div>
+
+        {/* Nudge bubble: anchored above-left of bot */}
+        {showNudge ? (
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              position: 'absolute',
+              left: '-260px',
+              bottom: '138px',
+              zIndex: 6,
+              width: '280px',
+              maxWidth: '280px',
+              pointerEvents: 'auto',
+            }}
+          >
+            <div
+              style={{
+                borderRadius: '16px',
+                border: '1px solid rgba(170, 198, 255, 0.18)',
+                background: 'linear-gradient(135deg, rgba(12,14,20,0.92) 0%, rgba(0,0,0,0.78) 100%)',
+                boxShadow: '0 28px 90px rgba(0,0,0,0.75)',
+                padding: '12px 12px',
+                color: 'rgba(235,245,255,0.92)',
+                fontSize: '12px',
+                lineHeight: 1.45,
+                cursor: 'pointer',
+                opacity: nudgeVisible ? 1 : 0,
+                transform: nudgeVisible ? 'translate3d(0,0,0) scale(1)' : 'translate3d(0,10px,0) scale(0.985)',
+                transition: 'opacity 220ms ease, transform 220ms ease',
+                willChange: 'opacity, transform',
+              }}
+              onClick={() => {
+                beginHideNudge(true);
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                <div style={{ flex: 1 }}>{nudgeText}</div>
+                <button
+                  type="button"
+                  aria-label="Dismiss"
+                  data-chatbot-ignore-activate="true"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    beginHideNudge(false);
+                  }}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'rgba(235,245,255,0.65)',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    padding: 0,
+                    lineHeight: 1,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </Chatbot3DTrigger>
 
       {/* 🔵 AI Chat modal */}
       <ChatErrorBoundary>

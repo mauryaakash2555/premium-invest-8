@@ -257,6 +257,7 @@ export default function Chatbot3DTrigger({
   zIndex = 2000,
   className,
   style,
+  children,
   'aria-label': ariaLabel = 'Open chat',
   ...rest
 }) {
@@ -290,6 +291,16 @@ export default function Chatbot3DTrigger({
     }, 0);
   }, [onActivate]);
 
+  const shouldIgnoreActivate = useCallback((e) => {
+    try {
+      const t = e?.target;
+      if (!t) return false;
+      return Boolean(t.closest?.('[data-chatbot-ignore-activate="true"]'));
+    } catch {
+      return false;
+    }
+  }, []);
+
   // Some WebGL runtimes attach aggressive event listeners (sometimes on document/window)
   // that can interfere with React handlers on nested elements.
   // Add a capture-phase fallback at the window level: if the interaction ends on this
@@ -300,6 +311,7 @@ export default function Chatbot3DTrigger({
 
     const onWinPointerUp = (e) => {
       try {
+        if (shouldIgnoreActivate(e)) return;
         const el = containerRef.current;
         if (!el) return;
         if (!e) return;
@@ -312,6 +324,7 @@ export default function Chatbot3DTrigger({
 
     const onWinClick = (e) => {
       try {
+        if (shouldIgnoreActivate(e)) return;
         const el = containerRef.current;
         if (!el) return;
         if (!e) return;
@@ -332,7 +345,7 @@ export default function Chatbot3DTrigger({
         // ignore
       }
     };
-  }, [prefersReducedMotion, safeActivate]);
+  }, [prefersReducedMotion, safeActivate, shouldIgnoreActivate]);
 
   const resolvedSizePx = useMemo(() => {
     if (isMobileFloat) {
@@ -347,8 +360,8 @@ export default function Chatbot3DTrigger({
     () => ({
       position: 'fixed',
       // Mobile: sit at the screen edge, but keep clear of the luxury bottom dock.
-      bottom: isMobileFloat ? 'calc(var(--li-mobile-dock-clearance, 72px) + env(safe-area-inset-bottom))' : '50px',
-      right: isMobileFloat ? 'calc(env(safe-area-inset-right) - 6px)' : '50px',
+      bottom: isMobileFloat ? 'calc(var(--li-mobile-dock-clearance, 72px) + env(safe-area-inset-bottom))' : '28px',
+      right: isMobileFloat ? 'calc(env(safe-area-inset-right) - 6px)' : '28px',
       width: `${resolvedSizePx}px`,
       height: `${resolvedSizePx}px`,
       background: 'transparent',
@@ -722,9 +735,10 @@ export default function Chatbot3DTrigger({
     (e) => {
       // Only respond to primary mouse button, but allow touch.
       if (e.pointerType === 'mouse' && e.button != null && e.button !== 0) return;
+      if (shouldIgnoreActivate(e)) return;
       safeActivate();
     },
-    [safeActivate]
+    [safeActivate, shouldIgnoreActivate]
   );
 
   // Reduced-motion fallback: keep a simple button (no 3D).
@@ -769,12 +783,14 @@ export default function Chatbot3DTrigger({
         // Capture-phase fallback: some runtimes attach listeners on the canvas and may
         // stop propagation; capture ensures we still open the modal.
         if (e?.button != null && e.button !== 0) return;
+        if (shouldIgnoreActivate(e)) return;
         safeActivate();
       }}
       onClick={(e) => {
         // Some environments (e.g., automated tests) may not dispatch pointer events.
         // Keep click as a reliable fallback.
         if (e?.button != null && e.button !== 0) return;
+        if (shouldIgnoreActivate(e)) return;
         safeActivate();
       }}
       onKeyDown={(e) => {
@@ -794,6 +810,18 @@ export default function Chatbot3DTrigger({
           background: 'transparent',
         }}
       />
+
+      {children ? (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'auto',
+          }}
+        >
+          {children}
+        </div>
+      ) : null}
 
       {!loaded && (
         <div
