@@ -2864,6 +2864,11 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <MorningBrief />
           </div>
 
+          {/* Night section (only visible in night_summary mode) */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <NightSummary />
+          </div>
+
           {/* Premium CTA: link to /learn (Living Learning Observatory) */}
           <div style={{ gridColumn: '1 / -1', marginTop: '12px' }}>
             <Link
@@ -2929,11 +2934,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
                 →
               </span>
             </Link>
-          </div>
-
-          {/* Night section (only visible in night_summary mode) */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <NightSummary />
           </div>
 
           {/* ═══════════════════════════════════════════════════════════
