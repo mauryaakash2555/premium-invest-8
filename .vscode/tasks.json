@@ -519,6 +519,36 @@
 			"group": "build"
 		},
 		{
+			"label": "clean-local-temp-artifacts (safe)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location '${workspaceFolder}'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\cleanup-local-temp.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "clean-local-temp-artifacts (dry-run)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location '${workspaceFolder}'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\cleanup-local-temp.ps1 -DryRun"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
 			"label": "build-premium-invest-8",
 			"type": "shell",
 			"command": "npm",

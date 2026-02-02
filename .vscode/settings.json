@@ -13,9 +13,13 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
     "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
     "**/.turbo/**": true
   },
   "search.exclude": {
@@ -29,9 +33,15 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
     "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
+    "**/temp-full.json": true,
+    "**/*.mp4": true,
     "**/.turbo/**": true
   },
   "files.exclude": {
@@ -44,9 +54,15 @@
     "**/backup/**": true,
     "**/.safety-backups/**": true,
     "**/database_backup/**": true,
+    "**/.itr_store/**": true,
+    "**/.incoming_step2/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
-    "**/.tmp*/**": true
+    "**/.tmp*/**": true,
+    "**/.tmp_*": true,
+    "**/.tmp_*.*": true,
+    "**/temp-full.json": true,
+    "**/*.mp4": true
   },
 
   // Helps on larger JS/TS projects.
@@ -61,6 +77,17 @@
 
   // Reduce background TypeScript downloads/work.
   "typescript.disableAutomaticTypeAcquisition": true,
+
+  // The built-in npm extension can do extra probing on large repos.
+  "npm.autoDetect": "off",
+
+  // Defensive: avoid the editor trying to fully load massive single files.
+  // (If VS Code detects a file as "large", it will fall back to a lightweight mode.)
+  "files.maxMemoryForLargeFilesMB": 64,
+
+  // Prefer respecting .gitignore/.ignore for search. Helps on huge repos.
+  "search.useIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
   "chat.tools.terminal.autoApprove": {
     "git add": true,
     "git commit": true,
