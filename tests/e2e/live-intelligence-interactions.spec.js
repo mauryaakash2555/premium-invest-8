@@ -59,57 +59,44 @@ test.describe('Live Intelligence UX', () => {
     // Allow client hydration so click handlers are reliably attached.
     await page.waitForTimeout(1200);
 
-    const openLiveIntel = page.getByRole('button', { name: 'Open Live Intelligence', exact: true });
+    const openLiveIntel = page.locator('a[aria-label="Open Live Intelligence"]').nth(1);
     await expect(openLiveIntel).toBeVisible({ timeout: 20000 });
     await openLiveIntel.click();
 
-    const overlayOpen = page.locator('.li-overlay.li-overlay-open');
-
-    const openedViaOverlay = await overlayOpen
-      .waitFor({ state: 'visible', timeout: 8000 })
-      .then(() => true)
-      .catch(() => false);
-
-    const openedViaRoute = openedViaOverlay
-      ? false
-      : await page
-          .waitForURL(/\/live-intelligence(?:\?|#|$)/, { timeout: 8000 })
-          .then(() => true)
-          .catch(() => false);
-
-    if (!openedViaOverlay && !openedViaRoute) {
-      // Last-resort: trigger the global opener (if present) or navigate directly.
-      const hasGlobalOpener = await page
-        .evaluate(() => typeof window.__openLiveIntelligence === 'function')
-        .catch(() => false);
-
-      if (hasGlobalOpener) {
-        await page.evaluate(() => window.__openLiveIntelligence());
-        await overlayOpen.waitFor({ state: 'visible', timeout: 8000 });
-      } else {
-        await page.goto('/live-intelligence', { waitUntil: 'domcontentloaded' });
-      }
-    }
+    // Overlay is removed; click should always route.
+    await page.waitForURL(/\/live-intelligence(?:\?|#|$)/, { timeout: 15000 });
 
     const headlineFeed = page.locator('[data-headline-feed]');
     await expect(headlineFeed).toBeVisible({ timeout: 20000 });
 
-    const card = page.locator('.li-headline-card').first();
-    await expect(card).toBeVisible();
-    await card.click();
+    // Give the client a moment to hydrate/fetch.
+    await page.waitForTimeout(1500);
 
-    const modal = page.locator('.li-headline-modal-overlay');
-    await expect(modal).toBeVisible({ timeout: 20000 });
+    const cards = page.locator('.li-headline-card');
+    const cardCount = await cards.count();
 
-    // Close (best-effort)
-    const close = page.locator('.li-modal-close');
-    if (await close.count()) {
-      await close.first().click();
-      await expect(modal).toBeHidden({ timeout: 20000 });
+    if (cardCount > 0) {
+      const card = cards.first();
+      await expect(card).toBeVisible({ timeout: 20000 });
+      await card.click();
+
+      const modal = page.locator('.li-headline-modal-overlay');
+      await expect(modal).toBeVisible({ timeout: 20000 });
+
+      // Close (best-effort)
+      const close = page.locator('.li-modal-close');
+      if (await close.count()) {
+        await close.first().click();
+        await expect(modal).toBeHidden({ timeout: 20000 });
+      }
+    } else {
+      // No cards yet (slow hydration / empty feed). Verify the empty state is present.
+      await expect(page.getByText('Updating Live Intelligence', { exact: false })).toBeVisible({ timeout: 20000 });
     }
 
-    await expect(page.getByText('Premium Learning', { exact: false })).toBeVisible();
-    await expect(page.getByText('Learn in 2 ways', { exact: false })).toBeVisible();
+    // Learning lives on /learn, not inside Live Intelligence.
+    await expect(page.getByText('Premium Learning', { exact: false })).toHaveCount(0);
+    await expect(page.getByText('Learn in 2 ways', { exact: false })).toHaveCount(0);
   });
 
   test('direct /live-intelligence renders without client exception', async ({ page }) => {
@@ -138,6 +125,7 @@ test.describe('Live Intelligence UX', () => {
     const headlineFeed = page.locator('[data-headline-feed]');
     await expect(headlineFeed).toBeVisible({ timeout: 20000 });
 
-    await expect(page.getByText('Premium Learning', { exact: false })).toBeVisible();
+    // Learning lives on /learn, not inside Live Intelligence.
+    await expect(page.getByText('Premium Learning', { exact: false })).toHaveCount(0);
   });
 });

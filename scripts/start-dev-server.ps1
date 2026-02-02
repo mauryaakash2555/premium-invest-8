@@ -41,8 +41,7 @@ function Test-NextClientAssets([int]$LocalPort) {
     if (-not (Test-UrlOk -Url $layoutCss -TimeoutSec 3)) {
       # Fallback: try the first CSS URL referenced by the homepage HTML.
       try {
-        $home = Invoke-WebRequest -Uri "$base/" -Method Get -TimeoutSec 8 -UseBasicParsing
-        $html = [string]$home.Content
+        $html = [string]((Invoke-WebRequest -Uri "$base/" -Method Get -TimeoutSec 8 -UseBasicParsing).Content)
         $m = [regex]::Match($html, '/_next/static/css/[^"\s]+')
         if ($m.Success) {
           $cssUrl = "$base$($m.Value)"
@@ -121,6 +120,9 @@ try {
     } else {
       try { Remove-Item -Recurse -Force (Join-Path $nextDir 'cache') -ErrorAction SilentlyContinue } catch {}
       try { Remove-Item -Recurse -Force (Join-Path $nextDir 'static') -ErrorAction SilentlyContinue } catch {}
+      # Also clear server artifacts to avoid stale webpack-runtime -> chunk path mismatches
+      # (e.g., runtime tries to require "./5873.js" while chunks live under server\chunks).
+      try { Remove-Item -Recurse -Force (Join-Path $nextDir 'server') -ErrorAction SilentlyContinue } catch {}
     }
   }
 } catch {}

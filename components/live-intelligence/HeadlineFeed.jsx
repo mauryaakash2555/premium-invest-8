@@ -251,7 +251,7 @@ export default function HeadlineFeed() {
 
   if (headlines.length === 0) {
     return (
-      <div className="li-headline-feed">
+      <div className="li-headline-feed" data-headline-feed>
         <CategoryFilter 
           selectedCategory={selectedCategory} 
           onCategoryChange={handleCategoryChange} 

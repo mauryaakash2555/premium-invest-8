@@ -118,6 +118,7 @@ const Home = () => {
             right: 0,
             height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)',
+            pointerEvents: 'none',
             zIndex: 0,
           }}
         />

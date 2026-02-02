@@ -859,6 +859,48 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "test"
+		},
+		{
+			"label": "qa-live-intelligence-http-status",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; $ErrorActionPreference='Stop'; $resp = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:3000/live-intelligence' -TimeoutSec 30; $lines = @(); $lines += \"StatusCode=$($resp.StatusCode)\"; $lines += \"FinalUrl=$($resp.BaseResponse.ResponseUri.AbsoluteUri)\"; $lines += \"HasNotFound=$($resp.Content -match 'This page could not be found')\"; $lines | Set-Content -Encoding UTF8 .tmp_live_intelligence_http.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-fetch-live-intelligence-html-snippet",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location 'c:\\Users\\admin\\premium-invest-8'; pwsh -NoProfile -ExecutionPolicy Bypass -File .tools\\qa-fetch-json.ps1 -Url 'http://127.0.0.1:3000/live-intelligence?nocache=1' -TimeoutSeconds 30 -MaxChars 4000 | Set-Content -Encoding UTF8 .tmp_live_intelligence_html_snippet.txt"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "test-live-intelligence-interactions-e2e",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"playwright",
+				"test",
+				"tests/e2e/live-intelligence-interactions.spec.js",
+				"--reporter=line",
+				"--workers=1"
+			],
+			"isBackground": false,
+			"group": "test"
 		}
 	]
 }

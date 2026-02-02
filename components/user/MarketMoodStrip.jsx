@@ -10,7 +10,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { getCurrentModeConfig } from '@/lib/live-intelligence/modes';
 
 const COLORS = {
@@ -25,7 +25,6 @@ export default function MarketMoodStrip({ onToggleRain }) {
   const [modeConfig, setModeConfig] = useState(null);
   const [isLive, setIsLive] = useState(false);
   const [hasTriedFetch, setHasTriedFetch] = useState(false);
-  const router = useRouter();
 
   const categoryLabel = (cat) => {
     const c = String(cat || '').toLowerCase();
@@ -177,38 +176,32 @@ export default function MarketMoodStrip({ onToggleRain }) {
         ? icon + ' ' + headlineText
         : (hasTriedFetch ? '🧠 Live Mood updating…' : 'Loading Live Mood…'));
 
-  const handleClick = () => {
-    if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
-      window.__openLiveIntelligence();
-    } else {
-      router.push('/live-intelligence');
-    }
-  };
+  // Navigation is a real link (works even if client hydration is delayed).
+  const liveIntelHref = '/live-intelligence';
 
   return (
     <div className='w-full bg-transparent py-1 z-50 overflow-hidden relative border-b border-[rgba(100,150,255,0.10)]' style={{ minHeight: '28px' }}>
       <div className='max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-start gap-3 h-5'>
-        <div
+        <Link
+          href={liveIntelHref}
           className='flex items-center gap-2 flex-shrink-0 z-10 pr-2 px-2 py-[2px] rounded-full bg-black/25 backdrop-blur-sm'
-          onClick={() => onToggleRain && onToggleRain()}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textDecoration: 'none' }}
+          aria-label='Open Live Intelligence'
         >
           <span className='relative inline-flex h-2 w-2'>
             <span className='absolute inline-flex h-full w-full rounded-full animate-ping' style={{ animationDuration: '2.6s', background: isLive ? 'rgba(100, 160, 255, 0.35)' : COLORS.accentDim }} />
             <span className='relative inline-flex rounded-full h-2 w-2 opacity-80' style={{ background: isLive ? 'rgba(100, 160, 255, 1)' : COLORS.accent }} />
           </span>
           <span className='text-[8px] font-medium tracking-[1.6px] uppercase opacity-70 whitespace-nowrap' style={{ color: COLORS.text }}>Live Mood</span>
-        </div>
+        </Link>
         
         <div className='h-full w-[1px] mx-2 flex-shrink-0 z-10 hidden md:block' style={{ background: 'rgba(100, 150, 255, 0.08)' }} />
 
-        <div
+        <Link
+          href={liveIntelHref}
           className='relative flex-1 overflow-hidden h-full flex items-center rounded-full bg-black/20 backdrop-blur-sm px-3'
-          role='button'
-          tabIndex={0}
-          onClick={handleClick}
           aria-label='Open Live Intelligence'
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textDecoration: 'none' }}
         >
           <div className='absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent z-10' />
           <div className='absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-black/20 to-transparent z-10' />
@@ -231,7 +224,7 @@ export default function MarketMoodStrip({ onToggleRain }) {
               </p>
             </motion.div>
           </AnimatePresence>
-        </div>
+        </Link>
       </div>
     </div>
   );

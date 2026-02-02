@@ -20,7 +20,7 @@
  * - Uses LaserFooter (same as overlay) NOT the system Footer
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Import the EXACT panel component from the overlay
@@ -34,11 +34,9 @@ import LaserFooter from '@/components/user/LaserFooter';
 import Link from 'next/link';
 
 export default function LiveIntelligencePage() {
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    setMounted(true);
     // Set body attribute for consistent styling (hides mobile dock, etc.)
     if (typeof document !== 'undefined' && document.body) {
       document.body.setAttribute('data-laser-active', 'true');
@@ -61,22 +59,6 @@ export default function LiveIntelligencePage() {
   const handleClose = () => {
     router.push('/');
   };
-
-  if (!mounted) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: '#090A0C',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <div style={{ color: 'rgba(170, 198, 255, 0.6)', fontSize: '14px' }}>
-          Loading Live Intelligence...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div

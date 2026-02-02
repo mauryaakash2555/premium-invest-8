@@ -35,24 +35,18 @@ function initProgressScript() {
 }
 
 test.describe('Learning separation & routing', () => {
-  test('Overlay shows zero learning UI', async ({ page }) => {
+  test('Overlay opener is removed (use /live-intelligence)', async ({ page }) => {
     await page.addInitScript(initProgressScript());
 
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
 
-    // Open overlay via global hook exposed by LiveIntelligenceOverlay
-    await page.evaluate(() => {
-      if (window.__openLiveIntelligence) window.__openLiveIntelligence();
-    });
+    const hasGlobalOpener = await page
+      .evaluate(() => typeof window.__openLiveIntelligence === 'function')
+      .catch(() => false);
+    expect(hasGlobalOpener).toBeFalsy();
 
-    // Overlay should appear
-    await page.waitForTimeout(500);
-
-    // LearningPathPanel root class should not exist anywhere in the overlay
-    await expect(page.locator('.lp-wrap')).toHaveCount(0);
-
-    // Also ensure known LearningPathPanel copy isn't present
-    await expect(page.getByText('Learn in 2 ways')).toHaveCount(0);
+    // Ensure overlay container is not present
+    await expect(page.locator('.li-overlay')).toHaveCount(0);
   });
 
   test('/live-intelligence shows summary + CTA, no lessons', async ({ page }) => {

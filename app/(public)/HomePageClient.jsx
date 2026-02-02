@@ -15,8 +15,6 @@ import { getServicesForHome } from '@/data/servicesCatalog';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 import PremiumMarketTicker from '@/core/marketTicker';
 import MarketMoodStrip from '@/components/user/MarketMoodStrip';
-import LiveIntelligenceOverlayIsolated from '@/components/user/LiveIntelligenceOverlayIsolated';
-import LaserFooter from '@/components/user/LaserFooter';
 import HeroContent from '@/components/home/HeroContent';
 import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
@@ -107,6 +105,8 @@ export default function HomePageClient() {
             right: 0,
             height: '100%',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.78) 100%)',
+            // IMPORTANT: this overlay must never block hero interactions/CTAs.
+            pointerEvents: 'none',
             zIndex: 2,
           }}
         />
@@ -125,19 +125,16 @@ export default function HomePageClient() {
           <HeroContent />
         </div>
 
-        {/* LIVE MOOD (restored) - sits just above ticker */}
-        <div ref={liveMoodRef} className="absolute bottom-[46px] left-0 w-full z-50">
+        {/* LIVE MOOD (restored) - original position; must remain clickable */}
+        <div ref={liveMoodRef} className="absolute bottom-[46px] left-0 w-full z-[70]" style={{ pointerEvents: 'auto' }}>
           <MarketMoodStrip onToggleRain={() => setRainEnabled((v) => !v)} />
         </div>
 
         {/* PREMIUM LIVE MARKET TICKER (inside hero, same position as your reference) */}
-        <div className="absolute bottom-0 left-0 w-full z-50">
+        <div className="absolute bottom-0 left-0 w-full z-40">
           <PremiumMarketTicker />
         </div>
       </section>
-
-      {/* Live Intelligence Overlay - Full page overlay */}
-      <LiveIntelligenceOverlayIsolated liveMoodRef={liveMoodRef} footerContent={<LaserFooter />} />
 
       {/* Services Overview Section */}
       <section className="section-container">

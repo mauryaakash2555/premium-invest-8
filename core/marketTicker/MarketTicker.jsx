@@ -387,9 +387,13 @@ export default function MarketTicker({ className }) {
   }
 
   function handleTickerClick(e) {
-    // Open Live Intelligence overlay if available
-    if (typeof window !== 'undefined' && window.__openLiveIntelligence) {
-      window.__openLiveIntelligence();
+    // Route to the Live Intelligence PAGE (overlay removed)
+    try {
+      if (typeof window !== 'undefined') {
+        window.location.assign('/live-intelligence');
+      }
+    } catch {
+      // ignore
     }
   }
 

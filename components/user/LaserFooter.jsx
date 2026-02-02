@@ -191,7 +191,6 @@ const LaserNewsletterSignup = () => {
 
 const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) => {
   const [hoveredLink, setHoveredLink] = useState(null)
-  const [mounted, setMounted] = useState(false)
   const [isWHAHovered, setIsWHAHovered] = useState(false)
   const [isWHAActive, setIsWHAActive] = useState(false)
   const [isWHAScrollBoost, setIsWHAScrollBoost] = useState(false)
@@ -204,7 +203,6 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
   const [noticeActive, setNoticeActive] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
     handleResize()
     window.addEventListener('resize', handleResize)
@@ -330,8 +328,6 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
   }
 
   const googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=66,+Vinod+Villa+Bldg.,+1st+floor+office+no.+108,+Cavel+Cross+Lane+3,+Kalbadevi,+Mumbai+-+400002,+Maharashtra,+India"
-
-  if (!mounted) return null;
 
   const handleInternalLinkClick = (e, href, label) => {
     if (!inLiveOverlay) return;
