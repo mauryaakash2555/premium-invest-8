@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 
 import LearningPathPanel from '@/components/live-intelligence/LearningPathPanel';
+import TodaysLens from '@/components/learn/TodaysLens';
 import LaserFooter from '@/components/user/LaserFooter';
 
 /**
@@ -25,13 +26,55 @@ import LaserFooter from '@/components/user/LaserFooter';
 
 const GUILD_ENTRY_KEY = 'wealth_guild_entered';
 
+const TODAY_LENSES = [
+  {
+    title: 'Clarity over prediction',
+    body:
+      'Notice when you are seeking certainty. Most decisions improve more from clear rules than from perfect forecasts.',
+    prompt: 'Name one rule you want to follow this month (simple, realistic, repeatable).',
+  },
+  {
+    title: 'Time is a feature',
+    body:
+      'Long horizons reduce urgency. If a decision feels rushed, zoom out until it feels calm again.',
+    prompt: 'Ask: “What changes if I wait a week and re-check?”',
+  },
+  {
+    title: 'Behavior is the real edge',
+    body:
+      'A good plan is one you can keep. Choose approaches that reduce friction and regret.',
+    prompt: 'Spot one habit that lowers stress (automation, smaller steps, fewer decisions).',
+  },
+  {
+    title: 'Costs and complexity',
+    body:
+      'Complexity often hides cost. Prefer simple structures you can explain to your future self.',
+    prompt: 'Can you describe your approach in one calm sentence?',
+  },
+  {
+    title: 'Risk is emotional timing',
+    body:
+      'Risk is not noise. Risk is what makes you abandon the plan at the wrong time. Design for staying power.',
+    prompt: 'What would make you panic? Write it down, then reduce that exposure.',
+  },
+];
+
 export default function LearnPage() {
   const [mounted, setMounted] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [todaysLens, setTodaysLens] = useState(null);
 
   useEffect(() => {
     setMounted(true);
+
+    // Pick a "Today’s Lens" on each page refresh (UI-only; no storage).
+    try {
+      const pick = TODAY_LENSES[Math.floor(Math.random() * TODAY_LENSES.length)];
+      setTodaysLens(pick || null);
+    } catch {
+      setTodaysLens(null);
+    }
 
     // Check if user has already entered the guild (persists across sessions)
     const entered = localStorage.getItem(GUILD_ENTRY_KEY);
@@ -239,9 +282,14 @@ export default function LearnPage() {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '18px', opacity: 0.85 }}>🏛️</span>
-          <span style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(200, 210, 230, 0.8)' }}>
-            The Wealth Guild
-          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(220, 230, 245, 0.86)' }}>
+              The Wealth Guild
+            </span>
+            <span style={{ fontSize: '12px', color: 'rgba(160, 175, 200, 0.62)' }}>
+              Living Learning Observatory
+            </span>
+          </div>
         </div>
 
         <Link
@@ -274,7 +322,7 @@ export default function LearnPage() {
         </Link>
       </div>
 
-      {/* PHASE 2 — Wealth Guild Orientation (UI-only, no engine changes) */}
+      {/* Observatory layer (UI-only, no engine changes) */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 16px' }}>
         <section
           aria-label="Wealth Guild Orientation"
@@ -287,19 +335,17 @@ export default function LearnPage() {
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px' }}>
-            <h2
-              style={{
-                margin: 0,
-                fontSize: '18px',
-                fontWeight: 600,
-                letterSpacing: '0.01em',
-                color: 'rgba(235, 242, 255, 0.92)',
-              }}
-            >
-              Welcome to The Wealth Guild
-            </h2>
-          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: '16px',
+              fontWeight: 600,
+              letterSpacing: '0.01em',
+              color: 'rgba(235, 242, 255, 0.92)',
+            }}
+          >
+            Welcome to The Wealth Guild
+          </h2>
 
           <p
             style={{
@@ -307,7 +353,7 @@ export default function LearnPage() {
               fontSize: '14px',
               lineHeight: 1.55,
               color: 'rgba(170, 185, 210, 0.78)',
-              maxWidth: '780px',
+              maxWidth: '820px',
             }}
           >
             This is not a course. There is no finish line.
@@ -315,13 +361,18 @@ export default function LearnPage() {
             You explore what matters. It grows as you grow.
           </p>
 
-          {/* Mode framing (copy/layout only — engine preserved) */}
+          {/* Today’s Lens (rotates per refresh; informational only) */}
+          <div style={{ marginTop: '14px' }}>
+            <TodaysLens lens={todaysLens} />
+          </div>
+
+          {/* Entry choice framing (copy/layout only — engine preserved) */}
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
               gap: '10px',
-              marginTop: '14px',
+              marginTop: '12px',
             }}
           >
             <div
@@ -344,11 +395,11 @@ export default function LearnPage() {
                     letterSpacing: '0.01em',
                   }}
                 >
-                  Daily (30s) — Stay sharp
+                  Stay sharp (30s insight)
                 </div>
               </div>
               <div style={{ marginTop: '6px', fontSize: '12px', color: 'rgba(160, 175, 200, 0.72)' }}>
-                A quick, lightweight check-in for consistency.
+                A quick check-in to keep your thinking clean.
               </div>
             </div>
 
@@ -372,11 +423,11 @@ export default function LearnPage() {
                     letterSpacing: '0.01em',
                   }}
                 >
-                  Explore Freely — Go deep, at your pace
+                  Explore deeply (your pace)
                 </div>
               </div>
               <div style={{ marginTop: '6px', fontSize: '12px', color: 'rgba(160, 175, 200, 0.72)' }}>
-                Pick what you want, revisit anytime, and linger where it helps.
+                Linger where it helps. Return when you want.
               </div>
             </div>
           </div>
