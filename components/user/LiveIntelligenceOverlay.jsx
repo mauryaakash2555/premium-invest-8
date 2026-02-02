@@ -2874,63 +2874,37 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '14px',
-                padding: '14px 16px',
+                justifyContent: 'center',
+                gap: '12px',
+                padding: '16px 20px',
                 borderRadius: '16px',
-                border: '1px solid rgba(170, 198, 255, 0.18)',
-                background:
-                  'linear-gradient(135deg, rgba(12,14,20,0.92) 0%, rgba(10,12,18,0.82) 55%, rgba(60,80,120,0.12) 100%)',
-                boxShadow: '0 26px 95px rgba(0,0,0,0.70)',
+                border: '1px solid rgba(140, 180, 255, 0.22)',
+                background: 'linear-gradient(135deg, rgba(80, 120, 200, 0.12), rgba(50, 80, 140, 0.07))',
+                color: 'rgba(220, 235, 255, 0.92)',
+                fontSize: '14px',
+                fontWeight: 600,
                 textDecoration: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 8px 32px rgba(60, 100, 180, 0.12)',
               }}
               aria-label="Open the Wealth Guild learning observatory"
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.40)';
+                e.currentTarget.style.color = 'rgba(240, 248, 255, 1)';
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.18), rgba(50, 80, 140, 0.10))';
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(60, 100, 180, 0.20)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(140, 180, 255, 0.22)';
+                e.currentTarget.style.color = 'rgba(220, 235, 255, 0.92)';
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 120, 200, 0.12), rgba(50, 80, 140, 0.07))';
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(60, 100, 180, 0.12)';
+              }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div
-                  aria-hidden="true"
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '12px',
-                    display: 'grid',
-                    placeItems: 'center',
-                    border: '1px solid rgba(140, 190, 255, 0.22)',
-                    background: 'rgba(0,0,0,0.18)',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
-                  }}
-                >
-                  ✨
-                </div>
-                <div>
-                  <div
-                    style={{
-                      color: 'rgba(235, 242, 255, 0.92)',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      letterSpacing: '0.01em',
-                    }}
-                  >
-                    Want to understand why markets behave this way?
-                  </div>
-                  <div style={{ color: 'rgba(170, 185, 210, 0.70)', fontSize: '12px', marginTop: '4px' }}>
-                    Step into the Wealth Guild’s observatory.
-                  </div>
-                </div>
-              </div>
-
-              <span
-                aria-hidden="true"
-                style={{
-                  color: 'rgba(220, 230, 245, 0.90)',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  letterSpacing: '0.02em',
-                  filter: 'drop-shadow(0 0 10px rgba(140, 190, 255, 0.25))',
-                }}
-              >
-                →
-              </span>
+              <span aria-hidden="true" style={{ fontSize: '18px' }}>✨</span>
+              <span>Want to understand why markets behave this way?</span>
+              <span aria-hidden="true" style={{ opacity: 0.7, fontSize: '16px' }}>→</span>
             </Link>
           </div>
 
