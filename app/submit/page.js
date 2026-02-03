@@ -16,7 +16,7 @@ export default function SubmitPage() {
   const [form, setForm] = useState({
     title: '',
     content_original: '',
-    pillar: 'IMPACT',
+    type: 'impact',
     author_name: '',
     author_email: '',
     author_linkedin: '',
@@ -32,7 +32,7 @@ export default function SubmitPage() {
       String(form.title || '').trim().length >= 6 &&
       String(form.content_original || '').trim().length >= 50 &&
       String(form.author_name || '').trim().length >= 2 &&
-      ['IMPACT', 'GUEST'].includes(String(form.pillar || '').toUpperCase())
+      ['impact', 'guest'].includes(String(form.type || '').toLowerCase())
     );
   }, [form]);
 
@@ -48,12 +48,12 @@ export default function SubmitPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/proxy-submit', {
+      const res = await fetch('/api/submit-post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          pillar: String(form.pillar || '').toUpperCase(),
+          type: String(form.type || '').toLowerCase(),
         }),
       });
 
@@ -69,7 +69,7 @@ export default function SubmitPage() {
       setForm({
         title: '',
         content_original: '',
-        pillar: 'IMPACT',
+        type: 'impact',
         author_name: '',
         author_email: '',
         author_linkedin: '',
@@ -111,9 +111,9 @@ export default function SubmitPage() {
         <form onSubmit={onSubmit} style={{ display: 'grid', gap: '14px' }}>
           <div>
             <label style={{ color: '#9ca3af', fontSize: '13px' }}>Pillar</label>
-            <select value={form.pillar} onChange={onChange('pillar')} style={inputStyle}>
-              <option value="IMPACT">Community Impact</option>
-              <option value="GUEST">Guest Columns</option>
+            <select value={form.type} onChange={onChange('type')} style={inputStyle}>
+              <option value="impact">Community Impact</option>
+              <option value="guest">Guest Columns</option>
             </select>
           </div>
 

@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
+from pymongo import ReturnDocument
 import uuid
 from datetime import datetime, timezone
 import requests
@@ -139,7 +140,10 @@ class Newsletter(BaseModel):
 
 
 class NewsletterCreate(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     email: EmailStr
+    source: Optional[str] = None
 
 
 class BlogPost(BaseModel):
@@ -172,7 +176,11 @@ class PostSubmit(BaseModel):
 
     title: str
     content_original: str
-    pillar: str  # IMPACT | GUEST | DEV
+    # Accept either:
+    # - pillar: IMPACT | GUEST | DEV (repo-native)
+    # - type: impact | guest | dev (prompt-native)
+    pillar: Optional[str] = None
+    type: Optional[str] = None
     author_name: str
     author_email: Optional[str] = None
     author_linkedin: Optional[str] = None
@@ -182,11 +190,24 @@ class PostSubmit(BaseModel):
 
 
 class PostApprove(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     content_enhanced: str
+    sponsored_by: Optional[str] = None
+    affiliate_link: Optional[str] = None
 
 
 class PostReject(BaseModel):
     reason: Optional[str] = None
+
+
+def _require_admin(request: Request):
+    required = (os.environ.get("ADMIN_TOKEN") or "").strip()
+    if not required:
+        return
+    got = (request.headers.get("x-admin-token") or "").strip()
+    if not got or got != required:
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
 
 # Routes
@@ -274,6 +295,9 @@ async def subscribe_newsletter(input: NewsletterCreate):
     doc["timestamp"] = doc["timestamp"].isoformat()
 
     try:
+        # Keep a copy of source for attribution (optional)
+        if input.source:
+            doc["source"] = str(input.source)[:64]
         _ = await db.newsletter.insert_one(doc)
         return newsletter_obj
     except Exception as e:
@@ -357,9 +381,20 @@ async def get_blog_post_by_slug(slug: str):
 
 @api_router.post("/submit-post")
 async def submit_post(post: PostSubmit):
+    type_map = {
+        "impact": "IMPACT",
+        "guest": "GUEST",
+        "dev": "DEV",
+        "editorial": "EDITORIAL",
+    }
+
     pillar = (post.pillar or "").upper().strip()
+    if not pillar:
+        t = (post.type or "").lower().strip()
+        pillar = type_map.get(t, "")
+
     if pillar not in ["IMPACT", "GUEST", "DEV"]:
-        raise HTTPException(status_code=400, detail="Invalid pillar")
+        raise HTTPException(status_code=400, detail="Invalid pillar/type")
 
     doc = post.model_dump()
     doc["pillar"] = pillar
@@ -368,6 +403,10 @@ async def submit_post(post: PostSubmit):
     doc["author_verified"] = False
     doc["flags"] = _light_flags(doc.get("content_original") or "")
     doc["impact_score"] = 0
+    doc["views"] = 0
+    doc["affiliate_clicks"] = 0
+    doc["sponsored_by"] = None
+    doc["affiliate_link"] = None
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
 
     result = await db.posts.insert_one(doc)
@@ -392,8 +431,21 @@ async def get_posts(pillar: str = "EDITORIAL", status: str = "APPROVED"):
     return posts
 
 
+@api_router.get("/post/{post_id}")
+async def get_post_by_id(post_id: str):
+    oid = _safe_object_id(post_id)
+    if not oid:
+        raise HTTPException(status_code=400, detail="Invalid post id")
+    post = await db.posts.find_one({"_id": oid})
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    post["_id"] = str(post["_id"])
+    return post
+
+
 @api_router.get("/queue")
-async def get_queue():
+async def get_queue(request: Request):
+    _require_admin(request)
     pending = await db.posts.find({"status": "PENDING"}).sort("created_at", -1).limit(100).to_list(length=100)
     for post in pending:
         if "_id" in post:
@@ -402,19 +454,26 @@ async def get_queue():
 
 
 @api_router.post("/approve/{post_id}")
-async def approve_post(post_id: str, approval: PostApprove):
+async def approve_post(post_id: str, approval: PostApprove, request: Request):
+    _require_admin(request)
     oid = _safe_object_id(post_id)
     if not oid:
         raise HTTPException(status_code=400, detail="Invalid post id")
 
+    update_set = {
+        "content_enhanced": approval.content_enhanced,
+        "status": "APPROVED",
+        "approved_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if approval.sponsored_by is not None:
+        update_set["sponsored_by"] = str(approval.sponsored_by).strip()[:120] or None
+    if approval.affiliate_link is not None:
+        update_set["affiliate_link"] = str(approval.affiliate_link).strip()[:500] or None
+
     result = await db.posts.update_one(
         {"_id": oid},
         {
-            "$set": {
-                "content_enhanced": approval.content_enhanced,
-                "status": "APPROVED",
-                "approved_at": datetime.now(timezone.utc).isoformat(),
-            }
+            "$set": update_set
         },
     )
 
@@ -425,7 +484,8 @@ async def approve_post(post_id: str, approval: PostApprove):
 
 
 @api_router.post("/reject/{post_id}")
-async def reject_post(post_id: str, rejection: PostReject):
+async def reject_post(post_id: str, rejection: PostReject, request: Request):
+    _require_admin(request)
     oid = _safe_object_id(post_id)
     if not oid:
         raise HTTPException(status_code=400, detail="Invalid post id")
@@ -442,6 +502,66 @@ async def reject_post(post_id: str, rejection: PostReject):
     )
 
     return {"message": "Rejected"}
+
+
+@api_router.post("/track-view/{post_id}")
+async def track_view(post_id: str):
+    oid = _safe_object_id(post_id)
+    if not oid:
+        raise HTTPException(status_code=400, detail="Invalid post id")
+
+    result = await db.posts.find_one_and_update(
+        {"_id": oid},
+        {"$inc": {"views": 1}},
+        return_document=ReturnDocument.AFTER,
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return {"success": True, "views": int(result.get("views") or 0)}
+
+
+@api_router.post("/track-affiliate-click/{post_id}")
+async def track_affiliate_click(post_id: str):
+    oid = _safe_object_id(post_id)
+    if not oid:
+        raise HTTPException(status_code=400, detail="Invalid post id")
+
+    result = await db.posts.find_one_and_update(
+        {"_id": oid},
+        {"$inc": {"affiliate_clicks": 1}},
+        return_document=ReturnDocument.AFTER,
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return {"success": True, "affiliate_clicks": int(result.get("affiliate_clicks") or 0)}
+
+
+@api_router.get("/admin/stats")
+async def admin_stats(request: Request):
+    _require_admin(request)
+
+    posts = await db.posts.find({}, {"views": 1, "affiliate_clicks": 1, "sponsored_by": 1, "status": 1}).to_list(length=5000)
+    total_views = 0
+    total_posts = 0
+    sponsored_posts = 0
+    affiliate_clicks = 0
+
+    for p in posts:
+        total_posts += 1
+        total_views += int(p.get("views") or 0)
+        affiliate_clicks += int(p.get("affiliate_clicks") or 0)
+        if (p.get("status") or "").upper() == "APPROVED" and p.get("sponsored_by"):
+            sponsored_posts += 1
+
+    newsletter_subs = await db.newsletter.count_documents({})
+
+    return {
+        "totalViews": total_views,
+        "totalPosts": total_posts,
+        "sponsoredPosts": sponsored_posts,
+        "affiliateClicks": affiliate_clicks,
+        "newsletterSubs": int(newsletter_subs),
+    }
 
 
 # Include the router in the main app

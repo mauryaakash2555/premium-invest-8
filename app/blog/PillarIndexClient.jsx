@@ -65,7 +65,11 @@ export default function PillarIndexClient({ pillar }) {
     }
   }, []);
 
-  const getPostHref = (post) => (post?.slug ? `/blog/${post.slug}` : '/blog');
+  const getPostHref = (post) => {
+    if (post?.slug) return `/blog/${post.slug}`;
+    if (post?._id) return `/blog/community/${post._id}`;
+    return '/blog';
+  };
 
   const getWhatsAppHref = (postHref, title) => {
     const url = `${siteOrigin}${postHref}`;
@@ -338,6 +342,32 @@ export default function PillarIndexClient({ pillar }) {
                       >
                         {String(post.content_original || '').slice(0, 360)}
                       </p>
+
+                      {post.sponsored_by ? (
+                        <div style={{ marginTop: '10px' }}>
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              padding: '4px 10px',
+                              background: 'rgba(255,255,255,0.04)',
+                              border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
+                              borderRadius: 0,
+                              fontSize: '11px',
+                              color: 'rgba(235,242,255,0.86)',
+                            }}
+                          >
+                            Sponsored
+                          </span>
+                        </div>
+                      ) : null}
+
+                      {post.affiliate_link ? (
+                        <div style={{ marginTop: '10px', color: 'var(--lux-accent)', fontSize: '12px', fontWeight: 700 }}>Affiliate link available</div>
+                      ) : null}
+
+                      {typeof post.views === 'number' ? (
+                        <div style={{ marginTop: '8px', color: '#666', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                      ) : null}
 
                       {post.location_tag ? (
                         <div style={{ marginTop: '14px', color: 'color-mix(in oklab, var(--lux-accent) 70%, #999)', fontSize: '13px' }}>

@@ -901,6 +901,28 @@
 			],
 			"isBackground": false,
 			"group": "test"
+		},
+		{
+			"label": "test-learn-separation-e2e",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"c:\\Users\\admin\\premium-invest-8\" && npx playwright test tests/e2e/learn-separation.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "test-learn-separation-e2e-skip-webserver",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"c:\\Users\\admin\\premium-invest-8\" && set PLAYWRIGHT_SKIP_WEB_SERVER=1 && set BASE_URL=http://127.0.0.1:3000 && npx playwright test tests/e2e/learn-separation.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"group": "test"
 		}
 	]
 }

@@ -33,11 +33,15 @@ import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import FAQSection from '@/components/shared/FAQSection';
 import BlogNavigation from '@/components/BlogNavigation';
+import BlogFilter from '@/components/BlogFilter';
+import NewsletterSignup from '@/components/NewsletterSignup';
+import ComplianceFooter from '@/components/ComplianceFooter';
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -46,13 +50,39 @@ export default function BlogPage() {
   }, []);
   const fetchBlogPosts = async () => {
     try {
+      const excerptFrom = (text, max = 160) => {
+        const s = String(text || '').replace(/\s+/g, ' ').trim();
+        if (!s) return '';
+        return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+      };
+
+      const normalizeCommunityPost = (p, type) => {
+        const base = typeof p === 'object' && p ? p : {};
+        const categoryLabel =
+          type === 'impact' ? 'Community Impact' : type === 'guest' ? 'Guest Column' : type === 'dev' ? 'Dev Writes' : 'Community';
+
+        const normalized = {
+          ...base,
+          type,
+          author: base.author || base.author_name || 'BM Community',
+          category: base.category || categoryLabel,
+          published_date: base.published_date || base.approved_at || base.created_at || base.date || null,
+          excerpt:
+            base.excerpt ||
+            base.summary ||
+            excerptFrom(base.content_enhanced || base.content_original || base.content || ''),
+        };
+
+        return normalized;
+      };
+
       // Ensure staticBlogData is an array and has content
       const staticBlogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 
         ? staticBlogData 
         : [staticBlogPost];
       
-      // Show all static blogs immediately
-      setBlogPosts(staticBlogs);
+      // Show all static blogs immediately (editorial)
+      setBlogPosts(staticBlogs.map((p) => ({ ...p, type: 'editorial' })));
       setIsLoading(false);
       
       // Then try to fetch backend blogs in background (skip on localhost to avoid CORS noise)
@@ -70,27 +100,64 @@ export default function BlogPage() {
             const backendPosts = (await response.json()) || [];
             const staticSlugs = staticBlogs.map((blog) => blog.slug).filter(Boolean);
             const uniqueBackendPosts = backendPosts.filter((post) => post.slug && !staticSlugs.includes(post.slug));
-            setBlogPosts([...staticBlogs, ...uniqueBackendPosts]);
+            setBlogPosts([
+              ...staticBlogs.map((p) => ({ ...p, type: 'editorial' })),
+              ...uniqueBackendPosts.map((p) => ({ ...p, type: 'editorial' })),
+            ]);
           }
         } catch (backendError) {
           if (debug) console.warn('Backend blog fetch failed (using static only):', backendError);
         }
       } else {}
+
+      // Fetch approved community posts (impact/guest/dev) via same-origin API
+      try {
+        const fetchType = async (type) => {
+          const res = await fetch(`/api/posts?type=${encodeURIComponent(type)}&status=APPROVED`, { cache: 'no-store' });
+          if (!res.ok) return [];
+          const json = await res.json();
+          return Array.isArray(json) ? json.map((p) => normalizeCommunityPost(p, type)) : [];
+        };
+
+        const [impact, guest, dev] = await Promise.all([fetchType('impact'), fetchType('guest'), fetchType('dev')]);
+
+        setBlogPosts((prev) => {
+          const base = Array.isArray(prev) ? prev : [];
+          const byId = new Set(base.map((p) => p?._id || p?.id || p?.slug).filter(Boolean));
+
+          const append = [];
+          for (const p of [...impact, ...guest, ...dev]) {
+            const k = p?._id || p?.id || p?.slug;
+            if (k && !byId.has(k)) {
+              byId.add(k);
+              append.push(p);
+            }
+          }
+          return [...base, ...append];
+        });
+      } catch {
+        // ignore; editorial still works
+      }
     } catch (error) {
       console.error('Error loading blog posts:', error);
-      setBlogPosts([staticBlogPost]);
+      setBlogPosts([{ ...staticBlogPost, type: 'editorial' }]);
       setIsLoading(false);
     }
   };
-  const allPosts = blogPosts.length > 0 ? blogPosts : [staticBlogPost];
+  const allPosts = blogPosts.length > 0 ? blogPosts : [{ ...staticBlogPost, type: 'editorial' }];
+
+  const typeFilteredPosts = useMemo(() => {
+    if (activeFilter === 'all') return allPosts;
+    return allPosts.filter((p) => String(p?.type || 'editorial').toLowerCase() === String(activeFilter).toLowerCase());
+  }, [activeFilter, allPosts]);
   
   // Get unique categories
-  const categories = [...new Set(allPosts.map(post => post.category).filter(Boolean))];
+  const categories = [...new Set(typeFilteredPosts.map(post => post.category).filter(Boolean))];
   
   // Filter posts by selected category
   const displayPosts = selectedCategory 
-    ? allPosts.filter(post => post.category === selectedCategory)
-    : allPosts;
+    ? typeFilteredPosts.filter(post => post.category === selectedCategory)
+    : typeFilteredPosts;
 
   const siteOrigin = useMemo(() => {
     try {
@@ -279,6 +346,37 @@ export default function BlogPage() {
         <BlogNavigation />
       </section>
 
+      <section className="section-container" style={{ paddingTop: '18px', paddingBottom: '0px' }}>
+        <BlogFilter
+          activeFilter={activeFilter}
+          onFilterChange={(v) => {
+            setActiveFilter(v);
+            setSelectedCategory(null);
+          }}
+        />
+        <NewsletterSignup source="blog" />
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-8px', marginBottom: '18px' }}>
+          <Link
+            href="/submit"
+            style={{
+              padding: '10px 16px',
+              borderRadius: 0,
+              border: '1px solid rgba(255,255,255,0.14)',
+              background: 'rgba(0,0,0,0.45)',
+              color: 'rgba(235, 242, 255, 0.92)',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: 700,
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            Share a story → Submit for review
+          </Link>
+        </div>
+      </section>
+
       {/* Category Filter */}
       {categories.length > 1 && (
         <section className="section-container" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
@@ -390,14 +488,31 @@ export default function BlogPage() {
           >
             {displayPosts.map((post, idx) => {
               const postHref = getPostHref(post);
+              const isCommunity = Boolean(post && post._id && !post.slug);
+              const resolvedHref = isCommunity ? `/blog/community/${post._id}` : postHref;
               const next = displayPosts.length > 1 ? displayPosts[(idx + 1) % displayPosts.length] : null;
-              const nextHref = next ? getPostHref(next) : null;
+              const nextIsCommunity = Boolean(next && next._id && !next.slug);
+              const nextHref = next ? (nextIsCommunity ? `/blog/community/${next._id}` : getPostHref(next)) : null;
               const nextTitle = next?.title || '';
-              const waHref = getWhatsAppHref(postHref, post?.title);
+              const waHref = getWhatsAppHref(resolvedHref, post?.title);
+
+              const onAffiliateClick = async (e) => {
+                if (!post?.affiliate_link) return;
+                e.preventDefault();
+                e.stopPropagation();
+                try {
+                  if (isCommunity && post?._id) {
+                    await fetch(`/api/track-affiliate-click/${encodeURIComponent(post._id)}`, { method: 'POST' });
+                  }
+                } catch {}
+                try {
+                  window.open(String(post.affiliate_link), '_blank', 'noopener,noreferrer');
+                } catch {}
+              };
 
               return (
                 <MobileScrollBoost
-                  key={post.id || post.slug || idx}
+                  key={post.id || post._id || post.slug || idx}
                   holdMs={6000}
                   bandTop={0.25}
                   bandBottom={0.85}
@@ -406,12 +521,12 @@ export default function BlogPage() {
                   tabIndex={0}
                   aria-label={post?.title ? `Open blog: ${post.title}` : 'Open blog'}
                   onClick={() => {
-                    if (postHref && postHref !== '/blog/') router.push(postHref);
+                    if (resolvedHref && resolvedHref !== '/blog/') router.push(resolvedHref);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      if (postHref && postHref !== '/blog/') router.push(postHref);
+                      if (resolvedHref && resolvedHref !== '/blog/') router.push(resolvedHref);
                     }
                   }}
                   style={{
@@ -493,6 +608,24 @@ export default function BlogPage() {
                         {post.category}
                       </span>
                     )}
+
+                    {post.sponsored_by ? (
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          padding: '4px 10px',
+                          background: 'rgba(255,255,255,0.04)',
+                          border: '1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)',
+                          borderRadius: 0,
+                          fontSize: '11px',
+                          color: 'rgba(235,242,255,0.86)',
+                          marginBottom: '10px',
+                          marginLeft: '10px',
+                        }}
+                      >
+                        Sponsored
+                      </span>
+                    ) : null}
                     
                     <h2
                       style={{
@@ -542,6 +675,27 @@ export default function BlogPage() {
                         </span>
                       )}
                     </div>
+
+                    {post.affiliate_link ? (
+                      <div style={{ marginTop: '12px' }}>
+                        <a
+                          href={post.affiliate_link}
+                          onClick={onAffiliateClick}
+                          style={{
+                            color: 'var(--lux-accent)',
+                            fontSize: '12px',
+                            fontWeight: 800,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          Learn More (Affiliate) →
+                        </a>
+                      </div>
+                    ) : null}
+
+                    {typeof post.views === 'number' ? (
+                      <div style={{ marginTop: '8px', color: '#666', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                    ) : null}
                   </div>
 
                   {/* Hover CTA overlay (desktop hover + keyboard focus) */}
@@ -581,6 +735,10 @@ export default function BlogPage() {
           <Link href="/tools/tax-optimization" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
           <Link href="/services" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Services</Link>
         </p>
+      </section>
+
+      <section className="section-container" style={{ paddingBottom: '10px' }}>
+        <ComplianceFooter />
       </section>
 
       <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/blog" withSchema />
