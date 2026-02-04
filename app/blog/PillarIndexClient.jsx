@@ -376,30 +376,7 @@ export default function PillarIndexClient({ pillar }) {
                       ) : null}
                     </div>
 
-                    {/* Hover CTA overlay (desktop hover + keyboard focus) */}
-                    <div className="blog-hover-cta" aria-label="Blog quick actions">
-                      {nextHref ? (
-                        <div className="blog-hover-next" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-                          <span className="blog-hover-nextLabel">Next Read:</span>
-                          <Link
-                            href={nextHref}
-                            className="blog-hover-nextLink"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            {nextTitle || 'Recommended'}
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="blog-hover-next">
-                          <span className="blog-hover-nextLabel">Next Read:</span>
-                          <span className="blog-hover-nextLink">Recommended</span>
-                        </div>
-                      )}
-
-
-                    </div>
+                    {/* Intentionally no “Next Read” overlay on listing cards. */}
                   </div>
                 );
               })}
