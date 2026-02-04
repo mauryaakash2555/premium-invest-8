@@ -58,6 +58,7 @@ export async function POST(req) {
     event_type: 'submission_impact',
     data: {
       ...data,
+      status: 'PENDING',
       meta,
       received_at: new Date().toISOString(),
     },

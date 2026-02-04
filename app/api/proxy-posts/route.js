@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLocalCommunityPosts } from "@/lib/blog/localCommunityPosts";
+import { listApprovedCommunitySubmissions } from '@/lib/blog/communitySubmissions';
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || "").trim();
@@ -67,8 +68,11 @@ export async function GET(req) {
     (p) => normalizePillar(p?.pillar) === pillar && normalizeStatus(p?.status) === status
   );
 
+  const submissions = await listApprovedCommunitySubmissions({ pillar, status, limit: 120 }).catch(() => []);
+  const localPlus = submissions.length ? mergeUniqueById(local, submissions) : local;
+
   // Local dev: never wait on upstream (it can be slow/unreachable and makes the page feel broken).
-  if (isLocalhost) return json(200, local);
+  if (isLocalhost) return json(200, localPlus);
 
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
@@ -101,16 +105,17 @@ export async function GET(req) {
             ? data
             : "Posts request failed";
       // Fall back to local curated posts if upstream is down.
-      if (local.length) return json(200, local);
+      if (localPlus.length) return json(200, localPlus);
       return json(upstream.status || 502, { success: false, detail });
     }
 
     // Merge local curated posts with upstream list (avoid duplicates by _id)
-    if (Array.isArray(data) && local.length) return json(200, mergeUniqueById(data, local));
-    return json(200, Array.isArray(data) ? data : local);
+    const upstreamList = Array.isArray(data) ? data : [];
+    if (upstreamList.length) return json(200, mergeUniqueById(upstreamList, localPlus));
+    return json(200, localPlus);
   } catch (e) {
     const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
-    if (local.length) return json(200, local);
+    if (localPlus.length) return json(200, localPlus);
     return json(aborted ? 504 : 502, {
       success: false,
       detail: aborted ? "Upstream timeout" : "Upstream error",

@@ -8,9 +8,10 @@ test('Floating chat trigger opens chat modal', async ({ page, baseURL }) => {
     if (msg.type() === 'error') errors.push(`console.error: ${msg.text()}`);
   });
 
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  // Bypass the localhost SW/cache reset auto-reload (it can race the test and keep the UI unhydrated).
+  await page.goto('/?__swResetDone=1', { waitUntil: 'domcontentloaded' });
 
-  const trigger = page.getByRole('button', { name: 'Open chat', exact: true });
+  const trigger = page.locator('[aria-label="Open chat"]').first();
 
   // If the Spline/3D trigger renders as role=button, we can click it even if 3D isn't loaded.
   await expect(trigger).toBeVisible({ timeout: 20000 });

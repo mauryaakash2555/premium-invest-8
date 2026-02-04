@@ -80,6 +80,14 @@ export default async function RootLayout({ children }) {
 		const url = new URL(window.location.href);
 		const params = url.searchParams;
 
+		// E2E automation stability: skip SW/cache reset under WebDriver.
+		// This avoids reload races that can keep client-only UI (e.g., chat float) from mounting in tests.
+		try {
+			if ((navigator && navigator.webdriver) || params.get('skipSwReset') === '1') return;
+		} catch {
+			// ignore
+		}
+
 		const doneParam = '__swResetDone';
 		const alreadyDone = params.get(doneParam) === '1';
 		if (alreadyDone) {

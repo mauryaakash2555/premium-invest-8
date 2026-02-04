@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { logEventSafe } from '@/lib/db/events';
 import { EmailService } from '@/lib/email/emailService';
@@ -8,7 +10,13 @@ export const runtime = 'nodejs';
 
 export async function POST(request, { params }) {
   try {
-    const { id } = await params;
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
+      return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
+    }
+
+    const id = params?.id;
     const rejectionData = await request.json();
     
     if (!id) {
@@ -25,7 +33,12 @@ export async function POST(request, { params }) {
       );
     }
 
-    const sb = supabaseAdmin();
+    let sb;
+    try {
+      sb = supabaseAdmin();
+    } catch {
+      return NextResponse.json({ ok: false, error: 'setup_required' }, { status: 503 });
+    }
 
     // Fetch the original event
     const { data: event, error: fetchError } = await sb

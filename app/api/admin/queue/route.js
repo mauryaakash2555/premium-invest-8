@@ -1,10 +1,25 @@
 import { NextResponse } from 'next/server';
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
 import { EventsDB } from '@/lib/db/events';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
 
 export async function GET() {
   try {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
+      return NextResponse.json({ ok: false, error: 'unauthorized', submissions: [] }, { status: 401 });
+    }
+
+    try {
+      supabaseAdmin();
+    } catch {
+      return NextResponse.json({ ok: false, error: 'setup_required', submissions: [] }, { status: 503 });
+    }
+
     // Fetch submission events from Supabase
     const { events, error } = await EventsDB.getAll({
       eventTypes: ['submission_impact', 'submission_guest'],

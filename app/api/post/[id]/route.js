@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { findLocalCommunityPostById } from '@/lib/blog/localCommunityPosts';
+import { findApprovedCommunitySubmissionById } from '@/lib/blog/communitySubmissions';
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || '').trim();
@@ -23,6 +24,11 @@ export async function GET(_req, { params }) {
   const local = await findLocalCommunityPostById(id).catch(() => null);
   if (local) {
     return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  const approved = await findApprovedCommunitySubmissionById(id).catch(() => null);
+  if (approved) {
+    return NextResponse.json(approved, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   }
 
   try {

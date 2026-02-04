@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getLocalCommunityPosts } from '@/lib/blog/localCommunityPosts';
+import { listApprovedCommunitySubmissions } from '@/lib/blog/communitySubmissions';
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || '').trim();
@@ -64,8 +65,11 @@ export async function GET(req) {
     (p) => normalizePillar(p?.pillar) === resolvedPillar && normalizeStatus(p?.status) === resolvedStatus
   );
 
+  const submissions = await listApprovedCommunitySubmissions({ pillar: resolvedPillar, status: resolvedStatus, limit: 120 }).catch(() => []);
+  const localPlus = submissions.length ? mergeUniqueById(local, submissions) : local;
+
   // Local dev: never wait on upstream (keeps filters instant).
-  if (isLocalhost) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  if (isLocalhost) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
@@ -88,20 +92,20 @@ export async function GET(req) {
 
     if (!upstream.ok) {
       const detail = typeof data === 'object' && data && 'detail' in data ? data.detail : typeof data === 'string' && data ? data : 'Posts request failed';
-      if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+      if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
       return NextResponse.json({ success: false, detail }, { status: upstream.status || 502 });
     }
 
-    if (Array.isArray(data) && local.length) {
-      return NextResponse.json(mergeUniqueById(data, local), { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    if (Array.isArray(data) && localPlus.length) {
+      return NextResponse.json(mergeUniqueById(data, localPlus), { status: 200, headers: { 'Cache-Control': 'no-store' } });
     }
 
     if (Array.isArray(data)) return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-    if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
     return NextResponse.json([], { status: 200, headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     const aborted = e && typeof e === 'object' && 'name' in e && e.name === 'AbortError';
-    if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
     return NextResponse.json({ success: false, detail: aborted ? 'Upstream timeout' : 'Upstream error' }, { status: aborted ? 504 : 502 });
   }
 }

@@ -56,6 +56,7 @@ export async function POST(req) {
     event_type: 'submission_guest',
     data: {
       ...data,
+      status: 'PENDING',
       meta,
       received_at: new Date().toISOString(),
     },
