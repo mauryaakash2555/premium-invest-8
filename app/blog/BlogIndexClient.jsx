@@ -41,6 +41,7 @@ import SubmitStoryCTA from '@/components/blog/SubmitStoryCTA';
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [communityLoading, setCommunityLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const router = useRouter();
@@ -72,6 +73,9 @@ export default function BlogPage() {
             base.excerpt ||
             base.summary ||
             excerptFrom(base.content_enhanced || base.content_original || base.content || ''),
+          // Ensure image fields are passed through
+          image_url: base.image_url || base.image || null,
+          image: base.image_url || base.image || null,
         };
 
         return normalized;
@@ -111,7 +115,8 @@ export default function BlogPage() {
         }
       } else {}
 
-      // Fetch approved community posts (impact/guest/dev) via same-origin API
+      // Fetch approved community posts (impact/guest/dev) via same-origin API - NOW WITH FAST LOADING
+      setCommunityLoading(true);
       try {
         const fetchType = async (type) => {
           const res = await fetch(`/api/posts?type=${encodeURIComponent(type)}&status=APPROVED`, { cache: 'no-store' });
@@ -138,6 +143,8 @@ export default function BlogPage() {
         });
       } catch {
         // ignore; editorial still works
+      } finally {
+        setCommunityLoading(false);
       }
     } catch (error) {
       console.error('Error loading blog posts:', error);

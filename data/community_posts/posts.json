@@ -7,7 +7,10 @@
     "author_name": "Chartered Accountant, Mumbai (Anonymous - 12+ Years F&B Sector Experience)",
     "title": "\"As a Mumbai CA: How GST Compliance Still Burdens Small Restaurants in 2026\"",
     "content_original_file": "guest-gst-compliance-restaurants-2026.original.txt",
-    "content_enhanced_file": ""
+    "content_enhanced_file": "",
+    "image_url": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=500&fit=crop&auto=format&fm=webp&q=75",
+    "image_keywords": ["GST", "tax compliance", "restaurant", "Mumbai", "business"],
+    "image_source": "fallback"
   },
   {
     "_id": "local-impact-horn-noise-anxiety-ira-2026",
@@ -17,7 +20,10 @@
     "author_name": "BM Community",
     "title": "\"Mumbai's Loud Horn Culture Gave My Daughter Anxiety Issues - With Medical Proof\"",
     "content_original_file": "impact-horn-noise-anxiety-ira.original.txt",
-    "content_enhanced_file": ""
+    "content_enhanced_file": "",
+    "image_url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=500&fit=crop&auto=format&fm=webp&q=75",
+    "image_keywords": ["traffic", "noise", "Mumbai", "city", "health"],
+    "image_source": "curated"
   },
   {
     "_id": "local-impact-malad-flat-bribe-2026",
@@ -27,7 +33,10 @@
     "author_name": "BM Community",
     "title": "\"₹1.2 Lakh Bribe Demand to Register My ₹2.3 Crore Malad Flat - With Proof\"",
     "content_original_file": "impact-malad-flat.original.txt",
-    "content_enhanced_file": "impact-malad-flat.enhanced.txt"
+    "content_enhanced_file": "impact-malad-flat.enhanced.txt",
+    "image_url": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop&auto=format&fm=webp&q=75",
+    "image_keywords": ["real estate", "property", "corruption", "Mumbai", "flat"],
+    "image_source": "curated"
   },
   {
     "_id": "local-dev-ai-coding-crisis-2026",
@@ -37,6 +46,9 @@
     "author_name": "BM Wealth",
     "title": "\"The AI Coding Challenges: Why I'm Using Multiple AIs and More Human Oversight in 2026\"",
     "content_original_file": "dev-ai-coding-crisis.original.txt",
-    "content_enhanced_file": ""
+    "content_enhanced_file": "",
+    "image_url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop&auto=format&fm=webp&q=75",
+    "image_keywords": ["AI", "coding", "developer", "programming", "technology"],
+    "image_source": "fallback"
   }
 ]
