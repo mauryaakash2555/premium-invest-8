@@ -2993,6 +2993,134 @@ body[data-laser-active="true"] .laser-footer li {
 }
 
 /* ==========================================================================
+   SIP PANIC CALCULATOR - HIGH CONTRAST OKLCH THEME (WCAG AAA)
+   ========================================================================== */
+
+/* Primary Truth Section - High contrast for accessibility */
+.sip-primary-truth {
+  background: oklch(0.12 0.02 264);
+  border: 2px solid oklch(0.75 0.15 85);
+  box-shadow: 
+    0 10px 60px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(192, 160, 98, 0.15);
+}
+
+.sip-primary-truth-label {
+  color: oklch(0.75 0.12 85);
+  letter-spacing: 0.1em;
+}
+
+.sip-primary-truth-amount {
+  color: oklch(0.95 0.02 85);
+  text-shadow: 0 0 20px rgba(192, 160, 98, 0.3);
+}
+
+.sip-primary-truth-loss {
+  color: oklch(0.85 0.18 25);
+  text-shadow: 0 0 12px rgba(255, 100, 100, 0.4);
+}
+
+.sip-primary-truth-subtitle {
+  color: oklch(0.88 0.08 85);
+}
+
+.sip-primary-truth-description {
+  color: oklch(0.75 0.04 85);
+}
+
+.sip-primary-truth-disclaimer {
+  color: oklch(0.55 0.02 264);
+}
+
+/* Real Life Comparison Cards */
+.sip-comparison-card {
+  background: oklch(0.08 0.01 264);
+  border: 1px solid oklch(0.75 0.15 85 / 0.15);
+  transition: all 0.2s ease;
+}
+
+.sip-comparison-card:hover {
+  border-color: oklch(0.75 0.15 85 / 0.3);
+  background: oklch(0.10 0.02 264);
+}
+
+.sip-comparison-card.highlight {
+  border-color: oklch(0.75 0.15 85 / 0.4);
+  background: oklch(0.75 0.15 85 / 0.08);
+}
+
+/* ==========================================================================
+   SIP CALCULATOR - MOBILE RESPONSIVE FIXES
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Mode selector - stack vertically on mobile */
+  .sip-mode-selector {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .sip-mode-selector button {
+    width: 100% !important;
+    min-height: 48px !important;
+  }
+
+  /* Primary truth - smaller text on mobile */
+  .sip-primary-truth-amount,
+  [class*="text-4xl"][class*="sm:text-6xl"] {
+    font-size: 1.875rem !important; /* 30px */
+    line-height: 1.2 !important;
+  }
+
+  /* Results cards - stack vertically */
+  .sip-results-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Timeline chart - ensure it scrolls */
+  .sip-timeline-chart {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Input groups - full width */
+  .sip-input-group {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Comparison cards - 2 columns on mobile */
+  .sip-comparison-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Quiz options - larger touch targets */
+  .sip-quiz-option {
+    min-height: 48px !important;
+    padding: 0.75rem !important;
+  }
+
+  /* Garden animation - smaller on mobile */
+  .sip-garden {
+    height: 180px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  .sip-primary-truth-amount,
+  [class*="text-4xl"][class*="sm:text-6xl"] {
+    font-size: 1.5rem !important; /* 24px */
+  }
+
+  /* Comparison cards - single column on very small screens */
+  .sip-comparison-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==========================================================================
    GLOBAL FOOTER VISIBILITY OVERRIDE (Requested)
    ========================================================================== */
 footer {

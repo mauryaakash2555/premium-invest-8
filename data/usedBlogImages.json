@@ -1,0 +1,16 @@
+{
+  "lastUpdated": "2026-02-04T00:00:00.000Z",
+  "count": 11,
+  "usedImageIds": [
+    "photo-1554224155-6726b3ff858f",
+    "photo-1512453979798-5ea266f8880c",
+    "photo-1519682337058-a94d519337bc",
+    "photo-1514525253161-7a46d19cd819",
+    "photo-1519681393784-d120267933ba",
+    "photo-1506905925346-21bda4d32df4",
+    "photo-1512917774080-9991f1c4c750",
+    "photo-1504307651254-35680f356dfd",
+    "photo-1600566753086-00f18fb6b3ea"
+  ],
+  "_note": "This file tracks all Unsplash image IDs used in blog posts to prevent reuse"
+}

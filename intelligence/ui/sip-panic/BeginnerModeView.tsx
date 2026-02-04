@@ -781,18 +781,23 @@ export function BeginnerModeView(props: {
         ) : null}
       </section>
 
-      <section className="rounded-3xl border border-white/15 bg-gradient-to-br from-slate-950/85 via-slate-950/65 to-indigo-950/55 p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55)]">
-        <div className="text-[11px] font-semibold tracking-wide text-white/70">PRIMARY TRUTH</div>
-        <div className="mt-3 text-4xl sm:text-6xl font-semibold text-white tabular-nums leading-tight">
-          You could lose <span className="text-rose-300"><LakhTooltip amount={result.behavioralCost} /></span>
+      {/* PRIMARY TRUTH - High contrast OKLCH gold theme for WCAG AAA compliance */}
+      <section className="rounded-3xl border-2 border-[oklch(0.75_0.15_85)] bg-[oklch(0.12_0.02_264)] p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55),0_0_40px_rgba(192,160,98,0.15)]">
+        <div className="text-[11px] font-semibold tracking-widest text-[oklch(0.75_0.12_85)] uppercase">Primary Truth</div>
+        <div className="mt-3 text-4xl sm:text-6xl font-bold tabular-nums leading-tight text-[oklch(0.95_0.02_85)] drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
+          You could lose <span className="text-[oklch(0.85_0.18_25)] drop-shadow-[0_0_12px_rgba(255,100,100,0.4)]"><LakhTooltip amount={result.behavioralCost} /></span>
         </div>
-        <p className="mt-3 text-sm sm:text-base text-white/85 font-semibold">
+        <p className="mt-3 text-sm sm:text-base font-semibold text-[oklch(0.88_0.08_85)]">
           Same market path. Different behavior.
         </p>
-        <p className="mt-2 text-[12px] text-white/70">
+        <p className="mt-2 text-[13px] text-[oklch(0.75_0.04_85)]">
           {primaryTruthLine}
         </p>
-        <p className="mt-4 text-[11px] text-white/55">Education-only. Simplified market + tax model.</p>
+        
+        {/* Real-life comparison to make the loss tangible */}
+        <RealLifeComparison amount={result.behavioralCost} title="What this loss could have bought" />
+        
+        <p className="mt-4 text-[11px] text-[oklch(0.55_0.02_264)]">Education-only. Simplified market + tax model.</p>
       </section>
 
       {yearsForCalc * 12 < crashStartMonth ? (

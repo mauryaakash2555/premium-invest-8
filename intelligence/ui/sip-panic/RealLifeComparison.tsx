@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 function clampInt(n: number, min: number, max: number): number {
   if (!Number.isFinite(n)) return min;
@@ -13,8 +13,16 @@ function formatCr(amount: number): string {
   return `₹${cr.toFixed(2)} Cr`;
 }
 
+function formatForSpeech(amount: number): string {
+  const v = Math.max(0, Number.isFinite(amount) ? amount : 0);
+  if (v >= 10_000_000) return `${(v / 10_000_000).toFixed(2)} crore rupees`;
+  if (v >= 100_000) return `${(v / 100_000).toFixed(2)} lakh rupees`;
+  return `${Math.round(v)} rupees`;
+}
+
 export function RealLifeComparison(props: { amount: number; title?: string }) {
   const amount = Number.isFinite(props.amount) ? props.amount : 0;
+  const [speaking, setSpeaking] = useState(false);
 
   const items = useMemo(() => {
     // Simple, illustrative equivalents (education-only).
@@ -24,29 +32,69 @@ export function RealLifeComparison(props: { amount: number; title?: string }) {
     const collegeYears = clampInt(amount / 1_000_000, 0, 99);
 
     return [
-      { icon: "🏠", text: `${housesTier2 || 1} homes in a tier-2 city (roughly)` },
-      { icon: "🚗", text: `${fortuners || 1} large family cars (roughly)` },
-      { icon: "✈️", text: `${europeTrips || 1} international trips (roughly)` },
-      { icon: "🎓", text: `${collegeYears || 1} years of college fees (roughly)` },
+      { icon: "🏠", text: `${housesTier2 || 1} homes in a tier-2 city`, highlight: housesTier2 >= 1 },
+      { icon: "🚗", text: `${fortuners || 1} luxury family cars`, highlight: fortuners >= 1 },
+      { icon: "✈️", text: `${europeTrips || 1} international vacations`, highlight: europeTrips >= 5 },
+      { icon: "🎓", text: `${collegeYears || 1} years of premium education`, highlight: collegeYears >= 2 },
     ];
   }, [amount]);
 
+  const handleSpeak = () => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+      return;
+    }
+
+    const amountText = formatForSpeech(amount);
+    const comparisons = items.map(it => it.text).join(', or ');
+    const fullText = `You could lose ${amountText}. That's equivalent to ${comparisons}.`;
+    
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.lang = 'en-IN';
+    utterance.rate = 0.9;
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
+    
+    setSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
-    <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4">
-      <div className="text-[11px] font-semibold tracking-wide text-white/70 uppercase">
-        {props.title || `What ${formatCr(amount)} can mean`}
+    <div className="mt-4 rounded-2xl border border-[oklch(0.75_0.15_85/0.3)] bg-[oklch(0.10_0.02_264)] p-4">
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-[11px] font-semibold tracking-wide text-[oklch(0.75_0.12_85)] uppercase">
+          {props.title || `What ${formatCr(amount)} could buy`}
+        </div>
+        <button
+          type="button"
+          onClick={handleSpeak}
+          className="flex items-center gap-1 rounded-lg border border-[oklch(0.75_0.15_85/0.3)] bg-[oklch(0.15_0.02_264)] px-2 py-1 text-[10px] text-[oklch(0.80_0.10_85)] hover:bg-[oklch(0.18_0.02_264)] transition-colors"
+          aria-label={speaking ? "Stop reading" : "Read aloud"}
+        >
+          {speaking ? "🔇 Stop" : "🔊 Read"}
+        </button>
       </div>
-      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-white/85">
+      <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
         {items.map((it) => (
-          <div key={it.icon + it.text} className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">
-            <div className="flex items-start gap-2">
-              <div className="text-base leading-none">{it.icon}</div>
-              <div className="text-[12px] leading-snug">{it.text}</div>
-            </div>
+          <div 
+            key={it.icon + it.text} 
+            className={`rounded-xl border px-3 py-3 text-center transition-all ${
+              it.highlight 
+                ? 'border-[oklch(0.75_0.15_85/0.4)] bg-[oklch(0.75_0.15_85/0.08)]' 
+                : 'border-[oklch(0.75_0.15_85/0.15)] bg-[oklch(0.08_0.01_264)]'
+            }`}
+          >
+            <div className="text-2xl">{it.icon}</div>
+            <div className="mt-1 text-[11px] leading-tight text-[oklch(0.85_0.05_85)]">{it.text}</div>
           </div>
         ))}
       </div>
-      <div className="mt-2 text-[11px] text-white/55">Illustrative comparisons to build intuition (not prices/quotes).</div>
+      <div className="mt-2 text-[10px] text-[oklch(0.50_0.02_264)]">
+        Illustrative comparisons to build intuition (not actual prices).
+      </div>
     </div>
   );
 }
