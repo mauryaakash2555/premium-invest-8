@@ -2,11 +2,26 @@
 
 :root {
   --sa-bg: #0a0a0c;
-  --sa-card: rgba(18, 18, 22, 0.7);
-  --sa-border: rgba(255,255,255,0.06);
+  --sa-card: rgba(18, 18, 22, 0.55);
+  --sa-border: rgba(255,255,255,0.08);
   --sa-text: rgba(255,255,255,0.92);
   --sa-muted: rgba(255,255,255,0.55);
   --sa-accent: var(--lux-accent, oklch(0.78 0.08 65));
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes cardGlow {
+  0%, 100% { box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset; }
+  50% { box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset, 0 0 40px rgba(212, 165, 116, 0.05); }
 }
 
 .sa-loading {
@@ -143,8 +158,11 @@
 .sa-card {
   border: 1px solid var(--sa-border);
   background: var(--sa-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: 16px;
   padding: 16px;
+  animation: fadeInUp 0.4s ease-out, cardGlow 5s ease-in-out infinite;
 }
 
 .sa-cardLabel {
@@ -183,8 +201,11 @@
 .sa-panel {
   border: 1px solid var(--sa-border);
   background: var(--sa-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: 16px;
   padding: 16px;
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .sa-panelHead {

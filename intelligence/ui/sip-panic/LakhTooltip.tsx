@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { animate } from "framer-motion";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -22,18 +23,42 @@ export function LakhTooltip(props: {
   decimals?: number;
   className?: string;
   prefix?: string;
+  animate?: boolean;
 }) {
-  const { amount, decimals = 2, className, prefix } = props;
+  const { amount, decimals = 2, className, prefix, animate: shouldAnimate = false } = props;
 
   const [open, setOpen] = useState(false);
 
+  const last = useRef<number>(Number.isFinite(amount) ? amount : 0);
+  const [displayAmount, setDisplayAmount] = useState<number>(() => (Number.isFinite(amount) ? amount : 0));
+
+  useEffect(() => {
+    const next = Number.isFinite(amount) ? amount : 0;
+    if (!shouldAnimate) {
+      last.current = next;
+      setDisplayAmount(next);
+      return;
+    }
+
+    const from = Number.isFinite(last.current) ? last.current : 0;
+    last.current = next;
+
+    const controls = animate(from, next, {
+      duration: 0.55,
+      ease: "easeOut",
+      onUpdate: (v) => setDisplayAmount(v),
+    });
+
+    return () => controls.stop();
+  }, [amount, shouldAnimate]);
+
   const { short, full } = useMemo(() => {
-    const v = Number.isFinite(amount) ? amount : 0;
+    const v = Number.isFinite(displayAmount) ? displayAmount : 0;
     return {
       short: formatLakhsText(v, decimals),
       full: inr0.format(Math.round(v)),
     };
-  }, [amount, decimals]);
+  }, [displayAmount, decimals]);
 
   return (
     <TooltipProvider delayDuration={150}>

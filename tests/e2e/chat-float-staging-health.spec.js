@@ -10,7 +10,7 @@ test('Floating chat trigger opens chat modal', async ({ page, baseURL }) => {
 
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-  const trigger = page.getByRole('button', { name: /open chat/i });
+  const trigger = page.getByRole('button', { name: 'Open chat', exact: true });
 
   // If the Spline/3D trigger renders as role=button, we can click it even if 3D isn't loaded.
   await expect(trigger).toBeVisible({ timeout: 20000 });

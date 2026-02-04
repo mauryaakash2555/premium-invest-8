@@ -25,6 +25,9 @@ import { MissedRecoveryAnimation } from "./MissedRecoveryAnimation";
 import { ComplianceBanner } from "./ComplianceBanner";
 import { TaxCalculationMode, type TaxCalculationModeKey } from "./TaxCalculationMode";
 import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
+import { MonthByMonthBreakdown } from "./MonthByMonthBreakdown";
+import { WealthGrowthChart } from "./WealthGrowthChart";
+import { ShareScenario } from "./ShareScenario";
 import { LangProvider } from "./LangContext";
 import { LanguageToggle } from "./LanguageToggle";
 import type { SIPUiMode } from "./ModeToggle";
@@ -83,6 +86,15 @@ function safeTaxCalcMode(v: string | null): TaxCalculationModeKey | null {
 function safeCrashPreset(v: string | null): "default" | "2008" | "2020" | "2022" | null {
   if (v === "default" || v === "2008" || v === "2020" || v === "2022") return v;
   return null;
+}
+
+function safeBool01(v: string | null): boolean {
+  return v === "1" || v === "true";
+}
+
+function safePctAbs(v: number, min: number, max: number): number {
+  if (!Number.isFinite(v)) return min;
+  return Math.max(min, Math.min(max, Math.round(Math.abs(v))));
 }
 
 function safeRiskComfort(v: string | null): "conservative" | "moderate" | "aggressive" | null {
@@ -264,6 +276,9 @@ export default function SIPPanicPage(props?: {
 
   const [crashPreset, setCrashPreset] = useState<"default" | "2008" | "2020" | "2022">("default");
 
+  const [customCrashEnabled, setCustomCrashEnabled] = useState<boolean>(false);
+  const [customMarket, setCustomMarket] = useState<MarketConditions>(() => buildMarketConditionsForPreset("default"));
+
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [avatar, setAvatar] = useState<AvatarKey>("balanced_raj");
 
@@ -410,8 +425,20 @@ export default function SIPPanicPage(props?: {
   const t = (key: TranslationKey, vars?: Record<string, string | number>) => tStatic(lang, key, vars);
 
   const marketConditions: MarketConditions = useMemo(() => {
+    if (customCrashEnabled) {
+      return {
+        ...customMarket,
+        forceScenario: true,
+      };
+    }
     return buildMarketConditionsForPreset(crashPreset);
-  }, [crashPreset]);
+  }, [crashPreset, customCrashEnabled, customMarket]);
+
+  useEffect(() => {
+    // Keep the custom builder in sync with the selected preset until the user turns it on.
+    if (customCrashEnabled) return;
+    setCustomMarket(buildMarketConditionsForPreset(crashPreset));
+  }, [crashPreset, customCrashEnabled]);
 
   const marketAssumptions = useMemo(() => {
     const y = Math.max(0, Math.floor(inputs.durationYears));
@@ -707,6 +734,23 @@ export default function SIPPanicPage(props?: {
     p.set("inv", String(investmentType));
     p.set("rc", String(riskComfort));
     p.set("crash", String(crashPreset));
+    if (customCrashEnabled) {
+      p.set("mkt", "1");
+      const cd = typeof customMarket.crashDepthPct === "number" ? safePctAbs(customMarket.crashDepthPct, 5, 80) : 35;
+      const cs = typeof customMarket.crashStartMonth === "number" ? clampInt(customMarket.crashStartMonth, 0, 240) : 30;
+      const cdm = typeof customMarket.crashDurationMonths === "number" ? clampInt(customMarket.crashDurationMonths, 1, 36) : 6;
+      const rg = typeof customMarket.recoveryGainPct === "number" ? safePctAbs(customMarket.recoveryGainPct, 0, 200) : 45;
+      const rdm = typeof customMarket.recoveryDurationMonths === "number" ? clampInt(customMarket.recoveryDurationMonths, 1, 60) : 12;
+      p.set("cd", String(cd));
+      p.set("cs", String(cs));
+      p.set("cdm", String(cdm));
+      p.set("rg", String(rg));
+      p.set("rdm", String(rdm));
+
+      if (typeof customMarket.secondaryCorrectionDepthPct === "number") p.set("scd", String(safePctAbs(customMarket.secondaryCorrectionDepthPct, 0, 60)));
+      if (typeof customMarket.secondaryCorrectionStartMonth === "number") p.set("scs", String(clampInt(customMarket.secondaryCorrectionStartMonth, 0, 240)));
+      if (typeof customMarket.secondaryCorrectionDurationMonths === "number") p.set("scdm", String(clampInt(customMarket.secondaryCorrectionDurationMonths, 1, 36)));
+    }
     p.set("en", enabledKeys.join(","));
     p.set("focus", focus);
     p.set("cost", String(Math.round(cost)));
@@ -775,6 +819,33 @@ export default function SIPPanicPage(props?: {
 
     const nextCrash = safeCrashPreset(searchParams.get("crash"));
     if (nextCrash) setCrashPreset(nextCrash);
+
+    const nextMkt = safeBool01(searchParams.get("mkt"));
+    if (nextMkt) {
+      const cd = safePctAbs(Number(searchParams.get("cd")), 5, 80);
+      const cs = clampInt(Number(searchParams.get("cs")), 0, 240);
+      const cdm = clampInt(Number(searchParams.get("cdm")), 1, 36);
+      const rg = safePctAbs(Number(searchParams.get("rg")), 0, 200);
+      const rdm = clampInt(Number(searchParams.get("rdm")), 1, 60);
+
+      const scdRaw = Number(searchParams.get("scd"));
+      const scsRaw = Number(searchParams.get("scs"));
+      const scdmRaw = Number(searchParams.get("scdm"));
+
+      setCustomCrashEnabled(true);
+      setCustomMarket((prev) => ({
+        ...prev,
+        crashDepthPct: -cd,
+        crashStartMonth: cs,
+        crashDurationMonths: cdm,
+        recoveryGainPct: rg,
+        recoveryDurationMonths: rdm,
+        secondaryCorrectionDepthPct: Number.isFinite(scdRaw) ? -safePctAbs(scdRaw, 0, 60) : undefined,
+        secondaryCorrectionStartMonth: Number.isFinite(scsRaw) ? clampInt(scsRaw, 0, 240) : undefined,
+        secondaryCorrectionDurationMonths: Number.isFinite(scdmRaw) ? clampInt(scdmRaw, 1, 36) : undefined,
+        forceScenario: true,
+      }));
+    }
 
     const enabledCsv = searchParams.get("en");
     const focus = safeScenarioKey(searchParams.get("focus"));
@@ -1205,6 +1276,151 @@ export default function SIPPanicPage(props?: {
               </button>
             ))}
           </div>
+
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-[11px] tracking-wide text-white/60 uppercase">Custom crash builder</div>
+                <div className="mt-1 text-xs text-white/75">Override the preset with your own crash + recovery path (education-only).</div>
+              </div>
+              <label className="inline-flex items-center gap-2 text-xs text-white/80 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={customCrashEnabled}
+                  onChange={(e) => {
+                    const enabled = Boolean(e.target.checked);
+                    setCustomCrashEnabled(enabled);
+                    if (enabled) setCustomMarket(buildMarketConditionsForPreset(crashPreset));
+                    try {
+                      const p = new URLSearchParams(window.location.search);
+                      if (enabled) p.set("mkt", "1");
+                      else p.delete("mkt");
+                      window.history.replaceState(null, "", `${window.location.pathname}?${p.toString()}`);
+                    } catch {
+                      // ignore
+                    }
+                  }}
+                  className="accent-[oklch(0.78_0.08_65)]"
+                />
+                Enable
+              </label>
+            </div>
+
+            {customCrashEnabled ? (
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-white/85 text-xs">Crash depth (%)</Label>
+                  <div className="mt-2">
+                    <Slider
+                      min={5}
+                      max={80}
+                      step={1}
+                      value={[safePctAbs(Number(customMarket.crashDepthPct ?? -35), 5, 80)]}
+                      onValueChange={(arr) => {
+                        const n = safePctAbs(Number(arr?.[0] ?? 35), 5, 80);
+                        setCustomMarket((prev) => ({ ...prev, crashDepthPct: -n }));
+                      }}
+                      trackClassName="bg-white/10"
+                      rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                      thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                    />
+                    <div className="mt-1 text-[11px] text-white/60 tabular-nums">-{safePctAbs(Number(customMarket.crashDepthPct ?? -35), 5, 80)}%</div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-white/85 text-xs">Crash start month</Label>
+                  <div className="mt-2">
+                    <Slider
+                      min={0}
+                      max={Math.max(12, inputs.durationYears * 12 - 1)}
+                      step={1}
+                      value={[clampInt(Number(customMarket.crashStartMonth ?? 30), 0, Math.max(12, inputs.durationYears * 12 - 1))]}
+                      onValueChange={(arr) => {
+                        const n = clampInt(Number(arr?.[0] ?? 30), 0, Math.max(12, inputs.durationYears * 12 - 1));
+                        setCustomMarket((prev) => ({ ...prev, crashStartMonth: n }));
+                      }}
+                      trackClassName="bg-white/10"
+                      rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                      thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                    />
+                    <div className="mt-1 text-[11px] text-white/60 tabular-nums">Month {clampInt(Number(customMarket.crashStartMonth ?? 30), 0, 240)}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-white/85 text-xs">Crash duration (months)</Label>
+                  <div className="mt-2">
+                    <Slider
+                      min={1}
+                      max={36}
+                      step={1}
+                      value={[clampInt(Number(customMarket.crashDurationMonths ?? 6), 1, 36)]}
+                      onValueChange={(arr) => {
+                        const n = clampInt(Number(arr?.[0] ?? 6), 1, 36);
+                        setCustomMarket((prev) => ({ ...prev, crashDurationMonths: n }));
+                      }}
+                      trackClassName="bg-white/10"
+                      rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                      thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                    />
+                    <div className="mt-1 text-[11px] text-white/60 tabular-nums">{clampInt(Number(customMarket.crashDurationMonths ?? 6), 1, 36)} months</div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-white/85 text-xs">Recovery gain (%)</Label>
+                  <div className="mt-2">
+                    <Slider
+                      min={0}
+                      max={200}
+                      step={1}
+                      value={[safePctAbs(Number(customMarket.recoveryGainPct ?? 45), 0, 200)]}
+                      onValueChange={(arr) => {
+                        const n = safePctAbs(Number(arr?.[0] ?? 45), 0, 200);
+                        setCustomMarket((prev) => ({ ...prev, recoveryGainPct: n }));
+                      }}
+                      trackClassName="bg-white/10"
+                      rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                      thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                    />
+                    <div className="mt-1 text-[11px] text-white/60 tabular-nums">+{safePctAbs(Number(customMarket.recoveryGainPct ?? 45), 0, 200)}%</div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <Label className="text-white/85 text-xs">Recovery duration (months)</Label>
+                  <div className="mt-2">
+                    <Slider
+                      min={1}
+                      max={60}
+                      step={1}
+                      value={[clampInt(Number(customMarket.recoveryDurationMonths ?? 12), 1, 60)]}
+                      onValueChange={(arr) => {
+                        const n = clampInt(Number(arr?.[0] ?? 12), 1, 60);
+                        setCustomMarket((prev) => ({ ...prev, recoveryDurationMonths: n }));
+                      }}
+                      trackClassName="bg-white/10"
+                      rangeClassName="bg-[oklch(0.78_0.08_65)]"
+                      thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                    />
+                    <div className="mt-1 text-[11px] text-white/60 tabular-nums">{clampInt(Number(customMarket.recoveryDurationMonths ?? 12), 1, 60)} months</div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setCustomMarket(buildMarketConditionsForPreset(crashPreset))}
+                    className="min-h-11 rounded-full border border-white/10 bg-black/25 px-4 py-2 text-xs text-white/80 hover:border-white/15"
+                  >
+                    Reset to preset
+                  </button>
+                  <div className="text-[11px] text-white/55 self-center">Custom path is added into share links when enabled.</div>
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {inputs.durationYears < 3 ? (
@@ -1491,6 +1707,28 @@ export default function SIPPanicPage(props?: {
               }
             />
 
+            <MonthByMonthBreakdown
+              data={chartData}
+              show={{
+                discipline: selection.enabled.discipline,
+                panic20: selection.enabled.panic20,
+                panic40: selection.enabled.panic40,
+                anyFall: selection.enabled.stopAnyFall,
+                custom: selection.enabled.custom,
+                invested: true,
+              }}
+              labels={{
+                discipline: "Discipline",
+                panic20: "Stop at 20%",
+                panic40: "Stop at 40%",
+                anyFall: "Pause in Red Months",
+                custom: selection.enabled.custom
+                  ? `Custom (${Math.round(selection.custom.panicThresholdPct || 30)}% / ${Math.round(selection.custom.stopDurationMonths || 6)}m)`
+                  : "Custom",
+                invested: "Invested",
+              }}
+            />
+
             <DrawdownPainChart
               data={chartData}
               title="Graph 2 — Drawdown Pain Chart"
@@ -1631,7 +1869,7 @@ export default function SIPPanicPage(props?: {
               <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
                 <div className="text-[11px] tracking-wide text-white/60 uppercase">Behavioral cost</div>
                 <div className="mt-2 text-3xl font-semibold gold-gradient-text tabular-nums">
-                  <LakhTooltip amount={worst?.behavioralCost ?? 0} className="text-3xl font-semibold gold-gradient-text tabular-nums" />
+                  <LakhTooltip amount={worst?.behavioralCost ?? 0} animate className="text-3xl font-semibold gold-gradient-text tabular-nums" />
                 </div>
                 <div className="mt-2 text-xs text-white/80">
                   {worst ? (
@@ -1795,6 +2033,28 @@ export default function SIPPanicPage(props?: {
                 </div>
               </div>
             </div>
+
+            {/* Wealth Growth Chart - Visual comparison */}
+            <WealthGrowthChart
+              data={chartData}
+              title="📊 Wealth Growth Visualization"
+              subtitle="See how discipline compounds over time — calm investor vs panic seller"
+              showPanic20={selection.enabled.panic20}
+              showPanic40={selection.enabled.panic40}
+              showAnyFall={selection.enabled.stopAnyFall}
+              showCustom={selection.enabled.custom}
+            />
+
+            {/* Share Your Scenario */}
+            <ShareScenario
+              monthlySIP={inputs.monthlyAmount}
+              years={inputs.durationYears}
+              crashPreset={crashPreset}
+              disciplineAmount={discipline?.postTaxCorpus ?? 0}
+              panicAmount={worst?.postTaxCorpus ?? 0}
+              loss={worst?.behavioralCost ?? 0}
+              lang={lang}
+            />
           </div>
         </div>
 
