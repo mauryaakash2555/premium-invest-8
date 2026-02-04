@@ -1,20 +1,17 @@
-/* Page-scoped styling for /admin-secret-akash */
+/* Page-scoped styling for /admin-secret-akash - ARTLIST STYLE */
 
 :root {
-  --sa-bg: oklch(0.06 0.02 280);
-  --sa-card: rgba(255,255,255,0.03);
-  --sa-border: rgba(255,255,255,0.10);
+  --sa-bg: #0a0a0c;
+  --sa-card: rgba(18, 18, 22, 0.7);
+  --sa-border: rgba(255,255,255,0.06);
   --sa-text: rgba(255,255,255,0.92);
-  --sa-muted: rgba(255,255,255,0.65);
+  --sa-muted: rgba(255,255,255,0.55);
   --sa-accent: var(--lux-accent, oklch(0.78 0.08 65));
 }
 
 .sa-loading {
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 20% -20%, color-mix(in oklab, var(--sa-accent) 6%, transparent), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(255,255,255,0.05), transparent 60%),
-    var(--sa-bg);
+  background: var(--sa-bg);
   color: var(--sa-text);
   display: grid;
   place-items: center;
@@ -23,18 +20,15 @@
 
 .sa-shell {
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 20% -20%, color-mix(in oklab, var(--sa-accent) 6%, transparent), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(255,255,255,0.05), transparent 60%),
-    var(--sa-bg);
+  background: var(--sa-bg);
   color: var(--sa-text);
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 
 .sa-topbar {
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 28px 16px 12px;
+  padding: 24px 20px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,98 +36,96 @@
 }
 
 .sa-title {
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  color: var(--sa-accent);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--sa-text);
 }
 
 .sa-sub {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--sa-muted);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .sa-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .sa-btn {
-  padding: 10px 12px;
-  border-radius: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
   border: 1px solid var(--sa-border);
   background: rgba(255,255,255,0.04);
   color: var(--sa-text);
   cursor: pointer;
-  font-weight: 700;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+  font-weight: 600;
+  font-size: 13px;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
 .sa-btn:hover {
   transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.18);
-  box-shadow: 0 18px 70px rgba(0,0,0,0.60);
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
 }
 
 .sa-btnGold {
-  border-color: color-mix(in oklab, var(--sa-accent) 28%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 8%, transparent);
+  border-color: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
   color: var(--sa-accent);
 }
 
 .sa-btnGold:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in oklab, var(--sa-accent) 40%, rgba(255,255,255,0.10));
+  border-color: var(--sa-accent);
   background: var(--sa-accent);
-  color: oklch(0.06 0.005 280);
-  box-shadow: 0 22px 90px rgba(0,0,0,0.70);
+  color: #0a0a0c;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
 }
 
 .sa-tabs {
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 14px;
+  padding: 0 20px 16px;
   display: flex;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .sa-tab {
-  padding: 10px 12px;
-  border-radius: 0;
+  padding: 10px 14px;
+  border-radius: 20px;
   border: 1px solid var(--sa-border);
   background: rgba(255,255,255,0.03);
   color: var(--sa-muted);
   cursor: pointer;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 600;
   font-size: 12px;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .sa-tab:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.88);
-  box-shadow: 0 18px 70px rgba(0,0,0,0.60);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.85);
 }
 
 .sa-tabActive {
-  color: var(--sa-accent);
-  border-color: color-mix(in oklab, var(--sa-accent) 28%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 8%, transparent);
+  color: var(--sa-text);
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
 }
 
 .sa-content {
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 40px;
+  padding: 0 20px 40px;
 }
 
 .sa-stats {
@@ -151,27 +143,27 @@
 .sa-card {
   border: 1px solid var(--sa-border);
   background: var(--sa-card);
-  border-radius: 0;
-  padding: 14px 14px;
+  border-radius: 16px;
+  padding: 16px;
 }
 
 .sa-cardLabel {
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  opacity: 0.7;
+  color: var(--sa-muted);
 }
 
 .sa-cardValue {
   margin-top: 8px;
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--sa-accent);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--sa-text);
 }
 
 .sa-cardSub {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--sa-muted);
 }
 
@@ -190,9 +182,9 @@
 
 .sa-panel {
   border: 1px solid var(--sa-border);
-  background: rgba(255,255,255,0.04);
-  border-radius: 0;
-  padding: 14px;
+  background: var(--sa-card);
+  border-radius: 16px;
+  padding: 16px;
 }
 
 .sa-panelHead {
@@ -203,36 +195,35 @@
 }
 
 .sa-panelTitle {
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 12px;
-  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--sa-text);
 }
 
 .sa-miniBtn {
-  padding: 8px 10px;
-  border-radius: 0;
-  border: 1px solid color-mix(in oklab, var(--sa-accent) 24%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 8%, transparent);
-  color: var(--sa-accent);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--sa-border);
+  background: rgba(255,255,255,0.04);
+  color: var(--sa-muted);
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 600;
+  font-size: 12px;
   text-decoration: none;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .sa-miniBtn:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in oklab, var(--sa-accent) 40%, rgba(255,255,255,0.10));
-  background: var(--sa-accent);
-  color: oklch(0.06 0.005 280);
-  box-shadow: 0 20px 80px rgba(0,0,0,0.70);
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.08);
+  color: var(--sa-text);
 }
 
 .sa-miniBtnActive {
-  border-color: color-mix(in oklab, var(--sa-accent) 34%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 10%, transparent);
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+  color: var(--sa-accent);
 }
 
 .sa-muted {
@@ -244,7 +235,7 @@
 .sa-list {
   margin-top: 10px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .sa-row {
@@ -252,99 +243,98 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 12px;
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,0,0,0.15);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--sa-border);
+  background: rgba(255,255,255,0.02);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 
 .sa-row:hover {
   transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.16);
-  background: rgba(255,255,255,0.03);
-  box-shadow: 0 18px 70px rgba(0,0,0,0.60);
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
 }
 
 .sa-rowTitle {
-  font-weight: 900;
+  font-weight: 600;
   font-size: 13px;
 }
 
 .sa-rowSub {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--sa-muted);
 }
 
 .sa-rowActions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .sa-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-left: 8px;
-  padding: 4px 8px;
-  border-radius: 0;
-  border: 1px solid color-mix(in oklab, var(--sa-accent) 24%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 7%, transparent);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--sa-border);
+  background: rgba(255,255,255,0.04);
   color: var(--sa-accent);
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .sa-quickPrompts {
   margin-top: 10px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .sa-pill {
-  padding: 8px 10px;
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.10);
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--sa-border);
   background: rgba(255,255,255,0.03);
-  color: rgba(255,255,255,0.80);
+  color: var(--sa-muted);
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 500;
   font-size: 12px;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .sa-pill:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in oklab, var(--sa-accent) 30%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 8%, transparent);
-  color: rgba(255,255,255,0.92);
-  box-shadow: 0 18px 70px rgba(0,0,0,0.60);
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--sa-text);
 }
 
 .sa-aiBox {
   margin-top: 10px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.18);
-  border-radius: 0;
-  padding: 10px;
+  border: 1px solid var(--sa-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 12px;
   min-height: 220px;
 }
 
 .sa-pre {
   margin: 0;
   white-space: pre-wrap;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.86);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
 }
 
 .sa-breakdown {
   margin-top: 12px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 @media (max-width: 900px) {
@@ -354,38 +344,38 @@
 }
 
 .sa-breakItem {
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-  border-radius: 0;
-  padding: 10px;
+  border: 1px solid var(--sa-border);
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  padding: 12px;
 }
 
 .sa-breakKey {
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.7;
+  color: var(--sa-muted);
 }
 
 .sa-breakVal {
   margin-top: 6px;
-  font-weight: 900;
-  color: var(--sa-accent);
+  font-weight: 600;
+  color: var(--sa-text);
 }
 
 .sa-quickActions {
   margin-top: 12px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .sa-tableWrap {
   margin-top: 12px;
   overflow-x: auto;
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.12);
+  border-radius: 12px;
+  border: 1px solid var(--sa-border);
+  background: rgba(0,0,0,0.2);
 }
 
 .sa-table {
@@ -396,30 +386,28 @@
 
 .sa-table th,
 .sa-table td {
-  padding: 10px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--sa-border);
   text-align: left;
   white-space: nowrap;
 }
 
 .sa-table th {
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--sa-muted);
+  background: rgba(0,0,0,0.2);
 }
 
 .sa-table tbody tr:hover {
   background: rgba(255,255,255,0.03);
 }
 
-/* Login */
+/* Login - Artlist Style */
 .sa-loginScreen {
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 20% -20%, color-mix(in oklab, var(--sa-accent) 6%, transparent), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(255,255,255,0.05), transparent 60%),
-    var(--sa-bg);
+  background: var(--sa-bg);
   color: var(--sa-text);
   display: grid;
   place-items: center;
@@ -427,31 +415,30 @@
 }
 
 .sa-loginCard {
-  width: min(520px, 100%);
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
-  padding: 18px;
+  width: min(440px, 100%);
+  border-radius: 20px;
+  border: 1px solid var(--sa-border);
+  background: var(--sa-card);
+  padding: 28px 24px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
 }
 
 .sa-loginTitle {
-  font-weight: 900;
-  font-size: 22px;
-  color: var(--sa-accent);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--sa-text);
 }
 
 .sa-loginSub {
   margin-top: 6px;
   color: var(--sa-muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   font-size: 12px;
 }
 
 .sa-loginForm {
-  margin-top: 14px;
+  margin-top: 20px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .sa-loginPassword {
@@ -460,23 +447,29 @@
 }
 
 .sa-loginPassword .sa-loginInput {
-  padding-right: 44px;
+  padding-right: 48px;
 }
 
 .sa-loginEyeBtn {
   position: absolute;
-  right: 10px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  width: 34px;
-  height: 34px;
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.12);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--sa-border);
   background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.78);
+  color: var(--sa-muted);
   cursor: pointer;
   display: grid;
   place-items: center;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.sa-loginEyeBtn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--sa-text);
 }
 
 .sa-loginEyeBtn:disabled {
@@ -485,26 +478,41 @@
 }
 
 .sa-loginInput {
-  padding: 12px 14px;
-  border-radius: 0;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(0,0,0,0.18);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--sa-border);
+  background: rgba(0,0,0,0.3);
   color: var(--sa-text);
+  font-size: 14px;
   outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.sa-loginInput:focus {
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.4);
 }
 
 .sa-loginBtn {
-  padding: 12px 14px;
-  border-radius: 0;
-  border: 1px solid color-mix(in oklab, var(--sa-accent) 28%, rgba(255,255,255,0.10));
-  background: color-mix(in oklab, var(--sa-accent) 12%, transparent);
-  color: var(--sa-accent);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--sa-border);
+  background: rgba(255,255,255,0.06);
+  color: var(--sa-text);
   cursor: pointer;
-  font-weight: 900;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.sa-loginBtn:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-1px);
 }
 
 .sa-loginError {
-  color: rgba(255,180,180,0.95);
+  color: rgba(255,150,150,0.9);
   font-size: 12px;
 }
 
@@ -514,9 +522,10 @@
 }
 
 .sa-loginHint {
-  margin-top: 12px;
+  margin-top: 16px;
   color: var(--sa-muted);
-  font-size: 12px;
+  font-size: 11px;
+  text-align: center;
 }
 
 .sa-block {

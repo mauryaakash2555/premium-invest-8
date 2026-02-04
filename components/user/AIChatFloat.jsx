@@ -1882,24 +1882,28 @@ export default function AIChatFloat({ open, onClose, whatsappHref }) {
               ) : null}
 
               <div className={styles.inputBar}>
-                <input
-                  className={styles.input}
-                  ref={inputRef}
-                  value={input}
-                  placeholder={admin ? "Admin command..." : "Type your message..."}
-                  onChange={(e) => setInput(e.target.value)}
-                  onInput={(e) => setInput(e.currentTarget.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      void send();
-                    }
-                  }}
-                  disabled={busy}
-                />
-                <button className={styles.send} type="button" onClick={() => void send()} disabled={busy}>
-                  SEND
-                </button>
+                <div className={styles.inputInner}>
+                  <input
+                    className={styles.input}
+                    ref={inputRef}
+                    value={input}
+                    placeholder={admin ? "Admin command..." : "Ask me anything..."}
+                    onChange={(e) => setInput(e.target.value)}
+                    onInput={(e) => setInput(e.currentTarget.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        void send();
+                      }
+                    }}
+                    disabled={busy}
+                  />
+                  <button className={styles.send} type="button" onClick={() => void send()} disabled={busy} aria-label="Send">
+                    <svg className={styles.sendIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </>
           )}
