@@ -848,51 +848,58 @@ export function BeginnerModeView(props: {
         </section>
       ) : null}
 
-      <details className="rounded-2xl border border-white/10 bg-black/20 p-5">
-        <summary className="cursor-pointer select-none text-sm font-semibold text-white/90">
-          Assumptions used in Beginner mode (education-only)
+      {/* Assumptions section - expanded by default for transparency */}
+      <details open className="rounded-2xl border border-[oklch(0.78_0.08_65/0.2)] bg-[oklch(0.10_0.02_264)] p-5 group">
+        <summary className="cursor-pointer select-none text-sm font-semibold text-white flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+          <span className="text-[oklch(0.78_0.08_65)] transition-transform duration-200 group-open:rotate-90">▶</span>
+          <span>📊 Assumptions used in this simulation</span>
+          <span className="ml-auto text-[10px] text-white/50 font-normal">(education-only)</span>
         </summary>
-        <div className="mt-3 space-y-3 text-[12px] text-white/75">
-          <div>
-            <div className="font-semibold text-white/85">Crash / recovery path</div>
-            <div>
-              Crash: {Math.abs(market.crashDepthPct ?? 35)}% over ~{market.crashDurationMonths ?? 6} months starting ~Month {crashStartMonth} (≈ Year {crashStartYearApprox}).
-              Recovery: +{market.recoveryGainPct ?? 45}% over ~{market.recoveryDurationMonths ?? 12} months.
+        <div className="mt-4 space-y-3 text-[12px] text-white/80">
+          <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+            <div className="font-semibold text-white flex items-center gap-2">📉 Crash / Recovery Path</div>
+            <div className="mt-1">
+              Crash: <span className="text-amber-300 font-medium">{Math.abs(market.crashDepthPct ?? 35)}%</span> over ~{market.crashDurationMonths ?? 6} months starting ~Month {crashStartMonth} (≈ Year {crashStartYearApprox}).
+              Recovery: <span className="text-emerald-300 font-medium">+{market.recoveryGainPct ?? 45}%</span> over ~{market.recoveryDurationMonths ?? 12} months.
               Secondary correction: {Math.abs(market.secondaryCorrectionDepthPct ?? 20)}% over ~{market.secondaryCorrectionDurationMonths ?? 3} months around Month {market.secondaryCorrectionStartMonth ?? 78}.
             </div>
           </div>
 
-          <div>
-            <div className="font-semibold text-white/85">Panic rule</div>
-            <div>
-              Stops SIP contributions once the market is ~{panicStopPct}% down from the last peak (a drawdown trigger).
+          <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+            <div className="font-semibold text-white flex items-center gap-2">⚠️ Panic Rule</div>
+            <div className="mt-1">
+              Stops SIP contributions once the market is ~<span className="text-amber-300 font-medium">{panicStopPct}%</span> down from the last peak (a drawdown trigger).
               After stopping, contributions are modeled as going to cash at ~{result.cashAnnualRatePct}% annual.
             </div>
           </div>
 
-          <div>
-            <div className="font-semibold text-white/85">Tax (simplified)</div>
-            <div>
+          <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+            <div className="font-semibold text-white flex items-center gap-2">🧾 Tax (Simplified)</div>
+            <div className="mt-1">
               Equity MF style, conservative gains tax approximation (30% on gains) + 4% cess; no surcharge in Beginner mode.
               This is a teaching model and may differ from your actual taxes.
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-black/20 p-3 text-[11px] text-white/65">
-            Want to change crash presets, tax profile, or see month-by-month charts? Use Advanced Mode.
+          <div className="rounded-xl border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.78_0.08_65/0.05)] p-3 text-[11px] text-[oklch(0.85_0.08_65)]">
+            💡 Want to change crash presets, tax profile, or see month-by-month charts? Use <strong>Advanced Mode</strong>.
           </div>
         </div>
       </details>
 
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5 sm:p-6">
-        <div className="text-sm font-semibold text-white/90">How much & how long?</div>
+        <div className="text-sm font-semibold text-white">How much & how long?</div>
         <div className="mt-1 text-[11px] text-white/60">Optional — adjust to match your situation.</div>
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <div className="text-[11px] font-semibold text-white/70">Monthly SIP (₹)</div>
+            <label htmlFor="monthly-sip-input" className="text-[11px] font-semibold text-white/70 flex items-center justify-between">
+              <span>Monthly SIP (₹)</span>
+              <span className="text-[10px] text-white/50 font-normal">₹1,000 – ₹5,00,000</span>
+            </label>
             <div className="mt-2 flex items-center gap-2">
               <Input
+                id="monthly-sip-input"
                 type="number"
                 inputMode="numeric"
                 min={1000}
@@ -906,20 +913,23 @@ export function BeginnerModeView(props: {
                 onBlur={() => {
                   props.onChangeMonthlyAmount(clampInt(props.monthlyAmount, 1_000, 5_00_000));
                 }}
-                className="no-spinner h-10 bg-black/25 border-white/12 text-white placeholder:text-white/45"
+                className="no-spinner h-10 bg-black/25 border-white/12 text-white placeholder:text-white/45 focus:ring-2 focus:ring-[oklch(0.78_0.08_65)] focus:border-[oklch(0.78_0.08_65)]"
+                aria-describedby="sip-range-hint"
+                placeholder="e.g. 10000"
               />
               <span className="text-[11px] text-white/55">/mo</span>
             </div>
-            <div className="mt-2 text-[11px] text-white/60">Total invested: ₹{totalInvested.toLocaleString("en-IN")}</div>
+            <div id="sip-range-hint" className="mt-2 text-[11px] text-white/60">Total invested: ₹{totalInvested.toLocaleString("en-IN")}</div>
           </div>
 
           <div>
             <div className="flex items-center justify-between gap-3">
-              <div className="text-[11px] font-semibold text-white/70">Duration</div>
-                <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/80 tabular-nums">{yearsForCalc}y</div>
+              <label htmlFor="duration-slider" className="text-[11px] font-semibold text-white/70">Duration</label>
+              <div className="rounded-full border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.78_0.08_65/0.1)] px-2.5 py-1 text-[11px] text-[oklch(0.85_0.08_65)] font-semibold tabular-nums">{yearsForCalc} years</div>
             </div>
             <div className="mt-2">
               <Slider
+                id="duration-slider"
                 min={1}
                 max={30}
                 step={1}
@@ -928,10 +938,13 @@ export function BeginnerModeView(props: {
                 trackClassName="bg-white/10"
                 rangeClassName="bg-[oklch(0.78_0.08_65)]"
                 thumbClassName="border-[oklch(0.78_0.08_65)] bg-black"
+                showTooltip={true}
+                formatValue={(v) => `${v} years`}
+                ariaLabel={`Investment duration: ${yearsForCalc} years`}
               />
               <div className="mt-1 flex items-center justify-between text-[11px] text-white/55">
-                <span>1y</span>
-                <span>30y</span>
+                <span>1 year</span>
+                <span>30 years</span>
               </div>
             </div>
           </div>
@@ -946,9 +959,13 @@ export function BeginnerModeView(props: {
                 props.onChangeMonthlyAmount(5_000);
                 props.onChangeDurationYears(5);
               }}
-              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+              className={`min-h-10 rounded-lg border px-3 py-2 text-[11px] font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.78_0.08_65)] ${
+                props.monthlyAmount === 5_000 && props.durationYears === 5
+                  ? "border-[oklch(0.78_0.08_65)] bg-[oklch(0.78_0.08_65/0.15)] text-[oklch(0.90_0.08_65)] shadow-[0_0_10px_rgba(192,160,98,0.2)]"
+                  : "border-white/10 bg-black/20 text-white/80 hover:bg-white/5 hover:border-white/20"
+              }`}
             >
-              Conservative
+              💰 Conservative
             </button>
             <button
               type="button"
@@ -956,9 +973,13 @@ export function BeginnerModeView(props: {
                 props.onChangeMonthlyAmount(10_000);
                 props.onChangeDurationYears(10);
               }}
-              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+              className={`min-h-10 rounded-lg border px-3 py-2 text-[11px] font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.78_0.08_65)] ${
+                props.monthlyAmount === 10_000 && props.durationYears === 10
+                  ? "border-[oklch(0.78_0.08_65)] bg-[oklch(0.78_0.08_65/0.15)] text-[oklch(0.90_0.08_65)] shadow-[0_0_10px_rgba(192,160,98,0.2)]"
+                  : "border-white/10 bg-black/20 text-white/80 hover:bg-white/5 hover:border-white/20"
+              }`}
             >
-              Balanced
+              ⚖️ Balanced
             </button>
             <button
               type="button"
@@ -966,42 +987,72 @@ export function BeginnerModeView(props: {
                 props.onChangeMonthlyAmount(20_000);
                 props.onChangeDurationYears(20);
               }}
-              className="min-h-10 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/80 hover:bg-white/5"
+              className={`min-h-10 rounded-lg border px-3 py-2 text-[11px] font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.78_0.08_65)] ${
+                props.monthlyAmount === 20_000 && props.durationYears === 20
+                  ? "border-[oklch(0.78_0.08_65)] bg-[oklch(0.78_0.08_65/0.15)] text-[oklch(0.90_0.08_65)] shadow-[0_0_10px_rgba(192,160,98,0.2)]"
+                  : "border-white/10 bg-black/20 text-white/80 hover:bg-white/5 hover:border-white/20"
+              }`}
             >
-              Aggressive
+              🚀 Aggressive
             </button>
           </div>
         </div>
       </section>
 
       <section className="space-y-4">
-        <h3 className="text-base font-semibold text-white/90">Your results (after tax)</h3>
+        <h3 className="text-base font-semibold text-white">Your results (after tax)</h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-6 text-center">
-            <p className="text-xs text-emerald-100/90 font-semibold">If you stay calm & keep investing</p>
-            <div className="mt-3 text-3xl sm:text-4xl font-semibold text-emerald-200 tabular-nums">
-              <LakhTooltip amount={result.disciplineAmt} />
+        {/* Results comparison with difference badge */}
+        <div className="relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border-2 border-emerald-500/40 bg-emerald-500/10 p-6 text-center shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+              <p className="text-xs text-emerald-100 font-semibold">✅ If you stay calm & keep investing</p>
+              <div className="mt-3 text-3xl sm:text-4xl font-bold text-emerald-200 tabular-nums">
+                <LakhTooltip amount={result.disciplineAmt} />
+              </div>
+              <p className="mt-2 text-[11px] text-emerald-100/80">Final wealth estimate</p>
             </div>
-            <p className="mt-2 text-[11px] text-emerald-100/70">Final wealth estimate</p>
-          </div>
 
-          <div className="rounded-2xl border border-red-500/25 bg-red-500/10 p-6 text-center">
-            <p className="text-xs text-red-100/90 font-semibold">If you {choiceLabel.toLowerCase()}</p>
-            <div className="mt-3 text-3xl sm:text-4xl font-semibold text-red-200 tabular-nums">
-              <LakhTooltip amount={result.choiceAmt} />
+            <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-900/20 p-6 text-center">
+              <p className="text-xs text-amber-100 font-semibold">⚠️ If you {choiceLabel.toLowerCase()}</p>
+              <div className="mt-3 text-3xl sm:text-4xl font-bold text-amber-200 tabular-nums">
+                <LakhTooltip amount={result.choiceAmt} />
+              </div>
+              <p className="mt-2 text-[11px] text-amber-100/80">Final wealth estimate</p>
             </div>
-            <p className="mt-2 text-[11px] text-red-100/70">Final wealth estimate</p>
           </div>
+          
+          {/* Difference badge - positioned between cards */}
+          {result.behavioralCost > 0 && (
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden sm:flex">
+              <div className="bg-[oklch(0.15_0.02_264)] border-2 border-[oklch(0.78_0.08_65)] rounded-full px-4 py-2 shadow-[0_0_20px_rgba(192,160,98,0.3)]">
+                <div className="text-[10px] text-[oklch(0.78_0.08_65)] font-semibold uppercase tracking-wider">Difference</div>
+                <div className="text-lg font-bold text-white tabular-nums">
+                  <LakhTooltip amount={result.behavioralCost} />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Mobile difference badge */}
+          {result.behavioralCost > 0 && (
+            <div className="mt-3 sm:hidden">
+              <div className="bg-[oklch(0.15_0.02_264)] border-2 border-[oklch(0.78_0.08_65)] rounded-xl p-3 text-center shadow-[0_0_15px_rgba(192,160,98,0.2)]">
+                <span className="text-[11px] text-[oklch(0.78_0.08_65)] font-semibold">You could lose: </span>
+                <span className="text-lg font-bold text-white"><LakhTooltip amount={result.behavioralCost} /></span>
+                <span className="text-[11px] text-white/60"> ({result.costPct}%)</span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass p-6">
-        <h4 className="text-sm font-semibold text-white/90">Why does panic cost so much?</h4>
-        <ul className="mt-3 space-y-2 text-sm text-white/75">
-          <li>During crashes, prices are low — continuing SIP buys more units.</li>
-          <li>When markets recover, those extra units compound your recovery gains.</li>
-          <li>Stopping SIP cuts off the cheapest buying period and the rebound.</li>
+        <h4 className="text-sm font-semibold text-white">Why does panic cost so much?</h4>
+        <ul className="mt-3 space-y-2 text-sm text-white/80">
+          <li className="flex items-start gap-2"><span className="text-emerald-400">✓</span> During crashes, prices are low — continuing SIP buys more units.</li>
+          <li className="flex items-start gap-2"><span className="text-emerald-400">✓</span> When markets recover, those extra units compound your recovery gains.</li>
+          <li className="flex items-start gap-2"><span className="text-amber-400">✗</span> Stopping SIP cuts off the cheapest buying period and the rebound.</li>
         </ul>
       </section>
 
@@ -1009,9 +1060,9 @@ export function BeginnerModeView(props: {
         <button
           type="button"
           onClick={props.onRequestAdvanced}
-          className="min-h-11 rounded-xl border border-white/20 bg-[color:var(--lux-accent)] px-4 py-3 text-sm font-semibold text-black hover:opacity-95"
+          className="min-h-11 rounded-xl border-2 border-[oklch(0.78_0.08_65)] bg-[oklch(0.78_0.08_65)] px-4 py-3 text-sm font-bold text-black hover:bg-[oklch(0.82_0.08_65)] transition-all duration-200 shadow-[0_4px_20px_rgba(192,160,98,0.3)] hover:shadow-[0_6px_25px_rgba(192,160,98,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.78_0.08_65)] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
-          Switch to Advanced Mode
+          🔬 Switch to Advanced Mode
         </button>
       </section>
 

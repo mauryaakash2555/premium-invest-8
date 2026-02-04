@@ -71,13 +71,14 @@ export function RealLifeComparison(props: { amount: number; title?: string }) {
         <button
           type="button"
           onClick={handleSpeak}
-          className="flex items-center gap-1 rounded-lg border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.15_0.02_264)] px-2 py-1 text-[10px] text-[oklch(0.80_0.08_65)] hover:bg-[oklch(0.18_0.02_264)] transition-colors"
+          className="flex items-center gap-1 rounded-lg border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.15_0.02_264)] px-2 py-1 text-[10px] text-[oklch(0.80_0.08_65)] hover:bg-[oklch(0.18_0.02_264)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.78_0.08_65)]"
           aria-label={speaking ? "Stop reading" : "Read aloud"}
         >
           {speaking ? "🔇 Stop" : "🔊 Read"}
         </button>
       </div>
-      <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {/* Responsive grid: 2 cols on mobile, 4 on desktop */}
+      <div className="mt-3 grid grid-cols-2 gap-2">
         {items.map((it) => (
           <div 
             key={it.icon + it.text} 
@@ -87,8 +88,8 @@ export function RealLifeComparison(props: { amount: number; title?: string }) {
                 : 'border-[oklch(0.78_0.08_65/0.15)] bg-[oklch(0.08_0.01_264)]'
             }`}
           >
-            <div className="text-2xl">{it.icon}</div>
-            <div className="mt-1 text-[11px] leading-tight text-[oklch(0.85_0.05_65)]">{it.text}</div>
+            <div className="text-2xl" role="img" aria-label={it.text}>{it.icon}</div>
+            <div className="mt-1 text-[10px] sm:text-[11px] leading-tight text-[oklch(0.85_0.05_65)]">{it.text}</div>
           </div>
         ))}
       </div>
