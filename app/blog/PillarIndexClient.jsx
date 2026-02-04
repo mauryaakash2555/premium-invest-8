@@ -48,12 +48,12 @@ function pillarCopy(pillar) {
   }
 }
 
-export default function PillarIndexClient({ pillar }) {
+export default function PillarIndexClient({ pillar, initialPosts = null }) {
   const PILLAR = String(pillar || 'EDITORIAL').toUpperCase();
   const copy = useMemo(() => pillarCopy(PILLAR), [PILLAR]);
 
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [posts, setPosts] = useState(() => (Array.isArray(initialPosts) ? initialPosts : []));
+  const [isLoading, setIsLoading] = useState(() => !Array.isArray(initialPosts));
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -81,7 +81,8 @@ export default function PillarIndexClient({ pillar }) {
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
-      setIsLoading(true);
+      // If we already rendered local posts on the server, avoid blocking UI with a full-screen skeleton.
+      if (!Array.isArray(initialPosts)) setIsLoading(true);
       setError('');
       setNote('');
       try {

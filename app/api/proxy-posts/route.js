@@ -59,15 +59,24 @@ export async function GET(req) {
   const pillar = normalizePillar(req.nextUrl.searchParams.get("pillar") || "EDITORIAL");
   const status = normalizeStatus(req.nextUrl.searchParams.get("status") || "APPROVED");
 
-  const localAll = await getLocalCommunityPosts().catch(() => []);
+  const hostname = String(req?.nextUrl?.hostname || '').toLowerCase();
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+  const localAll = await getLocalCommunityPosts({ includeContent: false }).catch(() => []);
   const local = (Array.isArray(localAll) ? localAll : []).filter(
     (p) => normalizePillar(p?.pillar) === pillar && normalizeStatus(p?.status) === status
   );
 
+  // Local dev: never wait on upstream (it can be slow/unreachable and makes the page feel broken).
+  if (isLocalhost) return json(200, local);
+
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    // If we already have local curated posts, keep the page snappy.
+    // Upstream is best-effort and should not block rendering.
+    const timeoutMs = local.length ? 1800 : 8000;
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     const upstream = await fetch(
       `${BACKEND_ORIGIN}/api/posts?pillar=${encodeURIComponent(pillar)}&status=${encodeURIComponent(status)}`,

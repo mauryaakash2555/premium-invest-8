@@ -53,18 +53,25 @@ export async function GET(req) {
   const pillar = req.nextUrl.searchParams.get('pillar');
   const status = req.nextUrl.searchParams.get('status') || 'APPROVED';
 
+  const hostname = String(req?.nextUrl?.hostname || '').toLowerCase();
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
   const resolvedPillar = normalizePillar(pillar || (type ? typeToPillar(type) : null) || 'EDITORIAL');
   const resolvedStatus = normalizeStatus(status);
 
-  const localAll = await getLocalCommunityPosts().catch(() => []);
+  const localAll = await getLocalCommunityPosts({ includeContent: false }).catch(() => []);
   const local = (Array.isArray(localAll) ? localAll : []).filter(
     (p) => normalizePillar(p?.pillar) === resolvedPillar && normalizeStatus(p?.status) === resolvedStatus
   );
 
+  // Local dev: never wait on upstream (keeps filters instant).
+  if (isLocalhost) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeoutMs = local.length ? 1800 : 8000;
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     const upstream = await fetch(
       `${BACKEND_ORIGIN}/api/posts?pillar=${encodeURIComponent(resolvedPillar)}&status=${encodeURIComponent(status)}`,
