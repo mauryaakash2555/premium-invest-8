@@ -5,7 +5,7 @@ const filters = [
   { id: 'editorial', name: 'BM Editorial' },
   { id: 'impact', name: 'Community Impact' },
   { id: 'guest', name: 'Guest Columns' },
-  { id: 'dev', name: 'Dev Writes' },
+  { id: 'dev', name: 'Developer Insight' },
 ];
 
 export default function BlogFilter({ activeFilter, onFilterChange }) {

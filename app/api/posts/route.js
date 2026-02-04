@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getLocalCommunityPosts } from '@/lib/blog/localCommunityPosts';
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || '').trim();
@@ -25,12 +26,40 @@ function typeToPillar(type) {
   return null;
 }
 
+function normalizePillar(value) {
+  return String(value || 'EDITORIAL').trim().toUpperCase();
+}
+
+function normalizeStatus(value) {
+  return String(value || 'APPROVED').trim().toUpperCase();
+}
+
+function mergeUniqueById(primary, secondary) {
+  const a = Array.isArray(primary) ? primary : [];
+  const b = Array.isArray(secondary) ? secondary : [];
+  const seen = new Set(a.map((p) => String(p?._id || '')).filter(Boolean));
+  const out = [...a];
+  for (const p of b) {
+    const id = String(p?._id || '');
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push(p);
+  }
+  return out;
+}
+
 export async function GET(req) {
   const type = req.nextUrl.searchParams.get('type');
   const pillar = req.nextUrl.searchParams.get('pillar');
   const status = req.nextUrl.searchParams.get('status') || 'APPROVED';
 
-  const resolvedPillar = pillar || (type ? typeToPillar(type) : null) || 'EDITORIAL';
+  const resolvedPillar = normalizePillar(pillar || (type ? typeToPillar(type) : null) || 'EDITORIAL');
+  const resolvedStatus = normalizeStatus(status);
+
+  const localAll = await getLocalCommunityPosts().catch(() => []);
+  const local = (Array.isArray(localAll) ? localAll : []).filter(
+    (p) => normalizePillar(p?.pillar) === resolvedPillar && normalizeStatus(p?.status) === resolvedStatus
+  );
 
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
@@ -52,12 +81,20 @@ export async function GET(req) {
 
     if (!upstream.ok) {
       const detail = typeof data === 'object' && data && 'detail' in data ? data.detail : typeof data === 'string' && data ? data : 'Posts request failed';
+      if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
       return NextResponse.json({ success: false, detail }, { status: upstream.status || 502 });
     }
 
-    return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    if (Array.isArray(data) && local.length) {
+      return NextResponse.json(mergeUniqueById(data, local), { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    }
+
+    if (Array.isArray(data)) return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json([], { status: 200, headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     const aborted = e && typeof e === 'object' && 'name' in e && e.name === 'AbortError';
+    if (local.length) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
     return NextResponse.json({ success: false, detail: aborted ? 'Upstream timeout' : 'Upstream error' }, { status: aborted ? 504 : 502 });
   }
 }

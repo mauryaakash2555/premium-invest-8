@@ -59,7 +59,7 @@ export default function BlogPage() {
       const normalizeCommunityPost = (p, type) => {
         const base = typeof p === 'object' && p ? p : {};
         const categoryLabel =
-          type === 'impact' ? 'Community Impact' : type === 'guest' ? 'Guest Column' : type === 'dev' ? 'Dev Writes' : 'Community';
+          type === 'impact' ? 'Community Impact' : type === 'guest' ? 'Guest Column' : type === 'dev' ? 'Developer Insight' : 'Community';
 
         const normalized = {
           ...base,

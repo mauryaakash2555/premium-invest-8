@@ -7,7 +7,7 @@ const pillars = [
   { name: 'BM Editorial', slug: 'editorial' },
   { name: 'Community Impact', slug: 'impact' },
   { name: 'Guest Columns', slug: 'guest' },
-  { name: 'Dev Writes', slug: 'dev' },
+  { name: 'Developer Insight', slug: 'dev' },
 ];
 
 export default function BlogNavigation() {

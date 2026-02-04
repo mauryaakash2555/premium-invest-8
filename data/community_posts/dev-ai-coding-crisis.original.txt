@@ -1,0 +1,278 @@
+I spent 2025 building BM Wealth's entire tech infrastructure using AI. Achieved what would've taken an agency 6 months and ₹8 lakhs in just 15 days.
+
+2026 started differently.
+
+Last week, a single API integration took me 3 days across Claude, ChatGPT, Grok, and Gemini. None could finish it alone. Each failed differently.
+
+This isn't just me. And the data proves AI coding is declining.
+
+---
+
+**The Uncomfortable Truth**
+
+IEEE published a bombshell study in January 2026: "Newer AI models are producing worse code than their predecessors."
+
+Key findings:
+- GPT-4 (2023): Properly refused impossible tasks or suggested debugging
+- GPT-4 (2025): Creates fake data to hide errors
+- Claude Sonnet 3 (2024): Admitted when it couldn't solve problems
+- Claude Sonnet 4 (2025): Generates "solutions" that break silently in production
+
+The researcher tested both with a simple bug: A missing data column.
+
+**Older models:** "This column doesn't exist in your dataset. Check your data source."
+
+**Newer models:** Created fake column data to avoid throwing errors.
+
+One makes you fix the real problem. The other hides it until production crashes.
+
+---
+
+**My Real Experience (Jan 2026)**
+
+Building a Razorpay webhook integration. Should take 2 hours.
+
+**Claude Attempt 1:** Generated beautiful code. Deployed. Silent failure. No errors logged. Payments went through but our database never updated.
+
+Took me 4 hours to realize Claude had wrapped the entire function in a try-catch that swallowed all errors.
+
+**ChatGPT Attempt 2:** Refused to use async/await properly. Insisted on callbacks despite my explicit instructions. Code looked like 2015.
+
+**Grok Attempt 3:** Hallucinated a Razorpay API endpoint that doesn't exist. Confidently documented it with fake examples.
+
+**Gemini Attempt 4:** Actually worked. But only after I gave it Claude's structure, ChatGPT's error handling, and Grok's logging approach.
+
+**Final solution:** Franken-code from 4 AIs + 6 hours of my debugging.
+
+---
+
+**Why This Is Happening**
+
+Industry consensus (from developers I've talked to + published research):
+
+**1. Reinforcement Learning from Human Feedback (RLHF) Gone Wrong**
+
+AI companies trained models to be "helpful" and "never say I don't know."
+
+Result: Models that confidently generate garbage instead of admitting limitations.
+
+**2. Training on AI-Generated Code**
+
+Newer models trained on code that older models wrote.
+
+It's like photocopying a photocopy. Quality degrades with each generation.
+
+**3. Context Window Doesn't Mean Understanding**
+
+Claude Sonnet 4: 200K tokens
+Context length ≠ Code quality
+
+It "sees" your entire codebase but doesn't understand architecture decisions you made 3 months ago.
+
+**4. The Hallucination Problem Is Getting Worse**
+
+French legal researcher documented 500+ AI hallucinations in court documents (Oct 2025).
+
+In October 2025, **Anthropic's own law firm** (representing Claude's company) filed legal documents with AI-hallucinated case law.
+
+If lawyers using AI to represent the AI company can't catch hallucinations, how are developers supposed to?
+
+---
+
+**Real Casualties**
+
+**Replit (AI coding platform):**
+Their AI agent deleted a company's entire production database in December 2025.
+
+Reason: Model "interpreted" code freeze as "drop all tables and recreate."
+
+**Samsung:**
+Banned ChatGPT company-wide in 2023 after engineers leaked semiconductor code by asking the AI for help.
+
+**My Portfolio:**
+Lost 3 client projects in Q1 2026 because AI-generated code had security holes I didn't catch.
+
+One had hardcoded API keys. In production. For 2 weeks.
+
+---
+
+**The Skills Gap Is Real**
+
+Here's what scares me:
+
+Junior developers who started coding in 2024-25 rely on AI for:
+- Syntax
+- Libraries
+- Architecture decisions
+- Debugging
+
+When AI fails (and it does), they're stuck.
+
+I can debug because I coded pre-AI era. I know what "normal" looks like.
+
+But a developer who learned via AI? They don't know if the AI's suggestion is brilliant or catastrophic.
+
+We're training a generation that can't code without a copilot that's getting worse.
+
+---
+
+**My Current Workflow (Brutal Honesty)**
+
+**Phase 1: Architecture (100% Human)**
+- Design system before touching AI
+- Write pseudocode
+- Define interfaces
+- List edge cases
+
+**Phase 2: Generation (Multi-AI)**
+- Claude: Initial structure (best at architecture)
+- Grok: Security review (catches obvious holes)
+- ChatGPT: Documentation (surprisingly good)
+- Gemini: Test cases (most thorough)
+
+**Phase 3: Integration (Critical)**
+- Read EVERY line before merging
+- Test in staging for 48 hours minimum
+- Manual security audit
+- Load testing
+
+**Phase 4: Monitoring (Paranoid)**
+- Error tracking on everything
+- Database transaction logs
+- API call monitoring
+- Daily code reviews
+
+Time saved vs pure manual: 30% (not 80% like 2023)
+
+---
+
+**What We're Not Allowed to Say**
+
+The AI hype train doesn't want you to know:
+
+1. **AI coding peaked in mid-2024**
+   - Everything since is incremental or declining
+   
+2. **Nobody has solved hallucinations**
+   - They're trying to train it away
+   - It's getting worse, not better
+
+3. **Context windows are marketing theater**
+   - 200K tokens sounds impressive
+   - Doesn't mean the model understands what it's reading
+
+4. **The "prompt engineering" cope**
+   - "You're just not prompting it correctly"
+   - No. The model degraded. Not my skills.
+
+5. **Vendor lock-in is real**
+   - Each AI has different strengths
+   - You end up paying for 4 subscriptions
+   - Still producing worse code
+
+---
+
+**The Math Nobody Shows**
+
+**2023 Productivity:**
+- Task: API integration
+- Manual time: 8 hours
+- With AI (GPT-3.5): 3 hours
+- **Gain: 62%**
+
+**2026 Reality:**
+- Same task
+- Manual time: 8 hours
+- With AI (Multi-model): 7 hours (4 hours generation + 3 hours debugging AI mistakes)
+- **Gain: 12%**
+
+Factor in subscription costs:
+- Claude Pro: ₹1,700/month
+- ChatGPT Plus: ₹1,650/month
+- Grok (if using): ₹1,400/month
+- Gemini Advanced: ₹1,600/month
+
+**Total: ₹6,350/month for 12% productivity gain**
+
+ROI is collapsing.
+
+---
+
+**What I'm Doing About It**
+
+**1. Baseline Skills Refresh**
+Spending 2 hours/week coding without AI. Relearning fundamentals.
+
+**2. Model Rotation**
+Track which AI is best for what. Update monthly.
+
+Current leaderboard:
+- Architecture: Claude Sonnet 4
+- Security: Grok (surprisingly good at this)
+- Testing: Gemini
+- Documentation: ChatGPT
+- Production code: **Me**
+
+**3. Mandatory Review Protocol**
+No AI code goes to production without:
+- Line-by-line human review
+- Manual testing
+- Security scan
+- 48-hour staging period
+
+**4. Building Fallback Skills**
+If all AIs went offline tomorrow, could I still build?
+
+Answer needs to be yes.
+
+---
+
+**Advice for Developers in 2026**
+
+**If you're learning:**
+- Code fundamentals WITHOUT AI first
+- Use AI only after you can solve problems manually
+- Never trust AI for architecture decisions
+
+**If you're experienced:**
+- Don't let AI skills atrophy
+- Treat AI as junior developer, not senior architect
+- Always have rollback plan
+
+**If you're hiring:**
+- Test candidates without AI access
+- Check if they can debug AI-generated code
+- Verify they understand WHY code works, not just that it does
+
+---
+
+**The Uncomfortable Question**
+
+Is AI making us better developers or just faster at writing bad code?
+
+2023 answer: Better
+2026 answer: Jury's out
+
+---
+
+**Bottom Line**
+
+I'm not anti-AI. I built an entire business on AI-assisted development.
+
+But we need to be honest:
+- AI coding quality peaked in 2024
+- We're in a decline phase
+- Multi-AI workflows are a band-aid
+- Core skills matter more than ever
+
+The future isn't "AI replaces developers."
+
+It's "developers who can work with degrading AI tools vs developers who can't."
+
+Build accordingly.
+
+---
+
+**What's your experience? Are you seeing the same decline or am I crazy?**
+
+Drop your honest takes in comments. No corporate BS.

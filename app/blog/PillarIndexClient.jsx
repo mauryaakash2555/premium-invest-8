@@ -33,7 +33,7 @@ function pillarCopy(pillar) {
       };
     case 'DEV':
       return {
-        title: 'Dev Writes',
+        title: 'Developer Insight',
         subtitle: 'Product, engineering, AI, and systems thinking.',
         image:
           'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',

@@ -18,12 +18,10 @@ page.on('console', async (msg) => {
       args.push('[unserializable]');
     }
   }
-  // eslint-disable-next-line no-console
   console.log('[console.error]', text, { location: loc, args });
 });
 
 page.on('pageerror', (err) => {
-  // eslint-disable-next-line no-console
   console.log('[pageerror]', String(err));
 });
 

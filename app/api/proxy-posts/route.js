@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getLocalCommunityPosts } from "@/lib/blog/localCommunityPosts";
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || "").trim();
@@ -32,9 +33,36 @@ function json(status, body) {
   });
 }
 
+function normalizePillar(value) {
+  return String(value || "EDITORIAL").trim().toUpperCase();
+}
+
+function normalizeStatus(value) {
+  return String(value || "APPROVED").trim().toUpperCase();
+}
+
+function mergeUniqueById(primary, secondary) {
+  const a = Array.isArray(primary) ? primary : [];
+  const b = Array.isArray(secondary) ? secondary : [];
+  const seen = new Set(a.map((p) => String(p?._id || "")).filter(Boolean));
+  const out = [...a];
+  for (const p of b) {
+    const id = String(p?._id || "");
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push(p);
+  }
+  return out;
+}
+
 export async function GET(req) {
-  const pillar = req.nextUrl.searchParams.get("pillar") || "EDITORIAL";
-  const status = req.nextUrl.searchParams.get("status") || "APPROVED";
+  const pillar = normalizePillar(req.nextUrl.searchParams.get("pillar") || "EDITORIAL");
+  const status = normalizeStatus(req.nextUrl.searchParams.get("status") || "APPROVED");
+
+  const localAll = await getLocalCommunityPosts().catch(() => []);
+  const local = (Array.isArray(localAll) ? localAll : []).filter(
+    (p) => normalizePillar(p?.pillar) === pillar && normalizeStatus(p?.status) === status
+  );
 
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
@@ -63,12 +91,17 @@ export async function GET(req) {
           : typeof data === "string" && data
             ? data
             : "Posts request failed";
+      // Fall back to local curated posts if upstream is down.
+      if (local.length) return json(200, local);
       return json(upstream.status || 502, { success: false, detail });
     }
 
-    return json(200, data);
+    // Merge local curated posts with upstream list (avoid duplicates by _id)
+    if (Array.isArray(data) && local.length) return json(200, mergeUniqueById(data, local));
+    return json(200, Array.isArray(data) ? data : local);
   } catch (e) {
     const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
+    if (local.length) return json(200, local);
     return json(aborted ? 504 : 502, {
       success: false,
       detail: aborted ? "Upstream timeout" : "Upstream error",

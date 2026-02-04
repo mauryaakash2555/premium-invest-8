@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { findLocalCommunityPostById } from '@/lib/blog/localCommunityPosts';
 
 function normalizeBackendOrigin(raw) {
   const s = String(raw || '').trim();
@@ -18,6 +19,12 @@ function getBackendOrigin() {
 
 export async function GET(_req, { params }) {
   const id = (await params)?.id;
+
+  const local = await findLocalCommunityPostById(id).catch(() => null);
+  if (local) {
+    return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  }
+
   try {
     const BACKEND_ORIGIN = getBackendOrigin();
     const controller = new AbortController();

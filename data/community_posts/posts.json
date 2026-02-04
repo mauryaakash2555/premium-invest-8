@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "local-impact-malad-flat-bribe-2026",
+    "pillar": "IMPACT",
+    "status": "APPROVED",
+    "approved_at": "2026-02-04T00:00:00.000Z",
+    "author_name": "BM Community",
+    "title": "\"₹1.8 Lakh Bribe Demand to Register My ₹2.3 Crore Malad Flat - With Proof\"",
+    "content_original_file": "impact-malad-flat.original.txt",
+    "content_enhanced_file": "impact-malad-flat.enhanced.txt"
+  },
+  {
+    "_id": "local-dev-ai-coding-crisis-2026",
+    "pillar": "DEV",
+    "status": "APPROVED",
+    "approved_at": "2026-02-04T00:00:00.000Z",
+    "author_name": "BM Wealth",
+    "title": "\"The AI Coding Crisis Nobody's Talking About: Why I'm Switching Between 4 AIs to Build One Feature\"",
+    "content_original_file": "dev-ai-coding-crisis.original.txt",
+    "content_enhanced_file": ""
+  }
+]
