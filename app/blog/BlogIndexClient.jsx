@@ -36,6 +36,7 @@ import BlogNavigation from '@/components/BlogNavigation';
 import BlogFilter from '@/components/BlogFilter';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import ComplianceFooter from '@/components/ComplianceFooter';
+import SubmitStoryCTA from '@/components/blog/SubmitStoryCTA';
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -704,6 +705,11 @@ export default function BlogPage() {
             })}
           </div>
         )}
+      </section>
+
+      {/* Submit Story CTA */}
+      <section className="section-container" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+        <SubmitStoryCTA variant="highlight" />
       </section>
 
       <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '60px' }}>

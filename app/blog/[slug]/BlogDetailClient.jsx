@@ -29,6 +29,12 @@ import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import BlogDisclaimer from '@/components/shared/BlogDisclaimer';
 import { trackEvent } from '@/lib/analytics';
 
+// Blog engagement components
+import Comments from '@/components/blog/Comments';
+import SocialShare from '@/components/blog/SocialShare';
+import ViewTracker from '@/components/blog/ViewTracker';
+import PostBottomCTA from '@/components/blog/PostBottomCTA';
+
 function isMobileViewport() {
   if (typeof window === 'undefined') return false;
   const w = window.innerWidth || 0;
@@ -913,6 +919,23 @@ export default function BlogDetailClient({ slug }) {
             </div>
           </div>
         )}
+
+        {/* View Tracker - tracks view after 10 seconds */}
+        <ViewTracker postId={post.id || slug} slug={slug} />
+
+        {/* Social Share Buttons */}
+        <SocialShare 
+          url={typeof window !== 'undefined' ? window.location.href : `https://bmwealth.co.in/blog/${slug}`}
+          title={post.title}
+          description={post.excerpt}
+          tags={post.tags?.map(t => `#${t.replace(/\s+/g, '')}`)}
+        />
+
+        {/* Post Bottom CTA - Newsletter + Submit Story */}
+        <PostBottomCTA title="Enjoyed this article?" />
+
+        {/* Comments Section */}
+        <Comments postId={post.id || slug} postTitle={post.title} />
 
         {/* Blog-only: Next Read + WhatsApp CTA (always present, premium, hover-ready) */}
         <div style={{ marginTop: '44px' }}>
