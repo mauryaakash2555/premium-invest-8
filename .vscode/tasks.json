@@ -381,7 +381,7 @@
 			"command": "npm",
 			"args": [
 				"run",
-				"dev"
+				"dev:reliable"
 			],
 			"isBackground": true,
 			"problemMatcher": [
@@ -674,6 +674,18 @@
 			"group": "test"
 		},
 		{
+			"label": "test-itr-filing-help-e2e-skip-webserver",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && set PLAYWRIGHT_SKIP_WEB_SERVER=1&& set BASE_URL=http://127.0.0.1:3000&& npx playwright test tests/e2e/itr-filing-help.spec.js --reporter=line --workers=1 > .tmp_itr_filing_help_e2e.log 2>&1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
 			"label": "qa-get-tools-status",
 			"type": "shell",
 			"command": "pwsh",
@@ -920,6 +932,48 @@
 			"args": [
 				"/c",
 				"cd /d \"c:\\Users\\admin\\premium-invest-8\" && set PLAYWRIGHT_SKIP_WEB_SERVER=1 && set BASE_URL=http://127.0.0.1:3000 && npx playwright test tests/e2e/learn-separation.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "run itr-filing-help playwright (skip webserver)",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"cd /d \"c:\\Users\\admin\\premium-invest-8\" && set PLAYWRIGHT_SKIP_WEB_SERVER=1&& set BASE_URL=http://127.0.0.1:3000&& npx playwright test tests/e2e/itr-filing-help.spec.js --reporter=line --workers=1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "qa-extract-bmwealth-oklch",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference='Stop'; $u='https://bmwealth.co.in/about'; $html=(Invoke-WebRequest -Uri $u -UseBasicParsing).Content; $cssLinks=[regex]::Matches($html,'<link[^>]+rel=\"stylesheet\"[^>]+href=\"([^\"]+)\"','IgnoreCase') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique; Write-Output ('stylesheets='+($cssLinks.Count)); $cssLinks | ForEach-Object { Write-Output $_ }; $oklch=@(); foreach($l in $cssLinks){ $abs = if($l -match '^https?://'){ $l } elseif($l.StartsWith('/')){ 'https://bmwealth.co.in'+$l } else { 'https://bmwealth.co.in/'+$l }; try{ $css=(Invoke-WebRequest -Uri $abs -UseBasicParsing).Content; $m=[regex]::Matches($css,'oklch\\([^\\)]+\\)'); foreach($x in $m){ $oklch += $x.Value } } catch { Write-Output ('failed='+$abs) } }; $oklch = $oklch | Select-Object -Unique; Write-Output ('unique_oklch='+$oklch.Count); $oklch | Sort-Object | Select-Object -First 200"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "qa-extract-bmwealth-oklch-to-file",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference='Continue'; $u='https://bmwealth.co.in/about'; $out=@(); $out += 'url='+$u; try{ $html=(Invoke-WebRequest -Uri $u -UseBasicParsing).Content } catch { $out += 'ERROR: failed to fetch html'; $out += $_.Exception.Message; $out | Set-Content -Encoding UTF8 .tmp_bm_oklch_extract.txt; exit 0 }; $cssLinks=[regex]::Matches($html,'<link[^>]+rel=\"stylesheet\"[^>]+href=\"([^\"]+)\"','IgnoreCase') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique; $out += 'stylesheets='+($cssLinks.Count); $out += ($cssLinks | ForEach-Object { 'css='+$_ }); $oklch=@(); foreach($l in $cssLinks){ $abs = if($l -match '^https?://'){ $l } elseif($l.StartsWith('/')){ 'https://bmwealth.co.in'+$l } else { 'https://bmwealth.co.in/'+$l }; try{ $css=(Invoke-WebRequest -Uri $abs -UseBasicParsing).Content; $m=[regex]::Matches($css,'oklch\\([^\\)]+\\)'); foreach($x in $m){ $oklch += $x.Value } } catch { $out += 'failed='+$abs } }; $oklch = $oklch | Select-Object -Unique; $out += 'unique_oklch='+$oklch.Count; $out += ($oklch | Sort-Object | Select-Object -First 400); $out | Set-Content -Encoding UTF8 .tmp_bm_oklch_extract.txt; exit 0"
 			],
 			"isBackground": false,
 			"group": "test"

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import AskFirstLearningExperience from '@/components/learn/AskFirstLearningExperience';
+import AskFirstInfiniteLearning from './AskFirstInfiniteClient';
 
 export default function LearnPage() {
   useEffect(() => {
@@ -24,5 +24,5 @@ export default function LearnPage() {
     };
   }, []);
 
-  return <AskFirstLearningExperience />;
+  return <AskFirstInfiniteLearning />;
 }

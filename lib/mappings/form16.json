@@ -2,40 +2,148 @@
   "docType": "form16",
   "fields": [
     {
+      "key": "employer_name",
+      "label": "Employer Name",
+      "type": "text",
+      "synonyms": ["name and address of the employer", "name of the employer", "employer name"]
+    },
+    {
+      "key": "employee_name",
+      "label": "Employee Name",
+      "type": "text",
+      "synonyms": ["name and address of the employee", "name of the employee", "employee name"]
+    },
+    {
+      "key": "pan_employee",
+      "label": "Employee PAN",
+      "type": "pan",
+      "synonyms": ["pan of the employee", "pan of employee", "employee pan"]
+    },
+    {
+      "key": "tan_employer",
+      "label": "Employer TAN",
+      "type": "tan",
+      "synonyms": ["tan of the deductor", "tan of deductor", "employer tan", "tan no"]
+    },
+    {
+      "key": "assessment_year",
+      "label": "Assessment Year",
+      "type": "year",
+      "synonyms": ["assessment year", "a.y.", "ay"]
+    },
+    {
       "key": "gross_salary",
-      "label": "Gross Salary",
-      "synonyms": [
-        "gross salary",
-        "gross salary as per provisions",
-        "salary as per provisions",
-        "gross salary (total)"
-      ]
+      "label": "Gross Salary (17(1))",
+      "type": "amount",
+      "synonyms": ["gross salary", "salary as per provisions", "salary as per section 17(1)", "gross salary as per provisions contained in section 17(1)", "1. gross salary"]
+    },
+    {
+      "key": "value_of_perquisites",
+      "label": "Value of Perquisites (17(2))",
+      "type": "amount",
+      "synonyms": ["value of perquisites", "perquisites u/s 17(2)", "17(2)"]
+    },
+    {
+      "key": "profits_in_lieu",
+      "label": "Profits in lieu of salary (17(3))",
+      "type": "amount",
+      "synonyms": ["profits in lieu of salary", "17(3)"]
+    },
+    {
+      "key": "allowances_10_exempt",
+      "label": "Allowances exempt u/s 10",
+      "type": "amount",
+      "synonyms": ["allowances to the extent exempt under section 10", "exempt allowances", "less: allowances", "allowance u/s 10"]
     },
     {
       "key": "standard_deduction",
       "label": "Standard Deduction",
-      "synonyms": [
-        "standard deduction"
-      ]
+      "type": "amount",
+      "synonyms": ["standard deduction", "standard deduction u/s 16(ia)", "16(ia)"]
+    },
+    {
+      "key": "professional_tax",
+      "label": "Professional Tax",
+      "type": "amount",
+      "synonyms": ["tax on employment", "professional tax", "16(iii)"]
+    },
+    {
+      "key": "income_from_salary",
+      "label": "Income from Salary",
+      "type": "amount",
+      "synonyms": ["income chargeable under the head salaries", "income from salary", "income chargeable"]
+    },
+    {
+      "key": "gross_total_income",
+      "label": "Gross Total Income",
+      "type": "amount",
+      "synonyms": ["gross total income", "7. gross total income"]
+    },
+    {
+      "key": "deduction_80c",
+      "label": "Deduction under 80C",
+      "type": "amount",
+      "synonyms": ["80c", "section 80c", "deduction under section 80c", "80ccc", "80ccd"]
+    },
+    {
+      "key": "deduction_80d",
+      "label": "Deduction under 80D",
+      "type": "amount",
+      "synonyms": ["80d", "section 80d", "medical insurance"]
+    },
+    {
+      "key": "total_deductions",
+      "label": "Total Deductions (Chapter VI-A)",
+      "type": "amount",
+      "synonyms": ["aggregate of deductible amount under chapter vi-a", "total chapter vi-a", "deductions under chapter vi-a"]
+    },
+    {
+      "key": "total_taxable_income",
+      "label": "Total Taxable Income",
+      "type": "amount",
+      "synonyms": ["total taxable income", "total income"]
+    },
+    {
+      "key": "tax_on_total_income",
+      "label": "Tax on Total Income",
+      "type": "amount",
+      "synonyms": ["tax on total income", "income tax"]
+    },
+    {
+      "key": "rebate_87a",
+      "label": "Rebate u/s 87A",
+      "type": "amount",
+      "synonyms": ["rebate under section 87a", "87a rebate", "rebate"]
+    },
+    {
+      "key": "surcharge",
+      "label": "Surcharge",
+      "type": "amount",
+      "synonyms": ["surcharge"]
+    },
+    {
+      "key": "cess",
+      "label": "Health & Education Cess",
+      "type": "amount",
+      "synonyms": ["health and education cess", "cess", "4% cess"]
+    },
+    {
+      "key": "total_tax_payable",
+      "label": "Total Tax Payable",
+      "type": "amount",
+      "synonyms": ["tax payable", "total tax"]
     },
     {
       "key": "tds_total",
-      "label": "Total TDS",
-      "synonyms": [
-        "tds",
-        "total tds",
-        "total tax deducted",
-        "tax deducted at source",
-        "total tax deducted at source"
-      ]
+      "label": "Total TDS Deducted",
+      "type": "amount",
+      "synonyms": ["total amount of tax deducted", "tax deducted", "tds", "total tds", "tax deducted at source"]
     },
     {
       "key": "net_tax_payable",
       "label": "Net Tax Payable",
-      "synonyms": [
-        "net tax payable",
-        "tax payable"
-      ]
+      "type": "amount",
+      "synonyms": ["net tax payable"]
     }
   ]
 }

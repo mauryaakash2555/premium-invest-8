@@ -27,8 +27,10 @@ import { TaxCalculationMode, type TaxCalculationModeKey } from "./TaxCalculation
 import { LakhTooltip, formatLakhsInlineText } from "./LakhTooltip";
 import { LangProvider } from "./LangContext";
 import { LanguageToggle } from "./LanguageToggle";
-import { ModeToggle, type SIPUiMode } from "./ModeToggle";
+import type { SIPUiMode } from "./ModeToggle";
+import { TierSelector, type SIPTier } from "./TierSelector";
 import { BeginnerModeView } from "./BeginnerModeView";
+import { FormulaPanel } from "./FormulaPanel";
 import { OnboardingWizard, type AvatarKey, type CrashPreset, type OnboardingResult } from "./OnboardingWizard";
 import { ShareResultCard } from "./ShareResultCard";
 import type { Lang } from "./i18n";
@@ -46,6 +48,7 @@ const LANG_KEY = "bm.sipPanicSelling.lang";
 const INVESTMENT_TYPE_KEY = "bm.sipPanicSelling.investmentType";
 const QUIZ_PROFILE_KEY = "bm.sipPanicSelling.quizProfileV1";
 const UI_MODE_KEY = "bm.sipPanicSelling.uiMode";
+const TIER_KEY = "bm.sipPanicSelling.tier";
 const ONBOARDING_V1_KEY = "bm.sipPanicSelling.onboardingV1Completed";
 const AVATAR_KEY = "bm.sipPanicSelling.avatarV1";
 
@@ -98,6 +101,11 @@ function safeLang(v: string | null): Lang | null {
 
 function safeUiMode(v: string | null): SIPUiMode | null {
   if (v === "beginner" || v === "advanced") return v;
+  return null;
+}
+
+function safeTier(v: string | null): SIPTier | null {
+  if (v === "story" || v === "learning" || v === "pro") return v;
   return null;
 }
 
@@ -193,6 +201,7 @@ export default function SIPPanicPage(props?: {
   const qsPartner = searchParams?.get("partner") || "";
   const qsMode = searchParams?.get("mode") || "";
   const qsUi = searchParams?.get("ui") || "";
+  const qsTier = safeTier(searchParams?.get("tier") ?? null);
   const qsHideDisclaimer = searchParams?.get("hideDisclaimer") === "1";
   const qsCta = searchParams?.get("cta") === "1";
   const qsCtaText = searchParams?.get("ctaText") || "";
@@ -216,6 +225,8 @@ export default function SIPPanicPage(props?: {
   const [inputs, setInputs] = useState({ monthlyAmount: 10_000, durationYears: 10 });
 
   const [uiMode, setUiMode] = useState<SIPUiMode>("beginner");
+
+  const [tier, setTier] = useState<SIPTier>("learning");
 
   const [riskComfort, setRiskComfort] = useState<"conservative" | "moderate" | "aggressive">("moderate");
 
@@ -515,25 +526,76 @@ export default function SIPPanicPage(props?: {
   }, []);
 
   useEffect(() => {
-    const fromQuery = safeUiMode((qsMode || qsUi || "").toLowerCase());
-    if (fromQuery) {
-      setUiMode(fromQuery);
+    // New 3-tier selector (tier=story|learning|pro)
+    if (qsTier) {
+      setTier(qsTier);
+      setUiMode(qsTier === "pro" ? "advanced" : "beginner");
+      try {
+        window.localStorage.setItem(TIER_KEY, qsTier);
+        window.localStorage.setItem(UI_MODE_KEY, qsTier === "pro" ? "advanced" : "beginner");
+      } catch {
+        // ignore
+      }
       return;
     }
 
+    // If deep-linked into story, default tier to story.
+    if (qsStory) {
+      setTier("story");
+      setUiMode("beginner");
+      return;
+    }
+
+    // Backward-compatible (ui=beginner|advanced).
+    const fromQuery = safeUiMode((qsMode || qsUi || "").toLowerCase());
+    if (fromQuery) {
+      setUiMode(fromQuery);
+      setTier(fromQuery === "advanced" ? "pro" : "learning");
+      return;
+    }
+
+    // Restore tier (preferred).
     try {
-      const saved = safeUiMode(window.localStorage.getItem(UI_MODE_KEY));
-      // Always default to beginner (brand + UX). Only restore a saved mode if it's beginner.
-      if (saved === "beginner") setUiMode(saved);
+      const savedTier = safeTier(window.localStorage.getItem(TIER_KEY));
+      if (savedTier) {
+        setTier(savedTier);
+        setUiMode(savedTier === "pro" ? "advanced" : "beginner");
+        return;
+      }
     } catch {
       // ignore
     }
-  }, [qsMode, qsUi]);
+
+    // Legacy restore: keep beginner by default.
+    try {
+      const saved = safeUiMode(window.localStorage.getItem(UI_MODE_KEY));
+      if (saved === "beginner") {
+        setUiMode(saved);
+        setTier("learning");
+      }
+    } catch {
+      // ignore
+    }
+  }, [qsMode, qsStory, qsTier, qsUi]);
+
+  const onTierChange = (next: SIPTier) => {
+    setTier(next);
+    const nextUi: SIPUiMode = next === "pro" ? "advanced" : "beginner";
+    setUiMode(nextUi);
+    try {
+      window.localStorage.setItem(TIER_KEY, next);
+      window.localStorage.setItem(UI_MODE_KEY, nextUi);
+    } catch {
+      // ignore
+    }
+  };
 
   const onUiModeChange = (next: SIPUiMode) => {
     setUiMode(next);
+    setTier(next === "advanced" ? "pro" : "learning");
     try {
       window.localStorage.setItem(UI_MODE_KEY, next);
+      window.localStorage.setItem(TIER_KEY, next === "advanced" ? "pro" : "learning");
     } catch {
       // ignore
     }
@@ -1001,7 +1063,7 @@ export default function SIPPanicPage(props?: {
             </div>
 
             <div className="mt-5">
-              <ModeToggle currentMode={uiMode} onChange={onUiModeChange} />
+              <TierSelector tier={tier} onChange={onTierChange} />
             </div>
 
             {uiMode === "advanced" ? (
@@ -1032,10 +1094,10 @@ export default function SIPPanicPage(props?: {
                 }))
               }
               onRequestAdvanced={() => onUiModeChange("advanced")}
-              initialStoryChoice={qsStory && !qsChallenge ? (qsStoryChoice ?? undefined) : undefined}
+              initialStoryChoice={(qsStory || tier === "story") && !qsChallenge ? (qsStoryChoice ?? undefined) : undefined}
               challengerChoice={qsChallenge ? (qsChallengerChoice ?? undefined) : undefined}
               initialStoryStep={
-                qsStory
+                qsStory || tier === "story"
                   ? qsChallenge
                     ? 1
                     : qsStoryChoice
@@ -1043,6 +1105,7 @@ export default function SIPPanicPage(props?: {
                     : 0
                   : undefined
               }
+              tier={tier === "story" ? "story" : "learning"}
             />
           ) : (
             <>
@@ -1052,6 +1115,8 @@ export default function SIPPanicPage(props?: {
                   Tax assumptions, scenario builders, risk profile, crash presets, and all details.
                 </div>
               </div>
+
+              <FormulaPanel />
 
               <SocialProofBanner />
 

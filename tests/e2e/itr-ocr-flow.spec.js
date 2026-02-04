@@ -60,6 +60,6 @@ test.describe('ITR OCR pipeline (digital PDF)', () => {
 
     // UI smoke: tool page loads.
     await page.goto('/tools/itr-filing-help');
-    await expect(page.getByText('Upload → Extract → Review → Validate → Export')).toBeVisible();
+    await expect(page.getByText('Upload Documents')).toBeVisible();
   });
 });

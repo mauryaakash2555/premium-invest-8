@@ -27,8 +27,6 @@ import { useRouter } from 'next/navigation';
 // This ensures 1:1 parity - any overlay changes automatically apply here
 import { LiveIntelligencePanel } from '@/components/user/LiveIntelligenceOverlay';
 
-import LearningProgressSummary from '@/components/learn/LearningProgressSummary';
-
 // Import LaserFooter - the SAME footer used by the overlay (NOT the system Footer)
 import LaserFooter from '@/components/user/LaserFooter';
 
@@ -39,6 +37,45 @@ export default function LiveIntelligencePage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Force top-of-page on entry so the sticky close button is visible.
+    // Also disable scroll restoration while on this route (Next/browser can restore last scroll).
+    let prevRestoration;
+    try {
+      if (typeof window !== 'undefined' && 'history' in window) {
+        prevRestoration = window.history.scrollRestoration;
+        window.history.scrollRestoration = 'manual';
+      }
+    } catch {}
+    try {
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+        window.requestAnimationFrame(() => window.scrollTo(0, 0));
+      }
+    } catch {}
+
+    // Some embedded widgets can steal focus and cause an initial scroll jump.
+    // Guard for the first moment after mount.
+    let guardTimer;
+    const startedAt = Date.now();
+    const onScrollGuard = () => {
+      if (Date.now() - startedAt > 900) return;
+      try {
+        if (typeof window !== 'undefined' && window.scrollY > 0) {
+          window.scrollTo(0, 0);
+        }
+      } catch {}
+    };
+    try {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('scroll', onScrollGuard, { passive: true });
+        guardTimer = window.setTimeout(() => {
+          try {
+            window.removeEventListener('scroll', onScrollGuard);
+          } catch {}
+        }, 950);
+      }
+    } catch {}
+
     // Set body attribute for consistent styling (hides mobile dock, etc.)
     if (typeof document !== 'undefined' && document.body) {
       document.body.setAttribute('data-laser-active', 'true');
@@ -48,12 +85,25 @@ export default function LiveIntelligencePage() {
       document.documentElement.setAttribute('data-laser-active', 'true');
     }
     return () => {
+      try {
+        if (typeof window !== 'undefined') {
+          if (guardTimer) window.clearTimeout(guardTimer);
+          window.removeEventListener('scroll', onScrollGuard);
+        }
+      } catch {}
+
       if (typeof document !== 'undefined' && document.body) {
         document.body.removeAttribute('data-laser-active');
       }
       if (typeof document !== 'undefined' && document.documentElement) {
         document.documentElement.removeAttribute('data-laser-active');
       }
+
+      try {
+        if (typeof window !== 'undefined' && prevRestoration) {
+          window.history.scrollRestoration = prevRestoration;
+        }
+      } catch {}
     };
   }, []);
 
@@ -82,7 +132,7 @@ export default function LiveIntelligencePage() {
           zIndex: 200,
         }}
       >
-        <LearningProgressSummary />
+        {/* Intentionally blank: no learning widgets on /live-intelligence */}
       </div>
 
       {/* Render the EXACT same panel as the overlay */}

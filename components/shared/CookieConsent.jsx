@@ -8,9 +8,10 @@ export default function CookieConsent() {
   const [show, setShow] = useState(false);
   const pathname = usePathname();
   const hideOnLiveMood = false;
+  const hideOnLearn = typeof pathname === "string" && pathname.startsWith("/learn");
 
   useEffect(() => {
-    if (hideOnLiveMood) {
+    if (hideOnLiveMood || hideOnLearn) {
       setShow(false);
       return;
     }
@@ -32,7 +33,7 @@ export default function CookieConsent() {
     setShow(false);
   };
 
-  if (hideOnLiveMood || !show) return null;
+  if (hideOnLiveMood || hideOnLearn || !show) return null;
 
   return (
     <div

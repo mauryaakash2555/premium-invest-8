@@ -7,7 +7,6 @@ export default function LiveIntelligenceError({ error, reset }) {
   useEffect(() => {
     // Keep a breadcrumb in the browser console for staging/production debugging.
     // (This file is route-scoped; it will not affect the rest of the site.)
-    // eslint-disable-next-line no-console
     console.error('[live-intelligence] route error:', error);
   }, [error]);
 

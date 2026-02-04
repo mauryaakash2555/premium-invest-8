@@ -344,6 +344,20 @@ export default function LiveIntelligenceOverlay({
     if (isOpen || isAnimating) return;
     setIsAnimating(true);
     setIsOpen(true);
+
+    // Always start at the top so the close button is in view.
+    // (Sticky doesn't help if the scroll container opens mid-scroll.)
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        try {
+          if (overlayRef?.current) {
+            overlayRef.current.scrollTo?.({ top: 0, left: 0, behavior: 'auto' });
+            overlayRef.current.scrollTop = 0;
+          }
+        } catch {}
+      });
+    }
+
     if (typeof document !== 'undefined' && document.body) {
       document.body.style.overflow = 'hidden';
       document.body.setAttribute('data-laser-active', 'true');
@@ -2331,15 +2345,13 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
         }
       `}</style>
 
-      {/* Sticky close (moves with scroll container) */}
+      {/* Fixed close (always visible) */}
       <div
         style={{
-          position: 'sticky',
+          position: 'fixed',
           top: 'max(10px, env(safe-area-inset-top, 0px))',
-          zIndex: 99999,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          padding: '10px 12px 0',
+          right: 'max(10px, env(safe-area-inset-right, 0px))',
+          zIndex: 999999,
           pointerEvents: 'none',
         }}
       >

@@ -7,8 +7,10 @@ import { spawn } from 'node:child_process';
 import { ensureSessionId } from '@/lib/itr/session';
 import { getFileMeta, readFileBytes, writeJsonAtomic, saveFileMeta } from '@/lib/itr/storage';
 import { rawPathForFile, ocrPathForFile, extractionPathForFile } from '@/lib/itr/paths';
-import { detectDocTypeFromText } from '@/lib/itr/docDetection';
-import { mapFieldsFromPdfPlumberRaw } from '@/lib/itr/mapping';
+import { detectDocTypeFromText, detectPdfKind } from '@/lib/itr/docDetection';
+import { mapFieldsFromPdfPlumberRaw, mapFieldsFromOcrPages } from '@/lib/itr/mapping';
+import { auditLogPath } from '@/lib/itr/paths';
+import fs from 'node:fs';
 
 async function runPdfPlumberExtract(pdfBytes) {
   const scriptPath = path.join(process.cwd(), 'scripts', 'pdfplumber_extract.py');
@@ -46,6 +48,11 @@ async function runPdfPlumberExtract(pdfBytes) {
   }
 
   throw lastErr || new Error('pdfplumber unavailable');
+}
+
+function appendAuditLine(filePath, obj) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.appendFileSync(filePath, JSON.stringify(obj) + '\n', 'utf8');
 }
 
 async function runOcrWorker({ bytes, filename }) {
@@ -126,11 +133,45 @@ export async function POST(request) {
       const bytes = readFileBytes(meta.diskPath);
       const filename = meta.filename;
 
-      if (meta.type === 'DIGITAL_PDF') {
-        const raw = await runPdfPlumberExtract(bytes);
+      const isPdf = String(filename || '').toLowerCase().endsWith('.pdf') || String(meta.contentType || '').includes('pdf');
+
+      // Always perform PDF type detection BEFORE any OCR.
+      // If selectable text exists -> DIGITAL_PDF, else -> SCANNED_PDF.
+      let pdfPlumberRaw = null;
+      let pdfHasSelectableText = null;
+      let extractedAllText = '';
+      let detectedKind = meta.type;
+
+      if (isPdf) {
+        try {
+          pdfPlumberRaw = await runPdfPlumberExtract(bytes);
+          extractedAllText = Array.isArray(pdfPlumberRaw?.pages)
+            ? pdfPlumberRaw.pages.map((p) => p?.text || '').join('\n\n')
+            : '';
+          pdfHasSelectableText = !!pdfPlumberRaw?.hasSelectableText;
+          detectedKind = detectPdfKind({ hasSelectableText: pdfHasSelectableText, extractedText: extractedAllText });
+        } catch (e) {
+          // If pdfplumber is unavailable we conservatively treat as scanned.
+          pdfPlumberRaw = null;
+          extractedAllText = '';
+          pdfHasSelectableText = null;
+          detectedKind = 'SCANNED_PDF';
+          appendAuditLine(auditLogPath({ sessionId }), {
+            type: 'pdf_type_detection_failed',
+            sessionId,
+            fileId,
+            filename,
+            at: new Date().toISOString(),
+            message: e?.message || String(e),
+          });
+        }
+      }
+
+      if (isPdf && detectedKind === 'DIGITAL_PDF') {
+        const raw = pdfPlumberRaw || (await runPdfPlumberExtract(bytes));
         writeJsonAtomic(rawPathForFile(fileId), raw);
 
-        const allText = Array.isArray(raw?.pages) ? raw.pages.map((p) => p?.text || '').join('\n\n') : '';
+        const allText = extractedAllText || (Array.isArray(raw?.pages) ? raw.pages.map((p) => p?.text || '').join('\n\n') : '');
         const docType = meta.docType && meta.docType !== 'unknown' ? meta.docType : detectDocTypeFromText(allText);
 
         const mapped = mapFieldsFromPdfPlumberRaw({ raw, fileId, filename, docType });
@@ -146,29 +187,114 @@ export async function POST(request) {
         };
 
         writeJsonAtomic(extractionPathForFile(fileId), extraction);
-        saveFileMeta(fileId, { ...meta, docType });
+        saveFileMeta(fileId, { ...meta, type: 'DIGITAL_PDF', docType });
+
+        for (const f of extraction.fields || []) {
+          appendAuditLine(auditLogPath({ sessionId }), {
+            type: 'extracted_field',
+            method: 'pdfplumber',
+            sessionId,
+            fileId,
+            filename,
+            fieldKey: f?.key,
+            label: f?.label,
+            valueText: f?.valueText ?? null,
+            confidence: f?.source?.confidence ?? null,
+            source: f?.source ?? null,
+            status: f?.status,
+            reason: f?.reason ?? null,
+            at: new Date().toISOString(),
+          });
+        }
 
         outputs.push({ fileId, ok: true, kind: 'DIGITAL_PDF', docType, fields: extraction.fields });
         continue;
       }
 
-      // SCANNED_PDF or image: run OCR worker and map using label matching (OCR mapping is basic in v1).
-      const ocr = await runOcrWorker({ bytes, filename });
-      writeJsonAtomic(ocrPathForFile(fileId), ocr);
+      // SCANNED_PDF or image: run OCR worker (fallback-only). Never guess.
+      // If OCR worker is unavailable, provide manual entry fields.
+      let ocr = null;
+      let ocrError = null;
+      try {
+        ocr = await runOcrWorker({ bytes, filename });
+        writeJsonAtomic(ocrPathForFile(fileId), ocr);
+      } catch (e) {
+        ocrError = e?.message || String(e);
+        appendAuditLine(auditLogPath({ sessionId }), {
+          type: 'ocr_worker_failed',
+          sessionId,
+          fileId,
+          filename,
+          at: new Date().toISOString(),
+          message: ocrError,
+        });
+      }
 
-      const docType = meta.docType || 'unknown';
+      const docType = meta.docType && meta.docType !== 'unknown' ? meta.docType : detectDocTypeFromText(extractedAllText || '');
+      
+      // If OCR failed, create placeholder fields for manual entry
+      let mapped;
+      if (ocr) {
+        mapped = mapFieldsFromOcrPages({ ocr, fileId, filename, docType, minConfidence: 0.85 });
+      } else {
+        // Create manual entry fields from mapping
+        const mapping = { form16: await import('@/lib/mappings/form16.json'), ais: await import('@/lib/mappings/ais.json'), bank: await import('@/lib/mappings/bank.json') }[docType]?.default || null;
+        const fieldDefs = mapping?.fields || [];
+        const manualFields = fieldDefs.map((def) => ({
+          key: def.key,
+          label: def.label,
+          valueText: null,
+          status: 'FLAGGED',
+          reason: 'OCR_UNAVAILABLE_MANUAL_ENTRY_REQUIRED',
+          source: {
+            source_file: fileId,
+            filename,
+            page: 1,
+            bbox: null,
+            raw_text_token: null,
+            raw_line_text: null,
+            confidence: null,
+          },
+        }));
+        mapped = { docType, fields: manualFields, warnings: ['OCR unavailable - please enter values manually while viewing the PDF'] };
+      }
+
       const extraction = {
         fileId,
         filename,
         kind: 'SCANNED_PDF',
         docType,
-        fields: Array.isArray(ocr?.fields) ? ocr.fields : [],
-        warnings: Array.isArray(ocr?.warnings) ? ocr.warnings : [],
+        fields: mapped.fields,
+        warnings: [...(ocrError ? [`OCR failed: ${ocrError}`] : []), ...(Array.isArray(ocr?.warnings) ? ocr.warnings : []), ...(Array.isArray(mapped?.warnings) ? mapped.warnings : [])],
         createdAt: new Date().toISOString(),
+        ocrMeta: {
+          method: ocr?.method || 'manual_fallback',
+          overallConfidence: typeof ocr?.overallConfidence === 'number' ? ocr.overallConfidence : null,
+          ocrError: ocrError || null,
+        },
       };
       writeJsonAtomic(extractionPathForFile(fileId), extraction);
+      saveFileMeta(fileId, { ...meta, type: 'SCANNED_PDF', docType });
 
-      outputs.push({ fileId, ok: true, kind: 'SCANNED_PDF', docType, fields: extraction.fields });
+      for (const f of extraction.fields || []) {
+        appendAuditLine(auditLogPath({ sessionId }), {
+          type: 'extracted_field',
+          method: ocr?.method || 'manual_fallback',
+          sessionId,
+          fileId,
+          filename,
+          fieldKey: f?.key,
+          label: f?.label,
+          valueText: f?.valueText ?? null,
+          confidence: f?.source?.confidence ?? null,
+          source: f?.source ?? null,
+          status: f?.status,
+          reason: f?.reason ?? null,
+          at: new Date().toISOString(),
+        });
+      }
+
+      outputs.push({ fileId, ok: true, kind: 'SCANNED_PDF', docType, fields: extraction.fields, warnings: extraction.warnings });
     }
 
     const resp = NextResponse.json({ ok: true, results: outputs }, { status: 200 });

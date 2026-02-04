@@ -45,7 +45,6 @@ export default function AdminQueuePage() {
 
   useEffect(() => {
     refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminToken]);
 
   const selectedId = selected?._id;

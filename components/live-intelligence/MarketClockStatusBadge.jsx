@@ -81,7 +81,9 @@ function formatCountdown(ms) {
 }
 
 export default function MarketClockStatusBadge() {
-  const [ist, setIst] = useState(() => getIstNow());
+  // IMPORTANT: avoid hydration mismatch by not rendering a real-time clock value
+  // during the server render. Populate after mount.
+  const [ist, setIst] = useState(null);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -123,6 +125,18 @@ export default function MarketClockStatusBadge() {
   }, []);
 
   const ui = useMemo(() => {
+    if (!ist) {
+      return {
+        phase: { phase: '—', isOpen: false },
+        boundary: { label: 'Opens in', target: new Date(0) },
+        countdown: '—',
+        timeStr: '--:--:--',
+        boundaryExact: '',
+        color: 'rgba(180,200,230,0.55)',
+        dim: 'rgba(180,200,230,0.08)',
+        border: 'rgba(180,200,230,0.18)',
+      };
+    }
     const phase = getMarketPhase(ist);
     const boundary = nextMarketBoundary(ist);
     const ms = boundary.target.getTime() - ist.getTime();

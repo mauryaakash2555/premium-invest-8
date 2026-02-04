@@ -53,51 +53,33 @@ export async function POST(request) {
       }
     }
 
-    // Layer 2: cross-doc checks (basic)
-    const tds = [];
-    const interest = [];
+    // Layer 2: cross-doc checks (Form16 vs AIS vs Bank)
+    // Non-negotiable rule: if mismatch > ₹1, FLAG and require manual confirmation.
+    const CROSS_CHECK_KEYS = ['tds_total', 'interest_total'];
 
-    for (const ex of extractedByFile) {
-      for (const f of ex.fields || []) {
-        if (f.key === 'tds_total') tds.push(f);
-        if (f.key === 'interest_total') interest.push(f);
-      }
-    }
-
-    if (tds.length >= 2) {
-      const nums = tds.map((t) => ({ f: t, n: parseInrNumber(t.valueText) })).filter((x) => x.n !== null);
-      if (nums.length >= 2) {
-        const base = nums[0].n;
-        for (let i = 1; i < nums.length; i++) {
-          const delta = Math.abs(nums[i].n - base);
-          if (delta > 1) {
-            flags.push(
-              flag(
-                'tds_total',
-                'Mismatch detected: [fieldA] vs [fieldB]. Please review highlighted source locations and confirm values.',
-                [nums[0].f.source, nums[i].f.source].filter(Boolean)
-              )
-            );
-          }
+    for (const key of CROSS_CHECK_KEYS) {
+      const seen = [];
+      for (const ex of extractedByFile) {
+        for (const f of ex.fields || []) {
+          if (f?.key !== key) continue;
+          const n = parseInrNumber(f.valueText);
+          if (n === null) continue;
+          seen.push({ f, n, docType: ex?.docType || 'unknown' });
         }
       }
-    }
 
-    if (interest.length >= 2) {
-      const nums = interest.map((t) => ({ f: t, n: parseInrNumber(t.valueText) })).filter((x) => x.n !== null);
-      if (nums.length >= 2) {
-        const base = nums[0].n;
-        for (let i = 1; i < nums.length; i++) {
-          const delta = Math.abs(nums[i].n - base);
-          if (delta > 1) {
-            flags.push(
-              flag(
-                'interest_total',
-                'Mismatch detected: [fieldA] vs [fieldB]. Please review highlighted source locations and confirm values.',
-                [nums[0].f.source, nums[i].f.source].filter(Boolean)
-              )
-            );
-          }
+      if (seen.length < 2) continue;
+
+      const base = seen[0];
+      for (let i = 1; i < seen.length; i++) {
+        const cur = seen[i];
+        const delta = Math.abs(cur.n - base.n);
+        if (delta > 1) {
+          const msg =
+            key === 'tds_total'
+              ? 'Mismatch detected: Form16 vs AIS (TDS). If mismatch > ₹1, confirm from highlighted sources.'
+              : 'Mismatch detected: AIS vs Bank (Interest). If mismatch > ₹1, confirm from highlighted sources.';
+          flags.push(flag(key, msg, [base.f.source, cur.f.source].filter(Boolean)));
         }
       }
     }

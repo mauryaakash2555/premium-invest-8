@@ -26,12 +26,12 @@ export default function ITRFilingHelpPage() {
     {
       question: "Is my data stored or shared?",
       answer:
-        "Your files are not shared. To support review, source-highlights, audit history, and exports, uploaded documents may be stored for your session (up to 30 days) unless you delete them sooner. Selectable-text PDFs can be extracted server-side via pdfplumber; scanned documents may require OCR. No automatic numeric guessing is performed — you must review and confirm every value.",
+        "Your files are not shared. To support review, source-highlights, audit history, and exports, uploaded documents may be stored for your session (up to 30 days) unless you delete them sooner. The system detects whether a PDF has selectable text: digital PDFs are extracted without OCR using coordinate-based parsing; scanned PDFs use OCR only as a fallback. No automatic numeric guessing is performed — you must review and confirm every value.",
     },
     {
       question: "How accurate is the OCR extraction?",
       answer:
-        "Extraction accuracy depends on document quality. All extracted values are editable — you must review and correct them before calculating your estimate.",
+        "Extraction accuracy depends on document quality. OCR is used only for scanned documents and only when confidence is high; otherwise fields are flagged for manual confirmation. All values are editable — you must review and correct them before using the estimate.",
     },
     {
       question: "Which documents are supported?",
@@ -115,7 +115,7 @@ export default function ITRFilingHelpPage() {
                 <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6">
                   <ol className="space-y-3 text-sm text-white/70 list-decimal list-inside">
                     <li><strong className="text-white/90">Upload a supported PDF</strong> — Form 16, AIS, or Bank Interest Statement</li>
-                    <li><strong className="text-white/90">OCR extracts text</strong> — Using free, open-source Tesseract.js (runs locally in your browser)</li>
+                    <li><strong className="text-white/90">Detect PDF type</strong> — Digital PDFs (selectable text) are parsed without OCR; scanned PDFs fall back to OCR only if needed</li>
                     <li><strong className="text-white/90">Review extracted values</strong> — All fields are editable. You must verify accuracy</li>
                     <li><strong className="text-white/90">Select tax regime</strong> — Choose between Old or New regime for FY 2025-26</li>
                     <li><strong className="text-white/90">View estimated tax</strong> — Indicative calculation with slab-wise breakdown</li>

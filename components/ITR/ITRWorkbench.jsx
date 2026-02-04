@@ -1,31 +1,125 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import ITRDisclaimer from '@/components/Legal/ITRDisclaimer';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const PDFSourceViewer = dynamic(() => import('./PDFSourceViewer'), { ssr: false });
+const PDFSidePanel = dynamic(() => import('./PDFSidePanel'), { ssr: false });
 
-function Badge({ children, tone = 'neutral' }) {
-  const cls =
-    tone === 'ok'
-      ? 'bg-emerald-500/15 text-emerald-200 border-emerald-500/20'
-      : tone === 'warn'
-        ? 'bg-amber-500/15 text-amber-200 border-amber-500/20'
-        : 'bg-white/10 text-white/70 border-white/15';
-  return <span className={`inline-flex items-center px-2 py-0.5 text-xs rounded-full border ${cls}`}>{children}</span>;
+// Icons
+const UploadIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+  </svg>
+);
+
+const ExtractIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+  </svg>
+);
+
+const ValidateIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const DownloadIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+);
+
+const FileIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
+const TrashIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+const AlertIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+);
+
+const SpinnerIcon = () => (
+  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+  </svg>
+);
+
+function Badge({ children, variant = 'default' }) {
+  const variants = {
+    default: 'bg-slate-700/50 text-slate-300 border-slate-600/50',
+    success: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+    warning: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+    error: 'bg-red-500/20 text-red-400 border-red-500/30',
+    info: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  };
+  return (
+    <span className={`inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border ${variants[variant]}`}>
+      {children}
+    </span>
+  );
+}
+
+function Button({ children, onClick, disabled, variant = 'default', size = 'md', className = '' }) {
+  const variants = {
+    default: 'bg-slate-800 hover:bg-slate-700 text-white border-slate-600',
+    primary: 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white border-blue-500',
+    success: 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-emerald-500',
+    ghost: 'bg-transparent hover:bg-slate-800/50 text-slate-300 border-transparent',
+    danger: 'bg-red-600/20 hover:bg-red-600/30 text-red-400 border-red-500/30',
+  };
+  const sizes = {
+    sm: 'px-2.5 py-1.5 text-xs',
+    md: 'px-4 py-2 text-sm',
+    lg: 'px-6 py-3 text-base',
+  };
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`inline-flex items-center justify-center gap-2 font-medium rounded-lg border transition-all duration-200 ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function ITRWorkbench() {
   const [busy, setBusy] = useState(false);
-  const [uploaded, setUploaded] = useState([]); // [{fileId, filename, type, pages, docType}]
-  const [extractions, setExtractions] = useState({}); // fileId -> {fields:[]}
-  const [activeSource, setActiveSource] = useState(null); // {fileId, page, bbox, pageWidth, pageHeight}
+  const [busyAction, setBusyAction] = useState(null);
+  const [uploaded, setUploaded] = useState([]);
+  const [extractions, setExtractions] = useState({});
   const [message, setMessage] = useState(null);
-  const [auditOpen, setAuditOpen] = useState(false);
-  const [auditEvents, setAuditEvents] = useState([]);
+  const [messageType, setMessageType] = useState('info');
+  const [panel, setPanel] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
 
   const allFields = useMemo(() => {
     const out = [];
@@ -37,9 +131,18 @@ export default function ITRWorkbench() {
     return out;
   }, [uploaded, extractions]);
 
+  const showMessage = useCallback((msg, type = 'info') => {
+    setMessage(msg);
+    setMessageType(type);
+    if (type !== 'error') {
+      setTimeout(() => setMessage(null), 5000);
+    }
+  }, []);
+
   async function onUploadFiles(files) {
     setMessage(null);
     setBusy(true);
+    setBusyAction('upload');
     try {
       const fd = new FormData();
       for (const f of files) fd.append('files', f);
@@ -49,17 +152,24 @@ export default function ITRWorkbench() {
       if (!resp.ok) throw new Error(data?.message || data?.error || 'Upload failed');
 
       setUploaded((prev) => [...prev, ...(data.files || [])]);
-      setMessage('Uploaded. Next: Extract values (no guessing).');
+      showMessage(`✓ ${data.files?.length || 1} file(s) uploaded successfully. Click "Extract Data" to parse.`, 'success');
+
+      const first = (data.files || [])[0];
+      if (first?.fileId) {
+        setPanel({ fileId: first.fileId, page: 1, bbox: null, pageWidth: null, pageHeight: null });
+      }
     } catch (e) {
-      setMessage(e?.message || String(e));
+      showMessage(e?.message || String(e), 'error');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   }
 
   async function runExtract() {
     setMessage(null);
     setBusy(true);
+    setBusyAction('extract');
     try {
       const fileIds = uploaded.map((u) => u.fileId);
       const resp = await fetch('/api/itr/extract', {
@@ -71,40 +181,44 @@ export default function ITRWorkbench() {
       if (!resp.ok) throw new Error(data?.userMessage || data?.message || data?.error || 'Extraction failed');
 
       const next = {};
+      let totalFields = 0;
+      let flaggedFields = 0;
       for (const r of data.results || []) {
-        next[r.fileId] = { fields: r.fields || [] };
+        next[r.fileId] = { fields: r.fields || [], warnings: r.warnings || [] };
+        totalFields += (r.fields || []).length;
+        flaggedFields += (r.fields || []).filter(f => f.status === 'FLAGGED').length;
       }
       setExtractions((prev) => ({ ...prev, ...next }));
-      setMessage('Extraction complete. Review flagged fields and correct manually.');
+      
+      if (flaggedFields > 0) {
+        showMessage(`Extracted ${totalFields} fields. ${flaggedFields} need manual review (highlighted in yellow).`, 'warning');
+      } else {
+        showMessage(`✓ Extracted ${totalFields} fields successfully.`, 'success');
+      }
     } catch (e) {
-      setMessage(e?.message || String(e));
+      showMessage(e?.message || String(e), 'error');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   }
 
   async function saveOverride(fileId, fieldKey, newValueText) {
-    setMessage(null);
-    setBusy(true);
     try {
-      const resp = await fetch('/api/itr/override', {
+      await fetch('/api/itr/override', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ fileId, fieldKey, newValueText }),
       });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data?.message || data?.error || 'Override failed');
-      setMessage('Saved manual override.');
     } catch (e) {
-      setMessage(e?.message || String(e));
-    } finally {
-      setBusy(false);
+      // Silent fail for auto-save
     }
   }
 
   async function runValidate() {
     setMessage(null);
     setBusy(true);
+    setBusyAction('validate');
     try {
       const fileIds = uploaded.map((u) => u.fileId);
       const resp = await fetch('/api/itr/validate', {
@@ -114,94 +228,78 @@ export default function ITRWorkbench() {
       });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data?.message || data?.error || 'Validation failed');
-      if (data.ok) setMessage('Validation: OK');
-      else setMessage(`Validation warnings: ${data.flags?.length || 0}. Open highlighted sources and confirm values.`);
+      if (data.ok) {
+        showMessage('✓ Validation passed! All values look consistent.', 'success');
+      } else {
+        showMessage(`Found ${data.flags?.length || 0} inconsistencies. Review flagged fields.`, 'warning');
+      }
     } catch (e) {
-      setMessage(e?.message || String(e));
+      showMessage(e?.message || String(e), 'error');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   }
 
   async function deleteFile(fileId) {
-    setMessage(null);
     setBusy(true);
     try {
-      const resp = await fetch('/api/itr/delete', {
+      await fetch('/api/itr/delete', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ fileId }),
       });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data?.message || data?.error || 'Delete failed');
       setUploaded((prev) => prev.filter((u) => u.fileId !== fileId));
       setExtractions((prev) => {
         const n = { ...prev };
         delete n[fileId];
         return n;
       });
-      setMessage('Deleted file and related artifacts.');
+      if (panel?.fileId === fileId) setPanel(null);
+      showMessage('File deleted.', 'info');
     } catch (e) {
-      setMessage(e?.message || String(e));
+      showMessage(e?.message || String(e), 'error');
     } finally {
       setBusy(false);
-    }
-  }
-
-  async function fetchAudit() {
-    const resp = await fetch('/api/itr/audit', { cache: 'no-store' });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data?.message || data?.error || 'Audit fetch failed');
-    setAuditEvents(Array.isArray(data?.events) ? data.events : []);
-  }
-
-  async function toggleAudit() {
-    try {
-      if (!auditOpen) await fetchAudit();
-      setAuditOpen((v) => !v);
-    } catch (e) {
-      setMessage(e?.message || String(e));
     }
   }
 
   function exportPdfSummary() {
     const rows = allFields.map((f) => [
       String(f.label || ''),
-      String(f.valueText ?? ''),
-      String(f.status || ''),
-      f.source?.page ? `p.${f.source.page}` : '',
+      String(f.valueText ?? '-'),
+      f.status === 'OK' ? 'OK' : 'Review Required',
+      f.source?.page ? `Page ${f.source.page}` : '-',
     ]);
 
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(14);
-    doc.text('ITR Extraction Summary (Educational)', 40, 48);
+    doc.setFontSize(16);
+    doc.text('ITR Extraction Summary', 40, 48);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.text(
-      'Disclaimer: This summary is for educational estimation only. No automatic numeric guessing was performed. You must verify every value against the source document before filing.',
-      40,
-      66,
-      { maxWidth: 515 }
-    );
+    doc.setTextColor(100);
+    doc.text('Educational estimate only. Verify all values before filing.', 40, 66);
+    doc.setTextColor(0);
 
     autoTable(doc, {
-      startY: 92,
-      head: [['Field', 'Value (as extracted/entered)', 'Status', 'Source'] ],
+      startY: 85,
+      head: [['Field', 'Value', 'Status', 'Source']],
       body: rows,
-      styles: { fontSize: 8, cellPadding: 4 },
-      headStyles: { fillColor: [20, 20, 20], textColor: [255, 255, 255] },
-      alternateRowStyles: { fillColor: [245, 245, 245] },
+      styles: { fontSize: 9, cellPadding: 6 },
+      headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
       margin: { left: 40, right: 40 },
     });
 
-    doc.save('itr-summary.pdf');
+    doc.save('itr-extraction-summary.pdf');
+    showMessage('PDF summary downloaded.', 'success');
   }
 
   async function downloadJson() {
-    setMessage(null);
     setBusy(true);
+    setBusyAction('export');
     try {
       const fileIds = uploaded.map((u) => u.fileId).join(',');
       const resp = await fetch(`/api/itr/download-json?fileIds=${encodeURIComponent(fileIds)}`);
@@ -216,235 +314,294 @@ export default function ITRWorkbench() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setMessage('Downloaded JSON.');
+      showMessage('JSON data downloaded.', 'success');
     } catch (e) {
-      setMessage(e?.message || String(e));
+      showMessage(e?.message || String(e), 'error');
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   }
 
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const files = Array.from(e.dataTransfer?.files || []);
+    if (files.length) onUploadFiles(files);
+  }, []);
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    setDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e) => {
+    e.preventDefault();
+    setDragOver(false);
+  }, []);
+
   return (
-    <div className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-5 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <div className="text-sm text-white/85 font-medium">Upload → Extract → Review → Validate → Export</div>
-          <div className="text-xs text-white/60">No paid APIs. No numeric guessing. Every value must trace to a source token.</div>
+    <div className="min-h-[600px]">
+      {/* Header / Status Message */}
+      {message && (
+        <div className={`mb-4 p-3 rounded-lg border flex items-start gap-2 text-sm ${
+          messageType === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+          messageType === 'warning' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+          messageType === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+          'bg-blue-500/10 border-blue-500/30 text-blue-400'
+        }`}>
+          {messageType === 'success' && <CheckIcon />}
+          {messageType === 'warning' && <AlertIcon />}
+          {messageType === 'error' && <AlertIcon />}
+          <span>{message}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <label className={`px-3 py-2 rounded-xl border border-white/15 text-sm ${busy ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:border-white/25'}`}>
-            <input
-              type="file"
-              accept="application/pdf,image/*"
-              multiple
-              disabled={busy}
-              className="hidden"
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                if (files.length) onUploadFiles(files);
-                e.target.value = '';
-              }}
-            />
-            Upload
-          </label>
-          <button
-            type="button"
-            disabled={busy || uploaded.length === 0}
-            onClick={runExtract}
-            className={`px-3 py-2 rounded-xl text-sm border border-white/15 ${busy || uploaded.length === 0 ? 'opacity-60' : 'hover:border-white/25'}`}
-          >
-            Extract
-          </button>
-          <button
-            type="button"
-            disabled={busy || uploaded.length === 0}
-            onClick={runValidate}
-            className={`px-3 py-2 rounded-xl text-sm border border-white/15 ${busy || uploaded.length === 0 ? 'opacity-60' : 'hover:border-white/25'}`}
-          >
-            Validate
-          </button>
-          <button
-            type="button"
-            disabled={busy || uploaded.length === 0}
-            onClick={downloadJson}
-            className={`px-3 py-2 rounded-xl text-sm border border-white/15 ${busy || uploaded.length === 0 ? 'opacity-60' : 'hover:border-white/25'}`}
-          >
-            Export JSON
-          </button>
-          <button
-            type="button"
-            disabled={busy || allFields.length === 0}
-            onClick={exportPdfSummary}
-            className={`px-3 py-2 rounded-xl text-sm border border-white/15 ${busy || allFields.length === 0 ? 'opacity-60' : 'hover:border-white/25'}`}
-          >
-            Export PDF
-          </button>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={toggleAudit}
-            className={`px-3 py-2 rounded-xl text-sm border border-white/15 ${busy ? 'opacity-60' : 'hover:border-white/25'}`}
-          >
-            {auditOpen ? 'Hide audit' : 'View audit'}
-          </button>
-        </div>
-      </div>
+      )}
 
-      {message ? <div className="mt-4 text-xs text-white/70">{message}</div> : null}
-
-      <div className="mt-5">
-        <ITRDisclaimer />
-      </div>
-
-      {uploaded.length > 0 ? (
-        <div className="mt-6">
-          <div className="text-sm text-white/80 mb-2">Uploaded files</div>
-          <div className="space-y-2">
-            {uploaded.map((u) => (
-              <div key={u.fileId} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-xl border border-white/10 p-3">
-                <div className="min-w-0">
-                  <div className="text-sm text-white/90 truncate">{u.filename}</div>
-                  <div className="text-xs text-white/60 flex flex-wrap gap-2">
-                    <Badge>{u.docType}</Badge>
-                    <Badge tone={u.type === 'DIGITAL_PDF' ? 'ok' : 'warn'}>{u.type}</Badge>
-                    <span>{u.pages} page(s)</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs text-white/55">FileId: {u.fileId}</div>
-                  <button
-                    type="button"
-                    disabled={busy}
-                    className={`px-2 py-1 rounded-lg border border-white/15 text-xs ${busy ? 'opacity-60' : 'hover:border-white/25'}`}
-                    onClick={() => deleteFile(u.fileId)}
-                  >
-                    Delete
-                  </button>
+      <div className="grid lg:grid-cols-[1fr_480px] gap-6">
+        {/* Left Column: Main Content */}
+        <div className="space-y-6">
+          {/* Step 1: Upload */}
+          <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">1</div>
+              <h3 className="text-white font-semibold">Upload Documents</h3>
+            </div>
+            
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${
+                dragOver ? 'border-blue-500 bg-blue-500/10' : 'border-slate-600 hover:border-slate-500'
+              }`}
+            >
+              <input
+                type="file"
+                accept="application/pdf,image/*"
+                multiple
+                disabled={busy}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                onChange={(e) => {
+                  const files = Array.from(e.target.files || []);
+                  if (files.length) onUploadFiles(files);
+                  e.target.value = '';
+                }}
+              />
+              <div className="flex flex-col items-center gap-3">
+                {busyAction === 'upload' ? <SpinnerIcon /> : <UploadIcon />}
+                <div>
+                  <p className="text-white font-medium">Drop files here or click to browse</p>
+                  <p className="text-slate-400 text-sm mt-1">Supports Form 16, AIS, Bank Statements (PDF)</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
+            </div>
 
-      {auditOpen ? (
-        <div className="mt-6 rounded-xl border border-white/10 p-3">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-white/80">Audit log (session)</div>
-            <button
-              type="button"
-              className="px-2 py-1 rounded-lg border border-white/15 text-xs hover:border-white/25"
-              onClick={async () => {
-                try {
-                  await fetchAudit();
-                } catch (e) {
-                  setMessage(e?.message || String(e));
-                }
-              }}
-            >
-              Refresh
-            </button>
-          </div>
-          <div className="mt-2 max-h-56 overflow-auto text-[11px] text-white/65">
-            {auditEvents.length === 0 ? (
-              <div className="text-white/45">No audit events yet.</div>
-            ) : (
-              auditEvents.map((ev, i) => (
-                <div key={i} className="py-1 border-b border-white/5">
-                  <span className="text-white/80">{ev.type}</span>
-                  {ev.fieldKey ? <span> — {ev.fieldKey}</span> : null}
-                  {ev.at ? <span className="text-white/45"> — {ev.at}</span> : null}
-                </div>
-              ))
+            {/* Uploaded Files List */}
+            {uploaded.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {uploaded.map((u) => (
+                  <div key={u.fileId} className="flex items-center justify-between bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <FileIcon />
+                      <div className="min-w-0">
+                        <p className="text-white text-sm font-medium truncate">{u.filename}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant={u.type === 'DIGITAL_PDF' ? 'success' : 'warning'}>
+                            {u.type === 'DIGITAL_PDF' ? 'Digital' : 'Scanned'}
+                          </Badge>
+                          <Badge variant="info">{u.docType || 'unknown'}</Badge>
+                          <span className="text-slate-500 text-xs">{u.pages} page(s)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button size="sm" variant="ghost" onClick={() => setPanel({ fileId: u.fileId, page: 1, bbox: null })}>
+                        <EyeIcon />
+                      </Button>
+                      <Button size="sm" variant="danger" onClick={() => deleteFile(u.fileId)} disabled={busy}>
+                        <TrashIcon />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-        </div>
-      ) : null}
 
-      {allFields.length > 0 ? (
-        <div className="mt-8">
-          <div className="text-sm text-white/80 mb-2">Extracted fields (review required)</div>
-          <div className="overflow-auto rounded-xl border border-white/10">
-            <table className="min-w-[820px] w-full text-left">
-              <thead className="bg-white/5">
-                <tr>
-                  <th className="p-3 text-xs text-white/70">Field</th>
-                  <th className="p-3 text-xs text-white/70">Value</th>
-                  <th className="p-3 text-xs text-white/70">Status</th>
-                  <th className="p-3 text-xs text-white/70">Source</th>
-                </tr>
-              </thead>
-              <tbody>
-                {allFields.map((f) => (
-                  <tr key={`${f.fileId}:${f.key}`} className="border-t border-white/10">
-                    <td className="p-3 text-xs text-white/85">
-                      <div className="text-white/90">{f.label}</div>
-                      <div className="text-white/50">{f.key}</div>
-                    </td>
-                    <td className="p-3">
-                      <input
-                        className="w-full bg-transparent border border-white/15 rounded-lg px-2 py-1 text-xs text-white/85"
-                        value={f.valueText ?? ''}
-                        placeholder="(missing)"
-                        onChange={(e) => {
-                          const v = e.target.value;
-                          setExtractions((prev) => {
-                            const ex = prev[f.fileId];
-                            if (!ex) return prev;
-                            const fields = (ex.fields || []).map((x) => (x.key === f.key ? { ...x, valueText: v, status: 'FLAGGED' } : x));
-                            return { ...prev, [f.fileId]: { ...ex, fields } };
-                          });
-                        }}
-                        onBlur={(e) => saveOverride(f.fileId, f.key, e.target.value)}
-                      />
-                    </td>
-                    <td className="p-3 text-xs">
-                      {f.status === 'OK' ? <Badge tone="ok">OK</Badge> : <Badge tone="warn">FLAGGED</Badge>}
-                      {f.reason ? <div className="mt-1 text-[11px] text-white/50">{f.reason}</div> : null}
-                    </td>
-                    <td className="p-3 text-xs text-white/70">
-                      {f.source?.page ? (
-                        <button
-                          type="button"
-                          className="underline underline-offset-4 hover:text-white"
-                          onClick={() =>
-                            setActiveSource({
-                              fileId: f.fileId,
-                              page: f.source.page,
-                              bbox: f.source.bbox,
-                              pageWidth: f.source.pageWidth,
-                              pageHeight: f.source.pageHeight,
-                            })
-                          }
-                        >
-                          View source (p.{f.source.page})
-                        </button>
-                      ) : (
-                        <span className="text-white/45">No source</span>
-                      )}
-                      <div className="mt-1 text-[11px] text-white/45 truncate">{f.filename}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-2 text-[11px] text-white/55">
-            Note: flagged means missing/low-confidence/format mismatch — values must be manually confirmed.
-          </div>
-        </div>
-      ) : null}
+          {/* Step 2: Extract & Validate */}
+          {uploaded.length > 0 && (
+            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">2</div>
+                <h3 className="text-white font-semibold">Extract & Review Data</h3>
+              </div>
+              
+              <div className="flex flex-wrap gap-3">
+                <Button variant="primary" onClick={runExtract} disabled={busy}>
+                  {busyAction === 'extract' ? <SpinnerIcon /> : <ExtractIcon />}
+                  Extract Data
+                </Button>
+                <Button variant="success" onClick={runValidate} disabled={busy || allFields.length === 0}>
+                  {busyAction === 'validate' ? <SpinnerIcon /> : <ValidateIcon />}
+                  Validate
+                </Button>
+                <Button variant="default" onClick={exportPdfSummary} disabled={busy || allFields.length === 0}>
+                  <DownloadIcon />
+                  Export PDF
+                </Button>
+                <Button variant="default" onClick={downloadJson} disabled={busy || allFields.length === 0}>
+                  {busyAction === 'export' ? <SpinnerIcon /> : <DownloadIcon />}
+                  Export JSON
+                </Button>
+              </div>
+            </div>
+          )}
 
-      {activeSource ? (
-        <PDFSourceViewer
-          fileId={activeSource.fileId}
-          page={activeSource.page}
-          bbox={activeSource.bbox}
-          pageWidth={activeSource.pageWidth}
-          pageHeight={activeSource.pageHeight}
-          onClose={() => setActiveSource(null)}
-        />
-      ) : null}
+          {/* Step 3: Extracted Data Table */}
+          {allFields.length > 0 && (
+            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">3</div>
+                  <h3 className="text-white font-semibold">Extracted Values</h3>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <Badge variant="success">{allFields.filter(f => f.status === 'OK').length} OK</Badge>
+                  <Badge variant="warning">{allFields.filter(f => f.status !== 'OK').length} Need Review</Badge>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-lg border border-slate-700/50">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-slate-800/50">
+                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Field</th>
+                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider min-w-[180px]">Value</th>
+                      <th className="text-center p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Source</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-700/50">
+                    {allFields.map((f) => (
+                      <tr key={`${f.fileId}:${f.key}`} className={`hover:bg-slate-800/30 transition-colors ${f.status !== 'OK' ? 'bg-amber-500/5' : ''}`}>
+                        <td className="p-3">
+                          <div className="text-white text-sm font-medium">{f.label}</div>
+                          <div className="text-slate-500 text-xs mt-0.5">{f.key}</div>
+                        </td>
+                        <td className="p-3">
+                          <input
+                            type="text"
+                            className={`w-full bg-slate-800/50 border rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
+                              f.status !== 'OK' ? 'border-amber-500/50' : 'border-slate-600/50'
+                            }`}
+                            value={f.valueText ?? ''}
+                            placeholder="Enter value..."
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExtractions((prev) => {
+                                const ex = prev[f.fileId];
+                                if (!ex) return prev;
+                                const fields = (ex.fields || []).map((x) =>
+                                  x.key === f.key ? { ...x, valueText: v, status: 'FLAGGED' } : x
+                                );
+                                return { ...prev, [f.fileId]: { ...ex, fields } };
+                              });
+                            }}
+                            onFocus={() => {
+                              if (f.source?.page) {
+                                setPanel({
+                                  fileId: f.fileId,
+                                  page: f.source.page,
+                                  bbox: f.source.bbox,
+                                  pageWidth: f.source.pageWidth,
+                                  pageHeight: f.source.pageHeight,
+                                });
+                              }
+                            }}
+                            onBlur={(e) => saveOverride(f.fileId, f.key, e.target.value)}
+                          />
+                        </td>
+                        <td className="p-3 text-center">
+                          {f.status === 'OK' ? (
+                            <Badge variant="success">
+                              <CheckIcon />
+                              <span className="ml-1">OK</span>
+                            </Badge>
+                          ) : (
+                            <Badge variant="warning">
+                              <AlertIcon />
+                              <span className="ml-1">Review</span>
+                            </Badge>
+                          )}
+                        </td>
+                        <td className="p-3">
+                          {f.source?.page ? (
+                            <button
+                              type="button"
+                              className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors"
+                              onClick={() =>
+                                setPanel({
+                                  fileId: f.fileId,
+                                  page: f.source.page,
+                                  bbox: f.source.bbox,
+                                  pageWidth: f.source.pageWidth,
+                                  pageHeight: f.source.pageHeight,
+                                })
+                              }
+                            >
+                              <EyeIcon />
+                              Page {f.source.page}
+                            </button>
+                          ) : (
+                            <span className="text-slate-500 text-sm">—</span>
+                          )}
+                          {f.reason && (
+                            <div className="text-amber-400/70 text-xs mt-1">{f.reason.replace(/_/g, ' ')}</div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-slate-500 text-xs mt-3">
+                💡 Click on a field to view its source in the PDF. Yellow rows need manual verification.
+              </p>
+            </div>
+          )}
+
+          {/* Disclaimer */}
+          <ITRDisclaimer />
+        </div>
+
+        {/* Right Column: PDF Viewer */}
+        <div className="lg:sticky lg:top-4 lg:self-start">
+          {panel?.fileId ? (
+            <PDFSidePanel
+              fileId={panel.fileId}
+              page={panel.page}
+              bbox={panel.bbox}
+              pageWidth={panel.pageWidth}
+              pageHeight={panel.pageHeight}
+              onClose={() => setPanel(null)}
+              onPageChange={(nextPage) =>
+                setPanel((prev) => (prev ? { ...prev, page: Number(nextPage || 1) || 1 } : prev))
+              }
+            />
+          ) : (
+            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800 flex items-center justify-center">
+                <FileIcon />
+              </div>
+              <h4 className="text-white font-medium mb-2">PDF Preview</h4>
+              <p className="text-slate-400 text-sm">
+                Upload a document to view it here. Click on extracted values to highlight their source.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

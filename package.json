@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "next dev -H 127.0.0.1 -p 3000",
+    "dev:reliable": "node scripts/clean-next.mjs && next dev -H 127.0.0.1 -p 3000",
     "dev:turbo": "next dev --turbo -H 127.0.0.1 -p 3000",
     "clean:next": "node scripts/clean-next.mjs",
     "build": "next build",

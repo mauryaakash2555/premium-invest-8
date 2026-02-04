@@ -10,6 +10,8 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { LakhTooltip } from "./LakhTooltip";
 import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
+import { RealLifeComparison } from "./RealLifeComparison";
+import { EmotionTracker, RupeeCoach } from "./StoryAssist";
 
 function buildDefaultMarketConditions(): MarketConditions {
   return {
@@ -38,8 +40,12 @@ export function BeginnerModeView(props: {
   initialStoryChoice?: "continue" | "stop" | "pause_6" | "pause_12";
   initialStoryStep?: 0 | 1 | 2;
   challengerChoice?: "continue" | "stop" | "pause_6" | "pause_12";
+  tier?: "story" | "learning";
 }) {
   const panicStopPct = 30;
+
+  const tier = props.tier || "learning";
+  const isStoryTier = tier === "story";
 
   const MONTH_MS = 520;
 
@@ -70,6 +76,17 @@ export function BeginnerModeView(props: {
       : storyChoice === "pause_6" || storyChoice === "pause_12"
       ? "Pausing during the crash reduces low-price buying; restarting helps, but timing still matters."
       : `Stopping your SIP around a ~${panicStopPct}% drawdown cuts off the crash buying window and the recovery compounding.`;
+
+  const coachMessage =
+    storyStep === 0
+      ? "We’ll plant a little every month. When prices fall, you often get more units for the same money."
+      : storyStep === 1
+      ? "Psst… storms make seeds cheaper. If your goal is long-term, staying consistent can help."
+      : storyChoice === "continue"
+      ? "Nice choice. You kept planting during the storm — that’s often how long-term investors win."
+      : storyChoice === "stop"
+      ? "It’s normal to feel scared. This shows the cost of stopping at the worst time."
+      : "Pausing can feel safe, but it may reduce the ‘buying cheap’ window.";
 
   function buildChoiceScenario(choice: StoryChoice): SIPScenario {
     if (choice === "continue") {
@@ -390,17 +407,41 @@ export function BeginnerModeView(props: {
     }
   }, [replayPoint?.date]);
 
+  const disciplineTrees = Math.max(0, Math.round((result.disciplineAmt || 0) / 100_000));
+  const choiceTrees = Math.max(0, Math.round((result.choiceAmt || 0) / 100_000));
+  const missedTrees = Math.max(0, disciplineTrees - choiceTrees);
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-7">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[11px] font-semibold tracking-wide text-white/70">STORY MODE (2 MIN)</div>
-            <div className="mt-1 text-sm font-semibold text-white/90">A guided crash decision, with real numbers</div>
-            <div className="mt-1 text-[12px] text-white/65">
-              You’ll face a simulated ~{Math.abs(market.crashDepthPct ?? 35)}% crash around Year ~{crashStartYearApprox}.
-              Choose your behavior and see the estimated cost.
+            <div className="text-[11px] font-semibold tracking-wide text-white/70">
+              {isStoryTier ? "STORY MODE (3 MIN)" : "LEARNING MODE"}
             </div>
+            <div className="mt-1 text-sm font-semibold text-white/90">
+              {isStoryTier ? "Plant Your Money Garden" : "A guided crash decision, with real numbers"}
+            </div>
+            <div className="mt-1 text-[12px] text-white/65">
+              {isStoryTier ? (
+                <>
+                  Imagine you plant ₹{monthlyForCalc.toLocaleString("en-IN")} “seeds” every month.
+                  Sometimes a storm comes (a market crash). Smart gardeners keep planting because seeds are cheaper.
+                </>
+              ) : (
+                <>
+                  You’ll face a simulated ~{Math.abs(market.crashDepthPct ?? 35)}% crash around Year ~{crashStartYearApprox}.
+                  Choose your behavior and see the estimated cost.
+                </>
+              )}
+            </div>
+
+            {isStoryTier ? (
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <RupeeCoach message={coachMessage} />
+                <EmotionTracker step={storyStep} choice={storyChoice} />
+              </div>
+            ) : null}
           </div>
 
           {storyStep === 0 ? (
@@ -446,10 +487,19 @@ export function BeginnerModeView(props: {
               </div>
             ) : null}
 
-            <div className="text-xs font-semibold text-white/85">Scene: “The crash hits.”</div>
+            <div className="text-xs font-semibold text-white/85">{isStoryTier ? "Scene: The storm arrives" : "Scene: “The crash hits.”"}</div>
             <div className="mt-1 text-[12px] text-white/70">
-              Headlines are red. Your portfolio is falling. You notice the market is down ~{panicStopPct}% from peak (drawdown).
-              What do you do?
+              {isStoryTier ? (
+                <>
+                  Your garden looks scary. Prices are down by about {panicStopPct}%. Most people stop planting.
+                  What will you do?
+                </>
+              ) : (
+                <>
+                  Headlines are red. Your portfolio is falling. You notice the market is down ~{panicStopPct}% from peak (drawdown).
+                  What do you do?
+                </>
+              )}
             </div>
 
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -471,10 +521,12 @@ export function BeginnerModeView(props: {
                 }}
                 className={
                   "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
-                  (storyChoice === "continue" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-100" : "border-white/10 bg-black/10 text-white/85")
+                  (storyChoice === "continue"
+                    ? "border-white/25 bg-[color:var(--lux-accent)] text-black"
+                    : "border-white/10 bg-black/10 text-white/85")
                 }
               >
-                Continue SIP (discipline)
+                {isStoryTier ? "Keep planting (best choice)" : "Continue SIP (discipline)"}
               </button>
 
               <button
@@ -495,10 +547,12 @@ export function BeginnerModeView(props: {
                 }}
                 className={
                   "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
-                  (storyChoice === "stop" ? "border-rose-400/40 bg-rose-400/10 text-rose-100" : "border-white/10 bg-black/10 text-white/85")
+                  (storyChoice === "stop"
+                    ? "border-white/25 bg-[color:var(--lux-accent)] text-black"
+                    : "border-white/10 bg-black/10 text-white/85")
                 }
               >
-                Stop SIP (fear takes over)
+                {isStoryTier ? "Stop planting (panic)" : "Stop SIP (fear takes over)"}
               </button>
 
               <button
@@ -519,10 +573,12 @@ export function BeginnerModeView(props: {
                 }}
                 className={
                   "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
-                  (storyChoice === "pause_6" ? "border-indigo-400/40 bg-indigo-400/10 text-indigo-100" : "border-white/10 bg-black/10 text-white/85")
+                  (storyChoice === "pause_6"
+                    ? "border-white/25 bg-[color:var(--lux-accent)] text-black"
+                    : "border-white/10 bg-black/10 text-white/85")
                 }
               >
-                Pause 6 months, then restart
+                {isStoryTier ? "Wait 6 months, then plant again" : "Pause 6 months, then restart"}
               </button>
 
               <button
@@ -543,30 +599,41 @@ export function BeginnerModeView(props: {
                 }}
                 className={
                   "min-h-11 rounded-xl border px-3 py-2 text-[12px] font-semibold hover:bg-white/5 " +
-                  (storyChoice === "pause_12" ? "border-indigo-300/40 bg-indigo-300/10 text-indigo-100" : "border-white/10 bg-black/10 text-white/85")
+                  (storyChoice === "pause_12"
+                    ? "border-white/25 bg-[color:var(--lux-accent)] text-black"
+                    : "border-white/10 bg-black/10 text-white/85")
                 }
               >
-                Pause 12 months, then restart
+                {isStoryTier ? "Wait 12 months, then plant again" : "Pause 12 months, then restart"}
               </button>
             </div>
 
             {storyStep >= 2 ? (
               <div className="mt-4 text-[12px] text-white/75">
-                <div className="font-semibold text-white/85">Outcome (estimated, after tax)</div>
+                <div className="font-semibold text-white/85">{isStoryTier ? "What you end up with" : "Outcome (estimated, after tax)"}</div>
                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-4">
-                    <div className="text-[11px] font-semibold text-emerald-100/90">Perfect discipline</div>
-                    <div className="mt-2 text-2xl font-semibold text-emerald-200 tabular-nums">
+                  <div className="rounded-xl border border-white/15 bg-black/20 p-4">
+                    <div className="text-[11px] font-semibold text-white/85">{isStoryTier ? "If you keep planting" : "Perfect discipline"}</div>
+                    <div className="mt-2 text-2xl font-semibold gold-gradient-text tabular-nums">
                       <LakhTooltip amount={result.disciplineAmt} />
                     </div>
+                    {isStoryTier ? <div className="mt-1 text-[11px] text-white/70">🌳 Trees: {disciplineTrees}</div> : null}
                   </div>
                   <div className="rounded-xl border border-white/10 bg-black/10 p-4">
-                    <div className="text-[11px] font-semibold text-white/80">{buildChoiceScenario(storyChoice).name}</div>
+                    <div className="text-[11px] font-semibold text-white/80">{isStoryTier ? "If you stop (or wait)" : buildChoiceScenario(storyChoice).name}</div>
                     <div className="mt-2 text-2xl font-semibold text-white tabular-nums">
                       <LakhTooltip amount={result.choiceAmt} />
                     </div>
+                    {isStoryTier ? <div className="mt-1 text-[11px] text-white/70">🌿 Plants: {choiceTrees}</div> : null}
                   </div>
                 </div>
+
+                {isStoryTier ? (
+                  <div className="mt-3 rounded-xl border border-white/10 bg-black/20 p-3">
+                    <div className="text-[11px] font-semibold text-white/85">You missed</div>
+                    <div className="mt-1 text-[12px] text-white/70">🌳 {missedTrees} trees (roughly) — just because of fear.</div>
+                  </div>
+                ) : null}
 
                 <div className="mt-3 rounded-xl border border-white/10 bg-black/20 p-3">
                   <div className="text-[11px] font-semibold text-white/85">Behavioral cost</div>
@@ -576,6 +643,8 @@ export function BeginnerModeView(props: {
                   </div>
                   <div className="mt-1 text-[11px] text-white/55">Education-only, simplified market + tax model.</div>
                 </div>
+
+                <RealLifeComparison amount={result.behavioralCost} title={isStoryTier ? "What fear can cost" : undefined} />
 
                 {replayPoint ? (
                   <div className="mt-3 rounded-xl border border-white/10 bg-black/20 p-3">

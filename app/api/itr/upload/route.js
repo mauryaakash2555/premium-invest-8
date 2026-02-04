@@ -98,7 +98,7 @@ export async function POST(request) {
             ? extracted.pages.map((p) => p?.text || '').join('\n\n')
             : '';
           pages = Number(extracted?.totalPages || extracted?.pages?.length || 1) || 1;
-          type = detectPdfKind({ extractedText: allText });
+          type = detectPdfKind({ hasSelectableText: !!extracted?.hasSelectableText, extractedText: allText });
           detection = {
             method: 'pdfplumber',
             hasSelectableText: !!extracted?.hasSelectableText,

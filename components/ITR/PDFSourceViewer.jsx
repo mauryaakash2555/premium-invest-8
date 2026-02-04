@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = '/api/itr/pdfjs-worker';
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -34,7 +34,6 @@ export default function PDFSourceViewer({ fileId, page, bbox, pageWidth, pageHei
       active = false;
       if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileId]);
 
   const overlay = useMemo(() => {

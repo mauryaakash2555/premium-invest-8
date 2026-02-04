@@ -1,4 +1,5 @@
 import { buildMetadata, getMetadataBase } from '@/lib/seo/metadata';
+import LearnBodyClass from './LearnBodyClass.client';
 
 export const metadata = buildMetadata({
   title: 'Learning Universe | BM Wealth',
@@ -22,40 +23,41 @@ export default function LearnLayout({ children }) {
         isolation: 'isolate',
       }}
     >
+      <LearnBodyClass />
+
       {/* Hide main navbar and footer for this route */}
       <style>{`
         /*
           Learning Sanctuary must open with ONLY the ask box.
-          We scope this using :has(.learn-universe-layout) so it applies immediately
-          (no client effect needed) and does not leak to other routes.
+          We scope via a body/html class so it works consistently across browsers.
         */
 
-        body:has(.learn-universe-layout) {
+        body.learn-universe {
           overflow: hidden !important;
-          background: #090A0C !important;
+          background: var(--li-background) !important;
         }
 
-        body:has(.learn-universe-layout) nav,
-        body:has(.learn-universe-layout) header,
-        body:has(.learn-universe-layout) footer,
-        body:has(.learn-universe-layout) [role="contentinfo"] {
+        body.learn-universe nav,
+        body.learn-universe header,
+        body.learn-universe footer,
+        body.learn-universe [role="contentinfo"] {
           display: none !important;
         }
 
         /* Hide global floating UI on /learn (dock + chat float + consent) */
-        body:has(.learn-universe-layout) [aria-label="Open chat"],
-        body:has(.learn-universe-layout) [aria-label="WhatsApp Us Concierge"],
-        body:has(.learn-universe-layout) [data-cookie-consent],
-        body:has(.learn-universe-layout) .luxury-mobile-dock,
-        body:has(.learn-universe-layout) [data-luxury-dock],
-        body:has(.learn-universe-layout) .ai-chat-float {
+        body.learn-universe [aria-label="Open chat"],
+        body.learn-universe [aria-label="WhatsApp Us Concierge"],
+        body.learn-universe [data-cookie-consent],
+        body.learn-universe .luxury-mobile-dock,
+        body.learn-universe [data-luxury-dock],
+        body.learn-universe .ai-chat-float {
           display: none !important;
         }
 
         .learn-universe-layout {
           min-height: 100vh;
           height: 100vh;
-          background: #090A0C;
+          background: var(--li-background);
         }
       `}</style>
       
