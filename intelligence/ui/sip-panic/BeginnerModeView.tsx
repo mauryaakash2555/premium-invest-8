@@ -12,6 +12,10 @@ import { LakhTooltip } from "./LakhTooltip";
 import { buildShareUrlWithUtm } from "@/lib/urls/shareUtm";
 import { RealLifeComparison } from "./RealLifeComparison";
 import { EmotionTracker, RupeeCoach } from "./StoryAssist";
+import { ProgressIndicator } from "./ProgressIndicator";
+import { PostSimulationQuiz } from "./PostSimulationQuiz";
+import { ShareButtons } from "./ShareButtons";
+import { DownloadReport } from "./DownloadReport";
 
 function buildDefaultMarketConditions(): MarketConditions {
   return {
@@ -413,6 +417,9 @@ export function BeginnerModeView(props: {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      {/* Progress Indicator - shows journey through the simulation */}
+      <ProgressIndicator currentStep={storyStep + 1} totalSteps={4} />
+
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass gold-grain-texture p-6 sm:p-7">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -775,15 +782,46 @@ export function BeginnerModeView(props: {
                     Challenge on WhatsApp
                   </button>
                 </div>
+
+                {/* Enhanced Share & Download Section */}
+                <div className="mt-4 space-y-3">
+                  <ShareButtons
+                    url={buildStoryShareUrl}
+                    title={`SIP vs Panic Selling — I chose: ${choiceLabel}`}
+                    message={`SIP vs Panic Selling Simulator\n\nMy crash decision: ${choiceLabel}\nEstimated behavioral cost: ₹${Math.round((result.behavioralCost || 0) / 100_000 * 100) / 100}L (~${result.costPct}% gap)\n\nEducation-only simulation.`}
+                    behavioralCost={result.behavioralCost}
+                    storyChoice={storyChoice}
+                  />
+                  
+                  <DownloadReport
+                    monthlyAmount={monthlyForCalc}
+                    durationYears={yearsForCalc}
+                    storyChoice={storyChoice}
+                    behavioralCost={result.behavioralCost}
+                    disciplineAmt={result.disciplineAmt}
+                    choiceAmt={result.choiceAmt}
+                    totalInvested={totalInvested}
+                  />
+                </div>
+
+                {/* Post-Simulation Quiz - Reinforce learning */}
+                <div className="mt-4">
+                  <PostSimulationQuiz
+                    behavioralCost={result.behavioralCost}
+                    disciplineAmt={result.disciplineAmt}
+                    choiceAmt={result.choiceAmt}
+                    storyChoice={storyChoice}
+                  />
+                </div>
               </div>
             ) : null}
           </div>
         ) : null}
       </section>
 
-      {/* PRIMARY TRUTH - High contrast OKLCH gold theme for WCAG AAA compliance */}
-      <section className="rounded-3xl border-2 border-[oklch(0.75_0.15_85)] bg-[oklch(0.12_0.02_264)] p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55),0_0_40px_rgba(192,160,98,0.15)]">
-        <div className="text-[11px] font-semibold tracking-widest text-[oklch(0.75_0.12_85)] uppercase">Primary Truth</div>
+      {/* PRIMARY TRUTH - High contrast OKLCH copper theme for WCAG AAA compliance */}
+      <section className="rounded-3xl border-2 border-[oklch(0.78_0.08_65)] bg-[oklch(0.12_0.02_264)] p-7 sm:p-10 text-center shadow-[0_10px_60px_rgba(0,0,0,0.55),0_0_40px_rgba(192,160,98,0.15)]">
+        <div className="text-[11px] font-semibold tracking-widest text-[oklch(0.78_0.08_65)] uppercase">Primary Truth</div>
         <div className="mt-3 text-4xl sm:text-6xl font-bold tabular-nums leading-tight text-[oklch(0.95_0.02_85)] drop-shadow-[0_0_20px_rgba(192,160,98,0.3)]">
           You could lose <span className="text-[oklch(0.85_0.18_25)] drop-shadow-[0_0_12px_rgba(255,100,100,0.4)]"><LakhTooltip amount={result.behavioralCost} /></span>
         </div>

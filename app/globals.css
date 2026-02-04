@@ -2999,14 +2999,14 @@ body[data-laser-active="true"] .laser-footer li {
 /* Primary Truth Section - High contrast for accessibility */
 .sip-primary-truth {
   background: oklch(0.12 0.02 264);
-  border: 2px solid oklch(0.75 0.15 85);
+  border: 2px solid oklch(0.78 0.08 65);
   box-shadow: 
     0 10px 60px rgba(0, 0, 0, 0.55),
     0 0 40px rgba(192, 160, 98, 0.15);
 }
 
 .sip-primary-truth-label {
-  color: oklch(0.75 0.12 85);
+  color: oklch(0.78 0.08 65);
   letter-spacing: 0.1em;
 }
 
@@ -3035,18 +3035,18 @@ body[data-laser-active="true"] .laser-footer li {
 /* Real Life Comparison Cards */
 .sip-comparison-card {
   background: oklch(0.08 0.01 264);
-  border: 1px solid oklch(0.75 0.15 85 / 0.15);
+  border: 1px solid oklch(0.78 0.08 65 / 0.15);
   transition: all 0.2s ease;
 }
 
 .sip-comparison-card:hover {
-  border-color: oklch(0.75 0.15 85 / 0.3);
+  border-color: oklch(0.78 0.08 65 / 0.3);
   background: oklch(0.10 0.02 264);
 }
 
 .sip-comparison-card.highlight {
-  border-color: oklch(0.75 0.15 85 / 0.4);
-  background: oklch(0.75 0.15 85 / 0.08);
+  border-color: oklch(0.78 0.08 65 / 0.4);
+  background: oklch(0.78 0.08 65 / 0.08);
 }
 
 /* ==========================================================================

@@ -63,15 +63,15 @@ export function RealLifeComparison(props: { amount: number; title?: string }) {
   };
 
   return (
-    <div className="mt-4 rounded-2xl border border-[oklch(0.75_0.15_85/0.3)] bg-[oklch(0.10_0.02_264)] p-4">
+    <div className="mt-4 rounded-2xl border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.10_0.02_264)] p-4">
       <div className="flex items-center justify-between gap-2">
-        <div className="text-[11px] font-semibold tracking-wide text-[oklch(0.75_0.12_85)] uppercase">
+        <div className="text-[11px] font-semibold tracking-wide text-[oklch(0.78_0.08_65)] uppercase">
           {props.title || `What ${formatCr(amount)} could buy`}
         </div>
         <button
           type="button"
           onClick={handleSpeak}
-          className="flex items-center gap-1 rounded-lg border border-[oklch(0.75_0.15_85/0.3)] bg-[oklch(0.15_0.02_264)] px-2 py-1 text-[10px] text-[oklch(0.80_0.10_85)] hover:bg-[oklch(0.18_0.02_264)] transition-colors"
+          className="flex items-center gap-1 rounded-lg border border-[oklch(0.78_0.08_65/0.3)] bg-[oklch(0.15_0.02_264)] px-2 py-1 text-[10px] text-[oklch(0.80_0.08_65)] hover:bg-[oklch(0.18_0.02_264)] transition-colors"
           aria-label={speaking ? "Stop reading" : "Read aloud"}
         >
           {speaking ? "🔇 Stop" : "🔊 Read"}
@@ -83,12 +83,12 @@ export function RealLifeComparison(props: { amount: number; title?: string }) {
             key={it.icon + it.text} 
             className={`rounded-xl border px-3 py-3 text-center transition-all ${
               it.highlight 
-                ? 'border-[oklch(0.75_0.15_85/0.4)] bg-[oklch(0.75_0.15_85/0.08)]' 
-                : 'border-[oklch(0.75_0.15_85/0.15)] bg-[oklch(0.08_0.01_264)]'
+                ? 'border-[oklch(0.78_0.08_65/0.4)] bg-[oklch(0.78_0.08_65/0.08)]' 
+                : 'border-[oklch(0.78_0.08_65/0.15)] bg-[oklch(0.08_0.01_264)]'
             }`}
           >
             <div className="text-2xl">{it.icon}</div>
-            <div className="mt-1 text-[11px] leading-tight text-[oklch(0.85_0.05_85)]">{it.text}</div>
+            <div className="mt-1 text-[11px] leading-tight text-[oklch(0.85_0.05_65)]">{it.text}</div>
           </div>
         ))}
       </div>
