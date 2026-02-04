@@ -1,5 +1,25 @@
 [
   {
+    "_id": "local-guest-mumbai-ca-gst-restaurants-2026",
+    "pillar": "GUEST",
+    "status": "APPROVED",
+    "approved_at": "2026-02-04T00:00:00.000Z",
+    "author_name": "Chartered Accountant, Mumbai (Anonymous - 12+ Years F&B Sector Experience)",
+    "title": "\"As a Mumbai CA: How GST Compliance Still Burdens Small Restaurants in 2026\"",
+    "content_original_file": "guest-gst-compliance-restaurants-2026.original.txt",
+    "content_enhanced_file": ""
+  },
+  {
+    "_id": "local-impact-horn-noise-anxiety-ira-2026",
+    "pillar": "IMPACT",
+    "status": "APPROVED",
+    "approved_at": "2026-02-04T00:00:00.000Z",
+    "author_name": "BM Community",
+    "title": "\"Mumbai's Loud Horn Culture Gave My Daughter Anxiety Issues - With Medical Proof\"",
+    "content_original_file": "impact-horn-noise-anxiety-ira.original.txt",
+    "content_enhanced_file": ""
+  },
+  {
     "_id": "local-impact-malad-flat-bribe-2026",
     "pillar": "IMPACT",
     "status": "APPROVED",
