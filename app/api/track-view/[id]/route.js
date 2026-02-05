@@ -1,35 +1,89 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { getAdminEnvSafe } from '@/config/env';
 
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || '').trim();
-  if (!s) return '';
-  const noTrailing = s.replace(/\/+$/, '');
-  return noTrailing.endsWith('/api') ? noTrailing.slice(0, -4) : noTrailing;
+function getClientIp(req) {
+  const forwardedFor = req.headers.get('x-forwarded-for') || '';
+  const ip = forwardedFor.split(',')[0]?.trim();
+  return ip || '';
 }
 
-function getBackendOrigin() {
-  const candidates = [process.env.BACKEND_URL, process.env.NEXT_BACKEND_URL, process.env.NEXT_PUBLIC_BACKEND_URL];
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-  return 'https://bmwealth-backend.onrender.com';
+function sha256Hex(s) {
+  return crypto.createHash('sha256').update(String(s || '')).digest('hex');
 }
 
-export async function POST(_req, { params }) {
+export async function POST(req, { params }) {
   const id = (await params)?.id;
-  try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const upstream = await fetch(`${BACKEND_ORIGIN}/api/track-view/${encodeURIComponent(id)}`, {
-      method: 'POST',
-      headers: { Accept: 'application/json' },
-      cache: 'no-store',
-    });
+  const trackId = String(id || '').trim();
+  if (!trackId) return NextResponse.json({ success: false, detail: 'Missing id' }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
 
-    const contentType = upstream.headers.get('content-type') || '';
-    const data = contentType.includes('application/json') ? await upstream.json() : await upstream.text();
-    return NextResponse.json(data, { status: upstream.ok ? 200 : upstream.status || 502, headers: { 'Cache-Control': 'no-store' } });
+  let body;
+  try {
+    body = await req.json();
   } catch {
-    return NextResponse.json({ success: false, detail: 'Upstream error' }, { status: 502 });
+    body = {};
   }
+
+  let sb;
+  try {
+    sb = supabaseAdmin();
+  } catch {
+    // If Supabase isn't configured, never break page rendering.
+    return NextResponse.json({ success: true, counted: false }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  const ip = getClientIp(req);
+  const ua = String(body?.userAgent || req.headers.get('user-agent') || '');
+  const salt = getAdminEnvSafe()?.ANALYTICS_SALT || '';
+  const visitorHash = sha256Hex(`${salt}|${ip}|${ua}`);
+
+  let canonicalPostId = trackId;
+  let canonicalSlug = null;
+  try {
+    const { data: rows } = await sb
+      .from('posts')
+      .select('id,slug')
+      .or(`id.eq.${trackId},slug.eq.${trackId}`)
+      .limit(1);
+    const row = Array.isArray(rows) ? rows[0] : null;
+    if (row?.id) canonicalPostId = String(row.id);
+    if (row?.slug) canonicalSlug = String(row.slug);
+  } catch {
+    // ignore
+  }
+
+  let counted = false;
+  try {
+    const { error } = await sb
+      .from('post_views')
+      .insert({
+        post_id: canonicalPostId,
+        visitor_hash: visitorHash,
+        slug: String(body?.slug || '').trim() || canonicalSlug || null,
+      })
+      .select('post_id')
+      .maybeSingle();
+
+    if (!error) counted = true;
+    // Unique violation (already counted) should not error the caller.
+    if (error && String(error.code || '') === '23505') counted = false;
+  } catch {
+    // ignore
+  }
+
+  if (counted) {
+    try {
+      const { data: rows } = await sb.from('posts').select('id,views').eq('id', canonicalPostId).limit(1);
+      const row = Array.isArray(rows) ? rows[0] : null;
+      if (row?.id) {
+        const nextViews = (typeof row.views === 'number' ? row.views : 0) + 1;
+        await sb.from('posts').update({ views: nextViews }).eq('id', row.id);
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  return NextResponse.json({ success: true, counted }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 }

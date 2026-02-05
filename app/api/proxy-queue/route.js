@@ -1,66 +1,63 @@
 import { NextResponse } from "next/server";
-
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || "").trim();
-  if (!s) return "";
-  const noTrailing = s.replace(/\/+$/, "");
-  return noTrailing.endsWith("/api") ? noTrailing.slice(0, -4) : noTrailing;
-}
-
-function getBackendOrigin() {
-  const candidates = [
-    process.env.BACKEND_URL,
-    process.env.NEXT_BACKEND_URL,
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-  ];
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-  return "https://bmwealth-backend.onrender.com";
-}
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 function json(status, body) {
   return NextResponse.json(body, {
     status,
     headers: {
       "Cache-Control": "no-store",
+      "X-Deprecated-Endpoint": "true",
     },
   });
 }
 
 export async function GET() {
   try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-
-    const upstream = await fetch(`${BACKEND_ORIGIN}/api/queue`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
-
-    const contentType = upstream.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await upstream.json() : await upstream.text();
-
-    if (!upstream.ok) {
-      const detail =
-        typeof data === "object" && data && "detail" in data
-          ? data.detail
-          : typeof data === "string" && data
-            ? data
-            : "Queue request failed";
-      return json(upstream.status || 502, { success: false, detail });
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
+      return json(401, { ok: false, error: 'unauthorized', submissions: [] });
     }
 
-    return json(200, data);
-  } catch (e) {
-    const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
-    return json(aborted ? 504 : 502, {
-      success: false,
-      detail: aborted ? "Upstream timeout" : "Upstream error",
-    });
+    let sb;
+    try {
+      sb = supabaseAdmin();
+    } catch {
+      return json(503, { ok: false, error: 'setup_required', submissions: [] });
+    }
+
+    const { data, error } = await sb
+      .from('posts')
+      .select('*')
+      .eq('status', 'PENDING')
+      .order('created_at', { ascending: false })
+      .limit(120);
+
+    if (error) return json(500, { error: 'Failed to fetch queue', submissions: [] });
+
+    const submissions = (Array.isArray(data) ? data : []).map((r) => ({
+      _id: String(r.id || r._id || ''),
+      type: String(r.pillar || r.type || 'EDITORIAL').toUpperCase() === 'IMPACT' ? 'impact' : 'guest',
+      title: r.title || 'Untitled',
+      author_name: r.author_name || 'Unknown',
+      author_email: r.author_email || '',
+      submitted_at: r.created_at || new Date().toISOString(),
+      incident_description: r.incident_description || r.content_original || '',
+      article_content: r.article_content || r.content_original || '',
+      location: r.location || '',
+      evidence: r.evidence || '',
+      visual_keywords: r.visual_keywords || r.location_tag || '',
+      expertise_area: r.expertise_area || '',
+      author_credentials: r.author_credentials || '',
+      author_bio: r.author_bio || '',
+      author_linkedin: r.author_linkedin || '',
+      sources_references: r.sources_references || '',
+    }));
+
+    return json(200, { submissions });
+  } catch {
+    return json(500, { error: 'Failed to fetch queue', submissions: [] });
   }
 }

@@ -1,35 +1,13 @@
 import { NextResponse } from "next/server";
 import { getLocalCommunityPosts } from "@/lib/blog/localCommunityPosts";
-import { listApprovedCommunitySubmissions } from '@/lib/blog/communitySubmissions';
-
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || "").trim();
-  if (!s) return "";
-  const noTrailing = s.replace(/\/+$/, "");
-  // Allow env values to be either origin (https://host) OR include /api.
-  return noTrailing.endsWith("/api") ? noTrailing.slice(0, -4) : noTrailing;
-}
-
-function getBackendOrigin() {
-  const candidates = [
-    process.env.BACKEND_URL,
-    process.env.NEXT_BACKEND_URL,
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-  ];
-
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-
-  return "https://bmwealth-backend.onrender.com";
-}
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 function json(status, body) {
   return NextResponse.json(body, {
     status,
     headers: {
       "Cache-Control": "no-store",
+      "X-Deprecated-Endpoint": "true",
     },
   });
 }
@@ -56,6 +34,40 @@ function mergeUniqueById(primary, secondary) {
   return out;
 }
 
+function excerptFrom(text, max = 220) {
+  const s = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!s) return '';
+  return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+}
+
+function mapRowToPost(row) {
+  const r = row && typeof row === 'object' ? row : {};
+  const id = String(r.id || r._id || '').trim();
+  const contentOriginal = String(r.content_original || r.article_content || r.incident_description || '').trim();
+  const contentEnhanced = String(r.content_enhanced || r.enhanced_content || '').trim();
+  const imageUrl = String(r.image_url || r.image || '').trim() || null;
+  return {
+    _id: id,
+    pillar: normalizePillar(r.pillar || r.type || r.category || 'EDITORIAL'),
+    status: normalizeStatus(r.status || 'APPROVED'),
+    approved_at: String(r.approved_at || '').trim(),
+    created_at: String(r.created_at || r.submitted_at || r.received_at || '').trim(),
+    title: String(r.title || '').trim(),
+    author_name: String(r.author_name || '').trim(),
+    author_email: String(r.author_email || '').trim(),
+    content_original: contentOriginal,
+    content_enhanced: contentEnhanced,
+    excerpt: String(r.excerpt || '').trim() || excerptFrom(contentEnhanced || contentOriginal),
+    image_url: imageUrl,
+    image: imageUrl,
+    sponsored_by: r.sponsored_by ?? null,
+    affiliate_link: r.affiliate_link ?? null,
+    location_tag: String(r.location_tag || r.visual_keywords || '').trim() || null,
+    tags: Array.isArray(r.tags) ? r.tags : [],
+    views: typeof r.views === 'number' ? r.views : 0,
+  };
+}
+
 export async function GET(req) {
   const pillar = normalizePillar(req.nextUrl.searchParams.get("pillar") || "EDITORIAL");
   const status = normalizeStatus(req.nextUrl.searchParams.get("status") || "APPROVED");
@@ -68,57 +80,26 @@ export async function GET(req) {
     (p) => normalizePillar(p?.pillar) === pillar && normalizeStatus(p?.status) === status
   );
 
-  const submissions = await listApprovedCommunitySubmissions({ pillar, status, limit: 120 }).catch(() => []);
-  const localPlus = submissions.length ? mergeUniqueById(local, submissions) : local;
+  if (isLocalhost) return json(200, local);
 
-  // Local dev: never wait on upstream (it can be slow/unreachable and makes the page feel broken).
-  if (isLocalhost) return json(200, localPlus);
-
+  let sb;
   try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const controller = new AbortController();
-    // If we already have local curated posts, keep the page snappy.
-    // Upstream is best-effort and should not block rendering.
-    const timeoutMs = local.length ? 1800 : 8000;
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-    const upstream = await fetch(
-      `${BACKEND_ORIGIN}/api/posts?pillar=${encodeURIComponent(pillar)}&status=${encodeURIComponent(status)}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-        cache: "no-store",
-        signal: controller.signal,
-      }
-    ).finally(() => clearTimeout(timeout));
-
-    const contentType = upstream.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await upstream.json() : await upstream.text();
-
-    if (!upstream.ok) {
-      const detail =
-        typeof data === "object" && data && "detail" in data
-          ? data.detail
-          : typeof data === "string" && data
-            ? data
-            : "Posts request failed";
-      // Fall back to local curated posts if upstream is down.
-      if (localPlus.length) return json(200, localPlus);
-      return json(upstream.status || 502, { success: false, detail });
-    }
-
-    // Merge local curated posts with upstream list (avoid duplicates by _id)
-    const upstreamList = Array.isArray(data) ? data : [];
-    if (upstreamList.length) return json(200, mergeUniqueById(upstreamList, localPlus));
-    return json(200, localPlus);
-  } catch (e) {
-    const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
-    if (localPlus.length) return json(200, localPlus);
-    return json(aborted ? 504 : 502, {
-      success: false,
-      detail: aborted ? "Upstream timeout" : "Upstream error",
-    });
+    sb = supabaseAdmin();
+  } catch {
+    return json(200, local);
   }
+
+  const { data, error } = await sb
+    .from('posts')
+    .select('*')
+    .eq('pillar', pillar)
+    .eq('status', status)
+    .order('approved_at', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
+    .limit(200);
+
+  if (error || !Array.isArray(data)) return json(200, local);
+
+  const remote = data.map(mapRowToPost).filter((p) => p && p._id && p.title);
+  return json(200, local.length ? mergeUniqueById(remote, local) : remote);
 }

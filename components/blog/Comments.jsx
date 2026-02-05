@@ -21,7 +21,8 @@ export default function Comments({ postId, postSlug }) {
       const res = await fetch(`/api/comments/${encodeURIComponent(identifier)}`);
       if (res.ok) {
         const data = await res.json();
-        setComments(Array.isArray(data) ? data : []);
+        const items = Array.isArray(data) ? data : Array.isArray(data?.comments) ? data.comments : [];
+        setComments(items);
       }
     } catch (error) {
       console.error('Failed to fetch comments:', error);

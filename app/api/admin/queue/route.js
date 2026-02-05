@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies, headers } from 'next/headers';
 import { isAdminFromRequest } from '@/lib/adminSession';
-import { EventsDB } from '@/lib/db/events';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
@@ -20,56 +19,56 @@ export async function GET() {
       return NextResponse.json({ ok: false, error: 'setup_required', submissions: [] }, { status: 503 });
     }
 
-    // Fetch submission events from Supabase
-    const { events, error } = await EventsDB.getAll({
-      eventTypes: ['submission_impact', 'submission_guest'],
-      limit: 100,
-      newestFirst: true
-    });
+    const sb = supabaseAdmin();
+
+    const { data, error } = await sb
+      .from('posts')
+      .select('*')
+      .eq('status', 'PENDING')
+      .order('created_at', { ascending: false })
+      .limit(120);
 
     if (error) {
       console.error('Queue fetch error:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch queue', submissions: [] },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to fetch queue', submissions: [] }, { status: 500 });
     }
 
-    // Transform events to submission format for admin queue
-    // Filter to only show pending (not yet approved/rejected)
-    const submissions = events
-      .filter(event => {
-        // Check if submission hasn't been processed yet
-        const data = event.data || {};
-        return !data.status || data.status === 'PENDING';
-      })
-      .map(event => {
-        const data = event.data || {};
-        return {
-          _id: event.id,
-          type: event.event_type === 'submission_impact' ? 'impact' : 'guest',
-          title: data.title || 'Untitled',
-          author_name: data.author_name || 'Unknown',
-          author_email: data.author_email || '',
-          submitted_at: data.received_at || event.created_at,
-          // Impact-specific fields
-          incident_description: data.what_happened || data.incident_description || '',
-          location: data.where_happened || data.location || '',
-          evidence: data.evidence_proof || data.evidence || '',
-          impact_result: data.impact_result || '',
-          people_affected: data.who_affected || data.people_affected || '',
-          proposed_solution: data.proposed_solution || '',
-          publish_anonymously: data.anonymous || data.publish_anonymously || false,
-          visual_keywords: data.visual_keywords || data.location_tag || '',
-          // Guest-specific fields
-          article_content: data.article_content || '',
-          expertise_area: data.expertise_area || '',
-          author_credentials: data.author_credentials || '',
-          author_bio: data.author_bio || '',
-          author_linkedin: data.author_linkedin || '',
-          sources_references: data.sources_references || ''
-        };
-      });
+    const submissions = (Array.isArray(data) ? data : []).map((row) => {
+      const r = row && typeof row === 'object' ? row : {};
+      const pillar = String(r.pillar || r.type || 'EDITORIAL').toUpperCase();
+      const type = pillar === 'IMPACT' ? 'impact' : pillar === 'GUEST' ? 'guest' : pillar === 'DEV' ? 'dev' : 'editorial';
+
+      const baseOriginal = String(r.content_original || '').trim();
+      const incident = String(r.incident_description || r.what_happened || baseOriginal || '').trim();
+      const article = String(r.article_content || baseOriginal || '').trim();
+
+      return {
+        _id: String(r.id || r._id || ''),
+        type,
+        title: String(r.title || 'Untitled'),
+        author_name: String(r.author_name || 'Unknown'),
+        author_email: String(r.author_email || ''),
+        submitted_at: String(r.created_at || r.submitted_at || r.received_at || new Date().toISOString()),
+
+        // Impact-specific fields
+        incident_description: incident,
+        location: String(r.location || r.where_happened || ''),
+        evidence: String(r.evidence || r.evidence_proof || ''),
+        impact_result: String(r.impact_result || ''),
+        people_affected: String(r.people_affected || r.who_affected || ''),
+        proposed_solution: String(r.proposed_solution || ''),
+        publish_anonymously: Boolean(r.anonymous || r.publish_anonymously),
+        visual_keywords: String(r.visual_keywords || r.location_tag || ''),
+
+        // Guest-specific fields
+        article_content: article,
+        expertise_area: String(r.expertise_area || ''),
+        author_credentials: String(r.author_credentials || ''),
+        author_bio: String(r.author_bio || ''),
+        author_linkedin: String(r.author_linkedin || ''),
+        sources_references: String(r.sources_references || ''),
+      };
+    });
 
     return NextResponse.json({ submissions });
 

@@ -1,30 +1,14 @@
 import { NextResponse } from "next/server";
-
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || "").trim();
-  if (!s) return "";
-  const noTrailing = s.replace(/\/+$/, "");
-  return noTrailing.endsWith("/api") ? noTrailing.slice(0, -4) : noTrailing;
-}
-
-function getBackendOrigin() {
-  const candidates = [
-    process.env.BACKEND_URL,
-    process.env.NEXT_BACKEND_URL,
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-  ];
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-  return "https://bmwealth-backend.onrender.com";
-}
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 function json(status, body) {
   return NextResponse.json(body, {
     status,
     headers: {
       "Cache-Control": "no-store",
+      "X-Deprecated-Endpoint": "true",
     },
   });
 }
@@ -39,39 +23,36 @@ export async function POST(req, { params }) {
   }
 
   try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
-
-    const upstream = await fetch(`${BACKEND_ORIGIN}/api/approve/${encodeURIComponent(id)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload ?? {}),
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
-
-    const contentType = upstream.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await upstream.json() : await upstream.text();
-
-    if (!upstream.ok) {
-      const detail =
-        typeof data === "object" && data && "detail" in data
-          ? data.detail
-          : typeof data === "string" && data
-            ? data
-            : "Approve failed";
-      return json(upstream.status || 502, { success: false, detail });
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
+      return json(401, { ok: false, error: 'unauthorized' });
     }
 
-    return json(200, typeof data === "object" && data ? { ...data, success: true } : { success: true });
-  } catch (e) {
-    const aborted = e && typeof e === "object" && "name" in e && e.name === "AbortError";
-    return json(aborted ? 504 : 502, {
-      success: false,
-      detail: aborted ? "Upstream timeout" : "Upstream error",
-    });
+    let sb;
+    try {
+      sb = supabaseAdmin();
+    } catch {
+      return json(503, { ok: false, error: 'setup_required' });
+    }
+
+    const safeId = String(id || '').trim();
+    if (!safeId) return json(400, { error: 'Post ID is required' });
+
+    const updated = {
+      status: 'APPROVED',
+      approved_at: new Date().toISOString(),
+      content_enhanced: payload?.content_enhanced,
+      image_url: payload?.image_url,
+      affiliate_link: payload?.affiliate_link,
+      sponsored_by: payload?.sponsored_by,
+      tags: payload?.tags_to_add || [],
+    };
+
+    const { error } = await sb.from('posts').update(updated).eq('id', safeId);
+    if (error) return json(500, { success: false, detail: 'Approve failed' });
+    return json(200, { success: true });
+  } catch {
+    return json(500, { success: false, detail: 'Approve failed' });
   }
 }

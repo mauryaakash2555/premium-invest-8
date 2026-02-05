@@ -90,6 +90,20 @@ export default function CommunityImpactForm() {
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
 
+  function isValidIsoDate(value) {
+    const s = String(value || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    const [yStr, mStr, dStr] = s.split('-');
+    const y = Number(yStr);
+    const m = Number(mStr);
+    const d = Number(dStr);
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return false;
+    if (m < 1 || m > 12) return false;
+    if (d < 1) return false;
+    const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    return d <= daysInMonth;
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
 
@@ -101,6 +115,11 @@ export default function CommunityImpactForm() {
 
     if (String(formData.title || '').length > TITLE_MAX) {
       setStatus({ state: 'error', message: 'title_too_long' });
+      return;
+    }
+
+    if (!isValidIsoDate(formData.when_happened)) {
+      setStatus({ state: 'error', message: 'invalid_date' });
       return;
     }
 
@@ -249,14 +268,17 @@ export default function CommunityImpactForm() {
             </FieldShell>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <FieldShell label="When did this happen?" required>
+              <FieldShell label="When did this happen?" required hint="YYYY-MM-DD">
                 <input
                   id={`${formId}-when`}
                   name="when_happened"
-                  type="date"
+                  type="text"
+                  inputMode="numeric"
                   required
                   value={formData.when_happened}
-                  onChange={(e) => updateField('when_happened', e.target.value)}
+                  onChange={(e) => updateField('when_happened', e.target.value.replace(/[^\d-]/g, '').slice(0, 10))}
+                  placeholder="YYYY-MM-DD"
+                  pattern="\d{4}-\d{2}-\d{2}"
                   className="focus:outline-none"
                   style={inputBaseStyle(status.state === 'submitting')}
                   disabled={status.state === 'submitting'}

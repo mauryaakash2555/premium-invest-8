@@ -71,6 +71,11 @@ export default function CommunityPostDetailClient({ id }) {
     return raw.length > 220 ? `${raw.slice(0, 220)}…` : raw;
   }, [content]);
 
+  const canonicalPostId = useMemo(() => {
+    if (post?.id) return String(post.id);
+    return safeId;
+  }, [post, safeId]);
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -173,7 +178,7 @@ export default function CommunityPostDetailClient({ id }) {
             ) : null}
 
             {/* View Tracker - tracks view after 10 seconds */}
-            <ViewTracker postId={safeId} slug={post?.slug || safeId} />
+            <ViewTracker postId={canonicalPostId} slug={post?.slug || safeId} />
 
             {/* Social Share Buttons */}
             <SocialShare
@@ -186,7 +191,7 @@ export default function CommunityPostDetailClient({ id }) {
             <PostBottomCTA title="Enjoyed this story?" />
 
             {/* Comments Section */}
-            <Comments postId={safeId} />
+            <Comments postId={canonicalPostId} postSlug={post?.slug || safeId} />
           </>
         ) : null}
       </section>

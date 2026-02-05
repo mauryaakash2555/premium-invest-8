@@ -1,58 +1,39 @@
 import { NextResponse } from 'next/server';
 import { findLocalCommunityPostById } from '@/lib/blog/localCommunityPosts';
-import { findApprovedCommunitySubmissionById } from '@/lib/blog/communitySubmissions';
-
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || '').trim();
-  if (!s) return '';
-  const noTrailing = s.replace(/\/+$/, '');
-  return noTrailing.endsWith('/api') ? noTrailing.slice(0, -4) : noTrailing;
-}
-
-function getBackendOrigin() {
-  const candidates = [process.env.BACKEND_URL, process.env.NEXT_BACKEND_URL, process.env.NEXT_PUBLIC_BACKEND_URL];
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-  return 'https://bmwealth-backend.onrender.com';
-}
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function GET(_req, { params }) {
   const id = (await params)?.id;
+  const safeId = String(id || '').trim();
+  if (!safeId) return NextResponse.json({ success: false, detail: 'Missing id' }, { status: 400 });
 
-  const local = await findLocalCommunityPostById(id).catch(() => null);
+  const local = await findLocalCommunityPostById(safeId).catch(() => null);
   if (local) {
     return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   }
 
-  const approved = await findApprovedCommunitySubmissionById(id).catch(() => null);
-  if (approved) {
-    return NextResponse.json(approved, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-  }
-
+  let sb;
   try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-
-    const upstream = await fetch(`${BACKEND_ORIGIN}/api/post/${encodeURIComponent(id)}`, {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-      cache: 'no-store',
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
-
-    const contentType = upstream.headers.get('content-type') || '';
-    const data = contentType.includes('application/json') ? await upstream.json() : await upstream.text();
-    if (!upstream.ok) {
-      const detail = typeof data === 'object' && data && 'detail' in data ? data.detail : typeof data === 'string' && data ? data : 'Post fetch failed';
-      return NextResponse.json({ success: false, detail }, { status: upstream.status || 502 });
-    }
-
-    return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-  } catch (e) {
-    const aborted = e && typeof e === 'object' && 'name' in e && e.name === 'AbortError';
-    return NextResponse.json({ success: false, detail: aborted ? 'Upstream timeout' : 'Upstream error' }, { status: aborted ? 504 : 502 });
+    sb = supabaseAdmin();
+  } catch {
+    return NextResponse.json({ success: false, detail: 'Not configured' }, { status: 503, headers: { 'Cache-Control': 'no-store' } });
   }
+
+  const { data: rows, error } = await sb
+    .from('posts')
+    .select('*')
+    .or(`id.eq.${safeId},slug.eq.${safeId}`)
+    .limit(1);
+
+  const data = Array.isArray(rows) ? rows[0] : null;
+  if (error || !data) {
+    return NextResponse.json({ success: false, detail: 'Not found' }, { status: 404, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  const status = String(data.status || '').trim().toUpperCase();
+  if (status !== 'APPROVED') {
+    return NextResponse.json({ success: false, detail: 'Not found' }, { status: 404, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 }

@@ -98,7 +98,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
       setError('');
       setNote('');
       try {
-        const url = `/api/proxy-posts?pillar=${encodeURIComponent(PILLAR)}&status=APPROVED`;
+        const url = `/api/posts?pillar=${encodeURIComponent(PILLAR)}&status=APPROVED`;
         const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
         const json = await res.json();

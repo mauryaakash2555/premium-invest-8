@@ -9,13 +9,32 @@ import { EmailService } from '@/lib/email/emailService';
 import { emailTemplate } from '@/lib/email/templates';
 import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
 import { logEventSafe } from '@/lib/db/events';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
+
+function isValidIsoDate(value) {
+  const s = String(value || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [yStr, mStr, dStr] = s.split('-');
+  const y = Number(yStr);
+  const m = Number(mStr);
+  const d = Number(dStr);
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return false;
+  if (m < 1 || m > 12) return false;
+  if (d < 1) return false;
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return d <= daysInMonth;
+}
 
 const schema = z.object({
   title: z.string().min(4).max(150),
   what_happened: z.string().min(30).max(6000),
-  when_happened: z.string().min(4).max(32), // date string from <input type="date">
+  when_happened: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'invalid_date' })
+    .refine((s) => isValidIsoDate(s), { message: 'invalid_date' }),
   where_happened: z.string().min(2).max(200),
   who_affected: z.string().max(240).optional().default(''),
   evidence_proof: z.string().max(4000).optional().default(''),
@@ -69,6 +88,39 @@ export async function POST(req) {
       received_at: new Date().toISOString(),
     },
   });
+
+  // Insert into posts (single source of truth) - best-effort.
+  try {
+    const sb = supabaseAdmin();
+    const authorName = data.anonymous ? 'Anonymous' : data.author_name;
+    const contentOriginal = `${data.what_happened}\n\nImpact / Result:\n${data.impact_result}`;
+
+    await sb
+      .from('posts')
+      .insert({
+        pillar: 'IMPACT',
+        status: 'PENDING',
+        title: data.title,
+        author_name: authorName,
+        author_email: data.author_email,
+        author_phone: data.author_phone,
+        content_original: contentOriginal,
+        content_enhanced: null,
+        location: data.where_happened,
+        location_tag: data.location_tag || null,
+        visual_keywords: data.visual_keywords || null,
+        evidence: data.evidence_proof || null,
+        impact_result: data.impact_result || null,
+        people_affected: data.who_affected || null,
+        proposed_solution: data.proposed_solution || null,
+        anonymous: Boolean(data.anonymous),
+        tags: [],
+        views: 0,
+      })
+      .throwOnError();
+  } catch {
+    // ignore if posts schema/env isn't configured yet
+  }
 
   const prefs = await EmailPreferencesDB.getSafe();
   const to = String(process.env.SUBMISSIONS_NOTIFY_EMAIL || process.env.EDITORIAL_INBOX_EMAIL || prefs?.email_address || '').trim();

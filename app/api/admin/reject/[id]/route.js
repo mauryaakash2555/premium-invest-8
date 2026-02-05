@@ -40,32 +40,22 @@ export async function POST(request, { params }) {
       return NextResponse.json({ ok: false, error: 'setup_required' }, { status: 503 });
     }
 
-    // Fetch the original event
-    const { data: event, error: fetchError } = await sb
-      .from('events')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const { data: post, error: fetchError } = await sb.from('posts').select('*').eq('id', id).single();
 
-    if (fetchError || !event) {
+    if (fetchError || !post) {
       return NextResponse.json(
         { error: 'Submission not found' },
         { status: 404 }
       );
     }
 
-    // Update the event data with rejection info
-    const updatedData = {
-      ...event.data,
+    const updatedPost = {
       status: 'REJECTED',
       rejected_at: new Date().toISOString(),
-      rejection_reason: rejectionData.reason
+      rejection_reason: rejectionData.reason,
     };
 
-    const { error: updateError } = await sb
-      .from('events')
-      .update({ data: updatedData })
-      .eq('id', id);
+    const { error: updateError } = await sb.from('posts').update(updatedPost).eq('id', id);
 
     if (updateError) {
       throw updateError;
@@ -77,18 +67,18 @@ export async function POST(request, { params }) {
       event_type: 'submission_rejected',
       data: {
         original_id: id,
-        title: event.data?.title,
+        title: post?.title,
         reason: rejectionData.reason,
         rejected_at: new Date().toISOString()
       }
     });
 
     // Send rejection email to author
-    const authorEmail = event.data?.author_email;
+    const authorEmail = post?.author_email;
     if (authorEmail) {
       const emailContent = `
         <h2>Update on Your Submission</h2>
-        <p>Thank you for submitting "<strong>${event.data?.title || 'Your Story'}</strong>".</p>
+        <p>Thank you for submitting "<strong>${post?.title || 'Your Story'}</strong>".</p>
         <p>After careful review, our editorial team has decided not to publish this submission at this time.</p>
         <hr />
         <p><strong>Feedback from our team:</strong></p>
@@ -100,7 +90,7 @@ export async function POST(request, { params }) {
 
       await EmailService.sendRaw({
         to: authorEmail,
-        subject: `Update on Your Submission: ${event.data?.title || 'Your Story'}`,
+        subject: `Update on Your Submission: ${post?.title || 'Your Story'}`,
         html: emailTemplate(emailContent)
       }).catch(err => console.error('Failed to send rejection email:', err));
     }

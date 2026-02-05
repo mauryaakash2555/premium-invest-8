@@ -3,6 +3,7 @@ import { logEventSafe } from '@/lib/db/events';
 import { EmailService } from '@/lib/email/emailService';
 import { emailTemplate } from '@/lib/email/templates';
 import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
 
@@ -48,6 +49,38 @@ export async function POST(request) {
         received_at: new Date().toISOString()
       }
     });
+
+    // Insert into posts (single source of truth) - best-effort.
+    try {
+      const sb = supabaseAdmin();
+      const pillar = String(data.type || '').toLowerCase() === 'impact' ? 'IMPACT' : 'GUEST';
+      const contentOriginal = String(data.type || '').toLowerCase() === 'impact'
+        ? String(data.what_happened || data.incident_description || '')
+        : String(data.article_content || '');
+
+      await sb
+        .from('posts')
+        .insert({
+          pillar,
+          status: 'PENDING',
+          title: data.title,
+          author_name: data.author_name || null,
+          author_email: data.author_email,
+          author_phone: data.author_phone || null,
+          content_original: contentOriginal,
+          content_enhanced: null,
+          location: data.location || data.where_happened || null,
+          expertise_area: data.expertise_area || null,
+          author_credentials: data.author_credentials || null,
+          author_bio: data.author_bio || null,
+          author_linkedin: data.author_linkedin || null,
+          tags: [],
+          views: 0,
+        })
+        .throwOnError();
+    } catch {
+      // ignore if posts schema/env isn't configured yet
+    }
 
     // Send notification email to admin
     const prefs = await EmailPreferencesDB.getSafe();

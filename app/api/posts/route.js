@@ -1,22 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getLocalCommunityPosts } from '@/lib/blog/localCommunityPosts';
-import { listApprovedCommunitySubmissions } from '@/lib/blog/communitySubmissions';
-
-function normalizeBackendOrigin(raw) {
-  const s = String(raw || '').trim();
-  if (!s) return '';
-  const noTrailing = s.replace(/\/+$/, '');
-  return noTrailing.endsWith('/api') ? noTrailing.slice(0, -4) : noTrailing;
-}
-
-function getBackendOrigin() {
-  const candidates = [process.env.BACKEND_URL, process.env.NEXT_BACKEND_URL, process.env.NEXT_PUBLIC_BACKEND_URL];
-  for (const c of candidates) {
-    const origin = normalizeBackendOrigin(c);
-    if (origin) return origin;
-  }
-  return 'https://bmwealth-backend.onrender.com';
-}
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 function typeToPillar(type) {
   const t = String(type || '').toLowerCase();
@@ -49,6 +33,41 @@ function mergeUniqueById(primary, secondary) {
   return out;
 }
 
+function excerptFrom(text, max = 220) {
+  const s = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!s) return '';
+  return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+}
+
+function mapRowToPost(row) {
+  const r = row && typeof row === 'object' ? row : {};
+  const id = String(r.id || r._id || '').trim();
+  const contentOriginal = String(r.content_original || r.article_content || r.incident_description || '').trim();
+  const contentEnhanced = String(r.content_enhanced || r.enhanced_content || '').trim();
+  const imageUrl = String(r.image_url || r.image || '').trim() || null;
+  return {
+    _id: id,
+    pillar: normalizePillar(r.pillar || r.type || r.category || 'EDITORIAL'),
+    status: normalizeStatus(r.status || 'APPROVED'),
+    approved_at: String(r.approved_at || '').trim(),
+    created_at: String(r.created_at || r.submitted_at || r.received_at || '').trim(),
+    title: String(r.title || '').trim(),
+    author_name: String(r.author_name || '').trim(),
+    author_email: String(r.author_email || '').trim(),
+    content_original: contentOriginal,
+    content_enhanced: contentEnhanced,
+    excerpt: String(r.excerpt || '').trim() || excerptFrom(contentEnhanced || contentOriginal),
+    image_url: imageUrl,
+    image: imageUrl,
+    sponsored_by: r.sponsored_by ?? null,
+    affiliate_link: r.affiliate_link ?? null,
+    location_tag: String(r.location_tag || r.visual_keywords || '').trim() || null,
+    tags: Array.isArray(r.tags) ? r.tags : [],
+    views: typeof r.views === 'number' ? r.views : 0,
+    type: String(r.type || '').trim() || null,
+  };
+}
+
 export async function GET(req) {
   const type = req.nextUrl.searchParams.get('type');
   const pillar = req.nextUrl.searchParams.get('pillar');
@@ -65,47 +84,31 @@ export async function GET(req) {
     (p) => normalizePillar(p?.pillar) === resolvedPillar && normalizeStatus(p?.status) === resolvedStatus
   );
 
-  const submissions = await listApprovedCommunitySubmissions({ pillar: resolvedPillar, status: resolvedStatus, limit: 120 }).catch(() => []);
-  const localPlus = submissions.length ? mergeUniqueById(local, submissions) : local;
+  // Local dev: keep list instant even if Supabase isn't configured.
+  if (isLocalhost) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 
-  // Local dev: never wait on upstream (keeps filters instant).
-  if (isLocalhost) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-
+  let sb;
   try {
-    const BACKEND_ORIGIN = getBackendOrigin();
-    const controller = new AbortController();
-    const timeoutMs = local.length ? 1800 : 8000;
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-    const upstream = await fetch(
-      `${BACKEND_ORIGIN}/api/posts?pillar=${encodeURIComponent(resolvedPillar)}&status=${encodeURIComponent(status)}`,
-      {
-        method: 'GET',
-        headers: { Accept: 'application/json' },
-        cache: 'no-store',
-        signal: controller.signal,
-      }
-    ).finally(() => clearTimeout(timeout));
-
-    const contentType = upstream.headers.get('content-type') || '';
-    const data = contentType.includes('application/json') ? await upstream.json() : await upstream.text();
-
-    if (!upstream.ok) {
-      const detail = typeof data === 'object' && data && 'detail' in data ? data.detail : typeof data === 'string' && data ? data : 'Posts request failed';
-      if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-      return NextResponse.json({ success: false, detail }, { status: upstream.status || 502 });
-    }
-
-    if (Array.isArray(data) && localPlus.length) {
-      return NextResponse.json(mergeUniqueById(data, localPlus), { status: 200, headers: { 'Cache-Control': 'no-store' } });
-    }
-
-    if (Array.isArray(data)) return NextResponse.json(data, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-    if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-    return NextResponse.json([], { status: 200, headers: { 'Cache-Control': 'no-store' } });
-  } catch (e) {
-    const aborted = e && typeof e === 'object' && 'name' in e && e.name === 'AbortError';
-    if (localPlus.length) return NextResponse.json(localPlus, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-    return NextResponse.json({ success: false, detail: aborted ? 'Upstream timeout' : 'Upstream error' }, { status: aborted ? 504 : 502 });
+    sb = supabaseAdmin();
+  } catch {
+    return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   }
+
+  const safeLimit = 200;
+  const { data, error } = await sb
+    .from('posts')
+    .select('*')
+    .eq('pillar', resolvedPillar)
+    .eq('status', resolvedStatus)
+    .order('approved_at', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
+    .limit(safeLimit);
+
+  if (error || !Array.isArray(data)) {
+    return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  const remote = data.map(mapRowToPost).filter((p) => p && p._id && p.title);
+  const merged = local.length ? mergeUniqueById(remote, local) : remote;
+  return NextResponse.json(merged, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 }

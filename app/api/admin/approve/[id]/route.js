@@ -34,35 +34,30 @@ export async function POST(request, { params }) {
     }
 
     // Fetch the original event
-    const { data: event, error: fetchError } = await sb
-      .from('events')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const { data: post, error: fetchError } = await sb.from('posts').select('*').eq('id', id).single();
 
-    if (fetchError || !event) {
+    if (fetchError || !post) {
       return NextResponse.json(
         { error: 'Submission not found' },
         { status: 404 }
       );
     }
 
-    // Update the event data with approval info
-    const updatedData = {
-      ...event.data,
+    const updatedPost = {
       status: 'APPROVED',
       approved_at: new Date().toISOString(),
       content_enhanced: approvalData.content_enhanced,
       image_url: approvalData.image_url,
       affiliate_link: approvalData.affiliate_link,
       sponsored_by: approvalData.sponsored_by,
-      tags: approvalData.tags_to_add || []
+      tags: approvalData.tags_to_add || [],
     };
 
-    const { error: updateError } = await sb
-      .from('events')
-      .update({ data: updatedData })
-      .eq('id', id);
+    let updateError;
+    {
+      const res = await sb.from('posts').update(updatedPost).eq('id', id);
+      updateError = res.error;
+    }
 
     if (updateError) {
       throw updateError;
@@ -74,17 +69,17 @@ export async function POST(request, { params }) {
       event_type: 'submission_approved',
       data: {
         original_id: id,
-        title: event.data?.title,
+        title: post?.title,
         approved_at: new Date().toISOString()
       }
     });
 
     // Send approval email to author
-    const authorEmail = event.data?.author_email;
+    const authorEmail = post?.author_email;
     if (authorEmail) {
       const emailContent = `
         <h2>Your Story Has Been Approved! 🎉</h2>
-        <p>Great news! Your submission "<strong>${event.data?.title || 'Your Story'}</strong>" has been reviewed and approved by our editorial team.</p>
+        <p>Great news! Your submission "<strong>${post?.title || 'Your Story'}</strong>" has been reviewed and approved by our editorial team.</p>
         <p>It will be published on our platform shortly.</p>
         <hr />
         <p>Thank you for contributing to our community.</p>
@@ -93,7 +88,7 @@ export async function POST(request, { params }) {
 
       await EmailService.sendRaw({
         to: authorEmail,
-        subject: `✅ Your Story Has Been Approved: ${event.data?.title || 'Your Submission'}`,
+        subject: `✅ Your Story Has Been Approved: ${post?.title || 'Your Submission'}`,
         html: emailTemplate(emailContent)
       }).catch(err => console.error('Failed to send approval email:', err));
     }

@@ -9,6 +9,7 @@ import { EmailService } from '@/lib/email/emailService';
 import { emailTemplate } from '@/lib/email/templates';
 import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
 import { logEventSafe } from '@/lib/db/events';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
 
@@ -79,6 +80,33 @@ export async function POST(req) {
       received_at: new Date().toISOString(),
     },
   });
+
+  // Insert into posts (single source of truth) - best-effort.
+  try {
+    const sb = supabaseAdmin();
+    await sb
+      .from('posts')
+      .insert({
+        pillar: 'GUEST',
+        status: 'PENDING',
+        title: data.title,
+        author_name: data.author_name,
+        author_email: data.author_email,
+        author_phone: data.author_phone,
+        content_original: data.article_content,
+        content_enhanced: null,
+        expertise_area: data.expertise_area,
+        author_credentials: data.author_credentials,
+        author_bio: data.author_bio,
+        author_linkedin: data.author_linkedin,
+        sources_references: data.sources_references || null,
+        tags: [],
+        views: 0,
+      })
+      .throwOnError();
+  } catch {
+    // ignore if posts schema/env isn't configured yet
+  }
 
   const prefs = await EmailPreferencesDB.getSafe();
   const to = String(process.env.SUBMISSIONS_NOTIFY_EMAIL || process.env.EDITORIAL_INBOX_EMAIL || prefs?.email_address || '').trim();
