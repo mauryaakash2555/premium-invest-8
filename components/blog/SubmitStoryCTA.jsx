@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Cormorant_Garamond } from 'next/font/google';
+import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
+import { useMemo } from 'react';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -10,9 +11,42 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 });
 
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+});
+
+const LUX = {
+  background: 'oklch(0.06 0.005 280)',
+  foreground: 'oklch(0.95 0.01 85)',
+  card: 'oklch(0.10 0.005 280)',
+  muted: 'oklch(0.55 0.01 85)',
+  accent: 'oklch(0.78 0.08 65)',
+};
+
 export default function SubmitStoryCTA() {
+  const themeStyle = useMemo(
+    () => ({
+      '--lux-background': LUX.background,
+      '--lux-foreground': LUX.foreground,
+      '--lux-foreground-80': 'oklch(0.95 0.01 85 / 0.80)',
+      '--lux-foreground-60': 'oklch(0.95 0.01 85 / 0.60)',
+      '--lux-foreground-40': 'oklch(0.95 0.01 85 / 0.40)',
+      '--lux-foreground-10': 'oklch(0.95 0.01 85 / 0.10)',
+      '--lux-foreground-05': 'oklch(0.95 0.01 85 / 0.05)',
+      '--lux-card': LUX.card,
+      '--lux-muted': LUX.muted,
+      '--lux-accent': LUX.accent,
+    }),
+    []
+  );
+
   return (
-    <section className="px-6 md:px-12 lg:px-24 py-28 md:py-32 border-t border-[color:var(--lux-foreground-05)]">
+    <section
+      style={themeStyle}
+      className={`${jakarta.className} px-6 md:px-12 lg:px-24 py-28 md:py-32 border-t border-[color:var(--lux-foreground-05)] bg-[var(--lux-background)]`}
+    >
       <div className="mx-auto max-w-7xl border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/45 backdrop-blur-xl p-10 md:p-14">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
           <div>
