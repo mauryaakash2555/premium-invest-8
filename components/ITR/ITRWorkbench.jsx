@@ -73,11 +73,11 @@ const SpinnerIcon = () => (
 
 function Badge({ children, variant = 'default' }) {
   const variants = {
-    default: 'bg-slate-700/50 text-slate-300 border-slate-600/50',
+    default: 'bg-[#333333]/50 text-white/70 border-[#333333]',
     success: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
     warning: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
     error: 'bg-red-500/20 text-red-400 border-red-500/30',
-    info: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    info: 'bg-[#d4af37]/20 text-[#d4af37] border-[#d4af37]/30',
   };
   return (
     <span className={`inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border ${variants[variant]}`}>
@@ -88,10 +88,10 @@ function Badge({ children, variant = 'default' }) {
 
 function Button({ children, onClick, disabled, variant = 'default', size = 'md', className = '' }) {
   const variants = {
-    default: 'bg-slate-800 hover:bg-slate-700 text-white border-slate-600',
-    primary: 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white border-blue-500',
+    default: 'bg-[#1a1a1a] hover:bg-[#333333] text-white border-[#333333]',
+    primary: 'bg-gradient-to-r from-[#d4af37] to-[#c4a030] hover:from-[#e5c040] hover:to-[#d4af37] text-[#0a0a0a] font-semibold border-[#d4af37]',
     success: 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-emerald-500',
-    ghost: 'bg-transparent hover:bg-slate-800/50 text-slate-300 border-transparent',
+    ghost: 'bg-transparent hover:bg-[#1a1a1a]/50 text-white/70 border-transparent',
     danger: 'bg-red-600/20 hover:bg-red-600/30 text-red-400 border-red-500/30',
   };
   const sizes = {
@@ -348,7 +348,7 @@ export default function ITRWorkbench() {
           messageType === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
           messageType === 'warning' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
           messageType === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-          'bg-blue-500/10 border-blue-500/30 text-blue-400'
+          'bg-[#d4af37]/10 border-[#d4af37]/30 text-[#d4af37]'
         }`}>
           {messageType === 'success' && <CheckIcon />}
           {messageType === 'warning' && <AlertIcon />}
@@ -361,9 +361,9 @@ export default function ITRWorkbench() {
         {/* Left Column: Main Content */}
         <div className="space-y-6">
           {/* Step 1: Upload */}
-          <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+          <div className="bg-[#1a1a1a] border border-[#333333] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">1</div>
+              <div className="w-8 h-8 rounded-full bg-[#d4af37]/20 flex items-center justify-center text-[#d4af37] font-bold text-sm">1</div>
               <h3 className="text-white font-semibold">Upload Documents</h3>
             </div>
             
@@ -372,7 +372,7 @@ export default function ITRWorkbench() {
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${
-                dragOver ? 'border-blue-500 bg-blue-500/10' : 'border-slate-600 hover:border-slate-500'
+                dragOver ? 'border-[#d4af37] bg-[#d4af37]/10' : 'border-[#333333] hover:border-[#d4af37]/50'
               }`}
             >
               <input
@@ -391,7 +391,7 @@ export default function ITRWorkbench() {
                 {busyAction === 'upload' ? <SpinnerIcon /> : <UploadIcon />}
                 <div>
                   <p className="text-white font-medium">Drop files here or click to browse</p>
-                  <p className="text-slate-400 text-sm mt-1">Supports Form 16, AIS, Bank Statements (PDF)</p>
+                  <p className="text-white/60 text-sm mt-1">Supports Form 16, AIS, Bank Statements (PDF)</p>
                 </div>
               </div>
             </div>
@@ -400,7 +400,7 @@ export default function ITRWorkbench() {
             {uploaded.length > 0 && (
               <div className="mt-4 space-y-2">
                 {uploaded.map((u) => (
-                  <div key={u.fileId} className="flex items-center justify-between bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                  <div key={u.fileId} className="flex items-center justify-between bg-[#0a0a0a]/80 rounded-lg p-3 border border-[#333333]">
                     <div className="flex items-center gap-3 min-w-0">
                       <FileIcon />
                       <div className="min-w-0">
@@ -410,7 +410,7 @@ export default function ITRWorkbench() {
                             {u.type === 'DIGITAL_PDF' ? 'Digital' : 'Scanned'}
                           </Badge>
                           <Badge variant="info">{u.docType || 'unknown'}</Badge>
-                          <span className="text-slate-500 text-xs">{u.pages} page(s)</span>
+                          <span className="text-white/50 text-xs">{u.pages} page(s)</span>
                         </div>
                       </div>
                     </div>
@@ -430,10 +430,10 @@ export default function ITRWorkbench() {
 
           {/* Step 2: Extract & Validate */}
           {uploaded.length > 0 && (
-            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+            <div className="bg-[#1a1a1a] border border-[#333333] rounded-xl p-5">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">2</div>
-                <h3 className="text-white font-semibold">Extract & Review Data</h3>
+              <div className="w-8 h-8 rounded-full bg-[#d4af37]/20 flex items-center justify-center text-[#d4af37] font-bold text-sm">2</div>
+              <h3 className="text-white font-semibold">Extract & Review Data</h3>
               </div>
               
               <div className="flex flex-wrap gap-3">
@@ -459,10 +459,10 @@ export default function ITRWorkbench() {
 
           {/* Step 3: Extracted Data Table */}
           {allFields.length > 0 && (
-            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-5">
+            <div className="bg-[#1a1a1a] border border-[#333333] rounded-xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">3</div>
+                  <div className="w-8 h-8 rounded-full bg-[#d4af37]/20 flex items-center justify-center text-[#d4af37] font-bold text-sm">3</div>
                   <h3 className="text-white font-semibold">Extracted Values</h3>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
@@ -471,28 +471,28 @@ export default function ITRWorkbench() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-lg border border-slate-700/50">
+              <div className="overflow-x-auto rounded-lg border border-[#333333]">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-slate-800/50">
-                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Field</th>
-                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider min-w-[180px]">Value</th>
-                      <th className="text-center p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                      <th className="text-left p-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Source</th>
+                    <tr className="bg-[#0a0a0a]">
+                      <th className="text-left p-3 text-xs font-semibold text-white/60 uppercase tracking-wider">Field</th>
+                      <th className="text-left p-3 text-xs font-semibold text-white/60 uppercase tracking-wider min-w-[180px]">Value</th>
+                      <th className="text-center p-3 text-xs font-semibold text-white/60 uppercase tracking-wider">Status</th>
+                      <th className="text-left p-3 text-xs font-semibold text-white/60 uppercase tracking-wider">Source</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-700/50">
+                  <tbody className="divide-y divide-[#333333]">
                     {allFields.map((f) => (
-                      <tr key={`${f.fileId}:${f.key}`} className={`hover:bg-slate-800/30 transition-colors ${f.status !== 'OK' ? 'bg-amber-500/5' : ''}`}>
+                      <tr key={`${f.fileId}:${f.key}`} className={`hover:bg-[#1a1a1a]/50 transition-colors ${f.status !== 'OK' ? 'bg-amber-500/5' : ''}`}>
                         <td className="p-3">
                           <div className="text-white text-sm font-medium">{f.label}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{f.key}</div>
+                          <div className="text-white/50 text-xs mt-0.5">{f.key}</div>
                         </td>
                         <td className="p-3">
                           <input
                             type="text"
-                            className={`w-full bg-slate-800/50 border rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
-                              f.status !== 'OK' ? 'border-amber-500/50' : 'border-slate-600/50'
+                            className={`w-full bg-[#1a1a1a]/80 border rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#d4af37]/50 ${
+                              f.status !== 'OK' ? 'border-amber-500/50' : 'border-[#333333]'
                             }`}
                             value={f.valueText ?? ''}
                             placeholder="Enter value..."
@@ -538,7 +538,7 @@ export default function ITRWorkbench() {
                           {f.source?.page ? (
                             <button
                               type="button"
-                              className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1 transition-colors"
+                              className="text-[#d4af37] hover:text-[#e5c040] text-sm flex items-center gap-1 transition-colors"
                               onClick={() =>
                                 setPanel({
                                   fileId: f.fileId,
@@ -553,7 +553,7 @@ export default function ITRWorkbench() {
                               Page {f.source.page}
                             </button>
                           ) : (
-                            <span className="text-slate-500 text-sm">—</span>
+                            <span className="text-white/50 text-sm">—</span>
                           )}
                           {f.reason && (
                             <div className="text-amber-400/70 text-xs mt-1">{f.reason.replace(/_/g, ' ')}</div>
@@ -565,7 +565,7 @@ export default function ITRWorkbench() {
                 </table>
               </div>
 
-              <p className="text-slate-500 text-xs mt-3">
+              <p className="text-white/50 text-xs mt-3">
                 💡 Click on a field to view its source in the PDF. Yellow rows need manual verification.
               </p>
             </div>
@@ -590,12 +590,12 @@ export default function ITRWorkbench() {
               }
             />
           ) : (
-            <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800 flex items-center justify-center">
+            <div className="bg-[#1a1a1a] border border-[#333333] rounded-xl p-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#0a0a0a] flex items-center justify-center">
                 <FileIcon />
               </div>
               <h4 className="text-white font-medium mb-2">PDF Preview</h4>
-              <p className="text-slate-400 text-sm">
+              <p className="text-white/60 text-sm">
                 Upload a document to view it here. Click on extracted values to highlight their source.
               </p>
             </div>
