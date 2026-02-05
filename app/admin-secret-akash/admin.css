@@ -1,11 +1,11 @@
-/* Page-scoped styling for /admin-secret-akash - ARTLIST STYLE */
+/* Page-scoped styling for /admin-secret-akash - LUX PREMIUM THEME */
 
 :root {
-  --sa-bg: #0a0a0c;
-  --sa-card: rgba(18, 18, 22, 0.55);
-  --sa-border: rgba(255,255,255,0.08);
-  --sa-text: rgba(255,255,255,0.92);
-  --sa-muted: rgba(255,255,255,0.55);
+  --sa-bg: oklch(0.06 0.005 280);
+  --sa-card: oklch(0.10 0.005 280 / 0.75);
+  --sa-border: oklch(0.25 0.01 85 / 0.12);
+  --sa-text: oklch(0.95 0.01 85);
+  --sa-muted: oklch(0.70 0.01 85);
   --sa-accent: var(--lux-accent, oklch(0.78 0.08 65));
 }
 
@@ -20,8 +20,8 @@
 }
 
 @keyframes cardGlow {
-  0%, 100% { box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset; }
-  50% { box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset, 0 0 40px rgba(212, 165, 116, 0.05); }
+  0%, 100% { box-shadow: 0 24px 80px oklch(0.02 0.005 280 / 0.6), 0 0 0 1px oklch(0.20 0.01 85 / 0.06) inset; }
+  50% { box-shadow: 0 24px 80px oklch(0.02 0.005 280 / 0.6), 0 0 0 1px oklch(0.25 0.01 85 / 0.10) inset, 0 0 60px color-mix(in oklab, var(--lux-accent) 8%, transparent); }
 }
 
 .sa-loading {
