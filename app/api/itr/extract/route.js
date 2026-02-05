@@ -1,20 +1,20 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import path from 'node:path';
-import fs from 'node:fs';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta, readFileBytes, writeJsonAtomic, saveFileMeta } from '@/lib/itr/storage';
-import { rawPathForFile, extractionPathForFile, auditLogPath } from '@/lib/itr/paths';
 import { detectDocTypeFromText } from '@/lib/itr/docDetection';
 import { mapFieldsFromExtraction } from '@/lib/itr/mapping';
 import { extractPdfText, detectPdfType, getAllText } from '@/lib/itr/pdfExtract';
-
-function appendAuditLine(filePath, obj) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.appendFileSync(filePath, JSON.stringify(obj) + '\n', 'utf8');
-}
+import {
+  downloadJson,
+  downloadBytes,
+  uploadJson,
+  metaKey,
+  extractionKey,
+  rawExtractionKey,
+  appendAuditEvents,
+} from '@/lib/itr/remoteStore';
 
 export async function POST(request) {
   try {
@@ -29,15 +29,22 @@ export async function POST(request) {
     }
 
     const outputs = [];
+    const auditEvents = [];
 
     for (const fileId of fileIds) {
-      const meta = getFileMeta(fileId);
+      const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+      const meta = metaResp?.obj;
       if (!meta || meta.sessionId !== sessionId) {
         outputs.push({ fileId, ok: false, error: 'NOT_FOUND' });
         continue;
       }
 
-      const bytes = readFileBytes(meta.diskPath);
+      const fileResp = await downloadBytes({ key: meta.storageKey });
+      const bytes = fileResp?.buffer ? new Uint8Array(fileResp.buffer) : null;
+      if (!bytes) {
+        outputs.push({ fileId, ok: false, error: 'FILE_MISSING' });
+        continue;
+      }
       const filename = meta.filename;
       const isPdf = String(filename || '').toLowerCase().endsWith('.pdf') || String(meta.contentType || '').includes('pdf');
 
@@ -59,7 +66,7 @@ export async function POST(request) {
         const allText = getAllText(extractionResult);
         
         // Save raw extraction data
-        writeJsonAtomic(rawPathForFile(fileId), extractionResult);
+        await uploadJson({ key: rawExtractionKey({ sessionId, fileId }), obj: extractionResult });
 
         if (pdfKind === 'SCANNED_PDF') {
           // Scanned PDF - create manual entry fields
@@ -94,8 +101,8 @@ export async function POST(request) {
             createdAt: new Date().toISOString(),
           };
 
-          writeJsonAtomic(extractionPathForFile(fileId), extraction);
-          saveFileMeta(fileId, { ...meta, type: 'SCANNED_PDF', docType });
+          await uploadJson({ key: extractionKey({ sessionId, fileId }), obj: extraction });
+          await uploadJson({ key: metaKey({ sessionId, fileId }), obj: { ...meta, type: 'SCANNED_PDF', docType } });
           
           outputs.push({ fileId, ok: true, kind: 'SCANNED_PDF', docType, fields: extraction.fields, warnings: extraction.warnings });
           continue;
@@ -115,12 +122,12 @@ export async function POST(request) {
           createdAt: new Date().toISOString(),
         };
 
-        writeJsonAtomic(extractionPathForFile(fileId), extraction);
-        saveFileMeta(fileId, { ...meta, type: 'DIGITAL_PDF', docType });
+        await uploadJson({ key: extractionKey({ sessionId, fileId }), obj: extraction });
+        await uploadJson({ key: metaKey({ sessionId, fileId }), obj: { ...meta, type: 'DIGITAL_PDF', docType } });
 
         // Audit log
         for (const f of extraction.fields || []) {
-          appendAuditLine(auditLogPath({ sessionId }), {
+          auditEvents.push({
             type: 'extracted_field',
             method: 'pdfjs',
             sessionId,
@@ -133,23 +140,23 @@ export async function POST(request) {
             source: f?.source ?? null,
             status: f?.status,
             reason: f?.reason ?? null,
-            at: new Date().toISOString(),
           });
         }
 
         outputs.push({ fileId, ok: true, kind: 'DIGITAL_PDF', docType, fields: extraction.fields });
       } catch (e) {
-        appendAuditLine(auditLogPath({ sessionId }), {
+        auditEvents.push({
           type: 'extraction_failed',
           sessionId,
           fileId,
           filename,
-          at: new Date().toISOString(),
           message: e?.message || String(e),
         });
         outputs.push({ fileId, ok: false, error: 'EXTRACTION_FAILED', message: e?.message || String(e) });
       }
     }
+
+    await appendAuditEvents({ sessionId, events: auditEvents });
 
     const resp = NextResponse.json({ ok: true, results: outputs }, { status: 200 });
     if (setCookie) resp.headers.set('Set-Cookie', setCookie);

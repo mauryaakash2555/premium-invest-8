@@ -1,25 +1,9 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import fs from 'node:fs';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta } from '@/lib/itr/storage';
-import {
-  metaPathForFile,
-  extractionPathForFile,
-  rawPathForFile,
-  ocrPathForFile,
-  getItrStoreRoot,
-} from '@/lib/itr/paths';
-
-function safeUnlink(p) {
-  try {
-    if (p && fs.existsSync(p)) fs.unlinkSync(p);
-  } catch {
-    // ignore
-  }
-}
+import { downloadJson, metaKey, extractionKey, rawExtractionKey, removeKeys } from '@/lib/itr/remoteStore';
 
 export async function POST(request) {
   try {
@@ -33,22 +17,22 @@ export async function POST(request) {
       return resp;
     }
 
-    const meta = getFileMeta(fileId);
+    const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+    const meta = metaResp?.obj;
     if (!meta || meta.sessionId !== sessionId) {
       const resp = NextResponse.json({ error: 'Not found' }, { status: 404 });
       if (setCookie) resp.headers.set('Set-Cookie', setCookie);
       return resp;
     }
 
-    // Delete on-disk artifacts
-    safeUnlink(meta.diskPath);
-    safeUnlink(metaPathForFile(fileId));
-    safeUnlink(extractionPathForFile(fileId));
-    safeUnlink(rawPathForFile(fileId));
-    safeUnlink(ocrPathForFile(fileId));
+    await removeKeys([
+      meta.storageKey,
+      metaKey({ sessionId, fileId }),
+      extractionKey({ sessionId, fileId }),
+      rawExtractionKey({ sessionId, fileId }),
+    ]);
 
-    // Best-effort: clean empty dirs is optional; keep store root stable.
-    const resp = NextResponse.json({ ok: true, storeRoot: getItrStoreRoot() }, { status: 200 });
+    const resp = NextResponse.json({ ok: true }, { status: 200 });
     if (setCookie) resp.headers.set('Set-Cookie', setCookie);
     return resp;
   } catch (err) {

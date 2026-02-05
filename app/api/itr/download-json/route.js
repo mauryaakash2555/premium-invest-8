@@ -3,8 +3,7 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta, readJsonIfExists } from '@/lib/itr/storage';
-import { extractionPathForFile } from '@/lib/itr/paths';
+import { downloadJson, metaKey, extractionKey } from '@/lib/itr/remoteStore';
 
 export async function GET(request) {
   try {
@@ -23,9 +22,12 @@ export async function GET(request) {
 
     const out = [];
     for (const fileId of fileIds) {
-      const meta = getFileMeta(fileId);
+      const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+      const meta = metaResp?.obj;
       if (!meta || meta.sessionId !== sessionId) continue;
-      const extraction = readJsonIfExists(extractionPathForFile(fileId));
+
+      const extractionResp = await downloadJson({ key: extractionKey({ sessionId, fileId }) });
+      const extraction = extractionResp?.obj || null;
       out.push({ meta, extraction });
     }
 

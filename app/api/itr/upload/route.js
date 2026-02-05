@@ -2,65 +2,63 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
-import path from 'node:path';
-import { spawn } from 'node:child_process';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { assertStoreRootExists, makeId, saveFileBytes, saveFileMeta } from '@/lib/itr/storage';
-import { filePathForUpload } from '@/lib/itr/paths';
-import { detectPdfKind, detectDocTypeFromText } from '@/lib/itr/docDetection';
+import { detectDocTypeFromText } from '@/lib/itr/docDetection';
+import { extractPdfText, detectPdfType, getAllText } from '@/lib/itr/pdfExtract';
+import { uploadBytes, uploadJson, metaKey, uploadKey } from '@/lib/itr/remoteStore';
+import { supabaseAdmin } from '@/lib/db/supabaseAdmin';
 
-async function runPdfPlumberExtract(pdfBytes) {
-  const scriptPath = path.join(process.cwd(), 'scripts', 'pdfplumber_extract.py');
-  const input = Buffer.from(pdfBytes).toString('base64');
+function makeId(prefix) {
+  return `${prefix}_${crypto.randomBytes(12).toString('hex')}`;
+}
 
-  const trySpawn = (command, args) =>
-    new Promise((resolve, reject) => {
-      const child = spawn(command, args, { stdio: ['pipe', 'pipe', 'pipe'] });
-      let stdout = '';
-      let stderr = '';
-      child.stdout.on('data', (d) => (stdout += d.toString()));
-      child.stderr.on('data', (d) => (stderr += d.toString()));
-      child.on('error', reject);
-      child.on('close', (code) => {
-        if (code !== 0) return reject(new Error(stderr || `pdfplumber exited with ${code}`));
-        resolve(stdout);
-      });
-      child.stdin.write(input);
-      child.stdin.end();
-    });
+function extractFieldsFromText(allText) {
+  const text = String(allText || '');
+  const fields = {};
 
-  const candidates = [
-    { cmd: process.env.PDFPLUMBER_PYTHON || 'python', args: [scriptPath] },
-    { cmd: 'py', args: ['-3', scriptPath] },
-  ];
+  const readNumber = (s) => {
+    const cleaned = String(s || '').replace(/[^\d,]/g, '');
+    if (!cleaned) return null;
+    const n = Number.parseInt(cleaned.replace(/,/g, ''), 10);
+    return Number.isFinite(n) ? n : null;
+  };
 
-  let lastErr;
-  for (const c of candidates) {
-    try {
-      const out = await trySpawn(c.cmd, c.args);
-      return JSON.parse(out);
-    } catch (e) {
-      lastErr = e;
+  // Gross Salary
+  {
+    const m = text.match(/gross\s+salary[^\d]{0,40}([\d,]{3,})/i);
+    const raw = m?.[1] || null;
+    const value = raw ? readNumber(raw) : null;
+    if (value !== null) {
+      fields.gross_salary = {
+        value,
+        raw,
+        confidence: 1.0,
+        source: { page: null, x: null, y: null },
+      };
     }
   }
 
-  throw lastErr || new Error('pdfplumber unavailable');
-}
+  // TDS
+  {
+    const m = text.match(/(?:\btds\b|tax\s+deducted)[^\d]{0,40}([\d,]{3,})/i);
+    const raw = m?.[1] || null;
+    const value = raw ? readNumber(raw) : null;
+    if (value !== null) {
+      fields.tds = {
+        value,
+        raw,
+        confidence: 1.0,
+        source: { page: null, x: null, y: null },
+      };
+    }
+  }
 
-function keywordSummary(text) {
-  const t = String(text || '').toLowerCase();
-  return {
-    hasForm16: t.includes('form 16') || t.includes('form no. 16'),
-    hasAis: t.includes('annual information statement') || t.includes('ais'),
-    hasTds: t.includes('tds') || t.includes('tax deducted at source'),
-  };
+  return fields;
 }
 
 export async function POST(request) {
   try {
-    assertStoreRootExists();
-
     const { sessionId, setCookie } = ensureSessionId(request);
     const uploadId = makeId('upload');
 
@@ -74,6 +72,8 @@ export async function POST(request) {
     }
 
     const results = [];
+    const bucket = process.env.ITR_STORAGE_BUCKET || 'itr-documents';
+    const supabase = supabaseAdmin();
 
     for (const f of files) {
       const filename = String(f?.name || 'upload.bin');
@@ -81,34 +81,44 @@ export async function POST(request) {
       const isPdf = ext === 'pdf' || String(f?.type || '').includes('pdf');
 
       const bytes = new Uint8Array(await f.arrayBuffer());
+      const buffer = Buffer.from(bytes);
       const fileId = makeId('itrfile');
-      const diskPath = filePathForUpload({ sessionId, uploadId, filename });
+      const storageKey = uploadKey({ sessionId, uploadId, fileId, filename });
 
-      saveFileBytes(diskPath, bytes);
+      await uploadBytes({
+        key: storageKey,
+        buffer,
+        contentType: String(f?.type || '') || 'application/octet-stream',
+      });
 
       let type = isPdf ? 'SCANNED_PDF' : 'SCANNED_PDF';
       let pages = 1;
       let detection = null;
       let detectedDocType = 'unknown';
+      let extractedPreview = null;
 
       if (isPdf) {
         try {
-          const extracted = await runPdfPlumberExtract(bytes);
-          const allText = Array.isArray(extracted?.pages)
-            ? extracted.pages.map((p) => p?.text || '').join('\n\n')
-            : '';
-          pages = Number(extracted?.totalPages || extracted?.pages?.length || 1) || 1;
-          type = detectPdfKind({ hasSelectableText: !!extracted?.hasSelectableText, extractedText: allText });
+          const extracted = await extractPdfText(bytes);
+          const pdfKind = detectPdfType(extracted);
+          const allText = getAllText(extracted);
+          pages = Number(extracted?.numPages || 1) || 1;
+          type = pdfKind;
           detection = {
-            method: 'pdfplumber',
+            method: 'pdfjs',
             hasSelectableText: !!extracted?.hasSelectableText,
-            keywords: keywordSummary(allText),
             extractedTextLength: String(allText || '').length,
           };
           detectedDocType = detectDocTypeFromText(allText);
+
+          extractedPreview = {
+            type: pdfKind === 'DIGITAL_PDF' ? 'DIGITAL' : 'SCANNED',
+            pages,
+            fields: extractFieldsFromText(allText),
+            rawTextCount: String(allText || '').length,
+          };
         } catch (e) {
-          // If pdfplumber is unavailable, we conservatively treat as scanned.
-          detection = { method: 'pdfplumber', error: e?.message || String(e) };
+          detection = { method: 'pdfjs', error: e?.message || String(e) };
           type = 'SCANNED_PDF';
           detectedDocType = 'unknown';
         }
@@ -117,23 +127,35 @@ export async function POST(request) {
       const createdAt = new Date().toISOString();
       const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString();
 
-      saveFileMeta(fileId, {
+      const meta = {
         fileId,
         sessionId,
         uploadId,
         filename,
         contentType: String(f?.type || ''),
         sizeBytes: bytes.length,
-        diskPath,
+        storageKey,
         type,
         pages,
         docType: detectedDocType,
         detection,
         createdAt,
         expiresAt,
-      });
+      };
 
-      results.push({ fileId, filename, type, pages, docType: detectedDocType });
+      await uploadJson({ key: metaKey({ sessionId, fileId }), obj: meta });
+
+      const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(storageKey);
+
+      results.push({
+        fileId,
+        filename,
+        type,
+        pages,
+        docType: detectedDocType,
+        fileUrl: urlData?.publicUrl || null,
+        extracted: extractedPreview,
+      });
     }
 
     const resp = NextResponse.json({ ok: true, uploadId, files: results }, { status: 200 });

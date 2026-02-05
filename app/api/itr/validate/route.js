@@ -4,8 +4,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta, readJsonIfExists, writeJsonAtomic } from '@/lib/itr/storage';
-import { extractionPathForFile, validationReportPath } from '@/lib/itr/paths';
+import { downloadJson, metaKey, extractionKey } from '@/lib/itr/remoteStore';
 import { parseInrNumber } from '@/lib/itr/numbers';
 
 function jobId() {
@@ -33,9 +32,11 @@ export async function POST(request) {
     const extractedByFile = [];
 
     for (const fileId of fileIds) {
-      const meta = getFileMeta(fileId);
+      const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+      const meta = metaResp?.obj;
       if (!meta || meta.sessionId !== sessionId) continue;
-      const extraction = readJsonIfExists(extractionPathForFile(fileId));
+      const extractionResp = await downloadJson({ key: extractionKey({ sessionId, fileId }) });
+      const extraction = extractionResp?.obj;
       if (extraction) extractedByFile.push(extraction);
     }
 
@@ -94,8 +95,6 @@ export async function POST(request) {
       flags,
       createdAt: new Date().toISOString(),
     };
-
-    writeJsonAtomic(validationReportPath({ sessionId, jobId: job }), report);
 
     const resp = NextResponse.json(report, { status: 200 });
     if (setCookie) resp.headers.set('Set-Cookie', setCookie);

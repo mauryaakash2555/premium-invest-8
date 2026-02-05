@@ -1,17 +1,9 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import fs from 'node:fs';
-import path from 'node:path';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta, readJsonIfExists, writeJsonAtomic } from '@/lib/itr/storage';
-import { auditLogPath, extractionPathForFile } from '@/lib/itr/paths';
-
-function appendAuditLine(filePath, obj) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.appendFileSync(filePath, JSON.stringify(obj) + '\n', 'utf8');
-}
+import { downloadJson, uploadJson, metaKey, extractionKey, appendAuditEvents } from '@/lib/itr/remoteStore';
 
 export async function POST(request) {
   try {
@@ -27,14 +19,16 @@ export async function POST(request) {
       return resp;
     }
 
-    const meta = getFileMeta(fileId);
+    const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+    const meta = metaResp?.obj;
     if (!meta || meta.sessionId !== sessionId) {
       const resp = NextResponse.json({ error: 'Not found' }, { status: 404 });
       if (setCookie) resp.headers.set('Set-Cookie', setCookie);
       return resp;
     }
 
-    const extraction = readJsonIfExists(extractionPathForFile(fileId));
+    const extractionResp = await downloadJson({ key: extractionKey({ sessionId, fileId }) });
+    const extraction = extractionResp?.obj;
     if (!extraction) {
       const resp = NextResponse.json({ error: 'No extraction for file' }, { status: 400 });
       if (setCookie) resp.headers.set('Set-Cookie', setCookie);
@@ -60,16 +54,20 @@ export async function POST(request) {
     };
 
     const updated = { ...extraction, fields, updatedAt: new Date().toISOString() };
-    writeJsonAtomic(extractionPathForFile(fileId), updated);
+    await uploadJson({ key: extractionKey({ sessionId, fileId }), obj: updated });
 
-    appendAuditLine(auditLogPath({ sessionId }), {
-      type: 'manual_override',
+    await appendAuditEvents({
       sessionId,
-      fileId,
-      fieldKey,
-      old_value: oldValueText,
-      new_value: String(newValueText ?? ''),
-      at: new Date().toISOString(),
+      events: [
+        {
+          type: 'manual_override',
+          sessionId,
+          fileId,
+          fieldKey,
+          old_value: oldValueText,
+          new_value: String(newValueText ?? ''),
+        },
+      ],
     });
 
     const resp = NextResponse.json({ ok: true }, { status: 200 });

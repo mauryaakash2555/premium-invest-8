@@ -1,10 +1,9 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import fs from 'node:fs';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { getFileMeta } from '@/lib/itr/storage';
+import { downloadJson, downloadBytes, metaKey } from '@/lib/itr/remoteStore';
 
 export async function GET(request) {
   try {
@@ -18,14 +17,21 @@ export async function GET(request) {
       return resp;
     }
 
-    const meta = getFileMeta(fileId);
+    const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
+    const meta = metaResp?.obj;
     if (!meta || meta.sessionId !== sessionId) {
       const resp = NextResponse.json({ error: 'Not found' }, { status: 404 });
       if (setCookie) resp.headers.set('Set-Cookie', setCookie);
       return resp;
     }
 
-    const buf = fs.readFileSync(meta.diskPath);
+    const fileResp = await downloadBytes({ key: meta.storageKey });
+    const buf = fileResp?.buffer;
+    if (!buf) {
+      const resp = NextResponse.json({ error: 'Not found' }, { status: 404 });
+      if (setCookie) resp.headers.set('Set-Cookie', setCookie);
+      return resp;
+    }
     const contentType = meta.contentType || (meta.filename?.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream');
 
     const resp = new NextResponse(buf, {

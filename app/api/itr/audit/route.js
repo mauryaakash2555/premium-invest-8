@@ -1,22 +1,20 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import fs from 'node:fs';
 
 import { ensureSessionId } from '@/lib/itr/session';
-import { auditLogPath } from '@/lib/itr/paths';
+import { downloadBytes, auditKey } from '@/lib/itr/remoteStore';
 
 export async function GET(request) {
   try {
     const { sessionId, setCookie } = ensureSessionId(request);
-    const p = auditLogPath({ sessionId });
-    if (!fs.existsSync(p)) {
+    const auditResp = await downloadBytes({ key: auditKey({ sessionId }) });
+    const raw = auditResp?.buffer ? auditResp.buffer.toString('utf8') : '';
+    if (!raw) {
       const resp = NextResponse.json({ ok: true, events: [] }, { status: 200 });
       if (setCookie) resp.headers.set('Set-Cookie', setCookie);
       return resp;
     }
-
-    const raw = fs.readFileSync(p, 'utf8');
     const lines = raw.split(/\n+/).filter(Boolean);
     const tail = lines.slice(-200).map((l) => {
       try {
