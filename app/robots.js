@@ -27,9 +27,22 @@ export default async function robots() {
           "/admin-secret-akash",
           "/admin-secret-xyz",
           // Legacy store prefix (should never be indexed on main host)
+          "/_store",
           "/_store/",
           // Internal store shell is only meant for store subdomain via host rewrite.
+          "/store",
           "/store/",
+          // Utility/private routes (must not be indexed)
+          "/login",
+          "/dashboard",
+          "/dashboard/",
+          "/client-portal",
+          "/client-portal/",
+          "/embed",
+          "/embed/",
+          "/payment-success",
+          "/payment-failed",
+          "/v0-test",
           // Block legacy query variants from being crawled/indexed
           "/*?live=",
         ],

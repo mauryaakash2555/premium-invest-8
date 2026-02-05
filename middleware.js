@@ -8,13 +8,52 @@ export function middleware(request) {
   const hostNoPort = host.split(':')[0];
   const normalizedHost = hostNoPort.startsWith('www.') ? hostNoPort.slice(4) : hostNoPort;
 
+  // Legacy store prefix (/_store/*) previously lived on the main domain.
+  // Permanently redirect to the store subdomain to consolidate signals and clean up index coverage.
+  if (pathname === '/_store' || pathname.startsWith('/_store/')) {
+    const target = url.clone();
+    target.protocol = 'https:';
+    target.hostname = 'store.bmwealth.co.in';
+    const nextPath = pathname.replace(/^\/_store(\/|$)/, '/');
+    target.pathname = nextPath === '' ? '/' : nextPath;
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
+  }
+
   // Canonicalize domain/protocol to avoid duplicate indexation (www vs non-www, http vs https).
   // Preferred host: www.bmwealth.co.in. Store host is handled separately.
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
   const isMainProdHost = hostNoPort === 'bmwealth.co.in' || hostNoPort === 'www.bmwealth.co.in';
-  const proto = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
+  const protoHeader = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
+  const protoFromHeader = protoHeader.split(',')[0].trim();
+  const proto = (protoFromHeader || String(url.protocol || '').replace(':', '')).toLowerCase();
   const canonicalUrl = url.clone();
   let shouldRedirect = false;
+
+  // Store shell internal routes can leak as /store/* on the main host.
+  // Redirect to the clean store hostname URLs instead of returning 404s.
+  if (!isStoreHost && (pathname === '/store' || pathname.startsWith('/store/'))) {
+    const target = url.clone();
+    target.protocol = 'https:';
+    target.hostname = 'store.bmwealth.co.in';
+    const nextPath = pathname.replace(/^\/store(\/|$)/, '/');
+    target.pathname = nextPath === '' ? '/' : nextPath;
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
+  }
+
+  // If Google discovers Cloudflare email-protection URLs, avoid a hard 404.
+  // Redirect to the Contact page (safe, user-intent-aligned).
+  if (pathname === '/cdn-cgi/l/email-protection' || pathname.startsWith('/cdn-cgi/l/email-protection/')) {
+    const target = url.clone();
+    target.pathname = '/contact';
+    target.search = '';
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
+  }
 
   if (!isStoreHost && hostNoPort === 'bmwealth.co.in') {
     canonicalUrl.hostname = 'www.bmwealth.co.in';
@@ -40,6 +79,7 @@ export function middleware(request) {
       '/privacy-policy': '/privacy',
       '/terms-and-conditions': '/terms',
       '/refund-policy': '/refund',
+      '/live': '/live-intelligence',
       '/live-intel': '/live-intelligence',
       '/sitemap-page': '/sitemap',
     };
@@ -56,14 +96,6 @@ export function middleware(request) {
     return NextResponse.redirect(canonicalUrl, 301);
   }
 
-  // Legacy internal store prefix is not used anymore.
-  // Hard-block it everywhere to avoid any accidental exposure.
-  if (pathname.startsWith('/_store')) {
-    const res = new NextResponse('Gone', { status: 410 });
-    res.headers.set('X-Robots-Tag', 'noindex, nofollow');
-    return res;
-  }
-
   // Store host must never expose the internal store path prefix.
   // External URLs stay clean (/, /products, /about...).
   if (isStoreHost && (pathname === '/store' || pathname.startsWith('/store/'))) {
@@ -72,19 +104,27 @@ export function middleware(request) {
 
   // Block direct access to internal store routes on the main domain.
   // (Store is exposed via hostname rewrite only.)
-  if (!isStoreHost && (pathname === '/store' || pathname.startsWith('/store/'))) {
-    return new NextResponse('Not Found', { status: 404 });
-  }
+  // (Handled above via redirect to store hostname.)
 
   // Block the demo /products page on the main domain. This page includes finance-style fields
   // (risk/returns/AUM) and must not be accessible on bmwealth.co.in.
   if (!isStoreHost && (pathname === '/products' || pathname.startsWith('/products/'))) {
-    return new NextResponse('Not Found', { status: 404 });
+    const target = url.clone();
+    target.protocol = 'https:';
+    target.hostname = 'store.bmwealth.co.in';
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
   }
 
   // Block checkout-like routes on the main domain.
   if (!isStoreHost && (pathname === '/checkout' || pathname.startsWith('/checkout/'))) {
-    return new NextResponse('Not Found', { status: 404 });
+    const target = url.clone();
+    target.protocol = 'https:';
+    target.hostname = 'store.bmwealth.co.in';
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
   }
 
   // Host-based store routing: store.bmwealth.co.in/* -> /store/* (dedicated store shell)
@@ -96,6 +136,15 @@ export function middleware(request) {
   }
 
   const response = NextResponse.next();
+
+  // Ensure certain utility/private routes never get indexed on the main host.
+  if (!isStoreHost) {
+    const noindexExact = new Set(['/login', '/payment-success', '/payment-failed', '/v0-test']);
+    const noindexPrefix = ['/dashboard', '/client-portal', '/embed'];
+    const shouldNoindex =
+      noindexExact.has(pathname) || noindexPrefix.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+    if (shouldNoindex) response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
 
   // API: security headers (Phase 5)
   if (pathname.startsWith('/api')) {
