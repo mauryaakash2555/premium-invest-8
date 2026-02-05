@@ -6,6 +6,18 @@ import { useRouter } from 'next/navigation';
 import { Calendar, User } from 'lucide-react';
 import BlogNavigation from '@/components/BlogNavigation';
 
+// Premium LUX Theme
+const LUX = {
+  background: 'oklch(0.06 0.005 280)',
+  foreground: 'oklch(0.95 0.01 85)',
+  foreground80: 'oklch(0.95 0.01 85 / 0.80)',
+  foreground60: 'oklch(0.95 0.01 85 / 0.60)',
+  foreground40: 'oklch(0.95 0.01 85 / 0.40)',
+  foreground10: 'oklch(0.95 0.01 85 / 0.10)',
+  card: 'oklch(0.10 0.005 280)',
+  accent: 'oklch(0.78 0.08 65)',
+};
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-IN', {
@@ -188,7 +200,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
           <div
             style={{
               minHeight: '55vh',
-              background: '#000000',
+              background: LUX.background,
               padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px)',
               maxWidth: '1200px',
               margin: '0 auto',
@@ -205,7 +217,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                 <div
                   key={i}
                   style={{
-                    background: '#000000',
+                    background: LUX.card,
                     borderRadius: 0,
                     padding: '20px',
                     border: '1px solid color-mix(in oklab, var(--lux-accent) 24%, transparent)',
@@ -237,7 +249,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
         ) : (
           <div
             style={{
-              background: '#000000',
+              background: LUX.background,
               padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px)',
               maxWidth: '1200px',
               margin: '0 auto',

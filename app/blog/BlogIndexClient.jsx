@@ -744,7 +744,7 @@ export default function BlogPage() {
       <SubmitStoryCTA />
 
       <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '60px' }}>
-        <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'center' }}>
+        <p style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--lux-foreground-60)', marginBottom: '0', textAlign: 'center' }}>
           Explore: <Link href="/tools" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tools</Link> ·{' '}
           <Link href="/tools/tax-optimization" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
           <Link href="/services" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Services</Link>

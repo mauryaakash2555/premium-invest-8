@@ -35,6 +35,19 @@ import SocialShare from '@/components/blog/SocialShare';
 import ViewTracker from '@/components/blog/ViewTracker';
 import PostBottomCTA from '@/components/blog/PostBottomCTA';
 
+// Premium LUX Theme (canonical values - never deviate)
+const LUX = {
+  background: 'oklch(0.06 0.005 280)',
+  foreground: 'oklch(0.95 0.01 85)',
+  foreground80: 'oklch(0.95 0.01 85 / 0.80)',
+  foreground60: 'oklch(0.95 0.01 85 / 0.60)',
+  foreground40: 'oklch(0.95 0.01 85 / 0.40)',
+  foreground10: 'oklch(0.95 0.01 85 / 0.10)',
+  foreground05: 'oklch(0.95 0.01 85 / 0.05)',
+  card: 'oklch(0.10 0.005 280)',
+  accent: 'oklch(0.78 0.08 65)',
+};
+
 function isMobileViewport() {
   if (typeof window === 'undefined') return false;
   const w = window.innerWidth || 0;
@@ -417,12 +430,12 @@ export default function BlogDetailClient({ slug }) {
     return (
       <div style={{
         minHeight: '100vh',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: LUX.background,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        <div style={{ color: 'var(--lux-accent)', fontSize: '18px' }}>Loading...</div>
+        <div style={{ color: LUX.accent, fontSize: '18px' }}>Loading...</div>
       </div>
     );
   }
@@ -431,17 +444,17 @@ export default function BlogDetailClient({ slug }) {
     return (
       <div style={{
         minHeight: '100vh',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: LUX.background,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '40px 20px'
       }}>
-        <h1 style={{ color: '#fff', fontSize: '48px', marginBottom: '16px' }}>404</h1>
-        <p style={{ color: 'var(--lux-foreground-60)', fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
+        <h1 style={{ color: LUX.foreground, fontSize: '48px', marginBottom: '16px' }}>404</h1>
+        <p style={{ color: LUX.foreground60, fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
         <Link href="/blog" style={{
-          color: 'var(--lux-accent)',
+          color: LUX.accent,
           textDecoration: 'none',
           display: 'flex',
           alignItems: 'center',
@@ -458,7 +471,20 @@ export default function BlogDetailClient({ slug }) {
   const progressPct = Math.round(readProgress * 100);
 
   return (
-    <div className={pageClassName} style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '100px' }}>
+    <div className={pageClassName} style={{
+      backgroundColor: LUX.background,
+      minHeight: '100vh',
+      paddingTop: '100px',
+      '--lux-background': LUX.background,
+      '--lux-foreground': LUX.foreground,
+      '--lux-foreground-80': LUX.foreground80,
+      '--lux-foreground-60': LUX.foreground60,
+      '--lux-foreground-40': LUX.foreground40,
+      '--lux-foreground-10': LUX.foreground10,
+      '--lux-foreground-05': LUX.foreground05,
+      '--lux-card': LUX.card,
+      '--lux-accent': LUX.accent,
+    }}>
       {/* Mobile-only reading progress */}
       {isMobile && (
         <>
@@ -724,7 +750,7 @@ export default function BlogDetailClient({ slug }) {
           <p style={{
             fontSize: '18px',
             lineHeight: '1.7',
-            color: '#ccc',
+            color: 'var(--lux-foreground-60)',
             fontStyle: 'italic',
             marginBottom: '40px',
             paddingLeft: '20px',
@@ -737,7 +763,7 @@ export default function BlogDetailClient({ slug }) {
         {/* Content */}
         <div
           className="blog-html"
-          style={{ color: '#e5e5e5', lineHeight: '1.8' }}
+          style={{ color: 'var(--lux-foreground-80)', lineHeight: '1.8' }}
           dangerouslySetInnerHTML={{ 
             __html: renderedHtml || 'No content available.'
           }}
@@ -765,7 +791,7 @@ export default function BlogDetailClient({ slug }) {
           </h3>
           <p style={{
             fontSize: '16px',
-            color: '#d0d0d0',
+            color: 'var(--lux-foreground-60)',
             marginBottom: '24px',
             lineHeight: '1.7'
           }}>
@@ -841,7 +867,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               backgroundColor: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.12)',
-              color: '#e5e5e5',
+              color: 'var(--lux-foreground-80)',
               textDecoration: 'none',
               fontSize: '14px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
@@ -852,7 +878,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               backgroundColor: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.12)',
-              color: '#e5e5e5',
+              color: 'var(--lux-foreground-80)',
               textDecoration: 'none',
               fontSize: '14px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
@@ -863,7 +889,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               backgroundColor: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.12)',
-              color: '#e5e5e5',
+              color: 'var(--lux-foreground-80)',
               textDecoration: 'none',
               fontSize: '14px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
@@ -874,7 +900,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               backgroundColor: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.12)',
-              color: '#e5e5e5',
+              color: 'var(--lux-foreground-80)',
               textDecoration: 'none',
               fontSize: '14px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
@@ -885,7 +911,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               backgroundColor: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.12)',
-              color: '#e5e5e5',
+              color: 'var(--lux-foreground-80)',
               textDecoration: 'none',
               fontSize: '14px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.35)',

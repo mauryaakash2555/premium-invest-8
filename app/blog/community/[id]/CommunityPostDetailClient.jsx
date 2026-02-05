@@ -66,7 +66,19 @@ export default function CommunityPostDetailClient({ id }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#000000' }}>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: 'oklch(0.06 0.005 280)',
+      '--lux-background': 'oklch(0.06 0.005 280)',
+      '--lux-foreground': 'oklch(0.95 0.01 85)',
+      '--lux-foreground-80': 'oklch(0.95 0.01 85 / 0.80)',
+      '--lux-foreground-60': 'oklch(0.95 0.01 85 / 0.60)',
+      '--lux-foreground-40': 'oklch(0.95 0.01 85 / 0.40)',
+      '--lux-foreground-10': 'oklch(0.95 0.01 85 / 0.10)',
+      '--lux-foreground-05': 'oklch(0.95 0.01 85 / 0.05)',
+      '--lux-card': 'oklch(0.10 0.005 280)',
+      '--lux-accent': 'oklch(0.78 0.08 65)',
+    }}>
       <section className="section-container" style={{ paddingTop: '120px', paddingBottom: '60px', maxWidth: '980px' }}>
         <Link href="/blog" style={{ color: 'rgba(235,242,255,0.86)', textDecoration: 'none' }}>
           ← Back to Blog
