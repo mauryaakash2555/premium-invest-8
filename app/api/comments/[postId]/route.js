@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://bmwealth-backend.onrender.com';
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
 
 // GET comments for a post
 export async function GET(request, { params }) {
   try {
-    const postId = params.postId;
+    const { postId } = params;
     
     if (!postId) {
       return NextResponse.json(
@@ -14,24 +20,29 @@ export async function GET(request, { params }) {
       );
     }
 
-    const response = await fetch(`${BACKEND_URL}/api/comments/${postId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      cache: 'no-store'
-    });
-
-    if (!response.ok) {
-      // If backend doesn't have this endpoint yet, return empty comments
-      if (response.status === 404) {
-        return NextResponse.json({ comments: [], count: 0 });
-      }
-      throw new Error(`Backend error: ${response.status}`);
+    const supabase = getSupabase();
+    if (!supabase) {
+      console.error('[Comments API] Supabase env not configured');
+      return NextResponse.json({ comments: [], count: 0 });
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    // Fetch approved comments
+    const { data, error, count } = await supabase
+      .from('comments')
+      .select('*', { count: 'exact' })
+      .eq('post_id', postId)
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('[Comments API] Supabase error:', error);
+      return NextResponse.json({ comments: [], count: 0 });
+    }
+
+    return NextResponse.json({
+      comments: data || [],
+      count: count || 0,
+    });
 
   } catch (error) {
     console.error('[Comments API] GET error:', error);
@@ -43,7 +54,7 @@ export async function GET(request, { params }) {
 // POST a new comment
 export async function POST(request, { params }) {
   try {
-    const postId = params.postId;
+    const { postId } = params;
     const body = await request.json();
 
     if (!postId) {
@@ -53,9 +64,21 @@ export async function POST(request, { params }) {
       );
     }
 
-    // Validate required fields
-    const { name, email, comment } = body;
-    if (!name || !email || !comment) {
+    const supabase = getSupabase();
+    if (!supabase) {
+      console.error('[Comments API] Supabase env not configured');
+      return NextResponse.json(
+        { error: 'Comments service unavailable' },
+        { status: 503 }
+      );
+    }
+
+    // Validate required fields (support legacy keys too)
+    const author_name = body?.author_name ?? body?.name;
+    const author_email = body?.author_email ?? body?.email;
+    const comment_text = body?.comment_text ?? body?.comment;
+    
+    if (!author_name || !author_email || !comment_text) {
       return NextResponse.json(
         { error: 'Name, email, and comment are required' },
         { status: 400 }
@@ -64,7 +87,7 @@ export async function POST(request, { params }) {
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(author_email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
@@ -72,37 +95,58 @@ export async function POST(request, { params }) {
     }
 
     // Sanitize comment (basic XSS prevention)
-    const sanitizedComment = comment
+    const sanitizedComment = comment_text
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .trim();
 
-    const response = await fetch(`${BACKEND_URL}/api/comments/${postId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        comment: sanitizedComment,
-        postId,
-        timestamp: new Date().toISOString(),
-        ip: request.headers.get('x-forwarded-for') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown'
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Backend error: ${response.status}`);
+    if (sanitizedComment.length < 3) {
+      return NextResponse.json(
+        { error: 'Comment too short' },
+        { status: 400 }
+      );
     }
 
-    const data = await response.json();
+    if (sanitizedComment.length > 5000) {
+      return NextResponse.json(
+        { error: 'Comment too long (max 5000 characters)' },
+        { status: 400 }
+      );
+    }
+
+    // Get IP and User Agent
+    const ip_address = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      'unknown';
+    const user_agent = request.headers.get('user-agent') || 'unknown';
+
+    // Insert comment (auto-approved for now, add moderation later)
+    const { data, error } = await supabase
+      .from('comments')
+      .insert({
+        post_id: postId,
+        author_name: author_name.trim(),
+        author_email: author_email.trim().toLowerCase(),
+        comment_text: sanitizedComment,
+        status: 'approved', // Change to 'pending' if you want moderation
+        ip_address,
+        user_agent,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('[Comments API] Insert error:', error);
+      return NextResponse.json(
+        { error: 'Failed to post comment' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'Comment submitted for moderation',
-      comment: data
+      message: 'Comment posted successfully',
+      comment: data,
     });
 
   } catch (error) {
