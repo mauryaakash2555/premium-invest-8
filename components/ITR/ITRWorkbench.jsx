@@ -151,6 +151,8 @@ export default function ITRWorkbench() {
       const data = await resp.json();
       if (!resp.ok) throw new Error(data?.message || data?.error || 'Upload failed');
 
+      console.log('[ITR] upload response:', data);
+
       setUploaded((prev) => [...prev, ...(data.files || [])]);
       showMessage(`✓ ${data.files?.length || 1} file(s) uploaded successfully. Click "Extract Data" to parse.`, 'success');
 
