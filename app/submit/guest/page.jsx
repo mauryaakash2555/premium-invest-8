@@ -54,12 +54,22 @@ function inputBaseStyle(disabled) {
 export default function GuestColumnForm() {
   const formId = useId();
 
+  const MIN_ARTICLE_WORDS = 800;
+  const BIO_MAX_WORDS = 150;
+
+  const wordCount = (text) => {
+    const s = String(text || '').trim();
+    if (!s) return 0;
+    return s.split(/\s+/).filter(Boolean).length;
+  };
+
   const initial = useMemo(
     () => ({
       title: '',
       article_content: '',
       expertise_area: '',
       author_name: '',
+      author_phone: '',
       author_credentials: '',
       author_bio: '',
       author_linkedin: '',
@@ -72,12 +82,42 @@ export default function GuestColumnForm() {
   const [formData, setFormData] = useState(initial);
   const [status, setStatus] = useState({ state: 'idle', message: '' });
 
+  const articleWords = useMemo(() => wordCount(formData.article_content), [formData.article_content]);
+  const bioWords = useMemo(() => wordCount(formData.author_bio), [formData.author_bio]);
+  const phoneIsValid = useMemo(() => {
+    const digits = String(formData.author_phone || '').replace(/\D+/g, '');
+    return digits.length === 10;
+  }, [formData.author_phone]);
+
+  const canSubmit = useMemo(() => {
+    if (status.state === 'submitting') return false;
+    if (!phoneIsValid) return false;
+    if (articleWords < MIN_ARTICLE_WORDS) return false;
+    if (bioWords > BIO_MAX_WORDS) return false;
+    return true;
+  }, [articleWords, bioWords, phoneIsValid, status.state]);
+
   function updateField(key, value) {
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
 
   async function onSubmit(e) {
     e.preventDefault();
+
+    const cleanedPhone = String(formData.author_phone || '').replace(/\D+/g, '');
+    if (cleanedPhone.length !== 10) {
+      setStatus({ state: 'error', message: 'invalid_phone' });
+      return;
+    }
+    if (wordCount(formData.article_content) < MIN_ARTICLE_WORDS) {
+      setStatus({ state: 'error', message: 'article_too_short' });
+      return;
+    }
+    if (wordCount(formData.author_bio) > BIO_MAX_WORDS) {
+      setStatus({ state: 'error', message: 'bio_too_long' });
+      return;
+    }
+
     setStatus({ state: 'submitting', message: '' });
 
     try {
@@ -236,7 +276,7 @@ export default function GuestColumnForm() {
               </p>
             </FieldShell>
 
-            <FieldShell label="Article Content" required hint="Minimum 800 words">
+            <FieldShell label="Article Content" required hint={`Words: ${articleWords}/${MIN_ARTICLE_WORDS} minimum`}>
               <textarea
                 id={`${formId}-content`}
                 name="article_content"
@@ -263,6 +303,11 @@ export default function GuestColumnForm() {
               <p className="mt-2 text-sm" style={{ color: OKLCH.textDim }}>
                 Use clear structure with headings. Avoid promotional links inside the body.
               </p>
+              {articleWords > 0 && articleWords < MIN_ARTICLE_WORDS ? (
+                <p className="mt-2 text-sm" style={{ color: OKLCH.danger }}>
+                  Please add at least {MIN_ARTICLE_WORDS - articleWords} more words.
+                </p>
+              ) : null}
             </FieldShell>
 
             <FieldShell label="Sources & References">
@@ -318,6 +363,41 @@ export default function GuestColumnForm() {
                   />
                 </FieldShell>
 
+                <FieldShell label="Author Phone" required hint="10 digits">
+                  <input
+                    id={`${formId}-author-phone`}
+                    name="author_phone"
+                    type="tel"
+                    required
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    pattern="\d{10}"
+                    value={formData.author_phone}
+                    onChange={(e) => {
+                      const cleaned = String(e.target.value || '').replace(/\D+/g, '').slice(0, 10);
+                      updateField('author_phone', cleaned);
+                    }}
+                    placeholder="10-digit mobile number"
+                    aria-invalid={formData.author_phone ? (!phoneIsValid ? 'true' : 'false') : undefined}
+                    className="focus:outline-none"
+                    style={inputBaseStyle(status.state === 'submitting')}
+                    disabled={status.state === 'submitting'}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = OKLCH.gold;
+                      e.currentTarget.style.boxShadow = `0 0 0 6px ${OKLCH.goldRing}`;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = OKLCH.border;
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                  {!phoneIsValid && formData.author_phone ? (
+                    <p className="mt-2 text-sm" style={{ color: OKLCH.danger }}>
+                      Please enter a valid 10-digit phone number.
+                    </p>
+                  ) : null}
+                </FieldShell>
+
                 <FieldShell label="Professional Credentials" required>
                   <input
                     id={`${formId}-credentials`}
@@ -341,7 +421,7 @@ export default function GuestColumnForm() {
                   />
                 </FieldShell>
 
-                <FieldShell label="Short Bio (150 words max)" required>
+                <FieldShell label="Short Bio" required hint={`Words: ${bioWords}/${BIO_MAX_WORDS} max`}>
                   <textarea
                     id={`${formId}-bio`}
                     name="author_bio"
@@ -365,6 +445,11 @@ export default function GuestColumnForm() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   />
+                  {bioWords > BIO_MAX_WORDS ? (
+                    <p className="mt-2 text-sm" style={{ color: OKLCH.danger }}>
+                      Please shorten your bio by {bioWords - BIO_MAX_WORDS} words.
+                    </p>
+                  ) : null}
                 </FieldShell>
 
                 <FieldShell label="LinkedIn Profile" required hint="Required for credential verification">
@@ -420,7 +505,7 @@ export default function GuestColumnForm() {
 
             <button
               type="submit"
-              disabled={status.state === 'submitting'}
+              disabled={!canSubmit}
               className="w-full py-4 rounded-xl font-bold transition"
               style={{
                 background: OKLCH.buttonBg,
@@ -429,8 +514,8 @@ export default function GuestColumnForm() {
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 boxShadow: `0 18px 70px ${OKLCH.goldRing}`,
-                opacity: status.state === 'submitting' ? 0.75 : 1,
-                cursor: status.state === 'submitting' ? 'not-allowed' : 'pointer',
+                opacity: !canSubmit ? 0.75 : 1,
+                cursor: !canSubmit ? 'not-allowed' : 'pointer',
               }}
             >
               {status.state === 'submitting' ? 'Submitting…' : 'Submit for Editorial Review'}

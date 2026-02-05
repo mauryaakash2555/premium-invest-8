@@ -12,13 +12,31 @@ import { logEventSafe } from '@/lib/db/events';
 
 export const runtime = 'nodejs';
 
+function wordCount(text) {
+  const s = String(text || '').trim();
+  if (!s) return 0;
+  return s.split(/\s+/).filter(Boolean).length;
+}
+
 const schema = z.object({
   title: z.string().min(4).max(200),
-  article_content: z.string().min(200).max(40000),
+  article_content: z
+    .string()
+    .min(200)
+    .max(40000)
+    .refine((s) => wordCount(s) >= 800, { message: 'article_too_short' }),
   expertise_area: z.string().min(2).max(40),
   author_name: z.string().min(2).max(160),
+  author_phone: z
+    .string()
+    .transform((s) => String(s || '').replace(/\D+/g, ''))
+    .refine((s) => /^\d{10}$/.test(s), { message: 'invalid_phone' }),
   author_credentials: z.string().min(2).max(240),
-  author_bio: z.string().min(10).max(1200),
+  author_bio: z
+    .string()
+    .min(10)
+    .max(1200)
+    .refine((s) => wordCount(s) <= 150, { message: 'bio_too_long' }),
   author_linkedin: z.string().url().max(400),
   author_email: z.string().email().max(240),
   sources_references: z.string().max(6000).optional().default(''),
@@ -73,6 +91,7 @@ export async function POST(req) {
     <p><strong>Author:</strong> ${safeText(data.author_name)}</p>
     <p><strong>Credentials:</strong> ${safeText(data.author_credentials)}</p>
     <p><strong>Email:</strong> ${safeText(data.author_email)}</p>
+    <p><strong>Phone:</strong> ${safeText(data.author_phone)}</p>
     <p><strong>LinkedIn:</strong> <a href="${safeText(data.author_linkedin)}">${safeText(data.author_linkedin)}</a></p>
     <p><strong>Bio:</strong></p>
     <pre style="white-space:pre-wrap">${safeText(data.author_bio)}</pre>

@@ -3,6 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
+import Comments from '@/components/blog/Comments';
+import SocialShare from '@/components/blog/SocialShare';
+import ViewTracker from '@/components/blog/ViewTracker';
+import PostBottomCTA from '@/components/blog/PostBottomCTA';
+
 const panelStyle = {
   borderRadius: 0,
   border: '1px solid rgba(255,255,255,0.14)',
@@ -44,11 +49,6 @@ export default function CommunityPostDetailClient({ id }) {
     };
   }, [safeId]);
 
-  useEffect(() => {
-    if (!safeId) return;
-    fetch(`/api/track-view/${encodeURIComponent(safeId)}`, { method: 'POST' }).catch(() => null);
-  }, [safeId]);
-
   const content = useMemo(() => {
     if (!post) return '';
     const hasEnhanced = Boolean(String(post.content_enhanced || '').trim());
@@ -64,6 +64,12 @@ export default function CommunityPostDetailClient({ id }) {
     } catch {}
     window.open(post.affiliate_link, '_blank', 'noopener,noreferrer');
   };
+
+  const shareDescription = useMemo(() => {
+    const raw = String(content || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return '';
+    return raw.length > 220 ? `${raw.slice(0, 220)}…` : raw;
+  }, [content]);
 
   return (
     <div style={{
@@ -165,6 +171,22 @@ export default function CommunityPostDetailClient({ id }) {
                 </a>
               </div>
             ) : null}
+
+            {/* View Tracker - tracks view after 10 seconds */}
+            <ViewTracker postId={safeId} slug={post?.slug || safeId} />
+
+            {/* Social Share Buttons */}
+            <SocialShare
+              url={typeof window !== 'undefined' ? window.location.href : `https://bmwealth.co.in/blog/community/${safeId}`}
+              title={post.title}
+              description={shareDescription}
+            />
+
+            {/* Post Bottom CTA - Newsletter + Submit Story */}
+            <PostBottomCTA title="Enjoyed this story?" />
+
+            {/* Comments Section */}
+            <Comments postId={safeId} />
           </>
         ) : null}
       </section>

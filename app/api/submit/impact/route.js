@@ -13,15 +13,21 @@ import { logEventSafe } from '@/lib/db/events';
 export const runtime = 'nodejs';
 
 const schema = z.object({
-  title: z.string().min(4).max(200),
+  title: z.string().min(4).max(150),
   what_happened: z.string().min(30).max(6000),
   when_happened: z.string().min(4).max(32), // date string from <input type="date">
   where_happened: z.string().min(2).max(200),
   who_affected: z.string().max(240).optional().default(''),
   evidence_proof: z.string().max(4000).optional().default(''),
   impact_result: z.string().min(10).max(4000),
+  proposed_solution: z.string().max(4000).optional().default(''),
+  visual_keywords: z.string().max(400).optional().default(''),
   author_name: z.string().min(2).max(160),
   author_email: z.string().email().max(240),
+  author_phone: z
+    .string()
+    .transform((s) => String(s || '').replace(/\D+/g, ''))
+    .refine((s) => /^\d{10}$/.test(s), { message: 'invalid_phone' }),
   location_tag: z.string().max(120).optional().default(''),
   anonymous: z.boolean().optional().default(false),
 });
@@ -73,17 +79,21 @@ export async function POST(req) {
     <p><strong>When:</strong> ${safeText(data.when_happened)}</p>
     <p><strong>Where:</strong> ${safeText(data.where_happened)}</p>
     <p><strong>Location Tag:</strong> ${safeText(data.location_tag || '-')}</p>
+    <p><strong>Visual Keywords:</strong> ${safeText(data.visual_keywords || '-')}</p>
     <hr />
     <p><strong>What Happened:</strong></p>
     <pre style="white-space:pre-wrap">${safeText(data.what_happened)}</pre>
     <p><strong>Who Affected:</strong> ${safeText(data.who_affected || '-')}</p>
     <p><strong>Impact/Result:</strong></p>
     <pre style="white-space:pre-wrap">${safeText(data.impact_result)}</pre>
+    <p><strong>Proposed Solution:</strong></p>
+    <pre style="white-space:pre-wrap">${safeText(data.proposed_solution || '-')}</pre>
     <p><strong>Evidence/Proof:</strong></p>
     <pre style="white-space:pre-wrap">${safeText(data.evidence_proof || '-')}</pre>
     <hr />
     <p><strong>Author Name:</strong> ${safeText(data.author_name)}</p>
     <p><strong>Author Email:</strong> ${safeText(data.author_email)}</p>
+    <p><strong>Author Phone:</strong> ${safeText(data.author_phone)}</p>
     <p><strong>Anonymous:</strong> ${data.anonymous ? 'Yes' : 'No'}</p>
     <hr />
     <p style="font-size:12px">Meta: ip=${safeText(meta.ip || '-')}, ua=${safeText(meta.ua || '-')}</p>

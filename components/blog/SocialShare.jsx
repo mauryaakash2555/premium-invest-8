@@ -29,6 +29,24 @@ export default function SocialShare({
     email: `mailto:?subject=${encodedTitle}&body=${encodedDesc}%0A%0A${encodedUrl}`
   };
 
+  const supportsNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+
+  const nativeShare = async () => {
+    if (!supportsNativeShare) {
+      await copyLink();
+      return;
+    }
+    try {
+      await navigator.share({
+        title: title || 'BM Wealth',
+        text: description || title || '',
+        url,
+      });
+    } catch {
+      // user cancelled or share failed; no-op
+    }
+  };
+
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(url);
@@ -50,10 +68,24 @@ export default function SocialShare({
       </h3>
       
       <div className="flex flex-wrap gap-3">
+        {/* Native Share (9th button; falls back to copy link) */}
+        <button
+          onClick={nativeShare}
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
+          aria-label="Share"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 8a3 3 0 10-6 0v8a3 3 0 106 0V8z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v5" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 6l4-3 4 3" />
+          </svg>
+          <span className="font-semibold hidden sm:inline">Share</span>
+        </button>
+
         {/* Twitter/X */}
         <button
           onClick={() => openShare('twitter')}
-          className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-zinc-900 text-white rounded-lg transition border border-white/20"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on X (Twitter)"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -65,7 +97,7 @@ export default function SocialShare({
         {/* WhatsApp */}
         <button
           onClick={() => openShare('whatsapp')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on WhatsApp"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -77,7 +109,7 @@ export default function SocialShare({
         {/* LinkedIn */}
         <button
           onClick={() => openShare('linkedin')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0077B5] hover:bg-[#006399] text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on LinkedIn"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -89,7 +121,7 @@ export default function SocialShare({
         {/* Facebook */}
         <button
           onClick={() => openShare('facebook')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on Facebook"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -101,7 +133,7 @@ export default function SocialShare({
         {/* Telegram */}
         <button
           onClick={() => openShare('telegram')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0088cc] hover:bg-[#0077b3] text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on Telegram"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -113,7 +145,7 @@ export default function SocialShare({
         {/* Reddit */}
         <button
           onClick={() => openShare('reddit')}
-          className="flex items-center gap-2 px-4 py-2 bg-[#FF4500] hover:bg-[#e63e00] text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share on Reddit"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -125,7 +157,7 @@ export default function SocialShare({
         {/* Email */}
         <button
           onClick={() => openShare('email')}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-lg transition"
           aria-label="Share via Email"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +171,7 @@ export default function SocialShare({
           onClick={copyLink}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             copied 
-              ? 'bg-emerald-600 text-white' 
+              ? 'bg-white/10 border border-white/20 text-white'
               : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
           }`}
           aria-label={copied ? 'Link copied!' : 'Copy link'}

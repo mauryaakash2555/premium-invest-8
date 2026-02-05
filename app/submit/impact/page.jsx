@@ -54,6 +54,8 @@ function inputBaseStyle(disabled) {
 export default function CommunityImpactForm() {
   const formId = useId();
 
+  const TITLE_MAX = 150;
+
   const initial = useMemo(
     () => ({
       title: '',
@@ -63,8 +65,11 @@ export default function CommunityImpactForm() {
       who_affected: '',
       evidence_proof: '',
       impact_result: '',
+      proposed_solution: '',
+      visual_keywords: '',
       author_name: '',
       author_email: '',
+      author_phone: '',
       location_tag: '',
       anonymous: false,
     }),
@@ -74,12 +79,31 @@ export default function CommunityImpactForm() {
   const [formData, setFormData] = useState(initial);
   const [status, setStatus] = useState({ state: 'idle', message: '' });
 
+  const titleLen = useMemo(() => String(formData.title || '').length, [formData.title]);
+
+  const phoneIsValid = useMemo(() => {
+    const digits = String(formData.author_phone || '').replace(/\D+/g, '');
+    return digits.length === 10;
+  }, [formData.author_phone]);
+
   function updateField(key, value) {
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
 
   async function onSubmit(e) {
     e.preventDefault();
+
+    const cleanedPhone = String(formData.author_phone || '').replace(/\D+/g, '');
+    if (cleanedPhone.length !== 10) {
+      setStatus({ state: 'error', message: 'invalid_phone' });
+      return;
+    }
+
+    if (String(formData.title || '').length > TITLE_MAX) {
+      setStatus({ state: 'error', message: 'title_too_long' });
+      return;
+    }
+
     setStatus({ state: 'submitting', message: '' });
 
     try {
@@ -175,6 +199,7 @@ export default function CommunityImpactForm() {
                 name="title"
                 type="text"
                 required
+                maxLength={TITLE_MAX}
                 value={formData.title}
                 onChange={(e) => updateField('title', e.target.value)}
                 placeholder="e.g., Property Registration Demanded ₹50,000 Bribe at Andheri Office"
@@ -190,6 +215,11 @@ export default function CommunityImpactForm() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               />
+              <div className="mt-2 flex justify-end">
+                <span className="text-sm" style={{ color: OKLCH.textDim }}>
+                  {titleLen}/{TITLE_MAX}
+                </span>
+              </div>
             </FieldShell>
 
             <FieldShell label="What Happened?" required>
@@ -338,6 +368,56 @@ export default function CommunityImpactForm() {
               />
             </FieldShell>
 
+            <FieldShell label="Proposed solution" hint="Optional">
+              <textarea
+                id={`${formId}-solution`}
+                name="proposed_solution"
+                rows={4}
+                value={formData.proposed_solution}
+                onChange={(e) => updateField('proposed_solution', e.target.value)}
+                placeholder="What should change? What would have prevented this?"
+                className="focus:outline-none"
+                style={{
+                  ...inputBaseStyle(status.state === 'submitting'),
+                  resize: 'vertical',
+                }}
+                disabled={status.state === 'submitting'}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = OKLCH.gold;
+                  e.currentTarget.style.boxShadow = `0 0 0 6px ${OKLCH.goldRing}`;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = OKLCH.border;
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
+            </FieldShell>
+
+            <FieldShell label="Visual keywords" hint="Optional">
+              <input
+                id={`${formId}-keywords`}
+                name="visual_keywords"
+                type="text"
+                value={formData.visual_keywords}
+                onChange={(e) => updateField('visual_keywords', e.target.value)}
+                placeholder="e.g., bribe, property registration, Mumbai (comma separated)"
+                className="focus:outline-none"
+                style={inputBaseStyle(status.state === 'submitting')}
+                disabled={status.state === 'submitting'}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = OKLCH.gold;
+                  e.currentTarget.style.boxShadow = `0 0 0 6px ${OKLCH.goldRing}`;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = OKLCH.border;
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
+              <p className="mt-2 text-sm" style={{ color: OKLCH.textDim }}>
+                Add 3–8 keywords that help us generate the right visuals.
+              </p>
+            </FieldShell>
+
             <div className="pt-6" style={{ borderTop: `1px solid ${OKLCH.border}` }}>
               <h3 className="font-bold mb-4" style={{ color: OKLCH.text }}>
                 Your Details
@@ -386,6 +466,41 @@ export default function CommunityImpactForm() {
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   />
+                </FieldShell>
+
+                <FieldShell label="Phone" required hint="10 digits">
+                  <input
+                    id={`${formId}-author-phone`}
+                    name="author_phone"
+                    type="tel"
+                    required
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    pattern="\d{10}"
+                    value={formData.author_phone}
+                    onChange={(e) => {
+                      const cleaned = String(e.target.value || '').replace(/\D+/g, '').slice(0, 10);
+                      updateField('author_phone', cleaned);
+                    }}
+                    placeholder="10-digit mobile number"
+                    aria-invalid={formData.author_phone ? (!phoneIsValid ? 'true' : 'false') : undefined}
+                    className="focus:outline-none"
+                    style={inputBaseStyle(status.state === 'submitting')}
+                    disabled={status.state === 'submitting'}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = OKLCH.gold;
+                      e.currentTarget.style.boxShadow = `0 0 0 6px ${OKLCH.goldRing}`;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = OKLCH.border;
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                  {!phoneIsValid && formData.author_phone ? (
+                    <p className="mt-2 text-sm" style={{ color: OKLCH.danger }}>
+                      Please enter a valid 10-digit phone number.
+                    </p>
+                  ) : null}
                 </FieldShell>
 
                 <div className="flex items-start gap-3 rounded-xl px-4 py-3" style={{ background: OKLCH.panel2, border: `1px solid ${OKLCH.border}` }}>
