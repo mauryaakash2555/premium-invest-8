@@ -1660,7 +1660,7 @@ export default function ITRFilingHelp() {
                   </p>
                 )}
                 {typeof ocrConfidence === 'number' && ocrConfidence < 0.6 && (
-                  <p className="text-xs text-amber-200 mt-2">
+                  <p className="text-xs text-[--lux-foreground-60] mt-2">
                     <Info className="w-3 h-3 inline mr-1" />
                     OCR confidence is below 60%. Please verify every value carefully or upload a clearer PDF.
                   </p>

@@ -49,8 +49,8 @@ export default function SipCalculatorPage() {
         </Link>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Planner</p>
-        <h1 className="text-3xl font-semibold text-white">SIP Calculator</h1>
+        <p className="text-xs uppercase tracking-[0.2em] text-[--lux-foreground-60]">Planner</p>
+        <h1 className="text-3xl font-semibold text-[--lux-foreground]">SIP Calculator</h1>
         <p className="text-sm text-slate-200/80">Estimate outcomes for a monthly SIP over time.</p>
       </div>
 

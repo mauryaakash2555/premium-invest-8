@@ -94,10 +94,10 @@ export default function ITRFilingHelpPage() {
         <div className="max-w-5xl mx-auto">
           {/* Hero Section - Clean, no disclaimers */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl sm:text-4xl font-semibold gold-gradient-text">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-[--lux-foreground]">
               Free ITR Filing Help
             </h1>
-            <p className="mt-3 text-sm sm:text-base text-white/75 max-w-2xl mx-auto">
+            <p className="mt-3 text-sm sm:text-base text-[--lux-foreground-60] max-w-2xl mx-auto">
               Upload Form 16, AIS, or Bank Interest Statement. Get an educational tax estimate.
             </p>
           </div>

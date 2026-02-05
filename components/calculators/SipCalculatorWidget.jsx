@@ -39,8 +39,8 @@ export default function SipCalculatorWidget({
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Planner</p>
-        <h2 className="text-2xl font-semibold text-white">{title}</h2>
+        <p className="text-xs uppercase tracking-[0.2em] text-[--lux-foreground-60]">Planner</p>
+        <h2 className="text-2xl font-semibold text-[--lux-foreground]">{title}</h2>
         {subtitle ? <p className="text-sm text-slate-200/80">{subtitle}</p> : null}
       </div>
 
@@ -98,7 +98,7 @@ export default function SipCalculatorWidget({
           </div>
           <div className="rounded-lg border border-white/10 bg-white/5 p-3">
             <p className="text-xs text-slate-300/80">Estimated gain</p>
-            <p className="text-2xl font-semibold text-blue-200">{formatCurrency(Math.max(gain, 0))}</p>
+            <p className="text-2xl font-semibold text-[--lux-accent]">{formatCurrency(Math.max(gain, 0))}</p>
           </div>
         </section>
       </div>

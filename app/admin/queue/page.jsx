@@ -143,7 +143,7 @@ export default function AdminQueue() {
               onClick={() => handleSelectPost(post)}
               className={`p-4 rounded-lg cursor-pointer transition ${
                 selected?._id === post._id
-                  ? 'bg-yellow-900/30 border-2 border-yellow-500'
+                  ? 'bg-[--lux-accent]/20 border-2 border-[--lux-accent]'
                   : 'bg-white/5 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -180,21 +180,21 @@ export default function AdminQueue() {
           <div className="space-y-6 max-h-screen overflow-y-auto">
             {/* Original Content */}
             <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-              <h4 className="text-yellow-400 font-bold mb-2">📄 ORIGINAL SUBMISSION:</h4>
+              <h4 className="text-[--lux-accent] font-bold mb-2">📄 ORIGINAL SUBMISSION:</h4>
               <div className="text-white whitespace-pre-wrap text-sm">
                 {selected.incident_description || selected.article_content}
               </div>
               
               {selected.evidence && (
                 <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-yellow-400 font-semibold text-sm mb-1">Evidence provided:</p>
+                  <p className="text-[--lux-accent] font-semibold text-sm mb-1">Evidence provided:</p>
                   <p className="text-gray-300 text-sm">{selected.evidence}</p>
                 </div>
               )}
               
               {selected.author_credentials && (
                 <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-yellow-400 font-semibold text-sm mb-1">Author Credentials:</p>
+                  <p className="text-[--lux-accent] font-semibold text-sm mb-1">Author Credentials:</p>
                   <p className="text-gray-300 text-sm">{selected.author_credentials}</p>
                 </div>
               )}

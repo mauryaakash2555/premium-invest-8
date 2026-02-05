@@ -3907,7 +3907,7 @@ ${text}
                       <div style={{ 
                         height: '100%', 
                         width: `${protectionScore}%`, 
-                        background: protectionScore >= 80 ? 'linear-gradient(90deg, #E6C77B, #D4AF37)' : 
+                        background: protectionScore >= 80 ? 'linear-gradient(90deg, var(--lux-accent), oklch(0.82 0.10 65))' : 
                                     protectionScore >= 60 ? 'linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.8))' : 
                                     'rgba(255,255,255,0.4)',
                         borderRadius: '4px',

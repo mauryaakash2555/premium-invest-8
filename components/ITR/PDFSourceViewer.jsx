@@ -70,7 +70,7 @@ export default function PDFSourceViewer({ fileId, page, bbox, pageWidth, pageHei
           </div>
         </div>
 
-        {error ? <div className="mt-3 text-xs text-amber-200">{error}</div> : null}
+        {error ? <div className="mt-3 text-xs text-[--lux-foreground-60]">{error}</div> : null}
 
         <div className="mt-3 overflow-auto rounded-xl border border-white/10 bg-black/30">
           {blobUrl ? (
@@ -80,7 +80,7 @@ export default function PDFSourceViewer({ fileId, page, bbox, pageWidth, pageHei
                   <Page pageNumber={page} width={pagePxWidth} renderTextLayer={false} renderAnnotationLayer={false} />
                   {overlay ? (
                     <div
-                      className="absolute border-2 border-amber-300/90 bg-amber-300/20"
+                      className="absolute border-2 border-[--lux-accent] bg-[--lux-accent]/20"
                       style={{ left: overlay.left, top: overlay.top, width: overlay.width, height: overlay.height }}
                     />
                   ) : null}

@@ -40,8 +40,8 @@ export default function LoginPage() {
   return (
     <section className="card p-4 md:p-6">
       <div className="flex flex-col gap-2">
-        <p className="text-xs uppercase tracking-[0.2em] text-blue-200/70">Auth shell</p>
-        <h1 className="text-2xl font-semibold text-white">Login</h1>
+        <p className="text-xs uppercase tracking-[0.2em] text-[--lux-foreground-60]">Auth shell</p>
+        <h1 className="text-2xl font-semibold text-[--lux-foreground]">Login</h1>
         <p className="text-sm text-slate-200/80">
           This is a placeholder form. Hook it up to your auth service when ready.
         </p>
@@ -64,16 +64,16 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full rounded-lg bg-[--lux-accent] px-4 py-2 text-sm font-semibold text-[--lux-background] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={loading}
         >
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
 
-      <div className="mt-4 text-sm text-slate-300">
-        <span className="text-slate-400">New user?</span>{" "}
-        <Link href="/" className="font-semibold text-blue-200 hover:text-white">
+      <div className="mt-4 text-sm text-[--lux-foreground-60]">
+        <span className="text-[--lux-foreground-40]">New user?</span>{" "}
+        <Link href="/" className="font-semibold text-[--lux-accent] hover:text-[--lux-foreground]">
           Go back home
         </Link>
       </div>
