@@ -100,13 +100,13 @@ export default function PDFSidePanel({
   };
 
   return (
-    <aside className="bg-[#1a1a1a] border border-[#333333] rounded-xl overflow-hidden">
+    <aside className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#0a0a0a] border-b border-[#333333]">
-        <h4 className="text-white font-medium text-sm">PDF Source</h4>
+      <div className="flex items-center justify-between px-4 py-3 bg-[var(--lux-background)] border-b border-[var(--lux-foreground-10)]">
+        <h4 className="text-[color:var(--lux-foreground)] font-medium text-sm">PDF Source</h4>
         <button
           type="button"
-          className="p-1.5 rounded-lg hover:bg-[#333333]/50 text-white/60 hover:text-white transition-colors"
+          className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
           onClick={onClose}
           title="Close"
         >
@@ -115,14 +115,14 @@ export default function PDFSidePanel({
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-[#0a0a0a]/80 border-b border-[#333333]">
+      <div className="flex items-center justify-between px-4 py-2 bg-[var(--lux-background)]/80 border-b border-[var(--lux-foreground-10)]">
         {/* Page Navigation */}
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={goToPrevPage}
             disabled={page <= 1}
-            className="p-1.5 rounded-lg hover:bg-[#333333]/50 text-white/60 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             title="Previous page"
           >
             <ChevronLeftIcon />
@@ -132,17 +132,17 @@ export default function PDFSidePanel({
               type="number"
               min={1}
               max={numPages || 1}
-              className="w-12 bg-[#1a1a1a] border border-[#333333] rounded-md px-2 py-1 text-xs text-white text-center focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+              className="w-12 bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-md px-2 py-1 text-xs text-[color:var(--lux-foreground)] text-center focus:outline-none focus:ring-1 focus:ring-[var(--lux-accent)]"
               value={page || 1}
               onChange={(e) => onPageChange?.(Number(e.target.value || 1))}
             />
-            <span className="text-white/50 text-xs">of {numPages ?? '—'}</span>
+            <span className="text-[color:var(--lux-foreground-40)] text-xs">of {numPages ?? '—'}</span>
           </div>
           <button
             type="button"
             onClick={goToNextPage}
             disabled={!numPages || page >= numPages}
-            className="p-1.5 rounded-lg hover:bg-[#333333]/50 text-white/60 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             title="Next page"
           >
             <ChevronRightIcon />
@@ -154,7 +154,7 @@ export default function PDFSidePanel({
           <button
             type="button"
             onClick={() => setPagePxWidth((w) => Math.max(280, w - 60))}
-            className="p-1.5 rounded-lg hover:bg-[#333333]/50 text-white/60 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
             title="Zoom out"
           >
             <ZoomOutIcon />
@@ -166,13 +166,13 @@ export default function PDFSidePanel({
               max={800}
               value={pagePxWidth}
               onChange={(e) => setPagePxWidth(Number(e.target.value))}
-              className="w-full h-1.5 bg-[#333333] rounded-lg appearance-none cursor-pointer accent-[#d4af37]"
+              className="w-full h-1.5 bg-[var(--lux-foreground-10)] rounded-lg appearance-none cursor-pointer accent-[var(--lux-accent)]"
             />
           </div>
           <button
             type="button"
             onClick={() => setPagePxWidth((w) => Math.min(800, w + 60))}
-            className="p-1.5 rounded-lg hover:bg-[#333333]/50 text-white/60 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
             title="Zoom in"
           >
             <ZoomInIcon />
@@ -188,10 +188,10 @@ export default function PDFSidePanel({
       )}
 
       {/* PDF Content */}
-      <div className="overflow-auto bg-[#0a0a0a]" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+      <div className="overflow-auto bg-[var(--lux-background)]" style={{ maxHeight: 'calc(100vh - 280px)' }}>
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 border-[#d4af37]/30 border-t-[#d4af37] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[var(--lux-accent)]/30 border-t-[var(--lux-accent)] rounded-full animate-spin" />
           </div>
         )}
         {blobUrl ? (
@@ -227,19 +227,19 @@ export default function PDFSidePanel({
           </div>
         ) : !loading && !error ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 rounded-full bg-[var(--lux-card)] flex items-center justify-center mb-3">
+              <svg className="w-6 h-6 text-[color:var(--lux-foreground-40)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <p className="text-white/60 text-sm">No PDF selected</p>
+            <p className="text-[color:var(--lux-foreground-60)] text-sm">No PDF selected</p>
           </div>
         ) : null}
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-2 bg-[#0a0a0a]/80 border-t border-[#333333]">
-        <p className="text-white/50 text-[11px]">
+      <div className="px-4 py-2 bg-[var(--lux-background)]/80 border-t border-[var(--lux-foreground-10)]">
+        <p className="text-[color:var(--lux-foreground-40)] text-[11px]">
           Highlighted areas show the source location of extracted values.
         </p>
       </div>
