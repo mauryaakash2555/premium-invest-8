@@ -7,7 +7,6 @@ import WhatsAppFloat from '@/components/user/WhatsAppFloat';
 import { LuxuryMobileDock } from '@/components/user/LuxuryMobileDock';
 import CookieConsent from '@/components/shared/CookieConsent';
 import { AnalyticsGate } from '@/components/analytics/AnalyticsGate';
-import SubmitStoryFAB from '@/components/blog/SubmitStoryFAB';
 
 export default function LayoutShellClient({
   children,
@@ -43,9 +42,6 @@ export default function LayoutShellClient({
 
       {!isStoreHost && !isLearn && <LuxuryMobileDock />}
       {!isStoreHost && !isLearn && <WhatsAppFloat />}
-      
-      {/* Submit Story FAB - shows on blog pages */}
-      {!isStoreHost && isBlog && <SubmitStoryFAB />}
 
       <CookieConsent />
       <AnalyticsGate measurementId={measurementId} />
