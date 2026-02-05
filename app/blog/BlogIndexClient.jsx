@@ -715,9 +715,7 @@ export default function BlogPage() {
       </section>
 
       {/* Submit Story CTA */}
-      <section className="section-container" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-        <SubmitStoryCTA variant="highlight" />
-      </section>
+      <SubmitStoryCTA />
 
       <section className="section-container" style={{ paddingTop: '10px', paddingBottom: '60px' }}>
         <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#d0d0d0', marginBottom: '0', textAlign: 'center' }}>
