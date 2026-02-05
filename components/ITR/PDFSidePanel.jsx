@@ -5,6 +5,19 @@ import { Document, Page, pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/api/itr/pdfjs-worker';
 
+// LUX Theme - EXACT OKLCH colors from About Us page
+const LUX = {
+  background: 'oklch(0.06 0.005 280)',
+  foreground: 'oklch(0.95 0.01 85)',
+  foreground80: 'oklch(0.95 0.01 85 / 0.80)',
+  foreground60: 'oklch(0.95 0.01 85 / 0.60)',
+  foreground40: 'oklch(0.95 0.01 85 / 0.40)',
+  foreground10: 'oklch(0.95 0.01 85 / 0.10)',
+  foreground05: 'oklch(0.95 0.01 85 / 0.05)',
+  card: 'oklch(0.10 0.005 280)',
+  accent: 'oklch(0.78 0.08 65)',
+};
+
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
@@ -100,13 +113,14 @@ export default function PDFSidePanel({
   };
 
   return (
-    <aside className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl overflow-hidden">
+    <aside className="rounded-xl overflow-hidden" style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[var(--lux-background)] border-b border-[var(--lux-foreground-10)]">
-        <h4 className="text-[color:var(--lux-foreground)] font-medium text-sm">PDF Source</h4>
+      <div className="flex items-center justify-between px-4 py-3" style={{ backgroundColor: LUX.background, borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: LUX.foreground10 }}>
+        <h4 className="font-medium text-sm" style={{ color: LUX.foreground }}>PDF Source</h4>
         <button
           type="button"
-          className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
+          className="p-1.5 rounded-lg transition-colors"
+          style={{ color: LUX.foreground60 }}
           onClick={onClose}
           title="Close"
         >
@@ -115,14 +129,15 @@ export default function PDFSidePanel({
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-[var(--lux-background)]/80 border-b border-[var(--lux-foreground-10)]">
+      <div className="flex items-center justify-between px-4 py-2" style={{ backgroundColor: `color-mix(in oklch, ${LUX.background} 80%, transparent)`, borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: LUX.foreground10 }}>
         {/* Page Navigation */}
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={goToPrevPage}
             disabled={page <= 1}
-            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ color: LUX.foreground60 }}
             title="Previous page"
           >
             <ChevronLeftIcon />
@@ -132,17 +147,19 @@ export default function PDFSidePanel({
               type="number"
               min={1}
               max={numPages || 1}
-              className="w-12 bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-md px-2 py-1 text-xs text-[color:var(--lux-foreground)] text-center focus:outline-none focus:ring-1 focus:ring-[var(--lux-accent)]"
+              className="w-12 rounded-md px-2 py-1 text-xs text-center focus:outline-none focus:ring-1"
+              style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10, color: LUX.foreground }}
               value={page || 1}
               onChange={(e) => onPageChange?.(Number(e.target.value || 1))}
             />
-            <span className="text-[color:var(--lux-foreground-40)] text-xs">of {numPages ?? '—'}</span>
+            <span className="text-xs" style={{ color: LUX.foreground40 }}>of {numPages ?? '—'}</span>
           </div>
           <button
             type="button"
             onClick={goToNextPage}
             disabled={!numPages || page >= numPages}
-            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ color: LUX.foreground60 }}
             title="Next page"
           >
             <ChevronRightIcon />
@@ -154,7 +171,8 @@ export default function PDFSidePanel({
           <button
             type="button"
             onClick={() => setPagePxWidth((w) => Math.max(280, w - 60))}
-            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
+            className="p-1.5 rounded-lg transition-colors"
+            style={{ color: LUX.foreground60 }}
             title="Zoom out"
           >
             <ZoomOutIcon />
@@ -166,13 +184,15 @@ export default function PDFSidePanel({
               max={800}
               value={pagePxWidth}
               onChange={(e) => setPagePxWidth(Number(e.target.value))}
-              className="w-full h-1.5 bg-[var(--lux-foreground-10)] rounded-lg appearance-none cursor-pointer accent-[var(--lux-accent)]"
+              className="w-full h-1.5 rounded-lg appearance-none cursor-pointer"
+              style={{ backgroundColor: LUX.foreground10, accentColor: LUX.accent }}
             />
           </div>
           <button
             type="button"
             onClick={() => setPagePxWidth((w) => Math.min(800, w + 60))}
-            className="p-1.5 rounded-lg hover:bg-[var(--lux-foreground-05)] text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors"
+            className="p-1.5 rounded-lg transition-colors"
+            style={{ color: LUX.foreground60 }}
             title="Zoom in"
           >
             <ZoomInIcon />
@@ -188,10 +208,10 @@ export default function PDFSidePanel({
       )}
 
       {/* PDF Content */}
-      <div className="overflow-auto bg-[var(--lux-background)]" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+      <div className="overflow-auto" style={{ backgroundColor: LUX.background, maxHeight: 'calc(100vh - 280px)' }}>
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 border-[var(--lux-accent)]/30 border-t-[var(--lux-accent)] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: `color-mix(in oklch, ${LUX.accent} 30%, transparent)`, borderTopColor: LUX.accent }} />
           </div>
         )}
         {blobUrl ? (
@@ -227,19 +247,19 @@ export default function PDFSidePanel({
           </div>
         ) : !loading && !error ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-12 h-12 rounded-full bg-[var(--lux-card)] flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-[color:var(--lux-foreground-40)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: LUX.card }}>
+              <svg className="w-6 h-6" style={{ color: LUX.foreground40 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <p className="text-[color:var(--lux-foreground-60)] text-sm">No PDF selected</p>
+            <p className="text-sm" style={{ color: LUX.foreground60 }}>No PDF selected</p>
           </div>
         ) : null}
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-2 bg-[var(--lux-background)]/80 border-t border-[var(--lux-foreground-10)]">
-        <p className="text-[color:var(--lux-foreground-40)] text-[11px]">
+      <div className="px-4 py-2" style={{ backgroundColor: `color-mix(in oklch, ${LUX.background} 80%, transparent)`, borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: LUX.foreground10 }}>
+        <p className="text-[11px]" style={{ color: LUX.foreground40 }}>
           Highlighted areas show the source location of extracted values.
         </p>
       </div>

@@ -8,7 +8,7 @@ import autoTable from 'jspdf-autotable';
 
 const PDFSidePanel = dynamic(() => import('./PDFSidePanel'), { ssr: false });
 
-// LUX Theme (matches About Us page exactly)
+// LUX Theme - EXACT OKLCH colors from About Us page (used inline)
 const LUX = {
   background: 'oklch(0.06 0.005 280)',
   foreground: 'oklch(0.95 0.01 85)',
@@ -20,20 +20,6 @@ const LUX = {
   card: 'oklch(0.10 0.005 280)',
   muted: 'oklch(0.55 0.01 85)',
   accent: 'oklch(0.78 0.08 65)',
-};
-
-// Theme wrapper styles
-const themeStyles = {
-  '--lux-background': LUX.background,
-  '--lux-foreground': LUX.foreground,
-  '--lux-foreground-80': LUX.foreground80,
-  '--lux-foreground-60': LUX.foreground60,
-  '--lux-foreground-40': LUX.foreground40,
-  '--lux-foreground-10': LUX.foreground10,
-  '--lux-foreground-05': LUX.foreground05,
-  '--lux-card': LUX.card,
-  '--lux-muted': LUX.muted,
-  '--lux-accent': LUX.accent,
 };
 
 // Icons
@@ -101,11 +87,11 @@ const SpinnerIcon = () => (
 
 function Badge({ children, variant = 'default' }) {
   const variants = {
-    default: 'bg-[var(--lux-card)] text-[var(--lux-foreground-60)] border-[var(--lux-foreground-10)]',
+    default: `bg-[${LUX.card}] text-[${LUX.foreground60}] border-[${LUX.foreground10}]`,
     success: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
     warning: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
     error: 'bg-red-500/20 text-red-400 border-red-500/30',
-    info: 'bg-[var(--lux-accent)]/20 text-[var(--lux-accent)] border-[var(--lux-accent)]/30',
+    info: `bg-[${LUX.accent}]/20 text-[${LUX.accent}] border-[${LUX.accent}]/30`,
   };
   return (
     <span className={`inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border ${variants[variant]}`}>
@@ -116,10 +102,10 @@ function Badge({ children, variant = 'default' }) {
 
 function Button({ children, onClick, disabled, variant = 'default', size = 'md', className = '' }) {
   const variants = {
-    default: 'bg-[var(--lux-card)] hover:bg-[var(--lux-foreground-10)] text-[var(--lux-foreground)] border-[var(--lux-foreground-10)]',
-    primary: 'bg-[var(--lux-accent)] hover:brightness-110 text-[var(--lux-background)] font-semibold border-[var(--lux-accent)]',
+    default: `bg-[${LUX.card}] hover:bg-[${LUX.foreground10}] text-[${LUX.foreground}] border-[${LUX.foreground10}]`,
+    primary: `bg-[${LUX.accent}] hover:brightness-110 text-[${LUX.background}] font-semibold border-[${LUX.accent}]`,
     success: 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white border-emerald-500',
-    ghost: 'bg-transparent hover:bg-[var(--lux-foreground-05)] text-[var(--lux-foreground-60)] border-transparent',
+    ghost: `bg-transparent hover:bg-[${LUX.foreground05}] text-[${LUX.foreground60}] border-transparent`,
     danger: 'bg-red-600/20 hover:bg-red-600/30 text-red-400 border-red-500/30',
   };
   const sizes = {
@@ -369,15 +355,15 @@ export default function ITRWorkbench() {
   }, []);
 
   return (
-    <div style={themeStyles} className="min-h-[600px] text-[color:var(--lux-foreground)]">
+    <div className="min-h-[600px]" style={{ color: LUX.foreground }}>
       {/* Header / Status Message */}
       {message && (
         <div className={`mb-4 p-3 rounded-lg border flex items-start gap-2 text-sm ${
           messageType === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
           messageType === 'warning' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
           messageType === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-          'bg-[var(--lux-accent)]/10 border-[var(--lux-accent)]/30 text-[var(--lux-accent)]'
-        }`}>
+          ''
+        }`} style={messageType === 'info' ? { backgroundColor: `color-mix(in oklch, ${LUX.accent} 10%, transparent)`, borderColor: `color-mix(in oklch, ${LUX.accent} 30%, transparent)`, color: LUX.accent } : {}}>
           {messageType === 'success' && <CheckIcon />}
           {messageType === 'warning' && <AlertIcon />}
           {messageType === 'error' && <AlertIcon />}
@@ -389,19 +375,18 @@ export default function ITRWorkbench() {
         {/* Left Column: Main Content */}
         <div className="space-y-6">
           {/* Step 1: Upload */}
-          <div className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl p-5">
+          <div className="rounded-xl p-5" style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-[var(--lux-accent)]/20 flex items-center justify-center text-[var(--lux-accent)] font-bold text-sm">1</div>
-              <h3 className="text-[color:var(--lux-foreground)] font-semibold">Upload Documents</h3>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: `color-mix(in oklch, ${LUX.accent} 20%, transparent)`, color: LUX.accent }}>1</div>
+              <h3 className="font-semibold" style={{ color: LUX.foreground }}>Upload Documents</h3>
             </div>
             
             <div
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
-              className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${
-                dragOver ? 'border-[var(--lux-accent)] bg-[var(--lux-accent)]/10' : 'border-[var(--lux-foreground-10)] hover:border-[var(--lux-accent)]/50'
-              }`}
+              className="relative border-2 border-dashed rounded-xl p-8 text-center transition-all"
+              style={dragOver ? { borderColor: LUX.accent, backgroundColor: `color-mix(in oklch, ${LUX.accent} 10%, transparent)` } : { borderColor: LUX.foreground10 }}
             >
               <input
                 type="file"
@@ -418,8 +403,8 @@ export default function ITRWorkbench() {
               <div className="flex flex-col items-center gap-3">
                 {busyAction === 'upload' ? <SpinnerIcon /> : <UploadIcon />}
                 <div>
-                  <p className="text-[color:var(--lux-foreground)] font-medium">Drop files here or click to browse</p>
-                  <p className="text-[color:var(--lux-foreground-60)] text-sm mt-1">Supports Form 16, AIS, Bank Statements (PDF)</p>
+                  <p className="font-medium" style={{ color: LUX.foreground }}>Drop files here or click to browse</p>
+                  <p className="text-sm mt-1" style={{ color: LUX.foreground60 }}>Supports Form 16, AIS, Bank Statements (PDF)</p>
                 </div>
               </div>
             </div>
@@ -428,17 +413,17 @@ export default function ITRWorkbench() {
             {uploaded.length > 0 && (
               <div className="mt-4 space-y-2">
                 {uploaded.map((u) => (
-                  <div key={u.fileId} className="flex items-center justify-between bg-[var(--lux-background)]/80 rounded-lg p-3 border border-[var(--lux-foreground-10)]">
+                  <div key={u.fileId} className="flex items-center justify-between rounded-lg p-3" style={{ backgroundColor: `color-mix(in oklch, ${LUX.background} 80%, transparent)`, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
                     <div className="flex items-center gap-3 min-w-0">
                       <FileIcon />
                       <div className="min-w-0">
-                        <p className="text-[color:var(--lux-foreground)] text-sm font-medium truncate">{u.filename}</p>
+                        <p className="text-sm font-medium truncate" style={{ color: LUX.foreground }}>{u.filename}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant={u.type === 'DIGITAL_PDF' ? 'success' : 'warning'}>
                             {u.type === 'DIGITAL_PDF' ? 'Digital' : 'Scanned'}
                           </Badge>
                           <Badge variant="info">{u.docType || 'unknown'}</Badge>
-                          <span className="text-[color:var(--lux-foreground-40)] text-xs">{u.pages} page(s)</span>
+                          <span className="text-xs" style={{ color: LUX.foreground40 }}>{u.pages} page(s)</span>
                         </div>
                       </div>
                     </div>
@@ -458,10 +443,10 @@ export default function ITRWorkbench() {
 
           {/* Step 2: Extract & Validate */}
           {uploaded.length > 0 && (
-            <div className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl p-5">
+            <div className="rounded-xl p-5" style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
               <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-[var(--lux-accent)]/20 flex items-center justify-center text-[var(--lux-accent)] font-bold text-sm">2</div>
-              <h3 className="text-[color:var(--lux-foreground)] font-semibold">Extract & Review Data</h3>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: `color-mix(in oklch, ${LUX.accent} 20%, transparent)`, color: LUX.accent }}>2</div>
+              <h3 className="font-semibold" style={{ color: LUX.foreground }}>Extract & Review Data</h3>
               </div>
               
               <div className="flex flex-wrap gap-3">
@@ -487,11 +472,11 @@ export default function ITRWorkbench() {
 
           {/* Step 3: Extracted Data Table */}
           {allFields.length > 0 && (
-            <div className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl p-5">
+            <div className="rounded-xl p-5" style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[var(--lux-accent)]/20 flex items-center justify-center text-[var(--lux-accent)] font-bold text-sm">3</div>
-                  <h3 className="text-[color:var(--lux-foreground)] font-semibold">Extracted Values</h3>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: `color-mix(in oklch, ${LUX.accent} 20%, transparent)`, color: LUX.accent }}>3</div>
+                  <h3 className="font-semibold" style={{ color: LUX.foreground }}>Extracted Values</h3>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   <Badge variant="success">{allFields.filter(f => f.status === 'OK').length} OK</Badge>
@@ -499,29 +484,35 @@ export default function ITRWorkbench() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-lg border border-[var(--lux-foreground-10)]">
+              <div className="overflow-x-auto rounded-lg" style={{ borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-[var(--lux-background)]">
-                      <th className="text-left p-3 text-xs font-semibold text-[color:var(--lux-foreground-60)] uppercase tracking-wider">Field</th>
-                      <th className="text-left p-3 text-xs font-semibold text-[color:var(--lux-foreground-60)] uppercase tracking-wider min-w-[180px]">Value</th>
-                      <th className="text-center p-3 text-xs font-semibold text-[color:var(--lux-foreground-60)] uppercase tracking-wider">Status</th>
-                      <th className="text-left p-3 text-xs font-semibold text-[color:var(--lux-foreground-60)] uppercase tracking-wider">Source</th>
+                    <tr style={{ backgroundColor: LUX.background }}>
+                      <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider" style={{ color: LUX.foreground60 }}>Field</th>
+                      <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider min-w-[180px]" style={{ color: LUX.foreground60 }}>Value</th>
+                      <th className="text-center p-3 text-xs font-semibold uppercase tracking-wider" style={{ color: LUX.foreground60 }}>Status</th>
+                      <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider" style={{ color: LUX.foreground60 }}>Source</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[var(--lux-foreground-10)]">
+                  <tbody style={{ '--divide-color': LUX.foreground10 }} className="divide-y divide-[--divide-color]">
                     {allFields.map((f) => (
-                      <tr key={`${f.fileId}:${f.key}`} className={`hover:bg-[var(--lux-card)]/50 transition-colors ${f.status !== 'OK' ? 'bg-amber-500/5' : ''}`}>
+                      <tr key={`${f.fileId}:${f.key}`} className={`transition-colors ${f.status !== 'OK' ? 'bg-amber-500/5' : ''}`} style={{ '--hover-bg': `color-mix(in oklch, ${LUX.card} 50%, transparent)` }}>
                         <td className="p-3">
-                          <div className="text-[color:var(--lux-foreground)] text-sm font-medium">{f.label}</div>
-                          <div className="text-[color:var(--lux-foreground-40)] text-xs mt-0.5">{f.key}</div>
+                          <div className="text-sm font-medium" style={{ color: LUX.foreground }}>{f.label}</div>
+                          <div className="text-xs mt-0.5" style={{ color: LUX.foreground40 }}>{f.key}</div>
                         </td>
                         <td className="p-3">
                           <input
                             type="text"
-                            className={`w-full bg-[var(--lux-card)]/80 border rounded-lg px-3 py-2 text-sm text-[color:var(--lux-foreground)] placeholder-[color:var(--lux-foreground-40)] focus:outline-none focus:ring-2 focus:ring-[var(--lux-accent)]/50 ${
-                              f.status !== 'OK' ? 'border-amber-500/50' : 'border-[var(--lux-foreground-10)]'
-                            }`}
+                            className={`w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 ${f.status !== 'OK' ? 'border-amber-500/50' : ''}`}
+                            style={{
+                              backgroundColor: `color-mix(in oklch, ${LUX.card} 80%, transparent)`,
+                              borderWidth: 1,
+                              borderStyle: 'solid',
+                              borderColor: f.status !== 'OK' ? undefined : LUX.foreground10,
+                              color: LUX.foreground,
+                              '--tw-ring-color': `color-mix(in oklch, ${LUX.accent} 50%, transparent)`,
+                            }}
                             value={f.valueText ?? ''}
                             placeholder="Enter value..."
                             onChange={(e) => {
@@ -566,7 +557,8 @@ export default function ITRWorkbench() {
                           {f.source?.page ? (
                             <button
                               type="button"
-                              className="text-[var(--lux-accent)] hover:brightness-110 text-sm flex items-center gap-1 transition-colors"
+                              className="hover:brightness-110 text-sm flex items-center gap-1 transition-colors"
+                              style={{ color: LUX.accent }}
                               onClick={() =>
                                 setPanel({
                                   fileId: f.fileId,
@@ -581,7 +573,7 @@ export default function ITRWorkbench() {
                               Page {f.source.page}
                             </button>
                           ) : (
-                            <span className="text-[color:var(--lux-foreground-40)] text-sm">—</span>
+                            <span className="text-sm" style={{ color: LUX.foreground40 }}>—</span>
                           )}
                           {f.reason && (
                             <div className="text-amber-400/70 text-xs mt-1">{f.reason.replace(/_/g, ' ')}</div>
@@ -593,7 +585,7 @@ export default function ITRWorkbench() {
                 </table>
               </div>
 
-              <p className="text-[color:var(--lux-foreground-40)] text-xs mt-3">
+              <p className="text-xs mt-3" style={{ color: LUX.foreground40 }}>
                 💡 Click on a field to view its source in the PDF. Yellow rows need manual verification.
               </p>
             </div>
@@ -618,12 +610,12 @@ export default function ITRWorkbench() {
               }
             />
           ) : (
-            <div className="bg-[var(--lux-card)] border border-[var(--lux-foreground-10)] rounded-xl p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--lux-background)] flex items-center justify-center">
+            <div className="rounded-xl p-8 text-center" style={{ backgroundColor: LUX.card, borderWidth: 1, borderStyle: 'solid', borderColor: LUX.foreground10 }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: LUX.background }}>
                 <FileIcon />
               </div>
-              <h4 className="text-[color:var(--lux-foreground)] font-medium mb-2">PDF Preview</h4>
-              <p className="text-[color:var(--lux-foreground-60)] text-sm">
+              <h4 className="font-medium mb-2" style={{ color: LUX.foreground }}>PDF Preview</h4>
+              <p className="text-sm" style={{ color: LUX.foreground60 }}>
                 Upload a document to view it here. Click on extracted values to highlight their source.
               </p>
             </div>
