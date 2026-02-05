@@ -10,49 +10,59 @@ export default function PostBottomCTA({
   return (
     <div className="mt-12 pt-8 border-t border-white/10">
       {/* Main CTA Box */}
-      <div className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-[oklch(0.78_0.08_65)]/10 rounded-2xl p-6 md:p-8 border border-white/10">
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+      <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/45 backdrop-blur-xl p-6 md:p-8">
+        <h3 className="text-2xl md:text-3xl font-medium text-[color:var(--lux-foreground-80)] mb-2">
           {title}
         </h3>
-        <p className="text-gray-400 mb-6">
+        <p className="text-[color:var(--lux-foreground-60)] mb-6 leading-[1.9] tracking-wide font-light">
           Join thousands of smart investors who stay ahead of the market.
         </p>
 
         <div className="grid gap-4 md:grid-cols-2">
           {/* Newsletter Signup */}
           {showNewsletter && (
-            <div className="bg-black/30 rounded-xl p-5 border border-white/5">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl">📬</span>
-                <h4 className="font-bold text-white">Weekly Digest</h4>
-              </div>
-              <p className="text-sm text-gray-400 mb-4">
+            <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/35 backdrop-blur-xl p-5">
+              <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">Newsletter</div>
+              <h4 className="mt-4 font-medium text-[color:var(--lux-foreground-80)]">Weekly Digest</h4>
+              <p className="mt-3 text-sm leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)] mb-4">
                 Get our best insights delivered to your inbox every Saturday.
               </p>
               <Link
                 href="/contact?type=newsletter"
-                className="block w-full py-2.5 px-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-center rounded-lg transition border border-white/10"
+                className="group relative overflow-hidden block w-full bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-6 py-4 no-underline"
               >
-                Subscribe Free →
+                <span className="relative z-10 flex items-center justify-center gap-5 text-[10px] tracking-[0.25em] uppercase font-semibold">
+                  Subscribe
+                  <span aria-hidden="true">→</span>
+                </span>
+                <span
+                  className="absolute inset-0 bg-[color:var(--lux-accent)] -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-700"
+                  aria-hidden="true"
+                />
               </Link>
             </div>
           )}
 
           {/* Submit Story */}
           {showSubmitStory && (
-            <div className="bg-black/30 rounded-xl p-5 border border-white/5">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl">✍️</span>
-                <h4 className="font-bold text-white">Share Your Story</h4>
-              </div>
-              <p className="text-sm text-gray-400 mb-4">
-                Got an investing win or lesson? We feature the best reader stories.
+            <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/35 backdrop-blur-xl p-5">
+              <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">Contribute</div>
+              <h4 className="mt-4 font-medium text-[color:var(--lux-foreground-80)]">Share Your Story</h4>
+              <p className="mt-3 text-sm leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)] mb-4">
+                Share an insight, a lesson learned, or a question — we may feature it.
               </p>
               <Link
                 href="/contact?type=story"
-                className="block w-full py-2.5 px-4 bg-[oklch(0.78_0.08_65)] hover:bg-[oklch(0.72_0.09_65)] text-black font-semibold text-center rounded-lg transition"
+                className="group relative overflow-hidden block w-full bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-6 py-4 no-underline"
               >
-                Submit Story →
+                <span className="relative z-10 flex items-center justify-center gap-5 text-[10px] tracking-[0.25em] uppercase font-semibold">
+                  Share your story
+                  <span aria-hidden="true">→</span>
+                </span>
+                <span
+                  className="absolute inset-0 bg-[color:var(--lux-accent)] -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-700"
+                  aria-hidden="true"
+                />
               </Link>
             </div>
           )}
