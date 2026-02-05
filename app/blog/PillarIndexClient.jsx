@@ -224,9 +224,9 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts yet.</p>
             {note ? (
-              <p style={{ color: '#888', marginTop: '8px' }}>{note}</p>
+              <p style={{ color: 'var(--lux-foreground-40)', marginTop: '8px' }}>{note}</p>
             ) : null}
-            <p style={{ color: '#888', marginTop: '8px' }}>
+            <p style={{ color: 'var(--lux-foreground-40)', marginTop: '8px' }}>
               Want to contribute?{' '}
               <Link href="/submit" style={{ color: 'var(--lux-accent)', textDecoration: 'none' }}>
                 Submit here
@@ -294,7 +294,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            color: '#888',
+                            color: 'var(--lux-foreground-40)',
                             fontSize: '13px',
                           }}
                         >
@@ -307,7 +307,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                               display: 'flex',
                               alignItems: 'center',
                               gap: '6px',
-                              color: '#888',
+                              color: 'var(--lux-foreground-40)',
                               fontSize: '13px',
                             }}
                           >
@@ -332,7 +332,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       <p
                         style={{
                           fontSize: '14px',
-                          color: '#999',
+                          color: 'var(--lux-foreground-60)',
                           lineHeight: 1.6,
                           marginBottom: '0px',
                           display: '-webkit-box',
@@ -367,11 +367,11 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       ) : null}
 
                       {typeof post.views === 'number' ? (
-                        <div style={{ marginTop: '8px', color: '#666', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                        <div style={{ marginTop: '8px', color: 'var(--lux-foreground-40)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
                       ) : null}
 
                       {post.location_tag ? (
-                        <div style={{ marginTop: '14px', color: 'color-mix(in oklab, var(--lux-accent) 70%, #999)', fontSize: '13px' }}>
+                        <div style={{ marginTop: '14px', color: 'color-mix(in oklab, var(--lux-accent) 70%, var(--lux-foreground-60))', fontSize: '13px' }}>
                           📍 {post.location_tag}
                         </div>
                       ) : null}

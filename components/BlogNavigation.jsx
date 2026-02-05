@@ -26,7 +26,7 @@ export default function BlogNavigation() {
             <button
               className="px-6 py-3 transition-colors"
               style={{
-                color: isActive ? 'var(--lux-accent)' : '#9ca3af',
+                color: isActive ? 'var(--lux-accent)' : 'var(--lux-foreground-40)',
                 borderBottom: isActive ? '2px solid var(--lux-accent)' : '2px solid transparent',
                 fontFamily: '"Inter", sans-serif',
                 fontWeight: 600,

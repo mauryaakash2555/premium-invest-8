@@ -109,7 +109,7 @@ export default function CommunityPostDetailClient({ id }) {
               {post.title}
             </h1>
 
-            <div style={{ color: '#9ca3af', fontSize: '13px', marginBottom: '18px' }}>
+            <div style={{ color: 'var(--lux-foreground-40)', fontSize: '13px', marginBottom: '18px' }}>
               {post.author_name ? `By ${post.author_name}` : ''}
               {post.location_tag ? ` · ${post.location_tag}` : ''}
               {typeof post.views === 'number' ? ` · ${post.views.toLocaleString()} views` : ''}

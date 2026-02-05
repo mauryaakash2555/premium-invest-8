@@ -439,7 +439,7 @@ export default function BlogDetailClient({ slug }) {
         padding: '40px 20px'
       }}>
         <h1 style={{ color: '#fff', fontSize: '48px', marginBottom: '16px' }}>404</h1>
-        <p style={{ color: '#999', fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
+        <p style={{ color: 'var(--lux-foreground-60)', fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
         <Link href="/blog" style={{
           color: 'var(--lux-accent)',
           textDecoration: 'none',
@@ -696,7 +696,7 @@ export default function BlogDetailClient({ slug }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#999',
+            color: 'var(--lux-foreground-60)',
             fontSize: '14px'
           }}>
             <Calendar size={16} />
@@ -706,14 +706,14 @@ export default function BlogDetailClient({ slug }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#999',
+            color: 'var(--lux-foreground-60)',
             fontSize: '14px'
           }}>
             <User size={16} />
             {post.author || 'BM Wealth Editorial Team'}
           </div>
           {post.readTime && (
-            <div style={{ color: '#999', fontSize: '14px' }}>
+            <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px' }}>
               {post.readTime}
             </div>
           )}
@@ -908,7 +908,7 @@ export default function BlogDetailClient({ slug }) {
               {post.tags.map((tag, index) => (
                 <span key={index} style={{
                   backgroundColor: 'rgba(255,255,255,0.05)',
-                  color: '#999',
+                  color: 'var(--lux-foreground-60)',
                   padding: '6px 14px',
                   borderRadius: 0,
                   fontSize: '13px'

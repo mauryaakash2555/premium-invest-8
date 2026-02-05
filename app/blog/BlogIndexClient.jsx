@@ -218,17 +218,43 @@ export default function BlogPage() {
     },
   ];
 
+  const LUX = {
+    background: 'oklch(0.06 0.005 280)',
+    foreground: 'oklch(0.95 0.01 85)',
+    foreground80: 'oklch(0.95 0.01 85 / 0.80)',
+    foreground60: 'oklch(0.95 0.01 85 / 0.60)',
+    foreground40: 'oklch(0.95 0.01 85 / 0.40)',
+    foreground10: 'oklch(0.95 0.01 85 / 0.10)',
+    foreground05: 'oklch(0.95 0.01 85 / 0.05)',
+    card: 'oklch(0.10 0.005 280)',
+    accent: 'oklch(0.78 0.08 65)',
+  };
+
   return (
-    <div>
+    <div
+      style={{
+        background: LUX.background,
+        color: LUX.foreground,
+        '--lux-background': LUX.background,
+        '--lux-foreground': LUX.foreground,
+        '--lux-foreground-80': LUX.foreground80,
+        '--lux-foreground-60': LUX.foreground60,
+        '--lux-foreground-40': LUX.foreground40,
+        '--lux-foreground-10': LUX.foreground10,
+        '--lux-foreground-05': LUX.foreground05,
+        '--lux-card': LUX.card,
+        '--lux-accent': LUX.accent,
+      }}
+    >
       {/* Mobile optimization for blog card images */}
       <style>{`
         @media (max-width: 768px) {
           .blog-card-image-wrapper img {
             object-fit: contain !important;
-            background: #000000 !important;
+            background: oklch(0.06 0.005 280) !important;
           }
           .blog-card-image-wrapper {
-            background: #000000 !important;
+            background: oklch(0.06 0.005 280) !important;
           }
         }
       `}</style>
@@ -404,7 +430,7 @@ export default function BlogPage() {
                   selectedCategory === null
                     ? 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
                     : 'transparent',
-                color: selectedCategory === null ? 'rgba(245,245,245,0.92)' : '#888',
+                color: selectedCategory === null ? 'rgba(245,245,245,0.92)' : 'var(--lux-foreground-40)',
                 cursor: 'pointer',
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
@@ -426,7 +452,7 @@ export default function BlogPage() {
                     selectedCategory === category
                       ? 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
                       : 'transparent',
-                  color: selectedCategory === category ? 'rgba(245,245,245,0.92)' : '#888',
+                  color: selectedCategory === category ? 'rgba(245,245,245,0.92)' : 'var(--lux-foreground-40)',
                   cursor: 'pointer',
                   fontSize: '14px',
                   transition: 'all 0.3s ease',
@@ -446,7 +472,7 @@ export default function BlogPage() {
         {isLoading ? (
           <div style={{
             minHeight: '70vh',
-            background: '#000000',
+            background: 'var(--lux-background)',
             padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 40px)',
             maxWidth: '1200px',
             margin: '0 auto'
@@ -458,7 +484,7 @@ export default function BlogPage() {
                 100% { background-position: 200% 0; }
               }
               .skeleton-shimmer {
-                background: linear-gradient(90deg, #000000 25%, #0a0a0a 50%, #000000 75%);
+                background: linear-gradient(90deg, oklch(0.06 0.005 280) 25%, oklch(0.10 0.005 280) 50%, oklch(0.06 0.005 280) 75%);
                 background-size: 200% 100%;
                 animation: shimmer 1.5s infinite;
               }
@@ -471,7 +497,7 @@ export default function BlogPage() {
             }}>
               {[1, 2, 3].map((i) => (
                 <div key={i} style={{
-                  background: '#000000',
+                  background: 'var(--lux-card)',
                   borderRadius: 0,
                   padding: '20px',
                   border: '1px solid color-mix(in oklab, var(--lux-accent) 24%, transparent)',
@@ -579,7 +605,7 @@ export default function BlogPage() {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          color: '#888',
+                          color: 'var(--lux-foreground-40)',
                           fontSize: '13px',
                         }}
                       >
@@ -591,7 +617,7 @@ export default function BlogPage() {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          color: '#888',
+                          color: 'var(--lux-foreground-40)',
                           fontSize: '13px',
                         }}
                       >
@@ -650,7 +676,7 @@ export default function BlogPage() {
                     <p
                       style={{
                         fontSize: '14px',
-                        color: '#999',
+                        color: 'var(--lux-foreground-60)',
                         lineHeight: 1.6,
                         marginBottom: '16px',
                         display: '-webkit-box',
@@ -676,7 +702,7 @@ export default function BlogPage() {
                       </span>
                       {(post.readTime || post.read_time) && (
                         <span style={{
-                          color: '#666',
+                          color: 'var(--lux-foreground-40)',
                           fontSize: '12px',
                         }}>
                           {post.readTime || post.read_time}
@@ -702,7 +728,7 @@ export default function BlogPage() {
                     ) : null}
 
                     {typeof post.views === 'number' ? (
-                      <div style={{ marginTop: '8px', color: '#666', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                      <div style={{ marginTop: '8px', color: 'var(--lux-foreground-40)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
                     ) : null}
                   </div>
 

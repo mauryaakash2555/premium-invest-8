@@ -24,7 +24,7 @@ export default function BlogFilter({ activeFilter, onFilterChange }) {
               background: isActive
                 ? 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)'
                 : 'transparent',
-              color: isActive ? 'rgba(245,245,245,0.92)' : '#9ca3af',
+              color: isActive ? 'rgba(245,245,245,0.92)' : 'var(--lux-foreground-40)',
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: isActive ? 700 : 600,
