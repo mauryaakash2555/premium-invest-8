@@ -215,7 +215,7 @@ export default function ITRFilingHelp() {
             <ExtractedFields fields={editedFields} confidence={extractedData.confidence} onEdit={handleFieldEdit} />
             <button
               onClick={handleCalculate}
-              className="mt-6 bg-[#d4af37] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#c4a137] transition"
+              className="mt-6 bg-[#d4af37] text-[#0a0a0a] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
             >
               Calculate Tax →
             </button>
@@ -239,7 +239,7 @@ export default function ITRFilingHelp() {
                 const doc = generateSummaryPdf();
                 if (doc) doc.save(pdfFilename);
               }}
-              className="bg-[#d4af37] text-black px-6 py-3 rounded-lg font-semibold"
+              className="bg-[#d4af37] text-[#0a0a0a] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
             >
               Download Summary PDF
             </button>

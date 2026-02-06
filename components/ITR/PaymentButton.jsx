@@ -60,7 +60,7 @@ export default function PaymentButton({ amount, onSuccess }) {
             alert(e?.message || 'Payment failed');
           });
         }}
-        className="bg-[#d4af37] text-black px-12 py-4 rounded-lg font-bold text-lg hover:bg-[#c4a137] transition"
+        className="bg-[#d4af37] text-[#0a0a0a] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
       >
         Pay & Download Report
       </button>
