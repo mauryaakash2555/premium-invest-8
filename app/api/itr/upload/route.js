@@ -3,8 +3,7 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-import { detectDocTypeFromText } from '@/lib/itr/docDetection';
-import { extractPdfText, detectPdfType, getAllText } from '@/lib/itr/pdfExtract';
+import { PDFParse } from 'pdf-parse';
 
 function makeId(prefix) {
   return `${prefix}_${crypto.randomBytes(12).toString('hex')}`;
@@ -81,26 +80,35 @@ export async function POST(request) {
 
       if (isPdf) {
         try {
-          const extracted = await extractPdfText(bytes);
-          const pdfKind = detectPdfType(extracted);
-          const allText = getAllText(extracted);
-          pages = Number(extracted?.numPages || 1) || 1;
-          type = pdfKind;
+          const parser = new PDFParse({ data: Buffer.from(bytes) });
+          let textResult;
+          try {
+            textResult = await parser.getText({ lineEnforce: true });
+          } finally {
+            try {
+              await parser.destroy();
+            } catch {
+              // ignore
+            }
+          }
+
+          const allText = String(textResult?.text || '');
+          pages = Number(textResult?.total || 1) || 1;
+          type = allText.trim().length >= 10 ? 'DIGITAL_PDF' : 'SCANNED_PDF';
           detection = {
-            method: 'pdfjs',
-            hasSelectableText: !!extracted?.hasSelectableText,
-            extractedTextLength: String(allText || '').length,
+            method: 'pdf-parse',
+            extractedTextLength: allText.length,
           };
-          detectedDocType = detectDocTypeFromText(allText);
+          detectedDocType = 'unknown';
 
           extractedPreview = {
-            type: pdfKind === 'DIGITAL_PDF' ? 'DIGITAL' : 'SCANNED',
+            type: type === 'DIGITAL_PDF' ? 'DIGITAL' : 'SCANNED',
             pages,
             fields: extractFieldsFromText(allText),
-            rawTextCount: String(allText || '').length,
+            rawTextCount: allText.length,
           };
         } catch (e) {
-          detection = { method: 'pdfjs', error: e?.message || String(e) };
+          detection = { method: 'pdf-parse', error: e?.message || String(e) };
           type = 'SCANNED_PDF';
           detectedDocType = 'unknown';
         }

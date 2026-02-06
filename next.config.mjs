@@ -8,6 +8,9 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
+  // pdf-parse (v2+) pulls in pdfjs-dist (and in some setups native canvas).
+  // Keeping these as server externals avoids webpack/RSC bundling issues with pdfjs .mjs.
+  serverExternalPackages: ['pdf-parse', 'pdfjs-dist', '@napi-rs/canvas'],
   // Prevent Next from inferring a wrong monorepo/workspace root when multiple lockfiles exist.
   outputFileTracingRoot: __dirname,
   images: {

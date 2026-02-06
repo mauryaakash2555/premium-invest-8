@@ -38,12 +38,12 @@ test('ITR Filing Help: upload -> extract -> view source -> edit override -> vali
         fileName: 'test.pdf',
         extracted: {
           totalPages: 1,
-          totalTextItems: 10,
+          totalTextLength: 1234,
           fields: {
             grossSalary: { value: 1200000, raw: '12,00,000', page: 1, confidence: 1.0 },
             tds: { value: 50000, raw: '50,000', page: 1, confidence: 1.0 },
           },
-          rawText: [{ text: 'gross salary', x: 10, y: 10, page: 1 }],
+          rawTextPreview: 'Gross Salary: 12,00,000\nTotal TDS: 50,000',
         },
       }),
     });
@@ -64,8 +64,8 @@ test('ITR Filing Help: upload -> extract -> view source -> edit override -> vali
   // Extraction info + extracted fields should render.
   await expect(page.getByText('Extraction Info')).toBeVisible({ timeout: 10000 });
   await expect(page.getByText('Extracted Fields')).toBeVisible();
-  await expect(page.getByText('grossSalary')).toBeVisible();
-  await expect(page.getByText('tds')).toBeVisible();
+  await expect(page.getByText('gross Salary', { exact: true })).toBeVisible();
+  await expect(page.getByText('tds', { exact: true })).toBeVisible();
 
   // Filter out "Missing property" console errors from Next.js devtools
   const filteredErrors = consoleErrors.filter(e => e !== 'Missing property');

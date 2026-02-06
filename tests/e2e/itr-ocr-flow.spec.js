@@ -26,8 +26,10 @@ test.describe('ITR OCR pipeline (digital PDF)', () => {
     expect(extract.success).toBeTruthy();
     expect(extract.extracted).toBeTruthy();
     expect(extract.extracted.totalPages).toBeGreaterThan(0);
-    expect(Array.isArray(extract.extracted.rawText)).toBeTruthy();
-    expect(extract.extracted.rawText.length).toBeGreaterThan(0);
+    expect(extract.extracted.totalTextLength).toBeGreaterThan(0);
+    expect(typeof extract.extracted.rawTextPreview).toBe('string');
+    expect(extract.extracted.rawTextPreview.length).toBeGreaterThan(0);
+    expect(extract.extracted.rawTextPreview.toLowerCase()).toContain('gross');
 
     // UI smoke: tool page loads.
     await page.goto('/tools/itr-filing-help');

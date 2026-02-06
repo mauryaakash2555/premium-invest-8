@@ -6,6 +6,7 @@ export default function ITRFilingHelp() {
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [errorDebug, setErrorDebug] = useState(null);
 
   async function handleUpload(e) {
     const file = e.target.files?.[0];
@@ -13,6 +14,7 @@ export default function ITRFilingHelp() {
 
     setUploading(true);
     setError(null);
+    setErrorDebug(null);
     setResult(null);
 
     const formData = new FormData();
@@ -30,6 +32,7 @@ export default function ITRFilingHelp() {
         setResult(data.extracted);
       } else {
         setError(data.error || 'Extraction failed');
+        setErrorDebug(data.debug || null);
       }
     } catch (err) {
       setError(err?.message || String(err));
@@ -57,51 +60,75 @@ export default function ITRFilingHelp() {
 
         {error && (
           <div className="bg-[--lux-card] border border-[--destructive] rounded-lg p-4 mb-8">
-            <p className="text-[--destructive]">Error: {error}</p>
+            <p className="text-[--destructive] font-medium">Error: {error}</p>
+            {errorDebug && (
+              <p className="mt-2 text-sm text-[--lux-foreground-60]">
+                Debug: pages={String(errorDebug.pages ?? '')} textLength={String(errorDebug.textLength ?? '')}
+              </p>
+            )}
           </div>
         )}
 
         {result && (
           <div className="space-y-6">
             <div className="bg-[--lux-card] border border-[--lux-foreground-10] rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-4">Extraction Info</h3>
-              <p>Pages: {result.totalPages}</p>
-              <p>Text items found: {result.totalTextItems}</p>
+              <h3 className="text-xl font-semibold mb-4 text-[--lux-accent]">Extraction Info</h3>
+              <div className="space-y-2 text-[--lux-foreground-80]">
+                <p>
+                  Pages: <span className="text-[--lux-foreground]">{result.totalPages}</span>
+                </p>
+                <p>
+                  Text length: <span className="text-[--lux-foreground]">{result.totalTextLength} characters</span>
+                </p>
+                <p>
+                  Fields found:{' '}
+                  <span className="text-[--lux-foreground]">{Object.keys(result.fields || {}).length}</span>
+                </p>
+              </div>
             </div>
 
             <div className="bg-[--lux-card] border border-[--lux-foreground-10] rounded-lg p-6">
               <h3 className="text-xl font-semibold mb-4">Extracted Fields</h3>
 
               {Object.keys(result.fields || {}).length === 0 ? (
-                <p className="text-[--lux-accent]">No fields extracted. Check raw text below.</p>
+                <div className="border border-[--lux-foreground-10] rounded p-4">
+                  <p className="text-[--lux-accent] font-medium">No fields extracted automatically.</p>
+                  <p className="text-sm text-[--lux-foreground-60] mt-2">
+                    Check the raw text preview below to see what was extracted from the PDF.
+                  </p>
+                </div>
               ) : (
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-[--lux-foreground-10]">
-                      <th className="text-left py-2">Field</th>
-                      <th className="text-left py-2">Value</th>
-                      <th className="text-left py-2">Raw</th>
-                      <th className="text-left py-2">Page</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(result.fields).map(([key, data]) => (
-                      <tr key={key} className="border-b border-[--lux-foreground-10]">
-                        <td className="py-3">{key}</td>
-                        <td className="py-3 font-mono">₹{Number(data.value || 0).toLocaleString('en-IN')}</td>
-                        <td className="py-3 text-[--lux-foreground-60]">{data.raw}</td>
-                        <td className="py-3">{data.page}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="space-y-3">
+                  {Object.entries(result.fields).map(([key, data]) => (
+                    <div key={key} className="flex items-center justify-between gap-4 border-b border-[--lux-foreground-10] pb-3">
+                      <div>
+                        <p className="font-semibold">
+                          {String(key)
+                            .replace(/([A-Z])/g, ' $1')
+                            .trim()}
+                        </p>
+                        <p className="text-sm text-[--lux-foreground-60]">Raw: {data.raw}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-mono text-[--lux-accent]">
+                          ₹{Number(data.value || 0).toLocaleString('en-IN')}
+                        </p>
+                        <p className="text-xs text-[--lux-foreground-40]">
+                          Confidence: {Number((data.confidence || 0) * 100).toFixed(0)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 
             <details className="bg-[--lux-card] border border-[--lux-foreground-10] rounded-lg p-6">
-              <summary className="cursor-pointer font-semibold">Raw Text (click to expand)</summary>
-              <pre className="mt-4 text-xs overflow-auto max-h-96 text-[--lux-foreground-80]">
-                {JSON.stringify(result.rawText || [], null, 2)}
+              <summary className="cursor-pointer font-semibold text-[--lux-accent]">
+                Raw Text Preview (click to expand)
+              </summary>
+              <pre className="mt-4 text-xs overflow-auto max-h-96 border border-[--lux-foreground-10] rounded p-4 bg-[--lux-background] text-[--lux-foreground-80]">
+                {result.rawTextPreview}
               </pre>
             </details>
           </div>
