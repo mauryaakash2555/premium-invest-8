@@ -1,6 +1,70 @@
 import { NextResponse } from 'next/server';
 import { getLocalCommunityPosts } from '@/lib/blog/localCommunityPosts';
+import { generateImageForPost } from '@/lib/blog/communityImageService';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+
+const COMMUNITY_IMAGE_CACHE_KEY = '__bm_community_image_cache_v1';
+const COMMUNITY_IMAGE_CACHE_TTL_MS = 1000 * 60 * 60 * 24; // 24h
+
+function getCommunityImageCache() {
+  const g = globalThis;
+  if (!g[COMMUNITY_IMAGE_CACHE_KEY]) g[COMMUNITY_IMAGE_CACHE_KEY] = new Map();
+  return g[COMMUNITY_IMAGE_CACHE_KEY];
+}
+
+function hasRealUnsplashKey() {
+  const k = String(process.env.UNSPLASH_ACCESS_KEY || '').trim();
+  return Boolean(k) && k.toLowerCase() !== 'demo';
+}
+
+async function maybeAutoResolveCommunityImage(post) {
+  const p = post && typeof post === 'object' ? post : null;
+  if (!p?._id) return p;
+
+  // Only auto-resolve for local/community posts to avoid heavy work.
+  const isCommunity = Boolean(p.image_source) || String(p._id).startsWith('local-');
+  if (!isCommunity) return p;
+  if (!hasRealUnsplashKey()) return p;
+
+  // Respect explicitly manual images.
+  const src = String(p.image_source || '').toLowerCase();
+  const isManual = src === 'manual' || src === 'editorial' || src === 'uploaded';
+  if (isManual) return p;
+
+  const shouldRefresh = !p.image_url || src === 'fallback' || src === 'curated' || src === 'rotated';
+  if (!shouldRefresh) return p;
+
+  const keywords = Array.isArray(p.image_keywords) ? p.image_keywords.filter(Boolean).slice(0, 6) : [];
+  const key = `${p._id}|${keywords.join(',')}`;
+  const cache = getCommunityImageCache();
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.ts < COMMUNITY_IMAGE_CACHE_TTL_MS) {
+    return { ...p, image_url: cached.url, image: cached.url, image_source: cached.source || p.image_source };
+  }
+
+  try {
+    const result = await generateImageForPost(
+      { ...p, image_url: null },
+      { forceRefresh: true, useFallback: true }
+    );
+
+    const url = String(result?.url || '').trim();
+    if (url) {
+      cache.set(key, { url, source: result.source || 'unsplash', ts: Date.now() });
+      return {
+        ...p,
+        image_url: url,
+        image: url,
+        image_keywords: keywords.length ? keywords : result.keywords || p.image_keywords,
+        image_source: result.source || p.image_source,
+      };
+    }
+  } catch {
+    // Ignore and fall back to existing image.
+  }
+
+  return p;
+}
 
 function typeToPillar(type) {
   const t = String(type || '').toLowerCase();
@@ -84,14 +148,16 @@ export async function GET(req) {
     (p) => normalizePillar(p?.pillar) === resolvedPillar && normalizeStatus(p?.status) === resolvedStatus
   );
 
+  const localWithImages = await Promise.all(local.map(maybeAutoResolveCommunityImage));
+
   // Local dev: keep list instant even if Supabase isn't configured.
-  if (isLocalhost) return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  if (isLocalhost) return NextResponse.json(localWithImages, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 
   let sb;
   try {
     sb = supabaseAdmin();
   } catch {
-    return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json(localWithImages, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   }
 
   const safeLimit = 200;
@@ -105,10 +171,10 @@ export async function GET(req) {
     .limit(safeLimit);
 
   if (error || !Array.isArray(data)) {
-    return NextResponse.json(local, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json(localWithImages, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   }
 
   const remote = data.map(mapRowToPost).filter((p) => p && p._id && p.title);
-  const merged = local.length ? mergeUniqueById(remote, local) : remote;
+  const merged = localWithImages.length ? mergeUniqueById(remote, localWithImages) : remote;
   return NextResponse.json(merged, { status: 200, headers: { 'Cache-Control': 'no-store' } });
 }

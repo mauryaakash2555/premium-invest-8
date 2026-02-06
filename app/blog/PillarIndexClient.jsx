@@ -174,6 +174,15 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
     return result;
   }, [posts, featuredPost, selectedSeries, selectedTags]);
 
+  const displayPosts = useMemo(() => {
+    // Avoid pillars looking “empty” when there is only one post.
+    // If filters are active, respect them.
+    const filtersActive = Boolean(selectedSeries) || (selectedTags && selectedTags.length > 0);
+    if (filtersActive) return filteredPosts;
+    if (filteredPosts.length > 0) return filteredPosts;
+    return featuredPost ? [featuredPost] : [];
+  }, [featuredPost, filteredPosts, selectedSeries, selectedTags]);
+
   const availableSeriesOptions = useMemo(() => {
     const present = new Set(
       posts
@@ -646,7 +655,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>{error}</p>
           </div>
-        ) : filteredPosts.length === 0 && posts.length === 0 ? (
+        ) : displayPosts.length === 0 && posts.length === 0 ? (
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts yet.</p>
             {note ? (
@@ -660,23 +669,28 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
               .
             </p>
           </div>
-        ) : filteredPosts.length === 0 ? (
+        ) : displayPosts.length === 0 ? (
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts match your filters.</p>
-            <button
-              onClick={() => { setSelectedSeries(null); setSelectedTags([]); }}
-              style={{
-                marginTop: '16px',
-                padding: '10px 20px',
-                background: 'var(--lux-accent)',
-                color: LUX.background,
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
-            >
-              Clear Filters
-            </button>
+            {selectedSeries || selectedTags.length > 0 ? (
+              <button
+                onClick={() => {
+                  setSelectedSeries(null);
+                  setSelectedTags([]);
+                }}
+                style={{
+                  marginTop: '16px',
+                  padding: '10px 20px',
+                  background: 'var(--lux-accent)',
+                  color: LUX.background,
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                Clear Filters
+              </button>
+            ) : null}
           </div>
         ) : (
           <div
@@ -694,9 +708,9 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                 gap: '40px',
               }}
             >
-              {filteredPosts.map((post, idx) => {
+              {displayPosts.map((post, idx) => {
                 const postHref = getPostHref(post);
-                const next = filteredPosts.length > 1 ? filteredPosts[(idx + 1) % filteredPosts.length] : null;
+                const next = displayPosts.length > 1 ? displayPosts[(idx + 1) % displayPosts.length] : null;
                 const nextHref = next ? getPostHref(next) : null;
                 const nextTitle = next?.title || '';
                 const waHref = getWhatsAppHref(postHref, post?.title);
