@@ -2,6 +2,27 @@
 
 import { useEffect } from 'react';
 
+function luxAccentToHex() {
+  try {
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--lux-accent').trim();
+    if (!accent) return null;
+
+    const probe = document.createElement('div');
+    probe.style.color = accent;
+    document.body.appendChild(probe);
+    const rgb = getComputedStyle(probe).color;
+    document.body.removeChild(probe);
+
+    const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    if (!m) return null;
+
+    const toHex = (n) => Number(n).toString(16).padStart(2, '0');
+    return `#${toHex(m[1])}${toHex(m[2])}${toHex(m[3])}`;
+  } catch {
+    return null;
+  }
+}
+
 export default function PaymentButton({ amount, onSuccess }) {
   useEffect(() => {
     const script = document.createElement('script');
@@ -30,6 +51,7 @@ export default function PaymentButton({ amount, onSuccess }) {
     }
 
     // Open Razorpay
+    const luxHex = luxAccentToHex();
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount,
@@ -40,9 +62,7 @@ export default function PaymentButton({ amount, onSuccess }) {
       handler: function (response) {
         onSuccess(response.razorpay_payment_id);
       },
-      theme: {
-        color: '#d4af37',
-      },
+      ...(luxHex ? { theme: { color: luxHex } } : {}),
     };
 
     const rzp = new window.Razorpay(options);
@@ -50,21 +70,21 @@ export default function PaymentButton({ amount, onSuccess }) {
   }
 
   return (
-    <div className="bg-[#1a1a1a] border border-[#333333] rounded-lg p-8 text-center mt-6">
+    <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center mt-6">
       <h3 className="text-xl font-bold mb-2">Get Your Full ITR Summary</h3>
-      <p className="text-[#9ca3af] mb-6">Download detailed PDF report with both tax regimes</p>
-      <div className="text-4xl font-bold text-[#d4af37] mb-6">₹{(amount / 100).toFixed(0)}</div>
+      <p className="text-[color:var(--lux-foreground-60)] mb-6">Download detailed PDF report with both tax regimes</p>
+      <div className="text-4xl font-bold text-[color:var(--lux-accent)] mb-6">₹{(amount / 100).toFixed(0)}</div>
       <button
         onClick={() => {
           handlePayment().catch((e) => {
             alert(e?.message || 'Payment failed');
           });
         }}
-        className="bg-[#d4af37] text-[#0a0a0a] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+        className="bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
       >
         Pay & Download Report
       </button>
-      <p className="text-xs text-[#9ca3af] mt-4">Secure payment via Razorpay</p>
+      <p className="text-xs text-[color:var(--lux-foreground-60)] mt-4">Secure payment via Razorpay</p>
     </div>
   );
 }

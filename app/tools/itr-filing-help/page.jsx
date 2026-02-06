@@ -181,32 +181,32 @@ export default function ITRFilingHelp() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-16 px-4 text-[#ffffff]">
+    <div className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-[#d4af37]">Free ITR Filing Help</h1>
-          <p className="text-[#9ca3af]">Upload Form 16, AIS, or Bank Statement - Get instant tax calculation</p>
+          <h1 className="text-4xl font-bold mb-2 text-[color:var(--lux-accent)]">Free ITR Filing Help</h1>
+          <p className="text-[color:var(--lux-foreground-60)]">Upload Form 16, AIS, or Bank Statement - Get instant tax calculation</p>
         </div>
 
         {/* Progress */}
         <div className="flex gap-4 mb-8">
-          <div className={`flex-1 h-2 rounded ${step !== 'upload' ? 'bg-[#d4af37]' : 'bg-[#333333]'}`} />
+          <div className={`flex-1 h-2 rounded ${step !== 'upload' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'}`} />
           <div
             className={`flex-1 h-2 rounded ${
-              step === 'payment' || step === 'complete' ? 'bg-[#d4af37]' : 'bg-[#333333]'
+              step === 'payment' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
             }`}
           />
-          <div className={`flex-1 h-2 rounded ${step === 'complete' ? 'bg-[#d4af37]' : 'bg-[#333333]'}`} />
+          <div className={`flex-1 h-2 rounded ${step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'}`} />
         </div>
 
         {/* Steps */}
         {step === 'upload' && <UploadZone onUpload={handleUpload} />}
 
         {step === 'extracting' && (
-          <div className="bg-[#1a1a1a] border border-[#333333] rounded-lg p-12 text-center">
-            <div className="animate-spin w-12 h-12 border-4 border-[#d4af37] border-t-transparent rounded-full mx-auto mb-4" />
-            <p className="text-[#d4af37]">Extracting data from your PDF...</p>
+          <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-12 text-center">
+            <div className="animate-spin w-12 h-12 border-4 border-[color:var(--lux-accent)] border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="text-[color:var(--lux-accent)]">Extracting data from your PDF...</p>
           </div>
         )}
 
@@ -215,7 +215,7 @@ export default function ITRFilingHelp() {
             <ExtractedFields fields={editedFields} confidence={extractedData.confidence} onEdit={handleFieldEdit} />
             <button
               onClick={handleCalculate}
-              className="mt-6 bg-[#d4af37] text-[#0a0a0a] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+              className="mt-6 bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
             >
               Calculate Tax →
             </button>
@@ -230,16 +230,16 @@ export default function ITRFilingHelp() {
         )}
 
         {step === 'complete' && (
-          <div className="bg-[#1a1a1a] border border-[#10b981] rounded-lg p-8 text-center">
+          <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-accent)]/35 rounded-lg p-8 text-center">
             <div className="text-6xl mb-4">✓</div>
-            <h2 className="text-2xl font-bold text-[#10b981] mb-2">Payment Successful!</h2>
-            <p className="text-[#9ca3af] mb-6">Your ITR summary has been generated</p>
+            <h2 className="text-2xl font-bold text-[color:var(--lux-accent)] mb-2">Payment Successful!</h2>
+            <p className="text-[color:var(--lux-foreground-60)] mb-6">Your ITR summary has been generated</p>
             <button
               onClick={() => {
                 const doc = generateSummaryPdf();
                 if (doc) doc.save(pdfFilename);
               }}
-              className="bg-[#d4af37] text-[#0a0a0a] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+              className="bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
             >
               Download Summary PDF
             </button>
@@ -248,7 +248,7 @@ export default function ITRFilingHelp() {
         )}
 
         {/* Disclaimer */}
-        <div className="mt-12 p-4 bg-[#1a1a1a] border border-[#333333] rounded-lg text-sm text-[#9ca3af]">
+        <div className="mt-12 p-4 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg text-sm text-[color:var(--lux-foreground-60)]">
           ⚠️ This tool prepares a draft. BM Wealth is not a CA or ERI. Final filing is your responsibility.
         </div>
       </div>

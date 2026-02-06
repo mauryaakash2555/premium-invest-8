@@ -19,7 +19,7 @@
     "security:scan": "node scripts/security/scan-secrets.js",
     "test": "jest",
     "test:e2e": "playwright test tests/e2e/chatbot.spec.js",
-    "test:itr:e2e": "playwright test tests/e2e/itr-ocr-flow.spec.js",
+    "test:itr:e2e": "cross-env BASE_URL=http://127.0.0.1:3001 playwright test tests/e2e/itr-ocr-flow.spec.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "validate:all": "node scripts/validate-all.js",

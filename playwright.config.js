@@ -13,7 +13,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
+    baseURL: process.env.BASE_URL || "http://127.0.0.1:3000",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
@@ -23,14 +23,27 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer:
-    process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1" ||
-    (process.env.BASE_URL && !String(process.env.BASE_URL).startsWith("http://localhost"))
-      ? undefined
-      : {
-          command: "npm run dev",
-          url: "http://localhost:3000",
-          reuseExistingServer: !process.env.CI,
-          timeout: 120 * 1000,
-        },
+  webServer: (() => {
+    if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
+
+    const baseURL = process.env.BASE_URL || "http://127.0.0.1:3000";
+    const isLocal =
+      String(baseURL).startsWith("http://localhost") || String(baseURL).startsWith("http://127.0.0.1");
+    if (!isLocal) return undefined;
+
+    let port = "3000";
+    try {
+      const u = new URL(String(baseURL));
+      port = u.port || port;
+    } catch {
+      // ignore
+    }
+
+    return {
+      command: `npx next dev -H 127.0.0.1 -p ${port}`,
+      url: String(baseURL),
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
+    };
+  })(),
 });
