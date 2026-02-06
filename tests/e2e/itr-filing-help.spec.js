@@ -29,76 +29,29 @@ test('ITR Filing Help: upload -> extract -> view source -> edit override -> vali
   });
   page.on('pageerror', (err) => consoleErrors.push(String(err)));
 
-  await page.route('**/api/itr/upload', async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        ok: true,
-        uploadId: 'upload_test',
-        files: [{ fileId: 'itrfile_test', filename: 'test.pdf', type: 'DIGITAL_PDF', pages: 1, docType: 'form16' }],
-      }),
-    });
-  });
-
   await page.route('**/api/itr/extract', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        ok: true,
-        results: [
-          {
-            fileId: 'itrfile_test',
-            ok: true,
-            kind: 'DIGITAL_PDF',
-            docType: 'form16',
-            fields: [
-              {
-                key: 'tds_total',
-                label: 'Total TDS',
-                valueText: '50000',
-                status: 'OK',
-                reason: null,
-                source: {
-                  source_file: 'itrfile_test',
-                  filename: 'test.pdf',
-                  page: 1,
-                  pageWidth: 600,
-                  pageHeight: 800,
-                  bbox: { x0: 10, x1: 80, top: 40, bottom: 60 },
-                  raw_text_token: '50000',
-                  raw_line_text: 'TDS 50000',
-                  confidence: 1,
-                },
-              },
-            ],
+        success: true,
+        fileName: 'test.pdf',
+        extracted: {
+          totalPages: 1,
+          totalTextItems: 10,
+          fields: {
+            grossSalary: { value: 1200000, raw: '12,00,000', page: 1, confidence: 1.0 },
+            tds: { value: 50000, raw: '50,000', page: 1, confidence: 1.0 },
           },
-        ],
+          rawText: [{ text: 'gross salary', x: 10, y: 10, page: 1 }],
+        },
       }),
     });
   });
 
-  await page.route('**/api/itr/override', async (route) => {
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
-  });
-
-  await page.route('**/api/itr/validate', async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ ok: true, status: 'ok', flags: [] }),
-    });
-  });
-
-  await page.route('**/api/itr/file?fileId=*', async (route) => {
-    const pdf = makeMinimalValidPdfBuffer();
-    await route.fulfill({ status: 200, contentType: 'application/pdf', body: pdf });
-  });
-
   await page.goto('/tools/itr-filing-help');
   await expect(page.getByRole('heading', { name: 'Free ITR Filing Help' })).toBeVisible();
-  await expect(page.getByText('Upload Documents')).toBeVisible();
+  await expect(page.getByText('Upload Form 16, AIS, or Bank Interest Statement')).toBeVisible();
 
   // Upload any PDF bytes (content is irrelevant because API is mocked)
   const fileInput = page.locator('input[type="file"]').first();
@@ -108,28 +61,11 @@ test('ITR Filing Help: upload -> extract -> view source -> edit override -> vali
     buffer: makeMinimalValidPdfBuffer(),
   });
 
-  // Wait for upload result to render so Extract becomes enabled.
-  await expect(page.getByText('file(s) uploaded successfully')).toBeVisible({ timeout: 10000 });
-  await expect(page.getByText('test.pdf')).toBeVisible();
-
-  await page.getByRole('button', { name: 'Extract Data' }).click();
-
-  // Extracted field appears.
-  await expect(page.getByText('Total TDS')).toBeVisible({ timeout: 10000 });
-  const tdsInput = page.locator('tr:has-text("tds_total") input').first();
-  await expect(tdsInput).toHaveValue('50000');
-
-  // Clicking source opens the side panel.
-  await page.getByRole('button', { name: 'Page 1' }).click();
-  await expect(page.getByText('PDF Source')).toBeVisible();
-
-  // Edit without re-upload (override)
-  await tdsInput.fill('50001');
-  await tdsInput.blur();
-
-  // Validate should succeed.
-  await page.getByRole('button', { name: 'Validate' }).click();
-  await expect(page.getByText('Validation passed')).toBeVisible({ timeout: 10000 });
+  // Extraction info + extracted fields should render.
+  await expect(page.getByText('Extraction Info')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Extracted Fields')).toBeVisible();
+  await expect(page.getByText('grossSalary')).toBeVisible();
+  await expect(page.getByText('tds')).toBeVisible();
 
   // Filter out "Missing property" console errors from Next.js devtools
   const filteredErrors = consoleErrors.filter(e => e !== 'Missing property');

@@ -1,0 +1,13 @@
+*.pdf binary
+*.pdf -text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+
+*.mp4 binary
+*.mov binary
+*.webm binary

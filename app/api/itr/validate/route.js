@@ -3,8 +3,6 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-import { ensureSessionId } from '@/lib/itr/session';
-import { downloadJson, metaKey, extractionKey } from '@/lib/itr/remoteStore';
 import { parseInrNumber } from '@/lib/itr/numbers';
 
 function jobId() {
@@ -17,28 +15,15 @@ function flag(fieldKey, message, sources = []) {
 
 export async function POST(request) {
   try {
-    const { sessionId, setCookie } = ensureSessionId(request);
     const body = await request.json();
-    const fileIds = Array.isArray(body?.fileIds) ? body.fileIds : [];
+    const extractedByFile = Array.isArray(body?.extractedByFile) ? body.extractedByFile : [];
 
-    if (fileIds.length === 0) {
-      const resp = NextResponse.json({ error: 'Missing fileIds' }, { status: 400 });
-      if (setCookie) resp.headers.set('Set-Cookie', setCookie);
-      return resp;
+    if (extractedByFile.length === 0) {
+      return NextResponse.json({ error: 'Missing extractedByFile' }, { status: 400 });
     }
 
     const job = jobId();
     const flags = [];
-    const extractedByFile = [];
-
-    for (const fileId of fileIds) {
-      const metaResp = await downloadJson({ key: metaKey({ sessionId, fileId }) });
-      const meta = metaResp?.obj;
-      if (!meta || meta.sessionId !== sessionId) continue;
-      const extractionResp = await downloadJson({ key: extractionKey({ sessionId, fileId }) });
-      const extraction = extractionResp?.obj;
-      if (extraction) extractedByFile.push(extraction);
-    }
 
     // Layer 1: format checks
     for (const ex of extractedByFile) {
@@ -91,14 +76,11 @@ export async function POST(request) {
       ok: flags.length === 0,
       status: flags.length === 0 ? 'ok' : 'warning',
       jobId: job,
-      sessionId,
       flags,
       createdAt: new Date().toISOString(),
     };
 
-    const resp = NextResponse.json(report, { status: 200 });
-    if (setCookie) resp.headers.set('Set-Cookie', setCookie);
-    return resp;
+    return NextResponse.json(report, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   } catch (err) {
     return NextResponse.json(
       {

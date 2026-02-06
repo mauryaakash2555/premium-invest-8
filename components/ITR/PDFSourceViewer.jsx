@@ -15,25 +15,11 @@ export default function PDFSourceViewer({ fileId, page, bbox, pageWidth, pageHei
   const [pagePxWidth, setPagePxWidth] = useState(880);
 
   useEffect(() => {
-    let active = true;
-    (async () => {
-      try {
-        setError(null);
-        const resp = await fetch(`/api/itr/file?fileId=${encodeURIComponent(fileId)}`, { cache: 'no-store' });
-        if (!resp.ok) throw new Error(`Failed to load PDF (${resp.status})`);
-        const blob = await resp.blob();
-        const url = URL.createObjectURL(blob);
-        if (!active) return;
-        setBlobUrl(url);
-      } catch (e) {
-        if (!active) return;
-        setError(e?.message || String(e));
-      }
-    })();
-    return () => {
-      active = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
+    // This component is deprecated in no-storage mode.
+    // It previously fetched PDFs from /api/itr/file; uploads are no longer persisted.
+    void fileId;
+    setBlobUrl(null);
+    setError('PDF source viewer is unavailable in no-storage mode. Use the inline preview panel instead.');
   }, [fileId]);
 
   const overlay = useMemo(() => {

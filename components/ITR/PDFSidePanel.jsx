@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/api/itr/pdfjs-worker';
@@ -29,18 +29,29 @@ const ChevronRightIcon = () => (
 
 const ZoomInIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+    />
   </svg>
 );
 
 const ZoomOutIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"
+    />
   </svg>
 );
 
 export default function PDFSidePanel({
   fileId,
+  blobUrl,
   page,
   bbox,
   pageWidth,
@@ -48,38 +59,11 @@ export default function PDFSidePanel({
   onClose,
   onPageChange,
 }) {
-  const [blobUrl, setBlobUrl] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [pagePxWidth, setPagePxWidth] = useState(420);
   const [numPages, setNumPages] = useState(null);
 
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      try {
-        setError(null);
-        setBlobUrl(null);
-        setLoading(true);
-        if (!fileId) return;
-        const resp = await fetch(`/api/itr/file?fileId=${encodeURIComponent(fileId)}`, { cache: 'no-store' });
-        if (!resp.ok) throw new Error(`Failed to load PDF (${resp.status})`);
-        const blob = await resp.blob();
-        const url = URL.createObjectURL(blob);
-        if (!active) return;
-        setBlobUrl(url);
-      } catch (e) {
-        if (!active) return;
-        setError(e?.message || String(e));
-      } finally {
-        if (active) setLoading(false);
-      }
-    })();
-    return () => {
-      active = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
-  }, [fileId]);
+  const effectiveUrl = blobUrl || null;
+  const error = fileId && !effectiveUrl ? 'PDF preview unavailable (no persisted upload). Re-upload the PDF to preview it.' : null;
 
   const overlay = useMemo(() => {
     if (!bbox || !pageWidth || !pageHeight) return null;
@@ -101,7 +85,6 @@ export default function PDFSidePanel({
 
   return (
     <aside className="rounded-xl overflow-hidden bg-[--lux-card] border border-[--lux-foreground-10]">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[--lux-background] border-b border-[--lux-foreground-10]">
         <h4 className="font-medium text-sm text-[--lux-foreground]">PDF Source</h4>
         <button
@@ -114,9 +97,7 @@ export default function PDFSidePanel({
         </button>
       </div>
 
-      {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 bg-[--lux-background]/80 border-b border-[--lux-foreground-10]">
-        {/* Page Navigation */}
         <div className="flex items-center gap-1">
           <button
             type="button"
@@ -149,7 +130,6 @@ export default function PDFSidePanel({
           </button>
         </div>
 
-        {/* Zoom */}
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -180,28 +160,17 @@ export default function PDFSidePanel({
         </div>
       </div>
 
-      {/* Error */}
       {error && (
         <div className="px-4 py-3 bg-red-500/10 border-b border-red-500/30">
           <p className="text-red-400 text-xs">{error}</p>
         </div>
       )}
 
-      {/* PDF Content */}
       <div className="overflow-auto bg-[--lux-background]" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-        {loading && (
-          <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 rounded-full animate-spin border-[--lux-accent]/30 border-t-[--lux-accent]" />
-          </div>
-        )}
-        {blobUrl ? (
+        {effectiveUrl ? (
           <div className="flex justify-center p-4">
             <div className="relative inline-block shadow-2xl rounded-lg overflow-hidden">
-              <Document
-                file={blobUrl}
-                loading={null}
-                onLoadSuccess={(pdf) => setNumPages(pdf?.numPages || null)}
-              >
+              <Document file={effectiveUrl} loading={null} onLoadSuccess={(pdf) => setNumPages(pdf?.numPages || null)}>
                 <div className="relative">
                   <Page
                     pageNumber={page || 1}
@@ -225,11 +194,16 @@ export default function PDFSidePanel({
               </Document>
             </div>
           </div>
-        ) : !loading && !error ? (
+        ) : !error ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[--lux-card]">
               <svg className="w-6 h-6 text-[--lux-foreground-40]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
             </div>
             <p className="text-sm text-[--lux-foreground-60]">No PDF selected</p>
@@ -237,11 +211,8 @@ export default function PDFSidePanel({
         ) : null}
       </div>
 
-      {/* Footer */}
       <div className="px-4 py-2 bg-[--lux-background]/80 border-t border-[--lux-foreground-10]">
-        <p className="text-[11px] text-[--lux-foreground-40]">
-          Highlighted areas show the source location of extracted values.
-        </p>
+        <p className="text-[11px] text-[--lux-foreground-40]">Highlighted areas show the source location of extracted values.</p>
       </div>
     </aside>
   );

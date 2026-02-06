@@ -3,11 +3,8 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-import { ensureSessionId } from '@/lib/itr/session';
 import { detectDocTypeFromText } from '@/lib/itr/docDetection';
 import { extractPdfText, detectPdfType, getAllText } from '@/lib/itr/pdfExtract';
-import { uploadBytes, uploadJson, metaKey, uploadKey } from '@/lib/itr/remoteStore';
-import { supabaseAdmin } from '@/lib/db/supabaseAdmin';
 
 function makeId(prefix) {
   return `${prefix}_${crypto.randomBytes(12).toString('hex')}`;
@@ -59,21 +56,14 @@ function extractFieldsFromText(allText) {
 
 export async function POST(request) {
   try {
-    const { sessionId, setCookie } = ensureSessionId(request);
-    const uploadId = makeId('upload');
-
     const form = await request.formData();
     const files = form.getAll('files');
 
     if (!files || files.length === 0) {
-      const resp = NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
-      if (setCookie) resp.headers.set('Set-Cookie', setCookie);
-      return resp;
+      return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
     }
 
     const results = [];
-    const bucket = process.env.ITR_STORAGE_BUCKET || 'itr-documents';
-    const supabase = supabaseAdmin();
 
     for (const f of files) {
       const filename = String(f?.name || 'upload.bin');
@@ -81,15 +71,7 @@ export async function POST(request) {
       const isPdf = ext === 'pdf' || String(f?.type || '').includes('pdf');
 
       const bytes = new Uint8Array(await f.arrayBuffer());
-      const buffer = Buffer.from(bytes);
       const fileId = makeId('itrfile');
-      const storageKey = uploadKey({ sessionId, uploadId, fileId, filename });
-
-      await uploadBytes({
-        key: storageKey,
-        buffer,
-        contentType: String(f?.type || '') || 'application/octet-stream',
-      });
 
       let type = isPdf ? 'SCANNED_PDF' : 'SCANNED_PDF';
       let pages = 1;
@@ -124,43 +106,18 @@ export async function POST(request) {
         }
       }
 
-      const createdAt = new Date().toISOString();
-      const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString();
-
-      const meta = {
-        fileId,
-        sessionId,
-        uploadId,
-        filename,
-        contentType: String(f?.type || ''),
-        sizeBytes: bytes.length,
-        storageKey,
-        type,
-        pages,
-        docType: detectedDocType,
-        detection,
-        createdAt,
-        expiresAt,
-      };
-
-      await uploadJson({ key: metaKey({ sessionId, fileId }), obj: meta });
-
-      const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(storageKey);
-
       results.push({
         fileId,
         filename,
         type,
         pages,
         docType: detectedDocType,
-        fileUrl: urlData?.publicUrl || null,
+        fileUrl: null,
         extracted: extractedPreview,
       });
     }
 
-    const resp = NextResponse.json({ ok: true, uploadId, files: results }, { status: 200 });
-    if (setCookie) resp.headers.set('Set-Cookie', setCookie);
-    return resp;
+    return NextResponse.json({ ok: true, files: results }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   } catch (err) {
     return NextResponse.json(
       {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import ITRDisclaimer from '@/components/Legal/ITRDisclaimer';
 import { jsPDF } from 'jspdf';
@@ -120,6 +120,20 @@ export default function ITRWorkbench() {
   const [messageType, setMessageType] = useState('info');
   const [panel, setPanel] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+  const blobUrlsRef = useRef(new Set());
+
+  useEffect(() => {
+    return () => {
+      for (const url of blobUrlsRef.current) {
+        try {
+          URL.revokeObjectURL(url);
+        } catch {
+          // ignore
+        }
+      }
+      blobUrlsRef.current.clear();
+    };
+  }, []);
 
   const allFields = useMemo(() => {
     const out = [];
@@ -139,6 +153,11 @@ export default function ITRWorkbench() {
     }
   }, []);
 
+  const panelBlobUrl = useMemo(() => {
+    if (!panel?.fileId) return null;
+    return uploaded.find((u) => u.fileId === panel.fileId)?.blobUrl || null;
+  }, [panel?.fileId, uploaded]);
+
   async function onUploadFiles(files) {
     setMessage(null);
     setBusy(true);
@@ -153,7 +172,18 @@ export default function ITRWorkbench() {
 
       console.log('[ITR] upload response:', data);
 
-      setUploaded((prev) => [...prev, ...(data.files || [])]);
+      const incoming = Array.isArray(data.files) ? data.files : [];
+      const enriched = incoming.map((r, idx) => {
+        const localFile = files[idx] || null;
+        const isPdf =
+          !!localFile &&
+          (String(localFile.type || '').includes('pdf') || String(localFile.name || '').toLowerCase().endsWith('.pdf'));
+        const blobUrl = isPdf ? URL.createObjectURL(localFile) : null;
+        if (blobUrl) blobUrlsRef.current.add(blobUrl);
+        return { ...r, localFile, blobUrl };
+      });
+
+      setUploaded((prev) => [...prev, ...enriched]);
       showMessage(`✓ ${data.files?.length || 1} file(s) uploaded successfully. Click "Extract Data" to parse.`, 'success');
 
       const first = (data.files || [])[0];
@@ -173,12 +203,14 @@ export default function ITRWorkbench() {
     setBusy(true);
     setBusyAction('extract');
     try {
-      const fileIds = uploaded.map((u) => u.fileId);
-      const resp = await fetch('/api/itr/extract', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ fileIds }),
-      });
+      const fd = new FormData();
+      for (const u of uploaded) {
+        if (!u?.localFile) continue;
+        fd.append('files', u.localFile);
+        fd.append('fileIds', u.fileId);
+      }
+
+      const resp = await fetch('/api/itr/extract', { method: 'POST', body: fd });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data?.userMessage || data?.message || data?.error || 'Extraction failed');
 
@@ -206,15 +238,10 @@ export default function ITRWorkbench() {
   }
 
   async function saveOverride(fileId, fieldKey, newValueText) {
-    try {
-      await fetch('/api/itr/override', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ fileId, fieldKey, newValueText }),
-      });
-    } catch (e) {
-      // Silent fail for auto-save
-    }
+    // No-storage mode: overrides are tracked client-side only.
+    void fileId;
+    void fieldKey;
+    void newValueText;
   }
 
   async function runValidate() {
@@ -222,11 +249,23 @@ export default function ITRWorkbench() {
     setBusy(true);
     setBusyAction('validate');
     try {
-      const fileIds = uploaded.map((u) => u.fileId);
+      const extractedByFile = uploaded
+        .map((u) => ({
+          fileId: u.fileId,
+          docType: u.docType || 'unknown',
+          fields: extractions[u.fileId]?.fields || [],
+        }))
+        .filter((x) => (x.fields || []).length > 0);
+
+      if (extractedByFile.length === 0) {
+        showMessage('No extracted fields to validate yet. Run Extract first.', 'warning');
+        return;
+      }
+
       const resp = await fetch('/api/itr/validate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ fileIds }),
+        body: JSON.stringify({ extractedByFile }),
       });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data?.message || data?.error || 'Validation failed');
@@ -244,13 +283,16 @@ export default function ITRWorkbench() {
   }
 
   async function deleteFile(fileId) {
-    setBusy(true);
     try {
-      await fetch('/api/itr/delete', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ fileId }),
-      });
+      const u = uploaded.find((x) => x.fileId === fileId);
+      if (u?.blobUrl) {
+        try {
+          URL.revokeObjectURL(u.blobUrl);
+        } catch {
+          // ignore
+        }
+        blobUrlsRef.current.delete(u.blobUrl);
+      }
       setUploaded((prev) => prev.filter((u) => u.fileId !== fileId));
       setExtractions((prev) => {
         const n = { ...prev };
@@ -261,8 +303,6 @@ export default function ITRWorkbench() {
       showMessage('File deleted.', 'info');
     } catch (e) {
       showMessage(e?.message || String(e), 'error');
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -300,14 +340,23 @@ export default function ITRWorkbench() {
   }
 
   async function downloadJson() {
-    setBusy(true);
-    setBusyAction('export');
     try {
-      const fileIds = uploaded.map((u) => u.fileId).join(',');
-      const resp = await fetch(`/api/itr/download-json?fileIds=${encodeURIComponent(fileIds)}`);
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data?.message || data?.error || 'Download failed');
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const payload = {
+        ok: true,
+        files: uploaded.map((u) => ({
+          meta: {
+            fileId: u.fileId,
+            filename: u.filename,
+            type: u.type,
+            pages: u.pages,
+            docType: u.docType || 'unknown',
+          },
+          extraction: extractions[u.fileId] || null,
+        })),
+        createdAt: new Date().toISOString(),
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -319,9 +368,6 @@ export default function ITRWorkbench() {
       showMessage('JSON data downloaded.', 'success');
     } catch (e) {
       showMessage(e?.message || String(e), 'error');
-    } finally {
-      setBusy(false);
-      setBusyAction(null);
     }
   }
 
@@ -578,6 +624,7 @@ export default function ITRWorkbench() {
           {panel?.fileId ? (
             <PDFSidePanel
               fileId={panel.fileId}
+              blobUrl={panelBlobUrl}
               page={panel.page}
               bbox={panel.bbox}
               pageWidth={panel.pageWidth}
