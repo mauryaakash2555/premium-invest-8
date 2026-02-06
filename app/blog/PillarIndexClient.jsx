@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Calendar, User } from 'lucide-react';
+import { Calendar, User, Clock, Sparkles, ChevronRight, Filter, X } from 'lucide-react';
 import BlogNavigation from '@/components/BlogNavigation';
 
 // Premium LUX Theme
@@ -17,6 +17,55 @@ const LUX = {
   card: 'oklch(0.10 0.005 280)',
   accent: 'oklch(0.78 0.08 65)',
 };
+
+// Series formats per pillar for the world-class blog system
+const PILLAR_SERIES = {
+  IMPACT: [
+    { id: 'before-after', label: 'Before/After', description: 'Real transformation stories' },
+    { id: 'playbook', label: 'Playbook', description: 'Step-by-step frameworks' },
+    { id: 'case-study', label: 'Case Study', description: 'Detailed analysis' },
+  ],
+  GUEST: [
+    { id: 'voices-ecosystem', label: 'Voices of Ecosystem', description: 'Expert perspectives' },
+    { id: 'fireside', label: 'Fireside', description: 'In-depth conversations' },
+    { id: 'masterclass', label: 'Masterclass', description: 'Educational deep-dives' },
+  ],
+  DEV: [
+    { id: 'open-kitchen', label: 'Open Kitchen', description: 'Behind the scenes builds' },
+    { id: 'techstack', label: 'Tech Stack', description: 'Architecture decisions' },
+    { id: 'experiment', label: 'Experiments', description: 'What we tried & learned' },
+  ],
+  EDITORIAL: [
+    { id: 'market-pulse', label: 'Market Pulse', description: 'Trend analysis' },
+    { id: 'deep-dive', label: 'Deep Dive', description: 'Comprehensive research' },
+    { id: 'quick-take', label: 'Quick Take', description: 'Rapid insights' },
+  ],
+};
+
+// Audience tags for filtering
+const AUDIENCE_TAGS = [
+  { id: 'high-income', label: 'High Income' },
+  { id: 'salaried', label: 'Salaried' },
+  { id: 'nri', label: 'NRI' },
+  { id: 'senior', label: 'Seniors' },
+  { id: 'first-time', label: 'First Timers' },
+];
+
+// Topic tags for filtering  
+const TOPIC_TAGS = [
+  { id: 'tax', label: 'Tax Strategy' },
+  { id: 'sip', label: 'SIP/MF' },
+  { id: 'insurance', label: 'Insurance' },
+  { id: 'retirement', label: 'Retirement' },
+  { id: 'real-estate', label: 'Real Estate' },
+];
+
+// Calculate reading time from content
+function calculateReadingTime(content) {
+  if (!content) return 4; // default
+  const words = String(content).split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200)); // 200 wpm for technical content
+}
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -63,10 +112,14 @@ function pillarCopy(pillar) {
 export default function PillarIndexClient({ pillar, initialPosts = null }) {
   const PILLAR = String(pillar || 'EDITORIAL').toUpperCase();
   const copy = useMemo(() => pillarCopy(PILLAR), [PILLAR]);
+  const seriesOptions = PILLAR_SERIES[PILLAR] || PILLAR_SERIES.EDITORIAL;
 
   const [posts, setPosts] = useState(() => (Array.isArray(initialPosts) ? initialPosts : []));
   const [isLoading, setIsLoading] = useState(() => !Array.isArray(initialPosts));
   const [error, setError] = useState('');
+  const [selectedSeries, setSelectedSeries] = useState(null);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
 
   const siteOrigin = useMemo(() => {
@@ -89,6 +142,26 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
     return `https://wa.me/918850977259?text=${encodeURIComponent(msg)}`;
   };
   const [note, setNote] = useState('');
+
+  // Featured post (most recent with most content)
+  const featuredPost = useMemo(() => {
+    if (posts.length === 0) return null;
+    // Sort by date descending, then by content length
+    const sorted = [...posts].sort((a, b) => {
+      const dateA = new Date(a.approved_at || a.created_at || 0).getTime();
+      const dateB = new Date(b.approved_at || b.created_at || 0).getTime();
+      if (dateB !== dateA) return dateB - dateA;
+      return (b.content_original?.length || 0) - (a.content_original?.length || 0);
+    });
+    return sorted[0];
+  }, [posts]);
+
+  // Filtered posts (excluding featured)
+  const filteredPosts = useMemo(() => {
+    let result = posts.filter(p => !featuredPost || p._id !== featuredPost._id);
+    // TODO: When series/tags are in the data, filter here
+    return result;
+  }, [posts, featuredPost, selectedSeries, selectedTags]);
 
   useEffect(() => {
     let cancelled = false;
@@ -195,6 +268,276 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
         <BlogNavigation />
       </section>
 
+      {/* Series Selector & Filters */}
+      <section className="section-container" style={{ paddingTop: '0', paddingBottom: '20px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
+          {/* Series selector pills */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
+            <button
+              onClick={() => setSelectedSeries(null)}
+              style={{
+                padding: '8px 16px',
+                background: selectedSeries === null ? 'var(--lux-accent)' : 'transparent',
+                color: selectedSeries === null ? LUX.background : 'var(--lux-foreground-60)',
+                border: `1px solid ${selectedSeries === null ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                borderRadius: 0,
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              All Posts
+            </button>
+            {seriesOptions.map(series => (
+              <button
+                key={series.id}
+                onClick={() => setSelectedSeries(selectedSeries === series.id ? null : series.id)}
+                title={series.description}
+                style={{
+                  padding: '8px 16px',
+                  background: selectedSeries === series.id ? 'var(--lux-accent)' : 'transparent',
+                  color: selectedSeries === series.id ? LUX.background : 'var(--lux-foreground-60)',
+                  border: `1px solid ${selectedSeries === series.id ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                  borderRadius: 0,
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {series.label}
+              </button>
+            ))}
+          </div>
+          
+          {/* Filter toggle */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 14px',
+              background: showFilters ? 'var(--lux-accent)' : 'transparent',
+              color: showFilters ? LUX.background : 'var(--lux-foreground-60)',
+              border: `1px solid ${showFilters ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+              borderRadius: 0,
+              fontSize: '13px',
+              cursor: 'pointer',
+            }}
+          >
+            <Filter size={14} />
+            Filters
+            {selectedTags.length > 0 && (
+              <span style={{ 
+                background: 'var(--lux-background)', 
+                color: 'var(--lux-accent)', 
+                padding: '2px 6px', 
+                borderRadius: '10px', 
+                fontSize: '11px' 
+              }}>
+                {selectedTags.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Expandable filter section */}
+        {showFilters && (
+          <div style={{ 
+            background: 'var(--lux-card)', 
+            padding: '16px',
+            border: '1px solid var(--lux-foreground-10)',
+            marginBottom: '16px',
+          }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+              <div>
+                <p style={{ fontSize: '12px', color: 'var(--lux-foreground-40)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Audience
+                </p>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {AUDIENCE_TAGS.map(tag => (
+                    <button
+                      key={tag.id}
+                      onClick={() => {
+                        setSelectedTags(prev => 
+                          prev.includes(tag.id) 
+                            ? prev.filter(t => t !== tag.id)
+                            : [...prev, tag.id]
+                        );
+                      }}
+                      style={{
+                        padding: '6px 12px',
+                        background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
+                        color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
+                        border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {tag.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p style={{ fontSize: '12px', color: 'var(--lux-foreground-40)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Topic
+                </p>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {TOPIC_TAGS.map(tag => (
+                    <button
+                      key={tag.id}
+                      onClick={() => {
+                        setSelectedTags(prev => 
+                          prev.includes(tag.id) 
+                            ? prev.filter(t => t !== tag.id)
+                            : [...prev, tag.id]
+                        );
+                      }}
+                      style={{
+                        padding: '6px 12px',
+                        background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
+                        color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
+                        border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {tag.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {selectedTags.length > 0 && (
+              <button
+                onClick={() => setSelectedTags([])}
+                style={{
+                  marginTop: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  color: 'var(--lux-foreground-40)',
+                  fontSize: '12px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                <X size={12} /> Clear filters
+              </button>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* Featured Post Section */}
+      {!isLoading && featuredPost && posts.length > 1 && (
+        <section className="section-container" style={{ paddingTop: '0', paddingBottom: '30px' }}>
+          <div
+            role="link"
+            tabIndex={0}
+            onClick={() => router.push(getPostHref(featuredPost))}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                router.push(getPostHref(featuredPost));
+              }
+            }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '0',
+              background: 'var(--lux-card)',
+              border: '1px solid color-mix(in oklab, var(--lux-accent) 24%, transparent)',
+              cursor: 'pointer',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Featured image */}
+            <div
+              style={{
+                minHeight: '280px',
+                backgroundImage: `url(${featuredPost.image_url || featuredPost.image || copy.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+            
+            {/* Featured content */}
+            <div style={{ padding: 'clamp(24px, 4vw, 40px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <Sparkles size={16} style={{ color: 'var(--lux-accent)' }} />
+                <span style={{ color: 'var(--lux-accent)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                  Featured
+                </span>
+              </div>
+              
+              <h2
+                style={{
+                  fontSize: 'clamp(22px, 3vw, 32px)',
+                  color: 'var(--lux-accent)',
+                  marginBottom: '16px',
+                  lineHeight: 1.2,
+                  fontFamily: '"Playfair Display", serif',
+                }}
+              >
+                {featuredPost.title}
+              </h2>
+              
+              <p
+                style={{
+                  fontSize: '15px',
+                  color: 'var(--lux-foreground-60)',
+                  lineHeight: 1.7,
+                  marginBottom: '20px',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}
+              >
+                {String(featuredPost.content_original || '').slice(0, 300)}...
+              </p>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--lux-foreground-40)', fontSize: '13px' }}>
+                  <Clock size={14} />
+                  {calculateReadingTime(featuredPost.content_original)} min read
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--lux-foreground-40)', fontSize: '13px' }}>
+                  <Calendar size={14} />
+                  {formatDate(featuredPost.approved_at || featuredPost.created_at)}
+                </span>
+                {featuredPost.author_name && (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--lux-foreground-40)', fontSize: '13px' }}>
+                    <User size={14} />
+                    {featuredPost.author_name}
+                  </span>
+                )}
+              </div>
+              
+              <div style={{ marginTop: '24px' }}>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: 'var(--lux-accent)',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                  }}
+                >
+                  Read Full Story <ChevronRight size={16} />
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="section-container blog-posts-section">
         {isLoading ? (
           <div
@@ -232,7 +575,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>{error}</p>
           </div>
-        ) : posts.length === 0 ? (
+        ) : filteredPosts.length === 0 && posts.length === 0 ? (
           <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
             <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts yet.</p>
             {note ? (
@@ -245,6 +588,24 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
               </Link>
               .
             </p>
+          </div>
+        ) : filteredPosts.length === 0 ? (
+          <div className="section-container" style={{ padding: '60px 20px', textAlign: 'center' }}>
+            <p style={{ color: 'rgba(235,242,255,0.86)' }}>No posts match your filters.</p>
+            <button
+              onClick={() => { setSelectedSeries(null); setSelectedTags([]); }}
+              style={{
+                marginTop: '16px',
+                padding: '10px 20px',
+                background: 'var(--lux-accent)',
+                color: LUX.background,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '14px',
+              }}
+            >
+              Clear Filters
+            </button>
           </div>
         ) : (
           <div
@@ -262,9 +623,9 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                 gap: '40px',
               }}
             >
-              {posts.map((post, idx) => {
+              {filteredPosts.map((post, idx) => {
                 const postHref = getPostHref(post);
-                const next = posts.length > 1 ? posts[(idx + 1) % posts.length] : null;
+                const next = filteredPosts.length > 1 ? filteredPosts[(idx + 1) % filteredPosts.length] : null;
                 const nextHref = next ? getPostHref(next) : null;
                 const nextTitle = next?.title || '';
                 const waHref = getWhatsAppHref(postHref, post?.title);
@@ -312,6 +673,18 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                         >
                           <Calendar size={14} />
                           {formatDate(post.approved_at || post.created_at || new Date().toISOString())}
+                        </span>
+                        <span
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            color: 'var(--lux-foreground-40)',
+                            fontSize: '13px',
+                          }}
+                        >
+                          <Clock size={14} />
+                          {calculateReadingTime(post.content_original)} min
                         </span>
                         {post.author_name && (
                           <span

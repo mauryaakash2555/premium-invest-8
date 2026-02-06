@@ -1,0 +1,227 @@
+[
+  {
+    "slug": "how-regular-mutual-fund-plans-cost-mumbai-investor-47-lakh",
+    "title": "He Lost ₹47 Lakh Following Expert Advice - Mumbai Investment Mistake (2025)",
+    "summary": "Here's What He Wishes He Knew 7 Years Ago",
+    "metaDescription": "A Mumbai professional lost ₹47 lakh to wrong investment advice. Learn the costly mistakes, red flags to watch, and how to choose the right financial advisor. Real case study with actionable lessons.",
+    "imageUrl": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=800&fit=crop&q=80",
+    "author": "BM Wealth Editorial Team",
+    "published": "2025-12-09",
+    "lastUpdated": "2026-01-15",
+    "pillar": "IMPACT",
+    "series": "wealth-rescue",
+    "featured": true,
+    "tags": ["high-income", "portfolio-review", "case-study"],
+    "badges": ["AMFI"],
+    "tldr": "A CA trusted his advisor blindly for 7 years. Result: ₹47L opportunity cost from ULIPs and high-cost funds. Lesson: Always verify AMFI registration, understand costs, and align products to goals.",
+    "keyNumbers": [
+      { "value": "₹47L", "label": "Opportunity Cost", "context": "Lost potential over 7 years" },
+      { "value": "2.5%", "label": "Actual Returns", "context": "vs 12% market average" },
+      { "value": "5", "label": "ULIPs Sold", "context": "None aligned to goals" }
+    ],
+    "relatedTools": ["tax-planning", "sip-strategy"],
+    "downloads": {
+      "checklist": {
+        "title": "Advisor Red Flags Checklist",
+        "url": "/downloads/advisor-red-flags-checklist.pdf"
+      }
+    }
+  },
+  {
+    "slug": "tax-leak-detector-how-we-built-it",
+    "title": "How We Built the Tax Leak Detector: Open Kitchen",
+    "summary": "The engineering story behind our most-used tool",
+    "metaDescription": "A behind-the-scenes look at how BM Wealth's Tax Leak Detector was built. Engineering decisions, regex patterns, and lessons learned.",
+    "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70",
+    "author": "Akash Maurya",
+    "published": "2025-11-20",
+    "pillar": "DEV",
+    "series": "build-log",
+    "featured": true,
+    "tags": ["tax-planning"],
+    "badges": ["AMFI"],
+    "tldr": "We built a tax calculator that actually works for Indian slabs. Here's the engineering: FY 2025-26 slabs, marginal relief, surcharge thresholds, and HRA exemption logic.",
+    "keyNumbers": [
+      { "value": "1018", "label": "Lines of Code", "context": "In tax-formulas.js" },
+      { "value": "4", "label": "Edge Cases", "context": "Marginal relief, surcharge, rebate, HRA" },
+      { "value": "99.2%", "label": "Accuracy", "context": "Verified against IT dept calculator" }
+    ],
+    "relatedTools": ["tax-planning"]
+  },
+  {
+    "slug": "ca-tax-trap-80c-mistakes",
+    "title": "CA's Monthly Tax Trap: 5 Ways You're Wasting 80C",
+    "summary": "A practicing CA reveals the most common 80C mistakes",
+    "metaDescription": "A chartered accountant reveals the 5 most common Section 80C mistakes. Stop wasting your ₹1.5L deduction limit.",
+    "imageUrl": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70",
+    "author": "CA Priya Sharma (Guest)",
+    "authorCredentials": ["Chartered Accountant, 12 years", "Former Big 4 Tax Partner"],
+    "published": "2026-01-05",
+    "pillar": "GUEST",
+    "series": "ca-tax-trap",
+    "featured": true,
+    "tags": ["tax-leaks", "tax-planning", "high-income"],
+    "badges": ["AMFI"],
+    "tldr": "Most investors waste 80C on low-return instruments. The 5 traps: PPF timing (April vs January), ELSS fund selection, insurance-as-investment, NPS confusion, and child tuition under-claiming.",
+    "keyNumbers": [
+      { "value": "₹46,800", "label": "Max Tax Saved", "context": "At 30% + cess bracket" },
+      { "value": "5", "label": "Common Traps", "context": "That waste your limit" },
+      { "value": "₹1.5L", "label": "80C Limit", "context": "Use it wisely" }
+    ],
+    "relatedTools": ["tax-planning"]
+  },
+  {
+    "slug": "mumbai-it-professional-saved-2-lakh-tax",
+    "title": "How a Mumbai IT Professional Saved ₹2.1L Tax in 40 Minutes",
+    "summary": "Before/After/Playbook: A real tax optimization case",
+    "metaDescription": "Real case study: How we helped a Mumbai software engineer save ₹2.1 lakh in tax with proper HRA documentation and NPS timing.",
+    "imageUrl": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70",
+    "author": "BM Wealth Editorial Team",
+    "published": "2026-01-20",
+    "lastUpdated": "2026-02-01",
+    "pillar": "IMPACT",
+    "series": "tax-leaks",
+    "featured": false,
+    "tags": ["tax-leaks", "salaried", "case-study", "high-income"],
+    "badges": ["AMFI"],
+    "tldr": "28-year-old Andheri IT pro was overpaying by ₹2.1L/year. Issues: Wrong HRA calculation, missed NPS 80CCD(1B), wrong regime choice. Fixed in one session.",
+    "keyNumbers": [
+      { "value": "₹2.1L", "label": "Tax Saved", "context": "Per year, ongoing" },
+      { "value": "40", "label": "Minutes", "context": "Time to identify leaks" },
+      { "value": "3", "label": "Fixes Applied", "context": "HRA, NPS, Regime" }
+    ],
+    "relatedTools": ["tax-planning"],
+    "downloads": {
+      "checklist": {
+        "title": "Tax Optimization Checklist",
+        "url": "/downloads/tax-optimization-checklist.pdf"
+      }
+    }
+  },
+  {
+    "slug": "sip-vs-lumpsum-when-to-use-which",
+    "title": "SIP vs Lump Sum: The Decision Tree for Mumbai Investors",
+    "summary": "A simple framework to choose between SIP and lump sum",
+    "metaDescription": "When to use SIP vs lump sum? A clear decision tree for Mumbai investors based on amount, market conditions, and psychology.",
+    "imageUrl": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85",
+    "author": "BM Wealth Editorial Team",
+    "published": "2026-01-10",
+    "pillar": "EDITORIAL",
+    "featured": false,
+    "tags": ["sip-strategy", "salaried"],
+    "badges": ["AMFI"],
+    "tldr": "If amount < 3 months salary: Lump sum. If amount > 6 months salary: STP or phased. If monthly surplus: SIP. Psychology matters more than math for most investors.",
+    "keyNumbers": [
+      { "value": "12%", "label": "Avg. Equity CAGR", "context": "Historical Nifty 50" },
+      { "value": "3-6", "label": "Month Threshold", "context": "For STP decision" }
+    ],
+    "relatedTools": ["sip-strategy"],
+    "downloads": {
+      "template": {
+        "title": "SIP vs Lumpsum Decision Sheet",
+        "url": "https://docs.google.com/spreadsheets/d/example"
+      }
+    }
+  },
+  {
+    "slug": "property-vs-sip-mumbai-deep-dive",
+    "title": "Property vs SIP in Mumbai: The ₹1.5Cr Decision",
+    "summary": "A numbers-driven comparison for Mumbai's big investment dilemma",
+    "metaDescription": "Should you buy property in Mumbai or invest in SIPs? A detailed comparison with real numbers, opportunity costs, and decision framework.",
+    "imageUrl": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=800&fit=crop&q=80",
+    "author": "BM Wealth Editorial Team",
+    "published": "2025-12-15",
+    "pillar": "EDITORIAL",
+    "featured": false,
+    "tags": ["real-estate", "high-income", "deep-dive"],
+    "badges": ["AMFI"],
+    "tldr": "At ₹1.5Cr with 5% property growth and 12% equity CAGR, the SIP route shows ₹90L more wealth in 15 years. But property has utility value and forced savings. Decision depends on your goals.",
+    "keyNumbers": [
+      { "value": "₹90L", "label": "Wealth Gap", "context": "SIP advantage at year 15" },
+      { "value": "5%", "label": "Property CAGR", "context": "Mumbai average" },
+      { "value": "12%", "label": "Equity CAGR", "context": "Historical average" }
+    ],
+    "relatedTools": ["real-estate", "sip-strategy"]
+  },
+  {
+    "slug": "ab-test-results-calculator-cta",
+    "title": "A/B Test Results: Which Calculator CTA Works Best",
+    "summary": "We tested 4 CTAs on 12,000 visitors. Here's what won.",
+    "metaDescription": "Real A/B test results from BM Wealth calculators. Which call-to-action generates most conversions? Data from 12,000 visitors.",
+    "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop&q=80",
+    "author": "Akash Maurya",
+    "published": "2025-10-25",
+    "pillar": "DEV",
+    "series": "ab-tests",
+    "featured": false,
+    "tags": [],
+    "badges": ["AMFI"],
+    "tldr": "'See Your Tax Savings' beat 'Calculate Now' by 47%. Specificity wins. 'Unlock Your Report' (gated) had highest quality leads but 3x lower volume.",
+    "keyNumbers": [
+      { "value": "47%", "label": "Conversion Lift", "context": "Best vs worst CTA" },
+      { "value": "12K", "label": "Visitors Tested", "context": "Over 6 weeks" },
+      { "value": "4", "label": "Variants", "context": "Tested head-to-head" }
+    ]
+  },
+  {
+    "slug": "lawyers-fine-print-nominee-vs-will",
+    "title": "Lawyer's Fine Print: Nominee ≠ Owner",
+    "summary": "A legal expert explains why nominations don't transfer ownership",
+    "metaDescription": "Your MF nominee is not the owner. A lawyer explains the difference between nomination and succession, and why your will matters.",
+    "imageUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1200&h=800&fit=crop&q=80",
+    "author": "Adv. Rahul Mehta (Guest)",
+    "authorCredentials": ["Practicing Advocate, 15 years", "Specializes in Estate Planning"],
+    "published": "2026-02-01",
+    "pillar": "GUEST",
+    "series": "lawyers-fine-print",
+    "featured": false,
+    "tags": ["salaried", "high-income"],
+    "badges": ["AMFI"],
+    "tldr": "Nominee is a custodian, not owner. Without a will, succession laws apply and assets may not go where you intended. Simple fix: Make a will, update it yearly.",
+    "keyNumbers": [
+      { "value": "70%", "label": "Indians", "context": "Don't have a will" },
+      { "value": "2", "label": "Documents", "context": "Will + Nomination needed" }
+    ]
+  },
+  {
+    "slug": "nri-tax-mistakes-filing-help",
+    "title": "5 Tax Mistakes NRIs Make Every Year",
+    "summary": "Common errors that cost NRIs lakhs in unnecessary tax",
+    "metaDescription": "NRIs lose money due to these 5 common tax filing mistakes. Learn about DTAA benefits, capital gains rules, and proper reporting.",
+    "imageUrl": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=800&fit=crop&q=80",
+    "author": "BM Wealth Editorial Team",
+    "published": "2025-11-30",
+    "pillar": "IMPACT",
+    "series": "tax-leaks",
+    "featured": false,
+    "tags": ["nri", "tax-leaks", "tax-planning", "case-study"],
+    "badges": ["AMFI"],
+    "tldr": "NRI tax mistakes: 1) Not claiming DTAA benefits, 2) Wrong TDS on property sale, 3) Missing NRO/NRE interest rules, 4) Capital gains timing errors, 5) Ignoring FEMA compliance.",
+    "keyNumbers": [
+      { "value": "5", "label": "Common Mistakes", "context": "We see repeatedly" },
+      { "value": "~₹3L", "label": "Avg. Tax Saved", "context": "When corrected" }
+    ],
+    "relatedTools": ["tax-planning"]
+  },
+  {
+    "slug": "retirement-gap-calculator-engineering",
+    "title": "Building the Retirement Gap Calculator: Technical Deep Dive",
+    "summary": "How we handle inflation, returns, and withdrawal modeling",
+    "metaDescription": "Technical walkthrough of BM Wealth's Retirement Gap Calculator. Inflation modeling, safe withdrawal rates, and target corpus calculation.",
+    "imageUrl": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=800&fit=crop&q=80",
+    "author": "Akash Maurya",
+    "published": "2025-09-15",
+    "pillar": "DEV",
+    "series": "build-log",
+    "featured": false,
+    "tags": ["retire-early"],
+    "badges": ["AMFI"],
+    "tldr": "Retirement math: We use 6% inflation, 4% real return post-retirement, and 25x multiplier for corpus. The gap = target corpus - current trajectory. We show the monthly SIP needed to close it.",
+    "keyNumbers": [
+      { "value": "25x", "label": "Corpus Multiplier", "context": "Annual expenses" },
+      { "value": "6%", "label": "Inflation Assumed", "context": "Conservative" },
+      { "value": "4%", "label": "Safe Withdrawal", "context": "Post-retirement" }
+    ],
+    "relatedTools": ["retire-early"]
+  }
+]

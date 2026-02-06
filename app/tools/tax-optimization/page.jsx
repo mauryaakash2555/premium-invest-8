@@ -6,6 +6,7 @@ import TrackedLink from "@/components/shared/TrackedLink";
 import FAQSection from "@/components/shared/FAQSection";
 
 import { TaxCalculator } from "@/components/calculators/TaxCalculator";
+import { CalculatorToBlogCTA } from "@/components/blog/RelatedContent";
 
 const PATH = "/tools/tax-optimization";
 
@@ -180,6 +181,13 @@ export default function TaxOptimizationToolPage() {
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>
+
+          {/* Related Blog Posts */}
+          <CalculatorToBlogCTA 
+            toolId="tax-optimization" 
+            title="Deepen Your Understanding" 
+            className="mt-10"
+          />
 
           {/* Soft execution router (internal only, no affiliates) */}
           <div className="mt-10 border border-white/10 bg-white/5 p-5">

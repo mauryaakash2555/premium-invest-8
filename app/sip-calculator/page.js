@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import sipPlans from "@/data/sipPlans.json";
 import SipCalculatorWidget from "@/components/calculators/SipCalculatorWidget";
+import { CalculatorToBlogCTA } from "@/components/blog/RelatedContent";
 
 export default function SipCalculatorPage() {
   const router = useRouter();
@@ -55,6 +56,9 @@ export default function SipCalculatorPage() {
       </div>
 
       <SipCalculatorWidget title="SIP Calculator" subtitle="Adjust the inputs to estimate your invested amount and potential growth." plans={sipPlans} />
+
+      {/* Related Blog Articles */}
+      <CalculatorToBlogCTA toolSlug="sip-calculator" />
     </div>
   );
 }
