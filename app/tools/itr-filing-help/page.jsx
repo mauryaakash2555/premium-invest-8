@@ -1,254 +1,256 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useMemo, useState } from 'react';
+import UploadZone from '@/components/ITR/UploadZone';
+import ExtractedFields from '@/components/ITR/ExtractedFields';
+import TaxCalculator from '@/components/ITR/TaxCalculator';
+import PaymentButton from '@/components/ITR/PaymentButton';
+import { jsPDF } from 'jspdf';
 
 export default function ITRFilingHelp() {
-  const [pdfUrl, setPdfUrl] = useState(null);
-  const [fileName, setFileName] = useState('');
-  const fileInputRef = useRef(null);
-  
-  // Manual input fields
-  const [grossSalary, setGrossSalary] = useState('');
-  const [tds, setTds] = useState('');
-  const [otherIncome, setOtherIncome] = useState('');
-  const [deductions, setDeductions] = useState('');
-  
-  // Calculated values
-  const [calculation, setCalculation] = useState(null);
+  const [step, setStep] = useState('upload'); // upload, review, payment, complete
+  const [extractedData, setExtractedData] = useState(null);
+  const [editedFields, setEditedFields] = useState({});
+  const [taxResult, setTaxResult] = useState(null);
+  const [downloadReady, setDownloadReady] = useState(false);
 
-  function handleFileChange(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    // Create blob URL for PDF viewer
-    const url = URL.createObjectURL(file);
-    setPdfUrl(url);
-    setFileName(file.name);
-    setCalculation(null);
-  }
+  const amountPaise = 29900;
 
-  function formatNumber(num) {
-    return num.toLocaleString('en-IN');
-  }
+  async function handleUpload(file) {
+    setStep('extracting');
 
-  function parseAmount(str) {
-    if (!str) return 0;
-    return parseInt(str.replace(/,/g, '')) || 0;
-  }
+    const formData = new FormData();
+    formData.append('file', file);
 
-  function calculateTax() {
-    const gross = parseAmount(grossSalary);
-    const tdsAmount = parseAmount(tds);
-    const other = parseAmount(otherIncome);
-    const ded = parseAmount(deductions);
-    
-    const totalIncome = gross + other;
-    const taxableIncome = Math.max(0, totalIncome - ded - 50000); // Standard deduction
-    
-    // New tax regime (simplified)
-    let tax = 0;
-    if (taxableIncome > 1500000) {
-      tax = 150000 + (taxableIncome - 1500000) * 0.30;
-    } else if (taxableIncome > 1200000) {
-      tax = 60000 + (taxableIncome - 1200000) * 0.20;
-    } else if (taxableIncome > 900000) {
-      tax = 30000 + (taxableIncome - 900000) * 0.15;
-    } else if (taxableIncome > 600000) {
-      tax = 15000 + (taxableIncome - 600000) * 0.10;
-    } else if (taxableIncome > 300000) {
-      tax = (taxableIncome - 300000) * 0.05;
-    }
-    
-    const cess = tax * 0.04;
-    const totalTax = Math.round(tax + cess);
-    const refund = tdsAmount > totalTax ? tdsAmount - totalTax : 0;
-    const due = totalTax > tdsAmount ? totalTax - tdsAmount : 0;
-    
-    setCalculation({
-      totalIncome,
-      taxableIncome,
-      tax: Math.round(tax),
-      cess: Math.round(cess),
-      totalTax,
-      tds: tdsAmount,
-      refund,
-      due
+    const res = await fetch('/api/itr/extract', {
+      method: 'POST',
+      body: formData,
     });
+
+    const data = await res.json();
+
+    if (data.success) {
+      setExtractedData(data);
+      setEditedFields(data.fields);
+      setStep('review');
+    } else {
+      alert('Extraction failed: ' + data.error);
+      setStep('upload');
+    }
+  }
+
+  function handleFieldEdit(fieldName, value) {
+    setEditedFields((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  }
+
+  function handleCalculate() {
+    const result = calculateTax(editedFields);
+    setTaxResult(result);
+    setStep('payment');
+  }
+
+  function calculateTax(fields) {
+    // Old regime vs new regime calculation
+    const income = Number(fields.grossSalary || 0);
+    const deductions = Number(fields.deductions || fields.deductions80C || 0);
+
+    // Old regime
+    const oldTaxableIncome = income - deductions;
+    const oldTax = calculateOldRegimeTax(oldTaxableIncome);
+
+    // New regime (no deductions, lower rates)
+    const newTax = calculateNewRegimeTax(income);
+
+    const oldRounded = Math.round(oldTax);
+    const newRounded = Math.round(newTax);
+
+    return {
+      income,
+      deductions,
+      oldRegime: { taxableIncome: oldTaxableIncome, tax: oldRounded },
+      newRegime: { taxableIncome: income, tax: newRounded },
+      recommended: oldRounded < newRounded ? 'old' : 'new',
+      savings: Math.abs(oldRounded - newRounded),
+    };
+  }
+
+  function calculateOldRegimeTax(income) {
+    // FY 2025-26 slabs
+    let tax = 0;
+    if (income <= 250000) tax = 0;
+    else if (income <= 500000) tax = (income - 250000) * 0.05;
+    else if (income <= 1000000) tax = 12500 + (income - 500000) * 0.2;
+    else tax = 112500 + (income - 1000000) * 0.3;
+
+    return tax * 1.04;
+  }
+
+  function calculateNewRegimeTax(income) {
+    // FY 2025-26 new regime slabs
+    let tax = 0;
+    if (income <= 300000) tax = 0;
+    else if (income <= 600000) tax = (income - 300000) * 0.05;
+    else if (income <= 900000) tax = 15000 + (income - 600000) * 0.1;
+    else if (income <= 1200000) tax = 45000 + (income - 900000) * 0.15;
+    else if (income <= 1500000) tax = 90000 + (income - 1200000) * 0.2;
+    else tax = 150000 + (income - 1500000) * 0.3;
+
+    return tax * 1.04;
+  }
+
+  const pdfFilename = useMemo(() => {
+    const ts = new Date().toISOString().slice(0, 10);
+    return `BM_Wealth_ITR_Summary_${ts}.pdf`;
+  }, []);
+
+  function generateSummaryPdf() {
+    if (!taxResult) return null;
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+    const left = 48;
+    let y = 64;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('BM Wealth — ITR Summary (Draft)', left, y);
+    y += 22;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.text('This is a draft summary based on your uploaded document and edits.', left, y);
+    y += 18;
+    doc.text('Final filing is your responsibility.', left, y);
+    y += 26;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Inputs', left, y);
+    y += 18;
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Gross Income: ₹${taxResult.income.toLocaleString('en-IN')}`, left, y);
+    y += 16;
+    doc.text(`Deductions: ₹${taxResult.deductions.toLocaleString('en-IN')}`, left, y);
+    y += 26;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Comparison', left, y);
+    y += 18;
+    doc.setFont('helvetica', 'normal');
+    doc.text(
+      `Old Regime Tax: ₹${taxResult.oldRegime.tax.toLocaleString('en-IN')} (Taxable: ₹${Math.max(
+        0,
+        Math.round(taxResult.oldRegime.taxableIncome)
+      ).toLocaleString('en-IN')})`,
+      left,
+      y
+    );
+    y += 16;
+    doc.text(
+      `New Regime Tax: ₹${taxResult.newRegime.tax.toLocaleString('en-IN')} (Taxable: ₹${Math.max(
+        0,
+        Math.round(taxResult.newRegime.taxableIncome)
+      ).toLocaleString('en-IN')})`,
+      left,
+      y
+    );
+    y += 18;
+    doc.text(
+      `Recommended: ${taxResult.recommended === 'old' ? 'Old Regime' : 'New Regime'} (Savings: ₹${taxResult.savings.toLocaleString(
+        'en-IN'
+      )})`,
+      left,
+      y
+    );
+
+    return doc;
+  }
+
+  async function handlePaymentSuccess(paymentId) {
+    try {
+      const doc = generateSummaryPdf();
+      if (!doc) throw new Error('Failed to generate PDF');
+      doc.save(pdfFilename);
+      setDownloadReady(true);
+      setStep('complete');
+    } catch (e) {
+      console.error(e);
+      alert('Payment success, but PDF generation failed. Please contact support.');
+      setStep('complete');
+    }
   }
 
   return (
-    <div className="min-h-screen bg-[color:var(--lux-background)] text-[color:var(--lux-foreground)] pt-32 px-6 md:px-12 pb-16">
+    <div className="min-h-screen bg-[#0a0a0a] pt-24 pb-16 px-4 text-[#ffffff]">
       <div className="max-w-6xl mx-auto">
-        
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">Free ITR Filing Help</h1>
-          <p className="text-[color:var(--lux-foreground-60)]">Upload Form 16, AIS, or Bank Interest Statement</p>
-        </div>
-        
-        {/* Upload Zone */}
-        <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/70 backdrop-blur-xl p-8 mb-8">
-          <label className="block cursor-pointer">
-            <div className="border-2 border-dashed border-[color:var(--lux-foreground-10)] p-10 text-center transition-colors duration-300 hover:border-[color:var(--lux-accent)]">
-              <input 
-                ref={fileInputRef}
-                type="file" 
-                accept=".pdf"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <p className="text-lg mb-2">Click to upload PDF</p>
-              <p className="text-sm text-[color:var(--lux-foreground-40)]">Form 16, AIS, or Bank Statement</p>
-            </div>
-          </label>
-          
-          {fileName && (
-            <p className="mt-4 text-[color:var(--lux-accent)]">Uploaded: {fileName}</p>
-          )}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 text-[#d4af37]">Free ITR Filing Help</h1>
+          <p className="text-[#9ca3af]">Upload Form 16, AIS, or Bank Statement - Get instant tax calculation</p>
         </div>
 
-        {/* PDF Viewer + Manual Form (side by side on desktop) */}
-        {pdfUrl && (
+        {/* Progress */}
+        <div className="flex gap-4 mb-8">
+          <div className={`flex-1 h-2 rounded ${step !== 'upload' ? 'bg-[#d4af37]' : 'bg-[#333333]'}`} />
+          <div
+            className={`flex-1 h-2 rounded ${
+              step === 'payment' || step === 'complete' ? 'bg-[#d4af37]' : 'bg-[#333333]'
+            }`}
+          />
+          <div className={`flex-1 h-2 rounded ${step === 'complete' ? 'bg-[#d4af37]' : 'bg-[#333333]'}`} />
+        </div>
+
+        {/* Steps */}
+        {step === 'upload' && <UploadZone onUpload={handleUpload} />}
+
+        {step === 'extracting' && (
+          <div className="bg-[#1a1a1a] border border-[#333333] rounded-lg p-12 text-center">
+            <div className="animate-spin w-12 h-12 border-4 border-[#d4af37] border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="text-[#d4af37]">Extracting data from your PDF...</p>
+          </div>
+        )}
+
+        {step === 'review' && extractedData && (
           <>
-            {/* Message for scanned PDFs */}
-            <div className="border border-[color:var(--lux-accent)]/30 bg-[color:var(--lux-accent)]/5 p-6 mb-8">
-              <p className="text-[color:var(--lux-foreground-80)]">
-                This PDF may be scanned/image-based. Please enter values manually while viewing the PDF below.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              
-              {/* PDF Viewer */}
-              <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/70 p-4">
-                <h3 className="text-xl font-semibold mb-4 text-[color:var(--lux-accent)]">Your PDF</h3>
-                <object
-                  data={pdfUrl}
-                  type="application/pdf"
-                  className="w-full h-[600px]"
-                >
-                  <p className="text-[color:var(--lux-foreground-60)]">
-                    PDF preview not supported. 
-                    <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="text-[color:var(--lux-accent)] underline ml-2">
-                      Open in new tab
-                    </a>
-                  </p>
-                </object>
-              </div>
-
-              {/* Manual Input Form */}
-              <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/70 p-6">
-                <h3 className="text-xl font-semibold mb-6 text-[color:var(--lux-accent)]">Enter Values Manually</h3>
-                
-                <div className="space-y-5">
-                  <div>
-                    <label className="block text-sm text-[color:var(--lux-foreground-60)] mb-2">Gross Salary (from Form 16)</label>
-                    <input
-                      type="text"
-                      value={grossSalary}
-                      onChange={(e) => setGrossSalary(e.target.value)}
-                      placeholder="e.g. 12,00,000"
-                      className="w-full bg-[color:var(--lux-background)] border border-[color:var(--lux-foreground-10)] p-3 text-[color:var(--lux-foreground)] placeholder:text-[color:var(--lux-foreground-40)] focus:border-[color:var(--lux-accent)] focus:outline-none transition-colors"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm text-[color:var(--lux-foreground-60)] mb-2">TDS Deducted</label>
-                    <input
-                      type="text"
-                      value={tds}
-                      onChange={(e) => setTds(e.target.value)}
-                      placeholder="e.g. 1,20,000"
-                      className="w-full bg-[color:var(--lux-background)] border border-[color:var(--lux-foreground-10)] p-3 text-[color:var(--lux-foreground)] placeholder:text-[color:var(--lux-foreground-40)] focus:border-[color:var(--lux-accent)] focus:outline-none transition-colors"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm text-[color:var(--lux-foreground-60)] mb-2">Other Income (Bank Interest, FD, etc.)</label>
-                    <input
-                      type="text"
-                      value={otherIncome}
-                      onChange={(e) => setOtherIncome(e.target.value)}
-                      placeholder="e.g. 50,000"
-                      className="w-full bg-[color:var(--lux-background)] border border-[color:var(--lux-foreground-10)] p-3 text-[color:var(--lux-foreground)] placeholder:text-[color:var(--lux-foreground-40)] focus:border-[color:var(--lux-accent)] focus:outline-none transition-colors"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm text-[color:var(--lux-foreground-60)] mb-2">Deductions (80C, 80D, etc.)</label>
-                    <input
-                      type="text"
-                      value={deductions}
-                      onChange={(e) => setDeductions(e.target.value)}
-                      placeholder="e.g. 1,50,000"
-                      className="w-full bg-[color:var(--lux-background)] border border-[color:var(--lux-foreground-10)] p-3 text-[color:var(--lux-foreground)] placeholder:text-[color:var(--lux-foreground-40)] focus:border-[color:var(--lux-accent)] focus:outline-none transition-colors"
-                    />
-                  </div>
-                  
-                  <button
-                    onClick={calculateTax}
-                    className="w-full bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] font-semibold py-3 mt-4 hover:opacity-90 transition-opacity"
-                  >
-                    Calculate Tax
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ExtractedFields fields={editedFields} confidence={extractedData.confidence} onEdit={handleFieldEdit} />
+            <button
+              onClick={handleCalculate}
+              className="mt-6 bg-[#d4af37] text-black px-8 py-3 rounded-lg font-semibold hover:bg-[#c4a137] transition"
+            >
+              Calculate Tax →
+            </button>
           </>
         )}
 
-        {/* Calculation Results */}
-        {calculation && (
-          <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/70 p-8 mb-8">
-            <h3 className="text-2xl font-semibold mb-6 text-[color:var(--lux-accent)]">Tax Calculation (New Regime)</h3>
-            
-            <div className="space-y-4 text-lg">
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">Total Income</span>
-                <span>₹{formatNumber(calculation.totalIncome)}</span>
-              </div>
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">Taxable Income (after std. deduction)</span>
-                <span>₹{formatNumber(calculation.taxableIncome)}</span>
-              </div>
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">Tax</span>
-                <span>₹{formatNumber(calculation.tax)}</span>
-              </div>
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">Cess (4%)</span>
-                <span>₹{formatNumber(calculation.cess)}</span>
-              </div>
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">Total Tax Liability</span>
-                <span className="font-semibold">₹{formatNumber(calculation.totalTax)}</span>
-              </div>
-              <div className="flex justify-between border-b border-[color:var(--lux-foreground-05)] pb-3">
-                <span className="text-[color:var(--lux-foreground-60)]">TDS Already Paid</span>
-                <span>₹{formatNumber(calculation.tds)}</span>
-              </div>
-              
-              {calculation.refund > 0 && (
-                <div className="flex justify-between pt-3 text-green-400 text-xl font-bold">
-                  <span>Expected Refund</span>
-                  <span>₹{formatNumber(calculation.refund)}</span>
-                </div>
-              )}
-              
-              {calculation.due > 0 && (
-                <div className="flex justify-between pt-3 text-red-400 text-xl font-bold">
-                  <span>Tax Due</span>
-                  <span>₹{formatNumber(calculation.due)}</span>
-                </div>
-              )}
-            </div>
+        {step === 'payment' && taxResult && (
+          <>
+            <TaxCalculator result={taxResult} />
+            <PaymentButton amount={amountPaise} onSuccess={handlePaymentSuccess} />
+          </>
+        )}
+
+        {step === 'complete' && (
+          <div className="bg-[#1a1a1a] border border-[#10b981] rounded-lg p-8 text-center">
+            <div className="text-6xl mb-4">✓</div>
+            <h2 className="text-2xl font-bold text-[#10b981] mb-2">Payment Successful!</h2>
+            <p className="text-[#9ca3af] mb-6">Your ITR summary has been generated</p>
+            <button
+              onClick={() => {
+                const doc = generateSummaryPdf();
+                if (doc) doc.save(pdfFilename);
+              }}
+              className="bg-[#d4af37] text-black px-6 py-3 rounded-lg font-semibold"
+            >
+              Download Summary PDF
+            </button>
+            {!downloadReady ? null : null}
           </div>
         )}
 
         {/* Disclaimer */}
-        <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/50 p-5 text-sm text-[color:var(--lux-foreground-40)]">
-          <p>This tool provides estimates only. BM Wealth is not a CA or ERI. Final filing is your responsibility. Consult a tax professional for accurate advice.</p>
+        <div className="mt-12 p-4 bg-[#1a1a1a] border border-[#333333] rounded-lg text-sm text-[#9ca3af]">
+          ⚠️ This tool prepares a draft. BM Wealth is not a CA or ERI. Final filing is your responsibility.
         </div>
-        
       </div>
     </div>
   );
