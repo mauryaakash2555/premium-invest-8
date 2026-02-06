@@ -25,6 +25,9 @@ import { cookies, headers } from "next/headers";
 import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { Logger } from "@/lib/monitoring/logger";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 function csvEscape(v) {
   const s = v == null ? "" : String(v);
   if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;

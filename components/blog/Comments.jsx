@@ -2,6 +2,35 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
+function getCookie(name) {
+  try {
+    const key = `${encodeURIComponent(name)}=`;
+    const parts = String(document.cookie || '').split(';').map((p) => p.trim());
+    const hit = parts.find((p) => p.startsWith(key));
+    if (!hit) return '';
+    return decodeURIComponent(hit.slice(key.length));
+  } catch {
+    return '';
+  }
+}
+
+function setCookie(name, value, days = 365) {
+  try {
+    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value || '')}; Expires=${expires}; Path=/; SameSite=Lax`;
+  } catch {
+    // ignore
+  }
+}
+
+function clearCookie(name) {
+  try {
+    document.cookie = `${encodeURIComponent(name)}=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; SameSite=Lax`;
+  } catch {
+    // ignore
+  }
+}
+
 export default function Comments({ postId, postSlug }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,6 +39,7 @@ export default function Comments({ postId, postSlug }) {
     author_email: '',
     comment_text: ''
   });
+  const [rememberMe, setRememberMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
@@ -35,6 +65,22 @@ export default function Comments({ postId, postSlug }) {
     fetchComments();
   }, [fetchComments]);
 
+  useEffect(() => {
+    // Prefill once per session (cookie-based remembrance).
+    const savedName = getCookie('bm_comment_name');
+    const savedEmail = getCookie('bm_comment_email');
+    const hasSaved = Boolean(savedName || savedEmail);
+    setRememberMe(hasSaved ? true : true);
+
+    if (savedName || savedEmail) {
+      setFormData((prev) => ({
+        ...prev,
+        author_name: prev.author_name || savedName || '',
+        author_email: prev.author_email || savedEmail || '',
+      }));
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!identifier || submitting) return;
@@ -50,6 +96,13 @@ export default function Comments({ postId, postSlug }) {
       });
 
       if (res.ok) {
+        if (rememberMe) {
+          setCookie('bm_comment_name', formData.author_name || '');
+          setCookie('bm_comment_email', formData.author_email || '');
+        } else {
+          clearCookie('bm_comment_name');
+          clearCookie('bm_comment_email');
+        }
         setFormData({ author_name: '', author_email: '', comment_text: '' });
         setSubmitStatus('success');
         fetchComments();
@@ -86,11 +139,9 @@ export default function Comments({ postId, postSlug }) {
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
           <span>💬</span>
           <span>Join the Discussion</span>
-          {!loading && (
-            <span className="text-base font-normal text-white/60">
-              ({comments.length})
-            </span>
-          )}
+          {!loading && comments.length > 0 ? (
+            <span className="text-base font-normal text-white/60">({comments.length})</span>
+          ) : null}
         </h2>
         <p className="text-gray-400">
           Share your experience or ask questions. Community-powered insights.
@@ -144,6 +195,25 @@ export default function Comments({ postId, postSlug }) {
               onChange={(e) => setFormData({...formData, comment_text: e.target.value})}
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-[oklch(0.78_0.08_65)] transition-colors resize-none"
             />
+          </div>
+
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <label className="inline-flex items-center gap-2 text-sm text-white/60 select-none cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => {
+                  const next = Boolean(e.target.checked);
+                  setRememberMe(next);
+                  if (!next) {
+                    clearCookie('bm_comment_name');
+                    clearCookie('bm_comment_email');
+                  }
+                }}
+                className="accent-[oklch(0.78_0.08_65)]"
+              />
+              Remember my name & email on this device
+            </label>
           </div>
           
           <div className="flex items-center justify-between flex-wrap gap-4">
@@ -220,8 +290,8 @@ export default function Comments({ postId, postSlug }) {
         ) : (
           <div className="text-center py-12 px-4">
             <div className="text-4xl mb-3">💬</div>
-            <p className="text-gray-400 text-lg mb-2">No comments yet</p>
-            <p className="text-gray-500 text-sm">Be the first to share your thoughts!</p>
+            <p className="text-gray-400 text-lg mb-2">Start the conversation</p>
+            <p className="text-gray-500 text-sm">Ask a question or share your experience.</p>
           </div>
         )}
       </div>

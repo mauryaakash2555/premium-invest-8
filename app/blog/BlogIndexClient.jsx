@@ -33,7 +33,6 @@ import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import FAQSection from '@/components/shared/FAQSection';
 import BlogNavigation from '@/components/BlogNavigation';
-import BlogFilter from '@/components/BlogFilter';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import ComplianceFooter from '@/components/ComplianceFooter';
 import SubmitStoryCTA from '@/components/blog/SubmitStoryCTA';
@@ -43,7 +42,6 @@ export default function BlogPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [communityLoading, setCommunityLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -154,10 +152,9 @@ export default function BlogPage() {
   };
   const allPosts = blogPosts.length > 0 ? blogPosts : [{ ...staticBlogPost, type: 'editorial' }];
 
-  const typeFilteredPosts = useMemo(() => {
-    if (activeFilter === 'all') return allPosts;
-    return allPosts.filter((p) => String(p?.type || 'editorial').toLowerCase() === String(activeFilter).toLowerCase());
-  }, [activeFilter, allPosts]);
+  // Keep the blog index simple while content is still growing.
+  // Pillar pages provide the dedicated browsing experience.
+  const typeFilteredPosts = allPosts;
   
   // Get unique categories
   const categories = [...new Set(typeFilteredPosts.map(post => post.category).filter(Boolean))];
@@ -381,13 +378,6 @@ export default function BlogPage() {
       </section>
 
       <section className="section-container" style={{ paddingTop: '18px', paddingBottom: '0px' }}>
-        <BlogFilter
-          activeFilter={activeFilter}
-          onFilterChange={(v) => {
-            setActiveFilter(v);
-            setSelectedCategory(null);
-          }}
-        />
         <NewsletterSignup source="blog" />
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-8px', marginBottom: '18px' }}>

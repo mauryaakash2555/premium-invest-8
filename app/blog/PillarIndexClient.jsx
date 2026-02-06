@@ -21,24 +21,24 @@ const LUX = {
 // Series formats per pillar for the world-class blog system
 const PILLAR_SERIES = {
   IMPACT: [
-    { id: 'before-after', label: 'Before/After', description: 'Real transformation stories' },
-    { id: 'playbook', label: 'Playbook', description: 'Step-by-step frameworks' },
-    { id: 'case-study', label: 'Case Study', description: 'Detailed analysis' },
+    { id: 'before-after', label: 'Success Stories', description: 'Real transformations and outcomes' },
+    { id: 'playbook', label: 'Guides', description: 'Step-by-step frameworks' },
+    { id: 'case-study', label: 'Case Studies', description: 'Detailed analysis' },
   ],
   GUEST: [
-    { id: 'voices-ecosystem', label: 'Voices of Ecosystem', description: 'Expert perspectives' },
-    { id: 'fireside', label: 'Fireside', description: 'In-depth conversations' },
+    { id: 'voices-ecosystem', label: 'Expert Opinions', description: 'Verified expert perspectives' },
+    { id: 'fireside', label: 'Interviews', description: 'In-depth conversations' },
     { id: 'masterclass', label: 'Masterclass', description: 'Educational deep-dives' },
   ],
   DEV: [
-    { id: 'open-kitchen', label: 'Open Kitchen', description: 'Behind the scenes builds' },
-    { id: 'techstack', label: 'Tech Stack', description: 'Architecture decisions' },
+    { id: 'open-kitchen', label: 'Behind the Scenes', description: 'How we build' },
+    { id: 'techstack', label: 'Engineering', description: 'Architecture decisions' },
     { id: 'experiment', label: 'Experiments', description: 'What we tried & learned' },
   ],
   EDITORIAL: [
-    { id: 'market-pulse', label: 'Market Pulse', description: 'Trend analysis' },
-    { id: 'deep-dive', label: 'Deep Dive', description: 'Comprehensive research' },
-    { id: 'quick-take', label: 'Quick Take', description: 'Rapid insights' },
+    { id: 'market-pulse', label: 'Insights', description: 'Trends and takeaways' },
+    { id: 'deep-dive', label: 'Deep Dives', description: 'Comprehensive research' },
+    { id: 'quick-take', label: 'Quick Reads', description: 'Rapid insights' },
   ],
 };
 
@@ -159,9 +159,55 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
   // Filtered posts (excluding featured)
   const filteredPosts = useMemo(() => {
     let result = posts.filter(p => !featuredPost || p._id !== featuredPost._id);
-    // TODO: When series/tags are in the data, filter here
+
+    if (selectedSeries) {
+      result = result.filter((p) => String(p?.series || '') === String(selectedSeries));
+    }
+
+    if (selectedTags.length > 0) {
+      result = result.filter((p) => {
+        const tags = Array.isArray(p?.tags) ? p.tags : [];
+        return selectedTags.some((t) => tags.includes(t));
+      });
+    }
+
     return result;
   }, [posts, featuredPost, selectedSeries, selectedTags]);
+
+  const availableSeriesOptions = useMemo(() => {
+    const present = new Set(
+      posts
+        .map((p) => String(p?.series || '').trim())
+        .filter(Boolean)
+    );
+    return seriesOptions.filter((o) => present.has(o.id));
+  }, [posts, seriesOptions]);
+
+  const hasTagMetadata = useMemo(() => {
+    return posts.some((p) => Array.isArray(p?.tags) && p.tags.length > 0);
+  }, [posts]);
+
+  const showSubTabs = useMemo(() => {
+    // Keep it simple while content is low or metadata is missing.
+    if (isLoading) return false;
+    const hasSeries = availableSeriesOptions.length >= 2;
+    const enoughPosts = posts.length >= 6;
+    return hasTagMetadata || (hasSeries && enoughPosts);
+  }, [availableSeriesOptions.length, hasTagMetadata, isLoading, posts.length]);
+
+  const showSeriesPills = useMemo(() => {
+    return availableSeriesOptions.length >= 2 && posts.length >= 6;
+  }, [availableSeriesOptions.length, posts.length]);
+
+  const showTagFilters = hasTagMetadata;
+
+  useEffect(() => {
+    if (!showSubTabs) {
+      if (selectedSeries !== null) setSelectedSeries(null);
+      if (selectedTags.length > 0) setSelectedTags([]);
+      if (showFilters) setShowFilters(false);
+    }
+  }, [showSubTabs]);
 
   useEffect(() => {
     let cancelled = false;
@@ -269,169 +315,194 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
       </section>
 
       {/* Series Selector & Filters */}
-      <section className="section-container" style={{ paddingTop: '0', paddingBottom: '20px' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
-          {/* Series selector pills */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
-            <button
-              onClick={() => setSelectedSeries(null)}
-              style={{
-                padding: '8px 16px',
-                background: selectedSeries === null ? 'var(--lux-accent)' : 'transparent',
-                color: selectedSeries === null ? LUX.background : 'var(--lux-foreground-60)',
-                border: `1px solid ${selectedSeries === null ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
-                borderRadius: 0,
-                fontSize: '13px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              All Posts
-            </button>
-            {seriesOptions.map(series => (
-              <button
-                key={series.id}
-                onClick={() => setSelectedSeries(selectedSeries === series.id ? null : series.id)}
-                title={series.description}
-                style={{
-                  padding: '8px 16px',
-                  background: selectedSeries === series.id ? 'var(--lux-accent)' : 'transparent',
-                  color: selectedSeries === series.id ? LUX.background : 'var(--lux-foreground-60)',
-                  border: `1px solid ${selectedSeries === series.id ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
-                  borderRadius: 0,
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {series.label}
-              </button>
-            ))}
-          </div>
-          
-          {/* Filter toggle */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 14px',
-              background: showFilters ? 'var(--lux-accent)' : 'transparent',
-              color: showFilters ? LUX.background : 'var(--lux-foreground-60)',
-              border: `1px solid ${showFilters ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
-              borderRadius: 0,
-              fontSize: '13px',
-              cursor: 'pointer',
-            }}
-          >
-            <Filter size={14} />
-            Filters
-            {selectedTags.length > 0 && (
-              <span style={{ 
-                background: 'var(--lux-background)', 
-                color: 'var(--lux-accent)', 
-                padding: '2px 6px', 
-                borderRadius: '10px', 
-                fontSize: '11px' 
-              }}>
-                {selectedTags.length}
-              </span>
+      {showSubTabs ? (
+        <section className="section-container" style={{ paddingTop: '0', paddingBottom: '20px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
+            {/* Series selector pills (only when metadata + enough content) */}
+            {showSeriesPills ? (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', flex: 1 }}>
+                <button
+                  onClick={() => setSelectedSeries(null)}
+                  style={{
+                    padding: '8px 16px',
+                    background: selectedSeries === null ? 'var(--lux-accent)' : 'transparent',
+                    color: selectedSeries === null ? LUX.background : 'var(--lux-foreground-60)',
+                    border: `1px solid ${selectedSeries === null ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                    borderRadius: 0,
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  All Posts
+                </button>
+                {availableSeriesOptions.map((series) => (
+                  <button
+                    key={series.id}
+                    onClick={() => setSelectedSeries(selectedSeries === series.id ? null : series.id)}
+                    title={series.description}
+                    style={{
+                      padding: '8px 16px',
+                      background: selectedSeries === series.id ? 'var(--lux-accent)' : 'transparent',
+                      color: selectedSeries === series.id ? LUX.background : 'var(--lux-foreground-60)',
+                      border: `1px solid ${selectedSeries === series.id ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                      borderRadius: 0,
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {series.label}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div style={{ flex: 1 }} />
             )}
-          </button>
-        </div>
 
-        {/* Expandable filter section */}
-        {showFilters && (
-          <div style={{ 
-            background: 'var(--lux-card)', 
-            padding: '16px',
-            border: '1px solid var(--lux-foreground-10)',
-            marginBottom: '16px',
-          }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-              <div>
-                <p style={{ fontSize: '12px', color: 'var(--lux-foreground-40)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  Audience
-                </p>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {AUDIENCE_TAGS.map(tag => (
-                    <button
-                      key={tag.id}
-                      onClick={() => {
-                        setSelectedTags(prev => 
-                          prev.includes(tag.id) 
-                            ? prev.filter(t => t !== tag.id)
-                            : [...prev, tag.id]
-                        );
-                      }}
-                      style={{
-                        padding: '6px 12px',
-                        background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
-                        color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
-                        border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
-                        fontSize: '12px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {tag.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p style={{ fontSize: '12px', color: 'var(--lux-foreground-40)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  Topic
-                </p>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {TOPIC_TAGS.map(tag => (
-                    <button
-                      key={tag.id}
-                      onClick={() => {
-                        setSelectedTags(prev => 
-                          prev.includes(tag.id) 
-                            ? prev.filter(t => t !== tag.id)
-                            : [...prev, tag.id]
-                        );
-                      }}
-                      style={{
-                        padding: '6px 12px',
-                        background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
-                        color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
-                        border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
-                        fontSize: '12px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {tag.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            {selectedTags.length > 0 && (
+            {/* Filter toggle (only when tags exist) */}
+            {showTagFilters ? (
               <button
-                onClick={() => setSelectedTags([])}
+                onClick={() => setShowFilters(!showFilters)}
                 style={{
-                  marginTop: '12px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px',
-                  color: 'var(--lux-foreground-40)',
-                  fontSize: '12px',
-                  background: 'none',
-                  border: 'none',
+                  gap: '6px',
+                  padding: '8px 14px',
+                  background: showFilters ? 'var(--lux-accent)' : 'transparent',
+                  color: showFilters ? LUX.background : 'var(--lux-foreground-60)',
+                  border: `1px solid ${showFilters ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                  borderRadius: 0,
+                  fontSize: '13px',
                   cursor: 'pointer',
                 }}
               >
-                <X size={12} /> Clear filters
+                <Filter size={14} />
+                Filters
+                {selectedTags.length > 0 && (
+                  <span
+                    style={{
+                      background: 'var(--lux-background)',
+                      color: 'var(--lux-accent)',
+                      padding: '2px 6px',
+                      borderRadius: '10px',
+                      fontSize: '11px',
+                    }}
+                  >
+                    {selectedTags.length}
+                  </span>
+                )}
               </button>
-            )}
+            ) : null}
           </div>
-        )}
-      </section>
+
+          {/* Expandable filter section */}
+          {showTagFilters && showFilters ? (
+            <div
+              style={{
+                background: 'var(--lux-card)',
+                padding: '16px',
+                border: '1px solid var(--lux-foreground-10)',
+                marginBottom: '16px',
+              }}
+            >
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                <div>
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      color: 'var(--lux-foreground-40)',
+                      marginBottom: '8px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                    }}
+                  >
+                    Audience
+                  </p>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    {AUDIENCE_TAGS.map((tag) => (
+                      <button
+                        key={tag.id}
+                        onClick={() => {
+                          setSelectedTags((prev) =>
+                            prev.includes(tag.id) ? prev.filter((t) => t !== tag.id) : [...prev, tag.id]
+                          );
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
+                          color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
+                          border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {tag.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      color: 'var(--lux-foreground-40)',
+                      marginBottom: '8px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                    }}
+                  >
+                    Topic
+                  </p>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    {TOPIC_TAGS.map((tag) => (
+                      <button
+                        key={tag.id}
+                        onClick={() => {
+                          setSelectedTags((prev) =>
+                            prev.includes(tag.id) ? prev.filter((t) => t !== tag.id) : [...prev, tag.id]
+                          );
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          background: selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'transparent',
+                          color: selectedTags.includes(tag.id) ? LUX.background : 'var(--lux-foreground-60)',
+                          border: `1px solid ${selectedTags.includes(tag.id) ? 'var(--lux-accent)' : 'var(--lux-foreground-10)'}`,
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {tag.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {selectedTags.length > 0 ? (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  style={{
+                    marginTop: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    color: 'var(--lux-foreground-40)',
+                    fontSize: '12px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <X size={12} /> Clear filters
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
       {/* Featured Post Section */}
       {!isLoading && featuredPost && posts.length > 1 && (
