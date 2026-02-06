@@ -1,32 +1,25 @@
 import { test, expect } from '@playwright/test';
 import { jsPDF } from 'jspdf';
 
-function makePdfWithSalaryData() {
-  if (makePdfWithSalaryData._cached) return makePdfWithSalaryData._cached;
+function makeTestPdfBuffer() {
+  if (makeTestPdfBuffer._cached) return makeTestPdfBuffer._cached;
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(12);
-  // Add text that matches the extraction regex patterns
-  doc.text('Form 16 - Salary Details', 40, 40);
-  doc.text('Gross Salary: 12,00,000', 40, 70);
-  doc.text('Total TDS: 50,000', 40, 100);
-  doc.text('Net Salary: 10,50,000', 40, 130);
+  doc.text('Form 16 - Test Document', 40, 40);
   const buf = Buffer.from(doc.output('arraybuffer'));
-  makePdfWithSalaryData._cached = buf;
+  makeTestPdfBuffer._cached = buf;
   return buf;
 }
 
-test('ITR Filing Help: client-side PDF extraction works', async ({ page }) => {
+test('ITR Filing Help: upload PDF + manual input + calculate', async ({ page }) => {
   const consoleErrors = [];
   page.on('console', (msg) => {
     if (msg.type() !== 'error') return;
     const text = msg.text();
     const loc = typeof msg.location === 'function' ? msg.location() : null;
     const url = loc?.url || '';
-
-    // Next.js dev overlay occasionally emits a noisy "Missing property" error
     if (text === 'Missing property' && url.includes('next-devtools/userspace/app/errors/intercept-console-error')) return;
-
     consoleErrors.push(text);
   });
   page.on('pageerror', (err) => consoleErrors.push(String(err)));
@@ -35,23 +28,29 @@ test('ITR Filing Help: client-side PDF extraction works', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Free ITR Filing Help' })).toBeVisible();
   await expect(page.getByText('Upload Form 16, AIS, or Bank Interest Statement')).toBeVisible();
 
-  // Upload PDF with salary data that matches extraction regex
+  // Upload PDF
   const fileInput = page.locator('input[type="file"]').first();
   await fileInput.setInputFiles({
     name: 'form16_test.pdf',
     mimeType: 'application/pdf',
-    buffer: makePdfWithSalaryData(),
+    buffer: makeTestPdfBuffer(),
   });
 
-  // Client-side extraction should render results
-  await expect(page.getByText('Extraction Info')).toBeVisible({ timeout: 15000 });
-  await expect(page.getByText('Extracted Fields')).toBeVisible();
-  
-  // Verify fields were extracted - use exact label match
-  await expect(page.getByText('Gross Salary', { exact: true })).toBeVisible();
-  await expect(page.getByText('TDS', { exact: true })).toBeVisible();
+  // Should show scanned PDF message and manual form
+  await expect(page.getByText('scanned/image-based')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole('heading', { name: 'Enter Values Manually' })).toBeVisible();
 
-  // Filter out "Missing property" console errors from Next.js devtools
+  // Fill in manual values
+  await page.getByPlaceholder('e.g. 12,00,000').fill('1200000');
+  await page.getByPlaceholder('e.g. 1,20,000').fill('120000');
+  
+  // Click calculate
+  await page.getByRole('button', { name: 'Calculate Tax' }).click();
+
+  // Should show calculation results
+  await expect(page.getByText('Tax Calculation')).toBeVisible();
+  await expect(page.getByText('Total Income')).toBeVisible();
+
   const filteredErrors = consoleErrors.filter(e => e !== 'Missing property');
   expect(filteredErrors, filteredErrors.join('\n')).toEqual([]);
 });
