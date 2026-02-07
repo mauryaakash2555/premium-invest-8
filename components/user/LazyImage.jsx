@@ -23,6 +23,7 @@ import { useState } from 'react';
 
 export default function LazyImage({ src, alt, className, style, loading, decoding, fetchPriority, ...props }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -35,10 +36,16 @@ export default function LazyImage({ src, alt, className, style, loading, decodin
       fetchPriority={fetchPriority}
       style={{
         ...style,
-        opacity: isLoaded ? 1 : 0,
+        opacity: isLoaded || hasError ? 1 : 0,
         transition: 'opacity 0.3s ease-in-out',
       }}
       onLoad={() => setIsLoaded(true)}
+      onError={(e) => {
+        setHasError(true);
+        try {
+          props?.onError?.(e);
+        } catch {}
+      }}
       {...props}
     />
   );

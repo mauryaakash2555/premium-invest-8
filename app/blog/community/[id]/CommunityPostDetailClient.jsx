@@ -8,6 +8,7 @@ import Comments from '@/components/blog/Comments';
 import SocialShare from '@/components/blog/SocialShare';
 import ViewTracker from '@/components/blog/ViewTracker';
 import PostBottomCTA from '@/components/blog/PostBottomCTA';
+import BlogNavigation from '@/components/BlogNavigation';
 
 const panelStyle = {
   borderRadius: 0,
@@ -139,6 +140,10 @@ export default function CommunityPostDetailClient({ id }) {
         <Link href={backHref} onClick={onBackClick} style={{ color: 'rgba(235,242,255,0.86)', textDecoration: 'none' }}>
           {backLabel}
         </Link>
+
+        <div style={{ marginTop: '18px' }}>
+          <BlogNavigation />
+        </div>
 
         {isLoading ? <div style={{ ...panelStyle, padding: '14px', marginTop: '14px', color: 'rgba(235,242,255,0.86)' }}>Loading…</div> : null}
         {error ? <div style={{ ...panelStyle, padding: '14px', marginTop: '14px', color: 'rgba(235,242,255,0.86)' }}>{error}</div> : null}

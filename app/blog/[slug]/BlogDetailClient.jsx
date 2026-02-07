@@ -35,6 +35,7 @@ import Comments from '@/components/blog/Comments';
 import SocialShare from '@/components/blog/SocialShare';
 import ViewTracker from '@/components/blog/ViewTracker';
 import PostBottomCTA from '@/components/blog/PostBottomCTA';
+import BlogNavigation from '@/components/BlogNavigation';
 
 // Premium LUX Theme (canonical values - never deviate)
 const LUX = {
@@ -702,7 +703,7 @@ export default function BlogDetailClient({ slug }) {
               borderRadius: 0,
               pointerEvents: 'none',
               background:
-                'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 60%, rgba(10,10,10,0.82) 100%)',
+                'linear-gradient(180deg, rgba(10,10,10,0.28) 0%, rgba(10,10,10,0.45) 60%, rgba(10,10,10,0.55) 100%)',
             }}
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -716,12 +717,16 @@ export default function BlogDetailClient({ slug }) {
               aspectRatio: '16/9',
               objectFit: 'cover',
               borderRadius: 0,
-              filter: 'brightness(0.4) saturate(0.9) contrast(1.1)',
-              opacity: 0.8
+              filter: 'brightness(0.78) saturate(1.12) contrast(1.05)',
+              opacity: 1
             }}
           />
         </div>
       )}
+
+      <section className="section-container" style={{ paddingTop: '0', paddingBottom: '0', maxWidth: '1000px' }}>
+        <BlogNavigation />
+      </section>
 
       {/* Article Content */}
       <article
