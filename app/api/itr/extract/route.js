@@ -75,52 +75,61 @@ export async function POST(request) {
 
 function extractFields(text) {
   const fields = {};
-
-  // Gross Salary
+  
+  // Gross Salary - Multiple patterns
   const grossPatterns = [
-    /gross\s+salary[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i,
-    /total\s+amount\s+of\s+salary[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i,
-    /salary\s+as\s+per.*?section.*?17.*?([\d,]+)/i,
+    /salary.*?section\s+17.*?(\d[\d,]{5,})/i,
+    /total.*?salary.*?(\d[\d,]{5,})/i,
+    /gross.*?salary.*?(\d[\d,]{5,})/i,
+    /(\d[\d,]{6,})\s*(?:\.00)?\s*total/i
   ];
+  
   for (const pattern of grossPatterns) {
     const match = text.match(pattern);
     if (match) {
-      const value = parseInt(match[1].replace(/,/g, ''));
-      if (value > 10000) {
+      const value = parseInt(match[1].replace(/,/g, '').replace(/\./g, ''));
+      if (value > 100000 && value < 100000000) {
         fields.grossSalary = value;
         break;
       }
     }
   }
-
-  // TDS
+  
+  // TDS - Look for total TDS
   const tdsPatterns = [
-    /total.*?tds[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i,
-    /amount\s+of\s+tax\s+deducted[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i,
-    /tax\s+deducted.*?source[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i,
+    /total.*?(?:rs\.?|₹)?\s*(\d[\d,]{5,})\s*(?:\.00)?\s*(?:\d[\d,]{5,})\s*(?:\.00)?\s*$/im,
+    /amount.*?tax.*?deducted.*?(\d[\d,]{5,})/i,
+    /tds.*?(\d[\d,]{5,})/i
   ];
+  
   for (const pattern of tdsPatterns) {
     const match = text.match(pattern);
     if (match) {
-      const value = parseInt(match[1].replace(/,/g, ''));
-      if (value > 1000) {
+      const value = parseInt(match[1].replace(/,/g, '').replace(/\./g, ''));
+      if (value > 10000 && value < 10000000) {
         fields.tds = value;
         break;
       }
     }
   }
-
-  // Standard Deduction
-  const stdMatch = text.match(/standard\s+deduction[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i);
+  
+  // Standard Deduction - Section 16
+  const stdMatch = text.match(/standard.*?deduction.*?section.*?16.*?(\d[\d,]{4,})/i);
   if (stdMatch) {
-    fields.standardDeduction = parseInt(stdMatch[1].replace(/,/g, ''));
+    const value = parseInt(stdMatch[1].replace(/,/g, ''));
+    if (value >= 40000 && value <= 75000) {
+      fields.standardDeduction = value;
+    }
   }
-
-  // 80C
-  const deduction80CMatch = text.match(/(?:deduction.*?)?80c[:\s]+(?:rs\.?|₹)?\s*([\d,]+)/i);
+  
+  // 80C Deductions
+  const deduction80CMatch = text.match(/total.*?deduction.*?section.*?80c.*?(\d[\d,]{5,})/i);
   if (deduction80CMatch) {
-    fields.deductions80C = parseInt(deduction80CMatch[1].replace(/,/g, ''));
+    const value = parseInt(deduction80CMatch[1].replace(/,/g, ''));
+    if (value >= 0 && value <= 150000) {
+      fields.deductions80C = value;
+    }
   }
-
+  
   return fields;
 }
