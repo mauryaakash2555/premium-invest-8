@@ -3,7 +3,9 @@ import path from 'node:path';
 import { jsPDF } from 'jspdf';
 
 const outDir = path.join(process.cwd(), 'tests', 'fixtures');
+const legacyOutDir = path.join(process.cwd(), 'fixtures');
 fs.mkdirSync(outDir, { recursive: true });
+fs.mkdirSync(legacyOutDir, { recursive: true });
 
 function writePdf(filename, lines) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
@@ -22,10 +24,21 @@ function writePdf(filename, lines) {
 writePdf('form16_clean.pdf', [
   'FORM 16',
   'Certificate under section 203',
-  'Gross Salary: 123456',
+  'Gross Salary: 2557983',
   'Standard Deduction: 50000',
-  'Total TDS: 23456',
+  'Total TDS: 483740',
 ]);
+
+// Acceptance checklist fixture path.
+// Keep a copy at ./fixtures/1_Form16_Sample.pdf while also storing under tests/fixtures.
+writePdf('1_Form16_Sample.pdf', [
+  'FORM 16',
+  'Certificate under section 203',
+  'Gross Salary: 2557983',
+  'Standard Deduction: 50000',
+  'Total TDS: 483740',
+]);
+fs.copyFileSync(path.join(outDir, '1_Form16_Sample.pdf'), path.join(legacyOutDir, '1_Form16_Sample.pdf'));
 
 writePdf('ais_sample.pdf', [
   'Annual Information Statement (AIS)',

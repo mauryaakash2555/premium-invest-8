@@ -39,10 +39,17 @@ export default defineConfig({
       // ignore
     }
 
+    const shouldKillPort = port !== "3000";
+    const command = shouldKillPort
+      ? `node scripts/kill-port.mjs ${port} && npx next dev -H 127.0.0.1 -p ${port}`
+      : `npx next dev -H 127.0.0.1 -p ${port}`;
+
     return {
-      command: `npx next dev -H 127.0.0.1 -p ${port}`,
+      command,
       url: String(baseURL),
-      reuseExistingServer: !process.env.CI,
+      // Never reuse for test-only ports (e.g. 3001) to avoid flakiness
+      // when a stale server is running.
+      reuseExistingServer: !process.env.CI && !shouldKillPort,
       timeout: 120 * 1000,
     };
   })(),
