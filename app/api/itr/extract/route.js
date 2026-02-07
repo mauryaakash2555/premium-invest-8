@@ -1,6 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import pdf from 'pdf-parse';
 
+// Force Node.js runtime (pdf-parse needs it)
+export const runtime = 'nodejs';
+export const maxDuration = 30;
+
 export async function POST(request) {
   try {
     // Check API key first

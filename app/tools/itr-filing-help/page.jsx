@@ -45,14 +45,24 @@ export default function ITRFilingHelp() {
         body: formData,
       });
 
-      const data = await res.json();
+      // Get raw text first to debug
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Response was not JSON:', text.substring(0, 500));
+        alert('Server error: ' + (text.substring(0, 200) || 'Empty response'));
+        setStep('upload');
+        return;
+      }
 
       if (data.success) {
         setExtractedData(data);
         setFields(data.fields);
         setStep('review');
       } else {
-        alert('Extraction failed: ' + data.error);
+        alert('Extraction failed: ' + (data.error || 'Unknown error') + (data.debug ? '\n\nDebug: ' + data.debug : ''));
         setStep('upload');
       }
     } catch (err) {
