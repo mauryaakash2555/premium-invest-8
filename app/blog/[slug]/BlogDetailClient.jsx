@@ -24,6 +24,7 @@
 
 import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Calendar, User, ArrowLeft, ChevronUp } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import BlogDisclaimer from '@/components/shared/BlogDisclaimer';
@@ -104,6 +105,45 @@ export default function BlogDetailClient({ slug }) {
   const [readProgress, setReadProgress] = useState(0); // 0..1
   const [showBackToTop, setShowBackToTop] = useState(false);
   // Keep overlay simple: % only (no timer)
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const backHref = useMemo(() => {
+    const raw = searchParams?.get('from');
+    if (!raw) return '/blog';
+    // Only allow internal blog paths to prevent open redirects.
+    if (raw === '/blog/impact' || raw === '/blog/guest' || raw === '/blog/dev' || raw === '/blog' || raw === '/blog/editorial') {
+      return raw;
+    }
+    return '/blog';
+  }, [searchParams]);
+
+  const backLabel = useMemo(() => {
+    switch (backHref) {
+      case '/blog/impact':
+        return 'Back to Community Impact';
+      case '/blog/guest':
+        return 'Back to Guest Columns';
+      case '/blog/dev':
+        return 'Back to Developer Insight';
+      default:
+        return 'Back to Blog';
+    }
+  }, [backHref]);
+
+  const onBackClick = (e) => {
+    // Prefer true browser back when available (keeps scroll + filters).
+    // Fallback to computed href if opened directly/new tab.
+    e?.preventDefault?.();
+    try {
+      if (typeof window !== 'undefined' && window.history && window.history.length > 1) {
+        router.back();
+        return;
+      }
+    } catch {}
+    router.push(backHref);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -453,7 +493,7 @@ export default function BlogDetailClient({ slug }) {
       }}>
         <h1 style={{ color: LUX.foreground, fontSize: '48px', marginBottom: '16px' }}>404</h1>
         <p style={{ color: LUX.foreground60, fontSize: '18px', marginBottom: '32px' }}>Blog post not found</p>
-        <Link href="/blog" style={{
+        <Link href={backHref} onClick={onBackClick} style={{
           color: LUX.accent,
           textDecoration: 'none',
           display: 'flex',
@@ -461,7 +501,7 @@ export default function BlogDetailClient({ slug }) {
           gap: '8px'
         }}>
           <ArrowLeft size={20} />
-          Back to Blog
+          {backLabel}
         </Link>
       </div>
     );
@@ -666,7 +706,7 @@ export default function BlogDetailClient({ slug }) {
         padding: '0 20px 80px 20px'
       }}>
         {/* Back Link */}
-        <Link href="/blog" style={{
+        <Link href={backHref} onClick={onBackClick} style={{
           color: 'var(--lux-accent)',
           textDecoration: 'none',
           display: 'inline-flex',
@@ -676,7 +716,7 @@ export default function BlogDetailClient({ slug }) {
           fontSize: '14px'
         }}>
           <ArrowLeft size={16} />
-          Back to Blog
+          {backLabel}
         </Link>
 
         {/* Category Tag */}
@@ -1066,7 +1106,7 @@ export default function BlogDetailClient({ slug }) {
 
         {/* Back to Blog */}
         <div style={{ marginTop: '60px', textAlign: 'center' }}>
-          <Link href="/blog" style={{
+          <Link href={backHref} onClick={onBackClick} style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
@@ -1080,7 +1120,7 @@ export default function BlogDetailClient({ slug }) {
             transition: 'all 0.3s ease'
           }}>
             <ArrowLeft size={18} />
-            Back to All Articles
+            {backLabel}
           </Link>
         </div>
       </article>

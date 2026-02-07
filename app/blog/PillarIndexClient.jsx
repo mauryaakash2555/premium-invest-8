@@ -130,10 +130,28 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
     }
   }, []);
 
+  const fromPath = useMemo(() => {
+    switch (PILLAR) {
+      case 'IMPACT':
+        return '/blog/impact';
+      case 'GUEST':
+        return '/blog/guest';
+      case 'DEV':
+        return '/blog/dev';
+      default:
+        return null;
+    }
+  }, [PILLAR]);
+
   const getPostHref = (post) => {
-    if (post?.slug) return `/blog/${post.slug}`;
-    if (post?._id) return `/blog/community/${post._id}`;
-    return '/blog';
+    let base = null;
+    if (post?.slug) base = `/blog/${post.slug}`;
+    else if (post?._id) base = `/blog/community/${post._id}`;
+    else base = '/blog';
+
+    if (!fromPath) return base;
+    const sep = base.includes('?') ? '&' : '?';
+    return `${base}${sep}from=${encodeURIComponent(fromPath)}`;
   };
 
   const getWhatsAppHref = (postHref, title) => {

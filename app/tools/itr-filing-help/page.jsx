@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 
 const LUX = {
   background: 'oklch(0.06 0.005 280)',
@@ -104,6 +105,16 @@ export default function ITRFilingHelp() {
       className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]"
     >
       <div className="max-w-5xl mx-auto">
+        <div className="mb-4">
+          <Link
+            href="/tools"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)]"
+          >
+            <span aria-hidden="true">←</span>
+            Back to Tools
+          </Link>
+        </div>
+
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-[color:var(--lux-foreground)]">Free ITR Filing Help</h1>
           <p className="text-[color:var(--lux-foreground-60)]">Upload Form 16, AIS, or Bank Statement</p>

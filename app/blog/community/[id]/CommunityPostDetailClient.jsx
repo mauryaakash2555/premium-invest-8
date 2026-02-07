@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import Comments from '@/components/blog/Comments';
 import SocialShare from '@/components/blog/SocialShare';
@@ -21,6 +22,42 @@ export default function CommunityPostDetailClient({ id }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [showEnhanced, setShowEnhanced] = useState(true);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const backHref = useMemo(() => {
+    const raw = searchParams?.get('from');
+    if (!raw) return '/blog';
+    if (raw === '/blog/impact' || raw === '/blog/guest' || raw === '/blog/dev' || raw === '/blog' || raw === '/blog/editorial') {
+      return raw;
+    }
+    return '/blog';
+  }, [searchParams]);
+
+  const backLabel = useMemo(() => {
+    switch (backHref) {
+      case '/blog/impact':
+        return '← Back to Community Impact';
+      case '/blog/guest':
+        return '← Back to Guest Columns';
+      case '/blog/dev':
+        return '← Back to Developer Insight';
+      default:
+        return '← Back to Blog';
+    }
+  }, [backHref]);
+
+  const onBackClick = (e) => {
+    e?.preventDefault?.();
+    try {
+      if (typeof window !== 'undefined' && window.history && window.history.length > 1) {
+        router.back();
+        return;
+      }
+    } catch {}
+    router.push(backHref);
+  };
 
   const safeId = useMemo(() => (typeof id === 'string' ? id : ''), [id]);
 
@@ -91,8 +128,8 @@ export default function CommunityPostDetailClient({ id }) {
       '--lux-accent': 'oklch(0.78 0.08 65)',
     }}>
       <section className="section-container" style={{ paddingTop: '120px', paddingBottom: '60px', maxWidth: '980px' }}>
-        <Link href="/blog" style={{ color: 'rgba(235,242,255,0.86)', textDecoration: 'none' }}>
-          ← Back to Blog
+        <Link href={backHref} onClick={onBackClick} style={{ color: 'rgba(235,242,255,0.86)', textDecoration: 'none' }}>
+          {backLabel}
         </Link>
 
         {isLoading ? <div style={{ ...panelStyle, padding: '14px', marginTop: '14px', color: 'rgba(235,242,255,0.86)' }}>Loading…</div> : null}
