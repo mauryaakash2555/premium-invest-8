@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { PDFParse } from 'pdf-parse';
+import pdfParse from 'pdf-parse';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -21,7 +21,7 @@ export async function POST(request) {
 
     const buffer = await file.arrayBuffer();
 
-    const parser = new PDFParse({ data: Buffer.from(buffer) });
+    const parser = new pdfParse.PDFParse({ data: Buffer.from(buffer) });
     let textResult;
     try {
       textResult = await parser.getText({ lineEnforce: true });
