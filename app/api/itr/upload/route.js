@@ -3,7 +3,10 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-import pdfParse from 'pdf-parse';
+async function loadPdfParse() {
+  const mod = await import('pdf-parse');
+  return mod.default || mod;
+}
 
 function makeId(prefix) {
   return `${prefix}_${crypto.randomBytes(12).toString('hex')}`;
@@ -80,6 +83,7 @@ export async function POST(request) {
 
       if (isPdf) {
         try {
+          const pdfParse = await loadPdfParse();
           const parser = new pdfParse.PDFParse({ data: Buffer.from(bytes) });
           let textResult;
           try {

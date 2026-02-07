@@ -1,8 +1,15 @@
-import OpenAI from 'openai';
-import pdfParse from 'pdf-parse';
-
 export const runtime = 'nodejs';
 export const maxDuration = 30;
+
+async function loadOpenAI() {
+  const mod = await import('openai');
+  return mod.default;
+}
+
+async function loadPdfParse() {
+  const mod = await import('pdf-parse');
+  return mod.default || mod;
+}
 
 export async function POST(request) {
   try {
@@ -10,6 +17,7 @@ export async function POST(request) {
       return Response.json({ success: false, error: 'OPENAI_API_KEY not configured' }, { status: 500 });
     }
 
+    const OpenAI = await loadOpenAI();
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const formData = await request.formData();
@@ -21,6 +29,7 @@ export async function POST(request) {
 
     const buffer = await file.arrayBuffer();
 
+    const pdfParse = await loadPdfParse();
     const parser = new pdfParse.PDFParse({ data: Buffer.from(buffer) });
     let textResult;
     try {
