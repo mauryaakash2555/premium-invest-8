@@ -197,6 +197,32 @@ export default function BlogDetailClient({ slug }) {
     return normalizeBlogHtmlForPremium(rawHtml);
   }, [rawHtml]);
 
+  const estimatedReadTime = useMemo(() => {
+    // Prefer explicit read time if present
+    const raw = String(post?.readTime || post?.read_time || '').trim();
+    const m = raw.match(/(\d+)\s*(min|minute)/i);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (Number.isFinite(n) && n > 0) return n;
+    }
+
+    // Estimate from HTML word count
+    const html = String(renderedHtml || '').trim();
+    if (!html) return null;
+    let text = '';
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      text = String(doc?.body?.textContent || '').replace(/\s+/g, ' ').trim();
+    } catch {
+      text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    const words = text ? text.split(' ').filter(Boolean).length : 0;
+    if (!words) return null;
+    const minutes = Math.max(1, Math.round(words / 220));
+    return minutes;
+  }, [post?.readTime, post?.read_time, renderedHtml]);
+
   const pageClassName = useMemo(() => {
     const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';
     // Slug-only (already url-safe); used for per-post styling without touching content text.
@@ -701,9 +727,9 @@ export default function BlogDetailClient({ slug }) {
       <article
         ref={articleRef}
         style={{
-        maxWidth: '800px',
+        maxWidth: '860px',
         margin: '0 auto',
-        padding: '0 20px 80px 20px'
+        padding: '0 clamp(20px, 4vw, 40px) 80px'
       }}>
         {/* Back Link */}
         <Link href={backHref} onClick={onBackClick} style={{
@@ -743,10 +769,25 @@ export default function BlogDetailClient({ slug }) {
           fontWeight: '600',
           color: 'var(--lux-accent)',
           lineHeight: '1.2',
-          marginBottom: '24px'
+          marginBottom: '10px'
         }}>
           {post.title}
         </h1>
+
+        {estimatedReadTime ? (
+          <div
+            style={{
+              color: 'var(--lux-foreground-60)',
+              fontSize: '14px',
+              marginBottom: '22px',
+              letterSpacing: '0.02em',
+            }}
+          >
+            Estimated read time: {estimatedReadTime} min
+          </div>
+        ) : (
+          <div style={{ height: 8 }} />
+        )}
 
         {/* Meta Info */}
         <div style={{
@@ -778,11 +819,7 @@ export default function BlogDetailClient({ slug }) {
             <User size={16} />
             {post.author || 'BM Wealth Editorial Team'}
           </div>
-          {post.readTime && (
-            <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px' }}>
-              {post.readTime}
-            </div>
-          )}
+          {/* Read time is shown under title for consistency */}
         </div>
 
         {/* Summary/Excerpt */}
@@ -803,13 +840,56 @@ export default function BlogDetailClient({ slug }) {
         {/* Content */}
         <div
           className="blog-html"
-          style={{ color: 'var(--lux-foreground-80)', lineHeight: '1.8' }}
+          style={{ color: 'var(--lux-foreground-80)', lineHeight: '1.9', fontSize: '17px' }}
           dangerouslySetInnerHTML={{ 
             __html: renderedHtml || 'No content available.'
           }}
         />
 
         <BlogDisclaimer />
+
+        {/* Author Block */}
+        <div
+          style={{
+            marginTop: '26px',
+            padding: '20px',
+            border: '1px solid rgba(255,255,255,0.10)',
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: 0,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div
+              aria-hidden="true"
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 999,
+                background:
+                  'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 40%, transparent) 0%, rgba(255,255,255,0.05) 100%)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(0,0,0,0.88)',
+                fontWeight: 800,
+              }}
+            >
+              {(String(post.author || 'BM')[0] || 'B').toUpperCase()}
+            </div>
+            <div>
+              <div style={{ color: 'var(--lux-foreground)', fontSize: '15px', fontWeight: 800 }}>
+                {post.author || 'BM Wealth'}
+              </div>
+              <div style={{ color: 'var(--lux-foreground-60)', fontSize: '13px' }}>
+                {post.author === 'BM Wealth Editorial Team' ? 'Editorial' : 'BM Wealth'}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: '12px', color: 'var(--lux-foreground-60)', fontSize: '14px', lineHeight: 1.7 }}>
+            Practical, high-signal writing on investing, tax, and better financial decisions.
+          </div>
+        </div>
 
         {/* Free Tools CTA */}
         <div style={{

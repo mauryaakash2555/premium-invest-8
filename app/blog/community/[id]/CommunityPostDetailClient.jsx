@@ -113,6 +113,14 @@ export default function CommunityPostDetailClient({ id }) {
     return safeId;
   }, [post, safeId]);
 
+  const estimatedReadTime = useMemo(() => {
+    const raw = String(content || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return null;
+    const words = raw.split(' ').filter(Boolean).length;
+    if (!words) return null;
+    return Math.max(1, Math.round(words / 220));
+  }, [content]);
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -169,6 +177,12 @@ export default function CommunityPostDetailClient({ id }) {
               {post.title}
             </h1>
 
+            {estimatedReadTime ? (
+              <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px', marginBottom: '10px' }}>
+                Estimated read time: {estimatedReadTime} min
+              </div>
+            ) : null}
+
             <div style={{ color: 'var(--lux-foreground-40)', fontSize: '13px', marginBottom: '18px' }}>
               {post.author_name ? `By ${post.author_name}` : ''}
               {post.location_tag ? ` · ${post.location_tag}` : ''}
@@ -194,8 +208,48 @@ export default function CommunityPostDetailClient({ id }) {
               </div>
             ) : null}
 
-            <div style={{ ...panelStyle, padding: '18px' }}>
-              <div style={{ color: 'rgba(235,242,255,0.86)', whiteSpace: 'pre-wrap', lineHeight: 1.85, fontSize: '15px' }}>{content}</div>
+            <div style={{ ...panelStyle, padding: '22px' }}>
+              <div style={{ color: 'rgba(235,242,255,0.86)', whiteSpace: 'pre-wrap', lineHeight: 1.95, fontSize: '16px' }}>{content}</div>
+            </div>
+
+            {/* Author Block */}
+            <div
+              style={{
+                ...panelStyle,
+                padding: '18px',
+                marginTop: '16px',
+                border: '1px solid rgba(255,255,255,0.10)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 999,
+                    background:
+                      'linear-gradient(135deg, color-mix(in oklab, var(--lux-accent) 40%, transparent) 0%, rgba(255,255,255,0.05) 100%)',
+                    border: '1px solid rgba(255,255,255,0.10)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'rgba(0,0,0,0.88)',
+                    fontWeight: 800,
+                  }}
+                >
+                  {(String(post.author_name || 'C')[0] || 'C').toUpperCase()}
+                </div>
+                <div>
+                  <div style={{ color: 'rgba(235,242,255,0.92)', fontSize: '14px', fontWeight: 900 }}>
+                    {post.author_name || 'Community Contributor'}
+                  </div>
+                  <div style={{ color: 'var(--lux-foreground-60)', fontSize: '13px' }}>Community Contributor</div>
+                </div>
+              </div>
+              <div style={{ marginTop: '10px', color: 'var(--lux-foreground-60)', fontSize: '14px', lineHeight: 1.7 }}>
+                Shared via the BM Wealth community.
+              </div>
             </div>
 
             {post.affiliate_link ? (
@@ -228,7 +282,7 @@ export default function CommunityPostDetailClient({ id }) {
             <PostBottomCTA title="Enjoyed this story?" />
 
             {/* Comments Section */}
-            <Comments postId={canonicalPostId} postSlug={post?.slug || safeId} />
+            <Comments postId={canonicalPostId} postSlug={post?.slug || safeId} postTitle={post.title} />
           </>
         ) : null}
       </section>
