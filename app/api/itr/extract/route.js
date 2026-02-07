@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import pdf from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -20,8 +20,20 @@ export async function POST(request) {
     }
 
     const buffer = await file.arrayBuffer();
-    const pdfData = await pdf(Buffer.from(buffer));
-    const fullText = String(pdfData?.text || '').trim();
+
+    const parser = new PDFParse({ data: Buffer.from(buffer) });
+    let textResult;
+    try {
+      textResult = await parser.getText({ lineEnforce: true });
+    } finally {
+      try {
+        await parser.destroy();
+      } catch {
+        // ignore
+      }
+    }
+
+    const fullText = String(textResult?.text || '').trim();
 
     if (!fullText) {
       return Response.json({ success: false, error: 'Could not extract text from PDF' }, { status: 422 });
