@@ -1,10 +1,15 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import pdf from 'pdf-parse';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export async function POST(request) {
   try {
+    // Check API key first
+    if (!process.env.GEMINI_API_KEY) {
+      return Response.json({ success: false, error: 'GEMINI_API_KEY not configured' }, { status: 500 });
+    }
+    
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    
     const formData = await request.formData();
     const file = formData.get('file');
     
@@ -14,18 +19,18 @@ export async function POST(request) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     
-    // Step 1: Extract text using pdf-parse (works great for digital PDFs)
+    // Step 1: Extract text using pdf-parse
     let pdfText = '';
     try {
       const pdfData = await pdf(buffer);
       pdfText = pdfData.text;
     } catch (e) {
       console.error('PDF parse error:', e);
-      return Response.json({ success: false, error: 'Could not parse PDF' }, { status: 400 });
+      return Response.json({ success: false, error: 'Could not parse PDF: ' + e.message }, { status: 400 });
     }
 
     if (!pdfText || pdfText.length < 100) {
-      return Response.json({ success: false, error: 'PDF appears to be empty or scanned' }, { status: 400 });
+      return Response.json({ success: false, error: 'PDF appears to be empty or scanned (text length: ' + (pdfText?.length || 0) + ')' }, { status: 400 });
     }
 
     // Step 2: Use Gemini to extract structured fields
@@ -43,37 +48,46 @@ From the following Form 16 text, extract these specific values:
 IMPORTANT RULES:
 - Only return numbers, no commas or currency symbols
 - If you cannot find a value with confidence, return null for that field
-- The gross salary in this document should be around 25-26 lakhs (2500000-2600000)
-- The TDS should be around 4-5 lakhs (400000-500000)
 
-Return ONLY valid JSON in this exact format:
-{
-  "grossSalary": <number or null>,
-  "tds": <number or null>,
-  "standardDeduction": <number or null>,
-  "deductions80C": <number or null>
-}
+Return ONLY valid JSON in this exact format (no markdown, no explanation):
+{"grossSalary": <number or null>, "tds": <number or null>, "standardDeduction": <number or null>, "deductions80C": <number or null|}
 
 Here is the Form 16 text:
 ---
-${pdfText.substring(0, 15000)}
----
+${pdfText.substring(0, 12000)}
+---`;
 
-JSON response:`;
-
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    let responseText = '';
+    try {
+      const result = await model.generateContent(prompt);
+      responseText = result.response.text();
+    } catch (e) {
+      console.error('Gemini API error:', e);
+      return Response.json({ success: false, error: 'Gemini API error: ' + e.message }, { status: 500 });
+    }
     
     // Parse JSON from Gemini response
     let fields = {};
     try {
       // Extract JSON from response (handle markdown code blocks)
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
       if (jsonMatch) {
         fields = JSON.parse(jsonMatch[0]);
+      } else {
+        console.error('No JSON found in response:', responseText);
+        return Response.json({ 
+          success: false, 
+          error: 'Could not parse AI response',
+          debug: responseText.substring(0, 500)
+        }, { status: 500 });
       }
     } catch (e) {
       console.error('JSON parse error:', e, responseText);
+      return Response.json({ 
+        success: false, 
+        error: 'Invalid JSON from AI: ' + e.message,
+        debug: responseText.substring(0, 500)
+      }, { status: 500 });
     }
     
     // Calculate confidence
@@ -84,7 +98,7 @@ JSON response:`;
       success: true,
       fields,
       confidence,
-      rawTextPreview: pdfText.substring(0, 500)
+      rawTextPreview: pdfText.substring(0, 300)
     });
 
   } catch (error) {
