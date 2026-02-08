@@ -3,9 +3,37 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-async function loadPdfParse() {
-  const mod = await import('pdf-parse');
-  return mod.default || mod;
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+async function extractPdfTextFromBytes(bytes) {
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+
+  let standardFontDataUrl;
+  try {
+    standardFontDataUrl = pathToFileURL(path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/')).href;
+  } catch {
+    standardFontDataUrl = undefined;
+  }
+
+  const loadingTask = pdfjs.getDocument({
+    data: bytes,
+    disableWorker: true,
+    ...(standardFontDataUrl ? { standardFontDataUrl } : {}),
+  });
+
+  const doc = await loadingTask.promise;
+  const pages = doc.numPages || 1;
+  let text = '';
+
+  for (let pageNumber = 1; pageNumber <= pages; pageNumber += 1) {
+    const page = await doc.getPage(pageNumber);
+    const content = await page.getTextContent();
+    text += content.items.map((it) => it.str).join(' ') + '\n';
+  }
+
+  await doc.destroy();
+  return { text: String(text || ''), pages };
 }
 
 function makeId(prefix) {
@@ -83,24 +111,12 @@ export async function POST(request) {
 
       if (isPdf) {
         try {
-          const pdfParse = await loadPdfParse();
-          const parser = new pdfParse.PDFParse({ data: Buffer.from(bytes) });
-          let textResult;
-          try {
-            textResult = await parser.getText({ lineEnforce: true });
-          } finally {
-            try {
-              await parser.destroy();
-            } catch {
-              // ignore
-            }
-          }
-
+          const textResult = await extractPdfTextFromBytes(bytes);
           const allText = String(textResult?.text || '');
-          pages = Number(textResult?.total || 1) || 1;
+          pages = Number(textResult?.pages || 1) || 1;
           type = allText.trim().length >= 10 ? 'DIGITAL_PDF' : 'SCANNED_PDF';
           detection = {
-            method: 'pdf-parse',
+            method: 'pdfjs-dist-legacy',
             extractedTextLength: allText.length,
           };
           detectedDocType = 'unknown';

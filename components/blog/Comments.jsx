@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 const LS_NAME = 'bm_comment_name';
 const LS_EMAIL = 'bm_comment_email';
@@ -72,7 +72,7 @@ function clearCookie(name) {
   }
 }
 
-export default function Comments({ postId, postSlug }) {
+export default function Comments({ postId, postSlug, postTitle, contextTitle, contextSubtitle, whatsappHref }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -83,10 +83,27 @@ export default function Comments({ postId, postSlug }) {
   const [rememberMe, setRememberMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [replyTo, setReplyTo] = useState(null); // { id, name }
+  const [activeReplyTo, setActiveReplyTo] = useState(null); // { id, name }
+  const [replyDraft, setReplyDraft] = useState('');
   const [likesById, setLikesById] = useState({}); // id -> true
 
   const identifier = postId || postSlug;
+
+  const headerTitle = useMemo(() => {
+    const raw = String(contextTitle || '').trim();
+    if (raw) return raw;
+    // Lightweight “Quora-like” contextualization without requiring per-post config.
+    if (/\bAI\b|artificial\s+intelligence|LLM|GPT/i.test(String(postTitle || ''))) {
+      return "Developers: What’s your 2026 AI experience?";
+    }
+    return 'Join the Discussion';
+  }, [contextTitle, postTitle]);
+
+  const headerSubtitle = useMemo(() => {
+    const raw = String(contextSubtitle || '').trim();
+    if (raw) return raw;
+    return 'Share your experience or ask questions. Community-powered insights.';
+  }, [contextSubtitle]);
 
   const fetchComments = useCallback(async () => {
     if (!identifier) return;
@@ -143,60 +160,67 @@ export default function Comments({ postId, postSlug }) {
     }
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!identifier || submitting) return;
-    
+  const submitComment = async ({ text, replyToId }) => {
+    if (!identifier || submitting) return false;
+
     setSubmitting(true);
     setSubmitStatus(null);
 
     try {
       const outgoing = {
         ...formData,
-        comment_text: replyTo?.id
-          ? `[[reply_to:${replyTo.id}]]\n${formData.comment_text}`
-          : formData.comment_text,
+        comment_text: replyToId ? `[[reply_to:${replyToId}]]\n${text}` : text,
       };
+
       const res = await fetch(`/api/comments/${encodeURIComponent(identifier)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(outgoing)
+        body: JSON.stringify(outgoing),
       });
 
-      if (res.ok) {
-        if (rememberMe) {
-          try {
-            localStorage.setItem(LS_NAME, formData.author_name || '');
-            localStorage.setItem(LS_EMAIL, formData.author_email || '');
-          } catch {
-            // ignore
-          }
-          setCookie('bm_comment_name', formData.author_name || '');
-          setCookie('bm_comment_email', formData.author_email || '');
-        } else {
-          try {
-            localStorage.removeItem(LS_NAME);
-            localStorage.removeItem(LS_EMAIL);
-          } catch {
-            // ignore
-          }
-          clearCookie('bm_comment_name');
-          clearCookie('bm_comment_email');
-        }
-        setFormData({ author_name: '', author_email: '', comment_text: '' });
-        setReplyTo(null);
-        setSubmitStatus('success');
-        fetchComments();
-        setTimeout(() => setSubmitStatus(null), 3000);
-      } else {
+      if (!res.ok) {
         setSubmitStatus('error');
+        return false;
       }
+
+      if (rememberMe) {
+        try {
+          localStorage.setItem(LS_NAME, formData.author_name || '');
+          localStorage.setItem(LS_EMAIL, formData.author_email || '');
+        } catch {
+          // ignore
+        }
+        setCookie('bm_comment_name', formData.author_name || '');
+        setCookie('bm_comment_email', formData.author_email || '');
+      } else {
+        try {
+          localStorage.removeItem(LS_NAME);
+          localStorage.removeItem(LS_EMAIL);
+        } catch {
+          // ignore
+        }
+        clearCookie('bm_comment_name');
+        clearCookie('bm_comment_email');
+      }
+
+      // Keep identity fields so returning commenters feel like regulars.
+      setFormData((prev) => ({ ...prev, comment_text: '' }));
+      setSubmitStatus('success');
+      fetchComments();
+      setTimeout(() => setSubmitStatus(null), 3000);
+      return true;
     } catch (error) {
       console.error('Comment submission failed:', error);
       setSubmitStatus('error');
+      return false;
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await submitComment({ text: formData.comment_text, replyToId: '' });
   };
 
   const formatDate = (dateStr) => {
@@ -252,9 +276,19 @@ export default function Comments({ postId, postSlug }) {
 
   const topLevel = normalized.filter((c) => !String(c.__replyToId || '').trim());
 
+  const totalCount = normalized.length;
+
   const countText = loading
     ? 'Loading comments…'
-    : `${topLevel.length} comment${topLevel.length === 1 ? '' : 's'}${topLevel.length === 0 ? ' — Start the conversation' : ' — Join the discussion'}`;
+    : `${totalCount} comment${totalCount === 1 ? '' : 's'}${totalCount === 0 ? ' — Start the conversation' : ' — Join the discussion'}`;
+
+  const scrollToForm = () => {
+    try {
+      document.getElementById('bm-comment-form')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <div className="mt-16 mb-16 px-4 max-w-4xl mx-auto">
@@ -262,10 +296,30 @@ export default function Comments({ postId, postSlug }) {
       <div className="mb-8 pb-6 border-b border-white/10">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
           <span>💬</span>
-          <span>Join the Discussion</span>
+          <span>{headerTitle}</span>
         </h2>
         <p className="text-gray-400">{countText}</p>
-        <p className="text-gray-500 text-sm mt-2">Share your experience or ask questions. Community-powered insights.</p>
+        <p className="text-gray-500 text-sm mt-2">{headerSubtitle}</p>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={scrollToForm}
+            className="px-4 py-2 border border-white/10 bg-white/5 text-white/80 hover:text-white hover:border-white/20 transition-colors"
+          >
+            Write a comment
+          </button>
+          {whatsappHref ? (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="px-4 py-2 border border-white/10 bg-white/5 text-white/80 hover:text-white hover:border-white/20 transition-colors"
+            >
+              Chat on WhatsApp
+            </a>
+          ) : null}
+        </div>
       </div>
 
       {/* Comments List */}
@@ -296,7 +350,13 @@ export default function Comments({ postId, postSlug }) {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[oklch(0.78_0.08_65)] to-[oklch(0.65_0.08_65)] flex items-center justify-center text-black font-bold">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-black font-bold"
+                      style={{
+                        background: 'linear-gradient(135deg, var(--lux-accent) 0%, rgba(255,255,255,0.12) 100%)',
+                        border: '1px solid rgba(255,255,255,0.10)',
+                      }}
+                    >
                       {author[0]?.toUpperCase?.() || 'A'}
                     </div>
                     <div>
@@ -321,10 +381,8 @@ export default function Comments({ postId, postSlug }) {
                   <button
                     type="button"
                     onClick={() => {
-                      setReplyTo({ id: comment.__id, name: author });
-                      try {
-                        document.getElementById('bm-comment-form')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
-                      } catch {}
+                      setActiveReplyTo({ id: comment.__id, name: author });
+                      setReplyDraft('');
                     }}
                     className="hover:text-white transition-colors"
                   >
@@ -339,6 +397,77 @@ export default function Comments({ postId, postSlug }) {
                     ▲ {helpful} Helpful
                   </button>
                 </div>
+
+                {activeReplyTo?.id === comment.__id ? (
+                  <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-sm text-white/70">
+                        Replying to <span className="text-white font-semibold">{author}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveReplyTo(null);
+                          setReplyDraft('');
+                        }}
+                        className="text-sm text-white/60 hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                    {!String(formData.author_name || '').trim() || !String(formData.author_email || '').trim() ? (
+                      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          placeholder="Your name"
+                          value={formData.author_name}
+                          onChange={(e) => setFormData({ ...formData, author_name: e.target.value })}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
+                        />
+                        <input
+                          type="email"
+                          placeholder="Email (not shown publicly)"
+                          value={formData.author_email}
+                          onChange={(e) => setFormData({ ...formData, author_email: e.target.value })}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
+                        />
+                      </div>
+                    ) : null}
+
+                    <textarea
+                      className="mt-3 w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors resize-none"
+                      rows={3}
+                      placeholder="Write a reply…"
+                      value={replyDraft}
+                      onChange={(e) => setReplyDraft(e.target.value)}
+                    />
+
+                    <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
+                      <button
+                        type="button"
+                        disabled={
+                          submitting ||
+                          !String(replyDraft || '').trim() ||
+                          !String(formData.author_name || '').trim() ||
+                          !String(formData.author_email || '').trim()
+                        }
+                        onClick={async () => {
+                          const ok = await submitComment({ text: replyDraft, replyToId: comment.__id });
+                          if (ok) {
+                            setActiveReplyTo(null);
+                            setReplyDraft('');
+                          }
+                        }}
+                        className="px-4 py-2 rounded-lg font-bold text-black disabled:opacity-50"
+                        style={{ backgroundColor: 'var(--lux-accent)' }}
+                      >
+                        Post Reply
+                      </button>
+                      <span className="text-xs text-white/50">No login required. Your email stays private.</span>
+                    </div>
+                  </div>
+                ) : null}
 
                 {replies.length > 0 ? (
                   <div className="mt-5 space-y-3 border-l border-white/10 pl-4">
@@ -374,20 +503,7 @@ export default function Comments({ postId, postSlug }) {
       {/* Comment Form */}
       <form id="bm-comment-form" onSubmit={handleSubmit} className="mb-12 p-6 bg-white/5 border border-white/10 rounded-xl">
         <div className="space-y-4">
-          {replyTo?.id ? (
-            <div className="flex items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-              <div className="text-sm text-white/70">
-                Replying to <span className="text-white font-semibold">{replyTo?.name || 'comment'}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setReplyTo(null)}
-                className="text-sm text-white/60 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          ) : null}
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -401,7 +517,8 @@ export default function Comments({ postId, postSlug }) {
                 required
                 value={formData.author_name}
                 onChange={(e) => setFormData({...formData, author_name: e.target.value})}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-[oklch(0.78_0.08_65)] transition-colors"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
+                style={{ borderColor: 'rgba(255,255,255,0.10)' }}
               />
             </div>
             <div>
@@ -415,7 +532,8 @@ export default function Comments({ postId, postSlug }) {
                 required
                 value={formData.author_email}
                 onChange={(e) => setFormData({...formData, author_email: e.target.value})}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-[oklch(0.78_0.08_65)] transition-colors"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
+                style={{ borderColor: 'rgba(255,255,255,0.10)' }}
               />
             </div>
           </div>
@@ -431,7 +549,8 @@ export default function Comments({ postId, postSlug }) {
               rows={4}
               value={formData.comment_text}
               onChange={(e) => setFormData({...formData, comment_text: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-[oklch(0.78_0.08_65)] transition-colors resize-none"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors resize-none"
+              style={{ borderColor: 'rgba(255,255,255,0.10)' }}
             />
           </div>
 
@@ -454,7 +573,8 @@ export default function Comments({ postId, postSlug }) {
                     clearCookie('bm_comment_email');
                   }
                 }}
-                className="accent-[oklch(0.78_0.08_65)]"
+                className=""
+                style={{ accentColor: 'var(--lux-accent)' }}
               />
               Remember my name & email on this device
             </label>
@@ -465,7 +585,7 @@ export default function Comments({ postId, postSlug }) {
               type="submit"
               disabled={submitting}
               className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-black transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{ backgroundColor: 'oklch(0.78 0.08 65)' }}
+              style={{ backgroundColor: 'var(--lux-accent)' }}
             >
               {submitting ? (
                 <span className="flex items-center gap-2">

@@ -169,6 +169,25 @@ export default function CommunityPostDetailClient({ id }) {
               </div>
             ) : null}
 
+            <div style={{ marginBottom: '10px' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  padding: '6px 12px',
+                  borderRadius: 0,
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'rgba(255,255,255,0.03)',
+                  color: 'rgba(235,242,255,0.86)',
+                  fontSize: '12px',
+                  fontWeight: 900,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                This is a Community Post
+              </span>
+            </div>
+
             <h1
               style={{
                 fontSize: 'clamp(28px, 4vw, 44px)',
@@ -184,7 +203,7 @@ export default function CommunityPostDetailClient({ id }) {
 
             {estimatedReadTime ? (
               <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px', marginBottom: '10px' }}>
-                Estimated read time: {estimatedReadTime} min
+                Estimated read time ({estimatedReadTime} min)
               </div>
             ) : null}
 

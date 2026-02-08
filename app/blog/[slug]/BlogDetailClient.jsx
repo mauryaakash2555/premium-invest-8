@@ -36,6 +36,7 @@ import SocialShare from '@/components/blog/SocialShare';
 import ViewTracker from '@/components/blog/ViewTracker';
 import PostBottomCTA from '@/components/blog/PostBottomCTA';
 import BlogNavigation from '@/components/BlogNavigation';
+import { RelatedPostsBlock } from '@/components/blog/RelatedContent';
 
 // Premium LUX Theme (canonical values - never deviate)
 const LUX = {
@@ -179,6 +180,23 @@ export default function BlogDetailClient({ slug }) {
     if (!next || next.slug === post.slug) return null;
     return next;
   }, [allBlogs, post]);
+
+  const whatsappHref = useMemo(() => {
+    const t = post?.title || 'a BM Wealth blog';
+    return `https://wa.me/918850977259?text=${encodeURIComponent(
+      `Hi Dev, I just read "${t}" on BM Wealth. I want help with my next steps.`
+    )}`;
+  }, [post?.title]);
+
+  const isDevPillar = useMemo(() => {
+    const cat = String(post?.category || '').toLowerCase();
+    return backHref === '/blog/dev' || cat.includes('developer');
+  }, [backHref, post?.category]);
+
+  const devPostsForRelated = useMemo(() => {
+    const dev = allBlogs.filter((p) => String(p?.category || '').toLowerCase().includes('developer'));
+    return dev.length >= 2 ? dev : allBlogs;
+  }, [allBlogs]);
 
   useEffect(() => {
     const set = () => setIsMobile(isMobileViewport());
@@ -732,9 +750,9 @@ export default function BlogDetailClient({ slug }) {
       <article
         ref={articleRef}
         style={{
-        maxWidth: '860px',
+        maxWidth: '900px',
         margin: '0 auto',
-        padding: '0 clamp(20px, 4vw, 40px) 80px'
+        padding: '0 clamp(22px, 5vw, 56px) 80px'
       }}>
         {/* Back Link */}
         <Link href={backHref} onClick={onBackClick} style={{
@@ -788,7 +806,7 @@ export default function BlogDetailClient({ slug }) {
               letterSpacing: '0.02em',
             }}
           >
-            Estimated read time: {estimatedReadTime} min
+            Estimated read time ({estimatedReadTime} min)
           </div>
         ) : (
           <div style={{ height: 8 }} />
@@ -845,11 +863,17 @@ export default function BlogDetailClient({ slug }) {
         {/* Content */}
         <div
           className="blog-html"
-          style={{ color: 'var(--lux-foreground-80)', lineHeight: '1.9', fontSize: '17px' }}
+          style={{ color: 'var(--lux-foreground-80)', lineHeight: '2.0', fontSize: '18px' }}
           dangerouslySetInnerHTML={{ 
             __html: renderedHtml || 'No content available.'
           }}
         />
+
+        {isDevPillar ? (
+          <div style={{ marginTop: '18px', color: 'var(--lux-foreground-60)', fontSize: '15px', lineHeight: 1.7 }}>
+            If you’re a developer facing similar AI issues, share your story below — we’re curating the best for future features.
+          </div>
+        ) : null}
 
         <BlogDisclaimer />
 
@@ -887,7 +911,7 @@ export default function BlogDetailClient({ slug }) {
                 {post.author || 'BM Wealth'}
               </div>
               <div style={{ color: 'var(--lux-foreground-60)', fontSize: '13px' }}>
-                {post.author === 'BM Wealth Editorial Team' ? 'Editorial' : 'BM Wealth'}
+                {post.author === 'BM Wealth Editorial Team' ? 'Editorial Team, BM Wealth' : 'BM Wealth'}
               </div>
             </div>
           </div>
@@ -895,6 +919,38 @@ export default function BlogDetailClient({ slug }) {
             Practical, high-signal writing on investing, tax, and better financial decisions.
           </div>
         </div>
+
+        {/* Conversation Hub (immediately after the article) */}
+        <Comments
+          postId={post.id || slug}
+          postTitle={post.title}
+          contextTitle={isDevPillar ? "Developers: What’s your 2026 AI experience?" : ''}
+          whatsappHref={whatsappHref}
+        />
+
+        {/* More from Developer Insight */}
+        {isDevPillar ? (
+          <div style={{ marginTop: '10px' }}>
+            <div
+              style={{
+                marginBottom: '12px',
+                paddingBottom: '10px',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div style={{ color: 'rgba(235,242,255,0.92)', fontSize: '16px', fontWeight: 800 }}>
+                More from Developer Insight
+              </div>
+              <div style={{ color: 'var(--lux-foreground-60)', fontSize: '13px', marginTop: 4 }}>
+                Keep reading — engineering, AI, and systems thinking.
+              </div>
+            </div>
+            <RelatedPostsBlock
+              currentSlug={post?.slug}
+              posts={devPostsForRelated}
+            />
+          </div>
+        ) : null}
 
         {/* Free Tools CTA */}
         <div style={{
@@ -1085,9 +1141,6 @@ export default function BlogDetailClient({ slug }) {
         {/* Post Bottom CTA - Newsletter + Submit Story */}
         <PostBottomCTA title="Enjoyed this article?" />
 
-        {/* Comments Section */}
-        <Comments postId={post.id || slug} postTitle={post.title} />
-
         {/* Blog-only: Next Read + WhatsApp CTA (always present, premium, hover-ready) */}
         <div style={{ marginTop: '44px' }}>
           {nextPost ? (
@@ -1143,9 +1196,7 @@ export default function BlogDetailClient({ slug }) {
 
           <a
             className="whatsapp-cta-btn"
-            href={`https://wa.me/918850977259?text=${encodeURIComponent(
-              `Hi Dev, I just read "${post?.title || 'a BM Wealth blog'}" on BM Wealth. I want help with my next steps.`
-            )}`}
+            href={whatsappHref}
             target="_blank"
             rel="noreferrer"
             style={{

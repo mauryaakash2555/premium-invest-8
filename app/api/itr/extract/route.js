@@ -1,25 +1,42 @@
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 
-async function loadOpenAI() {
-  const mod = await import('openai');
-  return mod.default;
-}
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
-async function loadPdfParse() {
-  const mod = await import('pdf-parse');
-  return mod.default || mod;
+async function extractPdfTextFromArrayBuffer(arrayBuffer) {
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const data = new Uint8Array(arrayBuffer);
+
+  let standardFontDataUrl;
+  try {
+    standardFontDataUrl = pathToFileURL(path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/')).href;
+  } catch {
+    standardFontDataUrl = undefined;
+  }
+
+  const loadingTask = pdfjs.getDocument({
+    data,
+    disableWorker: true,
+    ...(standardFontDataUrl ? { standardFontDataUrl } : {}),
+  });
+
+  const doc = await loadingTask.promise;
+  const pages = doc.numPages || 1;
+  let text = '';
+
+  for (let pageNumber = 1; pageNumber <= pages; pageNumber += 1) {
+    const page = await doc.getPage(pageNumber);
+    const content = await page.getTextContent();
+    text += content.items.map((it) => it.str).join(' ') + '\n';
+  }
+
+  await doc.destroy();
+  return { text: String(text || ''), pages };
 }
 
 export async function POST(request) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      return Response.json({ success: false, error: 'OPENAI_API_KEY not configured' }, { status: 500 });
-    }
-
-    const OpenAI = await loadOpenAI();
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
     const formData = await request.formData();
     const file = formData.get('file');
 
@@ -28,67 +45,49 @@ export async function POST(request) {
     }
 
     const buffer = await file.arrayBuffer();
+    const { text } = await extractPdfTextFromArrayBuffer(buffer);
+    const rawTextPreview = text.substring(0, 2000);
 
-    const pdfParse = await loadPdfParse();
-    const parser = new pdfParse.PDFParse({ data: Buffer.from(buffer) });
-    let textResult;
-    try {
-      textResult = await parser.getText({ lineEnforce: true });
-    } finally {
-      try {
-        await parser.destroy();
-      } catch {
-        // ignore
-      }
-    }
+    // Simple regex extraction (works for most Form16s)
+    const fields = {
+      grossSalary: 0,
+      tds: 0,
+      standardDeduction: 0,
+      deductions80C: 0,
+    };
 
-    const fullText = String(textResult?.text || '').trim();
+    // Gross Salary
+    const grossMatch = text.match(/gross\s*salary\b[^\d]{0,40}([\d,]{3,})/i) || text.match(/section\s+17.*?(\d{6,})/i);
+    if (grossMatch) fields.grossSalary = parseInt(String(grossMatch[1]).replace(/,/g, ''), 10);
 
-    if (!fullText) {
-      return Response.json({ success: false, error: 'Could not extract text from PDF' }, { status: 422 });
-    }
+    // TDS
+    const tdsMatch = text.match(/total\s*tds\b[^\d]{0,40}([\d,]{3,})/i) || text.match(/\btds\b[^\d]{0,40}([\d,]{3,})/i);
+    if (tdsMatch) fields.tds = parseInt(String(tdsMatch[1]).replace(/,/g, ''), 10);
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'user',
-          content: `Extract Form16 fields. Return ONLY valid JSON.
+    // Standard Deduction
+    const stdMatch = text.match(/standard\s*deduction\b[^\d]{0,40}([\d,]{3,})/i);
+    if (stdMatch) fields.standardDeduction = parseInt(String(stdMatch[1]).replace(/,/g, ''), 10);
 
-Format:
-{"grossSalary":0,"tds":0,"standardDeduction":0,"deductions80C":0}
+    // 80C
+    const c80Match = text.match(/\b80c\b[^\d]{0,40}([\d,]{3,})/i);
+    if (c80Match) fields.deductions80C = parseInt(String(c80Match[1]).replace(/,/g, ''), 10);
 
-Rules:
-- grossSalary: Part A Total row, first number (2-10 crore)
-- tds: Part A Total row, tax deducted column
-- standardDeduction: Part B section 16(ia) (usually 50000)
-- deductions80C: Part B section 80C total (0-150000)
+    const confidence = fields.grossSalary > 0 ? 0.85 : 0.6;
 
-Form16 text:
-${fullText.substring(0, 12000)}`,
-        },
-      ],
-      temperature: 0.1,
-      response_format: { type: 'json_object' },
+    return Response.json({
+      success: true,
+      fields,
+      confidence,
+      rawTextPreview,
     });
-
-    const content = completion?.choices?.[0]?.message?.content;
-    if (!content) {
-      return Response.json({ success: false, error: 'Empty response from AI' }, { status: 502 });
-    }
-
-    let fields;
-    try {
-      fields = JSON.parse(content);
-    } catch (e) {
-      return Response.json({ success: false, error: `Invalid JSON from AI: ${e?.message || 'parse_failed'}` }, { status: 502 });
-    }
-
-    const isValid = Number(fields?.grossSalary) > 100000 && Number(fields?.tds) >= 0;
-    const confidence = isValid ? 0.93 : 0.7;
-
-    return Response.json({ success: true, fields, confidence });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { status: 500 });
+    console.error(error);
+    return Response.json(
+      {
+        success: false,
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
