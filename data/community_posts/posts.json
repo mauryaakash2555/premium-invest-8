@@ -50,5 +50,31 @@
     "image_url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop&auto=format&fm=webp&q=75",
     "image_keywords": ["AI", "coding", "developer", "programming", "technology"],
     "image_source": "fallback"
+  },
+  {
+    "_id": "local-dev-claude-opus-4-6-review-2026-02-07",
+    "pillar": "DEV",
+    "status": "APPROVED",
+    "approved_at": "2026-02-07T00:00:00.000Z",
+    "author_name": "BM Wealth Dev Team",
+    "title": "Developer Insight: The Hype vs. Reality: What Claude Opus 4.6 Brings to the Table – 2026 Hands-On Review",
+    "content_original_file": "dev-claude-opus-4-6-review-2026-02-07.original.txt",
+    "content_enhanced_file": "",
+    "image_url": "https://thumbs.dreamstime.com/b/futuristic-robot-advanced-technology-looking-screen-ai-computer-high-tech-office-space-displaying-data-372697990.jpg",
+    "image_keywords": ["Claude Opus 4.6 review 2026", "AI coding tools comparison", "agentic AI", "long context", "Claude Code"],
+    "image_source": "curated"
+  },
+  {
+    "_id": "local-dev-gpt-5-3-codex-review-2026-02-07",
+    "pillar": "DEV",
+    "status": "APPROVED",
+    "approved_at": "2026-02-07T00:00:00.000Z",
+    "author_name": "BM Wealth Dev Team",
+    "title": "Developer Insight: GPT-5.3 Codex Unleashed: Beyond the Buzz – 2026 Deep Dive into Features, Flaws, and Real-World Wins",
+    "content_original_file": "dev-gpt-5-3-codex-review-2026-02-07.original.txt",
+    "content_enhanced_file": "",
+    "image_url": "https://thumbs.dreamstime.com/b/futuristic-humanoid-robot-working-high-tech-computer-workstation-artificial-intelligence-analyzing-data-multiple-neon-362316306.jpg",
+    "image_keywords": ["GPT-5.3 Codex pros cons", "AI coding tools comparison", "agentic AI drawbacks", "Terminal-Bench", "SWE-Bench"],
+    "image_source": "curated"
   }
 ]
