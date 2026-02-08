@@ -1,39 +1,7 @@
+import { extractText } from 'unpdf';
+
 export const runtime = 'nodejs';
 export const maxDuration = 30;
-
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
-
-async function extractPdfTextFromArrayBuffer(arrayBuffer) {
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const data = new Uint8Array(arrayBuffer);
-
-  let standardFontDataUrl;
-  try {
-    standardFontDataUrl = pathToFileURL(path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/')).href;
-  } catch {
-    standardFontDataUrl = undefined;
-  }
-
-  const loadingTask = pdfjs.getDocument({
-    data,
-    disableWorker: true,
-    ...(standardFontDataUrl ? { standardFontDataUrl } : {}),
-  });
-
-  const doc = await loadingTask.promise;
-  const pages = doc.numPages || 1;
-  let text = '';
-
-  for (let pageNumber = 1; pageNumber <= pages; pageNumber += 1) {
-    const page = await doc.getPage(pageNumber);
-    const content = await page.getTextContent();
-    text += content.items.map((it) => it.str).join(' ') + '\n';
-  }
-
-  await doc.destroy();
-  return { text: String(text || ''), pages };
-}
 
 export async function POST(request) {
   try {
@@ -45,8 +13,7 @@ export async function POST(request) {
     }
 
     const buffer = await file.arrayBuffer();
-    const { text } = await extractPdfTextFromArrayBuffer(buffer);
-    const rawTextPreview = text.substring(0, 2000);
+    const { text } = await extractText(new Uint8Array(buffer), { mergePages: true });
 
     // Simple regex extraction (works for most Form16s)
     const fields = {
@@ -56,20 +23,24 @@ export async function POST(request) {
       deductions80C: 0,
     };
 
-    // Gross Salary
-    const grossMatch = text.match(/gross\s*salary\b[^\d]{0,40}([\d,]{3,})/i) || text.match(/section\s+17.*?(\d{6,})/i);
+    // Gross Salary - section 17(1) (fallback to common "Gross Salary" label)
+    const grossMatch =
+      text.match(/section\s+17.*?(\d{7})/i) ||
+      text.match(/gross\s*salary\b[^\d]{0,40}([\d,]{3,})/i);
     if (grossMatch) fields.grossSalary = parseInt(String(grossMatch[1]).replace(/,/g, ''), 10);
 
-    // TDS
-    const tdsMatch = text.match(/total\s*tds\b[^\d]{0,40}([\d,]{3,})/i) || text.match(/\btds\b[^\d]{0,40}([\d,]{3,})/i);
-    if (tdsMatch) fields.tds = parseInt(String(tdsMatch[1]).replace(/,/g, ''), 10);
+    // TDS - Total row (fallback to common "Total TDS")
+    const tdsMatch =
+      text.match(/Total.*?(\d{7}).*?(\d{6})/i) ||
+      text.match(/total\s*tds\b[^\d]{0,40}([\d,]{3,})/i);
+    if (tdsMatch) fields.tds = parseInt(String(tdsMatch[2] ?? tdsMatch[1]).replace(/,/g, ''), 10);
 
-    // Standard Deduction
-    const stdMatch = text.match(/standard\s*deduction\b[^\d]{0,40}([\d,]{3,})/i);
+    // Standard Deduction - 50000
+    const stdMatch = text.match(/standard.*?deduction.*?(\d{5})/i);
     if (stdMatch) fields.standardDeduction = parseInt(String(stdMatch[1]).replace(/,/g, ''), 10);
 
     // 80C
-    const c80Match = text.match(/\b80c\b[^\d]{0,40}([\d,]{3,})/i);
+    const c80Match = text.match(/80c.*?(\d{6})/i);
     if (c80Match) fields.deductions80C = parseInt(String(c80Match[1]).replace(/,/g, ''), 10);
 
     const confidence = fields.grossSalary > 0 ? 0.85 : 0.6;
@@ -78,16 +49,13 @@ export async function POST(request) {
       success: true,
       fields,
       confidence,
-      rawTextPreview,
+      rawTextPreview: String(text || '').substring(0, 2000),
     });
   } catch (error) {
     console.error(error);
-    return Response.json(
-      {
-        success: false,
-        error: error.message,
-      },
-      { status: 500 }
-    );
+    return Response.json({
+      success: false,
+      error: error.message,
+    }, { status: 500 });
   }
 }
