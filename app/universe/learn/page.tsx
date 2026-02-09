@@ -9,96 +9,65 @@ type Star = {
   y: number;
   size: number;
   opacity: number;
+  driftX: number;
+  driftY: number;
   delay: number;
-};
-
-type FeaturedPath = {
-  id: string;
-  title: string;
-  description: string;
 };
 
 type RelatedTopic = {
   title: string;
   slug: string;
+  description: string;
 };
 
-const FEATURED_PATHS: FeaturedPath[] = [
-  {
-    id: 'start-journey',
-    title: 'Start Your Journey',
-    description: 'The essential foundation every investor needs',
-  },
-  {
-    id: 'exam-prep',
-    title: 'Exam Preparation',
-    description: 'Ace your AMFI and NISM certification exams',
-  },
-  {
-    id: 'wealth-building',
-    title: 'Wealth Building',
-    description: 'Timeless principles for growing your money',
-  },
-  {
-    id: 'behavioral-finance',
-    title: 'Behavioral Finance',
-    description: 'Master the psychology behind decisions',
-  },
-  {
-    id: 'advanced-strategies',
-    title: 'Advanced Strategies',
-    description: 'Sophisticated techniques for experienced investors',
-  },
-];
-
-const TOPIC_ASSOCIATIONS: Record<string, RelatedTopic[]> = {
-  default: [
-    { title: 'Investment Basics', slug: 'investment-basics' },
-    { title: 'Risk Management', slug: 'risk-management' },
-    { title: 'Tax Planning', slug: 'tax-planning' },
-    { title: 'Market Analysis', slug: 'market-analysis' },
+const TOPIC_SUGGESTIONS: Record<string, RelatedTopic[]> = {
+  bitcoin: [
+    { title: 'Cryptocurrency Basics', slug: 'cryptocurrency-basics', description: 'Understanding digital currencies' },
+    { title: 'Blockchain Technology', slug: 'blockchain-technology', description: 'The foundation of crypto' },
+    { title: 'Digital Assets', slug: 'digital-assets', description: 'Beyond traditional investments' },
+    { title: 'Crypto Tax India', slug: 'crypto-tax-india', description: 'Tax implications in India' },
   ],
   crypto: [
-    { title: 'Cryptocurrency Basics', slug: 'cryptocurrency-basics' },
-    { title: 'Blockchain Technology', slug: 'blockchain-technology' },
-    { title: 'Digital Assets', slug: 'digital-assets' },
-    { title: 'Tax Implications', slug: 'crypto-tax' },
+    { title: 'Bitcoin Fundamentals', slug: 'bitcoin-fundamentals', description: 'The original cryptocurrency' },
+    { title: 'Ethereum & Smart Contracts', slug: 'ethereum-smart-contracts', description: 'Programmable money' },
+    { title: 'Crypto Regulations', slug: 'crypto-regulations', description: 'Legal framework' },
+    { title: 'Crypto Tax India', slug: 'crypto-tax-india', description: 'Tax implications in India' },
   ],
-  stock: [
-    { title: 'Stock Market Basics', slug: 'stock-market-basics' },
-    { title: 'Technical Analysis', slug: 'technical-analysis' },
-    { title: 'Fundamental Analysis', slug: 'fundamental-analysis' },
-    { title: 'Portfolio Building', slug: 'portfolio-building' },
+  sip: [
+    { title: 'Mutual Funds', slug: 'mutual-funds', description: 'Pooled investment vehicles' },
+    { title: 'Systematic Investing', slug: 'systematic-investing', description: 'Discipline over timing' },
+    { title: 'Asset Allocation', slug: 'asset-allocation', description: 'Balancing your portfolio' },
+    { title: 'Long-term Wealth', slug: 'long-term-wealth', description: 'Compounding over decades' },
   ],
   mutual: [
-    { title: 'Mutual Fund Types', slug: 'mutual-fund-types' },
-    { title: 'SIP Strategy', slug: 'sip-strategy' },
-    { title: 'Fund Selection', slug: 'fund-selection' },
-    { title: 'NAV & Returns', slug: 'nav-returns' },
+    { title: 'SIP Strategy', slug: 'sip-strategy', description: 'Systematic investment plans' },
+    { title: 'Fund Selection', slug: 'fund-selection', description: 'Choosing the right fund' },
+    { title: 'NAV & Returns', slug: 'nav-returns', description: 'Understanding fund performance' },
+    { title: 'Expense Ratios', slug: 'expense-ratios', description: 'Hidden costs of investing' },
   ],
   tax: [
-    { title: 'Section 80C', slug: 'section-80c' },
-    { title: 'Capital Gains Tax', slug: 'capital-gains-tax' },
-    { title: 'ITR Filing', slug: 'itr-filing' },
-    { title: 'Tax-Saving Investments', slug: 'tax-saving-investments' },
+    { title: 'Tax Saving Investments', slug: 'tax-saving-investments', description: 'Section 80C and beyond' },
+    { title: '80C Deductions', slug: '80c-deductions', description: 'Maximizing your deductions' },
+    { title: 'Capital Gains Tax', slug: 'capital-gains-tax', description: 'LTCG and STCG explained' },
+    { title: 'Tax Planning', slug: 'tax-planning', description: 'Strategic tax optimization' },
   ],
-  insurance: [
-    { title: 'Term Insurance', slug: 'term-insurance' },
-    { title: 'Health Insurance', slug: 'health-insurance' },
-    { title: 'ULIP vs Mutual Funds', slug: 'ulip-vs-mutual-funds' },
-    { title: 'Claim Process', slug: 'insurance-claim' },
+  amfi: [
+    { title: 'AMFI Exam Prep', slug: 'amfi-exam-prep', description: 'Ace your certification' },
+    { title: 'Mutual Fund Basics', slug: 'mutual-fund-basics', description: 'Core concepts' },
+    { title: 'Regulatory Framework', slug: 'regulatory-framework', description: 'SEBI and AMFI rules' },
+    { title: 'Fund Categories', slug: 'fund-categories', description: 'Equity, debt, hybrid' },
   ],
-  retirement: [
-    { title: 'NPS Benefits', slug: 'nps-benefits' },
-    { title: 'EPF & PPF', slug: 'epf-ppf' },
-    { title: 'Retirement Corpus', slug: 'retirement-corpus' },
-    { title: 'Pension Plans', slug: 'pension-plans' },
+  stock: [
+    { title: 'Stock Market Basics', slug: 'stock-market-basics', description: 'How markets work' },
+    { title: 'Technical Analysis', slug: 'technical-analysis', description: 'Charts and patterns' },
+    { title: 'Fundamental Analysis', slug: 'fundamental-analysis', description: 'Company valuation' },
+    { title: 'Portfolio Building', slug: 'portfolio-building', description: 'Diversification strategies' },
   ],
-  real: [
-    { title: 'Real Estate Investment', slug: 'real-estate-investment' },
-    { title: 'REITs Explained', slug: 'reits-explained' },
-    { title: 'Property vs Equity', slug: 'property-vs-equity' },
-    { title: 'Home Loan Strategy', slug: 'home-loan-strategy' },
+  default: [
+    { title: 'Investment Basics', slug: 'investment-basics', description: 'Foundational concepts' },
+    { title: 'Risk Management', slug: 'risk-management', description: 'Protecting your capital' },
+    { title: 'Financial Planning', slug: 'financial-planning', description: 'Goal-based approach' },
+    { title: 'Market Analysis', slug: 'market-analysis', description: 'Making informed decisions' },
   ],
 };
 
@@ -121,45 +90,36 @@ function slugify(text: string): string {
 function getRelatedTopics(query: string): RelatedTopic[] {
   const q = query.toLowerCase();
   
-  if (q.includes('bitcoin') || q.includes('crypto') || q.includes('blockchain') || q.includes('eth')) {
-    return TOPIC_ASSOCIATIONS.crypto;
-  }
-  if (q.includes('stock') || q.includes('share') || q.includes('equity') || q.includes('nifty') || q.includes('sensex')) {
-    return TOPIC_ASSOCIATIONS.stock;
-  }
-  if (q.includes('mutual') || q.includes('fund') || q.includes('sip') || q.includes('nav')) {
-    return TOPIC_ASSOCIATIONS.mutual;
-  }
-  if (q.includes('tax') || q.includes('80c') || q.includes('itr') || q.includes('deduction')) {
-    return TOPIC_ASSOCIATIONS.tax;
-  }
-  if (q.includes('insurance') || q.includes('term') || q.includes('health') || q.includes('ulip')) {
-    return TOPIC_ASSOCIATIONS.insurance;
-  }
-  if (q.includes('retire') || q.includes('pension') || q.includes('nps') || q.includes('epf') || q.includes('ppf')) {
-    return TOPIC_ASSOCIATIONS.retirement;
-  }
-  if (q.includes('real') || q.includes('property') || q.includes('reit') || q.includes('home') || q.includes('house')) {
-    return TOPIC_ASSOCIATIONS.real;
-  }
+  if (q.includes('bitcoin') || q.includes('btc')) return TOPIC_SUGGESTIONS.bitcoin;
+  if (q.includes('crypto') || q.includes('blockchain') || q.includes('eth')) return TOPIC_SUGGESTIONS.crypto;
+  if (q.includes('sip') || q.includes('systematic')) return TOPIC_SUGGESTIONS.sip;
+  if (q.includes('mutual') || q.includes('fund') || q.includes('nav')) return TOPIC_SUGGESTIONS.mutual;
+  if (q.includes('tax') || q.includes('80c') || q.includes('itr') || q.includes('deduction')) return TOPIC_SUGGESTIONS.tax;
+  if (q.includes('amfi') || q.includes('nism') || q.includes('exam')) return TOPIC_SUGGESTIONS.amfi;
+  if (q.includes('stock') || q.includes('share') || q.includes('equity') || q.includes('nifty')) return TOPIC_SUGGESTIONS.stock;
   
-  return TOPIC_ASSOCIATIONS.default;
+  return TOPIC_SUGGESTIONS.default;
 }
 
 const STORAGE_KEY = 'universe_topics_explored_v1';
 
-export default function UniverseLearnHubPage() {
+export default function UniverseSearchHub() {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [debounced, setDebounced] = useState('');
-  const [scrolled, setScrolled] = useState(false);
   const [topicsExplored, setTopicsExplored] = useState(0);
   const [mounted, setMounted] = useState(false);
-
   const debounceRef = useRef<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const arr = raw ? (JSON.parse(raw) as unknown) : [];
+      if (Array.isArray(arr)) setTopicsExplored(arr.length);
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
@@ -172,37 +132,22 @@ export default function UniverseLearnHubPage() {
     };
   }, [query]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? (JSON.parse(raw) as unknown) : [];
-      if (Array.isArray(arr)) setTopicsExplored(arr.length);
-    } catch {
-      // ignore
-    }
-  }, []);
-
   const stars = useMemo<Star[]>(() => {
     const rand = seededRandom(20260210);
-    return Array.from({ length: 150 }, (_, i) => ({
+    return Array.from({ length: 200 }, (_, i) => ({
       id: i,
       x: rand() * 100,
       y: rand() * 100,
-      size: rand() < 0.7 ? 1 : rand() < 0.9 ? 2 : 3,
-      opacity: 0.3 + rand() * 0.7,
-      delay: rand() * 8,
+      size: rand() < 0.8 ? 1 : 2,
+      opacity: 0.2 + rand() * 0.5,
+      driftX: (rand() - 0.5) * 50,
+      driftY: (rand() - 0.5) * 50,
+      delay: rand() * 10,
     }));
   }, []);
 
-  const showSearchResults = debounced.trim().length >= 3;
-  const relatedTopics = showSearchResults ? getRelatedTopics(debounced) : [];
+  const hasSearch = debounced.trim().length >= 3;
+  const relatedTopics = hasSearch ? getRelatedTopics(debounced) : [];
   const searchSlug = slugify(debounced);
 
   const handleNavigate = (slug: string) => {
@@ -218,12 +163,8 @@ export default function UniverseLearnHubPage() {
     router.push(`/universe/learn/${slug}`);
   };
 
-  const handleFeaturedPath = (id: string) => {
-    handleNavigate(id);
-  };
-
   return (
-    <main className="hub-page">
+    <main className="search-hub">
       {/* Starfield */}
       <div className="starfield" aria-hidden="true">
         {stars.map((s) => (
@@ -235,7 +176,9 @@ export default function UniverseLearnHubPage() {
               top: `${s.y}%`,
               width: s.size,
               height: s.size,
-              '--opacity': s.opacity,
+              opacity: s.opacity,
+              '--drift-x': `${s.driftX}px`,
+              '--drift-y': `${s.driftY}px`,
               animationDelay: `${s.delay}s`,
             } as React.CSSProperties}
           />
@@ -243,102 +186,85 @@ export default function UniverseLearnHubPage() {
       </div>
 
       {/* Header */}
-      <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+      <header className="header">
         <div className="header-brand">Universe</div>
-        <div className="header-stat">{topicsExplored} explored</div>
+        <div className="header-stat">{topicsExplored} topics explored</div>
       </header>
 
-      {/* Content */}
-      <div className="content">
-        {/* Hero text */}
-        <div className={`hero ${showSearchResults ? 'hero--lifted' : ''}`}>
-          <h1 className="hero-title">What would you like to learn?</h1>
-          <p className="hero-subtitle">Search any topic or choose a curated path below</p>
-        </div>
-
-        {/* Search */}
-        <div className={`search-container ${showSearchResults ? 'search--lifted' : ''}`}>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search any topic..."
-            className="search-input"
-            aria-label="Search topics"
-          />
+      {/* Main content */}
+      <div className={`content ${hasSearch ? 'content--searching' : ''}`}>
+        {/* Search container */}
+        <div className="search-container">
+          <div className="search-bar">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="What do you want to master today?"
+              className="search-input"
+              aria-label="Search topics"
+            />
+          </div>
+          
+          {!hasSearch && (
+            <p className="search-hint">
+              Search any finance topic — SIP, Bitcoin, Tax, AMFI Exam...
+            </p>
+          )}
         </div>
 
         {/* Results */}
-        <div className={`results ${mounted ? 'results--visible' : ''}`}>
-          {showSearchResults ? (
-            <>
-              {/* Primary explore card */}
-              <button
-                type="button"
-                onClick={() => handleNavigate(searchSlug || 'explore')}
-                className="card card--primary"
-              >
-                <div className="card-content">
-                  <h3 className="card-title">Explore: {debounced.trim()}</h3>
-                  <p className="card-desc">Deep dive into everything about this topic</p>
-                </div>
-                <span className="card-arrow">→</span>
-              </button>
-
-              {/* Related topics */}
-              <div className="related-grid">
-                {relatedTopics.map((topic) => (
-                  <button
-                    key={topic.slug}
-                    type="button"
-                    onClick={() => handleNavigate(topic.slug)}
-                    className="card card--secondary"
-                  >
-                    <span className="card-title-sm">{topic.title}</span>
-                    <span className="card-arrow-sm">→</span>
-                  </button>
-                ))}
+        {hasSearch && (
+          <div className={`results ${mounted ? 'results--visible' : ''}`}>
+            {/* Primary result */}
+            <button
+              type="button"
+              onClick={() => handleNavigate(searchSlug || 'explore')}
+              className="card card--primary"
+            >
+              <div className="card-content">
+                <h2 className="card-title">🔍 Explore: {debounced.trim()}</h2>
+                <p className="card-desc">Deep dive into {debounced.trim().toLowerCase()} with unlimited depth</p>
               </div>
-            </>
-          ) : (
-            /* Featured paths */
-            <div className="featured-grid">
-              {FEATURED_PATHS.map((path, index) => (
+              <span className="card-arrow">→</span>
+            </button>
+
+            {/* Related suggestions */}
+            <div className="related-grid">
+              {relatedTopics.map((topic) => (
                 <button
-                  key={path.id}
+                  key={topic.slug}
                   type="button"
-                  onClick={() => handleFeaturedPath(path.id)}
-                  className="card card--featured"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  onClick={() => handleNavigate(topic.slug)}
+                  className="card card--secondary"
                 >
-                  <div className="card-number">{String(index + 1).padStart(2, '0')}</div>
                   <div className="card-content">
-                    <h3 className="card-title">{path.title}</h3>
-                    <p className="card-desc">{path.description}</p>
+                    <h3 className="card-title-sm">{topic.title}</h3>
+                    <p className="card-desc-sm">{topic.description}</p>
                   </div>
-                  <span className="card-arrow">→</span>
+                  <span className="card-arrow-sm">→</span>
                 </button>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <style jsx>{`
         /* ═══════════════════════════════════════════
-           BASE - Pure monochrome
+           BASE
            ═══════════════════════════════════════════ */
-        .hub-page {
+        .search-hub {
           min-height: 100vh;
           background: #000000;
           color: #ffffff;
-          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
-          line-height: 1.6;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
           overflow-x: hidden;
         }
 
         /* ═══════════════════════════════════════════
-           STARFIELD - White only
+           STARFIELD
            ═══════════════════════════════════════════ */
         .starfield {
           position: fixed;
@@ -351,43 +277,35 @@ export default function UniverseLearnHubPage() {
           position: absolute;
           background: #ffffff;
           border-radius: 50%;
-          opacity: var(--opacity);
-          animation: twinkle 6s ease-in-out infinite;
+          animation: drift 60s linear infinite;
         }
 
-        @keyframes twinkle {
-          0%, 100% { opacity: calc(var(--opacity) * 0.4); }
-          50% { opacity: var(--opacity); }
+        @keyframes drift {
+          0% { transform: translate(0, 0); }
+          50% { transform: translate(var(--drift-x), var(--drift-y)); }
+          100% { transform: translate(0, 0); }
         }
 
         /* ═══════════════════════════════════════════
-           HEADER - Monochrome glass
+           HEADER
            ═══════════════════════════════════════════ */
         .header {
-          position: fixed;
+          position: absolute;
           top: 0;
           left: 0;
           right: 0;
           z-index: 100;
-          height: 72px;
+          height: 80px;
           padding: 0 40px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           background: transparent;
-          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .header--scrolled {
-          background: rgba(255, 255, 255, 0.02);
-          backdrop-filter: blur(40px);
-          -webkit-backdrop-filter: blur(40px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .header-brand {
-          font-size: 20px;
-          font-weight: 600;
+          font-size: 24px;
+          font-weight: 300;
           color: #ffffff;
           letter-spacing: -0.02em;
         }
@@ -404,66 +322,55 @@ export default function UniverseLearnHubPage() {
         .content {
           position: relative;
           z-index: 10;
-          padding: 160px 32px 100px;
-          max-width: 800px;
-          margin: 0 auto;
-        }
-
-        /* ═══════════════════════════════════════════
-           HERO
-           ═══════════════════════════════════════════ */
-        .hero {
-          text-align: center;
-          margin-bottom: 48px;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 120px 24px 80px;
           transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hero--lifted {
-          margin-bottom: 32px;
-        }
-
-        .hero-title {
-          font-size: clamp(32px, 5vw, 48px);
-          font-weight: 300;
-          color: #ffffff;
-          letter-spacing: -0.03em;
-          margin: 0 0 16px;
-        }
-
-        .hero-subtitle {
-          font-size: 16px;
-          font-weight: 400;
-          color: #737373;
-          margin: 0;
+        .content--searching {
+          justify-content: flex-start;
+          padding-top: 160px;
         }
 
         /* ═══════════════════════════════════════════
-           SEARCH - Monochrome, 100px height
+           SEARCH
            ═══════════════════════════════════════════ */
         .search-container {
-          max-width: 640px;
-          margin: 0 auto 64px;
-          transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
+          width: 100%;
+          max-width: 700px;
+          text-align: center;
         }
 
-        .search--lifted {
-          margin-bottom: 48px;
+        .search-bar {
+          position: relative;
+          width: 100%;
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 32px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 24px;
+          pointer-events: none;
+          filter: grayscale(1);
         }
 
         .search-input {
           width: 100%;
           height: 100px;
-          padding: 0 40px;
+          padding: 0 32px 0 80px;
           font-size: 20px;
           font-weight: 400;
           color: #ffffff;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
+          border-radius: 16px;
           outline: none;
-          backdrop-filter: blur(40px);
-          -webkit-backdrop-filter: blur(40px);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
           transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -473,17 +380,27 @@ export default function UniverseLearnHubPage() {
 
         .search-input:focus {
           border-color: rgba(255, 255, 255, 0.2);
-          box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.6),
-            0 0 30px rgba(255, 255, 255, 0.1);
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
         }
 
-        @media (max-width: 640px) {
+        .search-hint {
+          margin-top: 24px;
+          font-size: 14px;
+          color: #737373;
+        }
+
+        @media (max-width: 768px) {
+          .search-container {
+            max-width: 90vw;
+          }
           .search-input {
             height: 72px;
             font-size: 16px;
-            padding: 0 28px;
-            border-radius: 20px;
+            padding-left: 64px;
+          }
+          .search-icon {
+            left: 24px;
+            font-size: 20px;
           }
         }
 
@@ -491,6 +408,9 @@ export default function UniverseLearnHubPage() {
            RESULTS
            ═══════════════════════════════════════════ */
         .results {
+          width: 100%;
+          max-width: 700px;
+          margin-top: 48px;
           opacity: 0;
           transform: translateY(20px);
           transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -501,16 +421,10 @@ export default function UniverseLearnHubPage() {
           transform: translateY(0);
         }
 
-        .featured-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-
         .related-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 16px;
+          gap: 24px;
           margin-top: 24px;
         }
 
@@ -521,21 +435,20 @@ export default function UniverseLearnHubPage() {
         }
 
         /* ═══════════════════════════════════════════
-           CARDS - Monochrome glass
+           CARDS
            ═══════════════════════════════════════════ */
         .card {
           display: flex;
           align-items: center;
           gap: 24px;
           width: 100%;
-          padding: 32px;
           text-align: left;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
           backdrop-filter: blur(40px);
           -webkit-backdrop-filter: blur(40px);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
           cursor: pointer;
           transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -544,46 +457,18 @@ export default function UniverseLearnHubPage() {
           transform: translateY(-4px);
           background: rgba(255, 255, 255, 0.06);
           border-color: rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 16px 48px rgba(0, 0, 0, 0.7),
-            0 0 40px rgba(255, 255, 255, 0.08);
-        }
-
-        .card:active {
-          transform: translateY(-2px);
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
         }
 
         .card--primary {
-          background: rgba(255, 255, 255, 0.03);
-          border-color: rgba(255, 255, 255, 0.08);
+          min-height: 120px;
+          padding: 32px;
         }
 
         .card--secondary {
+          min-height: 80px;
           padding: 24px;
           gap: 16px;
-        }
-
-        .card--featured {
-          animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(16px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .card-number {
-          flex-shrink: 0;
-          font-size: 14px;
-          font-weight: 400;
-          color: #404040;
-          font-variant-numeric: tabular-nums;
         }
 
         .card-content {
@@ -592,20 +477,28 @@ export default function UniverseLearnHubPage() {
         }
 
         .card-title {
-          font-size: 18px;
-          font-weight: 500;
+          font-size: 28px;
+          font-weight: 300;
           color: #ffffff;
-          margin: 0 0 6px;
-          letter-spacing: -0.01em;
+          margin: 0 0 8px;
+          letter-spacing: -0.02em;
         }
 
         .card-title-sm {
-          font-size: 15px;
-          font-weight: 500;
-          color: #e5e5e5;
+          font-size: 18px;
+          font-weight: 300;
+          color: #ffffff;
+          margin: 0 0 4px;
         }
 
         .card-desc {
+          font-size: 16px;
+          font-weight: 400;
+          color: #9ca3af;
+          margin: 0;
+        }
+
+        .card-desc-sm {
           font-size: 14px;
           font-weight: 400;
           color: #737373;
@@ -614,7 +507,7 @@ export default function UniverseLearnHubPage() {
 
         .card-arrow {
           flex-shrink: 0;
-          font-size: 20px;
+          font-size: 24px;
           color: #404040;
           transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -626,7 +519,7 @@ export default function UniverseLearnHubPage() {
 
         .card-arrow-sm {
           flex-shrink: 0;
-          font-size: 16px;
+          font-size: 18px;
           color: #404040;
           transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -640,19 +533,15 @@ export default function UniverseLearnHubPage() {
            REDUCED MOTION
            ═══════════════════════════════════════════ */
         @media (prefers-reduced-motion: reduce) {
-          .star,
-          .card--featured {
+          .star {
             animation: none;
           }
-          
-          .hero,
-          .search-container,
+          .content,
           .results,
           .card,
-          .card-arrow,
-          .card-arrow-sm,
           .search-input,
-          .header {
+          .card-arrow,
+          .card-arrow-sm {
             transition-duration: 0.1s;
           }
         }
