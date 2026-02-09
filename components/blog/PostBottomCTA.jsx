@@ -112,7 +112,7 @@ export default function PostBottomCTA({
       {/* Related Reading Teaser */}
       <div className="mt-6 text-center">
         <p className="text-gray-500 text-sm">
-          📚 Keep learning: Check out our <Link href="/learn" className="text-[oklch(0.78_0.08_65)] hover:underline">Learning Hub</Link> for more guides.
+          📚 Keep learning: Check out our <Link href="/universe" className="text-[oklch(0.78_0.08_65)] hover:underline">Learning Hub</Link> for more guides.
         </p>
       </div>
     </div>

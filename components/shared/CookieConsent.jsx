@@ -8,7 +8,7 @@ export default function CookieConsent() {
   const [show, setShow] = useState(false);
   const pathname = usePathname();
   const hideOnLiveMood = false;
-  const hideOnLearn = typeof pathname === "string" && pathname.startsWith("/learn");
+  const hideOnLearn = typeof pathname === "string" && (pathname.startsWith("/learn") || pathname.startsWith("/universe"));
 
   useEffect(() => {
     if (hideOnLiveMood || hideOnLearn) {

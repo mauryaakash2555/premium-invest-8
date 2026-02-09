@@ -18,8 +18,9 @@ export default function LayoutShellClient({
   const isLaserPage = pathname === '/live-intelligence';
   const isClientPortal = pathname === '/client-portal';
   const isLearn = typeof pathname === 'string' && pathname.startsWith('/learn');
+  const isUniverse = typeof pathname === 'string' && pathname.startsWith('/universe');
   const isBlog = typeof pathname === 'string' && pathname.startsWith('/blog');
-  const hasCustomFooter = isLaserPage || isClientPortal || isLearn;
+  const hasCustomFooter = isLaserPage || isClientPortal || isLearn || isUniverse;
 
   return (
     <>
@@ -33,15 +34,15 @@ export default function LayoutShellClient({
           position: 'relative',
         }}
       >
-        {!isStoreHost && !isLearn && <Navigation />}
+        {!isStoreHost && !isLearn && !isUniverse && <Navigation />}
         <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
           {children}
         </main>
         {!hasCustomFooter && !isStoreHost && <Footer />}
       </div>
 
-      {!isStoreHost && !isLearn && <LuxuryMobileDock />}
-      {!isStoreHost && !isLearn && <WhatsAppFloat />}
+      {!isStoreHost && !isLearn && !isUniverse && <LuxuryMobileDock />}
+      {!isStoreHost && !isLearn && !isUniverse && <WhatsAppFloat />}
 
       <CookieConsent />
       <AnalyticsGate measurementId={measurementId} />

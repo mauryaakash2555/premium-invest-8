@@ -950,56 +950,7 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   const [lastActiveIso, setLastActiveIso] = useState(null);
 
   const router = useRouter();
-  const [learnPortalOpen, setLearnPortalOpen] = useState(false);
-  const [learnPortalStage, setLearnPortalStage] = useState(0);
-  const learnPortalTimersRef = useRef([]);
-
-  const clearLearnPortalTimers = useCallback(() => {
-    try {
-      for (const t of learnPortalTimersRef.current) {
-        clearTimeout(t);
-      }
-    } catch {
-      // ignore
-    }
-    learnPortalTimersRef.current = [];
-  }, []);
-
-  const startLearnPortal = useCallback(() => {
-    // Restore the “enter another world” feel (Opus-style): brief portal overlay, then route.
-    clearLearnPortalTimers();
-    setLearnPortalOpen(true);
-    setLearnPortalStage(1);
-
-    learnPortalTimersRef.current.push(
-      setTimeout(() => {
-        setLearnPortalStage(2);
-      }, 420)
-    );
-
-    // A short “pull-in” pulse so users actually notice the transition.
-    learnPortalTimersRef.current.push(
-      setTimeout(() => {
-        setLearnPortalStage(3);
-      }, 880)
-    );
-
-    learnPortalTimersRef.current.push(
-      setTimeout(() => {
-        try {
-          router.push('/learn');
-        } finally {
-          // keep overlay until navigation occurs; then cleanup on unmount
-        }
-      }, 1250)
-    );
-  }, [clearLearnPortalTimers, router]);
-
-  useEffect(() => {
-    return () => {
-      clearLearnPortalTimers();
-    };
-  }, [clearLearnPortalTimers]);
+  // /universe is now the entry point for learning.
 
   const [intelView, setIntelView] = useState(() => {
     try {
@@ -2059,80 +2010,6 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
           animation: liCtaEnter 720ms var(--li-ease-premium, cubic-bezier(0.2, 0.9, 0.25, 1)) both;
         }
 
-        /* Learn portal transition overlay */
-        .li-learn-portal {
-          position: fixed;
-          inset: 0;
-          z-index: 200000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: radial-gradient(120% 120% at 50% 20%, rgba(120, 180, 255, 0.16) 0%, rgba(10, 12, 16, 0.94) 55%, rgba(0, 0, 0, 0.98) 100%);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          animation: liPortalFadeIn 260ms ease-out both;
-        }
-
-        .li-learn-portal-inner {
-          width: min(560px, calc(100vw - 44px));
-          padding: 22px 18px;
-          border-radius: 22px;
-          border: 1px solid rgba(140, 190, 255, 0.22);
-          background: linear-gradient(135deg, rgba(12, 14, 20, 0.84) 0%, rgba(0, 0, 0, 0.70) 100%);
-          box-shadow: 0 30px 120px rgba(0, 0, 0, 0.75);
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-          transform: translateZ(0);
-          will-change: transform, filter;
-        }
-
-        .li-learn-portal[data-stage='3'] .li-learn-portal-inner {
-          transform: scale(1.02);
-          filter: brightness(1.08);
-          transition: transform 220ms ease, filter 220ms ease;
-        }
-
-        .li-learn-portal-ring {
-          position: absolute;
-          inset: -60px;
-          background: conic-gradient(from 180deg, rgba(160, 210, 255, 0.0), rgba(160, 210, 255, 0.25), rgba(110, 160, 255, 0.0), rgba(160, 210, 255, 0.22), rgba(160, 210, 255, 0.0));
-          filter: blur(18px);
-          opacity: 0.8;
-          animation: liPortalSpin 1.1s linear infinite;
-          pointer-events: none;
-        }
-
-        .li-learn-portal-title {
-          position: relative;
-          z-index: 2;
-          margin: 0;
-          color: rgba(235, 245, 255, 0.96);
-          font-size: 16px;
-          font-weight: 700;
-          letter-spacing: -0.01em;
-          text-shadow: 0 0 22px rgba(120, 180, 255, 0.22);
-        }
-
-        .li-learn-portal-sub {
-          position: relative;
-          z-index: 2;
-          margin: 10px 0 0;
-          color: rgba(200, 215, 240, 0.72);
-          font-size: 13px;
-          line-height: 1.5;
-        }
-
-        @keyframes liPortalFadeIn {
-          from { opacity: 0; transform: scale(0.99); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes liPortalSpin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
         .li-learn-cta > span {
           position: relative;
           z-index: 2;
@@ -3128,34 +3005,16 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             <NightSummary />
           </div>
 
-          {/* Premium CTA: link to /learn (Living Learning Observatory) */}
+          {/* Premium CTA: link to /universe */}
           <div style={{ gridColumn: '1 / -1', marginTop: '12px' }}>
             <Link
-              href="/learn"
+              href="/universe"
               className="li-learn-cta"
               aria-label="✨ Want to understand why markets behave this way? →"
-              onClick={(e) => {
-                // Prevent immediate navigation; show portal transition first.
-                e.preventDefault();
-                startLearnPortal();
-              }}
             >
               <span>✨ Want to understand why markets behave this way? →</span>
             </Link>
           </div>
-
-          {/* Portal transition overlay (short, premium) */}
-          {learnPortalOpen ? (
-            <div className="li-learn-portal" data-stage={learnPortalStage} role="dialog" aria-label="Opening Learning Observatory">
-              <div className="li-learn-portal-inner">
-                <div className="li-learn-portal-ring" aria-hidden="true" />
-                <h4 className="li-learn-portal-title">
-                  {learnPortalStage >= 2 ? 'Arriving in the Learning Observatory…' : 'Entering the Learning Observatory…'}
-                </h4>
-                <p className="li-learn-portal-sub">One moment — we’re switching you into learning mode.</p>
-              </div>
-            </div>
-          ) : null}
 
           {/* ═══════════════════════════════════════════════════════════
               QUICK ACCESS (Overlay) - Pixel-perfect match with laser page
