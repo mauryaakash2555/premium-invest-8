@@ -5,18 +5,15 @@ import { useRouter } from 'next/navigation';
 
 type Star = {
   id: number;
-  leftPct: number;
-  topPct: number;
-  sizePx: number;
+  x: number;
+  y: number;
+  size: number;
   opacity: number;
-  driftX: number;
-  driftY: number;
-  delayS: number;
+  delay: number;
 };
 
 type FeaturedPath = {
   id: string;
-  icon: string;
   title: string;
   description: string;
 };
@@ -29,37 +26,31 @@ type RelatedTopic = {
 const FEATURED_PATHS: FeaturedPath[] = [
   {
     id: 'start-journey',
-    icon: '📚',
     title: 'Start Your Journey',
     description: 'The essential foundation every investor needs',
   },
   {
     id: 'exam-prep',
-    icon: '🎯',
-    title: 'Exam Preparation (AMFI, NISM)',
-    description: 'Ace your certification exams with structured learning',
+    title: 'Exam Preparation',
+    description: 'Ace your AMFI and NISM certification exams',
   },
   {
     id: 'wealth-building',
-    icon: '💰',
-    title: 'Wealth Building Fundamentals',
+    title: 'Wealth Building',
     description: 'Timeless principles for growing your money',
   },
   {
     id: 'behavioral-finance',
-    icon: '🧠',
     title: 'Behavioral Finance',
-    description: 'Master the psychology behind financial decisions',
+    description: 'Master the psychology behind decisions',
   },
   {
     id: 'advanced-strategies',
-    icon: '⚡',
     title: 'Advanced Strategies',
     description: 'Sophisticated techniques for experienced investors',
   },
 ];
 
-// Related topic suggestions based on keywords
 const TOPIC_ASSOCIATIONS: Record<string, RelatedTopic[]> = {
   default: [
     { title: 'Investment Basics', slug: 'investment-basics' },
@@ -111,12 +102,10 @@ const TOPIC_ASSOCIATIONS: Record<string, RelatedTopic[]> = {
   ],
 };
 
-function mulberry32(seed: number) {
+function seededRandom(seed: number) {
   return function () {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
   };
 }
 
@@ -200,25 +189,16 @@ export default function UniverseLearnHubPage() {
     }
   }, []);
 
-  // Stars
   const stars = useMemo<Star[]>(() => {
-    const rand = mulberry32(20260210);
-    const count = 180;
-    const out: Star[] = [];
-    for (let i = 0; i < count; i++) {
-      const sizes = [1, 1, 1, 2, 2, 3];
-      out.push({
-        id: i,
-        leftPct: rand() * 100,
-        topPct: rand() * 100,
-        sizePx: sizes[Math.floor(rand() * sizes.length)],
-        opacity: 0.2 + rand() * 0.8,
-        driftX: (rand() - 0.5) * 60,
-        driftY: (rand() - 0.5) * 60,
-        delayS: rand() * 10,
-      });
-    }
-    return out;
+    const rand = seededRandom(20260210);
+    return Array.from({ length: 150 }, (_, i) => ({
+      id: i,
+      x: rand() * 100,
+      y: rand() * 100,
+      size: rand() < 0.7 ? 1 : rand() < 0.9 ? 2 : 3,
+      opacity: 0.3 + rand() * 0.7,
+      delay: rand() * 8,
+    }));
   }, []);
 
   const showSearchResults = debounced.trim().length >= 3;
@@ -243,101 +223,100 @@ export default function UniverseLearnHubPage() {
   };
 
   return (
-    <main className="hub-root">
+    <main className="hub-page">
       {/* Starfield */}
-      <div className="hub-starfield" aria-hidden="true">
+      <div className="starfield" aria-hidden="true">
         {stars.map((s) => (
-          <span
+          <div
             key={s.id}
-            className="hub-star"
+            className="star"
             style={{
-              left: `${s.leftPct}%`,
-              top: `${s.topPct}%`,
-              width: `${s.sizePx}px`,
-              height: `${s.sizePx}px`,
-              opacity: s.opacity,
-              ['--drift-x' as string]: `${s.driftX}px`,
-              ['--drift-y' as string]: `${s.driftY}px`,
-              animationDelay: `${s.delayS}s`,
+              left: `${s.x}%`,
+              top: `${s.y}%`,
+              width: s.size,
+              height: s.size,
+              '--opacity': s.opacity,
+              animationDelay: `${s.delay}s`,
             } as React.CSSProperties}
           />
         ))}
       </div>
 
       {/* Header */}
-      <header className={`hub-header ${scrolled ? 'hub-header--scrolled' : ''}`}>
-        <div className="hub-header-left">Universe</div>
-        <div className="hub-header-right">🎯 {topicsExplored} topics explored</div>
+      <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+        <div className="header-brand">Universe</div>
+        <div className="header-stat">{topicsExplored} explored</div>
       </header>
 
       {/* Content */}
-      <div className="hub-content">
-        <div className={`hub-search-wrap ${showSearchResults ? 'hub-search-wrap--lifted' : ''}`}>
-          {/* Search */}
-          <div className="hub-search">
-            <span className="hub-search-icon">🔍</span>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="What do you want to master today?"
-              className="hub-search-input"
-              aria-label="Search topics"
-            />
-          </div>
+      <div className="content">
+        {/* Hero text */}
+        <div className={`hero ${showSearchResults ? 'hero--lifted' : ''}`}>
+          <h1 className="hero-title">What would you like to learn?</h1>
+          <p className="hero-subtitle">Search any topic or choose a curated path below</p>
         </div>
 
-        {/* Results or Featured */}
-        <div className={`hub-results ${mounted ? 'hub-results--visible' : ''}`}>
+        {/* Search */}
+        <div className={`search-container ${showSearchResults ? 'search--lifted' : ''}`}>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search any topic..."
+            className="search-input"
+            aria-label="Search topics"
+          />
+        </div>
+
+        {/* Results */}
+        <div className={`results ${mounted ? 'results--visible' : ''}`}>
           {showSearchResults ? (
             <>
-              {/* Primary: Explore this topic */}
+              {/* Primary explore card */}
               <button
                 type="button"
                 onClick={() => handleNavigate(searchSlug || 'explore')}
-                className="hub-card hub-card--primary"
+                className="card card--primary"
               >
-                <div className="hub-card-icon">🔍</div>
-                <div className="hub-card-body">
-                  <h3 className="hub-card-title">Explore: {debounced.trim()}</h3>
-                  <p className="hub-card-desc">Deep dive into everything about {debounced.trim().toLowerCase()}</p>
+                <div className="card-content">
+                  <h3 className="card-title">Explore: {debounced.trim()}</h3>
+                  <p className="card-desc">Deep dive into everything about this topic</p>
                 </div>
-                <span className="hub-card-arrow">→</span>
+                <span className="card-arrow">→</span>
               </button>
 
               {/* Related topics */}
-              <div className="hub-related-grid">
+              <div className="related-grid">
                 {relatedTopics.map((topic) => (
                   <button
                     key={topic.slug}
                     type="button"
                     onClick={() => handleNavigate(topic.slug)}
-                    className="hub-card hub-card--secondary"
+                    className="card card--secondary"
                   >
-                    <div className="hub-card-body">
-                      <h4 className="hub-card-title-sm">{topic.title}</h4>
-                    </div>
-                    <span className="hub-card-arrow-sm">→</span>
+                    <span className="card-title-sm">{topic.title}</span>
+                    <span className="card-arrow-sm">→</span>
                   </button>
                 ))}
               </div>
             </>
           ) : (
-            /* Featured learning paths */
-            <div className="hub-featured-grid">
-              {FEATURED_PATHS.map((path) => (
+            /* Featured paths */
+            <div className="featured-grid">
+              {FEATURED_PATHS.map((path, index) => (
                 <button
                   key={path.id}
                   type="button"
                   onClick={() => handleFeaturedPath(path.id)}
-                  className="hub-card hub-card--featured"
+                  className="card card--featured"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className="hub-card-icon">{path.icon}</div>
-                  <div className="hub-card-body">
-                    <h3 className="hub-card-title">{path.title}</h3>
-                    <p className="hub-card-desc">{path.description}</p>
+                  <div className="card-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div className="card-content">
+                    <h3 className="card-title">{path.title}</h3>
+                    <p className="card-desc">{path.description}</p>
                   </div>
-                  <span className="hub-card-arrow">→</span>
+                  <span className="card-arrow">→</span>
                 </button>
               ))}
             </div>
@@ -345,317 +324,337 @@ export default function UniverseLearnHubPage() {
         </div>
       </div>
 
-      <style jsx global>{`
-        /* ═══════════════════════════════════════════════════════════
-           BASE
-           ═══════════════════════════════════════════════════════════ */
-        .hub-root {
+      <style jsx>{`
+        /* ═══════════════════════════════════════════
+           BASE - Pure monochrome
+           ═══════════════════════════════════════════ */
+        .hub-page {
           min-height: 100vh;
           background: #000000;
           color: #ffffff;
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
           line-height: 1.6;
           overflow-x: hidden;
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           STARFIELD
-           ═══════════════════════════════════════════════════════════ */
-        .hub-starfield {
+        /* ═══════════════════════════════════════════
+           STARFIELD - White only
+           ═══════════════════════════════════════════ */
+        .starfield {
           position: fixed;
           inset: 0;
           pointer-events: none;
           z-index: 0;
         }
 
-        .hub-star {
+        .star {
           position: absolute;
-          border-radius: 50%;
           background: #ffffff;
-          animation: hubStarDrift 60s linear infinite;
-          will-change: transform;
+          border-radius: 50%;
+          opacity: var(--opacity);
+          animation: twinkle 6s ease-in-out infinite;
         }
 
-        @keyframes hubStarDrift {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(var(--drift-x), var(--drift-y)); }
-          100% { transform: translate(0, 0); }
+        @keyframes twinkle {
+          0%, 100% { opacity: calc(var(--opacity) * 0.4); }
+          50% { opacity: var(--opacity); }
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           HEADER
-           ═══════════════════════════════════════════════════════════ */
-        .hub-header {
+        /* ═══════════════════════════════════════════
+           HEADER - Monochrome glass
+           ═══════════════════════════════════════════ */
+        .header {
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
           z-index: 100;
-          height: 80px;
-          padding: 0 32px;
+          height: 72px;
+          padding: 0 40px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           background: transparent;
-          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-header--scrolled {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .header--scrolled {
+          background: rgba(255, 255, 255, 0.02);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .hub-header-left {
-          font-size: 24px;
+        .header-brand {
+          font-size: 20px;
           font-weight: 600;
+          color: #ffffff;
           letter-spacing: -0.02em;
-          text-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
 
-        .hub-header-right {
+        .header-stat {
           font-size: 14px;
-          color: #9ca3af;
-          font-weight: 500;
+          font-weight: 400;
+          color: #737373;
         }
 
-        /* ═══════════════════════════════════════════════════════════
+        /* ═══════════════════════════════════════════
            CONTENT
-           ═══════════════════════════════════════════════════════════ */
-        .hub-content {
+           ═══════════════════════════════════════════ */
+        .content {
           position: relative;
           z-index: 10;
-          padding: 120px 24px 80px;
-          max-width: 900px;
+          padding: 160px 32px 100px;
+          max-width: 800px;
           margin: 0 auto;
         }
 
-        .hub-search-wrap {
-          transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
-          transform: translateY(20vh);
+        /* ═══════════════════════════════════════════
+           HERO
+           ═══════════════════════════════════════════ */
+        .hero {
+          text-align: center;
+          margin-bottom: 48px;
+          transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-search-wrap--lifted {
-          transform: translateY(0);
+        .hero--lifted {
+          margin-bottom: 32px;
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           SEARCH BAR
-           ═══════════════════════════════════════════════════════════ */
-        .hub-search {
-          position: relative;
+        .hero-title {
+          font-size: clamp(32px, 5vw, 48px);
+          font-weight: 300;
+          color: #ffffff;
+          letter-spacing: -0.03em;
+          margin: 0 0 16px;
+        }
+
+        .hero-subtitle {
+          font-size: 16px;
+          font-weight: 400;
+          color: #737373;
+          margin: 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           SEARCH - Monochrome, 100px height
+           ═══════════════════════════════════════════ */
+        .search-container {
+          max-width: 640px;
+          margin: 0 auto 64px;
+          transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .search--lifted {
+          margin-bottom: 48px;
+        }
+
+        .search-input {
           width: 100%;
-          max-width: 700px;
-          margin: 0 auto;
-        }
-
-        .hub-search-icon {
-          position: absolute;
-          left: 24px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 24px;
-          pointer-events: none;
-        }
-
-        .hub-search-input {
-          width: 100%;
-          height: 80px;
-          padding: 0 32px 0 64px;
-          font-size: 18px;
+          height: 100px;
+          padding: 0 40px;
+          font-size: 20px;
           font-weight: 400;
           color: #ffffff;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
           outline: none;
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-search-input::placeholder {
-          color: #6b7280;
+        .search-input::placeholder {
+          color: #737373;
         }
 
-        .hub-search-input:focus {
-          border-color: rgba(124, 58, 237, 0.4);
+        .search-input:focus {
+          border-color: rgba(255, 255, 255, 0.2);
           box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(124, 58, 237, 0.2),
-            0 0 40px rgba(124, 58, 237, 0.15);
+            0 8px 32px rgba(0, 0, 0, 0.6),
+            0 0 30px rgba(255, 255, 255, 0.1);
         }
 
         @media (max-width: 640px) {
-          .hub-search-input {
-            height: 64px;
+          .search-input {
+            height: 72px;
             font-size: 16px;
-            padding-left: 56px;
-          }
-          .hub-search-icon {
-            left: 20px;
-            font-size: 20px;
+            padding: 0 28px;
+            border-radius: 20px;
           }
         }
 
-        /* ═══════════════════════════════════════════════════════════
+        /* ═══════════════════════════════════════════
            RESULTS
-           ═══════════════════════════════════════════════════════════ */
-        .hub-results {
-          margin-top: 48px;
+           ═══════════════════════════════════════════ */
+        .results {
           opacity: 0;
           transform: translateY(20px);
-          transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-results--visible {
+        .results--visible {
           opacity: 1;
           transform: translateY(0);
         }
 
-        .hub-featured-grid {
+        .featured-grid {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 24px;
         }
 
-        .hub-related-grid {
+        .related-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 12px;
-          margin-top: 16px;
+          gap: 16px;
+          margin-top: 24px;
         }
 
         @media (max-width: 640px) {
-          .hub-related-grid {
+          .related-grid {
             grid-template-columns: 1fr;
           }
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           CARDS
-           ═══════════════════════════════════════════════════════════ */
-        .hub-card {
+        /* ═══════════════════════════════════════════
+           CARDS - Monochrome glass
+           ═══════════════════════════════════════════ */
+        .card {
           display: flex;
           align-items: center;
-          gap: 20px;
+          gap: 24px;
           width: 100%;
-          min-height: 88px;
-          padding: 24px;
+          padding: 32px;
           text-align: left;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 16px;
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 20px;
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
           cursor: pointer;
-          transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-card:hover {
-          transform: translateY(-2px) scale(1.01);
-          border-color: rgba(124, 58, 237, 0.3);
+        .card:hover {
+          transform: translateY(-4px);
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(255, 255, 255, 0.12);
           box-shadow: 
-            0 12px 40px rgba(0, 0, 0, 0.4),
-            0 0 20px rgba(124, 58, 237, 0.2);
+            0 16px 48px rgba(0, 0, 0, 0.7),
+            0 0 40px rgba(255, 255, 255, 0.08);
         }
 
-        .hub-card:active {
-          transform: translateY(0) scale(0.99);
+        .card:active {
+          transform: translateY(-2px);
         }
 
-        .hub-card--primary {
-          background: linear-gradient(
-            135deg,
-            rgba(124, 58, 237, 0.15) 0%,
-            rgba(59, 130, 246, 0.1) 50%,
-            rgba(255, 255, 255, 0.03) 100%
-          );
-          border-color: rgba(124, 58, 237, 0.25);
+        .card--primary {
+          background: rgba(255, 255, 255, 0.03);
+          border-color: rgba(255, 255, 255, 0.08);
         }
 
-        .hub-card--secondary {
-          min-height: 64px;
-          padding: 16px 20px;
-          gap: 12px;
+        .card--secondary {
+          padding: 24px;
+          gap: 16px;
         }
 
-        .hub-card-icon {
+        .card--featured {
+          animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(16px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .card-number {
           flex-shrink: 0;
-          font-size: 32px;
-          line-height: 1;
+          font-size: 14px;
+          font-weight: 400;
+          color: #404040;
+          font-variant-numeric: tabular-nums;
         }
 
-        .hub-card-body {
+        .card-content {
           flex: 1;
           min-width: 0;
         }
 
-        .hub-card-title {
+        .card-title {
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 500;
           color: #ffffff;
-          margin: 0 0 4px;
+          margin: 0 0 6px;
           letter-spacing: -0.01em;
         }
 
-        .hub-card-title-sm {
+        .card-title-sm {
           font-size: 15px;
           font-weight: 500;
-          color: #ffffff;
-          margin: 0;
+          color: #e5e5e5;
         }
 
-        .hub-card-desc {
+        .card-desc {
           font-size: 14px;
           font-weight: 400;
-          color: #9ca3af;
+          color: #737373;
           margin: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
 
-        .hub-card-arrow {
+        .card-arrow {
           flex-shrink: 0;
           font-size: 20px;
-          color: #6b7280;
-          transition: all 200ms ease;
+          color: #404040;
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-card:hover .hub-card-arrow {
+        .card:hover .card-arrow {
           color: #ffffff;
-          transform: translateX(4px);
+          transform: translateX(6px);
         }
 
-        .hub-card-arrow-sm {
+        .card-arrow-sm {
           flex-shrink: 0;
           font-size: 16px;
-          color: #6b7280;
-          transition: all 200ms ease;
+          color: #404040;
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .hub-card:hover .hub-card-arrow-sm {
+        .card:hover .card-arrow-sm {
           color: #ffffff;
-          transform: translateX(4px);
+          transform: translateX(6px);
         }
 
-        /* ═══════════════════════════════════════════════════════════
+        /* ═══════════════════════════════════════════
            REDUCED MOTION
-           ═══════════════════════════════════════════════════════════ */
+           ═══════════════════════════════════════════ */
         @media (prefers-reduced-motion: reduce) {
-          .hub-star,
-          .hub-search-wrap,
-          .hub-results,
-          .hub-card {
-            animation: none !important;
-            transition: none !important;
+          .star,
+          .card--featured {
+            animation: none;
           }
-          .hub-search-wrap { transform: none; }
-          .hub-results { opacity: 1; transform: none; }
+          
+          .hero,
+          .search-container,
+          .results,
+          .card,
+          .card-arrow,
+          .card-arrow-sm,
+          .search-input,
+          .header {
+            transition-duration: 0.1s;
+          }
         }
       `}</style>
     </main>

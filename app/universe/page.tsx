@@ -12,15 +12,6 @@ type Star = {
   twinkleDelay: number;
 };
 
-type Particle = {
-  id: number;
-  angle: number;
-  radius: number;
-  speed: number;
-  size: number;
-  opacity: number;
-};
-
 function seededRandom(seed: number) {
   return function () {
     seed = (seed * 9301 + 49297) % 233280;
@@ -30,14 +21,13 @@ function seededRandom(seed: number) {
 
 export default function UniversePortalPage() {
   const router = useRouter();
-  const [phase, setPhase] = useState(0); // 0: initial, 1: portal visible, 2: expanding, 3: text visible
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    // Phase timing
-    const t1 = setTimeout(() => setPhase(1), 300);   // Stars + portal dot
-    const t2 = setTimeout(() => setPhase(2), 800);   // Portal starts expanding  
-    const t3 = setTimeout(() => setPhase(3), 2000);  // Text appears
-    const t4 = setTimeout(() => router.push('/universe/learn'), 4500); // Redirect
+    const t1 = setTimeout(() => setPhase(1), 200);
+    const t2 = setTimeout(() => setPhase(2), 600);
+    const t3 = setTimeout(() => setPhase(3), 1800);
+    const t4 = setTimeout(() => router.push('/universe/learn'), 4000);
 
     return () => {
       clearTimeout(t1);
@@ -47,39 +37,22 @@ export default function UniversePortalPage() {
     };
   }, [router]);
 
-  // Generate stars
   const stars = useMemo<Star[]>(() => {
     const rand = seededRandom(42);
-    return Array.from({ length: 300 }, (_, i) => ({
+    return Array.from({ length: 200 }, (_, i) => ({
       id: i,
       x: rand() * 100,
       y: rand() * 100,
       size: rand() < 0.7 ? 1 : rand() < 0.9 ? 2 : 3,
       opacity: 0.3 + rand() * 0.7,
-      twinkleDelay: rand() * 5,
-    }));
-  }, []);
-
-  // Orbital particles around portal
-  const particles = useMemo<Particle[]>(() => {
-    const rand = seededRandom(123);
-    return Array.from({ length: 60 }, (_, i) => ({
-      id: i,
-      angle: rand() * 360,
-      radius: 30 + rand() * 40,
-      speed: 15 + rand() * 25,
-      size: 1 + rand() * 2,
-      opacity: 0.3 + rand() * 0.5,
+      twinkleDelay: rand() * 8,
     }));
   }, []);
 
   return (
     <>
-      <div className={`universe-portal ${phase >= 1 ? 'visible' : ''}`}>
-        {/* Deep space background with nebula */}
-        <div className="nebula-layer" />
-        
-        {/* Starfield */}
+      <div className={`portal-page ${phase >= 1 ? 'phase-1' : ''} ${phase >= 2 ? 'phase-2' : ''} ${phase >= 3 ? 'phase-3' : ''}`}>
+        {/* Stars - white only */}
         <div className="starfield">
           {stars.map((star) => (
             <div
@@ -90,270 +63,219 @@ export default function UniversePortalPage() {
                 top: `${star.y}%`,
                 width: star.size,
                 height: star.size,
-                opacity: star.opacity,
+                '--opacity': star.opacity,
                 animationDelay: `${star.twinkleDelay}s`,
-              }}
+              } as React.CSSProperties}
             />
           ))}
         </div>
 
-        {/* Portal container */}
-        <div className="portal-container">
-          {/* Outer glow ring */}
-          <div className={`portal-glow ${phase >= 2 ? 'expanding' : ''}`} />
-          
-          {/* Orbital particles */}
-          <div className={`orbital-field ${phase >= 2 ? 'active' : ''}`}>
-            {particles.map((p) => (
-              <div
-                key={p.id}
-                className="orbital-particle"
-                style={{
-                  '--angle': `${p.angle}deg`,
-                  '--radius': `${p.radius}%`,
-                  '--speed': `${p.speed}s`,
-                  '--size': `${p.size}px`,
-                  '--opacity': p.opacity,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
-
-          {/* Main portal rings */}
-          <div className={`portal-ring outer ${phase >= 2 ? 'expanding' : ''}`} />
-          <div className={`portal-ring middle ${phase >= 2 ? 'expanding' : ''}`} />
-          <div className={`portal-ring inner ${phase >= 2 ? 'expanding' : ''}`} />
-          
-          {/* Portal core */}
-          <div className={`portal-core ${phase >= 1 ? 'visible' : ''} ${phase >= 2 ? 'expanding' : ''}`} />
-          
-          {/* Energy waves */}
-          <div className={`energy-wave wave-1 ${phase >= 2 ? 'active' : ''}`} />
-          <div className={`energy-wave wave-2 ${phase >= 2 ? 'active' : ''}`} />
-          <div className={`energy-wave wave-3 ${phase >= 2 ? 'active' : ''}`} />
+        {/* Portal - pure white light */}
+        <div className="portal-wrapper">
+          <div className="portal-glow" />
+          <div className="portal-ring ring-outer" />
+          <div className="portal-ring ring-middle" />
+          <div className="portal-ring ring-inner" />
+          <div className="portal-core" />
+          <div className="pulse-wave wave-1" />
+          <div className="pulse-wave wave-2" />
         </div>
 
-        {/* Text */}
-        <div className={`portal-text ${phase >= 3 ? 'visible' : ''}`}>
-          <span className="text-line">Entering Your</span>
-          <span className="text-line text-highlight">Learning Universe</span>
+        {/* Text - monochrome */}
+        <div className="portal-text">
+          <span className="text-upper">Entering Your</span>
+          <span className="text-main">Learning Universe</span>
         </div>
 
-        {/* Subtle vignette */}
+        {/* Vignette */}
         <div className="vignette" />
       </div>
 
       <style jsx>{`
-        .universe-portal {
+        .portal-page {
           position: fixed;
           inset: 0;
-          background: #000;
+          background: #000000;
           overflow: hidden;
           opacity: 0;
-          transition: opacity 0.5s ease;
+          transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        
-        .universe-portal.visible {
+
+        .portal-page.phase-1 {
           opacity: 1;
         }
 
-        /* Nebula background - very subtle, dark purples and blues */
-        .nebula-layer {
-          position: absolute;
-          inset: 0;
-          background: 
-            radial-gradient(ellipse 80% 50% at 20% 80%, rgba(59, 7, 100, 0.15) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 80% 20%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse 100% 80% at 50% 50%, rgba(17, 24, 39, 0.5) 0%, transparent 70%);
-        }
-
-        /* Stars */
+        /* ═══════════════════════════════════════════
+           STARFIELD - Pure white dots
+           ═══════════════════════════════════════════ */
         .starfield {
           position: absolute;
           inset: 0;
+          opacity: 0;
+          transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .phase-1 .starfield {
+          opacity: 1;
         }
 
         .star {
           position: absolute;
-          background: #fff;
+          background: #ffffff;
           border-radius: 50%;
-          animation: twinkle 3s ease-in-out infinite;
+          opacity: var(--opacity);
+          animation: twinkle 6s ease-in-out infinite;
         }
 
         @keyframes twinkle {
-          0%, 100% { opacity: var(--base-opacity, 0.5); transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.2); }
+          0%, 100% { opacity: calc(var(--opacity) * 0.4); }
+          50% { opacity: var(--opacity); }
         }
 
-        /* Portal container */
-        .portal-container {
+        /* ═══════════════════════════════════════════
+           PORTAL - Monochrome white light
+           ═══════════════════════════════════════════ */
+        .portal-wrapper {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 400px;
-          height: 400px;
+          width: 500px;
+          height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        /* Portal glow - outer atmospheric effect */
+        /* Outer glow - pure white */
         .portal-glow {
           position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 20px;
-          height: 20px;
-          transform: translate(-50%, -50%);
+          width: 10px;
+          height: 10px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%);
-          filter: blur(30px);
-          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .portal-glow.expanding {
-          width: 600px;
-          height: 600px;
-        }
-
-        /* Orbital particles */
-        .orbital-field {
-          position: absolute;
-          inset: 0;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.08) 40%,
+            transparent 70%
+          );
+          filter: blur(60px);
           opacity: 0;
-          transition: opacity 0.5s ease;
+          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .orbital-field.active {
+        .phase-2 .portal-glow {
+          width: 700px;
+          height: 700px;
           opacity: 1;
         }
 
-        .orbital-particle {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: var(--size);
-          height: var(--size);
-          background: rgba(167, 139, 250, var(--opacity));
-          border-radius: 50%;
-          box-shadow: 0 0 6px rgba(167, 139, 250, 0.5);
-          animation: orbit var(--speed) linear infinite;
-          transform-origin: center center;
-        }
-
-        @keyframes orbit {
-          from {
-            transform: translate(-50%, -50%) rotate(var(--angle)) translateX(calc(var(--radius))) rotate(calc(-1 * var(--angle)));
-          }
-          to {
-            transform: translate(-50%, -50%) rotate(calc(var(--angle) + 360deg)) translateX(calc(var(--radius))) rotate(calc(-1 * var(--angle) - 360deg));
-          }
-        }
-
-        /* Portal rings */
+        /* Portal rings - white borders only */
         .portal-ring {
           position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
           border-radius: 50%;
-          border: 1px solid rgba(139, 92, 246, 0.3);
-          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          opacity: 0;
+          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .portal-ring.outer {
-          width: 30px;
-          height: 30px;
-          border-color: rgba(99, 102, 241, 0.2);
-          animation: ringPulse 4s ease-in-out infinite;
+        .ring-outer {
+          width: 10px;
+          height: 10px;
+          border-color: rgba(255, 255, 255, 0.08);
         }
 
-        .portal-ring.middle {
-          width: 20px;
-          height: 20px;
-          border-color: rgba(139, 92, 246, 0.3);
-          animation: ringPulse 4s ease-in-out infinite 0.5s;
-        }
-
-        .portal-ring.inner {
-          width: 12px;
-          height: 12px;
-          border-color: rgba(167, 139, 250, 0.4);
-          animation: ringPulse 4s ease-in-out infinite 1s;
-        }
-
-        .portal-ring.outer.expanding { width: 320px; height: 320px; }
-        .portal-ring.middle.expanding { width: 240px; height: 240px; }
-        .portal-ring.inner.expanding { width: 160px; height: 160px; }
-
-        @keyframes ringPulse {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
-        }
-
-        /* Portal core */
-        .portal-core {
-          position: absolute;
-          top: 50%;
-          left: 50%;
+        .ring-middle {
           width: 8px;
           height: 8px;
-          transform: translate(-50%, -50%);
-          border-radius: 50%;
-          background: radial-gradient(circle, #fff 0%, rgba(167, 139, 250, 0.8) 30%, rgba(99, 102, 241, 0.6) 60%, transparent 100%);
-          box-shadow: 
-            0 0 20px rgba(167, 139, 250, 0.8),
-            0 0 40px rgba(139, 92, 246, 0.6),
-            0 0 60px rgba(99, 102, 241, 0.4);
-          opacity: 0;
-          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
+          border-color: rgba(255, 255, 255, 0.12);
         }
 
-        .portal-core.visible {
+        .ring-inner {
+          width: 6px;
+          height: 6px;
+          border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .phase-1 .portal-ring {
           opacity: 1;
         }
 
-        .portal-core.expanding {
-          width: 100px;
-          height: 100px;
-          box-shadow: 
-            0 0 40px rgba(167, 139, 250, 0.9),
-            0 0 80px rgba(139, 92, 246, 0.7),
-            0 0 120px rgba(99, 102, 241, 0.5),
-            0 0 200px rgba(79, 70, 229, 0.3);
+        .phase-2 .ring-outer {
+          width: 320px;
+          height: 320px;
         }
 
-        /* Energy waves */
-        .energy-wave {
+        .phase-2 .ring-middle {
+          width: 200px;
+          height: 200px;
+        }
+
+        .phase-2 .ring-inner {
+          width: 100px;
+          height: 100px;
+        }
+
+        /* Portal core - pure white light */
+        .portal-core {
           position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          width: 4px;
+          height: 4px;
           border-radius: 50%;
-          border: 1px solid rgba(167, 139, 250, 0.5);
+          background: #ffffff;
+          opacity: 0;
+          box-shadow:
+            0 0 15px rgba(255, 255, 255, 0.9),
+            0 0 30px rgba(255, 255, 255, 0.7),
+            0 0 60px rgba(255, 255, 255, 0.5);
+          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .phase-1 .portal-core {
+          opacity: 1;
+        }
+
+        .phase-2 .portal-core {
+          width: 50px;
+          height: 50px;
+          box-shadow:
+            0 0 40px rgba(255, 255, 255, 0.95),
+            0 0 80px rgba(255, 255, 255, 0.7),
+            0 0 140px rgba(255, 255, 255, 0.5),
+            0 0 220px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Pulse waves - white only */
+        .pulse-wave {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.2);
           opacity: 0;
         }
 
-        .energy-wave.active {
-          animation: waveExpand 3s ease-out infinite;
+        .phase-2 .pulse-wave {
+          animation: pulseExpand 4s ease-out infinite;
         }
 
         .wave-1 { animation-delay: 0s; }
-        .wave-2 { animation-delay: 1s; }
-        .wave-3 { animation-delay: 2s; }
+        .wave-2 { animation-delay: 2s; }
 
-        @keyframes waveExpand {
+        @keyframes pulseExpand {
           0% {
-            width: 100px;
-            height: 100px;
-            opacity: 0.6;
+            width: 50px;
+            height: 50px;
+            opacity: 0.4;
           }
           100% {
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             opacity: 0;
           }
         }
 
-        /* Text */
+        /* ═══════════════════════════════════════════
+           TEXT - Light weight, white/gray only
+           ═══════════════════════════════════════════ */
         .portal-text {
           position: absolute;
           top: 50%;
@@ -362,55 +284,58 @@ export default function UniversePortalPage() {
           text-align: center;
           z-index: 10;
           opacity: 0;
-          transition: opacity 0.8s ease, transform 0.8s ease;
+          transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .portal-text.visible {
+        .phase-3 .portal-text {
           opacity: 1;
         }
 
-        .text-line {
+        .text-upper {
           display: block;
-          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-          font-weight: 300;
-          font-size: clamp(24px, 4vw, 40px);
-          color: rgba(255, 255, 255, 0.9);
-          letter-spacing: 0.05em;
-          line-height: 1.4;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+          font-size: clamp(16px, 2.5vw, 24px);
+          font-weight: 400;
+          color: #737373;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          margin-bottom: 12px;
         }
 
-        .text-highlight {
-          font-weight: 500;
-          font-size: clamp(32px, 5vw, 56px);
-          background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #818cf8 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          text-shadow: none;
-          filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.5));
+        .text-main {
+          display: block;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+          font-size: clamp(36px, 7vw, 72px);
+          font-weight: 300;
+          color: #ffffff;
+          letter-spacing: -0.03em;
         }
 
         /* Vignette */
         .vignette {
           position: absolute;
           inset: 0;
-          background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+          background: radial-gradient(
+            ellipse at center,
+            transparent 0%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.6) 100%
+          );
           pointer-events: none;
         }
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
           .star,
-          .portal-ring,
-          .energy-wave,
-          .orbital-particle {
+          .pulse-wave {
             animation: none;
           }
-          
+
           .portal-glow,
-          .portal-core,
           .portal-ring,
-          .portal-text {
+          .portal-core,
+          .portal-text,
+          .starfield {
             transition-duration: 0.1s;
           }
         }
