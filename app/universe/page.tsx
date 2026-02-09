@@ -1,316 +1,420 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type Star = {
   id: number;
-  leftPct: number;
-  topPct: number;
-  sizePx: number;
+  x: number;
+  y: number;
+  size: number;
   opacity: number;
-  driftX: number;
-  driftY: number;
-  delayS: number;
+  twinkleDelay: number;
 };
 
-function mulberry32(seed: number) {
+type Particle = {
+  id: number;
+  angle: number;
+  radius: number;
+  speed: number;
+  size: number;
+  opacity: number;
+};
+
+function seededRandom(seed: number) {
   return function () {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
   };
 }
 
 export default function UniversePortalPage() {
   const router = useRouter();
+  const [phase, setPhase] = useState(0); // 0: initial, 1: portal visible, 2: expanding, 3: text visible
 
   useEffect(() => {
-    const t = window.setTimeout(() => {
-      router.push('/universe/learn');
-    }, 4000);
-    return () => window.clearTimeout(t);
+    // Phase timing
+    const t1 = setTimeout(() => setPhase(1), 300);   // Stars + portal dot
+    const t2 = setTimeout(() => setPhase(2), 800);   // Portal starts expanding  
+    const t3 = setTimeout(() => setPhase(3), 2000);  // Text appears
+    const t4 = setTimeout(() => router.push('/universe/learn'), 4500); // Redirect
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
   }, [router]);
 
-  // Generate 220 stars with different sizes and properties
+  // Generate stars
   const stars = useMemo<Star[]>(() => {
-    const rand = mulberry32(20260209);
-    const count = 220;
-    const out: Star[] = [];
+    const rand = seededRandom(42);
+    return Array.from({ length: 300 }, (_, i) => ({
+      id: i,
+      x: rand() * 100,
+      y: rand() * 100,
+      size: rand() < 0.7 ? 1 : rand() < 0.9 ? 2 : 3,
+      opacity: 0.3 + rand() * 0.7,
+      twinkleDelay: rand() * 5,
+    }));
+  }, []);
 
-    for (let i = 0; i < count; i++) {
-      const sizes = [1, 1, 1, 2, 2, 3]; // weighted toward smaller
-      const sizePx = sizes[Math.floor(rand() * sizes.length)];
-      out.push({
-        id: i,
-        leftPct: rand() * 100,
-        topPct: rand() * 100,
-        sizePx,
-        opacity: 0.2 + rand() * 0.8, // 0.2 to 1.0
-        driftX: (rand() - 0.5) * 80,
-        driftY: (rand() - 0.5) * 80,
-        delayS: rand() * 10,
-      });
-    }
-    return out;
+  // Orbital particles around portal
+  const particles = useMemo<Particle[]>(() => {
+    const rand = seededRandom(123);
+    return Array.from({ length: 60 }, (_, i) => ({
+      id: i,
+      angle: rand() * 360,
+      radius: 30 + rand() * 40,
+      speed: 15 + rand() * 25,
+      size: 1 + rand() * 2,
+      opacity: 0.3 + rand() * 0.5,
+    }));
   }, []);
 
   return (
-    <main className="portal-root">
-      {/* Starfield layer */}
-      <div className="portal-starfield" aria-hidden="true">
-        {stars.map((s) => (
-          <span
-            key={s.id}
-            className="portal-star"
-            style={{
-              left: `${s.leftPct}%`,
-              top: `${s.topPct}%`,
-              width: `${s.sizePx}px`,
-              height: `${s.sizePx}px`,
-              opacity: s.opacity,
-              ['--drift-x' as string]: `${s.driftX}px`,
-              ['--drift-y' as string]: `${s.driftY}px`,
-              animationDelay: `${s.delayS}s`,
-            } as React.CSSProperties}
-          />
-        ))}
-      </div>
-
-      {/* Portal vortex */}
-      <div className="portal-center">
-        <div className="portal-vortex" aria-hidden="true">
-          <div className="portal-ring portal-ring-1" />
-          <div className="portal-ring portal-ring-2" />
-          <div className="portal-ring portal-ring-3" />
-          <div className="portal-core" />
+    <>
+      <div className={`universe-portal ${phase >= 1 ? 'visible' : ''}`}>
+        {/* Deep space background with nebula */}
+        <div className="nebula-layer" />
+        
+        {/* Starfield */}
+        <div className="starfield">
+          {stars.map((star) => (
+            <div
+              key={star.id}
+              className="star"
+              style={{
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: star.size,
+                height: star.size,
+                opacity: star.opacity,
+                animationDelay: `${star.twinkleDelay}s`,
+              }}
+            />
+          ))}
         </div>
+
+        {/* Portal container */}
+        <div className="portal-container">
+          {/* Outer glow ring */}
+          <div className={`portal-glow ${phase >= 2 ? 'expanding' : ''}`} />
+          
+          {/* Orbital particles */}
+          <div className={`orbital-field ${phase >= 2 ? 'active' : ''}`}>
+            {particles.map((p) => (
+              <div
+                key={p.id}
+                className="orbital-particle"
+                style={{
+                  '--angle': `${p.angle}deg`,
+                  '--radius': `${p.radius}%`,
+                  '--speed': `${p.speed}s`,
+                  '--size': `${p.size}px`,
+                  '--opacity': p.opacity,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+
+          {/* Main portal rings */}
+          <div className={`portal-ring outer ${phase >= 2 ? 'expanding' : ''}`} />
+          <div className={`portal-ring middle ${phase >= 2 ? 'expanding' : ''}`} />
+          <div className={`portal-ring inner ${phase >= 2 ? 'expanding' : ''}`} />
+          
+          {/* Portal core */}
+          <div className={`portal-core ${phase >= 1 ? 'visible' : ''} ${phase >= 2 ? 'expanding' : ''}`} />
+          
+          {/* Energy waves */}
+          <div className={`energy-wave wave-1 ${phase >= 2 ? 'active' : ''}`} />
+          <div className={`energy-wave wave-2 ${phase >= 2 ? 'active' : ''}`} />
+          <div className={`energy-wave wave-3 ${phase >= 2 ? 'active' : ''}`} />
+        </div>
+
+        {/* Text */}
+        <div className={`portal-text ${phase >= 3 ? 'visible' : ''}`}>
+          <span className="text-line">Entering Your</span>
+          <span className="text-line text-highlight">Learning Universe</span>
+        </div>
+
+        {/* Subtle vignette */}
+        <div className="vignette" />
       </div>
 
-      {/* Text overlay */}
-      <div className="portal-text-wrap">
-        <h1 className="portal-title">✨ Entering Your Learning Universe...</h1>
-      </div>
-
-      <style jsx global>{`
-        .portal-root {
+      <style jsx>{`
+        .universe-portal {
           position: fixed;
           inset: 0;
-          width: 100vw;
-          height: 100vh;
-          background: #000000;
+          background: #000;
           overflow: hidden;
           opacity: 0;
-          animation: portalFadeIn 0.5s ease-out forwards;
+          transition: opacity 0.5s ease;
+        }
+        
+        .universe-portal.visible {
+          opacity: 1;
         }
 
-        @keyframes portalFadeIn {
-          to { opacity: 1; }
+        /* Nebula background - very subtle, dark purples and blues */
+        .nebula-layer {
+          position: absolute;
+          inset: 0;
+          background: 
+            radial-gradient(ellipse 80% 50% at 20% 80%, rgba(59, 7, 100, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 20%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse 100% 80% at 50% 50%, rgba(17, 24, 39, 0.5) 0%, transparent 70%);
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           STARFIELD
-           ═══════════════════════════════════════════════════════════ */
-        .portal-starfield {
+        /* Stars */
+        .starfield {
+          position: absolute;
+          inset: 0;
+        }
+
+        .star {
+          position: absolute;
+          background: #fff;
+          border-radius: 50%;
+          animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+          0%, 100% { opacity: var(--base-opacity, 0.5); transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Portal container */
+        .portal-container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 400px;
+          height: 400px;
+        }
+
+        /* Portal glow - outer atmospheric effect */
+        .portal-glow {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 20px;
+          height: 20px;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%);
+          filter: blur(30px);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .portal-glow.expanding {
+          width: 600px;
+          height: 600px;
+        }
+
+        /* Orbital particles */
+        .orbital-field {
           position: absolute;
           inset: 0;
           opacity: 0;
-          animation: starsAppear 0.8s ease-out forwards;
-          animation-delay: 0.5s;
+          transition: opacity 0.5s ease;
         }
 
-        @keyframes starsAppear {
-          to { opacity: 1; }
+        .orbital-field.active {
+          opacity: 1;
         }
 
-        .portal-star {
+        .orbital-particle {
           position: absolute;
+          top: 50%;
+          left: 50%;
+          width: var(--size);
+          height: var(--size);
+          background: rgba(167, 139, 250, var(--opacity));
           border-radius: 50%;
-          background: #ffffff;
-          animation: starDrift 60s linear infinite;
-          will-change: transform;
+          box-shadow: 0 0 6px rgba(167, 139, 250, 0.5);
+          animation: orbit var(--speed) linear infinite;
+          transform-origin: center center;
         }
 
-        @keyframes starDrift {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(var(--drift-x), var(--drift-y)); }
-          100% { transform: translate(0, 0); }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           PORTAL VORTEX
-           ═══════════════════════════════════════════════════════════ */
-        .portal-center {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: none;
-        }
-
-        .portal-vortex {
-          position: relative;
-          width: 10px;
-          height: 10px;
-          animation: portalExpand 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-          animation-delay: 1s;
-        }
-
-        @keyframes portalExpand {
-          0% {
-            width: 10px;
-            height: 10px;
+        @keyframes orbit {
+          from {
+            transform: translate(-50%, -50%) rotate(var(--angle)) translateX(calc(var(--radius))) rotate(calc(-1 * var(--angle)));
           }
-          100% {
-            width: 2000px;
-            height: 2000px;
+          to {
+            transform: translate(-50%, -50%) rotate(calc(var(--angle) + 360deg)) translateX(calc(var(--radius))) rotate(calc(-1 * var(--angle) - 360deg));
           }
         }
 
+        /* Portal rings */
         .portal-ring {
           position: absolute;
-          inset: 0;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           border-radius: 50%;
-          animation: portalSpin 8s linear infinite;
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .portal-ring-1 {
-          background: radial-gradient(
-            circle at 50% 50%,
-            rgba(30, 58, 138, 0.95) 0%,
-            rgba(30, 58, 138, 0.6) 30%,
-            rgba(124, 58, 237, 0.4) 55%,
-            rgba(217, 119, 6, 0.2) 75%,
-            transparent 100%
-          );
-          box-shadow:
-            0 0 60px rgba(30, 58, 138, 0.5),
-            0 0 120px rgba(124, 58, 237, 0.3),
-            0 0 200px rgba(217, 119, 6, 0.15),
-            inset 0 0 80px rgba(30, 58, 138, 0.4);
+        .portal-ring.outer {
+          width: 30px;
+          height: 30px;
+          border-color: rgba(99, 102, 241, 0.2);
+          animation: ringPulse 4s ease-in-out infinite;
         }
 
-        .portal-ring-2 {
-          background: radial-gradient(
-            circle at 50% 50%,
-            transparent 0%,
-            rgba(124, 58, 237, 0.15) 40%,
-            rgba(217, 119, 6, 0.1) 60%,
-            transparent 80%
-          );
-          animation-duration: 12s;
-          animation-direction: reverse;
+        .portal-ring.middle {
+          width: 20px;
+          height: 20px;
+          border-color: rgba(139, 92, 246, 0.3);
+          animation: ringPulse 4s ease-in-out infinite 0.5s;
         }
 
-        .portal-ring-3 {
-          background: radial-gradient(
-            circle at 50% 50%,
-            transparent 20%,
-            rgba(255, 255, 255, 0.05) 50%,
-            transparent 70%
-          );
-          animation-duration: 20s;
+        .portal-ring.inner {
+          width: 12px;
+          height: 12px;
+          border-color: rgba(167, 139, 250, 0.4);
+          animation: ringPulse 4s ease-in-out infinite 1s;
         }
 
+        .portal-ring.outer.expanding { width: 320px; height: 320px; }
+        .portal-ring.middle.expanding { width: 240px; height: 240px; }
+        .portal-ring.inner.expanding { width: 160px; height: 160px; }
+
+        @keyframes ringPulse {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 1; }
+        }
+
+        /* Portal core */
         .portal-core {
           position: absolute;
-          inset: 35%;
+          top: 50%;
+          left: 50%;
+          width: 8px;
+          height: 8px;
+          transform: translate(-50%, -50%);
           border-radius: 50%;
-          background: radial-gradient(
-            circle at 50% 50%,
-            rgba(255, 255, 255, 0.9) 0%,
-            rgba(147, 197, 253, 0.6) 20%,
-            rgba(30, 58, 138, 0.8) 50%,
-            transparent 100%
-          );
-          box-shadow:
-            0 0 40px rgba(255, 255, 255, 0.4),
-            0 0 80px rgba(147, 197, 253, 0.3);
-          animation: portalPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes portalSpin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
-        @keyframes portalPulse {
-          0%, 100% { opacity: 0.8; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.05); }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           TEXT
-           ═══════════════════════════════════════════════════════════ */
-        .portal-text-wrap {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 24px;
-          pointer-events: none;
-          z-index: 10;
-        }
-
-        .portal-title {
-          font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-          font-size: clamp(28px, 5vw, 48px);
-          font-weight: 500;
-          color: #ffffff;
-          text-align: center;
-          letter-spacing: -0.02em;
+          background: radial-gradient(circle, #fff 0%, rgba(167, 139, 250, 0.8) 30%, rgba(99, 102, 241, 0.6) 60%, transparent 100%);
+          box-shadow: 
+            0 0 20px rgba(167, 139, 250, 0.8),
+            0 0 40px rgba(139, 92, 246, 0.6),
+            0 0 60px rgba(99, 102, 241, 0.4);
           opacity: 0;
-          animation: textFadeFloat 1s ease-out forwards;
-          animation-delay: 2s;
-          text-shadow:
-            0 0 20px rgba(255, 255, 255, 0.5),
-            0 0 40px rgba(124, 58, 237, 0.4),
-            0 0 60px rgba(30, 58, 138, 0.3);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes textFadeFloat {
+        .portal-core.visible {
+          opacity: 1;
+        }
+
+        .portal-core.expanding {
+          width: 100px;
+          height: 100px;
+          box-shadow: 
+            0 0 40px rgba(167, 139, 250, 0.9),
+            0 0 80px rgba(139, 92, 246, 0.7),
+            0 0 120px rgba(99, 102, 241, 0.5),
+            0 0 200px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Energy waves */
+        .energy-wave {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          border: 1px solid rgba(167, 139, 250, 0.5);
+          opacity: 0;
+        }
+
+        .energy-wave.active {
+          animation: waveExpand 3s ease-out infinite;
+        }
+
+        .wave-1 { animation-delay: 0s; }
+        .wave-2 { animation-delay: 1s; }
+        .wave-3 { animation-delay: 2s; }
+
+        @keyframes waveExpand {
           0% {
-            opacity: 0;
-            transform: translateY(20px);
+            width: 100px;
+            height: 100px;
+            opacity: 0.6;
           }
           100% {
-            opacity: 1;
-            transform: translateY(0);
+            width: 500px;
+            height: 500px;
+            opacity: 0;
           }
         }
 
-        /* Subtle float after appearing */
-        .portal-title {
-          animation: textFadeFloat 1s ease-out forwards, textFloat 3s ease-in-out infinite;
-          animation-delay: 2s, 3s;
+        /* Text */
+        .portal-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+          z-index: 10;
+          opacity: 0;
+          transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        @keyframes textFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+        .portal-text.visible {
+          opacity: 1;
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           REDUCED MOTION
-           ═══════════════════════════════════════════════════════════ */
+        .text-line {
+          display: block;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+          font-weight: 300;
+          font-size: clamp(24px, 4vw, 40px);
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.05em;
+          line-height: 1.4;
+        }
+
+        .text-highlight {
+          font-weight: 500;
+          font-size: clamp(32px, 5vw, 56px);
+          background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #818cf8 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-shadow: none;
+          filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.5));
+        }
+
+        /* Vignette */
+        .vignette {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+          pointer-events: none;
+        }
+
+        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          .portal-root,
-          .portal-starfield,
-          .portal-star,
-          .portal-vortex,
+          .star,
           .portal-ring,
-          .portal-core,
-          .portal-title {
-            animation: none !important;
+          .energy-wave,
+          .orbital-particle {
+            animation: none;
           }
-          .portal-starfield { opacity: 1; }
-          .portal-vortex { width: 2000px; height: 2000px; }
-          .portal-title { opacity: 1; transform: none; }
+          
+          .portal-glow,
+          .portal-core,
+          .portal-ring,
+          .portal-text {
+            transition-duration: 0.1s;
+          }
         }
       `}</style>
-    </main>
+    </>
   );
 }
