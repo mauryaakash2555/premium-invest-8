@@ -9,7 +9,6 @@ type Star = {
   y: number;
   size: number;
   opacity: number;
-  twinkleDelay: number;
 };
 
 function seededRandom(seed: number) {
@@ -24,10 +23,10 @@ export default function UniversePortalPage() {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 200);
-    const t2 = setTimeout(() => setPhase(2), 600);
-    const t3 = setTimeout(() => setPhase(3), 1800);
-    const t4 = setTimeout(() => router.push('/universe/learn'), 4000);
+    const t1 = setTimeout(() => setPhase(1), 100);
+    const t2 = setTimeout(() => setPhase(2), 400);
+    const t3 = setTimeout(() => setPhase(3), 1600);
+    const t4 = setTimeout(() => router.push('/universe/learn'), 3800);
 
     return () => {
       clearTimeout(t1);
@@ -39,20 +38,19 @@ export default function UniversePortalPage() {
 
   const stars = useMemo<Star[]>(() => {
     const rand = seededRandom(42);
-    return Array.from({ length: 200 }, (_, i) => ({
+    return Array.from({ length: 150 }, (_, i) => ({
       id: i,
       x: rand() * 100,
       y: rand() * 100,
-      size: rand() < 0.7 ? 1 : rand() < 0.9 ? 2 : 3,
-      opacity: 0.3 + rand() * 0.7,
-      twinkleDelay: rand() * 8,
+      size: rand() < 0.8 ? 1 : 2,
+      opacity: 0.2 + rand() * 0.6,
     }));
   }, []);
 
   return (
     <>
       <div className={`portal-page ${phase >= 1 ? 'phase-1' : ''} ${phase >= 2 ? 'phase-2' : ''} ${phase >= 3 ? 'phase-3' : ''}`}>
-        {/* Stars - white only */}
+        {/* Stars */}
         <div className="starfield">
           {stars.map((star) => (
             <div
@@ -63,25 +61,25 @@ export default function UniversePortalPage() {
                 top: `${star.y}%`,
                 width: star.size,
                 height: star.size,
-                '--opacity': star.opacity,
-                animationDelay: `${star.twinkleDelay}s`,
-              } as React.CSSProperties}
+                opacity: star.opacity,
+              }}
             />
           ))}
         </div>
 
-        {/* Portal - pure white light */}
-        <div className="portal-wrapper">
-          <div className="portal-glow" />
-          <div className="portal-ring ring-outer" />
-          <div className="portal-ring ring-middle" />
-          <div className="portal-ring ring-inner" />
-          <div className="portal-core" />
-          <div className="pulse-wave wave-1" />
-          <div className="pulse-wave wave-2" />
+        {/* The Sun - supernatural, real, no animation */}
+        <div className="sun-container">
+          {/* Outermost corona - very subtle */}
+          <div className="sun-corona-outer" />
+          {/* Corona */}
+          <div className="sun-corona" />
+          {/* Photosphere glow */}
+          <div className="sun-glow" />
+          {/* Core - pure white */}
+          <div className="sun-core" />
         </div>
 
-        {/* Text - monochrome */}
+        {/* Text - small and refined */}
         <div className="portal-text">
           <span className="text-upper">Entering Your</span>
           <span className="text-main">Learning Universe</span>
@@ -98,7 +96,7 @@ export default function UniversePortalPage() {
           background: #000000;
           overflow: hidden;
           opacity: 0;
-          transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: opacity 0.8s ease;
         }
 
         .portal-page.phase-1 {
@@ -106,13 +104,13 @@ export default function UniversePortalPage() {
         }
 
         /* ═══════════════════════════════════════════
-           STARFIELD - Pure white dots
+           STARFIELD
            ═══════════════════════════════════════════ */
         .starfield {
           position: absolute;
           inset: 0;
           opacity: 0;
-          transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: opacity 1.5s ease;
         }
 
         .phase-1 .starfield {
@@ -123,158 +121,120 @@ export default function UniversePortalPage() {
           position: absolute;
           background: #ffffff;
           border-radius: 50%;
-          opacity: var(--opacity);
-          animation: twinkle 6s ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-          0%, 100% { opacity: calc(var(--opacity) * 0.4); }
-          50% { opacity: var(--opacity); }
         }
 
         /* ═══════════════════════════════════════════
-           PORTAL - Monochrome white light
+           THE SUN - Supernatural, real, static
+           No animation - just pure light
            ═══════════════════════════════════════════ */
-        .portal-wrapper {
+        .sun-container {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 500px;
-          height: 500px;
+          width: 600px;
+          height: 600px;
           display: flex;
           align-items: center;
           justify-content: center;
         }
 
-        /* Outer glow - pure white */
-        .portal-glow {
+        /* Outermost corona - barely visible haze */
+        .sun-corona-outer {
           position: absolute;
-          width: 10px;
-          height: 10px;
+          width: 0;
+          height: 0;
           border-radius: 50%;
           background: radial-gradient(
             circle,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.08) 40%,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.01) 40%,
             transparent 70%
           );
-          filter: blur(60px);
-          opacity: 0;
-          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .phase-2 .portal-glow {
-          width: 700px;
-          height: 700px;
-          opacity: 1;
+        .phase-2 .sun-corona-outer {
+          width: 600px;
+          height: 600px;
         }
 
-        /* Portal rings - white borders only */
-        .portal-ring {
+        /* Corona - soft outer glow */
+        .sun-corona {
           position: absolute;
+          width: 0;
+          height: 0;
           border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          opacity: 0;
-          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 30%,
+            rgba(255, 255, 255, 0.01) 60%,
+            transparent 100%
+          );
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .ring-outer {
-          width: 10px;
-          height: 10px;
-          border-color: rgba(255, 255, 255, 0.08);
+        .phase-2 .sun-corona {
+          width: 400px;
+          height: 400px;
         }
 
-        .ring-middle {
-          width: 8px;
-          height: 8px;
-          border-color: rgba(255, 255, 255, 0.12);
-        }
-
-        .ring-inner {
-          width: 6px;
-          height: 6px;
-          border-color: rgba(255, 255, 255, 0.18);
-        }
-
-        .phase-1 .portal-ring {
-          opacity: 1;
-        }
-
-        .phase-2 .ring-outer {
-          width: 320px;
-          height: 320px;
-        }
-
-        .phase-2 .ring-middle {
-          width: 200px;
-          height: 200px;
-        }
-
-        .phase-2 .ring-inner {
-          width: 100px;
-          height: 100px;
-        }
-
-        /* Portal core - pure white light */
-        .portal-core {
+        /* Photosphere - intense glow around core */
+        .sun-glow {
           position: absolute;
-          width: 4px;
-          height: 4px;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.5) 0%,
+            rgba(255, 255, 255, 0.3) 20%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%
+          );
+          box-shadow:
+            0 0 60px rgba(255, 255, 255, 0.4),
+            0 0 120px rgba(255, 255, 255, 0.2);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .phase-2 .sun-glow {
+          width: 180px;
+          height: 180px;
+        }
+
+        /* Core - pure white, intense */
+        .sun-core {
+          position: absolute;
+          width: 0;
+          height: 0;
           border-radius: 50%;
           background: #ffffff;
           opacity: 0;
           box-shadow:
-            0 0 15px rgba(255, 255, 255, 0.9),
-            0 0 30px rgba(255, 255, 255, 0.7),
-            0 0 60px rgba(255, 255, 255, 0.5);
-          transition: all 2.5s cubic-bezier(0.23, 1, 0.32, 1);
+            0 0 20px #ffffff,
+            0 0 40px rgba(255, 255, 255, 0.9),
+            0 0 80px rgba(255, 255, 255, 0.7),
+            0 0 120px rgba(255, 255, 255, 0.5),
+            0 0 200px rgba(255, 255, 255, 0.3);
+          transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .phase-1 .portal-core {
+        .phase-1 .sun-core {
+          width: 4px;
+          height: 4px;
           opacity: 1;
         }
 
-        .phase-2 .portal-core {
-          width: 50px;
-          height: 50px;
-          box-shadow:
-            0 0 40px rgba(255, 255, 255, 0.95),
-            0 0 80px rgba(255, 255, 255, 0.7),
-            0 0 140px rgba(255, 255, 255, 0.5),
-            0 0 220px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Pulse waves - white only */
-        .pulse-wave {
-          position: absolute;
-          border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          opacity: 0;
-        }
-
-        .phase-2 .pulse-wave {
-          animation: pulseExpand 4s ease-out infinite;
-        }
-
-        .wave-1 { animation-delay: 0s; }
-        .wave-2 { animation-delay: 2s; }
-
-        @keyframes pulseExpand {
-          0% {
-            width: 50px;
-            height: 50px;
-            opacity: 0.4;
-          }
-          100% {
-            width: 600px;
-            height: 600px;
-            opacity: 0;
-          }
+        .phase-2 .sun-core {
+          width: 40px;
+          height: 40px;
+          opacity: 1;
         }
 
         /* ═══════════════════════════════════════════
-           TEXT - Light weight, white/gray only
+           TEXT - Small, refined, elegant
            ═══════════════════════════════════════════ */
         .portal-text {
           position: absolute;
@@ -284,7 +244,7 @@ export default function UniversePortalPage() {
           text-align: center;
           z-index: 10;
           opacity: 0;
-          transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: opacity 1.2s ease;
         }
 
         .phase-3 .portal-text {
@@ -293,22 +253,31 @@ export default function UniversePortalPage() {
 
         .text-upper {
           display: block;
-          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
-          font-size: clamp(16px, 2.5vw, 24px);
-          font-weight: 400;
-          color: #737373;
-          letter-spacing: 0.2em;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+          font-size: 11px;
+          font-weight: 500;
+          color: #525252;
+          letter-spacing: 0.25em;
           text-transform: uppercase;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
         .text-main {
           display: block;
-          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
-          font-size: clamp(36px, 7vw, 72px);
-          font-weight: 300;
-          color: #ffffff;
-          letter-spacing: -0.03em;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+          font-size: 24px;
+          font-weight: 400;
+          color: #e5e5e5;
+          letter-spacing: 0.02em;
+        }
+
+        @media (min-width: 768px) {
+          .text-upper {
+            font-size: 12px;
+          }
+          .text-main {
+            font-size: 28px;
+          }
         }
 
         /* Vignette */
@@ -318,22 +287,18 @@ export default function UniversePortalPage() {
           background: radial-gradient(
             ellipse at center,
             transparent 0%,
-            transparent 40%,
-            rgba(0, 0, 0, 0.6) 100%
+            transparent 30%,
+            rgba(0, 0, 0, 0.7) 100%
           );
           pointer-events: none;
         }
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          .star,
-          .pulse-wave {
-            animation: none;
-          }
-
-          .portal-glow,
-          .portal-ring,
-          .portal-core,
+          .sun-corona-outer,
+          .sun-corona,
+          .sun-glow,
+          .sun-core,
           .portal-text,
           .starfield {
             transition-duration: 0.1s;
