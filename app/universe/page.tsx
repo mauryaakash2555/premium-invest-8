@@ -11,7 +11,6 @@ type Star = {
   opacity: number;
   driftX: number;
   driftY: number;
-  durationS: number;
   delayS: number;
 };
 
@@ -24,238 +23,292 @@ function mulberry32(seed: number) {
   };
 }
 
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
-
 export default function UniversePortalPage() {
   const router = useRouter();
 
   useEffect(() => {
     const t = window.setTimeout(() => {
       router.push('/universe/learn');
-    }, 3500);
+    }, 4000);
     return () => window.clearTimeout(t);
   }, [router]);
 
+  // Generate 220 stars with different sizes and properties
   const stars = useMemo<Star[]>(() => {
     const rand = mulberry32(20260209);
-    const count = 140; // 100+ required
-
+    const count = 220;
     const out: Star[] = [];
-    for (let i = 0; i < count; i += 1) {
-      const leftPct = rand() * 100;
-      const topPct = rand() * 100;
-      const sizePx = 1 + rand() * 2; // 1–3px
-      const opacity = clamp(0.3 + rand() * 0.7, 0.3, 1); // 0.3–1.0
-      const driftX = (rand() - 0.5) * 120; // px
-      const driftY = (rand() - 0.5) * 120; // px
-      const durationS = 40; // 40s, infinite
-      const delayS = rand() * 6;
 
+    for (let i = 0; i < count; i++) {
+      const sizes = [1, 1, 1, 2, 2, 3]; // weighted toward smaller
+      const sizePx = sizes[Math.floor(rand() * sizes.length)];
       out.push({
         id: i,
-        leftPct,
-        topPct,
+        leftPct: rand() * 100,
+        topPct: rand() * 100,
         sizePx,
-        opacity,
-        driftX,
-        driftY,
-        durationS,
-        delayS,
+        opacity: 0.2 + rand() * 0.8, // 0.2 to 1.0
+        driftX: (rand() - 0.5) * 80,
+        driftY: (rand() - 0.5) * 80,
+        delayS: rand() * 10,
       });
     }
-
     return out;
   }, []);
 
   return (
-    <main className="universe-root fixed inset-0 w-screen h-screen overflow-hidden bg-black">
-      {/* Starfield */}
-      <div className="universe-stars absolute inset-0" aria-hidden="true">
+    <main className="portal-root">
+      {/* Starfield layer */}
+      <div className="portal-starfield" aria-hidden="true">
         {stars.map((s) => (
           <span
             key={s.id}
-            className="universe-star absolute rounded-full bg-white"
-            style={
-              {
-                left: `${s.leftPct}%`,
-                top: `${s.topPct}%`,
-                width: `${s.sizePx}px`,
-                height: `${s.sizePx}px`,
-                opacity: s.opacity,
-                // CSS variables for per-star drift
-                ['--dx' as any]: `${s.driftX}`,
-                ['--dy' as any]: `${s.driftY}`,
-                animationDuration: `${s.durationS}s`,
-                animationDelay: `${s.delayS}s`,
-              } as React.CSSProperties
-            }
+            className="portal-star"
+            style={{
+              left: `${s.leftPct}%`,
+              top: `${s.topPct}%`,
+              width: `${s.sizePx}px`,
+              height: `${s.sizePx}px`,
+              opacity: s.opacity,
+              ['--drift-x' as string]: `${s.driftX}px`,
+              ['--drift-y' as string]: `${s.driftY}px`,
+              animationDelay: `${s.delayS}s`,
+            } as React.CSSProperties}
           />
         ))}
       </div>
 
-      {/* Portal */}
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="relative">
-          <div
-            className="universe-portal pointer-events-none"
-            aria-hidden="true"
-            style={{
-              background:
-                'radial-gradient(circle at 50% 50%, #1e3a8a 0%, #7c3aed 55%, #f59e0b 100%)',
-            }}
-          />
-
-          {/* Soft glow halo */}
-          <div
-            className="universe-portal-glow pointer-events-none"
-            aria-hidden="true"
-          />
+      {/* Portal vortex */}
+      <div className="portal-center">
+        <div className="portal-vortex" aria-hidden="true">
+          <div className="portal-ring portal-ring-1" />
+          <div className="portal-ring portal-ring-2" />
+          <div className="portal-ring portal-ring-3" />
+          <div className="portal-core" />
         </div>
       </div>
 
       {/* Text overlay */}
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="universe-text px-6 text-center">
-          <div className="universe-title text-[32px] sm:text-[36px] md:text-[48px] leading-tight text-white">
-            ✨ Entering Your Learning Universe...
-          </div>
-        </div>
+      <div className="portal-text-wrap">
+        <h1 className="portal-title">✨ Entering Your Learning Universe...</h1>
       </div>
 
       <style jsx global>{`
-        /* Sequence: fade-in to black (0.5s) */
-        @keyframes universeRootFade {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        .universe-root {
-          animation: universeRootFade 0.5s ease-out both;
-        }
-
-        /* Stars appear after 0.5s */
-        @keyframes universeStarsFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        .universe-stars {
+        .portal-root {
+          position: fixed;
+          inset: 0;
+          width: 100vw;
+          height: 100vh;
+          background: #000000;
+          overflow: hidden;
           opacity: 0;
-          animation: universeStarsFadeIn 0.5s ease-out both;
+          animation: portalFadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes portalFadeIn {
+          to { opacity: 1; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           STARFIELD
+           ═══════════════════════════════════════════════════════════ */
+        .portal-starfield {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          animation: starsAppear 0.8s ease-out forwards;
           animation-delay: 0.5s;
         }
 
-        @keyframes universe-star-drift {
-          0% {
-            transform: translate3d(0, 0, 0);
-          }
-          100% {
-            transform: translate3d(calc(var(--dx) * 1px), calc(var(--dy) * 1px), 0);
-          }
+        @keyframes starsAppear {
+          to { opacity: 1; }
         }
 
-        .universe-star {
-          animation-name: universe-star-drift;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-          will-change: transform;
-        }
-
-        /* Portal: dot appears ~0.3s, then expands over 2s */
-        @keyframes universe-portal-expand {
-          0% {
-            transform: translate3d(0, 0, 0) scale(0);
-            opacity: 0;
-          }
-          1% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0) scale(0.04);
-          }
-          100% {
-            transform: translate3d(0, 0, 0) scale(30);
-            opacity: 1;
-          }
-        }
-
-        .universe-portal {
-          width: 180px;
-          height: 180px;
-          border-radius: 9999px;
-          filter: saturate(1.1);
-          box-shadow:
-            0 0 44px rgba(30, 58, 138, 0.30),
-            0 0 92px rgba(124, 58, 237, 0.24),
-            0 0 140px rgba(245, 158, 11, 0.16);
-          animation: universe-portal-expand 2s ease-out both;
-          animation-delay: 0.3s;
-          transform-origin: 50% 50%;
-          will-change: transform;
-        }
-
-        .universe-portal-glow {
+        .portal-star {
           position: absolute;
-          inset: -18px;
-          border-radius: 9999px;
-          background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.0) 70%);
-          mix-blend-mode: screen;
-          opacity: 0.9;
+          border-radius: 50%;
+          background: #ffffff;
+          animation: starDrift 60s linear infinite;
+          will-change: transform;
         }
 
-        @keyframes universe-text-fade {
+        @keyframes starDrift {
+          0% { transform: translate(0, 0); }
+          50% { transform: translate(var(--drift-x), var(--drift-y)); }
+          100% { transform: translate(0, 0); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           PORTAL VORTEX
+           ═══════════════════════════════════════════════════════════ */
+        .portal-center {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: none;
+        }
+
+        .portal-vortex {
+          position: relative;
+          width: 10px;
+          height: 10px;
+          animation: portalExpand 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation-delay: 1s;
+        }
+
+        @keyframes portalExpand {
+          0% {
+            width: 10px;
+            height: 10px;
+          }
+          100% {
+            width: 2000px;
+            height: 2000px;
+          }
+        }
+
+        .portal-ring {
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          animation: portalSpin 8s linear infinite;
+        }
+
+        .portal-ring-1 {
+          background: radial-gradient(
+            circle at 50% 50%,
+            rgba(30, 58, 138, 0.95) 0%,
+            rgba(30, 58, 138, 0.6) 30%,
+            rgba(124, 58, 237, 0.4) 55%,
+            rgba(217, 119, 6, 0.2) 75%,
+            transparent 100%
+          );
+          box-shadow:
+            0 0 60px rgba(30, 58, 138, 0.5),
+            0 0 120px rgba(124, 58, 237, 0.3),
+            0 0 200px rgba(217, 119, 6, 0.15),
+            inset 0 0 80px rgba(30, 58, 138, 0.4);
+        }
+
+        .portal-ring-2 {
+          background: radial-gradient(
+            circle at 50% 50%,
+            transparent 0%,
+            rgba(124, 58, 237, 0.15) 40%,
+            rgba(217, 119, 6, 0.1) 60%,
+            transparent 80%
+          );
+          animation-duration: 12s;
+          animation-direction: reverse;
+        }
+
+        .portal-ring-3 {
+          background: radial-gradient(
+            circle at 50% 50%,
+            transparent 20%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 70%
+          );
+          animation-duration: 20s;
+        }
+
+        .portal-core {
+          position: absolute;
+          inset: 35%;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 255, 255, 0.9) 0%,
+            rgba(147, 197, 253, 0.6) 20%,
+            rgba(30, 58, 138, 0.8) 50%,
+            transparent 100%
+          );
+          box-shadow:
+            0 0 40px rgba(255, 255, 255, 0.4),
+            0 0 80px rgba(147, 197, 253, 0.3);
+          animation: portalPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes portalSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes portalPulse {
+          0%, 100% { opacity: 0.8; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TEXT
+           ═══════════════════════════════════════════════════════════ */
+        .portal-text-wrap {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          pointer-events: none;
+          z-index: 10;
+        }
+
+        .portal-title {
+          font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+          font-size: clamp(28px, 5vw, 48px);
+          font-weight: 500;
+          color: #ffffff;
+          text-align: center;
+          letter-spacing: -0.02em;
+          opacity: 0;
+          animation: textFadeFloat 1s ease-out forwards;
+          animation-delay: 2s;
+          text-shadow:
+            0 0 20px rgba(255, 255, 255, 0.5),
+            0 0 40px rgba(124, 58, 237, 0.4),
+            0 0 60px rgba(30, 58, 138, 0.3);
+        }
+
+        @keyframes textFadeFloat {
           0% {
             opacity: 0;
-            transform: translate3d(0, 8px, 0);
+            transform: translateY(20px);
           }
           100% {
             opacity: 1;
-            transform: translate3d(0, 0, 0);
+            transform: translateY(0);
           }
         }
 
-        .universe-text {
-          opacity: 0;
-          animation: universe-text-fade 0.8s ease forwards;
-          animation-delay: 1s;
-          text-shadow:
-            0 0 24px rgba(30, 58, 138, 0.22),
-            0 0 36px rgba(124, 58, 237, 0.18);
+        /* Subtle float after appearing */
+        .portal-title {
+          animation: textFadeFloat 1s ease-out forwards, textFloat 3s ease-in-out infinite;
+          animation-delay: 2s, 3s;
         }
 
-        .universe-title {
-          font-family: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-          font-weight: 500;
-          letter-spacing: -0.01em;
+        @keyframes textFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
 
-        /* Accessibility: reduce motion */
+        /* ═══════════════════════════════════════════════════════════
+           REDUCED MOTION
+           ═══════════════════════════════════════════════════════════ */
         @media (prefers-reduced-motion: reduce) {
-          .universe-root,
-          .universe-stars,
-          .universe-star,
-          .universe-portal,
-          .universe-text {
+          .portal-root,
+          .portal-starfield,
+          .portal-star,
+          .portal-vortex,
+          .portal-ring,
+          .portal-core,
+          .portal-title {
             animation: none !important;
-            transition: none !important;
           }
-          .universe-stars {
-            opacity: 1 !important;
-          }
-          .universe-portal {
-            transform: translate3d(0, 0, 0) scale(30) !important;
-          }
-          .universe-text {
-            opacity: 1 !important;
-            transform: none !important;
-          }
-        }
-
-        @media (max-width: 380px) {
-          .universe-portal {
-            width: 150px;
-            height: 150px;
-          }
+          .portal-starfield { opacity: 1; }
+          .portal-vortex { width: 2000px; height: 2000px; }
+          .portal-title { opacity: 1; transform: none; }
         }
       `}</style>
     </main>
