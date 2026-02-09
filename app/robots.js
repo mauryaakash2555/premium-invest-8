@@ -21,6 +21,8 @@ export default async function robots() {
         userAgent: "*",
         allow: "/",
         disallow: [
+          "/admin",
+          "/admin/",
           "/cdn-cgi/",
           "/_next/",
           "/api/",
@@ -44,6 +46,7 @@ export default async function robots() {
           "/payment-failed",
           "/v0-test",
           // Block legacy query variants from being crawled/indexed
+          "/?live=",
           "/*?live=",
         ],
       },

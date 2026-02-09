@@ -1,7 +1,5 @@
-'use client';
+import { permanentRedirect } from 'next/navigation';
 
-import AboutUsPage from '../about-us/page.jsx';
-
-export default function AboutPage() {
-  return <AboutUsPage />;
+export default function AboutLegacyPage() {
+  permanentRedirect('/about-us');
 }

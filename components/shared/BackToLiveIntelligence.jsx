@@ -10,7 +10,7 @@ export default function BackToLiveIntelligence() {
   return (
     <>
       <Link
-        href="/?live=1"
+        href="/live-intelligence"
         className="back-to-li"
         aria-label="Back to Live Intelligence"
       >

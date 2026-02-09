@@ -20,9 +20,10 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Terms & Conditions | BM Wealth",
-  description: "Review the terms and conditions for using BM Wealth’s website and services.",
+  title: "Terms (Legacy) | BM Wealth",
+  description: "Legacy URL. Redirects to the canonical terms and conditions page.",
   path: "/terms",
+  robots: { index: false, follow: false },
 });
 
 export default function Layout({ children }) {

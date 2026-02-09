@@ -82,6 +82,21 @@ const FixedDeposits = () => {
     },
   };
 
+  const financialProductSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialProduct',
+    name: 'Fixed Deposit Services',
+    description:
+      'Fixed deposit investment support by BM Wealth, with clarity on tenure, payout options, liquidity, and maturity tracking.',
+    url: pageUrl,
+    provider: {
+      '@type': 'FinancialService',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    areaServed: 'IN',
+  };
+
   const faqs = [
     {
       question: 'Are fixed deposits risk-free?',
@@ -158,6 +173,11 @@ const FixedDeposits = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
+      <script
+        id="fixed-deposits-financial-product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(financialProductSchema) }}
+      />
 
   <section className="svc-hero" style={{ position: 'relative', padding: '120px 0 80px 0', textAlign: 'center', marginTop: '80px', overflow: 'hidden' }}>
         {/* Back to Live Intelligence */}
@@ -213,6 +233,16 @@ const FixedDeposits = () => {
             Fixed deposits are commonly used for stability and known timelines. The right structure depends on tenure,
             payout preference, liquidity needs, and how you want maturities managed.
           </p>
+          <div style={{ marginTop: 26, display: 'flex', justifyContent: 'center' }}>
+            <img
+              src="/logo.png"
+              alt="BM Wealth fixed deposit advisory"
+              width={64}
+              height={64}
+              loading="lazy"
+              style={{ borderRadius: 14, border: '1px solid rgba(255,255,255,0.10)', opacity: 0.92 }}
+            />
+          </div>
         </div>
       </section>
 

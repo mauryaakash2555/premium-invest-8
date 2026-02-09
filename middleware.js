@@ -75,9 +75,10 @@ export function middleware(request) {
   // Keep this list tight: only redirect routes that are known duplicates or intentionally noindex.
   if (!isStoreHost) {
     const canonicalPathRedirects = {
-      '/about-us': '/about',
+      // Canonical public pages
+      '/about': '/about-us',
       '/privacy-policy': '/privacy',
-      '/terms-and-conditions': '/terms',
+      '/terms': '/terms-and-conditions',
       '/refund-policy': '/refund',
       '/live': '/live-intelligence',
       '/live-intel': '/live-intelligence',

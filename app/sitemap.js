@@ -140,7 +140,7 @@ export default async function sitemap() {
     "/submit",
     "/live-intelligence",
     "/contact",
-    "/about",
+    "/about-us",
     "/services",
     "/platforms",
     "/mutual-funds",
@@ -150,7 +150,7 @@ export default async function sitemap() {
     "/trading-services",
     "/sip",
     "/privacy",
-    "/terms",
+    "/terms-and-conditions",
     "/disclaimer",
     "/refund",
     "/compliance",
@@ -159,9 +159,9 @@ export default async function sitemap() {
 
   // Exclude known non-indexable or blocked URLs from the sitemap.
   const excludedExact = new Set([
-    "/about-us",
+    "/about",
     "/privacy-policy",
-    "/terms-and-conditions",
+    "/terms",
     "/refund-policy",
     "/payment-success",
     "/payment-failed",

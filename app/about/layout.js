@@ -1,10 +1,10 @@
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata = buildMetadata({
-  title: 'About BM Wealth | Mumbai Advisory Practice | BM Wealth',
-  description:
-    'Learn about BM Wealth — a Mumbai-based advisory practice focused on disciplined execution, transparent communication, and documentation-first workflows since 1989.',
+  title: 'About (Legacy) | BM Wealth',
+  description: 'Legacy URL. Redirects to the canonical About Us page.',
   path: '/about',
+  robots: { index: false, follow: false },
 });
 
 export default function Layout({ children }) {

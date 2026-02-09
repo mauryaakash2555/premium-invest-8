@@ -313,13 +313,15 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
     ],
     resources: [
       { label: "Tools", href: "/tools" },
+      { label: "ITR Filing Help", href: "/tools/itr-filing-help" },
+      { label: "Fixed Deposits", href: "/fixed-deposits" },
       { label: "Investment Platforms", href: "/platforms" },
       { label: "Curated Partners", href: "/curated-partners" },
       { label: "Careers", href: "/careers" },
-      { label: "Sitemap", href: "/sitemap-page" },
+      { label: "Sitemap", href: "/sitemap" },
     ],
     legal: [
-      { label: "Terms & Conditions", href: "/terms" },
+      { label: "Terms & Conditions", href: "/terms-and-conditions" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Disclaimer", href: "/disclaimer" },
       { label: "Refund Policy", href: "/refund" },

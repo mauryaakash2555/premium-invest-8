@@ -1,6 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const LUX = {
   background: 'oklch(0.06 0.005 280)',
@@ -15,6 +16,28 @@ export default function ITRFilingHelp() {
   const [extractedData, setExtractedData] = useState(null);
   const [fields, setFields] = useState({});
   const [taxResult, setTaxResult] = useState(null);
+
+  const baseUrl = getMetadataBase().origin;
+  const pageUrl = `${baseUrl}/tools/itr-filing-help`;
+  const toolSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'ITR Filing Help Tool',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    url: pageUrl,
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: baseUrl,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+    },
+  };
 
   const themeStyle = useMemo(
     () =>
@@ -114,6 +137,11 @@ export default function ITRFilingHelp() {
       style={themeStyle}
       className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]"
     >
+      <script
+        id="itr-filing-help-tool-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }}
+      />
       <div className="max-w-5xl mx-auto">
         <div className="mb-4">
           <Link
@@ -318,6 +346,58 @@ export default function ITRFilingHelp() {
             </button>
           </div>
         )}
+
+        {/* SEO content (indexable, no UI workflow change) */}
+        <section className="mt-12 bg-[color:var(--lux-card)]/50 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <img
+              src="/logo.png"
+              alt="BM Wealth"
+              width={40}
+              height={40}
+              loading="lazy"
+              className="rounded"
+            />
+            <div>
+              <h2 className="text-xl font-bold text-[color:var(--lux-foreground)]">How to use this ITR filing helper</h2>
+              <p className="text-sm text-[color:var(--lux-foreground-60)]">Educational workflow support — verify everything before filing.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-[color:var(--lux-foreground-60)] leading-7">
+            <p>
+              This page is designed to reduce the “blank page” problem when you start your ITR filing journey.
+              Most people are not stuck because they don’t have documents — they are stuck because they don’t know
+              what to do in what order. The upload step helps you extract a small set of commonly used fields from
+              a PDF document like Form 16, AIS, or a bank statement, so you can review the numbers in one place.
+            </p>
+            <p>
+              After you verify the extracted values, the tool compares an estimated tax outcome across old and new
+              tax regimes using a simplified model. This is intentionally conservative: it does not try to “auto-file”
+              your return, and it should not be treated as professional advice. Treat it like a checklist and a draft.
+              If your situation includes capital gains, multiple income sources, foreign assets, business income, or
+              complex deductions, you should use an appropriate professional workflow.
+            </p>
+            <p>
+              For best results, keep your inputs clean: use the total gross salary figure from Form 16, include the
+              standard deduction only once, and double-check any 80C deductions against proofs. If the extracted PDF
+              looks incomplete or low confidence, upload a clearer file or use the review step to overwrite values.
+            </p>
+            <p>
+              If you want a broader planning context, explore our public resources and services pages:
+              <span className="ml-2">
+                <Link href="/fixed-deposits" className="underline">Fixed Deposits</Link>,{' '}
+                <Link href="/mutual-funds" className="underline">Mutual Funds</Link>,{' '}
+                <Link href="/portfolio-management" className="underline">Portfolio Management</Link>,{' '}
+                <Link href="/tools/tax-optimization" className="underline">Tax Optimization Tool</Link>, and{' '}
+                <Link href="/contact" className="underline">Contact</Link>.
+              </span>
+            </p>
+            <p>
+              Canonical URL for this tool: <span className="text-[color:var(--lux-foreground)]">{pageUrl}</span>
+            </p>
+          </div>
+        </section>
 
         {/* Disclaimer */}
         <div className="mt-12 p-4 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg text-sm text-[color:var(--lux-foreground-60)]">
