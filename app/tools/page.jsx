@@ -138,6 +138,13 @@ export default function ToolsHubPage() {
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr">
               <ToolCard
                 active
+                title="Free ITR Filing Help"
+                subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
+                href="/tools/itr-filing-help"
+                laser
+              />
+              <ToolCard
+                active
                 title="Tax Optimization Intelligence — FY 2025–26"
                 subtitle="Old vs New regime • Zero-tax threshold • Execution-first"
                 href="/tools/tax-optimization"
@@ -168,14 +175,7 @@ export default function ToolsHubPage() {
                 title="All in One Financial Calculator"
                 subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
                 href="/tools/all-calculators"
-                laser
                 className="min-h-[130px]"
-              />
-              <ToolCard
-                active
-                title="Free ITR Filing Help"
-                subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
-                href="/tools/itr-filing-help"
               />
             </div>
 
