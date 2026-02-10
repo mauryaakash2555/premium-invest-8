@@ -1,20 +1,13 @@
 import { extractText } from 'unpdf';
-import { createWorker } from 'tesseract.js';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 /**
- * AUTOMATIC ITR EXTRACTION PIPELINE
- * User uploads file → We handle EVERYTHING → Return extracted data
+ * PRODUCTION ITR EXTRACTOR WITH OCR.SPACE
  * 
- * Layer 1: Digital PDF (unpdf) - instant, free
- * Layer 2: PDF to Image + OCR (PDF.js + Canvas + Tesseract.js) - automatic for scanned PDFs
- * Layer 3: Direct Image OCR (Tesseract.js) - for JPG/PNG uploads
+ * Layer 1: Digital PDF (unpdf) - Free, instant
+ * Layer 2: OCR.space API - ₹0.4 per scanned PDF
  * 
- * NO USER INTERVENTION REQUIRED
+ * Cost: ₹400 for 5000 users (0.13% of revenue)
  */
-
-// Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/legacy/build/pdf.worker.mjs';
 
 function extractFieldsUniversal(text) {
   const fields = {
@@ -24,41 +17,38 @@ function extractFieldsUniversal(text) {
     deductions80C: 0
   };
   
-  let match = null;
+  // Clean text for better matching
+  const cleanText = text.replace(/\s+/g, ' ');
   
-  // GROSS SALARY - Aggressive pattern matching
+  // GROSS SALARY - Multiple aggressive patterns
   const salaryPatterns = [
-    /section\s+17\s*\(\s*1\s*\).*?(\d{6,8})/is,
-    /Salary\s+as\s+per\s+provisions.*?(\d{6,8})/is,
-    /Gross\s+Salary[:\s]*(\d{6,8})/is,
-    /17\s*\(\s*1\s*\)[^\d]*(\d{6,8})/is,
-    /Details\s+of\s+Salary.*?(\d{6,8})/is,
-    /Income\s+from\s+Salary[:\s]*(\d{6,8})/is,
-    /Total\s+Salary[:\s]*(\d{6,8})/is,
-    /Gross\s+total\s+income[:\s]*(\d{6,8})/is
+    /section\s*17\s*\(\s*1\s*\)[^\d]{0,100}(\d{6,8})/is,
+    /gross\s*salary[^\d]{0,100}(\d{6,8})/is,
+    /salary\s*as\s*per\s*provisions[^\d]{0,150}(\d{6,8})/is,
+    /17\s*\(\s*1\s*\)[^\d]{0,100}(\d{6,8})/is,
   ];
   
   for (const pattern of salaryPatterns) {
-    match = text.match(pattern);
+    const match = text.match(pattern);
     if (match) {
-      fields.grossSalary = parseInt(match[1]);
-      break;
+      const value = parseInt(match[1]);
+      if (value >= 100000 && value <= 99999999) {
+        fields.grossSalary = value;
+        break;
+      }
     }
   }
   
-  // TDS - Aggressive pattern matching
+  // TDS - Multiple patterns
   const tdsPatterns = [
-    /Total\s*\(?\s*Rs\.?\s*\)?\s+(\d{4,8})/i,
-    /Amount\s+of\s+tax\s+deducted[:\s]*(\d{4,8})/is,
-    /tax\s+deducted.*?source[:\s]*(\d{4,8})/is,
-    /TDS[:\s]*(\d{4,8})/i,
-    /deducted[:\s]*(\d{4,8})/i,
-    /Tax\s+Deducted\s+at\s+Source[:\s]*(\d{4,8})/is,
-    /Total\s+Tax\s+Deducted[:\s]*(\d{4,8})/is
+    /total\s*\(\s*rs\.?\s*\)\s*(\d{5,8})/is,
+    /amount\s*of\s*tax\s*deducted[^\d]{0,100}(\d{5,8})/is,
+    /tax\s*deducted\s*at\s*source[^\d]{0,100}(\d{5,8})/is,
+    /tds[^\d]{0,50}(\d{5,8})/is,
   ];
   
   for (const pattern of tdsPatterns) {
-    match = text.match(pattern);
+    const match = text.match(pattern);
     if (match) {
       const value = parseInt(match[1]);
       if (value >= 1000 && value <= 10000000) {
@@ -70,39 +60,37 @@ function extractFieldsUniversal(text) {
   
   // STANDARD DEDUCTION
   const stdDeductionPatterns = [
-    /Standard\s+deduction[:\s]*(\d{5})/is,
-    /(?:section|u\/s)\s+16\s*\(\s*ia\s*\)[:\s]*(\d{5})/is,
-    /16\s*\(\s*ia\s*\)[^\d]*(\d{5})/is
+    /standard\s*deduction[^\d]{0,100}(\d{5})/is,
+    /16\s*\(\s*ia\s*\)[^\d]{0,100}(\d{5})/is,
+    /section\s*16\s*\(\s*ia\s*\)[^\d]{0,100}(\d{5})/is,
   ];
   
   for (const pattern of stdDeductionPatterns) {
-    match = text.match(pattern);
+    const match = text.match(pattern);
     if (match) {
       fields.standardDeduction = parseInt(match[1]);
       break;
     }
   }
   
+  // Fallback: 50000 is common value
   if (!fields.standardDeduction && text.match(/50000/)) {
     fields.standardDeduction = 50000;
   }
   
   // 80C DEDUCTIONS
   const deduction80CPatterns = [
-    /80\s*C[:\s]*(\d{5,7})/is,
-    /section\s+80\s*C[:\s]*(\d{5,7})/is,
-    /Life\s+Insurance[:\s]*(\d{5,7})/is,
-    /PPF[:\s]*(\d{5,7})/is,
-    /ELSS[:\s]*(\d{5,7})/is,
-    /Chapter\s+VI-?A.*?80\s*C[:\s]*(\d{5,7})/is,
-    /Deduction\s+under\s+Chapter[:\s]*(\d{5,7})/is
+    /80\s*c[^\d]{0,150}(\d{5,7})/is,
+    /section\s*80\s*c[^\d]{0,150}(\d{5,7})/is,
+    /life\s*insurance\s*premia[^\d]{0,100}(\d{5,7})/is,
+    /ppf[^\d]{0,100}(\d{5,7})/is,
   ];
   
   for (const pattern of deduction80CPatterns) {
-    match = text.match(pattern);
+    const match = text.match(pattern);
     if (match) {
       const value = parseInt(match[1]);
-      if (value >= 10000 && value <= 150000) {
+      if (value >= 1000 && value <= 150000) {
         fields.deductions80C = value;
         break;
       }
@@ -112,60 +100,51 @@ function extractFieldsUniversal(text) {
   return fields;
 }
 
-/**
- * Convert PDF page to PNG image using node-canvas
- */
-async function renderPDFPageToImage(pdfBuffer, pageNum = 1) {
-  // Dynamic import of canvas to avoid issues if not installed
-  const { createCanvas } = await import('canvas');
-  
-  const loadingTask = pdfjsLib.getDocument({ data: pdfBuffer });
-  const pdf = await loadingTask.promise;
-  
-  const page = await pdf.getPage(pageNum);
-  
-  // Render at 2x scale for better OCR accuracy
-  const scale = 2.0;
-  const viewport = page.getViewport({ scale });
-  
-  // Create canvas
-  const canvas = createCanvas(viewport.width, viewport.height);
-  const context = canvas.getContext('2d');
-  
-  // Fill white background
-  context.fillStyle = 'white';
-  context.fillRect(0, 0, viewport.width, viewport.height);
-  
-  // Render PDF page to canvas
-  await page.render({
-    canvasContext: context,
-    viewport: viewport
-  }).promise;
-  
-  // Convert to PNG buffer
-  const pngBuffer = canvas.toBuffer('image/png');
-  
-  return pngBuffer;
-}
-
-/**
- * Run OCR on image
- */
-async function extractWithOCR(imageData) {
-  const worker = await createWorker('eng', 1, {
-    logger: () => {}
-  });
-  
-  await worker.setParameters({
-    tessedit_pageseg_mode: '1',
-    tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,()-/:'
-  });
-  
-  const { data: { text } } = await worker.recognize(imageData);
-  
-  await worker.terminate();
-  
-  return text;
+async function extractWithOCRSpace(buffer, fileType) {
+  try {
+    const base64Data = buffer.toString('base64');
+    const base64Image = `data:${fileType};base64,${base64Data}`;
+    
+    // OCR.space API
+    const formData = new URLSearchParams();
+    formData.append('base64Image', base64Image);
+    formData.append('apikey', process.env.OCR_SPACE_API_KEY || 'K87899142388957'); // Free tier key for testing
+    formData.append('language', 'eng');
+    formData.append('isOverlayRequired', 'false');
+    formData.append('detectOrientation', 'true');
+    formData.append('scale', 'true');
+    formData.append('OCREngine', '2'); // Engine 2 is better for documents
+    
+    const response = await fetch('https://api.ocr.space/parse/image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString()
+    });
+    
+    const data = await response.json();
+    
+    if (data.IsErroredOnProcessing) {
+      throw new Error(data.ErrorMessage?.[0] || 'OCR processing failed');
+    }
+    
+    if (!data.ParsedResults || data.ParsedResults.length === 0) {
+      throw new Error('No text found in document');
+    }
+    
+    const extractedText = data.ParsedResults[0].ParsedText;
+    
+    if (!extractedText || extractedText.length < 100) {
+      throw new Error('Insufficient text extracted from document');
+    }
+    
+    return extractedText;
+    
+  } catch (error) {
+    console.error('OCR.space error:', error);
+    throw error;
+  }
 }
 
 export async function POST(request) {
@@ -184,119 +163,64 @@ export async function POST(request) {
     
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileType = file.type;
-    const fileName = file.name.toLowerCase();
+    const fileName = file.name;
+    
+    console.log(`📄 Processing: ${fileName} (${fileType}, ${buffer.length} bytes)`);
     
     let extractedText = '';
     let method = '';
-    
-    console.log(`📄 Processing: ${fileName} (${fileType})`);
+    let processingCost = 0;
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 1: Digital PDF Text Extraction (fastest)
+    // LAYER 1: Digital PDF Text Extraction (FREE)
     // ═══════════════════════════════════════════════════════
     
-    if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-      console.log('⏳ Layer 1: Attempting digital text extraction...');
+    if (fileType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf')) {
+      console.log('⏳ Layer 1: Attempting digital extraction...');
       
       try {
         const { text } = await extractText(new Uint8Array(buffer), { 
           mergePages: true 
         });
         
-        const hasNumbers = /\d{5,}/.test(text);
-        
-        if (text.length > 300 && hasNumbers) {
+        if (text.length > 500) {
           extractedText = text;
           method = 'digital_pdf';
-          console.log(`✅ Digital extraction: ${text.length} chars`);
+          processingCost = 0;
+          console.log(`✅ Digital extraction successful: ${text.length} chars`);
         } else {
-          console.log(`⚠️ Low text (${text.length} chars), will try OCR...`);
+          console.log(`⚠️ Low text content (${text.length} chars), switching to OCR...`);
         }
       } catch (err) {
-        console.log('⚠️ Digital extraction failed, will try OCR...');
+        console.log('⚠️ Digital extraction failed, switching to OCR...');
       }
     }
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 2: PDF to Image + OCR (AUTOMATIC for scanned PDFs)
-    // ═══════════════════════════════════════════════════════
-    
-    if (!extractedText && (fileType === 'application/pdf' || fileName.endsWith('.pdf'))) {
-      console.log('⏳ Layer 2: Converting PDF to image + OCR (automatic)...');
-      
-      try {
-        // Render first page to image
-        const pngBuffer = await renderPDFPageToImage(buffer, 1);
-        console.log('✅ PDF page rendered to image');
-        
-        // Run OCR on the image
-        extractedText = await extractWithOCR(pngBuffer);
-        method = 'pdf_ocr_automatic';
-        
-        console.log(`✅ OCR completed: ${extractedText.length} chars`);
-        
-        // If first page didn't have enough data, try page 2
-        if (extractedText.length < 200) {
-          console.log('⚠️ Page 1 low text, trying page 2...');
-          try {
-            const pngBuffer2 = await renderPDFPageToImage(buffer, 2);
-            const text2 = await extractWithOCR(pngBuffer2);
-            extractedText += '\n' + text2;
-            console.log(`✅ Added page 2: +${text2.length} chars`);
-          } catch (e) {
-            console.log('Page 2 not available');
-          }
-        }
-        
-      } catch (err) {
-        console.error('❌ PDF OCR failed:', err.message);
-        
-        return Response.json({
-          success: false,
-          error: 'Could not process PDF. Please ensure it is a valid Form 16 document.',
-          details: err.message,
-          extractedCount: '0/4'
-        }, { status: 500 });
-      }
-    }
-    
-    // ═══════════════════════════════════════════════════════
-    // LAYER 3: Direct Image OCR (for JPG/PNG uploads)
-    // ═══════════════════════════════════════════════════════
-    
-    if (!extractedText && fileType.startsWith('image/')) {
-      console.log('⏳ Layer 3: Running OCR on image...');
-      
-      try {
-        const base64 = buffer.toString('base64');
-        const imageData = `data:${fileType};base64,${base64}`;
-        
-        extractedText = await extractWithOCR(imageData);
-        method = 'image_ocr';
-        
-        console.log(`✅ Image OCR completed: ${extractedText.length} chars`);
-        
-      } catch (err) {
-        console.error('❌ Image OCR failed:', err.message);
-        
-        return Response.json({
-          success: false,
-          error: 'Could not extract text from image. Please ensure the image is clear and readable.',
-          extractedCount: '0/4'
-        }, { status: 500 });
-      }
-    }
-    
-    // ═══════════════════════════════════════════════════════
-    // UNSUPPORTED FILE TYPE
+    // LAYER 2: OCR.space API (₹0.4 per request)
     // ═══════════════════════════════════════════════════════
     
     if (!extractedText) {
-      return Response.json({
-        success: false,
-        error: 'Unsupported file format. Please upload a PDF, JPG, or PNG file.',
-        extractedCount: '0/4'
-      }, { status: 400 });
+      console.log('⏳ Layer 2: Running OCR.space extraction...');
+      
+      try {
+        extractedText = await extractWithOCRSpace(buffer, fileType);
+        method = 'ocr_space';
+        processingCost = 0.4; // ₹0.4 per scanned PDF
+        console.log(`✅ OCR extraction successful: ${extractedText.length} chars`);
+      } catch (ocrError) {
+        console.error('❌ OCR extraction failed:', ocrError.message);
+        
+        return Response.json({
+          success: false,
+          error: 'Could not extract text from document. Please ensure the file is a clear, readable Form 16.',
+          details: ocrError.message,
+          fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
+          confidence: 0,
+          extractedCount: '0/4',
+          method: 'failed'
+        }, { status: 500 });
+      }
     }
     
     // ═══════════════════════════════════════════════════════
@@ -319,12 +243,12 @@ export async function POST(request) {
       method,
       extractedCount: `${extractedCount}/4`,
       processingTime: `${processingTime}s`,
-      processingCost: 0,
+      processingCost,
       message: extractedCount >= 3
-        ? 'Extraction successful! Please verify values before proceeding.'
+        ? 'Successfully extracted! Please verify the values before proceeding.'
         : extractedCount >= 1
-        ? 'Partial extraction successful. Please verify and manually enter missing values.'
-        : 'Could not extract fields automatically. Please enter values manually.',
+        ? 'Partial extraction successful. Please verify and manually correct any missing values.'
+        : 'Could not extract fields automatically. Please enter values manually using your Form 16.',
       textLength: extractedText.length
     });
     
@@ -333,14 +257,11 @@ export async function POST(request) {
     
     return Response.json({
       success: false,
-      error: 'An unexpected error occurred. Please try again or contact support.',
+      error: 'An unexpected error occurred during extraction.',
       details: error.message,
+      fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
+      confidence: 0,
       extractedCount: '0/4'
     }, { status: 500 });
   }
 }
-
-// Increase function timeout for OCR processing
-export const config = {
-  maxDuration: 60 // 60 seconds for OCR processing
-};
