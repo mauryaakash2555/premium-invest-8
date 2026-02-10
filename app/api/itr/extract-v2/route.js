@@ -1,26 +1,15 @@
 import { extractText } from 'unpdf';
 import { createWorker } from 'tesseract.js';
-import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 /**
- * PERFECT ITR EXTRACTION PIPELINE
- * User is God - we handle EVERYTHING
+ * ITR EXTRACTION PIPELINE
  * 
  * Layer 1: Digital PDF (unpdf) - instant, free
- * Layer 2: PDF to Image + OCR (PDF.js + Tesseract.js) - 15-20 sec, free
- * Layer 3: Direct Image OCR (Tesseract.js) - 10-15 sec, free
+ * Layer 2: Direct Image OCR (Tesseract.js) - for JPG/PNG uploads
  * 
- * ALL work on Vercel serverless
- * NO system dependencies
- * NO user intervention required
+ * For scanned PDFs: Ask user to take photo with phone
+ * (PDF-to-image requires canvas which isn't available on Vercel serverless)
  */
-
-// Configure PDF.js worker
-if (typeof window === 'undefined') {
-  // Server-side
-  const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/legacy/build/pdf.worker.mjs';
-}
 
 function extractFieldsUniversal(text) {
   const fields = {
@@ -38,7 +27,9 @@ function extractFieldsUniversal(text) {
     /Salary\s+as\s+per\s+provisions.*?(\d{6,8})/is,
     /Gross\s+Salary[:\s]*(\d{6,8})/is,
     /17\s*\(\s*1\s*\)[^\d]*(\d{6,8})/is,
-    /Details\s+of\s+Salary.*?(\d{6,8})/is
+    /Details\s+of\s+Salary.*?(\d{6,8})/is,
+    /Income\s+from\s+Salary[:\s]*(\d{6,8})/is,
+    /Total\s+Salary[:\s]*(\d{6,8})/is
   ];
   
   for (const pattern of salaryPatterns) {
@@ -55,7 +46,8 @@ function extractFieldsUniversal(text) {
     /Amount\s+of\s+tax\s+deducted[:\s]*(\d{4,8})/is,
     /tax\s+deducted.*?source[:\s]*(\d{4,8})/is,
     /TDS[:\s]*(\d{4,8})/i,
-    /deducted[:\s]*(\d{4,8})/i
+    /deducted[:\s]*(\d{4,8})/i,
+    /Tax\s+Deducted\s+at\s+Source[:\s]*(\d{4,8})/is
   ];
   
   for (const pattern of tdsPatterns) {
@@ -97,7 +89,8 @@ function extractFieldsUniversal(text) {
     /Life\s+Insurance[:\s]*(\d{5,7})/is,
     /PPF[:\s]*(\d{5,7})/is,
     /ELSS[:\s]*(\d{5,7})/is,
-    /Chapter\s+VI-?A.*?80\s*C[:\s]*(\d{5,7})/is
+    /Chapter\s+VI-?A.*?80\s*C[:\s]*(\d{5,7})/is,
+    /Deduction\s+under\s+Chapter[:\s]*(\d{5,7})/is
   ];
   
   for (const pattern of deduction80CPatterns) {
@@ -113,53 +106,6 @@ function extractFieldsUniversal(text) {
   }
   
   return fields;
-}
-
-async function convertPDFPageToImage(pdfBuffer, pageNumber = 1) {
-  try {
-    // Load PDF
-    const loadingTask = getDocument({ data: pdfBuffer });
-    const pdf = await loadingTask.promise;
-    
-    // Get first page
-    const page = await pdf.getPage(pageNumber);
-    
-    // Set scale for good quality (2x)
-    const viewport = page.getViewport({ scale: 2.0 });
-    
-    // Create canvas
-    const canvas = {
-      width: viewport.width,
-      height: viewport.height,
-      data: new Uint8ClampedArray(viewport.width * viewport.height * 4)
-    };
-    
-    // Render page to canvas
-    const renderContext = {
-      canvasContext: {
-        canvas,
-        fillStyle: 'white',
-        fillRect: () => {},
-        drawImage: () => {},
-        // Minimal canvas implementation for server-side
-        getImageData: () => ({ data: canvas.data }),
-        putImageData: () => {}
-      },
-      viewport
-    };
-    
-    await page.render(renderContext).promise;
-    
-    // Convert to base64 image
-    const imageData = canvas.data;
-    const base64 = Buffer.from(imageData).toString('base64');
-    
-    return `data:image/png;base64,${base64}`;
-    
-  } catch (error) {
-    console.error('PDF to image conversion error:', error);
-    throw error;
-  }
 }
 
 async function extractWithOCR(imageData) {
@@ -219,56 +165,41 @@ export async function POST(request) {
           mergePages: true 
         });
         
-        if (text.length > 500) { // Lower threshold
+        // Check if we got meaningful text
+        const hasNumbers = /\d{5,}/.test(text); // Must have 5+ digit numbers
+        
+        if (text.length > 300 && hasNumbers) {
           extractedText = text;
           method = 'digital_pdf';
           console.log(`✅ Digital extraction: ${text.length} chars`);
         } else {
-          console.log(`⚠️ Low text (${text.length} chars), trying OCR...`);
+          console.log(`⚠️ Low quality text (${text.length} chars, hasNumbers: ${hasNumbers})`);
+          // This is likely a scanned PDF
+          return Response.json({
+            success: false,
+            error: 'This appears to be a scanned PDF. Please take a clear photo of your Form 16 with your phone camera and upload the image (JPG/PNG) instead.',
+            isScannedPdf: true,
+            extractedCount: '0/4',
+            hint: 'Tip: Use good lighting and ensure all text is clearly visible in the photo.'
+          }, { status: 400 });
         }
       } catch (err) {
-        console.log('⚠️ Digital extraction failed, trying OCR...');
-      }
-    }
-    
-    // ═══════════════════════════════════════════════════════
-    // LAYER 2: PDF to Image + OCR (for scanned PDFs)
-    // ═══════════════════════════════════════════════════════
-    
-    if (!extractedText && (fileType === 'application/pdf' || fileName.endsWith('.pdf'))) {
-      console.log('⏳ Layer 2: Converting PDF to image for OCR...');
-      
-      try {
-        // Convert PDF first page to image
-        const imageData = await convertPDFPageToImage(buffer);
-        
-        console.log('✅ PDF converted to image');
-        console.log('⏳ Running OCR on PDF image...');
-        
-        // Run OCR on image
-        extractedText = await extractWithOCR(imageData);
-        method = 'pdf_to_image_ocr';
-        
-        console.log(`✅ OCR completed: ${extractedText.length} chars`);
-        
-      } catch (err) {
-        console.error('❌ PDF OCR failed:', err.message);
-        
+        console.log('⚠️ PDF parsing error:', err.message);
         return Response.json({
           success: false,
-          error: 'Could not process PDF. Please ensure it is a valid Form 16 document.',
-          details: err.message,
+          error: 'Could not read PDF. Please take a photo of your Form 16 and upload the image instead.',
+          isScannedPdf: true,
           extractedCount: '0/4'
-        }, { status: 500 });
+        }, { status: 400 });
       }
     }
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 3: Direct Image OCR (for JPG/PNG uploads)
+    // LAYER 2: Direct Image OCR (for JPG/PNG uploads)
     // ═══════════════════════════════════════════════════════
     
     if (!extractedText && fileType.startsWith('image/')) {
-      console.log('⏳ Layer 3: Running OCR on image...');
+      console.log('⏳ Layer 2: Running OCR on image...');
       
       try {
         const base64 = buffer.toString('base64');
@@ -284,23 +215,27 @@ export async function POST(request) {
         
         return Response.json({
           success: false,
-          error: 'Could not extract text from image. Please ensure image is clear and readable.',
+          error: 'Could not extract text from image. Please ensure the image is clear, well-lit, and the text is readable.',
           extractedCount: '0/4'
         }, { status: 500 });
       }
     }
     
     // ═══════════════════════════════════════════════════════
-    // EXTRACT FIELDS
+    // UNSUPPORTED FILE TYPE
     // ═══════════════════════════════════════════════════════
     
     if (!extractedText) {
       return Response.json({
         success: false,
-        error: 'Unsupported file format. Please upload PDF, JPG, or PNG.',
+        error: 'Unsupported file format. Please upload a PDF, JPG, or PNG file.',
         extractedCount: '0/4'
       }, { status: 400 });
     }
+    
+    // ═══════════════════════════════════════════════════════
+    // EXTRACT FIELDS
+    // ═══════════════════════════════════════════════════════
     
     console.log('🔍 Extracting fields from text...');
     const fields = extractFieldsUniversal(extractedText);
@@ -325,7 +260,6 @@ export async function POST(request) {
         : extractedCount >= 1
         ? 'Partial extraction successful. Please verify and manually enter missing values.'
         : 'Could not extract fields automatically. Please enter values manually.',
-      // Include extracted text length for debugging
       textLength: extractedText.length
     });
     
