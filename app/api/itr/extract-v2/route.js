@@ -1,77 +1,15 @@
 import { extractText } from 'unpdf';
-import tesseract from 'node-tesseract-ocr';
-import sharp from 'sharp';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs';
-
-const execPromise = promisify(exec);
 
 /**
- * PRODUCTION ITR EXTRACTOR API
+ * ITR EXTRACTOR API v2
  * POST /api/itr/extract-v2
  *
- * Handles:
- * - Digital PDFs (unpdf)
- * - Scanned PDFs (OCR)
- * - Images (JPG, PNG, HEIC)
+ * Enhanced extraction with universal regex patterns for multiple Form16 templates.
+ * Works with digital PDFs. For scanned PDFs, users should use a scanning app
+ * to convert to searchable PDF first.
  *
- * Returns extracted fields + confidence score
+ * Returns extracted fields + confidence score + method
  */
-
-async function convertPdfToImage(buffer) {
-  const tempPdf = `/tmp/upload_${Date.now()}.pdf`;
-  const outputPath = `/tmp/form16_${Date.now()}.png`;
-
-  try {
-    // Write buffer to temp file
-    fs.writeFileSync(tempPdf, buffer);
-
-    // Convert with pdftoppm (150 DPI for balance)
-    await execPromise(`pdftoppm -png -f 1 -l 1 -r 150 "${tempPdf}" /tmp/form16_temp`);
-
-    // Find generated file
-    const files = fs.readdirSync('/tmp').filter(f => f.startsWith('form16_temp'));
-    if (files.length > 0) {
-      const generatedFile = `/tmp/${files[0]}`;
-      fs.renameSync(generatedFile, outputPath);
-
-      // Cleanup PDF
-      fs.unlinkSync(tempPdf);
-      return outputPath;
-    }
-  } catch (err) {
-    console.error('PDF conversion error:', err);
-    if (fs.existsSync(tempPdf)) fs.unlinkSync(tempPdf);
-  }
-
-  return null;
-}
-
-async function preprocessImage(imagePath) {
-  const processedPath = `/tmp/processed_${Date.now()}.png`;
-
-  try {
-    const metadata = await sharp(imagePath).metadata();
-    let transform = sharp(imagePath);
-
-    // Resize if too large (Tesseract limit)
-    if (metadata.width > 3000 || metadata.height > 3000) {
-      transform = transform.resize(3000, 3000, { fit: 'inside' });
-    }
-
-    await transform
-      .greyscale()
-      .normalize()
-      .sharpen()
-      .toFile(processedPath);
-
-    return processedPath;
-  } catch (err) {
-    console.error('Image preprocessing error:', err);
-    return null;
-  }
-}
 
 function extractFields(text) {
   const fields = {
@@ -81,23 +19,67 @@ function extractFields(text) {
     deductions80C: 0
   };
 
-  // Gross Salary - section 17(1)
-  let match = text.match(/section\s+17\(1\).*?(\d{7})/i);
+  let match = null;
+
+  // GROSS SALARY - Multiple patterns for different templates
+  match = text.match(/section\s+17\s*\(\s*1\s*\).*?(\d{6,8})/is);
   if (match) fields.grossSalary = parseInt(match[1]);
 
-  // TDS - Total (Rs.)
-  match = text.match(/Total\s*\(Rs\.\)\s+(\d{6,7})/i);
+  if (!fields.grossSalary) {
+    match = text.match(/Salary\s+as\s+per\s+provisions.*?(\d{6,8})/is);
+    if (match) fields.grossSalary = parseInt(match[1]);
+  }
+
+  if (!fields.grossSalary) {
+    match = text.match(/Gross\s+Salary.*?(\d{6,8})/is);
+    if (match) fields.grossSalary = parseInt(match[1]);
+  }
+
+  // TDS - Multiple patterns
+  match = text.match(/Total\s*\(?\s*Rs\.?\s*\)?\s+(\d{4,8})/i);
   if (match) fields.tds = parseInt(match[1]);
 
-  // Standard Deduction
-  match = text.match(/Entertainment.*?(\d{5})\.00.*?Standard\s+deduction/is);
-  if (!match) match = text.match(/Standard\s+deduction.*?(\d{5})/is);
+  if (!fields.tds) {
+    match = text.match(/Amount\s+of\s+tax\s+deducted.*?(\d{4,8})/is);
+    if (match) fields.tds = parseInt(match[1]);
+  }
+
+  if (!fields.tds) {
+    match = text.match(/tax\s+deducted.*?source.*?(\d{4,8})/is);
+    if (match) fields.tds = parseInt(match[1]);
+  }
+
+  // STANDARD DEDUCTION - Multiple patterns
+  match = text.match(/Standard\s+deduction.*?(\d{5})/is);
   if (match) fields.standardDeduction = parseInt(match[1]);
 
-  // 80C Deductions
-  match = text.match(/deduction\s+under\s+section\s+80C.*?(\d{6})/i);
-  if (!match) match = text.match(/80C.*?(\d{6})/i);
+  if (!fields.standardDeduction) {
+    match = text.match(/(?:section|u\/s)\s+16\s*\(\s*ia\s*\).*?(\d{5})/is);
+    if (match) fields.standardDeduction = parseInt(match[1]);
+  }
+
+  if (!fields.standardDeduction) {
+    match = text.match(/Entertainment.*?(\d{5})\.00.*?Standard/is);
+    if (match) fields.standardDeduction = parseInt(match[1]);
+  }
+
+  if (!fields.standardDeduction && text.match(/50000/)) {
+    fields.standardDeduction = 50000; // Common default value
+  }
+
+  // 80C DEDUCTIONS - Multiple patterns
+  match = text.match(/80\s*C.*?(\d{5,7})/is);
   if (match) fields.deductions80C = parseInt(match[1]);
+
+  if (!fields.deductions80C) {
+    match = text.match(/deduction\s+under\s+section\s+80C.*?(\d{5,7})/i);
+    if (match) fields.deductions80C = parseInt(match[1]);
+  }
+
+  if (!fields.deductions80C) {
+    match = text.match(/(?:Life\s+Insurance|PPF|ELSS).*?(\d{5,7})/is);
+    if (match) fields.deductions80C = parseInt(match[1]);
+  }
 
   return fields;
 }
@@ -114,89 +96,41 @@ export async function POST(request) {
       );
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileType = file.type;
+    const buffer = await file.arrayBuffer();
     const fileName = file.name.toLowerCase();
 
+    // Only support PDF files
+    if (!fileName.endsWith('.pdf')) {
+      return Response.json({
+        success: false,
+        error: 'Please upload a PDF file. For scanned documents, use a scanning app to convert to searchable PDF first.'
+      }, { status: 400 });
+    }
+
     let extractedText = '';
-    let method = '';
-    let processingCost = 0;
+    const method = 'digital_pdf';
 
-    // LAYER 1: Digital PDF Text Extraction (FREE)
-    if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-      try {
-        const { text } = await extractText(new Uint8Array(buffer), { mergePages: true });
-
-        if (text.length > 1000) {
-          extractedText = text;
-          method = 'digital_pdf';
-          processingCost = 0;
-        }
-      } catch (err) {
-        console.log('Digital extraction failed, trying OCR');
-      }
+    try {
+      const { text } = await extractText(new Uint8Array(buffer), { mergePages: true });
+      extractedText = text;
+    } catch (err) {
+      console.error('PDF text extraction failed:', err);
+      return Response.json({
+        success: false,
+        error: 'Could not extract text from PDF. Please ensure it is a digital (not scanned) Form 16.',
+        details: err.message
+      }, { status: 500 });
     }
 
-    // LAYER 2: OCR for Scanned PDFs and Images (FREE but slower)
-    if (!extractedText) {
-      let imagePath = null;
-      let tempFiles = [];
-
-      try {
-        // Convert PDF to image if needed
-        if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-          imagePath = await convertPdfToImage(buffer);
-          if (imagePath) tempFiles.push(imagePath);
-        } else if (fileType.startsWith('image/')) {
-          // Save image to temp file
-          imagePath = `/tmp/upload_${Date.now()}.${fileType.split('/')[1]}`;
-          fs.writeFileSync(imagePath, buffer);
-          tempFiles.push(imagePath);
-        }
-
-        if (!imagePath) {
-          throw new Error('Could not process file');
-        }
-
-        // Preprocess image
-        const processedPath = await preprocessImage(imagePath);
-        if (!processedPath) {
-          throw new Error('Image preprocessing failed');
-        }
-        tempFiles.push(processedPath);
-
-        // Run OCR
-        extractedText = await tesseract.recognize(processedPath, {
-          lang: 'eng',
-          oem: 1,
-          psm: 6
-        });
-
-        method = 'ocr_tesseract';
-        processingCost = 0; // Still free!
-
-      } catch (err) {
-        console.error('OCR extraction error:', err);
-
-        // Cleanup temp files
-        tempFiles.forEach(f => {
-          if (fs.existsSync(f)) fs.unlinkSync(f);
-        });
-
-        return Response.json({
-          success: false,
-          error: 'Failed to extract text from document. Please ensure the file is a valid Form 16.',
-          details: err.message
-        }, { status: 500 });
-      }
-
-      // Cleanup temp files
-      tempFiles.forEach(f => {
-        if (fs.existsSync(f)) fs.unlinkSync(f);
-      });
+    if (extractedText.length < 500) {
+      return Response.json({
+        success: false,
+        error: 'PDF appears to be scanned or image-based. Please use a scanning app to convert to searchable PDF first.',
+        textLength: extractedText.length
+      }, { status: 400 });
     }
 
-    // Extract fields using regex
+    // Extract fields using universal regex patterns
     const fields = extractFields(extractedText);
 
     // Calculate confidence
@@ -209,7 +143,7 @@ export async function POST(request) {
       confidence,
       method,
       extractedCount: `${extractedCount}/4`,
-      processingCost, // Always ₹0!
+      processingCost: 0, // Always FREE
       message: extractedCount >= 2
         ? 'Extraction successful'
         : 'Low confidence extraction. Please verify values manually.'
