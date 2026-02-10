@@ -143,6 +143,8 @@ async function extractWithOCRSpace(buffer, fileType) {
     
   } catch (error) {
     console.error('OCR.space error:', error);
+    console.error('OCR FAILED - Full error:', error);
+    console.error('OCR FAILED - Stack:', error.stack);
     throw error;
   }
 }
@@ -203,6 +205,9 @@ export async function POST(request) {
     
     if (!extractedText) {
       console.log('⏳ Layer 2: Running OCR.space extraction...');
+      console.log('API Key available:', !!process.env.OCR_SPACE_API_KEY);
+      console.log('File type:', fileType);
+      console.log('Buffer size:', buffer.length);
       
       try {
         extractedText = await extractWithOCRSpace(buffer, fileType);
