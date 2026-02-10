@@ -175,12 +175,14 @@ export default function CommunityPostDetailClient({ id }) {
                   display: 'inline-block',
                   padding: '6px 12px',
                   borderRadius: 0,
-                  border: '1px solid rgba(212,175,55,0.3)',
-                  background: 'rgba(212,175,55,0.08)',
-                  color: 'rgba(212,175,55,0.9)',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)',
+                  color: 'rgba(235,242,255,0.86)',
                   fontSize: '12px',
                   fontWeight: 600,
                   letterSpacing: '0.05em',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                 }}
               >
                 {post.pillar === 'DEV' ? 'Developer Insight' : post.pillar === 'GUEST' ? 'Guest Post' : 'Community'}

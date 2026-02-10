@@ -32,7 +32,7 @@ schema:
 
 <img src="https://thumbs.dreamstime.com/b/futuristic-humanoid-robot-working-high-tech-computer-workstation-artificial-intelligence-analyzing-data-multiple-neon-362316306.jpg" alt="Futuristic humanoid AI robot at a workstation for GPT-5.3 Codex review 2026" style="max-width:100%; height:auto; border-radius:12px; margin-bottom:24px;" />
 
-**February 7, 2026** · BM Wealth Dev Team · **10 min read**
+**February 7, 2026** · BM Wealth Dev Team
 
 ---
 

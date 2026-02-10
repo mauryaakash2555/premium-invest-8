@@ -753,7 +753,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                     style={{
                       overflow: 'hidden',
                       cursor: 'pointer',
-                      height: '440px',
+                      height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                     }}

@@ -32,7 +32,7 @@ schema:
 
 <img src="https://thumbs.dreamstime.com/b/futuristic-robot-advanced-technology-looking-screen-ai-computer-high-tech-office-space-displaying-data-372697990.jpg" alt="Futuristic AI robot analyzing data in a high-tech workspace for Claude Opus 4.6 review" style="max-width:100%; height:auto; border-radius:12px; margin-bottom:24px;" />
 
-**February 7, 2026** · BM Wealth Dev Team · **10 min read**
+**February 7, 2026** · BM Wealth Dev Team
 
 ---
 
