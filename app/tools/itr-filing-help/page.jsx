@@ -9,7 +9,7 @@ const LUX = {
   foreground: 'oklch(0.95 0.01 85)',
   card: 'oklch(0.10 0.005 280)',
   muted: 'oklch(0.55 0.01 85)',
-  accent: 'oklch(0.78 0.08 65)',
+  accent: 'oklch(0.78 0.08 250)',
 };
 
 const LOADING_STAGES = [
