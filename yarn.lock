@@ -791,6 +791,11 @@
   resolved "https://registry.npmjs.org/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-0.1.80.tgz"
   integrity sha512-Z8jPsM6df5V8B1HrCHB05+bDiCxjE9QA//3YrkKIdVDEwn5RKaqOxCJDRJkl48cJbylcrJbW4HxZbTte8juuPg==
 
+"@napi-rs/canvas-win32-x64-msvc@0.1.91":
+  version "0.1.91"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-0.1.91.tgz"
+  integrity sha512-++gtW9EV/neKI8TshD8WFxzBYALSPag2kFRahIJV+LYsyt5kBn21b1dBhEUDHf7O+wiZmuFCeUa7QKGHnYRZBA==
+
 "@napi-rs/canvas@^0.1.80", "@napi-rs/canvas@0.1.80":
   version "0.1.80"
   resolved "https://registry.npmjs.org/@napi-rs/canvas/-/canvas-0.1.80.tgz"
@@ -806,6 +811,23 @@
     "@napi-rs/canvas-linux-x64-gnu" "0.1.80"
     "@napi-rs/canvas-linux-x64-musl" "0.1.80"
     "@napi-rs/canvas-win32-x64-msvc" "0.1.80"
+
+"@napi-rs/canvas@^0.1.88":
+  version "0.1.91"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas/-/canvas-0.1.91.tgz"
+  integrity sha512-eeIe1GoB74P1B0Nkw6pV8BCQ3hfCfvyYr4BntzlCsnFXzVJiPMDnLeIx3gVB0xQMblHYnjK/0nCLvirEhOjr5g==
+  optionalDependencies:
+    "@napi-rs/canvas-android-arm64" "0.1.91"
+    "@napi-rs/canvas-darwin-arm64" "0.1.91"
+    "@napi-rs/canvas-darwin-x64" "0.1.91"
+    "@napi-rs/canvas-linux-arm-gnueabihf" "0.1.91"
+    "@napi-rs/canvas-linux-arm64-gnu" "0.1.91"
+    "@napi-rs/canvas-linux-arm64-musl" "0.1.91"
+    "@napi-rs/canvas-linux-riscv64-gnu" "0.1.91"
+    "@napi-rs/canvas-linux-x64-gnu" "0.1.91"
+    "@napi-rs/canvas-linux-x64-musl" "0.1.91"
+    "@napi-rs/canvas-win32-arm64-msvc" "0.1.91"
+    "@napi-rs/canvas-win32-x64-msvc" "0.1.91"
 
 "@next/bundle-analyzer@15.5.10":
   version "15.5.10"
@@ -5845,6 +5867,11 @@ node-int64@^0.4.0:
   resolved "https://registry.npmjs.org/node-int64/-/node-int64-0.4.0.tgz"
   integrity sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==
 
+node-readable-to-web-readable-stream@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/node-readable-to-web-readable-stream/-/node-readable-to-web-readable-stream-0.4.2.tgz"
+  integrity sha512-/cMZNI34v//jUTrI+UIo4ieHAB5EZRY/+7OmXZgBxaWBMcW2tGdceIw06RFxWxrKZ5Jp3sI2i5TsRo+CBhtVLQ==
+
 node-releases@^2.0.27:
   version "2.0.27"
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.27.tgz"
@@ -6121,6 +6148,14 @@ pdf-parse@^2.4.5:
   dependencies:
     "@napi-rs/canvas" "0.1.80"
     pdfjs-dist "5.4.296"
+
+pdfjs-dist@^5.4.624:
+  version "5.4.624"
+  resolved "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-5.4.624.tgz"
+  integrity sha512-sm6TxKTtWv1Oh6n3C6J6a8odejb5uO4A4zo/2dgkHuC0iu8ZMAXOezEODkVaoVp8nX1Xzr+0WxFJJmUr45hQzg==
+  optionalDependencies:
+    "@napi-rs/canvas" "^0.1.88"
+    node-readable-to-web-readable-stream "^0.4.2"
 
 pdfjs-dist@4.8.69:
   version "4.8.69"
@@ -6815,9 +6850,9 @@ semver@^6.3.0, semver@^6.3.1:
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
 semver@^7.3.5:
-  version "7.7.3"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.7.3.tgz"
-  integrity sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==
+  version "7.7.4"
+  resolved "https://registry.npmjs.org/semver/-/semver-7.7.4.tgz"
+  integrity sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==
 
 semver@^7.5.3:
   version "7.7.3"

@@ -109,6 +109,20 @@ const nextConfig = {
 
   // NOTE: Do not override webpack devtool in dev.
   // Next.js warns and may revert it, causing noisy logs and unstable perf.
+  
+  // PDF.js worker configuration for serverless
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias['canvas'] = false;
+      config.resolve.alias['encoding'] = false;
+    }
+    
+    // PDF.js worker alias
+    config.resolve.alias['pdfjs-dist/build/pdf.worker.js'] = 
+      'pdfjs-dist/legacy/build/pdf.worker.js';
+    
+    return config;
+  },
 };
 
 const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });
