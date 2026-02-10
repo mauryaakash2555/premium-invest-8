@@ -116,6 +116,48 @@ export default function TopicLearningPage() {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const INITIAL_SHOW_COUNT = 3;
 
+  // 🎮 GAMIFICATION STATE
+  const [hasStarted, setHasStarted] = useState(false); // User chooses to start
+  const [xp, setXp] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'correct' | 'complete' | 'streak'>('correct');
+  const [flashcardRatings, setFlashcardRatings] = useState<Record<number, 'got-it' | 'practice'>>({});
+  const [completedSections, setCompletedSections] = useState<Set<Tab>>(new Set());
+
+  // Motivational messages
+  const MOTIVATIONAL_MESSAGES = [
+    "You're doing amazing! 🌟",
+    "Keep going, champion! 💪",
+    "Knowledge is power! ⚡",
+    "You've got this! 🚀",
+    "Learning superstar! ⭐",
+    "Brilliant work! 🎯",
+    "Your brain is growing! 🧠",
+    "Unstoppable! 🔥",
+  ];
+
+  const getRandomMotivation = () => MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
+
+  // XP rewards
+  const XP_VALUES = {
+    correct_answer: 10,
+    streak_bonus: 5, // per streak level
+    section_complete: 25,
+    flashcard_got_it: 5,
+    practice_reveal: 3,
+  };
+
+  const triggerCelebration = (type: 'correct' | 'complete' | 'streak') => {
+    setCelebrationType(type);
+    setShowCelebration(true);
+    setTimeout(() => setShowCelebration(false), 2000);
+  };
+
+  const awardXp = (amount: number) => {
+    setXp((prev) => prev + amount);
+  };
+
   const abortRef = useRef<AbortController | null>(null);
   const prefetchedRef = useRef<Record<string, boolean>>({});
 
@@ -246,6 +288,30 @@ export default function TopicLearningPage() {
 
   const handleNavigate = (slug: string) => {
     router.push(`/universe/learn/${slug}`);
+  };
+
+  // Handle starting the learning session
+  const handleStartLearning = () => {
+    setHasStarted(true);
+    awardXp(5); // Bonus XP for starting!
+  };
+
+  // Calculate overall progress
+  const calculateProgress = () => {
+    let total = 0;
+    let completed = 0;
+    
+    // Explain is considered complete if content loaded
+    if (content && activeTab === 'explain') {
+      total += 1;
+      completed += 1;
+    }
+    
+    // Count completed sections
+    total += 4; // examples, practice, flashcards, quiz
+    completed += completedSections.size;
+    
+    return Math.round((completed / Math.max(total, 1)) * 100);
   };
 
   const currentKey = makeKey(topicId, depth, activeTab);
@@ -423,7 +489,17 @@ export default function TopicLearningPage() {
                   <button
                     type="button"
                     className="practice-reveal-btn"
-                    onClick={() => setRevealedPractice((prev) => ({ ...prev, [i]: true }))}
+                    onClick={() => {
+                      setRevealedPractice((prev) => ({ ...prev, [i]: true }));
+                      awardXp(XP_VALUES.practice_reveal);
+                      // Check if all revealed
+                      const newRevealed = { ...revealedPractice, [i]: true };
+                      const revealedCount = Object.values(newRevealed).filter(Boolean).length;
+                      if (revealedCount >= parsed.length) {
+                        setCompletedSections(prev => new Set([...prev, 'practice']));
+                        triggerCelebration('complete');
+                      }
+                    }}
                   >
                     <span>Show Answer</span>
                     <span className="reveal-icon">↓</span>
@@ -448,34 +524,84 @@ export default function TopicLearningPage() {
     if (tab === 'flashcards') {
       const visibleItems = expandedFlashcards ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
       const hasMore = parsed.length > INITIAL_SHOW_COUNT;
+      const ratedCount = Object.keys(flashcardRatings).length;
+      const gotItCount = Object.values(flashcardRatings).filter(r => r === 'got-it').length;
+      
       return (
         <div className="ai-content ai-content--visible">
           <div className="section-header">
             <span className="section-icon">🎴</span>
-            <span className="section-title">Tap to Flip</span>
-            <span className="section-count">{parsed.length} cards</span>
+            <span className="section-title">Flip & Rate</span>
+            <span className="section-count">
+              {ratedCount > 0 ? (
+                <span className="rating-summary">
+                  <span className="got-it-badge">✓ {gotItCount}</span>
+                  <span className="practice-badge">↻ {ratedCount - gotItCount}</span>
+                </span>
+              ) : `${parsed.length} cards`}
+            </span>
           </div>
           <div className="flashcards-grid">
             {visibleItems.map((c: any, i: number) => {
               const isFlipped = Boolean(flippedCards[i]);
+              const rating = flashcardRatings[i];
               return (
-                <button
-                  key={i}
-                  type="button"
-                  className={`flashcard ${isFlipped ? 'flashcard--flipped' : ''}`}
-                  onClick={() => setFlippedCards((prev) => ({ ...prev, [i]: !prev[i] }))}
-                >
-                  <div className="flashcard-inner">
-                    <div className="flashcard-front">
-                      <span className="flashcard-label">Q</span>
-                      <span className="flashcard-text">{String(c?.Front || c?.front || '')}</span>
+                <div key={i} className={`flashcard-wrapper ${rating ? `flashcard-wrapper--${rating}` : ''}`}>
+                  <button
+                    type="button"
+                    className={`flashcard ${isFlipped ? 'flashcard--flipped' : ''}`}
+                    onClick={() => setFlippedCards((prev) => ({ ...prev, [i]: !prev[i] }))}
+                  >
+                    <div className="flashcard-inner">
+                      <div className="flashcard-front">
+                        <span className="flashcard-label">Q</span>
+                        <span className="flashcard-text">{String(c?.Front || c?.front || '')}</span>
+                        <span className="flashcard-hint">tap to flip</span>
+                      </div>
+                      <div className="flashcard-back">
+                        <span className="flashcard-label">A</span>
+                        <span className="flashcard-text">{String(c?.Back || c?.back || '')}</span>
+                      </div>
                     </div>
-                    <div className="flashcard-back">
-                      <span className="flashcard-label">A</span>
-                      <span className="flashcard-text">{String(c?.Back || c?.back || '')}</span>
+                  </button>
+                  {isFlipped && !rating && (
+                    <div className="flashcard-rating">
+                      <button
+                        type="button"
+                        className="rating-btn rating-btn--got-it"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFlashcardRatings((prev) => ({ ...prev, [i]: 'got-it' }));
+                          awardXp(XP_VALUES.flashcard_got_it);
+                          if (ratedCount + 1 >= parsed.length) {
+                            setCompletedSections(prev => new Set([...prev, 'flashcards']));
+                            triggerCelebration('complete');
+                          }
+                        }}
+                      >
+                        ✓ Got it!
+                      </button>
+                      <button
+                        type="button"
+                        className="rating-btn rating-btn--practice"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFlashcardRatings((prev) => ({ ...prev, [i]: 'practice' }));
+                          if (ratedCount + 1 >= parsed.length) {
+                            setCompletedSections(prev => new Set([...prev, 'flashcards']));
+                          }
+                        }}
+                      >
+                        ↻ Practice more
+                      </button>
                     </div>
-                  </div>
-                </button>
+                  )}
+                  {rating && (
+                    <div className={`flashcard-rated flashcard-rated--${rating}`}>
+                      {rating === 'got-it' ? '✓ Mastered' : '↻ Review later'}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -510,14 +636,40 @@ export default function TopicLearningPage() {
       const selected = selectedQuizAnswers[currentQuizIndex];
       const hasAnswered = selected !== undefined && selected !== null;
 
+      // Calculate current streak for display
+      const currentStreak = (() => {
+        let s = 0;
+        for (let i = answeredCount - 1; i >= 0; i--) {
+          const wasCorrect = selectedQuizAnswers[i] === Number(parsed[i]?.Correct ?? parsed[i]?.correct);
+          if (wasCorrect) s++;
+          else break;
+        }
+        return s;
+      })();
+
       return (
         <div className="ai-content ai-content--visible">
           <div className="section-header">
             <span className="section-icon">🎯</span>
             <span className="section-title">Quiz Mode</span>
             <span className="section-count">
-              {answeredCount > 0 ? `${correctCount}/${answeredCount} correct` : ''}
+              {answeredCount > 0 ? (
+                <>
+                  {correctCount}/{answeredCount} correct
+                  {streak >= 3 && <span className="streak-badge">🔥 {streak} streak!</span>}
+                </>
+              ) : ''}
             </span>
+          </div>
+
+          {/* XP indicator */}
+          <div className="quiz-xp-bar">
+            <span className="xp-label">+{xp} XP</span>
+            {streak >= 2 && (
+              <span className="streak-indicator">
+                🔥 {streak} in a row! (+{XP_VALUES.streak_bonus * streak} bonus)
+              </span>
+            )}
           </div>
 
           {/* Progress indicator */}
@@ -562,7 +714,31 @@ export default function TopicLearningPage() {
                     type="button"
                     className={optClass}
                     disabled={hasAnswered}
-                    onClick={() => setSelectedQuizAnswers((prev) => ({ ...prev, [currentQuizIndex]: oi }))}
+                    onClick={() => {
+                      setSelectedQuizAnswers((prev) => ({ ...prev, [currentQuizIndex]: oi }));
+                      const isCorrect = oi === correct;
+                      if (isCorrect) {
+                        // Award XP with streak bonus
+                        const newStreak = streak + 1;
+                        setStreak(newStreak);
+                        const bonus = newStreak >= 2 ? XP_VALUES.streak_bonus * newStreak : 0;
+                        awardXp(XP_VALUES.correct_answer + bonus);
+                        if (newStreak >= 3) {
+                          triggerCelebration('streak');
+                        } else {
+                          triggerCelebration('correct');
+                        }
+                      } else {
+                        setStreak(0); // Reset streak on wrong answer
+                      }
+                      // Check if quiz complete
+                      const newAnswered = answeredCount + 1;
+                      if (newAnswered >= totalQuestions) {
+                        setCompletedSections(prev => new Set([...prev, 'quiz']));
+                        awardXp(XP_VALUES.section_complete);
+                        setTimeout(() => triggerCelebration('complete'), 500);
+                      }
+                    }}
                   >
                     <span className="quiz-option-letter">{['A', 'B', 'C', 'D'][oi]}</span>
                     <span className="quiz-option-text">{String(opt)}</span>
@@ -601,9 +777,17 @@ export default function TopicLearningPage() {
             ) : (
               <div className="quiz-complete">
                 {answeredCount === totalQuestions && (
-                  <span className="quiz-result">
-                    🎉 Score: {correctCount}/{totalQuestions}
-                  </span>
+                  <div className="quiz-final-score">
+                    <span className="quiz-trophy">{correctCount === totalQuestions ? '🏆' : correctCount >= totalQuestions * 0.7 ? '🎉' : '💪'}</span>
+                    <span className="quiz-result">
+                      Score: {correctCount}/{totalQuestions}
+                    </span>
+                    <span className="quiz-grade">
+                      {correctCount === totalQuestions ? 'Perfect!' : 
+                       correctCount >= totalQuestions * 0.8 ? 'Excellent!' :
+                       correctCount >= totalQuestions * 0.6 ? 'Good job!' : 'Keep practicing!'}
+                    </span>
+                  </div>
                 )}
               </div>
             )}
@@ -708,6 +892,36 @@ export default function TopicLearningPage() {
 
   return (
     <main className="learning-page">
+      {/* Celebration overlay */}
+      {showCelebration && (
+        <div className={`celebration celebration--${celebrationType}`}>
+          <div className="celebration-content">
+            {celebrationType === 'correct' && <span className="celebration-emoji">✨</span>}
+            {celebrationType === 'streak' && <span className="celebration-emoji">🔥</span>}
+            {celebrationType === 'complete' && <span className="celebration-emoji">🎉</span>}
+            <span className="celebration-text">
+              {celebrationType === 'correct' && 'Correct!'}
+              {celebrationType === 'streak' && `${streak} in a row!`}
+              {celebrationType === 'complete' && 'Section Complete!'}
+            </span>
+          </div>
+          {/* Confetti particles */}
+          <div className="confetti-container" aria-hidden="true">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div 
+                key={i} 
+                className="confetti" 
+                style={{
+                  '--delay': `${Math.random() * 0.5}s`,
+                  '--x': `${Math.random() * 100}%`,
+                  '--color': ['#fbbf24', '#22c55e', '#3b82f6', '#a78bfa', '#f43f5e'][Math.floor(Math.random() * 5)],
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Starfield */}
       <div className="starfield" aria-hidden="true">
         {stars.map((s) => (
@@ -728,11 +942,53 @@ export default function TopicLearningPage() {
         ))}
       </div>
 
+      {/* Welcome Screen - User Choice */}
+      {!hasStarted && mounted && (
+        <div className="welcome-overlay">
+          <div className="welcome-card">
+            <div className="welcome-icon">🚀</div>
+            <h2 className="welcome-title">Ready to learn?</h2>
+            <p className="welcome-topic">{topicTitle}</p>
+            <p className="welcome-desc">
+              Interactive lessons with examples, practice questions, flashcards, and quizzes.
+              Learn at your own pace!
+            </p>
+            <div className="welcome-features">
+              <div className="welcome-feature">
+                <span className="feature-icon">⚡</span>
+                <span>Earn XP</span>
+              </div>
+              <div className="welcome-feature">
+                <span className="feature-icon">🔥</span>
+                <span>Build streaks</span>
+              </div>
+              <div className="welcome-feature">
+                <span className="feature-icon">🎯</span>
+                <span>Track progress</span>
+              </div>
+            </div>
+            <button type="button" className="welcome-start-btn" onClick={handleStartLearning}>
+              <span>Start Learning</span>
+              <span className="start-arrow">→</span>
+            </button>
+            <button type="button" className="welcome-skip-btn" onClick={() => router.push('/universe/learn')}>
+              ← Browse other topics
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="header">
         <button type="button" onClick={handleBack} className="header-back">
           ← {activeTab !== 'explain' ? 'Back to Explain' : 'Back'}
         </button>
+        {hasStarted && (
+          <div className="header-xp">
+            <span className="xp-icon">⚡</span>
+            <span className="xp-value">{xp} XP</span>
+          </div>
+        )}
       </header>
 
       {/* Content */}
@@ -753,6 +1009,22 @@ export default function TopicLearningPage() {
         {/* Title */}
         <h1 className="title">{topicTitle}</h1>
 
+        {/* Progress bar */}
+        {hasStarted && (
+          <div className="progress-section">
+            <div className="progress-bar">
+              <div 
+                className="progress-fill" 
+                style={{ width: `${calculateProgress()}%` }}
+              />
+            </div>
+            <div className="progress-info">
+              <span className="progress-percent">{calculateProgress()}% complete</span>
+              <span className="progress-motivation">{getRandomMotivation()}</span>
+            </div>
+          </div>
+        )}
+
         {/* Depth selector */}
         <div className="depth-selector">
           {(['simple', 'normal', 'deep'] as Depth[]).map((d) => (
@@ -770,16 +1042,27 @@ export default function TopicLearningPage() {
 
         {/* Tabs */}
         <div className="tabs">
-          {(['explain', 'examples', 'practice', 'flashcards', 'quiz'] as Tab[]).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setActiveTab(t)}
-              className={`tab-btn ${activeTab === t ? 'tab-btn--active' : ''}`}
-            >
-              {TAB_LABELS[t]}
-            </button>
-          ))}
+          {(['explain', 'examples', 'practice', 'flashcards', 'quiz'] as Tab[]).map((t) => {
+            const isComplete = completedSections.has(t);
+            const tabIcon = {
+              explain: '📖',
+              examples: '📚',
+              practice: '🧠',
+              flashcards: '🎴',
+              quiz: '🎯',
+            }[t];
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setActiveTab(t)}
+                className={`tab-btn ${activeTab === t ? 'tab-btn--active' : ''} ${isComplete ? 'tab-btn--complete' : ''}`}
+              >
+                <span className="tab-icon">{isComplete ? '✓' : tabIcon}</span>
+                <span className="tab-label">{TAB_LABELS[t]}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Content area */}
@@ -879,6 +1162,300 @@ export default function TopicLearningPage() {
 
         .header-back:hover {
           color: #ffffff;
+        }
+
+        .header-xp {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+          border: 1px solid rgba(251, 191, 36, 0.3);
+          border-radius: 20px;
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
+          50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+        }
+
+        .xp-icon {
+          font-size: 14px;
+        }
+
+        .xp-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: #fbbf24;
+        }
+
+        /* ═══════════════════════════════════════════
+           WELCOME OVERLAY
+           ═══════════════════════════════════════════ */
+        .welcome-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          background: rgba(0, 0, 0, 0.9);
+          backdrop-filter: blur(20px);
+          animation: fadeIn 400ms ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .welcome-card {
+          max-width: 480px;
+          padding: 48px 40px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
+          text-align: center;
+          animation: slideUp 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-icon {
+          font-size: 64px;
+          margin-bottom: 20px;
+          animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        .welcome-title {
+          font-size: 28px;
+          font-weight: 300;
+          color: #ffffff;
+          margin: 0 0 8px;
+        }
+
+        .welcome-topic {
+          font-size: 20px;
+          font-weight: 500;
+          color: #fbbf24;
+          margin: 0 0 16px;
+        }
+
+        .welcome-desc {
+          font-size: 15px;
+          color: #9ca3af;
+          line-height: 1.7;
+          margin: 0 0 28px;
+        }
+
+        .welcome-features {
+          display: flex;
+          justify-content: center;
+          gap: 24px;
+          margin-bottom: 32px;
+        }
+
+        .welcome-feature {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .feature-icon {
+          font-size: 24px;
+        }
+
+        .welcome-feature span:last-child {
+          font-size: 12px;
+          color: #737373;
+        }
+
+        .welcome-start-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          width: 100%;
+          padding: 18px 32px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #000;
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          border: none;
+          border-radius: 14px;
+          cursor: pointer;
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .welcome-start-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(251, 191, 36, 0.4);
+        }
+
+        .start-arrow {
+          transition: transform 300ms ease;
+        }
+
+        .welcome-start-btn:hover .start-arrow {
+          transform: translateX(5px);
+        }
+
+        .welcome-skip-btn {
+          margin-top: 16px;
+          font-size: 14px;
+          color: #737373;
+          background: none;
+          border: none;
+          cursor: pointer;
+          transition: color 200ms ease;
+        }
+
+        .welcome-skip-btn:hover {
+          color: #ffffff;
+        }
+
+        /* ═══════════════════════════════════════════
+           CELEBRATION OVERLAY
+           ═══════════════════════════════════════════ */
+        .celebration {
+          position: fixed;
+          inset: 0;
+          z-index: 300;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: none;
+          animation: celebrationFade 2s ease-out forwards;
+        }
+
+        @keyframes celebrationFade {
+          0% { opacity: 0; }
+          15% { opacity: 1; }
+          70% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+
+        .celebration-content {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 20px 32px;
+          background: rgba(0, 0, 0, 0.9);
+          border-radius: 16px;
+          animation: celebrationPop 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes celebrationPop {
+          0% { transform: scale(0.5); opacity: 0; }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        .celebration--correct .celebration-content {
+          border: 2px solid rgba(34, 197, 94, 0.5);
+        }
+
+        .celebration--streak .celebration-content {
+          border: 2px solid rgba(251, 191, 36, 0.5);
+        }
+
+        .celebration--complete .celebration-content {
+          border: 2px solid rgba(139, 92, 246, 0.5);
+        }
+
+        .celebration-emoji {
+          font-size: 32px;
+          animation: bounce 500ms ease-in-out;
+        }
+
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        .celebration-text {
+          font-size: 20px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+
+        .confetti-container {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+
+        .confetti {
+          position: absolute;
+          top: 50%;
+          left: var(--x);
+          width: 10px;
+          height: 10px;
+          background: var(--color);
+          border-radius: 2px;
+          animation: confettiFall 1.5s ease-out var(--delay) forwards;
+        }
+
+        @keyframes confettiFall {
+          0% { 
+            transform: translateY(0) rotate(0deg); 
+            opacity: 1;
+          }
+          100% { 
+            transform: translateY(200px) rotate(720deg); 
+            opacity: 0;
+          }
+        }
+
+        /* ═══════════════════════════════════════════
+           PROGRESS BAR
+           ═══════════════════════════════════════════ */
+        .progress-section {
+          margin-bottom: 32px;
+        }
+
+        .progress-bar {
+          height: 6px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          overflow: hidden;
+          margin-bottom: 10px;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #22c55e, #84cc16);
+          border-radius: 3px;
+          transition: width 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .progress-info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .progress-percent {
+          font-size: 13px;
+          color: #22c55e;
+          font-weight: 500;
+        }
+
+        .progress-motivation {
+          font-size: 13px;
+          color: #737373;
         }
 
         /* ═══════════════════════════════════════════
@@ -1008,6 +1585,9 @@ export default function TopicLearningPage() {
         }
 
         .tab-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
           padding: 12px 20px;
           font-size: 14px;
           font-weight: 400;
@@ -1020,6 +1600,14 @@ export default function TopicLearningPage() {
           transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
+        .tab-icon {
+          font-size: 16px;
+        }
+
+        .tab-label {
+          font-size: 14px;
+        }
+
         .tab-btn:hover {
           color: #e5e5e5;
           background: rgba(255, 255, 255, 0.03);
@@ -1029,6 +1617,21 @@ export default function TopicLearningPage() {
           color: #ffffff;
           background: rgba(255, 255, 255, 0.06);
           border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn--complete {
+          color: #22c55e;
+        }
+
+        .tab-btn--complete .tab-icon {
+          background: rgba(34, 197, 94, 0.2);
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          font-size: 12px;
         }
 
         /* ═══════════════════════════════════════════
@@ -1701,6 +2304,95 @@ export default function TopicLearningPage() {
           transform: rotateY(180deg) scale(1.02);
         }
 
+        .flashcard-hint {
+          font-size: 11px;
+          color: #737373;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .flashcard-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .flashcard-wrapper--got-it .flashcard {
+          opacity: 0.6;
+        }
+
+        .flashcard-wrapper--practice .flashcard-front {
+          border-color: rgba(251, 191, 36, 0.4);
+        }
+
+        .flashcard-rating {
+          display: flex;
+          gap: 10px;
+          animation: fadeSlideIn 300ms ease-out;
+        }
+
+        .rating-btn {
+          flex: 1;
+          padding: 12px;
+          font-size: 13px;
+          font-weight: 600;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 200ms ease;
+        }
+
+        .rating-btn--got-it {
+          color: #fff;
+          background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .rating-btn--got-it:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+        }
+
+        .rating-btn--practice {
+          color: #fbbf24;
+          background: rgba(251, 191, 36, 0.15);
+          border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .rating-btn--practice:hover {
+          background: rgba(251, 191, 36, 0.25);
+        }
+
+        .flashcard-rated {
+          padding: 10px;
+          font-size: 12px;
+          font-weight: 500;
+          text-align: center;
+          border-radius: 8px;
+        }
+
+        .flashcard-rated--got-it {
+          color: #22c55e;
+          background: rgba(34, 197, 94, 0.1);
+        }
+
+        .flashcard-rated--practice {
+          color: #fbbf24;
+          background: rgba(251, 191, 36, 0.1);
+        }
+
+        .rating-summary {
+          display: flex;
+          gap: 12px;
+        }
+
+        .got-it-badge {
+          color: #22c55e;
+        }
+
+        .practice-badge {
+          color: #fbbf24;
+        }
+
         /* ═══════════════════════════════════════════
            INTERACTIVE QUIZ
            ═══════════════════════════════════════════ */
@@ -1871,6 +2563,80 @@ export default function TopicLearningPage() {
           margin-left: auto;
           font-size: 13px;
           color: #737373;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .streak-badge {
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 600;
+          color: #fbbf24;
+          background: rgba(251, 191, 36, 0.15);
+          border-radius: 12px;
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* ═══════════════════════════════════════════
+           QUIZ XP BAR
+           ═══════════════════════════════════════════ */
+        .quiz-xp-bar {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          background: rgba(251, 191, 36, 0.08);
+          border: 1px solid rgba(251, 191, 36, 0.2);
+          border-radius: 10px;
+          margin-bottom: 20px;
+        }
+
+        .xp-label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #fbbf24;
+        }
+
+        .streak-indicator {
+          font-size: 13px;
+          color: #f97316;
+          margin-left: auto;
+        }
+
+        /* ═══════════════════════════════════════════
+           QUIZ FINAL SCORE
+           ═══════════════════════════════════════════ */
+        .quiz-final-score {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 20px;
+          background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+          border: 1px solid rgba(34, 197, 94, 0.3);
+          border-radius: 12px;
+          animation: popIn 400ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes popIn {
+          0% { transform: scale(0.9); opacity: 0; }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        .quiz-trophy {
+          font-size: 24px;
+        }
+
+        .quiz-result {
+          font-size: 16px;
+          font-weight: 600;
+          color: #22c55e;
+        }
+
+        .quiz-grade {
+          font-size: 14px;
+          color: #a3e635;
         }
 
         /* ═══════════════════════════════════════════
