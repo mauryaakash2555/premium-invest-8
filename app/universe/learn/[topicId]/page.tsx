@@ -109,6 +109,13 @@ export default function TopicLearningPage() {
   const [selectedQuizAnswers, setSelectedQuizAnswers] = useState<Record<number, number | null>>({});
   const [revealedPractice, setRevealedPractice] = useState<Record<number, boolean>>({});
 
+  // Collapse/expand state - show 3 initially
+  const [expandedExamples, setExpandedExamples] = useState(false);
+  const [expandedPractice, setExpandedPractice] = useState(false);
+  const [expandedFlashcards, setExpandedFlashcards] = useState(false);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const INITIAL_SHOW_COUNT = 3;
+
   const abortRef = useRef<AbortController | null>(null);
   const prefetchedRef = useRef<Record<string, boolean>>({});
 
@@ -307,7 +314,20 @@ export default function TopicLearningPage() {
     setFlippedCards({});
     setSelectedQuizAnswers({});
     setRevealedPractice({});
+    setExpandedExamples(false);
+    setExpandedPractice(false);
+    setExpandedFlashcards(false);
+    setCurrentQuizIndex(0);
   }, [currentKey, content]);
+
+  // Handle back navigation - step by step
+  function handleBack() {
+    if (activeTab !== 'explain') {
+      setActiveTab('explain');
+    } else {
+      router.push('/universe/learn');
+    }
+  }
 
   const parseJsonContent = (text: string): any[] | null => {
     let raw = String(text || '').trim();
@@ -327,13 +347,16 @@ export default function TopicLearningPage() {
     if (!parsed) return renderExplain(text);
 
     if (tab === 'examples') {
+      const visibleItems = expandedExamples ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
+      const hasMore = parsed.length > INITIAL_SHOW_COUNT;
       return (
         <div className="ai-content ai-content--visible">
-          <div className="examples-header">
-            <span className="examples-icon">📚</span>
-            <span className="examples-title">Real-World Scenarios</span>
+          <div className="section-header">
+            <span className="section-icon">📚</span>
+            <span className="section-title">Real-World Scenarios</span>
+            <span className="section-count">{parsed.length} examples</span>
           </div>
-          {parsed.map((ex: any, i: number) => (
+          {visibleItems.map((ex: any, i: number) => (
             <div key={i} className="example-card">
               <div className="example-number">{i + 1}</div>
               <div className="example-content">
@@ -343,7 +366,7 @@ export default function TopicLearningPage() {
                 )}
                 {Array.isArray(ex?.Steps || ex?.steps) && (
                   <div className="example-steps">
-                    {(ex?.Steps || ex?.steps).slice(0, 10).map((s: any, si: number) => (
+                    {(ex?.Steps || ex?.steps).slice(0, 5).map((s: any, si: number) => (
                       <div key={si} className="example-step">
                         <span className="step-dot" />
                         <span className="step-text">{String(s)}</span>
@@ -360,19 +383,30 @@ export default function TopicLearningPage() {
               </div>
             </div>
           ))}
+          {hasMore && (
+            <button
+              type="button"
+              className="show-more-btn"
+              onClick={() => setExpandedExamples(!expandedExamples)}
+            >
+              {expandedExamples ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Examples ↓`}
+            </button>
+          )}
         </div>
       );
     }
 
     if (tab === 'practice') {
+      const visibleItems = expandedPractice ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
+      const hasMore = parsed.length > INITIAL_SHOW_COUNT;
       return (
         <div className="ai-content ai-content--visible">
-          <div className="practice-header">
-            <span className="practice-icon">🧠</span>
-            <span className="practice-title">Think & Learn</span>
-            <span className="practice-hint">Click to reveal answers</span>
+          <div className="section-header">
+            <span className="section-icon">🧠</span>
+            <span className="section-title">Think & Learn</span>
+            <span className="section-count">Click to reveal</span>
           </div>
-          {parsed.map((q: any, i: number) => {
+          {visibleItems.map((q: any, i: number) => {
             const isRevealed = Boolean(revealedPractice[i]);
             return (
               <div key={i} className="practice-card">
@@ -398,20 +432,31 @@ export default function TopicLearningPage() {
               </div>
             );
           })}
+          {hasMore && (
+            <button
+              type="button"
+              className="show-more-btn"
+              onClick={() => setExpandedPractice(!expandedPractice)}
+            >
+              {expandedPractice ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Questions ↓`}
+            </button>
+          )}
         </div>
       );
     }
 
     if (tab === 'flashcards') {
+      const visibleItems = expandedFlashcards ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
+      const hasMore = parsed.length > INITIAL_SHOW_COUNT;
       return (
         <div className="ai-content ai-content--visible">
-          <div className="flashcards-header">
-            <span className="flashcards-icon">🎴</span>
-            <span className="flashcards-title">Tap to Flip</span>
-            <span className="flashcards-count">{parsed.length} cards</span>
+          <div className="section-header">
+            <span className="section-icon">🎴</span>
+            <span className="section-title">Tap to Flip</span>
+            <span className="section-count">{parsed.length} cards</span>
           </div>
           <div className="flashcards-grid">
-            {parsed.map((c: any, i: number) => {
+            {visibleItems.map((c: any, i: number) => {
               const isFlipped = Boolean(flippedCards[i]);
               return (
                 <button
@@ -434,6 +479,15 @@ export default function TopicLearningPage() {
               );
             })}
           </div>
+          {hasMore && (
+            <button
+              type="button"
+              className="show-more-btn"
+              onClick={() => setExpandedFlashcards(!expandedFlashcards)}
+            >
+              {expandedFlashcards ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Cards ↓`}
+            </button>
+          )}
         </div>
       );
     }
@@ -447,59 +501,113 @@ export default function TopicLearningPage() {
         return v === correct;
       }).length;
 
+      // Show one question at a time
+      const q = parsed[currentQuizIndex];
+      if (!q) return renderExplain(text);
+
+      const options = Array.isArray(q?.Options || q?.options) ? (q?.Options || q?.options) : [];
+      const correct = Number(q?.Correct ?? q?.correct);
+      const selected = selectedQuizAnswers[currentQuizIndex];
+      const hasAnswered = selected !== undefined && selected !== null;
+
       return (
         <div className="ai-content ai-content--visible">
-          <div className="quiz-header">
-            <span className="quiz-icon">🎯</span>
-            <span className="quiz-title">Quiz Mode</span>
-            <span className="quiz-score">
-              {answeredCount > 0 ? `${correctCount}/${answeredCount} correct` : `${totalQuestions} questions`}
+          <div className="section-header">
+            <span className="section-icon">🎯</span>
+            <span className="section-title">Quiz Mode</span>
+            <span className="section-count">
+              {answeredCount > 0 ? `${correctCount}/${answeredCount} correct` : ''}
             </span>
           </div>
-          {parsed.map((q: any, i: number) => {
-            const options = Array.isArray(q?.Options || q?.options) ? (q?.Options || q?.options) : [];
-            const correct = Number(q?.Correct ?? q?.correct);
-            const selected = selectedQuizAnswers[i];
-            const hasAnswered = selected !== undefined && selected !== null;
 
-            return (
-              <div key={i} className="quiz-card">
-                <div className="quiz-question">
-                  <span className="quiz-q-num">{i + 1}</span>
-                  <span className="quiz-q-text">{String(q?.Question || q?.question || '')}</span>
-                </div>
-                <div className="quiz-options">
-                  {options.slice(0, 4).map((opt: any, oi: number) => {
-                    let optClass = 'quiz-option';
-                    if (hasAnswered) {
-                      if (oi === correct) optClass += ' quiz-option--correct';
-                      else if (oi === selected) optClass += ' quiz-option--wrong';
-                    }
-                    return (
-                      <button
-                        key={oi}
-                        type="button"
-                        className={optClass}
-                        disabled={hasAnswered}
-                        onClick={() => setSelectedQuizAnswers((prev) => ({ ...prev, [i]: oi }))}
-                      >
-                        <span className="quiz-option-letter">{['A', 'B', 'C', 'D'][oi]}</span>
-                        <span className="quiz-option-text">{String(opt)}</span>
-                        {hasAnswered && oi === correct && <span className="quiz-check">✓</span>}
-                        {hasAnswered && oi === selected && oi !== correct && <span className="quiz-x">✗</span>}
-                      </button>
-                    );
-                  })}
-                </div>
-                {hasAnswered && (q?.Explanation || q?.explanation) && (
-                  <div className="quiz-explanation">
-                    <span className="explanation-icon">💡</span>
-                    <span>{String(q?.Explanation || q?.explanation)}</span>
-                  </div>
+          {/* Progress indicator */}
+          <div className="quiz-progress">
+            {parsed.map((_: any, idx: number) => {
+              const isAnswered = selectedQuizAnswers[idx] !== undefined && selectedQuizAnswers[idx] !== null;
+              const wasCorrect = isAnswered && selectedQuizAnswers[idx] === Number(parsed[idx]?.Correct ?? parsed[idx]?.correct);
+              let dotClass = 'quiz-dot';
+              if (idx === currentQuizIndex) dotClass += ' quiz-dot--active';
+              else if (isAnswered && wasCorrect) dotClass += ' quiz-dot--correct';
+              else if (isAnswered) dotClass += ' quiz-dot--wrong';
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  className={dotClass}
+                  onClick={() => setCurrentQuizIndex(idx)}
+                  aria-label={`Question ${idx + 1}`}
+                >
+                  {idx + 1}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Single question card */}
+          <div className="quiz-card quiz-card--single">
+            <div className="quiz-question">
+              <span className="quiz-q-num">{currentQuizIndex + 1}/{totalQuestions}</span>
+              <span className="quiz-q-text">{String(q?.Question || q?.question || '')}</span>
+            </div>
+            <div className="quiz-options">
+              {options.slice(0, 4).map((opt: any, oi: number) => {
+                let optClass = 'quiz-option';
+                if (hasAnswered) {
+                  if (oi === correct) optClass += ' quiz-option--correct';
+                  else if (oi === selected) optClass += ' quiz-option--wrong';
+                }
+                return (
+                  <button
+                    key={oi}
+                    type="button"
+                    className={optClass}
+                    disabled={hasAnswered}
+                    onClick={() => setSelectedQuizAnswers((prev) => ({ ...prev, [currentQuizIndex]: oi }))}
+                  >
+                    <span className="quiz-option-letter">{['A', 'B', 'C', 'D'][oi]}</span>
+                    <span className="quiz-option-text">{String(opt)}</span>
+                    {hasAnswered && oi === correct && <span className="quiz-check">✓</span>}
+                    {hasAnswered && oi === selected && oi !== correct && <span className="quiz-x">✗</span>}
+                  </button>
+                );
+              })}
+            </div>
+            {hasAnswered && (q?.Explanation || q?.explanation) && (
+              <div className="quiz-explanation">
+                <span className="explanation-icon">💡</span>
+                <span>{String(q?.Explanation || q?.explanation)}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation buttons */}
+          <div className="quiz-nav">
+            <button
+              type="button"
+              className="quiz-nav-btn"
+              disabled={currentQuizIndex === 0}
+              onClick={() => setCurrentQuizIndex((p) => Math.max(0, p - 1))}
+            >
+              ← Previous
+            </button>
+            {currentQuizIndex < totalQuestions - 1 ? (
+              <button
+                type="button"
+                className="quiz-nav-btn quiz-nav-btn--primary"
+                onClick={() => setCurrentQuizIndex((p) => Math.min(totalQuestions - 1, p + 1))}
+              >
+                Next →
+              </button>
+            ) : (
+              <div className="quiz-complete">
+                {answeredCount === totalQuestions && (
+                  <span className="quiz-result">
+                    🎉 Score: {correctCount}/{totalQuestions}
+                  </span>
                 )}
               </div>
-            );
-          })}
+            )}
+          </div>
         </div>
       );
     }
@@ -622,8 +730,8 @@ export default function TopicLearningPage() {
 
       {/* Header */}
       <header className="header">
-        <button type="button" onClick={() => router.push('/universe/learn')} className="header-back">
-          ← Back
+        <button type="button" onClick={handleBack} className="header-back">
+          ← {activeTab !== 'explain' ? 'Back to Explain' : 'Back'}
         </button>
       </header>
 
@@ -1735,6 +1843,172 @@ export default function TopicLearningPage() {
         .explanation-icon {
           font-size: 16px;
           flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           UNIFIED SECTION HEADER
+           ═══════════════════════════════════════════ */
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 24px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .section-icon {
+          font-size: 24px;
+        }
+
+        .section-title {
+          font-size: 18px;
+          font-weight: 500;
+          color: #ffffff;
+        }
+
+        .section-count {
+          margin-left: auto;
+          font-size: 13px;
+          color: #737373;
+        }
+
+        /* ═══════════════════════════════════════════
+           SHOW MORE BUTTON
+           ═══════════════════════════════════════════ */
+        .show-more-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 16px;
+          margin-top: 16px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #d4af37;
+          background: rgba(212, 175, 55, 0.06);
+          border: 1px dashed rgba(212, 175, 55, 0.3);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .show-more-btn:hover {
+          background: rgba(212, 175, 55, 0.12);
+          border-style: solid;
+          transform: translateY(-2px);
+        }
+
+        /* ═══════════════════════════════════════════
+           QUIZ NAVIGATION (ONE AT A TIME)
+           ═══════════════════════════════════════════ */
+        .quiz-progress {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 24px;
+          justify-content: center;
+        }
+
+        .quiz-dot {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: 600;
+          color: #737373;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 200ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .quiz-dot:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .quiz-dot--active {
+          color: #000;
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          border-color: transparent;
+        }
+
+        .quiz-dot--correct {
+          color: #fff;
+          background: rgba(34, 197, 94, 0.9);
+          border-color: transparent;
+        }
+
+        .quiz-dot--wrong {
+          color: #fff;
+          background: rgba(239, 68, 68, 0.9);
+          border-color: transparent;
+        }
+
+        .quiz-card--single {
+          margin-bottom: 24px;
+        }
+
+        .quiz-nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding-top: 16px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .quiz-nav-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #9ca3af;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 200ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .quiz-nav-btn:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+        }
+
+        .quiz-nav-btn:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+
+        .quiz-nav-btn--primary {
+          color: #000;
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          border: none;
+        }
+
+        .quiz-nav-btn--primary:hover:not(:disabled) {
+          transform: translateX(4px);
+          box-shadow: 0 4px 14px rgba(251, 191, 36, 0.3);
+        }
+
+        .quiz-complete {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .quiz-result {
+          font-size: 16px;
+          font-weight: 600;
+          color: #22c55e;
         }
 
         /* ═══════════════════════════════════════════
