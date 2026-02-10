@@ -732,6 +732,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                 const nextHref = next ? getPostHref(next) : null;
                 const nextTitle = next?.title || '';
                 const waHref = getWhatsAppHref(postHref, post?.title);
+                const cardImage = post?.image_url || post?.image || copy.image;
 
                 return (
                   <div
@@ -755,6 +756,17 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       height: '100%',
                     }}
                   >
+                    {/* Card image */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        height: '190px',
+                        backgroundImage: `url(${cardImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderBottom: '1px solid color-mix(in oklab, var(--lux-accent) 16%, transparent)',
+                      }}
+                    />
                     <div style={{ padding: '20px' }}>
                       <div
                         style={{
