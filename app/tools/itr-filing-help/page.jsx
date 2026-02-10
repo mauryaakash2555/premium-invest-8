@@ -140,7 +140,7 @@ export default function ITRFilingHelp() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/itr/extract', {
+      const res = await fetch('/api/itr/extract-v2', {
         method: 'POST',
         body: formData,
       });
