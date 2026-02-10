@@ -753,21 +753,47 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                     style={{
                       overflow: 'hidden',
                       cursor: 'pointer',
-                      height: '100%',
+                      height: '440px',
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
                   >
-                    {/* Card image */}
+                    {/* Full-card image background (BM Editorial style) */}
                     <div
                       aria-hidden="true"
                       style={{
-                        height: '190px',
+                        position: 'absolute',
+                        inset: 0,
                         backgroundImage: `url(${cardImage})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        borderBottom: '1px solid color-mix(in oklab, var(--lux-accent) 16%, transparent)',
+                        transform: 'scale(1.02)',
+                        filter: 'saturate(1.02)',
                       }}
                     />
-                    <div style={{ padding: '20px' }}>
+
+                    {/* Readability veil */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        pointerEvents: 'none',
+                        background:
+                          'linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.46) 52%, rgba(0,0,0,0.82) 100%)',
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        position: 'relative',
+                        zIndex: 2,
+                        padding: '22px 20px 20px',
+                        marginTop: 'auto',
+                        background:
+                          'linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.88) 100%)',
+                      }}
+                    >
                       <div
                         style={{
                           display: 'flex',
@@ -782,7 +808,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            color: 'var(--lux-foreground-40)',
+                            color: 'var(--lux-foreground-80)',
                             fontSize: '13px',
                           }}
                         >
@@ -794,7 +820,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            color: 'var(--lux-foreground-40)',
+                            color: 'var(--lux-foreground-80)',
                             fontSize: '13px',
                           }}
                         >
@@ -807,7 +833,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                               display: 'flex',
                               alignItems: 'center',
                               gap: '6px',
-                              color: 'var(--lux-foreground-40)',
+                              color: 'var(--lux-foreground-80)',
                               fontSize: '13px',
                             }}
                           >
@@ -832,16 +858,16 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       <p
                         style={{
                           fontSize: '14px',
-                          color: 'var(--lux-foreground-60)',
+                          color: 'var(--lux-foreground-80)',
                           lineHeight: 1.6,
                           marginBottom: '0px',
                           display: '-webkit-box',
-                          WebkitLineClamp: 4,
+                          WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                         }}
                       >
-                        {String(post.content_original || '').slice(0, 360)}
+                        {String(post.content_original || '').slice(0, 260)}
                       </p>
 
                       {post.sponsored_by ? (
@@ -867,11 +893,11 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       ) : null}
 
                       {typeof post.views === 'number' ? (
-                        <div style={{ marginTop: '8px', color: 'var(--lux-foreground-40)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                        <div style={{ marginTop: '8px', color: 'var(--lux-foreground-80)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
                       ) : null}
 
                       {post.location_tag ? (
-                        <div style={{ marginTop: '14px', color: 'color-mix(in oklab, var(--lux-accent) 70%, var(--lux-foreground-60))', fontSize: '13px' }}>
+                        <div style={{ marginTop: '14px', color: 'color-mix(in oklab, var(--lux-accent) 72%, var(--lux-foreground-80))', fontSize: '13px' }}>
                           📍 {post.location_tag}
                         </div>
                       ) : null}
