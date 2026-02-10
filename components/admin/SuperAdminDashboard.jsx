@@ -12,6 +12,7 @@ import { LiveIntelligenceAdmin } from '@/components/admin/LiveIntelligenceAdmin'
 import { AioTrackerView } from '@/components/admin/AioTrackerView';
 import { AiProvidersPanel } from '@/components/admin/AiProvidersPanel';
 import { CommunityPostsManager } from '@/components/admin/CommunityPostsManager';
+import { BlogImagesManager } from '@/components/admin/BlogImagesManager';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -273,6 +274,7 @@ export function SuperAdminDashboard({ onLogout }) {
         <button className={tab === 'deliverables' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('deliverables')}>Deliverables</button>
         <button className={tab === 'live-intel' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('live-intel')}>Live Intelligence</button>
         <button className={tab === 'community' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('community')}>Community Posts</button>
+        <button className={tab === 'blog-images' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('blog-images')}>Blog Images</button>
         <button className={tab === 'analytics' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('analytics'); if (!analytics) void loadAnalytics(); }}>Analytics</button>
         <button className={tab === 'aio-tracker' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => { setTab('aio-tracker'); if (!aioTracker) void loadAioTracker(); }}>AIO Tracker</button>
         <button className={tab === 'system' ? 'sa-tab sa-tabActive' : 'sa-tab'} onClick={() => setTab('system')}>System</button>
@@ -401,6 +403,7 @@ export function SuperAdminDashboard({ onLogout }) {
         {tab === 'deliverables' ? <DeliverablesView /> : null}
         {tab === 'live-intel' ? <LiveIntelligenceAdmin /> : null}
         {tab === 'community' ? <CommunityPostsManager /> : null}
+        {tab === 'blog-images' ? <BlogImagesManager /> : null}
         {tab === 'analytics' ? <AnalyticsView analytics={analytics} /> : null}
 
         {tab === 'aio-tracker' ? (
