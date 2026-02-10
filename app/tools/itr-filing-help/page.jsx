@@ -132,6 +132,7 @@ export default function ITRFilingHelp() {
   }
 
   async function handleUpload(file) {
+    console.log('[ITR] handleUpload called with file:', file?.name, file?.type, file?.size);
     setStep('extracting');
     setLoadingStage(0);
     setLoadingProgress(0);
@@ -140,10 +141,12 @@ export default function ITRFilingHelp() {
     formData.append('file', file);
 
     try {
+      console.log('[ITR] Fetching /api/itr/extract-v2...');
       const res = await fetch('/api/itr/extract-v2', {
         method: 'POST',
         body: formData,
       });
+      console.log('[ITR] Response status:', res.status);
 
       // Get raw text first to debug
       const text = await res.text();
@@ -260,7 +263,10 @@ export default function ITRFilingHelp() {
             <input
               type="file"
               accept=".pdf"
-              onChange={(e) => e.target.files[0] && handleUpload(e.target.files[0])}
+              onChange={(e) => {
+                console.log('[ITR] File input changed:', e.target?.files?.[0]?.name);
+                e.target.files[0] && handleUpload(e.target.files[0]);
+              }}
               className="hidden"
               id="file-upload"
             />

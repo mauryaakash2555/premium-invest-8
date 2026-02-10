@@ -151,6 +151,7 @@ async function extractWithOCRSpace(buffer, fileType) {
 
 export async function POST(request) {
   const startTime = Date.now();
+  console.log('🚀 [extract-v2] POST request received at', new Date().toISOString());
   
   try {
     console.log('OCR API Key exists:', !!process.env.OCR_SPACE_API_KEY);
