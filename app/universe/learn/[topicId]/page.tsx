@@ -104,6 +104,11 @@ export default function TopicLearningPage() {
   const [errorByKey, setErrorByKey] = useState<Record<string, string>>({});
   const [fallbackByKey, setFallbackByKey] = useState<Record<string, boolean>>({});
 
+  // Interactive state
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const [selectedQuizAnswers, setSelectedQuizAnswers] = useState<Record<number, number | null>>({});
+  const [revealedPractice, setRevealedPractice] = useState<Record<number, boolean>>({});
+
   const abortRef = useRef<AbortController | null>(null);
   const prefetchedRef = useRef<Record<string, boolean>>({});
 
@@ -297,96 +302,209 @@ export default function TopicLearningPage() {
     );
   };
 
-  const renderJsonOrText = (tab: Tab, text: string) => {
-    const raw = String(text || '').trim();
-    const looksJson = raw.startsWith('[') || raw.startsWith('{');
-    if (!looksJson) return renderExplain(raw);
+  // Reset interactive state when content changes
+  useEffect(() => {
+    setFlippedCards({});
+    setSelectedQuizAnswers({});
+    setRevealedPractice({});
+  }, [currentKey, content]);
 
+  const parseJsonContent = (text: string): any[] | null => {
+    let raw = String(text || '').trim();
+    // Strip markdown code fences
+    raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+    if (!raw.startsWith('[') && !raw.startsWith('{')) return null;
     try {
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return renderExplain(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
 
-      if (tab === 'examples') {
-        return (
-          <div className={`ai-content ${raw ? 'ai-content--visible' : ''}`}>
-            {parsed.map((ex: any, i: number) => (
-              <div key={i} className="ai-block">
-                <div className="ai-block-title">{String(ex?.Title || ex?.title || `Example ${i + 1}`)}</div>
-                {ex?.Scenario || ex?.scenario ? <div className="ai-block-text">{String(ex?.Scenario || ex?.scenario)}</div> : null}
-                {Array.isArray(ex?.Steps || ex?.steps) ? (
-                  <ol className="ai-steps">
+  const renderJsonOrText = (tab: Tab, text: string) => {
+    const parsed = parseJsonContent(text);
+    if (!parsed) return renderExplain(text);
+
+    if (tab === 'examples') {
+      return (
+        <div className="ai-content ai-content--visible">
+          <div className="examples-header">
+            <span className="examples-icon">📚</span>
+            <span className="examples-title">Real-World Scenarios</span>
+          </div>
+          {parsed.map((ex: any, i: number) => (
+            <div key={i} className="example-card">
+              <div className="example-number">{i + 1}</div>
+              <div className="example-content">
+                <div className="example-title">{String(ex?.Title || ex?.title || `Example ${i + 1}`)}</div>
+                {(ex?.Scenario || ex?.scenario) && (
+                  <div className="example-scenario">{String(ex?.Scenario || ex?.scenario)}</div>
+                )}
+                {Array.isArray(ex?.Steps || ex?.steps) && (
+                  <div className="example-steps">
                     {(ex?.Steps || ex?.steps).slice(0, 10).map((s: any, si: number) => (
-                      <li key={si}>{String(s)}</li>
+                      <div key={si} className="example-step">
+                        <span className="step-dot" />
+                        <span className="step-text">{String(s)}</span>
+                      </div>
                     ))}
-                  </ol>
-                ) : ex?.Steps || ex?.steps ? (
-                  <div className="ai-block-text">{String(ex?.Steps || ex?.steps)}</div>
-                ) : null}
-                {ex?.Outcome || ex?.outcome ? <div className="ai-block-outcome">{String(ex?.Outcome || ex?.outcome)}</div> : null}
+                  </div>
+                )}
+                {(ex?.Outcome || ex?.outcome) && (
+                  <div className="example-outcome">
+                    <span className="outcome-icon">✓</span>
+                    <span>{String(ex?.Outcome || ex?.outcome)}</span>
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        );
-      }
-
-      if (tab === 'practice') {
-        return (
-          <div className={`ai-content ${raw ? 'ai-content--visible' : ''}`}>
-            {parsed.map((q: any, i: number) => (
-              <div key={i} className="ai-block">
-                <div className="ai-block-title">Q{i + 1}. {String(q?.Question || q?.question || '')}</div>
-                <div className="ai-block-text">{String(q?.Answer || q?.answer || '')}</div>
-              </div>
-            ))}
-          </div>
-        );
-      }
-
-      if (tab === 'flashcards') {
-        return (
-          <div className={`ai-content ${raw ? 'ai-content--visible' : ''}`}>
-            <div className="ai-grid">
-              {parsed.map((c: any, i: number) => (
-                <div key={i} className="ai-card">
-                  <div className="ai-card-front">{String(c?.Front || c?.front || '')}</div>
-                  <div className="ai-card-back">{String(c?.Back || c?.back || '')}</div>
-                </div>
-              ))}
             </div>
-          </div>
-        );
-      }
+          ))}
+        </div>
+      );
+    }
 
-      if (tab === 'quiz') {
-        return (
-          <div className={`ai-content ${raw ? 'ai-content--visible' : ''}`}>
-            {parsed.map((q: any, i: number) => {
-              const options = Array.isArray(q?.Options || q?.options) ? (q?.Options || q?.options) : [];
-              const correct = Number(q?.Correct ?? q?.correct);
-              return (
-                <div key={i} className="ai-block">
-                  <div className="ai-block-title">Q{i + 1}. {String(q?.Question || q?.question || '')}</div>
-                  <ul className="ai-options">
-                    {options.slice(0, 4).map((opt: any, oi: number) => (
-                      <li key={oi} className={oi === correct ? 'ai-option ai-option--correct' : 'ai-option'}>
-                        {String(opt)}
-                      </li>
-                    ))}
-                  </ul>
-                  {q?.Explanation || q?.explanation ? (
-                    <div className="ai-block-outcome">{String(q?.Explanation || q?.explanation)}</div>
-                  ) : null}
+    if (tab === 'practice') {
+      return (
+        <div className="ai-content ai-content--visible">
+          <div className="practice-header">
+            <span className="practice-icon">🧠</span>
+            <span className="practice-title">Think & Learn</span>
+            <span className="practice-hint">Click to reveal answers</span>
+          </div>
+          {parsed.map((q: any, i: number) => {
+            const isRevealed = Boolean(revealedPractice[i]);
+            return (
+              <div key={i} className="practice-card">
+                <div className="practice-question">
+                  <span className="practice-q-num">Q{i + 1}</span>
+                  <span className="practice-q-text">{String(q?.Question || q?.question || '')}</span>
                 </div>
+                {isRevealed ? (
+                  <div className="practice-answer practice-answer--visible">
+                    <div className="practice-answer-label">Answer</div>
+                    <div className="practice-answer-text">{String(q?.Answer || q?.answer || '')}</div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="practice-reveal-btn"
+                    onClick={() => setRevealedPractice((prev) => ({ ...prev, [i]: true }))}
+                  >
+                    <span>Show Answer</span>
+                    <span className="reveal-icon">↓</span>
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (tab === 'flashcards') {
+      return (
+        <div className="ai-content ai-content--visible">
+          <div className="flashcards-header">
+            <span className="flashcards-icon">🎴</span>
+            <span className="flashcards-title">Tap to Flip</span>
+            <span className="flashcards-count">{parsed.length} cards</span>
+          </div>
+          <div className="flashcards-grid">
+            {parsed.map((c: any, i: number) => {
+              const isFlipped = Boolean(flippedCards[i]);
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className={`flashcard ${isFlipped ? 'flashcard--flipped' : ''}`}
+                  onClick={() => setFlippedCards((prev) => ({ ...prev, [i]: !prev[i] }))}
+                >
+                  <div className="flashcard-inner">
+                    <div className="flashcard-front">
+                      <span className="flashcard-label">Q</span>
+                      <span className="flashcard-text">{String(c?.Front || c?.front || '')}</span>
+                    </div>
+                    <div className="flashcard-back">
+                      <span className="flashcard-label">A</span>
+                      <span className="flashcard-text">{String(c?.Back || c?.back || '')}</span>
+                    </div>
+                  </div>
+                </button>
               );
             })}
           </div>
-        );
-      }
-
-      return renderExplain(raw);
-    } catch {
-      return renderExplain(raw);
+        </div>
+      );
     }
+
+    if (tab === 'quiz') {
+      const totalQuestions = parsed.length;
+      const answeredCount = Object.keys(selectedQuizAnswers).filter((k) => selectedQuizAnswers[Number(k)] !== null).length;
+      const correctCount = Object.entries(selectedQuizAnswers).filter(([k, v]) => {
+        const q = parsed[Number(k)];
+        const correct = Number(q?.Correct ?? q?.correct);
+        return v === correct;
+      }).length;
+
+      return (
+        <div className="ai-content ai-content--visible">
+          <div className="quiz-header">
+            <span className="quiz-icon">🎯</span>
+            <span className="quiz-title">Quiz Mode</span>
+            <span className="quiz-score">
+              {answeredCount > 0 ? `${correctCount}/${answeredCount} correct` : `${totalQuestions} questions`}
+            </span>
+          </div>
+          {parsed.map((q: any, i: number) => {
+            const options = Array.isArray(q?.Options || q?.options) ? (q?.Options || q?.options) : [];
+            const correct = Number(q?.Correct ?? q?.correct);
+            const selected = selectedQuizAnswers[i];
+            const hasAnswered = selected !== undefined && selected !== null;
+
+            return (
+              <div key={i} className="quiz-card">
+                <div className="quiz-question">
+                  <span className="quiz-q-num">{i + 1}</span>
+                  <span className="quiz-q-text">{String(q?.Question || q?.question || '')}</span>
+                </div>
+                <div className="quiz-options">
+                  {options.slice(0, 4).map((opt: any, oi: number) => {
+                    let optClass = 'quiz-option';
+                    if (hasAnswered) {
+                      if (oi === correct) optClass += ' quiz-option--correct';
+                      else if (oi === selected) optClass += ' quiz-option--wrong';
+                    }
+                    return (
+                      <button
+                        key={oi}
+                        type="button"
+                        className={optClass}
+                        disabled={hasAnswered}
+                        onClick={() => setSelectedQuizAnswers((prev) => ({ ...prev, [i]: oi }))}
+                      >
+                        <span className="quiz-option-letter">{['A', 'B', 'C', 'D'][oi]}</span>
+                        <span className="quiz-option-text">{String(opt)}</span>
+                        {hasAnswered && oi === correct && <span className="quiz-check">✓</span>}
+                        {hasAnswered && oi === selected && oi !== correct && <span className="quiz-x">✗</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+                {hasAnswered && (q?.Explanation || q?.explanation) && (
+                  <div className="quiz-explanation">
+                    <span className="explanation-icon">💡</span>
+                    <span>{String(q?.Explanation || q?.explanation)}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    return renderExplain(text);
   };
 
   const renderActiveContent = () => {
@@ -1148,6 +1266,475 @@ export default function TopicLearningPage() {
         .next-card:hover .next-card-arrow {
           color: #ffffff;
           transform: translateX(6px);
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE EXAMPLES
+           ═══════════════════════════════════════════ */
+        .examples-header, .practice-header, .flashcards-header, .quiz-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 24px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .examples-icon, .practice-icon, .flashcards-icon, .quiz-icon {
+          font-size: 24px;
+        }
+
+        .examples-title, .practice-title, .flashcards-title, .quiz-title {
+          font-size: 18px;
+          font-weight: 500;
+          color: #ffffff;
+        }
+
+        .practice-hint, .flashcards-count, .quiz-score {
+          margin-left: auto;
+          font-size: 13px;
+          color: #737373;
+        }
+
+        .example-card {
+          display: flex;
+          gap: 16px;
+          padding: 20px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          margin-bottom: 16px;
+          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .example-card:hover {
+          border-color: rgba(255, 255, 255, 0.14);
+          transform: translateY(-2px);
+        }
+
+        .example-number {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 600;
+          color: #000;
+          background: linear-gradient(135deg, #fff 0%, #d4d4d4 100%);
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .example-content {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .example-title {
+          font-size: 16px;
+          font-weight: 500;
+          color: #ffffff;
+          margin: 0 0 10px;
+        }
+
+        .example-scenario {
+          font-size: 14px;
+          color: #9ca3af;
+          line-height: 1.7;
+          margin: 0 0 14px;
+        }
+
+        .example-steps {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+
+        .example-step {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .step-dot {
+          width: 6px;
+          height: 6px;
+          background: #737373;
+          border-radius: 50%;
+          margin-top: 7px;
+          flex-shrink: 0;
+        }
+
+        .step-text {
+          font-size: 13px;
+          color: #9ca3af;
+          line-height: 1.6;
+        }
+
+        .example-outcome {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          padding: 12px;
+          background: rgba(34, 197, 94, 0.08);
+          border: 1px solid rgba(34, 197, 94, 0.2);
+          border-radius: 10px;
+        }
+
+        .outcome-icon {
+          color: #22c55e;
+          font-weight: 600;
+        }
+
+        .example-outcome span:last-child {
+          font-size: 13px;
+          color: #a3e635;
+          line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE PRACTICE
+           ═══════════════════════════════════════════ */
+        .practice-card {
+          padding: 20px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          margin-bottom: 16px;
+        }
+
+        .practice-question {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 16px;
+        }
+
+        .practice-q-num {
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 600;
+          color: #000;
+          background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+          border-radius: 6px;
+          flex-shrink: 0;
+        }
+
+        .practice-q-text {
+          font-size: 15px;
+          font-weight: 500;
+          color: #ffffff;
+          line-height: 1.6;
+        }
+
+        .practice-reveal-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 14px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #a78bfa;
+          background: rgba(167, 139, 250, 0.08);
+          border: 1px dashed rgba(167, 139, 250, 0.3);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .practice-reveal-btn:hover {
+          background: rgba(167, 139, 250, 0.14);
+          border-style: solid;
+        }
+
+        .reveal-icon {
+          font-size: 12px;
+        }
+
+        .practice-answer {
+          padding: 16px;
+          background: rgba(167, 139, 250, 0.06);
+          border: 1px solid rgba(167, 139, 250, 0.15);
+          border-radius: 10px;
+          opacity: 0;
+          transform: translateY(-8px);
+          animation: fadeSlideIn 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .practice-answer--visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .practice-answer-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #a78bfa;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 8px;
+        }
+
+        .practice-answer-text {
+          font-size: 14px;
+          color: #e5e5e5;
+          line-height: 1.7;
+        }
+
+        @keyframes fadeSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE FLASHCARDS (3D FLIP)
+           ═══════════════════════════════════════════ */
+        .flashcards-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+          .flashcards-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .flashcard {
+          perspective: 1000px;
+          width: 100%;
+          height: 180px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+        }
+
+        .flashcard-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .flashcard--flipped .flashcard-inner {
+          transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 20px;
+          border-radius: 14px;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          text-align: center;
+        }
+
+        .flashcard-front {
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.04) 100%);
+          border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .flashcard-back {
+          background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.04) 100%);
+          border: 1px solid rgba(34, 197, 94, 0.25);
+          transform: rotateY(180deg);
+        }
+
+        .flashcard-label {
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: 700;
+          border-radius: 50%;
+        }
+
+        .flashcard-front .flashcard-label {
+          color: #3b82f6;
+          background: rgba(59, 130, 246, 0.2);
+        }
+
+        .flashcard-back .flashcard-label {
+          color: #22c55e;
+          background: rgba(34, 197, 94, 0.2);
+        }
+
+        .flashcard-text {
+          font-size: 14px;
+          line-height: 1.6;
+          color: #e5e5e5;
+        }
+
+        .flashcard:hover .flashcard-inner {
+          transform: scale(1.02);
+        }
+
+        .flashcard--flipped:hover .flashcard-inner {
+          transform: rotateY(180deg) scale(1.02);
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE QUIZ
+           ═══════════════════════════════════════════ */
+        .quiz-card {
+          padding: 24px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          margin-bottom: 20px;
+        }
+
+        .quiz-question {
+          display: flex;
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+
+        .quiz-q-num {
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 13px;
+          font-weight: 600;
+          color: #000;
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .quiz-q-text {
+          font-size: 16px;
+          font-weight: 500;
+          color: #ffffff;
+          line-height: 1.6;
+          padding-top: 2px;
+        }
+
+        .quiz-options {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .quiz-option {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+          padding: 14px 16px;
+          font-size: 14px;
+          color: #e5e5e5;
+          text-align: left;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 200ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .quiz-option:not(:disabled):hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.15);
+          transform: translateX(4px);
+        }
+
+        .quiz-option:disabled {
+          cursor: default;
+        }
+
+        .quiz-option-letter {
+          width: 26px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: 600;
+          color: #737373;
+          background: rgba(255, 255, 255, 0.06);
+          border-radius: 6px;
+          flex-shrink: 0;
+        }
+
+        .quiz-option-text {
+          flex: 1;
+          line-height: 1.5;
+        }
+
+        .quiz-check, .quiz-x {
+          font-size: 16px;
+          font-weight: 600;
+          margin-left: auto;
+        }
+
+        .quiz-check {
+          color: #22c55e;
+        }
+
+        .quiz-x {
+          color: #ef4444;
+        }
+
+        .quiz-option--correct {
+          background: rgba(34, 197, 94, 0.1);
+          border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .quiz-option--correct .quiz-option-letter {
+          color: #22c55e;
+          background: rgba(34, 197, 94, 0.2);
+        }
+
+        .quiz-option--wrong {
+          background: rgba(239, 68, 68, 0.1);
+          border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .quiz-option--wrong .quiz-option-letter {
+          color: #ef4444;
+          background: rgba(239, 68, 68, 0.2);
+        }
+
+        .quiz-explanation {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          margin-top: 16px;
+          padding: 14px;
+          background: rgba(251, 191, 36, 0.08);
+          border: 1px solid rgba(251, 191, 36, 0.2);
+          border-radius: 10px;
+          font-size: 13px;
+          color: #fde68a;
+          line-height: 1.6;
+          animation: fadeSlideIn 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .explanation-icon {
+          font-size: 16px;
+          flex-shrink: 0;
         }
 
         /* ═══════════════════════════════════════════
