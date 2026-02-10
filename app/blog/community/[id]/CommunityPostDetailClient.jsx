@@ -175,16 +175,15 @@ export default function CommunityPostDetailClient({ id }) {
                   display: 'inline-block',
                   padding: '6px 12px',
                   borderRadius: 0,
-                  border: '1px solid rgba(255,255,255,0.14)',
-                  background: 'rgba(255,255,255,0.03)',
-                  color: 'rgba(235,242,255,0.86)',
+                  border: '1px solid rgba(212,175,55,0.3)',
+                  background: 'rgba(212,175,55,0.08)',
+                  color: 'rgba(212,175,55,0.9)',
                   fontSize: '12px',
-                  fontWeight: 900,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
                 }}
               >
-                This is a Community Post
+                {post.pillar === 'DEV' ? 'Developer Insight' : post.pillar === 'GUEST' ? 'Guest Post' : 'Community'}
               </span>
             </div>
 
@@ -203,7 +202,7 @@ export default function CommunityPostDetailClient({ id }) {
 
             {estimatedReadTime ? (
               <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px', marginBottom: '10px' }}>
-                Estimated read time ({estimatedReadTime} min)
+                {estimatedReadTime} min read
               </div>
             ) : null}
 
