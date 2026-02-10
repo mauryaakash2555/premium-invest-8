@@ -151,6 +151,7 @@ export async function POST(request) {
   const startTime = Date.now();
   
   try {
+    console.log('OCR API Key exists:', !!process.env.OCR_SPACE_API_KEY);
     const formData = await request.formData();
     const file = formData.get('file');
     
