@@ -1,6 +1,7 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 const LUX = {
@@ -11,11 +12,22 @@ const LUX = {
   accent: 'oklch(0.78 0.08 65)',
 };
 
+const LOADING_STAGES = [
+  { id: 'upload', label: 'Receiving document', icon: '📥', duration: 1500 },
+  { id: 'analyze', label: 'Analyzing structure', icon: '🔍', duration: 2000 },
+  { id: 'ocr', label: 'Reading text (OCR)', icon: '📖', duration: 8000 },
+  { id: 'extract', label: 'Extracting fields', icon: '📊', duration: 2000 },
+  { id: 'validate', label: 'Validating data', icon: '✓', duration: 1000 },
+];
+
 export default function ITRFilingHelp() {
+  const router = useRouter();
   const [step, setStep] = useState('upload');
   const [extractedData, setExtractedData] = useState(null);
   const [fields, setFields] = useState({});
   const [taxResult, setTaxResult] = useState(null);
+  const [loadingStage, setLoadingStage] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}/tools/itr-filing-help`;
@@ -56,8 +68,73 @@ export default function ITRFilingHelp() {
     []
   );
 
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = () => {
+      // Always go to tools on browser back
+      router.push('/tools');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [router]);
+
+  // Animate loading stages
+  useEffect(() => {
+    if (step !== 'extracting') return;
+    
+    let stageIndex = 0;
+    let progress = 0;
+    
+    const runStages = () => {
+      if (stageIndex >= LOADING_STAGES.length) return;
+      
+      setLoadingStage(stageIndex);
+      const stage = LOADING_STAGES[stageIndex];
+      const startProgress = (stageIndex / LOADING_STAGES.length) * 100;
+      const endProgress = ((stageIndex + 1) / LOADING_STAGES.length) * 100;
+      
+      // Animate progress within this stage
+      const steps = 20;
+      const stepDuration = stage.duration / steps;
+      let stepCount = 0;
+      
+      const interval = setInterval(() => {
+        stepCount++;
+        const p = startProgress + ((endProgress - startProgress) * (stepCount / steps));
+        setLoadingProgress(p);
+        
+        if (stepCount >= steps) {
+          clearInterval(interval);
+          stageIndex++;
+          if (stageIndex < LOADING_STAGES.length) {
+            setTimeout(runStages, 200);
+          }
+        }
+      }, stepDuration);
+    };
+    
+    runStages();
+  }, [step]);
+
+  function handleBack() {
+    if (step === 'review') {
+      setStep('upload');
+      setExtractedData(null);
+      setFields({});
+    } else if (step === 'payment') {
+      setStep('review');
+      setTaxResult(null);
+    } else if (step === 'complete') {
+      setStep('payment');
+    } else {
+      router.push('/tools');
+    }
+  }
+
   async function handleUpload(file) {
     setStep('extracting');
+    setLoadingStage(0);
+    setLoadingProgress(0);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -144,13 +221,13 @@ export default function ITRFilingHelp() {
       />
       <div className="max-w-5xl mx-auto">
         <div className="mb-4">
-          <Link
-            href="/tools"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)]"
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors bg-transparent border-none cursor-pointer"
           >
             <span aria-hidden="true">←</span>
-            Back to Tools
-          </Link>
+            {step === 'upload' || step === 'extracting' ? 'Back to Tools' : 'Back'}
+          </button>
         </div>
 
         <div className="mb-8">
@@ -195,11 +272,67 @@ export default function ITRFilingHelp() {
           </div>
         )}
 
-        {/* Extracting */}
+        {/* Premium Extracting Animation */}
         {step === 'extracting' && (
-          <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-12 text-center">
-            <div className="animate-spin w-12 h-12 border-4 border-[color:var(--lux-accent)] border-t-transparent rounded-full mx-auto mb-4" />
-            <p className="text-[color:var(--lux-foreground-60)]">Extracting data from your PDF...</p>
+          <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-2xl p-10 md:p-16">
+            {/* Animated Document Icon */}
+            <div className="relative w-24 h-24 mx-auto mb-8">
+              <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--lux-accent)]/20 to-transparent rounded-2xl animate-pulse" />
+              <div className="absolute inset-2 bg-[color:var(--lux-background)] rounded-xl flex items-center justify-center">
+                <span className="text-4xl transition-all duration-300">
+                  {LOADING_STAGES[loadingStage]?.icon || '📄'}
+                </span>
+              </div>
+              {/* Orbiting dots */}
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: '3s' }}>
+                <div className="absolute top-0 left-1/2 w-2 h-2 -ml-1 rounded-full bg-[color:var(--lux-accent)]" />
+              </div>
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }}>
+                <div className="absolute bottom-0 left-1/2 w-1.5 h-1.5 -ml-0.75 rounded-full bg-[color:var(--lux-foreground-40)]" />
+              </div>
+            </div>
+
+            {/* Current Stage */}
+            <div className="text-center mb-8">
+              <p className="text-xl font-medium text-[color:var(--lux-foreground)] mb-2">
+                {LOADING_STAGES[loadingStage]?.label || 'Processing...'}
+              </p>
+              <p className="text-sm text-[color:var(--lux-foreground-40)]">
+                This may take 15-30 seconds for scanned documents
+              </p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="max-w-md mx-auto mb-8">
+              <div className="h-1.5 bg-[color:var(--lux-foreground-10)] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[color:var(--lux-accent)] to-[color:var(--lux-foreground)] rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${loadingProgress}%` }}
+                />
+              </div>
+              <div className="flex justify-between mt-2 text-xs text-[color:var(--lux-foreground-40)]">
+                <span>{Math.round(loadingProgress)}%</span>
+                <span>Step {loadingStage + 1} of {LOADING_STAGES.length}</span>
+              </div>
+            </div>
+
+            {/* Stage Pills */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {LOADING_STAGES.map((stage, idx) => (
+                <div
+                  key={stage.id}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+                    idx < loadingStage
+                      ? 'bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)]'
+                      : idx === loadingStage
+                      ? 'bg-[color:var(--lux-accent)]/20 text-[color:var(--lux-accent)] ring-1 ring-[color:var(--lux-accent)]/50'
+                      : 'bg-[color:var(--lux-foreground-05)] text-[color:var(--lux-foreground-40)]'
+                  }`}
+                >
+                  {idx < loadingStage ? '✓' : stage.icon} {stage.label}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
