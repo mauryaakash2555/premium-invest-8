@@ -1,15 +1,20 @@
 import { extractText } from 'unpdf';
 import { createWorker } from 'tesseract.js';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 /**
- * ITR EXTRACTION PIPELINE
+ * AUTOMATIC ITR EXTRACTION PIPELINE
+ * User uploads file → We handle EVERYTHING → Return extracted data
  * 
  * Layer 1: Digital PDF (unpdf) - instant, free
- * Layer 2: Direct Image OCR (Tesseract.js) - for JPG/PNG uploads
+ * Layer 2: PDF to Image + OCR (PDF.js + Canvas + Tesseract.js) - automatic for scanned PDFs
+ * Layer 3: Direct Image OCR (Tesseract.js) - for JPG/PNG uploads
  * 
- * For scanned PDFs: Ask user to take photo with phone
- * (PDF-to-image requires canvas which isn't available on Vercel serverless)
+ * NO USER INTERVENTION REQUIRED
  */
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/legacy/build/pdf.worker.mjs';
 
 function extractFieldsUniversal(text) {
   const fields = {
@@ -29,7 +34,8 @@ function extractFieldsUniversal(text) {
     /17\s*\(\s*1\s*\)[^\d]*(\d{6,8})/is,
     /Details\s+of\s+Salary.*?(\d{6,8})/is,
     /Income\s+from\s+Salary[:\s]*(\d{6,8})/is,
-    /Total\s+Salary[:\s]*(\d{6,8})/is
+    /Total\s+Salary[:\s]*(\d{6,8})/is,
+    /Gross\s+total\s+income[:\s]*(\d{6,8})/is
   ];
   
   for (const pattern of salaryPatterns) {
@@ -47,14 +53,14 @@ function extractFieldsUniversal(text) {
     /tax\s+deducted.*?source[:\s]*(\d{4,8})/is,
     /TDS[:\s]*(\d{4,8})/i,
     /deducted[:\s]*(\d{4,8})/i,
-    /Tax\s+Deducted\s+at\s+Source[:\s]*(\d{4,8})/is
+    /Tax\s+Deducted\s+at\s+Source[:\s]*(\d{4,8})/is,
+    /Total\s+Tax\s+Deducted[:\s]*(\d{4,8})/is
   ];
   
   for (const pattern of tdsPatterns) {
     match = text.match(pattern);
     if (match) {
       const value = parseInt(match[1]);
-      // TDS is usually between 10K and 10L
       if (value >= 1000 && value <= 10000000) {
         fields.tds = value;
         break;
@@ -62,7 +68,7 @@ function extractFieldsUniversal(text) {
     }
   }
   
-  // STANDARD DEDUCTION - Known value or pattern
+  // STANDARD DEDUCTION
   const stdDeductionPatterns = [
     /Standard\s+deduction[:\s]*(\d{5})/is,
     /(?:section|u\/s)\s+16\s*\(\s*ia\s*\)[:\s]*(\d{5})/is,
@@ -77,12 +83,11 @@ function extractFieldsUniversal(text) {
     }
   }
   
-  // Common value fallback
   if (!fields.standardDeduction && text.match(/50000/)) {
     fields.standardDeduction = 50000;
   }
   
-  // 80C DEDUCTIONS - Aggressive matching
+  // 80C DEDUCTIONS
   const deduction80CPatterns = [
     /80\s*C[:\s]*(\d{5,7})/is,
     /section\s+80\s*C[:\s]*(\d{5,7})/is,
@@ -97,7 +102,6 @@ function extractFieldsUniversal(text) {
     match = text.match(pattern);
     if (match) {
       const value = parseInt(match[1]);
-      // 80C is capped at 1.5L
       if (value >= 10000 && value <= 150000) {
         fields.deductions80C = value;
         break;
@@ -108,26 +112,60 @@ function extractFieldsUniversal(text) {
   return fields;
 }
 
+/**
+ * Convert PDF page to PNG image using node-canvas
+ */
+async function renderPDFPageToImage(pdfBuffer, pageNum = 1) {
+  // Dynamic import of canvas to avoid issues if not installed
+  const { createCanvas } = await import('canvas');
+  
+  const loadingTask = pdfjsLib.getDocument({ data: pdfBuffer });
+  const pdf = await loadingTask.promise;
+  
+  const page = await pdf.getPage(pageNum);
+  
+  // Render at 2x scale for better OCR accuracy
+  const scale = 2.0;
+  const viewport = page.getViewport({ scale });
+  
+  // Create canvas
+  const canvas = createCanvas(viewport.width, viewport.height);
+  const context = canvas.getContext('2d');
+  
+  // Fill white background
+  context.fillStyle = 'white';
+  context.fillRect(0, 0, viewport.width, viewport.height);
+  
+  // Render PDF page to canvas
+  await page.render({
+    canvasContext: context,
+    viewport: viewport
+  }).promise;
+  
+  // Convert to PNG buffer
+  const pngBuffer = canvas.toBuffer('image/png');
+  
+  return pngBuffer;
+}
+
+/**
+ * Run OCR on image
+ */
 async function extractWithOCR(imageData) {
-  try {
-    const worker = await createWorker('eng', 1, {
-      logger: () => {} // Suppress logs
-    });
-    
-    await worker.setParameters({
-      tessedit_pageseg_mode: '1', // Auto page segmentation
-      tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,()-/:'
-    });
-    
-    const { data: { text } } = await worker.recognize(imageData);
-    
-    await worker.terminate();
-    
-    return text;
-  } catch (error) {
-    console.error('OCR error:', error);
-    throw error;
-  }
+  const worker = await createWorker('eng', 1, {
+    logger: () => {}
+  });
+  
+  await worker.setParameters({
+    tessedit_pageseg_mode: '1',
+    tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,()-/:'
+  });
+  
+  const { data: { text } } = await worker.recognize(imageData);
+  
+  await worker.terminate();
+  
+  return text;
 }
 
 export async function POST(request) {
@@ -165,41 +203,69 @@ export async function POST(request) {
           mergePages: true 
         });
         
-        // Check if we got meaningful text
-        const hasNumbers = /\d{5,}/.test(text); // Must have 5+ digit numbers
+        const hasNumbers = /\d{5,}/.test(text);
         
         if (text.length > 300 && hasNumbers) {
           extractedText = text;
           method = 'digital_pdf';
           console.log(`✅ Digital extraction: ${text.length} chars`);
         } else {
-          console.log(`⚠️ Low quality text (${text.length} chars, hasNumbers: ${hasNumbers})`);
-          // This is likely a scanned PDF
-          return Response.json({
-            success: false,
-            error: 'This appears to be a scanned PDF. Please take a clear photo of your Form 16 with your phone camera and upload the image (JPG/PNG) instead.',
-            isScannedPdf: true,
-            extractedCount: '0/4',
-            hint: 'Tip: Use good lighting and ensure all text is clearly visible in the photo.'
-          }, { status: 400 });
+          console.log(`⚠️ Low text (${text.length} chars), will try OCR...`);
         }
       } catch (err) {
-        console.log('⚠️ PDF parsing error:', err.message);
-        return Response.json({
-          success: false,
-          error: 'Could not read PDF. Please take a photo of your Form 16 and upload the image instead.',
-          isScannedPdf: true,
-          extractedCount: '0/4'
-        }, { status: 400 });
+        console.log('⚠️ Digital extraction failed, will try OCR...');
       }
     }
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 2: Direct Image OCR (for JPG/PNG uploads)
+    // LAYER 2: PDF to Image + OCR (AUTOMATIC for scanned PDFs)
+    // ═══════════════════════════════════════════════════════
+    
+    if (!extractedText && (fileType === 'application/pdf' || fileName.endsWith('.pdf'))) {
+      console.log('⏳ Layer 2: Converting PDF to image + OCR (automatic)...');
+      
+      try {
+        // Render first page to image
+        const pngBuffer = await renderPDFPageToImage(buffer, 1);
+        console.log('✅ PDF page rendered to image');
+        
+        // Run OCR on the image
+        extractedText = await extractWithOCR(pngBuffer);
+        method = 'pdf_ocr_automatic';
+        
+        console.log(`✅ OCR completed: ${extractedText.length} chars`);
+        
+        // If first page didn't have enough data, try page 2
+        if (extractedText.length < 200) {
+          console.log('⚠️ Page 1 low text, trying page 2...');
+          try {
+            const pngBuffer2 = await renderPDFPageToImage(buffer, 2);
+            const text2 = await extractWithOCR(pngBuffer2);
+            extractedText += '\n' + text2;
+            console.log(`✅ Added page 2: +${text2.length} chars`);
+          } catch (e) {
+            console.log('Page 2 not available');
+          }
+        }
+        
+      } catch (err) {
+        console.error('❌ PDF OCR failed:', err.message);
+        
+        return Response.json({
+          success: false,
+          error: 'Could not process PDF. Please ensure it is a valid Form 16 document.',
+          details: err.message,
+          extractedCount: '0/4'
+        }, { status: 500 });
+      }
+    }
+    
+    // ═══════════════════════════════════════════════════════
+    // LAYER 3: Direct Image OCR (for JPG/PNG uploads)
     // ═══════════════════════════════════════════════════════
     
     if (!extractedText && fileType.startsWith('image/')) {
-      console.log('⏳ Layer 2: Running OCR on image...');
+      console.log('⏳ Layer 3: Running OCR on image...');
       
       try {
         const base64 = buffer.toString('base64');
@@ -215,7 +281,7 @@ export async function POST(request) {
         
         return Response.json({
           success: false,
-          error: 'Could not extract text from image. Please ensure the image is clear, well-lit, and the text is readable.',
+          error: 'Could not extract text from image. Please ensure the image is clear and readable.',
           extractedCount: '0/4'
         }, { status: 500 });
       }
@@ -240,7 +306,6 @@ export async function POST(request) {
     console.log('🔍 Extracting fields from text...');
     const fields = extractFieldsUniversal(extractedText);
     
-    // Calculate success metrics
     const extractedCount = Object.values(fields).filter(v => v > 0).length;
     const confidence = extractedCount >= 3 ? 0.95 : extractedCount >= 2 ? 0.75 : extractedCount >= 1 ? 0.60 : 0.3;
     const processingTime = ((Date.now() - startTime) / 1000).toFixed(2);
@@ -254,7 +319,7 @@ export async function POST(request) {
       method,
       extractedCount: `${extractedCount}/4`,
       processingTime: `${processingTime}s`,
-      processingCost: 0, // Always free!
+      processingCost: 0,
       message: extractedCount >= 3
         ? 'Extraction successful! Please verify values before proceeding.'
         : extractedCount >= 1
@@ -274,3 +339,8 @@ export async function POST(request) {
     }, { status: 500 });
   }
 }
+
+// Increase function timeout for OCR processing
+export const config = {
+  maxDuration: 60 // 60 seconds for OCR processing
+};
