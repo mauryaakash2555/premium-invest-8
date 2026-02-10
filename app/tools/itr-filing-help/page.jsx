@@ -317,16 +317,16 @@ export default function ITRFilingHelp() {
             </div>
 
             {/* Stage Pills */}
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-2">
               {LOADING_STAGES.map((stage, idx) => (
                 <div
                   key={stage.id}
-                  className={`text-sm transition-all duration-300 ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
                     idx < loadingStage
-                      ? 'text-[color:var(--lux-foreground)] opacity-100'
+                      ? 'bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)]'
                       : idx === loadingStage
-                      ? 'text-[color:var(--lux-foreground)] opacity-100'
-                      : 'text-[color:var(--lux-foreground)] opacity-40'
+                      ? 'bg-[color:var(--lux-foreground)]/20 text-[color:var(--lux-foreground)] ring-1 ring-[color:var(--lux-foreground)]/50'
+                      : 'bg-[color:var(--lux-foreground-05)] text-[color:var(--lux-foreground-40)]'
                   }`}
                 >
                   {idx < loadingStage ? '✓' : stage.icon} {stage.label}
