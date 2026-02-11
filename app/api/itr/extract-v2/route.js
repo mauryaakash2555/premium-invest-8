@@ -1,5 +1,4 @@
 import { extractText } from 'unpdf';
-import { createWorker } from 'tesseract.js';
 
 /**
  * FIXED - ACCURATE FIELD EXTRACTION
@@ -97,6 +96,8 @@ function extractFieldsAccurate(text) {
 }
 
 async function extractWithTesseract(buffer, isImage = false) {
+  // Lazy-load tesseract to avoid heavy cold-start cost
+  const { createWorker } = await import('tesseract.js');
   const worker = await createWorker('eng');
   
   try {
