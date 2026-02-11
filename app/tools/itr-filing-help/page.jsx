@@ -28,6 +28,15 @@ export default function ITRFilingHelp() {
   const [taxResult, setTaxResult] = useState(null);
   const [loadingStage, setLoadingStage] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [pdfBase64, setPdfBase64] = useState(null);
+  const [verified, setVerified] = useState({
+    grossSalary: false,
+    tds: false,
+    standardDeduction: false,
+    deductions80C: false,
+  });
+
+  const allVerified = Object.values(verified).every(v => v);
 
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}/tools/itr-filing-help`;
@@ -121,6 +130,8 @@ export default function ITRFilingHelp() {
       setStep('upload');
       setExtractedData(null);
       setFields({});
+      setPdfBase64(null);
+      setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     } else if (step === 'payment') {
       setStep('review');
       setTaxResult(null);
@@ -163,6 +174,8 @@ export default function ITRFilingHelp() {
       if (data.success) {
         setExtractedData(data);
         setFields(data.fields);
+        if (data.pdfBase64) setPdfBase64(data.pdfBase64);
+        setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
         setStep('review');
       } else {
         alert('Extraction failed: ' + (data.error || 'Unknown error') + (data.debug ? '\n\nDebug: ' + data.debug : ''));
@@ -342,50 +355,133 @@ export default function ITRFilingHelp() {
           </div>
         )}
 
-        {/* Review */}
+        {/* Review - Split Screen Verify & Edit */}
         {step === 'review' && extractedData && (
           <>
-            <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6 mb-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-[color:var(--lux-foreground)]">Extracted Fields</h3>
-                <span
-                  className={`px-3 py-1 rounded text-sm ${
-                    extractedData.confidence > 0.9
-                      ? 'bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)]'
-                      : 'bg-[color:var(--lux-foreground-10)] text-[color:var(--lux-foreground)]'
-                  }`}
-                >
-                  {(extractedData.confidence * 100).toFixed(0)}% Confidence
-                </span>
+            {/* Confidence Banner */}
+            <div className={`mb-6 p-4 rounded-lg border ${
+              extractedData.confidence > 0.9 
+                ? 'bg-green-900/20 border-green-500/30 text-green-300' 
+                : extractedData.confidence > 0.6 
+                ? 'bg-yellow-900/20 border-yellow-500/30 text-yellow-300'
+                : 'bg-red-900/20 border-red-500/30 text-red-300'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{extractedData.confidence > 0.9 ? '✓' : extractedData.confidence > 0.6 ? '⚠' : '⚠'}</span>
+                  <span className="font-semibold">{Math.round(extractedData.confidence * 100)}% Confidence</span>
+                  {extractedData.extractedCount && <span className="text-sm opacity-70">({extractedData.extractedCount} fields)</span>}
+                </div>
+                <span className="text-sm opacity-70">{extractedData.method === 'ocr' ? 'Scanned PDF (OCR)' : 'Digital PDF'}</span>
               </div>
-
-              <div className="space-y-4">
-                {[
-                  { key: 'grossSalary', label: 'Gross Salary' },
-                  { key: 'tds', label: 'TDS Deducted' },
-                  { key: 'standardDeduction', label: 'Standard Deduction' },
-                  { key: 'deductions80C', label: '80C Deductions' },
-                ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center gap-4">
-                    <label className="w-48 text-[color:var(--lux-foreground-60)]">{label}</label>
-                    <input
-                      type="number"
-                      value={fields[key] || 0}
-                      onChange={(e) => handleFieldChange(key, parseInt(e.target.value) || 0)}
-                      className="flex-1 bg-[var(--lux-background)] border border-[color:var(--lux-foreground-10)] rounded px-4 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-sm text-[color:var(--lux-foreground-60)] mt-4">ℹ️ Please verify these values before proceeding</p>
+              {extractedData.message && <p className="text-sm mt-2 opacity-80">{extractedData.message}</p>}
             </div>
 
+            {/* Split Screen */}
+            <div className="grid lg:grid-cols-2 gap-6 mb-6">
+              {/* Left: PDF Viewer */}
+              <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4">
+                <h3 className="font-semibold text-[color:var(--lux-foreground)] mb-3 flex items-center gap-2">
+                  <span>📄</span> Your Form 16 PDF
+                </h3>
+                {pdfBase64 ? (
+                  <iframe
+                    src={`data:application/pdf;base64,${pdfBase64}`}
+                    className="w-full rounded border border-[color:var(--lux-foreground-10)]"
+                    style={{ height: '450px' }}
+                    title="Form 16 PDF Preview"
+                  />
+                ) : (
+                  <div className="h-[450px] flex items-center justify-center bg-[color:var(--lux-foreground-05)] rounded text-[color:var(--lux-foreground-40)]">
+                    <p>PDF preview not available</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Right: Editable Fields with Verification */}
+              <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4">
+                <h3 className="font-semibold text-[color:var(--lux-foreground)] mb-3 flex items-center gap-2">
+                  <span>✏️</span> Verify Extracted Values
+                </h3>
+                <p className="text-sm text-[color:var(--lux-foreground-60)] mb-4">
+                  Compare with your PDF and check each field to confirm accuracy.
+                </p>
+
+                <div className="space-y-4">
+                  {[
+                    { key: 'grossSalary', label: 'Gross Salary', hint: 'Section 17(1) in Form 16' },
+                    { key: 'tds', label: 'TDS Deducted', hint: 'Total Tax Deducted row' },
+                    { key: 'standardDeduction', label: 'Standard Deduction', hint: 'Usually ₹50,000' },
+                    { key: 'deductions80C', label: '80C Deductions', hint: 'PF, LIC, etc.' },
+                  ].map(({ key, label, hint }) => {
+                    const fieldValue = fields[key] || 0;
+                    const confidence = extractedData.confidence;
+                    const bgColor = fieldValue > 0 
+                      ? (confidence > 0.9 ? 'bg-green-900/20 border-green-500/30' 
+                         : confidence > 0.6 ? 'bg-yellow-900/20 border-yellow-500/30' 
+                         : 'bg-red-900/20 border-red-500/30')
+                      : 'bg-[var(--lux-background)] border-[color:var(--lux-foreground-10)]';
+                    
+                    return (
+                      <div key={key} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm font-medium text-[color:var(--lux-foreground)]">{label}</label>
+                          <span className="text-xs text-[color:var(--lux-foreground-40)]">{hint}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[color:var(--lux-foreground-60)]">₹</span>
+                          <input
+                            type="number"
+                            value={fieldValue}
+                            onChange={(e) => handleFieldChange(key, parseInt(e.target.value) || 0)}
+                            className={`flex-1 ${bgColor} border rounded px-3 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]`}
+                          />
+                        </div>
+                        <label className="flex items-center gap-2 cursor-pointer text-sm">
+                          <input
+                            type="checkbox"
+                            checked={verified[key]}
+                            onChange={(e) => setVerified(prev => ({ ...prev, [key]: e.target.checked }))}
+                            className="w-4 h-4 rounded border-[color:var(--lux-foreground-40)] accent-green-500"
+                          />
+                          <span className={verified[key] ? 'text-green-400' : 'text-[color:var(--lux-foreground-60)]'}>
+                            I verified {label} is correct
+                          </span>
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Verification Progress */}
+                <div className="mt-6 pt-4 border-t border-[color:var(--lux-foreground-10)]">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-[color:var(--lux-foreground-60)]">Verification Progress</span>
+                    <span className="text-[color:var(--lux-foreground)]">
+                      {Object.values(verified).filter(v => v).length}/4 fields verified
+                    </span>
+                  </div>
+                  <div className="h-2 bg-[color:var(--lux-foreground-10)] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-green-500 rounded-full transition-all duration-300"
+                      style={{ width: `${(Object.values(verified).filter(v => v).length / 4) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Calculate Button - disabled until all verified */}
             <button
               onClick={calculateTax}
-              className="w-full bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+              disabled={!allVerified}
+              className={`w-full px-8 py-4 rounded-lg font-semibold transition ${
+                allVerified 
+                  ? 'bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] hover:opacity-90 cursor-pointer' 
+                  : 'bg-[color:var(--lux-foreground-10)] text-[color:var(--lux-foreground-40)] cursor-not-allowed'
+              }`}
             >
-              Calculate Tax →
+              {allVerified ? 'Calculate Tax →' : `Verify all 4 fields to continue (${Object.values(verified).filter(v => v).length}/4)`}
             </button>
           </>
         )}
