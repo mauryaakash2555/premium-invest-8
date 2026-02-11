@@ -188,6 +188,11 @@ export async function POST(request) {
     console.log('🔍 Extracting fields (context-aware)...');
     const fields = extractFieldsAccurate(text);
 
+    // EMERGENCY DEBUG - Save full OCR text
+    console.log('=== FULL OCR TEXT ===');
+    console.log(text);
+    console.log('=== END FULL TEXT ===');
+
     const count = Object.values(fields).filter(v => v > 0).length;
     const time = ((Date.now() - start) / 1000).toFixed(2);
 
