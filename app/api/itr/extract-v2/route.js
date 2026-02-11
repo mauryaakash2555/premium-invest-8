@@ -143,7 +143,9 @@ export async function POST(request) {
       console.log('⏳ Layer 1: Digital PDF...');
       try {
         const result = await extractText(new Uint8Array(buffer), { mergePages: true });
-        if (result.text.length > 500) {
+        // Use a much lower threshold: some valid digital PDFs have <500 chars,
+        // and we should avoid slow OCR when digital text exists.
+        if (result.text.length > 50) {
           text = result.text;
           method = 'digital_pdf';
           console.log(`✅ Digital: ${text.length} chars`);
