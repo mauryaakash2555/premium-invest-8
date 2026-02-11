@@ -199,12 +199,73 @@ function extractFieldsIntelligent(text) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// LAYER 2: IMAGE PREPROCESSING + TESSERACT OCR
+// LAYER 2: OCR.SPACE (FAST, RELIABLE FOR SERVERLESS)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function extractWithOCRSpace(buffer, fileType) {
+  console.log('\n═══════════════════════════════════════════');
+  console.log('LAYER 2: OCR.SPACE API');
+  console.log('═══════════════════════════════════════════');
+  
+  const base64Data = buffer.toString('base64');
+  const base64Image = `data:${fileType};base64,${base64Data}`;
+  
+  const formData = new URLSearchParams();
+  formData.append('base64Image', base64Image);
+  formData.append('apikey', process.env.OCR_SPACE_API_KEY || 'K89008606188957');
+  formData.append('language', 'eng');
+  formData.append('isOverlayRequired', 'false');
+  formData.append('detectOrientation', 'true');
+  formData.append('scale', 'true');
+  formData.append('OCREngine', '2');
+  
+  console.log('Calling OCR.space API...');
+  const startOCR = Date.now();
+  
+  const response = await fetch('https://api.ocr.space/parse/image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: formData.toString()
+  });
+  
+  const data = await response.json();
+  const ocrTime = ((Date.now() - startOCR) / 1000).toFixed(1);
+  
+  console.log(`OCR.space response in ${ocrTime}s`);
+  
+  if (data.IsErroredOnProcessing) {
+    const error = data.ErrorMessage?.[0] || 'OCR processing failed';
+    console.error('OCR.space error:', error);
+    throw new Error(error);
+  }
+  
+  if (!data.ParsedResults || data.ParsedResults.length === 0) {
+    throw new Error('No text found in document');
+  }
+  
+  const text = data.ParsedResults[0].ParsedText || '';
+  
+  console.log(`Text extracted: ${text.length} characters`);
+  
+  // Log sample for debugging
+  console.log('\n─── OCR TEXT SAMPLE (first 1500 chars) ───');
+  console.log(text.substring(0, 1500));
+  console.log('─── END SAMPLE ───\n');
+  
+  if (text.length < 50) {
+    throw new Error('Insufficient text extracted');
+  }
+  
+  return { text, method: 'ocr_space', confidence: 80 };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LAYER 3: TESSERACT OCR (BACKUP - MAY BE SLOW)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function extractWithTesseract(buffer, fileType) {
   console.log('\n═══════════════════════════════════════════');
-  console.log('LAYER 2: TESSERACT OCR');
+  console.log('LAYER 3: TESSERACT OCR (BACKUP)');
   console.log('═══════════════════════════════════════════');
   
   // Lazy-load heavy dependencies to minimize cold start
@@ -324,35 +385,49 @@ export async function POST(request) {
     }
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 2: Fall back to Tesseract OCR
+    // LAYER 2: Try OCR.space (fast, reliable for serverless)
     // ═══════════════════════════════════════════════════════
     
     if (!extractedText) {
-      console.log('\n⚠️ Digital extraction failed or insufficient, switching to OCR...');
+      console.log('\n⚠️ Digital extraction failed or insufficient, trying OCR.space...');
       
       try {
-        const ocrResult = await extractWithTesseract(buffer, fileType);
+        const ocrResult = await extractWithOCRSpace(buffer, fileType);
         extractedText = ocrResult.text;
         extractionMethod = ocrResult.method;
-      } catch (ocrError) {
-        console.error('❌ OCR extraction failed:', ocrError.message);
+      } catch (ocrSpaceError) {
+        console.error('❌ OCR.space failed:', ocrSpaceError.message);
         
-        // LAYER 4: Never return failure - return editable empty fields
-        return Response.json({
-          success: true,
-          requiresManualEntry: true,
-          fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
-          confidence: 0,
-          extractedCount: '0/4',
-          method: 'manual_entry_required',
-          processingTime: `${((Date.now() - startTime) / 1000).toFixed(1)}s`,
-          message: 'Could not read document automatically. Please enter values from your Form 16.'
-        });
+        // ═══════════════════════════════════════════════════════
+        // LAYER 3: Try Tesseract as last resort (may be slow)
+        // ═══════════════════════════════════════════════════════
+        
+        console.log('\n⚠️ OCR.space failed, trying Tesseract backup...');
+        
+        try {
+          const tesseractResult = await extractWithTesseract(buffer, fileType);
+          extractedText = tesseractResult.text;
+          extractionMethod = tesseractResult.method;
+        } catch (tesseractError) {
+          console.error('❌ Tesseract also failed:', tesseractError.message);
+          
+          // LAYER 4: Never return failure - return editable empty fields
+          return Response.json({
+            success: true,
+            requiresManualEntry: true,
+            fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
+            confidence: 0,
+            extractedCount: '0/4',
+            method: 'manual_entry_required',
+            processingTime: `${((Date.now() - startTime) / 1000).toFixed(1)}s`,
+            message: 'Could not read document automatically. Please enter values from your Form 16.'
+          });
+        }
       }
     }
     
     // ═══════════════════════════════════════════════════════
-    // LAYER 3: Intelligent field extraction
+    // LAYER 4: Intelligent field extraction
     // ═══════════════════════════════════════════════════════
     
     const { fields, debugInfo } = extractFieldsIntelligent(extractedText);
