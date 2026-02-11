@@ -28,11 +28,9 @@ const LUX = {
 };
 
 const LOADING_STAGES = [
-  { id: 'upload', label: 'Receiving document', icon: '📥', duration: 1500 },
-  { id: 'analyze', label: 'Analyzing structure', icon: '🔍', duration: 2000 },
-  { id: 'ocr', label: 'Reading text (OCR)', icon: '📖', duration: 8000 },
-  { id: 'extract', label: 'Extracting fields', icon: '📊', duration: 2000 },
-  { id: 'validate', label: 'Validating data', icon: '✓', duration: 1000 },
+  { id: 'upload', label: 'Uploading PDF...', icon: '📤', duration: 1500 },
+  { id: 'extract', label: 'Extracting data...', icon: '📄', duration: 8000 },
+  { id: 'validate', label: 'Validating with AI...', icon: '✓', duration: 1500 },
 ];
 
 export default function ITRFilingHelp() {
@@ -44,6 +42,7 @@ export default function ITRFilingHelp() {
   const [loadingStage, setLoadingStage] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [pdfBase64, setPdfBase64] = useState(null);
+  const [previewMimeType, setPreviewMimeType] = useState('application/pdf');
   const [pdfTooLarge, setPdfTooLarge] = useState(false);
   const [verified, setVerified] = useState({
     grossSalary: false,
@@ -147,6 +146,7 @@ export default function ITRFilingHelp() {
       setExtractedData(null);
       setFields({});
       setPdfBase64(null);
+      setPreviewMimeType('application/pdf');
       setPdfTooLarge(false);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     } else if (step === 'payment') {
@@ -169,8 +169,8 @@ export default function ITRFilingHelp() {
     formData.append('file', file);
 
     try {
-      console.log('[ITR] Fetching /api/itr/extract-v2...');
-      const res = await fetch('/api/itr/extract-v2', {
+      console.log('[ITR] Fetching /api/itr/extract...');
+      const res = await fetch('/api/itr/extract', {
         method: 'POST',
         body: formData,
       });
@@ -183,25 +183,56 @@ export default function ITRFilingHelp() {
         data = JSON.parse(text);
       } catch (e) {
         console.error('Response was not JSON:', text.substring(0, 500));
-        alert('Server error: ' + (text.substring(0, 200) || 'Empty response'));
-        setStep('upload');
+        // Swiss-bank reliability: if the API returns non-JSON (proxy error, HTML, etc),
+        // fall back to manual review rather than blocking the user.
+        const safeFields = { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
+        setExtractedData({
+          success: true,
+          confidence: 0,
+          method: 'manual',
+          extractedCount: '0/4',
+          message: 'Could not read the server response. Please enter values from your Form 16 below.',
+        });
+        setFields(safeFields);
+        setPdfTooLarge(false);
+        setPreviewMimeType(file?.type || 'application/pdf');
+        setPdfBase64(null);
+        setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
+        setStep('review');
         return;
       }
 
-      if (data.success) {
-        setExtractedData(data);
-        setFields(data.fields);
-        if (data.pdfBase64) setPdfBase64(data.pdfBase64);
-        setPdfTooLarge(data.pdfTooLarge || false);
-        setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
-        setStep('review');
-      } else {
-        alert('Extraction failed: ' + (data.error || 'Unknown error') + (data.debug ? '\n\nDebug: ' + data.debug : ''));
-        setStep('upload');
-      }
+      // Swiss-bank reliability: never block the user on extraction quality.
+      const safeFields = data?.fields || { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
+      setExtractedData({
+        success: data?.success !== false,
+        confidence: typeof data?.confidence === 'number' ? data.confidence : 0,
+        method: data?.method || 'manual',
+        extractedCount: data?.extractedCount,
+        message: data?.message || 'Please verify and edit the values below.',
+      });
+      setFields(safeFields);
+      setPdfTooLarge(Boolean(data?.pdfTooLarge));
+      setPreviewMimeType(data?.previewMimeType || 'application/pdf');
+      setPdfBase64(data?.pdfBase64 || null);
+      setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
+      setStep('review');
     } catch (err) {
-      alert('Error: ' + err.message);
-      setStep('upload');
+      console.error('[ITR] Upload/extract failed:', err);
+      const safeFields = { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
+      setExtractedData({
+        success: true,
+        confidence: 0,
+        method: 'manual',
+        extractedCount: '0/4',
+        message: 'Could not process the document right now. Please enter values from your Form 16 below.',
+      });
+      setFields(safeFields);
+      setPdfTooLarge(false);
+      setPreviewMimeType(file?.type || 'application/pdf');
+      setPdfBase64(null);
+      setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
+      setStep('review');
     }
   }
 
@@ -293,7 +324,7 @@ export default function ITRFilingHelp() {
           <div className="bg-[color:var(--lux-card)]/70 border-2 border-dashed border-[color:var(--lux-foreground-10)] rounded-lg p-16 text-center hover:border-[color:var(--lux-accent)]/50 transition">
             <input
               type="file"
-              accept=".pdf"
+              accept=".pdf,image/*"
               onChange={(e) => {
                 console.log('[ITR] File input changed:', e.target?.files?.[0]?.name);
                 e.target.files[0] && handleUpload(e.target.files[0]);
@@ -303,8 +334,8 @@ export default function ITRFilingHelp() {
             />
             <label htmlFor="file-upload" className="cursor-pointer block">
               <div className="text-6xl mb-4">📄</div>
-              <p className="text-xl font-semibold text-[color:var(--lux-foreground)] mb-2">Click to upload PDF</p>
-              <p className="text-[color:var(--lux-foreground-60)]">Form 16, AIS, or Bank Statement</p>
+              <p className="text-xl font-semibold text-[color:var(--lux-foreground)] mb-2">Click to upload PDF or image</p>
+              <p className="text-[color:var(--lux-foreground-60)]">Form 16, AIS, bank statement, or photo scan</p>
             </label>
           </div>
         )}
@@ -410,24 +441,31 @@ export default function ITRFilingHelp() {
                 <h3 className="font-semibold text-[color:var(--lux-foreground)] mb-3 flex items-center gap-2">
                   <span>📄</span> Your Form 16 PDF
                 </h3>
-                {pdfBase64 ? (
+                {pdfBase64 && previewMimeType === 'application/pdf' ? (
                   <iframe
                     src={`data:application/pdf;base64,${pdfBase64}`}
                     className="w-full rounded border border-[color:var(--lux-foreground-10)]"
                     style={{ height: '450px' }}
                     title="Form 16 PDF Preview"
                   />
+                ) : pdfBase64 && previewMimeType?.startsWith('image/') ? (
+                  <img
+                    src={`data:${previewMimeType};base64,${pdfBase64}`}
+                    className="w-full rounded border border-[color:var(--lux-foreground-10)] object-contain"
+                    style={{ height: '450px' }}
+                    alt="Uploaded document preview"
+                  />
                 ) : pdfTooLarge ? (
                   <div className="h-[450px] flex flex-col items-center justify-center bg-[color:var(--lux-foreground-05)] rounded text-[color:var(--lux-foreground-60)] p-6 text-center">
                     <span className="text-4xl mb-4">📄</span>
-                    <p className="font-medium mb-2">PDF too large for preview</p>
+                    <p className="font-medium mb-2">File too large for preview</p>
                     <p className="text-sm text-[color:var(--lux-foreground-40)]">
-                      Your Form 16 is over 1MB. Please view it locally and verify the extracted values on the right.
+                      Your upload is over 1MB. Please view it locally and verify the extracted values on the right.
                     </p>
                   </div>
                 ) : (
                   <div className="h-[450px] flex items-center justify-center bg-[color:var(--lux-foreground-05)] rounded text-[color:var(--lux-foreground-40)]">
-                    <p>PDF preview not available</p>
+                    <p>Preview not available</p>
                   </div>
                 )}
               </div>

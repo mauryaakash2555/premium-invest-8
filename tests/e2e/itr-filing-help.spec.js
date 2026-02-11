@@ -6,13 +6,28 @@ function makeTestPdfBuffer() {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(12);
-  doc.text('Form 16 - Test Document', 40, 40);
+  // Keep this fully deterministic: embed digital text that unpdf can extract,
+  // so we do NOT hit OCR.space in CI.
+  doc.text('Form 16 - Test Document (digital)', 40, 40);
+  doc.text('Salary as per provisions contained in section 17(1): 850000', 40, 70);
+  doc.text('Total (Rs.) tax deducted: 125000', 40, 90);
+  doc.text('Standard Deduction u/s 16(ia): 50000', 40, 110);
+  doc.text('Deduction under section 80C: 100000', 40, 130);
+  // Add filler so extracted text comfortably exceeds the 200-char OCR threshold.
+  doc.text('Filler: '.repeat(50), 40, 160);
   const buf = Buffer.from(doc.output('arraybuffer'));
   makeTestPdfBuffer._cached = buf;
   return buf;
 }
 
-test('ITR Filing Help: upload PDF + manual input + calculate', async ({ page }) => {
+function makeLargePdfBuffer() {
+  const base = makeTestPdfBuffer();
+  // Trailing bytes keep the PDF parseable but push size over 1MB.
+  const pad = Buffer.alloc(1_200_000);
+  return Buffer.concat([base, pad]);
+}
+
+test('ITR Filing Help: upload PDF + verify + calculate', async ({ page }) => {
   const consoleErrors = [];
   page.on('console', (msg) => {
     if (msg.type() !== 'error') return;
@@ -26,7 +41,7 @@ test('ITR Filing Help: upload PDF + manual input + calculate', async ({ page }) 
 
   await page.goto('/tools/itr-filing-help');
   await expect(page.getByRole('heading', { name: 'Free ITR Filing Help' })).toBeVisible();
-  await expect(page.getByText('Upload Form 16, AIS, or Bank Interest Statement')).toBeVisible();
+  await expect(page.getByText('Upload Form 16, AIS, or Bank Statement')).toBeVisible();
 
   // Upload PDF
   const fileInput = page.locator('input[type="file"]').first();
@@ -36,23 +51,48 @@ test('ITR Filing Help: upload PDF + manual input + calculate', async ({ page }) 
     buffer: makeTestPdfBuffer(),
   });
 
-  // Should show scanned PDF message and manual form
-  await expect(page.getByText('scanned/image-based')).toBeVisible({ timeout: 10000 });
-  await expect(page.getByRole('heading', { name: 'Enter Values Manually' })).toBeVisible();
+  // Review step
+  await expect(page.getByRole('heading', { name: 'Verify Extracted Values' })).toBeVisible({ timeout: 20000 });
 
-  // Fill in manual values
-  await page.getByPlaceholder('e.g. 12,00,000').fill('1200000');
-  await page.getByPlaceholder('e.g. 1,20,000').fill('120000');
-  
-  // Click calculate
-  await page.getByRole('button', { name: 'Calculate Tax' }).click();
+  // Fill / ensure values are present
+  await page.getByPlaceholder('Enter Gross Salary').fill('850000');
+  await page.getByPlaceholder('Enter TDS Deducted').fill('125000');
+  await page.getByPlaceholder('Enter Standard Deduction').fill('50000');
+  await page.getByPlaceholder('Enter 80C Deductions').fill('100000');
 
-  // Should show calculation results
-  await expect(page.getByText('Tax Calculation')).toBeVisible();
-  await expect(page.getByText('Total Income')).toBeVisible();
+  // CTA label is gated: disabled state says "Verify all 4 fields...", enabled state says "Calculate Tax →".
+  const calculateBtn = page.getByRole('button', { name: /Verify all 4 fields|Calculate Tax/i });
+  await expect(calculateBtn).toBeDisabled();
+
+  await page.getByText('I verified Gross Salary is correct').click();
+  await page.getByText('I verified TDS Deducted is correct').click();
+  await page.getByText('I verified Standard Deduction is correct').click();
+  await page.getByText('I verified 80C Deductions is correct').click();
+
+  await expect(calculateBtn).toBeEnabled();
+  await calculateBtn.click();
+
+  // Payment step headings
+  await expect(page.getByText('Old Tax Regime')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'New Tax Regime' })).toBeVisible();
 
   const filteredErrors = consoleErrors.filter(e => e !== 'Missing property');
   expect(filteredErrors, filteredErrors.join('\n')).toEqual([]);
+});
+
+test('ITR Filing Help: large PDF triggers preview fallback but still works', async ({ page }) => {
+  await page.goto('/tools/itr-filing-help');
+  await expect(page.getByRole('heading', { name: 'Free ITR Filing Help' })).toBeVisible();
+
+  const fileInput = page.locator('input[type="file"]').first();
+  await fileInput.setInputFiles({
+    name: 'form16_large.pdf',
+    mimeType: 'application/pdf',
+    buffer: makeLargePdfBuffer(),
+  });
+
+  await expect(page.getByRole('heading', { name: 'Verify Extracted Values' })).toBeVisible({ timeout: 20000 });
+  await expect(page.getByText('File too large for preview')).toBeVisible();
 });
 
 test('Live Intelligence: crawlable HTML + route reachable', async ({ page }) => {

@@ -149,7 +149,17 @@ export async function POST(request) {
     const file = formData.get('file');
     
     if (!file) {
-      return Response.json({ success: false, error: 'No file provided' }, { status: 400 });
+      return Response.json({
+        success: true,
+        fields: { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 },
+        confidence: 0,
+        method: 'manual',
+        message: 'No file provided. Please enter values from your Form 16.',
+        pdfBase64: null,
+        previewMimeType: 'application/pdf',
+        pdfTooLarge: false,
+        processingTime: `${((Date.now() - startTime) / 1000).toFixed(1)}s`
+      });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -159,6 +169,7 @@ export async function POST(request) {
     
     // PDF Preview: Only send base64 if <1MB to avoid Vercel response limits
     const pdfTooLarge = buffer.length >= 1000000;
+    const previewMimeType = mimeType || (isPDF ? 'application/pdf' : 'application/octet-stream');
     const pdfBase64 = pdfTooLarge ? null : buffer.toString('base64');
     
     let text = '';
@@ -197,6 +208,7 @@ export async function POST(request) {
           method: 'manual',
           message: 'Could not read document. Please enter values from your Form 16.',
           pdfBase64,
+          previewMimeType,
           pdfTooLarge,
           processingTime: `${((Date.now() - startTime) / 1000).toFixed(1)}s`
         });
@@ -253,6 +265,7 @@ export async function POST(request) {
         ? 'Partial extraction - please verify and complete.'
         : 'Low confidence - please review all fields.',
       pdfBase64,
+      previewMimeType,
       pdfTooLarge,
       processingTime: `${elapsed}s`
     });
@@ -267,6 +280,7 @@ export async function POST(request) {
       message: 'Processing error. Please enter values from your Form 16.',
       error: error.message,
       pdfBase64: null,
+      previewMimeType: 'application/pdf',
       pdfTooLarge: true
     });
   }
