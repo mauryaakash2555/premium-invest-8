@@ -4,7 +4,33 @@
 
 ---
 
-## 📌 THE GOLDEN RULE
+## �🚫🚫 BANNED COLORS - MANDATORY READING 🚫🚫🚫
+
+**⛔ BEFORE ANY STYLING, READ: `BANNED_COLORS.md` ⛔**
+
+**NEVER USE THESE TAILWIND CLASSES:**
+```
+❌ bg-green-*, text-green-*, border-green-*
+❌ bg-yellow-*, text-yellow-*, border-yellow-*
+❌ bg-amber-*, text-amber-*, border-amber-*
+❌ bg-red-*, text-red-*, border-red-*
+❌ bg-orange-*, text-orange-*, border-orange-*
+```
+
+**ONLY USE LUX CSS VARIABLES:**
+```
+✅ bg-[color:var(--lux-background)]
+✅ text-[color:var(--lux-foreground)]
+✅ border-[color:var(--lux-accent)]
+✅ text-[color:var(--lux-foreground-60)]
+✅ bg-[color:var(--lux-foreground-10)]
+```
+
+**The project owner HATES muddy yellow/brown/green colors. This has caused extreme frustration multiple times. ZERO TOLERANCE.**
+
+---
+
+## �📌 THE GOLDEN RULE
 
 ### ✅ DO THIS:
 - **Isolation:** Each new page or complex section should be treated as an isolated unit.

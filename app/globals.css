@@ -75,6 +75,16 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* ═══════════════════════════════════════════════════════════════
+     ⛔⛔⛔ BANNED COLORS - READ BANNED_COLORS.md ⛔⛔⛔
+     
+     NEVER USE: green-*, yellow-*, amber-*, red-*, orange-*
+     ONLY USE: These --lux-* variables below
+     
+     The project owner HATES muddy yellow/brown/green colors.
+     Using them causes EXTREME frustration. ZERO TOLERANCE.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ═══════════════════════════════════════════════════════════════
      LUX THEME - Approved OKLCH colors from About Us page
      Use these for consistent premium styling across all pages
      ═══════════════════════════════════════════════════════════════ */

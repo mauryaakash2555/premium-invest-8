@@ -4,6 +4,21 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
+/**
+ * ⛔⛔⛔ BANNED COLORS - DO NOT USE ⛔⛔⛔
+ * 
+ * NEVER use these Tailwind classes in this file:
+ * ❌ bg-green-*, text-green-*, border-green-*
+ * ❌ bg-yellow-*, text-yellow-*, border-yellow-*
+ * ❌ bg-amber-*, text-amber-*, border-amber-*
+ * ❌ bg-red-*, text-red-*, border-red-*
+ * 
+ * ONLY use the LUX CSS variables defined below.
+ * See BANNED_COLORS.md for full details.
+ * 
+ * The project owner HATES muddy yellow/brown/green colors.
+ */
+
 const LUX = {
   background: 'oklch(0.06 0.005 280)',
   foreground: 'oklch(0.95 0.01 85)',

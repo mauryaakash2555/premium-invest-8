@@ -2,7 +2,26 @@
 
 ## ⚠️ STOP BEFORE YOU CODE!
 
-## 🔒 CRITICAL: PROTECTED BOT - DO NOT TOUCH
+## �🚫🚫 CRITICAL: BANNED COLORS - READ FIRST 🚫🚫🚫
+
+**YOU MUST READ:** `BANNED_COLORS.md`
+
+**NEVER USE THESE TAILWIND CLASSES:**
+- ❌ `bg-green-*`, `text-green-*`, `border-green-*`
+- ❌ `bg-yellow-*`, `text-yellow-*`, `border-yellow-*`
+- ❌ `bg-amber-*`, `text-amber-*`, `border-amber-*`
+- ❌ `bg-red-*`, `text-red-*`, `border-red-*`
+
+**ONLY USE LUX VARIABLES:**
+- ✅ `bg-[color:var(--lux-background)]`
+- ✅ `text-[color:var(--lux-foreground)]`
+- ✅ `border-[color:var(--lux-accent)]`
+
+**The owner HATES muddy colors. Using them causes extreme frustration.**
+
+---
+
+## �🔒 CRITICAL: PROTECTED BOT - DO NOT TOUCH
 
 **READ THIS FIRST:** `DO_NOT_TOUCH_BOT.md`
 
