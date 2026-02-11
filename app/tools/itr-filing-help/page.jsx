@@ -361,10 +361,10 @@ export default function ITRFilingHelp() {
             {/* Confidence Banner */}
             <div className={`mb-6 p-4 rounded-lg border ${
               extractedData.confidence > 0.9 
-                ? 'bg-green-900/20 border-green-500/30 text-green-300' 
+                ? 'bg-[color:var(--lux-foreground)]/10 border-[color:var(--lux-accent)]/50 text-[color:var(--lux-foreground)]' 
                 : extractedData.confidence > 0.6 
-                ? 'bg-yellow-900/20 border-yellow-500/30 text-yellow-300'
-                : 'bg-red-900/20 border-red-500/30 text-red-300'
+                ? 'bg-[color:var(--lux-foreground-10)] border-[color:var(--lux-foreground-40)] text-[color:var(--lux-foreground)]'
+                : 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-40)] text-[color:var(--lux-foreground-60)]'
             }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -417,9 +417,9 @@ export default function ITRFilingHelp() {
                     const fieldValue = fields[key] || 0;
                     const confidence = extractedData.confidence;
                     const bgColor = fieldValue > 0 
-                      ? (confidence > 0.9 ? 'bg-green-900/20 border-green-500/30' 
-                         : confidence > 0.6 ? 'bg-yellow-900/20 border-yellow-500/30' 
-                         : 'bg-red-900/20 border-red-500/30')
+                      ? (confidence > 0.9 ? 'bg-[color:var(--lux-foreground-10)] border-[color:var(--lux-accent)]/30' 
+                         : confidence > 0.6 ? 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-40)]' 
+                         : 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-40)]')
                       : 'bg-[var(--lux-background)] border-[color:var(--lux-foreground-10)]';
                     
                     return (
@@ -442,9 +442,9 @@ export default function ITRFilingHelp() {
                             type="checkbox"
                             checked={verified[key]}
                             onChange={(e) => setVerified(prev => ({ ...prev, [key]: e.target.checked }))}
-                            className="w-4 h-4 rounded border-[color:var(--lux-foreground-40)] accent-green-500"
+                            className="w-4 h-4 rounded border-[color:var(--lux-foreground-40)] accent-[color:var(--lux-accent)]"
                           />
-                          <span className={verified[key] ? 'text-green-400' : 'text-[color:var(--lux-foreground-60)]'}>
+                          <span className={verified[key] ? 'text-[color:var(--lux-accent)]' : 'text-[color:var(--lux-foreground-60)]'}>
                             I verified {label} is correct
                           </span>
                         </label>
@@ -463,7 +463,7 @@ export default function ITRFilingHelp() {
                   </div>
                   <div className="h-2 bg-[color:var(--lux-foreground-10)] rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-green-500 rounded-full transition-all duration-300"
+                      className="h-full bg-[color:var(--lux-accent)] rounded-full transition-all duration-300"
                       style={{ width: `${(Object.values(verified).filter(v => v).length / 4) * 100}%` }}
                     />
                   </div>
