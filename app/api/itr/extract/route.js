@@ -52,10 +52,10 @@ async function extractFields(text) {
   return { fields, confidence, count };
 }
 
-async function extractWithOCR(buffer) {
-  console.log('[BULLETPROOF] Using OCR.space...');
+async function extractWithOCR(buffer, mimeType = 'application/pdf') {
+  console.log('[BULLETPROOF] Using OCR.space, mimeType:', mimeType);
   const formData = new URLSearchParams();
-  formData.append('base64Image', `data:application/pdf;base64,${buffer.toString('base64')}`);
+  formData.append('base64Image', `data:${mimeType};base64,${buffer.toString('base64')}`);
   formData.append('apikey', process.env.OCR_SPACE_API_KEY || 'K89008606188957');
   formData.append('language', 'eng');
   formData.append('OCREngine', '2');
@@ -93,24 +93,29 @@ export async function POST(request) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const pdfBase64 = buffer.toString('base64');
+    const mimeType = file.type || 'application/pdf';
+    const fileName = file.name || 'document';
+    const isPDF = mimeType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf');
     let text = '';
     let method = 'unpdf';
 
-    console.log('[BULLETPROOF] File:', file.name, 'Size:', buffer.length);
+    console.log('[BULLETPROOF] File:', fileName, 'Type:', mimeType, 'Size:', buffer.length, 'isPDF:', isPDF);
 
-    // Layer 1: Try digital extraction
-    try {
-      const { text: extracted } = await extractText(new Uint8Array(buffer), { mergePages: true });
-      console.log('[BULLETPROOF] Digital extracted:', extracted.length, 'chars');
-      if (extracted.length > 200) text = extracted;
-    } catch (e) {
-      console.log('[BULLETPROOF] Digital failed:', e.message);
+    // Layer 1: Try digital extraction (only for PDFs)
+    if (isPDF) {
+      try {
+        const { text: extracted } = await extractText(new Uint8Array(buffer), { mergePages: true });
+        console.log('[BULLETPROOF] Digital extracted:', extracted.length, 'chars');
+        if (extracted.length > 200) text = extracted;
+      } catch (e) {
+        console.log('[BULLETPROOF] Digital failed:', e.message);
+      }
     }
 
-    // Layer 2: Fallback to OCR if low text
+    // Layer 2: Fallback to OCR if low text OR if it's an image
     if (text.length < 200) {
       try {
-        text = await extractWithOCR(buffer);
+        text = await extractWithOCR(buffer, mimeType);
         method = 'ocr';
       } catch (e) {
         console.log('[BULLETPROOF] OCR failed:', e.message);
