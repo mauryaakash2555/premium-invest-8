@@ -44,6 +44,7 @@ export default function ITRFilingHelp() {
   const [loadingStage, setLoadingStage] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [pdfBase64, setPdfBase64] = useState(null);
+  const [pdfTooLarge, setPdfTooLarge] = useState(false);
   const [verified, setVerified] = useState({
     grossSalary: false,
     tds: false,
@@ -146,6 +147,7 @@ export default function ITRFilingHelp() {
       setExtractedData(null);
       setFields({});
       setPdfBase64(null);
+      setPdfTooLarge(false);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     } else if (step === 'payment') {
       setStep('review');
@@ -190,6 +192,7 @@ export default function ITRFilingHelp() {
         setExtractedData(data);
         setFields(data.fields);
         if (data.pdfBase64) setPdfBase64(data.pdfBase64);
+        setPdfTooLarge(data.pdfTooLarge || false);
         setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
         setStep('review');
       } else {
@@ -387,7 +390,15 @@ export default function ITRFilingHelp() {
                   <span className="font-semibold">{Math.round(extractedData.confidence * 100)}% Confidence</span>
                   {extractedData.extractedCount && <span className="text-sm opacity-70">({extractedData.extractedCount} fields)</span>}
                 </div>
-                <span className="text-sm opacity-70">{extractedData.method === 'ocr' ? 'Scanned PDF (OCR)' : 'Digital PDF'}</span>
+                <span className="text-sm opacity-70">
+                  {extractedData.method?.includes('gpt') 
+                    ? 'AI Enhanced' 
+                    : extractedData.method === 'ocr' || extractedData.method === 'ocr_space'
+                    ? 'Scanned PDF (OCR)' 
+                    : extractedData.method === 'manual'
+                    ? 'Manual Entry'
+                    : 'Digital PDF'}
+                </span>
               </div>
               {extractedData.message && <p className="text-sm mt-2 opacity-80">{extractedData.message}</p>}
             </div>
@@ -406,6 +417,14 @@ export default function ITRFilingHelp() {
                     style={{ height: '450px' }}
                     title="Form 16 PDF Preview"
                   />
+                ) : pdfTooLarge ? (
+                  <div className="h-[450px] flex flex-col items-center justify-center bg-[color:var(--lux-foreground-05)] rounded text-[color:var(--lux-foreground-60)] p-6 text-center">
+                    <span className="text-4xl mb-4">📄</span>
+                    <p className="font-medium mb-2">PDF too large for preview</p>
+                    <p className="text-sm text-[color:var(--lux-foreground-40)]">
+                      Your Form 16 is over 1MB. Please view it locally and verify the extracted values on the right.
+                    </p>
+                  </div>
                 ) : (
                   <div className="h-[450px] flex items-center justify-center bg-[color:var(--lux-foreground-05)] rounded text-[color:var(--lux-foreground-40)]">
                     <p>PDF preview not available</p>
@@ -424,11 +443,11 @@ export default function ITRFilingHelp() {
 
                 <div className="space-y-4">
                   {[
-                    { key: 'grossSalary', label: 'Gross Salary', hint: 'Section 17(1) in Form 16' },
-                    { key: 'tds', label: 'TDS Deducted', hint: 'Total Tax Deducted row' },
-                    { key: 'standardDeduction', label: 'Standard Deduction', hint: 'Usually ₹50,000' },
-                    { key: 'deductions80C', label: '80C Deductions', hint: 'PF, LIC, etc.' },
-                  ].map(({ key, label, hint }) => {
+                    { key: 'grossSalary', label: 'Gross Salary', hint: 'Section 17(1) in Form 16', tooltip: 'Find this under "Salary as per provisions contained in section 17(1)" in your Form 16 Part B' },
+                    { key: 'tds', label: 'TDS Deducted', hint: 'Total Tax Deducted row', tooltip: 'Find the "Total" row in the "Amount of tax deducted" column of Form 16 Part A' },
+                    { key: 'standardDeduction', label: 'Standard Deduction', hint: 'Usually ₹50,000', tooltip: 'Standard deduction under Section 16(ia) - maximum ₹50,000 for salaried individuals' },
+                    { key: 'deductions80C', label: '80C Deductions', hint: 'PF, LIC, etc.', tooltip: 'Total of PF, LIC premium, ELSS, PPF, etc. claimed under Section 80C (max ₹1.5 lakh)' },
+                  ].map(({ key, label, hint, tooltip }) => {
                     const fieldValue = fields[key] || 0;
                     const confidence = extractedData.confidence;
                     const bgColor = fieldValue > 0 
@@ -449,6 +468,8 @@ export default function ITRFilingHelp() {
                             type="number"
                             value={fieldValue}
                             onChange={(e) => handleFieldChange(key, parseInt(e.target.value) || 0)}
+                            title={tooltip}
+                            placeholder={`Enter ${label}`}
                             className={`flex-1 ${bgColor} border rounded px-3 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]`}
                           />
                         </div>
