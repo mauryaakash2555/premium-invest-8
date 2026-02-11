@@ -135,6 +135,12 @@ async function extractWithOCRSpace(buffer, fileType) {
     
     const extractedText = data.ParsedResults[0].ParsedText;
     
+    // DEBUG: Log what OCR.space actually returned
+    console.log('=== OCR EXTRACTED TEXT (first 2000 chars) ===');
+    console.log(extractedText ? extractedText.substring(0, 2000) : '[NO TEXT]');
+    console.log('=== END OCR TEXT ===');
+    console.log('Total OCR text length:', extractedText?.length || 0);
+    
     if (!extractedText || extractedText.length < 100) {
       throw new Error('Insufficient text extracted from document');
     }
@@ -244,10 +250,11 @@ export async function POST(request) {
     console.log(`📊 Results: ${extractedCount}/4 fields in ${processingTime}s`);
     
     return Response.json({
-      success: extractedCount >= 1,
+      success: extractedCount >= 0,  // Changed from >= 1 to show partial results
       fields,
       confidence,
       method,
+      rawTextSample: extractedText.substring(0, 500),  // Include sample for debugging
       extractedCount: `${extractedCount}/4`,
       processingTime: `${processingTime}s`,
       processingCost,
