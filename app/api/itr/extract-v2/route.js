@@ -1,222 +1,232 @@
 import { extractText } from 'unpdf';
+import { createWorker } from 'tesseract.js';
 
 /**
- * ACCURATE ITR EXTRACTOR (PRODUCTION)
- * Layer 1: Digital PDF (unpdf)
- * Layer 2: OCR.space (fast, reliable in serverless)
- *
- * Uses context-aware regex so we don't pick random numbers.
+ * DEBUG VERSION - LOGS EVERYTHING
+ * Use this to see what Tesseract extracts and fix regex
  */
 
 function extractFieldsAccurate(text) {
   const fields = { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 };
-
+  
+  console.log('\n========================================');
+  console.log('FULL OCR TEXT START');
+  console.log('========================================');
+  console.log(text);
+  console.log('========================================');
+  console.log('FULL OCR TEXT END');
+  console.log('========================================\n');
+  
   const normalized = text.replace(/\s+/g, ' ');
-
-  console.log('\n=== EXTRACTION DEBUG ===');
-
-  // GROSS SALARY - Must be near "section 17(1)" or "gross salary"
-  const salaryContext = normalized.match(/(?:section\s+17\s*\(\s*1\s*\)|gross\s+salary)(.{0,200})/is);
+  
+  console.log('=== EXTRACTION DEBUG ===');
+  
+  // GROSS SALARY - Search for it
+  console.log('\n1. SEARCHING FOR GROSS SALARY:');
+  const salaryContext = normalized.match(/(?:section\s+17\s*\(\s*1\s*\)|gross\s+salary)(.{0,300})/is);
   if (salaryContext) {
+    console.log('Found context:', salaryContext[0].substring(0, 200));
     const numbers = salaryContext[1].match(/\d{6,8}/g);
+    console.log('Numbers found:', numbers);
     if (numbers) {
       for (const num of numbers) {
-        const val = parseInt(num, 10);
-        if (val >= 100000 && val <= 99999999) {
+        const val = parseInt(num);
+        if (val >= 1000000 && val <= 99999999) {
           fields.grossSalary = val;
-          console.log('✓ Gross Salary:', val, '(context match)');
+          console.log('✓ SELECTED Gross Salary:', val);
           break;
         }
       }
     }
+  } else {
+    console.log('No gross salary context found');
   }
-
-  // TDS - Prefer "Total" row (take last occurrence)
+  
+  // TDS - Search for it
+  console.log('\n2. SEARCHING FOR TDS:');
   const tdsMatches = [...normalized.matchAll(/total[^\d]{0,50}(\d{5,7})/gis)];
+  console.log('Found', tdsMatches.length, 'matches for "Total"');
+  tdsMatches.forEach((m, i) => {
+    console.log(`  Match ${i + 1}: ${m[0].substring(0, 50)} -> ${m[1]}`);
+  });
+  
   if (tdsMatches.length > 0) {
     const lastMatch = tdsMatches[tdsMatches.length - 1];
-    const val = parseInt(lastMatch[1], 10);
-    if (val >= 1000 && val <= 10000000) {
+    const val = parseInt(lastMatch[1]);
+    if (val >= 10000 && val <= 5000000) {
       fields.tds = val;
-      console.log('✓ TDS:', val, '(total row)');
+      console.log('✓ SELECTED TDS:', val, '(last Total match)');
     }
-  }
-
-  // Fallback TDS
-  if (!fields.tds) {
+  } else {
+    console.log('No TDS found, trying "tax deducted"');
     const match = normalized.match(/tax\s+deducted\s+at\s+source[^\d]{0,100}(\d{5,7})/is);
     if (match) {
-      const val = parseInt(match[1], 10);
-      if (val >= 1000 && val <= 10000000) {
+      const val = parseInt(match[1]);
+      if (val >= 10000 && val <= 5000000) {
         fields.tds = val;
-        console.log('✓ TDS:', val, '(tax deducted at source)');
+        console.log('✓ SELECTED TDS:', val, '(from "tax deducted at source")');
       }
     }
   }
-
-  // STANDARD DEDUCTION - usually 50000, but only if near the right keywords
+  
+  // STANDARD DEDUCTION
+  console.log('\n3. SEARCHING FOR STANDARD DEDUCTION:');
   if (normalized.match(/(?:standard\s+deduction|16\s*\(\s*ia\s*\))/is)) {
+    console.log('Found "standard deduction" or "16(ia)"');
     if (text.includes('50000')) {
       fields.standardDeduction = 50000;
-      console.log('✓ Standard Deduction: 50000');
+      console.log('✓ SELECTED Standard Deduction: 50000');
     } else {
       const match = normalized.match(/(?:standard\s+deduction|16\s*\(\s*ia\s*\))[^\d]{0,100}(\d{5})/is);
       if (match) {
-        fields.standardDeduction = parseInt(match[1], 10);
-        console.log('✓ Standard Deduction:', fields.standardDeduction);
+        fields.standardDeduction = parseInt(match[1]);
+        console.log('✓ SELECTED Standard Deduction:', match[1]);
       }
     }
+  } else {
+    console.log('No standard deduction found');
   }
-
-  // 80C - Must be near "80C"
-  const c80Context = normalized.match(/(?:section\s+)?80\s*c(.{0,150})/is);
+  
+  // 80C
+  console.log('\n4. SEARCHING FOR 80C:');
+  const c80Context = normalized.match(/(?:section\s+)?80\s*c(.{0,200})/is);
   if (c80Context) {
+    console.log('Found 80C context:', c80Context[0].substring(0, 150));
     const numbers = c80Context[1].match(/\d{5,7}/g);
+    console.log('Numbers after 80C:', numbers);
     if (numbers) {
       for (const num of numbers) {
-        const val = parseInt(num, 10);
-        if (val >= 1000 && val <= 150000) {
+        const val = parseInt(num);
+        if (val >= 10000 && val <= 150000) {
           fields.deductions80C = val;
-          console.log('✓ 80C:', val);
+          console.log('✓ SELECTED 80C:', val);
           break;
         }
       }
     }
+  } else {
+    console.log('No 80C context found');
   }
-
-  console.log('=== END DEBUG ===\n');
-
+  
+  console.log('\n=== END EXTRACTION DEBUG ===\n');
+  
   return fields;
 }
 
-async function extractWithOCRSpace(buffer, fileType) {
-  const base64Data = buffer.toString('base64');
-  const base64Image = `data:${fileType};base64,${base64Data}`;
-
-  const formData = new URLSearchParams();
-  formData.append('base64Image', base64Image);
-  formData.append('apikey', process.env.OCR_SPACE_API_KEY || 'K89008606188957');
-  formData.append('language', 'eng');
-  formData.append('isOverlayRequired', 'false');
-  formData.append('detectOrientation', 'true');
-  formData.append('scale', 'true');
-  formData.append('OCREngine', '2');
-
-  console.log('Calling OCR.space API...');
-
-  const response = await fetch('https://api.ocr.space/parse/image', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: formData.toString()
-  });
-
-  const data = await response.json();
-
-  if (data.IsErroredOnProcessing) {
-    const error = data.ErrorMessage?.[0] || 'OCR processing failed';
-    console.error('OCR Error:', error);
-    throw new Error(error);
+async function extractWithTesseract(buffer, isImage = false) {
+  const worker = await createWorker('eng');
+  
+  try {
+    console.log('⚙️ Configuring Tesseract...');
+    await worker.setParameters({
+      tessedit_pageseg_mode: '1',
+      tessedit_ocr_engine_mode: '2',
+    });
+    
+    console.log('🔍 Running OCR...');
+    const { data: { text, confidence } } = await worker.recognize(buffer);
+    
+    console.log(`✅ OCR completed: ${text.length} chars, ${confidence.toFixed(1)}% confidence`);
+    
+    return text;
+    
+  } finally {
+    await worker.terminate();
   }
-
-  if (!data.ParsedResults || data.ParsedResults.length === 0) {
-    throw new Error('No text found in document');
-  }
-
-  const extractedText = data.ParsedResults[0].ParsedText || '';
-
-  console.log('OCR extracted length:', extractedText.length);
-  console.log('OCR sample (first 1000 chars):', extractedText.substring(0, 1000));
-
-  if (extractedText.length < 50) {
-    throw new Error('Insufficient text extracted - document may be unreadable');
-  }
-
-  return extractedText;
 }
 
 export async function POST(request) {
   const start = Date.now();
-
+  
   try {
     const formData = await request.formData();
     const file = formData.get('file');
-
-    if (!file) {
-      return Response.json({ success: false, error: 'No file provided' }, { status: 400 });
-    }
-
+    if (!file) return Response.json({ success: false, error: 'No file' }, { status: 400 });
+    
     const buffer = Buffer.from(await file.arrayBuffer());
-    const fileType = file.type || 'application/pdf';
-    const fileName = file.name || 'upload.pdf';
-
-    console.log(`\n📄 Processing: ${fileName} (${fileType}, ${(buffer.length / 1024).toFixed(0)}KB)`);
-
+    const fileType = file.type;
+    const fileName = file.name;
+    
+    console.log(`\n📄 Processing: ${fileName} (${(buffer.length / 1024).toFixed(0)}KB)`);
+    
     let text = '';
     let method = '';
-    let processingCost = 0;
-
-    // Layer 1: Digital PDF
-    if (fileType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf')) {
-      console.log('⏳ Layer 1: Digital PDF extraction...');
+    
+    // LAYER 1: Digital PDF
+    if (fileType === 'application/pdf') {
+      console.log('⏳ Layer 1: Digital PDF...');
       try {
         const result = await extractText(new Uint8Array(buffer), { mergePages: true });
-        console.log('Digital extracted length:', result.text?.length || 0);
-
-        if ((result.text || '').length > 50) {
+        if (result.text.length > 500) {
           text = result.text;
           method = 'digital_pdf';
-          processingCost = 0;
-          console.log('✅ Digital PDF extraction used');
+          console.log(`✅ Digital: ${text.length} chars`);
         } else {
-          console.log('⚠️ Low/empty digital text, switching to OCR');
+          console.log('⚠️ Low text, using OCR');
         }
       } catch (err) {
-        console.log('⚠️ Digital extraction failed, switching to OCR');
+        console.log('⚠️ Digital failed:', err.message);
       }
     }
-
-    // Layer 2: OCR.space
+    
+    // LAYER 2: Tesseract OCR
     if (!text) {
-      console.log('⏳ Layer 2: OCR.space...');
-      text = await extractWithOCRSpace(buffer, fileType);
-      method = 'ocr_space';
-      processingCost = 0.4;
-      console.log('✅ OCR.space extraction used');
+      console.log('⏳ Layer 2: Tesseract OCR...');
+      
+      try {
+        const isImage = fileType.startsWith('image/');
+        text = await extractWithTesseract(buffer, isImage);
+        method = 'tesseract_ocr';
+        console.log(`✅ OCR extracted ${text.length} chars`);
+        
+      } catch (err) {
+        console.error('❌ OCR failed:', err.message);
+        
+        return Response.json({
+          success: false,
+          requiresManualEntry: true,
+          error: 'Could not read document. Please enter values manually.',
+          fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
+          confidence: 0,
+          extractedCount: '0/4'
+        }, { status: 500 });
+      }
     }
-
-    // Extract fields
-    console.log('🔍 Extracting fields (context-aware)...');
+    
+    // EXTRACT FIELDS with full logging
     const fields = extractFieldsAccurate(text);
-
-    // EMERGENCY DEBUG - Save full OCR text
-    console.log('=== FULL OCR TEXT ===');
-    console.log(text);
-    console.log('=== END FULL TEXT ===');
-
+    
     const count = Object.values(fields).filter(v => v > 0).length;
-    const time = ((Date.now() - start) / 1000).toFixed(2);
-
-    console.log(`📊 Extracted ${count}/4 fields in ${time}s via ${method}`);
-
+    const time = ((Date.now() - start) / 1000).toFixed(1);
+    
+    console.log(`\n📊 FINAL RESULTS:`);
+    console.log(`   Extracted: ${count}/4 fields`);
+    console.log(`   Time: ${time}s`);
+    console.log(`   Method: ${method}`);
+    console.log(`   Gross Salary: ${fields.grossSalary || 0}`);
+    console.log(`   TDS: ${fields.tds || 0}`);
+    console.log(`   Standard Deduction: ${fields.standardDeduction || 0}`);
+    console.log(`   80C: ${fields.deductions80C || 0}`);
+    
     return Response.json({
-      success: true, // Always true if we got text (lets UI proceed)
+      success: count >= 1,
       fields,
       confidence: count >= 3 ? 0.95 : count >= 2 ? 0.75 : count >= 1 ? 0.6 : 0.3,
       extractedCount: `${count}/4`,
       method,
       processingTime: `${time}s`,
-      processingCost,
+      processingCost: 0,
       requiresManualEntry: count === 0,
-      textLength: text.length,
       message: count >= 3
         ? 'Extracted successfully! Please verify values.'
         : count >= 1
         ? 'Partial extraction. Verify and fill missing values.'
-        : 'Could not auto-extract fields. Please enter values manually.'
+        : 'Please enter values manually.'
     });
+    
   } catch (error) {
     console.error('💥 Fatal error:', error);
-
+    console.error('Stack:', error.stack);
     return Response.json({
       success: false,
       error: 'Processing failed',
