@@ -446,11 +446,11 @@ export default function ITRFilingHelp() {
               {/* Left: PDF Viewer */}
               <div>
                 {pdfBase64 && previewMimeType === 'application/pdf' ? (
-                  <div className="bg-[#1a1a1a] p-4 rounded-lg h-[800px] overflow-auto">
+                  <div className="bg-[#1a1a1a] p-6 rounded-lg h-[800px] overflow-auto border border-[color:var(--lux-foreground-10)]">
                     <iframe
                       src={`data:application/pdf;base64,${pdfBase64}`}
                       className="w-full h-full border-0"
-                      title="Form16"
+                      title="Form 16 PDF"
                     />
                   </div>
                 ) : pdfTooLarge ? (

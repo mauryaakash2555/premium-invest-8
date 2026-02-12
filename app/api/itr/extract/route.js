@@ -1,7 +1,7 @@
 import { extractText } from 'unpdf';
 
 const SAFE_FIELDS = { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
-const PREVIEW_LIMIT_BYTES = 1_000_000;
+const PREVIEW_LIMIT_BYTES = 1_200_000;
 
 function coerceNonNegativeInt(value) {
   const n = typeof value === 'number' ? value : Number(value);
@@ -12,8 +12,8 @@ function coerceNonNegativeInt(value) {
 
 async function parseWithGPT(text) {
   const safeText = String(text || '');
-  console.log('=== GPT INPUT TEXT LENGTH ===', safeText.length);
-  console.log('=== FIRST 1500 CHARS ===', safeText.substring(0, 1500));
+  console.log('=== FULL TEXT LENGTH ===', safeText.length);
+  console.log('=== FIRST 2000 CHARS ===', safeText.substring(0, 2000));
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -27,25 +27,25 @@ async function parseWithGPT(text) {
       messages: [
         {
           role: 'user',
-          content: `Extract exactly these 4 numbers from the Form16 text. 
-Look specifically for:
-- Gross Salary near "section 17(1)" or "salary as per provisions"
-- TDS near "tax deducted at source" or "total tax deducted" or "amount of tax deducted"
-- Standard Deduction near "section 16(ia)" or "standard deduction"
-- 80C Deductions near "section 80C" or "deduction under section 80C"
+          content: `This is a multi-page TRACES Form16 PDF (possibly OCR text). Extract exactly these 4 numbers:
+
+- grossSalary: look for "section 17(1)" or "salary as per provisions contained in section 17(1)" → the big salary number
+- tds: look for "Total (Rs.)" in tax deducted column or "amount of tax deducted" or "tax deducted at source"
+- standardDeduction: look for "standard deduction under section 16(ia)" or "section 16(ia)"
+- deductions80C: look for "deduction under section 80C" or "section 80C"
 
 Return ONLY valid JSON, no explanation:
 {"grossSalary": number, "tds": number, "standardDeduction": number, "deductions80C": number}
 
 Text:
-${safeText.substring(0, 7000)}`,
+${safeText.substring(0, 8000)}`,
         },
       ],
     }),
   });
 
   const data = await response.json();
-  console.log('=== GPT RAW RESPONSE ===', JSON.stringify(data, null, 2));
+  console.log('=== GPT RESPONSE ===', JSON.stringify(data, null, 2));
 
   try {
     const parsed = JSON.parse(data?.choices?.[0]?.message?.content || '');
@@ -63,11 +63,16 @@ ${safeText.substring(0, 7000)}`,
 }
 
 async function extractWithOCR(buffer, mimeType = 'application/pdf') {
+  if (!process.env.OCR_SPACE_API_KEY) {
+    throw new Error('OCR_SPACE_API_KEY not configured');
+  }
   const formData = new URLSearchParams();
   formData.append('base64Image', `data:${mimeType};base64,${buffer.toString('base64')}`);
-  formData.append('apikey', process.env.OCR_SPACE_API_KEY || 'K89008606188957');
+  formData.append('apikey', process.env.OCR_SPACE_API_KEY);
   formData.append('language', 'eng');
   formData.append('OCREngine', '2');
+  formData.append('scale', 'true');
+  formData.append('isTable', 'true');
 
   const res = await fetch('https://api.ocr.space/parse/image', {
     method: 'POST',
