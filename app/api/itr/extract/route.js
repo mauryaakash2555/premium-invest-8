@@ -14,36 +14,57 @@ import { extractText } from 'unpdf';
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FIELD EXTRACTION - Flexible regex patterns
+// FIELD EXTRACTION - ACCURATE (keyword-window parsing to prevent swapping)
 // ═══════════════════════════════════════════════════════════════════════════════
+
+function cleanForAccurateRegex(text) {
+  // Aggressively normalize to avoid OCR / PDF text variance.
+  // Example: "Section 17 (1)" -> "section171".
+  return (text || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function parseIntSafe(x) {
+  const n = parseInt(String(x || '').replace(/[^0-9]/g, ''), 10);
+  return Number.isFinite(n) ? n : 0;
+}
 
 async function extractFields(text) {
   const fields = { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 };
-  const cleanText = text.replace(/[, ]/g, '').toLowerCase();
+  const clean = cleanForAccurateRegex(text);
+  console.log('[ACCURATE] Extracting fields from', (text || '').length, 'chars');
 
-  console.log('[ROCKSOLID] Extracting fields from', text.length, 'chars');
+  // NOTE: Use bounded windows and minimum digit lengths to avoid capturing
+  // section numbers like 171 / 16ia / 80c.
+  let match;
 
-  // Flexible Gross Salary - multiple patterns
-  let match = cleanText.match(/(section17\(1\)|grosssalary|salaryaspersection17\(1\)|17\(1\)).*?(\d{6,8})/);
-  if (match) fields.grossSalary = parseInt(match[2]);
+  // Gross Salary (Section 17(1))
+  match = clean.match(/(?:salaryasperprovisionscontainedinsection171|salaryaspersection171|section171|grosssalary).{0,160}?(\d{6,9})/);
+  if (match) fields.grossSalary = parseIntSafe(match[1]);
 
-  // Flexible TDS - multiple patterns
-  match = cleanText.match(/(totaltaxdeducted|amountoftaxdeducted|tds|totalrs|total\(rs\.\??\)).*?(\d{5,7})/);
-  if (match) fields.tds = parseInt(match[2]);
+  // TDS (tax deducted) - do NOT use generic "total" tokens
+  match = clean.match(/(?:amountoftaxdeducted|taxdeductedatsource|tdsdeducted|totaltaxdeducted|taxdeducted).{0,160}?(\d{3,9})/);
+  if (match) fields.tds = parseIntSafe(match[1]);
 
-  // Flexible Standard Deduction - multiple patterns
-  match = cleanText.match(/(standarddeduction|section16\(ia\)|standarddeductionundersection16|16\(ia\)).*?(\d{5,6})/);
-  if (match) fields.standardDeduction = parseInt(match[2]);
-  else if (cleanText.includes('50000')) fields.standardDeduction = 50000;
+  // Standard Deduction (Section 16(ia))
+  match = clean.match(/(?:standarddeductionundersection16ia|standarddeduction|section16ia|16ia).{0,120}?(\d{5,6})/);
+  if (match) fields.standardDeduction = parseIntSafe(match[1]);
+  else if (clean.includes('standarddeduction') && clean.includes('50000')) fields.standardDeduction = 50000;
 
-  // Flexible 80C - multiple patterns
-  match = cleanText.match(/(80c|section80c|deductionunder80c).*?(\d{5,7})/);
-  if (match) fields.deductions80C = parseInt(match[2]);
+  // 80C deductions (deduction under section 80c)
+  match = clean.match(/(?:deductionundersection80c|section80c|us80c|u?s80c).{0,160}?(\d{3,6})/);
+  if (match) fields.deductions80C = parseIntSafe(match[1]);
+
+  // Sanity checks to reduce swaps
+  if (fields.grossSalary > 0) {
+    if (fields.tds > fields.grossSalary) fields.tds = 0;
+    if (fields.deductions80C > fields.grossSalary) fields.deductions80C = 0;
+  }
+  if (fields.deductions80C > 200000) fields.deductions80C = 0;
+  if (fields.standardDeduction > 75000) fields.standardDeduction = 0;
 
   const count = Object.values(fields).filter(v => v > 0).length;
   const confidence = count >= 4 ? 0.95 : count >= 3 ? 0.85 : count >= 2 ? 0.70 : count >= 1 ? 0.50 : 0.20;
-
-  console.log('[ROCKSOLID] Fields:', fields, 'Count:', count, 'Confidence:', confidence);
+  console.log('[ACCURATE] Fields:', fields, 'Count:', count, 'Confidence:', confidence);
   return { fields, confidence, count };
 }
 
@@ -52,7 +73,7 @@ async function extractFields(text) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function validateWithGPT(text) {
-  console.log('[ROCKSOLID] Using GPT-3.5-turbo for validation...');
+  console.log('[ACCURATE] Using GPT-3.5-turbo for validation...');
   
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -88,7 +109,7 @@ ${text.substring(0, 4000)}`
   }
 
   const content = data.choices?.[0]?.message?.content || '{}';
-  console.log('[ROCKSOLID] GPT response:', content);
+  console.log('[ACCURATE] GPT response:', content);
   
   // Parse JSON from response
   const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -108,7 +129,7 @@ ${text.substring(0, 4000)}`
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function extractWithOCR(buffer, mimeType = 'application/pdf') {
-  console.log('[ROCKSOLID] Using OCR.space, mimeType:', mimeType);
+  console.log('[ACCURATE] Using OCR.space, mimeType:', mimeType);
   
   const formData = new URLSearchParams();
   formData.append('base64Image', `data:${mimeType};base64,${buffer.toString('base64')}`);
@@ -142,7 +163,7 @@ async function extractWithOCR(buffer, mimeType = 'application/pdf') {
 
 export async function POST(request) {
   const startTime = Date.now();
-  console.log('[ROCKSOLID] === NEW REQUEST ===');
+  console.log('[ACCURATE] === NEW REQUEST ===');
 
   try {
     const formData = await request.formData();
@@ -175,8 +196,9 @@ export async function POST(request) {
     let text = '';
     let method = 'unpdf';
     let usedGPT = false;
+    let digitalUsable = false;
 
-    console.log('[ROCKSOLID] File:', fileName, 'Type:', mimeType, 'Size:', buffer.length, 'isPDF:', isPDF, 'tooLarge:', pdfTooLarge);
+    console.log('[ACCURATE] File:', fileName, 'Type:', mimeType, 'Size:', buffer.length, 'isPDF:', isPDF, 'tooLarge:', pdfTooLarge);
 
     // ═══════════════════════════════════════════════════════════════
     // LAYER 1: Digital PDF extraction
@@ -184,22 +206,31 @@ export async function POST(request) {
     if (isPDF) {
       try {
         const { text: extracted } = await extractText(new Uint8Array(buffer), { mergePages: true });
-        console.log('[ROCKSOLID] Digital extracted:', extracted.length, 'chars');
-        if (extracted.length > 200) text = extracted;
+        console.log('[ACCURATE] Digital extracted:', extracted.length, 'chars');
+        // Accept shorter digital text too, but only if it yields useful fields.
+        if (extracted.length > 50) {
+          const probe = await extractFields(extracted);
+          if (probe.count >= 2 || extracted.length > 200) {
+            text = extracted;
+            digitalUsable = true;
+          } else {
+            console.log('[ACCURATE] Digital text too weak (count:', probe.count, '), will OCR');
+          }
+        }
       } catch (e) {
-        console.log('[ROCKSOLID] Digital failed:', e.message);
+        console.log('[ACCURATE] Digital failed:', e.message);
       }
     }
 
     // ═══════════════════════════════════════════════════════════════
     // LAYER 2: OCR.space fallback
     // ═══════════════════════════════════════════════════════════════
-    if (text.length < 200) {
+    if (!digitalUsable && text.length < 200) {
       try {
         text = await extractWithOCR(buffer, mimeType);
         method = 'ocr';
       } catch (e) {
-        console.log('[ROCKSOLID] OCR failed:', e.message);
+        console.log('[ACCURATE] OCR failed:', e.message);
         // Return manual entry form
         return Response.json({ 
           success: true, 
@@ -223,7 +254,7 @@ export async function POST(request) {
     // ═══════════════════════════════════════════════════════════════
     if (count < 3 && process.env.OPENAI_API_KEY) {
       try {
-        console.log('[ROCKSOLID] Low confidence, trying GPT...');
+        console.log('[ACCURATE] Low confidence, trying GPT...');
         const gptFields = await validateWithGPT(text);
         
         // Merge GPT results (prefer GPT values if we had 0)
@@ -240,15 +271,15 @@ export async function POST(request) {
         confidence = newCount >= 4 ? 0.92 : newCount >= 3 ? 0.85 : newCount >= 2 ? 0.70 : 0.50;
         count = newCount;
         
-        console.log('[ROCKSOLID] After GPT:', fields, 'Count:', count);
+        console.log('[ACCURATE] After GPT:', fields, 'Count:', count);
       } catch (e) {
-        console.log('[ROCKSOLID] GPT failed:', e.message);
+        console.log('[ACCURATE] GPT failed:', e.message);
         // Continue without GPT
       }
     }
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-    console.log('[ROCKSOLID] Done in', elapsed, 's, method:', method, 'fields:', count);
+    console.log('[ACCURATE] Done in', elapsed, 's, method:', method, 'fields:', count);
 
     return Response.json({ 
       success: true, 
@@ -271,7 +302,7 @@ export async function POST(request) {
     });
 
   } catch (error) {
-    console.error('[ROCKSOLID] Error:', error);
+    console.error('[ACCURATE] Error:', error);
     return Response.json({
       success: true,
       fields: { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 },

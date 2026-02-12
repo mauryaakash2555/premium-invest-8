@@ -36,6 +36,7 @@ const LOADING_STAGES = [
 export default function ITRFilingHelp() {
   const router = useRouter();
   const [step, setStep] = useState('upload');
+  const [hydrated, setHydrated] = useState(false);
   const [extractedData, setExtractedData] = useState(null);
   const [fields, setFields] = useState({});
   const [taxResult, setTaxResult] = useState(null);
@@ -52,6 +53,11 @@ export default function ITRFilingHelp() {
   });
 
   const allVerified = Object.values(verified).every(v => v);
+
+  // E2E stability: provides a deterministic signal that client hydration completed.
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}/tools/itr-filing-help`;
@@ -277,6 +283,7 @@ export default function ITRFilingHelp() {
   return (
     <div
       style={themeStyle}
+      data-itr-hydrated={hydrated ? '1' : '0'}
       className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]"
     >
       <script
@@ -488,11 +495,25 @@ export default function ITRFilingHelp() {
                   ].map(({ key, label, hint, tooltip }) => {
                     const fieldValue = fields[key] || 0;
                     const confidence = extractedData.confidence;
-                    const bgColor = fieldValue > 0 
-                      ? (confidence > 0.9 ? 'bg-[color:var(--lux-foreground-10)] border-[color:var(--lux-accent)]/30' 
-                         : confidence > 0.6 ? 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-40)]' 
-                         : 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-40)]')
+
+                    // Highlight rules (LUX-safe):
+                    // - Missing (0): strongest attention styling ("red" intent)
+                    // - Partial / low confidence: medium attention styling ("yellow" intent)
+                    // - Good: normal styling
+                    const isMissing = fieldValue === 0;
+                    const isPartial = !isMissing && confidence < 0.8;
+                    const isGood = !isMissing && !isPartial;
+
+                    const inputChrome = isMissing
+                      ? 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-accent)]/60 ring-1 ring-[color:var(--lux-accent)]/25'
+                      : isPartial
+                      ? 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-accent)]/30'
+                      : isGood
+                      ? 'bg-[color:var(--lux-foreground-05)] border-[color:var(--lux-foreground-10)]'
                       : 'bg-[var(--lux-background)] border-[color:var(--lux-foreground-10)]';
+
+                    const statusText = isMissing ? 'Missing — enter from your document' : isPartial ? 'Low confidence — please verify' : 'Looks OK — please verify';
+                    const statusTone = isMissing ? 'text-[color:var(--lux-accent)]' : isPartial ? 'text-[color:var(--lux-foreground-60)]' : 'text-[color:var(--lux-foreground-60)]';
                     
                     return (
                       <div key={key} className="space-y-2">
@@ -508,9 +529,10 @@ export default function ITRFilingHelp() {
                             onChange={(e) => handleFieldChange(key, parseInt(e.target.value) || 0)}
                             title={tooltip}
                             placeholder={`Enter ${label}`}
-                            className={`flex-1 ${bgColor} border rounded px-3 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]`}
+                            className={`flex-1 ${inputChrome} border rounded px-3 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]`}
                           />
                         </div>
+                        <p className={`text-xs ${statusTone}`}>{statusText}</p>
                         <label className="flex items-center gap-2 cursor-pointer text-sm">
                           <input
                             type="checkbox"
