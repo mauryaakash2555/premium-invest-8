@@ -10,27 +10,11 @@ function coerceNonNegativeInt(value) {
   return Math.floor(n);
 }
 
-function safeJsonParseObject(content) {
-  if (typeof content !== 'string' || !content.trim()) return null;
-  try {
-    return JSON.parse(content);
-  } catch {
-    // Try best-effort extraction without regex.
-    const start = content.indexOf('{');
-    const end = content.lastIndexOf('}');
-    if (start >= 0 && end > start) {
-      const slice = content.slice(start, end + 1);
-      try {
-        return JSON.parse(slice);
-      } catch {
-        return null;
-      }
-    }
-    return null;
-  }
-}
-
 async function parseWithGPT(text) {
+  const safeText = String(text || '');
+  console.log('=== GPT INPUT TEXT LENGTH ===', safeText.length);
+  console.log('=== FIRST 1500 CHARS ===', safeText.substring(0, 1500));
+
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -40,27 +24,42 @@ async function parseWithGPT(text) {
     body: JSON.stringify({
       model: 'gpt-3.5-turbo',
       temperature: 0,
-      max_tokens: 250,
       messages: [
         {
           role: 'user',
-          content: `From this Form 16 text, extract ONLY these 4 numbers and return ONLY valid JSON (no markdown, no prose, no code block):\n\n{"grossSalary": number, "tds": number, "standardDeduction": number, "deductions80C": number}\n\nRules:\n- Use plain numbers (no commas, no currency symbols).\n- If you cannot find a field, use 0.\n- For standardDeduction, use 50000 if mentioned/expected but not clearly stated.\n\nText:\n${String(text || '').substring(0, 6000)}`,
+          content: `Extract exactly these 4 numbers from the Form16 text. 
+Look specifically for:
+- Gross Salary near "section 17(1)" or "salary as per provisions"
+- TDS near "tax deducted at source" or "total tax deducted" or "amount of tax deducted"
+- Standard Deduction near "section 16(ia)" or "standard deduction"
+- 80C Deductions near "section 80C" or "deduction under section 80C"
+
+Return ONLY valid JSON, no explanation:
+{"grossSalary": number, "tds": number, "standardDeduction": number, "deductions80C": number}
+
+Text:
+${safeText.substring(0, 7000)}`,
         },
       ],
     }),
   });
 
   const data = await response.json();
-  const content = data?.choices?.[0]?.message?.content || '';
-  const parsed = safeJsonParseObject(content);
-  if (!parsed || typeof parsed !== 'object') return { ...SAFE_FIELDS };
+  console.log('=== GPT RAW RESPONSE ===', JSON.stringify(data, null, 2));
 
-  return {
-    grossSalary: coerceNonNegativeInt(parsed.grossSalary),
-    tds: coerceNonNegativeInt(parsed.tds),
-    standardDeduction: coerceNonNegativeInt(parsed.standardDeduction) || 50000,
-    deductions80C: coerceNonNegativeInt(parsed.deductions80C),
-  };
+  try {
+    const parsed = JSON.parse(data?.choices?.[0]?.message?.content || '');
+    console.log('=== GPT PARSED FIELDS ===', parsed);
+    return {
+      grossSalary: coerceNonNegativeInt(parsed?.grossSalary),
+      tds: coerceNonNegativeInt(parsed?.tds),
+      standardDeduction: coerceNonNegativeInt(parsed?.standardDeduction) || 50000,
+      deductions80C: coerceNonNegativeInt(parsed?.deductions80C),
+    };
+  } catch (e) {
+    console.error('GPT parse failed', e);
+    return { ...SAFE_FIELDS };
+  }
 }
 
 async function extractWithOCR(buffer, mimeType = 'application/pdf') {

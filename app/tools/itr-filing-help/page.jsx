@@ -45,7 +45,6 @@ export default function ITRFilingHelp() {
   const [pdfBase64, setPdfBase64] = useState(null);
   const [previewMimeType, setPreviewMimeType] = useState('application/pdf');
   const [pdfTooLarge, setPdfTooLarge] = useState(false);
-  const [pdfZoom, setPdfZoom] = useState(1);
   const [verified, setVerified] = useState({
     grossSalary: false,
     tds: false,
@@ -155,7 +154,6 @@ export default function ITRFilingHelp() {
       setPdfBase64(null);
       setPreviewMimeType('application/pdf');
       setPdfTooLarge(false);
-      setPdfZoom(1);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     } else if (step === 'payment') {
       setStep('review');
@@ -223,7 +221,6 @@ export default function ITRFilingHelp() {
       setPdfTooLarge(Boolean(data?.pdfTooLarge));
       setPreviewMimeType(data?.previewMimeType || 'application/pdf');
       setPdfBase64(data?.pdfBase64 || null);
-      setPdfZoom(1);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     } catch (err) {
@@ -240,27 +237,9 @@ export default function ITRFilingHelp() {
       setPdfTooLarge(false);
       setPreviewMimeType(file?.type || 'application/pdf');
       setPdfBase64(null);
-      setPdfZoom(1);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     }
-  }
-
-  const PDF_VIEWER_HEIGHT_PX = 800;
-  const MIN_ZOOM = 0.5;
-  const MAX_ZOOM = 2.5;
-  const ZOOM_STEP = 0.1;
-
-  function clampZoom(z) {
-    if (!Number.isFinite(z)) return 1;
-    return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, z));
-  }
-
-  function bumpZoom(delta) {
-    setPdfZoom((z) => {
-      const next = Number((z + delta).toFixed(2));
-      return clampZoom(next);
-    });
   }
 
   function handleFieldChange(key, value) {
@@ -465,90 +444,28 @@ export default function ITRFilingHelp() {
             {/* Split Screen */}
             <div className="grid lg:grid-cols-2 gap-6 mb-6">
               {/* Left: PDF Viewer */}
-              <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4">
-                <div className="flex items-center justify-between gap-3 mb-3">
-                  <h3 className="font-semibold text-[color:var(--lux-foreground)] flex items-center gap-2">
-                    <span>📄</span> Your Form 16 PDF
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => bumpZoom(-ZOOM_STEP)}
-                      className="px-3 py-1 rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-foreground-05)] text-[color:var(--lux-foreground)] hover:opacity-90"
-                      aria-label="Zoom out"
-                    >
-                      −
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPdfZoom(1)}
-                      className="px-3 py-1 rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-foreground-05)] text-[color:var(--lux-foreground)] hover:opacity-90"
-                      aria-label="Reset zoom"
-                      title="Reset zoom"
-                    >
-                      {Math.round(pdfZoom * 100)}%
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => bumpZoom(ZOOM_STEP)}
-                      className="px-3 py-1 rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-foreground-05)] text-[color:var(--lux-foreground)] hover:opacity-90"
-                      aria-label="Zoom in"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  className="w-full h-[800px] overflow-auto rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-foreground-05)]"
-                  onWheel={(e) => {
-                    // "if possible" wheel zoom: only when user intentionally holds Ctrl/⌘.
-                    if (!e.ctrlKey && !e.metaKey) return;
-                    e.preventDefault();
-                    const direction = e.deltaY < 0 ? 1 : -1;
-                    bumpZoom(direction * ZOOM_STEP);
-                  }}
-                  title="Tip: Hold Ctrl (or ⌘ on Mac) and use mouse wheel to zoom"
-                >
-                  {pdfBase64 && previewMimeType === 'application/pdf' ? (
+              <div>
+                {pdfBase64 && previewMimeType === 'application/pdf' ? (
+                  <div className="bg-[#1a1a1a] p-4 rounded-lg h-[800px] overflow-auto">
                     <iframe
                       src={`data:application/pdf;base64,${pdfBase64}`}
-                      className="block rounded"
-                      style={{
-                        width: `${100 / pdfZoom}%`,
-                        height: `${PDF_VIEWER_HEIGHT_PX / pdfZoom}px`,
-                        transform: `scale(${pdfZoom})`,
-                        transformOrigin: '0 0',
-                        border: 'none',
-                      }}
-                      title="Form 16 PDF Preview"
+                      className="w-full h-full border-0"
+                      title="Form16"
                     />
-                  ) : pdfBase64 && previewMimeType?.startsWith('image/') ? (
-                    <img
-                      src={`data:${previewMimeType};base64,${pdfBase64}`}
-                      className="block object-contain"
-                      style={{
-                        width: `${100 / pdfZoom}%`,
-                        height: `${PDF_VIEWER_HEIGHT_PX / pdfZoom}px`,
-                        transform: `scale(${pdfZoom})`,
-                        transformOrigin: '0 0',
-                      }}
-                      alt="Uploaded document preview"
-                    />
-                  ) : pdfTooLarge ? (
-                    <div className="h-full flex flex-col items-center justify-center text-[color:var(--lux-foreground-60)] p-6 text-center">
-                      <span className="text-4xl mb-4">📄</span>
-                      <p className="font-medium mb-2">File too large for preview</p>
-                      <p className="text-sm text-[color:var(--lux-foreground-40)]">
-                        Your upload is over 1MB. Please view it locally and verify the extracted values on the right.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="h-full flex items-center justify-center text-[color:var(--lux-foreground-40)]">
-                      <p>Preview not available</p>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                ) : pdfTooLarge ? (
+                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[800px] flex flex-col items-center justify-center text-center">
+                    <span className="text-4xl mb-4">📄</span>
+                    <p className="font-medium mb-2 text-[color:var(--lux-foreground)]">File too large for preview</p>
+                    <p className="text-sm text-[color:var(--lux-foreground-60)]">
+                      Your upload is over 1MB. Please view it locally and verify the extracted values on the right.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[800px] flex items-center justify-center text-[color:var(--lux-foreground-60)]">
+                    <p>Preview not available</p>
+                  </div>
+                )}
               </div>
 
               {/* Right: Editable Fields with Verification */}
