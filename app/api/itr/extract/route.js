@@ -27,14 +27,16 @@ async function parseWithGPT(text) {
       messages: [
         {
           role: 'user',
-          content: `This is a multi-page TRACES Form16 PDF (possibly OCR text). Extract exactly these 4 numbers:
+          content: `This is a TRACES Form16 PDF (multi-page, possibly OCR).
+Find the table "Summary of amount paid/credited and tax deducted in respect of the employer".
+Extract the TOTAL row numbers:
 
-- grossSalary: look for "section 17(1)" or "salary as per provisions contained in section 17(1)" → the big salary number
-- tds: look for "Total (Rs.)" in tax deducted column or "amount of tax deducted" or "tax deducted at source"
-- standardDeduction: look for "standard deduction under section 16(ia)" or "section 16(ia)"
-- deductions80C: look for "deduction under section 80C" or "section 80C"
+- grossSalary = total Amount paid/credited (biggest salary figure)
+- tds = total Amount of tax deducted
+- standardDeduction = value near "standard deduction under section 16(ia)" or "section 16(ia)"
+- deductions80C = value near "deduction under section 80C" or "section 80C"
 
-Return ONLY valid JSON, no explanation:
+Return ONLY valid JSON, nothing else:
 {"grossSalary": number, "tds": number, "standardDeduction": number, "deductions80C": number}
 
 Text:

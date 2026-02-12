@@ -446,15 +446,18 @@ export default function ITRFilingHelp() {
               {/* Left: PDF Viewer */}
               <div>
                 {pdfBase64 && previewMimeType === 'application/pdf' ? (
-                  <div className="bg-[#1a1a1a] p-6 rounded-lg h-[800px] overflow-auto border border-[color:var(--lux-foreground-10)]">
+                  <div className="bg-[#1a1a1a] p-6 rounded-lg h-[820px] overflow-auto border border-[color:var(--lux-foreground-10)] flex flex-col">
                     <iframe
                       src={`data:application/pdf;base64,${pdfBase64}`}
-                      className="w-full h-full border-0"
+                      className="w-full flex-1 border-0"
                       title="Form 16 PDF"
                     />
+                    <p className="text-xs text-[color:var(--lux-foreground-40)] mt-2 text-center">
+                      Use toolbar buttons (+ / –) to zoom • Use page arrows to change pages • Ctrl + mouse wheel also zooms
+                    </p>
                   </div>
                 ) : pdfTooLarge ? (
-                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[800px] flex flex-col items-center justify-center text-center">
+                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[820px] flex flex-col items-center justify-center text-center">
                     <span className="text-4xl mb-4">📄</span>
                     <p className="font-medium mb-2 text-[color:var(--lux-foreground)]">File too large for preview</p>
                     <p className="text-sm text-[color:var(--lux-foreground-60)]">
@@ -462,7 +465,7 @@ export default function ITRFilingHelp() {
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[800px] flex items-center justify-center text-[color:var(--lux-foreground-60)]">
+                  <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-4 h-[820px] flex items-center justify-center text-[color:var(--lux-foreground-60)]">
                     <p>Preview not available</p>
                   </div>
                 )}
