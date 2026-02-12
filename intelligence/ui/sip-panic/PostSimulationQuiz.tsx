@@ -127,9 +127,9 @@ export function PostSimulationQuiz({
           if (selectedAnswer === null) {
             buttonClass += "border-[oklch(0.30_0.02_264)] bg-[oklch(0.08_0.01_264)] text-[oklch(0.80_0.02_264)] hover:border-[oklch(0.78_0.08_65/0.5)] hover:bg-[oklch(0.12_0.02_264)]";
           } else if (option.correct) {
-            buttonClass += "border-green-500 bg-green-500/10 text-green-300";
+            buttonClass += "border-[color:var(--lux-accent)] bg-[color:var(--lux-foreground-05)] text-white";
           } else if (index === selectedAnswer) {
-            buttonClass += "border-red-500 bg-red-500/10 text-red-300";
+            buttonClass += "border-white/15 bg-black/25 text-white/80";
           } else {
             buttonClass += "border-[oklch(0.20_0.02_264)] bg-[oklch(0.06_0.01_264)] text-[oklch(0.50_0.02_264)]";
           }

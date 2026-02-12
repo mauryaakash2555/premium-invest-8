@@ -176,7 +176,7 @@ export function MonthByMonthBreakdown(props: {
           <tbody className="text-white/85">
             {rows.map((r) => {
               const dd = Number.isFinite(r.marketDrawdown) ? r.marketDrawdown : 0;
-              const ddColor = dd <= -20 ? "text-red-300" : dd <= -10 ? "text-amber-200" : "text-white/75";
+              const ddColor = dd <= -20 ? "text-[color:var(--lux-accent)]" : dd <= -10 ? "text-white/80" : "text-white/75";
 
               return (
                 <tr key={String(r.monthNumber)} className="border-b border-white/5">
@@ -194,7 +194,7 @@ export function MonthByMonthBreakdown(props: {
                         className={
                           isPaused
                             ? "ml-2 inline-flex items-center rounded-full border border-white/10 bg-black/30 px-2 py-0.5 text-[10px] text-white/60"
-                            : "ml-2 inline-flex items-center rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[10px] text-emerald-200"
+                            : "ml-2 inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] text-[color:var(--lux-accent)]"
                         }
                       >
                         {isPaused ? "paused" : "active"}

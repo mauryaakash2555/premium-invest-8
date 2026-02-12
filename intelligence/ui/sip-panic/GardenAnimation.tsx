@@ -62,9 +62,9 @@ export function GardenAnimation(props: GardenAnimationProps) {
   // Weather based on market state
   const weather = useMemo(() => {
     if (isCrash) return { icon: '⛈️', label: 'Storm', bg: 'from-slate-800 to-slate-950', shake: true };
-    if (isRecovery) return { icon: '🌤️', label: 'Recovery', bg: 'from-amber-950/50 to-slate-950', shake: false };
-    if (isPanic) return { icon: '🥀', label: 'Abandoned', bg: 'from-red-950/50 to-slate-950', shake: false };
-    return { icon: '☀️', label: 'Growing', bg: 'from-emerald-950/40 to-slate-950', shake: false };
+    if (isRecovery) return { icon: '🌤️', label: 'Recovery', bg: 'from-white/5 to-slate-950', shake: false };
+    if (isPanic) return { icon: '🥀', label: 'Abandoned', bg: 'from-black/40 to-slate-950', shake: false };
+    return { icon: '☀️', label: 'Growing', bg: 'from-white/5 to-slate-950', shake: false };
   }, [isCrash, isRecovery, isPanic]);
 
   // Tree rendering
@@ -98,7 +98,7 @@ export function GardenAnimation(props: GardenAnimationProps) {
       {/* Garden scene */}
       <div className="relative h-48 sm:h-64">
         {/* Ground */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 rounded-t-3xl bg-gradient-to-t from-emerald-950 to-emerald-900/50" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 rounded-t-3xl bg-gradient-to-t from-slate-950 to-slate-900/50" />
 
         {/* Trees */}
         {trees.map(tree => (
@@ -146,9 +146,9 @@ export function GardenAnimation(props: GardenAnimationProps) {
         {/* Panic indicator */}
         {isPanic && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="rounded-xl bg-red-950/80 px-4 py-2 text-center">
+            <div className="rounded-xl border border-white/10 bg-black/70 px-4 py-2 text-center">
               <div className="text-2xl">😰</div>
-              <div className="text-xs text-red-300">Garden abandoned</div>
+              <div className="text-xs text-white/70">Garden abandoned</div>
             </div>
           </div>
         )}
@@ -157,7 +157,7 @@ export function GardenAnimation(props: GardenAnimationProps) {
       {/* Progress bar */}
       <div className="mt-3 relative h-2 rounded-full bg-slate-800 overflow-hidden">
         <div 
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-300"
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[color:var(--lux-accent)] to-[color:var(--lux-foreground-40)] transition-all duration-300"
           style={{ width: `${gardenState.progress * 100}%` }}
         />
       </div>

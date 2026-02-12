@@ -32,7 +32,7 @@ function TierCard(props: {
     >
       {/* Active indicator badge */}
       {active && (
-        <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+        <div className="absolute -top-2 -right-2 bg-[color:var(--lux-accent)] text-black text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg">
           ✓ ACTIVE
         </div>
       )}

@@ -258,7 +258,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
             <motion.path
               d={panic20Path}
               fill="none"
-              stroke="#EF4444"
+              stroke="color-mix(in oklab, var(--lux-foreground) 70%, transparent)"
               strokeWidth="2.5"
               strokeLinecap="round"
               initial={{ pathLength: 0 }}
@@ -270,7 +270,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
             <motion.path
               d={panic40Path}
               fill="none"
-              stroke="#F87171"
+              stroke="color-mix(in oklab, var(--lux-foreground) 45%, transparent)"
               strokeWidth="2"
               strokeLinecap="round"
               initial={{ pathLength: 0 }}
@@ -282,7 +282,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
             <motion.path
               d={anyFallPath}
               fill="none"
-              stroke="#FB923C"
+              stroke="color-mix(in oklab, var(--lux-accent) 28%, var(--lux-foreground-40))"
               strokeWidth="2"
               strokeLinecap="round"
               initial={{ pathLength: 0 }}
@@ -294,7 +294,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
             <motion.path
               d={customPath}
               fill="none"
-              stroke="#FBBF24"
+              stroke="color-mix(in oklab, var(--lux-accent) 55%, var(--lux-foreground))"
               strokeWidth="2"
               strokeLinecap="round"
               strokeDasharray="8 4"
@@ -308,7 +308,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
           <motion.path
             d={disciplinePath}
             fill="none"
-            stroke="#10B981"
+            stroke="var(--lux-accent)"
             strokeWidth="3"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
@@ -321,7 +321,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
             cx={scaleX(maxX)}
             cy={scaleY(disciplineFinal)}
             r="6"
-            fill="#10B981"
+            fill="var(--lux-accent)"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 1.5, duration: 0.3 }}
@@ -331,7 +331,7 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
               cx={scaleX(maxX)}
               cy={scaleY(panic20Final)}
               r="5"
-              fill="#EF4444"
+              fill="color-mix(in oklab, var(--lux-foreground) 70%, transparent)"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 1.3, duration: 0.3 }}
@@ -343,18 +343,18 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
       {/* Legend */}
       <div className="mt-4 flex flex-wrap gap-4 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-1 rounded-full bg-emerald-500" />
+          <div className="w-4 h-1 rounded-full bg-[color:var(--lux-accent)]" />
           <span className="text-white/80">💚 Stay calm & keep investing</span>
         </div>
         {showPanic20 && (
           <div className="flex items-center gap-2">
-            <div className="w-4 h-1 rounded-full bg-red-500" />
+            <div className="w-4 h-1 rounded-full bg-[color:var(--lux-foreground-60)]" />
             <span className="text-white/80">⚠️ Stop SIP at -20%</span>
           </div>
         )}
         {showPanic40 && (
           <div className="flex items-center gap-2">
-            <div className="w-4 h-1 rounded-full bg-red-400" />
+            <div className="w-4 h-1 rounded-full bg-[color:var(--lux-foreground-40)]" />
             <span className="text-white/80">Stop SIP at -40%</span>
           </div>
         )}
@@ -370,20 +370,20 @@ export function WealthGrowthChart(props: WealthGrowthChartProps) {
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.6, duration: 0.3 }}
-          className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3"
+          className="rounded-xl border border-white/15 bg-[color:var(--lux-foreground-05)] p-3"
         >
-          <div className="text-[10px] uppercase tracking-wider text-emerald-300/70">Disciplined</div>
-          <div className="text-lg font-bold text-emerald-300 tabular-nums">{formatLakhs(disciplineFinal)}</div>
+          <div className="text-[10px] uppercase tracking-wider text-white/60">Disciplined</div>
+          <div className="text-lg font-bold text-[color:var(--lux-accent)] tabular-nums">{formatLakhs(disciplineFinal)}</div>
         </motion.div>
         {showPanic20 && panic20Final > 0 && (
           <motion.div
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.7, duration: 0.3 }}
-            className="rounded-xl border border-red-500/20 bg-red-500/5 p-3"
+            className="rounded-xl border border-white/10 bg-black/20 p-3"
           >
-            <div className="text-[10px] uppercase tracking-wider text-red-300/70">Panic at -20%</div>
-            <div className="text-lg font-bold text-red-300 tabular-nums">{formatLakhs(panic20Final)}</div>
+            <div className="text-[10px] uppercase tracking-wider text-white/60">Panic at -20%</div>
+            <div className="text-lg font-bold text-white/85 tabular-nums">{formatLakhs(panic20Final)}</div>
           </motion.div>
         )}
       </div>

@@ -713,8 +713,8 @@ export function BeginnerModeView(props: {
                                 className={
                                   "rounded-full border px-2 py-[2px] text-[10px] font-semibold " +
                                   (replayStatus === "active"
-                                    ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-100"
-                                    : "border-rose-400/25 bg-rose-400/10 text-rose-100")
+                                    ? "border-white/15 bg-white/5 text-[color:var(--lux-accent)]"
+                                    : "border-white/10 bg-black/25 text-white/70")
                                 }
                               >
                                 {replayStatus}
@@ -839,9 +839,9 @@ export function BeginnerModeView(props: {
       </section>
 
       {yearsForCalc * 12 < crashStartMonth ? (
-        <section className="rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm text-amber-100">
+        <section className="rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white/85">
           <div className="font-semibold">Why might the cost look like ₹0 for short durations?</div>
-          <div className="mt-1 text-xs text-amber-100/90">
+          <div className="mt-1 text-xs text-white/70">
             This education model places the “big crash” around Year ~{crashStartYearApprox}. If your duration ends before that,
             the panic trigger may never occur, so the cost can be near zero.
           </div>
@@ -859,8 +859,8 @@ export function BeginnerModeView(props: {
           <div className="rounded-xl border border-white/10 bg-black/20 p-3">
             <div className="font-semibold text-white flex items-center gap-2">📉 Crash / Recovery Path</div>
             <div className="mt-1">
-              Crash: <span className="text-amber-300 font-medium">{Math.abs(market.crashDepthPct ?? 35)}%</span> over ~{market.crashDurationMonths ?? 6} months starting ~Month {crashStartMonth} (≈ Year {crashStartYearApprox}).
-              Recovery: <span className="text-emerald-300 font-medium">+{market.recoveryGainPct ?? 45}%</span> over ~{market.recoveryDurationMonths ?? 12} months.
+              Crash: <span className="text-[color:var(--lux-accent)] font-medium">{Math.abs(market.crashDepthPct ?? 35)}%</span> over ~{market.crashDurationMonths ?? 6} months starting ~Month {crashStartMonth} (≈ Year {crashStartYearApprox}).
+              Recovery: <span className="text-white/85 font-medium">+{market.recoveryGainPct ?? 45}%</span> over ~{market.recoveryDurationMonths ?? 12} months.
               Secondary correction: {Math.abs(market.secondaryCorrectionDepthPct ?? 20)}% over ~{market.secondaryCorrectionDurationMonths ?? 3} months around Month {market.secondaryCorrectionStartMonth ?? 78}.
             </div>
           </div>
@@ -868,7 +868,7 @@ export function BeginnerModeView(props: {
           <div className="rounded-xl border border-white/10 bg-black/20 p-3">
             <div className="font-semibold text-white flex items-center gap-2">⚠️ Panic Rule</div>
             <div className="mt-1">
-              Stops SIP contributions once the market is ~<span className="text-amber-300 font-medium">{panicStopPct}%</span> down from the last peak (a drawdown trigger).
+              Stops SIP contributions once the market is ~<span className="text-[color:var(--lux-accent)] font-medium">{panicStopPct}%</span> down from the last peak (a drawdown trigger).
               After stopping, contributions are modeled as going to cash at ~{result.cashAnnualRatePct}% annual.
             </div>
           </div>
@@ -1005,20 +1005,20 @@ export function BeginnerModeView(props: {
         {/* Results comparison with difference badge */}
         <div className="relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl border-2 border-emerald-500/40 bg-emerald-500/10 p-6 text-center shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-              <p className="text-xs text-emerald-100 font-semibold">✅ If you stay calm & keep investing</p>
-              <div className="mt-3 text-3xl sm:text-4xl font-bold text-emerald-200 tabular-nums">
+            <div className="rounded-2xl border-2 border-[color:var(--lux-accent)] bg-[color:var(--lux-foreground-05)] p-6 text-center shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+              <p className="text-xs text-[color:var(--lux-accent)] font-semibold">✅ If you stay calm & keep investing</p>
+              <div className="mt-3 text-3xl sm:text-4xl font-bold gold-gradient-text tabular-nums">
                 <LakhTooltip amount={result.disciplineAmt} />
               </div>
-              <p className="mt-2 text-[11px] text-emerald-100/80">Final wealth estimate</p>
+              <p className="mt-2 text-[11px] text-white/70">Final wealth estimate</p>
             </div>
 
-            <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-900/20 p-6 text-center">
-              <p className="text-xs text-amber-100 font-semibold">⚠️ If you {choiceLabel.toLowerCase()}</p>
-              <div className="mt-3 text-3xl sm:text-4xl font-bold text-amber-200 tabular-nums">
+            <div className="rounded-2xl border-2 border-white/10 bg-black/20 p-6 text-center">
+              <p className="text-xs text-white/80 font-semibold">⚠️ If you {choiceLabel.toLowerCase()}</p>
+              <div className="mt-3 text-3xl sm:text-4xl font-bold text-white tabular-nums">
                 <LakhTooltip amount={result.choiceAmt} />
               </div>
-              <p className="mt-2 text-[11px] text-amber-100/80">Final wealth estimate</p>
+              <p className="mt-2 text-[11px] text-white/70">Final wealth estimate</p>
             </div>
           </div>
           
@@ -1050,9 +1050,9 @@ export function BeginnerModeView(props: {
       <section className="rounded-2xl border border-white/10 ultra-luxury-glass p-6">
         <h4 className="text-sm font-semibold text-white">Why does panic cost so much?</h4>
         <ul className="mt-3 space-y-2 text-sm text-white/80">
-          <li className="flex items-start gap-2"><span className="text-emerald-400">✓</span> During crashes, prices are low — continuing SIP buys more units.</li>
-          <li className="flex items-start gap-2"><span className="text-emerald-400">✓</span> When markets recover, those extra units compound your recovery gains.</li>
-          <li className="flex items-start gap-2"><span className="text-amber-400">✗</span> Stopping SIP cuts off the cheapest buying period and the rebound.</li>
+          <li className="flex items-start gap-2"><span className="text-[color:var(--lux-accent)]">✓</span> During crashes, prices are low — continuing SIP buys more units.</li>
+          <li className="flex items-start gap-2"><span className="text-[color:var(--lux-accent)]">✓</span> When markets recover, those extra units compound your recovery gains.</li>
+          <li className="flex items-start gap-2"><span className="text-white/60">✗</span> Stopping SIP cuts off the cheapest buying period and the rebound.</li>
         </ul>
       </section>
 

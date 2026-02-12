@@ -30,7 +30,7 @@ export function ModeToggle(props: {
             onClick={() => onChange("beginner")}
             className={cn(
               "min-h-10 rounded-lg px-3 py-2 text-xs transition-colors",
-              currentMode === "beginner" ? "bg-emerald-500 text-black" : "text-white/85 hover:bg-white/5"
+              currentMode === "beginner" ? "bg-white/10 text-white" : "text-white/85 hover:bg-white/5"
             )}
           >
             Beginner

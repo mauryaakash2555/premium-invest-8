@@ -1424,9 +1424,9 @@ export default function SIPPanicPage(props?: {
         </div>
 
         {inputs.durationYears < 3 ? (
-          <div className="mt-6 rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm text-amber-100">
+          <div className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white/85">
             <div className="font-semibold">⚠️ Short-horizon note</div>
-            <div className="mt-1 text-xs text-amber-100/90">
+            <div className="mt-1 text-xs text-white/70">
               This simulator is designed for 3+ year horizons to demonstrate crash behavior and recovery compounding.
               Your {inputs.durationYears}-year timeframe may not include the full behavioral pattern.
             </div>
@@ -1434,7 +1434,7 @@ export default function SIPPanicPage(props?: {
         ) : null}
 
         {error ? (
-          <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+          <div className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-white/85">
             {error}
           </div>
         ) : null}
@@ -1809,10 +1809,10 @@ export default function SIPPanicPage(props?: {
                     <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
                       <div className="text-[11px] tracking-wide text-white/60 uppercase">Recommended for you</div>
                       <div className="mt-2 text-sm text-white/90">
-                        <span className="text-emerald-200 font-semibold">✓</span> {recommendedTitle}
+                        <span className="text-[color:var(--lux-accent)] font-semibold">✓</span> {recommendedTitle}
                       </div>
                       <div className="mt-2 text-sm text-white/90">
-                        <span className="text-amber-200 font-semibold">⚠️</span> Not ideal for your profile: {avoidTitle}
+                        <span className="text-white/70 font-semibold">⚠️</span> Not ideal for your profile: {avoidTitle}
                       </div>
 
                       <div className="mt-4 grid grid-cols-1 gap-2 text-[11px] text-white/75">

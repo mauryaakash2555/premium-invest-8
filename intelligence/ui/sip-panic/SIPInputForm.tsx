@@ -117,7 +117,7 @@ export function SIPInputForm(props: {
             placeholder="10000"
           />
           {touched.amount && errors.amount ? (
-            <p className="mt-2 text-xs text-red-300">{errors.amount}</p>
+            <p className="mt-2 text-xs text-[color:var(--lux-foreground-60)]">{errors.amount}</p>
           ) : (
             <p className="mt-2 text-xs text-white/70">Tip: ₹10,000/month for 10 years matches the Step 2 baseline.</p>
           )}
@@ -155,7 +155,13 @@ export function SIPInputForm(props: {
           </div>
 
           {touched.years && errors.duration ? (
-            <p className={`mt-2 text-xs ${errors.duration.includes("⚠️") ? "text-amber-200" : "text-red-300"}`}>
+            <p
+              className={`mt-2 text-xs ${
+                errors.duration.includes("⚠️")
+                  ? "text-[color:var(--lux-accent)]"
+                  : "text-[color:var(--lux-foreground-60)]"
+              }`}
+            >
               {errors.duration}
             </p>
           ) : (

@@ -339,8 +339,18 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                       />
                     </span>
                   </td>
-                  <td className={`px-4 py-3 text-right tabular-nums ${isDiscipline ? "" : "text-red-500"}`}>
-                    {isDiscipline ? "—" : <LakhTooltip amount={r.behavioralCost} prefix="-" className="tabular-nums text-red-500" />}
+                  <td
+                    className={`px-4 py-3 text-right tabular-nums ${
+                      isDiscipline ? "" : "text-[color:var(--lux-accent)]"
+                    }`}
+                  >
+                    {isDiscipline ? "—" : (
+                      <LakhTooltip
+                        amount={r.behavioralCost}
+                        prefix="-"
+                        className="tabular-nums text-[color:var(--lux-accent)]"
+                      />
+                    )}
                   </td>
                 </tr>
               );
@@ -391,11 +401,11 @@ export function ResultsDashboard(props: { results: SIPSimulationResult[] }) {
                 {!isDiscipline ? (
                   <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4">
                     <div className="text-[11px] tracking-wide text-white/70 uppercase">Your behavioral cost</div>
-                    <div className="mt-2 text-3xl sm:text-4xl font-semibold text-red-500">
+                    <div className="mt-2 text-3xl sm:text-4xl font-semibold text-[color:var(--lux-accent)]">
                       <LakhTooltip
                         amount={r.behavioralCost}
                         prefix="-"
-                        className="tabular-nums text-red-500 cursor-help underline decoration-white/15 underline-offset-4 hover:decoration-white/30"
+                        className="tabular-nums text-[color:var(--lux-accent)] cursor-help underline decoration-white/15 underline-offset-4 hover:decoration-white/30"
                       />
                     </div>
                     <div className="mt-2 text-xs text-white/80">Gap vs disciplined outcome (post-tax). This is the “cost of panic”.</div>
