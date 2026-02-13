@@ -171,12 +171,43 @@ export default function ITRFilingHelp() {
     setLoadingStage(0);
     setLoadingProgress(0);
 
+    // Always attempt a local preview first (keeps the viewer working even if API doesn't return preview data).
+    try {
+      const mime = file?.type || 'application/pdf';
+      setPreviewMimeType(mime);
+
+      const PREVIEW_LIMIT_BYTES = 1_200_000;
+      const tooLarge = Number(file?.size || 0) > PREVIEW_LIMIT_BYTES;
+      setPdfTooLarge(tooLarge);
+
+      if (!tooLarge && mime === 'application/pdf') {
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = String(reader.result || '');
+            const commaIdx = result.indexOf(',');
+            resolve(commaIdx >= 0 ? result.slice(commaIdx + 1) : '');
+          };
+          reader.onerror = () => reject(new Error('Failed to read file for preview'));
+          reader.readAsDataURL(file);
+        });
+        setPdfBase64(base64 || null);
+      } else {
+        setPdfBase64(null);
+      }
+    } catch (e) {
+      console.warn('[ITR] Preview generation failed:', e);
+      setPdfBase64(null);
+      setPdfTooLarge(false);
+      setPreviewMimeType(file?.type || 'application/pdf');
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      console.log('[ITR] Fetching /api/itr/extract...');
-      const res = await fetch('/api/itr/extract', {
+      console.log('[ITR] Fetching /api/itr/extract-v2...');
+      const res = await fetch('/api/itr/extract-v2', {
         method: 'POST',
         body: formData,
       });
@@ -209,18 +240,19 @@ export default function ITRFilingHelp() {
       }
 
       // Swiss-bank reliability: never block the user on extraction quality.
-      const safeFields = data?.fields || { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
+      const isScanned = Boolean(data?.isScanned);
+      const safeFields = isScanned
+        ? { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 }
+        : (data?.fields || { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 });
       setExtractedData({
         success: data?.success !== false,
         confidence: typeof data?.confidence === 'number' ? data.confidence : 0,
-        method: data?.method || 'manual',
+        method: data?.method || (isScanned ? 'manual' : 'digital_pdf'),
+        isScanned,
         extractedCount: data?.extractedCount,
         message: data?.message || 'Please verify and edit the values below.',
       });
       setFields(safeFields);
-      setPdfTooLarge(Boolean(data?.pdfTooLarge));
-      setPreviewMimeType(data?.previewMimeType || 'application/pdf');
-      setPdfBase64(data?.pdfBase64 || null);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     } catch (err) {
@@ -234,9 +266,6 @@ export default function ITRFilingHelp() {
         message: 'Could not process the document right now. Please enter values from your Form 16 below.',
       });
       setFields(safeFields);
-      setPdfTooLarge(false);
-      setPreviewMimeType(file?.type || 'application/pdf');
-      setPdfBase64(null);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     }
@@ -480,6 +509,14 @@ export default function ITRFilingHelp() {
                   Compare with your PDF and check each field to confirm accuracy.
                 </p>
 
+                {extractedData?.isScanned && (
+                  <div className="mb-4 rounded-lg border border-[color:var(--lux-accent)]/40 bg-[color:var(--lux-accent)]/10 p-3">
+                    <p className="text-sm text-[color:var(--lux-foreground)] font-medium">
+                      This appears to be a scanned document. Please enter values while viewing your PDF above.
+                    </p>
+                  </div>
+                )}
+
                 <div className="space-y-4">
                   {[
                     { key: 'grossSalary', label: 'Gross Salary', hint: 'Section 17(1) in Form 16', tooltip: 'Find this under "Salary as per provisions contained in section 17(1)" in your Form 16 Part B' },
@@ -489,6 +526,7 @@ export default function ITRFilingHelp() {
                   ].map(({ key, label, hint, tooltip }) => {
                     const fieldValue = fields[key] || 0;
                     const confidence = extractedData.confidence;
+                    const inputValue = extractedData?.isScanned && fieldValue === 0 ? '' : fieldValue;
 
                     // Highlight rules (LUX-safe):
                     // - Missing (0): strongest attention styling ("red" intent)
@@ -519,8 +557,15 @@ export default function ITRFilingHelp() {
                           <span className="text-[color:var(--lux-foreground-60)]">₹</span>
                           <input
                             type="number"
-                            value={fieldValue}
-                            onChange={(e) => handleFieldChange(key, parseInt(e.target.value) || 0)}
+                            value={inputValue}
+                            onChange={(e) => {
+                              const raw = e.target.value;
+                              if (raw === '') {
+                                handleFieldChange(key, 0);
+                                return;
+                              }
+                              handleFieldChange(key, parseInt(raw) || 0);
+                            }}
                             title={tooltip}
                             placeholder={`Enter ${label}`}
                             className={`flex-1 ${inputChrome} border rounded px-3 py-2 text-[color:var(--lux-foreground)] focus:outline-none focus:ring-1 focus:ring-[color:var(--lux-accent)]`}
