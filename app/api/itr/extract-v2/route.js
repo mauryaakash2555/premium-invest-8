@@ -56,7 +56,7 @@ export async function POST(request) {
     const c80Patterns = [
       /80C,\s*80CCC\s+and\s+80CCD[^\d]{0,100}([\d,]{5,})/i,
       /total\s+deduction\s+under\s+section\s+80C[^\d]{0,100}([\d,]{5,})/i,
-      /deduction\s+under\s+section\s+80C[^\d]{0,100}([\d,]{5,})/i,
+      /provident fund etc\. under section 80C[^\d]{0,50}([\d,]{5,})/i,
       /80C[^\d]{0,50}(1[45][0-9]{4})/i
     ];
     for (const p of c80Patterns) {
