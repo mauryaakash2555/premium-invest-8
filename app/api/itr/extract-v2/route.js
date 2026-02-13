@@ -36,11 +36,36 @@ export async function POST(request) {
     m = text.match(/Total\s*\(Rs\.\)\s+([\d,]+)/i);
     if (m) fields.tds = parseInt(m[1].replace(/,/g, ''));
 
-    m = text.match(/Entertainment[^\d]{0,80}([\d,]+)\.00[^\d]{0,80}Standard\s+deduction/is);
-    if (m) fields.standardDeduction = parseInt(m[1].replace(/,/g, ''));
+    // Standard Deduction — try multiple patterns
+    const stdPatterns = [
+      /standard\s+deduction\s+under\s+section\s+16\s*\(\s*ia\s*\)[^\d]{0,80}([\d,]{4,})/i,
+      /standard\s+deduction[^\d]{0,50}([\d,]{4,})/i,
+      /16\s*\(\s*ia\s*\)[^\d]{0,80}([\d,]{4,})/i,
+      /Entertainment[^\d]{0,80}(50000)/i
+    ];
+    for (const p of stdPatterns) {
+      const m2 = text.match(p);
+      if (m2) {
+        const v = parseInt(m2[1].replace(/,/g, ''));
+        if (v >= 40000 && v <= 75000) { fields.standardDeduction = v; break; }
+      }
+    }
+    if (!fields.standardDeduction) fields.standardDeduction = 50000; // statutory default FY25-26
 
-    m = text.match(/deduction\s+under\s+section\s+80C[^\d]{0,100}([\d,]{5,})/i);
-    if (m) fields.deductions80C = parseInt(m[1].replace(/,/g, ''));
+    // 80C — try multiple patterns
+    const c80Patterns = [
+      /80C,\s*80CCC\s+and\s+80CCD[^\d]{0,100}([\d,]{5,})/i,
+      /total\s+deduction\s+under\s+section\s+80C[^\d]{0,100}([\d,]{5,})/i,
+      /deduction\s+under\s+section\s+80C[^\d]{0,100}([\d,]{5,})/i,
+      /80C[^\d]{0,50}(1[45][0-9]{4})/i
+    ];
+    for (const p of c80Patterns) {
+      const m2 = text.match(p);
+      if (m2) {
+        const v = parseInt(m2[1].replace(/,/g, ''));
+        if (v > 0 && v <= 150000) { fields.deductions80C = v; break; }
+      }
+    }
 
     const found = Object.values(fields).filter(v => v > 0).length;
     const confidence = found >= 3 ? 0.95 : found >= 1 ? 0.75 : 0.5;
