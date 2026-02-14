@@ -105,8 +105,8 @@ export default function AboutUsPage() {
     offset: ['start start', 'end start'],
   });
 
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.9], [0.95, 0.35]);
+  // Keep the background animation subtle so the video stays smooth on mobile.
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
   const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
 
   const scrollToStory = () => storyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -116,7 +116,7 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <motion.div
-          style={{ scale: prefersReducedMotion ? 1 : videoScale, opacity: videoOpacity }}
+          style={{ scale: prefersReducedMotion ? 1 : videoScale }}
           className="absolute inset-0 z-0"
           aria-hidden="true"
         >
@@ -126,18 +126,20 @@ export default function AboutUsPage() {
             loop
             muted
             playsInline
+            preload="auto"
+            poster="/about-bg-poster.jpg"
             className="absolute inset-0 w-full h-full object-cover"
             src="/about-bg.mp4"
             initial={prefersReducedMotion ? undefined : { opacity: 0 }}
             animate={prefersReducedMotion ? undefined : { opacity: 1 }}
-            transition={{ duration: 1.2, ease: EASE_LUXURY }}
+            transition={{ duration: 0.6, ease: EASE_LUXURY }}
           />
 
           {/* Dark overlay tints for text legibility */}
-            <div className="absolute inset-0 bg-[var(--lux-background)]/36" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/14 to-[var(--lux-background)]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/70 via-[var(--lux-background)]/14 to-[var(--lux-background)]/50" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-46" />
+          <div className="absolute inset-0 bg-[var(--lux-background)]/36" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/14 to-[var(--lux-background)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/70 via-[var(--lux-background)]/14 to-[var(--lux-background)]/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-46" />
           <div
             className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
             style={{ backgroundImage: `url('${grainDataUrl}')` }}
