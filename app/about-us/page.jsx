@@ -80,20 +80,8 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          {/* Cinematic video background */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            poster="/about-bg-poster.jpg"
-            className="absolute inset-0 w-full h-full object-cover"
-            src="/about-bg.mp4"
-          />
-
-          {/* Simple dark overlay for text legibility */}
-          <div className="absolute inset-0 bg-[var(--lux-background)]/45" />
+          {/* Dark background */}
+          <div className="absolute inset-0 bg-[var(--lux-background)]" />
         </div>
 
         <div className="relative z-20 px-6 md:px-12 lg:px-24 pt-28 md:pt-32 lg:pt-36 pb-24 md:pb-28">
