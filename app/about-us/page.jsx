@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Award, ShieldCheck, Sparkles, Target, Users } from 'lucide-react';
 
 const cormorant = Cormorant_Garamond({
@@ -38,50 +37,24 @@ const grainDataUrl = `data:image/svg+xml,${encodeURIComponent(grainSvg)}`;
 
 function MotionLine({ delay = 0.8 }) {
   return (
-    <motion.div
-      initial={{ width: 0 }}
-      whileInView={{ width: 80 }}
-      viewport={{ once: true, margin: '-20% 0px -20% 0px' }}
-      transition={{ duration: 1.5, delay, ease: EASE_LUXURY }}
-      className="h-px bg-gradient-to-r from-[var(--lux-accent)] to-transparent"
-      aria-hidden="true"
-    />
+    <div className="h-px w-20 bg-gradient-to-r from-[var(--lux-accent)] to-transparent" aria-hidden="true" />
   );
 }
 
 function RevealText({ children, delay = 0.9 }) {
   return (
-    <span className="block overflow-hidden [perspective:900px]">
-      <motion.span
-        className="block"
-        initial={{ y: '130%', rotateX: -20 }}
-        whileInView={{ y: 0, rotateX: 0 }}
-        viewport={{ once: true, margin: '-20% 0px -10% 0px' }}
-        transition={{ duration: 1.6, delay, ease: EASE_LUXURY }}
-      >
-        {children}
-      </motion.span>
-    </span>
+    <span className="block">{children}</span>
   );
 }
 
 export default function AboutUsPage() {
-  const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef(null);
   const storyRef = useRef(null);
-  const [wordIndex, setWordIndex] = useState(0);
+  const [wordIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const id = window.setInterval(() => {
-      setWordIndex((i) => (i + 1) % WORDS.length);
-    }, 2600);
-    return () => window.clearInterval(id);
-  }, [prefersReducedMotion]);
 
   const themeStyle = useMemo(
     () =>
@@ -100,28 +73,15 @@ export default function AboutUsPage() {
     []
   );
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-
-  // Keep the background animation subtle so the video stays smooth on mobile.
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
-  const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
-
   const scrollToStory = () => storyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
     <div style={themeStyle} className={`${jakarta.className} relative min-h-screen bg-[var(--lux-background)] text-[color:var(--lux-foreground)]`}>
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
-        <motion.div
-          style={{ scale: prefersReducedMotion ? 1 : videoScale }}
-          className="absolute inset-0 z-0"
-          aria-hidden="true"
-        >
+        <div className="absolute inset-0 z-0" aria-hidden="true">
           {/* Cinematic video background */}
-          <motion.video
+          <video
             autoPlay
             loop
             muted
@@ -130,21 +90,11 @@ export default function AboutUsPage() {
             poster="/about-bg-poster.jpg"
             className="absolute inset-0 w-full h-full object-cover"
             src="/about-bg.mp4"
-            initial={prefersReducedMotion ? undefined : { opacity: 0 }}
-            animate={prefersReducedMotion ? undefined : { opacity: 1 }}
-            transition={{ duration: 0.6, ease: EASE_LUXURY }}
           />
 
-          {/* Dark overlay tints for text legibility */}
-          <div className="absolute inset-0 bg-[var(--lux-background)]/36" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/14 to-[var(--lux-background)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/70 via-[var(--lux-background)]/14 to-[var(--lux-background)]/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-46" />
-          <div
-            className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
-            style={{ backgroundImage: `url('${grainDataUrl}')` }}
-          />
-        </motion.div>
+          {/* Simple dark overlay for text legibility */}
+          <div className="absolute inset-0 bg-[var(--lux-background)]/45" />
+        </div>
 
         <div className="relative z-20 px-6 md:px-12 lg:px-24 pt-28 md:pt-32 lg:pt-36 pb-24 md:pb-28">
           <div className="mx-auto max-w-7xl">
@@ -156,7 +106,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="mt-16 md:mt-20 grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-14 lg:gap-16 items-end">
-              <motion.div style={{ y: prefersReducedMotion ? 0 : contentY }}>
+              <div>
                 <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-60)]">
                   Wealth distribution • PMS support • Mutual funds • Insurance
                 </div>
@@ -185,29 +135,24 @@ export default function AboutUsPage() {
                   </p>
 
                   <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <motion.button
+                    <button
                       type="button"
                       onClick={scrollToStory}
                       className="group relative overflow-hidden bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-10 md:px-12 py-5 md:py-6"
-                      whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                      transition={{ duration: 0.6, ease: EASE_LUXURY }}
                     >
                       <span className="relative z-10 flex items-center gap-5 text-[10px] tracking-[0.25em] uppercase font-semibold">
                         Explore our approach
                         <ArrowRight className="h-4 w-4 transition-transform duration-700 group-hover:translate-x-2" />
                       </span>
-                      <motion.div
-                        className="absolute inset-0 bg-[color:var(--lux-accent)]"
-                        initial={{ x: '-101%' }}
-                        whileHover={{ x: 0 }}
-                        transition={{ duration: 0.6, ease: EASE_LUXURY }}
+                      <span
+                        className="absolute inset-0 bg-[color:var(--lux-accent)] -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-700"
                         aria-hidden="true"
                       />
-                    </motion.button>
+                    </button>
 
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               <div className="hidden lg:block">
                 <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/70 backdrop-blur-xl p-10">
@@ -228,18 +173,7 @@ export default function AboutUsPage() {
                   <div className="mt-10 border-t border-[color:var(--lux-foreground-05)] pt-8">
                     <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-60)]">Built on</div>
                     <div className={`${cormorant.className} mt-2 text-3xl font-medium text-[color:var(--lux-foreground-80)]`}>
-                      <AnimatePresence mode="wait">
-                        <motion.span
-                          key={wordIndex}
-                          initial={{ opacity: 0, y: 60, filter: 'blur(10px)' }}
-                          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                          exit={{ opacity: 0, y: -60, filter: 'blur(10px)' }}
-                          transition={{ duration: 1, ease: EASE_LUXURY }}
-                          className="inline-block"
-                        >
-                          {WORDS[wordIndex]}
-                        </motion.span>
-                      </AnimatePresence>
+                      <span className="inline-block">{WORDS[wordIndex]}</span>
                     </div>
                   </div>
                 </div>
@@ -247,12 +181,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="mt-16 md:mt-20 flex items-center gap-6">
-              <motion.div
-                animate={prefersReducedMotion ? undefined : { y: [0, 8, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="h-14 w-px bg-gradient-to-b from-[color:var(--lux-accent)]/80 via-[color:var(--lux-accent)]/20 to-transparent"
-                aria-hidden="true"
-              />
+              <div className="h-14 w-px bg-gradient-to-b from-[color:var(--lux-accent)]/80 via-[color:var(--lux-accent)]/20 to-transparent" aria-hidden="true" />
               <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-40)]">Scroll</div>
             </div>
           </div>
@@ -350,12 +279,8 @@ export default function AboutUsPage() {
                 body: 'Transparent costs and risks — so decisions feel calm, deliberate, and well understood.',
               },
             ].map((card, i) => (
-              <motion.div
+              <div
                 key={card.title}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-                transition={{ duration: 1.2, delay: 0.15 * i, ease: EASE_LUXURY }}
                 className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-9 md:p-10"
               >
                 <div className="flex items-center gap-4">
@@ -366,7 +291,7 @@ export default function AboutUsPage() {
                 </div>
                 <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>{card.title}</div>
                 <div className="mt-5 text-[15px] leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)]">{card.body}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
