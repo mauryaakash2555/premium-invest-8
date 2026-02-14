@@ -693,14 +693,14 @@ export default function ITRFilingHelp() {
             <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
               <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Your Full ITR Summary</h3>
               <p className="text-[color:var(--lux-foreground-60)] mb-6">Download detailed PDF report with both tax regimes</p>
-              <div className="text-4xl font-bold text-[color:var(--lux-foreground)] mb-6">₹299</div>
-              <button
-                onClick={() => setStep('complete')}
-                className="bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+              <a
+                href="https://store.bmwealth.co.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
               >
-                Pay & Download Report
-              </button>
-              <p className="text-xs text-[color:var(--lux-foreground-60)] mt-4">Secure payment via Razorpay</p>
+                Get Full ITR Summary →
+              </a>
             </div>
           </>
         )}
@@ -709,11 +709,16 @@ export default function ITRFilingHelp() {
         {step === 'complete' && (
           <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
             <div className="text-6xl mb-4 text-[color:var(--lux-foreground)]">✓</div>
-            <h2 className="text-2xl font-bold text-[color:var(--lux-foreground)] mb-2">Payment Successful!</h2>
-            <p className="text-[color:var(--lux-foreground-60)] mb-6">Your ITR summary has been generated</p>
-            <button className="bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition">
-              Download Summary PDF
-            </button>
+            <h2 className="text-2xl font-bold text-[color:var(--lux-foreground)] mb-2">Ready for the full summary</h2>
+            <p className="text-[color:var(--lux-foreground-60)] mb-6">Get the full ITR summary from our digital store.</p>
+            <a
+              href="https://store.bmwealth.co.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+            >
+              Open Store →
+            </a>
           </div>
         )}
 

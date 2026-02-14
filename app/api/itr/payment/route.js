@@ -19,7 +19,7 @@ export async function POST(request) {
       return Response.json({ success: false, error: 'Razorpay not configured' }, { status: 500 });
     }
 
-    const { amount } = await request.json(); // amount in paise (29900 = ₹299)
+    const { amount } = await request.json(); // amount in paise
 
     const safeAmount = Number(amount);
     if (!Number.isFinite(safeAmount) || safeAmount <= 0) {

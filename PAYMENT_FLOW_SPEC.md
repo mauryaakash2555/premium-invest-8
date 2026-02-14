@@ -16,11 +16,11 @@ User clicks "Calculate Tax" → Shows:
 - New Regime: Tax = ₹4,86,091 ✓ (Recommended)
 - Potential Savings: ₹54,600
 
-### STEP 3: Payment Gate (₹299)
-Button: "Get Your Full ITR Summary" - ₹299
+### STEP 3: Store Gate
+Button: "Get Full ITR Summary →" (opens https://store.bmwealth.co.in in a new tab)
 
 When clicked → Opens Razorpay payment:
-- Amount: ₹299
+- Amount: handled on store
 - Description: "ITR Filing Report - AY 2025-26"
 - Merchant: BM Wealth
 
@@ -46,7 +46,7 @@ Auto-download PDF
 ```javascript
 const options = {
   key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
-  amount: 29900, // ₹299 in paise
+  amount: <handled on store>
   currency: 'INR',
   name: 'BM Wealth',
   description: 'ITR Filing Report',
@@ -98,7 +98,7 @@ razorpay.open();
 Upload → Extract → Calculate → Download PDF
 
 ### New Flow:
-Upload → Extract → Calculate → **PAY ₹299** → Download PDF
+Upload → Extract → Calculate → Open store → Download PDF
 
 ### Components to Update:
 1. `ITRFilingHelp.jsx` - Add payment button

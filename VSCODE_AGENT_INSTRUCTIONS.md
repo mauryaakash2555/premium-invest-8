@@ -6,7 +6,7 @@ User has a digital store at **store.bmwealth.co.in** with Razorpay integration. 
 
 1. Extract data from Form16 (any format - digital/scanned/image)
 2. Calculate tax (free)
-3. Gate PDF download behind ₹299 payment (via store.bmwealth.co.in)
+3. Gate PDF download via store.bmwealth.co.in (no prices on main site)
 
 ---
 
@@ -134,7 +134,7 @@ export async function POST(request) {
       onClick={handleDownloadReport}
       className="bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all"
     >
-      Get Your Full ITR Report - ₹299
+      Get Full ITR Summary →
     </button>
     <p className="text-gray-400 text-sm mt-2">
       Secure payment via BM Digital Store
@@ -153,7 +153,7 @@ const handleDownloadReport = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: 29900, // ₹299 in paise
+        amount: <handled on store>
         receipt: `itr_${Date.now()}`
       })
     });
@@ -177,7 +177,7 @@ const handleDownloadReport = async () => {
 
 **On store.bmwealth.co.in**, create product:
 - **Product Name:** "ITR Filing Report - AY 2025-26"
-- **Price:** ₹299
+- **Pricing:** handled on store
 - **Type:** Digital Download
 - **Description:** "Complete ITR summary with tax calculations for both regimes"
 
@@ -241,7 +241,7 @@ const generatePDF = async () => {
 After implementation:
 1. ✅ User uploads Form16 → Extraction works (digital/scanned)
 2. ✅ User sees tax calculation (FREE)
-3. ✅ User clicks "Get Report ₹299" → Redirects to store
+3. ✅ User clicks "Get Full ITR Summary →" → Opens store
 4. ✅ User pays on store → Redirects back
 5. ✅ PDF auto-downloads
 

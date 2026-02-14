@@ -2,13 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 
-export function PremiumUnlockButton({ onClick }) {
+export function PremiumUnlockButton({ href }) {
+  const finalHref = String(href || "https://store.bmwealth.co.in").trim();
+
   return (
     <Button
-      onClick={onClick}
+      asChild
       className="calculator-premium-cta w-full py-6 rounded-xl text-lg"
     >
-      Show Me How — ₹299
+      <a href={finalHref} target="_blank" rel="noopener noreferrer">
+        Go to Store →
+      </a>
     </Button>
   );
 }

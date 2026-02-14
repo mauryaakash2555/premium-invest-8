@@ -116,7 +116,7 @@ export function DailyKpisPanel({ days = 7 }) {
               </div>
             </div>
             <div className="sa-breakItem">
-              <div className="sa-breakKey">Revenue (₹399 PDF)</div>
+              <div className="sa-breakKey">Revenue (PDF)</div>
               <div className="sa-breakVal">{fmtINR(t?.revenue?.total_inr || 0)}</div>
               <div className="sa-cardSub">Purchases: {t?.revenue?.purchases || 0}</div>
             </div>
