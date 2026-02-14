@@ -121,20 +121,23 @@ export default function AboutUsPage() {
           aria-hidden="true"
         >
           {/* Cinematic video background */}
-          <video
+          <motion.video
             autoPlay
             loop
             muted
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
             src="/about-bg.mp4"
+            initial={prefersReducedMotion ? undefined : { opacity: 0 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+            transition={{ duration: 1.2, ease: EASE_LUXURY }}
           />
 
           {/* Dark overlay tints for text legibility */}
-          <div className="absolute inset-0 bg-[var(--lux-background)]/55" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/22 to-[var(--lux-background)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/88 via-[var(--lux-background)]/22 to-[var(--lux-background)]/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-65" />
+          <div className="absolute inset-0 bg-[var(--lux-background)]/45" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/18 to-[var(--lux-background)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/82 via-[var(--lux-background)]/18 to-[var(--lux-background)]/62" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-58" />
           <div
             className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
             style={{ backgroundImage: `url('${grainDataUrl}')` }}
