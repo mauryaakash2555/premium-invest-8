@@ -131,10 +131,10 @@ export default function AboutUsPage() {
           />
 
           {/* Dark overlay tints for text legibility */}
-          <div className="absolute inset-0 bg-[var(--lux-background)]/70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/40 to-[var(--lux-background)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/95 via-[var(--lux-background)]/30 to-[var(--lux-background)]/80" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-[var(--lux-background)]/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/22 to-[var(--lux-background)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/88 via-[var(--lux-background)]/22 to-[var(--lux-background)]/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-65" />
           <div
             className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
             style={{ backgroundImage: `url('${grainDataUrl}')` }}
