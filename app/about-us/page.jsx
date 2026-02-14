@@ -120,28 +120,18 @@ export default function AboutUsPage() {
           className="absolute inset-0 z-0"
           aria-hidden="true"
         >
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[var(--lux-background)]" />
-            <motion.div
-              className="absolute -inset-[35%]"
-              animate={prefersReducedMotion ? undefined : { rotate: [0, 8, 0], x: [0, -20, 0], y: [0, 12, 0] }}
-              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-              style={{
-                background:
-                  'radial-gradient(60% 50% at 30% 35%, oklch(0.78 0.08 65 / 0.14) 0%, transparent 60%), radial-gradient(55% 45% at 70% 55%, oklch(0.95 0.01 85 / 0.08) 0%, transparent 62%), radial-gradient(45% 40% at 55% 25%, oklch(0.55 0.01 85 / 0.10) 0%, transparent 60%)',
-              }}
-            />
-            <motion.div
-              className="absolute -inset-[45%]"
-              animate={prefersReducedMotion ? undefined : { rotate: [0, -10, 0], x: [0, 18, 0], y: [0, -14, 0] }}
-              transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-              style={{
-                background:
-                  'radial-gradient(50% 45% at 80% 25%, oklch(0.78 0.08 65 / 0.10) 0%, transparent 65%), radial-gradient(55% 55% at 20% 70%, oklch(0.10 0.005 280 / 0.75) 0%, transparent 65%)',
-              }}
-            />
-          </div>
+          {/* Cinematic video background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            src="/about-bg.mp4"
+          />
 
+          {/* Dark overlay tints for text legibility */}
+          <div className="absolute inset-0 bg-[var(--lux-background)]/70" />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/40 to-[var(--lux-background)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--lux-background)]/95 via-[var(--lux-background)]/30 to-[var(--lux-background)]/80" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--lux-background)] via-transparent to-transparent opacity-80" />
