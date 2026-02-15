@@ -80,18 +80,7 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/about-bg-poster.jpg"
-          >
-            <source src="/about-bg.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-[var(--lux-background)]/45" />
+          <div className="absolute inset-0 bg-[var(--lux-background)]" />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/65 to-[var(--lux-background)]" />
         </div>
 
