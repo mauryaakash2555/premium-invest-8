@@ -47,7 +47,6 @@ export default function ITRFilingHelp() {
     regime: '',
   });
   const [copiedKey, setCopiedKey] = useState('');
-  const [autoAdvanceToDetails, setAutoAdvanceToDetails] = useState(false);
   const [loadingStage, setLoadingStage] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [pdfBase64, setPdfBase64] = useState(null);
@@ -68,18 +67,9 @@ export default function ITRFilingHelp() {
     return () => clearTimeout(t);
   }, [copiedKey]);
 
-  useEffect(() => {
-    if (step !== 'payment') return;
-    if (!taxResult) return;
-    if (!autoAdvanceToDetails) return;
-
-    const t = setTimeout(() => {
-      setStep('details');
-      setAutoAdvanceToDetails(false);
-    }, 1600);
-
-    return () => clearTimeout(t);
-  }, [step, taxResult, autoAdvanceToDetails]);
+  // NOTE: Do not auto-advance away from the comparison step.
+  // The tool may redirect to the store for payment, and we need
+  // the user to explicitly proceed (and keep state stable).
 
   async function copyToClipboard(text, key) {
     const value = String(text ?? '').trim();
@@ -115,6 +105,43 @@ export default function ITRFilingHelp() {
   useEffect(() => {
     setHydrated(true);
   }, []);
+
+  // Restore state after successful store payment.
+  useEffect(() => {
+    if (!hydrated) return;
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('payment') !== 'success') return;
+
+    try {
+      const raw = window.sessionStorage.getItem('itr_data');
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+
+      if (parsed?.fields) setFields(parsed.fields);
+      if (parsed?.itrDetails) setItrDetails(parsed.itrDetails);
+      if (parsed?.taxResult) setTaxResult(parsed.taxResult);
+      if (parsed?.verified) setVerified(parsed.verified);
+
+      setStep('details');
+
+      // Let React commit restored state before opening print.
+      setTimeout(() => {
+        try {
+          downloadSummaryPdf({
+            fields: parsed?.fields,
+            itrDetails: parsed?.itrDetails,
+            taxResult: parsed?.taxResult,
+          });
+        } finally {
+          window.sessionStorage.removeItem('itr_data');
+        }
+      }, 350);
+    } catch (e) {
+      console.warn('[ITR] Failed to restore itr_data from sessionStorage:', e);
+    }
+  }, [hydrated]);
 
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}/tools/itr-filing-help`;
@@ -198,19 +225,16 @@ export default function ITRFilingHelp() {
       // Go back to verification (no navigation away; keep extracted values)
       setStep('review');
       setTaxResult(null);
-      setAutoAdvanceToDetails(false);
       return;
     }
 
     if (step === 'details') {
       setStep('payment');
-      setAutoAdvanceToDetails(false);
       return;
     }
 
     if (step === 'complete') {
       setStep('payment');
-      setAutoAdvanceToDetails(false);
       return;
     }
 
@@ -225,11 +249,13 @@ export default function ITRFilingHelp() {
     setPdfTooLarge(false);
     setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     setCopiedKey('');
-    setAutoAdvanceToDetails(false);
   }
 
-  function downloadSummaryPdf() {
-    if (!taxResult) return;
+  function downloadSummaryPdf(override) {
+    const usedTaxResult = override?.taxResult ?? taxResult;
+    const usedFields = override?.fields ?? fields;
+    const usedItrDetails = override?.itrDetails ?? itrDetails;
+    if (!usedTaxResult) return;
 
     const escapeHtml = (value) => {
       return String(value ?? '')
@@ -244,23 +270,28 @@ export default function ITRFilingHelp() {
     const now = new Date();
     const generatedOn = now.toLocaleString('en-IN');
 
-    const recommended = taxResult.recommended === 'old' ? 'Old Regime' : 'New Regime';
-    const selectedTax = taxResult.recommended === 'old' ? (taxResult.oldRegime?.tax || 0) : (taxResult.newRegime?.tax || 0);
-    const tds = Number(fields?.tds || 0);
+    const recommended = usedTaxResult.recommended === 'old' ? 'Old Regime' : 'New Regime';
+    const selectedTax = usedTaxResult.recommended === 'old' ? (usedTaxResult.oldRegime?.tax || 0) : (usedTaxResult.newRegime?.tax || 0);
+    const tds = Number(usedFields?.tds || 0);
     const diff = Math.round(selectedTax - tds);
     const taxPayableOrRefundText = diff > 0 ? `${fmtMoney(diff)} (Tax Payable)` : diff < 0 ? `${fmtMoney(Math.abs(diff))} (Refund Due)` : `${fmtMoney(0)} (Nil)`;
 
+    const resolvedNetTaxableIncome =
+      usedTaxResult.recommended === 'old'
+        ? (usedTaxResult.oldRegime?.taxable || 0)
+        : (usedTaxResult.newRegime?.taxable || 0);
+
     const details = [
-      ['Employee PAN', itrDetails.employeePAN || '—'],
-      ['Employer Name', itrDetails.employerName || '—'],
-      ['Employer TAN', itrDetails.employerTAN || '—'],
-      ['Assessment Year', itrDetails.assessmentYear || '—'],
-      ['Gross Salary', fmtMoney(fields?.grossSalary || 0)],
-      ['HRA Exemption', fmtMoney(itrDetails.hraExemption || 0)],
-      ['Standard Deduction', fmtMoney(fields?.standardDeduction || 0)],
-      ['80C Deductions', fmtMoney(fields?.deductions80C || 0)],
-      ['Net Taxable Income', fmtMoney(netTaxableIncome)],
-      ['TDS Already Deducted', fmtMoney(fields?.tds || 0)],
+      ['Employee PAN', usedItrDetails.employeePAN || '—'],
+      ['Employer Name', usedItrDetails.employerName || '—'],
+      ['Employer TAN', usedItrDetails.employerTAN || '—'],
+      ['Assessment Year', usedItrDetails.assessmentYear || '—'],
+      ['Gross Salary', fmtMoney(usedFields?.grossSalary || 0)],
+      ['HRA Exemption', fmtMoney(usedItrDetails.hraExemption || 0)],
+      ['Standard Deduction', fmtMoney(usedFields?.standardDeduction || 0)],
+      ['80C Deductions', fmtMoney(usedFields?.deductions80C || 0)],
+      ['Net Taxable Income', fmtMoney(resolvedNetTaxableIncome)],
+      ['TDS Already Deducted', fmtMoney(usedFields?.tds || 0)],
       ['Tax Payable / Refund Due', taxPayableOrRefundText],
       ['Recommended Regime', recommended],
     ];
@@ -343,18 +374,18 @@ export default function ITRFilingHelp() {
       <div class="two">
         <div class="card" style="margin:0;">
           <div style="font-weight:900;">Old Tax Regime</div>
-          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(taxResult.oldRegime?.taxable || 0))}</span></div>
-          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(taxResult.oldRegime?.tax || 0))}</span></div>
+          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(usedTaxResult.oldRegime?.taxable || 0))}</span></div>
+          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(usedTaxResult.oldRegime?.tax || 0))}</span></div>
         </div>
         <div class="card" style="margin:0;">
           <div style="font-weight:900;">New Tax Regime</div>
-          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(taxResult.newRegime?.taxable || 0))}</span></div>
-          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(taxResult.newRegime?.tax || 0))}</span></div>
+          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(usedTaxResult.newRegime?.taxable || 0))}</span></div>
+          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(usedTaxResult.newRegime?.tax || 0))}</span></div>
         </div>
       </div>
       <div style="margin-top: 12px; border-top: 1px solid var(--lux-foreground-10); padding-top: 12px; display:flex; justify-content:space-between; align-items:center;">
         <div style="font-size:12px; color:var(--lux-foreground-60);">Potential savings by choosing ${escapeHtml(recommended)}</div>
-        <div class="big">${escapeHtml(fmtMoney(taxResult.savings || 0))}</div>
+        <div class="big">${escapeHtml(fmtMoney(usedTaxResult.savings || 0))}</div>
       </div>
     </div>
 
@@ -370,6 +401,30 @@ export default function ITRFilingHelp() {
     w.document.open();
     w.document.write(html);
     w.document.close();
+  }
+
+  function goToStoreForFullSummary() {
+    if (typeof window === 'undefined') return;
+    if (!taxResult) return;
+
+    try {
+      const payload = {
+        fields,
+        itrDetails,
+        taxResult,
+        verified,
+      };
+      window.sessionStorage.setItem('itr_data', JSON.stringify(payload));
+    } catch (e) {
+      console.warn('[ITR] Failed to save itr_data to sessionStorage:', e);
+    }
+
+    const returnTo = `${window.location.origin}/tools/itr-filing-help?payment=success`;
+
+    // NOTE: Repo catalog confirms this is an existing ₹299 product.
+    // If a dedicated ITR product is added later, update this slug.
+    const storeUrl = `https://store.bmwealth.co.in/products/tax-optimization-pdf?returnTo=${encodeURIComponent(returnTo)}`;
+    window.location.href = storeUrl;
   }
 
   async function handleUpload(file) {
@@ -523,7 +578,6 @@ export default function ITRFilingHelp() {
       recommended: oldTax < newTax ? 'old' : 'new',
       savings: Math.round(Math.abs(oldTax - newTax)),
     });
-    setAutoAdvanceToDetails(true);
     setStep('payment');
   }
 
@@ -963,17 +1017,17 @@ export default function ITRFilingHelp() {
               <p className="text-sm text-[color:var(--lux-foreground-60)] mt-2">by choosing {taxResult.recommended === 'old' ? 'Old' : 'New'} Regime</p>
             </div>
 
-            {/* Download PDF (no payment, no redirect) */}
+            {/* Full summary (paid) */}
             <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
-              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Download Summary PDF</h3>
+              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Full ITR Summary (₹299)</h3>
               <p className="text-[color:var(--lux-foreground-60)] mb-6">
-                Generates a printable summary in your browser (no payment, no redirects).
+                You’ll be redirected to the BM Wealth Store for payment. After successful payment, you’ll come back here and the PDF will download automatically.
               </p>
               <button
-                onClick={downloadSummaryPdf}
+                onClick={goToStoreForFullSummary}
                 className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
               >
-                Download Summary PDF →
+                Continue to Store →
               </button>
             </div>
           </>
@@ -1094,7 +1148,7 @@ export default function ITRFilingHelp() {
                       {steps.map((s, idx) => (
                         <div key={s.title} className="flex gap-4">
                           <div className="shrink-0">
-                            <div className="w-9 h-9 rounded-full bg-[color:var(--lux-accent)]/15 border border-[color:var(--lux-accent)]/35 flex items-center justify-center font-bold text-[color:var(--lux-accent)]">
+                            <div className="w-9 h-9 rounded-full bg-[color:var(--lux-foreground-05)] border border-[color:var(--lux-foreground-10)] flex items-center justify-center font-bold text-[color:var(--lux-foreground)]">
                               {idx + 1}
                             </div>
                           </div>

@@ -26,6 +26,7 @@ function loadRazorpayScript() {
 export function RazorpayCheckoutButton({
   productSlug,
   productName,
+  successRedirectUrl,
   buttonLabel = "Buy Now",
   className = "rounded-none border border-white/15 bg-white/5 px-5 py-3 text-sm text-white hover:bg-white/10",
 }) {
@@ -33,6 +34,21 @@ export function RazorpayCheckoutButton({
   const [note, setNote] = useState("");
 
   const safeSlug = useMemo(() => String(productSlug || "").trim(), [productSlug]);
+  const safeSuccessRedirect = useMemo(() => {
+    const raw = String(successRedirectUrl || '').trim();
+    if (!raw) return '';
+    try {
+      const u = new URL(raw);
+      const origin = u.origin.toLowerCase();
+      const isAllowed =
+        origin.endsWith('bmwealth.co.in') ||
+        origin === 'http://localhost:3000' ||
+        origin === 'http://localhost:3001';
+      return isAllowed ? u.toString() : '';
+    } catch {
+      return '';
+    }
+  }, [successRedirectUrl]);
 
   const startCheckout = useCallback(async () => {
     if (!safeSlug) return;
@@ -69,7 +85,9 @@ export function RazorpayCheckoutButton({
             });
             const verifyJson = await verifyRes.json().catch(() => null);
             if (!verifyRes.ok || !verifyJson?.ok) throw new Error("verify_failed");
-            window.location.assign(`/payment-success?product=${encodeURIComponent(safeSlug)}`);
+            window.location.assign(
+              safeSuccessRedirect || `/payment-success?product=${encodeURIComponent(safeSlug)}`
+            );
           } catch {
             window.location.assign(`/payment-failed?product=${encodeURIComponent(safeSlug)}`);
           }
@@ -92,7 +110,7 @@ export function RazorpayCheckoutButton({
     } finally {
       setBusy(false);
     }
-  }, [productName, safeSlug]);
+  }, [productName, safeSlug, safeSuccessRedirect]);
 
   return (
     <div className="flex flex-col items-end gap-2">

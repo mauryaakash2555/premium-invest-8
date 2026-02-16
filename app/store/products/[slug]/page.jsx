@@ -25,15 +25,18 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function StoreProductDetailPage({ params }) {
+export default function StoreProductDetailPage({ params, searchParams }) {
   const requestedSlug = params?.slug;
   const slug = LEGACY_SLUG_REDIRECTS[requestedSlug] || requestedSlug;
   if (requestedSlug && slug && requestedSlug !== slug) {
-    redirect(`/products/${slug}`);
+    const qs = searchParams ? new URLSearchParams(searchParams).toString() : '';
+    redirect(`/products/${slug}${qs ? `?${qs}` : ''}`);
   }
 
   const product = products.find((p) => p.slug === slug);
   if (!product) return notFound();
+
+  const returnTo = typeof searchParams?.returnTo === 'string' ? searchParams.returnTo : '';
 
   return (
     <div className="space-y-8">
@@ -49,7 +52,7 @@ export default function StoreProductDetailPage({ params }) {
             <span className="text-white/60">Price: </span>
             <span className="text-lg font-semibold text-white">₹{product.priceInr}</span>
           </div>
-          <RazorpayCheckoutButton productSlug={product.slug} productName={product.name} />
+          <RazorpayCheckoutButton productSlug={product.slug} productName={product.name} successRedirectUrl={returnTo} />
         </div>
 
         {/* CCAvenue-required delivery notice - must be visible */}
