@@ -272,22 +272,52 @@ export default function ITRFilingHelp() {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ITR Summary</title>
     <style>
-      :root { --bg: #0b0b12; --fg: #f5f2e8; --muted: rgba(245,242,232,.70); --line: rgba(245,242,232,.15); --gold: #e7c36a; }
-      body { margin: 0; padding: 28px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: white; color: #111; }
+      :root {
+        --lux-background: oklch(0.06 0.005 280);
+        --lux-foreground: oklch(0.95 0.01 85);
+        --lux-foreground-80: oklch(0.95 0.01 85 / 0.80);
+        --lux-foreground-60: oklch(0.95 0.01 85 / 0.60);
+        --lux-foreground-40: oklch(0.95 0.01 85 / 0.40);
+        --lux-foreground-10: oklch(0.95 0.01 85 / 0.10);
+        --lux-foreground-05: oklch(0.95 0.01 85 / 0.05);
+        --lux-card: oklch(0.10 0.005 280);
+        --lux-accent: oklch(0.78 0.08 65);
+      }
+      body {
+        margin: 0;
+        padding: 28px;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: var(--lux-background);
+        color: var(--lux-foreground);
+      }
       h1 { margin: 0 0 6px; font-size: 22px; }
-      .sub { color: #444; font-size: 12px; margin-bottom: 18px; }
-      .card { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+      .sub { color: var(--lux-foreground-60); font-size: 12px; margin-bottom: 18px; }
+      .card {
+        border: 1px solid var(--lux-foreground-10);
+        background: color-mix(in oklab, var(--lux-card) 70%, transparent);
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
       .grid { width: 100%; border-collapse: collapse; }
-      .grid td { padding: 8px 10px; border-top: 1px solid #eee; vertical-align: top; }
+      .grid td { padding: 8px 10px; border-top: 1px solid var(--lux-foreground-10); vertical-align: top; }
       .grid tr:first-child td { border-top: none; }
-      .k { color: #444; width: 45%; font-size: 12px; }
-      .v { color: #111; font-weight: 700; font-size: 12px; }
-      .gold { color: #9a6b00; font-weight: 800; }
+      .k { color: var(--lux-foreground-60); width: 45%; font-size: 12px; }
+      .v { color: var(--lux-foreground); font-weight: 700; font-size: 12px; }
+      .gold { color: var(--lux-accent); font-weight: 800; }
       .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-      .tag { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #f3f3f3; font-size: 12px; }
+      .tag {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--lux-foreground-05);
+        border: 1px solid var(--lux-foreground-10);
+        font-size: 12px;
+        color: var(--lux-foreground-80);
+      }
       .big { font-size: 18px; font-weight: 900; }
       @media print {
-        body { padding: 0; }
+        body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .card { break-inside: avoid; }
       }
     </style>
@@ -322,8 +352,8 @@ export default function ITRFilingHelp() {
           <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(taxResult.newRegime?.tax || 0))}</span></div>
         </div>
       </div>
-      <div style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 12px; display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-size:12px; color:#444;">Potential savings by choosing ${escapeHtml(recommended)}</div>
+      <div style="margin-top: 12px; border-top: 1px solid var(--lux-foreground-10); padding-top: 12px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:12px; color:var(--lux-foreground-60);">Potential savings by choosing ${escapeHtml(recommended)}</div>
         <div class="big">${escapeHtml(fmtMoney(taxResult.savings || 0))}</div>
       </div>
     </div>
@@ -719,7 +749,7 @@ export default function ITRFilingHelp() {
               {/* Left: PDF Viewer */}
               <div>
                 {pdfBase64 && previewMimeType === 'application/pdf' ? (
-                  <div className="bg-[#1a1a1a] p-6 rounded-lg h-[820px] overflow-auto border border-[color:var(--lux-foreground-10)] flex flex-col">
+                  <div className="bg-[color:var(--lux-background)] p-6 rounded-lg h-[820px] overflow-auto border border-[color:var(--lux-foreground-10)] flex flex-col">
                     <iframe
                       src={`data:application/pdf;base64,${pdfBase64}`}
                       className="w-full flex-1 border-0"
