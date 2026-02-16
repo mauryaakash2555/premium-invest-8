@@ -607,33 +607,47 @@ export default function ITRFilingHelp() {
       return `₹${Math.round(v).toLocaleString('en-IN')}`;
     };
 
-    const safeText = (s) => String(s || '').trim() || '—';
+    const cleanInlineText = (value, maxLen = 64) => {
+      const s = String(value ?? '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!s) return '—';
+      if (s.length <= maxLen) return s;
+      return `${s.slice(0, Math.max(0, maxLen - 1))}…`;
+    };
 
-    const tax = taxResult
-      ? (taxResult.recommended === 'old' ? (taxResult.oldRegime?.tax || 0) : (taxResult.newRegime?.tax || 0))
-      : 0;
+    const safePan = (value) => {
+      const s = String(value ?? '').toUpperCase().replace(/\s+/g, '').trim();
+      const m = s.match(/[A-Z]{5}[0-9]{4}[A-Z]/);
+      return m?.[0] || '—';
+    };
+
+    const safeTan = (value) => {
+      const s = String(value ?? '').toUpperCase().replace(/\s+/g, '').trim();
+      const m = s.match(/[A-Z]{4}[0-9]{5}[A-Z]/);
+      return m?.[0] || '—';
+    };
+
+    const safeAssessmentYear = (value) => {
+      const s = String(value ?? '').trim();
+      const m = s.match(/\b(20\d{2})-(\d{2})\b/);
+      if (!m) return '—';
+      return `${m[1]}-${m[2]}`;
+    };
 
     return [
-      { key: 'employeePAN', label: 'Employee PAN', value: safeText(itrDetails.employeePAN) },
-      { key: 'employerName', label: 'Employer Name', value: safeText(itrDetails.employerName) },
-      { key: 'employerTAN', label: 'Employer TAN', value: safeText(itrDetails.employerTAN) },
-      { key: 'assessmentYear', label: 'Assessment Year', value: safeText(itrDetails.assessmentYear) },
+      { key: 'employeePAN', label: 'Employee PAN', value: safePan(itrDetails.employeePAN) },
+      { key: 'employerName', label: 'Employer Name', value: cleanInlineText(itrDetails.employerName, 48) },
+      { key: 'employerTAN', label: 'Employer TAN', value: safeTan(itrDetails.employerTAN) },
+      { key: 'assessmentYear', label: 'Assessment Year', value: safeAssessmentYear(itrDetails.assessmentYear) },
       { key: 'grossSalary', label: 'Gross Salary', value: fmtMoney(fields?.grossSalary || 0) },
       { key: 'hraExemption', label: 'HRA Exemption', value: fmtMoney(itrDetails.hraExemption || 0) },
       { key: 'standardDeduction', label: 'Standard Deduction', value: fmtMoney(fields?.standardDeduction || 0) },
       { key: 'deductions80C', label: '80C Deductions', value: fmtMoney(fields?.deductions80C || 0) },
       { key: 'netTaxableIncome', label: 'Net Taxable Income', value: fmtMoney(netTaxableIncome) },
-      { key: 'tds', label: 'TDS Already Deducted', value: fmtMoney(fields?.tds || 0) },
-      {
-        key: 'taxPayableOrRefund',
-        label: 'Tax Payable / Refund Due',
-        value: taxResult
-          ? (taxPayableOrRefund.label === 'Nil'
-            ? `${fmtMoney(0)} (Nil)`
-            : `${fmtMoney(taxPayableOrRefund.amount)} (${taxPayableOrRefund.label})`)
-          : fmtMoney(0),
-      },
-      { key: 'recommendedRegime', label: 'Recommended Regime', value: recommendedRegimeLabel || (tax ? '—' : '—') },
+      { key: 'tds', label: 'TDS Deducted', value: fmtMoney(fields?.tds || 0) },
+      { key: 'recommendedRegime', label: 'Recommended Regime', value: recommendedRegimeLabel || '—' },
     ];
   }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult]);
 
@@ -648,7 +662,7 @@ export default function ITRFilingHelp() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }}
       />
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-[1100px] mx-auto">
         <div className="mb-4">
           <button
             onClick={handleBack}
@@ -1044,7 +1058,7 @@ export default function ITRFilingHelp() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               {/* Section 1 */}
               <section className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -1052,25 +1066,33 @@ export default function ITRFilingHelp() {
                   <span className="text-xs text-[color:var(--lux-foreground-40)]">Copy-paste ready</span>
                 </div>
 
-                <div className="divide-y divide-[color:var(--lux-foreground-10)] border border-[color:var(--lux-foreground-10)] rounded-lg overflow-hidden">
-                  {itrDetailsRows.map((row) => (
-                    <div key={row.key} className="flex items-center justify-between gap-4 px-4 py-3 bg-[color:var(--lux-foreground-05)]">
-                      <div className="text-sm font-medium text-[color:var(--lux-foreground-60)]">
-                        {row.label}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-sm font-semibold text-[color:var(--lux-accent)] whitespace-nowrap">
-                          {row.value}
+                <div className="border border-[color:var(--lux-foreground-10)] rounded-lg overflow-hidden">
+                  <div className="hidden sm:grid grid-cols-[1fr_auto_auto] gap-4 px-4 py-2 bg-[color:var(--lux-foreground-05)] border-b border-[color:var(--lux-foreground-10)] text-xs font-semibold tracking-widest uppercase text-[color:var(--lux-foreground-40)]">
+                    <div>Field</div>
+                    <div className="text-right">Value</div>
+                    <div className="text-right">&nbsp;</div>
+                  </div>
+
+                  <div className="divide-y divide-[color:var(--lux-foreground-10)]">
+                    {itrDetailsRows.map((row) => (
+                      <div
+                        key={row.key}
+                        className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] items-start sm:items-center gap-2 sm:gap-4 px-4 py-3 bg-[color:var(--lux-foreground-05)]"
+                      >
+                        <div className="text-sm font-medium text-[color:var(--lux-foreground-60)]">{row.label}</div>
+                        <div className="text-sm font-semibold text-[color:var(--lux-accent)] break-words sm:text-right">{row.value}</div>
+                        <div className="sm:text-right">
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(row.value, row.key)}
+                            className="px-2.5 py-1.5 text-xs font-semibold rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-background)] text-[color:var(--lux-foreground-80)] hover:bg-[color:var(--lux-foreground-05)] transition"
+                          >
+                            {copiedKey === row.key ? 'Copied ✓' : 'Copy'}
+                          </button>
                         </div>
-                        <button
-                          onClick={() => copyToClipboard(row.value, row.key)}
-                          className="px-2.5 py-1.5 text-xs font-semibold rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-background)] text-[color:var(--lux-foreground-80)] hover:bg-[color:var(--lux-foreground-05)] transition"
-                        >
-                          {copiedKey === row.key ? 'Copied ✓' : 'Copy'}
-                        </button>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </section>
 
@@ -1079,58 +1101,74 @@ export default function ITRFilingHelp() {
                 <h3 className="text-xl font-bold text-[color:var(--lux-foreground)] mb-4">How to file in 6 steps</h3>
 
                 {(() => {
-                  const pan = String(itrDetails.employeePAN || '').trim() || '—';
-                  const ay = String(itrDetails.assessmentYear || '').trim() || '—';
+                  const safePan = (value) => {
+                    const s = String(value ?? '').toUpperCase().replace(/\s+/g, '').trim();
+                    const m = s.match(/[A-Z]{5}[0-9]{4}[A-Z]/);
+                    return m?.[0] || '—';
+                  };
+                  const safeAssessmentYear = (value) => {
+                    const s = String(value ?? '').trim();
+                    const m = s.match(/\b(20\d{2})-(\d{2})\b/);
+                    if (!m) return '—';
+                    return `${m[1]}-${m[2]}`;
+                  };
+                  const cleanEmployer = (value) => {
+                    const s = String(value ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                    if (!s) return 'your employer';
+                    return s.length > 40 ? `${s.slice(0, 39)}…` : s;
+                  };
+
+                  const pan = safePan(itrDetails.employeePAN);
+                  const ay = safeAssessmentYear(itrDetails.assessmentYear);
                   const grossSalary = Math.round(Number(fields?.grossSalary || 0)).toLocaleString('en-IN');
+                  const standardDeduction = Math.round(Number(fields?.standardDeduction || 0)).toLocaleString('en-IN');
                   const tds = Math.round(Number(fields?.tds || 0)).toLocaleString('en-IN');
-                  const employerName = String(itrDetails.employerName || '').trim() || 'your employer';
+                  const employerName = cleanEmployer(itrDetails.employerName);
                   const savings = Math.round(Number(taxResult?.savings || 0)).toLocaleString('en-IN');
                   const recommended = recommendedRegimeLabel || 'Recommended';
+
+                  const Gold = ({ children }) => (
+                    <span className="text-[color:var(--lux-accent)] font-semibold">{children}</span>
+                  );
 
                   const steps = [
                     {
                       title: 'Login to the portal',
                       desc: (
                         <>
-                          Go to <span className="text-[color:var(--lux-accent)] font-semibold">incometax.gov.in</span> → Click <span className="text-[color:var(--lux-accent)] font-semibold">e-Filing</span> → Login with your PAN:{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">{pan}</span>
+                          Sign in at <Gold>incometax.gov.in</Gold> using PAN <Gold>{pan}</Gold>.
                         </>
                       ),
                     },
                     {
-                      title: 'Start ITR filing',
+                      title: 'Start return',
                       desc: (
                         <>
-                          Click <span className="text-[color:var(--lux-accent)] font-semibold">File Income Tax Return</span> → Select Assessment Year{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">{ay}</span> → Select <span className="text-[color:var(--lux-accent)] font-semibold">ITR-1 (Sahaj)</span>
+                          Choose AY <Gold>{ay}</Gold> and select <Gold>ITR-1 (Sahaj)</Gold>.
                         </>
                       ),
                     },
                     {
-                      title: 'Verify salary details',
+                      title: 'Confirm salary',
                       desc: (
                         <>
-                          Gross Salary should show{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{grossSalary}</span>. If it’s different, correct it before you proceed.
+                          Gross Salary <Gold>₹{grossSalary}</Gold>, Standard Deduction <Gold>₹{standardDeduction}</Gold>.
                         </>
                       ),
                     },
                     {
-                      title: 'Choose the right regime',
+                      title: 'Pick regime',
                       desc: (
                         <>
-                          Choose <span className="text-[color:var(--lux-accent)] font-semibold">{recommended}</span>. This saves you{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{savings}</span> vs the other regime.
+                          Select <Gold>{recommended}</Gold> (est. savings <Gold>₹{savings}</Gold>).
                         </>
                       ),
                     },
                     {
-                      title: 'Verify TDS',
+                      title: 'Check TDS',
                       desc: (
                         <>
-                          TDS should show{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{tds}</span> already deducted by{' '}
-                          <span className="text-[color:var(--lux-accent)] font-semibold">{employerName}</span>.
+                          TDS deducted: <Gold>₹{tds}</Gold> (from <Gold>{employerName}</Gold>).
                         </>
                       ),
                     },
@@ -1138,7 +1176,7 @@ export default function ITRFilingHelp() {
                       title: 'Submit & e-Verify',
                       desc: (
                         <>
-                          Submit your return and e-Verify using <span className="text-[color:var(--lux-accent)] font-semibold">Aadhaar OTP</span> for instant verification.
+                          Submit and e-Verify via <Gold>Aadhaar OTP</Gold>.
                         </>
                       ),
                     },
@@ -1165,41 +1203,24 @@ export default function ITRFilingHelp() {
               </section>
             </div>
 
-            {/* Paid summary CTA (moved from Step 2) */}
-            <div className="mt-6 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
-              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Full ITR Summary (₹299)</h3>
-              <p className="text-[color:var(--lux-foreground-60)] mb-6">
-                You’ll be redirected to the BM Wealth Store for payment. After successful payment, you’ll come back here and the PDF will download automatically.
-              </p>
-
-              <div className="flex flex-col items-center gap-3">
-                <button
-                  type="button"
-                  onClick={downloadSummaryPdf}
-                  className="inline-flex items-center justify-center border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-background)] text-[color:var(--lux-foreground)] px-12 py-4 rounded-lg font-bold text-lg hover:bg-[color:var(--lux-foreground-05)] transition"
-                >
-                  Download Summary PDF
-                </button>
-
-                <button
-                  type="button"
-                  onClick={goToStoreForFullSummary}
-                  className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
-                >
-                  Get Full ITR Summary →
-                </button>
-              </div>
-              <div className="mt-3 text-xs text-[color:var(--lux-foreground-60)]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== 'undefined') window.print();
-                  }}
-                  className="underline underline-offset-4 hover:opacity-90"
-                >
-                  Print this page
-                </button>
-              </div>
+            {/* Bottom actions */}
+            <div className="mt-8 flex flex-col items-center">
+              <button
+                type="button"
+                onClick={goToStoreForFullSummary}
+                className="inline-flex items-center justify-center bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+              >
+                Get Full ITR Summary →
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') window.print();
+                }}
+                className="mt-3 text-xs text-[color:var(--lux-foreground-60)] underline underline-offset-4 hover:opacity-90"
+              >
+                Print this page
+              </button>
             </div>
           </>
         )}
