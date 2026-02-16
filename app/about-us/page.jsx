@@ -80,8 +80,18 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          <div className="absolute inset-0 bg-[var(--lux-background)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)] via-[var(--lux-background)]/65 to-[var(--lux-background)]" />
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          >
+            <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-[var(--lux-background)]/35" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)]/75 via-[var(--lux-background)]/55 to-[var(--lux-background)]" />
         </div>
 
         <div className="relative z-20 px-6 md:px-12 lg:px-24 pt-28 md:pt-32 lg:pt-36 pb-24 md:pb-28">
@@ -138,22 +148,6 @@ export default function AboutUsPage() {
                       />
                     </button>
 
-                  </div>
-
-                  <div className="mt-10 border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-3 md:p-4">
-                    <div className="relative w-full overflow-hidden rounded-sm">
-                      <div className="aspect-video w-full">
-                        <video
-                          className="h-full w-full object-contain"
-                          controls
-                          playsInline
-                          preload="metadata"
-                        >
-                          <source src="/videos/about-us-animated.mp4" type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
