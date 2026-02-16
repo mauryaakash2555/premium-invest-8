@@ -1017,17 +1017,18 @@ export default function ITRFilingHelp() {
               <p className="text-sm text-[color:var(--lux-foreground-60)] mt-2">by choosing {taxResult.recommended === 'old' ? 'Old' : 'New'} Regime</p>
             </div>
 
-            {/* Full summary (paid) */}
+            {/* Explicit next step (no auto-advance) */}
             <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
-              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Full ITR Summary (₹299)</h3>
+              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Ready to file?</h3>
               <p className="text-[color:var(--lux-foreground-60)] mb-6">
-                You’ll be redirected to the BM Wealth Store for payment. After successful payment, you’ll come back here and the PDF will download automatically.
+                Continue to see your filing checklist with copy-paste details and the 6-step guide.
               </p>
               <button
-                onClick={goToStoreForFullSummary}
+                type="button"
+                onClick={() => setStep('details')}
                 className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
               >
-                Continue to Store →
+                Continue to Filing Checklist →
               </button>
             </div>
           </>
@@ -1162,6 +1163,32 @@ export default function ITRFilingHelp() {
                   );
                 })()}
               </section>
+            </div>
+
+            {/* Paid summary CTA (moved from Step 2) */}
+            <div className="mt-6 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
+              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Full ITR Summary (₹299)</h3>
+              <p className="text-[color:var(--lux-foreground-60)] mb-6">
+                You’ll be redirected to the BM Wealth Store for payment. After successful payment, you’ll come back here and the PDF will download automatically.
+              </p>
+              <button
+                type="button"
+                onClick={goToStoreForFullSummary}
+                className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+              >
+                Get Full ITR Summary →
+              </button>
+              <div className="mt-3 text-xs text-[color:var(--lux-foreground-60)]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') window.print();
+                  }}
+                  className="underline underline-offset-4 hover:opacity-90"
+                >
+                  Print this page
+                </button>
+              </div>
             </div>
           </>
         )}
