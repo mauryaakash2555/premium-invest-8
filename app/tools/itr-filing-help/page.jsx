@@ -1171,13 +1171,24 @@ export default function ITRFilingHelp() {
               <p className="text-[color:var(--lux-foreground-60)] mb-6">
                 You’ll be redirected to the BM Wealth Store for payment. After successful payment, you’ll come back here and the PDF will download automatically.
               </p>
-              <button
-                type="button"
-                onClick={goToStoreForFullSummary}
-                className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
-              >
-                Get Full ITR Summary →
-              </button>
+
+              <div className="flex flex-col items-center gap-3">
+                <button
+                  type="button"
+                  onClick={downloadSummaryPdf}
+                  className="inline-flex items-center justify-center border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-background)] text-[color:var(--lux-foreground)] px-12 py-4 rounded-lg font-bold text-lg hover:bg-[color:var(--lux-foreground-05)] transition"
+                >
+                  Download Summary PDF
+                </button>
+
+                <button
+                  type="button"
+                  onClick={goToStoreForFullSummary}
+                  className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+                >
+                  Get Full ITR Summary →
+                </button>
+              </div>
               <div className="mt-3 text-xs text-[color:var(--lux-foreground-60)]">
                 <button
                   type="button"
