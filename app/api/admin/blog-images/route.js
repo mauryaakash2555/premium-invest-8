@@ -30,10 +30,17 @@ import fs from 'fs/promises';
 import { getSuperAdminPayloadFromRequest } from '@/lib/adminSession';
 import { staticBlogData } from '@/data/staticBlogData';
 import { getLocalCommunityPosts, clearLocalCommunityPostsCache } from '@/lib/blog/localCommunityPosts';
+import { upsertCommunityImageOverride } from '@/lib/blog/communityImageOverrides';
+import { supabaseAdmin } from '@/lib/db/supabaseAdmin';
 
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY || '';
 const IMAGE_HISTORY_PATH = path.join(process.cwd(), 'data', 'blog-image-history.json');
 const EDITORIAL_OVERRIDES_PATH = path.join(process.cwd(), 'data', 'editorial-image-overrides.json');
+
+const STORAGE_BUCKET_FALLBACK = process.env.ITR_STORAGE_BUCKET || 'itr-documents';
+const BLOG_IMAGES_STORAGE_BUCKET = process.env.BLOG_IMAGES_STORAGE_BUCKET || STORAGE_BUCKET_FALLBACK;
+const REMOTE_HISTORY_KEY = 'admin/blog-images/history.json';
+const REMOTE_EDITORIAL_OVERRIDES_KEY = 'admin/blog-images/editorial-overrides.json';
 
 /* ─── helpers ───────────────────────────────────────────────────── */
 
@@ -44,10 +51,59 @@ async function saveJSON(filePath, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
 }
 
-const loadImageHistory = () => loadJSON(IMAGE_HISTORY_PATH);
-const saveImageHistory = (h) => saveJSON(IMAGE_HISTORY_PATH, h);
-const loadEditorialOverrides = () => loadJSON(EDITORIAL_OVERRIDES_PATH);
-const saveEditorialOverrides = (o) => saveJSON(EDITORIAL_OVERRIDES_PATH, o);
+async function storageDownloadJson(key) {
+  try {
+    const sb = supabaseAdmin();
+    const { data, error } = await sb.storage.from(BLOG_IMAGES_STORAGE_BUCKET).download(key);
+    if (error || !data) return { obj: null, error: error || new Error('Missing object') };
+
+    const ab = typeof data.arrayBuffer === 'function' ? await data.arrayBuffer() : null;
+    if (!ab) return { obj: null, error: new Error('Unsupported storage response') };
+    const txt = Buffer.from(ab).toString('utf8');
+    return { obj: JSON.parse(txt), error: null };
+  } catch (e) {
+    return { obj: null, error: e };
+  }
+}
+
+async function storageUploadJson(key, obj) {
+  try {
+    const sb = supabaseAdmin();
+    const body = Buffer.from(JSON.stringify(obj || {}, null, 2), 'utf8');
+    const { error } = await sb.storage.from(BLOG_IMAGES_STORAGE_BUCKET).upload(key, body, {
+      contentType: 'application/json',
+      upsert: true,
+    });
+    if (error) throw new Error(error.message || 'Supabase upload failed');
+    return { ok: true, error: null };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+
+async function loadImageHistory() {
+  const remote = await storageDownloadJson(REMOTE_HISTORY_KEY);
+  if (remote?.obj && typeof remote.obj === 'object') return remote.obj;
+  return loadJSON(IMAGE_HISTORY_PATH);
+}
+
+async function saveImageHistory(h) {
+  const remote = await storageUploadJson(REMOTE_HISTORY_KEY, h);
+  if (remote?.ok) return;
+  return saveJSON(IMAGE_HISTORY_PATH, h);
+}
+
+async function loadEditorialOverrides() {
+  const remote = await storageDownloadJson(REMOTE_EDITORIAL_OVERRIDES_KEY);
+  if (remote?.obj && typeof remote.obj === 'object') return remote.obj;
+  return loadJSON(EDITORIAL_OVERRIDES_PATH);
+}
+
+async function saveEditorialOverrides(o) {
+  const remote = await storageUploadJson(REMOTE_EDITORIAL_OVERRIDES_KEY, o);
+  if (remote?.ok) return;
+  return saveJSON(EDITORIAL_OVERRIDES_PATH, o);
+}
 
 async function addToHistory(blogId, imageUrl, source = 'manual') {
   const history = await loadImageHistory();
@@ -229,19 +285,16 @@ export async function POST(req) {
           ov[blogId] = { image_url: imageUrl, updated_at: new Date().toISOString() };
           await saveEditorialOverrides(ov);
         } else {
-          const postsPath = path.join(process.cwd(), 'data', 'community_posts.json');
-          try {
-            const posts = JSON.parse(await fs.readFile(postsPath, 'utf8'));
-            const idx = posts.findIndex((p) => p._id === blogId);
-            if (idx >= 0) {
-              posts[idx].image_url = imageUrl;
-              posts[idx].image_updated_at = new Date().toISOString();
-              await fs.writeFile(postsPath, JSON.stringify(posts, null, 2), 'utf8');
-              clearLocalCommunityPostsCache();
-            }
-          } catch (e) {
-            console.error('Failed to update community post:', e);
+          const up = await upsertCommunityImageOverride({
+            postId: blogId,
+            imageUrl,
+            keywords: Array.isArray(body.imageKeywords) ? body.imageKeywords : [],
+            source: body.imageSource || 'manual',
+          });
+          if (!up?.success) {
+            return NextResponse.json({ success: false, error: up?.error || 'Failed to update community override', hint: up?.hint || null }, { status: 500 });
           }
+          clearLocalCommunityPostsCache();
         }
 
         return NextResponse.json({ success: true, message: 'Image updated', history: await getHistory(blogId) });
@@ -259,19 +312,16 @@ export async function POST(req) {
           ov[blogId] = { image_url: imageUrl, updated_at: new Date().toISOString(), reverted: true };
           await saveEditorialOverrides(ov);
         } else {
-          const postsPath = path.join(process.cwd(), 'data', 'community_posts.json');
-          try {
-            const posts = JSON.parse(await fs.readFile(postsPath, 'utf8'));
-            const idx = posts.findIndex((p) => p._id === blogId);
-            if (idx >= 0) {
-              posts[idx].image_url = imageUrl;
-              posts[idx].image_updated_at = new Date().toISOString();
-              await fs.writeFile(postsPath, JSON.stringify(posts, null, 2), 'utf8');
-              clearLocalCommunityPostsCache();
-            }
-          } catch (e) {
-            console.error('Failed to revert community post:', e);
+          const up = await upsertCommunityImageOverride({
+            postId: blogId,
+            imageUrl,
+            keywords: Array.isArray(body.imageKeywords) ? body.imageKeywords : [],
+            source: 'revert',
+          });
+          if (!up?.success) {
+            return NextResponse.json({ success: false, error: up?.error || 'Failed to revert community override', hint: up?.hint || null }, { status: 500 });
           }
+          clearLocalCommunityPostsCache();
         }
 
         return NextResponse.json({ success: true, message: 'Image reverted' });
