@@ -139,6 +139,22 @@ export default function AboutUsPage() {
                     </button>
 
                   </div>
+
+                  <div className="mt-10 border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-3 md:p-4">
+                    <div className="relative w-full overflow-hidden rounded-sm">
+                      <div className="aspect-video w-full">
+                        <video
+                          className="h-full w-full object-contain"
+                          controls
+                          playsInline
+                          preload="metadata"
+                        >
+                          <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
