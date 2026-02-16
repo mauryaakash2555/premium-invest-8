@@ -23,12 +23,58 @@ export async function POST(request) {
         success: true,
         isScanned: true,
         fields: { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 },
+        employeePAN: '',
+        employerName: '',
+        employerTAN: '',
+        assessmentYear: '',
+        hraExemption: 0,
+        regime: '',
         confidence: 0,
         message: 'Scanned PDF detected — please enter values manually while viewing your document'
       });
     }
 
     const fields = { grossSalary: 0, tds: 0, standardDeduction: 0, deductions80C: 0 };
+
+    const safeNumber = (raw) => {
+      if (raw == null) return 0;
+      const s = String(raw).replace(/,/g, '').trim();
+      const n = parseFloat(s);
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    const firstLineAfter = (haystack, marker) => {
+      const idx = haystack.toLowerCase().indexOf(String(marker).toLowerCase());
+      if (idx < 0) return '';
+      const after = haystack.slice(idx + marker.length);
+      const lines = after.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      return lines[0] || '';
+    };
+
+    // Additional extracted fields (do not interfere with existing extraction)
+    let employeePAN = '';
+    let employerName = '';
+    let employerTAN = '';
+    let assessmentYear = '';
+    let hraExemption = 0;
+    let regime = '';
+
+    let mm = text.match(/PAN of the Employee[^\n]*\n*([A-Z]{5}[0-9]{4}[A-Z])/i);
+    if (mm) employeePAN = mm[1];
+
+    employerName = firstLineAfter(text, 'Name and address of the Employer');
+
+    mm = text.match(/TAN of the Deductor\s+([A-Z]{4}[0-9]{5}[A-Z])/i);
+    if (mm) employerTAN = mm[1];
+
+    mm = text.match(/Assessment Year\s+(\d{4}-\d{2,4})/i);
+    if (mm) assessmentYear = mm[1];
+
+    mm = text.match(/House rent allowance under section 10\(13A\)[^\d]{0,20}([\d.]+)/i);
+    if (mm) hraExemption = safeNumber(mm[1]);
+
+    mm = text.match(/115BAC\s+(Yes|No)/i);
+    if (mm) regime = String(mm[1]).toLowerCase() === 'no' ? 'Old Regime' : 'New Regime';
 
     let m = text.match(/section\s+17\s*\(\s*1\s*\)[^\d]{0,80}([\d,]{5,})/i);
     if (m) fields.grossSalary = parseInt(m[1].replace(/,/g, ''));
@@ -70,7 +116,18 @@ export async function POST(request) {
     const found = Object.values(fields).filter(v => v > 0).length;
     const confidence = found >= 3 ? 0.95 : found >= 1 ? 0.75 : 0.5;
 
-    return Response.json({ success: true, isScanned: false, fields, confidence });
+    return Response.json({
+      success: true,
+      isScanned: false,
+      fields,
+      employeePAN,
+      employerName,
+      employerTAN,
+      assessmentYear,
+      hraExemption,
+      regime,
+      confidence,
+    });
 
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });

@@ -40,6 +40,16 @@ export default function ITRFilingHelp() {
   const [extractedData, setExtractedData] = useState(null);
   const [fields, setFields] = useState({});
   const [taxResult, setTaxResult] = useState(null);
+  const [itrDetails, setItrDetails] = useState({
+    employeePAN: '',
+    employerName: '',
+    employerTAN: '',
+    assessmentYear: '',
+    hraExemption: 0,
+    regime: '',
+  });
+  const [copiedKey, setCopiedKey] = useState('');
+  const [autoAdvanceToDetails, setAutoAdvanceToDetails] = useState(false);
   const [loadingStage, setLoadingStage] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [pdfBase64, setPdfBase64] = useState(null);
@@ -53,6 +63,55 @@ export default function ITRFilingHelp() {
   });
 
   const allVerified = Object.values(verified).every(v => v);
+
+  useEffect(() => {
+    if (!copiedKey) return;
+    const t = setTimeout(() => setCopiedKey(''), 1200);
+    return () => clearTimeout(t);
+  }, [copiedKey]);
+
+  useEffect(() => {
+    if (step !== 'payment') return;
+    if (!taxResult) return;
+    if (!autoAdvanceToDetails) return;
+
+    const t = setTimeout(() => {
+      setStep('details');
+      setAutoAdvanceToDetails(false);
+    }, 1600);
+
+    return () => clearTimeout(t);
+  }, [step, taxResult, autoAdvanceToDetails]);
+
+  async function copyToClipboard(text, key) {
+    const value = String(text ?? '').trim();
+    if (!value) return;
+
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        setCopiedKey(key);
+        return;
+      }
+    } catch (e) {
+      // fallback below
+    }
+
+    try {
+      const el = document.createElement('textarea');
+      el.value = value;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopiedKey(key);
+    } catch (e) {
+      // ignore
+    }
+  }
 
   // E2E stability: provides a deterministic signal that client hydration completed.
   useEffect(() => {
@@ -155,9 +214,12 @@ export default function ITRFilingHelp() {
       setPreviewMimeType('application/pdf');
       setPdfTooLarge(false);
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
+      setItrDetails({ employeePAN: '', employerName: '', employerTAN: '', assessmentYear: '', hraExemption: 0, regime: '' });
     } else if (step === 'payment') {
       setStep('review');
       setTaxResult(null);
+    } else if (step === 'details') {
+      setStep('payment');
     } else if (step === 'complete') {
       setStep('payment');
     } else {
@@ -231,6 +293,7 @@ export default function ITRFilingHelp() {
           message: 'Could not read the server response. Please enter values from your Form 16 below.',
         });
         setFields(safeFields);
+        setItrDetails({ employeePAN: '', employerName: '', employerTAN: '', assessmentYear: '', hraExemption: 0, regime: '' });
         setPdfTooLarge(false);
         setPreviewMimeType(file?.type || 'application/pdf');
         setPdfBase64(null);
@@ -253,6 +316,14 @@ export default function ITRFilingHelp() {
         message: data?.message || 'Please verify and edit the values below.',
       });
       setFields(safeFields);
+      setItrDetails({
+        employeePAN: data?.employeePAN || '',
+        employerName: data?.employerName || '',
+        employerTAN: data?.employerTAN || '',
+        assessmentYear: data?.assessmentYear || '',
+        hraExemption: typeof data?.hraExemption === 'number' ? data.hraExemption : (parseFloat(String(data?.hraExemption || 0)) || 0),
+        regime: data?.regime || '',
+      });
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     } catch (err) {
@@ -266,6 +337,7 @@ export default function ITRFilingHelp() {
         message: 'Could not process the document right now. Please enter values from your Form 16 below.',
       });
       setFields(safeFields);
+      setItrDetails({ employeePAN: '', employerName: '', employerTAN: '', assessmentYear: '', hraExemption: 0, regime: '' });
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     }
@@ -306,8 +378,65 @@ export default function ITRFilingHelp() {
       recommended: oldTax < newTax ? 'old' : 'new',
       savings: Math.round(Math.abs(oldTax - newTax)),
     });
+    setAutoAdvanceToDetails(true);
     setStep('payment');
   }
+
+  const recommendedRegimeLabel = useMemo(() => {
+    if (!taxResult?.recommended) return '';
+    return taxResult.recommended === 'old' ? 'Old Regime' : 'New Regime';
+  }, [taxResult?.recommended]);
+
+  const netTaxableIncome = useMemo(() => {
+    if (!taxResult) return 0;
+    return taxResult.recommended === 'old' ? (taxResult.oldRegime?.taxable || 0) : (taxResult.newRegime?.taxable || 0);
+  }, [taxResult]);
+
+  const taxPayableOrRefund = useMemo(() => {
+    if (!taxResult) return { amount: 0, label: '' };
+    const tax = taxResult.recommended === 'old' ? (taxResult.oldRegime?.tax || 0) : (taxResult.newRegime?.tax || 0);
+    const tds = fields?.tds || 0;
+    const diff = Math.round(tax - tds);
+    if (diff > 0) return { amount: diff, label: 'Tax Payable' };
+    if (diff < 0) return { amount: Math.abs(diff), label: 'Refund Due' };
+    return { amount: 0, label: 'Nil' };
+  }, [taxResult, fields?.tds]);
+
+  const itrDetailsRows = useMemo(() => {
+    const fmtMoney = (n) => {
+      const v = Number(n || 0);
+      return `₹${Math.round(v).toLocaleString('en-IN')}`;
+    };
+
+    const safeText = (s) => String(s || '').trim() || '—';
+
+    const tax = taxResult
+      ? (taxResult.recommended === 'old' ? (taxResult.oldRegime?.tax || 0) : (taxResult.newRegime?.tax || 0))
+      : 0;
+
+    return [
+      { key: 'employeePAN', label: 'Employee PAN', value: safeText(itrDetails.employeePAN) },
+      { key: 'employerName', label: 'Employer Name', value: safeText(itrDetails.employerName) },
+      { key: 'employerTAN', label: 'Employer TAN', value: safeText(itrDetails.employerTAN) },
+      { key: 'assessmentYear', label: 'Assessment Year', value: safeText(itrDetails.assessmentYear) },
+      { key: 'grossSalary', label: 'Gross Salary', value: fmtMoney(fields?.grossSalary || 0) },
+      { key: 'hraExemption', label: 'HRA Exemption', value: fmtMoney(itrDetails.hraExemption || 0) },
+      { key: 'standardDeduction', label: 'Standard Deduction', value: fmtMoney(fields?.standardDeduction || 0) },
+      { key: 'deductions80C', label: '80C Deductions', value: fmtMoney(fields?.deductions80C || 0) },
+      { key: 'netTaxableIncome', label: 'Net Taxable Income', value: fmtMoney(netTaxableIncome) },
+      { key: 'tds', label: 'TDS Already Deducted', value: fmtMoney(fields?.tds || 0) },
+      {
+        key: 'taxPayableOrRefund',
+        label: 'Tax Payable / Refund Due',
+        value: taxResult
+          ? (taxPayableOrRefund.label === 'Nil'
+            ? `${fmtMoney(0)} (Nil)`
+            : `${fmtMoney(taxPayableOrRefund.amount)} (${taxPayableOrRefund.label})`)
+          : fmtMoney(0),
+      },
+      { key: 'recommendedRegime', label: 'Recommended Regime', value: recommendedRegimeLabel || (tax ? '—' : '—') },
+    ];
+  }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult]);
 
   return (
     <div
@@ -345,12 +474,12 @@ export default function ITRFilingHelp() {
           />
           <div
             className={`flex-1 h-2 rounded ${
-              step === 'payment' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
+              step === 'payment' || step === 'details' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
             }`}
           />
           <div
             className={`flex-1 h-2 rounded ${
-              step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
+              step === 'details' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
             }`}
           />
         </div>
@@ -701,6 +830,149 @@ export default function ITRFilingHelp() {
               >
                 Get Full ITR Summary →
               </a>
+            </div>
+
+            {/* Step 3 entry */}
+            <div className="mt-6">
+              <button
+                onClick={() => setStep('details')}
+                className="w-full px-8 py-4 rounded-lg font-semibold transition bg-[color:var(--lux-foreground)]/10 text-[color:var(--lux-foreground)] hover:bg-[color:var(--lux-foreground)]/15 border border-[color:var(--lux-foreground-10)]"
+              >
+                Continue to Filing Steps →
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Step 3 — ITR Details + Filing Steps */}
+        {step === 'details' && taxResult && (
+          <>
+            <div className="mb-6 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-[color:var(--lux-foreground)] mb-2">Step 3 — Your filing checklist</h2>
+              <p className="text-[color:var(--lux-foreground-60)]">
+                Everything below is based on your extracted values. Copy what you need, then file confidently.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Section 1 */}
+              <section className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-[color:var(--lux-foreground)]">Your ITR Details</h3>
+                  <span className="text-xs text-[color:var(--lux-foreground-40)]">Copy-paste ready</span>
+                </div>
+
+                <div className="divide-y divide-[color:var(--lux-foreground-10)] border border-[color:var(--lux-foreground-10)] rounded-lg overflow-hidden">
+                  {itrDetailsRows.map((row) => (
+                    <div key={row.key} className="flex items-center justify-between gap-4 px-4 py-3 bg-[color:var(--lux-foreground-05)]">
+                      <div className="text-sm font-medium text-[color:var(--lux-foreground-60)]">
+                        {row.label}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm font-semibold text-[color:var(--lux-accent)] whitespace-nowrap">
+                          {row.value}
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(row.value, row.key)}
+                          className="px-2.5 py-1.5 text-xs font-semibold rounded border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-background)] text-[color:var(--lux-foreground-80)] hover:bg-[color:var(--lux-foreground-05)] transition"
+                        >
+                          {copiedKey === row.key ? 'Copied ✓' : 'Copy'}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Section 2 */}
+              <section className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
+                <h3 className="text-xl font-bold text-[color:var(--lux-foreground)] mb-4">How to file in 6 steps</h3>
+
+                {(() => {
+                  const pan = String(itrDetails.employeePAN || '').trim() || '—';
+                  const ay = String(itrDetails.assessmentYear || '').trim() || '—';
+                  const grossSalary = Math.round(Number(fields?.grossSalary || 0)).toLocaleString('en-IN');
+                  const tds = Math.round(Number(fields?.tds || 0)).toLocaleString('en-IN');
+                  const employerName = String(itrDetails.employerName || '').trim() || 'your employer';
+                  const savings = Math.round(Number(taxResult?.savings || 0)).toLocaleString('en-IN');
+                  const recommended = recommendedRegimeLabel || 'Recommended';
+
+                  const steps = [
+                    {
+                      title: 'Login to the portal',
+                      desc: (
+                        <>
+                          Go to <span className="text-[color:var(--lux-accent)] font-semibold">incometax.gov.in</span> → Click <span className="text-[color:var(--lux-accent)] font-semibold">e-Filing</span> → Login with your PAN:{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">{pan}</span>
+                        </>
+                      ),
+                    },
+                    {
+                      title: 'Start ITR filing',
+                      desc: (
+                        <>
+                          Click <span className="text-[color:var(--lux-accent)] font-semibold">File Income Tax Return</span> → Select Assessment Year{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">{ay}</span> → Select <span className="text-[color:var(--lux-accent)] font-semibold">ITR-1 (Sahaj)</span>
+                        </>
+                      ),
+                    },
+                    {
+                      title: 'Verify salary details',
+                      desc: (
+                        <>
+                          Gross Salary should show{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{grossSalary}</span>. If it’s different, correct it before you proceed.
+                        </>
+                      ),
+                    },
+                    {
+                      title: 'Choose the right regime',
+                      desc: (
+                        <>
+                          Choose <span className="text-[color:var(--lux-accent)] font-semibold">{recommended}</span>. This saves you{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{savings}</span> vs the other regime.
+                        </>
+                      ),
+                    },
+                    {
+                      title: 'Verify TDS',
+                      desc: (
+                        <>
+                          TDS should show{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">₹{tds}</span> already deducted by{' '}
+                          <span className="text-[color:var(--lux-accent)] font-semibold">{employerName}</span>.
+                        </>
+                      ),
+                    },
+                    {
+                      title: 'Submit & e-Verify',
+                      desc: (
+                        <>
+                          Submit your return and e-Verify using <span className="text-[color:var(--lux-accent)] font-semibold">Aadhaar OTP</span> for instant verification.
+                        </>
+                      ),
+                    },
+                  ];
+
+                  return (
+                    <div className="space-y-4">
+                      {steps.map((s, idx) => (
+                        <div key={s.title} className="flex gap-4">
+                          <div className="shrink-0">
+                            <div className="w-9 h-9 rounded-full bg-[color:var(--lux-accent)]/15 border border-[color:var(--lux-accent)]/35 flex items-center justify-center font-bold text-[color:var(--lux-accent)]">
+                              {idx + 1}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-[color:var(--lux-foreground)]">{s.title}</div>
+                            <div className="text-sm text-[color:var(--lux-foreground-60)] leading-6">{s.desc}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </section>
             </div>
           </>
         )}
