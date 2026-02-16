@@ -53,6 +53,20 @@ const nextConfig = {
 
     return [
       {
+        // Videos under /public/videos are likely to be updated/replaced.
+        // Do NOT cache them as immutable for a year, otherwise browsers/CDNs
+        // can keep serving the old video even after you upload a new one.
+        source: '/videos/:path*.(mp4|webm)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: isProd
+              ? 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400'
+              : 'no-store',
+          },
+        ],
+      },
+      {
         source: '/blog/:path*',
         headers: [
           {
@@ -84,7 +98,7 @@ const nextConfig = {
       },
       {
         // Cache heavier media/docs for 1 year (production only)
-        source: '/:path*.(mp4|webm|mp3|pdf)',
+        source: '/:path*.(mp3|pdf)',
         headers: [
           {
             key: 'Cache-Control',
