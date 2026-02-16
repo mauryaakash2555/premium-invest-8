@@ -1,7 +1,6 @@
 'use client';
 import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 
 /**
@@ -34,7 +33,6 @@ const LOADING_STAGES = [
 ];
 
 export default function ITRFilingHelp() {
-  const router = useRouter();
   const [step, setStep] = useState('upload');
   const [hydrated, setHydrated] = useState(false);
   const [extractedData, setExtractedData] = useState(null);
@@ -157,16 +155,6 @@ export default function ITRFilingHelp() {
     []
   );
 
-  // Handle browser back button
-  useEffect(() => {
-    const handlePopState = () => {
-      // Always go to tools on browser back
-      router.push('/tools');
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [router]);
-
   // Animate loading stages
   useEffect(() => {
     if (step !== 'extracting') return;
@@ -206,25 +194,152 @@ export default function ITRFilingHelp() {
   }, [step]);
 
   function handleBack() {
-    if (step === 'review') {
-      setStep('upload');
-      setExtractedData(null);
-      setFields({});
-      setPdfBase64(null);
-      setPreviewMimeType('application/pdf');
-      setPdfTooLarge(false);
-      setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
-      setItrDetails({ employeePAN: '', employerName: '', employerTAN: '', assessmentYear: '', hraExemption: 0, regime: '' });
-    } else if (step === 'payment') {
+    if (step === 'payment') {
+      // Go back to verification (no navigation away; keep extracted values)
       setStep('review');
       setTaxResult(null);
-    } else if (step === 'details') {
-      setStep('payment');
-    } else if (step === 'complete') {
-      setStep('payment');
-    } else {
-      router.push('/tools');
+      setAutoAdvanceToDetails(false);
+      return;
     }
+
+    if (step === 'details') {
+      setStep('payment');
+      setAutoAdvanceToDetails(false);
+      return;
+    }
+
+    if (step === 'complete') {
+      setStep('payment');
+      setAutoAdvanceToDetails(false);
+      return;
+    }
+
+    // For upload/extracting/review (and any unknown state), reset to the start.
+    setStep('upload');
+    setExtractedData(null);
+    setFields({});
+    setTaxResult(null);
+    setItrDetails({ employeePAN: '', employerName: '', employerTAN: '', assessmentYear: '', hraExemption: 0, regime: '' });
+    setPdfBase64(null);
+    setPreviewMimeType('application/pdf');
+    setPdfTooLarge(false);
+    setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
+    setCopiedKey('');
+    setAutoAdvanceToDetails(false);
+  }
+
+  function downloadSummaryPdf() {
+    if (!taxResult) return;
+
+    const escapeHtml = (value) => {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    };
+
+    const fmtMoney = (n) => `₹${Math.round(Number(n || 0)).toLocaleString('en-IN')}`;
+    const now = new Date();
+    const generatedOn = now.toLocaleString('en-IN');
+
+    const recommended = taxResult.recommended === 'old' ? 'Old Regime' : 'New Regime';
+    const selectedTax = taxResult.recommended === 'old' ? (taxResult.oldRegime?.tax || 0) : (taxResult.newRegime?.tax || 0);
+    const tds = Number(fields?.tds || 0);
+    const diff = Math.round(selectedTax - tds);
+    const taxPayableOrRefundText = diff > 0 ? `${fmtMoney(diff)} (Tax Payable)` : diff < 0 ? `${fmtMoney(Math.abs(diff))} (Refund Due)` : `${fmtMoney(0)} (Nil)`;
+
+    const details = [
+      ['Employee PAN', itrDetails.employeePAN || '—'],
+      ['Employer Name', itrDetails.employerName || '—'],
+      ['Employer TAN', itrDetails.employerTAN || '—'],
+      ['Assessment Year', itrDetails.assessmentYear || '—'],
+      ['Gross Salary', fmtMoney(fields?.grossSalary || 0)],
+      ['HRA Exemption', fmtMoney(itrDetails.hraExemption || 0)],
+      ['Standard Deduction', fmtMoney(fields?.standardDeduction || 0)],
+      ['80C Deductions', fmtMoney(fields?.deductions80C || 0)],
+      ['Net Taxable Income', fmtMoney(netTaxableIncome)],
+      ['TDS Already Deducted', fmtMoney(fields?.tds || 0)],
+      ['Tax Payable / Refund Due', taxPayableOrRefundText],
+      ['Recommended Regime', recommended],
+    ];
+
+    const html = `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ITR Summary</title>
+    <style>
+      :root { --bg: #0b0b12; --fg: #f5f2e8; --muted: rgba(245,242,232,.70); --line: rgba(245,242,232,.15); --gold: #e7c36a; }
+      body { margin: 0; padding: 28px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: white; color: #111; }
+      h1 { margin: 0 0 6px; font-size: 22px; }
+      .sub { color: #444; font-size: 12px; margin-bottom: 18px; }
+      .card { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+      .grid { width: 100%; border-collapse: collapse; }
+      .grid td { padding: 8px 10px; border-top: 1px solid #eee; vertical-align: top; }
+      .grid tr:first-child td { border-top: none; }
+      .k { color: #444; width: 45%; font-size: 12px; }
+      .v { color: #111; font-weight: 700; font-size: 12px; }
+      .gold { color: #9a6b00; font-weight: 800; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .tag { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #f3f3f3; font-size: 12px; }
+      .big { font-size: 18px; font-weight: 900; }
+      @media print {
+        body { padding: 0; }
+        .card { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ITR Summary (Draft)</h1>
+    <div class="sub">Generated on ${escapeHtml(generatedOn)} • Tool: ${escapeHtml(pageUrl)}</div>
+
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap: 12px;">
+        <div style="font-weight:800;">Your ITR Details</div>
+        <div class="tag">Recommended: <span class="gold">${escapeHtml(recommended)}</span></div>
+      </div>
+      <table class="grid" style="margin-top: 10px;">
+        ${details
+          .map(([k, v]) => `<tr><td class="k">${escapeHtml(k)}</td><td class="v">${escapeHtml(v)}</td></tr>`)
+          .join('')}
+      </table>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:800; margin-bottom:10px;">Regime Comparison</div>
+      <div class="two">
+        <div class="card" style="margin:0;">
+          <div style="font-weight:900;">Old Tax Regime</div>
+          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(taxResult.oldRegime?.taxable || 0))}</span></div>
+          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(taxResult.oldRegime?.tax || 0))}</span></div>
+        </div>
+        <div class="card" style="margin:0;">
+          <div style="font-weight:900;">New Tax Regime</div>
+          <div style="margin-top:8px; font-size:12px;">Taxable Income: <span class="gold">${escapeHtml(fmtMoney(taxResult.newRegime?.taxable || 0))}</span></div>
+          <div style="margin-top:6px; font-size:12px;">Tax Payable (incl. cess): <span class="gold">${escapeHtml(fmtMoney(taxResult.newRegime?.tax || 0))}</span></div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 12px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:12px; color:#444;">Potential savings by choosing ${escapeHtml(recommended)}</div>
+        <div class="big">${escapeHtml(fmtMoney(taxResult.savings || 0))}</div>
+      </div>
+    </div>
+
+    <script>
+      // Auto-open print dialog
+      setTimeout(() => { window.print(); }, 400);
+    </script>
+  </body>
+</html>`;
+
+    const w = window.open('', '_blank', 'noopener,noreferrer');
+    if (!w) return;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
   }
 
   async function handleUpload(file) {
@@ -456,7 +571,7 @@ export default function ITRFilingHelp() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors bg-transparent border-none cursor-pointer"
           >
             <span aria-hidden="true">←</span>
-            {step === 'upload' || step === 'extracting' ? 'Back to Tools' : 'Back'}
+            {step === 'upload' || step === 'extracting' ? 'Reset' : 'Back'}
           </button>
         </div>
 
@@ -818,27 +933,17 @@ export default function ITRFilingHelp() {
               <p className="text-sm text-[color:var(--lux-foreground-60)] mt-2">by choosing {taxResult.recommended === 'old' ? 'Old' : 'New'} Regime</p>
             </div>
 
-            {/* Payment CTA */}
+            {/* Download PDF (no payment, no redirect) */}
             <div className="bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-8 text-center">
-              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Get Your Full ITR Summary</h3>
-              <p className="text-[color:var(--lux-foreground-60)] mb-6">Download detailed PDF report with both tax regimes</p>
-              <a
-                href="https://store.bmwealth.co.in"
-                target="_blank"
-                rel="noopener noreferrer"
+              <h3 className="text-xl font-bold mb-2 text-[color:var(--lux-foreground)]">Download Summary PDF</h3>
+              <p className="text-[color:var(--lux-foreground-60)] mb-6">
+                Generates a printable summary in your browser (no payment, no redirects).
+              </p>
+              <button
+                onClick={downloadSummaryPdf}
                 className="inline-flex items-center justify-center bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
               >
-                Get Full ITR Summary →
-              </a>
-            </div>
-
-            {/* Step 3 entry */}
-            <div className="mt-6">
-              <button
-                onClick={() => setStep('details')}
-                className="w-full px-8 py-4 rounded-lg font-semibold transition bg-[color:var(--lux-foreground)]/10 text-[color:var(--lux-foreground)] hover:bg-[color:var(--lux-foreground)]/15 border border-[color:var(--lux-foreground-10)]"
-              >
-                Continue to Filing Steps →
+                Download Summary PDF →
               </button>
             </div>
           </>
