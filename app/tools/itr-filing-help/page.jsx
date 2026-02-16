@@ -1,7 +1,8 @@
 'use client';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
+import { ArrowRight } from 'lucide-react';
 
 /**
  * ⛔⛔⛔ BANNED COLORS - DO NOT USE ⛔⛔⛔
@@ -58,6 +59,10 @@ export default function ITRFilingHelp() {
     standardDeduction: false,
     deductions80C: false,
   });
+
+  const uploadRunIdRef = useRef(0);
+  const uploadAbortRef = useRef(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   const allVerified = Object.values(verified).every(v => v);
 
@@ -239,6 +244,27 @@ export default function ITRFilingHelp() {
     }
 
     // For upload/extracting/review (and any unknown state), reset to the start.
+    try {
+      uploadAbortRef.current?.abort?.();
+    } catch (e) {
+      // ignore
+    }
+    uploadAbortRef.current = null;
+    uploadRunIdRef.current += 1;
+
+    if (typeof window !== 'undefined') {
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('payment')) {
+          url.searchParams.delete('payment');
+          const next = `${url.pathname}${url.searchParams.toString() ? `?${url.searchParams.toString()}` : ''}${url.hash || ''}`;
+          window.history.replaceState({}, '', next);
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
     setStep('upload');
     setExtractedData(null);
     setFields({});
@@ -249,6 +275,7 @@ export default function ITRFilingHelp() {
     setPdfTooLarge(false);
     setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
     setCopiedKey('');
+    setFileInputKey((k) => k + 1);
   }
 
   function downloadSummaryPdf(override) {
@@ -428,6 +455,15 @@ export default function ITRFilingHelp() {
   }
 
   async function handleUpload(file) {
+    const runId = (uploadRunIdRef.current += 1);
+    try {
+      uploadAbortRef.current?.abort?.();
+    } catch (e) {
+      // ignore
+    }
+    const controller = new AbortController();
+    uploadAbortRef.current = controller;
+
     console.log('[ITR] handleUpload called with file:', file?.name, file?.type, file?.size);
     setStep('extracting');
     setLoadingStage(0);
@@ -453,12 +489,16 @@ export default function ITRFilingHelp() {
           reader.onerror = () => reject(new Error('Failed to read file for preview'));
           reader.readAsDataURL(file);
         });
+
+        if (runId !== uploadRunIdRef.current) return;
         setPdfBase64(base64 || null);
       } else {
+        if (runId !== uploadRunIdRef.current) return;
         setPdfBase64(null);
       }
     } catch (e) {
       console.warn('[ITR] Preview generation failed:', e);
+      if (runId !== uploadRunIdRef.current) return;
       setPdfBase64(null);
       setPdfTooLarge(false);
       setPreviewMimeType(file?.type || 'application/pdf');
@@ -472,11 +512,13 @@ export default function ITRFilingHelp() {
       const res = await fetch('/api/itr/extract-v2', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
       console.log('[ITR] Response status:', res.status);
 
       // Get raw text first to debug
       const text = await res.text();
+      if (runId !== uploadRunIdRef.current) return;
       let data;
       try {
         data = JSON.parse(text);
@@ -527,6 +569,8 @@ export default function ITRFilingHelp() {
       setVerified({ grossSalary: false, tds: false, standardDeduction: false, deductions80C: false });
       setStep('review');
     } catch (err) {
+      if (runId !== uploadRunIdRef.current) return;
+      if (controller?.signal?.aborted || err?.name === 'AbortError') return;
       console.error('[ITR] Upload/extract failed:', err);
       const safeFields = { grossSalary: 0, tds: 0, standardDeduction: 50000, deductions80C: 0 };
       setExtractedData({
@@ -701,6 +745,7 @@ export default function ITRFilingHelp() {
         {step === 'upload' && (
           <div className="bg-[color:var(--lux-card)]/70 border-2 border-dashed border-[color:var(--lux-foreground-10)] rounded-lg p-16 text-center hover:border-[color:var(--lux-accent)]/50 transition">
             <input
+              key={fileInputKey}
               type="file"
               accept=".pdf,image/*"
               onChange={(e) => {
@@ -1208,9 +1253,21 @@ export default function ITRFilingHelp() {
               <button
                 type="button"
                 onClick={goToStoreForFullSummary}
-                className="inline-flex items-center justify-center bg-[color:var(--lux-accent)] text-[color:var(--lux-background)] px-12 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+                className="group relative overflow-hidden px-7 md:px-8 py-3.5 md:py-4 no-underline transition-all duration-500"
+                style={{
+                  backgroundColor: 'var(--lux-foreground)',
+                  color: 'var(--lux-background)',
+                }}
               >
-                Get Full ITR Summary →
+                <span className="relative z-10 flex items-center gap-3 font-sans text-[9px] tracking-[0.22em] uppercase font-semibold">
+                  Get Full ITR Summary
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1.5" />
+                </span>
+                <span
+                  aria-hidden
+                  className="absolute inset-0 -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-500"
+                  style={{ backgroundColor: 'var(--lux-accent)' }}
+                />
               </button>
               <button
                 type="button"
