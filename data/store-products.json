@@ -40,15 +40,16 @@
   },
   {
     "slug": "tax-optimization-pdf",
-    "name": "Tax Optimization (Educational PDF)",
-    "priceInr": 299,
+    "name": "ITR Filing Summary — Form 16 Analysis",
+    "priceInr": 1,
     "type": "Educational PDF",
     "whatYouGet": [
-      "1 downloadable PDF",
-      "Checklist-style sections",
-      "Reference notes for common tax concepts"
+      "Personalised to your Form 16",
+      "All copy-paste values for ITR portal",
+      "Old vs New regime comparison",
+      "Step-by-step filing guide"
     ],
-    "description": "An educational PDF that explains common tax optimisation concepts and checklist-style steps for learning and planning.",
+    "description": "Your personalised ITR filing summary extracted from your Form 16. Contains all values needed to file ITR-1 on incometax.gov.in",
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   },
   {
