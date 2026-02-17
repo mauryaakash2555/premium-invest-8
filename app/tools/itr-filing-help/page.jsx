@@ -175,17 +175,6 @@ export default function ITRFilingHelp() {
     }
   }, [hydrated]);
 
-  // Fix 3 — payment_success step UI (minimal, no restructure)
-  if (step === 'payment_success')
-    return (
-      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <div style={{ fontSize: '48px' }}>✓</div>
-        <h2>Payment Successful</h2>
-        <p>Your ITR Summary is ready</p>
-        <button onClick={() => window.print()}>Download PDF</button>
-      </div>
-    );
-
   const baseUrl = getMetadataBase().origin;
   const pageUrl = `${baseUrl}/tools/itr-filing-help`;
   const toolSchema = {
@@ -732,6 +721,23 @@ export default function ITRFilingHelp() {
       { key: 'recommendedRegime', label: 'Recommended Regime', value: recommendedRegimeLabel || '—' },
     ];
   }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult]);
+
+  // Fix 3 — payment_success step UI (minimal)
+  // Important: this must be AFTER all hooks to avoid hook-order crashes.
+  if (step === 'payment_success')
+    return (
+      <div
+        style={themeStyle}
+        data-itr-hydrated={hydrated ? '1' : '0'}
+        className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]"
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <button onClick={() => window.print()}>Download PDF</button>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div
