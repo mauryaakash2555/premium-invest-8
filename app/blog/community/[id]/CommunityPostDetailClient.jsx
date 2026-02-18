@@ -195,9 +195,9 @@ export default function CommunityPostDetailClient({ id }) {
               {post.title}
             </h1>
 
-            {estimatedReadTime ? (
+            {post.content ? (
               <div style={{ color: 'var(--lux-foreground-60)', fontSize: '14px', marginBottom: '10px' }}>
-                {estimatedReadTime} min read
+                {Math.max(1, Math.ceil((post.content.length || 0) / 1200))} min read
               </div>
             ) : null}
 

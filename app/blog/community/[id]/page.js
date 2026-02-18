@@ -8,5 +8,6 @@ export const metadata = buildMetadata({
 });
 
 export default async function CommunityPostPage({ params }) {
-  return <CommunityPostDetailClient id={params?.id} />;
+  const resolved = await params;
+  return <CommunityPostDetailClient id={resolved?.id} />;
 }
