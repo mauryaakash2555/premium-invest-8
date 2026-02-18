@@ -48,6 +48,9 @@ export const BOT_NUDGE_CONFIG = {
   maxNudgesPerDay: 1,
   minDwellMs: 6000,
 
+  // How long the nudge stays visible before auto-fading out.
+  autoHideMs: 3200,
+
   // Extra friendly one-liners (rotated alongside path-specific messages).
   // Keep it light, no promises.
   extraMessages: [

@@ -201,12 +201,12 @@ const WhatsAppFloat = () => {
     setNudgeVisible(false);
     clearNudgeTimers();
 
-    // Unmount after transition.
+    // Unmount after transition (matches 600ms fade-out).
     nudgeUnmountRef.current = setTimeout(() => {
       setShowNudge(false);
       setNudgeVisible(false);
       if (openChat) setOpen(true);
-    }, 240);
+    }, 700);
   };
 
   const canAutoOpenOnPath = useMemo(() => {
@@ -578,8 +578,8 @@ const WhatsAppFloat = () => {
                 lineHeight: 1.45,
                 cursor: 'pointer',
                 opacity: nudgeVisible ? 1 : 0,
-                transform: nudgeVisible ? 'translate3d(0,0,0) scale(1)' : 'translate3d(0,10px,0) scale(0.985)',
-                transition: 'opacity 220ms ease, transform 220ms ease',
+                transform: nudgeVisible ? 'translate3d(0,0,0) scale(1)' : 'translate3d(0,8px,0) scale(0.97)',
+                transition: 'opacity 600ms cubic-bezier(0.4,0,0.15,1), transform 600ms cubic-bezier(0.4,0,0.15,1)',
                 willChange: 'opacity, transform',
               }}
               onClick={() => {
