@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Calendar, User, Clock, Sparkles, ChevronRight, Filter, X } from 'lucide-react';
+import { Calendar, User, Sparkles, ChevronRight, Filter, X } from 'lucide-react';
 import BlogNavigation from '@/components/BlogNavigation';
 
 // Premium LUX Theme
@@ -59,13 +59,6 @@ const TOPIC_TAGS = [
   { id: 'retirement', label: 'Retirement' },
   { id: 'real-estate', label: 'Real Estate' },
 ];
-
-// Calculate reading time from content
-function calculateReadingTime(content) {
-  if (!content) return 4; // default
-  const words = String(content).split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.ceil(words / 200)); // 200 wpm for technical content
-}
 
 function formatDate(dateString) {
   const date = new Date(dateString);

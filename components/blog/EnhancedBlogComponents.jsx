@@ -3,8 +3,8 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, User, ChevronRight, Tag, Filter, X } from 'lucide-react';
-import { PILLAR_CONFIG, TAG_CATEGORIES, AUTHORITY_BADGES, enhancePost, calculateReadingTime } from '@/lib/blog/schema';
+import { Calendar, User, ChevronRight, Tag, Filter, X } from 'lucide-react';
+import { PILLAR_CONFIG, TAG_CATEGORIES, AUTHORITY_BADGES, enhancePost } from '@/lib/blog/schema';
 
 /**
  * Format date for display
@@ -99,10 +99,6 @@ export function FeaturedCard({ post, priority = false }) {
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-4 text-xs text-[color:var(--lux-foreground-40)]">
             <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
-              {enhanced.readingTime} min read
-            </span>
-            <span className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
               {formatDate(enhanced.published)}
             </span>
@@ -171,8 +167,6 @@ export function PostCard({ post }) {
 
           {/* Meta */}
           <div className="flex items-center gap-3 text-xs text-[color:var(--lux-foreground-40)]">
-            <span>{enhanced.readingTime} min</span>
-            <span>•</span>
             <span>{formatDate(enhanced.published)}</span>
             {enhanced.relatedTools?.length > 0 && (
               <>
@@ -376,10 +370,6 @@ export function PostMeta({ post, showBadges = true }) {
 
   return (
     <div className="flex flex-wrap items-center gap-4 text-sm text-[color:var(--lux-foreground-40)]">
-      <span className="flex items-center gap-1.5">
-        <Clock className="w-4 h-4" />
-        {enhanced.readingTime} min read
-      </span>
       <span className="flex items-center gap-1.5">
         <Calendar className="w-4 h-4" />
         {formatDate(enhanced.published)}

@@ -216,31 +216,6 @@ export default function BlogDetailClient({ slug }) {
     return normalizeBlogHtmlForPremium(rawHtml);
   }, [rawHtml]);
 
-  const estimatedReadTime = useMemo(() => {
-    // Prefer explicit read time if present
-    const raw = String(post?.readTime || post?.read_time || '').trim();
-    const m = raw.match(/(\d+)\s*(min|minute)/i);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      if (Number.isFinite(n) && n > 0) return n;
-    }
-
-    // Estimate from HTML word count
-    const html = String(renderedHtml || '').trim();
-    if (!html) return null;
-    let text = '';
-    try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      text = String(doc?.body?.textContent || '').replace(/\s+/g, ' ').trim();
-    } catch {
-      text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    }
-    const words = text ? text.split(' ').filter(Boolean).length : 0;
-    if (!words) return null;
-    const minutes = Math.max(1, Math.round(words / 220));
-    return minutes;
-  }, [post?.readTime, post?.read_time, renderedHtml]);
 
   const pageClassName = useMemo(() => {
     const safe = typeof slug === 'string' && slug.trim() ? slug.trim() : 'unknown';

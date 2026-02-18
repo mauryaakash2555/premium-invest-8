@@ -114,13 +114,6 @@ export default function CommunityPostDetailClient({ id }) {
     return safeId;
   }, [post, safeId]);
 
-  const estimatedReadTime = useMemo(() => {
-    const raw = String(content || '').replace(/\s+/g, ' ').trim();
-    if (!raw) return null;
-    const words = raw.split(' ').filter(Boolean).length;
-    if (!words) return null;
-    return Math.max(1, Math.round(words / 220));
-  }, [content]);
 
   return (
     <div style={{
