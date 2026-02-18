@@ -166,9 +166,60 @@ function parseRssXml(xml) {
   return items;
 }
 
+function getRequestOrigin(request) {
+  const proto = request?.headers?.get('x-forwarded-proto');
+  const host = request?.headers?.get('x-forwarded-host') || request?.headers?.get('host');
+  if (proto && host) return `${proto}://${host}`;
+  return request?.nextUrl?.origin || null;
+}
+
+function looksLikeFeedXml(text) {
+  const raw = String(text || '');
+  if (!raw) return false;
+  // Heuristic: some providers return HTML (200 OK) when blocked; accept only if it contains RSS/Atom markers.
+  if (/<item[\s>]/i.test(raw) || /<entry[\s>]/i.test(raw)) return true;
+  const head = raw.slice(0, 3000).toLowerCase();
+  return head.includes('<rss') || head.includes('<feed') || head.includes('<rdf:rdf');
+}
+
+async function fetchRssXml({ feedUrl, origin, noCache }) {
+  const headers = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+    Accept: 'application/rss+xml, application/xml, text/xml, */*',
+    'Accept-Language': 'en-US,en;q=0.9',
+  };
+
+  // Prefer direct fetch (avoids dependency on internal origin/proxy).
+  try {
+    const res = await fetch(feedUrl, {
+      cache: noCache ? 'no-store' : 'force-cache',
+      headers,
+      redirect: 'follow',
+    });
+    if (res.ok) {
+      const text = await res.text();
+      if (looksLikeFeedXml(text)) return text;
+    }
+  } catch {
+    // ignore and try proxy
+  }
+
+  if (!origin) return null;
+
+  try {
+    const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feedUrl)}${noCache ? '&nocache=1' : ''}`;
+    const res = await fetch(proxyUrl, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const text = await res.text();
+    return looksLikeFeedXml(text) ? text : null;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, modeKey, noCache = false }) {
-  const origin = request?.nextUrl?.origin;
-  if (!origin) return [];
+  const origin = getRequestOrigin(request);
 
   const filteredFeeds = RSS_FALLBACK_FEEDS.filter((f) => {
     if (!categorySpecKey || categorySpecKey === 'all') return true;
@@ -180,10 +231,8 @@ async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, mode
 
   const responses = await Promise.allSettled(
     feedsToUse.map(async (feed) => {
-      const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feed.url)}${noCache ? '&nocache=1' : ''}`;
-      const res = await fetch(proxyUrl, { cache: 'no-store' });
-      if (!res.ok) return [];
-      const xml = await res.text();
+      const xml = await fetchRssXml({ feedUrl: feed.url, origin, noCache });
+      if (!xml) return [];
       const parsed = parseRssXml(xml);
       return parsed.map((p) => ({ ...p, feed }));
     })

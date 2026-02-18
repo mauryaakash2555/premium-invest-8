@@ -15,6 +15,7 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { fetchNseAllIndices, pickIndexRows } from '@/lib/live-intelligence/nseIndices';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -22,6 +23,13 @@ export const revalidate = 0;
 const NO_CACHE_HEADERS = {
   'Cache-Control': 'no-store, max-age=0',
 };
+
+function getBaseUrl(request) {
+  const proto = request?.headers?.get('x-forwarded-proto');
+  const host = request?.headers?.get('x-forwarded-host') || request?.headers?.get('host');
+  if (proto && host) return `${proto}://${host}`;
+  return request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bmwealth.co.in';
+}
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -33,17 +41,35 @@ function getSupabase() {
 // Fetch current market context
 async function getMarketContext(request) {
   try {
-    const baseUrl = request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
-    // Prefer indices snapshot (lighter + usually available even when full market-data is flaky).
-    const idxRes = await fetch(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
-    });
-    if (idxRes.ok) {
-      const idxJson = await idxRes.json().catch(() => null);
-      const mapped = marketDataFromIndicesSnapshot(idxJson);
+    // Prefer NSE indices directly (avoids internal API hops which can be flaky on serverless/edge).
+    try {
+      const json = await fetchNseAllIndices();
+      const rows = json?.data || json?.indices || [];
+      const wanted = ['NIFTY 50', 'NIFTY BANK', 'S&P BSE SENSEX', 'NIFTY FIN SERVICE', 'INDIA VIX'];
+      const indices = pickIndexRows(rows, wanted);
+      const mapped = marketDataFromIndicesSnapshot({ indices });
       if (hasUsableMarketData(mapped)) return mapped;
       if (Array.isArray(mapped?.items) && mapped.items.length) return mapped;
+    } catch {
+      // fall through to other sources
+    }
+
+    const baseUrl = getBaseUrl(request);
+
+    // Next best: cached snapshot API (may still succeed even if live fetch is temporarily blocked).
+    try {
+      const snap = await fetch(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      });
+      if (snap.ok) {
+        const payload = await snap.json().catch(() => null);
+        const mapped = marketDataFromIndicesSnapshot(payload);
+        if (hasUsableMarketData(mapped)) return mapped;
+        if (Array.isArray(mapped?.items) && mapped.items.length) return mapped;
+      }
+    } catch {
+      // ignore
     }
 
     // Fallback: full market-data API
