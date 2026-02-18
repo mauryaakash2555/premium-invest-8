@@ -182,6 +182,12 @@ function looksLikeFeedXml(text) {
   return head.includes('<rss') || head.includes('<feed') || head.includes('<rdf:rdf');
 }
 
+function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 async function fetchRssXml({ feedUrl, origin, noCache }) {
   const headers = {
     'User-Agent':
@@ -192,11 +198,11 @@ async function fetchRssXml({ feedUrl, origin, noCache }) {
 
   // Prefer direct fetch (avoids dependency on internal origin/proxy).
   try {
-    const res = await fetch(feedUrl, {
+    const res = await fetchWithTimeout(feedUrl, {
       cache: noCache ? 'no-store' : 'force-cache',
       headers,
       redirect: 'follow',
-    });
+    }, 8000);
     if (res.ok) {
       const text = await res.text();
       if (looksLikeFeedXml(text)) return text;
@@ -209,7 +215,7 @@ async function fetchRssXml({ feedUrl, origin, noCache }) {
 
   try {
     const proxyUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(feedUrl)}${noCache ? '&nocache=1' : ''}`;
-    const res = await fetch(proxyUrl, { cache: 'no-store' });
+    const res = await fetchWithTimeout(proxyUrl, { cache: 'no-store' }, 8000);
     if (!res.ok) return null;
     const text = await res.text();
     return looksLikeFeedXml(text) ? text : null;
@@ -298,10 +304,13 @@ async function fetchRssFallbackHeadlines({ request, limit, categorySpecKey, mode
     if (unique.length >= Math.max(limit * 3, limit)) break;
   }
 
-  // Apply the same pipeline used for DB items.
+  // RSS fallback items are "live" from the feed source; do NOT apply the strict
+  // 24-hour freshness filter that is meant for cached DB items.  Only apply
+  // the validity-window check (valid_from / valid_until).  If the feed source
+  // itself is stale, showing its latest headlines is still better than showing
+  // nothing.  Sort newest-first so the most recent items surface.
   const withinWindow = filterByValidityWindow(unique);
-  const fresh = filterExpired(withinWindow);
-  const final = buildRotation(fresh, { limit, modeKey });
+  const final = buildRotation(withinWindow, { limit, modeKey });
   return final.slice(0, limit);
 }
 

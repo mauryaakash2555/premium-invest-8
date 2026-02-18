@@ -38,6 +38,12 @@ function getSupabase() {
   return createClient(url, key);
 }
 
+function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 // Fetch current market context
 async function getMarketContext(request) {
   try {
@@ -50,35 +56,42 @@ async function getMarketContext(request) {
       const mapped = marketDataFromIndicesSnapshot({ indices });
       if (hasUsableMarketData(mapped)) return mapped;
       if (Array.isArray(mapped?.items) && mapped.items.length) return mapped;
-    } catch {
-      // fall through to other sources
+    } catch (e) {
+      console.warn('[mood] NSE direct fetch failed:', e?.message);
     }
 
     const baseUrl = getBaseUrl(request);
 
     // Next best: cached snapshot API (may still succeed even if live fetch is temporarily blocked).
     try {
-      const snap = await fetch(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
+      const snap = await fetchWithTimeout(`${baseUrl}/api/live-intelligence/indices-snapshot?nocache=1`, {
         cache: 'no-store',
         next: { revalidate: 0 },
-      });
+      }, 6000);
       if (snap.ok) {
         const payload = await snap.json().catch(() => null);
         const mapped = marketDataFromIndicesSnapshot(payload);
         if (hasUsableMarketData(mapped)) return mapped;
         if (Array.isArray(mapped?.items) && mapped.items.length) return mapped;
       }
-    } catch {
-      // ignore
+    } catch (e) {
+      console.warn('[mood] indices-snapshot fallback failed:', e?.message);
     }
 
     // Fallback: full market-data API
-    const response = await fetch(`${baseUrl}/api/market-data?nocache=1`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
-    });
-    if (!response.ok) return null;
-    return await response.json().catch(() => null);
+    try {
+      const response = await fetchWithTimeout(`${baseUrl}/api/market-data?nocache=1`, {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      }, 6000);
+      if (response.ok) {
+        return await response.json().catch(() => null);
+      }
+    } catch (e) {
+      console.warn('[mood] market-data fallback failed:', e?.message);
+    }
+
+    return null;
   } catch {
     return null;
   }
