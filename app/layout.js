@@ -68,6 +68,8 @@ export default async function RootLayout({ children }) {
 		<html lang="en">
 			<head>
 				<meta name="x-ui-build" content={buildId} />
+				{/* Disable Cloudflare Rocket Loader — it blocks the main thread for ~5.4 s */}
+				<meta name="cf-rocket-loader" content="disable" />
 
 				{/*
 					Pre-hydration SW/cache reset.

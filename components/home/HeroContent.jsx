@@ -115,7 +115,7 @@ export default function HeroContent() {
       >
         <Link
           href="/blueprint"
-          className="group relative overflow-hidden px-7 md:px-8 py-3.5 md:py-4 no-underline transition-all duration-500"
+          className="group relative overflow-hidden px-7 md:px-8 py-3.5 md:py-4 no-underline transition-[color,opacity,transform] duration-500"
           style={{
             backgroundColor: "oklch(0.95 0.01 85)",
             color: "oklch(0.06 0.005 280)",

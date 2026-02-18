@@ -517,10 +517,25 @@ export default function Chatbot3DTrigger({
     };
   }, [isMobileFloat, prefersReducedMotion] );
 
-  // Initialize ASAP (user expectation: bot appears immediately).
+  // ── Defer Spline: only start loading when user INTERACTS (hover/click/focus).
+  // This avoids 16+ seconds of main-thread blocking on page load.
+  const interactedRef = useRef(false);
+  const triggerSplineLoad = useCallback(() => {
+    if (interactedRef.current) return;
+    interactedRef.current = true;
+    if (!prefersReducedMotion) setReady(true);
+  }, [prefersReducedMotion]);
+
+  // Also load after 8 s idle so the bot eventually appears even without interaction.
   useEffect(() => {
     if (prefersReducedMotion) return;
-    setReady(true);
+    const t = setTimeout(() => {
+      if (!interactedRef.current) {
+        interactedRef.current = true;
+        setReady(true);
+      }
+    }, 8000);
+    return () => clearTimeout(t);
   }, [prefersReducedMotion]);
 
   // Initialize Spline runtime.
@@ -777,6 +792,9 @@ export default function Chatbot3DTrigger({
       aria-label={ariaLabel}
       className={className}
       style={containerStyle}
+      onMouseEnter={triggerSplineLoad}
+      onTouchStart={triggerSplineLoad}
+      onFocus={triggerSplineLoad}
       onPointerUpCapture={handlePointerUp}
       onPointerUp={handlePointerUp}
       onClickCapture={(e) => {

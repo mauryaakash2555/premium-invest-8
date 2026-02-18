@@ -9,13 +9,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 import { getServicesForHome } from '@/data/servicesCatalog';
 import dynamic from 'next/dynamic';
 // 🔒 CORE: Using isolated market ticker (never breaks)
-import PremiumMarketTicker from '@/core/marketTicker';
-import HeroContent from '@/components/home/HeroContent';
+// Lazy-loaded below the fold — not needed for LCP.
+const PremiumMarketTicker = dynamic(() => import('@/core/marketTicker'), { ssr: false });
+// HeroContent uses framer-motion (559 KiB). Dynamic-import code-splits it out of the
+// critical chunk, cutting ~2.2 s of main-thread blocking time.
+const HeroContent = dynamic(() => import('@/components/home/HeroContent'), {
+  ssr: false,
+  loading: () => <div style={{ minHeight: 320 }} />,
+});
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
 
@@ -24,16 +29,20 @@ const MarketMoodStrip = dynamic(() => import('@/components/user/MarketMoodStrip'
 const AnimatedClouds = dynamic(() => import('@/components/user/AnimatedClouds'), { ssr: false });
 
 // --- LUXURY COMPONENTS KEPT ---
-
+// Pure CSS animation — no framer-motion needed.
 const GoldenHorizonSweep = () => (
-  <motion.div
+  <div
     className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
-    initial={{ x: '-100%' }}
-    animate={{ x: '100%' }}
-    transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+    aria-hidden="true"
   >
-    <div className="h-full w-[40%] bg-gradient-to-r from-transparent via-[#C0A062]/6 to-transparent blur-[120px]" />
-  </motion.div>
+    <div
+      className="h-full w-[40%] golden-horizon-sweep"
+      style={{
+        background: 'linear-gradient(to right, transparent, rgba(192,160,98,0.06), transparent)',
+        filter: 'blur(120px)',
+      }}
+    />
+  </div>
 );
 
 export default function HomePageClient() {
@@ -415,6 +424,14 @@ export default function HomePageClient() {
       </section>
 
       <style jsx global>{`
+        @keyframes golden-horizon-sweep {
+          from { transform: translateX(-100%); }
+          to   { transform: translateX(250%); }
+        }
+        .golden-horizon-sweep {
+          animation: golden-horizon-sweep 15s linear infinite;
+          will-change: transform;
+        }
         @keyframes marquee {
           from {
             transform: translateX(0);
