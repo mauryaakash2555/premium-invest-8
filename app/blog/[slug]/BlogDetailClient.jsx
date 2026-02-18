@@ -1132,7 +1132,7 @@ export default function BlogDetailClient({ slug }) {
 
         {/* Social Share Buttons */}
         <SocialShare 
-          url={typeof window !== 'undefined' ? window.location.href : `https://bmwealth.co.in/blog/${slug}`}
+          url={typeof window !== 'undefined' ? window.location.href : `https://www.bmwealth.co.in/blog/${slug}`}
           title={post.title}
           description={post.excerpt}
           tags={post.tags?.map(t => `#${t.replace(/\s+/g, '')}`)}

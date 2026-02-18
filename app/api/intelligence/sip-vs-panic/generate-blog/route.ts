@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       `2. You miss part of the recovery rally.\n` +
       `3. Compounding never accelerates the same way.\n\n` +
       `## Try it yourself\n` +
-      `Run your own simulation: https://bmwealth.co.in/intelligence/sip-vs-panic\n\n` +
+      `Run your own simulation: https://www.bmwealth.co.in/intelligence/sip-vs-panic\n\n` +
       `> Disclaimer: Education-only. Not investment/tax/legal advice.\n`;
 
     return NextResponse.json({ ok: true, title, markdown: md });

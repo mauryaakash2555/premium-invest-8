@@ -9,7 +9,7 @@ import { computeMumbaiPropertyVsSip, buildMumbaiPropertyVsSipPdfPayload } from "
 export const runtime = "nodejs";
 
 function getBaseUrlSafe() {
-  return String(process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in").replace(/\/+$/, "");
+  return String(process.env.NEXT_PUBLIC_SITE_URL || "https://www.bmwealth.co.in").replace(/\/+$/, "");
 }
 
 async function getEventById(sb, id) {

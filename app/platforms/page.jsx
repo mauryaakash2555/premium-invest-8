@@ -336,7 +336,7 @@ export default function Platforms() {
           </p>
         </section>
 
-        <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/platforms" />
+        <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/platforms" />
 
         {/* Disclosure */}
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>

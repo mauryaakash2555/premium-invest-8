@@ -22,17 +22,17 @@ export default function SipVsPanicGuidePage() {
       "Education-only guide to the common mistake of stopping SIPs during market drawdowns, with a simulator to visualize behavior cost.",
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://bmwealth.co.in${PATH}`,
+      "@id": `https://www.bmwealth.co.in${PATH}`,
     },
     author: {
       "@type": "Organization",
       name: "BM Wealth",
-      url: "https://bmwealth.co.in",
+      url: "https://www.bmwealth.co.in",
     },
     publisher: {
       "@type": "Organization",
       name: "BM Wealth",
-      url: "https://bmwealth.co.in",
+      url: "https://www.bmwealth.co.in",
     },
   };
 
@@ -142,7 +142,7 @@ export default function SipVsPanicGuidePage() {
         </section>
 
         <section className="mt-10">
-          <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
+          <FAQSection faqs={faqs} pageUrl={`https://www.bmwealth.co.in${PATH}`} />
         </section>
 
         <section className="mt-10">

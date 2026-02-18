@@ -179,7 +179,7 @@ export default function TaxOptimizationToolPage() {
           <TaxCalculator />
 
           <div className="mt-10">
-            <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
+            <FAQSection faqs={faqs} pageUrl={`https://www.bmwealth.co.in${PATH}`} />
           </div>
 
           {/* Related Blog Posts */}

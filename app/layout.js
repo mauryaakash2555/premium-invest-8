@@ -62,7 +62,7 @@ export default async function RootLayout({ children }) {
 	const hdrs = await headers();
 	const normalizedHost = getNormalizedHost(hdrs);
 	const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
-	const siteUrl = isStoreHost ? 'https://store.bmwealth.co.in' : 'https://bmwealth.co.in';
+	const siteUrl = isStoreHost ? 'https://store.bmwealth.co.in' : 'https://www.bmwealth.co.in';
 
 	return (
 		<html lang="en">

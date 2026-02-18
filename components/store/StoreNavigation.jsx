@@ -11,7 +11,7 @@ export default function StoreNavigation() {
             BM Digital Store
           </Link>
           <a
-            href="https://bmwealth.co.in/tools/itr-filing-help"
+            href="https://www.bmwealth.co.in/tools/itr-filing-help"
             className="mt-1 block text-xs text-white/60 hover:text-white/80"
             rel="noopener noreferrer"
           >

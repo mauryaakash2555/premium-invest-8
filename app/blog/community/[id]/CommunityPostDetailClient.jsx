@@ -298,7 +298,7 @@ export default function CommunityPostDetailClient({ id }) {
 
             {/* Social Share Buttons */}
             <SocialShare
-              url={typeof window !== 'undefined' ? window.location.href : `https://bmwealth.co.in/blog/community/${safeId}`}
+              url={typeof window !== 'undefined' ? window.location.href : `https://www.bmwealth.co.in/blog/community/${safeId}`}
               title={post.title}
               description={shareDescription}
             />

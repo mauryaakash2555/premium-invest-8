@@ -7,7 +7,10 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Enable gzip compression for all responses (reduces transfer size ~60-70%).
+  compress: true,
+  // Remove the X-Powered-By: Next.js header (security + slightly smaller responses).
+  poweredByHeader: false,
   // pdf-parse (v2+) pulls in pdfjs-dist (and in some setups native canvas).
   // Keeping these as server externals avoids webpack/RSC bundling issues with pdfjs .mjs.
   serverExternalPackages: ['pdf-parse', 'pdfjs-dist', '@napi-rs/canvas'],
@@ -46,6 +49,28 @@ const nextConfig = {
     'lucide-react': {
       transform: 'lucide-react/dist/esm/icons/{{member}}',
     },
+  },
+  // SEO: Permanent redirects to consolidate duplicate/legacy URLs.
+  // These fire at the Next.js routing layer (before middleware) and send 308 Permanent Redirect.
+  // The middleware also handles these, but having them here gives Vercel Edge an extra-fast path.
+  async redirects() {
+    return [
+      // Canonical domain: non-www → www (catches any requests that bypass Cloudflare/middleware)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'bmwealth.co.in' }],
+        destination: 'https://www.bmwealth.co.in/:path*',
+        permanent: true,
+      },
+      // Legacy path redirects (also in middleware, duplicated here for Vercel edge performance)
+      { source: '/about', destination: '/about-us', permanent: true },
+      { source: '/terms', destination: '/terms-and-conditions', permanent: true },
+      { source: '/privacy-policy', destination: '/privacy', permanent: true },
+      { source: '/refund-policy', destination: '/refund', permanent: true },
+      { source: '/live', destination: '/live-intelligence', permanent: true },
+      { source: '/live-intel', destination: '/live-intelligence', permanent: true },
+      { source: '/sitemap-page', destination: '/sitemap', permanent: true },
+    ];
   },
   // Disable all caching for blog routes but enable for static assets
   async headers() {

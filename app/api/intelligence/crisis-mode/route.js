@@ -59,7 +59,7 @@ export async function GET(req) {
     const url = req?.url ? new URL(req.url) : null;
     const bypass = url?.searchParams?.get("nocache") === "1";
 
-    const baseUrl = req?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in";
+    const baseUrl = req?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || "https://www.bmwealth.co.in";
     const res = await fetch(`${baseUrl}/api/market-data${bypass ? "?nocache=1" : ""}` , {
       next: { revalidate: 0 },
     });

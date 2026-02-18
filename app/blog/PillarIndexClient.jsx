@@ -124,9 +124,9 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
 
   const siteOrigin = useMemo(() => {
     try {
-      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://bmwealth.co.in';
+      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://www.bmwealth.co.in';
     } catch {
-      return 'https://bmwealth.co.in';
+      return 'https://www.bmwealth.co.in';
     }
   }, []);
 

@@ -140,7 +140,7 @@ export function middleware(request) {
 
   // Ensure certain utility/private routes never get indexed on the main host.
   if (!isStoreHost) {
-    const noindexExact = new Set(['/login', '/payment-success', '/payment-failed', '/v0-test']);
+    const noindexExact = new Set(['/login', '/payment-success', '/payment-failed', '/v0-test', '/submit']);
     const noindexPrefix = ['/dashboard', '/client-portal', '/embed'];
     const shouldNoindex =
       noindexExact.has(pathname) || noindexPrefix.some((p) => pathname === p || pathname.startsWith(`${p}/`));

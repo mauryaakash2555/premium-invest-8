@@ -1,12 +1,15 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import Navigation from '@/components/user/Navigation';
 import Footer from '@/components/user/Footer';
-import WhatsAppFloat from '@/components/user/WhatsAppFloat';
-import { LuxuryMobileDock } from '@/components/user/LuxuryMobileDock';
-import CookieConsent from '@/components/shared/CookieConsent';
-import { AnalyticsGate } from '@/components/analytics/AnalyticsGate';
+
+// Non-critical overlays: lazy-loaded to reduce initial JS and improve TBT/LCP.
+const WhatsAppFloat = dynamic(() => import('@/components/user/WhatsAppFloat'), { ssr: false });
+const LuxuryMobileDock = dynamic(() => import('@/components/user/LuxuryMobileDock').then(m => m.LuxuryMobileDock), { ssr: false });
+const CookieConsent = dynamic(() => import('@/components/shared/CookieConsent'), { ssr: false });
+const AnalyticsGate = dynamic(() => import('@/components/analytics/AnalyticsGate').then(m => m.AnalyticsGate), { ssr: false });
 
 export default function LayoutShellClient({
   children,

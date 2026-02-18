@@ -193,7 +193,7 @@ export default function ToolsHubPage() {
               </p>
             </div>
 
-            <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/tools" />
+            <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/tools" />
           </div>
         </div>
       </section>

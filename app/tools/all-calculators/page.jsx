@@ -72,7 +72,7 @@ export default function AllCalculatorsPage() {
               </p>
             </div>
 
-            <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/tools/all-calculators" />
+            <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/tools/all-calculators" />
           </div>
         </div>
       </section>

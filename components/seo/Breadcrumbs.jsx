@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bmwealth.co.in';
 
 const LABELS = {
   'about-us': 'About Us',

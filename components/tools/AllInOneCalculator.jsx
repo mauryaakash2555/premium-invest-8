@@ -3112,7 +3112,7 @@ export default function AllInOneCalculator() {
   
   <div class="footer">
     <p>BM Wealth • Mumbai</p>
-    <p><a href="https://bmwealth.co.in">bmwealth.co.in</a> • +91 88509 77259</p>
+    <p><a href="https://www.bmwealth.co.in">bmwealth.co.in</a> • +91 88509 77259</p>
   </div>
 </body>
 </html>`;

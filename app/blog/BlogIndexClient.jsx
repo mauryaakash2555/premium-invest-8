@@ -166,9 +166,9 @@ export default function BlogPage() {
 
   const siteOrigin = useMemo(() => {
     try {
-      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://bmwealth.co.in';
+      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://www.bmwealth.co.in';
     } catch {
-      return 'https://bmwealth.co.in';
+      return 'https://www.bmwealth.co.in';
     }
   }, []);
 
@@ -763,7 +763,7 @@ export default function BlogPage() {
         <ComplianceFooter />
       </section>
 
-      <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/blog" withSchema />
+      <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/blog" withSchema />
     </div>
   );
 }

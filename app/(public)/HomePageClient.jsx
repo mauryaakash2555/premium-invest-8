@@ -12,13 +12,16 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { staticBlogPost } from '@/data/staticBlogData';
 import { getServicesForHome } from '@/data/servicesCatalog';
+import dynamic from 'next/dynamic';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 import PremiumMarketTicker from '@/core/marketTicker';
-import MarketMoodStrip from '@/components/user/MarketMoodStrip';
 import HeroContent from '@/components/home/HeroContent';
-import AnimatedClouds from '@/components/user/AnimatedClouds';
 import ServiceCard from '@/components/user/ServiceCard';
 import BlogCard from '@/components/user/BlogCard';
+
+// Below-the-fold components: lazy-loaded to cut initial JS for faster LCP / lower TBT.
+const MarketMoodStrip = dynamic(() => import('@/components/user/MarketMoodStrip'), { ssr: false });
+const AnimatedClouds = dynamic(() => import('@/components/user/AnimatedClouds'), { ssr: false });
 
 // --- LUXURY COMPONENTS KEPT ---
 

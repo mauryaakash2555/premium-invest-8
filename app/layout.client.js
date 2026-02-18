@@ -73,7 +73,7 @@ export default function RootLayout({ children, buildId: buildIdProp, host: hostP
   // Pages with their own custom footer - don't add global Footer
   const hasCustomFooter = isLaserPage || isClientPortal;
 
-  const siteUrl = isStoreHost ? "https://store.bmwealth.co.in" : "https://bmwealth.co.in";
+  const siteUrl = isStoreHost ? "https://store.bmwealth.co.in" : "https://www.bmwealth.co.in";
   return (
     <html lang="en">
       <head>
