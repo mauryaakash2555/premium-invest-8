@@ -291,47 +291,25 @@ export default function Comments({ postId, postSlug, postTitle, contextTitle, co
   };
 
   return (
-    <div className="mt-16 mb-16 px-4 max-w-4xl mx-auto">
+    <div className="mt-12 mb-12 px-4 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="mb-8 pb-6 border-b border-white/10">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
-          <span>💬</span>
-          <span>{headerTitle}</span>
+      <div className="mb-6 pb-4 border-b border-white/10">
+        <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
+          {headerTitle}
         </h2>
-        <p className="text-gray-400">{countText}</p>
-        <p className="text-gray-500 text-sm mt-2">{headerSubtitle}</p>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={scrollToForm}
-            className="px-4 py-2 border border-white/10 bg-white/5 text-white/80 hover:text-white hover:border-white/20 transition-colors"
-          >
-            Write a comment
-          </button>
-          {whatsappHref ? (
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              className="px-4 py-2 border border-white/10 bg-white/5 text-white/80 hover:text-white hover:border-white/20 transition-colors"
-            >
-              Chat on WhatsApp
-            </a>
-          ) : null}
-        </div>
+        <p className="text-gray-500 text-sm">{countText}</p>
       </div>
 
-      {/* Comments List */}
-      <div className="space-y-6 mb-10">
+      {/* Comments List — Quora-style compact thread */}
+      <div className="space-y-1 mb-8">
         {loading ? (
-          <div className="text-center py-8">
-            <div className="inline-flex items-center gap-2 text-white/50">
-              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+          <div className="text-center py-6">
+            <div className="inline-flex items-center gap-2 text-white/50 text-sm">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Loading comments...
+              Loading...
             </div>
           </div>
         ) : topLevel.length > 0 ? (
@@ -346,285 +324,220 @@ export default function Comments({ postId, postSlug, postTitle, contextTitle, co
             return (
               <div
                 key={comment.__id}
-                className="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-white/20 transition-colors"
+                className="py-4 border-b border-white/[0.06]"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-black font-bold"
-                      style={{
-                        background: 'linear-gradient(135deg, var(--lux-accent) 0%, rgba(255,255,255,0.12) 100%)',
-                        border: '1px solid rgba(255,255,255,0.10)',
-                      }}
-                    >
-                      {author[0]?.toUpperCase?.() || 'A'}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-white font-semibold">{author}</p>
-                        {comment.__highlighted ? (
-                          <span className="text-[11px] px-2 py-0.5 border border-white/10 bg-white/5 text-white/70 rounded-full">
-                            Highlighted by BM Wealth
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className="text-xs text-gray-500">{when}</p>
-                    </div>
+                <div className="flex items-start gap-2.5">
+                  <div
+                    className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-black text-xs font-bold"
+                    style={{ background: 'var(--lux-accent)' }}
+                  >
+                    {author[0]?.toUpperCase?.() || 'A'}
                   </div>
-                </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      <span className="text-white text-sm font-semibold">{author}</span>
+                      <span className="text-[11px] text-gray-500">{when}</span>
+                      {comment.__highlighted ? (
+                        <span className="text-[10px] px-1.5 py-0.5 bg-white/5 text-white/50 rounded">Pinned</span>
+                      ) : null}
+                    </div>
 
-                <p className="text-gray-300 whitespace-pre-wrap leading-relaxed">
-                  {comment.__text}
-                </p>
+                    <p className="mt-1 text-gray-300 text-[14px] leading-relaxed whitespace-pre-wrap">
+                      {comment.__text}
+                    </p>
 
-                <div className="mt-4 flex items-center gap-4 text-sm text-white/60">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveReplyTo({ id: comment.__id, name: author });
-                      setReplyDraft('');
-                    }}
-                    className="hover:text-white transition-colors"
-                  >
-                    Reply
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toggleLike(comment.__id)}
-                    className="hover:text-white transition-colors"
-                    aria-pressed={liked}
-                  >
-                    ▲ {helpful} Helpful
-                  </button>
-                </div>
-
-                {activeReplyTo?.id === comment.__id ? (
-                  <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded-xl">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="text-sm text-white/70">
-                        Replying to <span className="text-white font-semibold">{author}</span>
-                      </div>
+                    <div className="mt-2 flex items-center gap-4 text-xs text-white/40">
+                      <button
+                        type="button"
+                        onClick={() => toggleLike(comment.__id)}
+                        className={`hover:text-white transition-colors ${liked ? 'text-white/80' : ''}`}
+                        aria-pressed={liked}
+                      >
+                        ▲ {helpful}
+                      </button>
                       <button
                         type="button"
                         onClick={() => {
-                          setActiveReplyTo(null);
+                          setActiveReplyTo({ id: comment.__id, name: author });
                           setReplyDraft('');
                         }}
-                        className="text-sm text-white/60 hover:text-white transition-colors"
+                        className="hover:text-white transition-colors"
                       >
-                        Cancel
+                        Reply
                       </button>
                     </div>
 
-                    {!String(formData.author_name || '').trim() || !String(formData.author_email || '').trim() ? (
-                      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          placeholder="Your name"
-                          value={formData.author_name}
-                          onChange={(e) => setFormData({ ...formData, author_name: e.target.value })}
-                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
-                        />
-                        <input
-                          type="email"
-                          placeholder="Email (not shown publicly)"
-                          value={formData.author_email}
-                          onChange={(e) => setFormData({ ...formData, author_email: e.target.value })}
-                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
-                        />
+                    {activeReplyTo?.id === comment.__id ? (
+                      <div className="mt-3 pl-0">
+                        {!String(formData.author_name || '').trim() || !String(formData.author_email || '').trim() ? (
+                          <div className="flex gap-2 mb-2">
+                            <input
+                              type="text"
+                              placeholder="Name"
+                              value={formData.author_name}
+                              onChange={(e) => setFormData({ ...formData, author_name: e.target.value })}
+                              className="flex-1 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none"
+                            />
+                            <input
+                              type="email"
+                              placeholder="Email (private)"
+                              value={formData.author_email}
+                              onChange={(e) => setFormData({ ...formData, author_email: e.target.value })}
+                              className="flex-1 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none"
+                            />
+                          </div>
+                        ) : null}
+                        <div className="flex gap-2 items-end">
+                          <textarea
+                            className="flex-1 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none resize-none"
+                            rows={2}
+                            placeholder={`Reply to ${author}…`}
+                            value={replyDraft}
+                            onChange={(e) => setReplyDraft(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            disabled={
+                              submitting ||
+                              !String(replyDraft || '').trim() ||
+                              !String(formData.author_name || '').trim() ||
+                              !String(formData.author_email || '').trim()
+                            }
+                            onClick={async () => {
+                              const ok = await submitComment({ text: replyDraft, replyToId: comment.__id });
+                              if (ok) {
+                                setActiveReplyTo(null);
+                                setReplyDraft('');
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded text-xs font-bold text-black disabled:opacity-40"
+                            style={{ backgroundColor: 'var(--lux-accent)' }}
+                          >
+                            Reply
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setActiveReplyTo(null); setReplyDraft(''); }}
+                            className="text-xs text-white/40 hover:text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
                       </div>
                     ) : null}
 
-                    <textarea
-                      className="mt-3 w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors resize-none"
-                      rows={3}
-                      placeholder="Write a reply…"
-                      value={replyDraft}
-                      onChange={(e) => setReplyDraft(e.target.value)}
-                    />
-
-                    <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
-                      <button
-                        type="button"
-                        disabled={
-                          submitting ||
-                          !String(replyDraft || '').trim() ||
-                          !String(formData.author_name || '').trim() ||
-                          !String(formData.author_email || '').trim()
-                        }
-                        onClick={async () => {
-                          const ok = await submitComment({ text: replyDraft, replyToId: comment.__id });
-                          if (ok) {
-                            setActiveReplyTo(null);
-                            setReplyDraft('');
-                          }
-                        }}
-                        className="px-4 py-2 rounded-lg font-bold text-black disabled:opacity-50"
-                        style={{ backgroundColor: 'var(--lux-accent)' }}
-                      >
-                        Post Reply
-                      </button>
-                      <span className="text-xs text-white/50">No login required. Your email stays private.</span>
-                    </div>
+                    {replies.length > 0 ? (
+                      <div className="mt-3 space-y-0.5 ml-2 border-l border-white/[0.06] pl-3">
+                        {replies.map((r) => {
+                          const rAuthor = String(r?.author_name || 'Anonymous');
+                          const rWhen = relativeTime(r?.created_at) || formatDate(r?.created_at);
+                          return (
+                            <div key={r.__id} className="py-2">
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-white/80 text-sm font-semibold">{rAuthor}</span>
+                                <span className="text-[11px] text-gray-500">{rWhen}</span>
+                              </div>
+                              <p className="mt-0.5 text-gray-300 text-[13px] leading-relaxed whitespace-pre-wrap">
+                                {r.__text}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
-
-                {replies.length > 0 ? (
-                  <div className="mt-5 space-y-3 border-l border-white/10 pl-4">
-                    {replies.map((r) => {
-                      const rAuthor = String(r?.author_name || 'Anonymous');
-                      const rWhen = relativeTime(r?.created_at) || formatDate(r?.created_at);
-                      return (
-                        <div key={r.__id} className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                          <div className="flex items-center justify-between">
-                            <p className="text-white/90 text-sm font-semibold">{rAuthor}</p>
-                            <p className="text-xs text-gray-500">{rWhen}</p>
-                          </div>
-                          <p className="mt-2 text-gray-300 whitespace-pre-wrap leading-relaxed text-sm">
-                            {r.__text}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : null}
+                </div>
               </div>
             );
           })
         ) : (
-          <div className="text-center py-12 px-4">
-            <div className="text-4xl mb-3">💬</div>
-            <p className="text-gray-400 text-lg mb-2">Start the conversation</p>
-            <p className="text-gray-500 text-sm">Ask a question or share your experience.</p>
+          <div className="text-center py-8 px-4">
+            <p className="text-gray-500 text-sm">No comments yet. Be the first to share your thoughts.</p>
           </div>
         )}
       </div>
 
-      {/* Comment Form */}
-      <form id="bm-comment-form" onSubmit={handleSubmit} className="mb-12 p-6 bg-white/5 border border-white/10 rounded-xl">
-        <div className="space-y-4">
-
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="author_name" className="block text-sm text-white/70 mb-1">
-                Your Name <span className="text-red-400">*</span>
-              </label>
-              <input
-                id="author_name"
-                type="text"
-                placeholder="John Doe"
-                required
-                value={formData.author_name}
-                onChange={(e) => setFormData({...formData, author_name: e.target.value})}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
-                style={{ borderColor: 'rgba(255,255,255,0.10)' }}
-              />
-            </div>
-            <div>
-              <label htmlFor="author_email" className="block text-sm text-white/70 mb-1">
-                Email <span className="text-white/40">(not shown publicly)</span> <span className="text-red-400">*</span>
-              </label>
-              <input
-                id="author_email"
-                type="email"
-                placeholder="you@example.com"
-                required
-                value={formData.author_email}
-                onChange={(e) => setFormData({...formData, author_email: e.target.value})}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors"
-                style={{ borderColor: 'rgba(255,255,255,0.10)' }}
-              />
-            </div>
+      {/* Comment Form — compact inline */}
+      <form id="bm-comment-form" onSubmit={handleSubmit} className="mb-8 pt-4 border-t border-white/[0.06]">
+        <div className="flex items-start gap-2.5">
+          <div
+            className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-black text-xs font-bold mt-0.5"
+            style={{ background: 'var(--lux-accent)' }}
+          >
+            {String(formData.author_name || '')[0]?.toUpperCase?.() || '?'}
           </div>
-          
-          <div>
-            <label htmlFor="comment_text" className="block text-sm text-white/70 mb-1">
-              Your Comment <span className="text-red-400">*</span>
-            </label>
+          <div className="flex-1 space-y-2">
+            {!String(formData.author_name || '').trim() || !String(formData.author_email || '').trim() ? (
+              <div className="flex gap-2">
+                <input
+                  id="author_name"
+                  type="text"
+                  placeholder="Name"
+                  required
+                  value={formData.author_name}
+                  onChange={(e) => setFormData({...formData, author_name: e.target.value})}
+                  className="flex-1 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none"
+                />
+                <input
+                  id="author_email"
+                  type="email"
+                  placeholder="Email (private)"
+                  required
+                  value={formData.author_email}
+                  onChange={(e) => setFormData({...formData, author_email: e.target.value})}
+                  className="flex-1 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none"
+                />
+              </div>
+            ) : null}
             <textarea
               id="comment_text"
-              placeholder="Share your thoughts, experiences, or questions..."
+              placeholder="Write a comment…"
               required
-              rows={4}
+              rows={2}
               value={formData.comment_text}
               onChange={(e) => setFormData({...formData, comment_text: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none transition-colors resize-none"
-              style={{ borderColor: 'rgba(255,255,255,0.10)' }}
+              className="w-full px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm placeholder:text-white/30 focus:outline-none resize-none"
             />
-          </div>
-
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <label className="inline-flex items-center gap-2 text-sm text-white/60 select-none cursor-pointer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => {
-                  const next = Boolean(e.target.checked);
-                  setRememberMe(next);
-                  if (!next) {
-                    try {
-                      localStorage.removeItem(LS_NAME);
-                      localStorage.removeItem(LS_EMAIL);
-                    } catch {
-                      // ignore
-                    }
-                    clearCookie('bm_comment_name');
-                    clearCookie('bm_comment_email');
-                  }
-                }}
-                className=""
-                style={{ accentColor: 'var(--lux-accent)' }}
-              />
-              Remember my name & email on this device
-            </label>
-          </div>
-          
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-black transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{ backgroundColor: 'var(--lux-accent)' }}
-            >
-              {submitting ? (
-                <span className="flex items-center gap-2">
-                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Posting...
-                </span>
-              ) : 'Post Comment & Join the Conversation'}
-            </button>
-
-            <span className="text-xs text-white/50">
-              No login required. Your email stays private.
-            </span>
-
-            {submitStatus === 'success' && (
-              <span className="text-emerald-400 text-sm flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Comment posted successfully!
-              </span>
-            )}
-            {submitStatus === 'error' && (
-              <span className="text-red-400 text-sm">
-                Failed to post comment. Please try again.
-              </span>
-            )}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-1.5 rounded text-xs font-bold text-black disabled:opacity-40"
+                  style={{ backgroundColor: 'var(--lux-accent)' }}
+                >
+                  {submitting ? 'Posting…' : 'Comment'}
+                </button>
+                <label className="inline-flex items-center gap-1.5 text-[11px] text-white/30 select-none cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => {
+                      const next = Boolean(e.target.checked);
+                      setRememberMe(next);
+                      if (!next) {
+                        try { localStorage.removeItem(LS_NAME); localStorage.removeItem(LS_EMAIL); } catch {}
+                        clearCookie('bm_comment_name');
+                        clearCookie('bm_comment_email');
+                      }
+                    }}
+                    style={{ accentColor: 'var(--lux-accent)', width: 12, height: 12 }}
+                  />
+                  Remember me
+                </label>
+              </div>
+              {submitStatus === 'success' && (
+                <span className="text-emerald-400 text-xs">Posted!</span>
+              )}
+              {submitStatus === 'error' && (
+                <span className="text-red-400 text-xs">Failed. Try again.</span>
+              )}
+            </div>
           </div>
         </div>
       </form>
 
-      {/* Footer Note */}
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-500">
-          💡 Comments are moderated. Please keep discussions respectful and on-topic.
-        </p>
-      </div>
+      <p className="text-[11px] text-gray-600 text-center">Comments are moderated. No login required.</p>
     </div>
   );
 }

@@ -595,10 +595,6 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--lux-foreground-40)', fontSize: '13px' }}>
-                  <Clock size={14} />
-                  {calculateReadingTime(featuredPost.content_original)} min read
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--lux-foreground-40)', fontSize: '13px' }}>
                   <Calendar size={14} />
                   {formatDate(featuredPost.approved_at || featuredPost.created_at)}
                 </span>
@@ -747,8 +743,10 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       overflow: 'hidden',
                       cursor: 'pointer',
                       height: '100%',
+                      position: 'relative',
                       display: 'flex',
                       flexDirection: 'column',
+                      minHeight: '440px',
                     }}
                   >
                     {/* Full-card image background (BM Editorial style) */}
@@ -808,18 +806,6 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                           <Calendar size={14} />
                           {formatDate(post.approved_at || post.created_at || new Date().toISOString())}
                         </span>
-                        <span
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            color: 'var(--lux-foreground-80)',
-                            fontSize: '13px',
-                          }}
-                        >
-                          <Clock size={14} />
-                          {calculateReadingTime(post.content_original)} min
-                        </span>
                         {post.author_name && (
                           <span
                             style={{
@@ -853,7 +839,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                           fontSize: '14px',
                           color: 'var(--lux-foreground-80)',
                           lineHeight: 1.6,
-                          marginBottom: '0px',
+                          marginBottom: '16px',
                           display: '-webkit-box',
                           WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
@@ -862,6 +848,21 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       >
                         {String(post.content_original || '').slice(0, 260)}
                       </p>
+
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginTop: '16px',
+                      }}>
+                        <span style={{
+                          color: 'var(--lux-accent)',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                        }}>
+                          Read More →
+                        </span>
+                      </div>
 
                       {post.sponsored_by ? (
                         <div style={{ marginTop: '10px' }}>
@@ -882,11 +883,17 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                       ) : null}
 
                       {post.affiliate_link ? (
-                        <div style={{ marginTop: '10px', color: 'var(--lux-accent)', fontSize: '12px', fontWeight: 700 }}>Affiliate link available</div>
-                      ) : null}
-
-                      {typeof post.views === 'number' ? (
-                        <div style={{ marginTop: '8px', color: 'var(--lux-foreground-80)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                        <div style={{ marginTop: '10px' }}>
+                          <span
+                            style={{
+                              color: 'var(--lux-accent)',
+                              fontSize: '12px',
+                              fontWeight: 800,
+                            }}
+                          >
+                            Learn More (Affiliate) →
+                          </span>
+                        </div>
                       ) : null}
 
                       {post.location_tag ? (
