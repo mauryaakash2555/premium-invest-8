@@ -149,9 +149,12 @@ export default function AdminQueue() {
             >
               <div className="flex items-start justify-between mb-2">
                 <h3 className="text-white font-bold flex-1">{post.title}</h3>
-                <span className={`text-xs px-2 py-1 rounded ${
-                  post.type === 'impact' ? 'bg-blue-900/50 text-blue-300' : 'bg-purple-900/50 text-purple-300'
-                }`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded ${
+                    post.type === 'impact' ? '' : 'bg-purple-900/50 text-purple-300'
+                  }`}
+                  style={post.type === 'impact' ? { background: 'color-mix(in oklab, oklch(0.72 0.12 240) 15%, transparent)', color: 'oklch(0.72 0.12 240)' } : undefined}
+                >
                   {post.type}
                 </span>
               </div>
@@ -205,7 +208,8 @@ export default function AdminQueue() {
                     href={selected.author_linkedin} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-blue-400 text-sm hover:underline"
+                    className="text-sm hover:underline"
+                    style={{ color: 'oklch(0.72 0.12 240)' }}
                   >
                     🔗 View LinkedIn Profile
                   </a>
@@ -215,19 +219,20 @@ export default function AdminQueue() {
 
             {/* Enhanced Version Editor */}
             <div>
-              <h4 className="text-green-400 font-bold mb-2">✨ YOUR ENHANCED VERSION:</h4>
+              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.14 155)' }}>✨ YOUR ENHANCED VERSION:</h4>
               <textarea
                 value={enhanced}
                 onChange={(e) => setEnhanced(e.target.value)}
                 rows={15}
-                className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white text-sm font-mono focus:border-green-500 focus:outline-none"
+                className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white text-sm font-mono focus:outline-none"
+                style={{ '--tw-ring-color': 'oklch(0.72 0.14 155)' }}
                 placeholder="Add data, sources, context, impact analysis..."
               />
             </div>
 
             {/* Image Selection */}
             <div>
-              <h4 className="text-blue-400 font-bold mb-2">🖼️ IMAGE:</h4>
+              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.12 240)' }}>🖼️ IMAGE:</h4>
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
@@ -239,7 +244,8 @@ export default function AdminQueue() {
                 />
                 <button
                   onClick={searchUnsplash}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="px-4 py-2 text-white rounded"
+                  style={{ backgroundColor: 'oklch(0.72 0.12 240)' }}
                 >
                   Search
                 </button>
@@ -253,7 +259,7 @@ export default function AdminQueue() {
                       key={idx}
                       src={img.thumb || img.url}
                       alt={`Option ${idx + 1}`}
-                      className="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500"
+                      className="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-white/30"
                       onClick={() => selectImage(img.url)}
                     />
                   ))}
@@ -316,14 +322,16 @@ export default function AdminQueue() {
             <div className="flex gap-4 pt-4">
               <button
                 onClick={handleApprove}
-                className="flex-1 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700"
+                className="flex-1 py-3 text-white font-bold rounded-lg"
+                style={{ backgroundColor: 'oklch(0.72 0.14 155)' }}
               >
                 ✅ Approve & Publish
               </button>
               
               <button
                 onClick={handleReject}
-                className="flex-1 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700"
+                className="flex-1 py-3 text-white font-bold rounded-lg"
+                style={{ backgroundColor: 'oklch(0.65 0.18 25)' }}
               >
                 ❌ Reject
               </button>

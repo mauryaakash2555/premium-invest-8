@@ -298,7 +298,7 @@ export function DeliverablesView() {
                 <div
                   className="sa-row"
                   key={it.id}
-                  style={{ borderColor: active ? 'rgba(198,161,91,0.45)' : undefined }}
+                  style={{ borderColor: active ? 'color-mix(in oklab, var(--sa-accent) 45%, transparent)' : undefined }}
                 >
                   <div style={{ minWidth: 0 }}>
                     <div className="sa-rowTitle">

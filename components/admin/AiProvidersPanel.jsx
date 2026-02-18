@@ -133,8 +133,8 @@ export function AiProvidersPanel({ summary }) {
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
-                  background: isActive ? '#4ADE80' : 'rgba(255,255,255,0.2)',
-                  boxShadow: isActive ? '0 0 8px #4ADE80' : 'none',
+                  background: isActive ? 'oklch(0.72 0.14 155)' : 'rgba(255,255,255,0.2)',
+                  boxShadow: isActive ? '0 0 8px oklch(0.72 0.14 155)' : 'none',
                 }} title={isActive ? 'Active today' : 'Not used today'} />
               </div>
 
@@ -174,10 +174,10 @@ export function AiProvidersPanel({ summary }) {
                 <div style={{
                   padding: '6px 10px',
                   borderRadius: 8,
-                  background: remaining > 50 ? 'rgba(74,222,128,0.1)' : remaining > 10 ? 'rgba(251,191,36,0.1)' : 'rgba(248,113,113,0.1)',
+                  background: remaining > 50 ? 'color-mix(in oklab, oklch(0.72 0.14 155) 10%, transparent)' : remaining > 10 ? 'color-mix(in oklab, oklch(0.78 0.10 85) 10%, transparent)' : 'color-mix(in oklab, oklch(0.65 0.18 25) 10%, transparent)',
                   marginBottom: 12,
                   fontSize: 11,
-                  color: remaining > 50 ? '#4ADE80' : remaining > 10 ? '#FBB824' : '#F87171',
+                  color: remaining > 50 ? 'oklch(0.72 0.14 155)' : remaining > 10 ? 'oklch(0.78 0.10 85)' : 'oklch(0.65 0.18 25)',
                   fontWeight: 700,
                 }}>
                   {remaining} / {fmtNum(limit)} calls remaining today

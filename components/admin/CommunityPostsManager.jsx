@@ -151,8 +151,8 @@ export function CommunityPostsManager() {
   };
 
   const pillarColors = {
-    IMPACT: '#10B981',
-    GUEST: '#3B82F6',
+    IMPACT: 'oklch(0.72 0.14 155)',
+    GUEST: 'oklch(0.72 0.12 240)',
     DEV: '#8B5CF6',
     EDITORIAL: 'var(--lux-accent)'
   };
@@ -195,11 +195,11 @@ export function CommunityPostsManager() {
       {error && (
         <div style={{ 
           padding: '12px', 
-          background: 'rgba(239, 68, 68, 0.1)', 
-          border: '1px solid rgba(239, 68, 68, 0.3)',
+          background: 'color-mix(in oklab, oklch(0.65 0.18 25) 10%, transparent)', 
+          border: '1px solid color-mix(in oklab, oklch(0.65 0.18 25) 30%, transparent)',
           borderRadius: '4px',
           marginBottom: '16px',
-          color: '#EF4444'
+          color: 'oklch(0.65 0.18 25)'
         }}>
           {error}
           <button 

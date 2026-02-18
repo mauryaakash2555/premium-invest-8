@@ -309,12 +309,12 @@ const styles = {
     textAlign: 'center',
     marginBottom: '32px',
     paddingBottom: '24px',
-    borderBottom: '1px solid rgba(192, 160, 98, 0.3)'
+    borderBottom: '1px solid color-mix(in oklab, var(--sa-accent) 30%, transparent)'
   },
   title: {
     fontSize: '32px',
     fontWeight: '700',
-    color: '#C0A062',
+    color: 'var(--sa-accent)',
     margin: '0 0 8px 0'
   },
   subtitle: {
@@ -339,7 +339,7 @@ const styles = {
     display: 'block',
     fontSize: '14px',
     fontWeight: '600',
-    color: '#C0A062',
+    color: 'var(--sa-accent)',
     marginBottom: '8px'
   },
   input: {
@@ -393,7 +393,7 @@ const styles = {
   },
   primaryButton: {
     padding: '14px 28px',
-    backgroundColor: '#C0A062',
+    backgroundColor: 'var(--sa-accent)',
     color: '#0a0a0a',
     border: 'none',
     borderRadius: '8px',
@@ -424,11 +424,11 @@ const styles = {
     padding: '24px',
     borderRadius: '12px',
     marginBottom: '24px',
-    border: '1px solid rgba(192, 160, 98, 0.3)'
+    border: '1px solid color-mix(in oklab, var(--sa-accent) 30%, transparent)'
   },
   resultTitle: {
     fontSize: '20px',
-    color: '#C0A062',
+    color: 'var(--sa-accent)',
     margin: '0 0 20px 0'
   },
   imagePreview: {
@@ -454,7 +454,7 @@ const styles = {
     marginBottom: '8px'
   },
   link: {
-    color: '#C0A062',
+    color: 'var(--sa-accent)',
     textDecoration: 'none'
   },
   urlSection: {
@@ -477,7 +477,7 @@ const styles = {
   },
   copyButton: {
     padding: '12px 20px',
-    backgroundColor: '#C0A062',
+    backgroundColor: 'var(--sa-accent)',
     color: '#0a0a0a',
     border: 'none',
     borderRadius: '8px',
@@ -489,8 +489,8 @@ const styles = {
   jsonButton: {
     padding: '10px 16px',
     backgroundColor: '#2a2a2a',
-    color: '#C0A062',
-    border: '1px solid #C0A062',
+    color: 'var(--sa-accent)',
+    border: '1px solid var(--sa-accent)',
     borderRadius: '6px',
     fontSize: '13px',
     cursor: 'pointer'
@@ -503,7 +503,7 @@ const styles = {
   },
   analysisTitle: {
     fontSize: '14px',
-    color: '#C0A062',
+    color: 'var(--sa-accent)',
     margin: '0 0 12px 0'
   },
   analysisGrid: {

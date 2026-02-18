@@ -1,26 +1,24 @@
 "use client";
 
 /**
- * Client Portal Page - Databahn-style UI
- * 
+ * Client Portal Page — LUX Premium Rebuild
+ *
  * Features:
- * - Service integrations (MF, PMS, SIP, Insurance, LIC, Trading, FD)
- * - eKYC registration
- * - Document sharing (PDF, Word, Excel, etc.)
+ * - Service integrations (MF, PMS, SIP, Insurance, LIC, Trading, FD, Compliance)
+ * - eKYC registration with inline validation
+ * - Document sharing (PDF, Word, Excel, Images, up to 100 MB)
  * - WhatsApp file sharing
- * - Automated emails
- * - Large file uploads (HD/4K)
- * - Client data storage
+ * - Automated emails & quick-action templates
+ * - Fully lux-themed, zero brown/gold/banned colors
  */
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
-import { 
-  ArrowRight, 
-  Upload, 
-  FileText, 
-  Shield, 
-  Mail, 
+import {
+  ArrowRight,
+  FileText,
+  Shield,
+  Mail,
   MessageCircle,
   Briefcase,
   TrendingUp,
@@ -28,11 +26,8 @@ import {
   Heart,
   Building2,
   BarChart3,
-  Wallet,
   Users,
   Check,
-  ExternalLink,
-  Download,
   Clock,
   Star,
   ChevronRight,
@@ -42,345 +37,266 @@ import {
   FileSpreadsheet,
   FileImage,
   File,
-  Send
+  Send,
+  CheckCircle2,
+  X,
 } from "lucide-react";
 import LaserFooter from "@/components/user/LaserFooter";
 
-// Service integration cards data - PREMIUM DARK STYLE (no colorful cards)
+/* ─── Service data ─── */
 const serviceIntegrations = [
-  {
-    id: "mutual-funds",
-    title: "Mutual Funds",
-    icon: TrendingUp,
-    description: "Access 5000+ mutual fund schemes across all AMCs",
-    platforms: ["MF Central", "CAMS"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/mutual-funds"
-  },
-  {
-    id: "pms",
-    title: "Portfolio Management",
-    icon: Briefcase,
-    description: "Professional portfolio management with SEBI-registered PMS",
-    platforms: ["SEBI Registered PMS", "Customized Portfolios"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/portfolio-management"
-  },
-  {
-    id: "sip",
-    title: "SIP Investments",
-    icon: PiggyBank,
-    description: "Systematic investment plans with auto-debit facility",
-    platforms: ["NACH Mandate", "E-Mandate"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/sip"
-  },
-  {
-    id: "insurance",
-    title: "Insurance",
-    icon: Shield,
-    description: "Life, health, and general insurance solutions",
-    platforms: ["Term Plans", "Health Insurance"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/insurance"
-  },
-  {
-    id: "lic",
-    title: "LIC Policies",
-    icon: Heart,
-    description: "LIC policy management and premium tracking",
-    platforms: ["LIC Portal", "Premium Calculator"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/insurance"
-  },
-  {
-    id: "trading",
-    title: "Trading Services",
-    icon: BarChart3,
-    description: "Equity, derivatives, and commodity trading",
-    platforms: ["NSE", "BSE"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/trading-services"
-  },
-  {
-    id: "fd",
-    title: "Fixed Deposits",
-    icon: Building2,
-    description: "Corporate FDs with competitive interest rates",
-    platforms: ["Bank FDs", "Corporate FDs"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/fixed-deposits"
-  },
-  {
-    id: "compliance",
-    title: "SEBI Compliance",
-    icon: Lock,
-    description: "Regulatory compliance and documentation",
-    platforms: ["SEBI Guidelines", "KYC Compliance"],
-    color: "rgba(255, 255, 255, 0.02)",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    link: "/compliance"
-  }
+  { id: "mutual-funds", title: "Mutual Funds", icon: TrendingUp, description: "Access 5 000+ mutual fund schemes across all AMCs", platforms: ["MF Central", "CAMS"], link: "/mutual-funds" },
+  { id: "pms", title: "Portfolio Management", icon: Briefcase, description: "Professional portfolio management with SEBI-registered PMS", platforms: ["SEBI Registered PMS", "Customized Portfolios"], link: "/portfolio-management" },
+  { id: "sip", title: "SIP Investments", icon: PiggyBank, description: "Systematic investment plans with auto-debit facility", platforms: ["NACH Mandate", "E-Mandate"], link: "/sip" },
+  { id: "insurance", title: "Insurance", icon: Shield, description: "Life, health, and general insurance solutions", platforms: ["Term Plans", "Health Insurance"], link: "/insurance" },
+  { id: "lic", title: "LIC Policies", icon: Heart, description: "LIC policy management and premium tracking", platforms: ["LIC Portal", "Premium Calculator"], link: "/insurance" },
+  { id: "trading", title: "Trading Services", icon: BarChart3, description: "Equity, derivatives, and commodity trading", platforms: ["NSE", "BSE"], link: "/trading-services" },
+  { id: "fd", title: "Fixed Deposits", icon: Building2, description: "Corporate FDs with competitive interest rates", platforms: ["Bank FDs", "Corporate FDs"], link: "/fixed-deposits" },
+  { id: "compliance", title: "SEBI Compliance", icon: Lock, description: "Regulatory compliance and documentation", platforms: ["SEBI Guidelines", "KYC Compliance"], link: "/compliance" },
 ];
 
-// Supported file types
 const supportedFileTypes = [
-  { ext: "PDF", icon: FileText, color: "#FF6B6B" },
-  { ext: "DOC/DOCX", icon: FileText, color: "#4A90D9" },
-  { ext: "XLS/XLSX", icon: FileSpreadsheet, color: "#2ECC71" },
-  { ext: "JPG/PNG", icon: FileImage, color: "#9B59B6" },
-  { ext: "Any File", icon: File, color: "#95A5A6" }
+  { ext: "PDF", icon: FileText, color: "var(--lux-accent)" },
+  { ext: "DOC/DOCX", icon: FileText, color: "var(--lux-foreground-60)" },
+  { ext: "XLS/XLSX", icon: FileSpreadsheet, color: "var(--lux-foreground-60)" },
+  { ext: "JPG/PNG", icon: FileImage, color: "var(--lux-foreground-60)" },
+  { ext: "Any File", icon: File, color: "var(--lux-foreground-40)" },
 ];
 
+const features = [
+  { icon: Shield, title: "SEBI Compliant", desc: "All integrations follow SEBI guidelines and regulations" },
+  { icon: CloudUpload, title: "Large File Support", desc: "Upload HD/4K images and files up to 100 MB" },
+  { icon: Lock, title: "Secure Storage", desc: "Bank-grade encryption for all your documents" },
+  { icon: Mail, title: "Email Automation", desc: "Schedule automated emails for client communication" },
+  { icon: MessageCircle, title: "WhatsApp Integration", desc: "Quick file sharing through WhatsApp" },
+  { icon: Users, title: "Client Management", desc: "Organise client data in separate folders automatically" },
+];
+
+const tabs = [
+  { id: "services", label: "Services", icon: Briefcase },
+  { id: "ekyc", label: "eKYC Register", icon: Users },
+  { id: "documents", label: "Documents", icon: FileText },
+  { id: "automation", label: "Automation", icon: Mail },
+];
+
+/* ─── Shared glass style ─── */
+const glass = {
+  background: "color-mix(in oklab, var(--lux-card) 70%, transparent)",
+  backdropFilter: "blur(24px) saturate(180%)",
+  WebkitBackdropFilter: "blur(24px) saturate(180%)",
+  border: "1px solid var(--lux-foreground-05)",
+  borderRadius: 16,
+};
+
+const inputCls =
+  "w-full px-4 py-3.5 rounded-xl bg-[rgba(0,0,0,0.35)] border border-[rgba(255,255,255,0.06)] text-white placeholder-[rgba(255,255,255,0.28)] focus:outline-none focus:border-[color:color-mix(in_oklab,var(--lux-accent)_40%,transparent)] transition-colors duration-200 text-sm";
+
+/* ─── Component ─── */
 export default function ClientPortalPage() {
   const [activeTab, setActiveTab] = useState("services");
-  const [ekycFormData, setEkycFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    pan: "",
-    aadhaar: "",
-    dob: "",
-    address: ""
-  });
+  const [ekycFormData, setEkycFormData] = useState({ fullName: "", email: "", phone: "", pan: "", aadhaar: "", dob: "", address: "" });
+  const [ekycSubmitted, setEkycSubmitted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [automationEmail, setAutomationEmail] = useState({ clientEmail: "", subject: "", message: "", scheduleDate: "" });
+  const [emailSent, setEmailSent] = useState(false);
   const fileInputRef = useRef(null);
 
-  const handleEkycSubmit = async (e) => {
+  const handleEkycSubmit = useCallback((e) => {
     e.preventDefault();
-    // In production, this would send to your backend
-    console.log("eKYC Registration Data:", ekycFormData);
-    alert("eKYC Registration submitted! Our team will contact you shortly.");
-  };
+    setEkycSubmitted(true);
+    setTimeout(() => setEkycSubmitted(false), 5000);
+  }, []);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = useCallback((e) => {
     const files = Array.from(e.target.files);
-    const newFiles = files.map(file => ({
-      name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
-      type: file.type,
-      uploadedAt: new Date().toLocaleString()
+    const newFiles = files.map((f) => ({
+      name: f.name,
+      size: (f.size / (1024 * 1024)).toFixed(2) + " MB",
+      type: f.type,
+      uploadedAt: new Date().toLocaleString(),
     }));
-    setUploadedFiles(prev => [...prev, ...newFiles]);
-  };
+    setUploadedFiles((prev) => [...newFiles, ...prev]);
+  }, []);
 
-  const handleAutomationSubmit = (e) => {
+  const handleAutomationSubmit = useCallback((e) => {
     e.preventDefault();
-    console.log("Automation Email:", automationEmail);
-    alert("Email automation scheduled successfully!");
+    setEmailSent(true);
     setAutomationEmail({ clientEmail: "", subject: "", message: "", scheduleDate: "" });
-  };
+    setTimeout(() => setEmailSent(false), 4000);
+  }, []);
 
-  const tabs = [
-    { id: "services", label: "Services", icon: Briefcase },
-    { id: "ekyc", label: "eKYC Register", icon: Users },
-    { id: "documents", label: "Documents", icon: FileText },
-    { id: "automation", label: "Automation", icon: Mail }
-  ];
+  const removeFile = useCallback((idx) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== idx));
+  }, []);
 
   return (
-    <main className="min-h-screen bg-[#0A0B0D]">
-      {/* Hero Section - Databahn Style */}
-      <section 
+    <main className="min-h-screen" style={{ background: "var(--lux-background)" }}>
+      {/* ─── Hero ─── */}
+      <section
         className="relative overflow-hidden"
         style={{
           background: `
-            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(100, 150, 255, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 80% 20%, rgba(150, 100, 255, 0.06) 0%, transparent 50%),
-            linear-gradient(180deg, #0A0B0D 0%, #0D0E12 100%)
+            radial-gradient(ellipse 90% 50% at 50% -10%, color-mix(in oklab, var(--lux-accent) 8%, transparent) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 85% 15%, rgba(120,140,200,0.05) 0%, transparent 50%),
+            linear-gradient(180deg, var(--lux-background) 0%, color-mix(in oklab, var(--lux-background) 96%, #111218) 100%)
           `,
-          paddingTop: "120px",
-          paddingBottom: "60px"
+          paddingTop: 120,
+          paddingBottom: 64,
         }}
       >
-        {/* Grid pattern overlay */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-30"
+        {/* Subtle grid overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20"
           style={{
-            backgroundImage: `
-              linear-gradient(rgba(100, 150, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(100, 150, 255, 0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px"
+            backgroundImage:
+              "linear-gradient(var(--lux-foreground-05) 1px, transparent 1px), linear-gradient(90deg, var(--lux-foreground-05) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
           }}
         />
 
         <div className="relative max-w-7xl mx-auto px-6">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm mb-8">
-            <Link href="/" className="text-gray-500 hover:text-gray-300 transition-colors">Home</Link>
-            <ChevronRight size={14} className="text-gray-600" />
-            <span className="text-gray-300">Client Portal</span>
+            <Link href="/" className="text-[color:var(--lux-foreground-40)] hover:text-[color:var(--lux-foreground-80)] transition-colors">Home</Link>
+            <ChevronRight size={14} className="text-[color:var(--lux-foreground-40)]" />
+            <span className="text-[color:var(--lux-foreground-80)]">Client Portal</span>
           </div>
 
-          {/* Hero Content */}
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[rgba(100,150,255,0.08)] border border-[rgba(100,150,255,0.15)] mb-6">
-              <div className="w-2 h-2 rounded-full bg-[#64B5F6] animate-pulse" />
-              <span className="text-sm text-[rgba(200,220,255,0.8)] tracking-wide">Secure Client Access</span>
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-7"
+              style={{
+                background: "color-mix(in oklab, var(--lux-accent) 6%, transparent)",
+                border: "1px solid color-mix(in oklab, var(--lux-accent) 14%, transparent)",
+              }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: "var(--lux-accent)" }} />
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "var(--lux-accent)" }} />
+              </span>
+              <span className="text-sm tracking-wide" style={{ color: "color-mix(in oklab, var(--lux-accent) 80%, white)" }}>Secure Client Access</span>
             </div>
 
-            <h1 
+            <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               style={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(200,220,255,0.85) 50%, rgba(255,255,255,0.90) 100%)",
+                background: "linear-gradient(135deg, var(--lux-foreground) 0%, var(--lux-foreground-80) 50%, var(--lux-foreground) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                lineHeight: 1.1
+                lineHeight: 1.1,
               }}
             >
               Your Wealth,{" "}
-              <span style={{ 
+              <span style={{
                 background: "linear-gradient(135deg, var(--lux-accent) 0%, color-mix(in oklab, var(--lux-accent) 60%, white) 100%)",
                 WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
+                WebkitTextFillColor: "transparent",
               }}>
                 One Portal
               </span>
             </h1>
 
-            <p className="text-lg text-[rgba(200,210,230,0.7)] max-w-2xl mb-8 leading-relaxed">
-              Access all your investments, share documents securely, complete eKYC, and manage your 
-              financial portfolio — all in one place. Integrated with SEBI-compliant platforms.
+            <p className="text-lg max-w-2xl mb-9 leading-relaxed" style={{ color: "var(--lux-foreground-60)" }}>
+              Access all your investments, share documents securely, complete eKYC, and manage your financial portfolio — all in one place. Integrated with SEBI-compliant platforms.
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <a 
+              <a
                 href="#portal"
-                className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-none"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+                style={{ background: "var(--lux-accent)", color: "oklch(0.10 0.005 280)" }}
               >
-                Access Portal <ArrowRight size={18} />
+                Access Portal <ArrowRight size={17} />
               </a>
-              <Link 
+              <Link
                 href="/contact"
-                className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-none"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:translate-y-[-2px]"
+                style={{ border: "1px solid var(--lux-foreground-10)", color: "var(--lux-foreground-80)", background: "rgba(255,255,255,0.03)" }}
               >
                 Contact Support
               </Link>
             </div>
           </div>
 
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-16">
             {[
               { value: "8+", label: "Service Integrations" },
               { value: "100%", label: "SEBI Compliant" },
               { value: "4K", label: "HD File Support" },
-              { value: "24/7", label: "Document Access" }
+              { value: "24/7", label: "Document Access" },
             ].map((stat, i) => (
-              <div 
-                key={i}
-                className="text-center p-4 rounded-none"
-                style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)"
-                }}
-              >
+              <div key={i} className="text-center p-5 rounded-2xl" style={glass}>
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-500">{stat.label}</div>
+                <div className="text-xs" style={{ color: "var(--lux-muted)" }}>{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Main Portal Section */}
+      {/* ─── Portal Tabs ─── */}
       <section id="portal" className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Tab Navigation */}
-          <div 
-            className="flex flex-wrap gap-2 p-2 rounded-none mb-10"
-            style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.06)"
-            }}
-          >
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  flex items-center gap-2 px-5 py-3 rounded-none font-medium transition-all duration-300
-                  ${activeTab === tab.id 
-                    ? "bg-[rgba(100,150,255,0.12)] text-white border border-[rgba(100,150,255,0.25)]" 
-                    : "text-gray-400 hover:text-gray-200 hover:bg-[rgba(255,255,255,0.03)]"
-                  }
-                `}
-              >
-                <tab.icon size={18} />
-                {tab.label}
-              </button>
-            ))}
+          {/* Tab bar */}
+          <div className="flex flex-wrap gap-2 p-2 rounded-2xl mb-10" style={glass}>
+            {tabs.map((t) => {
+              const active = activeTab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveTab(t.id)}
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm transition-all duration-300"
+                  style={{
+                    background: active ? "color-mix(in oklab, var(--lux-accent) 10%, transparent)" : "transparent",
+                    border: active ? "1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent)" : "1px solid transparent",
+                    color: active ? "var(--lux-foreground)" : "var(--lux-muted)",
+                  }}
+                >
+                  <t.icon size={17} />
+                  {t.label}
+                </button>
+              );
+            })}
           </div>
 
           {/* Tab Content */}
           <div className="min-h-[600px]">
-            {/* Services Tab */}
+            {/* ── Services ── */}
             {activeTab === "services" && (
-              <div className="space-y-8">
+              <div className="space-y-8 animate-fadeIn">
                 <div className="mb-8">
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                    Integrated Service Platforms
-                  </h2>
-                  <p className="text-gray-400 max-w-2xl">
-                    Quick access to all your financial services. Click any card to access the service or view more details.
-                  </p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Integrated Service Platforms</h2>
+                  <p style={{ color: "var(--lux-muted)" }} className="max-w-2xl">Quick access to all your financial services. Click any card to access the service or view more details.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                  {serviceIntegrations.map((service) => (
+                  {serviceIntegrations.map((svc) => (
                     <Link
-                      key={service.id}
-                      href={service.link}
-                      className="group relative p-6 rounded-none transition-all duration-300 hover:translate-y-[-4px]"
-                      style={{
-                        background: service.color,
-                        border: `1px solid ${service.borderColor}`,
-                      }}
+                      key={svc.id}
+                      href={svc.link}
+                      className="group relative p-6 rounded-2xl transition-all duration-[400ms] hover:translate-y-[-6px] hover:shadow-[0_24px_64px_rgba(0,0,0,0.35)]"
+                      style={glass}
                     >
-                      <div 
-                        className="absolute inset-0 rounded-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{
-                          background: `radial-gradient(circle at 50% 0%, ${service.borderColor}, transparent 70%)`
-                        }}
+                      {/* Hover glow */}
+                      <div
+                        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                        style={{ background: "radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--lux-accent) 8%, transparent), transparent 70%)" }}
                       />
-                      
                       <div className="relative">
-                        <div 
-                          className="w-12 h-12 rounded-none flex items-center justify-center mb-4"
-                          style={{ background: service.borderColor }}
-                        >
-                          <service.icon size={24} className="text-white" />
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "var(--lux-foreground-05)" }}>
+                          <svc.icon size={23} style={{ color: "var(--lux-accent)" }} />
                         </div>
-                        
-                        <h3 className="text-lg font-semibold text-white mb-2">{service.title}</h3>
-                        <p className="text-sm text-gray-400 mb-4">{service.description}</p>
-                        
+                        <h3 className="text-[15px] font-semibold text-white mb-2">{svc.title}</h3>
+                        <p className="text-sm mb-4" style={{ color: "var(--lux-muted)" }}>{svc.description}</p>
                         <div className="flex flex-wrap gap-2">
-                          {service.platforms.slice(0, 2).map((platform, i) => (
-                            <span 
-                              key={i}
-                              className="text-xs px-2 py-1 rounded-none"
-                              style={{ 
-                                background: "rgba(255,255,255,0.08)",
-                                color: "rgba(255,255,255,0.7)"
-                              }}
-                            >
-                              {platform}
-                            </span>
+                          {svc.platforms.map((p, i) => (
+                            <span key={i} className="text-xs px-2.5 py-1 rounded-lg" style={{ background: "var(--lux-foreground-05)", color: "var(--lux-foreground-60)" }}>{p}</span>
                           ))}
                         </div>
-
-                        <div className="flex items-center gap-1 mt-4 text-sm text-gray-400 group-hover:text-white transition-colors">
-                          Access <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        <div className="flex items-center gap-1 mt-4 text-sm transition-colors duration-300 group-hover:text-white" style={{ color: "var(--lux-muted)" }}>
+                          Access <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
                         </div>
                       </div>
                     </Link>
@@ -389,211 +305,141 @@ export default function ClientPortalPage() {
               </div>
             )}
 
-            {/* eKYC Tab */}
+            {/* ── eKYC ── */}
             {activeTab === "ekyc" && (
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto animate-fadeIn">
                 <div className="mb-8 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[rgba(100,220,180,0.08)] border border-[rgba(100,220,180,0.20)] mb-4">
-                    <Unlock size={16} className="text-[#64DCA8]" />
-                    <span className="text-sm text-[rgba(100,220,180,0.9)]">Registration Open</span>
+                  <div
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
+                    style={{
+                      background: "color-mix(in oklab, var(--lux-accent) 6%, transparent)",
+                      border: "1px solid color-mix(in oklab, var(--lux-accent) 14%, transparent)",
+                    }}
+                  >
+                    <Unlock size={15} style={{ color: "var(--lux-accent)" }} />
+                    <span className="text-sm" style={{ color: "color-mix(in oklab, var(--lux-accent) 80%, white)" }}>Registration Open</span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                    Complete Your eKYC Registration
-                  </h2>
-                  <p className="text-gray-400">
-                    Register online and get instant access to all services. Your data is stored securely and compliant with SEBI regulations.
-                  </p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Complete Your eKYC Registration</h2>
+                  <p style={{ color: "var(--lux-muted)" }}>Register online and get instant access to all services. Your data is stored securely and compliant with SEBI regulations.</p>
                 </div>
 
-                <form 
-                  onSubmit={handleEkycSubmit}
-                  className="p-8 rounded-none space-y-6"
-                  style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.08)"
-                  }}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Full Name (as per PAN)</label>
-                      <input
-                        type="text"
-                        required
-                        value={ekycFormData.fullName}
-                        onChange={(e) => setEkycFormData({...ekycFormData, fullName: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Email Address</label>
-                      <input
-                        type="email"
-                        required
-                        value={ekycFormData.email}
-                        onChange={(e) => setEkycFormData({...ekycFormData, email: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Phone Number</label>
-                      <input
-                        type="tel"
-                        required
-                        value={ekycFormData.phone}
-                        onChange={(e) => setEkycFormData({...ekycFormData, phone: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                        placeholder="+91 XXXXX XXXXX"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Date of Birth</label>
-                      <input
-                        type="date"
-                        required
-                        value={ekycFormData.dob}
-                        onChange={(e) => setEkycFormData({...ekycFormData, dob: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">PAN Number</label>
-                      <input
-                        type="text"
-                        required
-                        maxLength={10}
-                        value={ekycFormData.pan}
-                        onChange={(e) => setEkycFormData({...ekycFormData, pan: e.target.value.toUpperCase()})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] uppercase"
-                        placeholder="ABCDE1234F"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Aadhaar Number (Last 4 digits)</label>
-                      <input
-                        type="text"
-                        maxLength={4}
-                        value={ekycFormData.aadhaar}
-                        onChange={(e) => setEkycFormData({...ekycFormData, aadhaar: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                        placeholder="XXXX"
-                      />
-                    </div>
+                {ekycSubmitted && (
+                  <div className="flex items-center gap-3 p-4 rounded-xl mb-6 animate-fadeIn" style={{ background: "color-mix(in oklab, var(--lux-accent) 8%, transparent)", border: "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)" }}>
+                    <CheckCircle2 size={20} style={{ color: "var(--lux-accent)" }} />
+                    <p className="text-sm text-white">eKYC Registration submitted! Our team will contact you shortly.</p>
                   </div>
-                  
+                )}
+
+                <form onSubmit={handleEkycSubmit} className="p-8 rounded-2xl space-y-6" style={glass}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {[
+                      { label: "Full Name (as per PAN)", key: "fullName", type: "text", ph: "Enter your full name", req: true },
+                      { label: "Email Address", key: "email", type: "email", ph: "your@email.com", req: true },
+                      { label: "Phone Number", key: "phone", type: "tel", ph: "+91 XXXXX XXXXX", req: true },
+                      { label: "Date of Birth", key: "dob", type: "date", req: true },
+                      { label: "PAN Number", key: "pan", type: "text", ph: "ABCDE1234F", req: true, max: 10, upper: true },
+                      { label: "Aadhaar (Last 4 digits)", key: "aadhaar", type: "text", ph: "XXXX", max: 4 },
+                    ].map((f) => (
+                      <div key={f.key}>
+                        <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>{f.label}</label>
+                        <input
+                          type={f.type}
+                          required={f.req}
+                          maxLength={f.max}
+                          value={ekycFormData[f.key]}
+                          onChange={(e) => setEkycFormData({ ...ekycFormData, [f.key]: f.upper ? e.target.value.toUpperCase() : e.target.value })}
+                          className={inputCls + (f.upper ? " uppercase" : "")}
+                          placeholder={f.ph}
+                        />
+                      </div>
+                    ))}
+                  </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Address</label>
+                    <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>Address</label>
                     <textarea
                       rows={3}
                       value={ekycFormData.address}
-                      onChange={(e) => setEkycFormData({...ekycFormData, address: e.target.value})}
-                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
+                      onChange={(e) => setEkycFormData({ ...ekycFormData, address: e.target.value })}
+                      className={inputCls + " resize-none"}
                       placeholder="Enter your complete address"
                     />
                   </div>
 
-                  <div className="flex items-start gap-3 p-4 rounded-none bg-[rgba(100,150,255,0.05)] border border-[rgba(100,150,255,0.10)]">
-                    <Shield size={20} className="text-[#64B5F6] flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-gray-400">
-                      Your data is encrypted and stored securely in compliance with SEBI regulations. 
-                      We never share your personal information with third parties.
+                  <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "color-mix(in oklab, var(--lux-accent) 4%, transparent)", border: "1px solid color-mix(in oklab, var(--lux-accent) 10%, transparent)" }}>
+                    <Shield size={18} className="flex-shrink-0 mt-0.5" style={{ color: "var(--lux-accent)" }} />
+                    <p className="text-xs leading-relaxed" style={{ color: "var(--lux-foreground-60)" }}>
+                      Your data is encrypted and stored securely in compliance with SEBI regulations. We never share your personal information with third parties.
                     </p>
                   </div>
 
                   <button
                     type="submit"
-                    className="btn-primary w-full py-4 rounded-none font-semibold flex items-center justify-center gap-2"
+                    className="w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+                    style={{ background: "var(--lux-accent)", color: "oklch(0.10 0.005 280)" }}
                   >
-                    Submit eKYC Registration <ArrowRight size={18} />
+                    Submit eKYC Registration <ArrowRight size={17} />
                   </button>
                 </form>
               </div>
             )}
 
-            {/* Documents Tab */}
+            {/* ── Documents ── */}
             {activeTab === "documents" && (
-              <div className="space-y-8">
+              <div className="space-y-8 animate-fadeIn">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Upload Section */}
-                  <div 
-                    className="p-6 rounded-none"
-                    style={{
-                      background: "rgba(255,255,255,0.02)",
-                      border: "1px solid rgba(255,255,255,0.08)"
-                    }}
-                  >
-                    <h3 className="text-xl font-semibold text-white mb-2">Upload Documents</h3>
-                    <p className="text-gray-400 text-sm mb-6">
-                      Share documents securely with us. Supports HD/4K images and large files up to 100MB.
-                    </p>
+                  {/* Upload */}
+                  <div className="p-7 rounded-2xl" style={glass}>
+                    <h3 className="text-lg font-semibold text-white mb-1.5">Upload Documents</h3>
+                    <p className="text-sm mb-6" style={{ color: "var(--lux-muted)" }}>Share documents securely. Supports HD/4K images and large files up to 100 MB.</p>
 
-                    <div 
+                    <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="border-2 border-dashed border-[rgba(100,150,255,0.25)] rounded-none p-10 text-center cursor-pointer hover:border-[rgba(100,150,255,0.45)] hover:bg-[rgba(100,150,255,0.03)] transition-all"
+                      className="border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-[color:color-mix(in_oklab,var(--lux-accent)_30%,transparent)] hover:bg-[color:color-mix(in_oklab,var(--lux-accent)_3%,transparent)]"
+                      style={{ borderColor: "var(--lux-foreground-10)" }}
                     >
-                      <CloudUpload size={48} className="mx-auto mb-4 text-[#64B5F6]" />
-                      <p className="text-white mb-2">Drop files here or click to upload</p>
-                      <p className="text-gray-500 text-sm">PDF, DOC, XLS, Images • Max 100MB</p>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        multiple
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif"
-                      />
+                      <CloudUpload size={44} className="mx-auto mb-4" style={{ color: "var(--lux-accent)" }} />
+                      <p className="text-white mb-2 text-sm font-medium">Drop files here or click to upload</p>
+                      <p className="text-xs" style={{ color: "var(--lux-muted)" }}>PDF, DOC, XLS, Images · Max 100 MB</p>
+                      <input ref={fileInputRef} type="file" multiple onChange={handleFileUpload} className="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif" />
                     </div>
 
-                    {/* Supported File Types */}
-                    <div className="flex flex-wrap gap-3 mt-6">
-                      {supportedFileTypes.map((type, i) => (
-                        <div 
-                          key={i}
-                          className="flex items-center gap-2 px-3 py-2 rounded-none"
-                          style={{ background: "rgba(255,255,255,0.04)" }}
-                        >
-                          <type.icon size={16} style={{ color: type.color }} />
-                          <span className="text-xs text-gray-400">{type.ext}</span>
+                    <div className="flex flex-wrap gap-2.5 mt-6">
+                      {supportedFileTypes.map((t, i) => (
+                        <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "var(--lux-foreground-05)" }}>
+                          <t.icon size={15} style={{ color: t.color }} />
+                          <span className="text-xs" style={{ color: "var(--lux-foreground-60)" }}>{t.ext}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Uploaded Files List */}
-                  <div 
-                    className="p-6 rounded-none"
-                    style={{
-                      background: "rgba(255,255,255,0.02)",
-                      border: "1px solid rgba(255,255,255,0.08)"
-                    }}
-                  >
-                    <h3 className="text-xl font-semibold text-white mb-2">Recent Uploads</h3>
-                    <p className="text-gray-400 text-sm mb-6">
-                      Files uploaded will be automatically saved to your client folder.
-                    </p>
+                  {/* Uploaded list */}
+                  <div className="p-7 rounded-2xl" style={glass}>
+                    <h3 className="text-lg font-semibold text-white mb-1.5">Recent Uploads</h3>
+                    <p className="text-sm mb-6" style={{ color: "var(--lux-muted)" }}>Files are automatically saved to your client folder.</p>
 
                     {uploadedFiles.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500">
-                        <FileText size={40} className="mx-auto mb-3 opacity-50" />
-                        <p>No files uploaded yet</p>
+                      <div className="text-center py-14" style={{ color: "var(--lux-muted)" }}>
+                        <FileText size={36} className="mx-auto mb-3 opacity-40" />
+                        <p className="text-sm">No files uploaded yet</p>
                       </div>
                     ) : (
-                      <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                      <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.08) transparent" }}>
                         {uploadedFiles.map((file, i) => (
-                          <div 
-                            key={i}
-                            className="flex items-center justify-between p-4 rounded-none"
-                            style={{ background: "rgba(255,255,255,0.03)" }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <FileText size={20} className="text-[#64B5F6]" />
-                              <div>
-                                <p className="text-white text-sm">{file.name}</p>
-                                <p className="text-gray-500 text-xs">{file.size} • {file.uploadedAt}</p>
+                          <div key={i} className="flex items-center justify-between p-4 rounded-xl group" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--lux-foreground-05)" }}>
+                            <div className="flex items-center gap-3 min-w-0">
+                              <FileText size={18} style={{ color: "var(--lux-accent)" }} className="flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm text-white truncate">{file.name}</p>
+                                <p className="text-xs" style={{ color: "var(--lux-muted)" }}>{file.size} · {file.uploadedAt}</p>
                               </div>
                             </div>
-                            <Check size={18} className="text-green-400" />
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 size={16} style={{ color: "var(--lux-accent)" }} />
+                              <button onClick={() => removeFile(i)} className="opacity-0 group-hover:opacity-60 hover:!opacity-100 transition-opacity p-1" aria-label="Remove file">
+                                <X size={14} className="text-white" />
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -601,118 +447,88 @@ export default function ClientPortalPage() {
                   </div>
                 </div>
 
-                {/* WhatsApp Share */}
-                <div 
-                  className="p-6 rounded-none flex flex-col md:flex-row items-center justify-between gap-6"
+                {/* WhatsApp card */}
+                <div
+                  className="p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6"
                   style={{
-                    background: "linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(37, 211, 102, 0.02) 100%)",
-                    border: "1px solid rgba(37, 211, 102, 0.20)"
+                    ...glass,
+                    background: "color-mix(in oklab, var(--lux-accent) 4%, var(--lux-card))",
+                    border: "1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent)",
                   }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-none bg-[rgba(37,211,102,0.15)] flex items-center justify-center">
-                      <MessageCircle size={28} className="text-[#25D366]" />
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: "color-mix(in oklab, var(--lux-accent) 12%, transparent)" }}>
+                      <MessageCircle size={26} style={{ color: "var(--lux-accent)" }} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white">Share via WhatsApp</h3>
-                      <p className="text-gray-400 text-sm">Quick file sharing through WhatsApp for instant communication</p>
+                      <h3 className="text-base font-semibold text-white">Share via WhatsApp</h3>
+                      <p className="text-sm" style={{ color: "var(--lux-muted)" }}>Quick file sharing for instant communication</p>
                     </div>
                   </div>
                   <a
                     href="https://wa.me/918850977259"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 rounded-none bg-[#25D366] text-white font-semibold flex items-center gap-2 hover:bg-[#20BD5A] transition-colors"
+                    className="px-6 py-3.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)]"
+                    style={{ background: "var(--lux-accent)", color: "oklch(0.10 0.005 280)" }}
                   >
-                    <MessageCircle size={18} />
+                    <MessageCircle size={17} />
                     Open WhatsApp
                   </a>
                 </div>
               </div>
             )}
 
-            {/* Automation Tab */}
+            {/* ── Automation ── */}
             {activeTab === "automation" && (
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto animate-fadeIn">
                 <div className="mb-8 text-center">
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                    Email Automation
-                  </h2>
-                  <p className="text-gray-400">
-                    Schedule automated emails for your clients. Set reminders, send updates, and stay connected.
-                  </p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Email Automation</h2>
+                  <p style={{ color: "var(--lux-muted)" }}>Schedule automated emails for your clients. Set reminders, send updates, and stay connected.</p>
                 </div>
 
-                <form 
-                  onSubmit={handleAutomationSubmit}
-                  className="p-8 rounded-none space-y-6"
-                  style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.08)"
-                  }}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {emailSent && (
+                  <div className="flex items-center gap-3 p-4 rounded-xl mb-6 animate-fadeIn" style={{ background: "color-mix(in oklab, var(--lux-accent) 8%, transparent)", border: "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)" }}>
+                    <CheckCircle2 size={20} style={{ color: "var(--lux-accent)" }} />
+                    <p className="text-sm text-white">Email automation scheduled successfully!</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleAutomationSubmit} className="p-8 rounded-2xl space-y-6" style={glass}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Client Email</label>
-                      <input
-                        type="email"
-                        required
-                        value={automationEmail.clientEmail}
-                        onChange={(e) => setAutomationEmail({...automationEmail, clientEmail: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                        placeholder="client@email.com"
-                      />
+                      <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>Client Email</label>
+                      <input type="email" required value={automationEmail.clientEmail} onChange={(e) => setAutomationEmail({ ...automationEmail, clientEmail: e.target.value })} className={inputCls} placeholder="client@email.com" />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Schedule Date & Time</label>
-                      <input
-                        type="datetime-local"
-                        required
-                        value={automationEmail.scheduleDate}
-                        onChange={(e) => setAutomationEmail({...automationEmail, scheduleDate: e.target.value})}
-                        className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                      />
+                      <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>Schedule Date & Time</label>
+                      <input type="datetime-local" required value={automationEmail.scheduleDate} onChange={(e) => setAutomationEmail({ ...automationEmail, scheduleDate: e.target.value })} className={inputCls} />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Email Subject</label>
-                    <input
-                      type="text"
-                      required
-                      value={automationEmail.subject}
-                      onChange={(e) => setAutomationEmail({...automationEmail, subject: e.target.value})}
-                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)]"
-                      placeholder="Investment Update - January 2026"
-                    />
+                    <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>Email Subject</label>
+                    <input type="text" required value={automationEmail.subject} onChange={(e) => setAutomationEmail({ ...automationEmail, subject: e.target.value })} className={inputCls} placeholder="Investment Update — January 2026" />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Email Message</label>
-                    <textarea
-                      rows={5}
-                      required
-                      value={automationEmail.message}
-                      onChange={(e) => setAutomationEmail({...automationEmail, message: e.target.value})}
-                      className="w-full px-4 py-3 rounded-none bg-[rgba(0,0,0,0.3)] border border-[rgba(255,255,255,0.08)] text-white placeholder-gray-500 focus:outline-none focus:border-[rgba(100,150,255,0.4)] resize-none"
-                      placeholder="Dear Client,
-
-We are pleased to share your portfolio update..."
-                    />
+                    <label className="block text-xs font-medium mb-2" style={{ color: "var(--lux-muted)" }}>Email Message</label>
+                    <textarea rows={5} required value={automationEmail.message} onChange={(e) => setAutomationEmail({ ...automationEmail, message: e.target.value })} className={inputCls + " resize-none"} placeholder={"Dear Client,\n\nWe are pleased to share your portfolio update..."} />
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 rounded-none bg-[rgba(100,220,180,0.05)] border border-[rgba(100,220,180,0.15)]">
-                    <Clock size={20} className="text-[#64DCA8] flex-shrink-0" />
-                    <p className="text-sm text-gray-400">
-                      Emails will be sent automatically at the scheduled time. You can manage all scheduled emails from your dashboard.
+                  <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "color-mix(in oklab, var(--lux-accent) 4%, transparent)", border: "1px solid color-mix(in oklab, var(--lux-accent) 10%, transparent)" }}>
+                    <Clock size={18} className="flex-shrink-0 mt-0.5" style={{ color: "var(--lux-accent)" }} />
+                    <p className="text-xs leading-relaxed" style={{ color: "var(--lux-foreground-60)" }}>
+                      Emails will be sent automatically at the scheduled time. Manage all scheduled emails from your dashboard.
                     </p>
                   </div>
 
                   <button
                     type="submit"
-                    className="btn-primary w-full py-4 rounded-none font-semibold flex items-center justify-center gap-2"
+                    className="w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+                    style={{ background: "var(--lux-accent)", color: "oklch(0.10 0.005 280)" }}
                   >
-                    <Send size={18} />
+                    <Send size={17} />
                     Schedule Email
                   </button>
                 </form>
@@ -722,19 +538,12 @@ We are pleased to share your portfolio update..."
                   {[
                     { icon: Mail, label: "Premium Reminder", desc: "SIP/Premium due alerts" },
                     { icon: TrendingUp, label: "Portfolio Update", desc: "Monthly performance" },
-                    { icon: Star, label: "Birthday Wishes", desc: "Automated greetings" }
-                  ].map((action, i) => (
-                    <button
-                      key={i}
-                      className="p-4 rounded-none text-left hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-                      style={{
-                        background: "rgba(255,255,255,0.02)",
-                        border: "1px solid rgba(255,255,255,0.06)"
-                      }}
-                    >
-                      <action.icon size={20} className="text-[#64B5F6] mb-2" />
-                      <p className="text-white font-medium text-sm">{action.label}</p>
-                      <p className="text-gray-500 text-xs">{action.desc}</p>
+                    { icon: Star, label: "Birthday Wishes", desc: "Automated greetings" },
+                  ].map((a, i) => (
+                    <button key={i} className="p-5 rounded-2xl text-left transition-all duration-300 hover:translate-y-[-3px] hover:shadow-[0_12px_36px_rgba(0,0,0,0.3)]" style={glass}>
+                      <a.icon size={20} className="mb-3" style={{ color: "var(--lux-accent)" }} />
+                      <p className="text-white font-medium text-sm">{a.label}</p>
+                      <p className="text-xs mt-1" style={{ color: "var(--lux-muted)" }}>{a.desc}</p>
                     </button>
                   ))}
                 </div>
@@ -744,40 +553,22 @@ We are pleased to share your portfolio update..."
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-16 px-6 bg-[#08090B]">
+      {/* ─── Features Grid ─── */}
+      <section className="py-16 px-6" style={{ background: "color-mix(in oklab, var(--lux-background) 96%, oklch(0.08 0.005 280))" }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              Everything You Need in One Place
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              A comprehensive client portal designed for modern wealth management
-            </p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Everything You Need in One Place</h2>
+            <p style={{ color: "var(--lux-muted)" }} className="max-w-2xl mx-auto">A comprehensive client portal designed for modern wealth management</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: Shield, title: "SEBI Compliant", desc: "All integrations follow SEBI guidelines and regulations" },
-              { icon: CloudUpload, title: "Large File Support", desc: "Upload HD/4K images and files up to 100MB" },
-              { icon: Lock, title: "Secure Storage", desc: "Bank-grade encryption for all your documents" },
-              { icon: Mail, title: "Email Automation", desc: "Schedule automated emails for client communication" },
-              { icon: MessageCircle, title: "WhatsApp Integration", desc: "Quick file sharing through WhatsApp" },
-              { icon: Users, title: "Client Management", desc: "Organize client data in separate folders automatically" }
-            ].map((feature, i) => (
-              <div 
-                key={i}
-                className="p-6 rounded-none"
-                style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)"
-                }}
-              >
-                <div className="w-12 h-12 rounded-none bg-[rgba(100,150,255,0.10)] flex items-center justify-center mb-4">
-                  <feature.icon size={24} className="text-[#64B5F6]" />
+            {features.map((f, i) => (
+              <div key={i} className="p-6 rounded-2xl transition-all duration-300 hover:translate-y-[-4px] hover:shadow-[0_16px_48px_rgba(0,0,0,0.3)]" style={glass}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "color-mix(in oklab, var(--lux-accent) 8%, transparent)" }}>
+                  <f.icon size={22} style={{ color: "var(--lux-accent)" }} />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.desc}</p>
+                <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
+                <p className="text-sm" style={{ color: "var(--lux-muted)" }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -787,12 +578,12 @@ We are pleased to share your portfolio update..."
       <LaserFooter />
 
       <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .animate-fadeIn {
+          animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
       `}</style>
     </main>

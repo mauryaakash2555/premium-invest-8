@@ -28,11 +28,11 @@ const CATEGORIES = [
 ];
 
 const URGENCY_LEVELS = [
-  { key: 'BREAKING', label: '🔴 Breaking', color: '#ef4444' },
-  { key: 'IMPORTANT', label: '🟡 Important', color: '#c0a062' },
+  { key: 'BREAKING', label: '🔴 Breaking', color: 'oklch(0.65 0.18 25)' },
+  { key: 'IMPORTANT', label: '🟡 Important', color: 'var(--sa-accent)' },
   { key: 'PREMIUM', label: '💎 Premium', color: '#a78bfa' },
-  { key: 'REGULAR', label: '🟢 Regular', color: '#22c55e' },
-  { key: 'EDUCATIONAL', label: '🔵 Educational', color: '#60a5fa' },
+  { key: 'REGULAR', label: '🟢 Regular', color: 'oklch(0.72 0.14 155)' },
+  { key: 'EDUCATIONAL', label: '🔵 Educational', color: 'oklch(0.72 0.12 240)' },
 ];
 
 function formatDate(iso) {
@@ -475,7 +475,7 @@ export function LiveIntelligenceAdmin() {
                   <div className="li-col-urgency">
                     <span 
                       className={`li-urgency-badge li-urgency-${h.urgency || 'medium'}`}
-                      style={{ background: urg?.color || '#3b82f6' }}
+                      style={{ background: urg?.color || 'oklch(0.72 0.12 240)' }}
                     >
                       {h.urgency?.toUpperCase() || 'MEDIUM'}
                     </span>
@@ -532,8 +532,8 @@ export function LiveIntelligenceAdmin() {
         }
         
         .li-breaking-alert {
-          background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
-          border: 1px solid rgba(239, 68, 68, 0.4);
+          background: linear-gradient(135deg, color-mix(in oklab, oklch(0.65 0.18 25) 20%, transparent), color-mix(in oklab, oklch(0.65 0.18 25) 10%, transparent));
+          border: 1px solid color-mix(in oklab, oklch(0.65 0.18 25) 40%, transparent);
           border-radius: 12px;
           padding: 12px 16px;
           margin-bottom: 16px;
@@ -545,8 +545,8 @@ export function LiveIntelligenceAdmin() {
         }
         
         @keyframes pulseRed {
-          0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
-          50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); }
+          0%, 100% { box-shadow: 0 0 10px color-mix(in oklab, oklch(0.65 0.18 25) 30%, transparent); }
+          50% { box-shadow: 0 0 25px color-mix(in oklab, oklch(0.65 0.18 25) 60%, transparent); }
         }
         
         .li-breaking-content {
@@ -557,7 +557,7 @@ export function LiveIntelligenceAdmin() {
         }
         
         .li-breaking-badge {
-          background: #ef4444;
+          background: oklch(0.65 0.18 25);
           color: white;
           padding: 4px 10px;
           border-radius: 6px;
@@ -577,8 +577,8 @@ export function LiveIntelligenceAdmin() {
         }
         
         .li-error {
-          background: rgba(239, 68, 68, 0.15);
-          border: 1px solid rgba(239, 68, 68, 0.3);
+          background: color-mix(in oklab, oklch(0.65 0.18 25) 15%, transparent);
+          border: 1px solid color-mix(in oklab, oklch(0.65 0.18 25) 30%, transparent);
           color: #fca5a5;
           padding: 10px 14px;
           border-radius: 8px;
@@ -829,24 +829,24 @@ export function LiveIntelligenceAdmin() {
         }
         
         .li-urgency-low { background: #6b7280; }
-        .li-urgency-medium { background: #3b82f6; }
-        .li-urgency-high { background: #f59e0b; }
-        .li-urgency-critical { background: #ef4444; }
+        .li-urgency-medium { background: oklch(0.72 0.12 240); }
+        .li-urgency-high { background: oklch(0.78 0.10 85); }
+        .li-urgency-critical { background: oklch(0.65 0.18 25); }
         
         .li-status-live {
-          color: #34d399;
+          color: oklch(0.72 0.14 155);
           font-size: 12px;
           font-weight: 600;
         }
         
         .li-status-pending {
-          color: #fbbf24;
+          color: oklch(0.78 0.10 85);
           font-size: 12px;
           font-weight: 600;
         }
         
         .li-status-expired {
-          color: #f87171;
+          color: oklch(0.65 0.18 25);
           font-size: 12px;
           font-weight: 600;
         }
@@ -865,12 +865,12 @@ export function LiveIntelligenceAdmin() {
         }
         
         .li-btn-delete {
-          color: #f87171 !important;
-          border-color: rgba(248, 113, 113, 0.3) !important;
+          color: oklch(0.65 0.18 25) !important;
+          border-color: color-mix(in oklab, oklch(0.65 0.18 25) 30%, transparent) !important;
         }
         
         .li-btn-delete:hover {
-          background: rgba(248, 113, 113, 0.15) !important;
+          background: color-mix(in oklab, oklch(0.65 0.18 25) 15%, transparent) !important;
         }
       `}</style>
     </div>
