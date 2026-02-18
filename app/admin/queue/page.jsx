@@ -143,7 +143,7 @@ export default function AdminQueue() {
               onClick={() => handleSelectPost(post)}
               className={`p-4 rounded-lg cursor-pointer transition ${
                 selected?._id === post._id
-                  ? 'bg-[--lux-accent]/20 border-2 border-[--lux-accent]'
+                  ? 'bg-blue-500/20 border-2 border-blue-400/40'
                   : 'bg-white/5 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -151,9 +151,9 @@ export default function AdminQueue() {
                 <h3 className="text-white font-bold flex-1">{post.title}</h3>
                 <span
                   className={`text-xs px-2 py-1 rounded ${
-                    post.type === 'impact' ? '' : 'bg-purple-900/50 text-purple-300'
+                    post.type === 'impact' ? '' : 'bg-white/5 text-gray-300'
                   }`}
-                  style={post.type === 'impact' ? { background: 'color-mix(in oklab, oklch(0.72 0.12 240) 15%, transparent)', color: 'oklch(0.72 0.12 240)' } : undefined}
+                  style={post.type === 'impact' ? { background: 'rgba(100,150,255,0.12)', color: 'oklch(0.72 0.10 240)' } : undefined}
                 >
                   {post.type}
                 </span>
@@ -183,21 +183,21 @@ export default function AdminQueue() {
           <div className="space-y-6 max-h-screen overflow-y-auto">
             {/* Original Content */}
             <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-              <h4 className="text-[--lux-accent] font-bold mb-2">📄 ORIGINAL SUBMISSION:</h4>
+              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.10 240)' }}>📄 ORIGINAL SUBMISSION:</h4>
               <div className="text-white whitespace-pre-wrap text-sm">
                 {selected.incident_description || selected.article_content}
               </div>
               
               {selected.evidence && (
                 <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-[--lux-accent] font-semibold text-sm mb-1">Evidence provided:</p>
+                  <p className="font-semibold text-sm mb-1" style={{ color: 'oklch(0.72 0.10 240)' }}>Evidence provided:</p>
                   <p className="text-gray-300 text-sm">{selected.evidence}</p>
                 </div>
               )}
               
               {selected.author_credentials && (
                 <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-[--lux-accent] font-semibold text-sm mb-1">Author Credentials:</p>
+                  <p className="font-semibold text-sm mb-1" style={{ color: 'oklch(0.72 0.10 240)' }}>Author Credentials:</p>
                   <p className="text-gray-300 text-sm">{selected.author_credentials}</p>
                 </div>
               )}
@@ -209,7 +209,7 @@ export default function AdminQueue() {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-sm hover:underline"
-                    style={{ color: 'oklch(0.72 0.12 240)' }}
+                    style={{ color: 'oklch(0.72 0.10 240)' }}
                   >
                     🔗 View LinkedIn Profile
                   </a>
@@ -219,20 +219,20 @@ export default function AdminQueue() {
 
             {/* Enhanced Version Editor */}
             <div>
-              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.14 155)' }}>✨ YOUR ENHANCED VERSION:</h4>
+              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.10 240)' }}>✨ YOUR ENHANCED VERSION:</h4>
               <textarea
                 value={enhanced}
                 onChange={(e) => setEnhanced(e.target.value)}
                 rows={15}
                 className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white text-sm font-mono focus:outline-none"
-                style={{ '--tw-ring-color': 'oklch(0.72 0.14 155)' }}
+                style={{ '--tw-ring-color': 'oklch(0.72 0.10 240)' }}
                 placeholder="Add data, sources, context, impact analysis..."
               />
             </div>
 
             {/* Image Selection */}
             <div>
-              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.12 240)' }}>🖼️ IMAGE:</h4>
+              <h4 className="font-bold mb-2" style={{ color: 'oklch(0.72 0.10 240)' }}>🖼️ IMAGE:</h4>
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
@@ -245,7 +245,7 @@ export default function AdminQueue() {
                 <button
                   onClick={searchUnsplash}
                   className="px-4 py-2 text-white rounded"
-                  style={{ backgroundColor: 'oklch(0.72 0.12 240)' }}
+                  style={{ backgroundColor: 'oklch(0.72 0.10 240)' }}
                 >
                   Search
                 </button>
@@ -323,7 +323,7 @@ export default function AdminQueue() {
               <button
                 onClick={handleApprove}
                 className="flex-1 py-3 text-white font-bold rounded-lg"
-                style={{ backgroundColor: 'oklch(0.72 0.14 155)' }}
+                style={{ backgroundColor: 'oklch(0.72 0.10 240)' }}
               >
                 ✅ Approve & Publish
               </button>
@@ -331,7 +331,7 @@ export default function AdminQueue() {
               <button
                 onClick={handleReject}
                 className="flex-1 py-3 text-white font-bold rounded-lg"
-                style={{ backgroundColor: 'oklch(0.65 0.18 25)' }}
+                style={{ backgroundColor: 'oklch(0.45 0.08 280)' }}
               >
                 ❌ Reject
               </button>

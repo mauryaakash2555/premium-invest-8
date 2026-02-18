@@ -11,7 +11,7 @@
   --sa-border-hover: oklch(0.30 0.01 85 / 0.18);
   --sa-text: oklch(0.95 0.01 85);
   --sa-muted: oklch(0.65 0.01 85);
-  --sa-accent: var(--lux-accent, oklch(0.78 0.08 65));
+  --sa-accent: oklch(0.72 0.10 240);
   --sa-sidebar: 260px;
   --sa-radius: 14px;
   --sa-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -509,7 +509,7 @@
 }
 .sa-loginBtn:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.14); transform: translateY(-1px); }
 .sa-loginError { color: rgba(255,180,180,0.9); font-size: 12px; }
-.sa-loginWarn { color: var(--sa-accent); font-size: 12px; }
+.sa-loginWarn { color: oklch(0.72 0.10 240); font-size: 12px; }
 .sa-loginHint { margin-top: 16px; color: var(--sa-muted); font-size: 11px; text-align: center; }
 
 /* ─── Misc ─── */

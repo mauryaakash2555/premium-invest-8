@@ -71,14 +71,14 @@ export default function RevenueDashboardPage() {
             fontWeight: 300,
             letterSpacing: '2px',
             fontFamily: '"Playfair Display", serif',
-            color: 'var(--lux-accent)',
+            color: 'oklch(0.72 0.10 240)',
           }}
         >
           Revenue Dashboard
         </h1>
 
         <div style={{ marginBottom: '18px' }}>
-          <div style={{ color: 'var(--lux-accent)', fontWeight: 700, marginBottom: '8px' }}>Admin Token (Optional)</div>
+          <div style={{ color: 'oklch(0.72 0.10 240)', fontWeight: 700, marginBottom: '8px' }}>Admin Token (Optional)</div>
           <input
             value={adminToken}
             onChange={(e) => {
@@ -133,7 +133,7 @@ export default function RevenueDashboardPage() {
             <div>Affiliates: ₹{est.affiliates.toLocaleString()}</div>
             <div>Sponsored: ₹{est.sponsored.toLocaleString()}</div>
             <div>Newsletter: ₹{est.newsletter.toLocaleString()}</div>
-            <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.10)', color: 'var(--lux-accent)', fontWeight: 900 }}>
+            <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.10)', color: 'oklch(0.72 0.10 240)', fontWeight: 900 }}>
               Total: ₹{total.toLocaleString()}
             </div>
           </div>
