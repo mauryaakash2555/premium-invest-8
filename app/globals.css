@@ -654,27 +654,29 @@ a.bm-cta-gold-flat:focus-visible {
   }
 
   .ambient-glow-pulse {
-    animation: ambient-pulse 3s ease-in-out infinite;
+    position: relative;
   }
 
-  @keyframes ambient-pulse {
-    0%,
-    100% {
-      box-shadow:
-        0 0 20px color-mix(in oklab, var(--lux-accent) 18%, transparent),
-        0 0 40px color-mix(in oklab, var(--lux-accent) 12%, transparent),
-        inset 0 0 20px color-mix(in oklab, var(--lux-accent) 3%, transparent);
-    }
-    50% {
-      box-shadow:
-        0 0 30px color-mix(in oklab, var(--lux-accent) 22%, transparent),
-        0 0 60px color-mix(in oklab, var(--lux-accent) 16%, transparent),
-        inset 0 0 30px color-mix(in oklab, var(--lux-accent) 5%, transparent);
-    }
+  .ambient-glow-pulse::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      0 0 20px color-mix(in oklab, var(--lux-accent) 18%, transparent),
+      0 0 40px color-mix(in oklab, var(--lux-accent) 12%, transparent),
+      inset 0 0 20px color-mix(in oklab, var(--lux-accent) 3%, transparent);
+    animation: ambient-pulse-opacity 3s ease-in-out infinite;
+  }
+
+  @keyframes ambient-pulse-opacity {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
   }
 
   .premium-hover-glow {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .premium-hover-glow:hover {

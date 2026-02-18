@@ -25,7 +25,7 @@ const SERVICES = [
     ],
     image: PMS_IMAGE,
     imagePresentation: {
-      quality: 90,
+      quality: 75,
     },
     link: '/portfolio-management',
   },
@@ -46,7 +46,7 @@ const SERVICES = [
     ],
     image: MUTUAL_FUNDS_IMAGE,
     imagePresentation: {
-      quality: 90,
+      quality: 75,
     },
     link: '/mutual-funds',
   },
@@ -67,7 +67,7 @@ const SERVICES = [
     ],
     image: '/services/Insurance.png',
     imagePresentation: {
-      quality: 90,
+      quality: 75,
       objectPosition: '50% 50%',
     },
     link: '/insurance',
@@ -89,7 +89,7 @@ const SERVICES = [
     ],
     image: '/services/SIP.png',
     imagePresentation: {
-      quality: 90,
+      quality: 75,
       objectPosition: '50% 50%',
     },
     link: '/sip',
@@ -111,7 +111,7 @@ const SERVICES = [
     ],
     image: '/services/Trading%20Service.png',
     imagePresentation: {
-      quality: 90,
+      quality: 75,
       // Lower the crop so any text near the bottom stays visible
       objectPosition: '50% 65%',
     },
@@ -134,7 +134,7 @@ const SERVICES = [
     ],
     image: '/services/FD.png',
     imagePresentation: {
-      quality: 90,
+      quality: 75,
       objectPosition: '50% 50%',
     },
     link: '/fixed-deposits',

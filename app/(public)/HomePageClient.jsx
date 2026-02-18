@@ -81,16 +81,25 @@ export default function HomePageClient() {
             left: 0,
             right: 0,
             height: '100%',
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            // Premium dark mood - visible but not distracting
-            opacity: 0.6,
-            filter: 'brightness(1.0) saturate(1.1) contrast(1.2)',
             zIndex: 1,
           }}
-        />
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75"
+            alt=""
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            quality={75}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center',
+              opacity: 0.6,
+              filter: 'brightness(1.0) saturate(1.1) contrast(1.2)',
+            }}
+          />
+        </div>
 
         {/* Animated Clouds with lightning effect (client-only to avoid hydration mismatch) */}
         {mounted ? <AnimatedClouds enableRain={rainEnabled} enableLightning={true} /> : null}

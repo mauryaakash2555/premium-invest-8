@@ -95,11 +95,11 @@ const Navigation = () => {
     ) : (
       <Link
         href={path}
-        className="bm-navlink group relative text-[12px] font-medium transition-all duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
+        className="bm-navlink group relative text-[12px] font-medium transition-[color,transform] duration-300 uppercase tracking-[2.5px] no-underline text-white/90 hover:text-white hover:scale-105"
       >
         {label}
         <span
-          className="absolute -bottom-2 left-1/2 w-0 h-[1px] transition-all duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
+          className="absolute -bottom-2 left-1/2 w-0 h-[1px] transition-[left,width] duration-300 group-hover:left-0 group-hover:w-full pointer-events-none bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent"
           aria-hidden="true"
         />
       </Link>
@@ -127,14 +127,14 @@ const Navigation = () => {
       <div className="flex flex-col">
         <div className="flex items-center gap-3">
           <span 
-            className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-all duration-500 group-hover:tracking-[3.5px] gold-gradient-text nav-logo-text"
+            className="font-serif font-bold tracking-[2px] whitespace-nowrap transition-[letter-spacing] duration-500 group-hover:tracking-[3.5px] gold-gradient-text nav-logo-text"
             style={{ fontSize }}
           >
             BM Wealth
           </span>
         </div>
         {/* Luxury Subline Underline */}
-        <div className="h-[1px] w-0 group-hover:w-full bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent transition-all duration-700 mx-auto mt-1" />
+        <div className="h-[1px] w-0 group-hover:w-full bg-gradient-to-r from-transparent via-[color:var(--lux-accent)] to-transparent transition-[width] duration-700 mx-auto mt-1" />
       </div>
     </Link>
   );

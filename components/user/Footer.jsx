@@ -283,7 +283,7 @@ return (
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                        className="text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
                         style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                       >
                         {link.label}
@@ -291,7 +291,7 @@ return (
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                        className="text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
                         style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                       >
                         {link.label}
@@ -313,7 +313,7 @@ return (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                      className="text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
                       style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                     >
                       {link.label}
@@ -334,7 +334,7 @@ return (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[14px] md:text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
+                      className="text-[14px] md:text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium premium-side-line hover:drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]"
                       style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}
                     >
                       {link.label}
@@ -353,11 +353,11 @@ return (
               <div className="space-y-8 text-[15px] text-center lg:text-left font-semibold" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>
                 <div className="space-y-2">
                   <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Phone</p>
-                  <p className="m-0 transition-all cursor-pointer text-base md:text-lg tracking-wider hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>+91 8850977259</p>
+                  <p className="m-0 transition-[color,opacity,filter,transform] cursor-pointer text-base md:text-lg tracking-wider hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>+91 8850977259</p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Email</p>
-                  <p className="m-0 transition-all cursor-pointer tracking-wide break-all hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>support@bmwealth.co.in</p>
+                  <p className="m-0 transition-[color,opacity,filter,transform] cursor-pointer tracking-wide break-all hover:drop-shadow-[0_0_10px_oklch(0.78_0.08_65_/_0.5)]" style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}>support@bmwealth.co.in</p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-[10px] uppercase tracking-[2px] m-0" style={{ color: 'oklch(0.78 0.08 65)' }}>Location</p>
@@ -365,7 +365,7 @@ return (
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start hover:text-[oklch(0.78_0.08_65)] hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.55)]"
+                    className="m-0 flex items-center gap-2 transition-[color,opacity,filter,transform] duration-300 no-underline italic font-bold group justify-center lg:justify-start hover:text-[oklch(0.78_0.08_65)] hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.55)]"
                     style={{ color: 'oklch(0.95 0.01 85 / 0.80)' }}
                   >
                     <MapPin className="w-4 h-4 transition-transform group-hover:scale-125" />
@@ -386,7 +386,7 @@ return (
                 onTouchStart={() => setIsWHAActive(true)}
                 onTouchEnd={() => setIsWHAActive(false)}
                 ref={whatsAppCardRef}                className={cn(
-                  "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5",
+                  "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0 px-4 md:px-5",
                   (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                 )}
                 style={{ 
@@ -399,7 +399,7 @@ return (
               >
                 {/* Dynamic Expansion - Brown to Green from Inside */}
                 <div 
-                  className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
+                  className="absolute inset-0 pointer-events-none transition-[color,opacity,filter,transform] duration-1000 ease-out"
                   style={{ 
                     background: isWHAActive 
                       ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
@@ -420,7 +420,7 @@ return (
                 <div className="relative z-20 flex items-center gap-4">
                   {/* Inner Emoji Container */}
                   <div 
-                    className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
                       borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
@@ -472,8 +472,8 @@ return (
             <div ref={sebiRef} className={cn("premium-half-line group", sebiActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setSebiActive(true); setTimeout(() => setSebiActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Market Risk Disclosure</h4>
-                <p className="text-[13px] leading-relaxed font-light m-0 transition-all group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-[color,opacity,filter,transform] group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Market Risk Disclosure</h4>
+                <p className="text-[13px] leading-relaxed font-light m-0 transition-[color,opacity,filter,transform] group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
                   Investments in securities market are subject to market risks. Read all the related documents carefully before investing. Past performance is not indicative of future returns. 
                 </p>
               </div>
@@ -482,8 +482,8 @@ return (
             <div ref={noticeRef} className={cn("premium-half-line group", noticeActive && "is-scroll-active")} onTouchStart={() => { if (!isMobile) return; setNoticeActive(true); setTimeout(() => setNoticeActive(false), 2500); }}>
               <div className="side-line" />
               <div className="space-y-3 text-left">
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Investment Notice</h4>
-                <p className="text-[13px] leading-relaxed font-light m-0 transition-all group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] m-0 transition-[color,opacity,filter,transform] group-hover:text-white group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.08_65_/_0.6)]" style={{ color: 'oklch(0.78 0.08 65)' }}>Investment Notice</h4>
+                <p className="text-[13px] leading-relaxed font-light m-0 transition-[color,opacity,filter,transform] group-hover:drop-shadow-[0_0_8px_oklch(0.95_0.01_85_/_0.3)]" style={{ color: 'oklch(0.55 0.01 85)' }}>
                   Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. BM Wealth acts as a distributor, not a manufacturer.
                 </p>
               </div>

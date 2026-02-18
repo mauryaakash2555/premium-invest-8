@@ -139,7 +139,7 @@ const LaserNewsletterSignup = () => {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="rounded-xl px-7 py-3 text-sm font-semibold transition-all duration-300"
+              className="rounded-xl px-7 py-3 text-sm font-semibold transition-[color,opacity,filter,transform] duration-300"
               style={{
                 background: 'transparent',
                 border: `1px solid ${COLORS.accent}`,
@@ -505,7 +505,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium laser-footer-link"
+                      className="text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium laser-footer-link"
                       style={{ color: COLORS.body }}
                       onClick={(e) => handleInternalLinkClick(e, link.href, link.label)}
                       onMouseEnter={(e) => e.target.style.color = COLORS.title}
@@ -532,7 +532,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium"
+                      className="text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium"
                       style={{ color: COLORS.body }}
                       onClick={(e) => handleInternalLinkClick(e, link.href, link.label)}
                       onMouseEnter={(e) => e.target.style.color = COLORS.title}
@@ -559,7 +559,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[14px] md:text-[15px] transition-all duration-500 no-underline justify-center lg:justify-start font-medium"
+                      className="text-[14px] md:text-[15px] transition-[color,opacity,filter,transform] duration-500 no-underline justify-center lg:justify-start font-medium"
                       style={{ color: COLORS.body }}
                       onMouseEnter={(e) => e.target.style.color = COLORS.title}
                       onMouseLeave={(e) => e.target.style.color = COLORS.body}
@@ -609,7 +609,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="m-0 flex items-center gap-2 transition-all duration-300 no-underline italic font-bold group justify-center lg:justify-start"
+                    className="m-0 flex items-center gap-2 transition-[color,opacity,filter,transform] duration-300 no-underline italic font-bold group justify-center lg:justify-start"
                     style={{ color: COLORS.body }}
                     onMouseEnter={(e) => e.target.style.color = COLORS.title}
                     onMouseLeave={(e) => e.target.style.color = COLORS.body}
@@ -633,7 +633,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                 onTouchEnd={() => setIsWHAActive(false)}
                 ref={whatsAppCardRef}
                 className={cn(
-                  "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-all duration-500 mx-auto lg:mx-0 px-4 md:px-5",
+                  "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0 px-4 md:px-5",
                   (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                 )}
                 style={{ 
@@ -646,7 +646,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
               >
                 {/* Dynamic Expansion */}
                 <div 
-                  className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-out"
+                  className="absolute inset-0 pointer-events-none transition-[color,opacity,filter,transform] duration-1000 ease-out"
                   style={{ 
                     background: isWHAActive 
                       ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)' 
@@ -666,7 +666,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                 {/* Content Container */}
                 <div className="relative z-20 flex items-center gap-4">
                   <div 
-                    className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                     style={{ 
                       borderColor: isWHAPremium ? '#25D366' : COLORS.border,
                       transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)'
@@ -729,7 +729,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
             >
               {/* Glowing side line */}
               <div 
-                className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-500"
+                className="absolute left-0 top-0 bottom-0 w-[2px] transition-[color,opacity,filter,transform] duration-500"
                 style={{
                   background: sebiActive 
                     ? `linear-gradient(180deg, transparent 0%, ${COLORS.accentStrong} 20%, ${COLORS.accentStrong} 80%, transparent 100%)`
@@ -764,7 +764,7 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
             >
               {/* Glowing side line */}
               <div 
-                className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-500"
+                className="absolute left-0 top-0 bottom-0 w-[2px] transition-[color,opacity,filter,transform] duration-500"
                 style={{
                   background: noticeActive 
                     ? `linear-gradient(180deg, transparent 0%, ${COLORS.accentStrong} 20%, ${COLORS.accentStrong} 80%, transparent 100%)`

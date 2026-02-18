@@ -22,6 +22,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -103,17 +104,15 @@ export default function BlogCard({ post, variant = 'default' }) {
           >
           {/* Editorial full-image background (covers entire card) */}
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={post.image_url || post.image}
               alt=""
-              className="blog-card-home-bg-img"
+              fill
+              quality={75}
+              sizes="(max-width: 768px) 100vw, 50vw"
               style={{
-                width: '100%',
-                height: '100%',
                 objectFit: 'cover',
                 objectPosition: isMobile ? '50% 30%' : '62% 42%',
-                display: 'block',
               }}
             />
           </div>
