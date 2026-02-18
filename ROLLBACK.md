@@ -1,121 +1,67 @@
 # 🚨 EMERGENCY ROLLBACK GUIDE
 
-## ✅ Staging Lock (Jan 5, 2026)
+## ✅ Current Lock (February 18, 2026)
 
-**Lock commit (known-good):** `012dde3` (`012dde31412dbe53177aa5b6533281adb39e8b4d`)
+**Lock commit (known-good):** `ba9af36` (`ba9af3662ee10bcc595e74441db981b0be80926a`)
+**Git tag:** `LOCKED_SITE_2026-02-18`
 
 This lock includes:
-- Property vs SIP WhatsApp follow-up scheduling
-- WhatsApp follow-up cron runner + webhook verification
-- Cron auth aligned with existing `CRON_SECRET` Bearer pattern
+- Live Intelligence feed pipeline fully working (RSS fallback with freshness fix)
+- Live Mood pipeline working (NSE indices → rule-based or Gemini mood text)
+- Homepage MarketMoodStrip + HeadlineFeed rendering correctly
+- Fetch timeouts for Vercel serverless resilience
+- All prior ITR, chat, blog, and service features intact
 
-### Fast rollback options (staging)
+### Fast rollback options
 
-**Option A: Vercel Dashboard (fastest)**
-- Go to Vercel → Project → Deployments → select the last good deployment → **Promote**.
+**Option A: Vercel Dashboard (fastest — 30 seconds)**
+- Go to Vercel → Project → Deployments → select the deployment for `ba9af36` → **Promote to Production**.
 
-**Option B: Git reset to lock commit (fast + deterministic)**
+**Option B: Git reset to lock tag (fast + deterministic)**
 ```bash
 cd "C:\Users\admin\premium-invest-8"
-git checkout staging
 git fetch origin
-git reset --hard 012dde31412dbe53177aa5b6533281adb39e8b4d
-git push --force-with-lease origin staging
+git reset --hard LOCKED_SITE_2026-02-18
+git push --force-with-lease origin main
+git push --force-with-lease origin main:staging
 ```
 
 **Option C: Git revert (safer history, slower)**
-- Revert the newer commits (no force-push), then push.
-
----
-
-## If Contact Form Breaks After Deployment
-
-### ⚡ INSTANT ROLLBACK (30 seconds):
-
-**Method 1: Vercel Dashboard (FASTEST)**
-1. Go to: https://vercel.com/dashboard
-2. Click on your project
-3. Go to "Deployments" tab
-4. Find the deployment BEFORE the contact form change
-5. Click "..." menu on that deployment
-6. Click "Promote to Production"
-7. ✅ Done! Live site reverted in 30 seconds
-
----
-
-**Method 2: Git Revert (2 minutes)**
 ```bash
-cd "C:\Users\admin\premium-invest-8"
+# Revert the newer commits one by one, then push.
 git revert HEAD
 git push origin main
 ```
-Vercel auto-deploys the previous version
 
 ---
 
-**Method 3: Quick File Change (1 minute)**
-File: `frontend/src/pages/Contact.js`
+## 🔍 HOW TO KNOW IF ROLLBACK IS NEEDED:
 
-Find line:
-```javascript
-const API_URL = '/api/contact'; // New Vercel endpoint
-```
+**Check Live Intelligence endpoints:**
+1. `https://www.bmwealth.co.in/api/live-intelligence/feed?limit=8&nocache=1` → should return `headlines` array with items
+2. `https://www.bmwealth.co.in/api/live-intelligence/mood?nocache=1` → should return real mood text (not "temporarily unavailable")
+3. `https://www.bmwealth.co.in/api/live-intelligence/indices-snapshot?nocache=1` → should return indices array
 
-Change to:
-```javascript
-const API_URL = 'https://bmwealth-backend.onrender.com/api/contact'; // Old Render backend
-```
-
-Save, commit, push:
-```bash
-git add frontend/src/pages/Contact.js
-git commit -m "fix: Revert to Render backend temporarily"
-git push origin main
-```
-
----
-
-### 🔍 HOW TO KNOW IF ROLLBACK IS NEEDED:
+**Check homepage:**
+1. Go to: https://www.bmwealth.co.in
+2. Scrolling mood strip should show live headlines
+3. Mood text should show Nifty/Bank Nifty percentages
 
 **Check contact form:**
-1. Go to: https://bmwealth.co.in/contact
-2. Fill form and submit
-3. If shows error or doesn't work after 10 seconds → ROLLBACK
-
-**Check Vercel deployment:**
-1. Go to Vercel Dashboard → Deployments
-2. If latest deployment shows "Failed" → ROLLBACK
+1. Go to: https://www.bmwealth.co.in/contact
+2. Fill form and submit — should succeed
 
 ---
 
-### ✅ AFTER ROLLBACK:
+## ✅ AFTER ROLLBACK:
 
-Your website will be exactly as it was before:
-- ✅ Contact form works (via Render backend)
+Your website will be exactly as it was on February 18, 2026:
+- ✅ Live Intelligence headlines working (RSS fallback)
+- ✅ Live Mood text showing real market data
 - ✅ All other pages unaffected
 - ✅ No data lost
-- ✅ No content changed
-
-Then you can debug the issue offline and re-deploy when fixed.
 
 ---
 
-### 📞 IF YOU NEED HELP:
-
-**The changes only affected:**
-- `api/contact.js` (new serverless function)
-- `frontend/src/pages/Contact.js` (API endpoint change)
-
-**Everything else is untouched:**
-- ✅ Blog content
-- ✅ Home/About/Services pages
-- ✅ Navigation
-- ✅ Styling
-- ✅ Database
-
-**Contact form is isolated - safe to experiment!**
-
----
-
-**Last Updated:** December 14, 2025  
-**Created for:** Vercel Serverless Migration Safety
+**Last Updated:** February 18, 2026
+**Created for:** Live Intelligence Pipeline Fix Lock

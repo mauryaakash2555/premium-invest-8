@@ -1,156 +1,71 @@
 # 🔒 BACKUP & RECOVERY GUIDE
-## Created: January 6, 2026
+## Last Updated: February 18, 2026
 
 ---
 
-## ✅ Current Lock (January 28, 2026)
+## ✅ Current Lock (February 18, 2026)
 
-### Live Intelligence locked folder (fast restore)
+**Lock commit:** `ba9af36` (`ba9af3662ee10bcc595e74441db981b0be80926a`)
+**Git tag:** `LOCKED_SITE_2026-02-18`
+**Branch:** `main` (= `origin/main` = `origin/staging`)
 
-- Folder: `backup/live-intelligence-locked-2026-01-28/`
-- Restore steps: see `backup/live-intelligence-locked-2026-01-28/RESTORE_GUIDE.md`
+### What's locked:
+- Live Intelligence feed/mood pipeline: fully working
+- Homepage MarketMoodStrip + headline rotation: verified live
+- RSS fallback with freshness-filter bypass for live feeds
+- Mood text from NSE indices (rule-based or Gemini)
+- Fetch timeouts for serverless resilience
+- All ITR, chat, blog, calculator, and service features
 
-### Full website zip snapshot (clean backup)
+### Instant rollback:
+```powershell
+cd "C:\Users\admin\premium-invest-8"
+git fetch origin
+git reset --hard LOCKED_SITE_2026-02-18
+git push --force-with-lease origin main
+git push --force-with-lease origin main:staging
+```
 
-- Script: `.tools/backup-site.ps1`
-- Output: `backup/site-snapshots/<timestamp>_<name>/repo.zip`
-
+Or: Vercel Dashboard → Deployments → Promote the `ba9af36` deployment.
 
 ---
 
-## 🛡️ MULTIPLE LAYERS OF PROTECTION
+## 🛡️ BACKUP LAYERS
 
-Your codebase has **5 independent backup layers**. If anything goes wrong, you can recover.
+### 1. Git Tag (primary lock)
+- **Tag:** `LOCKED_SITE_2026-02-18`
+- **Commit:** `ba9af36`
+- Restore: `git reset --hard LOCKED_SITE_2026-02-18`
 
----
+### 2. GitHub Remote (cloud backup)
+- Both `origin/main` and `origin/staging` at `ba9af36`
+- Full repo clone: `git clone https://github.com/mauryaakash2555/premium-invest-8.git`
 
-## 1️⃣ GIT TAG (Locked Production Build)
+### 3. Vercel Deployments (production snapshots)
+- Every push creates an immutable deployment on Vercel
+- Promote any past deployment from Vercel Dashboard → Deployments
 
-**Tag Name:** `LOCKED_GOOD_BUILD_2026-01-06`  
-**Commit:** `cbff0d3` (Property vs SIP copy update)  
-**Location:** Local + GitHub
-
-### To restore:
-```powershell
-git checkout LOCKED_GOOD_BUILD_2026-01-06
-# or create a branch from it:
-git checkout -b recovery-from-tag LOCKED_GOOD_BUILD_2026-01-06
-```
-
----
-
-## 2️⃣ BACKUP BRANCH (All Local Changes Preserved)
-
-**Branch:** `backup/pre-cleanup-2026-01-06`  
-**Commit:** `7ebd690`  
-**Location:** Local + GitHub (`origin/backup/pre-cleanup-2026-01-06`)
-
-### To restore all deleted/modified files:
-```powershell
-git checkout backup/pre-cleanup-2026-01-06
-# or cherry-pick specific files:
-git checkout backup/pre-cleanup-2026-01-06 -- path/to/specific/file.jsx
-```
+### 4. Local Working Copy
+- `C:\Users\admin\premium-invest-8\` — clean working tree
 
 ---
 
-## 3️⃣ DELETED FILES FOLDER
+## 📝 NOTES FOR AI AGENTS
 
-**Location:** `C:\Users\admin\BACKUPS_premium-invest-8\DELETED_FILES\`  
-**Contents:** 210+ files that were deleted from your working tree
-
-### To recover a specific file:
-```powershell
-# Example: recover PropertyVsSipCalculator.jsx
-Copy-Item "C:\Users\admin\BACKUPS_premium-invest-8\DELETED_FILES\components\calculators\PropertyVsSipCalculator.jsx" `
-          "C:\Users\admin\premium-invest-8\components\calculators\"
-```
-
-### File categories recovered:
-- `app/tools/*` - Calculator pages
-- `app/api/*` - API routes (razorpay, email, pdf, etc.)
-- `components/calculators/*` - All calculator components
-- `components/shared/*` - Shared UI components
-- `lib/*` - Utility libraries (pdf, email templates, etc.)
-- `scripts/*` - Development scripts
+- **Always check `ROLLBACK.md`** for the current lock commit before making changes
+- **Always verify endpoints** after deployment (feed, mood, indices-snapshot)
+- **Tag new locks** with `LOCKED_SITE_<date>` pattern
+- **Push tags** with `git push origin <tag>`
 
 ---
 
-## 4️⃣ GIT STASH
-
-**Check available stashes:**
+**If anything fails after a future deployment, run:**
 ```powershell
-git stash list
+git reset --hard LOCKED_SITE_2026-02-18
+git push --force-with-lease origin main
+git push --force-with-lease origin main:staging
 ```
 
-**Key stash:** `BACKUP_2026-01-06_all_local_changes_before_cleanup`
-
-### To recover:
-```powershell
-git stash apply stash@{0}
-# or pop (apply + remove from stash list):
-git stash pop stash@{0}
-```
-
----
-
-## 5️⃣ GITHUB REMOTE
-
-All important branches and tags are pushed to GitHub:
-
-| Type | Name | Commit |
-|------|------|--------|
-| Tag | `LOCKED_GOOD_BUILD_2026-01-06` | `cbff0d3` |
-| Branch | `backup/pre-cleanup-2026-01-06` | `7ebd690` |
-| Branch | `main` | `cbff0d3` |
-| Branch | `staging` | `cbff0d3` |
-
----
-
-## 🔄 QUICK RECOVERY SCENARIOS
-
-### "I need to go back to the exact production build"
-```powershell
-git checkout main
-git reset --hard LOCKED_GOOD_BUILD_2026-01-06
-```
-
-### "I need a deleted calculator component"
-```powershell
-git checkout backup/pre-cleanup-2026-01-06 -- components/calculators/PropertyVsSipCalculator.jsx
-```
-
-### "I need all the deleted API routes back"
-```powershell
-git checkout backup/pre-cleanup-2026-01-06 -- app/api/
-```
-
-### "I want to see what files were different"
-```powershell
-git diff main..backup/pre-cleanup-2026-01-06 --stat
-```
-
-### "I need everything back exactly as it was before cleanup"
-```powershell
-git checkout backup/pre-cleanup-2026-01-06
-```
-
----
-
-## ⚠️ DO NOT DELETE
-
-- Tag: `LOCKED_GOOD_BUILD_2026-01-06`
-- Branch: `backup/pre-cleanup-2026-01-06`  
-- Folder: `C:\Users\admin\BACKUPS_premium-invest-8\`
-
----
-
-## 📋 BACKUP INVENTORY
-
-| Item | Count |
-|------|-------|
-| Deleted files recovered | 210+ |
-| Git stashes available | 8 |
 | Backup branches | 5 |
 | Remote backup branches | 6+ |
 
