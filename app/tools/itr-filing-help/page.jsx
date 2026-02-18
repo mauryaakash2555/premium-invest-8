@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { getMetadataBase, SITE_NAME } from '@/lib/seo/metadata';
 import { ArrowRight } from 'lucide-react';
@@ -66,6 +66,140 @@ export default function ITRFilingHelp() {
   const [fileInputKey, setFileInputKey] = useState(0);
 
   const allVerified = Object.values(verified).every(v => v);
+
+  /** Generate a real PDF using jsPDF and trigger download */
+  const generateRealPdf = useCallback(async (overrideData) => {
+    const d = overrideData || paymentSuccessData || {};
+    const fmtMoney = (n) => `₹${Math.round(Number(n || 0)).toLocaleString('en-IN')}`;
+    const oldTax = Number(d.oldRegimeTax ?? taxResult?.oldRegime?.tax ?? 0);
+    const newTax = Number(d.newRegimeTax ?? taxResult?.newRegime?.tax ?? 0);
+    const savings = Number(d.savings ?? taxResult?.savings ?? 0);
+    const usedRegime = String(d.regime ?? taxResult?.recommended ?? '').toLowerCase();
+    const recommended = usedRegime === 'old' || usedRegime === 'new' ? usedRegime : (oldTax <= newTax ? 'old' : 'new');
+    const netIncome = Number(d.netTaxableIncome ?? 0);
+    const grossSalary = Number(d.grossSalary ?? fields?.grossSalary ?? 0);
+    const tds = Number(d.tds ?? fields?.tds ?? 0);
+    const standardDeduction = Number(d.standardDeduction ?? fields?.standardDeduction ?? 0);
+    const deductions80C = Number(d.deductions80C ?? fields?.deductions80C ?? 0);
+    const selectedTax = recommended === 'old' ? oldTax : newTax;
+    const diff = Math.round(selectedTax - tds);
+    const taxOrRefund = diff > 0 ? `${fmtMoney(diff)} (Tax Payable)` : diff < 0 ? `${fmtMoney(Math.abs(diff))} (Refund Due)` : `${fmtMoney(0)} (Nil)`;
+
+    try {
+      const { default: jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      const pw = doc.internal.pageSize.getWidth();
+      let y = 20;
+      const lm = 18;
+      const rm = pw - 18;
+
+      // Header
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text('BM Wealth', lm, y);
+      y += 8;
+      doc.setFontSize(14);
+      doc.text('Educational ITR Summary', lm, y);
+      y += 6;
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(120);
+      doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, lm, y);
+      doc.setTextColor(0);
+      y += 10;
+
+      // Divider
+      doc.setDrawColor(200);
+      doc.line(lm, y, rm, y);
+      y += 8;
+
+      // Details table
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Your ITR Details', lm, y);
+      y += 8;
+
+      const rows = [
+        ['Employee PAN', String(d.employeePAN ?? itrDetails?.employeePAN ?? '—')],
+        ['Employer Name', String(d.employerName ?? itrDetails?.employerName ?? '—')],
+        ['Employer TAN', String(d.employerTAN ?? itrDetails?.employerTAN ?? '—')],
+        ['Assessment Year', String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '—')],
+        ['Gross Salary', fmtMoney(grossSalary)],
+        ['HRA Exemption', fmtMoney(Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0))],
+        ['Standard Deduction', fmtMoney(standardDeduction)],
+        ['80C Deductions', fmtMoney(deductions80C)],
+        ['Net Taxable Income', fmtMoney(netIncome)],
+        ['TDS Already Deducted', fmtMoney(tds)],
+        ['Tax Payable / Refund', taxOrRefund],
+        ['Recommended Regime', recommended === 'old' ? 'Old Regime' : 'New Regime'],
+      ];
+
+      doc.setFontSize(10);
+      for (const [label, val] of rows) {
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(100);
+        doc.text(label, lm, y);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0);
+        doc.text(String(val || '—'), lm + 60, y);
+        y += 7;
+      }
+      y += 4;
+
+      // Regime comparison
+      doc.setDrawColor(200);
+      doc.line(lm, y, rm, y);
+      y += 8;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0);
+      doc.text('Regime Comparison', lm, y);
+      y += 8;
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Old Regime — Tax: ${fmtMoney(oldTax)}`, lm, y);
+      y += 7;
+      doc.text(`New Regime — Tax: ${fmtMoney(newTax)}`, lm, y);
+      y += 7;
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Potential Savings: ${fmtMoney(savings)} (${recommended === 'old' ? 'Old' : 'New'} Regime)`, lm, y);
+      y += 10;
+
+      // Filing steps
+      doc.setDrawColor(200);
+      doc.line(lm, y, rm, y);
+      y += 8;
+      doc.setFontSize(12);
+      doc.text('Filing Steps', lm, y);
+      y += 8;
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      const steps = [
+        `1. Use gross salary ${fmtMoney(grossSalary)} and TDS ${fmtMoney(tds)} as base.`,
+        `2. Apply standard deduction ${fmtMoney(standardDeduction)}.`,
+        `3. Apply 80C deductions ${fmtMoney(deductions80C)}.`,
+        `4. Net taxable income: ${fmtMoney(netIncome)}.`,
+        `5. Recommended: ${recommended === 'old' ? 'Old' : 'New'} Regime.`,
+        `6. File ITR, then e-Verify (Aadhaar OTP). Keep Form 16 + AIS.`,
+      ];
+      for (const s of steps) {
+        doc.text(s, lm, y);
+        y += 6;
+      }
+      y += 6;
+
+      // Disclaimer
+      doc.setFontSize(8);
+      doc.setTextColor(140);
+      doc.text('Educational summary only. Not tax advice. — BM Wealth', lm, y);
+
+      doc.save('ITR-Summary-BM-Wealth.pdf');
+    } catch (err) {
+      console.error('[ITR] jsPDF generation failed, falling back to print:', err);
+      window.print();
+    }
+  }, [paymentSuccessData, taxResult, fields, itrDetails]);
 
   useEffect(() => {
     if (!copiedKey) return;
@@ -513,8 +647,19 @@ export default function ITRFilingHelp() {
         savings: taxResult?.savings || 0,
       };
 
+      // Persist to sessionStorage as a fallback
+      try {
+        window.sessionStorage.setItem('itr_data', JSON.stringify({
+          fields,
+          itrDetails,
+          taxResult,
+          verified,
+        }));
+      } catch (e) { /* ignore */ }
+
       const encoded = window.btoa(encodeURIComponent(JSON.stringify(data)));
-      const returnUrl = `https://www.bmwealth.co.in/tools/itr-filing-help?payment=success&d=${encoded}`;
+      const origin = window.location.origin || 'https://www.bmwealth.co.in';
+      const returnUrl = `${origin}/tools/itr-filing-help?payment=success&d=${encoded}`;
       const storeUrl = `https://store.bmwealth.co.in/products/tax-optimization-pdf?returnTo=${encodeURIComponent(returnUrl)}`;
       window.location.href = storeUrl;
     } catch (e) {
@@ -799,7 +944,7 @@ export default function ITRFilingHelp() {
               </div>
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => generateRealPdf()}
                 className="px-5 py-2 rounded-lg font-semibold bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] hover:opacity-90 transition"
               >
                 Download PDF

@@ -239,7 +239,7 @@ export default function ClientPortalPage() {
             >
               Your Wealth,{" "}
               <span style={{ 
-                background: "linear-gradient(135deg, var(--lux-accent) 0%, color-mix(in oklab, var(--lux-accent) 60%, white) 100%)",
+                background: "linear-gradient(135deg, #64B5F6 0%, rgba(200,220,255,0.95) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent"
               }}>

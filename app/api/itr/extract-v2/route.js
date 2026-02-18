@@ -1,5 +1,19 @@
 import { extractText } from 'unpdf';
 
+/** Best-effort save extraction to Supabase storage */
+async function persistExtraction(extractionResult) {
+  try {
+    const { uploadJson, extractionKey } = await import('@/lib/itr/remoteStore');
+    const sessionId = 'web-' + Date.now().toString(36);
+    const fileId = Math.random().toString(36).slice(2, 10);
+    const key = extractionKey({ sessionId, fileId });
+    await uploadJson({ key, obj: { ...extractionResult, storedAt: new Date().toISOString() } });
+  } catch (e) {
+    // Non-blocking — don't fail the extraction if storage is unavailable
+    console.warn('[ITR extract-v2] Failed to persist extraction:', e?.message || e);
+  }
+}
+
 export async function POST(request) {
   try {
     const formData = await request.formData();
@@ -116,7 +130,7 @@ export async function POST(request) {
     const found = Object.values(fields).filter(v => v > 0).length;
     const confidence = found >= 3 ? 0.95 : found >= 1 ? 0.75 : 0.5;
 
-    return Response.json({
+    const result = {
       success: true,
       isScanned: false,
       fields,
@@ -127,7 +141,12 @@ export async function POST(request) {
       hraExemption,
       regime,
       confidence,
-    });
+    };
+
+    // Persist extraction to Supabase (non-blocking)
+    persistExtraction(result).catch(() => {});
+
+    return Response.json(result);
 
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
