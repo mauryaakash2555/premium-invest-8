@@ -67,16 +67,19 @@ export default function ITRFilingHelp() {
 
   const allVerified = Object.values(verified).every(v => v);
 
-  /** Generate a professional, complete ITR Filing Summary PDF using jsPDF */
+  /** Generate a luxury-grade ITR Filing Summary PDF — premium design for HNIs */
   const generateRealPdf = useCallback(async (overrideData) => {
     const d = overrideData || paymentSuccessData || {};
-    const fmtMoney = (n) => `₹${Math.round(Number(n || 0)).toLocaleString('en-IN')}`;
+    const fmtMoney = (n) => {
+      const v = Math.round(Number(n || 0));
+      return '\u20B9' + v.toLocaleString('en-IN');
+    };
 
     // === Extract all values with fallbacks ===
-    const employeePAN = String(d.employeePAN ?? itrDetails?.employeePAN ?? '—').toUpperCase().trim() || '—';
-    const employerName = String(d.employerName ?? itrDetails?.employerName ?? '—').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || '—';
-    const employerTAN = String(d.employerTAN ?? itrDetails?.employerTAN ?? '—').toUpperCase().trim() || '—';
-    const assessmentYear = String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '—').trim() || '—';
+    const employeePAN = String(d.employeePAN ?? itrDetails?.employeePAN ?? '\u2014').toUpperCase().trim() || '\u2014';
+    const employerName = String(d.employerName ?? itrDetails?.employerName ?? '\u2014').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || '\u2014';
+    const employerTAN = String(d.employerTAN ?? itrDetails?.employerTAN ?? '\u2014').toUpperCase().trim() || '\u2014';
+    const assessmentYear = String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '\u2014').trim() || '\u2014';
     const hraExemption = Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0);
     const grossSalary = Number(d.grossSalary ?? fields?.grossSalary ?? 0);
     const tds = Number(d.tds ?? fields?.tds ?? 0);
@@ -93,314 +96,305 @@ export default function ITRFilingHelp() {
     const diff = Math.round(selectedTax - tds);
     const taxOrRefund = diff > 0 ? `${fmtMoney(diff)} Tax Payable` : diff < 0 ? `${fmtMoney(Math.abs(diff))} Refund Due` : `${fmtMoney(0)} Nil`;
 
+    // Gold palette
+    const GOLD = [212, 175, 55];   // #D4AF37
+    const DARK = [28, 28, 32];     // near-black
+    const MID = [100, 100, 110];   // medium grey
+    const LIGHT = [160, 160, 168]; // lighter grey
+    const BG_CREAM = [252, 250, 245]; // warm off-white
+
     try {
       const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-      const pw = doc.internal.pageSize.getWidth();
-      const ph = doc.internal.pageSize.getHeight();
-      const lm = 18;
-      const rm = pw - 18;
-      const contentWidth = rm - lm;
+      const pw = doc.internal.pageSize.getWidth();   // 210
+      const ph = doc.internal.pageSize.getHeight();   // 297
+      const margin = 20;    // 2cm margins
+      const rm = pw - margin;
+      const cw = rm - margin; // content width ~170mm
       let y = 0;
 
-      // Helper: draw a filled rectangle
-      const drawRect = (x, _y, w, h, r, g, b) => {
-        doc.setFillColor(r, g, b);
-        doc.rect(x, _y, w, h, 'F');
-      };
+      const fill = (x, _y, w, h, col) => { doc.setFillColor(...col); doc.rect(x, _y, w, h, 'F'); };
+      const goldLine = (_y, x1, x2) => { doc.setDrawColor(...GOLD); doc.setLineWidth(0.5); doc.line(x1 ?? margin, _y, x2 ?? rm, _y); };
+      const greyLine = (_y) => { doc.setDrawColor(225, 225, 228); doc.setLineWidth(0.25); doc.line(margin, _y, rm, _y); };
+      const pageBreak = (need = 30) => { if (y + need > ph - 25) { doc.addPage(); y = 22; } };
 
-      // Helper: check page break
-      const checkPage = (needed = 25) => {
-        if (y + needed > ph - 20) {
-          doc.addPage();
-          y = 20;
-        }
-      };
+      // ────────────────────────────────────────────
+      //  HEADER — Dark premium banner
+      // ────────────────────────────────────────────
+      fill(0, 0, pw, 50, DARK);
+      // Thin gold accent line at bottom of header
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.8); doc.line(0, 50, pw, 50);
 
-      // ═══════════════════════════════════════════
-      // HEADER — Dark banner with BM Wealth branding
-      // ═══════════════════════════════════════════
-      drawRect(0, 0, pw, 44, 15, 15, 20);
+      // BM Wealth in serif (times = built-in serif in jsPDF)
+      doc.setFont('times', 'bold'); doc.setFontSize(26); doc.setTextColor(...GOLD);
+      doc.text('BM Wealth', margin, 22);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(22);
-      doc.setTextColor(255, 255, 255);
-      doc.text('BM Wealth', lm, 18);
+      // Subtitle
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(200, 200, 210);
+      doc.text('ITR Filing Summary', margin, 32);
 
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(180, 190, 210);
-      doc.text('ITR Filing Summary — Form 16 Analysis', lm, 28);
+      doc.setFontSize(9.5); doc.setTextColor(150, 150, 165);
+      doc.text('Personalised Form 16 Analysis', margin, 40);
 
-      doc.setFontSize(9);
-      doc.setTextColor(140, 150, 170);
-      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`, lm, 37);
+      // Right side — date, PAN, AY
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(...GOLD);
+      doc.text(employeePAN, rm, 20, { align: 'right' });
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(170, 170, 180);
+      doc.text(`Assessment Year ${assessmentYear}`, rm, 28, { align: 'right' });
+      doc.text(new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }), rm, 36, { align: 'right' });
 
-      // Right side — PAN badge
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(100, 181, 246);
-      doc.text(`PAN: ${employeePAN}`, rm, 18, { align: 'right' });
-      doc.setFontSize(9);
-      doc.setTextColor(140, 150, 170);
-      doc.text(`AY: ${assessmentYear}`, rm, 28, { align: 'right' });
+      y = 62;
 
-      y = 52;
-
-      // ═══════════════════════════════════════════
-      // SECTION 1 — Your Details (Copy-Paste Ready)
-      // ═══════════════════════════════════════════
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(15, 15, 20);
-      doc.text('SECTION 1 — Your Details', lm, y);
-      y += 3;
-      doc.setDrawColor(100, 181, 246);
-      doc.setLineWidth(0.8);
-      doc.line(lm, y, lm + 55, y);
-      y += 7;
-
-      // Table header
-      drawRect(lm, y, contentWidth, 8, 240, 245, 250);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(80, 80, 90);
-      doc.text('FIELD', lm + 4, y + 5.5);
-      doc.text('VALUE', lm + 75, y + 5.5);
+      // ────────────────────────────────────────────
+      //  SECTION 1 — Your Details
+      // ────────────────────────────────────────────
+      doc.setFont('times', 'bold'); doc.setFontSize(16); doc.setTextColor(...DARK);
+      doc.text('Your Details', margin, y);
+      y += 2;
+      goldLine(y, margin, margin + 32);
       y += 10;
 
+      // Elegant label-value rows — no spreadsheet look
       const detailRows = [
-        ['Employee PAN', employeePAN],
-        ['Employer Name', employerName.length > 45 ? employerName.slice(0, 44) + '...' : employerName],
-        ['Employer TAN', employerTAN],
-        ['Assessment Year', assessmentYear],
-        ['Gross Salary', fmtMoney(grossSalary)],
-        ['HRA Exemption', fmtMoney(hraExemption)],
-        ['Standard Deduction', fmtMoney(standardDeduction)],
-        ['80C Deductions', fmtMoney(deductions80C)],
-        ['TDS Already Deducted', fmtMoney(tds)],
-        ['Net Taxable Income', fmtMoney(netIncome)],
-        ['Tax Payable / Refund', taxOrRefund],
+        ['Employee PAN', employeePAN, false],
+        ['Employer Name', employerName, false],  // full name, will wrap
+        ['Employer TAN', employerTAN, false],
+        ['Assessment Year', assessmentYear, false],
+        ['', '', 'divider'],  // visual divider between identity & financials
+        ['Gross Salary', fmtMoney(grossSalary), true],
+        ['HRA Exemption', fmtMoney(hraExemption), true],
+        ['Standard Deduction', fmtMoney(standardDeduction), true],
+        ['80C Deductions', fmtMoney(deductions80C), true],
+        ['TDS Already Deducted', fmtMoney(tds), true],
+        ['', '', 'divider'],
+        ['Net Taxable Income', fmtMoney(netIncome), true],
+        ['Tax Payable / Refund', taxOrRefund, true],
       ];
 
-      doc.setFontSize(9.5);
+      const labelX = margin + 2;
+      const valueX = rm - 2; // right-aligned values
+
       for (let i = 0; i < detailRows.length; i++) {
-        const [label, val] = detailRows[i];
-        // Alternating row background
-        if (i % 2 === 0) drawRect(lm, y - 3.5, contentWidth, 7.5, 248, 250, 252);
+        const [label, val, isMoney] = detailRows[i];
 
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(90, 90, 100);
-        doc.text(label, lm + 4, y);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(15, 15, 20);
-        doc.text(String(val || '—'), lm + 75, y);
-        y += 7.5;
+        if (isMoney === 'divider') {
+          y += 2;
+          doc.setDrawColor(235, 235, 238); doc.setLineWidth(0.15);
+          doc.line(margin + 2, y, rm - 2, y);
+          y += 5;
+          continue;
+        }
+
+        pageBreak(12);
+
+        // Label
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(...MID);
+        doc.text(label, labelX, y);
+
+        // Value — wrap employer name if needed, right-align money
+        if (label === 'Employer Name') {
+          // Employer name can be long — wrap it in the right half
+          const maxValW = cw * 0.52;
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
+          const wrapped = doc.splitTextToSize(String(val || '\u2014'), maxValW);
+          doc.text(wrapped, valueX, y, { align: 'right' });
+          y += Math.max(wrapped.length - 1, 0) * 4.5;
+        } else if (isMoney) {
+          doc.setFont('courier', 'bold'); doc.setFontSize(10.5); doc.setTextColor(...DARK);
+          doc.text(String(val || '\u2014'), valueX, y, { align: 'right' });
+        } else {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
+          doc.text(String(val || '\u2014'), valueX, y, { align: 'right' });
+        }
+        y += 8.5;
       }
-      y += 6;
 
-      // ═══════════════════════════════════════════
-      // SECTION 2 — Tax Regime Comparison
-      // ═══════════════════════════════════════════
-      checkPage(70);
-      doc.setDrawColor(220, 220, 225);
-      doc.setLineWidth(0.3);
-      doc.line(lm, y, rm, y);
       y += 8;
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(15, 15, 20);
-      doc.text('SECTION 2 — Tax Regime Comparison', lm, y);
-      y += 3;
-      doc.setDrawColor(100, 181, 246);
-      doc.setLineWidth(0.8);
-      doc.line(lm, y, lm + 70, y);
-      y += 10;
+      // ────────────────────────────────────────────
+      //  SECTION 2 — Tax Regime Comparison
+      // ────────────────────────────────────────────
+      pageBreak(90);
+      greyLine(y); y += 12;
 
-      // Two side-by-side cards
-      const cardW = (contentWidth - 8) / 2;
-      const cardH = 46;
+      doc.setFont('times', 'bold'); doc.setFontSize(16); doc.setTextColor(...DARK);
+      doc.text('Tax Regime Comparison', margin, y);
+      y += 2;
+      goldLine(y, margin, margin + 48);
+      y += 14;
+
+      // Two elegant side-by-side cards
+      const gap = 10;
+      const cardW = (cw - gap) / 2;
+      const cardH = 58;
       const cardY = y;
 
-      // Old Regime card
-      const oldIsRecommended = recommended === 'old';
-      drawRect(lm, cardY, cardW, cardH, oldIsRecommended ? 235 : 248, oldIsRecommended ? 245 : 250, oldIsRecommended ? 255 : 252);
-      if (oldIsRecommended) {
-        doc.setDrawColor(100, 181, 246);
-        doc.setLineWidth(0.6);
-        doc.rect(lm, cardY, cardW, cardH, 'S');
-      }
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(15, 15, 20);
-      doc.text('Old Regime', lm + 6, cardY + 10);
-      if (oldIsRecommended) {
-        doc.setFontSize(7);
-        doc.setTextColor(100, 181, 246);
-        doc.text('✓ RECOMMENDED', lm + 6, cardY + 16);
-      }
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(90, 90, 100);
-      doc.text(`Gross Income: ${fmtMoney(grossSalary)}`, lm + 6, cardY + 24);
-      doc.text(`Deductions: ${fmtMoney(totalDeductions)}`, lm + 6, cardY + 31);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(15, 15, 20);
-      doc.text(`Tax Payable: ${fmtMoney(oldTax)}`, lm + 6, cardY + 40);
+      // --- Render one regime card ---
+      const renderCard = (cx, regime, taxAmt, ded, isRec) => {
+        // Card background
+        fill(cx, cardY, cardW, cardH, isRec ? [250, 247, 235] : [248, 248, 250]);
+        // Border
+        doc.setDrawColor(...(isRec ? GOLD : [220, 220, 225]));
+        doc.setLineWidth(isRec ? 0.7 : 0.3);
+        doc.rect(cx, cardY, cardW, cardH, 'S');
 
-      // New Regime card
-      const newCardX = lm + cardW + 8;
-      const newIsRecommended = recommended === 'new';
-      drawRect(newCardX, cardY, cardW, cardH, newIsRecommended ? 235 : 248, newIsRecommended ? 245 : 250, newIsRecommended ? 255 : 252);
-      if (newIsRecommended) {
-        doc.setDrawColor(100, 181, 246);
-        doc.setLineWidth(0.6);
-        doc.rect(newCardX, cardY, cardW, cardH, 'S');
-      }
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(15, 15, 20);
-      doc.text('New Regime', newCardX + 6, cardY + 10);
-      if (newIsRecommended) {
-        doc.setFontSize(7);
-        doc.setTextColor(100, 181, 246);
-        doc.text('✓ RECOMMENDED', newCardX + 6, cardY + 16);
-      }
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(90, 90, 100);
-      doc.text(`Gross Income: ${fmtMoney(grossSalary)}`, newCardX + 6, cardY + 24);
-      doc.text(`Deductions: ${fmtMoney(0)} (not applicable)`, newCardX + 6, cardY + 31);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(15, 15, 20);
-      doc.text(`Tax Payable: ${fmtMoney(newTax)}`, newCardX + 6, cardY + 40);
+        // If recommended — gold top accent bar
+        if (isRec) {
+          fill(cx, cardY, cardW, 3, GOLD);
+        }
 
-      y = cardY + cardH + 8;
+        let ty = cardY + (isRec ? 14 : 11);
 
-      // Savings callout
-      drawRect(lm, y, contentWidth, 16, 235, 245, 255);
-      doc.setDrawColor(100, 181, 246);
-      doc.setLineWidth(0.4);
-      doc.rect(lm, y, contentWidth, 16, 'S');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.setTextColor(15, 15, 20);
-      const savingsText = `Potential Savings: ${fmtMoney(savings)}`;
-      const savingsTextW = doc.getTextWidth(savingsText);
-      doc.text(savingsText, lm + (contentWidth - savingsTextW) / 2, y + 10.5);
-      y += 24;
+        // Regime name
+        doc.setFont('times', 'bold'); doc.setFontSize(15); doc.setTextColor(...DARK);
+        doc.text(`${regime} Regime`, cx + cardW / 2, ty, { align: 'center' });
+        ty += 7;
 
-      // ═══════════════════════════════════════════
-      // SECTION 3 — How to File in 6 Steps
-      // ═══════════════════════════════════════════
-      checkPage(75);
-      doc.setDrawColor(220, 220, 225);
-      doc.setLineWidth(0.3);
-      doc.line(lm, y, rm, y);
-      y += 8;
+        if (isRec) {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...GOLD);
+          const badge = 'RECOMMENDED';
+          const bw = doc.getTextWidth(badge) + 8;
+          const bx = cx + (cardW - bw) / 2;
+          fill(bx, ty - 4, bw, 6, [250, 245, 225]);
+          doc.setDrawColor(...GOLD); doc.setLineWidth(0.3);
+          doc.rect(bx, ty - 4, bw, 6, 'S');
+          doc.text(badge, cx + cardW / 2, ty, { align: 'center' });
+          ty += 9;
+        } else {
+          ty += 5;
+        }
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(15, 15, 20);
-      doc.text('SECTION 3 — How to File in 6 Steps', lm, y);
-      y += 3;
-      doc.setDrawColor(100, 181, 246);
-      doc.setLineWidth(0.8);
-      doc.line(lm, y, lm + 65, y);
-      y += 10;
+        // Metrics
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
+        doc.text('Gross Income', cx + 8, ty);
+        doc.setFont('courier', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
+        doc.text(fmtMoney(grossSalary), cx + cardW - 8, ty, { align: 'right' });
+        ty += 6.5;
 
-      const panDisplay = (employeePAN !== '—') ? employeePAN : 'your PAN';
-      const ayDisplay = (assessmentYear !== '—') ? assessmentYear : 'the relevant AY';
-      const employerDisplay = (employerName !== '—') ? employerName : 'your employer';
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
+        doc.text('Deductions', cx + 8, ty);
+        doc.setFont('courier', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
+        doc.text(fmtMoney(ded), cx + cardW - 8, ty, { align: 'right' });
+        ty += 8;
+
+        // Tax amount — large bold
+        doc.setDrawColor(235, 235, 238); doc.setLineWidth(0.2);
+        doc.line(cx + 8, ty - 3, cx + cardW - 8, ty - 3);
+        doc.setFont('courier', 'bold'); doc.setFontSize(13); doc.setTextColor(...(isRec ? GOLD : DARK));
+        doc.text(fmtMoney(taxAmt), cx + cardW / 2, ty + 3, { align: 'center' });
+      };
+
+      renderCard(margin, 'Old', oldTax, totalDeductions, recommended === 'old');
+      renderCard(margin + cardW + gap, 'New', newTax, 0, recommended === 'new');
+
+      y = cardY + cardH + 12;
+
+      // ── Savings Hero Banner ──
+      pageBreak(24);
+      fill(margin, y, cw, 20, [252, 248, 235]);
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.5);
+      doc.rect(margin, y, cw, 20, 'S');
+      // Small label
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
+      const savLabel = 'Potential Savings by choosing ' + (recommended === 'old' ? 'Old' : 'New') + ' Regime';
+      doc.text(savLabel, margin + cw / 2, y + 7, { align: 'center' });
+      // Big gold number
+      doc.setFont('times', 'bold'); doc.setFontSize(20); doc.setTextColor(...GOLD);
+      doc.text(fmtMoney(savings), margin + cw / 2, y + 16, { align: 'center' });
+
+      y += 32;
+
+      // ────────────────────────────────────────────
+      //  SECTION 3 — How to File: 6 Steps
+      // ────────────────────────────────────────────
+      pageBreak(80);
+      greyLine(y); y += 12;
+
+      doc.setFont('times', 'bold'); doc.setFontSize(16); doc.setTextColor(...DARK);
+      doc.text('How to File Your ITR', margin, y);
+      y += 2;
+      goldLine(y, margin, margin + 46);
+      y += 12;
+
+      const panDisplay = (employeePAN !== '\u2014') ? employeePAN : 'your PAN';
+      const ayDisplay = (assessmentYear !== '\u2014') ? assessmentYear : 'the relevant AY';
 
       const filingSteps = [
-        {
-          title: 'Login to the IT Portal',
-          desc: `Go to incometax.gov.in and sign in using your PAN: ${panDisplay}. If first time, register with Aadhaar-linked mobile.`,
-        },
-        {
-          title: 'Start Your Return',
-          desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) — for salaried individuals with income up to ₹50 lakh.`,
-        },
-        {
-          title: 'Enter Salary Details',
-          desc: `Enter Gross Salary: ${fmtMoney(grossSalary)}, Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check against Form 16 from ${employerDisplay.length > 35 ? employerDisplay.slice(0, 34) + '...' : employerDisplay}.`,
-        },
-        {
-          title: 'Choose Your Tax Regime',
-          desc: `Select ${recommended === 'old' ? 'Old' : 'New'} Regime (estimated savings: ${fmtMoney(savings)}). Old Regime Tax: ${fmtMoney(oldTax)} vs New Regime Tax: ${fmtMoney(newTax)}.`,
-        },
-        {
-          title: 'Verify TDS & Deductions',
-          desc: `TDS deducted by ${employerDisplay.length > 30 ? employerDisplay.slice(0, 29) + '...' : employerDisplay}: ${fmtMoney(tds)}. 80C Deductions: ${fmtMoney(deductions80C)}. HRA Exemption: ${fmtMoney(hraExemption)}.`,
-        },
-        {
-          title: 'Submit & e-Verify',
-          desc: `Review the summary, submit the return, then e-Verify via Aadhaar OTP (fastest method). Keep Form 16, AIS, and 26AS for records.`,
-        },
+        { title: 'Login to the IT Portal',
+          desc: `Visit incometax.gov.in and sign in with your PAN: ${panDisplay}. First-time users can register using their Aadhaar-linked mobile number.` },
+        { title: 'Start Your Return',
+          desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) \u2014 applicable for salaried individuals with total income up to \u20B950 lakh.` },
+        { title: 'Enter Salary Details',
+          desc: `Enter Gross Salary: ${fmtMoney(grossSalary)} and Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check all figures against Form 16 issued by ${employerName}.` },
+        { title: 'Choose Your Tax Regime',
+          desc: `Select the ${recommended === 'old' ? 'Old' : 'New'} Regime for estimated savings of ${fmtMoney(savings)}. For reference: Old Regime Tax = ${fmtMoney(oldTax)}, New Regime Tax = ${fmtMoney(newTax)}.` },
+        { title: 'Verify TDS & Deductions',
+          desc: `TDS deducted by ${employerName}: ${fmtMoney(tds)}. Ensure 80C Deductions (${fmtMoney(deductions80C)}) and HRA Exemption (${fmtMoney(hraExemption)}) match your Form 16 Part B.` },
+        { title: 'Submit & e-Verify',
+          desc: `Review the pre-filled summary, submit your return, then e-Verify instantly via Aadhaar OTP. Retain Form 16, AIS, and 26AS as supporting documents.` },
       ];
 
+      const stepNumSize = 7.5;
+      const stepIndent = 14;
+      const descMaxW = cw - stepIndent - 2;
+
       for (let i = 0; i < filingSteps.length; i++) {
-        const step = filingSteps[i];
-        checkPage(22);
+        const s = filingSteps[i];
+        // Estimate height for page break
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+        const testLines = doc.splitTextToSize(s.desc, descMaxW);
+        const estH = 8 + testLines.length * 4.2 + 8;
+        pageBreak(estH);
 
-        // Step number circle
-        drawRect(lm, y - 3, 7, 7, 100, 181, 246);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8);
-        doc.setTextColor(255, 255, 255);
-        doc.text(String(i + 1), lm + 2.3, y + 1.5);
+        // Gold step number circle
+        const circR = 4;
+        const circX = margin + circR;
+        const circY = y - 0.5;
+        doc.setFillColor(...GOLD);
+        doc.circle(circX, circY, circR, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(255, 255, 255);
+        const numW = doc.getTextWidth(String(i + 1));
+        doc.text(String(i + 1), circX - numW / 2, circY + 3);
 
-        // Step title
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(10.5);
-        doc.setTextColor(15, 15, 20);
-        doc.text(step.title, lm + 12, y + 1);
-        y += 6;
+        // Step title in serif bold
+        doc.setFont('times', 'bold'); doc.setFontSize(12); doc.setTextColor(...DARK);
+        doc.text(s.title, margin + stepIndent, y + 2);
+        y += 8;
 
-        // Step description — wrap text
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(9);
-        doc.setTextColor(80, 80, 90);
-        const descLines = doc.splitTextToSize(step.desc, contentWidth - 14);
-        doc.text(descLines, lm + 12, y);
-        y += descLines.length * 4.5 + 5;
+        // Step description — full wrap, no truncation
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(...MID);
+        const descLines = doc.splitTextToSize(s.desc, descMaxW);
+        doc.text(descLines, margin + stepIndent, y);
+        y += descLines.length * 4.2 + 8;
       }
+
       y += 4;
 
-      // ═══════════════════════════════════════════
-      // FOOTER — Disclaimer + Contact
-      // ═══════════════════════════════════════════
-      checkPage(30);
-      doc.setDrawColor(220, 220, 225);
-      doc.setLineWidth(0.3);
-      doc.line(lm, y, rm, y);
-      y += 8;
+      // ────────────────────────────────────────────
+      //  FOOTER — Disclaimer & Contact
+      // ────────────────────────────────────────────
+      pageBreak(38);
+      // Grey footer background
+      const footerH = 34;
+      const footY = Math.max(y + 4, ph - footerH - 8);
+      fill(0, footY, pw, footerH + 8, [245, 245, 247]);
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.4);
+      doc.line(0, footY, pw, footY);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(140, 140, 150);
-      doc.text('DISCLAIMER', lm, y);
-      y += 5;
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7.5);
-      doc.setTextColor(140, 140, 150);
-      const disclaimerText = 'This is an educational summary for reference only. It does not constitute professional tax advice. All values are extracted from your uploaded document and may require verification. Please cross-check every figure with your original Form 16, AIS, and 26AS before filing. Consult a Chartered Accountant for personalised tax guidance.';
-      const disclaimerLines = doc.splitTextToSize(disclaimerText, contentWidth);
-      doc.text(disclaimerLines, lm, y);
-      y += disclaimerLines.length * 3.5 + 6;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...LIGHT);
+      doc.text('DISCLAIMER', margin, footY + 7);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(100, 181, 246);
-      doc.text('BM Wealth', lm, y);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7.5);
-      doc.setTextColor(100, 100, 110);
-      doc.text('  |  www.bmwealth.co.in  |  tools@bmwealth.co.in', lm + doc.getTextWidth('BM Wealth'), y);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...LIGHT);
+      const discText = 'This document is an educational summary generated from your uploaded Form 16 data. It does not constitute professional tax advice, legal opinion, or a filing recommendation. All extracted values should be independently verified against your original Form 16 (Part A & Part B), Annual Information Statement (AIS), and Form 26AS before filing. BM Wealth recommends consulting a qualified Chartered Accountant for personalised tax planning.';
+      const discLines = doc.splitTextToSize(discText, cw);
+      doc.text(discLines, margin, footY + 12);
+      const discEnd = footY + 12 + discLines.length * 3;
+
+      // Contact line
+      doc.setFont('times', 'bold'); doc.setFontSize(9); doc.setTextColor(...GOLD);
+      doc.text('BM Wealth', margin, discEnd + 5);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...MID);
+      doc.text('www.bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
 
       doc.save('ITR-Filing-Summary-BM-Wealth.pdf');
     } catch (err) {
