@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * OnboardingEngine — shared component for public + portal onboarding.
+ * OnboardingEngine — Premium guided wealth onboarding experience.
  *
  * Props:
  *   steps          — Array of step objects from onboardingSteps.js
@@ -12,18 +12,16 @@
  *   showSeo        — boolean (true for public page, false for portal)
  *   staffMode      — boolean (enables tooltips + operational hints)
  *
- * Design: matches client-portal dark theme (#0A0B0D bg, white-tint cards).
- * NO gold, NO yellow, NO muddy colours. ONLY grayscale + subtle blue tints.
+ * UX: "Guided journey handled by BM Wealth" — NOT a compliance checklist.
+ * Uses --lux-accent (approved subtle gold) for premium CTA styling.
+ * NO raw Tailwind color classes. ONLY --lux-* CSS variables + white/black tints.
  */
 
 import { useState, useCallback } from "react";
 import {
   ExternalLink,
   Check,
-  SkipForward,
-  HelpCircle,
   ChevronDown,
-  ChevronUp,
   MessageCircle,
   Phone,
   ArrowRight,
@@ -31,14 +29,6 @@ import {
   AlertTriangle,
   Info,
 } from "lucide-react";
-
-/* ───────────────────────── skip reason options ───────────────────────── */
-const SKIP_REASONS = [
-  "Already completed offline",
-  "Not applicable to my case",
-  "Will do later",
-  "Need advisor help first",
-];
 
 /* ───────────────────────── staff tooltips per step ───────────────────────── */
 const STAFF_HINTS = {
@@ -49,38 +39,6 @@ const STAFF_HINTS = {
   5: "Common blocker. Name must match exactly across PAN, Aadhaar, and KYC.",
   6: "Only proceed after all verifications pass. Direct to WealthMagic or book advisor call.",
 };
-
-/* ───────────────────────── confirmation modal ───────────────────────── */
-function ConfirmModal({ message, onConfirm, onCancel }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)" }}>
-      <div
-        className="rounded-xl p-6 max-w-sm mx-4 w-full"
-        style={{ background: "#16171B", border: "1px solid rgba(255,255,255,0.1)" }}
-      >
-        <p className="text-[14px] text-white/90 mb-4">{message}</p>
-        <div className="flex gap-3 justify-end">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-[12px] font-medium text-white/60 transition-colors hover:bg-white/08 min-h-[44px]"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="px-4 py-2 rounded-lg text-[12px] font-medium text-white/90 transition-colors hover:bg-white/15 min-h-[44px]"
-            style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)" }}
-          >
-            Yes, Mark Complete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ───────────────────────── monetisation CTA card ───────────────────────── */
 function MonetisationCard({ onLogEvent, stepAfter }) {
@@ -99,19 +57,20 @@ function MonetisationCard({ onLogEvent, stepAfter }) {
 
   return (
     <div
-      className="my-6 rounded-xl border p-6"
+      className="my-8 rounded-2xl p-6 transition-all duration-300"
       style={{
-        background: "rgba(255,255,255,0.02)",
-        borderColor: "rgba(255,255,255,0.08)",
+        background: "color-mix(in oklab, var(--lux-accent) 4%, rgba(255,255,255,0.015))",
+        border: "1px solid color-mix(in oklab, var(--lux-accent) 15%, rgba(255,255,255,0.05))",
+        boxShadow: "0 2px 24px color-mix(in oklab, var(--lux-accent) 4%, transparent)",
       }}
     >
-      <p className="text-[15px] font-semibold text-white/90 mb-1">
-        {isKyc ? "Need help completing KYC?" : "Ready to invest?"}
+      <p className="text-[16px] font-semibold text-white/90 mb-1">
+        {isKyc ? "Need a hand with KYC?" : "Ready to begin your investment journey?"}
       </p>
-      <p className="text-[13px] text-white/50 mb-4">
+      <p className="text-[13px] text-white/40 mb-5 leading-relaxed">
         {isKyc
-          ? "BM Wealth will assist end-to-end — zero paperwork on your end."
-          : "Start SIP with expert guidance from BM Wealth advisors."}
+          ? "Our team handles the entire KYC process — zero paperwork on your end."
+          : "Start your SIP with personalised guidance from BM Wealth advisors."}
       </p>
       <div className="flex flex-wrap gap-3">
         <a
@@ -119,27 +78,40 @@ function MonetisationCard({ onLogEvent, stepAfter }) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackClick("whatsapp")}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium text-white/90 transition-colors hover:bg-white/10"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 hover:translate-y-[-1px] min-h-[44px]"
+          style={{
+            background: "rgba(255,255,255,0.045)",
+            border: "1px solid rgba(255,255,255,0.09)",
+            color: "rgba(255,255,255,0.75)",
+          }}
         >
-          <MessageCircle className="w-4 h-4" /> WhatsApp
+          <MessageCircle className="w-4 h-4" /> WhatsApp Us
         </a>
         <a
           href="/contact"
           onClick={() => trackClick("advisor_call")}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium text-white/90 transition-colors hover:bg-white/10"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 hover:translate-y-[-1px] min-h-[44px]"
+          style={{
+            background: "rgba(255,255,255,0.045)",
+            border: "1px solid rgba(255,255,255,0.09)",
+            color: "rgba(255,255,255,0.75)",
+          }}
         >
           <Phone className="w-4 h-4" /> Book Consultation
         </a>
         <a
           href="/client-portal"
           onClick={() => trackClick("sip_start")}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium text-white transition-colors hover:bg-white/15"
-          style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)" }}
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 hover:translate-y-[-1px] min-h-[44px]"
+          style={{
+            background: "color-mix(in oklab, var(--lux-accent) 12%, rgba(255,255,255,0.02))",
+            border: "1px solid color-mix(in oklab, var(--lux-accent) 28%, transparent)",
+            color: "color-mix(in oklab, var(--lux-accent) 85%, white)",
+            boxShadow: "0 2px 12px color-mix(in oklab, var(--lux-accent) 6%, transparent)",
+          }}
         >
           <ArrowRight className="w-4 h-4" />
-          {isKyc ? "Start Assistance" : "Start SIP"}
+          {isKyc ? "Get Assistance" : "Start Investing"}
         </a>
       </div>
     </div>
@@ -158,47 +130,56 @@ function StepCard({
   showSeo,
   staffMode,
 }) {
-  const [skipOpen, setSkipOpen] = useState(false);
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
   const [linkError, setLinkError] = useState(false);
   const [assistOpen, setAssistOpen] = useState(false);
-  const [loadingAction, setLoadingAction] = useState(null); // "complete" | "skip" | null
-  const [confirmComplete, setConfirmComplete] = useState(false);
+  const [altOpen, setAltOpen] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(null);
 
+  /* ── Primary CTA: open link, then prompt confirmation ── */
   const handlePrimary = useCallback(() => {
     const url = step.primaryLink.url;
     const w = window.open(url, "_blank", "noopener,noreferrer");
-    if (!w) setLinkError(true);
-  }, [step.primaryLink.url]);
+    if (!w) {
+      setLinkError(true);
+      setAltOpen(true);
+    }
+    if (mode === "portal") {
+      setTimeout(() => setAwaitingConfirmation(true), 600);
+    }
+  }, [step.primaryLink.url, mode]);
 
+  /* ── Alternate link click ── */
   const handleAlternate = useCallback(
     (url) => {
       window.open(url, "_blank", "noopener,noreferrer");
+      if (mode === "portal") {
+        setTimeout(() => setAwaitingConfirmation(true), 600);
+      }
     },
-    []
+    [mode]
   );
 
-  const handleComplete = useCallback(async () => {
+  /* ── Confirmation: Yes ── */
+  const handleConfirmYes = useCallback(async () => {
     setLoadingAction("complete");
     await onLogEvent?.(step.step, "complete");
     setLoadingAction(null);
-    setConfirmComplete(false);
+    setAwaitingConfirmation(false);
   }, [onLogEvent, step.step]);
 
-  const handleSkip = useCallback(
-    async (reason) => {
-      setLoadingAction("skip");
-      await onLogEvent?.(step.step, "skip", { skip_reason: reason });
-      setLoadingAction(null);
-      setSkipOpen(false);
-    },
-    [onLogEvent, step.step]
-  );
+  /* ── Confirmation: Not yet ── */
+  const handleConfirmNotYet = useCallback(() => {
+    setAwaitingConfirmation(false);
+  }, []);
 
+  /* ── "Let BM Wealth handle this" ── */
   const handleAssist = useCallback(() => {
     onLogEvent?.(step.step, "assist");
     setAssistOpen((prev) => !prev);
   }, [onLogEvent, step.step]);
 
+  /* ── Assist channel click (WhatsApp / Advisor) ── */
   const handleAssistClick = useCallback(
     async (channel, url) => {
       try {
@@ -207,238 +188,382 @@ function StepCard({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ step_number: step.step, click_type: channel }),
         });
-      } catch { /* non-blocking */ }
+      } catch {
+        /* non-blocking */
+      }
       setAssistOpen(false);
       if (url) window.open(url, "_blank", "noopener,noreferrer");
     },
     [step.step]
   );
 
-  const statusBadge = isCompleted
-    ? { label: "Completed", bg: "rgba(255,255,255,0.08)", text: "text-white/70" }
-    : isSkipped
-    ? { label: "Skipped", bg: "rgba(255,255,255,0.04)", text: "text-white/40" }
-    : null;
+  /* ── Quiet skip buried under assist panel ── */
+  const handleSkipQuiet = useCallback(async () => {
+    setLoadingAction("skip");
+    await onLogEvent?.(step.step, "skip", { skip_reason: "Not applicable" });
+    setLoadingAction(null);
+    setAssistOpen(false);
+  }, [onLogEvent, step.step]);
 
   return (
     <div
-      className="rounded-xl border transition-all duration-200"
+      className="rounded-2xl border transition-all duration-300"
       style={{
-        background: isExpanded ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.015)",
-        borderColor: isExpanded ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
+        background: isExpanded
+          ? "rgba(255,255,255,0.025)"
+          : "rgba(255,255,255,0.012)",
+        borderColor: isCompleted
+          ? "color-mix(in oklab, var(--lux-accent) 25%, rgba(255,255,255,0.06))"
+          : isExpanded
+            ? "rgba(255,255,255,0.1)"
+            : "rgba(255,255,255,0.04)",
+        boxShadow: isExpanded
+          ? "0 4px 32px rgba(0,0,0,0.25), 0 0 1px rgba(255,255,255,0.04)"
+          : "none",
       }}
     >
-      {/* Header — always visible, min 44px tap target */}
+      {/* ── Header — always visible ── */}
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center gap-4 p-5 text-left cursor-pointer bg-transparent border-none min-h-[56px]"
+        className="w-full flex items-center gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none min-h-[64px] transition-all duration-200"
       >
         {/* Step number circle */}
         <div
-          className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold"
+          className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center text-[14px] font-bold transition-all duration-300"
           style={{
             background: isCompleted
-              ? "rgba(255,255,255,0.12)"
-              : "rgba(255,255,255,0.06)",
-            color: isCompleted ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
-            border: `1px solid ${isCompleted ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.08)"}`,
+              ? "color-mix(in oklab, var(--lux-accent) 14%, rgba(255,255,255,0.04))"
+              : "rgba(255,255,255,0.035)",
+            color: isCompleted
+              ? "color-mix(in oklab, var(--lux-accent) 80%, white)"
+              : "rgba(255,255,255,0.4)",
+            border: isCompleted
+              ? "1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)"
+              : "1px solid rgba(255,255,255,0.06)",
+            boxShadow: isCompleted
+              ? "0 0 14px color-mix(in oklab, var(--lux-accent) 8%, transparent)"
+              : "none",
           }}
         >
           {isCompleted ? <Check className="w-4 h-4" /> : step.step}
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[15px] font-semibold text-white/90 leading-tight">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <span className="text-[15px] md:text-[16px] font-semibold text-white/90 leading-tight">
               {step.title}
             </span>
-            {statusBadge && (
+            {isCompleted && (
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${statusBadge.text}`}
-                style={{ background: statusBadge.bg }}
+                className="text-[11px] px-2.5 py-0.5 rounded-full font-medium"
+                style={{
+                  background:
+                    "color-mix(in oklab, var(--lux-accent) 10%, transparent)",
+                  color:
+                    "color-mix(in oklab, var(--lux-accent) 70%, white)",
+                  border:
+                    "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
+                }}
               >
-                {statusBadge.label}
+                Verified
+              </span>
+            )}
+            {isSkipped && (
+              <span
+                className="text-[11px] px-2.5 py-0.5 rounded-full font-medium text-white/30"
+                style={{ background: "rgba(255,255,255,0.035)" }}
+              >
+                Handled by BM Wealth
               </span>
             )}
           </div>
-          <p className="text-[13px] text-white/45 mt-0.5 leading-snug">{step.description}</p>
+          <p className="text-[13px] text-white/38 mt-1 leading-snug">
+            {step.description}
+          </p>
         </div>
 
-        {isExpanded ? (
-          <ChevronUp className="w-5 h-5 shrink-0 text-white/30" />
-        ) : (
-          <ChevronDown className="w-5 h-5 shrink-0 text-white/30" />
-        )}
+        <ChevronDown
+          className={`w-5 h-5 shrink-0 text-white/20 transition-transform duration-300 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
-      {/* Expanded body */}
+      {/* ── Expanded body ── */}
       {isExpanded && (
-        <div className="px-5 pb-5 pt-0 space-y-4">
-          {/* Staff hint (only visible with ?mode=staff) */}
+        <div className="px-5 md:px-6 pb-6 pt-0 space-y-5">
+          {/* Staff hint */}
           {staffMode && STAFF_HINTS[step.step] && (
             <div
-              className="flex items-start gap-2 rounded-lg px-3 py-2"
-              style={{ background: "rgba(100,150,255,0.06)", border: "1px solid rgba(100,150,255,0.15)" }}
+              className="flex items-start gap-2.5 rounded-xl px-4 py-3"
+              style={{
+                background: "rgba(100,150,255,0.04)",
+                border: "1px solid rgba(100,150,255,0.10)",
+              }}
             >
-              <Info className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "rgba(130,170,255,0.7)" }} />
-              <p className="text-[12px] leading-relaxed" style={{ color: "rgba(130,170,255,0.7)" }}>
+              <Info
+                className="w-4 h-4 shrink-0 mt-0.5"
+                style={{ color: "rgba(130,170,255,0.55)" }}
+              />
+              <p
+                className="text-[12px] leading-relaxed"
+                style={{ color: "rgba(130,170,255,0.55)" }}
+              >
                 {STAFF_HINTS[step.step]}
               </p>
             </div>
           )}
 
-          {/* SEO body text (public page only) */}
+          {/* SEO body (public page only) */}
           {showSeo && step.seoBody && (
-            <p className="text-[13px] text-white/50 leading-relaxed">{step.seoBody}</p>
+            <p className="text-[13px] text-white/35 leading-relaxed">
+              {step.seoBody}
+            </p>
           )}
 
-          {/* Primary link button — 44px min tap target */}
+          {/* ── Primary CTA ── */}
           <button
             type="button"
             onClick={handlePrimary}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[13px] font-semibold text-white transition-colors hover:bg-white/15 min-h-[44px]"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[14px] font-semibold transition-all duration-300 hover:translate-y-[-1px] min-h-[48px]"
             style={{
-              background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.15)",
+              background:
+                "color-mix(in oklab, var(--lux-accent) 10%, rgba(255,255,255,0.02))",
+              border:
+                "1px solid color-mix(in oklab, var(--lux-accent) 28%, transparent)",
+              color: "color-mix(in oklab, var(--lux-accent) 85%, white)",
+              boxShadow:
+                "0 2px 16px color-mix(in oklab, var(--lux-accent) 6%, transparent)",
             }}
           >
             <ExternalLink className="w-4 h-4" />
             {step.primaryLink.label}
           </button>
 
-          {/* Link error fallback — auto-shows alternates */}
+          {/* ── Secondary: Let BM Wealth handle this (portal only) ── */}
+          {mode === "portal" && !isCompleted && !isSkipped && (
+            <button
+              type="button"
+              onClick={handleAssist}
+              className="flex items-center gap-2 text-[13px] transition-all duration-200 cursor-pointer bg-transparent border-none py-1 min-h-[44px]"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "rgba(255,255,255,0.65)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "rgba(255,255,255,0.35)";
+              }}
+            >
+              or let BM Wealth handle this
+              <ArrowRight className="w-3.5 h-3.5 ml-0.5" />
+            </button>
+          )}
+
+          {/* Link error */}
           {linkError && (
             <div
-              className="flex items-start gap-2 rounded-lg px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,180,100,0.15)" }}
+              className="flex items-start gap-2.5 rounded-xl px-4 py-3"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,180,100,0.12)",
+              }}
             >
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "rgba(255,180,100,0.7)" }} />
-              <p className="text-[12px] text-white/60 leading-relaxed">
-                Primary portal not responding. Try alternate verification below.
+              <AlertTriangle
+                className="w-4 h-4 shrink-0 mt-0.5"
+                style={{ color: "rgba(255,180,100,0.55)" }}
+              />
+              <p className="text-[12px] text-white/45 leading-relaxed">
+                Portal didn&apos;t open. Try an alternate source below.
               </p>
             </div>
           )}
 
-          {/* Alternate links — always shown if linkError, otherwise collapsible */}
-          {(step.alternates.length > 0) && (
-            <div className="space-y-1.5">
-              <p className="text-[11px] text-white/30 uppercase tracking-wider font-medium">
-                Alternate sources
-              </p>
-              {step.alternates.map((alt) => (
-                <button
-                  key={alt.url}
-                  type="button"
-                  onClick={() => handleAlternate(alt.url)}
-                  className="flex items-center gap-2 text-[13px] text-white/60 hover:text-white/90 transition-colors bg-transparent border-none cursor-pointer py-1.5 min-h-[44px]"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                  {alt.label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Portal actions: Complete / Skip / Need Help */}
-          {mode === "portal" && (
-            <div className="flex flex-wrap gap-2 pt-3 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-              {!isCompleted && (
-                <button
-                  type="button"
-                  onClick={() => setConfirmComplete(true)}
-                  disabled={!!loadingAction}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-medium text-white/90 transition-colors hover:bg-white/12 disabled:opacity-50 min-h-[44px]"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)" }}
-                >
-                  {loadingAction === "complete" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                  Mark Complete
-                </button>
-              )}
-
-              {!isSkipped && !isCompleted && (
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setSkipOpen(!skipOpen)}
-                    disabled={!!loadingAction}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-medium text-white/60 transition-colors hover:bg-white/08 disabled:opacity-50 min-h-[44px]"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-                  >
-                    {loadingAction === "skip" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <SkipForward className="w-3.5 h-3.5" />}
-                    Skip
-                  </button>
-                  {skipOpen && (
-                    <div
-                      className="absolute left-0 top-full mt-1 z-20 rounded-lg py-1 min-w-[220px] shadow-xl"
-                      style={{ background: "#16171B", border: "1px solid rgba(255,255,255,0.1)" }}
-                    >
-                      {SKIP_REASONS.map((r) => (
-                        <button
-                          key={r}
-                          type="button"
-                          onClick={() => handleSkip(r)}
-                          className="block w-full text-left px-4 py-2.5 text-[12px] text-white/70 hover:bg-white/06 transition-colors bg-transparent border-none cursor-pointer min-h-[44px]"
-                        >
-                          {r}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
+          {/* ── Alternate links (collapsible, kept by requirement) ── */}
+          {step.alternates.length > 0 && (
+            <div>
               <button
                 type="button"
-                onClick={handleAssist}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-medium text-white/60 transition-colors hover:bg-white/08 min-h-[44px]"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
+                onClick={() => setAltOpen(!altOpen)}
+                className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-medium cursor-pointer bg-transparent border-none py-1 transition-colors duration-200 min-h-[36px]"
+                style={{ color: "rgba(255,255,255,0.22)" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.42)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.22)";
+                }}
               >
-                <HelpCircle className="w-3.5 h-3.5" /> Need Help
+                Other verification sources
+                <ChevronDown
+                  className={`w-3 h-3 transition-transform duration-200 ${
+                    altOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-
-              {/* Floating assist panel */}
-              {assistOpen && (
-                <div
-                  className="w-full mt-3 rounded-xl p-4 space-y-1"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-                >
-                  <p className="text-[13px] font-medium text-white/80 mb-2">Need help completing this step?</p>
-                  <button
-                    type="button"
-                    onClick={() => handleAssistClick("whatsapp", "https://wa.me/919136065616?text=Hi%2C%20I%20need%20help%20with%20onboarding%20step%20" + step.step)}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[12px] text-white/70 hover:bg-white/06 transition-colors bg-transparent border-none cursor-pointer min-h-[44px]"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAssistClick("advisor_call", "/contact")}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[12px] text-white/70 hover:bg-white/06 transition-colors bg-transparent border-none cursor-pointer min-h-[44px]"
-                  >
-                    <Phone className="w-3.5 h-3.5" /> Book Advisor
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAssistClick("callback", "/contact")}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[12px] text-white/70 hover:bg-white/06 transition-colors bg-transparent border-none cursor-pointer min-h-[44px]"
-                  >
-                    <Phone className="w-3.5 h-3.5" /> Call Back
-                  </button>
+              {(altOpen || linkError) && (
+                <div className="mt-1.5 space-y-0.5 pl-1">
+                  {step.alternates.map((alt) => (
+                    <button
+                      key={alt.url}
+                      type="button"
+                      onClick={() => handleAlternate(alt.url)}
+                      className="flex items-center gap-2 text-[13px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-2 min-h-[40px]"
+                      style={{ color: "rgba(255,255,255,0.42)" }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color =
+                          "rgba(255,255,255,0.72)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color =
+                          "rgba(255,255,255,0.42)";
+                      }}
+                    >
+                      <ExternalLink className="w-3 h-3 shrink-0" />
+                      {alt.label}
+                    </button>
+                  ))}
                 </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Soft confirmation: "Did this complete?" ── */}
+          {awaitingConfirmation && !isCompleted && !isSkipped && (
+            <div
+              className="rounded-xl p-5 mt-1"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <p className="text-[14px] text-white/65 mb-3.5 font-medium">
+                Did this complete successfully?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleConfirmYes}
+                  disabled={!!loadingAction}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 hover:translate-y-[-1px] disabled:opacity-50 min-h-[44px]"
+                  style={{
+                    background:
+                      "color-mix(in oklab, var(--lux-accent) 10%, rgba(255,255,255,0.02))",
+                    border:
+                      "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
+                    color:
+                      "color-mix(in oklab, var(--lux-accent) 80%, white)",
+                  }}
+                >
+                  {loadingAction === "complete" ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Check className="w-3.5 h-3.5" />
+                  )}
+                  Yes, verified
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmNotYet}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-medium transition-colors duration-200 min-h-[44px]"
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    border: "1px solid rgba(255,255,255,0.05)",
+                    color: "rgba(255,255,255,0.45)",
+                  }}
+                >
+                  Not yet
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── Assist panel: "We'll take care of this" ── */}
+          {assistOpen && (
+            <div
+              className="rounded-xl p-5"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <p className="text-[14px] font-medium text-white/70 mb-1">
+                We&apos;ll take care of this for you
+              </p>
+              <p className="text-[12px] text-white/30 mb-4">
+                Our team will complete this step on your behalf.
+              </p>
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAssistClick(
+                      "whatsapp",
+                      "https://wa.me/919136065616?text=Hi%2C%20I%20need%20help%20with%20onboarding%20step%20" +
+                        step.step
+                    )
+                  }
+                  className="flex items-center gap-2.5 w-full px-4 py-3 rounded-xl text-[13px] transition-all duration-200 bg-transparent border-none cursor-pointer min-h-[44px]"
+                  style={{ color: "rgba(255,255,255,0.55)" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(255,255,255,0.025)";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.8)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+                  }}
+                >
+                  <MessageCircle className="w-4 h-4" /> Message on WhatsApp
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAssistClick("advisor_call", "/contact")
+                  }
+                  className="flex items-center gap-2.5 w-full px-4 py-3 rounded-xl text-[13px] transition-all duration-200 bg-transparent border-none cursor-pointer min-h-[44px]"
+                  style={{ color: "rgba(255,255,255,0.55)" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background =
+                      "rgba(255,255,255,0.025)";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.8)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+                  }}
+                >
+                  <Phone className="w-4 h-4" /> Book a Call with Advisor
+                </button>
+              </div>
+
+              {/* Quiet skip — buried under assist, de-emphasised */}
+              {!isSkipped && !isCompleted && (
+                <button
+                  type="button"
+                  onClick={handleSkipQuiet}
+                  disabled={!!loadingAction}
+                  className="mt-3 pt-3 text-[11px] cursor-pointer bg-transparent border-none transition-colors duration-200 disabled:opacity-50 w-full text-left"
+                  style={{
+                    color: "rgba(255,255,255,0.18)",
+                    borderTop: "1px solid rgba(255,255,255,0.04)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "rgba(255,255,255,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "rgba(255,255,255,0.18)";
+                  }}
+                >
+                  {loadingAction === "skip"
+                    ? "Updating..."
+                    : "Not applicable to my case"}
+                </button>
               )}
             </div>
           )}
         </div>
-      )}
-
-      {/* Confirmation modal for Mark Complete */}
-      {confirmComplete && (
-        <ConfirmModal
-          message={`Mark "${step.title}" as complete? This action will be logged.`}
-          onConfirm={handleComplete}
-          onCancel={() => setConfirmComplete(false)}
-        />
       )}
     </div>
   );
@@ -456,38 +581,36 @@ export default function OnboardingEngine({
 }) {
   const [expandedStep, setExpandedStep] = useState(steps[0]?.step ?? 1);
 
-  /* Track local state so UI updates instantly without waiting for DB roundtrip */
+  /* Local state for instant UI updates without DB roundtrip */
   const [localCompleted, setLocalCompleted] = useState(completedSteps);
   const [localSkipped, setLocalSkipped] = useState(skippedSteps);
 
   const handleLogEvent = useCallback(
     async (stepNumber, actionType, meta) => {
-      // Optimistic local update
       if (actionType === "complete") {
         setLocalCompleted((prev) => new Set([...prev, stepNumber]));
       }
       if (actionType === "skip") {
         setLocalSkipped((prev) => new Set([...prev, stepNumber]));
       }
-
-      // Delegate to parent (API call)
       await onLogEvent(stepNumber, actionType, meta);
     },
     [onLogEvent]
   );
 
-  // Determine which monetisation slots to show (after step 3 and step 6)
   const monetisationAfter = new Set([3, 6]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {steps.map((s) => (
         <div key={s.step}>
           <StepCard
             step={s}
             mode={mode}
             isExpanded={expandedStep === s.step}
-            onToggle={() => setExpandedStep(expandedStep === s.step ? null : s.step)}
+            onToggle={() =>
+              setExpandedStep(expandedStep === s.step ? null : s.step)
+            }
             isCompleted={localCompleted.has(s.step)}
             isSkipped={localSkipped.has(s.step)}
             onLogEvent={handleLogEvent}
@@ -495,7 +618,10 @@ export default function OnboardingEngine({
             staffMode={staffMode}
           />
           {monetisationAfter.has(s.step) && (
-            <MonetisationCard onLogEvent={handleLogEvent} stepAfter={s.step} />
+            <MonetisationCard
+              onLogEvent={handleLogEvent}
+              stepAfter={s.step}
+            />
           )}
         </div>
       ))}

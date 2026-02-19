@@ -7,13 +7,13 @@
 export const onboardingSteps = [
   {
     step: 1,
-    title: "Check PAN–Aadhaar Link Status Online",
+    title: "Let's Verify Your PAN–Aadhaar Link",
     description:
-      "PAN must be linked with Aadhaar to invest in mutual funds or open demat accounts.",
+      "Required for all mutual fund investments and demat accounts",
     seoBody:
       "PAN must be linked with Aadhaar to invest in mutual funds, open demat accounts, and complete financial KYC. Use the official Income Tax portal to verify whether your PAN is active and linked. If not linked, you must complete the linking process before proceeding further.",
     primaryLink: {
-      label: "Check PAN–Aadhaar Status",
+      label: "Verify Now",
       url: "https://eportal.incometax.gov.in/iec/foservices/#/pre-login/link-aadhaar-status",
     },
     alternates: [
@@ -29,12 +29,12 @@ export const onboardingSteps = [
   },
   {
     step: 2,
-    title: "Apply for New PAN Card (If Required)",
-    description: "PAN is mandatory for KYC, SIP registration, and all financial transactions.",
+    title: "Need a PAN Card? We'll Help You Apply",
+    description: "We'll guide you through the PAN application if needed",
     seoBody:
       "If an investor does not have a PAN card, they must apply before starting mutual fund investments. PAN is mandatory for KYC, SIP registration, and all financial transactions. Applications can be submitted online through authorized government service providers like Protean (NSDL) or UTI.",
     primaryLink: {
-      label: "Apply PAN via Protean (NSDL)",
+      label: "Apply Now",
       url: "https://onlineservices.proteantech.in/paam/endUserRegisterContact.html",
     },
     alternates: [
@@ -46,13 +46,13 @@ export const onboardingSteps = [
   },
   {
     step: 3,
-    title: "Check Mutual Fund KYC Status (CAMS / KRA)",
+    title: "Let's Check Your Mutual Fund KYC Status",
     description:
-      "Verify whether your KYC is registered in the KRA database before investing.",
+      "Verifying your KYC registration across all KRA databases",
     seoBody:
       "Investors must verify whether their KYC is registered in the KRA (KYC Registration Agency) database. This determines eligibility to invest in mutual funds. You can check status using CAMS, CVL, NDML, or Karvy KRA systems. If KYC is not registered, investment platforms may reject SIP and lump sum transactions.",
     primaryLink: {
-      label: "CAMS KRA Status Check",
+      label: "Check Now",
       url: "https://camskra.com/investorservices#kyc_check_check",
     },
     alternates: [
@@ -72,13 +72,13 @@ export const onboardingSteps = [
   },
   {
     step: 4,
-    title: "Validate KYC Across KRAs & Aadhaar Systems",
+    title: "Validating Your KYC Across All Systems",
     description:
-      "Confirm compliance with SEBI requirements and prevent transaction rejection.",
+      "Confirming identity consistency across verification agencies",
     seoBody:
       "KYC validation ensures investor data is verified across multiple KRA databases and Aadhaar systems. This step confirms compliance with SEBI requirements and prevents transaction rejection during SIP or investment activation. Use CVL, NDML, CAMS Aadhaar validation, and Karvy systems to confirm identity consistency.",
     primaryLink: {
-      label: "CVL KRA Validation",
+      label: "Validate Now",
       url: "https://validate.cvlindia.com/CVLKRAVerification_V1/",
     },
     alternates: [
@@ -98,12 +98,12 @@ export const onboardingSteps = [
   },
   {
     step: 5,
-    title: "Verify Name Match Across PAN, Aadhaar & KYC",
-    description: "Name mismatch between documents can block mutual fund investments.",
+    title: "Verifying Your Name Across PAN, Aadhaar & KYC",
+    description: "Ensuring your name matches perfectly across all records",
     seoBody:
       "Mismatch in name between PAN, Aadhaar, and KYC records can block mutual fund investments. Investors must ensure spelling and structure are identical across documents. Use verification guides and correction portals if discrepancies exist.",
     primaryLink: {
-      label: "ABSL KYC FAQ Guide",
+      label: "Verify Now",
       url: "https://mutualfund.adityabirlacapital.com/faqs-on-kyc-process",
     },
     alternates: [
@@ -119,13 +119,13 @@ export const onboardingSteps = [
   },
   {
     step: 6,
-    title: "Start SIP or Investment After KYC Approval",
+    title: "You're Ready — Let's Start Your Investment",
     description:
-      "Once PAN linking and KYC validation are complete, begin investing.",
+      "All verifications complete — let's begin your investment journey",
     seoBody:
       "Once PAN linking and KYC validation are complete, investors can start SIP, lumpsum investments, or portfolio creation. Investment platforms and advisors can assist in selecting suitable mutual funds and activating mandates.",
     primaryLink: {
-      label: "Open WealthMagic",
+      label: "Get Started",
       url: "/client-portal",
     },
     alternates: [
