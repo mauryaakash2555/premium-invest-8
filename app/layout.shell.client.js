@@ -20,10 +20,11 @@ export default function LayoutShellClient({
   const pathname = usePathname();
   const isLaserPage = pathname === '/live-intelligence';
   const isClientPortal = pathname === '/client-portal';
+  const isOnboarding = typeof pathname === 'string' && pathname.startsWith('/onboarding') || pathname === '/client-portal/onboarding';
   const isLearn = typeof pathname === 'string' && pathname.startsWith('/learn');
   const isUniverse = typeof pathname === 'string' && pathname.startsWith('/universe');
   const isBlog = typeof pathname === 'string' && pathname.startsWith('/blog');
-  const hasCustomFooter = isLaserPage || isClientPortal || isLearn || isUniverse;
+  const hasCustomFooter = isLaserPage || isClientPortal || isOnboarding || isLearn || isUniverse;
 
   return (
     <>
@@ -37,7 +38,7 @@ export default function LayoutShellClient({
           position: 'relative',
         }}
       >
-        {!isStoreHost && !isLearn && !isUniverse && <Navigation />}
+        {!isStoreHost && !isLearn && !isUniverse && !isOnboarding && <Navigation />}
         <main style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%' }}>
           {children}
         </main>

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import OnboardingEngine from "@/components/onboarding/OnboardingEngine";
 import { onboardingSteps } from "@/components/onboarding/onboardingSteps";
+import LaserFooter from "@/components/user/LaserFooter";
 
 /* ───────── Detect ?mode=staff ───────── */
 function useStaffMode() {
@@ -143,6 +144,8 @@ export default function PortalOnboardingPage() {
           their availability.
         </p>
       </div>
+
+      <LaserFooter />
     </main>
   );
 }

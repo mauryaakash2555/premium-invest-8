@@ -13,8 +13,8 @@
  *   staffMode      — boolean (enables tooltips + operational hints)
  *
  * UX: "Guided journey handled by BM Wealth" — NOT a compliance checklist.
- * Uses --lux-accent (approved subtle gold) for premium CTA styling.
- * NO raw Tailwind color classes. ONLY --lux-* CSS variables + white/black tints.
+ * ONLY client-portal dark theme: #0A0B0D bg, white/rgba tints.
+ * NO gold, NO lux-accent, NO raw Tailwind colors.
  */
 
 import { useState, useCallback } from "react";
@@ -59,9 +59,8 @@ function MonetisationCard({ onLogEvent, stepAfter }) {
     <div
       className="my-8 rounded-2xl p-6 transition-all duration-300"
       style={{
-        background: "color-mix(in oklab, var(--lux-accent) 4%, rgba(255,255,255,0.015))",
-        border: "1px solid color-mix(in oklab, var(--lux-accent) 15%, rgba(255,255,255,0.05))",
-        boxShadow: "0 2px 24px color-mix(in oklab, var(--lux-accent) 4%, transparent)",
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
       <p className="text-[16px] font-semibold text-white/90 mb-1">
@@ -104,10 +103,9 @@ function MonetisationCard({ onLogEvent, stepAfter }) {
           onClick={() => trackClick("sip_start")}
           className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 hover:translate-y-[-1px] min-h-[44px]"
           style={{
-            background: "color-mix(in oklab, var(--lux-accent) 12%, rgba(255,255,255,0.02))",
-            border: "1px solid color-mix(in oklab, var(--lux-accent) 28%, transparent)",
-            color: "color-mix(in oklab, var(--lux-accent) 85%, white)",
-            boxShadow: "0 2px 12px color-mix(in oklab, var(--lux-accent) 6%, transparent)",
+            background: "rgba(255,255,255,0.10)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            color: "rgba(255,255,255,0.90)",
           }}
         >
           <ArrowRight className="w-4 h-4" />
@@ -213,7 +211,7 @@ function StepCard({
           ? "rgba(255,255,255,0.025)"
           : "rgba(255,255,255,0.012)",
         borderColor: isCompleted
-          ? "color-mix(in oklab, var(--lux-accent) 25%, rgba(255,255,255,0.06))"
+          ? "rgba(255,255,255,0.15)"
           : isExpanded
             ? "rgba(255,255,255,0.1)"
             : "rgba(255,255,255,0.04)",
@@ -233,17 +231,14 @@ function StepCard({
           className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center text-[14px] font-bold transition-all duration-300"
           style={{
             background: isCompleted
-              ? "color-mix(in oklab, var(--lux-accent) 14%, rgba(255,255,255,0.04))"
+              ? "rgba(255,255,255,0.10)"
               : "rgba(255,255,255,0.035)",
             color: isCompleted
-              ? "color-mix(in oklab, var(--lux-accent) 80%, white)"
+              ? "rgba(255,255,255,0.80)"
               : "rgba(255,255,255,0.4)",
             border: isCompleted
-              ? "1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent)"
+              ? "1px solid rgba(255,255,255,0.20)"
               : "1px solid rgba(255,255,255,0.06)",
-            boxShadow: isCompleted
-              ? "0 0 14px color-mix(in oklab, var(--lux-accent) 8%, transparent)"
-              : "none",
           }}
         >
           {isCompleted ? <Check className="w-4 h-4" /> : step.step}
@@ -258,12 +253,9 @@ function StepCard({
               <span
                 className="text-[11px] px-2.5 py-0.5 rounded-full font-medium"
                 style={{
-                  background:
-                    "color-mix(in oklab, var(--lux-accent) 10%, transparent)",
-                  color:
-                    "color-mix(in oklab, var(--lux-accent) 70%, white)",
-                  border:
-                    "1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent)",
+                  background: "rgba(255,255,255,0.06)",
+                  color: "rgba(255,255,255,0.60)",
+                  border: "1px solid rgba(255,255,255,0.10)",
                 }}
               >
                 Verified
@@ -328,13 +320,10 @@ function StepCard({
             onClick={handlePrimary}
             className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[14px] font-semibold transition-all duration-300 hover:translate-y-[-1px] min-h-[48px]"
             style={{
-              background:
-                "color-mix(in oklab, var(--lux-accent) 10%, rgba(255,255,255,0.02))",
-              border:
-                "1px solid color-mix(in oklab, var(--lux-accent) 28%, transparent)",
-              color: "color-mix(in oklab, var(--lux-accent) 85%, white)",
-              boxShadow:
-                "0 2px 16px color-mix(in oklab, var(--lux-accent) 6%, transparent)",
+              background: "rgba(255,255,255,0.10)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "rgba(255,255,255,0.90)",
+              boxShadow: "0 2px 16px rgba(0,0,0,0.20)",
             }}
           >
             <ExternalLink className="w-4 h-4" />
@@ -447,12 +436,9 @@ function StepCard({
                   disabled={!!loadingAction}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 hover:translate-y-[-1px] disabled:opacity-50 min-h-[44px]"
                   style={{
-                    background:
-                      "color-mix(in oklab, var(--lux-accent) 10%, rgba(255,255,255,0.02))",
-                    border:
-                      "1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent)",
-                    color:
-                      "color-mix(in oklab, var(--lux-accent) 80%, white)",
+                    background: "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    color: "rgba(255,255,255,0.85)",
                   }}
                 >
                   {loadingAction === "complete" ? (

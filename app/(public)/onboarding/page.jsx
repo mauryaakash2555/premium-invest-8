@@ -12,6 +12,7 @@ import {
   onboardingSteps,
   onboardingFaqs,
 } from "@/components/onboarding/onboardingSteps";
+import LaserFooter from "@/components/user/LaserFooter";
 
 /* ───────── Detect ?mode=staff ───────── */
 function useStaffMode() {
@@ -243,6 +244,8 @@ export default function PublicOnboardingPage() {
           their availability. Educational content only — not investment advice.
         </p>
       </div>
+
+      <LaserFooter />
     </main>
   );
 }
