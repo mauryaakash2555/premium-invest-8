@@ -160,6 +160,7 @@ export default function TopicLearningPage() {
 
   const abortRef = useRef<AbortController | null>(null);
   const prefetchedRef = useRef<Record<string, boolean>>({});
+  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const nextTopics = useMemo(() => getNextTopics(topicId), [topicId]);
 
@@ -397,15 +398,62 @@ export default function TopicLearningPage() {
 
   const parseJsonContent = (text: string): any[] | null => {
     let raw = String(text || '').trim();
-    // Strip markdown code fences
-    raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
-    if (!raw.startsWith('[') && !raw.startsWith('{')) return null;
-    try {
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : null;
-    } catch {
-      return null;
+
+    // Strategy 1: Strip ALL markdown code fences (```json ... ```, including nested)
+    raw = raw.replace(/```(?:json|JSON)?\s*/g, '').replace(/```/g, '').trim();
+
+    // Strategy 2: Direct parse if it looks like JSON
+    if (raw.startsWith('[') || raw.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch {
+        // continue to other strategies
+      }
     }
+
+    // Strategy 3: Extract the largest JSON array from anywhere in the text
+    // Find all potential JSON array boundaries
+    const arrayStart = raw.indexOf('[');
+    const arrayEnd = raw.lastIndexOf(']');
+    if (arrayStart !== -1 && arrayEnd > arrayStart) {
+      try {
+        const candidate = raw.slice(arrayStart, arrayEnd + 1);
+        const parsed = JSON.parse(candidate);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch {
+        // continue
+      }
+    }
+
+    // Strategy 4: Extract the largest JSON object from the text
+    const objStart = raw.indexOf('{');
+    const objEnd = raw.lastIndexOf('}');
+    if (objStart !== -1 && objEnd > objStart) {
+      try {
+        const candidate = raw.slice(objStart, objEnd + 1);
+        const parsed = JSON.parse(candidate);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch {
+        // continue
+      }
+    }
+
+    // Strategy 5: Try to fix common JSON issues (trailing commas, single quotes)
+    if (arrayStart !== -1 && arrayEnd > arrayStart) {
+      try {
+        let candidate = raw.slice(arrayStart, arrayEnd + 1);
+        // Remove trailing commas before ] or }
+        candidate = candidate.replace(/,\s*([\]}])/g, '$1');
+        // Fix single quotes to double quotes (careful with apostrophes inside values)
+        const parsed = JSON.parse(candidate);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch {
+        // give up
+      }
+    }
+
+    return null;
   };
 
   const renderJsonOrText = (tab: Tab, text: string) => {
@@ -799,6 +847,24 @@ export default function TopicLearningPage() {
     return renderExplain(text);
   };
 
+  // Loading timeout: if loading takes >30s, auto-set error
+  useEffect(() => {
+    if (loadingTimerRef.current) {
+      clearTimeout(loadingTimerRef.current);
+      loadingTimerRef.current = null;
+    }
+    if (isLoading) {
+      loadingTimerRef.current = setTimeout(() => {
+        const key = makeKey(topicId, depth, activeTab);
+        setLoadingByKey((prev) => ({ ...prev, [key]: false }));
+        setErrorByKey((prev) => ({ ...prev, [key]: 'Taking too long — the AI might be busy. Please retry.' }));
+      }, 30_000);
+    }
+    return () => {
+      if (loadingTimerRef.current) clearTimeout(loadingTimerRef.current);
+    };
+  }, [isLoading, topicId, depth, activeTab]);
+
   const renderActiveContent = () => {
     if (isLoading) {
       return (
@@ -914,7 +980,7 @@ export default function TopicLearningPage() {
                 style={{
                   '--delay': `${Math.random() * 0.5}s`,
                   '--x': `${Math.random() * 100}%`,
-                  '--color': ['#fbbf24', '#22c55e', '#3b82f6', '#a78bfa', '#f43f5e'][Math.floor(Math.random() * 5)],
+                  '--color': ['#64B5F6', '#90CAF9', '#3b82f6', '#a78bfa', '#f43f5e'][Math.floor(Math.random() * 5)],
                 } as React.CSSProperties}
               />
             ))}
@@ -1040,9 +1106,9 @@ export default function TopicLearningPage() {
           ))}
         </div>
 
-        {/* Tabs */}
+        {/* Tabs — progressive unlock: each tab unlocks after visiting the previous one */}
         <div className="tabs">
-          {(['explain', 'examples', 'practice', 'flashcards', 'quiz'] as Tab[]).map((t) => {
+          {(['explain', 'examples', 'practice', 'flashcards', 'quiz'] as Tab[]).map((t, idx) => {
             const isComplete = completedSections.has(t);
             const tabIcon = {
               explain: '📖',
@@ -1051,14 +1117,21 @@ export default function TopicLearningPage() {
               flashcards: '🎴',
               quiz: '🎯',
             }[t];
+            // Progressive unlock: a tab is available if it's explain, or the previous tab has been visited (has content loaded)
+            const tabOrder: Tab[] = ['explain', 'examples', 'practice', 'flashcards', 'quiz'];
+            const prevTab = idx > 0 ? tabOrder[idx - 1] : null;
+            const prevKey = prevTab ? makeKey(topicId, depth, prevTab) : null;
+            const isUnlocked = idx === 0 || (prevKey ? Boolean(contentByKey[prevKey]) : false);
             return (
               <button
                 key={t}
                 type="button"
-                onClick={() => setActiveTab(t)}
-                className={`tab-btn ${activeTab === t ? 'tab-btn--active' : ''} ${isComplete ? 'tab-btn--complete' : ''}`}
+                onClick={() => isUnlocked && setActiveTab(t)}
+                className={`tab-btn ${activeTab === t ? 'tab-btn--active' : ''} ${isComplete ? 'tab-btn--complete' : ''} ${!isUnlocked ? 'tab-btn--locked' : ''}`}
+                disabled={!isUnlocked}
+                title={!isUnlocked ? `Complete ${prevTab ? TAB_LABELS[prevTab] : ''} first` : TAB_LABELS[t]}
               >
-                <span className="tab-icon">{isComplete ? '✓' : tabIcon}</span>
+                <span className="tab-icon">{!isUnlocked ? '🔒' : isComplete ? '✓' : tabIcon}</span>
                 <span className="tab-label">{TAB_LABELS[t]}</span>
               </button>
             );
@@ -1170,15 +1243,15 @@ export default function TopicLearningPage() {
           align-items: center;
           gap: 6px;
           padding: 8px 14px;
-          background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
-          border: 1px solid rgba(251, 191, 36, 0.3);
+          background: linear-gradient(135deg, rgba(100, 181, 246, 0.15) 0%, rgba(66, 165, 245, 0.08) 100%);
+          border: 1px solid rgba(100, 181, 246, 0.3);
           border-radius: 20px;
           animation: pulse-glow 2s ease-in-out infinite;
         }
 
         @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
-          50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+          0%, 100% { box-shadow: 0 0 10px rgba(100, 181, 246, 0.2); }
+          50% { box-shadow: 0 0 20px rgba(100, 181, 246, 0.4); }
         }
 
         .xp-icon {
@@ -1188,7 +1261,7 @@ export default function TopicLearningPage() {
         .xp-value {
           font-size: 14px;
           font-weight: 600;
-          color: #fbbf24;
+          color: #64B5F6;
         }
 
         /* ═══════════════════════════════════════════
@@ -1248,7 +1321,7 @@ export default function TopicLearningPage() {
         .welcome-topic {
           font-size: 20px;
           font-weight: 500;
-          color: #fbbf24;
+          color: #64B5F6;
           margin: 0 0 16px;
         }
 
@@ -1292,7 +1365,7 @@ export default function TopicLearningPage() {
           font-size: 16px;
           font-weight: 600;
           color: #000;
-          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
           border: none;
           border-radius: 14px;
           cursor: pointer;
@@ -1301,7 +1374,7 @@ export default function TopicLearningPage() {
 
         .welcome-start-btn:hover {
           transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(251, 191, 36, 0.4);
+          box-shadow: 0 8px 30px rgba(100, 181, 246, 0.4);
         }
 
         .start-arrow {
@@ -1364,11 +1437,11 @@ export default function TopicLearningPage() {
         }
 
         .celebration--correct .celebration-content {
-          border: 2px solid rgba(34, 197, 94, 0.5);
+          border: 2px solid rgba(100, 181, 246, 0.5);
         }
 
         .celebration--streak .celebration-content {
-          border: 2px solid rgba(251, 191, 36, 0.5);
+          border: 2px solid rgba(100, 181, 246, 0.5);
         }
 
         .celebration--complete .celebration-content {
@@ -1436,7 +1509,7 @@ export default function TopicLearningPage() {
 
         .progress-fill {
           height: 100%;
-          background: linear-gradient(90deg, #22c55e, #84cc16);
+          background: linear-gradient(90deg, #64B5F6, #42A5F5);
           border-radius: 3px;
           transition: width 500ms cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -1449,7 +1522,7 @@ export default function TopicLearningPage() {
 
         .progress-percent {
           font-size: 13px;
-          color: #22c55e;
+          color: #64B5F6;
           font-weight: 500;
         }
 
@@ -1620,11 +1693,11 @@ export default function TopicLearningPage() {
         }
 
         .tab-btn--complete {
-          color: #22c55e;
+          color: #64B5F6;
         }
 
         .tab-btn--complete .tab-icon {
-          background: rgba(34, 197, 94, 0.2);
+          background: rgba(100, 181, 246, 0.2);
           width: 24px;
           height: 24px;
           display: flex;
@@ -1632,6 +1705,16 @@ export default function TopicLearningPage() {
           justify-content: center;
           border-radius: 50%;
           font-size: 12px;
+        }
+
+        .tab-btn--locked {
+          opacity: 0.35;
+          cursor: not-allowed;
+          pointer-events: none;
+        }
+
+        .tab-btn--locked .tab-icon {
+          font-size: 14px;
         }
 
         /* ═══════════════════════════════════════════
@@ -2089,19 +2172,19 @@ export default function TopicLearningPage() {
           align-items: flex-start;
           gap: 8px;
           padding: 12px;
-          background: rgba(34, 197, 94, 0.08);
-          border: 1px solid rgba(34, 197, 94, 0.2);
+          background: rgba(100, 181, 246, 0.08);
+          border: 1px solid rgba(100, 181, 246, 0.2);
           border-radius: 10px;
         }
 
         .outcome-icon {
-          color: #22c55e;
+          color: #64B5F6;
           font-weight: 600;
         }
 
         .example-outcome span:last-child {
           font-size: 13px;
-          color: #a3e635;
+          color: #90CAF9;
           line-height: 1.6;
         }
 
@@ -2264,8 +2347,8 @@ export default function TopicLearningPage() {
         }
 
         .flashcard-back {
-          background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.04) 100%);
-          border: 1px solid rgba(34, 197, 94, 0.25);
+          background: linear-gradient(135deg, rgba(100, 181, 246, 0.12) 0%, rgba(100, 181, 246, 0.04) 100%);
+          border: 1px solid rgba(100, 181, 246, 0.25);
           transform: rotateY(180deg);
         }
 
@@ -2286,8 +2369,8 @@ export default function TopicLearningPage() {
         }
 
         .flashcard-back .flashcard-label {
-          color: #22c55e;
-          background: rgba(34, 197, 94, 0.2);
+          color: #64B5F6;
+          background: rgba(100, 181, 246, 0.2);
         }
 
         .flashcard-text {
@@ -2322,7 +2405,7 @@ export default function TopicLearningPage() {
         }
 
         .flashcard-wrapper--practice .flashcard-front {
-          border-color: rgba(251, 191, 36, 0.4);
+          border-color: rgba(100, 181, 246, 0.4);
         }
 
         .flashcard-rating {
@@ -2344,22 +2427,22 @@ export default function TopicLearningPage() {
 
         .rating-btn--got-it {
           color: #fff;
-          background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
         }
 
         .rating-btn--got-it:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+          box-shadow: 0 4px 14px rgba(100, 181, 246, 0.4);
         }
 
         .rating-btn--practice {
-          color: #fbbf24;
-          background: rgba(251, 191, 36, 0.15);
-          border: 1px solid rgba(251, 191, 36, 0.3);
+          color: #90CAF9;
+          background: rgba(100, 181, 246, 0.15);
+          border: 1px solid rgba(100, 181, 246, 0.3);
         }
 
         .rating-btn--practice:hover {
-          background: rgba(251, 191, 36, 0.25);
+          background: rgba(100, 181, 246, 0.25);
         }
 
         .flashcard-rated {
@@ -2371,13 +2454,13 @@ export default function TopicLearningPage() {
         }
 
         .flashcard-rated--got-it {
-          color: #22c55e;
-          background: rgba(34, 197, 94, 0.1);
+          color: #64B5F6;
+          background: rgba(100, 181, 246, 0.1);
         }
 
         .flashcard-rated--practice {
-          color: #fbbf24;
-          background: rgba(251, 191, 36, 0.1);
+          color: #90CAF9;
+          background: rgba(100, 181, 246, 0.1);
         }
 
         .rating-summary {
@@ -2386,11 +2469,11 @@ export default function TopicLearningPage() {
         }
 
         .got-it-badge {
-          color: #22c55e;
+          color: #64B5F6;
         }
 
         .practice-badge {
-          color: #fbbf24;
+          color: #90CAF9;
         }
 
         /* ═══════════════════════════════════════════
@@ -2419,7 +2502,7 @@ export default function TopicLearningPage() {
           font-size: 13px;
           font-weight: 600;
           color: #000;
-          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
           border-radius: 50%;
           flex-shrink: 0;
         }
@@ -2490,7 +2573,7 @@ export default function TopicLearningPage() {
         }
 
         .quiz-check {
-          color: #22c55e;
+          color: #64B5F6;
         }
 
         .quiz-x {
@@ -2498,13 +2581,13 @@ export default function TopicLearningPage() {
         }
 
         .quiz-option--correct {
-          background: rgba(34, 197, 94, 0.1);
-          border-color: rgba(34, 197, 94, 0.3);
+          background: rgba(100, 181, 246, 0.1);
+          border-color: rgba(100, 181, 246, 0.3);
         }
 
         .quiz-option--correct .quiz-option-letter {
-          color: #22c55e;
-          background: rgba(34, 197, 94, 0.2);
+          color: #64B5F6;
+          background: rgba(100, 181, 246, 0.2);
         }
 
         .quiz-option--wrong {
@@ -2523,11 +2606,11 @@ export default function TopicLearningPage() {
           gap: 10px;
           margin-top: 16px;
           padding: 14px;
-          background: rgba(251, 191, 36, 0.08);
-          border: 1px solid rgba(251, 191, 36, 0.2);
+          background: rgba(100, 181, 246, 0.08);
+          border: 1px solid rgba(100, 181, 246, 0.2);
           border-radius: 10px;
           font-size: 13px;
-          color: #fde68a;
+          color: #b3d4fc;
           line-height: 1.6;
           animation: fadeSlideIn 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
         }
@@ -2572,8 +2655,8 @@ export default function TopicLearningPage() {
           padding: 4px 10px;
           font-size: 12px;
           font-weight: 600;
-          color: #fbbf24;
-          background: rgba(251, 191, 36, 0.15);
+          color: #64B5F6;
+          background: rgba(100, 181, 246, 0.15);
           border-radius: 12px;
           animation: pulse-glow 2s ease-in-out infinite;
         }
@@ -2586,8 +2669,8 @@ export default function TopicLearningPage() {
           align-items: center;
           gap: 12px;
           padding: 12px 16px;
-          background: rgba(251, 191, 36, 0.08);
-          border: 1px solid rgba(251, 191, 36, 0.2);
+          background: rgba(100, 181, 246, 0.08);
+          border: 1px solid rgba(100, 181, 246, 0.2);
           border-radius: 10px;
           margin-bottom: 20px;
         }
@@ -2595,12 +2678,12 @@ export default function TopicLearningPage() {
         .xp-label {
           font-size: 14px;
           font-weight: 600;
-          color: #fbbf24;
+          color: #64B5F6;
         }
 
         .streak-indicator {
           font-size: 13px;
-          color: #f97316;
+          color: #42A5F5;
           margin-left: auto;
         }
 
@@ -2612,8 +2695,8 @@ export default function TopicLearningPage() {
           align-items: center;
           gap: 10px;
           padding: 12px 20px;
-          background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
-          border: 1px solid rgba(34, 197, 94, 0.3);
+          background: linear-gradient(135deg, rgba(100, 181, 246, 0.15) 0%, rgba(100, 181, 246, 0.05) 100%);
+          border: 1px solid rgba(100, 181, 246, 0.3);
           border-radius: 12px;
           animation: popIn 400ms cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -2631,12 +2714,12 @@ export default function TopicLearningPage() {
         .quiz-result {
           font-size: 16px;
           font-weight: 600;
-          color: #22c55e;
+          color: #64B5F6;
         }
 
         .quiz-grade {
           font-size: 14px;
-          color: #a3e635;
+          color: #90CAF9;
         }
 
         /* ═══════════════════════════════════════════
@@ -2652,16 +2735,16 @@ export default function TopicLearningPage() {
           margin-top: 16px;
           font-size: 14px;
           font-weight: 500;
-          color: #d4af37;
-          background: rgba(212, 175, 55, 0.06);
-          border: 1px dashed rgba(212, 175, 55, 0.3);
+          color: #64B5F6;
+          background: rgba(100, 181, 246, 0.06);
+          border: 1px dashed rgba(100, 181, 246, 0.3);
           border-radius: 12px;
           cursor: pointer;
           transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .show-more-btn:hover {
-          background: rgba(212, 175, 55, 0.12);
+          background: rgba(100, 181, 246, 0.12);
           border-style: solid;
           transform: translateY(-2px);
         }
@@ -2700,13 +2783,13 @@ export default function TopicLearningPage() {
 
         .quiz-dot--active {
           color: #000;
-          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
           border-color: transparent;
         }
 
         .quiz-dot--correct {
           color: #fff;
-          background: rgba(34, 197, 94, 0.9);
+          background: rgba(100, 181, 246, 0.9);
           border-color: transparent;
         }
 
@@ -2756,13 +2839,13 @@ export default function TopicLearningPage() {
 
         .quiz-nav-btn--primary {
           color: #000;
-          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
           border: none;
         }
 
         .quiz-nav-btn--primary:hover:not(:disabled) {
           transform: translateX(4px);
-          box-shadow: 0 4px 14px rgba(251, 191, 36, 0.3);
+          box-shadow: 0 4px 14px rgba(100, 181, 246, 0.3);
         }
 
         .quiz-complete {
@@ -2774,7 +2857,7 @@ export default function TopicLearningPage() {
         .quiz-result {
           font-size: 16px;
           font-weight: 600;
-          color: #22c55e;
+          color: #64B5F6;
         }
 
         /* ═══════════════════════════════════════════

@@ -57,7 +57,8 @@ function buildJsonOnlyPrompt(topic: string, section: Exclude<Section, "explain">
   const baseContext =
     "Context: This is for Indian investors. Use Indian examples, regulations, and currency (₹).\n" +
     "Educational only. Be factual, neutral tone. No marketing, no product promotion.\n" +
-    "Output must be ONLY valid JSON. Do not include markdown, code fences, or extra commentary.\n";
+    "CRITICAL: Output ONLY a raw JSON array. No markdown, no ```json fences, no explanation before or after.\n" +
+    "Your ENTIRE response must start with [ and end with ]. Nothing else.\n";
 
   if (section === "examples") {
     return (
@@ -67,7 +68,7 @@ function buildJsonOnlyPrompt(topic: string, section: Exclude<Section, "explain">
       "- Scenario: 2-3 sentences describing the situation\n" +
       "- Steps: Numbered list of 3-5 action steps\n" +
       "- Outcome: What happened and key learning\n\n" +
-      "Format as JSON array."
+      "Format as JSON array. Remember: output ONLY the raw JSON array, nothing else."
     );
   }
 
@@ -77,7 +78,7 @@ function buildJsonOnlyPrompt(topic: string, section: Exclude<Section, "explain">
       `Generate 5 thought-provoking practice questions about ${topicSafe} for ${depth} level. For each:\n` +
       "- Question: Clear, specific question\n" +
       "- Answer: Detailed 3-4 sentence answer with explanation\n\n" +
-      "Format as JSON array."
+      "Format as JSON array. Remember: output ONLY the raw JSON array, nothing else."
     );
   }
 
@@ -87,7 +88,7 @@ function buildJsonOnlyPrompt(topic: string, section: Exclude<Section, "explain">
       `Generate 8 flashcards for ${topicSafe} at ${depth} level. For each:\n` +
       "- Front: Question or concept (10-15 words)\n" +
       "- Back: Clear answer or explanation (20-30 words)\n\n" +
-      "Format as JSON array."
+      "Format as JSON array. Remember: output ONLY the raw JSON array, nothing else."
     );
   }
 
@@ -99,7 +100,7 @@ function buildJsonOnlyPrompt(topic: string, section: Exclude<Section, "explain">
     "- Options: Array of 4 choices (A, B, C, D)\n" +
     "- Correct: Index of correct answer (0-3)\n" +
     "- Explanation: Why this answer is correct (2-3 sentences)\n\n" +
-    "Format as JSON array."
+    "Format as JSON array. Remember: output ONLY the raw JSON array, nothing else."
   );
 }
 
@@ -192,7 +193,9 @@ export async function POST(request: Request) {
     apiKey,
     userText: prompt,
     system:
-      "You are a precise finance educator. Write accurate, clear, structured educational content for Indian investors. Avoid hype and marketing.",
+      section === "explain"
+        ? "You are a precise finance educator. Write accurate, clear, structured educational content for Indian investors. Avoid hype and marketing."
+        : "You are a precise finance educator. Output ONLY a valid JSON array. No markdown fences, no explanation text, no code blocks. Start your response with [ and end with ]. Nothing else.",
     temperature: 0.7,
     maxTokens,
     model: "llama-3.3-70b-versatile",
