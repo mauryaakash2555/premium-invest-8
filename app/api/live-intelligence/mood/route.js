@@ -28,7 +28,7 @@ function getBaseUrl(request) {
   const proto = request?.headers?.get('x-forwarded-proto');
   const host = request?.headers?.get('x-forwarded-host') || request?.headers?.get('host');
   if (proto && host) return `${proto}://${host}`;
-  return request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bmwealth.co.in';
+  return request?.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
 }
 
 function getSupabase() {

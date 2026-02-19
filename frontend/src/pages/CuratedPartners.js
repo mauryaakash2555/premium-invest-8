@@ -13,7 +13,7 @@ const CuratedPartners = () => {
         <title>Curated Partners | BM Wealth Mumbai</title>
         <meta name="description" content="Partner with BM Wealth for premium financial advisory services. AMFI Registered | IRDAI Licensed financial advisors in Mumbai." />
         <meta name="keywords" content="financial partners, investment advisory, BM Wealth, Mumbai financial advisors, AMFI, IRDAI" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/curated-partners" />
+        <link rel="canonical" href="https://bmwealth.co.in/curated-partners" />
       </Helmet>
 
       {/* Hero Section */}

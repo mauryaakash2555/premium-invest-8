@@ -49,6 +49,35 @@ export default function TaxLeakDetectorLanding() {
             professional before filing.
           </p>
         </div>
+
+        {/* Deep dive: Digital Store products */}
+        <div className="mt-10 border border-white/10 bg-white/5 p-6">
+          <p className="text-[11px] tracking-[0.18em] uppercase text-white/70 mb-3">Go deeper</p>
+          <p className="text-sm text-white/75 leading-relaxed mb-3">
+            Want a structured, printable resource? These educational guides go deeper.
+          </p>
+          <div className="flex flex-col gap-2">
+            <a
+              href="https://store.bmwealth.co.in/products/form-16-tax-leak-checklist"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[color:var(--lux-accent)] underline underline-offset-4 hover:opacity-80"
+            >
+              Form 16 Review & Tax Leak Checklist (PDF + printable) \u2192
+            </a>
+            <a
+              href="https://store.bmwealth.co.in/products/mumbai-tax-leak-playbook"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[color:var(--lux-accent)] underline underline-offset-4 hover:opacity-80"
+            >
+              Mumbai High-Income Playbook: 7 Tax Leak Traps \u2192
+            </a>
+          </div>
+          <p className="mt-3 text-[11px] text-white/50">
+            Educational content only \u2014 not investment advice.
+          </p>
+        </div>
       </div>
     </div>
   );

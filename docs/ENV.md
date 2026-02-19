@@ -164,7 +164,7 @@ Important:
 **Get from:** You choose it.
 **Used in:** `backend/server.py`
 **If missing:** Defaults to `*` (open).
-**Example:** `https://bmwealth.co.in,https://www.bmwealth.co.in`
+**Example:** `https://bmwealth.co.in,https://bmwealth.co.in`
 
 ---
 

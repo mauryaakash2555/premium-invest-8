@@ -1094,8 +1094,8 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
   }, []);
 
   const shareUrl = useMemo(() => {
-    if (typeof window === 'undefined') return 'https://www.bmwealth.co.in';
-    const baseUrl = window.location.origin || 'https://www.bmwealth.co.in';
+    if (typeof window === 'undefined') return 'https://bmwealth.co.in';
+    const baseUrl = window.location.origin || 'https://bmwealth.co.in';
     return baseUrl;
   }, []);
 

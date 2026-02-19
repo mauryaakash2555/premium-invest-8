@@ -287,7 +287,7 @@ const discEnd = footY + 12 + discLines.length * 3;
 doc.setFont('times', 'bold'); doc.setFontSize(9); doc.setTextColor(...GOLD);
 doc.text('BM Wealth', margin, discEnd + 5);
 doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...MID);
-doc.text('www.bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
+doc.text('bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
 
 const buf = doc.output('arraybuffer');
 writeFileSync('ITR-Filing-Summary-BM-Wealth.pdf', Buffer.from(buf));

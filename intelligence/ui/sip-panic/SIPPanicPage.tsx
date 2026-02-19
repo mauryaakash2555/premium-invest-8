@@ -232,7 +232,7 @@ export default function SIPPanicPage(props?: {
   const hideDisclaimer = embed ? qsHideDisclaimer : false;
   const showCta = embed ? qsCta : false;
   const ctaText = (qsCtaText || "Book a call") as string;
-  const ctaUrl = (qsCtaUrl || "https://www.bmwealth.co.in/contact") as string;
+  const ctaUrl = (qsCtaUrl || "https://bmwealth.co.in/contact") as string;
 
   const [inputs, setInputs] = useState({ monthlyAmount: 10_000, durationYears: 10 });
 

@@ -39,7 +39,7 @@ function parseINR(v) {
 }
 
 function getBaseUrlSafe() {
-  return String(process.env.NEXT_PUBLIC_SITE_URL || "https://www.bmwealth.co.in").replace(/\/+$/, "");
+  return String(process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in").replace(/\/+$/, "");
 }
 
 function buildPaymentLinkSafe() {

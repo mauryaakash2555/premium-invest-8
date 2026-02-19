@@ -22,7 +22,7 @@ export function middleware(request) {
   }
 
   // Canonicalize domain/protocol to avoid duplicate indexation (www vs non-www, http vs https).
-  // Preferred host: www.bmwealth.co.in. Store host is handled separately.
+  // Preferred host: bmwealth.co.in (non-www). Store host is handled separately.
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
   const isMainProdHost = hostNoPort === 'bmwealth.co.in' || hostNoPort === 'www.bmwealth.co.in';
   const protoHeader = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
@@ -55,15 +55,9 @@ export function middleware(request) {
     return res;
   }
 
-  if (!isStoreHost && hostNoPort === 'bmwealth.co.in') {
-    canonicalUrl.hostname = 'www.bmwealth.co.in';
-    shouldRedirect = true;
-  }
-
-  if (!isStoreHost && isMainProdHost && proto === 'http') {
-    canonicalUrl.protocol = 'https:';
-    shouldRedirect = true;
-  }
+  // Domain redirect (www → non-www) and protocol upgrade (http → https) are
+  // handled exclusively by vercel.json + Cloudflare.  Do NOT duplicate here
+  // to avoid redirect loops when Cloudflare "Always Use HTTPS" is active.
 
   // Strip legacy homepage query variant that should not be indexed.
   if (pathname === '/' && canonicalUrl.searchParams.get('live') === '1') {

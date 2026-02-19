@@ -64,5 +64,61 @@
     ],
     "description": "An educational report that explains the concepts behind property vs SIP comparisons, assumptions, and trade-offs.",
     "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "form-16-tax-leak-checklist",
+    "name": "Form 16 Review & Tax Leak Checklist",
+    "priceInr": 149,
+    "type": "Educational PDF + Checklist",
+    "whatYouGet": [
+      "6–8 page PDF guide on reading your Form 16",
+      "1-page printable checklist (TDS, HRA, 80C, 80D, NPS)",
+      "Common miss list with real-world salary examples",
+      "Cross-reference table: Form 16 fields → ITR portal fields"
+    ],
+    "description": "A structured checklist for salaried professionals to cross-check TDS, deductions, and commonly missed items in Form 16 — including HRA, 80C, 80D, and standard deduction alignment.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "mumbai-tax-leak-playbook",
+    "name": "Mumbai High-Income Playbook: 7 Tax Leak Traps",
+    "priceInr": 249,
+    "type": "Educational Guide",
+    "whatYouGet": [
+      "15–20 page guide with examples and simplified numbers",
+      "7 lifestyle-based tax leaks explained (idle cash, wrong FD, no term cover, etc.)",
+      "Action-step summary for each leak",
+      "No stock tips or specific product recommendations"
+    ],
+    "description": "An educational guide explaining 7 common tax and financial leak traps that Mumbai high-income professionals fall into — idle savings, misallocated FDs, insufficient term cover, and more. Uses simplified examples, not investment advice.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "sip-vs-panic-workbook",
+    "name": "SIP vs Panic Selling Scenario Workbook",
+    "priceInr": 199,
+    "type": "Educational Workbook (Excel + PDF)",
+    "whatYouGet": [
+      "Excel/Google Sheet scenario planner (plug in your own SIP, crash size, recovery period)",
+      "4-page explainer PDF on behavioral cost of panic selling",
+      "Pre-built scenarios: 2008-style, 2020-style, 2022-style drawdowns",
+      "Visual charts comparing discipline vs panic outcomes"
+    ],
+    "description": "A hands-on workbook that lets you plug in your own SIP amount, simulate a market crash, and see the post-tax cost of panic selling versus staying disciplined. Includes an Excel sheet and a 4-page explainer PDF.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
+  },
+  {
+    "slug": "wealth-blueprint-starter-kit",
+    "name": "Wealth Blueprint Starter Kit",
+    "priceInr": 399,
+    "type": "Educational Templates + Guide",
+    "whatYouGet": [
+      "Goal-planning Excel/Notion templates (goals, timelines, cashflow)",
+      "5–8 page guide on structuring a family wealth blueprint",
+      "Monthly cashflow tracker worksheet",
+      "Priority framework for Mumbai families (housing, education, retirement)"
+    ],
+    "description": "A starter kit for Mumbai families who want a simple, structured approach to wealth planning. Includes goal templates, a cashflow tracker, and a guide covering timelines, priorities, and common pitfalls — all educational, not advice.",
+    "delivery": "Digital download link provided immediately after successful payment. No physical goods shipped."
   }
 ]

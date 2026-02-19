@@ -72,7 +72,7 @@ export default function ITRFilingHelp() {
     const d = overrideData || paymentSuccessData || {};
     const fmtMoney = (n) => {
       const v = Math.round(Number(n || 0));
-      return '\u20B9' + v.toLocaleString('en-IN');
+      return 'Rs. ' + v.toLocaleString('en-IN');
     };
 
     // === Extract all values with fallbacks ===
@@ -194,13 +194,13 @@ export default function ITRFilingHelp() {
         // Value — wrap employer name if needed, right-align money
         if (label === 'Employer Name') {
           // Employer name can be long — wrap it in the right half
-          const maxValW = cw * 0.52;
+          const maxValW = cw * 0.65;
           doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
           const wrapped = doc.splitTextToSize(String(val || '\u2014'), maxValW);
           doc.text(wrapped, valueX, y, { align: 'right' });
           y += Math.max(wrapped.length - 1, 0) * 4.5;
         } else if (isMoney) {
-          doc.setFont('courier', 'bold'); doc.setFontSize(10.5); doc.setTextColor(...DARK);
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(...DARK);
           doc.text(String(val || '\u2014'), valueX, y, { align: 'right' });
         } else {
           doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
@@ -267,20 +267,20 @@ export default function ITRFilingHelp() {
         // Metrics
         doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
         doc.text('Gross Income', cx + 8, ty);
-        doc.setFont('courier', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
         doc.text(fmtMoney(grossSalary), cx + cardW - 8, ty, { align: 'right' });
         ty += 6.5;
 
         doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
         doc.text('Deductions', cx + 8, ty);
-        doc.setFont('courier', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...DARK);
         doc.text(fmtMoney(ded), cx + cardW - 8, ty, { align: 'right' });
         ty += 8;
 
         // Tax amount — large bold
         doc.setDrawColor(235, 235, 238); doc.setLineWidth(0.2);
         doc.line(cx + 8, ty - 3, cx + cardW - 8, ty - 3);
-        doc.setFont('courier', 'bold'); doc.setFontSize(13); doc.setTextColor(...(isRec ? GOLD : DARK));
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(...(isRec ? GOLD : DARK));
         doc.text(fmtMoney(taxAmt), cx + cardW / 2, ty + 3, { align: 'center' });
       };
 
@@ -323,7 +323,7 @@ export default function ITRFilingHelp() {
         { title: 'Login to the IT Portal',
           desc: `Visit incometax.gov.in and sign in with your PAN: ${panDisplay}. First-time users can register using their Aadhaar-linked mobile number.` },
         { title: 'Start Your Return',
-          desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) \u2014 applicable for salaried individuals with total income up to \u20B950 lakh.` },
+          desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) \u2014 applicable for salaried individuals with total income up to Rs. 50 lakh.` },
         { title: 'Enter Salary Details',
           desc: `Enter Gross Salary: ${fmtMoney(grossSalary)} and Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check all figures against Form 16 issued by ${employerName}.` },
         { title: 'Choose Your Tax Regime',
@@ -394,7 +394,7 @@ export default function ITRFilingHelp() {
       doc.setFont('times', 'bold'); doc.setFontSize(9); doc.setTextColor(...GOLD);
       doc.text('BM Wealth', margin, discEnd + 5);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...MID);
-      doc.text('www.bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
+      doc.text('bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
 
       doc.save('ITR-Filing-Summary-BM-Wealth.pdf');
     } catch (err) {
@@ -537,8 +537,20 @@ export default function ITRFilingHelp() {
   const printCss = `
 @media print {
   body * { visibility: hidden !important; }
-  #itr-print-content, #itr-print-content * { visibility: visible !important; }
-  #itr-print-content { position: fixed; top: 0; left: 0; width: 100%; }
+  #itr-print-content, #itr-print-content * {
+    visibility: visible !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    letter-spacing: 0 !important;
+  }
+  #itr-print-content {
+    position: fixed; top: 0; left: 0;
+    width: 100% !important; max-width: 100% !important;
+    padding: 1cm 1.5cm;
+    font-size: 11pt;
+  }
 }
 `;
 
@@ -777,6 +789,8 @@ export default function ITRFilingHelp() {
       @media print {
         body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .card { break-inside: avoid; }
+        * { overflow: visible !important; text-overflow: clip !important; white-space: normal !important; word-wrap: break-word !important; letter-spacing: 0 !important; }
+        table, td, th { overflow: visible !important; white-space: normal !important; word-break: break-word; }
       }
     </style>
   </head>
@@ -877,7 +891,7 @@ export default function ITRFilingHelp() {
         return;
       }
 
-      const origin = window.location.origin || 'https://www.bmwealth.co.in';
+      const origin = window.location.origin || 'https://bmwealth.co.in';
       const returnUrl = `${origin}/tools/itr-filing-help?payment=success&d=${encoded}`;
       const storeUrl = `https://store.bmwealth.co.in/products/tax-optimization-pdf?returnTo=${encodeURIComponent(returnUrl)}`;
       window.location.href = storeUrl;
@@ -1176,6 +1190,26 @@ export default function ITRFilingHelp() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-[color:var(--lux-foreground)]">Free ITR Filing Help</h1>
           <p className="text-[color:var(--lux-foreground-60)]">Upload Form 16, AIS, or Bank Statement</p>
+          <p className="mt-3 text-sm text-[color:var(--lux-foreground-40)]">
+            Need deeper checklists and templates?{' '}
+            <a
+              href="https://store.bmwealth.co.in/products/form-16-tax-leak-checklist"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 text-[color:var(--lux-accent)] hover:opacity-80 transition-opacity"
+            >
+              Form 16 Review & Tax Leak Checklist →
+            </a>
+            {' · '}
+            <a
+              href="https://store.bmwealth.co.in/products/mumbai-tax-leak-playbook"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 text-[color:var(--lux-accent)] hover:opacity-80 transition-opacity"
+            >
+              7 Tax Leak Traps Playbook →
+            </a>
+          </p>
         </div>
 
         {/* Progress */}

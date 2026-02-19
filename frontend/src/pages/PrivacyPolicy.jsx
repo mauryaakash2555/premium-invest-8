@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
       <Helmet>
         <title>Privacy Policy - BM Wealth</title>
         <meta name="description" content="Privacy Policy for BM Wealth - How we protect and manage your data" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/privacy" />
+        <link rel="canonical" href="https://bmwealth.co.in/privacy" />
       </Helmet>
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>

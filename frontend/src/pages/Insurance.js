@@ -13,19 +13,19 @@ const Insurance = () => {
         <title>Insurance Advisory Mumbai | Life & Health Insurance | BM Wealth IRDAI 277925</title>
         <meta name="description" content="Comprehensive insurance planning in Mumbai. Term insurance, health insurance, ULIP. IRDAI Licensed 277925. Expert insurance advisory services." />
         <meta name="keywords" content="insurance advisor mumbai, life insurance mumbai, health insurance mumbai, term insurance plans, insurance planning mumbai, IRDAI licensed" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/insurance" />
+        <link rel="canonical" href="https://bmwealth.co.in/insurance" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/insurance" />
+        <meta property="og:url" content="https://bmwealth.co.in/insurance" />
         <meta property="og:title" content="Insurance Advisory Mumbai - Life & Health Insurance | BM Wealth" />
         <meta property="og:description" content="Comprehensive insurance planning in Mumbai. IRDAI Licensed 277925. Expert term, health, and ULIP advisory." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/insurance" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/insurance" />
         <meta name="twitter:title" content="Insurance Advisory Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Comprehensive insurance planning in Mumbai. IRDAI Licensed 277925." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{

@@ -79,7 +79,7 @@ export default function PropertyVsSipToolPage() {
           <PropertyVsSipCalculator />
 
           <div className="mt-10">
-            <FAQSection faqs={faqs} pageUrl={`https://www.bmwealth.co.in${PATH}`} />
+            <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>
 
           {/* Related Blog Posts */}
@@ -115,8 +115,28 @@ export default function PropertyVsSipToolPage() {
           <Link href="/tools/tax-optimization" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Tax Intelligence</Link> ·{' '}
           <Link href="/sip" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">SIP</Link> ·{' '}
           <Link href="/blog" className="text-[color:var(--color-matte-gold)] underline underline-offset-4">Blogs</Link>
-        </p>
-      </section>
+        </p>        <div className="mt-4 border border-white/10 bg-white/5 p-4">
+          <p className="text-[11px] tracking-[0.18em] uppercase text-white/60 mb-2">Go deeper \u2014 BM Digital Store</p>
+          <div className="flex flex-col gap-2">
+            <a
+              href="https://store.bmwealth.co.in/products/property-vs-sip-pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[color:var(--color-matte-gold)] underline underline-offset-4 hover:opacity-80"
+            >
+              Property vs SIP Educational Report (PDF) \u2192
+            </a>
+            <a
+              href="https://store.bmwealth.co.in/products/wealth-blueprint-starter-kit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[color:var(--color-matte-gold)] underline underline-offset-4 hover:opacity-80"
+            >
+              Wealth Blueprint Starter Kit \u2014 goals, cashflow, priorities \u2192
+            </a>
+          </div>
+          <p className="mt-2 text-[11px] text-white/45">Educational content only \u2014 not investment advice.</p>
+        </div>      </section>
 
       <Script
         id="property-vs-sip-schema"

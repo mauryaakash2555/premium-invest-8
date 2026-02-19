@@ -12,7 +12,7 @@ const RefundPolicy = () => {
       <Helmet>
         <title>Refund Policy - BM Wealth</title>
         <meta name="description" content="Refund and cancellation policy for BM Wealth services" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/refund" />
+        <link rel="canonical" href="https://bmwealth.co.in/refund" />
       </Helmet>
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>

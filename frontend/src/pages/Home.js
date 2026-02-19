@@ -61,21 +61,21 @@ const Home = () => {
         <title>BM Wealth - Mumbai's Distinguished Financial Advisory | Mutual Funds, SIP, PMS | ARN 90008</title>
         <meta name="description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008. Led by Brahmdeo Maurya. Initiate your wealth journey today." />
         <meta name="keywords" content="BM Wealth, Mumbai investment advisor, mutual funds Mumbai, SIP investment, portfolio management, ARN 90008, Brahmdeo Maurya, financial planning Mumbai" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/" />
+        <link rel="canonical" href="https://bmwealth.co.in/" />
         
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/" />
+        <meta property="og:url" content="https://bmwealth.co.in/" />
         <meta property="og:title" content="BM Wealth - Mumbai's Distinguished Financial Advisory | ARN 90008" />
         <meta property="og:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services. SEBI Registered ARN 90008." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.png" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.png" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/" />
         <meta name="twitter:title" content="BM Wealth - Mumbai's Distinguished Financial Advisory" />
         <meta name="twitter:description" content="Exceptional wealth management solutions in Mumbai. Mutual Funds, SIP, PMS, Insurance & Trading Services." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.png" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.png" />
       </Helmet>
       {/* Hero Section */}
       <section

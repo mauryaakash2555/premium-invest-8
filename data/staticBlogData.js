@@ -77,7 +77,7 @@
 //
 // BLOG 1: "₹47 Lakh Case Study" (staticBlogPost)
 //    • Slug: 47-lakh-investment-mistake-mumbai
-//    • URL: https://www.bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai
+//    • URL: https://bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai
 //    • Status: LIVE
 //    • Content starts: Line 93 below
 //    • Hover effects: Controlled by App.css
@@ -144,10 +144,10 @@ export const staticBlogPost = {
     "@type": "BlogPosting",
     "headline": "He Lost ₹47 Lakh Following Expert Advice - Here's What He Wishes He Knew 7 Years Ago",
     "description": "True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.",
-    "url": "https://www.bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai",
+    "url": "https://bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://www.bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai"
+      "@id": "https://bmwealth.co.in/blog/47-lakh-investment-mistake-mumbai"
     },
     "author": {
       "@type": "Organization",
@@ -158,7 +158,7 @@ export const staticBlogPost = {
       "name": "BM Wealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bmwealth.co.in/logo.png"
+        "url": "https://bmwealth.co.in/logo.png"
       }
     },
     "datePublished": "2025-12-09",
@@ -595,7 +595,7 @@ export const staticBlogPost = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -705,7 +705,7 @@ export const staticBlogPost2 = {
       "name": "BM Wealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bmwealth.co.in/logo.png"
+        "url": "https://bmwealth.co.in/logo.png"
       }
     },
     "datePublished": "2025-12-13",
@@ -1086,7 +1086,7 @@ export const staticBlogPost2 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -1197,7 +1197,7 @@ export const staticBlogPost3 = {
       "name": "BM Wealth",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bmwealth.co.in/logo.png"
+        "url": "https://bmwealth.co.in/logo.png"
       }
     },
     "datePublished": "2025-12-18",
@@ -1572,7 +1572,7 @@ export const staticBlogPost3 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -1674,7 +1674,7 @@ export const staticBlogPost5 = {
     "headline": "₹25 Lakh Bonus: SIP vs Lump Sum - The 5-Year Real Result That Shocked Both",
     "description": "Two friends get ₹25L bonus in March 2020. One goes SIP, one goes lump sum. Five years later at Starbucks BKC: ₹58L vs ₹52L. Market timing myth busted.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-12-28",
     "dateModified": "2025-12-30",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
@@ -1917,7 +1917,7 @@ export const staticBlogPost5 = {
           <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
-      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a></p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;"><a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a></p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002</p>
       <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
@@ -1992,7 +1992,7 @@ export const staticBlogPost4 = {
     "headline": "How a Powai Engineer Saved ₹2.2 Lakh in Taxes Beyond Section 80C",
     "description": "March 30 panic vs smart planning: A 32-year-old software engineer discovers tax-saving strategies beyond the usual 80C investments. Annual savings: ₹2.2 lakh.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2025-12-23",
     "dateModified": "2025-12-26",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
@@ -2283,7 +2283,7 @@ export const staticBlogPost4 = {
           <span class="whatsapp-cta-btn">WhatsApp: +91</span> 88509 77259
         </a>
       </div>
-      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a></p>
+      <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a></p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;"><a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a></p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">Office: 66, Vinod Villa Bldg., 1st floor office no. 108, cavel cross lane 3, Kalbadevi Mumbai, 400002</p>
       <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
@@ -2357,7 +2357,7 @@ export const staticBlogPost6 = {
     "headline": "Why 6 Months Emergency Fund Nearly Destroyed This Malad Family",
     "description": "Family of 3 in Malad during COVID. Job loss. ₹12.3L needed for 14 months. They had ₹4.8L. Why Mumbai needs 12-15 months emergency fund, not 6.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2026-01-02",
     "dateModified": "2026-01-04",
     "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
@@ -2701,7 +2701,7 @@ export const staticBlogPost6 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -2803,7 +2803,7 @@ export const staticBlogPost7 = {
     "headline": "₹1.5 Lakh Annually for 20 Years: ELSS vs PPF vs NPS - The Real Results",
     "description": "Same annual investment of ₹1.5L for 20 years. Three tax-saving instruments. Final corpus: ₹1.15 crore vs ₹63 lakh vs ₹94 lakh. The math explains everything.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2026-01-06",
     "dateModified": "2026-01-08",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
@@ -3137,7 +3137,7 @@ export const staticBlogPost7 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -3235,7 +3235,7 @@ export const staticBlogPost8 = {
     "headline": "₹1 Crore Retirement Corpus: The Mumbai Reality That Shocked Him",
     "description": "Retired bank manager from Chembur with ₹1 crore corpus. Feels rich—until monthly withdrawal calculation: only ₹58,000. Why you actually need ₹2.8-5 crore for Mumbai retirement.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2026-01-10",
     "dateModified": "2026-01-12",
     "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
@@ -3543,7 +3543,7 @@ export const staticBlogPost8 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -3652,7 +3652,7 @@ export const staticBlogPost9 = {
     "headline": "₹60 Lakh in 2010: Real Estate vs Mutual Funds - The 15-Year Verdict",
     "description": "Two brothers inherit ₹60L in 2010. One buys Thane flat (₹3.43 Cr today). One invests in mutual funds (₹4.25 Cr). The detailed math reveals everything.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2026-01-13",
     "dateModified": "2026-01-15",
     "image": "https://images.unsplash.com/photo-1554224311-beee1c7c0b18",
@@ -4058,7 +4058,7 @@ export const staticBlogPost9 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>
@@ -4156,7 +4156,7 @@ export const staticBlogPost10 = {
     "headline": "Grandmother's 400g Gold: Physical vs Digital Gold vs SGB - The Analysis",
     "description": "Family heirloom: 400g gold inherited. Three options analyzed—physical gold, digital gold, Sovereign Gold Bonds. Storage, returns, liquidity, taxation compared.",
     "author": {"@type": "Organization", "name": "BM Wealth Editorial Team"},
-    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://www.bmwealth.co.in/logo.png"}},
+    "publisher": {"@type": "Organization", "name": "BM Wealth", "logo": {"@type": "ImageObject", "url": "https://bmwealth.co.in/logo.png"}},
     "datePublished": "2026-01-15",
     "dateModified": "2026-01-15",
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
@@ -4560,7 +4560,7 @@ export const staticBlogPost10 = {
         </a>
       </div>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
-        Website: <a href="https://www.bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
+        Website: <a href="https://bmwealth.co.in" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">bmwealth.co.in</a>
       </p>
       <p style="font-size: 17px; margin-bottom: 12px; color: #E5E5E5;">
         <a href="/services" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Our Services</a> | <a href="/contact" style="color: color-mix(in oklab, var(--lux-accent) 90%, transparent); text-decoration: underline;">Contact Us</a>

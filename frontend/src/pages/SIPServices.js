@@ -12,19 +12,19 @@ const SIPServices = () => {
         <title>SIP Investment Mumbai | Systematic Investment Plan Services | BM Wealth</title>
         <meta name="description" content="Start SIP investment in Mumbai with expert guidance. SIP calculator, best SIP plans 2025, retirement planning. AMFI Registered ARN 90008." />
         <meta name="keywords" content="SIP investment mumbai, systematic investment plan, SIP calculator, best SIP plans 2025, SIP advisor mumbai" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/sip" />
+        <link rel="canonical" href="https://bmwealth.co.in/sip" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/sip" />
+        <meta property="og:url" content="https://bmwealth.co.in/sip" />
         <meta property="og:title" content="SIP Investment Mumbai | Systematic Investment Plan | BM Wealth" />
         <meta property="og:description" content="Start SIP investment in Mumbai with expert guidance. AMFI Registered ARN 90008." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/sip" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/sip" />
         <meta name="twitter:title" content="SIP Investment Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Start SIP investment with expert guidance. Best SIP plans 2025." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{

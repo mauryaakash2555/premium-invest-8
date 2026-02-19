@@ -369,6 +369,17 @@ export default function HomePageClient() {
           >
             Expert financial wisdom and real-world investment stories
           </p>
+          <p style={{ marginTop: '14px', fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>
+            Prefer self-paced learning?{' '}
+            <a
+              href="https://store.bmwealth.co.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'oklch(0.78 0.08 65)', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              Explore our Digital Store →
+            </a>
+          </p>
         </div>
 
         <BlogCard post={staticBlogPost} variant="homeMutualStyle" />

@@ -51,7 +51,7 @@ function getBaseUrlFromRequest(request) {
   // Prefer same-origin so staging never calls production domains (which can 403).
   const origin = request?.nextUrl?.origin;
   if (origin) return origin;
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bmwealth.co.in';
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
 }
 
 function emptyMarkets(reason = 'unavailable') {

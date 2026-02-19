@@ -12,19 +12,19 @@ const FixedDeposits = () => {
         <title>Fixed Deposit Advisory Mumbai | Best FD Rates 2025 | BM Wealth</title>
         <meta name="description" content="Expert fixed deposit investment advisory in Mumbai. Compare bank & corporate FD rates, tax-saving FDs, senior citizen schemes. Get best FD returns." />
         <meta name="keywords" content="fixed deposit rates mumbai, FD investment advisor, best FD rates 2025, senior citizen FD, tax saving FD" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/fixed-deposits" />
+        <link rel="canonical" href="https://bmwealth.co.in/fixed-deposits" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/fixed-deposits" />
+        <meta property="og:url" content="https://bmwealth.co.in/fixed-deposits" />
         <meta property="og:title" content="Fixed Deposit Advisory Mumbai | Best FD Rates 2025 | BM Wealth" />
         <meta property="og:description" content="Expert fixed deposit investment advisory in Mumbai. Compare bank & corporate FD rates." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/fixed-deposits" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/fixed-deposits" />
         <meta name="twitter:title" content="Fixed Deposit Advisory Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Expert FD advisory in Mumbai. Get best FD rates 2025." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.webp" />
       </Helmet>
 
       <section style={{

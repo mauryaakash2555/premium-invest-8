@@ -13,7 +13,7 @@ const Platforms = () => {
         <title>Recommended Investment Platforms | BM Wealth Mumbai</title>
         <meta name="description" content="Discover top investment platforms recommended by BM Wealth. Compare Zerodha, Smallcase, and Groww for your trading and investment needs." />
         <meta name="keywords" content="investment platforms, trading platforms, Zerodha, Smallcase, Groww, Mumbai investment" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/recommended-platforms" />
+        <link rel="canonical" href="https://bmwealth.co.in/recommended-platforms" />
       </Helmet>
 
       {/* Hero Section */}

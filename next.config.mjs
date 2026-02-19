@@ -55,13 +55,9 @@ const nextConfig = {
   // The middleware also handles these, but having them here gives Vercel Edge an extra-fast path.
   async redirects() {
     return [
-      // Canonical domain: non-www → www (catches any requests that bypass Cloudflare/middleware)
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'bmwealth.co.in' }],
-        destination: 'https://www.bmwealth.co.in/:path*',
-        permanent: true,
-      },
+      // Domain redirect (www → non-www) lives ONLY in vercel.json to avoid
+      // redirect loops with Cloudflare proxy + Vercel + app-level redirects.
+      //
       // Legacy path redirects (also in middleware, duplicated here for Vercel edge performance)
       { source: '/about', destination: '/about-us', permanent: true },
       { source: '/terms', destination: '/terms-and-conditions', permanent: true },

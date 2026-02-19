@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 
 async function main() {
-  const url = 'https://www.bmwealth.co.in/about-us';
+  const url = 'https://bmwealth.co.in/about-us';
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 

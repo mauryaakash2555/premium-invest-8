@@ -12,7 +12,7 @@ const TermsAndConditions = () => {
       <Helmet>
         <title>Terms and Conditions - BM Wealth</title>
         <meta name="description" content="Terms and Conditions for BM Wealth financial advisory services" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/terms" />
+        <link rel="canonical" href="https://bmwealth.co.in/terms" />
       </Helmet>
       
       <div style={{ minHeight: '100vh', background: '#000000', paddingTop: '120px', paddingBottom: '80px' }}>

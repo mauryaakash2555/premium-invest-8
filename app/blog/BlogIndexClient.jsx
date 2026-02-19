@@ -93,7 +93,7 @@ export default function BlogPage() {
       const isLocalhost =
         typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-      const canFetchBackend = !isLocalhost && (window.location.hostname === 'bmwealth.co.in' || window.location.hostname === 'www.bmwealth.co.in');
+      const canFetchBackend = !isLocalhost && window.location.hostname === 'bmwealth.co.in';
 
       if (canFetchBackend) {
         try {
@@ -166,9 +166,9 @@ export default function BlogPage() {
 
   const siteOrigin = useMemo(() => {
     try {
-      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://www.bmwealth.co.in';
+      return typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://bmwealth.co.in';
     } catch {
-      return 'https://www.bmwealth.co.in';
+      return 'https://bmwealth.co.in';
     }
   }, []);
 
@@ -323,6 +323,25 @@ export default function BlogPage() {
             }}
           >
             Elite insights, market analysis, and updates from BM Wealth Talks
+          </p>
+          <p
+            style={{
+              fontSize: '14px',
+              color: 'var(--lux-foreground-60)',
+              maxWidth: '700px',
+              margin: '16px auto 0',
+              lineHeight: 1.7,
+            }}
+          >
+            Start with our free tools, then deepen your learning with premium checklists and blueprints from{' '}
+            <a
+              href="https://store.bmwealth.co.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--lux-accent)', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              BM Digital Store
+            </a>.
           </p>
         </div>
       </section>
@@ -757,13 +776,24 @@ export default function BlogPage() {
           <Link href="/tools/tax-optimization" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Tax Intelligence</Link> ·{' '}
           <Link href="/services" style={{ color: 'var(--lux-accent)', textDecoration: 'underline' }}>Services</Link>
         </p>
+        <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--lux-foreground-40)', marginTop: '12px', textAlign: 'center' }}>
+          Prefer self-paced, printable guides?{' '}
+          <a
+            href="https://store.bmwealth.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--lux-accent)', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+          >
+            Explore BM Digital Store →
+          </a>
+        </p>
       </section>
 
       <section className="section-container" style={{ paddingBottom: '10px' }}>
         <ComplianceFooter />
       </section>
 
-      <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/blog" withSchema />
+      <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/blog" withSchema />
     </div>
   );
 }

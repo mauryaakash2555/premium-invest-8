@@ -14,20 +14,20 @@ const MutualFunds = () => {
         <title>Mutual Fund Investment Services Mumbai | Best SIP Plans 2025 | BM Wealth</title>
         <meta name="description" content="Expert mutual fund advisory in Mumbai. AMFI Registered ARN 90008. SIP investment, ELSS tax saving, equity & debt funds. Start investing with BM Wealth today." />
         <meta name="keywords" content="mutual funds mumbai, best mutual funds 2025, SIP investment mumbai, mutual fund advisor mumbai, ELSS tax saving, AMFI registered advisor" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/mutual-funds" />
+        <link rel="canonical" href="https://bmwealth.co.in/mutual-funds" />
         
         {/* Open Graph Tags */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/mutual-funds" />
+        <meta property="og:url" content="https://bmwealth.co.in/mutual-funds" />
         <meta property="og:title" content="Mutual Fund Investment Services Mumbai | BM Wealth ARN 90008" />
         <meta property="og:description" content="Expert mutual fund advisory in Mumbai. AMFI Registered ARN 90008. SIP investment, ELSS tax saving funds." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/mutual-funds" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/mutual-funds" />
         <meta name="twitter:title" content="Mutual Fund Investment Services Mumbai | BM Wealth" />
         <meta name="twitter:description" content="Expert mutual fund advisory in Mumbai. AMFI Registered ARN 90008." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.webp" />
         
         {/* Schema Markup */}
         <script type="application/ld+json">
@@ -36,7 +36,7 @@ const MutualFunds = () => {
             "@type": "FinancialService",
             "name": "BM Wealth Mutual Fund Services",
             "description": "Expert mutual fund investment advisory services in Mumbai",
-            "url": "https://www.bmwealth.co.in/mutual-funds",
+            "url": "https://bmwealth.co.in/mutual-funds",
             "telephone": "+91-8850977259",
             "address": {
               "@type": "PostalAddress",

@@ -524,7 +524,7 @@ return (
 
             <div className="flex flex-col items-center space-y-3">
               <p className="text-[12px] font-light tracking-[0.4em] uppercase m-0 opacity-60" style={{ color: 'oklch(0.95 0.01 85 / 0.60)' }}>
-                © 2025 BM Wealth. All rights reserved.
+                © {new Date().getFullYear()} BM Wealth. All rights reserved.
               </p>
               <p className="text-[10px] font-bold tracking-[0.2em] uppercase m-0 opacity-60 drop-shadow-[0_0_8px_oklch(0.78_0.08_65_/_0.4)]" style={{ color: 'oklch(0.78 0.08 65)' }}>
                 Crafted for Mumbai's Distinguished Investors

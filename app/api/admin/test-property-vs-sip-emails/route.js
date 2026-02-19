@@ -48,7 +48,7 @@ export async function POST(req) {
   const pdfPayload = buildMumbaiPropertyVsSipPdfPayload({ lead, model });
   const pdfBytes = generateBmWealthBlueprint15PdfBytes(pdfPayload);
 
-  const baseUrl = String(process.env.NEXT_PUBLIC_SITE_URL || "https://www.bmwealth.co.in").replace(/\/+$/, "");
+  const baseUrl = String(process.env.NEXT_PUBLIC_SITE_URL || "https://bmwealth.co.in").replace(/\/+$/, "");
 
   const freeEmail = buildPropertyVsSipFreeSummaryEmail({ lead, inputs, siteUrl: baseUrl });
   const paidEmail = buildPropertyVsSipPaidPdfEmail({ lead, pdfPayload, attachmentName: pdfPayload?.meta?.filename });

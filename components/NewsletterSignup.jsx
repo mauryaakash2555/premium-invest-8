@@ -43,7 +43,7 @@ export default function NewsletterSignup({ source = 'blog' }) {
     >
       <div style={{ color: 'var(--lux-accent)', fontWeight: 800, marginBottom: '6px' }}>Get weekly insights</div>
       <div style={{ color: 'var(--lux-foreground-40)', fontSize: '13px', marginBottom: '12px', lineHeight: 1.6 }}>
-        Market notes + community stories. No spam.
+        1 practical wealth insight + 1 tool walkthrough per week. No spam.
       </div>
 
       <form onSubmit={handleSubmit} className="flex gap-2" style={{ alignItems: 'stretch' }}>

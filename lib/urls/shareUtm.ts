@@ -11,18 +11,18 @@ function isBmwealthHostname(hostname: string): boolean {
 }
 
 export function getBestShareOrigin(): string {
-  if (typeof window === "undefined") return "https://www.bmwealth.co.in";
+  if (typeof window === "undefined") return "https://bmwealth.co.in";
 
   try {
     const { hostname, origin } = window.location;
 
     // If we are on the production host(s), always share the canonical non-www origin.
-    if (isBmwealthHostname(hostname)) return "https://www.bmwealth.co.in";
+    if (isBmwealthHostname(hostname)) return "https://bmwealth.co.in";
 
     // Otherwise (localhost/staging previews), keep current origin so links work.
     return origin;
   } catch {
-    return "https://www.bmwealth.co.in";
+    return "https://bmwealth.co.in";
   }
 }
 
@@ -30,7 +30,7 @@ export function addUtmParams(inputUrl: string, options: UTMOptions): string {
   const { source = "share", medium, campaign = "sip_vs_panic", content } = options;
 
   try {
-    const base = typeof window !== "undefined" ? window.location.origin : "https://www.bmwealth.co.in";
+    const base = typeof window !== "undefined" ? window.location.origin : "https://bmwealth.co.in";
     const url = new URL(inputUrl, base);
 
     url.searchParams.set("utm_source", source);

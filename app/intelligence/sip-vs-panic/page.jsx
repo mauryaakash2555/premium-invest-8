@@ -199,6 +199,23 @@ export default function SIPPanicRoutePage() {
               Explore more simulators →
             </Link>
           </div>
+
+          {/* Deep dive: SIP vs Panic Workbook */}
+          <div className="mt-6 border border-white/10 bg-white/5 p-4">
+            <p className="text-[11px] tracking-[0.18em] uppercase text-white/60 mb-2">Go deeper</p>
+            <p className="text-sm text-white/70 leading-relaxed mb-2">
+              Want to run these scenarios with your own numbers? Export and keep the results.
+            </p>
+            <a
+              href="https://store.bmwealth.co.in/products/sip-vs-panic-workbook"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[oklch(0.78_0.08_65)] underline underline-offset-4 hover:opacity-80"
+            >
+              SIP vs Panic Selling Scenario Workbook (Excel + PDF) →
+            </a>
+            <p className="mt-2 text-[11px] text-white/45">Educational content only — not investment advice.</p>
+          </div>
         </div>
       </section>
 

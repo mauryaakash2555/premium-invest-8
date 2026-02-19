@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
  * dynamic Open Graph meta tags for nice link previews.
  */
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bmwealth.co.in';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bmwealth.co.in';
 
 // Calculator labels for generating titles
 const CALC_LABELS = {

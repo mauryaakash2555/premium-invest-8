@@ -131,8 +131,17 @@ export default function ToolsHubPage() {
             </h1>
             <p className="mt-3 text-sm sm:text-base text-white/75 max-w-2xl mx-auto">
               Professional-grade calculators built for Mumbai’s high-income professionals.
-            </p>
-          </div>
+            </p>            <p className="mt-3 text-xs sm:text-sm text-white/55 max-w-xl mx-auto">
+              Need deeper checklists and templates?{' '}
+              <a
+                href="https://store.bmwealth.co.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4 gold-gradient-text"
+              >
+                Visit BM Digital Store →
+              </a>
+            </p>          </div>
 
           <div className="bp-body">
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr">
@@ -193,7 +202,7 @@ export default function ToolsHubPage() {
               </p>
             </div>
 
-            <FAQSection faqs={faqs} pageUrl="https://www.bmwealth.co.in/tools" />
+            <FAQSection faqs={faqs} pageUrl="https://bmwealth.co.in/tools" />
           </div>
         </div>
       </section>

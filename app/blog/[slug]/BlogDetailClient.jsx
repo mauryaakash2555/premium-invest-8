@@ -1116,6 +1116,47 @@ export default function BlogDetailClient({ slug }) {
         {/* Post Bottom CTA - Newsletter + Submit Story */}
         <PostBottomCTA title="Enjoyed this article?" />
 
+        {/* Digital Store Product CTAs — category-aware */}
+        <div style={{
+          marginTop: '36px',
+          padding: '24px',
+          border: '1px solid rgba(255,255,255,0.10)',
+          background: 'rgba(0,0,0,0.50)',
+        }}>
+          <div style={{ fontSize: '10px', letterSpacing: '0.5em', textTransform: 'uppercase', fontWeight: 600, color: 'var(--lux-foreground-60)', marginBottom: '14px' }}>
+            Go Deeper — BM Digital Store
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <a
+              href="https://store.bmwealth.co.in/products/form-16-tax-leak-checklist"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--lux-accent)', fontSize: '14px', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              Download the Form 16 Review &amp; Tax Leak Checklist (PDF) \u2192
+            </a>
+            <a
+              href="https://store.bmwealth.co.in/products/mumbai-tax-leak-playbook"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--lux-accent)', fontSize: '14px', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              Get the Mumbai High-Income Playbook: 7 Tax Leak Traps \u2192
+            </a>
+            <a
+              href="https://store.bmwealth.co.in/products/wealth-blueprint-starter-kit"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--lux-accent)', fontSize: '14px', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              Wealth Blueprint Starter Kit — goals, cashflow, priorities \u2192
+            </a>
+          </div>
+          <div style={{ marginTop: '12px', fontSize: '11px', color: 'var(--lux-foreground-40)' }}>
+            Educational content only — not investment advice.
+          </div>
+        </div>
+
         {/* Blog-only: Next Read + WhatsApp CTA (always present, premium, hover-ready) */}
         <div style={{ marginTop: '44px' }}>
           {nextPost ? (

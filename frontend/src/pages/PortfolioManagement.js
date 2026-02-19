@@ -14,11 +14,11 @@ const PortfolioManagement = () => {
         <title>Portfolio Management Services Mumbai | Wealth Management | BM Wealth</title>
         <meta name="description" content="Professional portfolio management & wealth advisory in Mumbai. Customized asset allocation, risk management, PMS services. AMFI ARN 90008." />
         <meta name="keywords" content="portfolio management services mumbai, wealth management mumbai, investment advisory mumbai, PMS services, portfolio diversification" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/portfolio-management" />
+        <link rel="canonical" href="https://bmwealth.co.in/portfolio-management" />
         
         <meta property="og:title" content="Portfolio Management Services Mumbai | BM Wealth" />
         <meta property="og:description" content="Professional portfolio management and wealth advisory services in Mumbai by AMFI registered advisors." />
-        <meta property="og:url" content="https://www.bmwealth.co.in/portfolio-management" />
+        <meta property="og:url" content="https://bmwealth.co.in/portfolio-management" />
       </Helmet>
 
       {/* Hero */}

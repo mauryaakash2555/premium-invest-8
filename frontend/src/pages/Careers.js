@@ -13,19 +13,19 @@ const Careers = () => {
         <title>Careers at BM Wealth Mumbai | Financial Advisor Jobs | AMFI Certification</title>
         <meta name="description" content="Join BM Wealth's growing team in Mumbai. Career opportunities in financial advisory, insurance, wealth management. AMFI certified advisors welcome." />
         <meta name="keywords" content="financial advisor jobs mumbai, career in finance mumbai, AMFI certification jobs, financial planning careers" />
-        <link rel="canonical" href="https://www.bmwealth.co.in/careers" />
+        <link rel="canonical" href="https://bmwealth.co.in/careers" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.bmwealth.co.in/careers" />
+        <meta property="og:url" content="https://bmwealth.co.in/careers" />
         <meta property="og:title" content="Careers at BM Wealth Mumbai | Financial Advisor Jobs" />
         <meta property="og:description" content="Join BM Wealth's growing team in Mumbai. Career opportunities in financial advisory and wealth management." />
-        <meta property="og:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta property="og:image" content="https://bmwealth.co.in/logo.webp" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.bmwealth.co.in/careers" />
+        <meta name="twitter:url" content="https://bmwealth.co.in/careers" />
         <meta name="twitter:title" content="Careers at BM Wealth Mumbai" />
         <meta name="twitter:description" content="Join our team of financial professionals. AMFI certified advisors welcome." />
-        <meta name="twitter:image" content="https://www.bmwealth.co.in/logo.webp" />
+        <meta name="twitter:image" content="https://bmwealth.co.in/logo.webp" />
       </Helmet>
 
       {/* Hero Section with Background */}
