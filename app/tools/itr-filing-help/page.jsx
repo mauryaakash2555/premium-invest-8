@@ -67,134 +67,342 @@ export default function ITRFilingHelp() {
 
   const allVerified = Object.values(verified).every(v => v);
 
-  /** Generate a real PDF using jsPDF and trigger download */
+  /** Generate a professional, complete ITR Filing Summary PDF using jsPDF */
   const generateRealPdf = useCallback(async (overrideData) => {
     const d = overrideData || paymentSuccessData || {};
     const fmtMoney = (n) => `₹${Math.round(Number(n || 0)).toLocaleString('en-IN')}`;
+
+    // === Extract all values with fallbacks ===
+    const employeePAN = String(d.employeePAN ?? itrDetails?.employeePAN ?? '—').toUpperCase().trim() || '—';
+    const employerName = String(d.employerName ?? itrDetails?.employerName ?? '—').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || '—';
+    const employerTAN = String(d.employerTAN ?? itrDetails?.employerTAN ?? '—').toUpperCase().trim() || '—';
+    const assessmentYear = String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '—').trim() || '—';
+    const hraExemption = Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0);
+    const grossSalary = Number(d.grossSalary ?? fields?.grossSalary ?? 0);
+    const tds = Number(d.tds ?? fields?.tds ?? 0);
+    const standardDeduction = Number(d.standardDeduction ?? fields?.standardDeduction ?? 0);
+    const deductions80C = Number(d.deductions80C ?? fields?.deductions80C ?? 0);
     const oldTax = Number(d.oldRegimeTax ?? taxResult?.oldRegime?.tax ?? 0);
     const newTax = Number(d.newRegimeTax ?? taxResult?.newRegime?.tax ?? 0);
     const savings = Number(d.savings ?? taxResult?.savings ?? 0);
     const usedRegime = String(d.regime ?? taxResult?.recommended ?? '').toLowerCase();
     const recommended = usedRegime === 'old' || usedRegime === 'new' ? usedRegime : (oldTax <= newTax ? 'old' : 'new');
     const netIncome = Number(d.netTaxableIncome ?? 0);
-    const grossSalary = Number(d.grossSalary ?? fields?.grossSalary ?? 0);
-    const tds = Number(d.tds ?? fields?.tds ?? 0);
-    const standardDeduction = Number(d.standardDeduction ?? fields?.standardDeduction ?? 0);
-    const deductions80C = Number(d.deductions80C ?? fields?.deductions80C ?? 0);
+    const totalDeductions = standardDeduction + deductions80C + hraExemption;
     const selectedTax = recommended === 'old' ? oldTax : newTax;
     const diff = Math.round(selectedTax - tds);
-    const taxOrRefund = diff > 0 ? `${fmtMoney(diff)} (Tax Payable)` : diff < 0 ? `${fmtMoney(Math.abs(diff))} (Refund Due)` : `${fmtMoney(0)} (Nil)`;
+    const taxOrRefund = diff > 0 ? `${fmtMoney(diff)} Tax Payable` : diff < 0 ? `${fmtMoney(Math.abs(diff))} Refund Due` : `${fmtMoney(0)} Nil`;
 
     try {
       const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF({ unit: 'mm', format: 'a4' });
       const pw = doc.internal.pageSize.getWidth();
-      let y = 20;
+      const ph = doc.internal.pageSize.getHeight();
       const lm = 18;
       const rm = pw - 18;
+      const contentWidth = rm - lm;
+      let y = 0;
 
-      // Header
-      doc.setFontSize(20);
+      // Helper: draw a filled rectangle
+      const drawRect = (x, _y, w, h, r, g, b) => {
+        doc.setFillColor(r, g, b);
+        doc.rect(x, _y, w, h, 'F');
+      };
+
+      // Helper: check page break
+      const checkPage = (needed = 25) => {
+        if (y + needed > ph - 20) {
+          doc.addPage();
+          y = 20;
+        }
+      };
+
+      // ═══════════════════════════════════════════
+      // HEADER — Dark banner with BM Wealth branding
+      // ═══════════════════════════════════════════
+      drawRect(0, 0, pw, 44, 15, 15, 20);
+
       doc.setFont('helvetica', 'bold');
-      doc.text('BM Wealth', lm, y);
-      y += 8;
-      doc.setFontSize(14);
-      doc.text('Educational ITR Summary', lm, y);
-      y += 6;
-      doc.setFontSize(9);
+      doc.setFontSize(22);
+      doc.setTextColor(255, 255, 255);
+      doc.text('BM Wealth', lm, 18);
+
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(120);
-      doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, lm, y);
-      doc.setTextColor(0);
+      doc.setFontSize(11);
+      doc.setTextColor(180, 190, 210);
+      doc.text('ITR Filing Summary — Form 16 Analysis', lm, 28);
+
+      doc.setFontSize(9);
+      doc.setTextColor(140, 150, 170);
+      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`, lm, 37);
+
+      // Right side — PAN badge
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(100, 181, 246);
+      doc.text(`PAN: ${employeePAN}`, rm, 18, { align: 'right' });
+      doc.setFontSize(9);
+      doc.setTextColor(140, 150, 170);
+      doc.text(`AY: ${assessmentYear}`, rm, 28, { align: 'right' });
+
+      y = 52;
+
+      // ═══════════════════════════════════════════
+      // SECTION 1 — Your Details (Copy-Paste Ready)
+      // ═══════════════════════════════════════════
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.setTextColor(15, 15, 20);
+      doc.text('SECTION 1 — Your Details', lm, y);
+      y += 3;
+      doc.setDrawColor(100, 181, 246);
+      doc.setLineWidth(0.8);
+      doc.line(lm, y, lm + 55, y);
+      y += 7;
+
+      // Table header
+      drawRect(lm, y, contentWidth, 8, 240, 245, 250);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(80, 80, 90);
+      doc.text('FIELD', lm + 4, y + 5.5);
+      doc.text('VALUE', lm + 75, y + 5.5);
       y += 10;
 
-      // Divider
-      doc.setDrawColor(200);
+      const detailRows = [
+        ['Employee PAN', employeePAN],
+        ['Employer Name', employerName.length > 45 ? employerName.slice(0, 44) + '...' : employerName],
+        ['Employer TAN', employerTAN],
+        ['Assessment Year', assessmentYear],
+        ['Gross Salary', fmtMoney(grossSalary)],
+        ['HRA Exemption', fmtMoney(hraExemption)],
+        ['Standard Deduction', fmtMoney(standardDeduction)],
+        ['80C Deductions', fmtMoney(deductions80C)],
+        ['TDS Already Deducted', fmtMoney(tds)],
+        ['Net Taxable Income', fmtMoney(netIncome)],
+        ['Tax Payable / Refund', taxOrRefund],
+      ];
+
+      doc.setFontSize(9.5);
+      for (let i = 0; i < detailRows.length; i++) {
+        const [label, val] = detailRows[i];
+        // Alternating row background
+        if (i % 2 === 0) drawRect(lm, y - 3.5, contentWidth, 7.5, 248, 250, 252);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(90, 90, 100);
+        doc.text(label, lm + 4, y);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(15, 15, 20);
+        doc.text(String(val || '—'), lm + 75, y);
+        y += 7.5;
+      }
+      y += 6;
+
+      // ═══════════════════════════════════════════
+      // SECTION 2 — Tax Regime Comparison
+      // ═══════════════════════════════════════════
+      checkPage(70);
+      doc.setDrawColor(220, 220, 225);
+      doc.setLineWidth(0.3);
       doc.line(lm, y, rm, y);
       y += 8;
 
-      // Details table
-      doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
-      doc.text('Your ITR Details', lm, y);
+      doc.setFontSize(13);
+      doc.setTextColor(15, 15, 20);
+      doc.text('SECTION 2 — Tax Regime Comparison', lm, y);
+      y += 3;
+      doc.setDrawColor(100, 181, 246);
+      doc.setLineWidth(0.8);
+      doc.line(lm, y, lm + 70, y);
+      y += 10;
+
+      // Two side-by-side cards
+      const cardW = (contentWidth - 8) / 2;
+      const cardH = 46;
+      const cardY = y;
+
+      // Old Regime card
+      const oldIsRecommended = recommended === 'old';
+      drawRect(lm, cardY, cardW, cardH, oldIsRecommended ? 235 : 248, oldIsRecommended ? 245 : 250, oldIsRecommended ? 255 : 252);
+      if (oldIsRecommended) {
+        doc.setDrawColor(100, 181, 246);
+        doc.setLineWidth(0.6);
+        doc.rect(lm, cardY, cardW, cardH, 'S');
+      }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(15, 15, 20);
+      doc.text('Old Regime', lm + 6, cardY + 10);
+      if (oldIsRecommended) {
+        doc.setFontSize(7);
+        doc.setTextColor(100, 181, 246);
+        doc.text('✓ RECOMMENDED', lm + 6, cardY + 16);
+      }
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(90, 90, 100);
+      doc.text(`Gross Income: ${fmtMoney(grossSalary)}`, lm + 6, cardY + 24);
+      doc.text(`Deductions: ${fmtMoney(totalDeductions)}`, lm + 6, cardY + 31);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(15, 15, 20);
+      doc.text(`Tax Payable: ${fmtMoney(oldTax)}`, lm + 6, cardY + 40);
+
+      // New Regime card
+      const newCardX = lm + cardW + 8;
+      const newIsRecommended = recommended === 'new';
+      drawRect(newCardX, cardY, cardW, cardH, newIsRecommended ? 235 : 248, newIsRecommended ? 245 : 250, newIsRecommended ? 255 : 252);
+      if (newIsRecommended) {
+        doc.setDrawColor(100, 181, 246);
+        doc.setLineWidth(0.6);
+        doc.rect(newCardX, cardY, cardW, cardH, 'S');
+      }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(15, 15, 20);
+      doc.text('New Regime', newCardX + 6, cardY + 10);
+      if (newIsRecommended) {
+        doc.setFontSize(7);
+        doc.setTextColor(100, 181, 246);
+        doc.text('✓ RECOMMENDED', newCardX + 6, cardY + 16);
+      }
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(90, 90, 100);
+      doc.text(`Gross Income: ${fmtMoney(grossSalary)}`, newCardX + 6, cardY + 24);
+      doc.text(`Deductions: ${fmtMoney(0)} (not applicable)`, newCardX + 6, cardY + 31);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(15, 15, 20);
+      doc.text(`Tax Payable: ${fmtMoney(newTax)}`, newCardX + 6, cardY + 40);
+
+      y = cardY + cardH + 8;
+
+      // Savings callout
+      drawRect(lm, y, contentWidth, 16, 235, 245, 255);
+      doc.setDrawColor(100, 181, 246);
+      doc.setLineWidth(0.4);
+      doc.rect(lm, y, contentWidth, 16, 'S');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(15, 15, 20);
+      const savingsText = `Potential Savings: ${fmtMoney(savings)}`;
+      const savingsTextW = doc.getTextWidth(savingsText);
+      doc.text(savingsText, lm + (contentWidth - savingsTextW) / 2, y + 10.5);
+      y += 24;
+
+      // ═══════════════════════════════════════════
+      // SECTION 3 — How to File in 6 Steps
+      // ═══════════════════════════════════════════
+      checkPage(75);
+      doc.setDrawColor(220, 220, 225);
+      doc.setLineWidth(0.3);
+      doc.line(lm, y, rm, y);
       y += 8;
 
-      const rows = [
-        ['Employee PAN', String(d.employeePAN ?? itrDetails?.employeePAN ?? '—')],
-        ['Employer Name', String(d.employerName ?? itrDetails?.employerName ?? '—')],
-        ['Employer TAN', String(d.employerTAN ?? itrDetails?.employerTAN ?? '—')],
-        ['Assessment Year', String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '—')],
-        ['Gross Salary', fmtMoney(grossSalary)],
-        ['HRA Exemption', fmtMoney(Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0))],
-        ['Standard Deduction', fmtMoney(standardDeduction)],
-        ['80C Deductions', fmtMoney(deductions80C)],
-        ['Net Taxable Income', fmtMoney(netIncome)],
-        ['TDS Already Deducted', fmtMoney(tds)],
-        ['Tax Payable / Refund', taxOrRefund],
-        ['Recommended Regime', recommended === 'old' ? 'Old Regime' : 'New Regime'],
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.setTextColor(15, 15, 20);
+      doc.text('SECTION 3 — How to File in 6 Steps', lm, y);
+      y += 3;
+      doc.setDrawColor(100, 181, 246);
+      doc.setLineWidth(0.8);
+      doc.line(lm, y, lm + 65, y);
+      y += 10;
+
+      const panDisplay = (employeePAN !== '—') ? employeePAN : 'your PAN';
+      const ayDisplay = (assessmentYear !== '—') ? assessmentYear : 'the relevant AY';
+      const employerDisplay = (employerName !== '—') ? employerName : 'your employer';
+
+      const filingSteps = [
+        {
+          title: 'Login to the IT Portal',
+          desc: `Go to incometax.gov.in and sign in using your PAN: ${panDisplay}. If first time, register with Aadhaar-linked mobile.`,
+        },
+        {
+          title: 'Start Your Return',
+          desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) — for salaried individuals with income up to ₹50 lakh.`,
+        },
+        {
+          title: 'Enter Salary Details',
+          desc: `Enter Gross Salary: ${fmtMoney(grossSalary)}, Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check against Form 16 from ${employerDisplay.length > 35 ? employerDisplay.slice(0, 34) + '...' : employerDisplay}.`,
+        },
+        {
+          title: 'Choose Your Tax Regime',
+          desc: `Select ${recommended === 'old' ? 'Old' : 'New'} Regime (estimated savings: ${fmtMoney(savings)}). Old Regime Tax: ${fmtMoney(oldTax)} vs New Regime Tax: ${fmtMoney(newTax)}.`,
+        },
+        {
+          title: 'Verify TDS & Deductions',
+          desc: `TDS deducted by ${employerDisplay.length > 30 ? employerDisplay.slice(0, 29) + '...' : employerDisplay}: ${fmtMoney(tds)}. 80C Deductions: ${fmtMoney(deductions80C)}. HRA Exemption: ${fmtMoney(hraExemption)}.`,
+        },
+        {
+          title: 'Submit & e-Verify',
+          desc: `Review the summary, submit the return, then e-Verify via Aadhaar OTP (fastest method). Keep Form 16, AIS, and 26AS for records.`,
+        },
       ];
 
-      doc.setFontSize(10);
-      for (const [label, val] of rows) {
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(100);
-        doc.text(label, lm, y);
+      for (let i = 0; i < filingSteps.length; i++) {
+        const step = filingSteps[i];
+        checkPage(22);
+
+        // Step number circle
+        drawRect(lm, y - 3, 7, 7, 100, 181, 246);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(0);
-        doc.text(String(val || '—'), lm + 60, y);
-        y += 7;
+        doc.setFontSize(8);
+        doc.setTextColor(255, 255, 255);
+        doc.text(String(i + 1), lm + 2.3, y + 1.5);
+
+        // Step title
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor(15, 15, 20);
+        doc.text(step.title, lm + 12, y + 1);
+        y += 6;
+
+        // Step description — wrap text
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(80, 80, 90);
+        const descLines = doc.splitTextToSize(step.desc, contentWidth - 14);
+        doc.text(descLines, lm + 12, y);
+        y += descLines.length * 4.5 + 5;
       }
       y += 4;
 
-      // Regime comparison
-      doc.setDrawColor(200);
+      // ═══════════════════════════════════════════
+      // FOOTER — Disclaimer + Contact
+      // ═══════════════════════════════════════════
+      checkPage(30);
+      doc.setDrawColor(220, 220, 225);
+      doc.setLineWidth(0.3);
       doc.line(lm, y, rm, y);
       y += 8;
-      doc.setFontSize(12);
+
       doc.setFont('helvetica', 'bold');
-      doc.setTextColor(0);
-      doc.text('Regime Comparison', lm, y);
-      y += 8;
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Old Regime — Tax: ${fmtMoney(oldTax)}`, lm, y);
-      y += 7;
-      doc.text(`New Regime — Tax: ${fmtMoney(newTax)}`, lm, y);
-      y += 7;
-      doc.setFont('helvetica', 'bold');
-      doc.text(`Potential Savings: ${fmtMoney(savings)} (${recommended === 'old' ? 'Old' : 'New'} Regime)`, lm, y);
-      y += 10;
-
-      // Filing steps
-      doc.setDrawColor(200);
-      doc.line(lm, y, rm, y);
-      y += 8;
-      doc.setFontSize(12);
-      doc.text('Filing Steps', lm, y);
-      y += 8;
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      const steps = [
-        `1. Use gross salary ${fmtMoney(grossSalary)} and TDS ${fmtMoney(tds)} as base.`,
-        `2. Apply standard deduction ${fmtMoney(standardDeduction)}.`,
-        `3. Apply 80C deductions ${fmtMoney(deductions80C)}.`,
-        `4. Net taxable income: ${fmtMoney(netIncome)}.`,
-        `5. Recommended: ${recommended === 'old' ? 'Old' : 'New'} Regime.`,
-        `6. File ITR, then e-Verify (Aadhaar OTP). Keep Form 16 + AIS.`,
-      ];
-      for (const s of steps) {
-        doc.text(s, lm, y);
-        y += 6;
-      }
-      y += 6;
-
-      // Disclaimer
       doc.setFontSize(8);
-      doc.setTextColor(140);
-      doc.text('Educational summary only. Not tax advice. — BM Wealth', lm, y);
+      doc.setTextColor(140, 140, 150);
+      doc.text('DISCLAIMER', lm, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(140, 140, 150);
+      const disclaimerText = 'This is an educational summary for reference only. It does not constitute professional tax advice. All values are extracted from your uploaded document and may require verification. Please cross-check every figure with your original Form 16, AIS, and 26AS before filing. Consult a Chartered Accountant for personalised tax guidance.';
+      const disclaimerLines = doc.splitTextToSize(disclaimerText, contentWidth);
+      doc.text(disclaimerLines, lm, y);
+      y += disclaimerLines.length * 3.5 + 6;
 
-      doc.save('ITR-Summary-BM-Wealth.pdf');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(100, 181, 246);
+      doc.text('BM Wealth', lm, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 100, 110);
+      doc.text('  |  www.bmwealth.co.in  |  tools@bmwealth.co.in', lm + doc.getTextWidth('BM Wealth'), y);
+
+      doc.save('ITR-Filing-Summary-BM-Wealth.pdf');
     } catch (err) {
       console.error('[ITR] jsPDF generation failed, falling back to print:', err);
       window.print();
@@ -908,113 +1116,18 @@ export default function ITRFilingHelp() {
     ];
   }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult]);
 
-  // Fix 3 — payment_success step UI (minimal)
-  // Important: this must be AFTER all hooks to avoid hook-order crashes.
-  if (step === 'payment_success')
-    {
-      const d = paymentSuccessData || {};
-      const fmtMoney = (n) => {
-        const v = Number(n || 0);
-        return `₹${Math.round(v).toLocaleString('en-IN')}`;
-      };
-      const oldTax = Number(d.oldRegimeTax ?? taxResult?.oldRegime?.tax ?? 0);
-      const newTax = Number(d.newRegimeTax ?? taxResult?.newRegime?.tax ?? 0);
-      const savings = Number(d.savings ?? taxResult?.savings ?? 0);
-      const usedRegime = String(d.regime ?? taxResult?.recommended ?? '').toLowerCase();
-      const recommended = usedRegime === 'old' || usedRegime === 'new' ? usedRegime : (oldTax <= newTax ? 'old' : 'new');
-      const netIncome = Number(d.netTaxableIncome ?? netTaxableIncome ?? 0);
-      const grossSalary = Number(d.grossSalary ?? fields?.grossSalary ?? 0);
-      const tds = Number(d.tds ?? fields?.tds ?? 0);
-      const standardDeduction = Number(d.standardDeduction ?? fields?.standardDeduction ?? 0);
-      const deductions80C = Number(d.deductions80C ?? fields?.deductions80C ?? 0);
+  // Fix 3 — payment_success: redirect to 'details' step so the full filing checklist renders
+  // with all data restored. The Download PDF button is injected at the top of Step 3 when
+  // paymentSuccessData is present.
+  if (step === 'payment_success') {
+    // Data is already restored in the useEffect above (fields, itrDetails, taxResult).
+    // Just switch to details step so the normal Step 3 UI renders.
+    // We use a layout effect pattern: set step synchronously on first render of this branch.
+    // But since we can't call hooks conditionally, we'll just render the details UI directly here
+    // with the Download PDF banner at the top.
+  }
 
-      return (
-        <div
-          style={themeStyle}
-          data-itr-hydrated={hydrated ? '1' : '0'}
-          className="min-h-screen bg-[var(--lux-background)] pt-24 pb-16 px-4 text-[color:var(--lux-foreground)]"
-        >
-          <style>{printCss}</style>
-
-          <div className="max-w-[1100px] mx-auto">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <div className="text-sm tracking-[0.22em] uppercase text-[color:var(--lux-foreground-60)]">BM Wealth</div>
-                <div className="text-2xl font-bold text-[color:var(--lux-foreground)]">ITR Filing Summary</div>
-              </div>
-              <button
-                type="button"
-                onClick={() => generateRealPdf()}
-                className="px-5 py-2 rounded-lg font-semibold bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] hover:opacity-90 transition"
-              >
-                Download PDF
-              </button>
-            </div>
-
-            <div id="itr-print-content">
-              <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 6 }}>BM Wealth</div>
-              <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 16 }}>Educational ITR Summary</div>
-
-              <div style={{ border: '1px solid var(--lux-foreground-10)', borderRadius: 12, padding: 14, marginBottom: 14 }}>
-                <div style={{ fontWeight: 900, marginBottom: 10 }}>Extracted Fields</div>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                  <tbody>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', width: '42%', color: 'var(--lux-foreground-60)' }}>Employee PAN</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{String(d.employeePAN ?? itrDetails?.employeePAN ?? '—') || '—'}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Employer Name</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{String(d.employerName ?? itrDetails?.employerName ?? '—') || '—'}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Employer TAN</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{String(d.employerTAN ?? itrDetails?.employerTAN ?? '—') || '—'}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Assessment Year</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '—') || '—'}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Gross Salary</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(grossSalary)}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>HRA Exemption</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0))}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Standard Deduction</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(standardDeduction)}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>80C Deductions</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(deductions80C)}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>Net Taxable Income</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(netIncome)}</td></tr>
-                    <tr><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)', color: 'var(--lux-foreground-60)' }}>TDS Deducted</td><td style={{ padding: '8px 10px', borderTop: '1px solid var(--lux-foreground-10)' }}>{fmtMoney(tds)}</td></tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div style={{ border: '1px solid var(--lux-foreground-10)', borderRadius: 12, padding: 14, marginBottom: 14 }}>
-                <div style={{ fontWeight: 900, marginBottom: 10 }}>Old vs New Regime</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                  <div style={{ border: '1px solid var(--lux-foreground-10)', borderRadius: 12, padding: 12 }}>
-                    <div style={{ fontWeight: 900 }}>Old Regime</div>
-                    <div style={{ marginTop: 8, fontSize: 13 }}>Tax Payable (incl. cess): <span style={{ fontWeight: 900 }}>{fmtMoney(oldTax)}</span></div>
-                  </div>
-                  <div style={{ border: '1px solid var(--lux-foreground-10)', borderRadius: 12, padding: 12 }}>
-                    <div style={{ fontWeight: 900 }}>New Regime</div>
-                    <div style={{ marginTop: 8, fontSize: 13 }}>Tax Payable (incl. cess): <span style={{ fontWeight: 900 }}>{fmtMoney(newTax)}</span></div>
-                  </div>
-                </div>
-                <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--lux-foreground-10)', paddingTop: 12 }}>
-                  <div style={{ fontSize: 13, color: 'var(--lux-foreground-60)' }}>Recommended regime</div>
-                  <div style={{ fontWeight: 900 }}>{recommended === 'old' ? 'Old Regime' : 'New Regime'}</div>
-                </div>
-                <div style={{ marginTop: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontSize: 13, color: 'var(--lux-foreground-60)' }}>Potential savings</div>
-                  <div style={{ fontWeight: 900 }}>{fmtMoney(savings)}</div>
-                </div>
-              </div>
-
-              <div style={{ border: '1px solid var(--lux-foreground-10)', borderRadius: 12, padding: 14, marginBottom: 14 }}>
-                <div style={{ fontWeight: 900, marginBottom: 10 }}>Filing Steps (with your numbers)</div>
-                <ol style={{ margin: 0, paddingLeft: 18, fontSize: 13, lineHeight: 1.7 }}>
-                  <li>Use gross salary <b>{fmtMoney(grossSalary)}</b> and TDS <b>{fmtMoney(tds)}</b> as your base.</li>
-                  <li>Apply standard deduction <b>{fmtMoney(standardDeduction)}</b> (once).</li>
-                  <li>Apply 80C deductions <b>{fmtMoney(deductions80C)}</b> (as per proofs).</li>
-                  <li>Net taxable income (approx.) <b>{fmtMoney(netIncome)}</b>.</li>
-                  <li>Compare regimes: Old <b>{fmtMoney(oldTax)}</b> vs New <b>{fmtMoney(newTax)}</b>. Recommended: <b>{recommended === 'old' ? 'Old' : 'New'}</b>.</li>
-                  <li>File ITR, then e-Verify (Aadhaar OTP). Keep Form 16 + AIS for records.</li>
-                </ol>
-              </div>
-
-              <div style={{ fontSize: 12, color: 'var(--lux-foreground-60)', borderTop: '1px solid var(--lux-foreground-10)', paddingTop: 10 }}>
-                Educational summary only. Not tax advice.
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
+  const showDownloadBanner = step === 'payment_success' || (paymentSuccessData && step === 'details');
 
   return (
     <div
@@ -1416,8 +1529,26 @@ export default function ITRFilingHelp() {
         )}
 
         {/* Step 3 — ITR Details + Filing Steps */}
-        {step === 'details' && taxResult && (
+        {(step === 'details' || step === 'payment_success') && (taxResult || paymentSuccessData) && (
           <>
+            {/* Download PDF banner — shown after returning from payment */}
+            {showDownloadBanner && (
+              <div className="mb-6 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6 flex items-center justify-between">
+                <div>
+                  <div className="text-sm tracking-[0.22em] uppercase text-[color:var(--lux-foreground-60)]">Payment Successful</div>
+                  <div className="text-xl font-bold text-[color:var(--lux-foreground)]">Your ITR Filing Summary is ready</div>
+                  <div className="text-sm text-[color:var(--lux-foreground-60)] mt-1">Review your data below, then download the full professional PDF.</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => generateRealPdf()}
+                  className="shrink-0 px-6 py-3 rounded-lg font-semibold bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] hover:opacity-90 transition text-base"
+                >
+                  ⬇ Download PDF
+                </button>
+              </div>
+            )}
+
             <div className="mb-6 bg-[color:var(--lux-card)]/70 border border-[color:var(--lux-foreground-10)] rounded-lg p-6">
               <h2 className="text-2xl font-bold text-[color:var(--lux-foreground)] mb-2">Step 3 — Your filing checklist</h2>
               <p className="text-[color:var(--lux-foreground-60)]">
@@ -1572,6 +1703,15 @@ export default function ITRFilingHelp() {
 
             {/* Bottom actions */}
             <div className="mt-8 flex flex-col items-center">
+              {showDownloadBanner ? (
+                <button
+                  type="button"
+                  onClick={() => generateRealPdf()}
+                  className="px-8 py-4 rounded-lg font-semibold bg-[color:var(--lux-foreground)] text-[color:var(--lux-background)] hover:opacity-90 transition text-base"
+                >
+                  ⬇ Download Full ITR Summary PDF
+                </button>
+              ) : (
               <button
                 type="button"
                 onClick={() => {
@@ -1594,6 +1734,7 @@ export default function ITRFilingHelp() {
                   style={{ backgroundColor: 'var(--lux-accent)' }}
                 />
               </button>
+              )}
               <button
                 type="button"
                 onClick={() => {
