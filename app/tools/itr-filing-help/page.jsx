@@ -866,6 +866,17 @@ export default function ITRFilingHelp() {
       } catch (e) { /* ignore */ }
 
       const encoded = window.btoa(encodeURIComponent(JSON.stringify(data)));
+
+      // FREE product (₹0): skip payment gateway, directly trigger PDF download
+      const FREE_PRODUCT = true; // set false to re-enable store checkout at ₹299
+      if (FREE_PRODUCT) {
+        setPaymentSuccessData(data);
+        setStep('payment_success');
+        // Auto-trigger PDF download after a short delay so state is set
+        setTimeout(() => { generateRealPdf(data); }, 400);
+        return;
+      }
+
       const origin = window.location.origin || 'https://www.bmwealth.co.in';
       const returnUrl = `${origin}/tools/itr-filing-help?payment=success&d=${encoded}`;
       const storeUrl = `https://store.bmwealth.co.in/products/tax-optimization-pdf?returnTo=${encodeURIComponent(returnUrl)}`;

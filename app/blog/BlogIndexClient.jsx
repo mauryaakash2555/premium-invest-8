@@ -708,7 +708,14 @@ export default function BlogPage() {
                       }}>
                         Read More →
                       </span>
-
+                      {(post.readTime || post.read_time) && (
+                        <span style={{
+                          color: 'var(--lux-foreground-80)',
+                          fontSize: '12px',
+                        }}>
+                          {post.readTime || post.read_time}
+                        </span>
+                      )}
                     </div>
 
                     {post.affiliate_link ? (
@@ -728,7 +735,9 @@ export default function BlogPage() {
                       </div>
                     ) : null}
 
-
+                    {typeof post.views === 'number' ? (
+                      <div style={{ marginTop: '8px', color: 'var(--lux-foreground-80)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
+                    ) : null}
                   </div>
 
                   {/* Intentionally no “Next Read” overlay on listing cards. */}
