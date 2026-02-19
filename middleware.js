@@ -21,15 +21,9 @@ export function middleware(request) {
     return res;
   }
 
-  // Canonicalize domain/protocol to avoid duplicate indexation (www vs non-www, http vs https).
-  // Preferred host: bmwealth.co.in (non-www). Store host is handled separately.
+  // Store subdomain detection (used for routing, NOT for domain redirects).
+  // Domain redirect (www → non-www) is handled exclusively by vercel.json.
   const isStoreHost = normalizedHost === 'store.bmwealth.co.in';
-  const isMainProdHost = hostNoPort === 'bmwealth.co.in' || hostNoPort === 'www.bmwealth.co.in';
-  const protoHeader = (request.headers.get('x-forwarded-proto') || '').toLowerCase();
-  const protoFromHeader = protoHeader.split(',')[0].trim();
-  const proto = (protoFromHeader || String(url.protocol || '').replace(':', '')).toLowerCase();
-  const canonicalUrl = url.clone();
-  let shouldRedirect = false;
 
   // Store shell internal routes can leak as /store/* on the main host.
   // Redirect to the clean store hostname URLs instead of returning 404s.
@@ -59,10 +53,14 @@ export function middleware(request) {
   // handled exclusively by vercel.json + Cloudflare.  Do NOT duplicate here
   // to avoid redirect loops when Cloudflare "Always Use HTTPS" is active.
 
+  // --- Path-only redirects (no domain/hostname inspection) ---
+  const cleanupUrl = url.clone();
+  let shouldRedirectPath = false;
+
   // Strip legacy homepage query variant that should not be indexed.
-  if (pathname === '/' && canonicalUrl.searchParams.get('live') === '1') {
-    canonicalUrl.searchParams.delete('live');
-    shouldRedirect = true;
+  if (pathname === '/' && cleanupUrl.searchParams.get('live') === '1') {
+    cleanupUrl.searchParams.delete('live');
+    shouldRedirectPath = true;
   }
 
   // Canonicalize legacy/duplicate paths to reduce duplicate indexation.
@@ -81,14 +79,13 @@ export function middleware(request) {
 
     const target = canonicalPathRedirects[pathname];
     if (target) {
-      canonicalUrl.pathname = target;
-      shouldRedirect = true;
+      cleanupUrl.pathname = target;
+      shouldRedirectPath = true;
     }
   }
 
-  if (shouldRedirect) {
-    // 301 to align with Google Search Console expectations for permanent canonicalization.
-    return NextResponse.redirect(canonicalUrl, 301);
+  if (shouldRedirectPath) {
+    return NextResponse.redirect(cleanupUrl, 301);
   }
 
   // Store host must never expose the internal store path prefix.
