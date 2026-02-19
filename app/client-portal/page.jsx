@@ -127,6 +127,16 @@ const serviceIntegrations = [
     color: "rgba(255, 255, 255, 0.02)",
     borderColor: "rgba(255, 255, 255, 0.08)",
     link: "/compliance"
+  },
+  {
+    id: "onboarding",
+    title: "Onboarding",
+    icon: Users,
+    description: "Complete your KYC, link PAN-Aadhaar, and start your first SIP",
+    platforms: ["KYC Check", "PAN-Aadhaar Link", "SIP Setup"],
+    color: "rgba(100, 150, 255, 0.04)",
+    borderColor: "rgba(100, 150, 255, 0.15)",
+    link: "/client-portal/onboarding"
   }
 ];
 
@@ -259,6 +269,17 @@ export default function ClientPortalPage() {
               >
                 Access Portal <ArrowRight size={18} />
               </a>
+              <Link 
+                href="/client-portal/onboarding"
+                className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-none"
+                style={{
+                  background: "rgba(100,150,255,0.10)",
+                  border: "1px solid rgba(100,150,255,0.25)",
+                  color: "rgba(200,220,255,0.9)"
+                }}
+              >
+                Start Onboarding <ChevronRight size={18} />
+              </Link>
               <Link 
                 href="/contact"
                 className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-none"

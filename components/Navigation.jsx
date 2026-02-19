@@ -38,6 +38,7 @@ const Navigation = () => {
     { path: '/services', label: 'Services' },
     { path: '/platforms', label: 'Platforms' },
     { path: '/curated-partners', label: 'Curated Partners' },
+    { path: '/onboarding', label: 'Get Started' },
     { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
   ];
@@ -46,6 +47,7 @@ const Navigation = () => {
     { href: '/', label: 'Home' },
     { href: '/about-us', label: 'About' },
     { href: '/services', label: 'Services' },
+    { href: '/onboarding', label: 'Get Started' },
     { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
     { href: STORE_URL, label: 'Store', external: true },
