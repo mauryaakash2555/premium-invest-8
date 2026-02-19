@@ -78,6 +78,9 @@ export default function ITRFilingHelp() {
     // === Extract all values with fallbacks ===
     const employeePAN = String(d.employeePAN ?? itrDetails?.employeePAN ?? '\u2014').toUpperCase().trim() || '\u2014';
     const employerName = String(d.employerName ?? itrDetails?.employerName ?? '\u2014').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || '\u2014';
+    // Safety: cap employer name to 60 chars for PDF display; use 'your employer' in step text
+    const safeEmployer = employerName.length > 60 ? employerName.slice(0, 59) + '\u2026' : employerName;
+    const shortEmployer = employerName.length > 50 ? 'your employer' : employerName;
     const employerTAN = String(d.employerTAN ?? itrDetails?.employerTAN ?? '\u2014').toUpperCase().trim() || '\u2014';
     const assessmentYear = String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '\u2014').trim() || '\u2014';
     const hraExemption = Number(d.hraExemption ?? itrDetails?.hraExemption ?? 0);
@@ -157,7 +160,7 @@ export default function ITRFilingHelp() {
       // Elegant label-value rows — no spreadsheet look
       const detailRows = [
         ['Employee PAN', employeePAN, false],
-        ['Employer Name', employerName, false],  // full name, will wrap
+        ['Employer Name', safeEmployer, false],  // capped name, will wrap
         ['Employer TAN', employerTAN, false],
         ['Assessment Year', assessmentYear, false],
         ['', '', 'divider'],  // visual divider between identity & financials
@@ -325,11 +328,11 @@ export default function ITRFilingHelp() {
         { title: 'Start Your Return',
           desc: `Select Assessment Year ${ayDisplay} and choose ITR-1 (Sahaj) \u2014 applicable for salaried individuals with total income up to Rs. 50 lakh.` },
         { title: 'Enter Salary Details',
-          desc: `Enter Gross Salary: ${fmtMoney(grossSalary)} and Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check all figures against Form 16 issued by ${employerName}.` },
+          desc: `Enter Gross Salary: ${fmtMoney(grossSalary)} and Standard Deduction: ${fmtMoney(standardDeduction)}. Cross-check all figures against Form 16 issued by your employer.` },
         { title: 'Choose Your Tax Regime',
           desc: `Select the ${recommended === 'old' ? 'Old' : 'New'} Regime for estimated savings of ${fmtMoney(savings)}. For reference: Old Regime Tax = ${fmtMoney(oldTax)}, New Regime Tax = ${fmtMoney(newTax)}.` },
         { title: 'Verify TDS & Deductions',
-          desc: `TDS deducted by ${employerName}: ${fmtMoney(tds)}. Ensure 80C Deductions (${fmtMoney(deductions80C)}) and HRA Exemption (${fmtMoney(hraExemption)}) match your Form 16 Part B.` },
+          desc: `TDS deducted by your employer: ${fmtMoney(tds)}. Ensure 80C Deductions (${fmtMoney(deductions80C)}) and HRA Exemption (${fmtMoney(hraExemption)}) match your Form 16 Part B.` },
         { title: 'Submit & e-Verify',
           desc: `Review the pre-filled summary, submit your return, then e-Verify instantly via Aadhaar OTP. Retain Form 16, AIS, and 26AS as supporting documents.` },
       ];
@@ -720,10 +723,16 @@ export default function ITRFilingHelp() {
         ? (usedTaxResult.oldRegime?.taxable || 0)
         : (usedTaxResult.newRegime?.taxable || 0);
 
+    const safeEmployerHtml = (() => {
+      const s = String(usedItrDetails.employerName || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!s) return '\u2014';
+      return s.length > 60 ? s.slice(0, 59) + '\u2026' : s;
+    })();
+
     const details = [
-      ['Employee PAN', usedItrDetails.employeePAN || '—'],
-      ['Employer Name', usedItrDetails.employerName || '—'],
-      ['Employer TAN', usedItrDetails.employerTAN || '—'],
+      ['Employee PAN', usedItrDetails.employeePAN || '\u2014'],
+      ['Employer Name', safeEmployerHtml],
+      ['Employer TAN', usedItrDetails.employerTAN || '\u2014'],
       ['Assessment Year', usedItrDetails.assessmentYear || '—'],
       ['Gross Salary', fmtMoney(usedFields?.grossSalary || 0)],
       ['HRA Exemption', fmtMoney(usedItrDetails.hraExemption || 0)],

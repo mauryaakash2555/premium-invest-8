@@ -65,6 +65,18 @@ export async function POST(request) {
       return lines[0] || '';
     };
 
+    /** Extract ONLY the company name — strip address, numbers, and Form 16 boilerplate */
+    const extractEmployerNameOnly = (raw) => {
+      let s = String(raw || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      // Cut at first occurrence of typical address/number markers
+      s = s.split(/\b(floor|plot|road|street|lane|nagar|sector|bldg|bandra|mumbai|delhi|bangalore|chennai|hyderabad|pune|kolkata|gurgaon|block|tower|area|phase|pin\s*[-:]?\s*\d|\d{6}|Survey No|Regd|CIN|PAN|TAN|Tel|Fax|Email|Website|Phone)\b/i)[0].trim();
+      // Remove trailing commas, dashes, dots
+      s = s.replace(/[,\-\.\s]+$/, '').trim();
+      // Hard cap at 80 characters
+      if (s.length > 80) s = s.slice(0, 79) + '\u2026';
+      return s;
+    };
+
     // Additional extracted fields (do not interfere with existing extraction)
     let employeePAN = '';
     let employerName = '';
@@ -76,7 +88,7 @@ export async function POST(request) {
     let mm = text.match(/PAN of the Employee[^\n]*\n*([A-Z]{5}[0-9]{4}[A-Z])/i);
     if (mm) employeePAN = mm[1];
 
-    employerName = firstLineAfter(text, 'Name and address of the Employer');
+    employerName = extractEmployerNameOnly(firstLineAfter(text, 'Name and address of the Employer'));
 
     mm = text.match(/TAN of the Deductor\s+([A-Z]{4}[0-9]{5}[A-Z])/i);
     if (mm) employerTAN = mm[1];
