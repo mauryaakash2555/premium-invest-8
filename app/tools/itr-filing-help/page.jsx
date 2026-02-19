@@ -626,6 +626,12 @@ export default function ITRFilingHelp() {
   }, [step]);
 
   function handleBack() {
+    // payment_success: go to details step (keeps all restored data for cross-checking)
+    if (step === 'payment_success') {
+      setStep('details');
+      return;
+    }
+
     if (step === 'payment') {
       // Go back to verification (no navigation away; keep extracted values)
       setStep('review');
@@ -1154,13 +1160,23 @@ export default function ITRFilingHelp() {
       />
       <div className="max-w-[1100px] mx-auto">
         <div className="mb-4">
-          <button
-            onClick={handleBack}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors bg-transparent border-none cursor-pointer"
-          >
-            <span aria-hidden="true">←</span>
-            {step === 'upload' || step === 'extracting' ? 'Reset' : 'Back'}
-          </button>
+          {step === 'upload' || step === 'extracting' ? (
+            <a
+              href="/tools"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors no-underline"
+            >
+              <span aria-hidden="true">←</span>
+              Back to Tools
+            </a>
+          ) : (
+            <button
+              onClick={handleBack}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--lux-foreground-60)] hover:text-[color:var(--lux-foreground)] transition-colors bg-transparent border-none cursor-pointer"
+            >
+              <span aria-hidden="true">←</span>
+              Back
+            </button>
+          )}
         </div>
 
         <div className="mb-8">
@@ -1177,12 +1193,12 @@ export default function ITRFilingHelp() {
           />
           <div
             className={`flex-1 h-2 rounded ${
-              step === 'payment' || step === 'details' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
+              step === 'payment' || step === 'details' || step === 'payment_success' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
             }`}
           />
           <div
             className={`flex-1 h-2 rounded ${
-              step === 'details' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
+              step === 'details' || step === 'payment_success' || step === 'complete' ? 'bg-[color:var(--lux-accent)]' : 'bg-[color:var(--lux-foreground-10)]'
             }`}
           />
         </div>
