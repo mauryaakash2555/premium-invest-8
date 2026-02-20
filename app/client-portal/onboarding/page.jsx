@@ -47,6 +47,13 @@ export default function PortalOnboardingPage() {
   }, []);
 
   const handleLogEvent = useCallback(async (stepNumber, actionType, meta) => {
+    /* Update local state so progress bar reflects immediately */
+    if (actionType === "complete") {
+      setCompletedSteps((prev) => new Set([...prev, stepNumber]));
+    }
+    if (actionType === "skip") {
+      setSkippedSteps((prev) => new Set([...prev, stepNumber]));
+    }
     try {
       await fetch("/api/onboarding/event", {
         method: "POST",
