@@ -166,6 +166,7 @@ const navigationLinks = {
     ],
     resources: [
       { label: "Tools", href: "/tools" },
+      { label: "Investor Onboarding", href: "/onboarding" },
       { label: "ITR Filing Help", href: "/tools/itr-filing-help" },
       { label: "Fixed Deposits", href: "/fixed-deposits" },
       { label: "SIP Calculator", href: "/sip-calculator" },

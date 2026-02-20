@@ -198,6 +198,7 @@ export default function ToolsHubPage() {
               <p className="mt-3 text-[11px] text-white/55">
                 Explore: <Link href="/blog" className="underline underline-offset-4">Blogs</Link> ·{' '}
                 <Link href="/services" className="underline underline-offset-4">Services</Link> ·{' '}
+                <Link href="/onboarding" className="underline underline-offset-4">Get Started</Link> ·{' '}
                 <Link href="/contact" className="underline underline-offset-4">Contact</Link>
               </p>
             </div>

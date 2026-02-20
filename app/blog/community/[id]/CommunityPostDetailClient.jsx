@@ -9,6 +9,8 @@ import SocialShare from '@/components/blog/SocialShare';
 import ViewTracker from '@/components/blog/ViewTracker';
 import PostBottomCTA from '@/components/blog/PostBottomCTA';
 import BlogNavigation from '@/components/BlogNavigation';
+import ReactMarkdown from 'react-markdown';
+import { normalizeCommunityMarkdown } from '@/lib/blog/formatting';
 
 const panelStyle = {
   borderRadius: 0,
@@ -93,6 +95,8 @@ export default function CommunityPostDetailClient({ id }) {
     if (!hasEnhanced) return String(post.content_original || '');
     return showEnhanced ? String(post.content_enhanced || '') : String(post.content_original || '');
   }, [post, showEnhanced]);
+
+  const markdown = useMemo(() => normalizeCommunityMarkdown(content), [content]);
 
   const onAffiliateClick = async (e) => {
     if (!post?.affiliate_link) return;
@@ -227,7 +231,58 @@ export default function CommunityPostDetailClient({ id }) {
             ) : null}
 
             <div style={{ ...panelStyle, padding: '22px' }}>
-              <div style={{ color: 'rgba(235,242,255,0.86)', whiteSpace: 'pre-wrap', lineHeight: 1.95, fontSize: '16px' }}>{content}</div>
+              <div style={{ color: 'rgba(235,242,255,0.86)', lineHeight: 1.95, fontSize: '16px' }}>
+                <ReactMarkdown
+                  components={{
+                    h1: ({ children }) => (
+                      <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '28px 0 12px', color: 'rgba(235,242,255,0.92)' }}>
+                        {children}
+                      </h2>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '28px 0 12px', color: 'rgba(235,242,255,0.92)' }}>
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '22px 0 10px', color: 'rgba(235,242,255,0.92)' }}>
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p style={{ margin: '0 0 16px', lineHeight: 1.85, color: 'rgba(235,242,255,0.86)' }}>{children}</p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul style={{ margin: '0 0 16px 20px', padding: 0, lineHeight: 1.85 }}>{children}</ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol style={{ margin: '0 0 16px 20px', padding: 0, lineHeight: 1.85 }}>{children}</ol>
+                    ),
+                    li: ({ children }) => (
+                      <li style={{ margin: '0 0 8px' }}>{children}</li>
+                    ),
+                    strong: ({ children }) => (
+                      <span style={{ fontWeight: 800, color: 'rgba(235,242,255,0.92)' }}>{children}</span>
+                    ),
+                    a: ({ href, children }) => {
+                      const safeHref = typeof href === 'string' ? href : '#';
+                      const isExternal = /^https?:\/\//i.test(safeHref);
+                      return (
+                        <a
+                          href={safeHref}
+                          target={isExternal ? '_blank' : undefined}
+                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                          style={{ color: 'var(--lux-accent)', textDecoration: 'none', fontWeight: 800 }}
+                        >
+                          {children}
+                        </a>
+                      );
+                    },
+                  }}
+                >
+                  {markdown}
+                </ReactMarkdown>
+              </div>
             </div>
 
             {/* Author Block */}

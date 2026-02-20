@@ -36,6 +36,7 @@ import BlogNavigation from '@/components/BlogNavigation';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import ComplianceFooter from '@/components/ComplianceFooter';
 import SubmitStoryCTA from '@/components/blog/SubmitStoryCTA';
+import { stripMarkdownForExcerpt } from '@/lib/blog/formatting';
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -51,7 +52,7 @@ export default function BlogPage() {
   const fetchBlogPosts = async () => {
     try {
       const excerptFrom = (text, max = 160) => {
-        const s = String(text || '').replace(/\s+/g, ' ').trim();
+        const s = stripMarkdownForExcerpt(text).replace(/\s+/g, ' ').trim();
         if (!s) return '';
         return s.length > max ? `${s.slice(0, max - 1)}…` : s;
       };

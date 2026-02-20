@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Calendar, User, Sparkles, ChevronRight, Filter, X } from 'lucide-react';
 import BlogNavigation from '@/components/BlogNavigation';
+import { stripMarkdownForExcerpt } from '@/lib/blog/formatting';
 
 // Premium LUX Theme
 const LUX = {
@@ -590,7 +591,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                   overflow: 'hidden',
                 }}
               >
-                {String(featuredPost.content_original || '').slice(0, 300)}...
+                {stripMarkdownForExcerpt(featuredPost.content_original || '').slice(0, 300)}...
               </p>
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
@@ -846,7 +847,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
                           overflow: 'hidden',
                         }}
                       >
-                        {String(post.content_original || '').slice(0, 260)}
+                        {stripMarkdownForExcerpt(post.content_original || '').slice(0, 260)}
                       </p>
 
                       <div style={{
