@@ -451,7 +451,8 @@ const SIPServices = () => {
         <section style={{ marginBottom: '20px' }}>
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: MUTED, marginBottom: '0', textAlign: 'justify' }}>
             Related resources: <Link href="/mutual-funds" style={{ color: ACCENT, textDecoration: 'underline' }}>Mutual Funds</Link> ·{' '}
-            <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link>
+            <Link href="/tools" style={{ color: ACCENT, textDecoration: 'underline' }}>Tools</Link> ·{' '}
+            <Link href="/onboarding" style={{ color: ACCENT, textDecoration: 'underline' }}>Investor Onboarding</Link>
           </p>
         </section>
 

@@ -730,7 +730,8 @@ const MutualFunds = () => {
           <p style={{ fontSize: '16px', lineHeight: '1.8', color: MUTED, marginBottom: 0, textAlign: 'justify' }}>
             Related resources: <Link href="/sip" style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline' }}>SIP</Link> ·{' '}
             <Link href="/portfolio-management" style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline' }}>Portfolio Planning</Link> ·{' '}
-            <Link href="/tools" style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline' }}>Tools</Link>
+            <Link href="/tools" style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline' }}>Tools</Link> ·{' '}
+            <Link href="/onboarding" style={{ color: `rgba(${ACCENT_RGB}, 0.95)`, textDecoration: 'underline' }}>Investor Onboarding</Link>
           </p>
         </section>
 
