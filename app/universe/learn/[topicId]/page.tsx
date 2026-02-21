@@ -111,9 +111,11 @@ export default function TopicLearningPage() {
 
   // Collapse/expand state - show 3 initially
   const [expandedExamples, setExpandedExamples] = useState(false);
+  const [expandedExampleDetails, setExpandedExampleDetails] = useState<Record<number, boolean>>({});
   const [expandedPractice, setExpandedPractice] = useState(false);
   const [expandedFlashcards, setExpandedFlashcards] = useState(false);
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
   const INITIAL_SHOW_COUNT = 3;
 
   // 🎮 GAMIFICATION STATE
@@ -369,6 +371,7 @@ export default function TopicLearningPage() {
       <div className={`ai-content ${text ? 'ai-content--visible' : ''}`}>
         {blocks.map((b, idx) => (
           <p key={idx} className={idx === 0 ? 'ai-lead' : 'ai-paragraph'}>
+            {idx === 0 && <span className="ai-lead-glyph">✦ </span>}
             {b}
           </p>
         ))}
@@ -382,9 +385,11 @@ export default function TopicLearningPage() {
     setSelectedQuizAnswers({});
     setRevealedPractice({});
     setExpandedExamples(false);
+    setExpandedExampleDetails({});
     setExpandedPractice(false);
     setExpandedFlashcards(false);
     setCurrentQuizIndex(0);
+    setCurrentFlashcardIndex(0);
   }, [currentKey, content]);
 
   // Handle back navigation - step by step
@@ -470,40 +475,59 @@ export default function TopicLearningPage() {
             <span className="section-title">Real-World Scenarios</span>
             <span className="section-count">{parsed.length} examples</span>
           </div>
-          {visibleItems.map((ex: any, i: number) => (
-            <div key={i} className="example-card">
-              <div className="example-number">{i + 1}</div>
-              <div className="example-content">
-                <div className="example-title">{String(ex?.Title || ex?.title || `Example ${i + 1}`)}</div>
-                {(ex?.Scenario || ex?.scenario) && (
-                  <div className="example-scenario">{String(ex?.Scenario || ex?.scenario)}</div>
-                )}
-                {Array.isArray(ex?.Steps || ex?.steps) && (
-                  <div className="example-steps">
-                    {(ex?.Steps || ex?.steps).slice(0, 5).map((s: any, si: number) => (
-                      <div key={si} className="example-step">
-                        <span className="step-dot" />
-                        <span className="step-text">{String(s)}</span>
-                      </div>
-                    ))}
+          {visibleItems.map((ex: any, i: number) => {
+            const isOpen = Boolean(expandedExampleDetails[i]);
+            const title = String(ex?.Title || ex?.title || `Example ${i + 1}`);
+            const scenario = String(ex?.Scenario || ex?.scenario || '');
+            const steps = Array.isArray(ex?.Steps || ex?.steps) ? (ex?.Steps || ex?.steps) : [];
+            const outcome = String(ex?.Outcome || ex?.outcome || '');
+            // Show short scenario (first sentence) when collapsed
+            const shortScenario = scenario.split(/[.!?]\s/)[0] + (scenario.includes('.') ? '.' : '');
+            return (
+              <div key={i} className={`example-card ${isOpen ? 'example-card--open' : ''}`}>
+                <button
+                  type="button"
+                  className="example-header-btn"
+                  onClick={() => setExpandedExampleDetails(prev => ({ ...prev, [i]: !prev[i] }))}
+                >
+                  <div className="example-number">{i + 1}</div>
+                  <div className="example-header-text">
+                    <div className="example-title">{title}</div>
+                    {!isOpen && scenario && <div className="example-snippet">{shortScenario}</div>}
                   </div>
-                )}
-                {(ex?.Outcome || ex?.outcome) && (
-                  <div className="example-outcome">
-                    <span className="outcome-icon">✓</span>
-                    <span>{String(ex?.Outcome || ex?.outcome)}</span>
+                  <span className={`example-chevron ${isOpen ? 'example-chevron--open' : ''}`}>▾</span>
+                </button>
+                {isOpen && (
+                  <div className="example-body">
+                    {scenario && <div className="example-scenario">{scenario}</div>}
+                    {steps.length > 0 && (
+                      <div className="example-steps">
+                        {steps.slice(0, 5).map((s: any, si: number) => (
+                          <div key={si} className="example-step">
+                            <span className="step-number">{si + 1}</span>
+                            <span className="step-text">{String(s)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {outcome && (
+                      <div className="example-outcome">
+                        <span className="outcome-icon">✨</span>
+                        <span>{outcome}</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            </div>
-          ))}
+            );
+          })}
           {hasMore && (
             <button
               type="button"
               className="show-more-btn"
               onClick={() => setExpandedExamples(!expandedExamples)}
             >
-              {expandedExamples ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Examples ↓`}
+              {expandedExamples ? '↑ Show Less' : `✦ ${parsed.length - INITIAL_SHOW_COUNT} More Examples`}
             </button>
           )}
         </div>
@@ -513,141 +537,48 @@ export default function TopicLearningPage() {
     if (tab === 'practice') {
       const visibleItems = expandedPractice ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
       const hasMore = parsed.length > INITIAL_SHOW_COUNT;
+      const revealedCount = Object.values(revealedPractice).filter(Boolean).length;
       return (
         <div className="ai-content ai-content--visible">
           <div className="section-header">
             <span className="section-icon">🧠</span>
-            <span className="section-title">Think & Learn</span>
-            <span className="section-count">Click to reveal</span>
-          </div>
-          {visibleItems.map((q: any, i: number) => {
-            const isRevealed = Boolean(revealedPractice[i]);
-            return (
-              <div key={i} className="practice-card">
-                <div className="practice-question">
-                  <span className="practice-q-num">Q{i + 1}</span>
-                  <span className="practice-q-text">{String(q?.Question || q?.question || '')}</span>
-                </div>
-                {isRevealed ? (
-                  <div className="practice-answer practice-answer--visible">
-                    <div className="practice-answer-label">Answer</div>
-                    <div className="practice-answer-text">{String(q?.Answer || q?.answer || '')}</div>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="practice-reveal-btn"
-                    onClick={() => {
-                      setRevealedPractice((prev) => ({ ...prev, [i]: true }));
-                      awardXp(XP_VALUES.practice_reveal);
-                      // Check if all revealed
-                      const newRevealed = { ...revealedPractice, [i]: true };
-                      const revealedCount = Object.values(newRevealed).filter(Boolean).length;
-                      if (revealedCount >= parsed.length) {
-                        setCompletedSections(prev => new Set([...prev, 'practice']));
-                        triggerCelebration('complete');
-                      }
-                    }}
-                  >
-                    <span>Show Answer</span>
-                    <span className="reveal-icon">↓</span>
-                  </button>
-                )}
-              </div>
-            );
-          })}
-          {hasMore && (
-            <button
-              type="button"
-              className="show-more-btn"
-              onClick={() => setExpandedPractice(!expandedPractice)}
-            >
-              {expandedPractice ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Questions ↓`}
-            </button>
-          )}
-        </div>
-      );
-    }
-
-    if (tab === 'flashcards') {
-      const visibleItems = expandedFlashcards ? parsed : parsed.slice(0, INITIAL_SHOW_COUNT);
-      const hasMore = parsed.length > INITIAL_SHOW_COUNT;
-      const ratedCount = Object.keys(flashcardRatings).length;
-      const gotItCount = Object.values(flashcardRatings).filter(r => r === 'got-it').length;
-      
-      return (
-        <div className="ai-content ai-content--visible">
-          <div className="section-header">
-            <span className="section-icon">🎴</span>
-            <span className="section-title">Flip & Rate</span>
+            <span className="section-title">Q &amp; A</span>
             <span className="section-count">
-              {ratedCount > 0 ? (
-                <span className="rating-summary">
-                  <span className="got-it-badge">✓ {gotItCount}</span>
-                  <span className="practice-badge">↻ {ratedCount - gotItCount}</span>
-                </span>
-              ) : `${parsed.length} cards`}
+              {revealedCount > 0 ? `${revealedCount}/${parsed.length} revealed` : 'Tap to reveal'}
             </span>
           </div>
-          <div className="flashcards-grid">
-            {visibleItems.map((c: any, i: number) => {
-              const isFlipped = Boolean(flippedCards[i]);
-              const rating = flashcardRatings[i];
+          <div className="qa-grid">
+            {visibleItems.map((q: any, i: number) => {
+              const isRevealed = Boolean(revealedPractice[i]);
               return (
-                <div key={i} className={`flashcard-wrapper ${rating ? `flashcard-wrapper--${rating}` : ''}`}>
-                  <button
-                    type="button"
-                    className={`flashcard ${isFlipped ? 'flashcard--flipped' : ''}`}
-                    onClick={() => setFlippedCards((prev) => ({ ...prev, [i]: !prev[i] }))}
-                  >
-                    <div className="flashcard-inner">
-                      <div className="flashcard-front">
-                        <span className="flashcard-label">Q</span>
-                        <span className="flashcard-text">{String(c?.Front || c?.front || '')}</span>
-                        <span className="flashcard-hint">tap to flip</span>
+                <div key={i} className={`qa-card ${isRevealed ? 'qa-card--revealed' : ''}`}>
+                  <div className="qa-badge">Q{i + 1}</div>
+                  <div className="qa-question">{String(q?.Question || q?.question || '')}</div>
+                  {isRevealed ? (
+                    <div className="qa-answer">
+                      <div className="qa-answer-divider">
+                        <span className="qa-answer-label">Answer</span>
                       </div>
-                      <div className="flashcard-back">
-                        <span className="flashcard-label">A</span>
-                        <span className="flashcard-text">{String(c?.Back || c?.back || '')}</span>
-                      </div>
+                      <div className="qa-answer-text">{String(q?.Answer || q?.answer || '')}</div>
                     </div>
-                  </button>
-                  {isFlipped && !rating && (
-                    <div className="flashcard-rating">
-                      <button
-                        type="button"
-                        className="rating-btn rating-btn--got-it"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setFlashcardRatings((prev) => ({ ...prev, [i]: 'got-it' }));
-                          awardXp(XP_VALUES.flashcard_got_it);
-                          if (ratedCount + 1 >= parsed.length) {
-                            setCompletedSections(prev => new Set([...prev, 'flashcards']));
-                            triggerCelebration('complete');
-                          }
-                        }}
-                      >
-                        ✓ Got it!
-                      </button>
-                      <button
-                        type="button"
-                        className="rating-btn rating-btn--practice"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setFlashcardRatings((prev) => ({ ...prev, [i]: 'practice' }));
-                          if (ratedCount + 1 >= parsed.length) {
-                            setCompletedSections(prev => new Set([...prev, 'flashcards']));
-                          }
-                        }}
-                      >
-                        ↻ Practice more
-                      </button>
-                    </div>
-                  )}
-                  {rating && (
-                    <div className={`flashcard-rated flashcard-rated--${rating}`}>
-                      {rating === 'got-it' ? '✓ Mastered' : '↻ Review later'}
-                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="qa-reveal-btn"
+                      onClick={() => {
+                        setRevealedPractice((prev) => ({ ...prev, [i]: true }));
+                        awardXp(XP_VALUES.practice_reveal);
+                        const newRevealed = { ...revealedPractice, [i]: true };
+                        const newCount = Object.values(newRevealed).filter(Boolean).length;
+                        if (newCount >= parsed.length) {
+                          setCompletedSections(prev => new Set([...prev, 'practice']));
+                          triggerCelebration('complete');
+                        }
+                      }}
+                    >
+                      <span className="qa-reveal-icon">✦</span>
+                      <span>Reveal Answer</span>
+                    </button>
                   )}
                 </div>
               );
@@ -657,11 +588,135 @@ export default function TopicLearningPage() {
             <button
               type="button"
               className="show-more-btn"
-              onClick={() => setExpandedFlashcards(!expandedFlashcards)}
+              onClick={() => setExpandedPractice(!expandedPractice)}
             >
-              {expandedFlashcards ? 'Show Less ↑' : `Show ${parsed.length - INITIAL_SHOW_COUNT} More Cards ↓`}
+              {expandedPractice ? '↑ Show Less' : `✦ ${parsed.length - INITIAL_SHOW_COUNT} More Questions`}
             </button>
           )}
+        </div>
+      );
+    }
+
+    if (tab === 'flashcards') {
+      const total = parsed.length;
+      const ci = Math.min(currentFlashcardIndex, total - 1);
+      const c: any = parsed[ci] || {};
+      const isFlipped = Boolean(flippedCards[ci]);
+      const rating = flashcardRatings[ci];
+      const ratedCount = Object.keys(flashcardRatings).length;
+      const gotItCount = Object.values(flashcardRatings).filter(r => r === 'got-it').length;
+
+      return (
+        <div className="ai-content ai-content--visible">
+          <div className="section-header">
+            <span className="section-icon">🎴</span>
+            <span className="section-title">Flash Cards</span>
+            <span className="section-count">
+              {ratedCount > 0 ? (
+                <span className="rating-summary">
+                  <span className="got-it-badge">✓ {gotItCount}</span>
+                  <span className="practice-badge">↻ {ratedCount - gotItCount}</span>
+                </span>
+              ) : `${total} cards`}
+            </span>
+          </div>
+
+          {/* Card counter dots */}
+          <div className="fc-dots">
+            {parsed.map((_: any, idx: number) => {
+              const r = flashcardRatings[idx];
+              let dotCls = 'fc-dot';
+              if (idx === ci) dotCls += ' fc-dot--active';
+              if (r === 'got-it') dotCls += ' fc-dot--mastered';
+              if (r === 'practice') dotCls += ' fc-dot--review';
+              return (
+                <button key={idx} type="button" className={dotCls} onClick={() => { setCurrentFlashcardIndex(idx); setFlippedCards({}); }} aria-label={`Card ${idx + 1}`} />
+              );
+            })}
+          </div>
+
+          {/* Single big card */}
+          <div className="fc-stage">
+            <div className={`fc-wrapper ${rating ? `fc-wrapper--${rating}` : ''}`}>
+              <button
+                type="button"
+                className={`fc-card ${isFlipped ? 'fc-card--flipped' : ''}`}
+                onClick={() => setFlippedCards((prev) => ({ ...prev, [ci]: !prev[ci] }))}
+              >
+                <div className="fc-inner">
+                  <div className="fc-face fc-front">
+                    <span className="fc-label-badge">Question</span>
+                    <span className="fc-main-text">{String(c?.Front || c?.front || '')}</span>
+                    <span className="fc-tap-hint">tap to flip ✦</span>
+                  </div>
+                  <div className="fc-face fc-back">
+                    <span className="fc-label-badge fc-label-badge--answer">Answer</span>
+                    <span className="fc-main-text">{String(c?.Back || c?.back || '')}</span>
+                  </div>
+                </div>
+              </button>
+
+              {/* Rating buttons — show after flip */}
+              {isFlipped && !rating && (
+                <div className="fc-rating">
+                  <button
+                    type="button"
+                    className="fc-rate-btn fc-rate-btn--got-it"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFlashcardRatings((prev) => ({ ...prev, [ci]: 'got-it' }));
+                      awardXp(XP_VALUES.flashcard_got_it);
+                      if (ratedCount + 1 >= total) {
+                        setCompletedSections(prev => new Set([...prev, 'flashcards']));
+                        triggerCelebration('complete');
+                      }
+                    }}
+                  >
+                    ✓ Got it!
+                  </button>
+                  <button
+                    type="button"
+                    className="fc-rate-btn fc-rate-btn--again"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFlashcardRatings((prev) => ({ ...prev, [ci]: 'practice' }));
+                      if (ratedCount + 1 >= total) {
+                        setCompletedSections(prev => new Set([...prev, 'flashcards']));
+                      }
+                    }}
+                  >
+                    ↻ Again
+                  </button>
+                </div>
+              )}
+              {rating && (
+                <div className={`fc-rated fc-rated--${rating}`}>
+                  {rating === 'got-it' ? '✓ Mastered' : '↻ Review later'}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Navigation arrows */}
+          <div className="fc-nav">
+            <button
+              type="button"
+              className="fc-nav-btn"
+              disabled={ci === 0}
+              onClick={() => { setCurrentFlashcardIndex(ci - 1); setFlippedCards({}); }}
+            >
+              ← Previous
+            </button>
+            <span className="fc-counter">{ci + 1} / {total}</span>
+            <button
+              type="button"
+              className="fc-nav-btn fc-nav-btn--primary"
+              disabled={ci === total - 1}
+              onClick={() => { setCurrentFlashcardIndex(ci + 1); setFlippedCards({}); }}
+            >
+              Next →
+            </button>
+          </div>
         </div>
       );
     }
@@ -1769,18 +1824,27 @@ export default function TopicLearningPage() {
           transform: translateY(0);
         }
 
+        .ai-lead-glyph {
+          color: #64B5F6;
+          font-size: 16px;
+        }
+
         .ai-lead {
-          font-size: 18px;
-          font-weight: 400;
-          color: #e5e5e5;
+          font-size: 19px;
+          font-weight: 500;
+          color: #f5f5f5;
           line-height: 1.75;
-          margin: 0 0 18px;
+          margin: 0 0 20px;
+          padding: 20px 24px;
+          background: linear-gradient(135deg, rgba(100,181,246,0.06) 0%, rgba(100,181,246,0.01) 100%);
+          border-radius: 16px;
+          border-left: 3px solid rgba(100,181,246,0.35);
         }
 
         .ai-paragraph {
           font-size: 16px;
           font-weight: 400;
-          color: #9ca3af;
+          color: #a3a3a3;
           line-height: 1.8;
           margin: 0 0 16px;
           white-space: pre-wrap;
@@ -2063,418 +2127,343 @@ export default function TopicLearningPage() {
         }
 
         /* ═══════════════════════════════════════════
-           INTERACTIVE EXAMPLES
+           INTERACTIVE EXAMPLES — Collapsible Cards
            ═══════════════════════════════════════════ */
-        .examples-header, .practice-header, .flashcards-header, .quiz-header {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 24px;
-          padding-bottom: 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .examples-icon, .practice-icon, .flashcards-icon, .quiz-icon {
-          font-size: 24px;
-        }
-
-        .examples-title, .practice-title, .flashcards-title, .quiz-title {
-          font-size: 18px;
-          font-weight: 500;
-          color: #ffffff;
-        }
-
-        .practice-hint, .flashcards-count, .quiz-score {
-          margin-left: auto;
-          font-size: 13px;
-          color: #737373;
-        }
-
         .example-card {
-          display: flex;
-          gap: 16px;
-          padding: 20px;
-          background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          margin-bottom: 16px;
-          transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+          border-radius: 16px;
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.07);
+          margin-bottom: 12px;
+          overflow: hidden;
+          transition: border-color 300ms ease, box-shadow 300ms ease;
         }
-
-        .example-card:hover {
-          border-color: rgba(255, 255, 255, 0.14);
-          transform: translateY(-2px);
+        .example-card--open {
+          border-color: rgba(100,181,246,0.25);
+          box-shadow: 0 0 30px rgba(100,181,246,0.06);
         }
-
-        .example-number {
-          width: 32px;
-          height: 32px;
+        .example-header-btn {
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 14px;
-          font-weight: 600;
-          color: #000;
-          background: linear-gradient(135deg, #fff 0%, #d4d4d4 100%);
-          border-radius: 50%;
-          flex-shrink: 0;
-        }
-
-        .example-content {
-          flex: 1;
-          min-width: 0;
-        }
-
-        .example-title {
-          font-size: 16px;
-          font-weight: 500;
-          color: #ffffff;
-          margin: 0 0 10px;
-        }
-
-        .example-scenario {
-          font-size: 14px;
-          color: #9ca3af;
-          line-height: 1.7;
-          margin: 0 0 14px;
-        }
-
-        .example-steps {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          margin-bottom: 14px;
-        }
-
-        .example-step {
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-        }
-
-        .step-dot {
-          width: 6px;
-          height: 6px;
-          background: #737373;
-          border-radius: 50%;
-          margin-top: 7px;
-          flex-shrink: 0;
-        }
-
-        .step-text {
-          font-size: 13px;
-          color: #9ca3af;
-          line-height: 1.6;
-        }
-
-        .example-outcome {
-          display: flex;
-          align-items: flex-start;
-          gap: 8px;
-          padding: 12px;
-          background: rgba(100, 181, 246, 0.08);
-          border: 1px solid rgba(100, 181, 246, 0.2);
-          border-radius: 10px;
-        }
-
-        .outcome-icon {
-          color: #64B5F6;
-          font-weight: 600;
-        }
-
-        .example-outcome span:last-child {
-          font-size: 13px;
-          color: #90CAF9;
-          line-height: 1.6;
-        }
-
-        /* ═══════════════════════════════════════════
-           INTERACTIVE PRACTICE
-           ═══════════════════════════════════════════ */
-        .practice-card {
-          padding: 20px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          margin-bottom: 16px;
-        }
-
-        .practice-question {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 16px;
-        }
-
-        .practice-q-num {
-          padding: 4px 10px;
-          font-size: 12px;
-          font-weight: 600;
-          color: #000;
-          background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-          border-radius: 6px;
-          flex-shrink: 0;
-        }
-
-        .practice-q-text {
-          font-size: 15px;
-          font-weight: 500;
-          color: #ffffff;
-          line-height: 1.6;
-        }
-
-        .practice-reveal-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
+          gap: 14px;
           width: 100%;
-          padding: 14px;
-          font-size: 14px;
-          font-weight: 500;
-          color: #a78bfa;
-          background: rgba(167, 139, 250, 0.08);
-          border: 1px dashed rgba(167, 139, 250, 0.3);
-          border-radius: 10px;
-          cursor: pointer;
-          transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .practice-reveal-btn:hover {
-          background: rgba(167, 139, 250, 0.14);
-          border-style: solid;
-        }
-
-        .reveal-icon {
-          font-size: 12px;
-        }
-
-        .practice-answer {
-          padding: 16px;
-          background: rgba(167, 139, 250, 0.06);
-          border: 1px solid rgba(167, 139, 250, 0.15);
-          border-radius: 10px;
-          opacity: 0;
-          transform: translateY(-8px);
-          animation: fadeSlideIn 300ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-
-        .practice-answer--visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .practice-answer-label {
-          font-size: 11px;
-          font-weight: 600;
-          color: #a78bfa;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-bottom: 8px;
-        }
-
-        .practice-answer-text {
-          font-size: 14px;
-          color: #e5e5e5;
-          line-height: 1.7;
-        }
-
-        @keyframes fadeSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* ═══════════════════════════════════════════
-           INTERACTIVE FLASHCARDS (3D FLIP)
-           ═══════════════════════════════════════════ */
-        .flashcards-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 16px;
-        }
-
-        @media (max-width: 640px) {
-          .flashcards-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .flashcard {
-          perspective: 1000px;
-          width: 100%;
-          height: 180px;
+          padding: 18px 20px;
           background: none;
           border: none;
           cursor: pointer;
+          text-align: left;
+          color: inherit;
+        }
+        .example-header-btn:hover { background: rgba(255,255,255,0.03); }
+        .example-number {
+          width: 34px; height: 34px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 13px; font-weight: 700;
+          color: #000;
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+          border-radius: 10px;
+          flex-shrink: 0;
+        }
+        .example-header-text { flex: 1; min-width: 0; }
+        .example-title {
+          font-size: 15px; font-weight: 600; color: #fff;
+          margin: 0 0 2px;
+        }
+        .example-snippet {
+          font-size: 13px; color: #737373;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .example-chevron {
+          font-size: 16px; color: #525252;
+          transition: transform 300ms ease;
+          flex-shrink: 0;
+        }
+        .example-chevron--open { transform: rotate(180deg); color: #64B5F6; }
+        .example-body {
+          padding: 0 20px 20px 68px;
+          animation: slideReveal 350ms cubic-bezier(0.23,1,0.32,1);
+        }
+        @keyframes slideReveal {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .example-scenario {
+          font-size: 14px; color: #a3a3a3; line-height: 1.7; margin: 0 0 14px;
+        }
+        .example-steps {
+          display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;
+        }
+        .example-step {
+          display: flex; align-items: flex-start; gap: 10px;
+        }
+        .step-number {
+          width: 22px; height: 22px;
+          display: inline-flex; align-items: center; justify-content: center;
+          font-size: 11px; font-weight: 700;
+          color: #64B5F6; background: rgba(100,181,246,0.12);
+          border-radius: 6px; flex-shrink: 0; margin-top: 1px;
+        }
+        .step-text { font-size: 13px; color: #a3a3a3; line-height: 1.6; }
+        .example-outcome {
+          display: flex; align-items: flex-start; gap: 8px;
+          padding: 12px 14px;
+          background: rgba(100,181,246,0.06);
+          border: 1px solid rgba(100,181,246,0.15);
+          border-radius: 12px;
+        }
+        .outcome-icon { font-size: 14px; flex-shrink: 0; }
+        .example-outcome span:last-child {
+          font-size: 13px; color: #90CAF9; line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════
+           Q & A — Card-Based Reveal
+           ═══════════════════════════════════════════ */
+        .qa-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .qa-card {
+          position: relative;
+          padding: 24px;
+          background: linear-gradient(135deg, rgba(167,139,250,0.04) 0%, rgba(139,92,246,0.02) 100%);
+          border: 1px solid rgba(167,139,250,0.12);
+          border-radius: 18px;
+          transition: all 350ms cubic-bezier(0.23,1,0.32,1);
+        }
+        .qa-card--revealed {
+          border-color: rgba(167,139,250,0.25);
+          box-shadow: 0 8px 32px rgba(167,139,250,0.08);
+        }
+        .qa-badge {
+          display: inline-flex; align-items: center; justify-content: center;
+          padding: 4px 12px;
+          font-size: 11px; font-weight: 800;
+          color: #a78bfa;
+          background: rgba(167,139,250,0.12);
+          border-radius: 999px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          margin-bottom: 14px;
+        }
+        .qa-question {
+          font-size: 16px; font-weight: 600; color: #fff;
+          line-height: 1.6; margin: 0 0 18px;
+        }
+        .qa-reveal-btn {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 12px 24px;
+          font-size: 13px; font-weight: 700;
+          color: #a78bfa;
+          background: rgba(167,139,250,0.08);
+          border: 1px solid rgba(167,139,250,0.25);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 250ms ease;
+          letter-spacing: 0.02em;
+        }
+        .qa-reveal-btn:hover {
+          background: rgba(167,139,250,0.16);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(167,139,250,0.15);
+        }
+        .qa-reveal-icon {
+          font-size: 12px;
+          animation: sparkle 1.5s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.3); }
+        }
+        .qa-answer {
+          margin-top: 18px;
+          animation: slideReveal 350ms cubic-bezier(0.23,1,0.32,1);
+        }
+        .qa-answer-divider {
+          display: flex; align-items: center; gap: 10px;
+          margin-bottom: 12px;
+        }
+        .qa-answer-divider::before, .qa-answer-divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: rgba(167,139,250,0.15);
+        }
+        .qa-answer-label {
+          font-size: 10px; font-weight: 800;
+          color: #a78bfa;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .qa-answer-text {
+          font-size: 14px; color: #d4d4d4; line-height: 1.75;
+          padding: 16px;
+          background: rgba(167,139,250,0.04);
+          border-radius: 12px;
+          border-left: 3px solid rgba(167,139,250,0.3);
+        }
+
+        /* ═══════════════════════════════════════════
+           FLASH CARDS — Single-Card Carousel (3D Flip)
+           ═══════════════════════════════════════════ */
+        .fc-dots {
+          display: flex; justify-content: center; gap: 6px;
+          margin-bottom: 24px;
+        }
+        .fc-dot {
+          width: 10px; height: 10px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.08);
+          cursor: pointer;
+          transition: all 250ms ease;
           padding: 0;
         }
+        .fc-dot:hover { background: rgba(255,255,255,0.2); }
+        .fc-dot--active {
+          width: 28px;
+          background: linear-gradient(135deg, #3b82f6, #64B5F6);
+          border-color: transparent;
+        }
+        .fc-dot--mastered { background: rgba(100,181,246,0.5); border-color: transparent; }
+        .fc-dot--review { background: rgba(251,191,36,0.4); border-color: transparent; }
 
-        .flashcard-inner {
-          position: relative;
-          width: 100%;
-          height: 100%;
+        .fc-stage {
+          display: flex; justify-content: center;
+          perspective: 1200px;
+          margin-bottom: 20px;
+        }
+        .fc-wrapper {
+          width: 100%; max-width: 420px;
+          display: flex; flex-direction: column; gap: 14px;
+        }
+        .fc-wrapper--got-it { opacity: 0.55; }
+
+        .fc-card {
+          width: 100%; height: 260px;
+          background: none; border: none; cursor: pointer; padding: 0;
+          perspective: 1200px;
+        }
+        .fc-inner {
+          position: relative; width: 100%; height: 100%;
           transform-style: preserve-3d;
-          transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
+          transition: transform 600ms cubic-bezier(0.23,1,0.32,1);
+        }
+        .fc-card--flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-card:hover:not(.fc-card--flipped) .fc-inner {
+          transform: rotateY(8deg) scale(1.02);
+        }
+        .fc-card--flipped:hover .fc-inner {
+          transform: rotateY(180deg) scale(1.02);
         }
 
-        .flashcard--flipped .flashcard-inner {
-          transform: rotateY(180deg);
-        }
-
-        .flashcard-front, .flashcard-back {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          padding: 20px;
-          border-radius: 14px;
+        .fc-face {
+          position: absolute; inset: 0;
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          gap: 16px; padding: 28px;
+          border-radius: 20px;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
           text-align: center;
         }
-
-        .flashcard-front {
-          background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.04) 100%);
-          border: 1px solid rgba(59, 130, 246, 0.25);
+        .fc-front {
+          background: linear-gradient(145deg, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0.04) 100%);
+          border: 1px solid rgba(59,130,246,0.25);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
         }
-
-        .flashcard-back {
-          background: linear-gradient(135deg, rgba(100, 181, 246, 0.12) 0%, rgba(100, 181, 246, 0.04) 100%);
-          border: 1px solid rgba(100, 181, 246, 0.25);
+        .fc-back {
+          background: linear-gradient(145deg, rgba(100,181,246,0.14) 0%, rgba(100,181,246,0.04) 100%);
+          border: 1px solid rgba(100,181,246,0.3);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
           transform: rotateY(180deg);
         }
 
-        .flashcard-label {
-          width: 28px;
-          height: 28px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          border-radius: 50%;
-        }
-
-        .flashcard-front .flashcard-label {
-          color: #3b82f6;
-          background: rgba(59, 130, 246, 0.2);
-        }
-
-        .flashcard-back .flashcard-label {
-          color: #64B5F6;
-          background: rgba(100, 181, 246, 0.2);
-        }
-
-        .flashcard-text {
-          font-size: 14px;
-          line-height: 1.6;
-          color: #e5e5e5;
-        }
-
-        .flashcard:hover .flashcard-inner {
-          transform: scale(1.02);
-        }
-
-        .flashcard--flipped:hover .flashcard-inner {
-          transform: rotateY(180deg) scale(1.02);
-        }
-
-        .flashcard-hint {
-          font-size: 11px;
-          color: #737373;
+        .fc-label-badge {
+          padding: 4px 14px;
+          font-size: 10px; font-weight: 800;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          color: #3b82f6;
+          background: rgba(59,130,246,0.12);
+          border-radius: 999px;
+        }
+        .fc-label-badge--answer {
+          color: #64B5F6;
+          background: rgba(100,181,246,0.12);
+        }
+        .fc-main-text {
+          font-size: 16px; font-weight: 500; color: #e5e5e5;
+          line-height: 1.65; max-width: 32ch;
+        }
+        .fc-tap-hint {
+          font-size: 11px; color: #525252;
+          letter-spacing: 0.04em;
+          animation: sparkle 2s ease-in-out infinite;
         }
 
-        .flashcard-wrapper {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
+        .fc-rating {
+          display: flex; gap: 10px;
+          animation: slideReveal 300ms ease-out;
         }
-
-        .flashcard-wrapper--got-it .flashcard {
-          opacity: 0.6;
+        .fc-rate-btn {
+          flex: 1; padding: 14px;
+          font-size: 13px; font-weight: 700;
+          border: none; border-radius: 12px;
+          cursor: pointer; transition: all 200ms ease;
         }
-
-        .flashcard-wrapper--practice .flashcard-front {
-          border-color: rgba(100, 181, 246, 0.4);
-        }
-
-        .flashcard-rating {
-          display: flex;
-          gap: 10px;
-          animation: fadeSlideIn 300ms ease-out;
-        }
-
-        .rating-btn {
-          flex: 1;
-          padding: 12px;
-          font-size: 13px;
-          font-weight: 600;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: all 200ms ease;
-        }
-
-        .rating-btn--got-it {
+        .fc-rate-btn--got-it {
           color: #fff;
-          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         }
-
-        .rating-btn--got-it:hover {
+        .fc-rate-btn--got-it:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 14px rgba(100, 181, 246, 0.4);
+          box-shadow: 0 6px 20px rgba(59,130,246,0.35);
         }
-
-        .rating-btn--practice {
+        .fc-rate-btn--again {
           color: #90CAF9;
-          background: rgba(100, 181, 246, 0.15);
-          border: 1px solid rgba(100, 181, 246, 0.3);
+          background: rgba(100,181,246,0.12);
+          border: 1px solid rgba(100,181,246,0.25);
+        }
+        .fc-rate-btn--again:hover { background: rgba(100,181,246,0.22); }
+
+        .fc-rated {
+          padding: 12px; font-size: 12px; font-weight: 600;
+          text-align: center; border-radius: 10px;
+        }
+        .fc-rated--got-it { color: #64B5F6; background: rgba(100,181,246,0.08); }
+        .fc-rated--practice { color: #90CAF9; background: rgba(100,181,246,0.08); }
+
+        .fc-nav {
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 14px; padding-top: 6px;
+        }
+        .fc-counter {
+          font-size: 13px; font-weight: 600; color: #525252;
+        }
+        .fc-nav-btn {
+          padding: 10px 18px; font-size: 13px; font-weight: 600;
+          color: #737373; background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+          cursor: pointer; transition: all 200ms ease;
+        }
+        .fc-nav-btn:hover:not(:disabled) {
+          background: rgba(255,255,255,0.08); color: #fff;
+        }
+        .fc-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .fc-nav-btn--primary {
+          color: #000;
+          background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+          border: none;
+        }
+        .fc-nav-btn--primary:hover:not(:disabled) {
+          transform: translateX(3px);
+          box-shadow: 0 4px 14px rgba(100,181,246,0.3);
         }
 
-        .rating-btn--practice:hover {
-          background: rgba(100, 181, 246, 0.25);
-        }
-
-        .flashcard-rated {
-          padding: 10px;
-          font-size: 12px;
-          font-weight: 500;
-          text-align: center;
-          border-radius: 8px;
-        }
-
-        .flashcard-rated--got-it {
-          color: #64B5F6;
-          background: rgba(100, 181, 246, 0.1);
-        }
-
-        .flashcard-rated--practice {
-          color: #90CAF9;
-          background: rgba(100, 181, 246, 0.1);
-        }
-
-        .rating-summary {
-          display: flex;
-          gap: 12px;
-        }
-
-        .got-it-badge {
-          color: #64B5F6;
-        }
-
-        .practice-badge {
-          color: #90CAF9;
-        }
+        .rating-summary { display: flex; gap: 12px; }
+        .got-it-badge { color: #64B5F6; }
+        .practice-badge { color: #90CAF9; }
 
         /* ═══════════════════════════════════════════
            INTERACTIVE QUIZ
@@ -2626,26 +2615,30 @@ export default function TopicLearningPage() {
         .section-header {
           display: flex;
           align-items: center;
-          gap: 10px;
-          margin-bottom: 24px;
-          padding-bottom: 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          gap: 12px;
+          margin-bottom: 28px;
+          padding: 14px 18px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 14px;
         }
 
         .section-icon {
-          font-size: 24px;
+          font-size: 22px;
+          filter: drop-shadow(0 0 6px rgba(100,181,246,0.3));
         }
 
         .section-title {
-          font-size: 18px;
-          font-weight: 500;
+          font-size: 17px;
+          font-weight: 700;
           color: #ffffff;
+          letter-spacing: 0.01em;
         }
 
         .section-count {
           margin-left: auto;
-          font-size: 13px;
-          color: #737373;
+          font-size: 12px;
+          color: #525252;
           display: flex;
           align-items: center;
           gap: 8px;
@@ -2733,20 +2726,22 @@ export default function TopicLearningPage() {
           width: 100%;
           padding: 16px;
           margin-top: 16px;
-          font-size: 14px;
-          font-weight: 500;
+          font-size: 13px;
+          font-weight: 700;
           color: #64B5F6;
-          background: rgba(100, 181, 246, 0.06);
-          border: 1px dashed rgba(100, 181, 246, 0.3);
-          border-radius: 12px;
+          background: linear-gradient(135deg, rgba(100,181,246,0.06) 0%, rgba(100,181,246,0.02) 100%);
+          border: 1px solid rgba(100,181,246,0.15);
+          border-radius: 14px;
           cursor: pointer;
           transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
+          letter-spacing: 0.03em;
         }
 
         .show-more-btn:hover {
-          background: rgba(100, 181, 246, 0.12);
-          border-style: solid;
+          background: linear-gradient(135deg, rgba(100,181,246,0.12) 0%, rgba(100,181,246,0.06) 100%);
+          border-color: rgba(100,181,246,0.3);
           transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(100,181,246,0.1);
         }
 
         /* ═══════════════════════════════════════════
