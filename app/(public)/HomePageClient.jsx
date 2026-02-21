@@ -9,7 +9,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { staticBlogPost } from '@/data/staticBlogData';
 import { getServicesForHome } from '@/data/servicesCatalog';
 import dynamic from 'next/dynamic';
 // 🔒 CORE: Using isolated market ticker (never breaks)
@@ -22,7 +21,6 @@ const HeroContent = dynamic(() => import('@/components/home/HeroContent'), {
   loading: () => <div style={{ minHeight: 320 }} />,
 });
 import ServiceCard from '@/components/user/ServiceCard';
-import BlogCard from '@/components/user/BlogCard';
 
 // Below-the-fold components: lazy-loaded to cut initial JS for faster LCP / lower TBT.
 const MarketMoodStrip = dynamic(() => import('@/components/user/MarketMoodStrip'), { ssr: false });
@@ -347,7 +345,7 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Latest Insights Section */}
+      {/* Latest Insights Section — 6 premium cards */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2
@@ -367,7 +365,7 @@ export default function HomePageClient() {
               margin: '0 auto',
             }}
           >
-            Expert financial wisdom and real-world investment stories
+            Expert financial wisdom, real-world stories &amp; powerful tools
           </p>
           <p style={{ marginTop: '14px', fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>
             Prefer self-paced learning?{' '}
@@ -382,9 +380,110 @@ export default function HomePageClient() {
           </p>
         </div>
 
-        <BlogCard post={staticBlogPost} variant="homeMutualStyle" />
+        {/* 6-card premium grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+            gap: '24px',
+            maxWidth: '1100px',
+            margin: '0 auto',
+          }}
+        >
+          {[
+            {
+              title: 'Editorial',
+              desc: 'In-depth financial analysis, case studies & expert breakdowns.',
+              href: '/blog/editorial',
+              icon: '📰',
+              accent: 'oklch(0.78 0.08 65)',
+            },
+            {
+              title: 'Community Impact',
+              desc: 'Real stories — how everyday investors transformed their finances.',
+              href: '/blog/impact',
+              icon: '🤝',
+              accent: 'oklch(0.72 0.11 155)',
+            },
+            {
+              title: 'Guest Columns',
+              desc: 'Perspectives from industry experts, fund managers & thought leaders.',
+              href: '/blog/guest',
+              icon: '✍️',
+              accent: 'oklch(0.75 0.10 250)',
+            },
+            {
+              title: 'Developer Insight',
+              desc: 'Where technology meets finance — tools, APIs & automation.',
+              href: '/blog/dev',
+              icon: '💻',
+              accent: 'oklch(0.72 0.12 300)',
+            },
+            {
+              title: 'ITR Filing Help',
+              desc: 'Guided income-tax return filing — step by step, stress-free.',
+              href: '/tools/itr-filing-help',
+              icon: '📋',
+              accent: 'oklch(0.74 0.09 180)',
+            },
+            {
+              title: 'Live Intelligence',
+              desc: 'Real-time market context, mood indicators & trading timings.',
+              href: '/live-intelligence',
+              icon: '📡',
+              accent: 'oklch(0.70 0.14 230)',
+            },
+          ].map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                padding: '28px 24px',
+                borderRadius: '16px',
+                background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                textDecoration: 'none',
+                transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+                cursor: 'pointer',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.borderColor = card.accent;
+                e.currentTarget.style.boxShadow = `0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px ${card.accent}22`;
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <span style={{ fontSize: '28px' }}>{card.icon}</span>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', margin: 0 }}>
+                {card.title}
+              </h3>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, margin: 0 }}>
+                {card.desc}
+              </p>
+              <span
+                style={{
+                  marginTop: 'auto',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  color: card.accent,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Explore →
+              </span>
+            </Link>
+          ))}
+        </div>
 
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+        <div style={{ textAlign: 'center', marginTop: '48px' }}>
           <Link href="/blog" className="btn-secondary" style={{ textDecoration: 'none' }}>
             View All Insights
           </Link>

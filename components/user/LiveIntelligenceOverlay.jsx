@@ -47,6 +47,7 @@ import { savedHeadlines } from '@/components/live-intelligence/HeadlineCard';
 import { BadgeDisplay } from '@/components/live-intelligence/BadgeDisplay';
 import { AchievementPopup } from '@/components/live-intelligence/AchievementPopup';
 import { FeedToggle } from '@/components/live-intelligence/FeedToggle';
+import TodayAtAGlance from '@/components/live-intelligence/TodayAtAGlance';
 // Theme toggle removed - we follow the main system theme
 import { getVoiceReader } from '@/lib/live-intelligence/voice';
 import { getGamificationTracker } from '@/lib/live-intelligence/gamification';
@@ -2316,7 +2317,9 @@ function LiveIntelligencePanel({ onClose, scrollContainerRef = null }) {
             {greetingLine}
           </div>
 
-          
+          {/* Today at a Glance — date, bank status, holidays */}
+          <TodayAtAGlance />
+
           {/* Row 4: Navigation Tabs - Live Market Pulse, Live, Timings, 2 Days, Saved */}
           <div style={{ marginTop: '14px', overflowX: 'auto', marginLeft: '-4px', marginRight: '-4px', paddingLeft: '4px', paddingRight: '4px' }}>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
