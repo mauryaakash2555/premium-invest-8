@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { ArrowRight, Award, ShieldCheck, Sparkles, Target, Users } from 'lucide-react';
 
 const cormorant = Cormorant_Garamond({
@@ -51,9 +51,20 @@ export default function AboutUsPage() {
   const containerRef = useRef(null);
   const storyRef = useRef(null);
   const [wordIndex] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Skip heavy 40 MB video on mobile — only render on screens ≥ 768px
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(Boolean(mq.matches));
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
   }, []);
 
   const themeStyle = useMemo(
@@ -80,16 +91,22 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          >
-            <source src="/videos/about-us-animated.mp4" type="video/mp4" />
-          </video>
+          {isDesktop ? (
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23101018' width='1' height='1'/%3E%3C/svg%3E"
+            >
+              <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            /* Mobile: static gradient background instead of 40 MB video */
+            <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.10_0.02_280)] via-[oklch(0.07_0.01_260)] to-[oklch(0.05_0.005_280)]" />
+          )}
           <div className="absolute inset-0 bg-[var(--lux-background)]/35" />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)]/75 via-[var(--lux-background)]/55 to-[var(--lux-background)]" />
         </div>

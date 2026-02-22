@@ -128,6 +128,7 @@ function getDefaultItems() {
 export default function LiveIntelligenceHero() {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+  const [showVideo, setShowVideo] = useState(false);
 
   const [marketMode, setMarketMode] = useState(() => getMarketModeIst());
   const [isExpanded, setIsExpanded] = useState(false);
@@ -163,6 +164,16 @@ export default function LiveIntelligenceHero() {
     if (!video) return;
     const p = video.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
+  }, [showVideo]);
+
+  // Skip heavy 24 MB laser video on mobile — only load on ≥768px screens
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setShowVideo(Boolean(mq.matches));
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   // IST market mode refresh
@@ -308,17 +319,22 @@ export default function LiveIntelligenceHero() {
         aria-hidden="true"
       />
 
-      <video
-        ref={videoRef}
-        className={styles.laserVideo}
-        autoPlay
-        muted
-        playsInline
-        loop
-        preload="auto"
-      >
-        <source src={`/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`} type="video/mp4" />
-      </video>
+      {showVideo ? (
+        <video
+          ref={videoRef}
+          className={styles.laserVideo}
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="metadata"
+        >
+          <source src={`/videos/laser-beam.mp4?v=${LASER_ASSET_VERSION}`} type="video/mp4" />
+        </video>
+      ) : (
+        /* Mobile: CSS gradient instead of 24 MB video for fast load */
+        <div className={styles.laserVideo} style={{ background: 'radial-gradient(ellipse at 50% 40%, oklch(0.12 0.03 280) 0%, oklch(0.06 0.005 280) 70%)' }} />
+      )}
 
       <div className={styles.topFade} aria-hidden="true" />
       <div className={styles.bottomFade} aria-hidden="true" />

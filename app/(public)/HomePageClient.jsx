@@ -397,6 +397,7 @@ export default function HomePageClient() {
               href: '/blog/editorial',
               icon: '📰',
               accent: 'oklch(0.78 0.08 65)',
+              img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Community Impact',
@@ -404,6 +405,7 @@ export default function HomePageClient() {
               href: '/blog/impact',
               icon: '🤝',
               accent: 'oklch(0.72 0.11 155)',
+              img: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Guest Columns',
@@ -411,6 +413,7 @@ export default function HomePageClient() {
               href: '/blog/guest',
               icon: '✍️',
               accent: 'oklch(0.75 0.10 250)',
+              img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Developer Insight',
@@ -418,6 +421,7 @@ export default function HomePageClient() {
               href: '/blog/dev',
               icon: '💻',
               accent: 'oklch(0.72 0.12 300)',
+              img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'ITR Filing Help',
@@ -425,6 +429,7 @@ export default function HomePageClient() {
               href: '/tools/itr-filing-help',
               icon: '📋',
               accent: 'oklch(0.74 0.09 180)',
+              img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Live Intelligence',
@@ -432,6 +437,7 @@ export default function HomePageClient() {
               href: '/live-intelligence',
               icon: '📡',
               accent: 'oklch(0.70 0.14 230)',
+              img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=640&h=360&fit=crop&auto=format&q=75',
             },
           ].map((card) => (
             <Link
@@ -440,14 +446,14 @@ export default function HomePageClient() {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px',
-                padding: '28px 24px',
+                gap: '0',
                 borderRadius: '16px',
                 background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
                 border: '1px solid rgba(255,255,255,0.07)',
                 textDecoration: 'none',
                 transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
                 cursor: 'pointer',
+                overflow: 'hidden',
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
@@ -460,25 +466,44 @@ export default function HomePageClient() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <span style={{ fontSize: '28px' }}>{card.icon}</span>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', margin: 0 }}>
-                {card.title}
-              </h3>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, margin: 0 }}>
-                {card.desc}
-              </p>
-              <span
-                style={{
-                  marginTop: 'auto',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: card.accent,
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Explore →
-              </span>
+              {/* Card thumbnail */}
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+                <Image
+                  src={card.img}
+                  alt={card.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 340px"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                />
+                {/* Gradient fade at bottom of image */}
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)' }} />
+                <span style={{
+                  position: 'absolute', bottom: '10px', left: '14px',
+                  fontSize: '22px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))',
+                }}>{card.icon}</span>
+              </div>
+              {/* Card body */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', margin: 0 }}>
+                  {card.title}
+                </h3>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
+                  {card.desc}
+                </p>
+                <span
+                  style={{
+                    marginTop: 'auto',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: card.accent,
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Explore →
+                </span>
+              </div>
             </Link>
           ))}
         </div>
