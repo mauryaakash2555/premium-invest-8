@@ -78,8 +78,8 @@ export default function ITRFilingHelp() {
     // === Extract all values with fallbacks ===
     const employeePAN = String(d.employeePAN ?? itrDetails?.employeePAN ?? '\u2014').toUpperCase().trim() || '\u2014';
     const employerName = String(d.employerName ?? itrDetails?.employerName ?? '\u2014').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || '\u2014';
-    // Safety: cap employer name to 60 chars for PDF display; use 'your employer' in step text
-    const safeEmployer = employerName.length > 60 ? employerName.slice(0, 59) + '\u2026' : employerName;
+    // Show full employer name (splitTextToSize handles wrapping); use 'your employer' in step text if very long
+    const safeEmployer = employerName;
     const shortEmployer = employerName.length > 50 ? 'your employer' : employerName;
     const employerTAN = String(d.employerTAN ?? itrDetails?.employerTAN ?? '\u2014').toUpperCase().trim() || '\u2014';
     const assessmentYear = String(d.assessmentYear ?? itrDetails?.assessmentYear ?? '\u2014').trim() || '\u2014';
@@ -157,6 +157,9 @@ export default function ITRFilingHelp() {
       goldLine(y, margin, margin + 32);
       y += 10;
 
+      // ── Gold border around the entire "Your Details" table ──
+      const detailTableY = y - 4;
+
       // Elegant label-value rows — no spreadsheet look
       const detailRows = [
         ['Employee PAN', employeePAN, false],
@@ -212,6 +215,11 @@ export default function ITRFilingHelp() {
         y += 8.5;
       }
 
+      // ── Draw thin gold border around the details table ──
+      const detailTableH = y - detailTableY + 2;
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.4);
+      doc.rect(margin - 1, detailTableY, cw + 2, detailTableH, 'S');
+
       y += 8;
 
       // ────────────────────────────────────────────
@@ -234,8 +242,8 @@ export default function ITRFilingHelp() {
 
       // --- Render one regime card ---
       const renderCard = (cx, regime, taxAmt, ded, isRec) => {
-        // Card background
-        fill(cx, cardY, cardW, cardH, isRec ? [250, 247, 235] : [248, 248, 250]);
+        // Card background — light gold/cream for both, slightly warmer for recommended
+        fill(cx, cardY, cardW, cardH, isRec ? [250, 247, 235] : [253, 251, 243]);
         // Border
         doc.setDrawColor(...(isRec ? GOLD : [220, 220, 225]));
         doc.setLineWidth(isRec ? 0.7 : 0.3);
@@ -292,20 +300,25 @@ export default function ITRFilingHelp() {
 
       y = cardY + cardH + 12;
 
-      // ── Savings Hero Banner ──
-      pageBreak(24);
-      fill(margin, y, cw, 20, [252, 248, 235]);
-      doc.setDrawColor(...GOLD); doc.setLineWidth(0.5);
-      doc.rect(margin, y, cw, 20, 'S');
+      // ── Savings Hero Banner — BIG, impossible to miss ──
+      pageBreak(52);
+      const savBannerH = 44;
+      fill(margin, y, cw, savBannerH, [252, 248, 235]);
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.8);
+      doc.rect(margin, y, cw, savBannerH, 'S');
+      // Thin gold accent lines top & bottom inside
+      doc.setDrawColor(...GOLD); doc.setLineWidth(0.3);
+      doc.line(margin + 4, y + 2, margin + cw - 4, y + 2);
+      doc.line(margin + 4, y + savBannerH - 2, margin + cw - 4, y + savBannerH - 2);
       // Small label
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...MID);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(...MID);
       const savLabel = 'Potential Savings by choosing ' + (recommended === 'old' ? 'Old' : 'New') + ' Regime';
-      doc.text(savLabel, margin + cw / 2, y + 7, { align: 'center' });
-      // Big gold number
-      doc.setFont('times', 'bold'); doc.setFontSize(20); doc.setTextColor(...GOLD);
-      doc.text(fmtMoney(savings), margin + cw / 2, y + 16, { align: 'center' });
+      doc.text(savLabel, margin + cw / 2, y + 12, { align: 'center' });
+      // HUGE gold number — 36pt (≈ 48px) — the visual hero
+      doc.setFont('times', 'bold'); doc.setFontSize(36); doc.setTextColor(...GOLD);
+      doc.text(fmtMoney(savings), margin + cw / 2, y + 32, { align: 'center' });
 
-      y += 32;
+      y += savBannerH + 12;
 
       // ────────────────────────────────────────────
       //  SECTION 3 — How to File: 6 Steps
@@ -349,15 +362,18 @@ export default function ITRFilingHelp() {
         const estH = 8 + testLines.length * 4.2 + 8;
         pageBreak(estH);
 
-        // Gold step number circle
+        // Gold step number circle — centered both horizontally and vertically
         const circR = 4;
         const circX = margin + circR;
         const circY = y - 0.5;
         doc.setFillColor(...GOLD);
         doc.circle(circX, circY, circR, 'F');
         doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(255, 255, 255);
-        const numW = doc.getTextWidth(String(i + 1));
-        doc.text(String(i + 1), circX - numW / 2, circY + 3);
+        const numStr = String(i + 1);
+        const numW = doc.getTextWidth(numStr);
+        // Vertical center: font ascent is ~70% of font size in mm; cap height ≈ 2.2mm for 9pt
+        const numH = 2.2;
+        doc.text(numStr, circX - numW / 2, circY + numH / 2);
 
         // Step title in serif bold
         doc.setFont('times', 'bold'); doc.setFontSize(12); doc.setTextColor(...DARK);
@@ -398,6 +414,18 @@ export default function ITRFilingHelp() {
       doc.text('BM Wealth', margin, discEnd + 5);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...MID);
       doc.text('bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
+
+      // ── Subtle BM Wealth watermark — bottom-right corner, 20% opacity on every page ──
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let pg = 1; pg <= totalPages; pg++) {
+        doc.setPage(pg);
+        doc.setFont('times', 'bold'); doc.setFontSize(28);
+        doc.setTextColor(212, 175, 55); // gold
+        doc.setGState(new doc.GState({ opacity: 0.08 }));
+        doc.text('BM Wealth', pw - margin - 2, ph - 12, { align: 'right' });
+        // Reset opacity
+        doc.setGState(new doc.GState({ opacity: 1 }));
+      }
 
       doc.save('ITR-Filing-Summary-BM-Wealth.pdf');
     } catch (err) {

@@ -11,6 +11,7 @@ import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { getServicesForHome } from '@/data/servicesCatalog';
 import dynamic from 'next/dynamic';
+import communityPostsMeta from '@/data/community_posts/posts.json';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 // Lazy-loaded below the fold — not needed for LCP.
 const PremiumMarketTicker = dynamic(() => import('@/core/marketTicker'), { ssr: false });
@@ -47,11 +48,21 @@ export default function HomePageClient() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [rainEnabled, setRainEnabled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const liveMoodRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
     window.scrollTo(0, 0);
+
+    const mq = window.matchMedia('(min-width: 768px)');
+    const updateDesktop = () => setIsDesktop(Boolean(mq.matches));
+    updateDesktop();
+    try {
+      mq.addEventListener('change', updateDesktop);
+    } catch {
+      mq.addListener(updateDesktop);
+    }
 
     const handleMouseMove = (e) => {
       setMousePos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 });
@@ -59,6 +70,11 @@ export default function HomePageClient() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      try {
+        mq.removeEventListener('change', updateDesktop);
+      } catch {
+        mq.removeListener(updateDesktop);
+      }
     };
   }, []);
 
@@ -373,7 +389,7 @@ export default function HomePageClient() {
               href="https://store.bmwealth.co.in"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'oklch(0.78 0.08 65)', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+              style={{ color: 'rgba(214, 179, 106, 0.9)', textDecoration: 'underline', textUnderlineOffset: '4px' }}
             >
               Explore our Digital Store →
             </a>
@@ -390,56 +406,77 @@ export default function HomePageClient() {
             margin: '0 auto',
           }}
         >
-          {[
-            {
+          {(() => {
+            const pickLatestCommunity = (pillar) => {
+              const list = Array.isArray(communityPostsMeta) ? communityPostsMeta : [];
+              const filtered = list.filter(
+                (p) =>
+                  String(p?.pillar || '').toUpperCase() === String(pillar || '').toUpperCase() &&
+                  String(p?.status || '').toUpperCase() === 'APPROVED'
+              );
+              filtered.sort((a, b) => {
+                const da = new Date(a?.approved_at || a?.created_at || 0).getTime();
+                const db = new Date(b?.approved_at || b?.created_at || 0).getTime();
+                return db - da;
+              });
+              return filtered[0] || null;
+            };
+
+            const editorial = {
               title: 'Editorial',
-              desc: 'In-depth financial analysis, case studies & expert breakdowns.',
-              href: '/blog/editorial',
-              icon: '📰',
-              accent: 'oklch(0.78 0.08 65)',
-              img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-            {
-              title: 'Community Impact',
-              desc: 'Real stories — how everyday investors transformed their finances.',
-              href: '/blog/impact',
-              icon: '🤝',
-              accent: 'oklch(0.72 0.11 155)',
-              img: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-            {
-              title: 'Guest Columns',
-              desc: 'Perspectives from industry experts, fund managers & thought leaders.',
-              href: '/blog/guest',
-              icon: '✍️',
-              accent: 'oklch(0.75 0.10 250)',
-              img: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-            {
-              title: 'Developer Insight',
-              desc: 'Where technology meets finance — tools, APIs & automation.',
-              href: '/blog/dev',
-              icon: '💻',
-              accent: 'oklch(0.72 0.12 300)',
-              img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-            {
-              title: 'ITR Filing Help',
-              desc: 'Guided income-tax return filing — step by step, stress-free.',
-              href: '/tools/itr-filing-help',
-              icon: '📋',
-              accent: 'oklch(0.74 0.09 180)',
-              img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-            {
-              title: 'Live Intelligence',
-              desc: 'Real-time market context, mood indicators & trading timings.',
-              href: '/live-intelligence',
-              icon: '📡',
-              accent: 'oklch(0.70 0.14 230)',
-              img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=640&h=360&fit=crop&auto=format&q=75',
-            },
-          ].map((card) => (
+              kicker: 'BM Editorial',
+              postTitle: 'He Lost ₹47 Lakh Following "Expert" Advice - Here\'s What He Wishes He Knew 7 Years Ago',
+              desc:
+                'True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.',
+              href: '/blog/47-lakh-investment-mistake-mumbai',
+              img: '/blog-images/blog-hero-47lakh.jpg',
+              kind: 'post',
+            };
+
+            const impactPost = pickLatestCommunity('IMPACT');
+            const guestPost = pickLatestCommunity('GUEST');
+            const devPost = pickLatestCommunity('DEV');
+
+            const communityCard = (pillar, label, post) => {
+              const id = String(post?._id || '').trim();
+              const img = String(post?.image_url || post?.image || '').trim();
+              return {
+                title: label,
+                kicker: label,
+                postTitle: String(post?.title || '').trim() || label,
+                desc: 'Read the latest approved story in this series.',
+                href: id ? `/blog/community/${id}` : '/blog',
+                img,
+                kind: 'post',
+              };
+            };
+
+            const cards = [
+              editorial,
+              communityCard('IMPACT', 'Community Impact', impactPost),
+              communityCard('GUEST', 'Guest Columns', guestPost),
+              communityCard('DEV', 'Developer Insight', devPost),
+              {
+                title: 'ITR Filing Help',
+                kicker: 'Tool',
+                postTitle: 'ITR Filing Help',
+                desc: 'Guided income-tax return filing — step by step, stress-free.',
+                href: '/tools/itr-filing-help',
+                img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75',
+                kind: 'tool',
+              },
+              {
+                title: 'Live Intelligence',
+                kicker: 'Live',
+                postTitle: 'Live Intelligence',
+                desc: 'Real-time market context, mood indicators & trading timings.',
+                href: '/live-intelligence',
+                kind: 'live-intel',
+              },
+            ];
+
+            return cards;
+          })().map((card) => (
             <Link
               key={card.href}
               href={card.href}
@@ -457,8 +494,8 @@ export default function HomePageClient() {
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.borderColor = card.accent;
-                e.currentTarget.style.boxShadow = `0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px ${card.accent}22`;
+                e.currentTarget.style.borderColor = 'rgba(214, 179, 106, 0.45)';
+                e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(214, 179, 106, 0.20)';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
@@ -468,25 +505,60 @@ export default function HomePageClient() {
             >
               {/* Card thumbnail */}
               <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
-                <Image
-                  src={card.img}
-                  alt={card.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 340px"
-                  style={{ objectFit: 'cover' }}
-                  loading="lazy"
-                />
+                {card.kind === 'live-intel' ? (
+                  mounted && isDesktop ? (
+                    <video
+                      className="absolute inset-0 h-full w-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
+                    >
+                      <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+                    </video>
+                  ) : (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background:
+                          'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                      }}
+                    />
+                  )
+                ) : (
+                  card.img ? (
+                    <Image
+                      src={card.img}
+                      alt={card.postTitle || card.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 340px"
+                      style={{ objectFit: 'cover' }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background:
+                          'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                      }}
+                    />
+                  )
+                )}
                 {/* Gradient fade at bottom of image */}
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)' }} />
-                <span style={{
-                  position: 'absolute', bottom: '10px', left: '14px',
-                  fontSize: '22px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))',
-                }}>{card.icon}</span>
               </div>
               {/* Card body */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
-                <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', margin: 0 }}>
-                  {card.title}
+                <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
+                  {card.kicker || card.title}
+                </div>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+                  {card.postTitle || card.title}
                 </h3>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
                   {card.desc}
@@ -496,12 +568,12 @@ export default function HomePageClient() {
                     marginTop: 'auto',
                     fontSize: '11px',
                     fontWeight: 700,
-                    color: card.accent,
+                    color: 'rgba(214, 179, 106, 0.9)',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                   }}
                 >
-                  Explore →
+                  Read →
                 </span>
               </div>
             </Link>

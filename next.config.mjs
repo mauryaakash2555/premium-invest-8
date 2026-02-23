@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.pexels.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'thumbs.dreamstime.com',
+      },
     ],
     // Image optimization settings for faster loading
     formats: ['image/avif', 'image/webp'],
