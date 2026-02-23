@@ -251,7 +251,7 @@ return (
 
         {/* Navigation Grid - Optimized for Desktop & Mobile */}
         <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 py-24 relative z-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-16 lg:gap-8">
             
             {/* Vault Column */}
             <div className="space-y-10">
@@ -304,12 +304,12 @@ return (
             </div>
 
             {/* Intelligence Column */}
-            <div className="space-y-10">
+            <div className="space-y-10 lg:col-span-2">
               <h3 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start" style={{ color: 'oklch(0.78 0.08 65)' }}>
                 <Info className="w-5 h-5" strokeWidth={1.5} style={{ color: 'oklch(0.78 0.08 65)' }} />
                 Intelligence
               </h3>
-              <ul className="list-none p-0 m-0 text-center lg:text-left grid grid-cols-1 gap-y-6 lg:grid-cols-2 lg:gap-x-10">
+              <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
                 {navigationLinks.resources.map((link) => (
                   <li key={link.label}>
                     <Link
