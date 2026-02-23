@@ -513,6 +513,7 @@ export default function HomePageClient() {
               key={card.href}
               href={card.href}
               style={{
+                position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0',
@@ -536,79 +537,124 @@ export default function HomePageClient() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {/* Card thumbnail */}
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
-                {card.kind === 'live-intel' ? (
-                  mounted && isDesktop ? (
-                    <video
-                      className="absolute inset-0 h-full w-full object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
+              {card.kind === 'live-intel' ? (
+                <>
+                  {/* Live Intel keeps the video thumbnail presentation */}
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+                    {mounted && isDesktop ? (
+                      <video
+                        className="absolute inset-0 h-full w-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
+                      >
+                        <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+                      </video>
+                    ) : (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background:
+                            'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                        }}
+                      />
+                    )}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)',
+                      }}
+                    />
+                  </div>
+
+                  {/* Card body */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
+                    <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
+                      {card.kicker || card.title}
+                    </div>
+                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+                      {card.postTitle || card.title}
+                    </h3>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
+                      {card.desc}
+                    </p>
+                    <span
+                      style={{
+                        marginTop: 'auto',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: 'rgba(214, 179, 106, 0.9)',
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}
                     >
-                      <source src="/videos/about-us-animated.mp4" type="video/mp4" />
-                    </video>
-                  ) : (
+                      Read →
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Full-card background image (blog-style) */}
+                  <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
+                    {card.img ? (
+                      <Image
+                        src={card.img}
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 100vw, 420px"
+                        style={{ objectFit: 'cover' }}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background:
+                            'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                        }}
+                      />
+                    )}
                     <div
                       style={{
                         position: 'absolute',
                         inset: 0,
-                        background:
-                          'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(10,10,15,0.92) 100%)',
                       }}
                     />
-                  )
-                ) : (
-                  card.img ? (
-                    <Image
-                      src={card.img}
-                      alt={card.postTitle || card.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 340px"
-                      style={{ objectFit: 'cover' }}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div
+                  </div>
+
+                  {/* Text overlay */}
+                  <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px', marginTop: 'auto' }}>
+                    <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>
+                      {card.kicker || card.title}
+                    </div>
+                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+                      {card.postTitle || card.title}
+                    </h3>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0 }}>
+                      {card.desc}
+                    </p>
+                    <span
                       style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background:
-                          'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                        marginTop: 'auto',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: 'rgba(214, 179, 106, 0.9)',
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
                       }}
-                    />
-                  )
-                )}
-                {/* Gradient fade at bottom of image */}
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)' }} />
-              </div>
-              {/* Card body */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
-                <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
-                  {card.kicker || card.title}
-                </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
-                  {card.postTitle || card.title}
-                </h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
-                  {card.desc}
-                </p>
-                <span
-                  style={{
-                    marginTop: 'auto',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    color: 'rgba(214, 179, 106, 0.9)',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Read →
-                </span>
-              </div>
+                    >
+                      Read →
+                    </span>
+                  </div>
+                </>
+              )}
             </Link>
           ))}
         </div>
