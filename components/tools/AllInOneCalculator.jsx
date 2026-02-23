@@ -5643,7 +5643,7 @@ ${text}
           border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 20px;
           padding: 28px;
-          max-width: 1100px;
+          max-width: 1400px;
           margin: 0 auto;
           position: relative;
           overflow: hidden;
@@ -5655,8 +5655,8 @@ ${text}
 
         .aio-main {
           display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 18px;
+          grid-template-columns: 1fr;
+          gap: 24px;
           position: relative;
           z-index: 1;
         }
@@ -5674,13 +5674,11 @@ ${text}
           border-radius: 16px;
           border: 1px solid rgba(255, 255, 255, 0.16);
           background: rgba(0, 0, 0, 0.22);
-          padding: 16px;
+          padding: 20px;
           box-shadow:
             0 18px 44px rgba(0, 0, 0, 0.35),
             inset 0 1px 0 rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px);
-          position: sticky;
-          top: 14px;
           outline: none;
         }
 
@@ -6067,6 +6065,7 @@ ${text}
 
         .aio-inputs {
           display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
           gap: 18px;
           margin-bottom: 24px;
           position: relative;
@@ -6081,6 +6080,7 @@ ${text}
 
         .aio-section {
           padding-top: 6px;
+          grid-column: 1 / -1;
         }
 
         .aio-sectionTitle {
@@ -6183,8 +6183,8 @@ ${text}
 
         .aio-results-grid {
           display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
           gap: 14px;
-          max-height: 420px;
           overflow: auto;
           padding-right: 6px;
           overscroll-behavior: contain;
@@ -6341,12 +6341,6 @@ ${text}
         }
 
         @media (max-width: 900px) {
-          .aio-main {
-            grid-template-columns: 1fr;
-          }
-          .aio-right {
-            display: none;
-          }
           .aio-calc {
             padding: 20px;
           }

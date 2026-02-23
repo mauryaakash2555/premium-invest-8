@@ -70,8 +70,9 @@ export default function PortalOnboardingPage() {
   }, []);
 
   const total = onboardingSteps.length;
-  const done = completedSteps.size;
-  const progressPct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const validStepNumbers = new Set(onboardingSteps.map((s) => s.step));
+  const done = [...completedSteps].filter((n) => validStepNumbers.has(n)).length;
+  const progressPct = total > 0 ? Math.min(Math.round((done / total) * 100), 100) : 0;
 
   return (
     <main

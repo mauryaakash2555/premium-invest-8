@@ -44,7 +44,7 @@ export default function AllCalculatorsPage() {
       <BackRow href="/tools" label="← Back to Tools" />
       <style dangerouslySetInnerHTML={{ __html: BODY_TEXT_STYLES }} />
       <section className="px-6 lg:px-10 py-14 lg:py-20">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <h1 className="text-3xl sm:text-4xl font-semibold gold-gradient-text">
               All in One Financial Calculator
