@@ -309,7 +309,7 @@ return (
                 <Info className="w-5 h-5" strokeWidth={1.5} style={{ color: 'oklch(0.78 0.08 65)' }} />
                 Intelligence
               </h3>
-              <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
+              <ul className="list-none p-0 m-0 text-center lg:text-left grid grid-cols-1 gap-y-6 lg:grid-cols-2 lg:gap-x-10">
                 {navigationLinks.resources.map((link) => (
                   <li key={link.label}>
                     <Link

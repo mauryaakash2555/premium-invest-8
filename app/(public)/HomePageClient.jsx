@@ -11,7 +11,6 @@ import { TrendingUp, Shield, PieChart } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { getServicesForHome } from '@/data/servicesCatalog';
 import dynamic from 'next/dynamic';
-import communityPostsMeta from '@/data/community_posts/posts.json';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 // Lazy-loaded below the fold — not needed for LCP.
 const PremiumMarketTicker = dynamic(() => import('@/core/marketTicker'), { ssr: false });
@@ -49,6 +48,11 @@ export default function HomePageClient() {
   const [rainEnabled, setRainEnabled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [latestCommunityByPillar, setLatestCommunityByPillar] = useState({
+    IMPACT: null,
+    GUEST: null,
+    DEV: null,
+  });
   const liveMoodRef = useRef(null);
 
   useEffect(() => {
@@ -75,6 +79,51 @@ export default function HomePageClient() {
       } catch {
         mq.removeListener(updateDesktop);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
+
+    const pickLatestFrom = (items) => {
+      const list = Array.isArray(items) ? [...items] : [];
+      list.sort((a, b) => {
+        const da = new Date(a?.approved_at || a?.created_at || 0).getTime();
+        const db = new Date(b?.approved_at || b?.created_at || 0).getTime();
+        return db - da;
+      });
+      return list.find((p) => p && p._id && p.title) || null;
+    };
+
+    const load = async () => {
+      try {
+        const pillars = ['IMPACT', 'GUEST', 'DEV'];
+        const results = await Promise.all(
+          pillars.map(async (pillar) => {
+            const res = await fetch(`/api/posts?pillar=${encodeURIComponent(pillar)}&status=APPROVED`, {
+              signal: controller.signal,
+              cache: 'no-store',
+            });
+            if (!res.ok) return [pillar, null];
+            const data = await res.json();
+            return [pillar, pickLatestFrom(data)];
+          })
+        );
+
+        if (cancelled) return;
+        const next = { IMPACT: null, GUEST: null, DEV: null };
+        for (const [pillar, post] of results) next[pillar] = post;
+        setLatestCommunityByPillar(next);
+      } catch {
+        // Best-effort; keep placeholders.
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+      controller.abort();
     };
   }, []);
 
@@ -400,28 +449,11 @@ export default function HomePageClient() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
-            gap: '24px',
-            maxWidth: '1100px',
-            margin: '0 auto',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '30px',
           }}
         >
           {(() => {
-            const pickLatestCommunity = (pillar) => {
-              const list = Array.isArray(communityPostsMeta) ? communityPostsMeta : [];
-              const filtered = list.filter(
-                (p) =>
-                  String(p?.pillar || '').toUpperCase() === String(pillar || '').toUpperCase() &&
-                  String(p?.status || '').toUpperCase() === 'APPROVED'
-              );
-              filtered.sort((a, b) => {
-                const da = new Date(a?.approved_at || a?.created_at || 0).getTime();
-                const db = new Date(b?.approved_at || b?.created_at || 0).getTime();
-                return db - da;
-              });
-              return filtered[0] || null;
-            };
-
             const editorial = {
               title: 'Editorial',
               kicker: 'BM Editorial',
@@ -433,9 +465,9 @@ export default function HomePageClient() {
               kind: 'post',
             };
 
-            const impactPost = pickLatestCommunity('IMPACT');
-            const guestPost = pickLatestCommunity('GUEST');
-            const devPost = pickLatestCommunity('DEV');
+            const impactPost = latestCommunityByPillar.IMPACT;
+            const guestPost = latestCommunityByPillar.GUEST;
+            const devPost = latestCommunityByPillar.DEV;
 
             const communityCard = (pillar, label, post) => {
               const id = String(post?._id || '').trim();
@@ -484,6 +516,7 @@ export default function HomePageClient() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0',
+                minHeight: isDesktop ? '420px' : 'clamp(360px, 54vh, 450px)',
                 borderRadius: '16px',
                 background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
                 border: '1px solid rgba(255,255,255,0.07)',
