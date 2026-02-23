@@ -72,6 +72,10 @@ export const onboardingSteps = [
         label: "CKYC Search",
         url: "https://kra.ndml.in/kra/ckyc/#/initiate",
       },
+      {
+        label: "CKYC Check Link",
+        url: "https://www.ckycindia.in/kyc/getkyccard",
+      },
     ],
   },
   {
