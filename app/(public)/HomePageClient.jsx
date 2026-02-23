@@ -397,7 +397,7 @@ export default function HomePageClient() {
               href: '/blog/editorial',
               icon: '📰',
               accent: 'oklch(0.78 0.08 65)',
-              img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=640&h=360&fit=crop&auto=format&q=75',
+              img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Community Impact',
@@ -405,7 +405,7 @@ export default function HomePageClient() {
               href: '/blog/impact',
               icon: '🤝',
               accent: 'oklch(0.72 0.11 155)',
-              img: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=640&h=360&fit=crop&auto=format&q=75',
+              img: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Guest Columns',
@@ -413,7 +413,7 @@ export default function HomePageClient() {
               href: '/blog/guest',
               icon: '✍️',
               accent: 'oklch(0.75 0.10 250)',
-              img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=640&h=360&fit=crop&auto=format&q=75',
+              img: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'Developer Insight',
@@ -421,7 +421,7 @@ export default function HomePageClient() {
               href: '/blog/dev',
               icon: '💻',
               accent: 'oklch(0.72 0.12 300)',
-              img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=640&h=360&fit=crop&auto=format&q=75',
+              img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=640&h=360&fit=crop&auto=format&q=75',
             },
             {
               title: 'ITR Filing Help',
