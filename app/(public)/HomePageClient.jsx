@@ -48,6 +48,7 @@ export default function HomePageClient() {
   const [rainEnabled, setRainEnabled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [communityLoaded, setCommunityLoaded] = useState(false);
   const [latestCommunityByPillar, setLatestCommunityByPillar] = useState({
     IMPACT: null,
     GUEST: null,
@@ -117,6 +118,8 @@ export default function HomePageClient() {
         setLatestCommunityByPillar(next);
       } catch {
         // Best-effort; keep placeholders.
+      } finally {
+        if (!cancelled) setCommunityLoaded(true);
       }
     };
 
@@ -472,10 +475,16 @@ export default function HomePageClient() {
             const communityCard = (pillar, label, post) => {
               const id = String(post?._id || '').trim();
               const img = String(post?.image_url || post?.image || '').trim();
+              const title = String(post?.title || '').trim();
+
+              // Don’t render placeholder pillar cards; only show when a real post is available.
+              if (!communityLoaded) return null;
+              if (!id || !title) return null;
+
               return {
                 title: label,
                 kicker: label,
-                postTitle: String(post?.title || '').trim() || label,
+                postTitle: title,
                 desc: 'Read the latest approved story in this series.',
                 href: id ? `/blog/community/${id}` : '/blog',
                 img,
@@ -505,7 +514,7 @@ export default function HomePageClient() {
                 href: '/live-intelligence',
                 kind: 'live-intel',
               },
-            ];
+            ].filter(Boolean);
 
             return cards;
           })().map((card) => (
