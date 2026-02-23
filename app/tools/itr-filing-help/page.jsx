@@ -412,8 +412,9 @@ export default function ITRFilingHelp() {
       // Contact line
       doc.setFont('times', 'bold'); doc.setFontSize(9); doc.setTextColor(...GOLD);
       doc.text('BM Wealth', margin, discEnd + 5);
+      const bmNameWidth = doc.getTextWidth('BM Wealth') + 6; // measure in times bold 9pt before switching
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...MID);
-      doc.text('bmwealth.co.in  |  tools@bmwealth.co.in', margin + doc.getTextWidth('BM Wealth  '), discEnd + 5);
+      doc.text('bmwealth.co.in  |  tools@bmwealth.co.in', margin + bmNameWidth, discEnd + 5);
 
       // ── Subtle BM Wealth watermark — bottom-right corner, 20% opacity on every page ──
       const totalPages = doc.internal.getNumberOfPages();
@@ -601,7 +602,7 @@ export default function ITRFilingHelp() {
     },
     offers: {
       '@type': 'Offer',
-      price: '0',
+      price: '299',
       priceCurrency: 'INR',
       availability: 'https://schema.org/InStock',
     },
@@ -918,8 +919,8 @@ export default function ITRFilingHelp() {
 
       const encoded = window.btoa(encodeURIComponent(JSON.stringify(data)));
 
-      // FREE product (₹0): skip payment gateway, directly trigger PDF download
-      const FREE_PRODUCT = true; // set false to re-enable store checkout at ₹299
+      // Paid product (₹299): redirect to store checkout
+      const FREE_PRODUCT = false; // set true to bypass store checkout (free PDF)
       if (FREE_PRODUCT) {
         setPaymentSuccessData(data);
         setStep('payment_success');
@@ -1163,20 +1164,25 @@ export default function ITRFilingHelp() {
       return `${m[1]}-${m[2]}`;
     };
 
-    return [
-      { key: 'employeePAN', label: 'Employee PAN', value: safePan(itrDetails.employeePAN) },
-      { key: 'employerName', label: 'Employer Name', value: cleanInlineText(itrDetails.employerName, 48) },
-      { key: 'employerTAN', label: 'Employer TAN', value: safeTan(itrDetails.employerTAN) },
+    const rawRows = [
+      { key: 'employeePAN', label: 'Employee PAN', value: safePan(itrDetails.employeePAN), maskType: 'pan' },
+      { key: 'employerName', label: 'Employer Name', value: cleanInlineText(itrDetails.employerName, 48), maskType: 'name' },
+      { key: 'employerTAN', label: 'Employer TAN', value: safeTan(itrDetails.employerTAN), maskType: 'tan' },
       { key: 'assessmentYear', label: 'Assessment Year', value: safeAssessmentYear(itrDetails.assessmentYear) },
-      { key: 'grossSalary', label: 'Gross Salary', value: fmtMoney(fields?.grossSalary || 0) },
-      { key: 'hraExemption', label: 'HRA Exemption', value: fmtMoney(itrDetails.hraExemption || 0) },
-      { key: 'standardDeduction', label: 'Standard Deduction', value: fmtMoney(fields?.standardDeduction || 0) },
-      { key: 'deductions80C', label: '80C Deductions', value: fmtMoney(fields?.deductions80C || 0) },
-      { key: 'netTaxableIncome', label: 'Net Taxable Income', value: fmtMoney(netTaxableIncome) },
-      { key: 'tds', label: 'TDS Deducted', value: fmtMoney(fields?.tds || 0) },
+      { key: 'grossSalary', label: 'Gross Salary', value: fmtMoney(fields?.grossSalary || 0), maskType: 'amount' },
+      { key: 'hraExemption', label: 'HRA Exemption', value: fmtMoney(itrDetails.hraExemption || 0), maskType: 'amount' },
+      { key: 'standardDeduction', label: 'Standard Deduction', value: fmtMoney(fields?.standardDeduction || 0), maskType: 'amount' },
+      { key: 'deductions80C', label: '80C Deductions', value: fmtMoney(fields?.deductions80C || 0), maskType: 'amount' },
+      { key: 'netTaxableIncome', label: 'Net Taxable Income', value: fmtMoney(netTaxableIncome), maskType: 'amount' },
+      { key: 'tds', label: 'TDS Deducted', value: fmtMoney(fields?.tds || 0), maskType: 'amount' },
       { key: 'recommendedRegime', label: 'Recommended Regime', value: recommendedRegimeLabel || '—' },
     ];
-  }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult]);
+
+    return rawRows.map((row) => ({
+      ...row,
+      value: row.maskType ? maskValue(row.value, row.maskType) : row.value,
+    }));
+  }, [fields, itrDetails, netTaxableIncome, recommendedRegimeLabel, taxPayableOrRefund, taxResult, isPaid]);
 
   // Fix 3 — payment_success: redirect to 'details' step so the full filing checklist renders
   // with all data restored. The Download PDF button is injected at the top of Step 3 when
@@ -1190,6 +1196,22 @@ export default function ITRFilingHelp() {
   }
 
   const showDownloadBanner = step === 'payment_success' || (paymentSuccessData && step === 'details');
+
+  // ── Masking helper: hides sensitive values on-screen before payment ──
+  const isPaid = showDownloadBanner;
+  const maskValue = (value, type) => {
+    if (isPaid) return value; // no masking after payment
+    const s = String(value ?? '');
+    if (type === 'pan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXXX' : s;
+    if (type === 'tan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXX' : s;
+    if (type === 'amount') {
+      const digits = s.replace(/[^0-9]/g, '');
+      if (digits.length >= 2) return '₹' + digits.slice(0, 2) + ',XX,XXX';
+      return s;
+    }
+    if (type === 'name') return s.length > 20 ? s.slice(0, 20) + '...' : s;
+    return value;
+  };
 
   return (
     <div
@@ -1708,13 +1730,21 @@ export default function ITRFilingHelp() {
                     return s.length > 40 ? `${s.slice(0, 39)}…` : s;
                   };
 
-                  const pan = safePan(itrDetails.employeePAN);
+                  const rawPan = safePan(itrDetails.employeePAN);
+                  const pan = maskValue(rawPan, 'pan');
                   const ay = safeAssessmentYear(itrDetails.assessmentYear);
-                  const grossSalary = Math.round(Number(fields?.grossSalary || 0)).toLocaleString('en-IN');
-                  const standardDeduction = Math.round(Number(fields?.standardDeduction || 0)).toLocaleString('en-IN');
-                  const tds = Math.round(Number(fields?.tds || 0)).toLocaleString('en-IN');
-                  const employerName = cleanEmployer(itrDetails.employerName);
-                  const savings = Math.round(Number(taxResult?.savings || 0)).toLocaleString('en-IN');
+                  const grossSalary = isPaid
+                    ? '₹' + Math.round(Number(fields?.grossSalary || 0)).toLocaleString('en-IN')
+                    : maskValue(String(Math.round(Number(fields?.grossSalary || 0))), 'amount');
+                  const standardDeduction = isPaid
+                    ? '₹' + Math.round(Number(fields?.standardDeduction || 0)).toLocaleString('en-IN')
+                    : maskValue(String(Math.round(Number(fields?.standardDeduction || 0))), 'amount');
+                  const tds = isPaid
+                    ? '₹' + Math.round(Number(fields?.tds || 0)).toLocaleString('en-IN')
+                    : maskValue(String(Math.round(Number(fields?.tds || 0))), 'amount');
+                  const employerName = maskValue(cleanEmployer(itrDetails.employerName), 'name');
+                  // Savings amount stays visible (hooks user)
+                  const savings = '₹' + Math.round(Number(taxResult?.savings || 0)).toLocaleString('en-IN');
                   const recommended = recommendedRegimeLabel || 'Recommended';
 
                   const Gold = ({ children }) => (
@@ -1742,7 +1772,7 @@ export default function ITRFilingHelp() {
                       title: 'Confirm salary',
                       desc: (
                         <>
-                          Gross Salary <Gold>₹{grossSalary}</Gold>, Standard Deduction <Gold>₹{standardDeduction}</Gold>.
+                          Gross Salary <Gold>{grossSalary}</Gold>, Standard Deduction <Gold>{standardDeduction}</Gold>.
                         </>
                       ),
                     },
@@ -1750,7 +1780,7 @@ export default function ITRFilingHelp() {
                       title: 'Pick regime',
                       desc: (
                         <>
-                          Select <Gold>{recommended}</Gold> (est. savings <Gold>₹{savings}</Gold>).
+                          Select <Gold>{recommended}</Gold> (est. savings <Gold>{savings}</Gold>).
                         </>
                       ),
                     },
@@ -1758,7 +1788,7 @@ export default function ITRFilingHelp() {
                       title: 'Check TDS',
                       desc: (
                         <>
-                          TDS deducted: <Gold>₹{tds}</Gold> (from <Gold>{employerName}</Gold>).
+                          TDS deducted: <Gold>{tds}</Gold> (from <Gold>{employerName}</Gold>).
                         </>
                       ),
                     },
