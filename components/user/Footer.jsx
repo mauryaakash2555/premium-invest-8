@@ -413,12 +413,12 @@ return (
                   onTouchEnd={() => setIsWHAActive(false)}
                   ref={whatsAppCardRef}
                   className={cn(
-                    "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[320px] bg-black h-[68px] border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0 px-5",
+                    "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0 px-4 md:px-5",
                     (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                   )}
                   style={{
                     borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65)',
-                    transform: isWHAPremium ? 'scale(1.05)' : 'scale(1)',
+                    transform: isWHAPremium ? 'scale(1.08)' : 'scale(1)',
                     boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px oklch(0.78 0.08 65 / 0.22)',
                     display: 'flex',
                     justifyContent: 'flex-start',
@@ -447,13 +447,13 @@ return (
 
                   <div className="relative z-20 flex items-center gap-4">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
+                      className="w-9 h-9 rounded-lg flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                       style={{
                         borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
                         transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)',
                       }}
                     >
-                      <MessageCircle size={22} className="text-[#25D366]" style={{ strokeWidth: 2.5 }} />
+                      <MessageCircle size={20} className="text-[#25D366]" style={{ strokeWidth: 2.5 }} />
                     </div>
 
                     <div className="flex flex-col justify-center text-left">
