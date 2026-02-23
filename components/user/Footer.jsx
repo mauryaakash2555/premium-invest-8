@@ -413,19 +413,19 @@ return (
                   onTouchEnd={() => setIsWHAActive(false)}
                   ref={whatsAppCardRef}
                   className={cn(
-                    "whatsapp-card relative flex items-center rounded-xl no-underline overflow-hidden w-full max-w-[280px] md:max-w-[320px] bg-black h-[60px] border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0 px-4 md:px-5",
+                    "whatsapp-card relative flex items-center rounded-xl no-underline w-full bg-black py-2.5 px-3 md:px-4 border-[2.5px] transition-[color,opacity,filter,transform] duration-500 mx-auto lg:mx-0",
                     (isWHAScrollBoost || (isMobile && isWHAActive)) && "is-scroll-boost"
                   )}
                   style={{
                     borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65)',
-                    transform: isWHAPremium ? 'scale(1.08)' : 'scale(1)',
+                    transform: isWHAPremium ? 'scale(1.05)' : 'scale(1)',
                     boxShadow: isWHAPremium ? '0 0 60px rgba(37, 211, 102, 0.6)' : '0 0 30px oklch(0.78 0.08 65 / 0.22)',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }}
                 >
                   <div
-                    className="absolute inset-0 pointer-events-none transition-[color,opacity,filter,transform] duration-1000 ease-out"
+                    className="absolute inset-0 pointer-events-none transition-[color,opacity,filter,transform] duration-1000 ease-out rounded-xl"
                     style={{
                       background: isWHAActive
                         ? 'radial-gradient(circle at center, rgba(37, 211, 102, 0.45) 0%, transparent 75%)'
@@ -440,37 +440,37 @@ return (
 
                   <div
                     className={cn(
-                      "absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 z-10",
+                      "absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 z-10 rounded-xl",
                       isWHAPremium ? "translate-x-[100%]" : "-translate-x-[100%]"
                     )}
                   />
 
-                  <div className="relative z-20 flex items-center gap-4">
+                  <div className="relative z-20 flex items-center gap-3">
                     <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
+                      className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center border transition-[color,opacity,filter,transform] duration-1000 bg-gradient-to-br from-[#111111] to-[#000000]"
                       style={{
                         borderColor: isWHAPremium ? '#25D366' : 'oklch(0.78 0.08 65 / 0.30)',
                         transform: isWHAPremium ? 'rotate(360deg)' : 'rotate(0deg)',
                       }}
                     >
-                      <MessageCircle size={20} className="text-[#25D366]" style={{ strokeWidth: 2.5 }} />
+                      <MessageCircle size={18} className="text-[#25D366]" style={{ strokeWidth: 2.5 }} />
                     </div>
 
-                    <div className="flex flex-col justify-center text-left">
+                    <div className="flex flex-col justify-center text-left min-w-0">
                       <p
-                        className="m-0 font-black uppercase tracking-[1.5px] transition-colors duration-500"
+                        className="m-0 font-black uppercase tracking-[1px] transition-colors duration-500 whitespace-nowrap"
                         style={{
-                          fontSize: isDesktop ? '16px' : '15px',
+                          fontSize: '13px',
                           color: isWHAPremium ? '#25D366' : '#FFFFFF',
                         }}
                       >
                         WhatsApp Us
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-[#25D366] animate-pulse shadow-[0_0_10px_#25D366]" />
                         <p
                           className={cn(
-                            "text-[9px] md:text-[10px] m-0 uppercase tracking-[3px] md:tracking-[4px] font-black transition-colors duration-500",
+                            "text-[9px] m-0 uppercase tracking-[2px] font-black transition-colors duration-500 whitespace-nowrap",
                             isWHAPremium ? "text-white" : "text-[oklch(0.78_0.08_65)]"
                           )}
                         >
