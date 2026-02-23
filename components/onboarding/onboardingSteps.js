@@ -29,23 +29,6 @@ export const onboardingSteps = [
   },
   {
     step: 2,
-    title: "Need a PAN Card? We'll Help You Apply",
-    description: "We'll guide you through the PAN application if needed",
-    seoBody:
-      "If an investor does not have a PAN card, they must apply before starting mutual fund investments. PAN is mandatory for KYC, SIP registration, and all financial transactions. Applications can be submitted online through authorized government service providers like Protean (NSDL) or UTI.",
-    primaryLink: {
-      label: "Apply Now",
-      url: "https://onlineservices.proteantech.in/paam/endUserRegisterContact.html",
-    },
-    alternates: [
-      {
-        label: "Apply PAN via UTI",
-        url: "https://www.pan.utiitsl.com/",
-      },
-    ],
-  },
-  {
-    step: 3,
     title: "Let's Check Your Mutual Fund KYC Status",
     description:
       "Verifying your KYC registration across all KRA databases",
@@ -71,33 +54,7 @@ export const onboardingSteps = [
     ],
   },
   {
-    step: 4,
-    title: "Validating Your KYC Across All Systems",
-    description:
-      "Confirming identity consistency across verification agencies",
-    seoBody:
-      "KYC validation ensures investor data is verified across multiple KRA databases and Aadhaar systems. This step confirms compliance with SEBI requirements and prevents transaction rejection during SIP or investment activation. Use CVL, NDML, CAMS Aadhaar validation, and Karvy systems to confirm identity consistency.",
-    primaryLink: {
-      label: "Validate Now",
-      url: "https://validate.cvlindia.com/CVLKRAVerification_V1/",
-    },
-    alternates: [
-      {
-        label: "NDML CKYC Validation",
-        url: "https://kra.ndml.in/kra/ckyc/#/initiate",
-      },
-      {
-        label: "CAMS Aadhaar Validation",
-        url: "https://qrkra.camsonline.com/KRAAADHAARWEB/MobileApp/Home.aspx",
-      },
-      {
-        label: "Karvy KYC Validation",
-        url: "https://www.karvykra.com/KYC_Validation/Default.aspx",
-      },
-    ],
-  },
-  {
-    step: 5,
+    step: 3,
     title: "Verifying Your Name Across PAN, Aadhaar & KYC",
     description: "Ensuring your name matches perfectly across all records",
     seoBody:
@@ -118,7 +75,7 @@ export const onboardingSteps = [
     ],
   },
   {
-    step: 6,
+    step: 4,
     title: "You're Ready — Let's Start Your Investment",
     description:
       "All verifications complete — let's begin your investment journey",
