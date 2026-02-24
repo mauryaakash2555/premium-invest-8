@@ -489,15 +489,30 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
                 className="text-[14px] font-serif font-bold uppercase tracking-[0.5em] flex items-center gap-4 m-0 justify-center lg:justify-start"
                 style={{ color: COLORS.title }}
               >
-                {/* Diamond Ice Shine Gem Icon - Static glow only, no animation */}
-                <Gem 
-                  className="w-5 h-5" 
-                  style={{ 
-                    color: COLORS.diamondCore,
-                    filter: `drop-shadow(0 0 3px ${COLORS.diamondGlow}) drop-shadow(0 0 6px ${COLORS.diamondGlow}) drop-shadow(0 0 10px rgba(170, 198, 255, 0.4))`,
-                  }} 
-                  strokeWidth={1.5} 
-                />
+                {/* Diamond Ice Shine Gem Icon - Animated glow + sparkle */}
+                <span className="vault-diamond-shine" style={{ display: 'inline-flex', position: 'relative' }}>
+                  <Gem 
+                    className="w-5 h-5" 
+                    style={{ 
+                      color: COLORS.diamondCore,
+                      filter: `drop-shadow(0 0 4px ${COLORS.diamondGlow}) drop-shadow(0 0 8px ${COLORS.diamondGlow}) drop-shadow(0 0 14px rgba(170, 198, 255, 0.5))`,
+                      animation: 'vaultDiamondPulse 3s ease-in-out infinite',
+                    }} 
+                    strokeWidth={1.5} 
+                  />
+                  {/* Sparkle overlay */}
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      inset: '-4px',
+                      borderRadius: '50%',
+                      background: 'radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%)',
+                      animation: 'vaultDiamondSparkle 4s ease-in-out infinite',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                </span>
                 Vault
               </h3>
               <ul className="space-y-6 list-none p-0 m-0 text-center lg:text-left">
@@ -891,6 +906,20 @@ const LaserFooter = ({ onHomeClick, onNavigate, inLiveOverlay = false } = {}) =>
         @keyframes linearSweep {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
+        }
+        @keyframes vaultDiamondPulse {
+          0%, 100% {
+            filter: drop-shadow(0 0 4px rgba(170,198,255,0.9)) drop-shadow(0 0 8px rgba(170,198,255,0.9)) drop-shadow(0 0 14px rgba(170,198,255,0.5));
+          }
+          50% {
+            filter: drop-shadow(0 0 8px rgba(200,220,255,1)) drop-shadow(0 0 16px rgba(170,198,255,1)) drop-shadow(0 0 28px rgba(170,198,255,0.7)) drop-shadow(0 0 40px rgba(200,220,255,0.3));
+          }
+        }
+        @keyframes vaultDiamondSparkle {
+          0%, 100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+          25% { opacity: 0.6; transform: scale(1.1) rotate(45deg); }
+          50% { opacity: 0; transform: scale(0.9) rotate(90deg); }
+          75% { opacity: 0.8; transform: scale(1.2) rotate(135deg); }
         }
       `}</style>
     </footer>

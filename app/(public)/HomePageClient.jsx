@@ -8,8 +8,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { TrendingUp, Shield, PieChart } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getServicesForHome } from '@/data/servicesCatalog';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import dynamic from 'next/dynamic';
 // 🔒 CORE: Using isolated market ticker (never breaks)
 // Lazy-loaded below the fold — not needed for LCP.
@@ -43,6 +44,214 @@ const GoldenHorizonSweep = () => (
   </div>
 );
 
+/* ── InsightCard — mobile IntersectionObserver animation (same pattern as ServiceCard) ── */
+function InsightCard({ card, isDesktop, mounted }) {
+  const ref = useRef(null);
+  const isMobile = useIsMobile();
+  const [animating, setAnimating] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAnimating(true);
+          window.setTimeout(() => setAnimating(false), 1000);
+        }
+      },
+      { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isMobile]);
+
+  const mobileGlow = isMobile && animating;
+
+  return (
+    <Link
+      ref={ref}
+      href={card.href}
+      style={{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0',
+        minHeight: isDesktop ? '420px' : 'clamp(360px, 54vh, 450px)',
+        borderRadius: '16px',
+        background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        textDecoration: 'none',
+        transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        willChange: isMobile ? 'transform, box-shadow' : 'auto',
+        ...(mobileGlow ? {
+          transform: 'translateY(-8px)',
+          borderColor: 'rgba(214, 179, 106, 0.45)',
+          boxShadow: '0 12px 40px rgba(198, 161, 91, 0.35)',
+        } : {}),
+      }}
+      onTouchStart={() => {
+        if (!isMobile) return;
+        setAnimating(true);
+        window.setTimeout(() => setAnimating(false), 1000);
+      }}
+      onMouseOver={(e) => {
+        if (isMobile) return;
+        e.currentTarget.style.transform = 'translateY(-4px)';
+        e.currentTarget.style.borderColor = 'rgba(214, 179, 106, 0.45)';
+        e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(214, 179, 106, 0.20)';
+      }}
+      onMouseOut={(e) => {
+        if (isMobile) return;
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+        e.currentTarget.style.boxShadow = 'none';
+      }}
+    >
+      {/* Mobile scroll glow overlay (matches ServiceCard) */}
+      {isMobile && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 5,
+            pointerEvents: 'none',
+            opacity: mobileGlow ? 1 : 0,
+            transition: 'opacity 320ms ease',
+            background:
+              'radial-gradient(70% 55% at 50% 75%, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 60%), radial-gradient(45% 35% at 35% 30%, rgba(214,179,106,0.12) 0%, rgba(0,0,0,0) 62%)',
+            boxShadow:
+              'inset 0 0 0 1px rgba(255,255,255,0.16), 0 22px 70px rgba(0,0,0,0.55), 0 0 26px rgba(214,179,106,0.10)',
+          }}
+        />
+      )}
+
+      {card.kind === 'live-intel' ? (
+        <>
+          {/* Live Intel video — plays on both desktop AND mobile */}
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+            {mounted ? (
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
+              >
+                <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+              </video>
+            ) : (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                }}
+              />
+            )}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)',
+              }}
+            />
+          </div>
+
+          {/* Card body */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
+              {card.kicker || card.title}
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+              {card.postTitle || card.title}
+            </h3>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
+              {card.desc}
+            </p>
+            <span
+              style={{
+                marginTop: 'auto',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: 'rgba(214, 179, 106, 0.9)',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Read →
+            </span>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Full-card background image (blog-style) */}
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
+            {card.img ? (
+              <Image
+                src={card.img}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 420px"
+                style={{ objectFit: 'cover' }}
+                loading="lazy"
+              />
+            ) : (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
+                }}
+              />
+            )}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(10,10,15,0.92) 100%)',
+              }}
+            />
+          </div>
+
+          {/* Text overlay */}
+          <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px', marginTop: 'auto' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>
+              {card.kicker || card.title}
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+              {card.postTitle || card.title}
+            </h3>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0 }}>
+              {card.desc}
+            </p>
+            <span
+              style={{
+                marginTop: 'auto',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: 'rgba(214, 179, 106, 0.9)',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Read →
+            </span>
+          </div>
+        </>
+      )}
+    </Link>
+  );
+}
+
 export default function HomePageClient() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [rainEnabled, setRainEnabled] = useState(false);
@@ -54,6 +263,7 @@ export default function HomePageClient() {
     GUEST: null,
     DEV: null,
   });
+  const [insightsConfig, setInsightsConfig] = useState(null);
   const liveMoodRef = useRef(null);
 
   useEffect(() => {
@@ -128,6 +338,16 @@ export default function HomePageClient() {
       cancelled = true;
       controller.abort();
     };
+  }, []);
+
+  /* ── Fetch admin insights config (best-effort, caches at CDN) ── */
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/insights-config')
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { if (!cancelled && j?.config) setInsightsConfig(j.config); })
+      .catch(() => {/* silent — fallback to hardcoded */});
+    return () => { cancelled = true; };
   }, []);
 
   const services = getServicesForHome();
@@ -457,7 +677,11 @@ export default function HomePageClient() {
           }}
         >
           {(() => {
-            const editorial = {
+            /* Admin config merges over hardcoded defaults (from /api/insights-config) */
+            const ic = insightsConfig;
+            const merge = (defaults, override) => override && override.enabled !== false ? { ...defaults, ...override } : defaults;
+
+            const editorialDefaults = {
               title: 'Editorial',
               kicker: 'BM Editorial',
               postTitle: 'He Lost ₹47 Lakh Following "Expert" Advice - Here\'s What He Wishes He Knew 7 Years Ago',
@@ -467,6 +691,7 @@ export default function HomePageClient() {
               img: '/blog-images/blog-hero-47lakh.jpg',
               kind: 'post',
             };
+            const editorial = ic?.editorial?.enabled === false ? null : merge(editorialDefaults, ic?.editorial);
 
             const impactPost = latestCommunityByPillar.IMPACT;
             const guestPost = latestCommunityByPillar.GUEST;
@@ -497,7 +722,7 @@ export default function HomePageClient() {
               communityCard('IMPACT', 'Community Impact', impactPost),
               communityCard('GUEST', 'Guest Columns', guestPost),
               communityCard('DEV', 'Developer Insight', devPost),
-              {
+              ic?.itr?.enabled === false ? null : merge({
                 title: 'ITR Filing Help',
                 kicker: 'Tool',
                 postTitle: 'ITR Filing Help',
@@ -505,166 +730,22 @@ export default function HomePageClient() {
                 href: '/tools/itr-filing-help',
                 img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75',
                 kind: 'tool',
-              },
-              {
+              }, ic?.itr),
+              ic?.liveIntel?.enabled === false ? null : merge({
                 title: 'Live Intelligence',
                 kicker: 'Live',
                 postTitle: 'Live Intelligence',
                 desc: 'Real-time market context, mood indicators & trading timings.',
                 href: '/live-intelligence',
                 kind: 'live-intel',
-              },
+              }, ic?.liveIntel),
+              // Admin custom cards
+              ...(ic?.custom || []).filter(c => c && c.enabled !== false && c.href),
             ].filter(Boolean);
 
             return cards;
           })().map((card) => (
-            <Link
-              key={card.href}
-              href={card.href}
-              style={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0',
-                minHeight: isDesktop ? '420px' : 'clamp(360px, 54vh, 450px)',
-                borderRadius: '16px',
-                background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                textDecoration: 'none',
-                transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
-                cursor: 'pointer',
-                overflow: 'hidden',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.borderColor = 'rgba(214, 179, 106, 0.45)';
-                e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(214, 179, 106, 0.20)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              {card.kind === 'live-intel' ? (
-                <>
-                  {/* Live Intel keeps the video thumbnail presentation */}
-                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
-                    {mounted && isDesktop ? (
-                      <video
-                        className="absolute inset-0 h-full w-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
-                      >
-                        <source src="/videos/about-us-animated.mp4" type="video/mp4" />
-                      </video>
-                    ) : (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background:
-                            'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
-                        }}
-                      />
-                    )}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)',
-                      }}
-                    />
-                  </div>
-
-                  {/* Card body */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
-                    <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
-                      {card.kicker || card.title}
-                    </div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
-                      {card.postTitle || card.title}
-                    </h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
-                      {card.desc}
-                    </p>
-                    <span
-                      style={{
-                        marginTop: 'auto',
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        color: 'rgba(214, 179, 106, 0.9)',
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Read →
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Full-card background image (blog-style) */}
-                  <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
-                    {card.img ? (
-                      <Image
-                        src={card.img}
-                        alt=""
-                        fill
-                        sizes="(max-width: 768px) 100vw, 420px"
-                        style={{ objectFit: 'cover' }}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background:
-                            'radial-gradient(740px 220px at 10% 100%, rgba(214, 179, 106, 0.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
-                        }}
-                      />
-                    )}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(10,10,15,0.92) 100%)',
-                      }}
-                    />
-                  </div>
-
-                  {/* Text overlay */}
-                  <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px', marginTop: 'auto' }}>
-                    <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>
-                      {card.kicker || card.title}
-                    </div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
-                      {card.postTitle || card.title}
-                    </h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0 }}>
-                      {card.desc}
-                    </p>
-                    <span
-                      style={{
-                        marginTop: 'auto',
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        color: 'rgba(214, 179, 106, 0.9)',
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Read →
-                    </span>
-                  </div>
-                </>
-              )}
-            </Link>
+            <InsightCard key={card.href} card={card} isDesktop={isDesktop} mounted={mounted} />
           ))}
         </div>
 

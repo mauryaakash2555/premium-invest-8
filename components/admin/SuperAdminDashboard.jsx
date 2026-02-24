@@ -13,6 +13,8 @@ import { AioTrackerView } from '@/components/admin/AioTrackerView';
 import { AiProvidersPanel } from '@/components/admin/AiProvidersPanel';
 import { CommunityPostsManager } from '@/components/admin/CommunityPostsManager';
 import { BlogImagesManager } from '@/components/admin/BlogImagesManager';
+import { InsightsManager } from '@/components/admin/InsightsManager';
+import { SiteImagesManager } from '@/components/admin/SiteImagesManager';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -81,6 +83,8 @@ const NAV_SECTIONS = [
     items: [
       { id: 'community',    name: 'Community Posts',   icon: '💬' },
       { id: 'blog-images',  name: 'Blog Images',       icon: '🖼️' },
+      { id: 'insights',     name: 'Insights Manager',  icon: '✨' },
+      { id: 'site-images',  name: 'Site Images',        icon: '🏞️' },
     ],
   },
   {
@@ -462,6 +466,20 @@ export function SuperAdminDashboard({ onLogout }) {
 
         {/* ═══ TAB: Blog Images ═══ */}
         {tab === 'blog-images' && <BlogImagesManager />}
+
+        {/* ═══ TAB: Insights Manager ═══ */}
+        {tab === 'insights' && (
+          <div className="sa-panel">
+            <InsightsManager />
+          </div>
+        )}
+
+        {/* ═══ TAB: Site Images ═══ */}
+        {tab === 'site-images' && (
+          <div className="sa-panel">
+            <SiteImagesManager />
+          </div>
+        )}
 
         {/* ═══ TAB: Analytics ═══ */}
         {tab === 'analytics' && <AnalyticsView analytics={analytics} />}
