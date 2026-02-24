@@ -38,10 +38,11 @@ const allNavItems = [
   { label: "Home", icon: <Home className="w-6 h-6" strokeWidth={1} />, href: "/" },
   { label: "About", icon: <Info className="w-6 h-6" strokeWidth={1} />, href: "/about-us" },
   { label: "Services", icon: <Briefcase className="w-6 h-6" strokeWidth={1} />, href: "/services" },
-  { label: "Platforms", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/platforms" },
+  { label: "Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/intelligence" },
+  { label: "Live Intel", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/live-intelligence" },
   { label: "Tools", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/tools" },
-  { label: "Live Intelligence", icon: <Layers className="w-6 h-6" strokeWidth={1} />, href: "/live-intelligence" },
   { label: "Partners", icon: <Users className="w-6 h-6" strokeWidth={1} />, href: "/partners" },
+  { label: "Client Portal", icon: <Briefcase className="w-6 h-6" strokeWidth={1} />, href: "/client-portal" },
   { label: "Blog", icon: <BookOpen className="w-6 h-6" strokeWidth={1} />, href: "/blog" },
   { label: "Contact", icon: <Mail className="w-6 h-6" strokeWidth={1} />, href: "/contact" },
 ];

@@ -91,22 +91,17 @@ export default function AboutUsPage() {
       {/* HERO */}
       <section ref={containerRef} className="relative overflow-hidden">
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          {isDesktop ? (
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23101018' width='1' height='1'/%3E%3C/svg%3E"
-            >
-              <source src="/videos/about-us-animated.mp4" type="video/mp4" />
-            </video>
-          ) : (
-            /* Mobile: static gradient background instead of 40 MB video */
-            <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.10_0.02_280)] via-[oklch(0.07_0.01_260)] to-[oklch(0.05_0.005_280)]" />
-          )}
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload={isDesktop ? 'metadata' : 'none'}
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23101018' width='1' height='1'/%3E%3C/svg%3E"
+          >
+            <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-[var(--lux-background)]/35" />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--lux-background)]/75 via-[var(--lux-background)]/55 to-[var(--lux-background)]" />
         </div>

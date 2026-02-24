@@ -83,14 +83,14 @@ function InsightCard({ card, isDesktop, mounted }) {
         background: 'linear-gradient(170deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%)',
         border: '1px solid rgba(255,255,255,0.07)',
         textDecoration: 'none',
-        transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+        transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
         cursor: 'pointer',
         overflow: 'hidden',
         willChange: isMobile ? 'transform, box-shadow' : 'auto',
         ...(mobileGlow ? {
-          transform: 'translateY(-8px)',
+          transform: 'translateY(-8px) scale(1.02)',
           borderColor: 'rgba(214, 179, 106, 0.45)',
-          boxShadow: '0 12px 40px rgba(198, 161, 91, 0.35)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(214,179,106,0.22) inset, 0 0 34px rgba(214,179,106,0.18)',
         } : {}),
       }}
       onTouchStart={() => {
@@ -100,13 +100,13 @@ function InsightCard({ card, isDesktop, mounted }) {
       }}
       onMouseOver={(e) => {
         if (isMobile) return;
-        e.currentTarget.style.transform = 'translateY(-4px)';
+        e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
         e.currentTarget.style.borderColor = 'rgba(214, 179, 106, 0.45)';
-        e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(214, 179, 106, 0.20)';
+        e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(214,179,106,0.22) inset, 0 0 34px rgba(214,179,106,0.18)';
       }}
       onMouseOut={(e) => {
         if (isMobile) return;
-        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.transform = 'translateY(0) scale(1)';
         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
         e.currentTarget.style.boxShadow = 'none';
       }}
@@ -132,11 +132,11 @@ function InsightCard({ card, isDesktop, mounted }) {
 
       {card.kind === 'live-intel' ? (
         <>
-          {/* Live Intel video — plays on both desktop AND mobile */}
-          <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+          {/* Live Intel — full-card video background */}
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
             {mounted ? (
               <video
-                className="absolute inset-0 h-full w-full object-cover"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                 autoPlay
                 muted
                 loop
@@ -160,20 +160,20 @@ function InsightCard({ card, isDesktop, mounted }) {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 50%)',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(10,10,15,0.92) 100%)',
               }}
             />
           </div>
 
-          {/* Card body */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>
+          {/* Text overlay — pinned to bottom */}
+          <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '10px', padding: '18px 20px 22px', marginTop: 'auto' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>
               {card.kicker || card.title}
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {card.postTitle || card.title}
             </h3>
-            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {card.desc}
             </p>
             <span
@@ -186,7 +186,7 @@ function InsightCard({ card, isDesktop, mounted }) {
                 textTransform: 'uppercase',
               }}
             >
-              Read →
+              Explore →
             </span>
           </div>
         </>
@@ -227,10 +227,10 @@ function InsightCard({ card, isDesktop, mounted }) {
             <div style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>
               {card.kicker || card.title}
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {card.postTitle || card.title}
             </h3>
-            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {card.desc}
             </p>
             <span
@@ -684,9 +684,9 @@ export default function HomePageClient() {
             const editorialDefaults = {
               title: 'Editorial',
               kicker: 'BM Editorial',
-              postTitle: 'He Lost ₹47 Lakh Following "Expert" Advice - Here\'s What He Wishes He Knew 7 Years Ago',
+              postTitle: 'He Lost \u20b947 Lakh Following "Expert" Advice',
               desc:
-                'True story: How a Mumbai CA lost ₹47 lakh opportunity cost following wrong advice. Learn the 5 critical mistakes and what you should check in your portfolio today.',
+                'How a Mumbai CA lost \u20b947 lakh following wrong advice. The 5 critical mistakes to check in your portfolio today.',
               href: '/blog/47-lakh-investment-mistake-mumbai',
               img: '/blog-images/blog-hero-47lakh.jpg',
               kind: 'post',
@@ -710,7 +710,7 @@ export default function HomePageClient() {
                 title: label,
                 kicker: label,
                 postTitle: title,
-                desc: 'Read the latest approved story in this series.',
+                desc: 'Fresh perspective from the BM Wealth community.',
                 href: id ? `/blog/community/${id}` : '/blog',
                 img,
                 kind: 'post',
@@ -726,7 +726,7 @@ export default function HomePageClient() {
                 title: 'ITR Filing Help',
                 kicker: 'Tool',
                 postTitle: 'ITR Filing Help',
-                desc: 'Guided income-tax return filing — step by step, stress-free.',
+                desc: 'Step-by-step guided income-tax return filing.',
                 href: '/tools/itr-filing-help',
                 img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75',
                 kind: 'tool',
@@ -735,7 +735,7 @@ export default function HomePageClient() {
                 title: 'Live Intelligence',
                 kicker: 'Live',
                 postTitle: 'Live Intelligence',
-                desc: 'Real-time market context, mood indicators & trading timings.',
+                desc: 'Real-time market mood, indices & trading signals.',
                 href: '/live-intelligence',
                 kind: 'live-intel',
               }, ic?.liveIntel),
