@@ -1,28 +1,57 @@
 'use client';
 
 /**
- * SiteImagesManager — Admin component to browse, update, and search images used across the site.
- * Mobile-first LUX theme. Supports Unsplash search + direct URL paste.
+ * SiteImagesManager v2 — Robust admin image manager.
+ * Scans EVERY image actually used in the repo (31 assets, full catalog).
+ * Supports Unsplash search, URL paste, preview, change history, page filters.
+ * Mobile-first LUX theme.
  */
 
 import { useCallback, useEffect, useState } from 'react';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
-const DEFAULT_KEYS = [
-  { key: 'hero-bg', label: 'Home Hero Background', page: 'Home' },
-  { key: 'about-banner', label: 'About Page Banner', page: 'About' },
-  { key: 'about-team', label: 'About Team Photo', page: 'About' },
-  { key: 'services-mf', label: 'Services: Mutual Funds', page: 'Services' },
-  { key: 'services-tax', label: 'Services: Tax Planning', page: 'Services' },
-  { key: 'services-insurance', label: 'Services: Insurance', page: 'Services' },
-  { key: 'services-equity', label: 'Services: Equity', page: 'Services' },
-  { key: 'contact-header', label: 'Contact Page Header', page: 'Contact' },
-  { key: 'careers-header', label: 'Careers Page Header', page: 'Careers' },
-  { key: 'blog-fallback', label: 'Blog Default Thumbnail', page: 'Blog' },
-  { key: 'itr-tool-og', label: 'ITR Tool OG Image', page: 'Tools' },
-  { key: 'live-intel-bg', label: 'Live Intelligence BG', page: 'Intelligence' },
-  { key: 'store-hero', label: 'Store Hero Image', page: 'Store' },
+/* ─── Complete catalog of all images used across the site ─── */
+const IMAGE_CATALOG = [
+  // ── SERVICES ──
+  { key: 'services/mutual-funds',   label: 'Mutual Funds',             page: 'Services', current: '/services/Mutual Funds.png' },
+  { key: 'services/insurance',      label: 'Insurance',                page: 'Services', current: '/services/Insurance.png' },
+  { key: 'services/fd',             label: 'Fixed Deposits',           page: 'Services', current: '/services/FD.png' },
+  { key: 'services/sip',            label: 'SIP',                      page: 'Services', current: '/services/SIP.png' },
+  { key: 'services/trading',        label: 'Trading Service',          page: 'Services', current: '/services/Trading Service.png' },
+  { key: 'services/portfolio-mgmt', label: 'Portfolio Management',     page: 'Services', current: '/services/Portfolio Management.png' },
+  { key: 'services/chatgpt-1',      label: 'ChatGPT Image 1',         page: 'Services', current: '/services/ChatGPT Image Jan 4, 2026, 10_14_56 AM.png' },
+  { key: 'services/chatgpt-2',      label: 'ChatGPT Image 2',         page: 'Services', current: '/services/ChatGPT Image Jan 4, 2026, 12_53_07 PM.png' },
+  { key: 'services/jan5',           label: 'Jan 5 Service Image',      page: 'Services', current: '/services/Jan 5, 2026, 04_47_36 PM.png' },
+
+  // ── BLOG ──
+  { key: 'blog/hero-47lakh',        label: '47 Lakh Mistake Hero',     page: 'Blog', current: '/blog-images/blog-hero-47lakh.jpg' },
+  { key: 'blog/luxury-interior',    label: 'Blog 2: Luxury Interior',  page: 'Blog', current: '/blog-images/blog-2-luxury-interior.png.jpeg' },
+  { key: 'blog/yacht-sunset',       label: 'Blog 3: Yacht Sunset',     page: 'Blog', current: '/blog-images/blog-3-yacht-sunset.png.jpeg' },
+  { key: 'blog/yacht-deck',         label: 'Blog 4: Yacht Deck',       page: 'Blog', current: '/blog-images/blog-4-yacht-deck.png.jpeg' },
+  { key: 'blog/yacht-aerial',       label: 'Blog 5: Yacht Aerial',     page: 'Blog', current: '/blog-images/blog-5-yacht-aerial.png.jpeg' },
+  { key: 'blog/credit-card-svg',    label: 'Blog 11: Credit Card SVG', page: 'Blog', current: '/blog-images/blog-11-credit-card.svg' },
+
+  // ── BRANDING ──
+  { key: 'brand/logo-png',          label: 'Logo (PNG)',               page: 'Branding', current: '/logo.png' },
+  { key: 'brand/logo-webp',         label: 'Logo (WebP)',              page: 'Branding', current: '/logo.webp' },
+  { key: 'brand/favicon-32',        label: 'Favicon 32×32',            page: 'Branding', current: '/favicon-32x32.png' },
+  { key: 'brand/favicon-16',        label: 'Favicon 16×16',            page: 'Branding', current: '/favicon-16x16.png' },
+  { key: 'brand/apple-touch',       label: 'Apple Touch Icon',         page: 'Branding', current: '/apple-touch-icon.png' },
+  { key: 'brand/android-192',       label: 'Android Chrome 192',       page: 'Branding', current: '/android-chrome-192x192.png' },
+  { key: 'brand/android-512',       label: 'Android Chrome 512',       page: 'Branding', current: '/android-chrome-512x512.png' },
+
+  // ── VIDEOS ──
+  { key: 'video/about-hero',        label: 'About Us Hero Video',      page: 'Videos', current: '/videos/about-us-animated.mp4', isVideo: true },
+  { key: 'video/laser-beam',        label: 'Laser Beam Video',         page: 'Videos', current: '/videos/laser-beam.mp4', isVideo: true },
+
+  // ── EXTERNAL / CDN ──
+  { key: 'ext/itr-unsplash',        label: 'ITR Tool Hero (Unsplash)', page: 'Tools', current: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75' },
+
+  // ── MISC ──
+  { key: 'misc/6th',                label: '6th.png',                  page: 'Misc', current: '/6th.png' },
 ];
+
+const PAGES = ['All', ...([...new Set(IMAGE_CATALOG.map(i => i.page))].sort())];
 
 export function SiteImagesManager() {
   const [imageMap, setImageMap] = useState({});
@@ -103,48 +132,103 @@ export function SiteImagesManager() {
     }
   }, [searchQ, showNote]);
 
+  const [filterPage, setFilterPage] = useState('All');
+
+  const filtered = filterPage === 'All'
+    ? IMAGE_CATALOG
+    : IMAGE_CATALOG.filter(i => i.page === filterPage);
+
+  const stats = {
+    total: IMAGE_CATALOG.length,
+    images: IMAGE_CATALOG.filter(i => !i.isVideo).length,
+    videos: IMAGE_CATALOG.filter(i => i.isVideo).length,
+    overridden: Object.keys(imageMap).length,
+  };
+
   if (loading) {
-    return <div className="sa-muted">Loading site images…</div>;
+    return <div className="sa-muted">Loading image catalog…</div>;
   }
 
   return (
     <div>
-      <div className="sa-panelHead" style={{ marginBottom: 16 }}>
+      <div className="sa-panelHead" style={{ marginBottom: 12 }}>
         <div className="sa-panelTitle">SITE IMAGES MANAGER</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button className="sa-miniBtn" onClick={load} disabled={loading}>Refresh</button>
           <button className="sa-miniBtn" onClick={() => setShowHistory(!showHistory)}>
-            {showHistory ? 'Hide History' : 'History'}
+            {showHistory ? 'Hide History' : `History (${history.length})`}
           </button>
         </div>
       </div>
 
+      {/* Stats bar */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 14, fontSize: 12, color: 'var(--sa-muted)' }}>
+        <span>{stats.total} assets</span>
+        <span>{stats.images} images</span>
+        <span>{stats.videos} videos</span>
+        <span style={{ color: 'rgba(214,179,106,0.8)' }}>{stats.overridden} overridden</span>
+      </div>
+
       {note && <div style={{ padding: '8px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.06)', marginBottom: 12, fontSize: 13 }}>{note}</div>}
+
+      {/* Page filter pills */}
+      <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 14 }}>
+        {PAGES.map(p => {
+          const count = p === 'All' ? IMAGE_CATALOG.length : IMAGE_CATALOG.filter(i => i.page === p).length;
+          return (
+            <button
+              key={p}
+              className={`sa-miniBtn${filterPage === p ? ' sa-miniBtnActive' : ''}`}
+              onClick={() => setFilterPage(p)}
+            >
+              {p} ({count})
+            </button>
+          );
+        })}
+      </div>
 
       {/* Image grid */}
       <div style={{ display: 'grid', gap: 10 }}>
-        {DEFAULT_KEYS.map(({ key, label, page }) => {
-          const url = imageMap[key] || '';
+        {filtered.map((item) => {
+          const overrideUrl = imageMap[item.key];
+          const displayUrl = overrideUrl || item.current || '';
+          const isImg = !item.isVideo;
+
           return (
-            <div key={key} className="sa-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+            <div key={item.key} className="sa-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <div>
-                  <div className="sa-rowTitle">{label}</div>
-                  <div className="sa-rowSub">{page} — {key}</div>
+                <div style={{ flex: 1, minWidth: 180 }}>
+                  <div className="sa-rowTitle">
+                    {item.label}
+                    {overrideUrl && <span style={{ marginLeft: 6, fontSize: 10, color: 'rgba(214,179,106,0.7)' }}>● overridden</span>}
+                  </div>
+                  <div className="sa-rowSub">{item.page} — <span style={{ fontFamily: 'monospace', fontSize: 10 }}>{item.key}</span></div>
                 </div>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <button className="sa-miniBtn" onClick={() => { setEditKey(key); setEditUrl(url); setSearchResults([]); setSearchQ(''); }}>
-                    {url ? 'Change' : 'Set'}
-                  </button>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {isImg && (
+                    <button className="sa-miniBtn" onClick={() => { setEditKey(item.key); setEditUrl(overrideUrl || item.current || ''); setSearchResults([]); setSearchQ(''); }}>
+                      {overrideUrl ? 'Change' : 'Override'}
+                    </button>
+                  )}
+                  {displayUrl && (
+                    <a href={displayUrl} target="_blank" rel="noopener noreferrer" className="sa-miniBtn" style={{ textDecoration: 'none' }}>
+                      View ↗
+                    </a>
+                  )}
                 </div>
               </div>
-              {url && (
-                <div style={{ width: '100%', maxWidth: 280, aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.3)' }}>
-                  <img src={url} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+              {displayUrl && isImg && (
+                <div style={{ width: '100%', maxWidth: 260, aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.3)' }}>
+                  <img src={displayUrl} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                 </div>
               )}
-              {!url && (
-                <div style={{ width: '100%', maxWidth: 280, aspectRatio: '16/9', borderRadius: 8, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.12)', fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>
+              {displayUrl && item.isVideo && (
+                <div style={{ width: '100%', maxWidth: 260, aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.3)', display: 'grid', placeItems: 'center', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+                  🎬 Video — {item.current}
+                </div>
+              )}
+              {!displayUrl && (
+                <div style={{ width: '100%', maxWidth: 260, aspectRatio: '16/9', borderRadius: 8, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.12)', fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>
                   No image set
                 </div>
               )}
@@ -157,15 +241,16 @@ export function SiteImagesManager() {
       {showHistory && history.length > 0 && (
         <div style={{ marginTop: 20 }}>
           <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8, color: 'var(--sa-muted)' }}>
-            RECENT CHANGES
+            RECENT CHANGES ({history.length})
           </div>
-          <div style={{ display: 'grid', gap: 6, maxHeight: 360, overflowY: 'auto' }}>
-            {history.slice(0, 30).map((h, i) => (
+          <div style={{ display: 'grid', gap: 6, maxHeight: 400, overflowY: 'auto' }}>
+            {history.slice(0, 50).map((h, i) => (
               <div key={i} className="sa-row" style={{ fontSize: 12, padding: '8px 12px' }}>
                 <div>
                   <span style={{ fontWeight: 600 }}>{h.key}</span>{' '}
                   <span style={{ opacity: 0.5 }}>{h.action}</span>{' '}
-                  <span style={{ opacity: 0.4 }}>{new Date(h.timestamp).toLocaleDateString()}</span>
+                  <span style={{ opacity: 0.4 }}>{new Date(h.timestamp).toLocaleDateString()} {new Date(h.timestamp).toLocaleTimeString()}</span>
+                  {h.newUrl && <div style={{ fontSize: 10, opacity: 0.4, marginTop: 2, wordBreak: 'break-all' }}>→ {h.newUrl.slice(0, 80)}</div>}
                 </div>
               </div>
             ))}
@@ -177,7 +262,7 @@ export function SiteImagesManager() {
       {editKey && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
+          background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)',
           display: 'grid', placeItems: 'center',
           padding: 16, overflowY: 'auto',
         }}>
@@ -190,8 +275,19 @@ export function SiteImagesManager() {
               Change Image
             </div>
             <div className="sa-rowSub" style={{ marginBottom: 16 }}>
-              {DEFAULT_KEYS.find(dk => dk.key === editKey)?.label || editKey}
+              {IMAGE_CATALOG.find(c => c.key === editKey)?.label || editKey}
+              <span style={{ display: 'block', fontSize: 10, fontFamily: 'monospace', marginTop: 4, opacity: 0.5 }}>key: {editKey}</span>
             </div>
+
+            {/* Current file info */}
+            {(() => {
+              const item = IMAGE_CATALOG.find(c => c.key === editKey);
+              return item?.current ? (
+                <div style={{ marginBottom: 12, fontSize: 11, color: 'var(--sa-muted)' }}>
+                  Default: <span style={{ fontFamily: 'monospace' }}>{item.current.length > 60 ? item.current.slice(0, 60) + '…' : item.current}</span>
+                </div>
+              ) : null;
+            })()}
 
             {/* URL input */}
             <div style={{ marginBottom: 12 }}>
@@ -213,10 +309,10 @@ export function SiteImagesManager() {
               </div>
             )}
 
-            {/* Search */}
+            {/* Search free images */}
             <div style={{ marginBottom: 12 }}>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', marginBottom: 4, color: 'var(--sa-muted)' }}>
-                Search Free Images
+                Search Free Images (Unsplash)
               </label>
               <div style={{ display: 'flex', gap: 6 }}>
                 <input
@@ -234,14 +330,14 @@ export function SiteImagesManager() {
             </div>
 
             {searchResults.length > 0 && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 6, marginBottom: 16, maxHeight: 260, overflowY: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 6, marginBottom: 16, maxHeight: 240, overflowY: 'auto' }}>
                 {searchResults.map((img) => (
                   <div
                     key={img.id}
                     onClick={() => setEditUrl(img.url)}
                     style={{
                       aspectRatio: '4/3', borderRadius: 8, overflow: 'hidden',
-                      cursor: 'pointer', border: editUrl === img.url ? '2px solid var(--sa-accent, #8B6914)' : '2px solid transparent',
+                      cursor: 'pointer', border: editUrl === img.url ? '2px solid rgba(214,179,106,0.7)' : '2px solid transparent',
                       background: 'rgba(0,0,0,0.3)',
                     }}
                   >

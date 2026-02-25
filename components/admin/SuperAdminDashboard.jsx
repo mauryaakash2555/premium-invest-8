@@ -15,6 +15,7 @@ import { CommunityPostsManager } from '@/components/admin/CommunityPostsManager'
 import { BlogImagesManager } from '@/components/admin/BlogImagesManager';
 import { InsightsManager } from '@/components/admin/InsightsManager';
 import { SiteImagesManager } from '@/components/admin/SiteImagesManager';
+import { DigitalProductsManager } from '@/components/admin/DigitalProductsManager';
 import { SessionManager } from '@/lib/auth/session';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
@@ -85,6 +86,7 @@ const NAV_SECTIONS = [
       { id: 'blog-images',  name: 'Blog Images',       icon: '🖼️' },
       { id: 'insights',     name: 'Insights Manager',  icon: '✨' },
       { id: 'site-images',  name: 'Site Images',        icon: '🏞️' },
+      { id: 'products',    name: 'Digital Products',  icon: '📄' },
     ],
   },
   {
@@ -478,6 +480,13 @@ export function SuperAdminDashboard({ onLogout }) {
         {tab === 'site-images' && (
           <div className="sa-panel">
             <SiteImagesManager />
+          </div>
+        )}
+
+        {/* ═══ TAB: Digital Products ═══ */}
+        {tab === 'products' && (
+          <div className="sa-panel">
+            <DigitalProductsManager />
           </div>
         )}
 

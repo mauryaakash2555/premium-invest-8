@@ -30,7 +30,12 @@ export async function GET() {
   let error = null;
 
   const wanted = [
+    // ── Benchmark ──
     'NIFTY 50',
+    'NIFTY NEXT 50',
+    'NIFTY MIDCAP 50',
+    'NIFTY SMLCAP 50',
+    // ── Sectoral ──
     'NIFTY BANK',
     'NIFTY FIN SERVICE',
     'NIFTY IT',
@@ -39,6 +44,18 @@ export async function GET() {
     'NIFTY AUTO',
     'NIFTY METAL',
     'NIFTY REALTY',
+    'NIFTY ENERGY',
+    'NIFTY MEDIA',
+    'NIFTY PSE',
+    'NIFTY PSU BANK',
+    'NIFTY PVT BANK',
+    'NIFTY INFRA',
+    'NIFTY COMMODITIES',
+    'NIFTY CONSUMPTION',
+    'NIFTY HEALTHCARE',
+    'NIFTY MNC',
+    'NIFTY OIL AND GAS',
+    // ── VIX ──
     'INDIA VIX',
   ];
 
