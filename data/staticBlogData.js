@@ -1,3 +1,10 @@
+// Affiliate blog posts (Blogs 13-24)
+import {
+  staticBlogPost13, staticBlogPost14, staticBlogPost15, staticBlogPost16,
+  staticBlogPost17, staticBlogPost18, staticBlogPost19, staticBlogPost20,
+  staticBlogPost21, staticBlogPost22, staticBlogPost23, staticBlogPost24,
+} from './affiliateBlogPosts.js';
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 📖 BLOG EDITING GUIDE - HOW TO CHANGE/EDIT THIS FILE
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -5343,6 +5350,18 @@ export const staticBlogData = [
   staticBlogPost10,
   staticBlogPost11,
   staticBlogPost12,
+  staticBlogPost13,
+  staticBlogPost14,
+  staticBlogPost15,
+  staticBlogPost16,
+  staticBlogPost17,
+  staticBlogPost18,
+  staticBlogPost19,
+  staticBlogPost20,
+  staticBlogPost21,
+  staticBlogPost22,
+  staticBlogPost23,
+  staticBlogPost24,
 ];
 
 
