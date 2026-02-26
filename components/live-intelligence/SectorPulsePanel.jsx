@@ -15,13 +15,13 @@ function toneFromPct(pct) {
 function outlookSignal(pct) {
   const n = Number(pct);
   if (!Number.isFinite(n)) return { label: '—', color: 'rgba(200,215,240,0.40)' };
-  if (n >= 1.5)  return { label: 'Strong Rally',  color: 'rgba(80,220,140,0.95)' };
-  if (n >= 0.5)  return { label: 'Bullish',        color: 'rgba(140,220,180,0.85)' };
-  if (n > 0)     return { label: 'Mild Green',     color: 'rgba(180,230,200,0.70)' };
-  if (n === 0)   return { label: 'Flat',           color: 'rgba(200,215,240,0.55)' };
-  if (n > -0.5)  return { label: 'Mild Red',       color: 'rgba(255,180,140,0.70)' };
-  if (n > -1.5)  return { label: 'Bearish',        color: 'rgba(255,120,100,0.80)' };
-  return           { label: 'Sharp Sell-off',       color: 'rgba(255,80,80,0.95)' };
+  if (n >= 1.5)  return { label: 'Strong Gain',    color: 'rgba(80,220,140,0.95)' };
+  if (n >= 0.5)  return { label: 'Gaining',          color: 'rgba(140,220,180,0.85)' };
+  if (n > 0)     return { label: 'Slight Positive',  color: 'rgba(180,230,200,0.70)' };
+  if (n === 0)   return { label: 'Flat',              color: 'rgba(200,215,240,0.55)' };
+  if (n > -0.5)  return { label: 'Slight Negative',  color: 'rgba(255,180,140,0.70)' };
+  if (n > -1.5)  return { label: 'Declining',         color: 'rgba(255,120,100,0.80)' };
+  return           { label: 'Sharp Decline',          color: 'rgba(255,80,80,0.95)' };
 }
 
 function vixSentiment(vix) {
@@ -77,7 +77,7 @@ const DISPLAY_NAME = {
 const FILTER_TABS = [
   { id: 'all',     label: 'All Sectors' },
   { id: 'top',     label: 'Top Gainers' },
-  { id: 'bottom',  label: 'Top Losers' },
+  { id: 'bottom',  label: 'Lagging' },
   { id: 'bench',   label: 'Benchmarks' },
 ];
 
@@ -179,7 +179,7 @@ export default function SectorPulsePanel() {
             Market Sectors Intelligence
           </div>
           <div style={{ marginTop: '3px', color: 'rgba(200,215,240,0.42)', fontSize: '11px' }}>
-            {view.summary.total} sectors — {view.summary.bullish} bullish · {view.summary.bearish} bearish · {view.summary.flat} flat
+            {view.summary.total} sectors — {view.summary.bullish} gaining · {view.summary.bearish} declining · {view.summary.flat} flat
           </div>
         </div>
         <LiveBadge lastUpdate={state.lastUpdatedAt || new Date().toISOString()} />
@@ -195,7 +195,7 @@ export default function SectorPulsePanel() {
             display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10,
           }}>
             <div>
-              <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.04em' }}>INDIA VIX — Fear Gauge</div>
+              <div style={{ color: 'rgba(200,215,240,0.55)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.04em' }}>INDIA VIX — Volatility Index</div>
               <div style={{ color: vs.color, fontSize: '11px', fontWeight: 600, marginTop: 2 }}>{vs.label}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
@@ -323,7 +323,7 @@ export default function SectorPulsePanel() {
       )}
 
       <div style={{ marginTop: '10px', color: 'rgba(200,215,240,0.30)', fontSize: '10px', lineHeight: 1.35 }}>
-        NSE indices — educational context only. Outlook based on intraday change signals.
+        NSE indices for educational awareness only. Not investment advice. Past performance does not indicate future results.
       </div>
     </div>
   );

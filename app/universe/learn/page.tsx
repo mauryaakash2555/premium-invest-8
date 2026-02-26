@@ -187,7 +187,17 @@ export default function UniverseSearchHub() {
 
       {/* Header */}
       <header className="header">
-        <div className="header-brand">Universe</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button
+            type="button"
+            className="header-back-btn"
+            onClick={() => router.push('/')}
+            aria-label="Back to home"
+          >
+            ←
+          </button>
+          <div className="header-brand">Universe</div>
+        </div>
         <div className="header-stat">{topicsExplored} topics explored</div>
       </header>
 
@@ -308,6 +318,25 @@ export default function UniverseSearchHub() {
           font-weight: 300;
           color: #ffffff;
           letter-spacing: -0.02em;
+        }
+
+        .header-back-btn {
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.12);
+          color: #fff;
+          font-size: 18px;
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          cursor: pointer;
+          display: grid;
+          place-items: center;
+          transition: background 0.2s, border-color 0.2s;
+        }
+
+        .header-back-btn:hover {
+          background: rgba(255,255,255,0.12);
+          border-color: rgba(255,255,255,0.25);
         }
 
         .header-stat {

@@ -1,8 +1,9 @@
 'use client';
 
 /**
- * SiteImagesManager v2 — Robust admin image manager.
- * Scans EVERY image actually used in the repo (31 assets, full catalog).
+ * SiteImagesManager v3 — Complete admin image manager.
+ * Catalogs EVERY image & video used across the entire website.
+ * 50+ assets: page heroes, blog images, service graphics, branding, videos.
  * Supports Unsplash search, URL paste, preview, change history, page filters.
  * Mobile-first LUX theme.
  */
@@ -10,9 +11,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchAdminJSON } from '@/lib/auth/adminTokenClient';
 
-/* ─── Complete catalog of all images used across the site ─── */
+/* ─── Complete catalog of ALL images used across the live website ─── */
 const IMAGE_CATALOG = [
-  // ── SERVICES ──
+  // ═══ PAGE HEROES (Unsplash backgrounds used in page headers) ═══
+  { key: 'hero/home',               label: 'Home Page Hero BG',        page: 'Heroes', current: 'https://images.unsplash.com/photo-1666289158111-7576ce2ccfae?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75' },
+  { key: 'hero/careers',            label: 'Careers Hero BG',          page: 'Heroes', current: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=75' },
+  { key: 'hero/curated-partners',   label: 'Curated Partners Hero BG', page: 'Heroes', current: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&h=1080&fit=crop&auto=format&fm=webp&q=80' },
+  { key: 'hero/blog-index',         label: 'Blog Index Section BG',    page: 'Heroes', current: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&auto=format&fm=webp&q=60' },
+  { key: 'hero/itr-tool',           label: 'ITR Tool Hero',            page: 'Heroes', current: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75' },
+
+  // ═══ SERVICE IMAGES (local PNGs in /services/) ═══
   { key: 'services/mutual-funds',   label: 'Mutual Funds',             page: 'Services', current: '/services/Mutual Funds.png' },
   { key: 'services/insurance',      label: 'Insurance',                page: 'Services', current: '/services/Insurance.png' },
   { key: 'services/fd',             label: 'Fixed Deposits',           page: 'Services', current: '/services/FD.png' },
@@ -23,32 +31,45 @@ const IMAGE_CATALOG = [
   { key: 'services/chatgpt-2',      label: 'ChatGPT Image 2',         page: 'Services', current: '/services/ChatGPT Image Jan 4, 2026, 12_53_07 PM.png' },
   { key: 'services/jan5',           label: 'Jan 5 Service Image',      page: 'Services', current: '/services/Jan 5, 2026, 04_47_36 PM.png' },
 
-  // ── BLOG ──
-  { key: 'blog/hero-47lakh',        label: '47 Lakh Mistake Hero',     page: 'Blog', current: '/blog-images/blog-hero-47lakh.jpg' },
-  { key: 'blog/luxury-interior',    label: 'Blog 2: Luxury Interior',  page: 'Blog', current: '/blog-images/blog-2-luxury-interior.png.jpeg' },
-  { key: 'blog/yacht-sunset',       label: 'Blog 3: Yacht Sunset',     page: 'Blog', current: '/blog-images/blog-3-yacht-sunset.png.jpeg' },
-  { key: 'blog/yacht-deck',         label: 'Blog 4: Yacht Deck',       page: 'Blog', current: '/blog-images/blog-4-yacht-deck.png.jpeg' },
-  { key: 'blog/yacht-aerial',       label: 'Blog 5: Yacht Aerial',     page: 'Blog', current: '/blog-images/blog-5-yacht-aerial.png.jpeg' },
-  { key: 'blog/credit-card-svg',    label: 'Blog 11: Credit Card SVG', page: 'Blog', current: '/blog-images/blog-11-credit-card.svg' },
+  // ═══ BLOG IMAGES — LOCAL (6 files in /blog-images/) ═══
+  { key: 'blog/1-hero-47lakh',      label: 'Blog 1: 47 Lakh Mistake',  page: 'Blog', current: '/blog-images/blog-hero-47lakh.jpg' },
+  { key: 'blog/2-luxury-interior',  label: 'Blog 2: Luxury Interior',  page: 'Blog', current: '/blog-images/blog-2-luxury-interior.png.jpeg' },
+  { key: 'blog/3-yacht-sunset',     label: 'Blog 3: Yacht Sunset',     page: 'Blog', current: '/blog-images/blog-3-yacht-sunset.png.jpeg' },
+  { key: 'blog/4-yacht-deck',       label: 'Blog 4: Yacht Deck',       page: 'Blog', current: '/blog-images/blog-4-yacht-deck.png.jpeg' },
+  { key: 'blog/5-yacht-aerial',     label: 'Blog 5: Yacht Aerial',     page: 'Blog', current: '/blog-images/blog-5-yacht-aerial.png.jpeg' },
+  { key: 'blog/11-credit-card',     label: 'Blog 11: Credit Card',     page: 'Blog', current: '/blog-images/blog-11-credit-card.svg' },
 
-  // ── BRANDING ──
+  // ═══ BLOG IMAGES — UNSPLASH (blogs 6-10, 12) ═══
+  { key: 'blog/6-real-estate',      label: 'Blog 6: Real Estate',      page: 'Blog', current: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85' },
+  { key: 'blog/7-property',         label: 'Blog 7: Property',         page: 'Blog', current: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85' },
+  { key: 'blog/8-luxury-property',  label: 'Blog 8: Luxury Property',  page: 'Blog', current: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85' },
+  { key: 'blog/9-luxury-home',      label: 'Blog 9: Luxury Home',      page: 'Blog', current: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&auto=format&fm=webp&q=85' },
+  { key: 'blog/10-interior',        label: 'Blog 10: Interior',        page: 'Blog', current: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&h=600&fit=crop&auto=format&fm=webp&q=85' },
+
+  // ═══ COMMUNITY POST FALLBACK IMAGES ═══
+  { key: 'community/impact',        label: 'Community: Impact',        page: 'Community', current: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&h=500&fit=crop&auto=format&fm=webp&q=75' },
+  { key: 'community/guest',         label: 'Community: Guest',         page: 'Community', current: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=500&fit=crop&auto=format&fm=webp&q=75' },
+  { key: 'community/dev',           label: 'Community: Dev',           page: 'Community', current: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=500&fit=crop&auto=format&fm=webp&q=75' },
+  { key: 'community/editorial',     label: 'Community: Editorial',     page: 'Community', current: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop&auto=format&fm=webp&q=75' },
+
+  // ═══ BRANDING & ICONS ═══
   { key: 'brand/logo-png',          label: 'Logo (PNG)',               page: 'Branding', current: '/logo.png' },
   { key: 'brand/logo-webp',         label: 'Logo (WebP)',              page: 'Branding', current: '/logo.webp' },
+  { key: 'brand/favicon-ico',       label: 'Favicon ICO',              page: 'Branding', current: '/favicon.ico' },
   { key: 'brand/favicon-32',        label: 'Favicon 32×32',            page: 'Branding', current: '/favicon-32x32.png' },
   { key: 'brand/favicon-16',        label: 'Favicon 16×16',            page: 'Branding', current: '/favicon-16x16.png' },
   { key: 'brand/apple-touch',       label: 'Apple Touch Icon',         page: 'Branding', current: '/apple-touch-icon.png' },
   { key: 'brand/android-192',       label: 'Android Chrome 192',       page: 'Branding', current: '/android-chrome-192x192.png' },
   { key: 'brand/android-512',       label: 'Android Chrome 512',       page: 'Branding', current: '/android-chrome-512x512.png' },
+  { key: 'brand/6th',               label: 'Graphic: 6th.png',         page: 'Branding', current: '/6th.png' },
 
-  // ── VIDEOS ──
+  // ═══ VIDEOS ═══
   { key: 'video/about-hero',        label: 'About Us Hero Video',      page: 'Videos', current: '/videos/about-us-animated.mp4', isVideo: true },
-  { key: 'video/laser-beam',        label: 'Laser Beam Video',         page: 'Videos', current: '/videos/laser-beam.mp4', isVideo: true },
+  { key: 'video/laser-beam',        label: 'Laser Beam Effect',        page: 'Videos', current: '/videos/laser-beam.mp4', isVideo: true },
 
-  // ── EXTERNAL / CDN ──
-  { key: 'ext/itr-unsplash',        label: 'ITR Tool Hero (Unsplash)', page: 'Tools', current: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&auto=format&q=75' },
-
-  // ── MISC ──
-  { key: 'misc/6th',                label: '6th.png',                  page: 'Misc', current: '/6th.png' },
+  // ═══ 3D / SPLINE ASSETS ═══
+  { key: 'spline/genkub',           label: 'Spline: GenKub Scene',     page: '3D Assets', current: '/spline/genkub/scene.splinecode', isSpline: true },
+  { key: 'spline/r4x',              label: 'Spline: R4X Scene',        page: '3D Assets', current: '/spline/r4x/scene.splinecode', isSpline: true },
 ];
 
 const PAGES = ['All', ...([...new Set(IMAGE_CATALOG.map(i => i.page))].sort())];
@@ -140,8 +161,9 @@ export function SiteImagesManager() {
 
   const stats = {
     total: IMAGE_CATALOG.length,
-    images: IMAGE_CATALOG.filter(i => !i.isVideo).length,
+    images: IMAGE_CATALOG.filter(i => !i.isVideo && !i.isSpline).length,
     videos: IMAGE_CATALOG.filter(i => i.isVideo).length,
+    spline: IMAGE_CATALOG.filter(i => i.isSpline).length,
     overridden: Object.keys(imageMap).length,
   };
 
@@ -166,6 +188,7 @@ export function SiteImagesManager() {
         <span>{stats.total} assets</span>
         <span>{stats.images} images</span>
         <span>{stats.videos} videos</span>
+        <span>{stats.spline} 3D</span>
         <span style={{ color: 'rgba(214,179,106,0.8)' }}>{stats.overridden} overridden</span>
       </div>
 
@@ -192,7 +215,7 @@ export function SiteImagesManager() {
         {filtered.map((item) => {
           const overrideUrl = imageMap[item.key];
           const displayUrl = overrideUrl || item.current || '';
-          const isImg = !item.isVideo;
+          const isImg = !item.isVideo && !item.isSpline;
 
           return (
             <div key={item.key} className="sa-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
@@ -225,6 +248,11 @@ export function SiteImagesManager() {
               {displayUrl && item.isVideo && (
                 <div style={{ width: '100%', maxWidth: 260, aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.3)', display: 'grid', placeItems: 'center', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
                   🎬 Video — {item.current}
+                </div>
+              )}
+              {item.isSpline && (
+                <div style={{ width: '100%', maxWidth: 260, aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.3)', display: 'grid', placeItems: 'center', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+                  🎨 3D Scene — {item.current}
                 </div>
               )}
               {!displayUrl && (

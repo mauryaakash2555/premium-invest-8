@@ -1,13 +1,14 @@
 /**
  * Expiry Monitoring Cron Job
  * 
- * Runs hourly to:
+ * Runs ONCE DAILY at 8 AM UTC (1:30 PM IST) to:
  * 1. Check for expired headlines
- * 2. Send alerts if too many expired
+ * 2. Send alert ONLY if situation is genuinely critical
  * 3. Auto-delete old expired headlines
  * 4. Log to Supabase
  * 
- * Vercel Cron: 0 * * * * (every hour)
+ * Vercel Cron: 0 8 * * * (once per day)
+ * Throttle: max 1 email per 12 hours
  */
 
 import { NextResponse } from 'next/server';
@@ -63,17 +64,26 @@ export async function GET(request) {
       .select('*', { count: 'exact', head: true })
       .lt('valid_until', now.toISOString());
 
-    // Send alert if more than 5 headlines expired in the last hour
-    let alertSent = false;
-    if (recentlyExpired > 5) {
-      await sendExpiryAlert(recentlyExpired, activeHeadlines);
-      alertSent = true;
-    }
+    // ── Throttle: check if we already sent an alert in the last 12 hours ──
+    const twelveHoursAgo = new Date(now.getTime() - 12 * 60 * 60 * 1000);
+    const { count: recentAlerts } = await supabase
+      .from('processing_logs')
+      .select('*', { count: 'exact', head: true })
+      .eq('type', 'expiry_check')
+      .gte('created_at', twelveHoursAgo.toISOString())
+      .not('details->alert_sent', 'eq', false);
 
-    // Also alert if active headlines drop below 10
-    if (activeHeadlines < 10) {
-      await sendExpiryAlert(recentlyExpired || 0, activeHeadlines);
-      alertSent = true;
+    const alreadySentRecently = (recentAlerts || 0) > 0;
+
+    // Only alert if truly critical AND no recent alert sent:
+    // - More than 25 headlines expired in the last hour, OR
+    // - Active headlines dropped below 3 (site nearly empty)
+    let alertSent = false;
+    if (!alreadySentRecently) {
+      if (recentlyExpired > 25 || activeHeadlines < 3) {
+        await sendExpiryAlert(recentlyExpired || 0, activeHeadlines);
+        alertSent = true;
+      }
     }
 
     // Auto-delete headlines expired more than 1 week ago
