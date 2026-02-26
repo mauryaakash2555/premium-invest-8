@@ -162,6 +162,31 @@ export default function BlogDetailClient({ slug }) {
     const foundPost = allBlogs.find(p => p.slug === slug);
     setPost(foundPost || null);
     setIsLoading(false);
+
+    // Apply super-admin editorial image overrides so Blog Images Manager updates reflect on public blog pages.
+    // This stays client-side to avoid requiring a rebuild for static blog content.
+    (async () => {
+      try {
+        const res = await fetch('/api/blog/editorial-image-overrides', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const overrides = data?.overrides && typeof data.overrides === 'object' ? data.overrides : null;
+        if (!overrides || !foundPost) return;
+
+        const key = foundPost.id || foundPost.slug;
+        if (!key) return;
+        const nextUrl = overrides?.[key]?.image_url;
+        if (!nextUrl) return;
+
+        setPost((prev) => {
+          if (!prev) return prev;
+          if ((prev.id || prev.slug) !== key) return prev;
+          return { ...prev, image_url: nextUrl, image: nextUrl };
+        });
+      } catch {
+        // ignore
+      }
+    })();
     // re-run DOM enhancements when content changes
     setScrollBoostSeed((s) => s + 1);
   }, [slug]);

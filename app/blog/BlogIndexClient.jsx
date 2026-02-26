@@ -22,9 +22,10 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
+
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { Calendar, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -44,6 +45,22 @@ export default function BlogPage() {
   const [communityLoading, setCommunityLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const router = useRouter();
+
+  const editorialOverridesRef = useRef(null);
+
+  const applyEditorialOverrides = (posts, overrides) => {
+    const ov = overrides && typeof overrides === 'object' ? overrides : null;
+    if (!ov) return posts;
+
+    return (Array.isArray(posts) ? posts : []).map((p) => {
+      if (!p || p.type !== 'editorial') return p;
+      const key = p.id || p.slug;
+      if (!key) return p;
+      const nextUrl = ov?.[key]?.image_url;
+      if (!nextUrl) return p;
+      return { ...p, image_url: nextUrl, image: nextUrl };
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -88,6 +105,19 @@ export default function BlogPage() {
       // Show all static blogs immediately (editorial)
       setBlogPosts(staticBlogs.map((p) => ({ ...p, type: 'editorial' })));
       setIsLoading(false);
+
+      // Apply super-admin editorial image overrides (so Blog Images Manager changes show on public pages)
+      try {
+        const res = await fetch('/api/blog/editorial-image-overrides', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const overrides = data?.overrides;
+          editorialOverridesRef.current = overrides && typeof overrides === 'object' ? overrides : null;
+          setBlogPosts((prev) => applyEditorialOverrides(prev, overrides));
+        }
+      } catch {
+        // ignore; fall back to static images
+      }
       
       // Then try to fetch backend blogs in background (skip on localhost to avoid CORS noise)
       const debug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === '1';
@@ -104,10 +134,11 @@ export default function BlogPage() {
             const backendPosts = (await response.json()) || [];
             const staticSlugs = staticBlogs.map((blog) => blog.slug).filter(Boolean);
             const uniqueBackendPosts = backendPosts.filter((post) => post.slug && !staticSlugs.includes(post.slug));
-            setBlogPosts([
+            const merged = [
               ...staticBlogs.map((p) => ({ ...p, type: 'editorial' })),
               ...uniqueBackendPosts.map((p) => ({ ...p, type: 'editorial' })),
-            ]);
+            ];
+            setBlogPosts(applyEditorialOverrides(merged, editorialOverridesRef.current));
           }
         } catch (backendError) {
           if (debug) console.warn('Backend blog fetch failed (using static only):', backendError);
@@ -147,7 +178,8 @@ export default function BlogPage() {
       }
     } catch (error) {
       console.error('Error loading blog posts:', error);
-      setBlogPosts([{ ...staticBlogPost, type: 'editorial' }]);
+      const fallback = [{ ...staticBlogPost, type: 'editorial' }];
+      setBlogPosts(applyEditorialOverrides(fallback, editorialOverridesRef.current));
       setIsLoading(false);
     }
   };
@@ -173,7 +205,19 @@ export default function BlogPage() {
     }
   }, []);
 
-  const getPostHref = (post) => `/blog/${post?.slug || post?.id || ''}`;
+  const getPostHref = (post) => {
+    if (!post) return '/blog';
+    if (post?.slug) return `/blog/${post.slug}`;
+
+    // Community posts are served via /blog/community/[id]
+    const communityId = post?._id || post?.id;
+    if (communityId && (post?.type === 'impact' || post?.type === 'guest' || post?.type === 'dev' || post?.pillar)) {
+      return `/blog/community/${communityId}`;
+    }
+
+    // Safe fallback
+    return '/blog';
+  };
 
   const getWhatsAppHref = (postHref, title) => {
     const url = `${siteOrigin}${postHref}`;
