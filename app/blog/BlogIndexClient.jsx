@@ -755,9 +755,6 @@ export default function BlogPage() {
                       </div>
                     ) : null}
 
-                    {typeof post.views === 'number' ? (
-                      <div style={{ marginTop: '8px', color: 'var(--lux-foreground-80)', fontSize: '12px' }}>{post.views.toLocaleString()} views</div>
-                    ) : null}
                   </div>
 
                   {/* Intentionally no “Next Read” overlay on listing cards. */}
