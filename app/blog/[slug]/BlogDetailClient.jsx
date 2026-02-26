@@ -188,6 +188,17 @@ export default function BlogDetailClient({ slug }) {
     )}`;
   }, [post?.title]);
 
+  const estimatedReadTime = useMemo(() => {
+    if (!post) return null;
+    if (post.estimatedReadTime) return post.estimatedReadTime;
+    if (post.readTime) return post.readTime;
+    // Estimate from content: ~200 words per minute
+    const text = typeof post.content === 'string' ? post.content.replace(/<[^>]*>/g, '') : '';
+    const words = text.split(/\s+/).filter(Boolean).length;
+    const mins = Math.max(1, Math.round(words / 200));
+    return mins;
+  }, [post]);
+
   const isDevPillar = useMemo(() => {
     const cat = String(post?.category || '').toLowerCase();
     return backHref === '/blog/dev' || cat.includes('developer');

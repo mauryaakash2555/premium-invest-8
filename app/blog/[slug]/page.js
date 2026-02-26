@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BlogDetailClient from "./BlogDetailClient";
 import { buildMetadata, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo/metadata";
 import { staticBlogData, staticBlogPost } from "@/data/staticBlogData";
@@ -91,7 +92,9 @@ export default async function BlogDetailPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
-      <BlogDetailClient slug={slug} />
+      <Suspense fallback={null}>
+        <BlogDetailClient slug={slug} />
+      </Suspense>
     </>
   );
 }
