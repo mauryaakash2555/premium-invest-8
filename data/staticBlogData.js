@@ -4509,16 +4509,16 @@ export const staticBlogPost10 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
-  <a class="coming-next-block" href="/blog/47-lakh-investment-mistake-mumbai" style="text-decoration: none;">
+  <a class="coming-next-block" href="/blog/best-credit-cards-high-income-india" style="text-decoration: none;">
     <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid color-mix(in oklab, var(--lux-accent) 50%, transparent); margin-bottom: 60px; cursor: pointer;">
       <p style="font-size: 18px; font-weight: 600; color: var(--lux-accent); margin-bottom: 15px;">
-        Explore Our Investment Education Series:
+        Next Read:
       </p>
       <p style="font-size: 24px; margin-bottom: 10px; color: var(--lux-accent); font-weight: 600;">
-        Start from Blog 1: The ₹47 Lakh Case Study →
+        Best Credit Cards for High-Income Professionals in India (2026) →
       </p>
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
-        Mumbai CA's investment mistakes that cost him ₹47 lakh opportunity cost over 7 years.
+        A structured look at premium credit cards — rewards, fees, and which cards suit different income profiles.
       </p>
     </div>
   </a>
@@ -4899,6 +4899,22 @@ export const staticBlogPost11 = {
   <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
     If you already use structured financial tools to optimise tax and cash flow, credit card decisions should follow the same disciplined, long-term mindset.
   </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <a class="coming-next-block" href="/blog/personal-loans-short-term-cashflow-professionals" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid color-mix(in oklab, var(--lux-accent) 50%, transparent); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: var(--lux-accent); margin-bottom: 15px;">
+        Next Read:
+      </p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: var(--lux-accent); font-weight: 600;">
+        Personal Loans for Short-Term Cashflow: A Practical Guide →
+      </p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
+        When does a personal loan make sense? A structured framework for professionals managing short-term liquidity.
+      </p>
+    </div>
+  </a>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -5285,6 +5301,22 @@ export const staticBlogPost12 = {
     </p>
     <a href="/execution-partners" class="text-link" style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.72);">View execution options →</a>
   </section>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <a class="coming-next-block" href="/blog/47-lakh-investment-mistake-mumbai" style="text-decoration: none;">
+    <div class="coming-next-block" style="background: rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; border-left: 4px solid color-mix(in oklab, var(--lux-accent) 50%, transparent); margin-bottom: 60px; cursor: pointer;">
+      <p style="font-size: 18px; font-weight: 600; color: var(--lux-accent); margin-bottom: 15px;">
+        Next Read:
+      </p>
+      <p style="font-size: 24px; margin-bottom: 10px; color: var(--lux-accent); font-weight: 600;">
+        He Lost ₹47 Lakh Following "Expert" Advice →
+      </p>
+      <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">
+        A Mumbai CA's investment mistakes that cost him ₹47 lakh. Start the full education series.
+      </p>
+    </div>
+  </a>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 

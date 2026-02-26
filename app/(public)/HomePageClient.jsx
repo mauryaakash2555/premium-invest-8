@@ -130,9 +130,9 @@ function InsightCard({ card, isDesktop, mounted }) {
         />
       )}
 
-      {card.kind === 'live-intel' ? (
+      {(card.kind === 'live-intel' || card.kind === 'laser-video') ? (
         <>
-          {/* Live Intel — full-card video background */}
+          {/* Full-card video background */}
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
             {mounted ? (
               <video
@@ -144,7 +144,7 @@ function InsightCard({ card, isDesktop, mounted }) {
                 preload="metadata"
                 poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
               >
-                <source src="/videos/about-us-animated.mp4" type="video/mp4" />
+                <source src={card.kind === 'laser-video' ? '/videos/laser-beam.mp4' : '/videos/about-us-animated.mp4'} type="video/mp4" />
               </video>
             ) : (
               <div
@@ -720,8 +720,15 @@ export default function HomePageClient() {
             const cards = [
               editorial,
               communityCard('IMPACT', 'Community Impact', impactPost),
-              communityCard('GUEST', 'Guest Columns', guestPost),
               communityCard('DEV', 'Developer Insight', devPost),
+              {
+                title: 'SIP vs Panic',
+                kicker: 'Intelligence',
+                postTitle: 'SIP vs Panic Selling',
+                desc: 'What happens when investors panic-sell vs stay disciplined during market crashes. Interactive simulation.',
+                href: '/intelligence/sip-vs-panic',
+                kind: 'laser-video',
+              },
               ic?.itr?.enabled === false ? null : merge({
                 title: 'ITR Filing Help',
                 kicker: 'Tool',
