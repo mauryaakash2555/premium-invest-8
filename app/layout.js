@@ -13,6 +13,10 @@ function getNormalizedHost(hdrs) {
 }
 
 const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim() || null;
+const ADSENSE_PUBLISHER_ID = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID?.trim() || null;
+const ADSENSE_SCRIPT_SRC = ADSENSE_PUBLISHER_ID
+	? `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(ADSENSE_PUBLISHER_ID)}`
+	: null;
 
 const playfair = Playfair_Display({
 	variable: '--font-playfair',
@@ -230,6 +234,17 @@ export default async function RootLayout({ children }) {
 
 				<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 				<meta name="theme-color" content="#090A0C" />
+
+				{/* Google AdSense (verification + ads script) */}
+				{ADSENSE_SCRIPT_SRC && (
+					<Script
+						id="adsense"
+						async
+						src={ADSENSE_SCRIPT_SRC}
+						crossOrigin="anonymous"
+						strategy="afterInteractive"
+					/>
+				)}
 
 				{/* JSON-LD (server-rendered to avoid hydration mismatch) */}
 				{!isStoreHost && (
