@@ -208,6 +208,9 @@ const Contact = () => {
     }
   };
 
+  const whatsappMessage = `Hi BM Wealth, I'd like to connect.\n\nName: ${formData.name || ''}\nEmail: ${formData.email || ''}\nPhone: ${formData.phone || ''}\n\nMessage: ${formData.message || ''}`;
+  const whatsappPrefillHref = `https://wa.me/918850977259?text=${encodeURIComponent(whatsappMessage)}`;
+
   return (
     <div>
 
@@ -518,7 +521,7 @@ const Contact = () => {
               </MobileScrollBoost>
 
               <MobileScrollBoost as="a" holdMs={6000}
-                href="https://wa.me/918850977259"
+                href={whatsappPrefillHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="glass-effect contact-info-card whatsapp-contact-card" style={{ padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px', textDecoration: 'none', cursor: 'pointer', border: '1px solid rgba(37, 211, 102, 0.2)' }}
@@ -783,7 +786,7 @@ const Contact = () => {
               {showWhatsAppFallback && (
                 <div data-whatsapp-fallback className="mt-6 text-center">
                   <a
-                    href="https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%27d%20like%20to%20connect"
+                    href={whatsappPrefillHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bm-btn inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl no-underline bm-wa-fallback"

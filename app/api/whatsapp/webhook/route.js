@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { WhatsAppFollowupsDB } from "@/lib/db/whatsappFollowups";
 import { logEventSafe } from "@/lib/db/events";
+import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
+import { EmailService } from "@/lib/email/emailService";
 
 export const runtime = "nodejs";
 
@@ -96,16 +98,30 @@ export async function POST(req) {
   const { leadId } = await WhatsAppFollowupsDB.findLeadIdByPhone(from);
   const stopRes = await WhatsAppFollowupsDB.stopPhone({ phone: from });
 
+  const inboundBody = String(bodyTwilio || bodyMeta || "").slice(0, 1000);
+  const inboundProvider = fromTwilio ? "twilio" : fromMeta ? "meta" : "unknown";
+
   await logEventSafe({
     leadId: leadId || null,
     event_type: "whatsapp_reply_received",
     data: {
       phone: from,
-      provider: fromTwilio ? "twilio" : fromMeta ? "meta" : "unknown",
-      body: String(bodyTwilio || bodyMeta || "").slice(0, 500),
+      provider: inboundProvider,
+      body: inboundBody.slice(0, 500),
       stopOk: Boolean(stopRes?.ok),
     },
   });
+
+  // Best-effort: email super admin with the inbound WhatsApp message.
+  try {
+    const prefs = await EmailPreferencesDB.getSafe();
+    await EmailService.sendWhatsAppInboundAlert({
+      to: prefs?.email_address,
+      inbound: { phone: from, provider: inboundProvider, body: inboundBody },
+    });
+  } catch {
+    // ignore
+  }
 
   return NextResponse.json({ ok: true });
 }

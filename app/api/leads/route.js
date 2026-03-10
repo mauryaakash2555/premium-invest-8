@@ -14,6 +14,9 @@ import { isFeatureEnabled } from "@/config/features";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
 import { sanitizeInput, validateLeadData, normalizePhone } from "@/lib/utils/validator";
+import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
+import { EmailService } from "@/lib/email/emailService";
+import { logEventSafe } from "@/lib/db/events";
 
 function isMissingLeadsTable(msg) {
   const m = String(msg || "");
@@ -44,6 +47,25 @@ export async function POST(req) {
   try {
     const lead = await upsertLead({ name, email, phone });
     await runPluginHook("onLeadCapture", { lead });
+
+    // Best-effort: notify super admin + log event.
+    try {
+      const prefs = await EmailPreferencesDB.getSafe();
+      await EmailService.sendLeadCapturedAlert({
+        to: prefs?.email_address,
+        lead,
+        source: String(body?.source || 'api_leads'),
+      });
+    } catch {
+      // ignore
+    }
+
+    await logEventSafe({
+      leadId: lead?.id || null,
+      event_type: 'lead_captured',
+      data: { source: String(body?.source || 'api_leads') },
+    });
+
     return NextResponse.json({ ok: true, lead });
   } catch (e) {
     const msg = String(e?.message || "");

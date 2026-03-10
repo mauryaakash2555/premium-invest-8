@@ -10,6 +10,8 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { EmailPreferencesDB } from '@/lib/db/emailPreferences';
+import { EmailService } from '@/lib/email/emailService';
 
 // Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -42,6 +44,22 @@ export async function POST(request) {
     if (!supabase) {
       // Log subscription if Supabase not configured
       console.log('[WhatsApp Opt-In]', { phone: phone.slice(-4), type, preferences });
+
+      // Best-effort email (even without DB)
+      try {
+        const prefsDb = await EmailPreferencesDB.getSafe();
+        await EmailService.sendWhatsAppInboundAlert({
+          to: prefsDb?.email_address,
+          inbound: {
+            phone: `+91${String(phone || '').trim()}`,
+            provider: 'opt-in',
+            body: `WhatsApp opt-in request (no DB): type=${String(type || 'live_intelligence')}`,
+          },
+        });
+      } catch {
+        // ignore
+      }
+
       return NextResponse.json({ success: true, stored: false });
     }
 
@@ -63,6 +81,23 @@ export async function POST(request) {
             updated_at: new Date().toISOString(),
           })
           .eq('id', existing.id);
+      }
+
+      // Best-effort notify super admin
+      try {
+        const prefsDb = await EmailPreferencesDB.getSafe();
+        await EmailService.sendWhatsAppInboundAlert({
+          to: prefsDb?.email_address,
+          inbound: {
+            phone: `+91${String(phone || '').trim()}`,
+            provider: 'opt-in',
+            body: existing.is_active
+              ? `WhatsApp opt-in updated: type=${String(type || 'live_intelligence')}`
+              : `WhatsApp opt-in reactivated: type=${String(type || 'live_intelligence')}`,
+          },
+        });
+      } catch {
+        // ignore
       }
       
       return NextResponse.json({ 
@@ -90,6 +125,21 @@ export async function POST(request) {
         { error: 'Failed to subscribe. Please try again.' },
         { status: 500 }
       );
+    }
+
+    // Best-effort notify super admin
+    try {
+      const prefsDb = await EmailPreferencesDB.getSafe();
+      await EmailService.sendWhatsAppInboundAlert({
+        to: prefsDb?.email_address,
+        inbound: {
+          phone: `+91${String(phone || '').trim()}`,
+          provider: 'opt-in',
+          body: `New WhatsApp opt-in: type=${String(type || 'live_intelligence')}`,
+        },
+      });
+    } catch {
+      // ignore
     }
 
     return NextResponse.json({

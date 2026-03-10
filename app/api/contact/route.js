@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
 
+import { upsertLead } from "@/lib/db/leads";
+import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
+import { EmailService } from "@/lib/email/emailService";
+import { logEventSafe } from "@/lib/db/events";
+import { sanitizeInput, validateLeadData, normalizePhone, validateEmail } from "@/lib/utils/validator";
+
+export const runtime = 'nodejs';
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://bmwealth-backend.onrender.com";
 
 function json(status, body) {
@@ -17,6 +25,43 @@ export async function POST(req) {
     payload = await req.json();
   } catch {
     return json(400, { success: false, detail: "Invalid JSON" });
+  }
+
+  // Best-effort: capture lead + notify super admin (never blocks proxy).
+  try {
+    const name = sanitizeInput(String(payload?.name || ''));
+    const email = sanitizeInput(String(payload?.email || '')).toLowerCase();
+    const phone = normalizePhone(sanitizeInput(String(payload?.phone || payload?.mobile || '')));
+    const message = String(payload?.message || '').toString().slice(0, 2000);
+    const page = String(payload?.page || '/contact');
+
+    let lead = null;
+    const { valid } = validateLeadData({ name, email, phone });
+
+    // Only upsert into leads if email is valid (leads table uses email as unique key).
+    if (valid && validateEmail(email)) {
+      lead = await upsertLead({ name, email, phone });
+    }
+
+    await logEventSafe({
+      leadId: lead?.id || null,
+      event_type: 'contact_form_submitted',
+      data: {
+        name,
+        email,
+        phone,
+        page,
+        message: String(message || '').slice(0, 500),
+      },
+    });
+
+    const prefs = await EmailPreferencesDB.getSafe();
+    await EmailService.sendContactFormAlert({
+      to: prefs?.email_address,
+      contact: { name, email, phone, message, page },
+    });
+  } catch {
+    // ignore
   }
 
   try {

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { LeadsDB } from "@/lib/db/leads";
 import { EmailService } from "@/lib/email/emailService";
 import { logEventSafe } from "@/lib/db/events";
+import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
 import { EmailFollowupsDB } from "@/lib/db/emailFollowups";
 import { WhatsAppFollowupsDB } from "@/lib/db/whatsappFollowups";
 import { buildTaxOptimizationFollowupEmail } from "@/lib/email/taxOptimizationFollowupTemplates";
@@ -124,6 +125,19 @@ export async function POST(req) {
     const { lead, error } = await LeadsDB.create({ name, email, phone });
     if (error) {
       return NextResponse.json({ ok: false, error: "lead_save_failed" }, { status: 500 });
+    }
+
+    // Best-effort: notify super admin for every captured lead.
+    try {
+      const prefs = await EmailPreferencesDB.getSafe();
+      await EmailService.sendLeadCapturedAlert({
+        to: prefs?.email_address,
+        lead,
+        source,
+        note: whatsappOptIn ? 'WhatsApp opt-in: YES' : 'WhatsApp opt-in: NO',
+      });
+    } catch {
+      // ignore
     }
 
     await logEventSafe({

@@ -6,6 +6,18 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 const LEADS_LIMIT = 200;
 const SUPABASE_TIMEOUT_MS = 8_000;
 
+function isMissingColumnError(err, columnName) {
+  const msg = String(err?.message || err || "");
+  const col = String(columnName || "");
+  if (!msg || !col) return false;
+  // Common PostgREST/Supabase shapes.
+  return (
+    msg.toLowerCase().includes('column') &&
+    msg.toLowerCase().includes(col.toLowerCase()) &&
+    (msg.toLowerCase().includes('does not exist') || msg.toLowerCase().includes('not found'))
+  );
+}
+
 async function withTimeout(promise, ms) {
   let t;
   const timeout = new Promise((_, reject) => {
@@ -87,17 +99,32 @@ export async function GET(req) {
 
   const { from, to } = computeRange(normalizedFilter);
 
-  let q = sb.from("leads").select("id,name,email,phone,created_at,lead_score").order("created_at", { ascending: false }).limit(LEADS_LIMIT);
-  if (from) q = q.gte("created_at", from.toISOString());
-  if (to) q = q.lt("created_at", to.toISOString());
+  const baseQuery = () => {
+    let q = sb.from("leads").order("created_at", { ascending: false }).limit(LEADS_LIMIT);
+    if (from) q = q.gte("created_at", from.toISOString());
+    if (to) q = q.lt("created_at", to.toISOString());
+    return q;
+  };
 
+  // Try selecting lead_score if present; if schema doesn't have it, fall back.
   let res;
   try {
-    res = await withTimeout(q, SUPABASE_TIMEOUT_MS);
+    res = await withTimeout(baseQuery().select("id,name,email,phone,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
   } catch (e) {
     const msg = String(e?.message || "failed");
     const status = msg === "timeout" ? 504 : 502;
     return NextResponse.json({ ok: false, error: msg }, { status });
+  }
+
+  if (res?.error && isMissingColumnError(res.error, 'lead_score')) {
+    // Retry without lead_score for backwards compatible schemas.
+    try {
+      res = await withTimeout(baseQuery().select("id,name,email,phone,created_at"), SUPABASE_TIMEOUT_MS);
+    } catch (e) {
+      const msg = String(e?.message || "failed");
+      const status = msg === "timeout" ? 504 : 502;
+      return NextResponse.json({ ok: false, error: msg }, { status });
+    }
   }
 
   if (res?.error) {
