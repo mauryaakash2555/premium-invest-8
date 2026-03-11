@@ -98,9 +98,9 @@ function normalizeBlogHtmlForPremium(html) {
     .replace(/Coming Next/gi, 'Next Read');
 }
 
-export default function BlogDetailClient({ slug }) {
-  const [post, setPost] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+export default function BlogDetailClient({ slug, initialPost = null }) {
+  const [post, setPost] = useState(initialPost);
+  const [isLoading, setIsLoading] = useState(!initialPost);
   const [scrollBoostSeed, setScrollBoostSeed] = useState(0);
   const articleRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -159,7 +159,9 @@ export default function BlogDetailClient({ slug }) {
       ? staticBlogData
       : [staticBlogPost];
     
-    const foundPost = allBlogs.find(p => p.slug === slug);
+    const foundPost = (initialPost && initialPost.slug === slug)
+      ? initialPost
+      : allBlogs.find((p) => p?.slug === slug);
     setPost(foundPost || null);
     setIsLoading(false);
 
@@ -189,7 +191,7 @@ export default function BlogDetailClient({ slug }) {
     })();
     // re-run DOM enhancements when content changes
     setScrollBoostSeed((s) => s + 1);
-  }, [slug]);
+  }, [slug, initialPost]);
 
   const allBlogs = useMemo(() => {
     return Array.isArray(staticBlogData) && staticBlogData.length > 0

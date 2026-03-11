@@ -93,7 +93,7 @@ export default async function BlogDetailPage({ params }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
       <Suspense fallback={null}>
-        <BlogDetailClient slug={slug} />
+        <BlogDetailClient slug={slug} initialPost={post} />
       </Suspense>
     </>
   );

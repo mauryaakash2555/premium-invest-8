@@ -23,9 +23,14 @@ export default async function robots() {
         disallow: [
           "/admin",
           "/admin/",
+          // NOTE: Do NOT disallow public-but-noindex pages (e.g., blog pillar pages).
+          // If disallowed, Google may not crawl them, so it can't see `noindex`.
+          // These routes are excluded from sitemap + output `noindex` via metadata.
           "/cdn-cgi/",
           "/_next/",
           "/api/",
+          "/track",
+          "/track/",
           "/admin-secret-akash",
           "/admin-secret-xyz",
           // Legacy store prefix (should never be indexed on main host)

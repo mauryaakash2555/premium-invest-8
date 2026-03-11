@@ -147,6 +147,7 @@ export default async function sitemap() {
     "/tools/itr-filing-help",
     // /blog is the canonical blog index (must not be a redirect-only URL)
     "/blog",
+    // Blog pillar indexes (keep explicit so they're present even if route discovery fails)
     "/blog/editorial",
     "/blog/impact",
     "/blog/guest",
