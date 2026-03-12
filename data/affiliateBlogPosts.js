@@ -8,6 +8,7 @@
 // --- BLOG 13: Scapia Credit Card Review ---
 export const staticBlogPost13 = {
   id: "blog-13",
+  isAffiliate: true,
   slug: "scapia-credit-card-review-federal-bank-2026",
   title: "Scapia Credit Card Review 2026: Is the Federal Bank Travel Card Worth It for Professionals?",
   author: "BM Wealth Editorial Team",
@@ -225,6 +226,7 @@ export const staticBlogPost13 = {
 // --- BLOG 14: SBI Elite Credit Card Review ---
 export const staticBlogPost14 = {
   id: "blog-14",
+  isAffiliate: true,
   slug: "sbi-elite-credit-card-review-2026",
   title: "SBI Elite Credit Card 2026: Full Review, Benefits, Fees & How to Apply Online",
   author: "BM Wealth Editorial Team",
@@ -336,6 +338,135 @@ export const staticBlogPost14 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Eligibility &amp; How to Apply</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Income Requirement</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">SBI Card requires a minimum annual income of ₹12 lakh for salaried applicants and ₹15 lakh ITR for self-employed applicants. In practice, applicants with existing SBI savings or salary accounts above ₹1 lakh monthly balance report smoother approvals.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Credit Score</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">A CIBIL score of 750 or above is the practical minimum. Applicants between 720–749 may still receive approval but with a lower initial credit limit (typically ₹1.5–3 lakh instead of ₹5–8 lakh). Scores below 720 are almost always declined for premium cards.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Documents Needed</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>PAN card (mandatory for KYC)</li>
+    <li>Aadhaar or passport for address verification</li>
+    <li>Latest 3 months' salary slips or 2 years' ITR for self-employed</li>
+    <li>6 months' bank statement showing consistent inflows above ₹1 lakh/month</li>
+    <li>Form 16 (salaried) — speeds up underwriting by 2–3 days</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Approval Timeline</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Online applications through sbicard.com typically receive a decision within 3–5 working days. Card dispatch takes an additional 5–7 working days after approval. Existing SBI account holders applying via net banking can see approvals within 48 hours. Branch applications tend to take 10–14 working days due to physical document processing.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real Spend Scenario: Is the Fee Worth It?</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">The annual fee is ₹4,999 + 18% GST = ₹5,899 effective. Whether that pays for itself depends entirely on your annual domestic card spend. Here are two realistic scenarios:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Scenario A: ₹6 Lakh Annual Spend</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Reward points earned: 6,00,000 ÷ 100 × 5 = 30,000 points</li>
+    <li>Point value at 0.25 paise each: ₹750</li>
+    <li>Milestone cashback at ₹5 lakh: ₹5,000</li>
+    <li>Fuel surcharge savings (₹4,000/month fuel): ~₹480/year</li>
+    <li>Lounge visits (4 per year at ₹1,200 each): ₹4,800</li>
+    <li><strong>Total value received: ~₹11,030</strong></li>
+    <li><strong>Net gain after fee: ₹11,030 − ₹5,899 = ₹5,131</strong></li>
+    <li>Annual fee is <strong>not</strong> waived (requires ₹10 lakh spend)</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Scenario B: ₹10 Lakh Annual Spend</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Reward points earned: 10,00,000 ÷ 100 × 5 = 50,000 points</li>
+    <li>Point value at 0.25 paise each: ₹1,250</li>
+    <li>Milestone cashbacks: ₹5,000 (at ₹5L) + ₹5,000 (at ₹10L) = ₹10,000</li>
+    <li>Fuel surcharge savings: ~₹480/year</li>
+    <li>Lounge visits (8 per year at ₹1,200 each): ₹9,600</li>
+    <li><strong>Total value received: ~₹21,330</strong></li>
+    <li>Annual fee: ₹0 (waived at ₹10 lakh spend)</li>
+    <li><strong>Net gain: ₹21,330</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Break-Even Point</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">If you use at least 4 lounge visits per year and hit the ₹5 lakh milestone, the card breaks even at approximately ₹3.5–4 lakh annual spend. Below ₹3.5 lakh, you are paying ₹5,899 for benefits worth less than ₹4,000 — a no-fee card like SBI SimplyCLICK is objectively better at that spend level.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">How SBI Elite Compares</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">The SBI Elite sits in the mid-premium tier. Here is how it stacks up against two frequently compared alternatives:</p>
+
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 16px; color: #E5E5E5;">
+      <thead>
+        <tr style="border-bottom: 2px solid color-mix(in oklab, var(--lux-accent) 40%, transparent);">
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Feature</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">SBI Elite</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">HDFC Regalia</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Axis Magnus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 12px;">Annual Fee</td>
+          <td style="padding: 12px;">₹4,999 (waiver at ₹10L)</td>
+          <td style="padding: 12px;">₹2,500 (waiver at ₹7.5L)</td>
+          <td style="padding: 12px;">₹12,500 (no waiver)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 12px;">Reward Rate</td>
+          <td style="padding: 12px;">5 pts/₹100 (~0.25%)</td>
+          <td style="padding: 12px;">4 pts/₹150 (~0.50%)</td>
+          <td style="padding: 12px;">12 pts/₹200 (~1.2%)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 12px;">Forex Markup</td>
+          <td style="padding: 12px;">3.5%</td>
+          <td style="padding: 12px;">2.0%</td>
+          <td style="padding: 12px;">2.0%</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 12px;">Lounge Access</td>
+          <td style="padding: 12px;">8/year (2 per quarter)</td>
+          <td style="padding: 12px;">12/year (via Priority Pass)</td>
+          <td style="padding: 12px;">Unlimited domestic</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 12px;">Best For</td>
+          <td style="padding: 12px;">High domestic spenders on SBI ecosystem</td>
+          <td style="padding: 12px;">Mid-spenders wanting travel perks</td>
+          <td style="padding: 12px;">₹15L+ spenders maximising point value</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">The SBI Elite's advantage is its low fee waiver threshold relative to the milestone cashbacks. At ₹10 lakh spend, you receive ₹10,000 in milestones alone — something neither Regalia nor Magnus offers in that form.</p>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">However, if your annual spend exceeds ₹15 lakh and you travel internationally more than 3 times a year, the Axis Magnus delivers significantly higher per-rupee value despite its ₹12,500 fee. For professionals spending ₹6–10 lakh primarily on domestic purchases, the SBI Elite remains the stronger cost-adjusted choice.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How do I get the SBI Elite annual fee waived?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Spend ₹10 lakh or more in the card anniversary year. The next year's annual fee (₹4,999 + GST) is automatically waived. There is no partial credit — spending ₹9.99 lakh still results in the full fee being charged. The anniversary year is measured from your card approval date, not the calendar year. You can check your current spend total in the SBI Card app under the 'Rewards &amp; Benefits' section. Utility bill payments, insurance premiums, and EMI transactions all count toward the ₹10 lakh threshold, but wallet loads and fuel transactions above ₹4,000 per transaction do not.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">When do SBI Elite reward points expire?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Reward points expire 2 years from the date they are earned. SBI Card does not send expiry reminders, so set a calendar check every 6 months. Unredeemed points worth ₹500+ should be converted to statement credit or Amazon vouchers before lapsing. The best redemption rate is through the SBI Card rewards catalogue for Amazon or Tanishq vouchers, where 1 point ≈ 0.25 paise. Avoid redeeming for merchandise — the point-to-rupee ratio drops to 0.15 paise or worse on physical products.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Should I use SBI Elite for international transactions?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">No. The 3.5% forex markup means a $1,000 international purchase costs you an extra ₹2,940 (at ₹84/USD) beyond the exchange rate. A zero-markup card like Scapia or HDFC Infinia saves that entire amount. Use SBI Elite exclusively for domestic spend and pair it with a dedicated travel card.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Does applying for the SBI Elite affect my credit score?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes, SBI Card performs a hard inquiry on your CIBIL report. This typically reduces your score by 5–15 points for 3–6 months. If you plan to apply for a home loan or other major credit within 6 months, time your card application accordingly. Avoid applying for multiple cards in the same quarter — each inquiry compounds the temporary drop.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">What is the best card to pair with SBI Elite?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">For most professionals, the ideal two-card setup is SBI Elite for all domestic spending (fuel, groceries, utilities, dining) plus Scapia Federal Bank for all international and online forex transactions. The SBI Elite handles the domestic milestone cashbacks and lounge access, while Scapia eliminates the 3.5% forex markup entirely at zero annual fee. Together these two cards cover 95% of a professional's payment needs at the lowest combined cost.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Final Thoughts</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
@@ -371,6 +502,7 @@ export const staticBlogPost14 = {
 // --- BLOG 15: Axis Bank Credit Cards Deep-Dive ---
 export const staticBlogPost15 = {
   id: "blog-15",
+  isAffiliate: true,
   slug: "axis-bank-credit-cards-salaried-professionals-2026",
   title: "Axis Bank Credit Cards for Salaried Professionals: Which One Fits Your Cashflow in 2026?",
   author: "BM Wealth Editorial Team",
@@ -567,6 +699,7 @@ export const staticBlogPost15 = {
 // --- BLOG 16: Best Travel Credit Cards Comparison (3 affiliate links) ---
 export const staticBlogPost16 = {
   id: "blog-16",
+  isAffiliate: true,
   slug: "best-travel-credit-cards-india-2026",
   title: "Best Travel Credit Cards India 2026: Scapia vs Axis Atlas vs SBI Elite — The Professional's Comparison",
   author: "BM Wealth Editorial Team",
@@ -724,6 +857,7 @@ export const staticBlogPost16 = {
 // --- BLOG 17: Cleartrip + Scapia Story ---
 export const staticBlogPost17 = {
   id: "blog-17",
+  isAffiliate: true,
   slug: "cleartrip-honeymoon-savings-credit-card-strategy",
   title: "How a Bandra Couple Saved ₹1.2 Lakh on Their European Honeymoon Using the Right Credit Card and Cleartrip",
   author: "BM Wealth Editorial Team",
@@ -878,6 +1012,7 @@ export const staticBlogPost17 = {
 // --- BLOG 18: Personal Loan vs Credit Card EMI ---
 export const staticBlogPost18 = {
   id: "blog-18",
+  isAffiliate: true,
   slug: "personal-loan-vs-credit-card-emi-professionals",
   title: "Personal Loan vs Credit Card EMI vs Liquidating Investments: What Mumbai Professionals Get Wrong",
   author: "BM Wealth Editorial Team",
@@ -1038,6 +1173,7 @@ export const staticBlogPost18 = {
 // --- BLOG 19: BookMap Review ---
 export const staticBlogPost19 = {
   id: "blog-19",
+  isAffiliate: true,
   slug: "bookmap-review-order-flow-trading-india-2026",
   title: "BookMap Review 2026: Is Order Flow Trading Worth ₹50,000/Year for Indian Traders?",
   author: "BM Wealth Editorial Team",
@@ -1201,6 +1337,7 @@ export const staticBlogPost19 = {
 // --- BLOG 20: Pepperstone Review ---
 export const staticBlogPost20 = {
   id: "blog-20",
+  isAffiliate: true,
   slug: "pepperstone-review-forex-broker-india-2026",
   title: "Pepperstone Review 2026: Should Indian Traders Consider a Global Forex Broker?",
   author: "BM Wealth Editorial Team",
@@ -1350,6 +1487,7 @@ export const staticBlogPost20 = {
 // --- BLOG 21: Wellness & Ayurvedic Brands for Corporate Gifting ---
 export const staticBlogPost21 = {
   id: "blog-21",
+  isAffiliate: true,
   slug: "best-wellness-ayurvedic-brands-corporate-gifting-india-2026",
   title: "The Best Wellness & Ayurvedic Brands for Corporate Gifting in 2026 — A Mumbai Professional's Guide",
   author: "BM Wealth Editorial Team",
@@ -1587,6 +1725,7 @@ export const staticBlogPost21 = {
 // --- BLOG 22: Switcher Studio Review ---
 export const staticBlogPost22 = {
   id: "blog-22",
+  isAffiliate: true,
   slug: "switcher-studio-review-live-streaming-finance-creators-2026",
   title: "Switcher Studio vs OBS vs StreamYard: Which Live Streaming Tool Should Financial Content Creators Use in 2026?",
   author: "BM Wealth Editorial Team",
@@ -1735,6 +1874,7 @@ export const staticBlogPost22 = {
 // --- BLOG 23: Cloudways Hosting Review ---
 export const staticBlogPost23 = {
   id: "blog-23",
+  isAffiliate: true,
   slug: "cloudways-vs-hostinger-digitalocean-hosting-indian-finance-blogs-2026",
   title: "Cloudways vs Hostinger vs DigitalOcean: Best Hosting for Indian Finance Blogs in 2026",
   author: "BM Wealth Editorial Team",
@@ -1882,6 +2022,7 @@ export const staticBlogPost23 = {
 // --- BLOG 24: OPPO Flagship Review ---
 export const staticBlogPost24 = {
   id: "blog-24",
+  isAffiliate: true,
   slug: "oppo-find-n5-review-professional-smartphone-india-2026",
   title: "OPPO Find N5 Review 2026: Is the Foldable Flagship Worth It for Indian Professionals?",
   author: "BM Wealth Editorial Team",

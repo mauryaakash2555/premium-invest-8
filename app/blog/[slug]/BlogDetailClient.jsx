@@ -28,6 +28,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Calendar, User, ArrowLeft, ChevronUp } from 'lucide-react';
 import { staticBlogData, staticBlogPost } from '@/data/staticBlogData';
 import BlogDisclaimer from '@/components/shared/BlogDisclaimer';
+import AffiliateDisclosure from '@/components/shared/AffiliateDisclosure';
 import { trackEvent } from '@/lib/analytics';
 
 // Blog engagement components
@@ -872,6 +873,8 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
             {post.excerpt}
           </p>
         )}
+
+        {post.isAffiliate && <AffiliateDisclosure />}
 
         {/* Content */}
         <div
