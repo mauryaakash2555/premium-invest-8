@@ -664,6 +664,76 @@ export const staticBlogPost15 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Eligibility &amp; How to Apply</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Income Requirements</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Axis Bank segments eligibility by card tier. The Flipkart and Ace cards require a minimum annual income of ₹3 lakh for salaried applicants — achievable for most professionals early in their careers. My Zone requires ₹4.5 lakh. The Magnus, as a premium product, requires ₹15 lakh annual income or an existing Axis relationship with ₹10 lakh+ in deposits. Self-employed applicants need ITR filings for the last 2 years showing equivalent income levels.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Credit Score</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">A CIBIL score of 720 or above is the practical minimum for Flipkart and Ace. For Magnus, Axis typically requires 750+. Applicants with existing Axis salary accounts in good standing often receive pre-approved offers with relaxed score thresholds. If your score is between 700–720, the Flipkart card is the most likely approval — apply for that first and build history before upgrading.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Documents &amp; Timeline</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>PAN card (mandatory for all applications)</li>
+    <li>Aadhaar or passport for KYC verification</li>
+    <li>Latest 3 months' salary slips (salaried) or 2 years' ITR (self-employed)</li>
+    <li>6 months' bank statement showing regular inflows</li>
+    <li>Form 16 for salaried applicants — speeds processing by 2–3 days</li>
+  </ul>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Online applications via the Axis Bank website or app typically receive decisions within 3–5 working days. Existing Axis savings or salary account holders applying through net banking often see approval within 48 hours. Card dispatch takes an additional 5–7 working days after approval. Branch applications are slower — typically 10–14 working days end-to-end.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real Spend Scenario: ₹8 Lakh Annual Spend</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Consider a salaried professional in Mumbai spending ₹8 lakh per year on cards — ₹2 lakh on online shopping (Flipkart, Amazon, Myntra), ₹1.2 lakh on utility bills, ₹1 lakh on dining, and ₹3.8 lakh on general purchases. Here is how each Axis card performs:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Flipkart Card Returns</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>₹2L Flipkart/Myntra at 5% = ₹10,000</li>
+    <li>₹1L dining (Swiggy/Uber) at 4% = ₹4,000</li>
+    <li>₹5L remaining at 1.5% = ₹7,500</li>
+    <li><strong>Total cashback: ₹21,500 | Annual fee: ₹0 | Net gain: ₹21,500</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Ace Card Returns</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>₹1.2L bills at 5% = ₹6,000</li>
+    <li>₹1L dining (Zomato/Swiggy) at 4% = ₹4,000</li>
+    <li>₹5.8L remaining at 2% = ₹11,600</li>
+    <li><strong>Total cashback: ₹21,600 | Annual fee: ₹0 | Net gain: ₹21,600</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Magnus Card Returns</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>₹8L total at ~1.2% equivalent reward value = ₹9,600</li>
+    <li>Lounge access value (if used 8 times): ₹9,600</li>
+    <li><strong>Total value: ₹19,200 | Annual fee: ₹14,750 (with GST) | Net gain: ₹4,450</strong></li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">At ₹8 lakh annual spend, both the Flipkart and Ace cards deliver approximately ₹21,500 in net cashback at zero cost. The Magnus — despite being the premium option — delivers only ₹4,450 net after its ₹14,750 fee. The Magnus only starts making sense above ₹18–20 lakh annual spend combined with frequent travel. For most salaried professionals, the free cards win decisively.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I get the Axis Flipkart card with no prior credit history?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. The Flipkart card is one of Axis Bank's entry-level products and is frequently approved for first-time credit card applicants. If you have an Axis salary account with 6+ months of regular deposits, pre-approval chances increase significantly. Without an existing Axis relationship, having a CIBIL score of 720+ (even from other credit like a two-wheeler loan) typically suffices. Initial credit limits for first-time cardholders are usually ₹50,000–₹1.5 lakh. If you have no CIBIL score at all (NTC — new to credit), consider applying for a secured credit card first or ensuring your salary account has at least ₹25,000 monthly inflow for 6 consecutive months to build a profile before applying.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Does cashback come as statement credit or Flipkart vouchers?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">On the Flipkart card, cashback on Flipkart and Myntra purchases is credited as Flipkart SuperCoins within 2 billing cycles — each SuperCoin is worth ₹1 and can be used on subsequent Flipkart purchases or converted to partner vouchers. Cashback on all other purchases is credited as a direct statement adjustment against your next bill. On the Ace card, all cashback — regardless of merchant category — is applied as a statement credit, making it significantly more flexible since you are not locked into any specific platform for redemption. My Zone rewards come as Axis Edge Reward points that must be redeemed through the Axis rewards catalogue, where 1 point equals approximately 0.25 paise — a lower per-point value than direct cashback.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I hold two Axis credit cards simultaneously?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. Axis Bank allows multiple credit cards per customer. A common strategy is holding both the Flipkart card (for online shopping) and the Ace card (for bills and general spends). Each card's cashback categories are independent. However, each new application generates a separate hard inquiry on your CIBIL report. Apply for both cards at least 3 months apart to minimise the temporary credit score impact.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Is there a cashback cap on the Axis Ace card?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. The 5% cashback on bill payments is capped at ₹500 per billing cycle (equivalent to ₹10,000 in qualifying spend per month). The 4% category cashback (Zomato, Swiggy, Ola) is also capped at ₹500 per cycle. However, the 2% baseline cashback on all other spends has no monthly cap, which is what makes the Ace card particularly valuable for high-volume general spenders. At ₹50,000 monthly general spend, you earn ₹1,000 in uncapped cashback alone.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How do I upgrade from Flipkart to Magnus later?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Axis Bank offers upgrade paths based on your spending and repayment history. After 12–18 months of consistent usage (timely full payments, average monthly spend above ₹40,000), you may receive an upgrade offer via the Axis mobile app or email. You can also call Axis customer service and request an upgrade review. The key metrics they evaluate are: average monthly spend, repayment consistency (full payment vs minimum due), and whether your income has increased since the original application. Upgrades within the same bank do not require a new hard inquiry on your credit report. The typical upgrade path is Flipkart → Ace → My Zone → Magnus, though Axis may offer skip upgrades directly from Flipkart to My Zone if your spend and income justify it. When upgrading, your existing credit limit is usually preserved or increased, and any accumulated reward points transfer to the new card automatically.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Final Thoughts</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
@@ -824,6 +894,72 @@ export const staticBlogPost16 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real Cost Scenario: ₹3 Lakh International Spend</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Consider a professional who spends ₹3 lakh internationally per year — a mix of travel bookings, SaaS subscriptions (Notion, Figma, GitHub), international e-commerce, and dining abroad. Here is the actual cost comparison:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Scapia (Federal Bank)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Forex markup: ₹0 (zero markup)</li>
+    <li>Cashback at 1%: ₹3,000</li>
+    <li>Annual fee: ₹0</li>
+    <li><strong>Net benefit: +₹3,000</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Axis Atlas</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Forex markup at 2%: −₹6,000</li>
+    <li>GST on markup (18%): −₹1,080</li>
+    <li>Reward points value (at optimal transfer): ~₹4,500</li>
+    <li>Annual fee: −₹5,900 (₹5,000 + GST)</li>
+    <li><strong>Net cost: −₹8,480</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">SBI Elite</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Forex markup at 3.5%: −₹10,500</li>
+    <li>GST on markup (18%): −₹1,890</li>
+    <li>Reward points value: ~₹750</li>
+    <li>Annual fee: −₹5,899 (if not waived)</li>
+    <li><strong>Net cost: −₹17,539</strong></li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">The difference between Scapia and SBI Elite on ₹3 lakh international spend is ₹20,539 per year — enough to fund a weekend trip or 4 months of a ₹5,000 SIP. Even compared to the Atlas, Scapia saves ₹11,480. The only scenario where Atlas wins is if you consistently redeem points at 2x+ value through airline transfer partners, which requires significant effort and spend volume above ₹8 lakh internationally.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Eligibility &amp; Getting These Cards</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Scapia</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Scapia's application is fully digital — no branch visit required. Minimum annual income is ₹3 lakh. CIBIL score of 700+ is sufficient. The card is issued by Federal Bank, so applicants do not need an existing Scapia or Federal Bank account. Approval typically takes 2–4 working days, with card delivery within 7 days. The initial credit limit is usually ₹1–3 lakh, scaling up after 6 months of consistent usage.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Axis Atlas</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Requires minimum annual income of ₹9 lakh (salaried) or ₹12 lakh ITR (self-employed). CIBIL score of 750+ is the practical threshold. Axis salary account holders with 12+ months of history may receive pre-approved offers at relaxed criteria. Application is available online via Axis Bank website. Approval takes 5–7 working days for non-Axis customers. No fee waiver option — the ₹5,000 + GST annual fee is mandatory.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">SBI Elite</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Requires minimum annual income of ₹12 lakh. CIBIL score of 750+ recommended. SBI savings account holders applying via net banking receive faster processing (48 hours vs 5–7 days). Annual fee of ₹4,999 + GST is waived if annual spend exceeds ₹10 lakh — making it effectively free for high domestic spenders. Documents needed: PAN, Aadhaar, 3 months' salary slips, and 6 months' bank statements.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How does Scapia offer zero forex markup and still make money?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Scapia earns revenue from interchange fees charged to merchants on every transaction (typically 1.5–2.5% of the transaction value paid by the merchant's bank). Since Scapia has no branch infrastructure or legacy systems, their operational costs are significantly lower than traditional banks, allowing them to pass the forex markup savings to cardholders. The model is similar to how fintech cards like Revolut and Wise operate globally. Additionally, Scapia earns from late payment fees and interest charges on revolving balances — common revenue streams for any credit card issuer. Their customer acquisition cost is also lower since they rely on digital-only distribution rather than branch networks or DSA commissions.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I use Scapia for recurring SaaS subscriptions in USD?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. Scapia works for all international online transactions including recurring subscriptions to services like Notion ($10/month), GitHub ($4/month), Figma ($15/month), ChatGPT ($20/month), and similar tools. Each transaction is billed at the live Visa exchange rate with zero additional markup. For professionals spending $100–300/month on international SaaS tools, this saves ₹2,400–₹7,200 per year compared to a card with 2% markup. Recurring subscriptions are processed automatically without needing monthly re-authorisation, and the 1% cashback applies to each recurring charge as well — adding an additional ₹1,000–₹3,000 in annual statement credits on top of the forex savings.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Is it worth having both a Scapia and an SBI Elite?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">This is the optimal two-card setup for most high-earning professionals. Use Scapia exclusively for all international and forex transactions (travel, SaaS, foreign e-commerce) and SBI Elite for all domestic spending (fuel, groceries, utilities, dining). The SBI Elite earns milestone cashbacks up to ₹10,000/year on domestic spend, while Scapia eliminates all forex costs internationally. Together, they deliver the highest combined return at the lowest cost. The total annual fee for this combination is ₹0 if your domestic spend exceeds ₹10 lakh (SBI Elite fee waived) — making it the most cost-efficient premium card combination available in India today for professionals earning ₹12 lakh or more.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">What happens if Scapia increases its markup later?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Card issuers can modify terms with 30 days' written notice. However, Scapia's zero-markup positioning is its core competitive advantage — changing it would eliminate their primary differentiator. If they ever introduce markup, you would receive advance notice and could switch to alternatives like the Niyo Global card (Federal Bank) or Fi Money card, both of which currently offer zero or near-zero forex markup. Having a backup zero-markup card is always prudent.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Does the Axis Atlas make sense for anyone?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Yes — but only for a specific profile. If you spend ₹10 lakh+ internationally per year and actively manage airline/hotel loyalty programmes (transferring points to Marriott Bonvoy, Air India, Singapore Airlines, etc.), the Atlas reward points can yield 2–3x their base value through strategic transfers. At that scale, the 2% markup and ₹5,900 annual fee are offset by the enhanced redemption value. For professionals spending under ₹5 lakh internationally, Scapia is unambiguously better on pure cost. The Atlas also makes strategic sense as a secondary card for business travellers whose companies reimburse card fees — you keep the loyalty points while the company absorbs the markup cost and annual fee through expense claims.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Final Thoughts</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
@@ -976,6 +1112,68 @@ export const staticBlogPost17 = {
   <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
     The same discipline that drives investment efficiency — comparing costs, avoiding unnecessary fees, and choosing tools that align with your actual usage — applies directly to travel planning.
   </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Who This Strategy Works For</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Amit and Priya's framework is not specific to European honeymoons. It applies to any international trip where you control the booking and payment method. The two conditions are:</p>
+
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li><strong>International spend above ₹1.5 lakh:</strong> Below this threshold, the forex markup savings (~₹3,500 on ₹1 lakh at 3.5%) are noticeable but not transformative. Above ₹3 lakh, the savings become significant enough to fund additional activities or redirect into investments.</li>
+    <li><strong>Flexible booking timeline (30+ days ahead):</strong> Cleartrip's bundle pricing and promotional offers are most competitive when booked 4–8 weeks in advance. Last-minute bookings offer less price advantage versus direct airline or hotel bookings.</li>
+    <li><strong>Multi-city itineraries:</strong> The bundle discount on Cleartrip scales with complexity. A single-city, single-hotel trip may not show meaningful savings versus Booking.com. A 3-city trip with flights and hotels bundled typically shows 10–18% aggregate savings.</li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Professionals planning annual international holidays, destination weddings, or sabbatical travel should build this two-tool approach (zero-markup card + bundled booking platform) into their planning checklist. The savings compound: a couple saving ₹1 lakh per trip who travel internationally twice a year redirects ₹2 lakh annually into investments — worth ₹12–15 lakh over a decade at 12% CAGR.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Applying the Framework to Other Destinations</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Here is how estimated savings scale across popular international destinations from India, assuming the same two-tool approach (Scapia + Cleartrip bundling) versus a standard 3.5% markup card with separate bookings:</p>
+
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 16px; color: #E5E5E5;">
+      <thead>
+        <tr style="border-bottom: 2px solid color-mix(in oklab, var(--lux-accent) 40%, transparent);">
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Destination</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Trip Budget</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Forex Saving</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Booking Saving</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Total Estimated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">Southeast Asia (10 days)</td><td style="padding: 14px;">₹2.5 lakh</td><td style="padding: 14px;">₹6,500</td><td style="padding: 14px;">₹18,000</td><td style="padding: 14px;">₹24,500</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">Europe (14 days)</td><td style="padding: 14px;">₹6.5 lakh</td><td style="padding: 14px;">₹13,400</td><td style="padding: 14px;">₹72,000</td><td style="padding: 14px;">₹85,400</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">Japan (10 days)</td><td style="padding: 14px;">₹4.0 lakh</td><td style="padding: 14px;">₹9,400</td><td style="padding: 14px;">₹32,000</td><td style="padding: 14px;">₹41,400</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">USA/Canada (14 days)</td><td style="padding: 14px;">₹8.0 lakh</td><td style="padding: 14px;">₹18,800</td><td style="padding: 14px;">₹60,000</td><td style="padding: 14px;">₹78,800</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">Maldives (5 days)</td><td style="padding: 14px;">₹3.5 lakh</td><td style="padding: 14px;">₹8,200</td><td style="padding: 14px;">₹22,000</td><td style="padding: 14px;">₹30,200</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Booking savings vary by season, advance booking window, and destination competitiveness. The forex savings are deterministic — they depend only on the international spend amount and the markup rate eliminated. Even for a modest Southeast Asia trip at ₹2.5 lakh, the combined savings of ₹24,500 represent a 10% reduction in total trip cost with zero compromise on quality.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Does Cleartrip always offer lower prices than booking directly with airlines?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Not always. For single one-way flights, direct airline bookings and Cleartrip prices are often identical or within ₹200–500. Cleartrip's advantage appears in two scenarios: (1) return flights, where platform-aggregated fares are frequently ₹3,000–₹8,000 lower due to inventory agreements with airlines, and (2) bundled flight + hotel bookings for multi-city trips, where the aggregate discount compounds to 10–18%. Always compare both options — the 5-minute price check is worth the potential ₹30,000+ saving. Additionally, Cleartrip occasionally runs flash sales and exclusive promotional codes that reduce prices below what airlines offer directly, especially during off-peak travel windows in January, February, and September.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I apply for Scapia if I already have another Federal Bank card?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. Scapia credit cards are issued independently through Federal Bank's digital card infrastructure. Having an existing Federal Bank account or credit card does not prevent a Scapia application. However, if you already hold a Federal Bank credit card with a high limit, your combined credit exposure may affect the initial limit offered on the Scapia card. Federal Bank evaluates total credit exposure across all cards when setting individual limits. If your existing Federal Bank card has a ₹5 lakh limit, the Scapia card may initially receive a lower limit (₹1–2 lakh) until your repayment track record on both cards is established over 6 months.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">What if I need to cancel flights booked through Cleartrip?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Cleartrip's cancellation policies mirror the underlying airline's terms. For refundable fares, the refund is processed within 7–14 working days to your original payment method. Non-refundable fares follow the airline's cancellation charges, typically ₹3,000–₹6,000 per passenger for international routes. Cleartrip charges no additional cancellation fee beyond the airline's own charges. For bundled bookings, flight and hotel cancellations are processed independently — cancelling one does not automatically cancel the other.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Is it better to carry forex cash or use the Scapia card abroad?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">For 90% of your international spend, use the Scapia card. Card payments are processed at the live Visa exchange rate with zero markup, which is typically 0.5–1% better than airport or bank forex counter rates. Carry a small amount of local currency (equivalent of ₹5,000–₹10,000) for street vendors, tips, and transit systems that do not accept cards. Avoid buying large amounts of forex cash — the exchange rate spread at counters is 2–4%, worse than any credit card markup.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How far in advance should I book international travel for maximum savings?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">The optimal booking window for international flights from India is 6–10 weeks before departure. Prices typically hit their lowest point 45–60 days out and then climb steadily as the departure date approaches. For hotels, 4–6 weeks ahead offers the best balance of availability and pricing. Booking 90+ days in advance often locks you into non-refundable rates with minimal price advantage over the 6-week mark. During peak seasons (December, Diwali, summer holidays), extend the window to 10–12 weeks for flights to ensure seat availability at competitive fares. For platforms like Cleartrip, Tuesday and Wednesday bookings tend to show marginally lower prices than weekend bookings for the same routes and dates — airlines update inventory pricing mid-week, and aggregators like Cleartrip reflect these adjustments within hours.</p>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -1140,6 +1338,86 @@ export const staticBlogPost18 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real Cost Scenario: ₹3 Lakh Medical Expense</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Consider a salaried professional in Pune facing a ₹3 lakh medical expense not covered by insurance. They need to repay within 12 months. Here is the actual rupee-for-rupee comparison of each financing route:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Personal Loan (₹3 lakh, 12 months, 12% p.a.)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Monthly EMI: ₹26,647</li>
+    <li>Total interest paid: ₹19,764</li>
+    <li>Processing fee (2%): ₹6,000</li>
+    <li><strong>Total cost of borrowing: ₹25,764</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Credit Card EMI (₹3 lakh, 12 months, 15% p.a.)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Monthly EMI: ₹27,125</li>
+    <li>Total interest paid: ₹25,500</li>
+    <li>Processing fee: ₹499 (flat)</li>
+    <li><strong>Total cost of borrowing: ₹25,999</strong></li>
+    <li>Credit utilisation impact: High — ₹3 lakh blocks significant card limit for 12 months</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Liquidating Equity Mutual Funds (₹3 lakh withdrawal)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Exit load (if held under 1 year at 1%): ₹3,000</li>
+    <li>Short-term capital gains tax (15% on ₹40,000 gains): ₹6,000</li>
+    <li>Lost compounding over 5 years (at 12% CAGR): ₹2,28,745 − ₹3,00,000 = ~₹78,000 in foregone growth if reinvested</li>
+    <li><strong>Effective cost: ₹9,000 immediate + ₹78,000 opportunity cost = ₹87,000</strong></li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">At 12 months tenure, the personal loan and credit card EMI cost nearly the same (~₹25,800–₹26,000). But the personal loan preserves your credit card limit for everyday use, while the CC EMI blocks ₹3 lakh of available credit for a full year. Liquidating investments is the most expensive option by far — ₹87,000 in total cost versus ₹26,000 for a loan. The numbers are clear: borrow first, preserve investments.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Total Cost Comparison</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">A side-by-side summary of borrowing costs at different amounts and tenures:</p>
+
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 16px; color: #E5E5E5;">
+      <thead>
+        <tr style="border-bottom: 2px solid color-mix(in oklab, var(--lux-accent) 40%, transparent);">
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Scenario</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Personal Loan</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">CC EMI</th>
+          <th style="text-align: left; padding: 14px; color: var(--lux-accent);">Liquidation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">₹1L, 3 months</td><td style="padding: 14px;">₹3,500</td><td style="padding: 14px;">₹2,300</td><td style="padding: 14px;">₹14,000+</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">₹1L, 6 months</td><td style="padding: 14px;">₹5,800</td><td style="padding: 14px;">₹5,100</td><td style="padding: 14px;">₹18,000+</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">₹3L, 12 months</td><td style="padding: 14px;">₹25,764</td><td style="padding: 14px;">₹25,999</td><td style="padding: 14px;">₹87,000+</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">₹5L, 24 months</td><td style="padding: 14px;">₹62,000</td><td style="padding: 14px;">₹82,000</td><td style="padding: 14px;">₹1,80,000+</td></tr>
+        <tr style="border-bottom: 1px solid rgba(229,229,229,0.1);"><td style="padding: 14px;">₹5L, 36 months</td><td style="padding: 14px;">₹95,000</td><td style="padding: 14px;">Not recommended</td><td style="padding: 14px;">₹2,40,000+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">The pattern is consistent: for short tenures (3–6 months) and amounts under ₹2 lakh, credit card EMI wins on total cost because the processing fee is flat (₹499) versus percentage-based for personal loans. Beyond 6 months and ₹2 lakh, personal loans become cheaper due to lower interest rates. Liquidation is always the most expensive route when opportunity cost is included.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Does a personal loan affect my home loan eligibility?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. Banks calculate your FOIR (Fixed Obligations to Income Ratio) when processing home loan applications. An active personal loan EMI reduces your available income for the home loan EMI calculation. For example, if you earn ₹1.5 lakh/month and have a ₹27,000 personal loan EMI, banks will calculate your home loan eligibility on ₹1.23 lakh — reducing your maximum home loan by approximately ₹8–12 lakh. If you plan to apply for a home loan within 12 months, prefer credit card EMI for smaller amounts to avoid the FOIR impact.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I prepay a credit card EMI early without penalty?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Most card issuers allow early closure of EMI conversions, but policies vary. SBI Card charges a 3% foreclosure fee on the outstanding principal. Axis Bank charges 2% plus GST. HDFC charges 3% on the remaining tenure's interest. Some issuers (like ICICI) offer zero-foreclosure EMI options on select cards — confirm before converting. The foreclosure fee is almost always worth paying if you receive a lump sum (bonus, tax refund) that allows early closure, because the interest saving on the remaining months exceeds the fee.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">What about loan against mutual funds instead of a personal loan?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Loan against mutual funds (LAMF) is often the cheapest borrowing option for professionals with ₹5 lakh+ in liquid or equity mutual fund holdings. Interest rates are typically 9–10.5% p.a. — lower than personal loans (12%+) and significantly lower than credit card EMIs (15%+). Your mutual fund units remain invested and continue earning returns; they serve as collateral without being liquidated. LAMF does not appear on your CIBIL report as a loan since it is a secured overdraft facility, making it invisible to future lenders. The main limitation: maximum loan-to-value is typically 50–65% of your mutual fund portfolio value.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How does credit utilisation from EMI conversion affect my CIBIL score?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Credit card EMI conversion blocks the converted amount from your available credit limit for the entire tenure. If your card limit is ₹5 lakh and you convert ₹3 lakh to EMI, your available limit drops to ₹2 lakh — pushing your credit utilisation above 60%. CIBIL penalises utilisation above 30%. This temporary score drop (typically 20–40 points) persists until the EMI is fully repaid. If you need a clean CIBIL report for a home loan application in 6 months, avoid large CC EMI conversions and use a personal loan instead — it does not affect credit utilisation metrics.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Should I use my emergency fund instead of borrowing?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Only if the expense qualifies as a genuine emergency (medical crisis, job loss, urgent home repair) and your emergency fund covers 6+ months of expenses after the withdrawal. Depleting your emergency fund for a planned expense (renovation, vacation, wedding) creates a dangerous gap — the next unexpected expense will force you into high-cost borrowing under pressure. The rule is simple: if the expense is predictable and repayable within 12 months, borrow at the lowest available rate. If it is a true emergency and borrowing is not feasible within 48 hours, use the emergency fund and replenish it within 3 months.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Final Thoughts</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
@@ -1301,6 +1579,83 @@ export const staticBlogPost19 = {
   <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
     Sierra Chart is cheaper and more customisable but requires significant technical setup. Jigsaw is solid for futures-only traders. BookMap's advantage is the visual clarity of its heatmap and its crypto exchange integrations.
   </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real Trading Scenario: Does the Cost Pay for Itself?</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Consider a trader operating with ₹15 lakh capital, making 12 trades per day on ES (S&amp;P 500) futures via an international broker. Without order flow data, their win rate is 52% with an average profit of 2 ticks per winning trade and average loss of 2.5 ticks per losing trade. Here is how BookMap potentially changes the maths:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Without BookMap (Baseline)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>12 trades/day × 52% win rate = 6.24 wins, 5.76 losses</li>
+    <li>Gross profit: 6.24 × 2 ticks × $12.50 = $156/day</li>
+    <li>Gross loss: 5.76 × 2.5 ticks × $12.50 = $180/day</li>
+    <li><strong>Net daily P&amp;L: −$24/day (losing strategy before commissions)</strong></li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">With BookMap (Improved Entries)</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Same 12 trades/day but win rate improves to 56% (conservative 4-point increase from better entry timing)</li>
+    <li>Gross profit: 6.72 × 2 ticks × $12.50 = $168/day</li>
+    <li>Gross loss: 5.28 × 2.5 ticks × $12.50 = $165/day</li>
+    <li><strong>Net daily P&amp;L: +$3/day before commissions</strong></li>
+    <li>Monthly improvement: ~$540/month (≈₹45,000)</li>
+    <li>BookMap Digital+ cost: ~₹3,300/month</li>
+    <li><strong>Net monthly gain from BookMap: ~₹41,700</strong></li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">A 4-percentage-point improvement in win rate — which order flow data makes plausible for disciplined scalpers — transforms a losing strategy into a profitable one. At 12 trades per day with ₹15 lakh capital, the ₹3,300/month subscription pays for itself within the first two trading days of each month. However, note the critical dependency: this improvement requires consistent discipline in reading the heatmap. Traders who subscribe but do not invest the 50–100 hours of deliberate practice on replay mode to learn pattern recognition will see no improvement — turning BookMap into an expensive monthly donation.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Getting Started: 30-Day Evaluation Plan</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">If you are considering BookMap, follow this structured 30-day evaluation before committing to a paid subscription:</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Week 1: Free Tier Setup</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Create a free BookMap account and install the desktop application</li>
+    <li>Connect to delayed data feed (available for free on crypto pairs)</li>
+    <li>Spend 30 minutes daily on replay mode, studying how the heatmap looks before and after major price moves</li>
+    <li>Focus on one instrument only (BTC/USDT or ES futures)</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Week 2: Pattern Recognition</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Learn to identify: absorption (large orders being filled without price moving), spoofing (large orders placed and pulled), and iceberg orders</li>
+    <li>Journal 20+ observations linking heatmap patterns to subsequent price action</li>
+    <li>Watch BookMap's free tutorial library (approximately 8 hours of structured content)</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Week 3: Paper Trading</h3>
+  <ul style="margin: 0 0 22px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Use replay mode to simulate live trading decisions based on order flow data</li>
+    <li>Record your paper trade entries and exits with timestamps</li>
+    <li>Measure your hypothetical win rate and compare it against your existing journaled results</li>
+  </ul>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Week 4: Decision Point</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">After 30 days of free-tier evaluation, you should have enough data to decide. If your paper trade results show a measurable improvement in entry timing (even 1–2 ticks better average entry) and you trade frequently enough for that edge to compound, upgrade to Digital+ (₹3,300/month). If you saw no clear improvement, the tool is not suited to your trading style — and that is valuable information that cost you nothing. Do not upgrade on excitement alone; upgrade on evidence from your own journal.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Frequently Asked Questions</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I use BookMap for Indian stock market (NSE/BSE) trading?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Not directly. BookMap does not currently integrate with Indian exchanges (NSE, BSE, MCX). It supports CME, Eurex, and major crypto exchanges (Binance, Bybit, OKX). Indian traders use BookMap primarily for US futures (ES, NQ, CL), forex pairs via supported brokers, and crypto markets. If your trading is exclusively on NSE/BSE, BookMap offers no direct benefit — consider alternatives like Zerodha's depth data or GoCharting for Indian order flow visualisation.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">What internet speed does BookMap require?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">BookMap processes real-time Level 2 market data, which requires a stable connection of at least 10 Mbps download speed with low latency (under 100ms to data servers). Most urban broadband connections in India (Jio Fiber, Airtel Xstream) comfortably meet this requirement. However, wireless connections (4G/5G) can introduce packet loss during peak hours, causing heatmap rendering delays. For serious trading, use a wired Ethernet connection. BookMap also requires a computer with at least 8GB RAM and a dedicated GPU for smooth heatmap rendering at high tick rates.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Is BookMap worth it for crypto-only traders?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">For crypto scalpers trading BTC, ETH, or SOL on exchanges like Binance with capital above ₹5 lakh and 10+ daily trades, BookMap offers the best heatmap visualisation available. Crypto order books are thinner than futures markets, meaning large orders have proportionally larger price impact — and BookMap makes these visible in real time. The Digital+ plan at ₹3,300/month includes all major crypto exchange connections. For spot holders or swing traders with 1–3 trades per week, the tool adds minimal value relative to its cost.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">Can I cancel BookMap at any time?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Yes. BookMap offers monthly subscriptions with no lock-in period. You can cancel from the account settings page at any time, and your access continues until the end of the current billing period. Annual subscriptions (which offer approximately 20% discount versus monthly) are also cancellable with the remaining period refunded on a pro-rata basis. If you start with a paid plan immediately, the cancellation flexibility means your maximum risk is one month's subscription fee (₹3,300–₹5,400).</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 14px;">How long does it take to become proficient with BookMap?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Based on community feedback and BookMap's own estimates, most traders need 50–100 hours of deliberate practice (combining tutorial study, replay mode, and paper trading) before they can consistently read heatmap patterns in real time. At 1–2 hours per day, this translates to 2–3 months of daily practice. The most common mistake is subscribing to a paid plan on day one and expecting immediate results. Order flow reading is a skill — like reading candlestick patterns — that develops gradually through repetition and journalling. Start with the free tier and invest the learning time before investing money.</p>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
