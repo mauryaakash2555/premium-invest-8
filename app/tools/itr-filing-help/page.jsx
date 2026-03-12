@@ -1129,6 +1129,24 @@ export default function ITRFilingHelp() {
     return { amount: 0, label: 'Nil' };
   }, [taxResult, fields?.tds]);
 
+  const showDownloadBanner = step === 'payment_success' || (paymentSuccessData && step === 'details');
+
+  // ── Masking helper: hides sensitive values on-screen before payment ──
+  const isPaid = showDownloadBanner;
+  const maskValue = (value, type) => {
+    if (isPaid) return value; // no masking after payment
+    const s = String(value ?? '');
+    if (type === 'pan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXXX' : s;
+    if (type === 'tan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXX' : s;
+    if (type === 'amount') {
+      const digits = s.replace(/[^0-9]/g, '');
+      if (digits.length >= 2) return '₹' + digits.slice(0, 2) + ',XX,XXX';
+      return s;
+    }
+    if (type === 'name') return s.length > 20 ? s.slice(0, 20) + '...' : s;
+    return value;
+  };
+
   const itrDetailsRows = useMemo(() => {
     const fmtMoney = (n) => {
       const v = Number(n || 0);
@@ -1194,24 +1212,6 @@ export default function ITRFilingHelp() {
     // But since we can't call hooks conditionally, we'll just render the details UI directly here
     // with the Download PDF banner at the top.
   }
-
-  const showDownloadBanner = step === 'payment_success' || (paymentSuccessData && step === 'details');
-
-  // ── Masking helper: hides sensitive values on-screen before payment ──
-  const isPaid = showDownloadBanner;
-  const maskValue = (value, type) => {
-    if (isPaid) return value; // no masking after payment
-    const s = String(value ?? '');
-    if (type === 'pan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXXX' : s;
-    if (type === 'tan') return s.length >= 4 ? s.slice(0, 4) + 'XXXXXX' : s;
-    if (type === 'amount') {
-      const digits = s.replace(/[^0-9]/g, '');
-      if (digits.length >= 2) return '₹' + digits.slice(0, 2) + ',XX,XXX';
-      return s;
-    }
-    if (type === 'name') return s.length > 20 ? s.slice(0, 20) + '...' : s;
-    return value;
-  };
 
   return (
     <div
