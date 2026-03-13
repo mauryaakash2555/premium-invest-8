@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { ArrowRight, Award, ShieldCheck, Sparkles, Target, Users } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Sparkles, Target, Users } from 'lucide-react';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -52,6 +52,34 @@ export default function AboutUsPage() {
   const storyRef = useRef(null);
   const [wordIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const faqs = [
+    {
+      question: 'What regulatory credentials does BM Wealth hold?',
+      answer:
+        "BM Wealth holds AMFI registration (ARN 90008) for mutual fund distribution, PMS empanelment (Cert. 2430447816) for portfolio management services, and IRDAI licensing (277925) for insurance distribution — all issued by India's primary financial regulators.",
+    },
+    {
+      question: 'What is the minimum investment to work with BM Wealth?',
+      answer:
+        'For PMS engagements, the regulatory minimum is Rs. 50 lakh. For mutual fund and insurance advisory, there is no fixed minimum — though our focus is on clients with investable surplus above Rs. 25 lakh who are looking for structured, long-term wealth management.',
+    },
+    {
+      question: 'How is BM Wealth different from a bank relationship manager?',
+      answer:
+        'A bank relationship manager is incentivised to sell in-house products. BM Wealth is an independent distributor — we work across multiple fund houses, PMS providers, and insurers, and our recommendations are based on client fit, not product targets.',
+    },
+    {
+      question: 'How does BM Wealth earn — fees or commissions?',
+      answer:
+        'BM Wealth earns distributor commission as per AMFI and IRDAI regulations — disclosed transparently at the time of each transaction. There are no hidden charges. Distribution remuneration follows industry-standard norms set by regulators.',
+    },
+    {
+      question: 'How do I begin the onboarding process?',
+      answer:
+        'The first step is a complimentary consultation where we review your current portfolio, goals, and risk profile. From there we propose a structured plan before any product recommendation is made. You can initiate this via the Contact page or WhatsApp concierge.',
+    },
+  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -208,16 +236,13 @@ export default function AboutUsPage() {
             </h2>
             <div className="mt-10 space-y-6">
               <p className="text-base leading-[2] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
-                Led by <span className="text-[color:var(--lux-foreground-80)] font-medium">Brahmdeo Maurya</span>, BM Wealth serves
-                investors from early-career SIP starters to established entrepreneurs managing complex portfolios.
+                BM Wealth is a Mumbai-based wealth advisory firm led by <span className="text-[color:var(--lux-foreground-80)] font-medium">Brahmdeo Maurya</span>, a seasoned wealth advisor with decades of client experience across portfolios, mutual funds, insurance, and long-horizon financial planning.
               </p>
               <p className="text-base leading-[2] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
-                Since 1989, we’ve focused on disciplined execution, transparent communication, and documentation-first workflows.
-                The goal is simple: help you make decisions with clarity — not pressure.
+                The practice was built on a PMS-first philosophy that prioritises structured, accountable portfolio decisions over generic advice or reactive commentary. We focus on clarity before action and process before product.
               </p>
               <p className="text-base leading-[2] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
-                Our support spans portfolio management (PMS), mutual fund distribution, SIP execution, and insurance distribution —
-                with disclosure-led processes and suitability checks at every step.
+                Every engagement begins with a documented investment rationale, clear objectives, and a review framework that can be revisited calmly over time. That structure helps preserve context and accountability as portfolios evolve, so clients have a disciplined path they can understand, question, and monitor with confidence through changing market conditions.
               </p>
             </div>
           </div>
@@ -236,71 +261,119 @@ export default function AboutUsPage() {
             </div>
 
             <div className="mt-10 grid grid-cols-1 gap-6">
-              {[
-                { k: 'PMS Certification', v: '2430447816' },
-                { k: 'AMFI Registration', v: 'ARN 90008' },
-                { k: 'IRDAI License', v: '277925' },
-              ].map((row) => (
-                <div key={row.k} className="flex items-start justify-between gap-6 border-t border-[color:var(--lux-foreground-05)] pt-6">
-                  <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-40)]">{row.k}</div>
-                  <div className="text-sm tracking-[0.12em] text-[color:var(--lux-foreground-80)]">{row.v}</div>
+              <div className="flex items-start justify-between gap-6 border-t border-[color:var(--lux-foreground-05)] pt-6">
+                <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-40)]">AMFI ARN 90008</div>
+                <div className="max-w-[420px] text-sm leading-[1.9] tracking-[0.04em] text-[color:var(--lux-foreground-60)] text-right">
+                  AMFI-registered Mutual Fund Distributor. All mutual fund transactions are processed through AMFI-regulated channels on behalf of clients.
                 </div>
-              ))}
+              </div>
+              <div className="flex items-start justify-between gap-6 border-t border-[color:var(--lux-foreground-05)] pt-6">
+                <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-40)]">PMS Certification 2430447816</div>
+                <div className="max-w-[420px] text-sm leading-[1.9] tracking-[0.04em] text-[color:var(--lux-foreground-60)] text-right">
+                  SEBI-empanelled PMS Distributor. Clients access structured portfolio management through SEBI-regulated PMS providers.
+                </div>
+              </div>
+              <div className="flex items-start justify-between gap-6 border-t border-[color:var(--lux-foreground-05)] pt-6">
+                <div className="text-[11px] tracking-[0.25em] uppercase font-medium text-[color:var(--lux-foreground-40)]">IRDAI License 277925</div>
+                <div className="max-w-[420px] text-sm leading-[1.9] tracking-[0.04em] text-[color:var(--lux-foreground-60)] text-right">
+                  IRDAI-licensed Insurance Distributor. Insurance recommendations are backed by a valid IRDAI distribution license.
+                </div>
+              </div>
             </div>
 
             <div className="mt-10 border-t border-[color:var(--lux-foreground-05)] pt-8">
               <div className="text-base leading-[2] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
-                Our approach combines practical planning and calm execution: we explain risks and costs, document disclosures, and help
-                you stay aligned to goals across market cycles.
+                These credentials sit inside a review-led operating model: product access is always paired with documentation, periodic evaluation, and communication that remains understandable even when markets are noisy.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PRINCIPLES */}
+      {/* PHILOSOPHY */}
       <section className="px-6 md:px-12 lg:px-24 py-28 md:py-32 border-t border-[color:var(--lux-foreground-05)]">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between gap-10 flex-wrap">
             <div>
-              <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">Principles</div>
+              <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">Our philosophy</div>
               <h2 className={`${cormorant.className} mt-6 text-4xl md:text-5xl font-medium text-[color:var(--lux-foreground-80)]`}>
-                Premium service — measured in process.
+                Wealth management built on structure, not noise.
               </h2>
             </div>
             <MotionLine delay={0.2} />
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                icon: Users,
-                title: 'Client-first suitability',
-                body: 'Every recommendation starts with goals, constraints, and risk comfort — not market noise.',
-              },
-              {
-                icon: Award,
-                title: 'Professional standards',
-                body: 'Documentation, disclosures, and disciplined execution across mutual funds, PMS support, and insurance.',
-              },
-              {
-                icon: ShieldCheck,
-                title: 'Trust through clarity',
-                body: 'Transparent costs and risks — so decisions feel calm, deliberate, and well understood.',
-              },
-            ].map((card, i) => (
+          <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-9 md:p-10">
+              <div className="flex items-center gap-4">
+                <div className="h-11 w-11 flex items-center justify-center rounded-full border border-[color:var(--lux-foreground-10)] text-[color:var(--lux-accent)]">
+                  <ShieldCheck className="h-5 w-5" strokeWidth={1.5} />
+                </div>
+                <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">01</div>
+              </div>
+              <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>Our Philosophy</div>
+              <div className="mt-5 space-y-5 text-[15px] leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
+                <p>
+                  Wealth management is not about chasing returns. It is about structured decision-making, documented reviews, and clear accountability at every stage. BM Wealth operates on a review-first model — every client portfolio is evaluated periodically against stated goals, not market noise.
+                </p>
+                <p>
+                  We believe the most valuable thing a wealth advisor can offer is not a product recommendation, but a disciplined process that holds up in both bull and bear markets. That means suitability before execution, clarity before action, and a written framework that can be revisited with confidence when circumstances change. A disciplined review cycle protects judgment when markets become emotional, and helps keep decisions anchored to objectives rather than headlines.
+                </p>
+              </div>
+            </div>
+
+            <div className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-9 md:p-10">
+              <div className="flex items-center gap-4">
+                <div className="h-11 w-11 flex items-center justify-center rounded-full border border-[color:var(--lux-foreground-10)] text-[color:var(--lux-accent)]">
+                  <Users className="h-5 w-5" strokeWidth={1.5} />
+                </div>
+                <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">02</div>
+              </div>
+              <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>Who We Serve</div>
+              <div className="mt-5 space-y-5 text-[15px] leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
+                <p>
+                  BM Wealth works with Mumbai-based professionals, business owners, and families with investable surplus above Rs. 25 lakh. Our clients are not looking for tips or shortcuts — they want a structured wealth partner who documents decisions, follows through on reviews, and communicates clearly.
+                </p>
+                <p>
+                  Many are balancing multiple financial priorities at once: portfolio growth, liquidity planning, protection, tax efficiency, and long-term family goals. Most want a long-term advisory relationship rather than intermittent transaction help. We do not take on clients we cannot serve well. The relationship is designed for people who value consistency, accountability, and a steady advisory process over improvisation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-6 md:px-12 lg:px-24 py-28 md:py-32 border-t border-[color:var(--lux-foreground-05)]">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center justify-between gap-10 flex-wrap">
+            <div>
+              <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">Questions</div>
+              <h2 className={`${cormorant.className} mt-6 text-4xl md:text-5xl font-medium text-[color:var(--lux-foreground-80)]`}>
+                Questions people ask before they begin.
+              </h2>
+            </div>
+            <MotionLine delay={0.2} />
+          </div>
+
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {faqs.map((faq, index) => (
               <div
-                key={card.title}
+                key={faq.question}
                 className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-9 md:p-10"
               >
                 <div className="flex items-center gap-4">
                   <div className="h-11 w-11 flex items-center justify-center rounded-full border border-[color:var(--lux-foreground-10)] text-[color:var(--lux-accent)]">
-                    <card.icon className="h-5 w-5" strokeWidth={1.5} />
+                    {index % 2 === 0 ? <Target className="h-5 w-5" strokeWidth={1.5} /> : <Sparkles className="h-5 w-5" strokeWidth={1.5} />}
                   </div>
-                  <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">0{i + 1}</div>
+                  <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">0{index + 1}</div>
                 </div>
-                <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>{card.title}</div>
-                <div className="mt-5 text-[15px] leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)]">{card.body}</div>
+                <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>
+                  {faq.question}
+                </div>
+                <div className="mt-5 text-[15px] leading-[1.9] tracking-wide font-light text-[color:var(--lux-foreground-60)]">
+                  {faq.answer}
+                </div>
               </div>
             ))}
           </div>
