@@ -51,6 +51,16 @@ const TradingServices = () => {
         'Risk management is a set of controls—position sizing, exit levels, and exposure limits—designed to keep downsides manageable during adverse moves.',
     },
     {
+      question: 'What is the difference between NSE and BSE?',
+      answer:
+        'NSE (National Stock Exchange) and BSE (Bombay Stock Exchange) are India’s two main stock exchanges. Many stocks are listed on both; prices are usually close due to arbitrage, but liquidity and volumes can differ by stock and segment.',
+    },
+    {
+      question: 'How are trading profits taxed in India?',
+      answer:
+        'Tax treatment depends on the instrument and how you trade. Delivery equity trades are typically taxed as capital gains, while intraday equity is generally treated as speculative business income and F&O is commonly treated as non-speculative business income. Rules can change—consult a tax professional for your facts.',
+    },
+    {
       question: 'Are the platform links affiliate links?',
       answer:
         'Some platform links may be affiliate links. If you sign up through them, we may earn a commission at no extra cost to you.',
@@ -219,52 +229,93 @@ const TradingServices = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Trading Styles (At a Glance)
+            Understanding Trading in India
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
-            {[
-              { t: 'Delivery investing', d: 'Typically used for longer horizons, with fewer decisions and lower churn.' },
-              { t: 'Intraday trading', d: 'Higher frequency with tighter risk controls; execution discipline matters.' },
-              { t: 'Derivatives (F&O)', d: 'Advanced segment; margin and risk can change quickly with volatility.' },
-            ].map((x) => (
-              <div key={x.t} className="svc-card" style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: TITLE, fontWeight: 600 }}>{x.t}</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: BODY, lineHeight: '1.75' }}>{x.d}</p>
-              </div>
-            ))}
+          <div className="svc-card" style={card}>
+            <p style={{ margin: 0, fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
+              Trading in India broadly falls into delivery trading (you buy/sell and take delivery in your demat account), intraday trading (positions are opened and
+              closed the same day), and derivatives or F&O (futures and options) where leverage can amplify outcomes. Access requires a demat + trading account with KYC
+              and segment activation, and brokers may ask for additional declarations or income proof for derivatives. SEBI regulates markets and brokers follow rules on
+              margins, risk management, and disclosures. Because losses can occur quickly—especially in intraday and derivatives—
+              trading should be approached with risk limits, capital discipline, and a process you can follow consistently.
+            </p>
           </div>
         </section>
 
-        <div aria-hidden="true" style={divider} />
-
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Delivery vs Intraday vs F&O — Neutral Comparison
+            Delivery vs Intraday vs F&O — A Comparison
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
-            {[
-              {
-                t: 'Delivery',
-                a: 'Often chosen for simplicity and longer horizons.',
-                b: 'Requires patience and alignment with the plan.',
-              },
-              {
-                t: 'Intraday',
-                a: 'Often chosen for short-term opportunities and tighter cycles.',
-                b: 'Demands discipline, limits, and emotional control.',
-              },
-              {
-                t: 'F&O',
-                a: 'Often chosen for hedging or advanced strategies.',
-                b: 'Leverage can amplify losses quickly; only for those who understand it.',
-              },
-            ].map((x) => (
-              <div key={x.t} className="svc-card" style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: TITLE, fontWeight: 600 }}>{x.t}</h3>
-                <p style={{ margin: '0 0 10px 0', fontSize: '15px', color: BODY, lineHeight: '1.75' }}>{x.a}</p>
-                <p style={{ margin: 0, fontSize: '14px', color: MUTED, lineHeight: '1.75' }}>{x.b}</p>
-              </div>
-            ))}
+          <div className="svc-card" style={{ ...card, padding: 0 }}>
+            <div style={{ overflowX: 'auto', padding: '18px 20px 20px 20px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '760px' }}>
+                <thead>
+                  <tr>
+                    {['Factor', 'Delivery', 'Intraday', 'F&O'].map((h) => (
+                      <th
+                        key={h}
+                        style={{
+                          textAlign: 'left',
+                          padding: '12px 12px',
+                          fontSize: '13px',
+                          letterSpacing: '0.02em',
+                          color: TITLE,
+                          borderBottom: `1px solid ${BORDER}`,
+                        }}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      k: 'Risk level',
+                      d: 'Typically lower than leveraged segments; still market risk.',
+                      i: 'Higher due to speed and tight moves; discipline matters.',
+                      f: 'Highest for many users due to leverage and volatility sensitivity.',
+                    },
+                    {
+                      k: 'Capital required',
+                      d: 'Flexible; based on price and position sizing.',
+                      i: 'Often smaller per trade but requires buffer for losses and costs.',
+                      f: 'Margin-based; can require meaningful buffers depending on strategy.',
+                    },
+                    {
+                      k: 'Time commitment',
+                      d: 'Lower frequency; monitoring can be periodic.',
+                      i: 'High; requires active monitoring during market hours.',
+                      f: 'High for active strategies; risk can change quickly.',
+                    },
+                    {
+                      k: 'Tax treatment',
+                      d: 'Usually taxed as capital gains (subject to holding period rules).',
+                      i: 'Often treated as speculative business income for equity intraday.',
+                      f: 'Commonly treated as non-speculative business income (F&O).',
+                    },
+                  ].map((row) => (
+                    <tr key={row.k}>
+                      {[row.k, row.d, row.i, row.f].map((cell, idx) => (
+                        <td
+                          key={`${row.k}-${idx}`}
+                          style={{
+                            padding: '14px 12px',
+                            fontSize: '14px',
+                            lineHeight: '1.75',
+                            color: idx === 0 ? TITLE : BODY,
+                            borderBottom: `1px solid ${BORDER}`,
+                            verticalAlign: 'top',
+                          }}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -281,73 +332,21 @@ const TradingServices = () => {
 
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Our Role
+            How BM Wealth Supports Traders
           </h2>
           <div className="svc-card" style={card}>
             <p style={{ margin: '0 0 12px 0', fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
-              We help you set up the right plumbing and process—platform selection, onboarding checklist, and risk-first structure.
+              BM Wealth supports traders with a structured setup — platform selection guidance, demat onboarding support, and a documented execution framework. This is
+              not tips or calls. The focus is a repeatable process: checklists, risk-first sizing thinking, and clarity on costs and segments so decisions are deliberate.
             </p>
-            <p style={{ margin: '0 0 10px 0', fontSize: '16px', color: BODY, lineHeight: '1.85' }}>Our role is to:</p>
             <ul style={{ margin: 0, paddingLeft: '18px', color: BODY, lineHeight: '1.85', fontSize: '16px' }}>
-              <li>Support demat onboarding and documentation flow</li>
-              <li>Help compare platforms based on your requirements</li>
-              <li>Share a disciplined execution framework and risk controls</li>
+              <li>Platform comparison based on stability, costs, and workflow</li>
+              <li>Demat onboarding support and documentation flow</li>
+              <li>Execution framework (sizing, limits, review routine)</li>
             </ul>
             <p style={{ margin: '16px 0 0 0', fontSize: '16px', color: MUTED, lineHeight: '1.8' }}>
               Trading decisions remain with the client.
             </p>
-          </div>
-        </section>
-
-        <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Quick Start
-          </h2>
-          <div className="svc-card" style={{ ...card, padding: '24px' }}>
-            <p style={{ margin: '0 0 14px 0', fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
-              If you want a clean setup, start with your segment choice and costs, then move to onboarding support.
-            </p>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <Link
-                href="/platforms"
-                className="svc-cta"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '12px 20px',
-                  borderRadius: '999px',
-                  border: `1px solid rgba(${ACCENT_RGB}, 0.28)`,
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)',
-                  boxShadow: `0 14px 45px rgba(${ACCENT_RGB}, 0.14)`,
-                  backdropFilter: 'blur(12px)',
-                  color: '#ffffff',
-                  fontWeight: 600,
-                  letterSpacing: '0.01em',
-                  textDecoration: 'none',
-                }}
-              >
-                Compare Platforms <span aria-hidden="true">→</span>
-              </Link>
-              <Link
-                href="/contact"
-                className="svc-cta"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(255,255,255,0.14)',
-                  background: 'rgba(255,255,255,0.04)',
-                  color: BODY,
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                }}
-              >
-                Talk to BM Wealth <span aria-hidden="true">→</span>
-              </Link>
-            </div>
           </div>
         </section>
 

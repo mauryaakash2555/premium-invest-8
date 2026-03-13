@@ -56,9 +56,18 @@ const PortfolioManagement = () => {
       answer:
         'Different assets grow at different rates. Over time, a portfolio can become more aggressive or conservative than intended unless it’s reviewed and rebalanced.',
     },
+    {
+      question: 'What are the tax implications of PMS in India?',
+      answer:
+        'In PMS, you typically own the underlying securities directly, so taxation usually follows the tax rules applicable to those securities (for example, equity capital gains rules for equity shares). The exact impact depends on churn, holding periods, and the strategy; consult a tax professional.',
+    },
+    {
+      question: 'Can NRIs invest in PMS?',
+      answer:
+        'Many PMS providers allow NRI participation, but eligibility, documentation, and repatriation rules can vary by provider and account type (NRE/NRO). It’s best to confirm onboarding requirements and compliance steps with the PMS provider before proceeding.',
+    },
   ];
 
-  
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -199,7 +208,7 @@ const PortfolioManagement = () => {
             A Structured Way to Allocate, Review, and Rebalance
           </p>
           <p style={{ fontSize: '16px', color: MUTED, maxWidth: '920px', margin: '0 auto', lineHeight: '1.8' }}>
-            Portfolio planning is about designing a structure you can hold through cycles—then reviewing it with calm, periodic discipline. The goal is clarity, consistency, and controlled risk.
+            Portfolio planning is about designing a structure you can hold through cycles—then reviewing it with calm, periodic discipline.
           </p>
         </div>
       </section>
@@ -256,27 +265,6 @@ const PortfolioManagement = () => {
                     <p style={{ margin: 0, fontSize: '15px', color: BODY, lineHeight: '1.75' }}>{x.d}</p>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <div aria-hidden="true" style={divider} />
-
-        <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Portfolio Planning in One Minute
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
-            {[
-              { t: 'Asset allocation', d: 'Decide how much to hold across equity, debt, and other assets—based on timeline and comfort.' },
-              { t: 'Diversification', d: 'Spread exposure so one theme or position doesn’t dominate outcomes.' },
-              { t: 'Rebalancing', d: 'Bring the portfolio back to target weights as markets move.' },
-              { t: 'Review cadence', d: 'Periodic reviews plus event-driven reviews after major life changes.' },
-            ].map((x) => (
-              <div key={x.t} className="svc-card" style={card}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: TITLE, fontWeight: 600 }}>{x.t}</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: BODY, lineHeight: '1.75' }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -343,54 +331,115 @@ const PortfolioManagement = () => {
           </div>
         </section>
 
+        <div aria-hidden="true" style={divider} />
+
         <section style={{ marginBottom: '56px' }}>
           <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
-            Quick Start
+            What is Portfolio Management Services (PMS)?
           </h2>
-          <div className="svc-card" style={{ ...card, padding: '24px' }}>
-            <p style={{ margin: '0 0 14px 0', fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
-              If you want structure: define goals and timeline first, then set an allocation and a calm review cadence.
+          <div className="svc-card" style={card}>
+            <p style={{ margin: 0, fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
+              Portfolio Management Services (PMS) is a SEBI-regulated investment service where a professional portfolio manager manages a portfolio of stocks,
+              bonds, or other securities on behalf of a client. Unlike mutual funds, PMS typically gives you direct ownership of the underlying securities and
+              visibility into every transaction and holding. The strategy is personalised based on your goals, risk profile, and constraints, and can differ meaningfully
+              across providers (for example, concentrated vs diversified approaches, or value vs growth styles). In India, the regulatory minimum investment for PMS is
+              ₹50 lakh.
             </p>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <Link
-                href="/tools"
-                className="svc-cta"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '12px 20px',
-                  borderRadius: '999px',
-                  border: `1px solid rgba(${ACCENT_RGB}, 0.28)`,
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)',
-                  boxShadow: `0 14px 45px rgba(${ACCENT_RGB}, 0.14)`,
-                  backdropFilter: 'blur(12px)',
-                  color: '#ffffff',
-                  fontWeight: 600,
-                  letterSpacing: '0.01em',
-                  textDecoration: 'none',
-                }}
-              >
-                Explore Tools <span aria-hidden="true">→</span>
-              </Link>
-              <Link
-                href="/contact"
-                className="svc-cta"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(255,255,255,0.14)',
-                  background: 'rgba(255,255,255,0.04)',
-                  color: BODY,
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                }}
-              >
-                Talk to BM Wealth <span aria-hidden="true">→</span>
-              </Link>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            How BM Wealth Approaches PMS Distribution
+          </h2>
+          <div className="svc-card" style={card}>
+            <p style={{ margin: 0, fontSize: '16px', color: BODY, lineHeight: '1.85' }}>
+              BM Wealth is empanelled with multiple SEBI-registered PMS providers. We evaluate each provider on track record, strategy clarity, drawdown history,
+              portfolio construction, and fee structure — not just headline returns. We also review concentration risk and turnover. Clients receive a written comparison
+              before any recommendation so the trade-offs are clear and the decision remains deliberate.
+            </p>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '56px' }}>
+          <h2 style={{ fontSize: '36px', color: TITLE, marginBottom: '18px', fontWeight: '600', fontFamily: '"Playfair Display", serif' }}>
+            PMS vs Mutual Funds — Key Differences
+          </h2>
+          <div className="svc-card" style={{ ...card, padding: 0 }}>
+            <div style={{ padding: '18px 20px 0 20px' }}>
+              <p style={{ margin: 0, fontSize: '14px', color: MUTED, lineHeight: '1.75' }}>
+                A neutral comparison. Exact details can vary by provider and scheme.
+              </p>
+            </div>
+            <div style={{ overflowX: 'auto', padding: '14px 20px 20px 20px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '720px' }}>
+                <thead>
+                  <tr>
+                    {['Factor', 'PMS', 'Mutual Funds'].map((h) => (
+                      <th
+                        key={h}
+                        style={{
+                          textAlign: 'left',
+                          padding: '12px 12px',
+                          fontSize: '13px',
+                          letterSpacing: '0.02em',
+                          color: TITLE,
+                          borderBottom: `1px solid ${BORDER}`,
+                        }}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      k: 'Direct ownership',
+                      pms: 'Typically direct ownership of underlying securities in your name.',
+                      mf: 'You own fund units; the scheme holds the underlying securities.',
+                    },
+                    {
+                      k: 'Minimum investment',
+                      pms: 'Regulatory minimum ₹50 lakh (India).',
+                      mf: 'Often accessible with small amounts (e.g., SIPs).',
+                    },
+                    {
+                      k: 'Customisation',
+                      pms: 'Higher customisation potential based on mandate and provider policy.',
+                      mf: 'Limited; investors follow a common scheme portfolio.',
+                    },
+                    {
+                      k: 'Transparency',
+                      pms: 'Detailed portfolio statements; transaction-level visibility is common.',
+                      mf: 'Periodic portfolio disclosures; you typically don’t see each transaction.',
+                    },
+                    {
+                      k: 'Tax treatment',
+                      pms: 'Usually follows tax rules of underlying securities you own; depends on holding period and churn.',
+                      mf: 'Tax depends on mutual fund category and holding period (per applicable rules).',
+                    },
+                  ].map((row) => (
+                    <tr key={row.k}>
+                      {[row.k, row.pms, row.mf].map((cell, i) => (
+                        <td
+                          key={`${row.k}-${i}`}
+                          style={{
+                            padding: '14px 12px',
+                            fontSize: '14px',
+                            lineHeight: '1.75',
+                            color: i === 0 ? TITLE : BODY,
+                            borderBottom: `1px solid ${BORDER}`,
+                            verticalAlign: 'top',
+                          }}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
