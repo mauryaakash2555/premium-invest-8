@@ -167,17 +167,20 @@ export default function ToolsHubPage() {
               <ToolCard
                 title="Retirement Gap Stress Test"
                 href="/tools/retirement-gap"
-                active={false}
+                subtitle="Corpus gap • Inflation-adjusted • SIP to close gap"
+                active
               />
               <ToolCard
                 title="Lumpsum Growth Planner"
                 href="/tools/lumpsum-planner"
-                active={false}
+                subtitle="Maturity projection • SIP comparison • Wealth multiplier"
+                active
               />
               <ToolCard
                 title="Human Life Value Shield"
                 href="/tools/insurance-value"
-                active={false}
+                subtitle="Coverage gap • Income replacement • Term insurance estimate"
+                active
               />
               <ToolCard
                 active

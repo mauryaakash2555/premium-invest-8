@@ -49,6 +49,7 @@ export const metadata = {
     title: "Dashboard | BM Wealth",
     description: "Demo dashboard view for BM Wealth Next.",
     path: PATH,
+    robots: { index: false, follow: false },
   }),
 };
 
