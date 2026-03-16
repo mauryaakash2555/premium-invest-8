@@ -125,7 +125,7 @@ export default function AboutUsPage() {
             muted
             loop
             playsInline
-            preload={isDesktop ? 'metadata' : 'none'}
+            preload={isDesktop ? 'auto' : 'none'}
             poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23101018' width='1' height='1'/%3E%3C/svg%3E"
           >
             <source src="/videos/about-us-animated.mp4" type="video/mp4" />

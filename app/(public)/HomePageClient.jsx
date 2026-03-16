@@ -49,19 +49,22 @@ function InsightCard({ card, isDesktop, mounted }) {
   const ref = useRef(null);
   const isMobile = useIsMobile();
   const [animating, setAnimating] = useState(false);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (!isMobile) return;
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setAnimating(true);
-          window.setTimeout(() => setAnimating(false), 1000);
+          setInView(true);
+          if (isMobile) {
+            setAnimating(true);
+            window.setTimeout(() => setAnimating(false), 1000);
+          }
         }
       },
-      { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+      { threshold: 0.1, rootMargin: '200px 0px 200px 0px' }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -134,14 +137,14 @@ function InsightCard({ card, isDesktop, mounted }) {
         <>
           {/* Full-card video background */}
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
-            {mounted ? (
+            {mounted && inView ? (
               <video
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                 autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="auto"
                 poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%230a0a0a' width='1' height='1'/%3E%3C/svg%3E"
               >
                 <source src={card.kind === 'laser-video' ? '/videos/laser-beam.mp4' : '/videos/about-us-animated.mp4'} type="video/mp4" />
