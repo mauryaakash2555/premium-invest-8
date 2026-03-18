@@ -87,6 +87,23 @@ export default function LumpsumPlannerToolPage() {
         <div className="max-w-6xl mx-auto">
           <LumpsumPlannerCalculator />
 
+          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/70">How to use this tool</div>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed">
+              Enter the lumpsum amount, expected annual return, and time horizon. Click Calculate to see projected maturity,
+              total gain, and the equivalent monthly SIP that would reach the same maturity.
+            </p>
+            <ul className="mt-3 text-sm text-white/75 leading-relaxed list-disc pl-5 space-y-1">
+              <li>Use the equivalent SIP as a planning lens for affordability (monthly cashflow).</li>
+              <li>If you worry about timing risk, treat the result as a target and deploy via an STP approach.</li>
+              <li>Interpret returns as illustrative assumptions, not guarantees.</li>
+            </ul>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              <span className="text-white/85 font-semibold">Example:</span> Lumpsum <span className="text-white">₹10,00,000</span>
+              at <span className="text-white">12%</span> for <span className="text-white">10 years</span> to estimate maturity and SIP equivalence.
+            </p>
+          </div>
+
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>

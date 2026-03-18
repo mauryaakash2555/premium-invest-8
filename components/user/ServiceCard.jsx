@@ -71,6 +71,17 @@ export default function ServiceCard({ service, index = 0 }) {
   const isPremiumImageCard = isMutualFunds || isPortfolioManagement || isInsurance || isTradingServices || isFixedDeposits || isSip;
   const premiumObjectPosition = imagePresentation?.objectPosition || (isPortfolioManagement ? '50% 50%' : '62% 42%');
   const premiumImageClassName = `mutual-bg-image${isPortfolioManagement ? ' mutual-bg-image--pms' : ''}`;
+  const defaultCardSizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+  const fixedServiceCardSizes = '(max-width: 768px) 100vw, 411px';
+  const isFixedSizesServiceImage =
+    typeof service?.image === 'string' &&
+    [
+      '/services/SIP.png',
+      '/services/FD.png',
+      '/services/Portfolio%20Management.png',
+      '/services/Mutual%20Funds.png',
+    ].includes(service.image);
+  const cardImageSizes = isFixedSizesServiceImage ? fixedServiceCardSizes : defaultCardSizes;
 
   return (
     <Link href={service.link} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -131,7 +142,7 @@ export default function ServiceCard({ service, index = 0 }) {
                   objectFit: 'cover',
                   objectPosition: premiumObjectPosition,
                 }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes={cardImageSizes}
                 priority={index < 3}
               />
             </div>
@@ -244,7 +255,7 @@ export default function ServiceCard({ service, index = 0 }) {
                   padding: imageFit === 'contain' ? imageBoxPadding : undefined,
                   ...(imagePresentation?.style || {}),
                 }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes={cardImageSizes}
                 priority={index < 3}
               />
             </div>

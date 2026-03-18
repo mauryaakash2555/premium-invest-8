@@ -573,6 +573,19 @@ const Contact = () => {
             >
               Send Us a Message
             </h2>
+
+            <div style={{ marginTop: '-14px', marginBottom: '24px', maxWidth: '720px' }}>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.75, margin: 0 }}>
+                Use this form if you want a clear, specific answer — whether it’s about SIP execution, mutual fund portfolio structure,
+                tax regime choices, insurance coverage gaps, or simply getting your next steps organised. The faster we understand your
+                context, the faster we can respond.
+              </p>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.75, margin: '12px 0 0 0' }}>
+                Helpful details to include: your goal and time horizon, approximate monthly surplus (if SIP), existing investments (if
+                any), and what decision you are trying to make right now. If you prefer instant fallback, WhatsApp is available on this
+                page as well.
+              </p>
+            </div>
             <form onSubmit={handleSubmit} data-testid="contact-form">
               <div style={{ marginBottom: '24px' }}>
                 <label

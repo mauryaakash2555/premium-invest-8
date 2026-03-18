@@ -178,6 +178,23 @@ export default function TaxOptimizationToolPage() {
         <div className="w-full max-w-6xl mx-auto">
           <TaxCalculator />
 
+          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/70">How to use this tool</div>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed">
+              Enter your annual salary and deductions, then click Calculate to compare estimated Old vs New regime tax.
+              Use the winner and savings as a starting point, then validate against your Form 16 and proofs.
+            </p>
+            <ul className="mt-3 text-sm text-white/75 leading-relaxed list-disc pl-5 space-y-1">
+              <li>Fill salary + deductions (80C/80D/NPS) first; add HRA fields only if applicable.</li>
+              <li>Review the breakdown to sanity-check slab-wise tax and rebate logic.</li>
+              <li>Use the result as an estimate and confirm with your filing workflow before you commit to investments.</li>
+            </ul>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              <span className="text-white/85 font-semibold">Example:</span> Salary <span className="text-white">₹25,00,000</span>, 80C
+              <span className="text-white">₹1,50,000</span>, 80D <span className="text-white">₹50,000</span>. Click Calculate to see which regime is lower.
+            </p>
+          </div>
+
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>

@@ -33,7 +33,7 @@ async function resolveCanonicalPostId(supabase, identifier) {
 // GET comments for a post
 export async function GET(request, { params }) {
   try {
-    const { postId } = params;
+    const { postId } = await params;
     
     if (!postId) {
       return NextResponse.json(
@@ -83,7 +83,7 @@ export async function GET(request, { params }) {
 // POST a new comment
 export async function POST(request, { params }) {
   try {
-    const { postId } = params;
+    const { postId } = await params;
     const body = await request.json();
 
     if (!postId) {

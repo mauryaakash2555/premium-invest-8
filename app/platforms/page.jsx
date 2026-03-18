@@ -130,6 +130,32 @@ export default function Platforms() {
 
       {/* Platform Cards Section */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
+
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px 28px' }}>
+          <div
+            className="glass-effect"
+            style={{
+              padding: '22px 22px',
+              border: '1px solid rgba(255,255,255,0.10)',
+              borderRadius: 0,
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700, color: 'var(--lux-accent)', letterSpacing: '0.6px' }}>
+              How we think about execution platforms
+            </h2>
+            <p style={{ margin: '12px 0 0 0', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.8 }}>
+              Execution matters because friction creates mistakes. We typically recommend platforms that make it easy to place SIPs and
+              lumpsum orders, track holdings cleanly, download tax-ready reports, and avoid hidden complexity when you need support.
+              Investors often underestimate how much the day-to-day experience (statements, dashboards, alerts, and service response)
+              affects behaviour.
+            </p>
+            <p style={{ margin: '12px 0 0 0', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.8 }}>
+              Use this directory as a starting point, then compare fees, product coverage, and reliability before opening an account.
+              The “best” platform is the one you will actually use consistently — especially during volatility.
+            </p>
+          </div>
+        </div>
         
         {/* POSITION #1 - DIAMOND PARTNER (COMPETITIVE BIDDING) */}
         <MobileScrollBoost className="platform-card diamond-bidding" holdMs={5000}>

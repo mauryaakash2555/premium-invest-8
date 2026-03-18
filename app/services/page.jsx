@@ -88,6 +88,16 @@ const Services = () => {
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
+
   return (
     <div
       className="svc-shell"
@@ -108,6 +118,11 @@ const Services = () => {
         ['--lux-accent']: LUX.accent,
       }}
     >
+      <script
+        id="services-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <style>{`
         /* Prevent accidental horizontal overflow in Services page */
         .svc-shell * {
@@ -602,7 +617,7 @@ const Services = () => {
         </div>
       </section>
 
-      <FAQSection title="Questions People Quietly Ask" faqs={faqs} />
+      <FAQSection title="Questions People Quietly Ask" faqs={faqs} pageUrl="https://bmwealth.co.in/services" />
 
       {/* Risk & Disclosure */}
       <section className="section-container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>

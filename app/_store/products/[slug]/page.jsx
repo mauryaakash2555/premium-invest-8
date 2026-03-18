@@ -7,10 +7,16 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }) {
   const product = products.find((p) => p.slug === params.slug);
-  if (!product) return { title: 'Product' };
+  if (!product) {
+    return {
+      title: 'Product',
+      robots: { index: false, follow: false },
+    };
+  }
   return {
     title: product.name,
     description: product.description,
+    robots: { index: false, follow: false },
   };
 }
 
