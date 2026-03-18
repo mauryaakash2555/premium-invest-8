@@ -109,6 +109,17 @@ export function middleware(request) {
     return res;
   }
 
+  // Store legal/fulfillment pages should resolve on the main host too.
+  // Redirect to the store hostname instead of returning a 404.
+  if (!isStoreHost && pathname === '/delivery') {
+    const target = url.clone();
+    target.protocol = 'https:';
+    target.hostname = 'store.bmwealth.co.in';
+    const res = NextResponse.redirect(target, 301);
+    res.headers.set('X-Robots-Tag', 'noindex');
+    return res;
+  }
+
   // Block checkout-like routes on the main domain.
   if (!isStoreHost && (pathname === '/checkout' || pathname.startsWith('/checkout/'))) {
     const target = url.clone();

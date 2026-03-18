@@ -964,48 +964,44 @@ export default function TopicLearningPage() {
   const placeholderContent: Record<Tab, React.ReactNode> = {
     explain: (
       <div className="placeholder-content">
-        <p className="placeholder-lead">What is {topicTitle}?</p>
+        <p className="placeholder-lead">Editorial note</p>
         <p className="placeholder-text">
-          This section will provide a comprehensive explanation of {topicTitle.toLowerCase()} at the{' '}
-          <strong>{DEPTH_LABELS[depth].label.toLowerCase()}</strong> level.
+          This topic is being prepared by our editorial team.
         </p>
         <p className="placeholder-text">
-          Content will be dynamically generated using AI to match your selected depth and learning pace.
+          Explore our blog for related financial insights.
         </p>
       </div>
     ),
     examples: (
       <div className="placeholder-content">
-        <p className="placeholder-lead">Real-World Examples</p>
+        <p className="placeholder-lead">Editorial note</p>
         <p className="placeholder-text">
-          Practical examples demonstrating {topicTitle.toLowerCase()} in action. Each example will be tailored to the{' '}
-          <strong>{DEPTH_LABELS[depth].label.toLowerCase()}</strong> complexity level.
+          This topic is being prepared by our editorial team. Explore our blog for related financial insights.
         </p>
       </div>
     ),
     practice: (
       <div className="placeholder-content">
-        <p className="placeholder-lead">Practice Problems</p>
+        <p className="placeholder-lead">Editorial note</p>
         <p className="placeholder-text">
-          Interactive exercises to solidify your understanding of {topicTitle.toLowerCase()}. Problems will scale based
-          on the <strong>{DEPTH_LABELS[depth].label.toLowerCase()}</strong> setting.
+          This topic is being prepared by our editorial team. Explore our blog for related financial insights.
         </p>
       </div>
     ),
     flashcards: (
       <div className="placeholder-content">
-        <p className="placeholder-lead">Flashcards</p>
+        <p className="placeholder-lead">Editorial note</p>
         <p className="placeholder-text">
-          Key concepts from {topicTitle.toLowerCase()} presented as flashcards for quick review and memorization.
+          This topic is being prepared by our editorial team. Explore our blog for related financial insights.
         </p>
       </div>
     ),
     quiz: (
       <div className="placeholder-content">
-        <p className="placeholder-lead">Knowledge Check</p>
+        <p className="placeholder-lead">Editorial note</p>
         <p className="placeholder-text">
-          Test your understanding of {topicTitle.toLowerCase()} with a quiz tailored to your{' '}
-          <strong>{DEPTH_LABELS[depth].label.toLowerCase()}</strong> depth setting.
+          This topic is being prepared by our editorial team. Explore our blog for related financial insights.
         </p>
       </div>
     ),

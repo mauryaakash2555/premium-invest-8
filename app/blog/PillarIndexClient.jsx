@@ -76,6 +76,8 @@ function pillarCopy(pillar) {
       return {
         title: 'Community Impact',
         subtitle: 'Stories and outcomes that improve everyday financial life.',
+        intro:
+          'This pillar focuses on real-world results: before/after stories, decision frameworks, and case studies that show what changed — and why. You’ll find practical, execution-first lessons around SIP discipline, portfolio clean-up, tax frictions, and behavioural mistakes that quietly destroy compounding. If you want to learn by seeing outcomes (not theory), start here. Read the story, note the inputs that mattered most, and apply the same checklist to your situation before taking the next step.',
         image:
           'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',
       };
@@ -83,6 +85,8 @@ function pillarCopy(pillar) {
       return {
         title: 'Guest Columns',
         subtitle: 'Expert perspectives from verified professionals.',
+        intro:
+          'Guest Columns brings in external expertise — independent viewpoints from professionals who work in the trenches. Expect well-argued opinions, nuanced trade-offs, and “what I would do differently” reflections that help you sharpen judgment. These pieces are meant to expand your mental models: taxes, legal structure, behavioural finance, business cashflows, and the realities of execution. Use them as a lens, then cross-check with your own numbers and constraints.',
         image:
           'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',
       };
@@ -90,6 +94,8 @@ function pillarCopy(pillar) {
       return {
         title: 'Developer Insight',
         subtitle: 'Product, engineering, AI, and systems thinking.',
+        intro:
+          'Developer Insight is where we document how we build BM Wealth — the decisions, experiments, and trade-offs behind the product. You’ll see how we think about data quality, tools, automation, and reliability, plus what we learned when something didn’t work as expected. If you like systems thinking (inputs → process → output), this pillar gives you transparency into our method — and practical takeaways you can reuse in your own workflows.',
         image:
           'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',
       };
@@ -97,6 +103,7 @@ function pillarCopy(pillar) {
       return {
         title: 'BM Editorial',
         subtitle: 'Premium wealth insights and market intelligence.',
+        intro: null,
         image:
           'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=900&fit=crop&auto=format&fm=webp&q=70',
       };
@@ -328,6 +335,23 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
           >
             {copy.subtitle}
           </p>
+
+          {copy.intro ? (
+            <p
+              style={{
+                marginTop: '14px',
+                fontSize: '15px',
+                color: 'rgba(255,255,255,0.78)',
+                maxWidth: '920px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                lineHeight: 1.75,
+                textShadow: '0 2px 10px rgba(0,0,0,0.35)',
+              }}
+            >
+              {copy.intro}
+            </p>
+          ) : null}
         </div>
       </section>
 

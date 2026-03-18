@@ -87,6 +87,24 @@ export default function InsuranceValueToolPage() {
         <div className="max-w-6xl mx-auto">
           <InsuranceValueCalculator />
 
+          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/70">How to use this tool</div>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed">
+              Enter annual income, age, dependents, existing life cover, and outstanding loans. Click Calculate to see the
+              recommended total cover, your current coverage gap, and a suggested term insurance target.
+            </p>
+            <ul className="mt-3 text-sm text-white/75 leading-relaxed list-disc pl-5 space-y-1">
+              <li>Use the coverage gap as the main output to action.</li>
+              <li>Keep existing cover realistic (include only life cover that pays out on death, not investment plans).</li>
+              <li>Recalculate after major life changes (marriage, children, home loan) and as income grows.</li>
+            </ul>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              <span className="text-white/85 font-semibold">Example:</span> Income <span className="text-white">₹25,00,000</span>, age
+              <span className="text-white">35</span>, dependents <span className="text-white">2</span>, existing cover <span className="text-white">₹50,00,000</span>, loans
+              <span className="text-white">₹30,00,000</span> to estimate your recommended cover.
+            </p>
+          </div>
+
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>

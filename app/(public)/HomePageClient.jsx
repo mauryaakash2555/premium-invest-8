@@ -636,6 +636,122 @@ export default function HomePageClient() {
         </div>
       </section>
 
+      {/* What We Do + About BM Wealth (editorial) */}
+      <section
+        style={{
+          background: 'linear-gradient(180deg, #0a0a0a 0%, #000000 100%)',
+          padding: '80px 20px',
+        }}
+      >
+        <div className="section-container">
+          <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+            <h2
+              style={{
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                marginBottom: '16px',
+                color: '#FFFFFF',
+              }}
+            >
+              What We Do
+            </h2>
+            <p
+              style={{
+                fontSize: '18px',
+                color: 'rgba(255,255,255,0.78)',
+                maxWidth: '860px',
+                margin: '0 auto',
+                lineHeight: 1.75,
+              }}
+            >
+              BM Wealth is built for investors who want clarity, not noise. We translate goals into an execution plan — what to do,
+              when to do it, and how to review it — so decisions stay consistent even when markets are not.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '22px',
+              alignItems: 'stretch',
+            }}
+          >
+            <div
+              className="glass-effect gold-grain-texture premium-hover-glow"
+              style={{
+                padding: '26px',
+                border: '1px solid rgba(255,255,255,0.10)',
+                background:
+                  'radial-gradient(860px 240px at 10% 0%, rgba(214, 179, 106, 0.10), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02))',
+              }}
+            >
+              <div
+                style={{
+                  color: 'rgba(255,255,255,0.62)',
+                  fontSize: '12px',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  marginBottom: '10px',
+                }}
+              >
+                Process-First
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>A disciplined plan you can follow</h3>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, marginBottom: '14px' }}>
+                We start with cashflows, time-horizons, and risk limits. Then we structure an investable plan across core mutual funds,
+                SIP cadence, and risk controls — with review points that keep you from drifting.
+              </p>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, margin: 0 }}>
+                Use our tools to stress-test trade-offs (property vs SIP), retirement gaps, tax regime choices, and insurance coverage —
+                then convert the output into a clean execution checklist.
+              </p>
+            </div>
+
+            <div
+              className="glass-effect gold-grain-texture premium-hover-glow"
+              style={{
+                padding: '26px',
+                border: '1px solid rgba(214, 179, 106, 0.16)',
+                background:
+                  'radial-gradient(860px 240px at 90% 10%, rgba(255,255,255,0.07), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+              }}
+            >
+              <div
+                style={{
+                  color: 'rgba(255,255,255,0.62)',
+                  fontSize: '12px',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  marginBottom: '10px',
+                }}
+              >
+                About BM Wealth
+              </div>
+              <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>Mumbai-focused, execution-led</h3>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, marginBottom: '14px' }}>
+                We work with professionals who value accountability: documented recommendations, clear follow-through, and a review rhythm
+                that keeps the strategy aligned to your life.
+              </p>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, margin: 0 }}>
+                We do not promise returns. We focus on what you can control — costs, allocation, behaviour, and execution — and build a
+                system that stays rational when markets tempt you to react.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '34px' }}>
+            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.75, maxWidth: '920px', margin: '0 auto' }}>
+              Already investing? Validate your plan in minutes using our calculators and checklists. Starting fresh? Explore our
+              step-by-step tools, then reach out for a guided review when you want a single, coherent plan.
+            </p>
+            <div style={{ marginTop: '18px', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/tools" className="btn-primary">Explore Tools</Link>
+              <Link href="/contact" className="btn-secondary">Talk to Us</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Latest Insights Section — 6 premium cards */}
       <section className="section-container" style={{ padding: '80px 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>

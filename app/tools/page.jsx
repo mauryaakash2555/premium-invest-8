@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import BackRow from "@/components/shared/BackRow";
 import FAQSection from "@/components/shared/FAQSection";
@@ -11,9 +10,8 @@ import { LaserBeam } from "@/components/ui/laser-beam";
 /*
   LAYOUT-LOCKED: /tools hub page
   Spec:
-  - Hero + exactly 6 cards (updated with All-in-One Calculator)
-  - Tax tool and Property vs SIP are active
-  - Others show "Coming Soon" and appear disabled
+  - Hero + tools grid
+  - All visible tools are active and navigable
   Edit only with explicit instruction.
 */
 
@@ -24,8 +22,9 @@ export const metadata = buildMetadata({
   path: "/tools",
 });
 
-function ToolCard({ title, subtitle, href, active, laser = false, className = "" }) {
-  const content = (
+function ToolCard({ title, subtitle, href, laser = false, className = "" }) {
+  return (
+    <Link href={href} className="block" aria-label={title}>
     <Card
       className={`border border-white/10 ultra-luxury-glass premium-hover-glow relative overflow-hidden rounded-none h-full ${laser ? "overflow-visible" : ""} ${className}`}
     >
@@ -55,42 +54,19 @@ function ToolCard({ title, subtitle, href, active, laser = false, className = ""
             <h2 className="text-base font-semibold gold-gradient-text truncate">{title}</h2>
             {subtitle ? <p className="mt-1 text-sm text-white/70">{subtitle}</p> : null}
           </div>
-          {!active ? (
-            <Badge className="shrink-0 bg-white/10 text-white/80 border border-white/10">Coming Soon</Badge>
-          ) : null}
         </div>
 
         <div className="mt-5 mt-auto">
-          {active ? (
-            <Link href={href} className="inline-flex">
-              <Button className="calculator-premium-cta">
-                Open Tool
-              </Button>
-            </Link>
-          ) : (
-            <Button
-              disabled
-              className="bg-white/5 text-white/50 border border-white/10"
-            >
-              Launching Soon
+          <div className="inline-flex">
+            <Button className="calculator-premium-cta">
+              Open Tool
             </Button>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
-
-  // Keep "Coming Soon" visuals locked, but allow navigation to internal
-  // Coming Soon pages (still no logic exposed).
-  if (!active && href && href !== "#") {
-    return (
-      <Link href={href} className="block" aria-label={title}>
-        {content}
-      </Link>
-    );
-  }
-
-  return content;
 }
 
 export default function ToolsHubPage() {
@@ -144,16 +120,29 @@ export default function ToolsHubPage() {
             </p>          </div>
 
           <div className="bp-body">
+              <div className="mt-8 rounded-none border border-white/10 ultra-luxury-glass gold-grain-texture p-5">
+                <h2 className="text-lg font-semibold gold-gradient-text">How to use these tools</h2>
+                <p className="mt-2 text-sm text-white/75">
+                  These calculators are designed to turn a vague goal into an actionable decision. Start by entering conservative inputs
+                  (realistic salary growth, expected returns, and buffers). Then read the output as a range, not a guarantee — the goal is
+                  to make trade-offs visible so you can execute with confidence.
+                </p>
+                <p className="mt-3 text-sm text-white/75">
+                  A simple workflow: (1) pick the tool closest to your immediate decision, (2) run one conservative and one optimistic
+                  scenario, (3) note the delta and what variables drive it, and (4) convert that into an execution checklist (SIP amount,
+                  asset allocation, regime choice, coverage target, or timeline). If you want help validating assumptions or mapping the
+                  result into a portfolio, you can reach us via the Contact page.
+                </p>
+              </div>
+
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr">
               <ToolCard
-                active
                 title="Free ITR Filing Help"
                 subtitle="Upload Form 16, AIS, or Bank Statement • OCR extraction • Educational estimate"
                 href="/tools/itr-filing-help"
                 laser
               />
               <ToolCard
-                active
                 title="Tax Optimization Intelligence — FY 2025–26"
                 subtitle="Old vs New regime • Zero-tax threshold • Execution-first"
                 href="/tools/tax-optimization"
@@ -162,28 +151,23 @@ export default function ToolsHubPage() {
                 title="Mumbai Property vs SIP Analyzer"
                 href="/tools/property-vs-sip"
                 subtitle="Wealth gap • Opportunity cost • Premium report"
-                active
               />
               <ToolCard
                 title="Retirement Gap Stress Test"
                 href="/tools/retirement-gap"
                 subtitle="Corpus gap • Inflation-adjusted • SIP to close gap"
-                active
               />
               <ToolCard
                 title="Lumpsum Growth Planner"
                 href="/tools/lumpsum-planner"
                 subtitle="Maturity projection • SIP comparison • Wealth multiplier"
-                active
               />
               <ToolCard
                 title="Human Life Value Shield"
                 href="/tools/insurance-value"
                 subtitle="Coverage gap • Income replacement • Term insurance estimate"
-                active
               />
               <ToolCard
-                active
                 title="All in One Financial Calculator"
                 subtitle="SIP • Lumpsum • EMI • Tax • PPF • NPS • Goal Planning + more"
                 href="/tools/all-calculators"

@@ -40,13 +40,25 @@ export async function generateMetadata({ params }) {
 
   const image = post?.imageUrl || post?.image_url || post?.image || DEFAULT_OG_IMAGE;
 
-  return buildMetadata({
+  const metadata = buildMetadata({
     title,
     description,
     path: slug ? `/blog/${slug}` : "/blog",
     type: "article",
     image,
   });
+
+  if (post?.noindex === true) {
+    return {
+      ...metadata,
+      robots: {
+        index: false,
+        follow: true,
+      },
+    };
+  }
+
+  return metadata;
 }
 
 export default async function BlogDetailPage({ params }) {

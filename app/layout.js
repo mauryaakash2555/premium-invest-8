@@ -236,7 +236,7 @@ export default async function RootLayout({ children }) {
 					async
 					src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6364347953465538"
 					crossOrigin="anonymous"
-					strategy="afterInteractive"
+					strategy="lazyOnload"
 				/>
 
 				{/* JSON-LD (server-rendered to avoid hydration mismatch) */}

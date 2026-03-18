@@ -1912,6 +1912,12 @@ export default function ITRFilingHelp() {
               a PDF document like Form 16, AIS, or a bank statement, so you can review the numbers in one place.
             </p>
             <p>
+              <span className="text-[color:var(--lux-foreground)] font-semibold">Numeric example:</span> If your Form 16 shows gross salary
+              of Rs. 25,00,000, standard deduction of Rs. 50,000, 80C deductions of Rs. 1,50,000, and TDS of Rs. 2,10,000, the tool
+              will estimate tax under old vs new regime after you verify the extracted fields and highlight whether you may have tax payable
+              or a refund due.
+            </p>
+            <p>
               After you verify the extracted values, the tool compares an estimated tax outcome across old and new
               tax regimes using a simplified model. This is intentionally conservative: it does not try to “auto-file”
               your return, and it should not be treated as professional advice. Treat it like a checklist and a draft.

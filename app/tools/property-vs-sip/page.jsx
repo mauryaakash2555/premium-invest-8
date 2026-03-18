@@ -78,6 +78,23 @@ export default function PropertyVsSipToolPage() {
         <div className="max-w-6xl mx-auto">
           <PropertyVsSipCalculator />
 
+          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/70">How to use this tool</div>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed">
+              Enter the property price, your intended monthly SIP amount, and the horizon in years. Click Calculate to
+              compare the future value of the property path vs an equity SIP path under the locked assumptions.
+            </p>
+            <ul className="mt-3 text-sm text-white/75 leading-relaxed list-disc pl-5 space-y-1">
+              <li>Focus on the <strong className="text-white">wealth gap</strong> as the decision signal, not the absolute totals.</li>
+              <li>If the SIP path is higher, it indicates opportunity cost of allocating that capital to property under these assumptions.</li>
+              <li>Use the result as an illustrative comparison — it does not model stamp duty, EMIs, or taxes.</li>
+            </ul>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              <span className="text-white/85 font-semibold">Example:</span> Property price <span className="text-white">₹2,00,00,000</span>
+              + monthly SIP <span className="text-white">₹50,000</span> + horizon <span className="text-white">15 years</span>.
+            </p>
+          </div>
+
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>

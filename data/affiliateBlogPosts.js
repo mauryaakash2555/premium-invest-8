@@ -19,6 +19,7 @@ export const staticBlogPost13 = {
   category: "Cashflow & Banking",
   excerpt:
     "The Scapia credit card from Federal Bank has quickly gained attention among frequent travellers. But does it hold up for high-income professionals who prioritise fee transparency, forex efficiency, and long-term usability?",
+  metaDescription: "Scapia (Federal Bank) travel card review for professionals: fees, forex markup, usability, and who should consider it in 2026.",
   image: "https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Travel credit card for professionals — Scapia Federal Bank review",
@@ -320,6 +321,7 @@ export const staticBlogPost14 = {
   category: "Cashflow & Banking",
   excerpt:
     "The SBI Elite is one of the most searched credit cards in India. But is it genuinely suited for professionals earning above ₹15 lakh per annum? A detailed, unbiased review.",
+  metaDescription: "SBI Elite credit card review 2026 for high-income professionals: fees, benefits, reward value, and whether it’s worth the annual cost.",
   image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "SBI Elite credit card review for professionals in India",
@@ -596,6 +598,7 @@ export const staticBlogPost15 = {
   category: "Cashflow & Banking",
   excerpt:
     "Axis Bank offers over a dozen credit card variants. For salaried professionals, picking the right one depends on spend patterns, not marketing brochures. A structured comparison.",
+  metaDescription: "Axis Bank credit cards for salaried professionals (2026): compare Flipkart, Ace, My Zone and Magnus based on spend patterns and cashflow fit.",
   image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Axis Bank credit card selection for professionals",
@@ -863,6 +866,7 @@ export const staticBlogPost16 = {
   category: "Cashflow & Banking",
   excerpt:
     "Three cards, three very different value propositions. A structured side-by-side comparison of Scapia, Axis Atlas, and SBI Elite for professionals who travel and transact internationally.",
+  metaDescription: "Best travel credit cards India 2026: compare Scapia, Axis Atlas and SBI Elite for forex costs, fees, lounge access, and who each fits.",
   image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Travel credit cards comparison India 2026",
@@ -1087,6 +1091,7 @@ export const staticBlogPost17 = {
   category: "Investment Education",
   excerpt:
     "They planned a 14-day Europe honeymoon with a ₹6.5 lakh budget. By choosing the right credit card for forex savings and optimising bookings through Cleartrip, they saved over ₹1.2 lakh without compromising on anything.",
+  metaDescription: "How a Bandra couple saved ₹1.2 lakh on a Europe honeymoon using forex-smart credit cards and an execution-first Cleartrip booking workflow.",
   image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "European honeymoon savings with smart credit card and booking strategy",
@@ -1304,6 +1309,7 @@ export const staticBlogPost18 = {
   category: "Cashflow & Banking",
   excerpt:
     "When a short-term cashflow gap appears, professionals often default to the wrong financing option. A structured comparison of personal loans, credit card EMIs, and investment liquidation — and when each actually makes sense.",
+  metaDescription: "Personal loan vs credit card EMI vs selling investments: a framework for Mumbai professionals to choose the lowest-cost option for short-term liquidity.",
   image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Personal loan vs credit card EMI comparison for professionals",
@@ -1545,6 +1551,7 @@ export const staticBlogPost19 = {
   category: "Investment Education",
   excerpt:
     "Order flow trading tools promise to show you what institutional traders are doing in real time. BookMap is the most recognised name in this space. But at ₹50,000+ per year, is it justified for traders operating from India?",
+  metaDescription: "BookMap review 2026: order flow trading platform, pricing (~₹50k/yr), who should use it, and when it’s not worth it for Indian traders.",
   image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Order flow trading platform BookMap review for Indian traders",
@@ -1786,6 +1793,7 @@ export const staticBlogPost20 = {
   category: "Investment Education",
   excerpt:
     "Pepperstone is one of the most-regulated forex and CFD brokers globally, with licences from ASIC, FCA, and CySEC. For Indian traders looking beyond domestic brokerages, here is what you need to know about execution quality, spreads, and regulatory clarity.",
+  metaDescription: "Pepperstone review 2026 for Indian traders: regulation, spreads, execution quality, and key considerations for using a global forex/CFD broker.",
   image: "https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Global forex trading platform Pepperstone review for Indian traders",
@@ -2028,6 +2036,7 @@ export const staticBlogPost21 = {
   category: "Cashflow & Banking",
   excerpt:
     "Corporate gifting has shifted from generic hampers to curated wellness experiences. For professionals managing client relationships, team appreciation, or Diwali gifting budgets, here are the most credible Indian wellness brands worth considering.",
+  metaDescription: "Best wellness & Ayurvedic brands for corporate gifting (2026): curated options for Mumbai professionals with budgets from ₹800 to ₹15,000+.",
   image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Premium wellness and Ayurvedic corporate gifting brands India",
@@ -2351,6 +2360,7 @@ export const staticBlogPost22 = {
   category: "Developer Insight",
   excerpt:
     "Financial content creators need reliable, professional live streaming tools. Switcher Studio, OBS, and StreamYard each serve different needs. Here is the honest comparison for creators who prioritise production quality and audience engagement.",
+  metaDescription: "Switcher Studio vs OBS vs StreamYard: live streaming tool comparison for finance creators in 2026 focused on reliability and production quality.",
   image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Live streaming studio setup for financial content creators",
@@ -2573,6 +2583,7 @@ export const staticBlogPost23 = {
   category: "Developer Insight",
   excerpt:
     "Your hosting provider directly impacts page speed, SEO rankings, and user trust. For Indian financial websites handling sensitive content and moderate traffic, here is the honest comparison between Cloudways, Hostinger, and DigitalOcean.",
+  metaDescription: "Cloudways vs Hostinger vs DigitalOcean: hosting comparison for Indian finance blogs in 2026 focused on SEO speed, uptime, and Mumbai-region performance.",
   image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "Server hosting comparison for Indian finance websites",
@@ -2813,6 +2824,7 @@ export const staticBlogPost24 = {
   category: "Developer Insight",
   excerpt:
     "Foldable smartphones are maturing rapidly. The OPPO Find N5 represents the latest generation of productivity-focused foldables — but at its price point, does it justify the upgrade for professionals who use their phone as a primary work tool?",
+  metaDescription: "OPPO Find N5 review 2026: a foldable flagship evaluated for professional productivity—screen, multitasking, durability, and value.",
   image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1600&h=900&fit=crop&auto=format&fm=webp&q=80",
   image_alt: "OPPO Find N5 foldable smartphone review for professionals India",

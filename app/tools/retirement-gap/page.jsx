@@ -87,6 +87,24 @@ export default function RetirementGapToolPage() {
         <div className="max-w-6xl mx-auto">
           <RetirementGapCalculator />
 
+          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+            <div className="text-[11px] tracking-[0.18em] uppercase text-white/70">How to use this tool</div>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed">
+              Enter your current age, retirement age, monthly expenses today, and current savings. The tool inflates your
+              expenses to retirement and estimates the corpus needed using the 25× rule.
+            </p>
+            <ul className="mt-3 text-sm text-white/75 leading-relaxed list-disc pl-5 space-y-1">
+              <li>If the tool shows a gap, treat the suggested SIP as a target to review with your asset allocation.</li>
+              <li>Keep inflation and return assumptions realistic for your situation (even small changes materially shift the gap).</li>
+              <li>Use the results to decide timing (start now vs later), not to predict markets.</li>
+            </ul>
+            <p className="mt-3 text-sm text-white/75 leading-relaxed">
+              <span className="text-white/85 font-semibold">Example:</span> Age <span className="text-white">30</span> retire at <span className="text-white">60</span>,
+              expenses <span className="text-white">₹1,00,000/mo</span>,
+              savings <span className="text-white">₹50,00,000</span>. Click Calculate to see corpus needed and monthly SIP to close the gap.
+            </p>
+          </div>
+
           <div className="mt-10">
             <FAQSection faqs={faqs} pageUrl={`https://bmwealth.co.in${PATH}`} />
           </div>

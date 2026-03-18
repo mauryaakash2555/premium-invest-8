@@ -149,9 +149,6 @@ export default async function sitemap() {
     "/blog",
     // Blog pillar indexes (keep explicit so they're present even if route discovery fails)
     "/blog/editorial",
-    "/blog/impact",
-    "/blog/guest",
-    "/blog/dev",
     "/live-intelligence",
     "/contact",
     "/about-us",
@@ -168,12 +165,12 @@ export default async function sitemap() {
     "/disclaimer",
     "/refund",
     "/compliance",
-    "/sitemap",
   ];
 
   // Exclude known non-indexable or blocked URLs from the sitemap.
   const excludedExact = new Set([
     "/about",
+    "/delivery",
     "/privacy-policy",
     "/terms",
     "/refund-policy",
@@ -181,6 +178,10 @@ export default async function sitemap() {
     "/payment-failed",
     "/live-intel",
     "/submit",
+    "/sitemap",
+    "/blog/dev",
+    "/blog/impact",
+    "/blog/guest",
     // Legacy redirect-only URL (canonical is the blog post under /blog/)
     "/best-credit-cards-high-income-india",
   ]);
