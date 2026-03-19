@@ -18,64 +18,47 @@
  * - 🔧 Search for "TO MODIFY" notes inside the file.
  */
 
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
+import { MessageCircle } from "lucide-react";
 
-const fields = [
-  { id: "email", label: "Email", type: "email", placeholder: "you@example.com" },
-  { id: "password", label: "Password", type: "password", placeholder: "••••••••" }
-];
+const WHATSAPP_HREF = "https://wa.me/918850977259?text=Hi%20BM%20Wealth%2C%20I%20would%20like%20to%20request%20client%20portal%20access.";
 
 export default function LoginPage() {
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setTimeout(() => setLoading(false), 800); // mock feedback
-  };
-
   return (
-    <section className="card p-4 md:p-6">
-      <div className="flex flex-col gap-2">
-        <p className="text-xs uppercase tracking-[0.2em] text-[--lux-foreground-60]">Auth shell</p>
-        <h1 className="text-2xl font-semibold text-[--lux-foreground]">Login</h1>
-        <p className="text-sm text-slate-200/80">
-          This is a placeholder form. Hook it up to your auth service when ready.
+    <section className="relative overflow-hidden rounded-none border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.045)_0%,rgba(255,255,255,0.015)_100%)] p-6 md:p-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at top right, rgba(192,160,98,0.16), transparent 35%), radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 32%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-2xl text-center">
+        <p className="text-xs uppercase tracking-[0.24em] text-[--lux-foreground-60]">Client Portal</p>
+        <h1 className="mt-4 text-3xl font-semibold text-[--lux-foreground] md:text-4xl">Client Portal Coming Soon</h1>
+        <p className="mt-4 text-base leading-7 text-[--lux-foreground-60]">
+          Our client portal is being prepared. Contact us via WhatsApp for account access.
         </p>
-      </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        {fields.map((field) => (
-          <label key={field.id} className="block space-y-2 text-sm text-slate-100">
-            <span className="font-semibold">{field.label}</span>
-            <input
-              id={field.id}
-              name={field.id}
-              type={field.type}
-              placeholder={field.placeholder}
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 outline-none transition focus:border-white/40 focus:bg-white/10"
-              required
-            />
-          </label>
-        ))}
-
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-[--lux-accent] px-4 py-2 text-sm font-semibold text-[--lux-background] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
-          disabled={loading}
-        >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
-
-      <div className="mt-4 text-sm text-[--lux-foreground-60]">
-        <span className="text-[--lux-foreground-40]">New user?</span>{" "}
-        <Link href="/" className="font-semibold text-[--lux-accent] hover:text-[--lux-foreground]">
-          Go back home
-        </Link>
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-none border border-[--lux-accent] bg-[--lux-accent] px-5 py-3 text-sm font-semibold text-[--lux-background] transition hover:brightness-110"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Contact on WhatsApp
+          </a>
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-none border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-[--lux-foreground] transition hover:border-white/20 hover:bg-white/10"
+          >
+            Back to Home
+          </Link>
+        </div>
       </div>
     </section>
   );
