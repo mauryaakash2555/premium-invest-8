@@ -232,6 +232,26 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
     return backHref === '/blog/dev' || cat.includes('developer');
   }, [backHref, post?.category]);
 
+  const editorialAuthorCard = useMemo(() => {
+    const rawAuthor = String(post?.author || '');
+    const isEditorialTeam = rawAuthor.includes('Editorial Team');
+
+    if (!isEditorialTeam) {
+      return {
+        primary: rawAuthor || 'BM Wealth',
+        secondary: 'BM Wealth',
+        description: 'Practical, high-signal writing on investing, tax, and better financial decisions.',
+      };
+    }
+
+    return {
+      primary: 'Brahmdeo Maurya',
+      secondary: 'Founder & Lead Advisor, BM Wealth',
+      description:
+        'PMS distributor (Cert. 2430447816), AMFI-registered mutual fund distributor (ARN 90008) and IRDAI-licensed insurance advisor (277925) with decades of wealth management experience in Mumbai.',
+    };
+  }, [post?.author]);
+
   const devPostsForRelated = useMemo(() => {
     const dev = allBlogs.filter((p) => String(p?.category || '').toLowerCase().includes('developer'));
     return dev.length >= 2 ? dev : allBlogs;
@@ -920,19 +940,19 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
                 fontWeight: 800,
               }}
             >
-              {(String(post.author || 'BM')[0] || 'B').toUpperCase()}
+              {(String(editorialAuthorCard.primary || 'BM')[0] || 'B').toUpperCase()}
             </div>
             <div>
               <div style={{ color: 'var(--lux-foreground)', fontSize: '15px', fontWeight: 800 }}>
-                {post.author || 'BM Wealth'}
+                {editorialAuthorCard.primary}
               </div>
               <div style={{ color: 'var(--lux-foreground-60)', fontSize: '13px' }}>
-                {post.author === 'BM Wealth Editorial Team' ? 'Editorial Team, BM Wealth' : 'BM Wealth'}
+                {editorialAuthorCard.secondary}
               </div>
             </div>
           </div>
           <div style={{ marginTop: '12px', color: 'var(--lux-foreground-60)', fontSize: '14px', lineHeight: 1.7 }}>
-            Practical, high-signal writing on investing, tax, and better financial decisions.
+            {editorialAuthorCard.description}
           </div>
         </div>
 
