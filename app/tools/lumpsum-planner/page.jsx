@@ -181,7 +181,7 @@ export default function LumpsumPlannerToolPage() {
 
               <hr />
               <p className="text-[11px] text-white/60">
-                Market-linked outcomes can fluctuate • ARN 90008
+                Educational content only — not investment advice. Market-linked outcomes can fluctuate • AMFI ARN 90008
               </p>
             </div>
           </div>

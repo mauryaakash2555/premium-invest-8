@@ -729,7 +729,7 @@ export default function HomePageClient() {
               </div>
               <h3 style={{ fontSize: '22px', color: '#FFFFFF', marginBottom: '10px' }}>Mumbai-focused, execution-led</h3>
               <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, marginBottom: '14px' }}>
-                We work with professionals who value accountability: documented recommendations, clear follow-through, and a review rhythm
+                BM Wealth operates as an AMFI-registered mutual fund distributor (ARN 90008), PMS distributor (Cert. 2430447816), and IRDAI-licensed insurance distributor (277925), serving investors in Mumbai since 1989. We work with professionals who value accountability: documented recommendations, clear follow-through, and a review rhythm
                 that keeps the strategy aligned to your life.
               </p>
               <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.7, margin: 0 }}>
