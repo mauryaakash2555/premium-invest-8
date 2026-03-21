@@ -85,6 +85,14 @@ test-results/
 # Gateway audit artifacts (never commit)
 .audit/
 
+# Public site audit artifacts (local)
+PUBLIC_SITE_AUDIT*.md
+PUBLIC_SITE_AUDIT_COMPARISON*.md
+
+# Local QA/audit scripts output (never commit)
+scripts/audit/
+scripts/qa/
+
 # Large binary tools
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
